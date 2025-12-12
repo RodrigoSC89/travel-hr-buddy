@@ -92,13 +92,13 @@ export const FilterPanel = ({
               type="date"
               placeholder="Início"
               value={value?.start || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
             <Input
               type="date"
               placeholder="Fim"
               value={value?.end || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
           </div>
         </div>

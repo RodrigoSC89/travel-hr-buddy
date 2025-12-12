@@ -271,4 +271,4 @@ export const SyncStatus = memo(function({ lastSync, isSyncing, onSync }: SyncSta
       </CardContent>
     </Card>
   );
-}
+});

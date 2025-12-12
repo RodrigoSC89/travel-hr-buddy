@@ -165,4 +165,4 @@ export const LiteModeToggle = memo(function({ className }: { className?: string 
       </Tooltip>
     </TooltipProvider>
   );
-}
+});

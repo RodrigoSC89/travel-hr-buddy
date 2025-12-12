@@ -1,4 +1,5 @@
 import React from "react";
+import { memo } from "react";
 import { Loader2, Anchor, Ship, Waves } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -111,13 +112,13 @@ export interface LoadingOverlayProps {
 /**
  * Loading overlay that wraps content and shows loading state
  */
-export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = memo(function LoadingOverlay({
   isLoading,
   message,
   children,
   variant = "default",
   size = "md",
-}) => {
+}: LoadingOverlayProps) {
   return (
     <div className="relative">
       {children}
@@ -238,7 +239,7 @@ export const LoadingDashboard: React.FC = () => {
       </div>
     </div>
   );
-});
+};
 
 // Export legacy names for backward compatibility
 export const LoadingState = Loading;

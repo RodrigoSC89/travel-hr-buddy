@@ -17,7 +17,7 @@ const AlertasPrecosModule = () => {
     priceIncreases: 0,
     priceDrops: 0,
     estimatedSavings: 0
-  };
+  });
 
   const loadStats = async () => {
     try {

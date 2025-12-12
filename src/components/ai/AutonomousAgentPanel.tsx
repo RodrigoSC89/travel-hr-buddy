@@ -2,7 +2,7 @@
  * Autonomous Agent Panel - Proactive AI monitoring and actions
  */
 
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,11 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import {
   Bot,
-  Brain,
-  Zap,
-  AlertTriangle,
   CheckCircle2,
-  Clock,
   Play,
   Pause,
   Settings,

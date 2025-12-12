@@ -20,7 +20,7 @@ export const OrganizationStatsCards: React.FC = () => {
     activeUsers: 0,
     vessels: 0,
     storageUsed: 0
-  };
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

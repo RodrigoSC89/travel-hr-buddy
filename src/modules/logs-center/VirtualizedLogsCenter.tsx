@@ -180,7 +180,7 @@ export default function VirtualizedLogsCenter() {
               <Input
                 placeholder="Buscar logs..."
                 value={filters.search || ""}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -208,7 +208,7 @@ export default function VirtualizedLogsCenter() {
               placeholder="Origem..."
               className="w-[200px]"
               value={filters.origin || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
 
             <Button

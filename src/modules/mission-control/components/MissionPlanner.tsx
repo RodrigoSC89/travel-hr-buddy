@@ -69,7 +69,7 @@ export const MissionPlanner: React.FC = () => {
     try {
       const { data, error } = await supabase.rpc("activate_mission", {
         p_mission_id: missionId,
-      };
+      });
 
       if (error) throw error;
 

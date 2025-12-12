@@ -76,7 +76,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     multipage: false,
     ocrLanguage: "pt",
     outputFormat: "pdf"
-  };
+  });
   const [currentStep, setCurrentStep] = useState<"capture" | "preview" | "enhance" | "ocr" | "analysis">("capture");
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);

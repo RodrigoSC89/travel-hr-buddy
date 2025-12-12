@@ -106,4 +106,4 @@ export const SyncStatusBadge = memo(function() {
       )}
     </div>
   );
-}
+});

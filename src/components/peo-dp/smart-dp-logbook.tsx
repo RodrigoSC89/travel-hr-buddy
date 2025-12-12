@@ -246,7 +246,7 @@ export const SmartDPLogbook: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Operador</label>
-                    <Input placeholder="Nome - Função" value={newEntry.operator || ""} onChange={handleChange})} />
+                    <Input placeholder="Nome - Função" value={newEntry.operator || ""} onChange={handleChange} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Modo DP</label>
@@ -264,11 +264,11 @@ export const SmartDPLogbook: React.FC = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Descrição do Evento *</label>
-                  <Textarea placeholder="Descreva o evento detalhadamente..." value={newEntry.description || ""} onChange={handleChange})} rows={3} />
+                  <Textarea placeholder="Descreva o evento detalhadamente..." value={newEntry.description || ""} onChange={handleChange} rows={3} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Observações</label>
-                  <Textarea placeholder="Notas adicionais..." value={newEntry.notes || ""} onChange={handleChange})} rows={2} />
+                  <Textarea placeholder="Notas adicionais..." value={newEntry.notes || ""} onChange={handleChange} rows={2} />
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
                   <Button variant="outline" onClick={handleSetIsNewEntryOpen}>Cancelar</Button>

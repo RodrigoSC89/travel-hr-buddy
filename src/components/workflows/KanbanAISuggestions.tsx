@@ -104,4 +104,4 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
       ))}
     </div>
   );
-}
+});

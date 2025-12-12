@@ -164,4 +164,4 @@ export const LazyAvatar = memo(function({
       )}
     </div>
   );
-}
+});

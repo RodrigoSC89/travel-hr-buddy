@@ -274,4 +274,4 @@ export const NautilusCommandCenter = memo(function() {
       </div>
     </div>
   );
-}
+});

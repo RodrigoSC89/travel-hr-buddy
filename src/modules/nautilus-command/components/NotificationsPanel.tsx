@@ -222,4 +222,4 @@ export const NotificationsPanel = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

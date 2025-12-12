@@ -38,11 +38,9 @@ import {
   MoreHorizontal,
   Printer,
   Share2,
-  Filter,
   BarChart3,
   FileSpreadsheet,
   Loader2,
-  CheckCircle,
 } from "lucide-react";
 
 interface DashboardActionsProps {

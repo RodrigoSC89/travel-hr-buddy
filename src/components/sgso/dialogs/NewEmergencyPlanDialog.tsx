@@ -67,7 +67,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
     procedures: "",
     equipmentRequired: "",
     contacts: "",
-};
+});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: string, value: string) => {

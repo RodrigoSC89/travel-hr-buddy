@@ -82,4 +82,4 @@ export const ExportarComentariosPDF = memo(function({ comentarios }: ExportarCom
       Exportar Comentários (PDF)
     </Button>
   );
-}
+});

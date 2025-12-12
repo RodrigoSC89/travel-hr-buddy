@@ -95,7 +95,7 @@ const TravelManagement = () => {
     arrival_date: "",
     travel_purpose: "",
     status: "pending"
-  };
+  });
 
   useEffect(() => {
     loadItineraries();
@@ -410,7 +410,7 @@ const TravelManagement = () => {
                           <Input
                             id="departure_location"
                             value={formData.departure_location}
-                            onChange={handleChange})}
+                            onChange={handleChange}
                             placeholder="e.g., New York, USA"
                           />
                         </div>
@@ -419,7 +419,7 @@ const TravelManagement = () => {
                           <Input
                             id="arrival_location"
                             value={formData.arrival_location}
-                            onChange={handleChange})}
+                            onChange={handleChange}
                             placeholder="e.g., London, UK"
                           />
                         </div>
@@ -431,7 +431,7 @@ const TravelManagement = () => {
                             id="departure_date"
                             type="datetime-local"
                             value={formData.departure_date}
-                            onChange={handleChange})}
+                            onChange={handleChange}
                           />
                         </div>
                         <div>
@@ -440,7 +440,7 @@ const TravelManagement = () => {
                             id="arrival_date"
                             type="datetime-local"
                             value={formData.arrival_date}
-                            onChange={handleChange})}
+                            onChange={handleChange}
                           />
                         </div>
                       </div>
@@ -449,7 +449,7 @@ const TravelManagement = () => {
                         <Textarea
                           id="travel_purpose"
                           value={formData.travel_purpose}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="Describe the purpose of this travel..."
                           rows={3}
                         />

@@ -298,4 +298,4 @@ export function useOfflineTable<T extends { id?: string }>(tableName: string) {
       setData(result);
     },
   };
-}
+});

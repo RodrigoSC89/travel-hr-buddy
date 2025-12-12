@@ -36,4 +36,4 @@ export const usePerformanceLog = memo(function({
   useEffect(() => {
     renderStartTime.current = Date.now();
   });
-}
+});

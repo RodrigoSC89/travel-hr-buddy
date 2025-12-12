@@ -88,4 +88,4 @@ export const EfficiencyKPI = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

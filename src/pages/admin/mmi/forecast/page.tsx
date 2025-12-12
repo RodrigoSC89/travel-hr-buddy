@@ -74,7 +74,7 @@ export default function ForecastPage() {
 
   // Apply filters
   useEffect(() => {
-    let filtered = [...forecasts];
+    let filtered = [...forecasts]);
     
     if (vesselFilter !== "all") {
       filtered = filtered.filter(f => f.vessel_name === vesselFilter);

@@ -391,4 +391,4 @@ export const InsightsPanel = memo(function() {
       </div>
     </div>
   );
-}
+});

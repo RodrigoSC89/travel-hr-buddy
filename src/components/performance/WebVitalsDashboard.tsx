@@ -166,4 +166,4 @@ export const WebVitalsIndicator = memo(function({ className }: { className?: str
       <span className="text-xs font-medium">{score}</span>
     </div>
   );
-}
+});

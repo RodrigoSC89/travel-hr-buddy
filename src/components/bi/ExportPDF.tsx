@@ -81,4 +81,4 @@ export const ExportBIReport = memo(function({ trend, forecast }: { trend: TrendD
       📄 Exportar PDF
     </Button>
   );
-}
+});

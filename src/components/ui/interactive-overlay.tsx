@@ -194,7 +194,7 @@ const StatusWidget = () => {
     performance: 0,
     health: 0,
     efficiency: 0
-  };
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {

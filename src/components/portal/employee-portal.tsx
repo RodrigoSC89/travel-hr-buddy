@@ -248,19 +248,19 @@ export const EmployeePortal: React.FC = () => {
                 <Input
                   type="date"
                   value={newTimeEntry.date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
                 <Input
                   type="number"
                   placeholder="Horas"
                   step="0.5"
                   value={newTimeEntry.hours}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
                 <Input
                   placeholder="Projeto"
                   value={newTimeEntry.project}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
                 <Button onClick={addTimeEntry} className="w-full">
                   Adicionar
@@ -269,7 +269,7 @@ export const EmployeePortal: React.FC = () => {
               <Textarea
                 placeholder="Descrição das atividades (opcional)"
                 value={newTimeEntry.description}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
 
               <div className="space-y-2">
@@ -314,18 +314,18 @@ export const EmployeePortal: React.FC = () => {
                   type="date"
                   placeholder="Data de início"
                   value={leaveRequest.startDate}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
                 <Input
                   type="date"
                   placeholder="Data de fim"
                   value={leaveRequest.endDate}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
                 <select 
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   value={leaveRequest.type}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 >
                   <option value="vacation">Férias</option>
                   <option value="sick">Licença Médica</option>
@@ -336,7 +336,7 @@ export const EmployeePortal: React.FC = () => {
               <Textarea
                 placeholder="Motivo (opcional para férias, obrigatório para outros tipos)"
                 value={leaveRequest.reason}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
               <Button onClick={submitLeaveRequest} className="w-full">
                 Enviar Solicitação

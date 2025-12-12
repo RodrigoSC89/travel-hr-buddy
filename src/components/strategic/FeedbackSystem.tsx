@@ -49,7 +49,7 @@ export const FeedbackSystem = memo(() => {
     description: "",
     category: "",
     module: ""
-  };
+  });
 
   const feedbackItems: FeedbackItem[] = [
     {
@@ -219,7 +219,7 @@ export const FeedbackSystem = memo(() => {
                 <Input
                   placeholder="Descreva sua sugestão em poucas palavras"
                   value={newFeedback.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -261,7 +261,7 @@ export const FeedbackSystem = memo(() => {
               <Textarea
                 placeholder="Descreva sua sugestão ou problema detalhadamente..."
                 value={newFeedback.description}
-                onChange={handleChange})}
+                onChange={handleChange}
                 rows={4}
               />
             </div>

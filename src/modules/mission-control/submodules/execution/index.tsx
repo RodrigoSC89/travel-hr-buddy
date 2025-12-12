@@ -93,4 +93,4 @@ export const MissionExecution = memo(function() {
       </div>
     </div>
   );
-}
+});

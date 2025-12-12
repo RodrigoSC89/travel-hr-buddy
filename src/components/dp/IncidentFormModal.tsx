@@ -228,4 +228,4 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
       </DialogContent>
     </Dialog>
   );
-}
+});

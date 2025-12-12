@@ -190,12 +190,12 @@ export const OrganizationCustomization: React.FC = () => {
         ...customization,
         enabled_modules: customization.enabled_modules,
         business_rules: customization.business_rules
-      };
+      });
       
       toast({
         title: "Sucesso",
         description: "Personalização salva com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
@@ -328,7 +328,7 @@ export const OrganizationCustomization: React.FC = () => {
                   <Label>Nome da Empresa</Label>
                   <Input
                     value={customization.company_name}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Nome que aparecerá na interface"
                   />
                 </div>
@@ -338,7 +338,7 @@ export const OrganizationCustomization: React.FC = () => {
                   <div className="flex gap-2">
                     <Input
                       value={customization.logo_url}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="https://exemplo.com/logo.png"
                     />
                     <Button variant="outline" size="icon">
@@ -359,12 +359,12 @@ export const OrganizationCustomization: React.FC = () => {
                       <Input
                         type="color"
                         value={customization.primary_color}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         className="w-16 h-10 p-1"
                       />
                       <Input
                         value={customization.primary_color}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="#1e40af"
                       />
                     </div>
@@ -376,12 +376,12 @@ export const OrganizationCustomization: React.FC = () => {
                       <Input
                         type="color"
                         value={customization.secondary_color}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         className="w-16 h-10 p-1"
                       />
                       <Input
                         value={customization.secondary_color}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="#3b82f6"
                       />
                     </div>
@@ -393,12 +393,12 @@ export const OrganizationCustomization: React.FC = () => {
                       <Input
                         type="color"
                         value={customization.accent_color}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         className="w-16 h-10 p-1"
                       />
                       <Input
                         value={customization.accent_color}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="#06b6d4"
                       />
                     </div>

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo } from "react";
 /**
  * System Diagnostics Panel - PATCH 850
  * Visual component for system diagnostics

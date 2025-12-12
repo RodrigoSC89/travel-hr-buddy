@@ -69,7 +69,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
     title: "",
     category: "ism_procedure" as DocumentCategory,
     description: ""
-  };
+  });
 
   useEffect(() => {
     loadDocuments();
@@ -161,7 +161,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                 <Input 
                   id="title"
                   value={newDoc.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Nome do documento"
                 />
               </div>
@@ -186,7 +186,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                 <Textarea 
                   id="description"
                   value={newDoc.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descrição do documento"
                 />
               </div>

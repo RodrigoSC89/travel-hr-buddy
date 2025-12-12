@@ -143,7 +143,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               min="0"
               placeholder="0,00"
               value={formData.amount}
-              onChange={handleChange})}
+              onChange={handleChange}
               required
             />
           </div>
@@ -155,7 +155,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               id="description"
               placeholder="Ex: Pagamento de frete internacional"
               value={formData.description}
-              onChange={handleChange})}
+              onChange={handleChange}
               required
             />
           </div>
@@ -187,7 +187,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               id="date"
               type="date"
               value={formData.transaction_date}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
           </div>
 
@@ -198,7 +198,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               id="notes"
               placeholder="Observações adicionais..."
               value={formData.notes}
-              onChange={handleChange})}
+              onChange={handleChange}
               rows={2}
             />
           </div>
@@ -225,4 +225,4 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
       </DialogContent>
     </Dialog>
   );
-}
+});

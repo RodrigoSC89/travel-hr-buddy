@@ -35,7 +35,7 @@ const MaintenancePlanner = () => {
     completed: 0,
     overdue: 0,
     efficiency: 0
-  };
+  });
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAlertsPanel, setShowAlertsPanel] = useState(false);

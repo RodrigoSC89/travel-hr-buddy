@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,6 @@ import {
   Truck, 
   Package, 
   MapPin, 
-  Clock, 
   TrendingUp, 
   AlertTriangle, 
   CheckCircle, 
@@ -26,16 +25,12 @@ import {
   Star, 
   Globe, 
   Zap, 
-  Shield, 
   Crown, 
   Diamond, 
   Activity,
-  Users,
-  Target,
   Plane,
   Ship,
   Navigation,
-  Anchor,
   Brain
 } from "lucide-react";
 import { LogisticsAIInsights } from "./logistics-ai-insights";

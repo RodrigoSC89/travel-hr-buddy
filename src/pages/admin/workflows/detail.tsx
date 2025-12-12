@@ -546,7 +546,7 @@ export default function WorkflowDetailPage() {
                     <Input
                       id="title"
                       value={taskForm.title}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Digite o título da tarefa"
                     />
                   </div>
@@ -556,7 +556,7 @@ export default function WorkflowDetailPage() {
                     <Textarea
                       id="description"
                       value={taskForm.description}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Adicione detalhes sobre a tarefa"
                       rows={3}
                     />
@@ -625,7 +625,7 @@ export default function WorkflowDetailPage() {
                         id="due_date"
                         type="date"
                         value={taskForm.due_date}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>

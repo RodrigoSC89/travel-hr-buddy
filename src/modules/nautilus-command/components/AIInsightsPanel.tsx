@@ -221,4 +221,4 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
       </CardContent>
     </Card>
   );
-}
+});

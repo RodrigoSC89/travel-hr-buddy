@@ -46,7 +46,7 @@ const ComplianceReports = () => {
     severities: [] as string[],
     dateFrom: "",
     dateTo: ""
-  };
+  });
 
   const [reports, setReports] = useState([
     {
@@ -485,7 +485,7 @@ const ComplianceReports = () => {
               <Label>Título do Relatório</Label>
               <Input
                 value={reportConfig.title}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Ex: Relatório Mensal de Compliance"
               />
             </div>
@@ -611,7 +611,7 @@ const ComplianceReports = () => {
                       <Input
                         type="date"
                         value={reportConfig.dateFrom}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -619,7 +619,7 @@ const ComplianceReports = () => {
                       <Input
                         type="date"
                         value={reportConfig.dateTo}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>

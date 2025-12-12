@@ -110,7 +110,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
         missing_metrics: state.hasMissingMetrics,
         action: "auto_heal_attempt",
         attempt_number: state.autoHealAttempts + 1
-      };
+      });
 
       // Trigger re-render
       if (onHeal) {
@@ -154,7 +154,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
       await logWatchdogEvent({
         action: "auto_heal_error",
         error: error instanceof Error ? error.message : "Unknown error"
-      };
+      });
     }
   }, [state, onHeal, runWatchdogChecks]);
 
@@ -260,4 +260,4 @@ async function logWatchdogEvent(data: Record<string, unknown>) {
   } catch (error) {
     logger.error("[Watchdog] Error logging event:", error);
   }
-}
+});

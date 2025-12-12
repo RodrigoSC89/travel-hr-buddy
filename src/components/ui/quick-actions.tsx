@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { ExternalLink, Download, FileText, Printer } from "lucide-react";
+import { Download, FileText, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSystemActions } from "@/hooks/use-system-actions";
 

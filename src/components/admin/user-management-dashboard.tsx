@@ -117,13 +117,13 @@ const UserManagementDashboard = () => {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   const handleUserAction = (action: string, userId: number) => {
     toast({
       title: "Ação Executada",
       description: `${action} aplicada ao usuário ID: ${userId}`,
-    };
+    });
   };
 
   return (

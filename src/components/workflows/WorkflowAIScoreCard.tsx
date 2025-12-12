@@ -39,4 +39,4 @@ export const WorkflowAIScoreCard = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

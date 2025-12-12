@@ -456,4 +456,4 @@ export const ProfessionalAnalyticsDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

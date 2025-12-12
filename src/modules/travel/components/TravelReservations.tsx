@@ -205,7 +205,7 @@ export const TravelReservations: React.FC = () => {
                     <Label>Reservation Number *</Label>
                     <Input
                       value={formData.reservation_number}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -233,7 +233,7 @@ export const TravelReservations: React.FC = () => {
                     <Label>Provider Name *</Label>
                     <Input
                       value={formData.provider_name}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Hotel name, airline, etc."
                     />
                   </div>
@@ -241,7 +241,7 @@ export const TravelReservations: React.FC = () => {
                     <Label>Booking Reference</Label>
                     <Input
                       value={formData.booking_reference}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="ABC123XYZ"
                     />
                   </div>
@@ -251,7 +251,7 @@ export const TravelReservations: React.FC = () => {
                   <Label>Location</Label>
                   <Input
                     value={formData.location}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="City, Country"
                   />
                 </div>
@@ -262,7 +262,7 @@ export const TravelReservations: React.FC = () => {
                     <Input
                       type="datetime-local"
                       value={formData.check_in_date}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -270,7 +270,7 @@ export const TravelReservations: React.FC = () => {
                     <Input
                       type="datetime-local"
                       value={formData.check_out_date}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -282,7 +282,7 @@ export const TravelReservations: React.FC = () => {
                       type="number"
                       step="0.01"
                       value={formData.cost}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -344,7 +344,7 @@ export const TravelReservations: React.FC = () => {
                   <Label>Notes</Label>
                   <Textarea
                     value={formData.notes}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Additional notes..."
                     rows={3}
                   />

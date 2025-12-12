@@ -111,7 +111,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
         title: "Erro",
         description: "Nome e URL são obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -124,39 +124,39 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
 
     onUpdate({
       webhooks: [...settings.webhooks, webhook]
-    };
+    });
 
     setNewWebhook({ name: "", url: "" });
     
     toast({
       title: "Webhook Adicionado",
       description: "Webhook configurado com sucesso"
-    };
+    });
   };
 
   const removeWebhook = (id: string) => {
     onUpdate({
       webhooks: settings.webhooks.filter(w => w.id !== id)
-    };
+    });
     
     toast({
       title: "Webhook Removido",
       description: "Webhook foi removido das configurações"
-    };
+    });
   };
 
   const testWebhook = async (webhook: unknown) => {
     toast({
       title: "Testando Webhook",
       description: "Enviando payload de teste..."
-    };
+    });
 
     // Simulate webhook test
     setTimeout(() => {
       toast({
         title: "Webhook Testado",
         description: "Resposta: 200 OK - Webhook funcionando corretamente"
-      };
+      });
     }, 2000);
   };
 
@@ -295,7 +295,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       id="webhookName"
                       placeholder="Nome descritivo do webhook"
                       value={newWebhook.name}
-                      onChange={handleChange}))}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -304,7 +304,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       id="webhookUrl"
                       placeholder="https://api.exemplo.com/webhook"
                       value={newWebhook.url}
-                      onChange={handleChange}))}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>

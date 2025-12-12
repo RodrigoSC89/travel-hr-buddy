@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI, AIModule, AIAction } from "@/hooks/useNautilusAI";
 import {
   Brain,
@@ -275,7 +274,7 @@ export const AIModuleEnhancer = memo(function({
             )}
           </div>
         )}
-       </CardContent>
+      </CardContent>
     </Card>
   );
 });

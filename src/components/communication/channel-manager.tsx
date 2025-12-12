@@ -212,7 +212,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedChannels = React.useMemo(() => {
-    let filtered = [...channels];
+    let filtered = [...channels]);
 
     if (searchTerm) {
       filtered = filtered.filter(c => 

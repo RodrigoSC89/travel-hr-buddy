@@ -1049,4 +1049,4 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
       <SidebarRail />
     </Sidebar>
   );
-}
+});

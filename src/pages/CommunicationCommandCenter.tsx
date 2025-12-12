@@ -55,7 +55,7 @@ const CommunicationCommandCenter = () => {
     criticalNotifications: 0,
     urgentMessages: 0,
     todayMessages: 0
-  };
+  });
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 

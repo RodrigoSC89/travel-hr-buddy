@@ -102,4 +102,4 @@ export const EmployeeHistory = memo(function() {
       )}
     </div>
   );
-}
+});

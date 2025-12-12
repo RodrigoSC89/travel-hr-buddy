@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,21 +13,15 @@ import {
   Ship,
   Anchor,
   AlertTriangle,
-  CheckCircle,
   Activity,
-  Zap,
   MapPin,
-  Gauge,
-  Thermometer,
   Wind,
   Waves,
-  Radio,
   Eye,
   Bell,
   TrendingUp,
   Clock,
   Users,
-  Settings,
   Search,
   RefreshCw,
   Download

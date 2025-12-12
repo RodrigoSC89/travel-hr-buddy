@@ -288,4 +288,4 @@ function getBadgeVariant(severity: string): BadgeVariant {
   default:
     return "secondary";
   }
-}
+});

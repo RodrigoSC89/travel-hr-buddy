@@ -79,7 +79,7 @@ const MaintenanceCommandCenter = () => {
     efficiency: 0,
     activeTasks: 0,
     pendingForecasts: 0
-  };
+  });
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAlertsPanel, setShowAlertsPanel] = useState(false);

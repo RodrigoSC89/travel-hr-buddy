@@ -63,7 +63,7 @@ export const AutonomousProcurementAI: React.FC = () => {
     autoOrders: 0,
     savingsThisMonth: 0,
     supplierScore: 0
-  };
+  });
 
   useEffect(() => {
     loadProcurementData();

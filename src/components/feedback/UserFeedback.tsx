@@ -5,7 +5,7 @@ import { useState, useCallback } from "react";;
  */
 
 import React, { memo, useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageSquare, X } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";

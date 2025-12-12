@@ -54,7 +54,7 @@ const VesselManagement: React.FC = () => {
     flag_state: "",
     next_port: "",
     eta: ""
-  };
+  });
 
   useEffect(() => {
     loadVessels();
@@ -240,7 +240,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="name"
                   value={newVessel.name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: MV Atlântico"
                 />
               </div>
@@ -249,7 +249,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="imo"
                   value={newVessel.imo_number}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 1234567"
                 />
               </div>
@@ -276,7 +276,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="flag"
                   value={newVessel.flag_state}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Brasil"
                 />
               </div>
@@ -285,7 +285,7 @@ const VesselManagement: React.FC = () => {
                 <Input
                   id="port"
                   value={newVessel.next_port}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Santos"
                 />
               </div>
@@ -295,7 +295,7 @@ const VesselManagement: React.FC = () => {
                   id="eta"
                   type="datetime-local"
                   value={newVessel.eta}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>

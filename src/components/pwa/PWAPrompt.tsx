@@ -177,4 +177,4 @@ export const OfflineIndicator = memo(function() {
       </div>
     </motion.div>
   );
-}
+});

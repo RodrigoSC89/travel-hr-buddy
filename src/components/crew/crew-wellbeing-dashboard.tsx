@@ -268,4 +268,4 @@ export const CrewWellbeingDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

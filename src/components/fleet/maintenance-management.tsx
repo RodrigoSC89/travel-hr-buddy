@@ -372,7 +372,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="vessel_name"
                   value={newMaintenance.vessel_name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Nome da embarcação"
                 />
               </div>
@@ -416,7 +416,7 @@ const MaintenanceManagement: React.FC = () => {
                   id="scheduled_date"
                   type="datetime-local"
                   value={newMaintenance.scheduled_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="md:col-span-2">
@@ -424,7 +424,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newMaintenance.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Inspeção do Motor Principal"
                 />
               </div>
@@ -433,7 +433,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newMaintenance.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descrição detalhada da manutenção..."
                   rows={3}
                 />
@@ -444,7 +444,7 @@ const MaintenanceManagement: React.FC = () => {
                   id="estimated_duration"
                   type="number"
                   value={newMaintenance.estimated_duration}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 24"
                 />
               </div>
@@ -455,7 +455,7 @@ const MaintenanceManagement: React.FC = () => {
                   type="number"
                   step="0.01"
                   value={newMaintenance.cost_estimate}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 15000.00"
                 />
               </div>
@@ -464,7 +464,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="assigned_technician"
                   value={newMaintenance.assigned_technician}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Nome do técnico"
                 />
               </div>
@@ -473,7 +473,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="location"
                   value={newMaintenance.location}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Porto de Santos"
                 />
               </div>
@@ -482,7 +482,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="parts_required"
                   value={newMaintenance.parts_required}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Filtro de óleo, Junta do cabeçote (separadas por vírgula)"
                 />
               </div>

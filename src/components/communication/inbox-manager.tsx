@@ -189,7 +189,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedMessages = useMemo(() => {
-    let filtered = [...messages];
+    let filtered = [...messages]);
 
     // Filter by tab
     switch (activeInboxTab) {

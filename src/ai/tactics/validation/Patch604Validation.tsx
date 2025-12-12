@@ -171,4 +171,4 @@ export const Patch604Validation = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

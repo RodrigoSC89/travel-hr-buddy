@@ -164,4 +164,4 @@ export const usePerformanceContext = memo(function() {
     throw new Error("usePerformanceContext must be used within PerformanceProvider");
   }
   return context;
-}
+});

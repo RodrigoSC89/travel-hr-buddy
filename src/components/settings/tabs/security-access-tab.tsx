@@ -48,7 +48,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
         ...settings.passwordRules,
         [rule]: value
       }
-};
+});
   };
 
   const getPasswordStrength = () => {
@@ -109,7 +109,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireNumbers}
-                    onCheckedChange={(checked) => updatePasswordRule("requireNumbers", checked}
+                    onCheckedChange={(checked) => updatePasswordRule("requireNumbers", checked)}
                   />
                 </div>
 
@@ -120,7 +120,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireSymbols}
-                    onCheckedChange={(checked) => updatePasswordRule("requireSymbols", checked}
+                    onCheckedChange={(checked) => updatePasswordRule("requireSymbols", checked)}
                   />
                 </div>
 
@@ -131,7 +131,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireUppercase}
-                    onCheckedChange={(checked) => updatePasswordRule("requireUppercase", checked}
+                    onCheckedChange={(checked) => updatePasswordRule("requireUppercase", checked)}
                   />
                 </div>
               </div>
@@ -204,7 +204,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                 min="1"
                 max="10"
                 value={settings.maxLoginAttempts}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
               <p className="text-xs text-muted-foreground">
                 Conta será bloqueada temporariamente após este número de tentativas

@@ -256,4 +256,4 @@ export const TelemetryMap = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

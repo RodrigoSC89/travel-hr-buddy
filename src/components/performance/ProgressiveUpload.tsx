@@ -247,4 +247,4 @@ export const useProgressiveUpload = memo(function() {
   };
 
   return { progress, isUploading, upload };
-}
+});

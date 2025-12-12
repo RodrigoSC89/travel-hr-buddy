@@ -40,7 +40,7 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
 }) => {
   // Add preconnect links dynamically for faster resource loading
   useEffect(() => {
-    const links: HTMLLinkElement[] = [];
+    const links: HTMLLinkElement[] = []);
     
     // Add preconnect links
     preconnectDomains.forEach(domain => {

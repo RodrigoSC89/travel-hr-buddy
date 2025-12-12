@@ -144,4 +144,4 @@ export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
       ))}
     </div>
   );
-}
+});

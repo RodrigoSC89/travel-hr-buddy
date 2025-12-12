@@ -109,4 +109,4 @@ export const ComplianceByVesselChart = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

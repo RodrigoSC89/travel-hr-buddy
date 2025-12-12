@@ -222,7 +222,7 @@ export default function SatelliteTracker() {
       const { data, error } = await supabase.rpc("start_tracking_session", {
         p_satellite_id: satelliteId,
         p_tracking_mode: "real-time"
-      };
+      });
 
       if (error) throw error;
 
@@ -249,7 +249,7 @@ export default function SatelliteTracker() {
     try {
       const { error } = await supabase.rpc("end_tracking_session", {
         p_session_id: trackingSessionId
-      };
+      });
 
       if (error) throw error;
 
@@ -269,7 +269,7 @@ export default function SatelliteTracker() {
     try {
       const { error } = await supabase.rpc("resolve_satellite_alert", {
         p_alert_id: alertId
-      };
+      });
 
       if (error) throw error;
 

@@ -311,4 +311,4 @@ export const SmartInventory = memo(function() {
       </Card>
     </div>
   );
-}
+});

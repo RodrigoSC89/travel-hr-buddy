@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Upload, Download, Eye, Shield, Calendar } from "lucide-react";
+import { FileText, Upload, Shield, Calendar } from "lucide-react";
 
 const DocumentationCenter: React.FC = () => {
   return (

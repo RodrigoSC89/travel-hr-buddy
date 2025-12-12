@@ -331,4 +331,4 @@ export const ProfessionalWeatherDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

@@ -280,4 +280,4 @@ export const PainelBI = memo(function() {
       </div>
     </div>
   );
-}
+});

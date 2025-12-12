@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import { 
   Server,
-  Database,
-  Cloud,
   Cpu,
   HardDrive,
   Network,
@@ -22,11 +20,8 @@ import {
   Activity,
   Zap,
   Shield,
-  Clock,
   Eye,
-  AlertCircle,
-  CheckCircle,
-  TrendingUp
+  CheckCircle
 } from "lucide-react";
 
 const SystemStatusDashboard = () => {

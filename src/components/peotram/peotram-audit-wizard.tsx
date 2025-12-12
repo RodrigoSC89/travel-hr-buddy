@@ -657,7 +657,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Textarea
                   id="comments"
                   value={requirement.comments || ""}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descreva as observações, evidências encontradas e justificativas para a pontuação..."
                   rows={4}
                 />
@@ -687,7 +687,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Textarea
                     id="justification"
                     value={requirement.justification}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Justifique a não conformidade e as ações corretivas necessárias..."
                     rows={3}
                   />

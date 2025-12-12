@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CheckCircle, XCircle, MinusCircle, ClipboardCheck } from "lucide-react";
-import { OVIQ4_SECTIONS, getQuestionsForVesselType } from "@/data/oviq4-checklist";
+import { OVIQ4_SECTIONS } from "@/data/oviq4-checklist";
 
 interface OVIDChecklistProps {
   vesselType: string;

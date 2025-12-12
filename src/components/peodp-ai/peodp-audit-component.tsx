@@ -55,7 +55,7 @@ export const PEODPAuditComponent = memo(function() {
         vesselName,
         dpClass: dpClass || undefined,
         autoDownload: false,
-      };
+      });
 
       // Gerar recomendações
       const { PEOEngine } = await import("@/modules/hr/peo-dp");
@@ -300,4 +300,4 @@ export const PEODPAuditComponent = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

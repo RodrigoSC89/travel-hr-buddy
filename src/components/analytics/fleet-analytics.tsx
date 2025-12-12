@@ -14,7 +14,7 @@ import {
   LineChart,
   Line
 } from "recharts";
-import { Ship, Fuel, Users, Calendar } from "lucide-react";
+import { Ship, Fuel, Users } from "lucide-react";
 
 const vesselStatusData = [
   { name: "Ativas", value: 12, color: "#10b981" },

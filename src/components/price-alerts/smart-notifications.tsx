@@ -72,7 +72,7 @@ export const SmartNotifications: React.FC = () => {
   const [testNotification, setTestNotification] = useState({
     type: "email" as "email" | "push" | "sms",
     message: "Teste de notificação do sistema de alertas"
-  };
+  });
 
   const { toast } = useToast();
   const { user } = useAuth();

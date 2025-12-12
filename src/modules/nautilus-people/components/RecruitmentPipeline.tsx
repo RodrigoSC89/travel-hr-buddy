@@ -256,7 +256,7 @@ const RecruitmentPipeline: React.FC = () => {
                   <Input 
                     placeholder="Ex: Engenheiro de Produção Sênior"
                     value={newVaga.titulo}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -302,7 +302,7 @@ const RecruitmentPipeline: React.FC = () => {
                     placeholder="Descreva as responsabilidades e requisitos..." 
                     rows={4}
                     value={newVaga.descricao}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -310,7 +310,7 @@ const RecruitmentPipeline: React.FC = () => {
                   <Input 
                     placeholder="Python, SQL, 3+ anos experiência"
                     value={newVaga.requisitos}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>

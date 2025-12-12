@@ -340,4 +340,4 @@ export const MLCComplianceDashboard = memo(function() {
       </Card>
     </div>
   );
-}
+});

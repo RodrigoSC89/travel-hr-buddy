@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react";;
  */
 
 import React, { useState, useEffect } from "react";
-import { Wifi, WifiOff, Cloud, CloudOff, RefreshCw, CheckCircle2, AlertTriangle } from "lucide-react";
+import { WifiOff, Cloud, CloudOff, RefreshCw, CheckCircle2, AlertTriangle } from "lucide-react";
 import { offlineSyncManager } from "@/lib/pwa/offline-sync-manager";
 import { cn } from "@/lib/utils";
 

@@ -388,4 +388,4 @@ export const FleetIntelligence = memo(function() {
       </Card>
     </div>
   );
-}
+});

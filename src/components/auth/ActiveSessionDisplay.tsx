@@ -19,8 +19,7 @@ import {
 } from "lucide-react";
 import { 
   getSessionMetadata, 
-  secureLogout, 
-  TokenRefreshManager,
+  secureLogout,
   initializeTokenRefresh 
 } from "@/services/enhanced-auth-service";
 import { useToast } from "@/hooks/use-toast";

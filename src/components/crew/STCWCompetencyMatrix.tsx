@@ -326,4 +326,4 @@ export const STCWCompetencyMatrix = memo(function() {
       </div>
     </div>
   );
-}
+});

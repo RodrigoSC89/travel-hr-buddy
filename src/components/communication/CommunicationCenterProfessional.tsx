@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -17,7 +17,6 @@ import {
   Bell,
   Settings,
   Search,
-  Filter,
   Plus,
   Star,
   Archive,
@@ -32,8 +31,6 @@ import {
   Sparkles,
   Bot,
   MoreHorizontal,
-  Phone,
-  Video,
   Paperclip,
   Smile,
   Mic,
@@ -43,7 +40,6 @@ import {
   Forward,
   ChevronRight,
   Users,
-  Volume2,
   Lock
 } from "lucide-react";
 import {
@@ -264,7 +260,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
 
   // Filtered messages
   const filteredMessages = useMemo(() => {
-    let result = [...messages];
+    let result = [...messages]);
 
     // Filter by inbox tab
     if (inboxTab === "unread") result = result.filter(m => m.status !== "read");

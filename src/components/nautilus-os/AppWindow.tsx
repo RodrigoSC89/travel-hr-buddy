@@ -41,4 +41,4 @@ export const AppWindow = memo(function({ id, onClose }: AppWindowProps) {
       </div>
     </Card>
   );
-}
+});

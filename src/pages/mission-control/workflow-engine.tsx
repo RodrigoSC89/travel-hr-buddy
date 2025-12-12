@@ -48,7 +48,7 @@ const WorkflowEngine = () => {
     name: "",
     description: "",
     steps: [],
-  };
+  });
 
   useEffect(() => {
     loadWorkflows();
@@ -213,7 +213,7 @@ const WorkflowEngine = () => {
               <Label>Nome do Workflow</Label>
               <Input
                 value={newWorkflow.name}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Ex: Análise Diária de Saúde"
               />
             </div>
@@ -222,7 +222,7 @@ const WorkflowEngine = () => {
               <Label>Descrição</Label>
               <Textarea
                 value={newWorkflow.description}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Descreva o objetivo deste workflow"
                 rows={2}
               />

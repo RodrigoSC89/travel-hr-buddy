@@ -314,4 +314,4 @@ export const FleetManagementDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

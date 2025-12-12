@@ -128,7 +128,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: nauticalRoutineItems
-};
+});
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -180,7 +180,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
         ...checklist,
         status: "pending_review",
         completedAt: new Date().toISOString()
-      };
+      });
       toast.success("Checklist enviado para revisão!");
     } catch (error) {
       toast.error("Erro ao enviar checklist");

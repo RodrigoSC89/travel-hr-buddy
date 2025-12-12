@@ -314,7 +314,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                               <Textarea
                                 id="description"
                                 value={selectedNC.description}
-                                onChange={handleChange})}
+                                onChange={handleChange}
                                 rows={3}
                               />
                             </div>
@@ -324,7 +324,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                               <Textarea
                                 id="corrective_action"
                                 value={selectedNC.corrective_action}
-                                onChange={handleChange})}
+                                onChange={handleChange}
                                 rows={3}
                               />
                             </div>
@@ -353,7 +353,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                                 <Input
                                   id="responsible_person"
                                   value={selectedNC.responsible_person}
-                                  onChange={handleChange})}
+                                  onChange={handleChange}
                                 />
                               </div>
                             </div>
@@ -364,7 +364,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                                 id="target_date"
                                 type="date"
                                 value={selectedNC.target_date}
-                                onChange={handleChange})}
+                                onChange={handleChange}
                               />
                             </div>
                             

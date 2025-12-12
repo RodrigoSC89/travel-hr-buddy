@@ -50,7 +50,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       // Create challenge
       const { data: challengeData, error: challengeError } = await supabase.auth.mfa.challenge({
         factorId: verifiedFactor.id
-      };
+      });
       
       if (challengeError) throw challengeError;
 
@@ -90,7 +90,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         factorId,
         challengeId: challenge.id,
         code
-      };
+      });
 
       if (error) throw error;
 

@@ -178,12 +178,12 @@ const PerformanceDashboard: React.FC = () => {
         period: selectedPeriod,
         vessel: selectedVessel,
         missionType: selectedMissionType
-      };
+      });
 
       toast({
         title: "PDF Gerado",
         description: "Relatório de performance exportado com sucesso",
-      };
+      });
 
     } catch (error) {
       console.error("[Performance Dashboard] PDF export error:", error);

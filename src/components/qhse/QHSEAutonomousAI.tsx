@@ -17,8 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
-  Brain, Shield, AlertTriangle, CheckCircle, FileText,
-  TrendingUp, Clock, Zap, Sparkles, Search, ClipboardCheck,
+  Brain, Shield, AlertTriangle, CheckCircle, FileText, Clock, Zap, Sparkles, ClipboardCheck,
   AlertCircle, Target
 } from "lucide-react";
 import { toast } from "sonner";

@@ -14,10 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
-import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
   Brain,
   GraduationCap,
@@ -28,12 +26,10 @@ import {
   Play,
   CheckCircle,
   Clock,
-  TrendingUp,
   FileText,
   Sparkles,
   MessageSquare,
-  Lightbulb,
-  AlertTriangle
+  Lightbulb
 } from "lucide-react";
 import { toast } from "sonner";
 

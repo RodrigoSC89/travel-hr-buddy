@@ -233,4 +233,4 @@ function SimilarJobsList({ jobs }: { jobs: SimilarJob[] }) {
       ))}
     </div>
   );
-}
+});

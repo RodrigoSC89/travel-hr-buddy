@@ -53,7 +53,7 @@ export function VirtualizedList<T>({
 
   // Calculate total height and item positions
   const { totalHeight, itemPositions } = useMemo(() => {
-    const positions: number[] = [];
+    const positions: number[] = []);
     let total = 0;
 
     items.forEach((_, index) => {
@@ -135,7 +135,7 @@ export function VirtualizedList<T>({
 
   // Render visible items
   const visibleItems = useMemo(() => {
-    const visible: React.ReactNode[] = [];
+    const visible: React.ReactNode[] = []);
 
     for (let i = startIndex; i < endIndex; i++) {
       const item = items[i];

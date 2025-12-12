@@ -62,7 +62,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     try {
       const { data, error } = await supabase.auth.mfa.enroll({
         factorType: "totp"
-      };
+      });
 
       if (error) throw error;
 
@@ -74,13 +74,13 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "2FA Configurado",
         description: "Escaneie o QR Code com seu app autenticador",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao configurar 2FA",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -92,7 +92,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         title: "Código Inválido",
         description: "Por favor, digite um código de 6 dígitos",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -102,7 +102,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         factorId,
         challengeId: factorId,
         code: verificationCode
-      };
+      });
 
       if (error) throw error;
 
@@ -112,13 +112,13 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "2FA Ativado",
         description: "Autenticação de dois fatores foi ativada com sucesso!",
-      };
+      });
     } catch (error) {
       toast({
         title: "Código Incorreto",
         description: error instanceof Error ? error.message : "Verifique o código e tente novamente",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -136,13 +136,13 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "2FA Desativado",
         description: "Autenticação de dois fatores foi desativada",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao desativar 2FA",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -155,7 +155,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     toast({
       title: "Copiado",
       description: "Código copiado para a área de transferência",
-    };
+    });
   };
 
   const renderSetupStep = () => (

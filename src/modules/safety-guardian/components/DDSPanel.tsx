@@ -34,7 +34,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
     participants_count: 0,
     duration_minutes: 15,
     notes: ""
-};
+});
 
   const handleSubmit = async () => {
     if (!formData.topic || !formData.vessel_name || !formData.conductor) {
@@ -46,7 +46,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
       ...formData,
       date: new Date().toISOString(),
       participants: []
-    };
+    });
 
     setFormData({
       topic: "",
@@ -172,7 +172,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                 <Input
                   placeholder="Ex: Uso correto de EPIs"
                   value={formData.topic}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -200,7 +200,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                   <Input
                     placeholder="Nome do condutor"
                     value={formData.conductor}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -212,7 +212,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                     type="number"
                     min={0}
                     value={formData.participants_count}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -222,7 +222,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                     type="number"
                     min={5}
                     value={formData.duration_minutes}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -232,7 +232,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                 <Textarea
                   placeholder="Anotações adicionais..."
                   value={formData.notes}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   rows={3}
                 />
               </div>

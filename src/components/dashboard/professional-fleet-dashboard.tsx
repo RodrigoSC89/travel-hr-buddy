@@ -457,4 +457,4 @@ export const ProfessionalFleetDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

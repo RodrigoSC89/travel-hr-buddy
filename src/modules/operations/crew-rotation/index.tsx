@@ -288,7 +288,7 @@ export default function CrewRotationModule() {
                 <Input
                   placeholder="ID do tripulante"
                   value={newRotation.crew_member_id}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               
@@ -297,7 +297,7 @@ export default function CrewRotationModule() {
                 <Input
                   placeholder="ID da embarcação"
                   value={newRotation.vessel_id}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -307,7 +307,7 @@ export default function CrewRotationModule() {
                   <Input
                     type="date"
                     value={newRotation.start_date}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 
@@ -316,7 +316,7 @@ export default function CrewRotationModule() {
                   <Input
                     type="date"
                     value={newRotation.end_date}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>

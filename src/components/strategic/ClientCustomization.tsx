@@ -365,7 +365,7 @@ export const ClientCustomization = memo(() => {
                         <Label>Nome do Campo</Label>
                         <Input 
                           value={field.name}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           className="mt-1"
                         />
                       </div>
@@ -435,7 +435,7 @@ export const ClientCustomization = memo(() => {
                         <Input 
                           placeholder="Opção 1, Opção 2, Opção 3"
                           value={field.options?.join(", ") || ""}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           className="mt-1"
                         />
                       </div>

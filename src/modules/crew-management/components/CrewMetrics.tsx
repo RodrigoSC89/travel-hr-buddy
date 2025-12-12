@@ -69,4 +69,4 @@ export const CrewMetrics = memo(function({ totalCrew, activeCrew, onLeaveCrew, e
       ))}
     </div>
   );
-}
+});

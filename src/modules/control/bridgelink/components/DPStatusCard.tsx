@@ -97,4 +97,4 @@ export const DPStatusCard = memo(function({ status }: DPStatusCardProps) {
       </CardContent>
     </Card>
   );
-}
+});

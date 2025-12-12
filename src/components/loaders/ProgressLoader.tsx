@@ -61,4 +61,4 @@ export const ProgressLoader = memo(function({
       )}
     </div>
   );
-}
+});

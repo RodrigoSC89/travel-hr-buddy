@@ -520,7 +520,7 @@ export default function AITemplatesPage() {
                 id="title"
                 placeholder="Ex: Relatório Mensal"
                 value={formData.title}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -531,7 +531,7 @@ export default function AITemplatesPage() {
                 placeholder="Digite o conteúdo do template..."
                 rows={8}
                 value={formData.content}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 

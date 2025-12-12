@@ -42,7 +42,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
     push_enabled: true,
     sms_enabled: false,
     frequency: "once"
-};
+});
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 

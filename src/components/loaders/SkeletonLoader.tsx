@@ -91,4 +91,4 @@ export const SkeletonLoader = memo(function({
       {renderSkeleton()}
     </div>
   );
-}
+});

@@ -360,7 +360,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="name"
                     value={newVessel.name}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: MV Atlântico Explorer"
                   />
                 </div>
@@ -369,7 +369,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="imo"
                     value={newVessel.imo_number}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: 9876543"
                   />
                 </div>
@@ -397,7 +397,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="flag"
                     value={newVessel.flag_state}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: Brasil"
                   />
                 </div>
@@ -407,7 +407,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="crew"
                     type="number"
                     value={newVessel.crew_count}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: 24"
                   />
                 </div>
@@ -417,7 +417,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="capacity"
                     type="number"
                     value={newVessel.cargo_capacity}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: 12000"
                   />
                 </div>
@@ -428,7 +428,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     type="number"
                     step="0.1"
                     value={newVessel.fuel_consumption}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: 15.2"
                   />
                 </div>
@@ -437,7 +437,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="port"
                     value={newVessel.next_port}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: Santos"
                   />
                 </div>
@@ -447,7 +447,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="eta"
                     type="datetime-local"
                     value={newVessel.eta}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>

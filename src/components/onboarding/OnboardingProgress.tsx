@@ -4,7 +4,7 @@
  */
 
 import React, { memo } from "react";
-import { Check, Circle } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 

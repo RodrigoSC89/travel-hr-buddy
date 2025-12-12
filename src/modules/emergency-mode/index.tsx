@@ -374,7 +374,7 @@ const EmergencyMode = () => {
         role: "assistant",
         content: response.data?.answer || getDefaultAIResponse(aiInput),
         timestamp: new Date(),
-      };
+      });
       setAiMessages(prev => [...prev, aiResponse]);
     } catch (error) {
       const fallbackResponse: AIMessage = {

@@ -148,4 +148,4 @@ export const AdaptiveAvatar = memo(function({
       className={cn("rounded-full object-cover", className)}
     />
   );
-}
+});

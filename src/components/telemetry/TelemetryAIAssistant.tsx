@@ -268,4 +268,4 @@ export const TelemetryAIAssistant = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

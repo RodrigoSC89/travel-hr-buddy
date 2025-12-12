@@ -30,7 +30,7 @@ export const TestEnvironmentConfig: React.FC = () => {
     errorReporting: true,
     performanceMonitoring: true,
     securityScanning: true
-  };
+  });
 
   const { toast } = useToast();
 

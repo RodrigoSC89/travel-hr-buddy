@@ -6,7 +6,6 @@
 
 import {
   Ship,
-  TrendingUp,
   Users,
   DollarSign,
   Target,

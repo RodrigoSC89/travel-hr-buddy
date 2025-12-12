@@ -15,7 +15,7 @@ const FuelOptimizer = () => {
     destination: "",
     cargo_weight: "",
     weather_condition: "normal"
-  };
+  });
 
   const [optimization, setOptimization] = useState<unknown>(null);
   const [history, setHistory] = useState([
@@ -134,7 +134,7 @@ const FuelOptimizer = () => {
               <Label>Origem</Label>
               <Input
                 value={routeData.origin}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Porto de origem"
               />
             </div>
@@ -142,7 +142,7 @@ const FuelOptimizer = () => {
               <Label>Destino</Label>
               <Input
                 value={routeData.destination}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Porto de destino"
               />
             </div>
@@ -151,7 +151,7 @@ const FuelOptimizer = () => {
               <Input
                 type="number"
                 value={routeData.cargo_weight}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="0"
               />
             </div>
@@ -160,7 +160,7 @@ const FuelOptimizer = () => {
               <select
                 className="w-full p-2 border rounded-md bg-background"
                 value={routeData.weather_condition}
-                onChange={handleChange})}
+                onChange={handleChange}
               >
                 <option value="normal">Normal</option>
                 <option value="adversa">Adversa</option>

@@ -41,7 +41,7 @@ export const OrganizationHealthCheck: React.FC = () => {
     vessels: 0,
     certificates: 0,
     modules: 0
-  };
+  });
 
   useEffect(() => {
     if (currentOrganization) {

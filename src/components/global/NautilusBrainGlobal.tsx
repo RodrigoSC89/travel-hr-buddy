@@ -5,7 +5,6 @@ import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
  */
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +13,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Brain, Send, X, Loader2, Sparkles, Ship, Wrench, Users,
-  Package, Shield, Mic, Copy, ThumbsUp, ThumbsDown,
-  Lightbulb, MessageSquare, Minimize2, Maximize2
+  Brain, Send, X, Loader2, Sparkles, Copy, ThumbsUp, ThumbsDown,
+  Lightbulb, Minimize2
 } from "lucide-react";
 
 interface Message {

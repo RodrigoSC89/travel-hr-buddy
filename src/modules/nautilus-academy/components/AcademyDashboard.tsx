@@ -205,7 +205,7 @@ export default function AcademyDashboard() {
       await updateProgress(selectedProgress.id, {
         progress_percent: newProgress,
         status: newProgress >= 100 ? "completed" : "in_progress"
-      };
+      });
       toast({ title: "Progresso atualizado", description: `Progresso: ${newProgress}%` });
       if (newProgress >= 100) {
         toast({ title: "Parabéns!", description: "Você concluiu o curso!" });

@@ -52,7 +52,7 @@ export const WorkflowDetailWithAISuggestions = memo(function({ workflowId }: { w
           criticidade: "Crítica",
           responsavel_sugerido: "DevOps Lead"
         }
-      ];
+      ]);
 
       setAiSuggestions(suggestions);
     };
@@ -166,7 +166,7 @@ export default function ExampleWorkflowPage() {
           criticidade: "Média",
           responsavel_sugerido: "Tech Lead"
         }
-      ];
+      ]);
 
       // Method 2: Generate dynamic suggestions
       const dynamicSuggestions = await generateAISuggestionsForWorkflow("workflow-123");

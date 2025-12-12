@@ -63,7 +63,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     maritimeElements: true,
     navigationStyle: "modern",
     terminology: "maritime"
-  };
+  });
   
   const [previewMode, setPreviewMode] = useState(false);
   const [originalTheme, setOriginalTheme] = useState<{

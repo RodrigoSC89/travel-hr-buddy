@@ -167,7 +167,7 @@ export const MissionManager = memo(function() {
                   id="name"
                   placeholder="Ex: Inspeção de Segurança"
                   value={newMission.name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
@@ -176,7 +176,7 @@ export const MissionManager = memo(function() {
                   id="description"
                   placeholder="Descreva os objetivos e detalhes da missão"
                   value={newMission.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   rows={3}
                 />
               </div>

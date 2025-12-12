@@ -36,4 +36,4 @@ export const ComponentLoader = memo(function({
       {message && <p className="text-xs text-muted-foreground">{message}</p>}
     </div>
   );
-}
+});

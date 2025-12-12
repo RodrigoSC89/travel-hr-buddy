@@ -85,7 +85,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
     location: "",
     severity: "",
     witnesses: "",
-};
+});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,7 +102,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
         severity: formData.severity as SafetyIncident["severity"],
         incident_date: format(date, "yyyy-MM-dd"),
         witnesses: formData.witnesses ? formData.witnesses.split(",").map(w => w.trim()) : [],
-      };
+      });
       
       // Reset form
       setFormData({
@@ -168,7 +168,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               id="title"
               placeholder="Descreva brevemente a ocorrência..."
               value={formData.title}
-              onChange={handleChange})}
+              onChange={handleChange}
               required
             />
           </div>
@@ -180,7 +180,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               id="description"
               placeholder="Descreva em detalhes o que aconteceu, quando, onde e como..."
               value={formData.description}
-              onChange={handleChange})}
+              onChange={handleChange}
               rows={4}
               required
             />
@@ -274,7 +274,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                 id="location"
                 placeholder="Ex: Convés principal, Sala de máquinas..."
                 value={formData.location}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -289,7 +289,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               id="witnesses"
               placeholder="Nomes separados por vírgula..."
               value={formData.witnesses}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
           </div>
 

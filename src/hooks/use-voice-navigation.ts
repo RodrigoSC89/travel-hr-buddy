@@ -229,7 +229,7 @@ export const useVoiceNavigation = () => {
       "Acessar relatórios",
       "Abrir configurações",
       "Mostrar analytics"
-    ];
+    ]);
   }, []);
 
   // Verificar se um comando é válido

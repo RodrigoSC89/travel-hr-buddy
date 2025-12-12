@@ -43,7 +43,7 @@ export const SupplyOrdersManagement = memo(() => {
     delivery_address: "",
     estimated_delivery_date: "",
     notes: ""
-  };
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -206,7 +206,7 @@ export const SupplyOrdersManagement = memo(() => {
                   <Input
                     type="number"
                     value={newOrder.quantity}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -228,14 +228,14 @@ export const SupplyOrdersManagement = memo(() => {
                 <Label>Fornecedor</Label>
                 <Input
                   value={newOrder.supplier}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Endereço de Entrega</Label>
                 <Input
                   value={newOrder.delivery_address}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
@@ -243,14 +243,14 @@ export const SupplyOrdersManagement = memo(() => {
                 <Input
                   type="date"
                   value={newOrder.estimated_delivery_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Notas</Label>
                 <Textarea
                   value={newOrder.notes}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>

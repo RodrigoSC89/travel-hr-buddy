@@ -100,4 +100,4 @@ export function useInViewport(
   }, [ref, options]);
 
   return isInViewport;
-}
+});

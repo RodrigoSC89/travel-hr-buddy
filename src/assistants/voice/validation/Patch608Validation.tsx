@@ -190,4 +190,4 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
       <span>{label}</span>
     </div>
   );
-}
+});

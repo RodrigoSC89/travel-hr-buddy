@@ -41,7 +41,7 @@ export const useDashboardFilters = (options: UseDashboardFiltersOptions) => {
 
   const getFilterValue = useCallback(
     (filterId: string) => {
-      return filterValues[filterId];
+      return filterValues[filterId]);
     },
     [filterValues]
   );

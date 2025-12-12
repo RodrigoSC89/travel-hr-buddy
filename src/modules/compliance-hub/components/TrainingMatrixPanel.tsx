@@ -387,4 +387,4 @@ export const TrainingMatrixPanel = memo(function({
       )}
     </div>
   );
-}
+});

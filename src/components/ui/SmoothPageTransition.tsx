@@ -89,4 +89,4 @@ export const SlideTransition = memo(function({ children, className }: SmoothPage
       {children}
     </motion.div>
   );
-}
+});

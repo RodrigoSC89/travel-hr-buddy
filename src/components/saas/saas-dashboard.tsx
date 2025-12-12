@@ -14,7 +14,6 @@ import {
   CheckCircle,
   TrendingUp,
   DollarSign,
-  Calendar,
   Settings,
   Globe,
   Shield,
@@ -23,10 +22,6 @@ import {
 import { useTenant } from "@/contexts/TenantContext";
 import { TenantSwitcher } from "./tenant-switcher";
 import { WhiteLabelCustomizer } from "./white-label-customizer";
-import { TenantSetupWizard } from "./tenant-setup-wizard";
-import { BillingManagement } from "./billing-management";
-import { UsageAnalytics } from "./usage-analytics";
-import { TenantUserManagement } from "./tenant-user-management";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export const SaaSDashboard: React.FC = () => {

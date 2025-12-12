@@ -56,7 +56,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
     notification_email: alert?.notification_email ?? true,
     notification_push: alert?.notification_push ?? true,
     notification_frequency: alert?.notification_frequency || "immediate",
-};
+});
   const [travelDate, setTravelDate] = useState<Date | undefined>(
     alert?.travel_date ? new Date(alert.travel_date) : undefined
   );

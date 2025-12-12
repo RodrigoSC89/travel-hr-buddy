@@ -38,7 +38,7 @@ export const ReservationsDashboard: React.FC = () => {
     end_date: "",
     location: "",
     status: "confirmed" as "pending" | "confirmed" | "cancelled"
-  };
+  });
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -247,7 +247,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Título</label>
                 <Input
                   value={formData.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Título da reserva"
                   required
                 />
@@ -276,7 +276,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.start_date}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -285,7 +285,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.end_date}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     required
                   />
                 </div>
@@ -294,7 +294,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Local</label>
                 <Input
                   value={formData.location}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Local da reserva"
                 />
               </div>
@@ -302,7 +302,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Descrição</label>
                 <Textarea
                   value={formData.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descrição adicional"
                   rows={3}
                 />

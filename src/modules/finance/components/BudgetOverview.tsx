@@ -46,4 +46,4 @@ export const BudgetOverview = memo(function({ period }: BudgetOverviewProps) {
       </CardContent>
     </Card>
   );
-}
+});

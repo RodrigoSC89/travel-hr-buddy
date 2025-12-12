@@ -76,7 +76,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
     currency: "BRL",
     notes: "",
     is_public: false
-};
+});
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -438,7 +438,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Nome do Template *</label>
                 <Input
                   value={formData.name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Hotel Padrão Santos"
                 />
               </div>
@@ -446,7 +446,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Tipo de Reserva</label>
                 <select
                   value={formData.reservation_type}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
                   <option value="hotel">Hotel</option>
@@ -462,7 +462,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Título da Reserva *</label>
               <Input
                 value={formData.title}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Ex: Hotel Santos Dumont"
               />
             </div>
@@ -471,7 +471,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Descrição</label>
               <Textarea
                 value={formData.description}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Descrição padrão para este tipo de reserva..."
                 rows={3}
               />
@@ -482,7 +482,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Local</label>
                 <Input
                   value={formData.location}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Santos, SP"
                 />
               </div>
@@ -490,7 +490,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Tipo de Quarto/Serviço</label>
                 <Input
                   value={formData.room_type}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Quarto duplo standard"
                 />
               </div>
@@ -500,7 +500,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Endereço</label>
               <Input
                 value={formData.address}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Endereço completo..."
               />
             </div>
@@ -510,7 +510,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Contato</label>
                 <Input
                   value={formData.contact_info}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Telefone, email..."
                 />
               </div>
@@ -518,7 +518,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Link do Fornecedor</label>
                 <Input
                   value={formData.supplier_url}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="https://..."
                 />
               </div>
@@ -528,7 +528,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Observações</label>
               <Textarea
                 value={formData.notes}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Observações padrão..."
                 rows={2}
               />
@@ -539,7 +539,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 type="checkbox"
                 id="is_public"
                 checked={formData.is_public}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
               <label htmlFor="is_public" className="text-sm">
                 Tornar este template público (outros usuários poderão vê-lo)

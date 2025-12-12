@@ -126,4 +126,4 @@ export const DashboardSkeleton = memo(function() {
       </div>
     </div>
   );
-}
+});

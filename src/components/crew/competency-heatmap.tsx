@@ -1,17 +1,14 @@
-import { useState, useMemo } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
-  Users, 
-  Award,
-  TrendingUp,
+  Users,
   AlertCircle,
   CheckCircle,
   BookOpen,
-  Target,
-  Zap
+  Target
 } from "lucide-react";
 
 interface CrewMember {

@@ -1,13 +1,12 @@
-import { useState, useMemo, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, 
-  Tooltip, ResponsiveContainer, RadialBarChart, RadialBar, AreaChart, Area
+  Tooltip, ResponsiveContainer, AreaChart, Area
 } from "recharts";
 import { 
   TrendingUp, 
@@ -15,14 +14,9 @@ import {
   Activity, 
   Target, 
   AlertTriangle,
-  CheckCircle,
   Clock,
-  Users,
   Ship,
-  Building,
-  Award,
   Zap,
-  Leaf,
   Shield,
   BarChart3,
   PieChart as PieChartIcon,

@@ -252,4 +252,4 @@ export const NetworkStatusBadge = memo(function() {
       ({quality.downlink.toFixed(1)} Mbps)
     </div>
   );
-}
+});

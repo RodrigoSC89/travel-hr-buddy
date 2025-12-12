@@ -235,4 +235,4 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
       </CardContent>
     </Card>
   );
-}
+});

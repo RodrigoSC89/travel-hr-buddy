@@ -42,7 +42,7 @@ export const GanttChart = memo(() => {
     priority: "medium",
     description: "",
     parent_task_id: null as string | null
-  };
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -433,14 +433,14 @@ export const GanttChart = memo(() => {
               <Label>Nome do Projeto</Label>
               <Input
                 value={newTask.project_name}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
             <div className="grid gap-2">
               <Label>Nome da Tarefa</Label>
               <Input
                 value={newTask.task_name}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -449,7 +449,7 @@ export const GanttChart = memo(() => {
                 <Input
                   type="date"
                   value={newTask.start_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
@@ -457,7 +457,7 @@ export const GanttChart = memo(() => {
                 <Input
                   type="date"
                   value={newTask.end_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>

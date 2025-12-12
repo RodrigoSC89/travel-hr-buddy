@@ -137,4 +137,4 @@ export const EventTimeline = memo(function({ events }: EventTimelineProps) {
       })}
     </div>
   );
-}
+});

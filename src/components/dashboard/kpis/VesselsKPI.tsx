@@ -88,4 +88,4 @@ export const VesselsKPI = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

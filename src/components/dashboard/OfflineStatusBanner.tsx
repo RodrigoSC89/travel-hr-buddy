@@ -62,4 +62,4 @@ export const OfflineStatusBanner = memo(function({
       </AlertDescription>
     </Alert>
   );
-}
+});

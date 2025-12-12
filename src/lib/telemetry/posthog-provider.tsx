@@ -52,4 +52,4 @@ export const TelemetryProvider = memo(function({ children }: TelemetryProviderPr
       {children}
     </TelemetryContext.Provider>
   );
-}
+});

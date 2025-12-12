@@ -23,7 +23,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
     stress_level: 5,
     energy_level: 5,
     notes: "",
-};
+});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -148,7 +148,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   step="0.5"
                   value={formData.sleep_hours}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   min="0"
                   max="24"
                 />
@@ -185,7 +185,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   placeholder="120"
                   value={formData.blood_pressure_systolic}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -195,7 +195,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   placeholder="80"
                   value={formData.blood_pressure_diastolic}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -206,7 +206,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                 type="number"
                 placeholder="72"
                 value={formData.heart_rate}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -228,7 +228,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
             <Label>Additional Notes (Optional)</Label>
             <Textarea
               value={formData.notes}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Any symptoms, concerns, or additional information..."
               rows={3}
             />

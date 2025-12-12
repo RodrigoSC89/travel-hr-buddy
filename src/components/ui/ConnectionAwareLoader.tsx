@@ -6,7 +6,7 @@
 import React from "react";
 import { useConnectionAware } from "@/hooks/use-connection-aware";
 import { Skeleton } from "./skeleton";
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
+import { WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ConnectionAwareLoaderProps {

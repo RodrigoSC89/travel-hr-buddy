@@ -11,13 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
   Brain, Navigation, Fuel, Users, Wrench, Cloud,
   MapPin, Clock, DollarSign, TrendingUp, Sparkles, Zap,
-  Anchor, Ship, AlertTriangle
+  Anchor, Ship
 } from "lucide-react";
 import { toast } from "sonner";
 

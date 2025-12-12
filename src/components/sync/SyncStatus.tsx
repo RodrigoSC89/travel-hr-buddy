@@ -198,4 +198,4 @@ export const SyncStatus = memo(function() {
       </Card>
     </div>
   );
-}
+});

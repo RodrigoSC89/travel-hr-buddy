@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,19 +27,11 @@ import {
   Clock,
   Eye,
   Search,
-  Filter,
   Zap,
   Target,
-  TrendingUp,
   Activity,
   Bookmark,
-  Share2,
-  PenTool,
-  Layers,
-  Globe2,
-  Cpu,
-  Database,
-  Server
+  Share2
 } from "lucide-react";
 
 // Import category components
@@ -556,23 +547,23 @@ const EnhancedSettingsHubComponent: React.FC = () => {
 
   const toggleTestMode = () => {
     setTestMode(!testMode);
-        toast({
-          title: "🔄 Modo de Teste",
-          description: settings.advanced.testMode
-          ? "Voltando ao modo produção. Alterações afetarão o sistema."
-          : "Modo teste ativado. Alterações não afetarão outros usuários.",
-        });
+    toast({
+      title: "🔄 Modo de Teste",
+      description: settings.advanced.testMode
+        ? "Voltando ao modo produção. Alterações afetarão o sistema."
+        : "Modo teste ativado. Alterações não afetarão outros usuários.",
+    });
   };
 
   const togglePreviewMode = () => {
     const newPreviewMode = !previewMode;
     setPreviewMode(newPreviewMode);
-        toast({
-          title: "🔍 Modo Prévia",
-          description: settings.advanced.previewMode
-          ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
-          : "Voltando ao modo normal.",
-        });
+    toast({
+      title: "🔍 Modo Prévia",
+      description: settings.advanced.previewMode
+        ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
+        : "Voltando ao modo normal.",
+    });
   };
 
   const getHealthColor = (score: number) => {
@@ -900,8 +891,8 @@ const EnhancedSettingsHubComponent: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
-      </div>
-    );
+    </div>
+  );
 };
 
 export const EnhancedSettingsHub = memo(EnhancedSettingsHubComponent);

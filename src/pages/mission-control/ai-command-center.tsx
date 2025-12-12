@@ -71,7 +71,7 @@ const AICommandCenter = () => {
             title: "Erro",
             description: "Não foi possível processar o comando",
             variant: "destructive",
-          };
+          });
           setIsLoading(false);
         },
       };

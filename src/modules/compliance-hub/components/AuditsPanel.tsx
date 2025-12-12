@@ -346,4 +346,4 @@ export const AuditsPanel = memo(function({
       </Tabs>
     </div>
   );
-}
+});

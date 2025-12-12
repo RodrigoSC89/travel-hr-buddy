@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,18 +14,11 @@ import {
   Plus, 
   Play, 
   Pause, 
-  Square, 
-  Edit, 
-  Copy, 
-  Trash2,
+  Edit,
   Clock,
   CheckCircle,
   AlertCircle,
-  Users,
-  ArrowRight,
-  Settings,
-  Calendar,
-  Target
+  Users
 } from "lucide-react";
 
 interface WorkflowStep {

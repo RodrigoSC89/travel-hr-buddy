@@ -2,13 +2,8 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   Home, 
-  BarChart3, 
-  Bell, 
-  Settings, 
   User,
   AlertTriangle,
-  Users,
-  Plane,
   Bot,
   Trophy
 } from "lucide-react";

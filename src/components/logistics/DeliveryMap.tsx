@@ -299,4 +299,4 @@ export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
       </CardContent>
     </Card>
   );
-}
+});

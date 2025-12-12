@@ -127,4 +127,4 @@ export const AnimatedPageWithPreset = memo(function({
       {children}
     </motion.div>
   );
-}
+});

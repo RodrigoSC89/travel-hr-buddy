@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo } from "react";
 /**
  * AI Modules Dashboard
  * Visual overview of all AI-integrated modules

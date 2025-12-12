@@ -64,7 +64,7 @@ export default function PEODPPanel() {
       const resultado = await peodpCore.iniciarAuditoria({
         vesselName,
         dpClass,
-      };
+      });
       setAuditoria(resultado);
       
       // Get recommendations from engine

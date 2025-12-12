@@ -81,7 +81,7 @@ export function DataTable<T extends Record<string, unknown>>({
 
   // Filter and search data
   const filteredData = useMemo(() => {
-    let result = [...data];
+    let result = [...data]);
 
     // Apply search
     if (searchTerm) {

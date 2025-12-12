@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,13 +8,9 @@ import { Separator } from "@/components/ui/separator";
 import { 
   Ship, 
   MapPin, 
-  Fuel, 
-  Users, 
   Calendar,
   Wrench,
-  AlertTriangle,
-  TrendingUp,
-  Activity
+  TrendingUp
 } from "lucide-react";
 
 interface VesselPerformance {

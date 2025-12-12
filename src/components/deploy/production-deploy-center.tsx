@@ -56,7 +56,7 @@ const ProductionDeployCenter: React.FC = () => {
     apiStatus: "online",
     memoryUsage: 45,
     cpuUsage: 23
-  };
+  });
 
   const [deployConfig, setDeployConfig] = useState<DeploymentConfig>({
     domain: "",
@@ -65,7 +65,7 @@ const ProductionDeployCenter: React.FC = () => {
     cdnEnabled: true,
     environment: "production",
     monitoringEnabled: true
-  };
+  });
 
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployProgress, setDeployProgress] = useState(0);

@@ -43,7 +43,7 @@ export const DGNSSDashboard: React.FC = () => {
     lat: -22.9068,
     lng: -43.1729,
     alt: 0,
-  };
+  });
 
   useEffect(() => {
     loadData();

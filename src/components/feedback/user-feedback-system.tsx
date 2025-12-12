@@ -56,7 +56,7 @@ export const UserFeedbackSystem: React.FC = () => {
     rating: 5,
     page_url: window.location.href,
     browser_info: navigator.userAgent
-  };
+  });
 
   // Carregar feedbacks do usuário
   const loadFeedbacks = async () => {

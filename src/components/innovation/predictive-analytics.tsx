@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,14 +13,13 @@ import {
   CheckCircle,
   Brain,
   BarChart3,
-  Calendar,
   Target,
   Zap,
   Clock,
   Settings,
   Download
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const PredictiveAnalytics: React.FC = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState("30d");

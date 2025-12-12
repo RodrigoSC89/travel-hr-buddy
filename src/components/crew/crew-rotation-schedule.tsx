@@ -151,4 +151,4 @@ export const CrewRotationSchedule = memo(function() {
       </div>
     </div>
   );
-}
+});

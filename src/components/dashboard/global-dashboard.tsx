@@ -1,10 +1,10 @@
-import { useState, useMemo, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { ResponsiveDashboard } from "./responsive-dashboard";
 import { EnhancedDashboard } from "./enhanced-dashboard";
 import PersonalizedRecommendations from "../intelligence/PersonalizedRecommendations";
 import IntelligentNotificationCenter from "../intelligence/IntelligentNotificationCenter";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";

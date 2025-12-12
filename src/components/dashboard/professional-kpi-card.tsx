@@ -118,4 +118,4 @@ export const ProfessionalKPICard = memo(function({
       </Card>
     </motion.div>
   );
-}
+});

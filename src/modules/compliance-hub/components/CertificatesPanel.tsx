@@ -377,4 +377,4 @@ export const CertificatesPanel = memo(function({
       </ScrollArea>
     </div>
   );
-}
+});

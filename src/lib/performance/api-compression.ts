@@ -111,7 +111,7 @@ export async function batchRequests<T>(
   const results = await Promise.allSettled(
     requests.map(async req => {
       const data = await executor(req.endpoint, req.params);
-      return { id: req.id, data };
+      return { id: req.id, data });
     })
   );
 

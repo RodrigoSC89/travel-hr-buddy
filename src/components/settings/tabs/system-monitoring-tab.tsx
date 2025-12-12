@@ -51,7 +51,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
     activeUsers: 24,
     errors: 3,
     uptime: 99.8
-};
+});
 
   const metrics = [
     {
@@ -94,7 +94,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
         ...settings.alertThresholds,
         [metric]: value
       }
-    };
+    });
   };
 
   const getStatusColor = (color: string) => {
@@ -294,7 +294,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="1"
                     max="365"
                     value={settings.retentionDays}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     className="w-20"
                   />
                 </div>

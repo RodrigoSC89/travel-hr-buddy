@@ -56,7 +56,7 @@ const MaritimeFleetManagement = () => {
     maintenanceVessels: 0,
     criticalAlerts: 0,
     efficiency: 0
-  };
+  });
 
   // Vessels data for AI
   const [vessels, setVessels] = useState<any[]>([]);

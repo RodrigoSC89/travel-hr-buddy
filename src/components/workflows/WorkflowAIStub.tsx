@@ -10,4 +10,4 @@ export const KanbanAISuggestions = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

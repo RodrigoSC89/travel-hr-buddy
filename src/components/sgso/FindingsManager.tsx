@@ -153,4 +153,4 @@ export const FindingsManager = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

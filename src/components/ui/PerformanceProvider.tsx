@@ -99,4 +99,4 @@ export const usePerformance = memo(function() {
 export function useShouldOptimize(): boolean {
   const { lightMode, connectionQuality, saveData } = usePerformance();
   return lightMode || connectionQuality === "slow" || connectionQuality === "offline" || saveData;
-}
+});

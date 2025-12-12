@@ -58,7 +58,7 @@ export const TaskManagement: React.FC = () => {
     tags: [] as string[],
     related_vessel: "",
     related_crew: ""
-  };
+  });
 
   useEffect(() => {
     loadTasks();
@@ -289,7 +289,7 @@ export const TaskManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newTask.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Inspeção de Segurança"
                 />
               </div>
@@ -298,7 +298,7 @@ export const TaskManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newTask.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descreva os detalhes da tarefa..."
                   rows={3}
                 />
@@ -325,7 +325,7 @@ export const TaskManagement: React.FC = () => {
                   <Input
                     id="assigned"
                     value={newTask.assigned_to}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Nome do responsável"
                   />
                 </div>
@@ -336,7 +336,7 @@ export const TaskManagement: React.FC = () => {
                   id="due_date"
                   type="datetime-local"
                   value={newTask.due_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">

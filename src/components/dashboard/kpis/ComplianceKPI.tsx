@@ -88,4 +88,4 @@ export const ComplianceKPI = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

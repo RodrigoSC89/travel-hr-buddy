@@ -165,7 +165,7 @@ export const usePerformanceMonitor = memo(function(options: UsePerformanceMonito
 
   // Get optimization suggestions
   const getSuggestions = useCallback((): string[] => {
-    const suggestions: string[] = [];
+    const suggestions: string[] = []);
 
     if (metrics.fps < fpsThreshold) {
       suggestions.push("Reduce DOM complexity or use virtualization");
@@ -234,4 +234,4 @@ export const PerformanceOverlay = memo(function() {
       )}
     </div>
   );
-}
+});

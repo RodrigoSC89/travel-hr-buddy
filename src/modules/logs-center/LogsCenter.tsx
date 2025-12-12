@@ -173,7 +173,7 @@ export default function LogsCenter() {
               <Input
                 placeholder="Buscar logs..."
                 value={filters.search || ""}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -198,7 +198,7 @@ export default function LogsCenter() {
               placeholder="Origem..."
               className="w-[200px]"
               value={filters.origin || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
 
             <Button

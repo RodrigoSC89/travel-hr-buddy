@@ -1,11 +1,10 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Search, FileText, Users, Calendar, BarChart3, Settings, Plane, Hotel, Bot, Trophy, Ship, Shield, Anchor, Leaf } from "lucide-react";
+import { Search, Users, BarChart3, Settings, Bot, Ship, Shield, Anchor, Leaf } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 interface SearchResult {
   id: string;

@@ -237,7 +237,7 @@ const FinanceCommandCenter: React.FC = () => {
     amount: "",
     category: "other",
     notes: "",
-  };
+  });
 
   // Format currency
   const formatCurrency = (value: number) => {

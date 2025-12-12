@@ -358,7 +358,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                     <Input
                       placeholder="Título, descrição ou usuário..."
                       value={filter.search || ""}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="pl-10"
                     />
                   </div>
@@ -522,7 +522,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="title"
                   placeholder="Resumo do seu feedback"
                   value={newFeedback.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -532,7 +532,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="description"
                   placeholder="Descreva detalhadamente seu feedback, sugestão ou problema"
                   value={newFeedback.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   rows={4}
                 />
               </div>

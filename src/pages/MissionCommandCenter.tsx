@@ -328,7 +328,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Mission Name</Label>
                     <Input
                       value={formData.missionName}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       required
                       className="bg-zinc-800 border-zinc-700"
                     />
@@ -339,7 +339,7 @@ const MissionCommandCenter: React.FC = () => {
                       <Input
                         type="date"
                         value={formData.missionDate}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         required
                         className="bg-zinc-800 border-zinc-700"
                       />
@@ -363,7 +363,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Location</Label>
                     <Input
                       value={formData.location}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="bg-zinc-800 border-zinc-700"
                     />
                   </div>
@@ -371,7 +371,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Crew Members (comma-separated)</Label>
                     <Input
                       value={formData.crewMembers?.join(", ")}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="bg-zinc-800 border-zinc-700"
                     />
                   </div>
@@ -379,7 +379,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Description</Label>
                     <Textarea
                       value={formData.description}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       rows={4}
                       className="bg-zinc-800 border-zinc-700"
                     />

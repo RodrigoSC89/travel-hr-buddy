@@ -4,7 +4,7 @@
  * Componente para gerenciar preload inteligente de módulos
  */
 
-import { memo, memo, useEffect, useCallback } from "react";;;
+import { memo, memo, useEffect } from "react";;;
 import { useLocation } from "react-router-dom";
 import { preloadForRoute, preloadCriticalModules } from "@/lib/lazy-loaders";
 

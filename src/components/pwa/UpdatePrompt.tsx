@@ -78,4 +78,4 @@ export const UpdatePrompt = memo(function() {
       </motion.div>
     </AnimatePresence>
   );
-}
+});

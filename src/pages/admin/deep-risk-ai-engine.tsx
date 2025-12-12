@@ -38,7 +38,7 @@ const DeepRiskAIPage: React.FC = () => {
     highCount: 0,
     mediumCount: 0,
     lowCount: 0,
-  };
+  });
 
   // Input states
   const [forecastName, setForecastName] = useState("");
@@ -110,7 +110,7 @@ const DeepRiskAIPage: React.FC = () => {
         fuel_status: fuelStatus,
         equipment_status: equipmentStatus,
         communication_quality: communicationQuality,
-      };
+      });
 
       setCurrentAnalysis(result);
       toast.success(`Risk analysis complete: ${result.level.toUpperCase()} (${result.score.toFixed(1)})`);

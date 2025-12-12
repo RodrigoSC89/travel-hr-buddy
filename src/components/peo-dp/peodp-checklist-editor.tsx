@@ -482,7 +482,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                   <Label>Código</Label>
                   <Input
                     value={editingReq.code}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -490,14 +490,14 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                 <Label>Título</Label>
                 <Input
                   value={editingReq.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="space-y-2">
                 <Label>Descrição</Label>
                 <Textarea
                   value={editingReq.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   rows={3}
                 />
               </div>
@@ -506,7 +506,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                   <Label>Referência</Label>
                   <Input
                     value={editingReq.reference || ""}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -516,7 +516,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                     min={1}
                     max={10}
                     value={editingReq.weight}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">

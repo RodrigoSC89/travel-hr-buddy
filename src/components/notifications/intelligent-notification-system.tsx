@@ -129,7 +129,7 @@ const IntelligentNotificationSystem = () => {
         actionRequired: false,
         source: "Strategic AI"
       }
-    ];
+    ]);
     setNotifications(mockNotifications);
   }, []);
 

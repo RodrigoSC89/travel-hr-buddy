@@ -25,4 +25,4 @@ export const PageLoader = memo(function({ message = "Carregando...", className }
       <p className="text-sm text-muted-foreground">{message}</p>
     </div>
   );
-}
+});

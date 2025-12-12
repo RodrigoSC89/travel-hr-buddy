@@ -35,7 +35,7 @@ export const ScheduledReports: React.FC = () => {
     template: "",
     format: "pdf",
     frequency: "monthly" as const,
-  };
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -249,7 +249,7 @@ export const ScheduledReports: React.FC = () => {
                 <Label>Report Title</Label>
                 <Input
                   value={formData.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Monthly Compliance Report"
                 />
               </div>

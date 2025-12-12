@@ -46,7 +46,7 @@ const CoordinationAIEnginePage: React.FC = () => {
     pendingTasks: 0,
     completedTasks: 0,
     failedTasks: 0,
-  };
+  });
   const [loading, setLoading] = useState(false);
 
   // Form states

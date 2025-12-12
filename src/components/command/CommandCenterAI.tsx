@@ -13,7 +13,7 @@ import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
   Brain, Ship, Users, Wrench, Shield, DollarSign, 
-  AlertTriangle, TrendingUp, Activity, Sparkles, Zap, LayoutDashboard
+  AlertTriangle, Activity, Sparkles, Zap, LayoutDashboard
 } from "lucide-react";
 import { toast } from "sonner";
 

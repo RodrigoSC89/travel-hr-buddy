@@ -218,7 +218,7 @@ export function useSafetyData() {
   };
 
   const getFilteredIncidents = useCallback(() => {
-    let filtered = [...incidents];
+    let filtered = [...incidents]);
 
     if (filters.searchTerm) {
       const term = filters.searchTerm.toLowerCase();

@@ -324,7 +324,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <Input
                     id="endpoint"
                     value={config.endpoint || ""}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="https://api.exemplo.com/v1"
                   />
                 </div>

@@ -329,4 +329,4 @@ export function useAdaptiveFetch<T>(
     isOnline,
     isSlowConnection,
   };
-}
+});

@@ -103,7 +103,7 @@ export const SupplierComparator = memo(function() {
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
 
   const sortedSuppliers = useMemo(() => {
-    const sorted = [...MOCK_SUPPLIERS];
+    const sorted = [...MOCK_SUPPLIERS]);
     switch (sortBy) {
     case "price":
       sorted.sort((a, b) => b.priceCompetitiveness - a.priceCompetitiveness);

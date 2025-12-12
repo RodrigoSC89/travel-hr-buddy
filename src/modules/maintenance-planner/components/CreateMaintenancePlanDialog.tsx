@@ -62,7 +62,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
     estimatedHours: "",
     assignee: "",
     notes: "",
-};
+});
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -138,7 +138,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 id="title"
                 placeholder="Ex: Manutenção preventiva do Thruster"
                 value={formData.title}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -256,7 +256,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                   placeholder="Ex: 4"
                   className="pl-10"
                   value={formData.estimatedHours}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -268,7 +268,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 id="assignee"
                 placeholder="Nome do técnico responsável"
                 value={formData.assignee}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -280,7 +280,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 placeholder="Descreva os detalhes do plano de manutenção..."
                 rows={3}
                 value={formData.description}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -292,7 +292,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 placeholder="Observações adicionais, peças necessárias, etc..."
                 rows={2}
                 value={formData.notes}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
           </div>

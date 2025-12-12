@@ -65,7 +65,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
     issuer: "",
     issue_date: null as Date | null,
     expiry_date: null as Date | null
-};
+});
 
   const certificateTypes = [
     "STCW Basic Safety",
@@ -112,7 +112,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         allowEditing: true,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Camera,
-      };
+      });
 
       if (image.dataUrl) {
         setCapturedImage(image.dataUrl);

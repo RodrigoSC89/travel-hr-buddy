@@ -126,4 +126,4 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
       </CardContent>
     </Card>
   );
-}
+});

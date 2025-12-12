@@ -51,4 +51,4 @@ export const ExpenseChart = memo(function({ transactions }: ExpenseChartProps) {
       </CardContent>
     </Card>
   );
-}
+});

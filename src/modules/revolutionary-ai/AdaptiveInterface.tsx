@@ -372,4 +372,4 @@ export const AdaptiveInterface = memo(function() {
       </div>
     </div>
   );
-}
+});

@@ -207,7 +207,7 @@ export function useInfiniteOptimizedQuery<T>({
   const { quality } = useNetworkStatus();
   const pageSize = getAdaptivePageSizeFromQuality(quality);
 
-  const fetchPage = useCallback(async ({ pageParam = 0 }): Promise<{ data: T[]; nextPage: number | null }> => {
+  const fetchPage = useCallback(async ({ pageParam = 0 }): Promise<{ data: T[]); nextPage: number | null }> => {
     let query = supabase
       .from(tableName as any)
       .select(select)

@@ -2,12 +2,11 @@
  * Scenario Simulator Panel - What-If analysis with AI
  */
 
-import { memo, memo, useState, useCallback, useMemo } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FlaskConical,
@@ -17,8 +16,6 @@ import {
   TrendingDown,
   Minus,
   AlertTriangle,
-  DollarSign,
-  Clock,
   Fuel,
   Users,
   Wrench,
@@ -26,7 +23,6 @@ import {
   Sparkles,
   Loader2,
   Save,
-  Share2,
 } from "lucide-react";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { motion } from "framer-motion";
@@ -353,6 +349,6 @@ export const ScenarioSimulatorPanel = memo(function() {
         )}
       </CardContent>
     </Card>
-    );
-  }
+  );
+}
 );

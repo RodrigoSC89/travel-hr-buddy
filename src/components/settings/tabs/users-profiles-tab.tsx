@@ -117,7 +117,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
     const matchesStatus = selectedStatus === "all" || user.status === selectedStatus;
     
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -17,7 +17,6 @@ import {
   Clock,
   Shield,
   Database,
-  Wifi,
   WifiOff,
   Cpu,
   Users,
@@ -544,6 +543,5 @@ export const ProductionChecklist = memo(function() {
       </CardContent>
     </Card>
   );
-}
-
+});
 export default ProductionChecklist;
