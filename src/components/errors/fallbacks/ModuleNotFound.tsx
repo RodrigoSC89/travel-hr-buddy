@@ -29,7 +29,7 @@ export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
       moduleName,
       moduleId,
       error: error?.message,
-};
+    });
   }, [moduleName, moduleId, error]);
 
   return (
@@ -124,4 +124,4 @@ export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
       </Card>
     </div>
   );
-});
+};
