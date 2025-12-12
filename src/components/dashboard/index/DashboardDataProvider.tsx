@@ -146,7 +146,7 @@ export const useDashboardData = memo(function() {
     toast({
       title: "Dados atualizados",
       description: "O dashboard foi atualizado com os dados mais recentes"
-    };
+    });
   }, [fetchMetrics, toast]);
 
   const markNotificationAsRead = useCallback(async (id: string) => {
