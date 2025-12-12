@@ -32,7 +32,7 @@ const NetworkStatusWidgetComponent: React.FC = () => {
     rtt: 50,
     effectiveType: "4g",
     isOnline: navigator.onLine,
-  };
+  });
 
   const updateStats = useCallback(() => {
     const connection = (navigator as unknown).connection;
@@ -41,7 +41,7 @@ const NetworkStatusWidgetComponent: React.FC = () => {
       rtt: connection?.rtt || 50,
       effectiveType: connection?.effectiveType || "4g",
       isOnline: navigator.onLine,
-    };
+    });
   }, []);
 
   useEffect(() => {
