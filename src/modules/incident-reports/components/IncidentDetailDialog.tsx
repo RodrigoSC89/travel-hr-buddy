@@ -421,7 +421,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                       <Label>Descrição da Ação *</Label>
                       <Textarea
                         value={newAction.action_description}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Descreva a ação corretiva necessária"
                         rows={3}
                       />
@@ -431,7 +431,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                         <Label>Responsável *</Label>
                         <Input
                           value={newAction.assigned_to}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="Nome do responsável"
                         />
                       </div>
@@ -440,7 +440,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                         <Input
                           type="date"
                           value={newAction.due_date}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                         />
                       </div>
                     </div>

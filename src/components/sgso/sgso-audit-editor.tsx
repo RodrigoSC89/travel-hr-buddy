@@ -399,7 +399,7 @@ export default function SGSOAuditEditor() {
                     <Label>Comentários</Label>
                     <Textarea
                       value={result.comments}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Observações, evidências e ações necessárias..."
                       rows={3}
                     />

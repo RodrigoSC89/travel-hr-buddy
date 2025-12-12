@@ -95,7 +95,7 @@ export const HealthCheckin: React.FC = () => {
               max="24"
               step="0.5"
               value={metrics.sleep_hours}
-              onChange={handleChange})}
+              onChange={handleChange}
               className="w-full"
             />
             
@@ -209,7 +209,7 @@ export const HealthCheckin: React.FC = () => {
               min="0"
               max="300"
               value={metrics.exercise_minutes}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
           </div>
 
@@ -222,7 +222,7 @@ export const HealthCheckin: React.FC = () => {
               max="10"
               step="0.1"
               value={metrics.water_intake_liters}
-              onChange={handleChange})}
+              onChange={handleChange}
             />
           </div>
 
@@ -232,7 +232,7 @@ export const HealthCheckin: React.FC = () => {
             <Textarea
               placeholder="Any concerns or notes about your wellbeing..."
               value={metrics.notes}
-              onChange={handleChange})}
+              onChange={handleChange}
               className="min-h-[100px]"
             />
           </div>

@@ -249,7 +249,7 @@ export const ScheduledReports: React.FC = () => {
                 <Label>Report Title</Label>
                 <Input
                   value={formData.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Monthly Compliance Report"
                 />
               </div>

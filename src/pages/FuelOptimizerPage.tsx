@@ -884,7 +884,7 @@ const FuelOptimizerPage = () => {
               <Label>Nome da Rota *</Label>
               <Input
                 value={newRoute.route_name}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Ex: Santos → Rio de Janeiro"
               />
             </div>
@@ -893,7 +893,7 @@ const FuelOptimizerPage = () => {
                 <Label>Origem</Label>
                 <Input
                   value={newRoute.origin}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Porto de origem"
                 />
               </div>
@@ -901,7 +901,7 @@ const FuelOptimizerPage = () => {
                 <Label>Destino</Label>
                 <Input
                   value={newRoute.destination}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Porto de destino"
                 />
               </div>
@@ -912,7 +912,7 @@ const FuelOptimizerPage = () => {
                 <Input
                   type="number"
                   value={newRoute.distance_nm}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="220"
                 />
               </div>
@@ -922,7 +922,7 @@ const FuelOptimizerPage = () => {
                   type="number"
                   step="0.01"
                   value={newRoute.estimated_consumption}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="45.5"
                 />
               </div>
@@ -949,7 +949,7 @@ const FuelOptimizerPage = () => {
                   type="number"
                   step="0.1"
                   value={newRoute.current_speed}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="12"
                 />
               </div>

@@ -138,7 +138,7 @@ export const WeeklyAssessment: React.FC = () => {
                   max="24"
                   step="0.5"
                   value={formData.sleep_hours}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               
@@ -225,7 +225,7 @@ export const WeeklyAssessment: React.FC = () => {
                   type="number"
                   min="0"
                   value={formData.exercise_minutes}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               
@@ -236,7 +236,7 @@ export const WeeklyAssessment: React.FC = () => {
                   min="0"
                   step="0.1"
                   value={formData.water_intake_liters}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ export const WeeklyAssessment: React.FC = () => {
               <Input
                 placeholder="e.g., headache, fatigue, anxiety"
                 value={formData.concerns}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
             
@@ -263,7 +263,7 @@ export const WeeklyAssessment: React.FC = () => {
               <Textarea
                 placeholder="Any other information you'd like to share..."
                 value={formData.notes}
-                onChange={handleChange})}
+                onChange={handleChange}
                 rows={4}
               />
             </div>

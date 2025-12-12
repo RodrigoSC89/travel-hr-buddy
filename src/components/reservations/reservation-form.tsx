@@ -271,7 +271,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Ex: Hotel Santos Dumont - Rio de Janeiro"
                       required
                     />
@@ -308,7 +308,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Detalhes adicionais sobre a reserva..."
                     rows={3}
                   />
@@ -332,7 +332,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="start_date"
                       type="datetime-local"
                       value={formData.start_date}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -342,7 +342,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="end_date"
                       type="datetime-local"
                       value={formData.end_date}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -354,7 +354,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Ex: Rio de Janeiro, RJ"
                     />
                   </div>
@@ -363,7 +363,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="address"
                       value={formData.address}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Rua, número, bairro, CEP"
                     />
                   </div>
@@ -383,7 +383,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="confirmation_number"
                       value={formData.confirmation_number}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Ex: ABC123456"
                     />
                   </div>
@@ -392,7 +392,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="room_type"
                       value={formData.room_type}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Ex: Quarto duplo standard"
                     />
                   </div>
@@ -408,7 +408,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         type="number"
                         step="0.01"
                         value={formData.total_amount}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="0.00"
                         className="pl-10"
                       />
@@ -467,7 +467,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       <Input
                         id="contact_info"
                         value={formData.contact_info}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Telefone, email, etc."
                         className="pl-10"
                       />
@@ -481,7 +481,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         id="supplier_url"
                         type="url"
                         value={formData.supplier_url}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="https://..."
                         className="pl-10"
                       />
@@ -494,7 +494,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="notes"
                     value={formData.notes}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Observações internas, requisitos especiais, etc."
                     rows={3}
                   />

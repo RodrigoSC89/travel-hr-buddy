@@ -133,7 +133,7 @@ export const FilterPanel = memo(function({
             <Input
               placeholder="Buscar..."
               value={filters.search}
-              onChange={handleChange})}
+              onChange={handleChange}
               className="pl-9"
             />
           </div>

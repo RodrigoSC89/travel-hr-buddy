@@ -279,7 +279,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
               <Input
                 type="number"
                 value={queryConfig.limit}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 

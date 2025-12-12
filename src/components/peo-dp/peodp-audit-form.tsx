@@ -361,7 +361,7 @@ export const PEODPAuditForm = memo(function({
                                     id={`${req.id}-evidence`}
                                     placeholder="Descreva as evidências encontradas..."
                                     value={item?.evidence || ""}
-                                    onChange={handleChange})}
+                                    onChange={handleChange}
                                     rows={3}
                                   />
                                 </div>
@@ -371,7 +371,7 @@ export const PEODPAuditForm = memo(function({
                                     id={`${req.id}-observations`}
                                     placeholder="Observações adicionais..."
                                     value={item?.observations || ""}
-                                    onChange={handleChange})}
+                                    onChange={handleChange}
                                     rows={3}
                                   />
                                 </div>
@@ -384,7 +384,7 @@ export const PEODPAuditForm = memo(function({
                                     id={`${req.id}-action`}
                                     placeholder="Descreva a ação corretiva necessária..."
                                     value={item?.actionRequired || ""}
-                                    onChange={handleChange})}
+                                    onChange={handleChange}
                                     rows={2}
                                   />
                                 </div>

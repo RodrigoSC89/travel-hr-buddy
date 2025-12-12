@@ -257,7 +257,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="Nome do colaborador"
                     value={newColaborador.nome}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -266,7 +266,7 @@ const CollaboratorRegistry: React.FC = () => {
                     type="email" 
                     placeholder="email@empresa.com"
                     value={newColaborador.email}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -274,7 +274,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="+55 11 99999-0000"
                     value={newColaborador.telefone}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -282,7 +282,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="000.000.000-00"
                     value={newColaborador.cpf}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -290,7 +290,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="Cargo do colaborador"
                     value={newColaborador.cargo}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
@@ -326,7 +326,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     type="date"
                     value={newColaborador.dataAdmissao}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2 col-span-2">

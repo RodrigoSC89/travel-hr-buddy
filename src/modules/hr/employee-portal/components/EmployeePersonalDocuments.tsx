@@ -310,7 +310,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Input
                         id="document_name"
                         value={formData.document_name}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="e.g., National ID"
                       />
                     </div>
@@ -321,7 +321,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Input
                         id="document_number"
                         value={formData.document_number}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Optional"
                       />
                     </div>
@@ -330,7 +330,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Input
                         id="issuing_authority"
                         value={formData.issuing_authority}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Optional"
                       />
                     </div>
@@ -342,7 +342,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                         id="issue_date"
                         type="date"
                         value={formData.issue_date}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -351,7 +351,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                         id="expiry_date"
                         type="date"
                         value={formData.expiry_date}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>

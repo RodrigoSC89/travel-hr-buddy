@@ -294,7 +294,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="1"
                     max="365"
                     value={settings.retentionDays}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     className="w-20"
                   />
                 </div>

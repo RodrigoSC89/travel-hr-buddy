@@ -343,7 +343,7 @@ export const TemplateLibrary: React.FC = () => {
                       <Label>Template Name *</Label>
                       <Input
                         value={formData.name}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Monthly Report Template"
                       />
                     </div>
@@ -370,7 +370,7 @@ export const TemplateLibrary: React.FC = () => {
                     <Label>Description</Label>
                     <Input
                       value={formData.description}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Template description..."
                     />
                   </div>
@@ -379,7 +379,7 @@ export const TemplateLibrary: React.FC = () => {
                     <Label>Content *</Label>
                     <Textarea
                       value={formData.content}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Use {{placeholder}} syntax for dynamic content..."
                       rows={15}
                       className="font-mono text-sm"
@@ -394,7 +394,7 @@ export const TemplateLibrary: React.FC = () => {
                       type="checkbox"
                       id="is_public"
                       checked={formData.is_public}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="rounded"
                     />
                     <Label htmlFor="is_public" className="cursor-pointer">
@@ -526,7 +526,7 @@ export const TemplateLibrary: React.FC = () => {
                 <Label>{placeholder}</Label>
                 <Input
                   value={generateData[placeholder]}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder={`Enter ${placeholder}...`}
                 />
               </div>

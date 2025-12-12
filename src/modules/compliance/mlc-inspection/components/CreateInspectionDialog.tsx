@@ -95,7 +95,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="vessel_id"
                 placeholder="Enter vessel ID"
                 value={formData.vessel_id}
-                onChange={handleChange})}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="inspector_name"
                 placeholder="Enter inspector name"
                 value={formData.inspector_name}
-                onChange={handleChange})}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -136,7 +136,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="notes"
                 placeholder="Enter any initial notes..."
                 value={formData.notes}
-                onChange={handleChange})}
+                onChange={handleChange}
                 rows={3}
               />
             </div>

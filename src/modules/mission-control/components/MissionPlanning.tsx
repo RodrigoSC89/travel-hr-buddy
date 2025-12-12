@@ -106,7 +106,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <label className="text-sm font-medium">Code</label>
                     <Input
                       value={formData.code}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="MSN-001"
                       required
                     />
@@ -115,7 +115,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <label className="text-sm font-medium">Name</label>
                     <Input
                       value={formData.name}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Mission Name"
                       required
                     />
@@ -156,7 +156,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                   <label className="text-sm font-medium">Description</label>
                   <Textarea
                     value={formData.description}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Mission description..."
                     rows={3}
                   />
@@ -167,7 +167,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <Input
                       type="date"
                       value={formData.startDate}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <Input
                       type="date"
                       value={formData.endDate}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>

@@ -115,7 +115,7 @@ export const FocusTrapExample: React.FC = () => {
                         <Input
                           id="name"
                           value={formData.name}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="Enter your name"
                           required
                         />
@@ -127,7 +127,7 @@ export const FocusTrapExample: React.FC = () => {
                           id="email"
                           type="email"
                           value={formData.email}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="Enter your email"
                           required
                         />

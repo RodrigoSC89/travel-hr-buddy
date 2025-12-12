@@ -97,7 +97,7 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
               <Input
                 placeholder="Buscar ocorrências..."
                 value={filters.searchTerm || ""}
-                onChange={handleChange})}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>

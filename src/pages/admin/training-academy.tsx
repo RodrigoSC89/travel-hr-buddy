@@ -271,7 +271,7 @@ export default function TrainingAcademyAdmin() {
                 <Input
                   id="title"
                   value={newCourse.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Operações DP Avançadas"
                 />
               </div>
@@ -280,7 +280,7 @@ export default function TrainingAcademyAdmin() {
                 <Textarea
                   id="description"
                   value={newCourse.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descrição detalhada do curso"
                   rows={3}
                 />
@@ -331,7 +331,7 @@ export default function TrainingAcademyAdmin() {
                     min="0.5"
                     step="0.5"
                     value={newCourse.duration_hours}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -339,7 +339,7 @@ export default function TrainingAcademyAdmin() {
                   <Input
                     id="instructor"
                     value={newCourse.instructor_name}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Nome do instrutor"
                   />
                 </div>

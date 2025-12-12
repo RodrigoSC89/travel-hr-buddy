@@ -322,7 +322,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="cat-name"
                     value={newCategory.name}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: Contratos"
                   />
                 </div>
@@ -331,7 +331,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="cat-desc"
                     value={newCategory.description}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Descrição da categoria..."
                   />
                 </div>
@@ -341,7 +341,7 @@ export const DocumentManagement: React.FC = () => {
                     id="cat-color"
                     type="color"
                     value={newCategory.color}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -373,7 +373,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="title"
                     value={newDocument.title}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: Manual de Procedimentos"
                   />
                 </div>
@@ -382,7 +382,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="description"
                     value={newDocument.description}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Descrição do documento..."
                   />
                 </div>
@@ -428,7 +428,7 @@ export const DocumentManagement: React.FC = () => {
                     id="expires"
                     type="datetime-local"
                     value={newDocument.expires_at}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
                 <div>

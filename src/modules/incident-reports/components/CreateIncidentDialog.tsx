@@ -234,7 +234,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
             <Input
               required
               value={formData.title}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Descrição breve do incidente"
             />
           </div>
@@ -303,7 +303,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               <Label>Local</Label>
               <Input
                 value={formData.incident_location}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Onde ocorreu o incidente?"
               />
             </div>
@@ -313,7 +313,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               <div className="flex gap-2">
                 <Input
                   value={formData.gps_coordinates}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Lat, Long ou clique em capturar"
                   className="flex-1"
                 />
@@ -334,7 +334,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
             <Textarea
               required
               value={formData.description}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Descrição detalhada do incidente..."
               rows={6}
             />

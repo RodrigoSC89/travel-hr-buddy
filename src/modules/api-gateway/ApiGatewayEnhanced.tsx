@@ -441,7 +441,7 @@ const ApiGatewayEnhanced = () => {
                         <Input
                           id="route_name"
                           value={routeFormData.route_name}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="e.g., Get User Profile"
                         />
                       </div>
@@ -470,7 +470,7 @@ const ApiGatewayEnhanced = () => {
                           <Input
                             id="route_path"
                             value={routeFormData.route_path}
-                            onChange={handleChange})}
+                            onChange={handleChange}
                             placeholder="/api/v1/users/:id"
                           />
                         </div>
@@ -480,7 +480,7 @@ const ApiGatewayEnhanced = () => {
                         <Input
                           id="description"
                           value={routeFormData.description}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="Brief description of the endpoint"
                         />
                       </div>
@@ -578,7 +578,7 @@ const ApiGatewayEnhanced = () => {
                         <Input
                           id="key_name"
                           value={keyFormData.key_name}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="e.g., Production API Key"
                         />
                       </div>

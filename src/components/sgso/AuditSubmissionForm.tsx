@@ -133,7 +133,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
             <Textarea
               id="audit_scope"
               value={formData.audit_scope}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Describe the scope of this audit..."
               required
               rows={3}
@@ -146,7 +146,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
               id="audit_date"
               type="date"
               value={formData.audit_date}
-              onChange={handleChange})}
+              onChange={handleChange}
               required
             />
           </div>
@@ -156,7 +156,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
             <Input
               id="auditors"
               value={formData.auditors}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="John Doe, Jane Smith, ..."
             />
           </div>
@@ -166,7 +166,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Any additional information..."
               rows={2}
             />

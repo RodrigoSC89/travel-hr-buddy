@@ -254,7 +254,7 @@ export default function TemplatesPanel() {
                   id="name"
                   placeholder="Ex: Relatório de Inspeção"
                   value={newTemplate.name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
@@ -263,7 +263,7 @@ export default function TemplatesPanel() {
                   id="description"
                   placeholder="Descrição opcional"
                   value={newTemplate.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
@@ -287,7 +287,7 @@ export default function TemplatesPanel() {
                     id="content"
                     placeholder={"<h1>Título</h1>\n<p>{{nome}}</p>\n<p>{{data}}</p>"}
                     value={newTemplate.content}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     rows={15}
                     className="font-mono text-sm"
                   />
@@ -385,21 +385,21 @@ export default function TemplatesPanel() {
                 <Label>Nome</Label>
                 <Input
                   value={editingTemplate.name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Descrição</Label>
                 <Input
                   value={editingTemplate.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Conteúdo HTML</Label>
                 <Textarea
                   value={editingTemplate.content}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   rows={15}
                   className="font-mono text-sm"
                 />
@@ -434,7 +434,7 @@ export default function TemplatesPanel() {
                       <Label className="text-sm">{variable}</Label>
                       <Input
                         value={previewVariables[varName] || ""}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder={`Valor para ${variable}`}
                       />
                     </div>

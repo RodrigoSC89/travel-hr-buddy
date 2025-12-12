@@ -585,7 +585,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="project_name"
                 value={formData.project_name}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Enter project name"
               />
             </div>
@@ -594,7 +594,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="task_name"
                 value={formData.task_name}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Enter task name"
               />
             </div>
@@ -603,7 +603,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="description"
                 value={formData.description}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Enter description"
               />
             </div>
@@ -645,7 +645,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                   id="start_date"
                   type="date"
                   value={formData.start_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -654,7 +654,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                   id="end_date"
                   type="date"
                   value={formData.end_date}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -663,7 +663,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="assigned_to"
                 value={formData.assigned_to}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Enter assignee"
               />
             </div>
@@ -675,7 +675,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                 min="0"
                 max="100"
                 value={formData.progress}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
             <div className="flex gap-2 justify-end">

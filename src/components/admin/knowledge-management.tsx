@@ -635,7 +635,7 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Título</label>
                     <Input
                       value={editingItem.title}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Título do conteúdo"
                     />
                   </div>
@@ -718,7 +718,7 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Tags (separadas por vírgula)</label>
                   <Input
                     value={editingItem.tags.join(", ")}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="tag1, tag2, tag3"
                   />
                 </div>
@@ -727,7 +727,7 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Conteúdo</label>
                   <Textarea
                     value={editingItem.content}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Conteúdo do item"
                     rows={8}
                   />

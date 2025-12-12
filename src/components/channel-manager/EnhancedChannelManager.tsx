@@ -299,7 +299,7 @@ export const EnhancedChannelManager: React.FC = () => {
                       <Label>Channel Name *</Label>
                       <Input
                         value={formData.name}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Operations Team"
                       />
                     </div>
@@ -307,7 +307,7 @@ export const EnhancedChannelManager: React.FC = () => {
                       <Label>Description</Label>
                       <Textarea
                         value={formData.description}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="Channel description..."
                         rows={3}
                       />
@@ -335,7 +335,7 @@ export const EnhancedChannelManager: React.FC = () => {
                         <Input
                           type="number"
                           value={formData.max_members}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                         />
                       </div>
                     </div>

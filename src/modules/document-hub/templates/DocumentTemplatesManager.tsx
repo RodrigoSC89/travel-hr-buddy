@@ -398,7 +398,7 @@ const DocumentTemplatesManager = () => {
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                         placeholder="e.g., Inspection Report"
                       />
                     </div>
@@ -428,7 +428,7 @@ const DocumentTemplatesManager = () => {
                     <Input
                       id="description"
                       value={formData.description}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Brief description of this template"
                     />
                   </div>
@@ -437,7 +437,7 @@ const DocumentTemplatesManager = () => {
                     <Textarea
                       id="content"
                       value={formData.content}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="Use {{vessel_name}}, {{commander}}, {{date}}, etc."
                       rows={10}
                       className="font-mono"
@@ -451,7 +451,7 @@ const DocumentTemplatesManager = () => {
                     <Input
                       id="tags"
                       value={formData.tags}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder="e.g., vessel, inspection, report"
                     />
                   </div>
@@ -578,7 +578,7 @@ const DocumentTemplatesManager = () => {
                     <Input
                       id={variable}
                       value={previewVariables[variable] || ""}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       placeholder={`Enter ${variable}`}
                     />
                   </div>

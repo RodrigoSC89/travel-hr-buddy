@@ -131,7 +131,7 @@ export const BetaFeedbackForm = memo(function() {
                 id="userName"
                 required
                 value={formData.userName}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="Seu nome"
               />
             </div>
@@ -143,7 +143,7 @@ export const BetaFeedbackForm = memo(function() {
                 type="email"
                 required
                 value={formData.email}
-                onChange={handleChange})}
+                onChange={handleChange}
                 placeholder="seu.email@exemplo.com"
               />
             </div>
@@ -187,7 +187,7 @@ export const BetaFeedbackForm = memo(function() {
               id="module"
               required
               value={formData.module}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Ex: Dashboard, Crew Management, Control Hub"
             />
           </div>
@@ -244,7 +244,7 @@ export const BetaFeedbackForm = memo(function() {
             <Textarea
               id="comments"
               value={formData.comments}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Compartilhe sua experiência geral com o sistema..."
               rows={4}
             />
@@ -256,7 +256,7 @@ export const BetaFeedbackForm = memo(function() {
             <Textarea
               id="suggestions"
               value={formData.suggestions}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="O que você gostaria de ver melhorado ou adicionado?"
               rows={4}
             />
@@ -268,7 +268,7 @@ export const BetaFeedbackForm = memo(function() {
             <Textarea
               id="bugs"
               value={formData.bugs}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Descreva qualquer bug ou problema que encontrou..."
               rows={4}
             />

@@ -327,7 +327,7 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-name"
                     value={webhookConfig.name}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Ex: Notificações Slack"
                   />
                 </div>
@@ -337,7 +337,7 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-url"
                     value={webhookConfig.url}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="https://hooks.slack.com/services/..."
                   />
                 </div>
@@ -428,7 +428,7 @@ export const WebhookBuilder: React.FC = () => {
                   </div>
                   <Textarea
                     value={webhookConfig.payload}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Payload JSON do webhook..."
                     className="font-mono text-sm min-h-32"
                   />

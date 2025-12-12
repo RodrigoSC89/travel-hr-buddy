@@ -390,7 +390,7 @@ export default function IncidentReportsComplete() {
                 <Label>Título</Label>
                 <Input
                   value={newIncident.title}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Título breve do incidente"
                 />
               </div>
@@ -398,7 +398,7 @@ export default function IncidentReportsComplete() {
                 <Label>Descrição</Label>
                 <Textarea
                   value={newIncident.description}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Descreva o incidente detalhadamente"
                   rows={4}
                 />
@@ -439,7 +439,7 @@ export default function IncidentReportsComplete() {
                   <Label>Local</Label>
                   <Input
                     value={newIncident.incident_location}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Local do incidente"
                   />
                 </div>
@@ -710,7 +710,7 @@ export default function IncidentReportsComplete() {
                         <Label>Descrição</Label>
                         <Textarea
                           value={newFollowup.description}
-                          onChange={handleChange})}
+                          onChange={handleChange}
                           placeholder="Descreva a atualização"
                           rows={3}
                         />

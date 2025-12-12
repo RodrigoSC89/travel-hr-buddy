@@ -236,7 +236,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: MV Atlantic Explorer"
                 />
               </div>
@@ -263,7 +263,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="imo_number"
                   value={formData.imo_number}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 1234567"
                 />
               </div>
@@ -272,7 +272,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="flag_state"
                   value={formData.flag_state}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Brasil"
                 />
               </div>
@@ -282,7 +282,7 @@ export const VesselManagement = memo(function() {
                   id="gross_tonnage"
                   type="number"
                   value={formData.gross_tonnage}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 50000"
                 />
               </div>
@@ -292,7 +292,7 @@ export const VesselManagement = memo(function() {
                   id="built_year"
                   type="number"
                   value={formData.built_year}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 2020"
                 />
               </div>
@@ -301,7 +301,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="classification_society"
                   value={formData.classification_society}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: DNV GL"
                 />
               </div>
@@ -311,7 +311,7 @@ export const VesselManagement = memo(function() {
                   id="crew_capacity"
                   type="number"
                   value={formData.crew_capacity}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: 25"
                 />
               </div>
@@ -334,7 +334,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="current_location"
                   value={formData.current_location}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   placeholder="Ex: Porto de Santos"
                 />
               </div>

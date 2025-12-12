@@ -165,7 +165,7 @@ export const CreateAuditDialog = memo(function({
                 id="auditor"
                 placeholder="Nome do auditor"
                 value={formData.auditorName || ""}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
 
@@ -203,7 +203,7 @@ export const CreateAuditDialog = memo(function({
               id="scope"
               placeholder="Descreva o escopo da auditoria..."
               value={formData.scope || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
               rows={3}
             />
           </div>
@@ -214,7 +214,7 @@ export const CreateAuditDialog = memo(function({
               id="objectives"
               placeholder="Liste os objetivos principais..."
               value={formData.objectives || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
               rows={3}
             />
           </div>

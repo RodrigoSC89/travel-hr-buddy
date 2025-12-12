@@ -412,7 +412,7 @@ const PerformanceCenter: React.FC = () => {
                     <Input 
                       placeholder="Ex: Aumentar eficiência operacional"
                       value={newOKR.objetivo}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -421,7 +421,7 @@ const PerformanceCenter: React.FC = () => {
                       placeholder="Reduzir tempo de parada em 20%&#10;Aumentar OEE para 85%"
                       rows={4}
                       value={newOKR.keyResults}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -444,7 +444,7 @@ const PerformanceCenter: React.FC = () => {
                       <Input 
                         type="date"
                         value={newOKR.prazo}
-                        onChange={handleChange})}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>

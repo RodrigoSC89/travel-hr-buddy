@@ -84,7 +84,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
             <Input
               id="product_name"
               value={formData.product_name}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Ex: Passagem São Paulo - Rio de Janeiro"
               required
             />
@@ -96,7 +96,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
               id="product_url"
               type="url"
               value={formData.product_url}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="https://..."
               required
             />
@@ -107,7 +107,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
             <Input
               id="route"
               value={formData.route || ""}
-              onChange={handleChange})}
+              onChange={handleChange}
               placeholder="Ex: GRU-SDU"
             />
           </div>
@@ -120,7 +120,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
                 type="number"
                 step="0.01"
                 value={formData.target_price}
-                onChange={handleChange})}
+                onChange={handleChange}
                 required
               />
             </div>
@@ -132,7 +132,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
                 type="number"
                 step="0.01"
                 value={formData.current_price || ""}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
             </div>
           </div>

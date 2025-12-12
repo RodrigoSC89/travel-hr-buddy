@@ -296,7 +296,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="quantity"
             value={formData.quantity_liters}
-            onChange={handleChange})}
+            onChange={handleChange}
             placeholder="Ex: 45000"
           />
         </div>
@@ -307,7 +307,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="cost"
             value={formData.cost_usd}
-            onChange={handleChange})}
+            onChange={handleChange}
             placeholder="Ex: 67500"
           />
         </div>
@@ -318,7 +318,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="distance"
             value={formData.distance_nm}
-            onChange={handleChange})}
+            onChange={handleChange}
             placeholder="Ex: 850"
           />
         </div>
@@ -330,7 +330,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             id="speed"
             step="0.1"
             value={formData.avg_speed_knots}
-            onChange={handleChange})}
+            onChange={handleChange}
             placeholder="Ex: 14.5"
           />
         </div>

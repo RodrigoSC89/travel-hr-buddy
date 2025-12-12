@@ -331,7 +331,7 @@ export default function DPHistory() {
                   <Input
                     placeholder="Buscar por evento ou detalhes..."
                     value={filters.searchText}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                   />
                 </div>
 
@@ -374,7 +374,7 @@ export default function DPHistory() {
                     <Input
                       type="date"
                       value={filters.dateFrom}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -382,7 +382,7 @@ export default function DPHistory() {
                     <Input
                       type="date"
                       value={filters.dateTo}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
