@@ -171,7 +171,7 @@ export default function UserProfilePage() {
       month: "long",
       year: "numeric"
     });
-  });
+  };
 
   if (isLoading) {
     return (
