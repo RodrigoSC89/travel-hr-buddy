@@ -540,6 +540,6 @@ export const TrainingAcademyAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
-export default TrainingAcademyAI;
+export const TrainingAcademyAI;
