@@ -415,6 +415,6 @@ export const QHSEAutonomousAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default QHSEAutonomousAI;
