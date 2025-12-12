@@ -96,4 +96,4 @@ export const UserMenu: React.FC = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-});
+};
