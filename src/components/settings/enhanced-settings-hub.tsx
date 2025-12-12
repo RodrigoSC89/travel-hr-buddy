@@ -122,7 +122,7 @@ interface SettingsData {
   };
 }
 
-export const EnhancedSettingsHub: React.FC = () => {
+const EnhancedSettingsHubComponent: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   
@@ -902,7 +902,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       </div>
       </div>
     );
-  }
-);
+};
 
+export const EnhancedSettingsHub = memo(EnhancedSettingsHubComponent);
 export default EnhancedSettingsHub;
