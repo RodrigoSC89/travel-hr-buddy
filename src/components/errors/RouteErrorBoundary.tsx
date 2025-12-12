@@ -23,7 +23,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
     this.state = {
       hasError: false,
       error: null,
-    });
+    };
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
