@@ -137,26 +137,26 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
   const removeWebhook = (id: string) => {
     onUpdate({
       webhooks: settings.webhooks.filter(w => w.id !== id)
-    };
+    });
     
     toast({
       title: "Webhook Removido",
       description: "Webhook foi removido das configurações"
-    };
+    });
   };
 
   const testWebhook = async (webhook: unknown) => {
     toast({
       title: "Testando Webhook",
       description: "Enviando payload de teste..."
-    };
+    });
 
     // Simulate webhook test
     setTimeout(() => {
       toast({
         title: "Webhook Testado",
         description: "Resposta: 200 OK - Webhook funcionando corretamente"
-      };
+      });
     }, 2000);
   };
 
