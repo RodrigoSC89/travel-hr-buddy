@@ -167,9 +167,8 @@ export const PerformanceMonitor = memo(function({
       </motion.div>
     </AnimatePresence>
   );
-}
-
-// Dev-only performance overlay
+});
+// Dev-only performance overlayy
 export const DevPerformanceOverlay = memo(function() {
   const [show, setShow] = useState(false);
 
