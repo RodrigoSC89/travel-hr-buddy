@@ -74,7 +74,7 @@ const SatelliteTracker = () => {
           maxLat: 50,
           minLon: -60,
           maxLon: 20,
-        };
+        });
         setVessels(vesselData);
       } catch (error) {
         console.error("Error fetching AIS data:", error);

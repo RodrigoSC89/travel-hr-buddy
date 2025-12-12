@@ -156,12 +156,12 @@ export default function JobCards() {
         includeAIRecommendations: true,
         title: "Relatório MMI - Manutenção Inteligente",
         subtitle: "Nautilus One v1.1.0 - Sistema com IA Adaptativa",
-      };
+      });
       toast({
         title: "Relatório Gerado",
         description: "PDF exportado com sucesso!",
         variant: "default",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
@@ -178,7 +178,7 @@ export default function JobCards() {
     try {
       await generateJobReport(job, {
         includeAIRecommendations: true,
-      };
+      });
       toast({
         title: "Relatório Gerado",
         description: `PDF do job "${job.title}" exportado com sucesso!`,

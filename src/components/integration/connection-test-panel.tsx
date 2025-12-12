@@ -95,7 +95,7 @@ export const ConnectionTestPanel: React.FC = () => {
         
         if (error) throw error;
         return data;
-  };
+      });
       
       const result: TestResult = {
         name: "Supabase com Retry",

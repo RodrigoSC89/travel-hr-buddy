@@ -102,7 +102,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         factorId,
         challengeId: factorId,
         code: verificationCode
-      };
+      });
 
       if (error) throw error;
 

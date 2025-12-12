@@ -46,7 +46,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
       ...formData,
       date: new Date().toISOString(),
       participants: []
-    };
+    });
 
     setFormData({
       topic: "",

@@ -108,7 +108,7 @@ export default function ListaAuditoriasIMCA() {
       const canvas = await html2canvas(pdfRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
-      };
+      });
 
       const imgData = canvas.toDataURL("image/png");
       const jsPDF = await getJsPDF();

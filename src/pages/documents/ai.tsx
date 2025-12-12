@@ -143,7 +143,7 @@ export default function AIDocuments() {
         p_document_id: documentId,
         p_analysis_type: "ocr",
         p_status: "started"
-      };
+      });
 
       const worker = await createWorker();
       
@@ -203,7 +203,7 @@ export default function AIDocuments() {
         p_analysis_type: "ocr",
         p_status: "failed",
         p_error: error.message
-      };
+      });
       
       throw error;
     }

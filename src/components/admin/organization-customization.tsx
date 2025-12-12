@@ -190,12 +190,12 @@ export const OrganizationCustomization: React.FC = () => {
         ...customization,
         enabled_modules: customization.enabled_modules,
         business_rules: customization.business_rules
-      };
+      });
       
       toast({
         title: "Sucesso",
         description: "Personalização salva com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",

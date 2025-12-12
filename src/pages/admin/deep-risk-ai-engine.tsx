@@ -110,7 +110,7 @@ const DeepRiskAIPage: React.FC = () => {
         fuel_status: fuelStatus,
         equipment_status: equipmentStatus,
         communication_quality: communicationQuality,
-      };
+      });
 
       setCurrentAnalysis(result);
       toast.success(`Risk analysis complete: ${result.level.toUpperCase()} (${result.score.toFixed(1)})`);

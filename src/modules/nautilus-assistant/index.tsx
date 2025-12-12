@@ -67,7 +67,7 @@ const NautilusAssistant: React.FC = () => {
     try {
       const response = await invoke("audit_analyze", chatInput, {
         context: "Nautilus Assistant - Copiloto de IA Marítimo"
-      };
+      });
 
       const assistantMessage: ChatMessage = {
         role: "assistant",
@@ -75,7 +75,7 @@ const NautilusAssistant: React.FC = () => {
           ? (typeof response.response === "string" ? response.response : JSON.stringify(response.response))
           : "Entendi sua solicitação. Com base nos dados disponíveis, posso ajudá-lo com análises operacionais, planejamento de viagens, gestão de manutenção e conformidade regulatória. Qual área específica você gostaria de explorar?",
         timestamp: new Date()
-      };
+      });
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {

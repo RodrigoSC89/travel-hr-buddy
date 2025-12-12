@@ -86,7 +86,7 @@ describe("Audit Center Workflow", () => {
           type: "safety",
           vessel: "vessel-001",
           inspector: "inspector-001",
-        };
+        });
   };
 
       expect(result.current.audits).toHaveLength(1);

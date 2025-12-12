@@ -61,7 +61,7 @@ export const MyCertificates: React.FC = () => {
         issued_date: cert.issued_date,
         final_score: cert.final_score,
         user_name: profile?.full_name || user.email || "Student",
-      };
+      });
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

@@ -112,7 +112,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         allowEditing: true,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Camera,
-      };
+      });
 
       if (image.dataUrl) {
         setCapturedImage(image.dataUrl);

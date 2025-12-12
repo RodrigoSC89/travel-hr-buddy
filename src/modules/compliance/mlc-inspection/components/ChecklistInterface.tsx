@@ -69,7 +69,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         severity: severity as unknown,
         corrective_action,
         evidence_attached: false,
-      };
+      });
       
       await loadFindings();
       onUpdate();

@@ -114,7 +114,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         sgso_category: category,
         sgso_root_cause: rootCause,
         sgso_risk_level: riskLevel,
-      };
+      });
 
       if (plan) {
         setActionPlan(plan);

@@ -76,7 +76,7 @@ export const WorkflowAutomationHub: React.FC = () => {
       priority: newWorkflowData.priority as unknown,
       status: "draft",
       steps: [],
-    };
+    });
     setShowNewWorkflow(false);
     setNewWorkflowData({ name: "", description: "", category: "custom", priority: "medium" });
   };
@@ -91,7 +91,7 @@ export const WorkflowAutomationHub: React.FC = () => {
       steps: template.steps,
       estimated_duration: template.estimated_duration,
       tags: template.tags,
-    };
+    });
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
   };
 

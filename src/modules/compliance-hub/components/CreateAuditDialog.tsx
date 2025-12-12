@@ -90,7 +90,7 @@ export const CreateAuditDialog = memo(function({
         scheduledDate: format(scheduledDate, "yyyy-MM-dd"),
         scope: formData.scope || "",
         objectives: formData.objectives || "",
-      };
+      });
       
       toast.success("Auditoria criada com sucesso");
       onOpenChange(false);

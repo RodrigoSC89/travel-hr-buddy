@@ -95,7 +95,7 @@ export default function DashboardAuditorias() {
       const canvas = await html2canvas(chartRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
-      };
+      });
 
       const imgData = canvas.toDataURL("image/png");
       const jsPDF = await loadJsPDF();

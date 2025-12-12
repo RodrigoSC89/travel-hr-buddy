@@ -187,7 +187,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       const canvas = await html2canvas(timelineRef.current, {
         backgroundColor: "#ffffff",
         scale: 2,
-      };
+      });
 
       const link = document.createElement("a");
       link.download = `incident-timeline-${Date.now()}.png`;

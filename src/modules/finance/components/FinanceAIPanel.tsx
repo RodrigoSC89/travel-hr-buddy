@@ -47,7 +47,7 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       expenses,
       balance: income - expenses,
       margin: ((income - expenses) / income * 100).toFixed(1),
-    };
+    });
     setAnalysis(result?.response || "Análise não disponível no momento.");
   };
 
@@ -57,7 +57,7 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       currentMonth: new Date().toISOString().slice(0, 7),
       income,
       expenses,
-    };
+    });
     setAnalysis(result?.response || "Previsão não disponível no momento.");
   };
 
@@ -66,7 +66,7 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       expenses: transactions.filter(t => t.type === "expense"),
       categories: [...new Set(transactions.map(t => t.category))],
       totalExpenses: expenses,
-    };
+    });
     setAnalysis(result?.response || "Recomendações não disponíveis no momento.");
   };
 
@@ -81,7 +81,7 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       transactions: transactions.slice(0, 10),
       income,
       expenses,
-    };
+    });
     
     setChatHistory(prev => [...prev, { role: "assistant" as const, content: response?.response || "Desculpe, não consegui processar sua pergunta." }]);
   };

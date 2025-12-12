@@ -334,7 +334,7 @@ const RealTimeWorkspace: React.FC = () => {
         status: newStatus,
         last_seen: new Date().toISOString(),
         current_page: window.location.pathname
-      };
+      });
     } catch (error) {
       logger.error("Failed to change status:", error);
     }

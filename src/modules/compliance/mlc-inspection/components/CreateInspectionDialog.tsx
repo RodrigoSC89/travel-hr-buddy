@@ -54,7 +54,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
         inspection_type: formData.inspection_type,
         notes: formData.notes,
         status: "draft",
-      };
+      });
 
       onInspectionCreated(inspection.id);
       
