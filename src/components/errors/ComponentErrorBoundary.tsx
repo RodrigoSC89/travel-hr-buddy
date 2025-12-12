@@ -51,7 +51,7 @@ export class ComponentErrorBoundary extends Component<Props, State> {
     this.setState({
       hasError: false,
       error: null,
-    };
+    });
   };
 
   render(): ReactNode {
