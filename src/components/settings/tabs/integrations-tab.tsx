@@ -124,7 +124,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
 
     onUpdate({
       webhooks: [...settings.webhooks, webhook]
-    };
+    });
 
     setNewWebhook({ name: "", url: "" });
     
