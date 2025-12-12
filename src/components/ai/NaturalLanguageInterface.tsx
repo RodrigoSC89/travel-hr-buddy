@@ -177,7 +177,7 @@ export const NaturalLanguageInterface = memo(function() {
             <Input
               value={input}
               onChange={handleChange}
-              onKeyDown={(e) => e.key === "Enter" && executeCommand(input}
+              onKeyDown={(e) => e.key === "Enter" && executeCommand(input)}
               placeholder="Digite um comando em linguagem natural..."
               className="pr-10"
               disabled={isLoading}
