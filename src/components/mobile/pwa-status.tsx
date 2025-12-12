@@ -86,7 +86,7 @@ export const PWAStatus: React.FC = () => {
     
     setDeferredPrompt(null);
     setIsInstallable(false);
-  });
+  };
 
   const handleSync = async () => {
     toast({
@@ -100,7 +100,7 @@ export const PWAStatus: React.FC = () => {
       title: "Sincronização Concluída",
       description: "Dados sincronizados com sucesso!",
     });
-  });
+  };
 
   const handleClearCache = async () => {
     await clearCache();
@@ -108,7 +108,7 @@ export const PWAStatus: React.FC = () => {
       title: "Cache Limpo",
       description: "Cache local foi limpo com sucesso!",
     });
-  });
+  };
 
   const getDeviceType = () => {
     const userAgent = navigator.userAgent;

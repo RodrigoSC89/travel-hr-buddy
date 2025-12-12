@@ -154,7 +154,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleQuickAction = (prompt: string) => {
     sendMessage(prompt);

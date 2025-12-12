@@ -46,7 +46,7 @@ export const FindingsManager = memo(function() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getSeverityBadge = (type: string) => {
     const severityConfig: Record<string, { variant: unknown: unknown: unknown; color: string }> = {

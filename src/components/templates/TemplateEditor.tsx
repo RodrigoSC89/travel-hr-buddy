@@ -107,7 +107,7 @@ export default function TemplateEditor() {
     } finally {
       setIsSaving(false);
     }
-  });
+  };
 
   const handleExportPDF = () => {
     if (!editor) return;
@@ -229,7 +229,7 @@ export default function TemplateEditor() {
     } finally {
       setIsGenerating(false);
     }
-  });
+  };
 
   return (
     <Card className="w-full max-w-6xl mx-auto">

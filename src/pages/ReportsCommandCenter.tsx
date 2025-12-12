@@ -138,7 +138,7 @@ const ReportsCommandCenter = () => {
     } finally {
       setIsLoadingAnalytics(false);
     }
-  });
+  };
 
   const getGrowthPercentage = () => {
     if (!analyticsData || analyticsData.reportsLastMonth === 0) return null;

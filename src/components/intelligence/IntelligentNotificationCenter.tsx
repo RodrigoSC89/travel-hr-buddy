@@ -145,7 +145,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleNewNotification = (payload: unknown) => {
     loadNotifications(); // Reload notifications
@@ -188,7 +188,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         variant: "destructive",
       });
     }
-  });
+  };
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 

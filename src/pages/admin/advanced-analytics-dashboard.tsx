@@ -157,7 +157,7 @@ export default function AdvancedAnalyticsDashboard() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const addWidget = async (widgetType: string, chartType?: string) => {
     try {
@@ -186,7 +186,7 @@ export default function AdvancedAnalyticsDashboard() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const chartOptions = {
     responsive: true,

@@ -431,7 +431,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         description: "Seu Nautilus One está pronto. Automações personalizadas foram ativadas.",
       });
     }
-  });
+  };
 
   const generateWelcomeAutomations = async (data: OnboardingData) => {
     setIsLoading(true);
@@ -484,7 +484,7 @@ export const SmartOnboardingWizard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const progress = ((currentStep + 1) / steps.length) * 100;
   const CurrentStepComponent = steps[currentStep].component;

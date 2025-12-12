@@ -125,7 +125,7 @@ const VesselManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleAddVessel = async () => {
     try {
@@ -183,7 +183,7 @@ const VesselManagement: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

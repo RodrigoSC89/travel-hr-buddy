@@ -114,7 +114,7 @@ export const SettingsDialog = memo(function({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const updateNotifications = (key: keyof ComplianceSettings["notifications"], value: unknown: unknown: unknown) => {
     setCurrentSettings({

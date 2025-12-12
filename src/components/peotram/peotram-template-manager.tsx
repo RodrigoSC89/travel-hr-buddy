@@ -65,7 +65,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         variant: "destructive",
       });
     }
-  });
+  };
 
   const updateTemplate = async (id: string, updates: Record<string, unknown>) => {
     try {
@@ -90,7 +90,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         variant: "destructive",
       });
     }
-  });
+  };
 
   const toggleTemplateStatus = async (template: PeotramTemplate) => {
     await updateTemplate(template.id, { is_active: !template.is_active });

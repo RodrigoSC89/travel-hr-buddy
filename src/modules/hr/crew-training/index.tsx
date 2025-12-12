@@ -86,7 +86,7 @@ const CrewTraining = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadAIInsights = async () => {
     try {
@@ -109,7 +109,7 @@ const CrewTraining = () => {
     } catch (error) {
       console.error("Error loading AI insights:", error);
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

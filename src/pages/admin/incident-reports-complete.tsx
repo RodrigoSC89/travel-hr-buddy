@@ -122,7 +122,7 @@ export default function IncidentReportsComplete() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadFollowups = async (incidentId: string) => {
     try {
@@ -185,7 +185,7 @@ export default function IncidentReportsComplete() {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const autoRouteIncident = async (incident: IncidentReport) => {
     // Auto-assign based on category
@@ -213,7 +213,7 @@ export default function IncidentReportsComplete() {
     } catch (error) {
       logger.error("Error routing incident", { error });
     }
-  });
+  };
 
   const addFollowup = async () => {
     if (!selectedIncident || !newFollowup.description) return;
@@ -266,7 +266,7 @@ export default function IncidentReportsComplete() {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const exportToPDF = async (incident: IncidentReport) => {
     const { jsPDF } = await loadJsPDF();
@@ -318,7 +318,7 @@ export default function IncidentReportsComplete() {
       title: "Sucesso",
       description: "PDF exportado com sucesso"
     });
-  });
+  };
 
   const getFilteredIncidents = () => {
     return incidents.filter(inc => {

@@ -175,7 +175,7 @@ export const SmartNotifications: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  });
+  };
 
   const sendTestNotification = async () => {
     try {
@@ -204,7 +204,7 @@ export const SmartNotifications: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

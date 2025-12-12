@@ -120,7 +120,7 @@ export const PullToRefresh = memo(function({
       setIsRefreshing(false);
       setPullProgress(0);
     }
-  });
+  };
   
   return (
     <GestureArea

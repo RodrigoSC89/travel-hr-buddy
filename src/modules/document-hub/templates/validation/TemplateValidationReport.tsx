@@ -277,7 +277,7 @@ export default function TemplateValidationReport() {
     } else {
       toast.warning(`⚠️ Validação: ${passed}/${total} testes aprovados`);
     }
-  });
+  };
 
   useEffect(() => {
     runValidation();

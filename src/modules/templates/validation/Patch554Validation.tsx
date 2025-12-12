@@ -41,7 +41,7 @@ export default function Patch554Validation() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const allPassed = Object.values(checks).every(Boolean);
 

@@ -214,7 +214,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
     } catch (error) {
       toast.error("Erro ao enviar checklist");
     }
-  });
+  };
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {

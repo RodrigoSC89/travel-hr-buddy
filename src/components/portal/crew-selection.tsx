@@ -59,7 +59,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const filteredCrewMembers = crewMembers.filter(member =>
     member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||

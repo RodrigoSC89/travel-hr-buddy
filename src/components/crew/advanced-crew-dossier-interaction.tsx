@@ -104,7 +104,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         variant: "destructive"
       });
     }
-  });
+  };
 
   const processVoiceCommand = async (text: string) => {
     try {
@@ -144,7 +144,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
     } finally {
       setIsLoadingAI(false);
     }
-  });
+  };
 
   const loadAIInsights = async () => {
     try {
@@ -215,7 +215,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
     } catch (error) {
       logger.error("Failed to create new goal:", error);
     }
-  });
+  };
 
   const renderVoiceTab = () => (
     <div className="space-y-4">

@@ -208,7 +208,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const trackAnalytics = async (action: string, itemId?: string, data?: Record<string, unknown>) => {
     try {
@@ -223,7 +223,7 @@ export const IntelligentHelpCenter: React.FC = () => {
     } catch (error) {
       logger.error("Failed to track user action:", error);
     }
-  });
+  };
 
   const handleExportMaterial = async (type: "pdf" | "video" | "image", content: Tutorial | FAQ) => {
     toast({

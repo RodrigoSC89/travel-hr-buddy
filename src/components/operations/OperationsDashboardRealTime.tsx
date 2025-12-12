@@ -346,7 +346,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getTimeFilter = (range: string): string => {
     const now = new Date();

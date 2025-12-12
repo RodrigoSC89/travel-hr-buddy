@@ -78,7 +78,7 @@ export const Patch602Validation = memo(function() {
       title: "Context Awareness Complete",
       description: "Transitioned through all context layers successfully",
     });
-  });
+  };
 
   const getActionsForLevel = (level: string): string[] => {
     const actionMap: Record<string, string[]> = {

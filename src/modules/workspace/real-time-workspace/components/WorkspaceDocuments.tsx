@@ -140,7 +140,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     } finally {
       setIsUploading(false);
     }
-  });
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -174,7 +174,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     } finally {
       setIsDownloading(null);
     }
-  });
+  };
 
   const handleViewDoc = (doc: SharedDocument) => {
     setSelectedDoc(doc);
@@ -221,7 +221,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
         variant: "destructive",
       });
     }
-  });
+  };
 
   const confirmShare = () => {
     if (selectedDoc) {

@@ -91,7 +91,7 @@ export default function InsightDashboard() {
     } finally {
       setIsGenerating(false);
     }
-  });
+  };
 
   const downloadReport = () => {
     const reportContent = `
@@ -140,7 +140,7 @@ ${logs.slice(0, 10).map(log =>
       title: "Enviando Relatório",
       description: "Funcionalidade em desenvolvimento (Supabase Edge Function)",
     });
-  });
+  };
 
   // Chart colors
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];

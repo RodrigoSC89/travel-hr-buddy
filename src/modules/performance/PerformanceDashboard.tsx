@@ -157,7 +157,7 @@ const PerformanceDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleExportPDF = async () => {
     try {
@@ -194,7 +194,7 @@ const PerformanceDashboard: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: "default" | "destructive" | "outline" | "secondary", label: string }> = {

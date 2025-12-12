@@ -127,7 +127,7 @@ export const ScenarioSimulatorPanel = memo(function() {
     } catch (error) {
       setAiAnalysis("Cenário analisado. Considere os trade-offs entre custo e risco operacional.");
     }
-  });
+  };
 
   const resetSimulation = () => {
     setParameters({

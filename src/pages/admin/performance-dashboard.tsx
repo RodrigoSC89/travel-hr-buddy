@@ -119,7 +119,7 @@ export default function PerformanceDashboard() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getFilteredMetrics = () => {
     let filtered = metrics;

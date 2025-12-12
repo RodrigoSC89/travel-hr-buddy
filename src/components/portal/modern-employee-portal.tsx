@@ -136,7 +136,7 @@ export const ModernEmployeePortal: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadUserProfile = async () => {
     try {
@@ -173,7 +173,7 @@ export const ModernEmployeePortal: React.FC = () => {
       }
     } catch (error) {
     }
-  });
+  };
 
   const loadDashboardStats = async () => {
     if (!userProfile) return;
@@ -213,7 +213,7 @@ export const ModernEmployeePortal: React.FC = () => {
       });
     } catch (error) {
     }
-  });
+  };
 
   const loadPersonalCalendar = async () => {
     if (!userProfile) return;
@@ -244,7 +244,7 @@ export const ModernEmployeePortal: React.FC = () => {
       });
     } catch (error) {
     }
-  });
+  };
 
   const loadAIInsights = async () => {
     if (!userProfile) return;
@@ -385,7 +385,7 @@ export const ModernEmployeePortal: React.FC = () => {
     } finally {
       setUploadingDoc(false);
     }
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

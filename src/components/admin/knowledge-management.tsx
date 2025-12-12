@@ -263,7 +263,7 @@ export const KnowledgeManagement: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleDelete = async (id: string) => {
     if (confirm("Tem certeza que deseja excluir este item?")) {
@@ -289,7 +289,7 @@ export const KnowledgeManagement: React.FC = () => {
         });
       }
     }
-  });
+  };
 
   const handleExport = () => {
     const dataStr = JSON.stringify(knowledgeItems, null, 2);

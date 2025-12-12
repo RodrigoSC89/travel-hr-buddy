@@ -82,7 +82,7 @@ export const EnhancedCommunicationCenter = memo(() => {
           setLoading(false);
         }
       }
-    });
+    };
     
     init();
     

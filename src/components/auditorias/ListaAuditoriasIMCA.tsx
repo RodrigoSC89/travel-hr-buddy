@@ -128,7 +128,7 @@ export default function ListaAuditoriasIMCA() {
       console.error("Erro ao exportar PDF:", error);
       toast.error("Erro ao exportar PDF");
     }
-  });
+  };
 
   const explicarIA = async (id: string, navio: string, item: string, norma: string) => {
     setLoadingIA(id);

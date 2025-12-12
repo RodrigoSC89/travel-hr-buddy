@@ -207,7 +207,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       
       setInstallPrompt(null);
     }
-  });
+  };
 
   const requestPermission = async (permission: keyof MobileSettings) => {
     try {
@@ -306,7 +306,7 @@ export const EnhancedMobileSupport: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const updateServiceWorker = () => {
     if ("serviceWorker" in navigator) {

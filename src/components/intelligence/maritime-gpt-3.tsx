@@ -175,7 +175,7 @@ Como posso ajudá-lo hoje?`,
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);
     }, 1500);
-  });
+  };
 
   const generateMaritimeResponse = (query: string): Message => {
     const lowerQuery = query.toLowerCase();

@@ -105,7 +105,7 @@ export const RealTimeCollaboration = memo(() => {
     } catch (error) {
       logger.error("Failed to create conversation:", error);
     }
-  });
+  };
 
   const fetchMessages = async (conversationId: string) => {
     try {
@@ -206,7 +206,7 @@ export const RealTimeCollaboration = memo(() => {
         });
       }
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

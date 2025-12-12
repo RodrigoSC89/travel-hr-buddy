@@ -141,7 +141,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const loadPriceHistory = async (alertId: string) => {
     try {
@@ -197,7 +197,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       console.error("Error creating alert:", error);
       toast.error("Failed to create price alert");
     }
-  });
+  };
 
   const toggleAlert = async (alertId: string, currentState: boolean) => {
     try {

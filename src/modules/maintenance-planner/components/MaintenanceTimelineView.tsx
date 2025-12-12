@@ -49,7 +49,7 @@ export const MaintenanceTimelineView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getTaskIcon = (status: string) => {
     switch (status) {

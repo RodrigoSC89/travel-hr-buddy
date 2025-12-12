@@ -76,7 +76,7 @@ export const ReservationsDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,7 +125,7 @@ export const ReservationsDashboard: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleDelete = async (id: string) => {
     await triggerHaptics();
@@ -150,7 +150,7 @@ export const ReservationsDashboard: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const resetForm = () => {
     setFormData({

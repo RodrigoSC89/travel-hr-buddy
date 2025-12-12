@@ -97,7 +97,7 @@ export const usePerformanceData = (period: number = 7) => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const calculateMetrics = (
     fleetLogs: any[],

@@ -81,7 +81,7 @@ export const UserFeedbackSystem: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   // Enviar feedback
   const submitFeedback = async () => {
@@ -140,7 +140,7 @@ export const UserFeedbackSystem: React.FC = () => {
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   useEffect(() => {
     loadFeedbacks();

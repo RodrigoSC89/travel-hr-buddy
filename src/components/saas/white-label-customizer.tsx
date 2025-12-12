@@ -102,7 +102,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleReset = () => {
     setFormData({

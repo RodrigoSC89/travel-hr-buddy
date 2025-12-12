@@ -122,7 +122,7 @@ export default function SatelliteTracker() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const fetchAlerts = async () => {
     try {
@@ -241,7 +241,7 @@ export default function SatelliteTracker() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const stopTracking = async () => {
     if (!trackingSessionId) return;
@@ -263,7 +263,7 @@ export default function SatelliteTracker() {
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }
-  });
+  };
 
   const resolveAlert = async (alertId: string) => {
     try {
@@ -282,7 +282,7 @@ export default function SatelliteTracker() {
     } catch (error) {
       logger.error("Error resolving satellite alert", { error, alertId });
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

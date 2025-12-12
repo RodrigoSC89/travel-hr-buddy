@@ -178,7 +178,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const submitFeedback = async () => {
     try {
@@ -216,7 +216,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

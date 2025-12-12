@@ -152,7 +152,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const extractPlaceholders = (content: string): string[] => {
     const regex = /\{\{([^}]+)\}\}/g;
@@ -334,7 +334,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       console.error("Error exporting Word:", error);
       toast.error("Failed to export Word document");
     }
-  });
+  };
 
   // PATCH 493: Preview before export
   const showPreview = () => {
@@ -375,7 +375,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       console.error("Error saving export history:", error);
       console.error("Error saving export history:", error);
     }
-  });
+  };
 
   const createNewTemplate = () => {
     setSelectedTemplate(null);

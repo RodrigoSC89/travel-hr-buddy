@@ -80,7 +80,7 @@ export const WellbeingHistory: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   if (loading) {
     return (

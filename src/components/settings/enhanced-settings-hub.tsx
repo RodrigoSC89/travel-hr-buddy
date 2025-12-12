@@ -305,7 +305,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  });
+  };
 
   const validateSettings = (settings: SettingsData): string[] => {
     const errors: string[] = [];
@@ -410,7 +410,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
       title: "🔄 Configurações Restauradas",
       description: "Todas as configurações foram restauradas aos valores padrão.",
     });
-  });
+  };
 
   const exportSettings = () => {
     const exportData = {
@@ -530,7 +530,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
       }
     } catch (error) {
     }
-  });
+  };
 
   const logSettingsChange = async (action: string, data: unknown) => {
     const logEntry = {

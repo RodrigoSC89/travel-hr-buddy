@@ -266,7 +266,7 @@ export default function TravelCommandCenter() {
     } finally {
       setReservationsLoading(false);
     }
-  });
+  };
 
   const detectConflicts = (reservations: EnhancedReservation[]): EnhancedReservation[] => {
     return reservations.map(reservation => {

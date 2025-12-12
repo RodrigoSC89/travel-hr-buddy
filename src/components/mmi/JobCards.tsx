@@ -42,7 +42,7 @@ export default function JobCards() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleShowAIRecommendation = async (jobId: string) => {
     setLoadingAI(true);
@@ -62,7 +62,7 @@ export default function JobCards() {
     } finally {
       setLoadingAI(false);
     }
-  });
+  };
 
   const handleAutoPostpone = async (jobId: string) => {
     setProcessingJobId(jobId);
@@ -83,7 +83,7 @@ export default function JobCards() {
     } finally {
       setProcessingJobId(null);
     }
-  });
+  };
 
   const handleCreateOS = async (jobId: string) => {
     setProcessingJobId(jobId);
@@ -108,7 +108,7 @@ export default function JobCards() {
     } finally {
       setProcessingJobId(null);
     }
-  });
+  };
 
   const handleExportOrderPDF = async (job: MMIJob, osId: string) => {
     setExportingOrderPDF(job.id);
@@ -147,7 +147,7 @@ export default function JobCards() {
     } finally {
       setExportingOrderPDF(null);
     }
-  });
+  };
 
   const handleExportPDF = async () => {
     setGeneratingPDF(true);
@@ -171,7 +171,7 @@ export default function JobCards() {
     } finally {
       setGeneratingPDF(false);
     }
-  });
+  };
 
   const handleGenerateJobReport = async (job: MMIJob) => {
     setGeneratingJobPDF(job.id);
@@ -193,7 +193,7 @@ export default function JobCards() {
     } finally {
       setGeneratingJobPDF(null);
     }
-  });
+  };
 
   if (loading) {
     return (

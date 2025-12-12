@@ -208,7 +208,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedChannels = React.useMemo(() => {
@@ -286,7 +286,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const joinChannel = async (channelId: string) => {
     try {
@@ -311,7 +311,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getChannelIcon = (type: string) => {
     switch (type) {

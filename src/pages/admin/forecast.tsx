@@ -69,7 +69,7 @@ export default function ForecastPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   useEffect(() => {
     generateForecast();

@@ -83,7 +83,7 @@ export default function PEODPPanel() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleStartMonitoring = () => {
     try {

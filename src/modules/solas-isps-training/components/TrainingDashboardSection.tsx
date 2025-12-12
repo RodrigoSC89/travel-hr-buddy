@@ -177,7 +177,7 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
       setIsLoading(false);
     }, 1500);
-  });
+  };
 
   const filteredDrills = mockDrills.filter(drill => 
     !searchQuery || drill.name.toLowerCase().includes(searchQuery.toLowerCase())

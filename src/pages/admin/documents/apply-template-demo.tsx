@@ -53,7 +53,7 @@ export default function ApplyTemplateDemo() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   if (loading) {
     return (

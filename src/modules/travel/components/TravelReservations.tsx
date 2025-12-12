@@ -90,7 +90,7 @@ export const TravelReservations: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const applyFilters = () => {
     let filtered = [...reservations];
@@ -130,7 +130,7 @@ export const TravelReservations: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const resetForm = () => {
     setFormData({

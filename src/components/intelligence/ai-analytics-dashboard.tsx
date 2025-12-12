@@ -106,7 +106,7 @@ export const AIAnalyticsDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const getAccuracyColor = (accuracy: number) => {
     if (accuracy >= 95) return "text-green-600";

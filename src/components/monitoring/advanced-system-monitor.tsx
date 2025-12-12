@@ -152,7 +152,7 @@ const AdvancedSystemMonitor: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

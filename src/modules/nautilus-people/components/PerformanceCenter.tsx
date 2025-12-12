@@ -132,7 +132,7 @@ const PerformanceCenter: React.FC = () => {
     setIsNewOKROpen(false);
     setNewOKR({ objetivo: "", keyResults: "", responsavel: "", prazo: "" });
     toast.success("OKR criado com sucesso!");
-  });
+  };
 
   const handleGenerateOKRWithAI = async () => {
     toast.info("Gerando OKR com IA...");
@@ -153,7 +153,7 @@ const PerformanceCenter: React.FC = () => {
         toast.success("Sugestão de objetivo gerada!");
       }
     }
-  });
+  };
 
   const handleSendFeedback = () => {
     if (!feedbackText || !feedbackTarget) {

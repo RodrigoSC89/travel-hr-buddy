@@ -104,7 +104,7 @@ export const ModuleLLMHelper: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleExportAll = (format: "markdown" | "json") => {
     const allPrompts = generateBatchPrompts(filteredModules);

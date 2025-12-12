@@ -163,7 +163,7 @@ export const MaritimeCommunicationCenter = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadChannels = async () => {
     try {
@@ -267,7 +267,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getMessageTypeColor = (type: MaritimeCommunication["message_type"]) => {
     switch (type) {

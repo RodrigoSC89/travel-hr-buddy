@@ -198,7 +198,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const generateMockPriceHistory = () => {
     const data = [];
@@ -296,7 +296,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   const handleExportPDF = async () => {
     setIsExporting(true);
@@ -322,7 +322,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   const formatCurrency = (value: number) => `R$ ${value.toLocaleString("pt-BR")}`;
   const formatPercentage = (value: number) => `${value}%`;

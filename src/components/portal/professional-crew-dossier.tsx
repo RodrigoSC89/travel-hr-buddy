@@ -143,7 +143,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const createCrewMember = async () => {
     if (!user) return;
@@ -180,7 +180,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const fetchDossierData = async () => {
     if (!selectedCrewId) return;
@@ -271,7 +271,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const generateAIRecommendations = async () => {
     if (!selectedCrewId) return;

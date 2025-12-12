@@ -151,7 +151,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const detectConflicts = (reservations: EnhancedReservation[]): EnhancedReservation[] => {
     return reservations.map(reservation => {
@@ -222,7 +222,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const exportReservations = () => {
     const csv = [

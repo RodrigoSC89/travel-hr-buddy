@@ -185,7 +185,7 @@ Formate a resposta em markdown estruturado.`,
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   useEffect(() => {
     analyzeCompliance();

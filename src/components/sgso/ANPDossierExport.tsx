@@ -105,7 +105,7 @@ export const ANPDossierExport: React.FC = () => {
       description: "O arquivo PDF foi baixado com sucesso."
     });
     setIsExporting(false);
-  });
+  };
 
   const handleExportZIP = async () => {
     setIsExporting(true);
@@ -121,7 +121,7 @@ export const ANPDossierExport: React.FC = () => {
       description: "Dossiê completo com evidências baixado."
     });
     setIsExporting(false);
-  });
+  };
 
   const togglePractice = (id: number) => {
     setSelectedPractices(prev =>

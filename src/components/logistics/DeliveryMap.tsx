@@ -75,7 +75,7 @@ export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
         console.error("Error initializing map:", error);
         if (mounted) setIsLoading(false);
       }
-    });
+    };
 
     initMap();
 

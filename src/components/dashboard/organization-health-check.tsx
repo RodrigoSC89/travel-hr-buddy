@@ -183,7 +183,7 @@ export const OrganizationHealthCheck: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const completedChecks = healthChecks.filter(check => check.status === "completed").length;
   const totalChecks = healthChecks.length;

@@ -121,7 +121,7 @@ const AICopilot: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleCopy = async (content: string, id: string) => {
     await navigator.clipboard.writeText(content);
@@ -131,7 +131,7 @@ const AICopilot: React.FC = () => {
       title: "Copiado!",
       description: "Texto copiado para a área de transferência.",
     });
-  });
+  };
 
   const clearChat = () => {
     setMessages([]);

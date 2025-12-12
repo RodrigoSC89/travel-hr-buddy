@@ -93,7 +93,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const loadNotifications = async () => {
     try {
@@ -190,7 +190,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
     } finally {
       setIsCreatingAlert(false);
     }
-  });
+  };
 
   const toggleAlert = async (id: string) => {
     const alert = alerts.find(a => a.id === id);
@@ -214,7 +214,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const removeAlert = async (id: string) => {
     try {
@@ -237,7 +237,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const refreshPrices = async () => {
     setIsCheckingPrices(true);
@@ -265,7 +265,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
     } finally {
       setIsCheckingPrices(false);
     }
-  });
+  };
 
   // Mock price change calculation (will be replaced with real history)
   const getPriceChange = (alert: PriceAlert) => {

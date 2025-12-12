@@ -118,7 +118,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadCoverageEvents = async () => {
     try {
@@ -227,7 +227,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
     } catch (error: SupabaseError | null) {
       console.error("Error updating satellites:", error);
     }
-  });
+  };
 
   const checkCoverageEvents = async (satellites: SatelliteData[]) => {
     for (const sat of satellites) {
@@ -255,7 +255,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
     }
 
     await loadCoverageEvents();
-  });
+  };
 
   const manualRefresh = async () => {
     setLoading(true);
@@ -267,7 +267,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
       title: "Data refreshed",
       description: "Satellite data has been updated",
     });
-  });
+  };
 
   const getVisibilityColor = (status: string) => {
     switch (status?.toLowerCase()) {

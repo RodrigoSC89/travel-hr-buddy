@@ -45,7 +45,7 @@ const AlertasPrecosModule = () => {
     } catch (error) {
       console.error("Error loading stats:", error);
     }
-  });
+  };
 
   useEffect(() => {
     loadStats();

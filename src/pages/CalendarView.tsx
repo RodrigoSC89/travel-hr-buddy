@@ -36,7 +36,7 @@ const CalendarView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getDaysInMonth = () => {
     const year = currentDate.getFullYear();

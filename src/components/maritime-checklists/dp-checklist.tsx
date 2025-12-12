@@ -165,7 +165,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
     } catch (error) {
       toast.error("Erro ao enviar checklist");
     }
-  });
+  };
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {

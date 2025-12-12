@@ -139,7 +139,7 @@ export default function DocumentViewPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadComments = async () => {
     if (!id) return;
@@ -183,7 +183,7 @@ export default function DocumentViewPage() {
     } finally {
       setLoadingComments(false);
     }
-  });
+  };
 
   const subscribeToComments = () => {
     if (!id || realtimeChannel) return;
@@ -262,7 +262,7 @@ export default function DocumentViewPage() {
     } finally {
       setSubmittingComment(false);
     }
-  });
+  };
 
   const deleteComment = async (commentId: string) => {
     setDeletingCommentId(commentId);
@@ -288,7 +288,7 @@ export default function DocumentViewPage() {
     } finally {
       setDeletingCommentId(null);
     }
-  });
+  };
 
   if (loading)
     return (

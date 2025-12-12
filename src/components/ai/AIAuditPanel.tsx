@@ -67,7 +67,7 @@ export const AIAuditPanel: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleExport = async () => {
     try {

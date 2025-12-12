@@ -67,7 +67,7 @@ export const ShipmentTracking = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

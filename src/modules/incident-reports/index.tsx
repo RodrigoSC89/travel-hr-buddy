@@ -81,7 +81,7 @@ const IncidentReports = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

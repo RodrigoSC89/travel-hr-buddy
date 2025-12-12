@@ -93,7 +93,7 @@ export default function AILearningDashboard() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

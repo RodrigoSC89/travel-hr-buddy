@@ -136,7 +136,7 @@ export default function CollaborationPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -146,7 +146,7 @@ export default function CollaborationPage() {
       title: "Atualizado",
       description: "Comentários atualizados com sucesso.",
     });
-  });
+  };
 
   const handleSubmit = async () => {
     if (!newComment.trim()) {
@@ -190,7 +190,7 @@ export default function CollaborationPage() {
     } finally {
       setSubmitting(false);
     }
-  });
+  };
 
   const fetchReplies = async (commentId: string) => {
     try {
@@ -264,7 +264,7 @@ export default function CollaborationPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const submitReply = async (commentId: string) => {
     const replyText = replyTexts[commentId];
@@ -309,7 +309,7 @@ export default function CollaborationPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -155,7 +155,7 @@ export const SecurityDashboard: React.FC = () => {
     } finally {
       setIsScanning(false);
     }
-  });
+  };
 
   useEffect(() => {
     runSecurityScan();

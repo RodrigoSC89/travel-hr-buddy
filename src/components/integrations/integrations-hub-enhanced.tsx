@@ -108,7 +108,7 @@ export const IntegrationsHubEnhanced = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadWebhookEvents = async () => {
     try {
@@ -167,7 +167,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const disconnectIntegration = async (integrationId: string) => {
     try {
@@ -191,7 +191,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const createWebhook = async () => {
     if (!webhookUrl) {
@@ -240,7 +240,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const testWebhook = async (integration: Integration) => {
     try {
@@ -278,7 +278,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const retryWebhook = async (eventId: string) => {
     try {

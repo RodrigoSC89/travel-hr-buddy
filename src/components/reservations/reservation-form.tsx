@@ -218,7 +218,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getTypeLabel = (type: string) => {
     switch (type) {

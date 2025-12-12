@@ -90,7 +90,7 @@ export const WeeklyAssessment: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
-  });
+  };
 
   const getRatingLabel = (value: number) => {
     switch (value) {

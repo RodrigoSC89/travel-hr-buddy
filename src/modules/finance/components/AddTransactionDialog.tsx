@@ -98,7 +98,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

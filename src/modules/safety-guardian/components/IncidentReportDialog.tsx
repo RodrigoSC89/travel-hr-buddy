@@ -119,7 +119,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const selectedType = incidentTypes.find(t => t.value === formData.type);
 

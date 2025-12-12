@@ -106,14 +106,14 @@ const MaintenanceCommandCenter = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleExportWeeklySchedule = async () => {
     toast({
       title: "Exportação",
       description: "Gerando relatório semanal de manutenção...",
     });
-  });
+  };
 
   if (loading) {
     return (

@@ -172,7 +172,7 @@ export const TelemetryExporter = memo(function({
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   const exportToCSV = () => {
     try {

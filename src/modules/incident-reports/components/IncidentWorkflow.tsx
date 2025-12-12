@@ -76,7 +76,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -121,7 +121,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
     } finally {
       setUploading(false);
     }
-  });
+  };
 
   const exportToPDF = async () => {
     try {
@@ -158,7 +158,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         variant: "destructive",
       });
     }
-  });
+  };
 
   return (
     <div className="space-y-4">

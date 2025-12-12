@@ -64,7 +64,7 @@ export const SystemStatusWidget = memo(function({ compact = false }: { compact?:
 
     setStatuses(results);
     setLoading(false);
-  });
+  };
 
   useEffect(() => {
     checkAllModules();

@@ -100,7 +100,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const testNotification = async () => {
     try {
@@ -131,7 +131,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   return (
     <Card>

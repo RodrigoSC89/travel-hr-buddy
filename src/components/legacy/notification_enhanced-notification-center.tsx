@@ -65,7 +65,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const markAsRead = async (notificationId: string) => {
     try {
@@ -93,7 +93,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const markAllAsRead = async () => {
     try {
@@ -120,7 +120,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const deleteNotification = async (notificationId: string) => {
     try {
@@ -144,7 +144,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

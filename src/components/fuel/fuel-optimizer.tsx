@@ -335,7 +335,7 @@ export const FuelOptimizer = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getOptimizationChartData = () => {
     return {

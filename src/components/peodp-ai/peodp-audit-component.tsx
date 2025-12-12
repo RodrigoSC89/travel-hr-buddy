@@ -80,7 +80,7 @@ export const PEODPAuditComponent = memo(function() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleDownloadPDF = () => {
     if (auditoria) {

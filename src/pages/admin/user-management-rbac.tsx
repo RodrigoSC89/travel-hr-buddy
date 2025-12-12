@@ -57,7 +57,7 @@ export default function UserManagementRBAC() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const fetchAuditLogs = async () => {
     setLoading(true);
@@ -80,7 +80,7 @@ export default function UserManagementRBAC() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const createGroup = async (name: string, description: string) => {
     try {
@@ -103,7 +103,7 @@ export default function UserManagementRBAC() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const addUserToGroup = async (userId: string, groupId: string) => {
     try {
@@ -126,7 +126,7 @@ export default function UserManagementRBAC() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

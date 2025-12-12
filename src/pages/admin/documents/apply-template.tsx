@@ -74,7 +74,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
         variant: "destructive",
       });
     }
-  });
+  };
 
   return (
     <div className="space-y-4 mt-6 p-4 border rounded-xl">

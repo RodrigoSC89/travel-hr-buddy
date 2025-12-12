@@ -51,7 +51,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     const message = input;
     setInput("");
     await sendMessage(message, context);
-  });
+  };
 
   const handleVoiceInput = () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {

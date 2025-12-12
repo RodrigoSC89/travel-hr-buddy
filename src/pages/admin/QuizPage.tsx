@@ -236,7 +236,7 @@ export default function QuizPage() {
     } catch (error) {
       logger.error("Error saving quiz result", { error });
     }
-  });
+  };
 
   const restartQuiz = () => {
     setQuizStarted(false);

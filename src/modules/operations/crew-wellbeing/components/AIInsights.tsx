@@ -60,7 +60,7 @@ export const AIInsights = memo(() => {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const getFatigueLevelColor = (level: string) => {
     switch (level) {

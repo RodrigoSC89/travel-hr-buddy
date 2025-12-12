@@ -57,7 +57,7 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
       // Revert the accepted state on error
       setAccepted((prev) => prev.filter(e => e !== etapa));
     }
-  });
+  };
 
   return (
     <div className="space-y-4">

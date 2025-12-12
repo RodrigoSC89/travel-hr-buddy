@@ -89,7 +89,7 @@ export const PriceRangeConfig = memo(function() {
     } finally {
       setIsSaving(false);
     }
-  });
+  };
 
   return (
     <Card>

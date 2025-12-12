@@ -76,7 +76,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Card>

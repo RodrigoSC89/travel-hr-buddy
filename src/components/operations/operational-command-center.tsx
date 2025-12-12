@@ -93,7 +93,7 @@ export const OperationalCommandCenter: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const loadMetrics = async () => {
     const { data, error } = await supabase
@@ -189,7 +189,7 @@ export const OperationalCommandCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const resolveAlert = async (alertId: string) => {
     try {
@@ -216,7 +216,7 @@ export const OperationalCommandCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

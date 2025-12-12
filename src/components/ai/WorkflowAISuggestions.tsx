@@ -110,7 +110,7 @@ export const WorkflowAISuggestions = memo(function({
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const generateAISuggestions = useCallback(async () => {
     setIsRefreshing(true);

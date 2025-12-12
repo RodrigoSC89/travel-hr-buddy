@@ -127,7 +127,7 @@ export const NautilusCommandCenter = memo(function() {
     } catch (error) {
       console.error("Error loading data:", error);
     }
-  });
+  };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);

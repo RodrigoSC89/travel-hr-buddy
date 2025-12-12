@@ -121,7 +121,7 @@ export const CrewManagementDashboard = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getStatusColor = (status: CrewMember["status"]) => {
     switch (status) {

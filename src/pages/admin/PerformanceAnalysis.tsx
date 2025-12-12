@@ -68,7 +68,7 @@ const PerformanceAnalysis: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

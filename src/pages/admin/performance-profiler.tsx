@@ -150,7 +150,7 @@ export default function PerformanceProfiler() {
 
     // Store to Supabase
     await storeMetrics(metric);
-  });
+  };
 
   const detectSlowComponents = () => {
     try {

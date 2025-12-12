@@ -194,7 +194,7 @@ export const AutonomousProcurementAI: React.FC = () => {
       supplierScore: 96
     });
     setIsAnalyzing(false);
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

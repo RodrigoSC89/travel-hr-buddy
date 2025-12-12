@@ -123,7 +123,7 @@ const WorkflowEngine = () => {
         description: "Execução em andamento",
       });
     }
-  });
+  };
 
   const addStep = () => {
     setNewWorkflow({

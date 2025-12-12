@@ -104,7 +104,7 @@ export const useSystemActions = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handlePrintReport = () => {
     toast({

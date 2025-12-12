@@ -113,7 +113,7 @@ export const AdvancedSettings: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  });
+  };
 
   const resetSettings = () => {
     setSettings({

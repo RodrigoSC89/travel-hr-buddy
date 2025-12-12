@@ -60,7 +60,7 @@ const SGSOHistoryPage: React.FC = () => {
       setLoading(false);
       setRefreshing(false);
     }
-  });
+  };
 
   useEffect(() => {
     fetchActionPlans();

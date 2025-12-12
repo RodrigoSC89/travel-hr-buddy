@@ -59,14 +59,14 @@ const MaintenancePlanner = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleExportWeeklySchedule = async () => {
     toast({
       title: "Exportação",
       description: "Funcionalidade de exportação será implementada com dados reais.",
     });
-  });
+  };
 
   const handleJobCreated = (job: unknown) => {
     toast({

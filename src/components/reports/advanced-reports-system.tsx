@@ -66,7 +66,7 @@ const AdvancedReportsSystem = () => {
     } finally {
       setIsGenerating(false);
     }
-  });
+  };
 
   const exportReport = async (format: string) => {
     setIsExporting(true);
@@ -99,7 +99,7 @@ const AdvancedReportsSystem = () => {
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   return (
     <div className="space-y-6">

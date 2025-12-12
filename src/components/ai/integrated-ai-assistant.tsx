@@ -196,7 +196,7 @@ const IntegratedAIAssistant = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const generateAIResponse = async (prompt: string) => {
     // Simulate different types of responses based on keywords

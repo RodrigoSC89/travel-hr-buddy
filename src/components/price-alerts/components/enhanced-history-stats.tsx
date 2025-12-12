@@ -119,7 +119,7 @@ export const EnhancedHistoryStats = memo(function() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const combinedHistory = useMemo(() => {
     return [...flightHistory, ...hotelHistory].sort(
@@ -337,7 +337,7 @@ export const EnhancedHistoryStats = memo(function() {
       title: "PDF exportado",
       description: "O arquivo foi baixado com sucesso",
     });
-  });
+  };
 
   if (isLoading) {
     return (

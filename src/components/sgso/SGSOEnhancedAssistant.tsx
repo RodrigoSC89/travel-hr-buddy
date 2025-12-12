@@ -165,7 +165,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

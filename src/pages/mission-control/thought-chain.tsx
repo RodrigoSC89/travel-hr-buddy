@@ -67,7 +67,7 @@ const ThoughtChainPage = () => {
     } finally {
       setIsRunning(false);
     }
-  });
+  };
 
   const handleRunChain = () => {
     const steps = parseNaturalLanguageToChain(input);

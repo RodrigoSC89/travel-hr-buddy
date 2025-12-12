@@ -177,7 +177,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const getRiskColor = (level: string) => {
     switch (level) {

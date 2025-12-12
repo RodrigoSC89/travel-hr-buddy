@@ -140,7 +140,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const detectAction = (text: string): string | undefined => {
     const lowerText = text.toLowerCase();

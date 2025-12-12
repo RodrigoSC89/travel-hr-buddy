@@ -138,7 +138,7 @@ export const MaritimeCertificationManager = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadAlerts = async () => {
     try {

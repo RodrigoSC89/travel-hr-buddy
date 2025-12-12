@@ -72,7 +72,7 @@ export default function EditTemplatePage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // Generate content with AI
   const generateWithAI = async () => {
@@ -110,7 +110,7 @@ export default function EditTemplatePage() {
     } finally {
       setGenerating(false);
     }
-  });
+  };
 
   // Rewrite content with AI
   const rewriteContent = async () => {
@@ -146,7 +146,7 @@ export default function EditTemplatePage() {
     } finally {
       setRewriting(false);
     }
-  });
+  };
 
   // Auto-suggest title from content
   const suggestTitle = async () => {
@@ -182,7 +182,7 @@ export default function EditTemplatePage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Update template
   const updateTemplate = async () => {
@@ -223,7 +223,7 @@ export default function EditTemplatePage() {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   if (loading) {
     return (

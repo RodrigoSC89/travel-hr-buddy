@@ -47,7 +47,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleCopySuggestion = (suggestion: string) => {
     if (onSelect) {

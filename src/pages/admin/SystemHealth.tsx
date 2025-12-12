@@ -46,7 +46,7 @@ export default function SystemHealth() {
     } finally {
       setIsValidating(false);
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -58,7 +58,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
     });
     setDialogOpen(false);
     toast.success("DDS registrado com sucesso!");
-  });
+  };
 
   const filteredRecords = records.filter(r =>
     r.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||

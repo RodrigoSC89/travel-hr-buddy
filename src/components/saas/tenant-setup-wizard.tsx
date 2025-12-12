@@ -115,7 +115,7 @@ export const TenantSetupWizard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const progress = (currentStep / steps.length) * 100;
 

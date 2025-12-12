@@ -130,7 +130,7 @@ export const AlertsSystem: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (loading) {
     return (

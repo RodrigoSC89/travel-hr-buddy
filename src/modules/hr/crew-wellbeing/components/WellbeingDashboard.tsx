@@ -84,7 +84,7 @@ export const WellbeingDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 8) return "text-green-600";

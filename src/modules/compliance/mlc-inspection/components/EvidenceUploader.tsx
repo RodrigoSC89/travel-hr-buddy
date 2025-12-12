@@ -56,7 +56,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
     } finally {
       setUploading(false);
     }
-  });
+  };
 
   const handleRemove = () => {
     setSelectedFile(null);

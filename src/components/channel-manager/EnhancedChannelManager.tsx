@@ -108,7 +108,7 @@ export const EnhancedChannelManager: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadMessages = async (channelId: string) => {
     try {
@@ -209,7 +209,7 @@ export const EnhancedChannelManager: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleSendMessage = async () => {
     if (!messageContent.trim() || !selectedChannel) return;
@@ -238,7 +238,7 @@ export const EnhancedChannelManager: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const resetForm = () => {
     setFormData({

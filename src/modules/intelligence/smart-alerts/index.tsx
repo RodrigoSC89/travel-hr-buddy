@@ -114,7 +114,7 @@ const SmartAlerts = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadAIInsights = async () => {
     try {
@@ -139,7 +139,7 @@ const SmartAlerts = () => {
     } catch (error) {
       console.error("Error loading AI insights:", error);
     }
-  });
+  };
 
   const handleAcknowledge = async (alertId: string) => {
     try {
@@ -164,7 +164,7 @@ const SmartAlerts = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleResolve = async (alertId: string) => {
     try {
@@ -189,7 +189,7 @@ const SmartAlerts = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getLevelBadge = (level: string, predicted: boolean) => {
     if (predicted) {

@@ -94,7 +94,7 @@ export const PerformanceEngineV1: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

@@ -93,7 +93,7 @@ export const OperationsDashboard = memo(function() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const generateAISuggestions = () => {
     // AI-powered operational suggestions

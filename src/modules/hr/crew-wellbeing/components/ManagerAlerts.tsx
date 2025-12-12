@@ -52,7 +52,7 @@ export const ManagerAlerts: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const acknowledgeAlert = async (alertId: string) => {
     try {
@@ -80,7 +80,7 @@ export const ManagerAlerts: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const resolveAlert = async (alertId: string) => {
     try {
@@ -108,7 +108,7 @@ export const ManagerAlerts: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {

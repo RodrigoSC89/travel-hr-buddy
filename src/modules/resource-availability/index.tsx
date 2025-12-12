@@ -141,7 +141,7 @@ export default function ResourceAvailability() {
         description: "IA identificou potenciais gargalos futuros" 
       });
     }
-  });
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {

@@ -136,7 +136,7 @@ export const TaskManagement: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleAddTask = async () => {
     try {
@@ -172,7 +172,7 @@ export const TaskManagement: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const updateTaskStatus = (taskId: string, newStatus: Task["status"]) => {
     setTasks(tasks.map(task => 

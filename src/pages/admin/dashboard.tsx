@@ -293,7 +293,7 @@ export default function AdminDashboard() {
     } finally {
       setExportingPDF(false);
     }
-  });
+  };
 
   return (
     <div className="p-6 space-y-6">

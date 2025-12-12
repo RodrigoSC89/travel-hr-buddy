@@ -166,7 +166,7 @@ export const PriceAlertsValidationReport: React.FC = () => {
 
     setRunning(false);
     toast.success("Validação concluída!");
-  });
+  };
 
   const getStatusIcon = (status: ValidationTest["status"]) => {
     switch (status) {

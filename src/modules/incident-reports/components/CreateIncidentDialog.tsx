@@ -220,7 +220,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     } finally {
       setSubmitting(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

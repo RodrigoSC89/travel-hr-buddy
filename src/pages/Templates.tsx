@@ -343,7 +343,7 @@ const Templates = () => {
     
     setIsGeneratingAI(false);
     toast.success("Conteúdo gerado com IA!");
-  });
+  };
 
   const handlePrint = (template: Template) => {
     const printWindow = window.open("", "_blank");

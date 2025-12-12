@@ -84,7 +84,7 @@ export const NotificationSettings = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const saveSettings = async () => {
     if (!user) return;
@@ -113,7 +113,7 @@ export const NotificationSettings = memo(() => {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const requestPushPermission = async () => {
     if (!pushSupported) return;
@@ -137,7 +137,7 @@ export const NotificationSettings = memo(() => {
       }
     } catch (error) {
     }
-  });
+  };
 
   const testPushNotification = () => {
     if (pushPermission === "granted") {

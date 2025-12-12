@@ -397,7 +397,7 @@ export const ChatInterface = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const createNewConversation = async (userId: string) => {
     try {
@@ -468,7 +468,7 @@ export const ChatInterface = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getConversationTitle = (conversation: Conversation) => {
     if (conversation.title) return conversation.title;

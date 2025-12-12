@@ -40,7 +40,7 @@ export default function FeatureToggles() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (isLoading) {
     return (

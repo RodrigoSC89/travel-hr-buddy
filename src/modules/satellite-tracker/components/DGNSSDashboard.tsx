@@ -83,7 +83,7 @@ export const DGNSSDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const updateData = async () => {
     if (isUpdating) return;

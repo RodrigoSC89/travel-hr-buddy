@@ -107,7 +107,7 @@ export default function SGSOAuditReviewPage() {
       } finally {
         setLoading(false);
       }
-    });
+    };
 
     fetchAudit();
   }, [id, toast]);
@@ -156,7 +156,7 @@ export default function SGSOAuditReviewPage() {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
@@ -189,7 +189,7 @@ export default function SGSOAuditReviewPage() {
     } finally {
       setExporting(false);
     }
-  });
+  };
 
   if (loading) {
     return (

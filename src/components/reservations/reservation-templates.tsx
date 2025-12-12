@@ -114,7 +114,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleSaveTemplate = async () => {
     if (!user || !formData.name.trim() || !formData.title.trim()) {
@@ -182,7 +182,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleDeleteTemplate = async (templateId: string) => {
     if (!confirm("Tem certeza que deseja excluir este template?")) return;
@@ -208,7 +208,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleUseTemplate = (template: ReservationTemplate) => {
     onUseTemplate(template.template_data);

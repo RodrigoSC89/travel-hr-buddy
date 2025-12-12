@@ -106,7 +106,7 @@ export const UnifiedLogsPanel = memo(function() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
@@ -280,7 +280,7 @@ export const UnifiedLogsPanel = memo(function() {
       title: "PDF exportado",
       description: "O arquivo foi baixado com sucesso",
     });
-  });
+  };
 
   if (isLoading) {
     return (

@@ -80,7 +80,7 @@ const CoordinationAIEnginePage: React.FC = () => {
     } catch (error) {
       logger.error("Error loading coordination AI data", { error });
     }
-  });
+  };
 
   const handleRegisterAgent = async () => {
     if (!newAgentName) {
@@ -113,7 +113,7 @@ const CoordinationAIEnginePage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleCreateTask = async () => {
     if (!newTaskName || !newTaskType) {
@@ -146,7 +146,7 @@ const CoordinationAIEnginePage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getStatusColor = (status: string): string => {
     const colors: Record<string, string> = {

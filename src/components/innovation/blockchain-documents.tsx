@@ -158,7 +158,7 @@ export const BlockchainDocuments: React.FC = () => {
       title: "Verificação Concluída",
       description: "Documento verificado com sucesso na blockchain",
     });
-  });
+  };
 
   const uploadDocument = () => {
     toast({

@@ -86,7 +86,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

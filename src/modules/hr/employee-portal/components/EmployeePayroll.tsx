@@ -78,7 +78,7 @@ export const EmployeePayroll: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const viewRecord = (record: PayrollRecord) => {
     setSelectedRecord(record);
@@ -95,7 +95,7 @@ export const EmployeePayroll: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {

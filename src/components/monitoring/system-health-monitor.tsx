@@ -111,7 +111,7 @@ export const SystemHealthMonitor: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   useEffect(() => {
     loadSystemMetrics();

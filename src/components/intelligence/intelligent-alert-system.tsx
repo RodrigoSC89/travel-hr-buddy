@@ -280,7 +280,7 @@ export const IntelligentAlertSystem = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const setupRealTimeUpdates = () => {
     // Set up real-time updates for critical alerts

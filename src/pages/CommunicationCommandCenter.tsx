@@ -77,7 +77,7 @@ const CommunicationCommandCenter = () => {
       });
       
       setIsLoading(false);
-    });
+    };
     
     loadStats();
   }, []);

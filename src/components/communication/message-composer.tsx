@@ -303,7 +303,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const sendMessage = async () => {
     try {
@@ -342,7 +342,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getRecipientIcon = (type: string) => {
     switch (type) {

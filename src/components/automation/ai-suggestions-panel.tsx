@@ -194,7 +194,7 @@ export const AISuggestionsPanel: React.FC = () => {
     } finally {
       setIsRefreshing(false);
     }
-  });
+  };
 
   useEffect(() => {
     loadSuggestions();
@@ -244,7 +244,7 @@ export const AISuggestionsPanel: React.FC = () => {
         description: "A sugestão foi removida da sua lista.",
       });
     }
-  });
+  };
 
   const executeAction = async (suggestion: AISuggestion) => {
     const { action_data } = suggestion;

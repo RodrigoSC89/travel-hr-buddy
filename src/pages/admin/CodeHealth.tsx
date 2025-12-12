@@ -48,7 +48,7 @@ export default function CodeHealth() {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const getGradeColor = (grade: string) => {
     switch (grade) {

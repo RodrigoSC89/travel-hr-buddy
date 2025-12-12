@@ -130,7 +130,7 @@ const DocumentTemplatesManager = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadVersions = async (templateId: string) => {
     try {
@@ -209,7 +209,7 @@ const DocumentTemplatesManager = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const updateTemplate = async (templateId: string, newContent: string) => {
     try {
@@ -233,7 +233,7 @@ const DocumentTemplatesManager = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const deleteTemplate = async (templateId: string) => {
     try {
@@ -257,7 +257,7 @@ const DocumentTemplatesManager = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const exportToPDF = (template: Template, variables: Record<string, string>) => {
     const startTime = Date.now();
@@ -336,7 +336,7 @@ const DocumentTemplatesManager = () => {
       title: "✅ Word Document Exported",
       description: `Template exported to ${fileName}`,
     });
-  });
+  };
 
   const getCategoryBadge = (category: string) => {
     switch (category) {

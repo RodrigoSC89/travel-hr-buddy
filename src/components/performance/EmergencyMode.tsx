@@ -163,7 +163,7 @@ function EmergencyModeOverlay() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   return (
     <>

@@ -193,7 +193,7 @@ const SystemPerformanceMonitor = () => {
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   const overallStatus = systemMetrics.every(m => m.status === "healthy") && 
                        services.every(s => s.status === "online") ? "healthy" : 

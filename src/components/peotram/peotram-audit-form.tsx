@@ -134,7 +134,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const saveAudit = async () => {
     try {
@@ -176,7 +176,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
         variant: "destructive",
       });
     }
-  });
+  };
 
   const completeAudit = async () => {
     await saveAudit();
@@ -200,7 +200,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     });
 
     onComplete();
-  });
+  };
 
   const calculateComplianceScore = () => {
     const allResponses = Object.values(auditResponses).flat();

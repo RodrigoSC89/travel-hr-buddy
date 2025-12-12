@@ -74,7 +74,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
     } finally {
       setIsClassifying(false);
     }
-  });
+  };
 
   const handleApplyClassification = () => {
     if (classification) {

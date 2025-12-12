@@ -289,7 +289,7 @@ export default function ProcurementCommandCenter() {
       supplierScore: 96
     });
     setIsAnalyzing(false);
-  });
+  };
 
   const loadInventoryItems = async () => {
     try {
@@ -310,7 +310,7 @@ export default function ProcurementCommandCenter() {
     } finally {
       setInventoryLoading(false);
     }
-  });
+  };
 
   // ============================================
   // UTILITY FUNCTIONS
@@ -367,7 +367,7 @@ export default function ProcurementCommandCenter() {
       title: "Compra Iniciada",
       description: `Pedido de ${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} enviado para ${rec.suggestedSupplier.name}`,
     });
-  });
+  };
 
   // ============================================
   // RENDER

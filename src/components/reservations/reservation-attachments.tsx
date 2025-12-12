@@ -77,7 +77,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -146,7 +146,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         fileInputRef.current.value = "";
       }
     }
-  });
+  };
 
   const handleDeleteAttachment = async (attachmentId: string, filePath: string) => {
     if (!confirm("Tem certeza que deseja excluir este anexo?")) return;
@@ -178,7 +178,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getFileIcon = (fileType: string) => {
     if (fileType.startsWith("image/")) return <Image className="h-4 w-4" />;

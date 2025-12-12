@@ -110,7 +110,7 @@ export default function DocumentTemplates() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const fetchGeneratedDocuments = async () => {
     try {
@@ -212,7 +212,7 @@ export default function DocumentTemplates() {
         });
       }
     }
-  });
+  };
 
   const generateDocument = async () => {
     if (!selectedTemplate) return;
@@ -241,7 +241,7 @@ export default function DocumentTemplates() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const rollbackVersion = async (version: number) => {
     if (!selectedTemplate) return;
@@ -269,7 +269,7 @@ export default function DocumentTemplates() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const extractVariables = (content: string): unknown[] => {
     const matches = content.match(/\{\{([a-zA-Z0-9_]+)\}\}/g) || [];
@@ -307,7 +307,7 @@ export default function DocumentTemplates() {
     } catch (error) {
       logger.error("Error exporting document", { error });
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

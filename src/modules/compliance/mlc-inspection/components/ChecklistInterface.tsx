@@ -55,7 +55,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleAddFinding = async (item: typeof MLC_CHECKLIST_ITEMS[0], compliance: boolean, severity?: string, corrective_action?: string) => {
     try {
@@ -86,7 +86,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getFindingForItem = (regulation: string) => {
     return findings.find(f => f.mlc_regulation === regulation);

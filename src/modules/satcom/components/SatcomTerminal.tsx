@@ -183,7 +183,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
     }
 
     setTimeout(() => setIsTransmitting(false), latency);
-  });
+  };
 
   const receiveMessage = () => {
     const messages = [

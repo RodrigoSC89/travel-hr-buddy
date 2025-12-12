@@ -274,7 +274,7 @@ export const SharedAlerts = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleShareAlert = async () => {
     if (!user || !shareForm.alert_id || !shareForm.title) {
@@ -313,7 +313,7 @@ export const SharedAlerts = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const copyProductUrl = async (url: string, productName: string) => {
     try {
@@ -332,7 +332,7 @@ export const SharedAlerts = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (loading) {
     return (

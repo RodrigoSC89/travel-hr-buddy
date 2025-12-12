@@ -69,7 +69,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: unknown: unknown: unknown) => {
     const updated = [...checklistItems];
@@ -163,7 +163,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const getCompletionProgress = () => {
     const answered = checklistItems.filter(

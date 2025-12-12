@@ -107,7 +107,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       title: "PDF exported successfully",
       description: "Your project timeline has been downloaded",
     });
-  });
+  };
 
   const exportToICS = () => {
     if (tasks.length === 0) {

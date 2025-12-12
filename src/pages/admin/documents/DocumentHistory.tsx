@@ -81,7 +81,7 @@ export default function DocumentHistoryPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // Filter versions with useMemo for performance
   const filteredVersions = useMemo(() => {
@@ -131,7 +131,7 @@ export default function DocumentHistoryPage() {
     } finally {
       setRestoring(null);
     }
-  });
+  };
 
   if (loading) {
     return (

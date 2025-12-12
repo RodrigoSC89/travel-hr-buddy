@@ -103,7 +103,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         variant: "destructive"
       });
     }
-  });
+  };
 
   const captureFromCamera = async () => {
     try {
@@ -134,7 +134,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -219,7 +219,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
     } finally {
       setIsUploading(false);
     }
-  });
+  };
 
   const downloadCertificate = async (certificate: Certificate) => {
     try {
@@ -242,7 +242,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         variant: "destructive"
       });
     }
-  });
+  };
 
   const deleteCertificate = async (certificate: Certificate) => {
     try {
@@ -274,7 +274,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

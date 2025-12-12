@@ -236,7 +236,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
       title: "Lista atualizada",
       description: "As tarefas foram atualizadas com sucesso",
     });
-  });
+  };
 
   const handleStartTask = (taskId: string) => {
     setTasks(prev => 

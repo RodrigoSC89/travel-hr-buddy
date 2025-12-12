@@ -46,7 +46,7 @@ export default function SGSOSystem() {
     } catch (error) {
       console.error("Error loading stats:", error);
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

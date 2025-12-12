@@ -142,7 +142,7 @@ export default function VaultAIComplete() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const performMockVectorSearch = (query: string, docs: VaultDocument[]): SearchResult[] => {
     const queryLower = query.toLowerCase();

@@ -315,7 +315,7 @@ const AlertsCommandCenter = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getAlertIcon = (type: SmartAlert["type"]) => {
     switch (type) {

@@ -249,7 +249,7 @@ export const useLogisticsAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   return {
     isAnalyzing,

@@ -173,7 +173,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     } finally {
       setIsValidating(false);
     }
-  });
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];

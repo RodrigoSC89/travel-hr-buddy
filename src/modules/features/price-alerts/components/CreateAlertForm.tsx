@@ -68,7 +68,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   return (
     <Card>

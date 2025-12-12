@@ -118,7 +118,7 @@ export const MMIIntegration: React.FC = () => {
         description: "Feature demonstration - database not configured",
       });
     }
-  });
+  };
 
   const getProbabilityColor = (probability: number) => {
     if (probability >= 0.7) return "text-red-600";

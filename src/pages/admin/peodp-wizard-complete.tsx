@@ -161,7 +161,7 @@ export default function PeoDpWizardComplete() {
     } catch (error) {
       logger.error("Error loading PEO-DP historical data", { error });
     }
-  });
+  };
 
   const runInference = async (data: unknown) => {
     try {
@@ -451,7 +451,7 @@ export default function PeoDpWizardComplete() {
       title: "PDF Exportado",
       description: "Relatório de auditoria PEO-DP salvo com sucesso"
     });
-  });
+  };
 
   const handleFieldChange = (field: string, value: unknown: unknown: unknown) => {
     const newData = { ...formData, [field]: value };
@@ -512,7 +512,7 @@ export default function PeoDpWizardComplete() {
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   const currentWizardStep = WIZARD_STEPS[currentStep];
   const progress = ((currentStep + 1) / WIZARD_STEPS.length) * 100;

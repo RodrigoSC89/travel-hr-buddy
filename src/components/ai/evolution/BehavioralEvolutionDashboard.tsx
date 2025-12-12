@@ -104,7 +104,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const calculateAverageAlignment = (data: unknown[]): number => {
     if (data.length === 0) return 0;

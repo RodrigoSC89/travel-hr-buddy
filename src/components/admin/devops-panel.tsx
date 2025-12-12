@@ -128,7 +128,7 @@ export const DevOpsPanel = memo(function() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Clear completed operations
   const clearCompleted = async () => {
@@ -162,7 +162,7 @@ export const DevOpsPanel = memo(function() {
     } catch (error) {
       addLog("error", "Cache", `Erro ao limpar caches: ${error}`);
     }
-  });
+  };
 
   // Export logs
   const exportLogs = () => {

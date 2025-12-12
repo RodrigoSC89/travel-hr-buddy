@@ -164,7 +164,7 @@ export const SettingsPanel = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const resetSettings = () => {
     setSettings({
@@ -272,7 +272,7 @@ export const SettingsPanel = memo(() => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   return (
     <div className="space-y-6">

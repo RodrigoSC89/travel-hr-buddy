@@ -132,7 +132,7 @@ export const ApplyTemplateDialog = memo(function({
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleApply = () => {
     if (appliedResult.success) {

@@ -80,7 +80,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const fetchUsers = async () => {
     try {
@@ -174,7 +174,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const updatePermission = async (id: string, updates: Record<string, unknown>) => {
     try {
@@ -198,7 +198,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const togglePermissionStatus = async (permission: UserPermission) => {
     await updatePermission(permission.id, { is_active: !permission.is_active });
@@ -226,7 +226,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getPermissionLevelColor = (level: string) => {
     switch (level) {

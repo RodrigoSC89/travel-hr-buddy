@@ -80,7 +80,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const generateHTML = () => {
     const blob = new Blob([previewContent], { type: "text/html" });

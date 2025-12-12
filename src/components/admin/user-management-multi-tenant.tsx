@@ -84,7 +84,7 @@ export const UserManagementMultiTenant: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleUpdateRole = async (userId: string, newRole: string) => {
     try {
@@ -101,7 +101,7 @@ export const UserManagementMultiTenant: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleRemoveUser = async (userId: string) => {
     try {
@@ -118,7 +118,7 @@ export const UserManagementMultiTenant: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {

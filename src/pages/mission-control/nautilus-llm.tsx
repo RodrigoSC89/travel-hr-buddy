@@ -61,7 +61,7 @@ const NautilusLLM: React.FC = () => {
   const loadStats = async () => {
     const iaStats = await getIAStats();
     setStats(iaStats);
-  });
+  };
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
@@ -105,7 +105,7 @@ const NautilusLLM: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleQuickCommand = async (command: string) => {
     setIsLoading(true);
@@ -144,7 +144,7 @@ const NautilusLLM: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const quickCommands = [
     { id: "status", label: "Status Geral", icon: Activity },

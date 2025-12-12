@@ -224,7 +224,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
       setIsScanning(false);
       setScanProgress(0);
     }
-  });
+  };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

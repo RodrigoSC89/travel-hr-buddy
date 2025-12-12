@@ -135,7 +135,7 @@ Formate a resposta em markdown estruturado com informações práticas para nave
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const selectRoute = (route: typeof commonRoutes[0]) => {
     setOrigin(route.origin);

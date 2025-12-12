@@ -36,7 +36,7 @@ export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {

@@ -43,7 +43,7 @@ export default function PrePSCDashboard() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleNewInspection = () => {
     setSelectedInspection(null);

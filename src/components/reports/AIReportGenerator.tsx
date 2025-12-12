@@ -124,7 +124,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     } finally {
       setIsGenerating(false);
     }
-  });
+  };
 
   const downloadReport = () => {
     if (!lastReport) return;

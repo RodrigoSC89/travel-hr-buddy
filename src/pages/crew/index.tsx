@@ -109,7 +109,7 @@ export const ConsolidatedCrewManagement = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getCrewStats = () => {
     const expiringCerts = certifications.filter(cert => {

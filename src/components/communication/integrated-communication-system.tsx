@@ -159,7 +159,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     } catch (error) {
       logger.error("Failed to mark messages as read:", error);
     }
-  });
+  };
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedContact) return;
@@ -203,7 +203,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -260,7 +260,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         variant: "destructive"
       });
     }
-  });
+  };
 
   const startVoiceRecording = () => {
     setIsRecording(true);

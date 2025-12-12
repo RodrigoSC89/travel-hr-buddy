@@ -106,7 +106,7 @@ export const AuditTrailViewer: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const filteredLogs = logs.filter(log => {
     if (!searchTerm) return true;

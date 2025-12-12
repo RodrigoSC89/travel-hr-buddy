@@ -68,7 +68,7 @@ export const SessionManagement: React.FC = () => {
     } finally {
       setRevoking(null);
     }
-  });
+  };
 
   const handleRevokeOtherSessions = async () => {
     try {
@@ -88,7 +88,7 @@ export const SessionManagement: React.FC = () => {
     } finally {
       setRevokingOthers(false);
     }
-  });
+  };
 
   const getDeviceIcon = (deviceType?: string) => {
     switch (deviceType?.toLowerCase()) {

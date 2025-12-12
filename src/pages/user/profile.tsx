@@ -119,7 +119,7 @@ export default function UserProfilePage() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const saveProfile = async () => {
     if (!user) return;
@@ -153,7 +153,7 @@ export default function UserProfilePage() {
     } finally {
       setIsSaving(false);
     }
-  });
+  };
 
   const getInitials = (name: string) => {
     return name

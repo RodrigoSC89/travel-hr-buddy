@@ -226,7 +226,7 @@ const RealTimeWorkspace: React.FC = () => {
       } finally {
         setIsLoading(false);
       }
-    });
+    };
 
     setupRealtime();
 
@@ -295,7 +295,7 @@ const RealTimeWorkspace: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Enviar atualização do workspace
   const sendWorkspaceUpdate = async (action: string, description: string, priority: "low" | "medium" | "high" = "medium") => {
@@ -317,7 +317,7 @@ const RealTimeWorkspace: React.FC = () => {
     } catch (error) {
       logger.error("Failed to send reaction:", error);
     }
-  });
+  };
 
   // Alterar status
   const changeStatus = async (newStatus: "online" | "busy" | "away") => {
@@ -338,7 +338,7 @@ const RealTimeWorkspace: React.FC = () => {
     } catch (error) {
       logger.error("Failed to change status:", error);
     }
-  });
+  };
 
   // Obter cor do status
   const getStatusColor = (status: string) => {

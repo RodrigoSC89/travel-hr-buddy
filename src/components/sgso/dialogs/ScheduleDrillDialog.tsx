@@ -114,7 +114,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

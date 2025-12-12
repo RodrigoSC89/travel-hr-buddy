@@ -44,7 +44,7 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   if (!selectedPlanId) {
     return (

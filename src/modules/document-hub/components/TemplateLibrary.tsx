@@ -97,7 +97,7 @@ export const TemplateLibrary: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadVersions = async (templateId: string) => {
     try {
@@ -185,7 +185,7 @@ export const TemplateLibrary: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this template?")) return;
@@ -212,7 +212,7 @@ export const TemplateLibrary: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const openGenerateDialog = (template: Template) => {
     setSelectedTemplate(template);

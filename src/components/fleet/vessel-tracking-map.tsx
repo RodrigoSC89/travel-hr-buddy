@@ -48,7 +48,7 @@ const VesselTrackingMap = () => {
           variant: "destructive"
         });
       }
-    });
+    };
 
     fetchMapboxToken();
   }, [toast]);
@@ -90,7 +90,7 @@ const VesselTrackingMap = () => {
         console.error("Failed to load map:", error);
         if (mounted) setIsMapLoading(false);
       }
-    });
+    };
 
     initMap();
 
@@ -170,7 +170,7 @@ const VesselTrackingMap = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const updateVesselMarkers = (vesselData: VesselLocation[]) => {
     if (!map.current || !mapboxRef.current) return;

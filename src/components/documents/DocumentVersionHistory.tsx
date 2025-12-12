@@ -63,7 +63,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleRestoreClick = (version: DocumentVersion) => {
     setSelectedVersion(version);
@@ -121,7 +121,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
     } finally {
       setRestoring(false);
     }
-  });
+  };
 
   if (loading) {
     return (

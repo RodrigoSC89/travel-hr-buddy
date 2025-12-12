@@ -114,7 +114,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

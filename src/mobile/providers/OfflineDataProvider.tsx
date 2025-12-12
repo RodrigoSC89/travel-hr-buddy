@@ -51,7 +51,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
       // Update pending count
       const count = await sqliteStorage.getQueueCount();
       setPendingChanges(count);
-    });
+    };
     
     init();
 

@@ -226,7 +226,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     } finally {
       setIsRefreshing(false);
     }
-  });
+  };
 
   const loadNotifications = async () => {
     try {
@@ -434,7 +434,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       title: "Todas as notificações marcadas como lidas",
       description: `${unreadCount} notificações atualizadas`
     });
-  });
+  };
 
   const deleteNotification = (notificationId: string) => {
     setNotifications(prev => prev.filter(n => n.id !== notificationId));
@@ -575,7 +575,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       setIsGeneratingInsights(false);
       setTimeout(() => setReportProgress(0), 1000);
     }
-  });
+  };
 
   // Export to CSV
   const exportToCSV = () => {
@@ -752,7 +752,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     } finally {
       setIsExportingPDF(false);
     }
-  });
+  };
 
   // Generate Full AI Report
   const generateFullAIReport = async () => {
@@ -829,7 +829,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       setIsGeneratingReport(false);
       setTimeout(() => setReportProgress(0), 1000);
     }
-  });
+  };
 
   // Copy report to clipboard
   const copyReportToClipboard = async () => {
@@ -843,7 +843,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Print report
   const printReport = () => {

@@ -207,7 +207,7 @@ export const OrganizationSetupWizard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {

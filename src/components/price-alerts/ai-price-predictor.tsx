@@ -124,7 +124,7 @@ export const AIPricePredictor: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const generateAIPredictionData = async (productName: string, currentPrice: number): Promise<PricePrediction> => {
     // Simulated AI prediction logic - in production, this would use real ML models

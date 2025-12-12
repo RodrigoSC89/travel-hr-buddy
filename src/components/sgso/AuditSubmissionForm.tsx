@@ -95,7 +95,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

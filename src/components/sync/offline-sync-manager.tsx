@@ -124,7 +124,7 @@ export const OfflineSyncManager: React.FC = () => {
       setIsSync(false);
       setSyncProgress(0);
     }
-  });
+  };
 
   // Simular ação de sincronização
   const simulateSyncAction = async (item: SyncItem) => {
@@ -174,7 +174,7 @@ export const OfflineSyncManager: React.FC = () => {
     });
 
     await loadPendingItems();
-  });
+  };
 
   // Limpar dados em cache
   const handleClearCache = async () => {
@@ -193,7 +193,7 @@ export const OfflineSyncManager: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   useEffect(() => {
     loadPendingItems();

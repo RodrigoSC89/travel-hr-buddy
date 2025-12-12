@@ -41,7 +41,7 @@ export const MyCertificates: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleDownload = async (cert: unknown: unknown: unknown) => {
     try {
@@ -81,7 +81,7 @@ export const MyCertificates: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (isLoading) {
     return <div className="text-center py-8">Loading certificates...</div>;

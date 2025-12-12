@@ -166,7 +166,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleRecommendationAction = (recommendation: Recommendation) => {
     if (recommendation.actionType === "navigate" && recommendation.actionData?.module) {

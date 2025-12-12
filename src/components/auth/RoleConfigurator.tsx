@@ -91,7 +91,7 @@ export const RoleConfigurator: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const updatePermission = async (
     permissionId: string,
@@ -170,7 +170,7 @@ export const RoleConfigurator: React.FC = () => {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const getPermissionForModuleAndRole = (moduleName: string, role: string) => {
     return permissions.find(p => p.module_name === moduleName && p.role === role);

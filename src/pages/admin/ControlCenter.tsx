@@ -55,7 +55,7 @@ export default function ControlCenter() {
     } finally {
       setIsChecking(false);
     }
-  });
+  };
 
   const toolCategories = [
     {

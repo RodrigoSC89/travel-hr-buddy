@@ -119,7 +119,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const fetchDependencies = async () => {
     try {
@@ -175,7 +175,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const updateTask = async () => {
     if (!selectedTask) return;
@@ -201,7 +201,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const deleteTask = async (id: string) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
@@ -224,7 +224,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const resetForm = () => {
     setFormData({

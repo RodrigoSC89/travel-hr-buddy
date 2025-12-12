@@ -93,7 +93,7 @@ export const VesselTracking = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // PATCH 549: useEffect with proper memoized loadVessels
   useEffect(() => {

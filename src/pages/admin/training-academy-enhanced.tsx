@@ -116,7 +116,7 @@ export default function TrainingAcademyEnhanced() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadLearningHistory = async () => {
     try {
@@ -209,7 +209,7 @@ export default function TrainingAcademyEnhanced() {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const downloadCertificatePDF = (certificate: Certificate) => {
     const doc = new jsPDF({
@@ -299,7 +299,7 @@ export default function TrainingAcademyEnhanced() {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

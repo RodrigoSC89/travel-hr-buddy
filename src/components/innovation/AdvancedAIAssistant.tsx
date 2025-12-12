@@ -203,7 +203,7 @@ export const AdvancedAIAssistant = memo(() => {
     } finally {
       setIsTyping(false);
     }
-  });
+  };
 
   const handleQuickAction = (action: QuickAction) => {
     setInputMessage(action.prompt);

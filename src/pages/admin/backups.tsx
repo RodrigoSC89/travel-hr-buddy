@@ -70,7 +70,7 @@ export default function BackupsPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadStats = async () => {
     try {
@@ -132,7 +132,7 @@ export default function BackupsPage() {
     } finally {
       setTriggering(false);
     }
-  });
+  };
 
   const downloadBackup = async (backup: BackupSnapshot) => {
     try {
@@ -167,7 +167,7 @@ export default function BackupsPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";

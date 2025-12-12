@@ -174,7 +174,7 @@ export default function SGSOAuditEditor() {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const calculateOverallSeverity = (): string => {
     const nonCompliances = auditResults.filter(r => r.status === "non_compliant").length;

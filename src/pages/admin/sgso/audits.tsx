@@ -133,7 +133,7 @@ export default function SGSOAudits() {
       logger.error("Failed to save audit", error);
       toast.error("Failed to save audit");
     }
-  });
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this audit?")) return;
@@ -156,7 +156,7 @@ export default function SGSOAudits() {
       logger.error("Failed to delete audit", error);
       toast.error("Failed to delete audit");
     }
-  });
+  };
 
   const handleEdit = (audit: Audit) => {
     setFormData(audit);

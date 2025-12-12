@@ -131,7 +131,7 @@ export default function AIDocuments() {
       setProcessing(false);
       setOcrProgress(0);
     }
-  });
+  };
 
   // Perform OCR using Tesseract.js
   const performOCR = async (file: File, documentId: string) => {

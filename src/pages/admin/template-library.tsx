@@ -61,7 +61,7 @@ export default function TemplateLibraryPage() {
     });
     // Simulate save to database
     logger.info("Saving template to ai_document_templates", { templateId: template.id, templateName: template.name });
-  });
+  };
 
   const types = ["all", "document", "incident", "fmea", "contract", "report", "checklist"];
 

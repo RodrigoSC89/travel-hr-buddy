@@ -125,7 +125,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const pendingCount = maintenance.filter(m => m.status === "pending").length;
   const scheduledCount = maintenance.filter(m => m.status === "scheduled").length;

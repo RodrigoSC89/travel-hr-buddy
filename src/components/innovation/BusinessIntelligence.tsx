@@ -109,7 +109,7 @@ export const BusinessIntelligence = memo(() => {
     } finally {
       setIsGenerating(false);
     }
-  });
+  };
 
   const kpiMetrics: KPIMetric[] = [
     {

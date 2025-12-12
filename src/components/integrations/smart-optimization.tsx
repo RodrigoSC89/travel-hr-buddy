@@ -235,7 +235,7 @@ export const SmartOptimization: React.FC = () => {
       title: "Análise Concluída",
       description: "4 novas otimizações foram identificadas.",
     });
-  });
+  };
 
   const implementSuggestion = (suggestionId: string) => {
     const suggestion = suggestions.find(s => s.id === suggestionId);

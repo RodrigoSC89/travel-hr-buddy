@@ -69,7 +69,7 @@ export const Patch605Validation = memo(function() {
       title: "Learning Loop Complete",
       description: `Processed ${iterations} iterations with weight adjustments`,
     });
-  });
+  };
 
   const getRandomDecision = () => {
     const decisions = [

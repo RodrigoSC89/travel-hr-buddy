@@ -407,7 +407,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       setUploading(false);
       setProcessing(false);
     }
-  });
+  };
 
   const loadDocuments = async () => {
     try {
@@ -427,7 +427,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const loadDocumentDetails = async (documentId: string) => {
     try {
@@ -456,7 +456,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
@@ -482,7 +482,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

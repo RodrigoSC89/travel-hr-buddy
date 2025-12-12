@@ -91,7 +91,7 @@ export const ApiKeyManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const generateApiKey = (): string => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -166,7 +166,7 @@ export const ApiKeyManagement: React.FC = () => {
       console.error("Error creating API key:", error);
       toast.error("Erro ao criar chave de API");
     }
-  });
+  };
 
   const toggleApiKey = async (keyId: string, isActive: boolean) => {
     try {

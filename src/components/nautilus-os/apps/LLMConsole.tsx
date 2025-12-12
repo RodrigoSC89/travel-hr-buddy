@@ -30,7 +30,7 @@ export const LLMConsole = memo(function() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   return (
     <div className="space-y-3">

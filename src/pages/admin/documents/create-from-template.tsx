@@ -125,7 +125,7 @@ export default function CreateFromTemplate({
         variant: "destructive",
       });
     }
-  });
+  };
 
   /**
    * Export document as PDF

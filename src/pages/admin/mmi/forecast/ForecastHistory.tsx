@@ -71,7 +71,7 @@ export default function ForecastHistoryPage() {
     } finally {
       setGeneratingOrderId(null);
     }
-  });
+  };
 
   useEffect(() => {
     setLoading(true);

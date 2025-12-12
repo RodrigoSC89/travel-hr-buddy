@@ -94,7 +94,7 @@ export default function AITemplatesPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const filterTemplates = () => {
     if (!searchTerm.trim()) {
@@ -140,7 +140,7 @@ export default function AITemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleToggleFavorite = async (template: AIDocumentTemplate) => {
     try {
@@ -167,7 +167,7 @@ export default function AITemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleTogglePrivate = async (template: AIDocumentTemplate) => {
     try {
@@ -194,7 +194,7 @@ export default function AITemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleSaveTemplate = async () => {
     if (!user || !formData.title.trim() || !formData.content.trim()) {
@@ -259,7 +259,7 @@ export default function AITemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleDeleteTemplate = async (templateId: string) => {
     if (!confirm("Tem certeza que deseja excluir este template?")) return;
@@ -286,7 +286,7 @@ export default function AITemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleEditTemplate = (template: AIDocumentTemplate) => {
     setEditingTemplate(template);

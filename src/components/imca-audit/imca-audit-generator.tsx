@@ -89,7 +89,7 @@ export const IMCAAuditGenerator = memo(function() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleExport = () => {
     if (report) {

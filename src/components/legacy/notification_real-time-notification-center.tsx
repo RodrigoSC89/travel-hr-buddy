@@ -101,7 +101,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   // Marcar notificação como lida
   const markAsRead = async (notificationId: string, isIntelligent = false) => {
@@ -137,7 +137,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Marcar todas como lidas
   const markAllAsRead = async () => {
@@ -176,7 +176,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Executar ação de notificação inteligente
   const executeAction = async (notification: IntelligentNotification) => {
@@ -206,7 +206,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Configurar real-time subscriptions
   useEffect(() => {

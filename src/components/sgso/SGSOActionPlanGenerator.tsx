@@ -139,7 +139,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   return (
     <div className="space-y-6">

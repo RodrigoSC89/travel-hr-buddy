@@ -76,7 +76,7 @@ const CrewManagement = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   useEffect(() => {
     loadData();

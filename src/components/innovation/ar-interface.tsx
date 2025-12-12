@@ -182,7 +182,7 @@ export const ARInterface: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const stopARSession = () => {
     if (videoRef.current && videoRef.current.srcObject) {

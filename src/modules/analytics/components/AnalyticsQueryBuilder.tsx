@@ -129,7 +129,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const exportToCSV = () => {
     if (!queryResult || queryResult.rows.length === 0) {

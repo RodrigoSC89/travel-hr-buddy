@@ -162,7 +162,7 @@ export const DocumentManagement: React.FC = () => {
       });
       setIsLoading(false);
     }
-  });
+  };
 
   const loadCategories = async () => {
     try {
@@ -217,7 +217,7 @@ export const DocumentManagement: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleAddCategory = async () => {
     try {
@@ -246,7 +246,7 @@ export const DocumentManagement: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";

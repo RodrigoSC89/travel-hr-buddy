@@ -131,7 +131,7 @@ export default function FleetTelemetryModule() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const setupRealtimeSubscription = () => {
     const channel = supabase

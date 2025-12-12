@@ -59,7 +59,7 @@ export default function DocumentListPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const filterDocuments = () => {
     if (!searchTerm.trim()) {

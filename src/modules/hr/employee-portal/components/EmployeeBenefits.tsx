@@ -72,7 +72,7 @@ export const EmployeeBenefits: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getBenefitIcon = (type: string) => {
     switch (type) {

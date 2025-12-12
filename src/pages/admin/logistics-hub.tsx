@@ -124,7 +124,7 @@ export default function LogisticsHub() {
       logger.error("Failed to submit request", error);
       toast.error("Failed to submit request");
     }
-  });
+  };
 
   const handleApproval = async (id: string, approved: boolean) => {
     try {
@@ -144,7 +144,7 @@ export default function LogisticsHub() {
       logger.error("Failed to update request", error);
       toast.error("Failed to update request");
     }
-  });
+  };
 
   const handleDelivered = async (id: string) => {
     try {

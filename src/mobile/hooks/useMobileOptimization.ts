@@ -101,7 +101,7 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
         memoryPressure,
         shouldDefer: isSlowNetwork || isLowPowerMode || memoryPressure !== "normal"
       });
-    });
+    };
 
     checkCapabilities();
 

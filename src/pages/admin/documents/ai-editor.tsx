@@ -130,7 +130,7 @@ export default function DocumentAIEditorPage() {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const exportToPDF = async () => {
     if (!editor || !title.trim()) {
@@ -199,7 +199,7 @@ export default function DocumentAIEditorPage() {
     } finally {
       setExporting(false);
     }
-  });
+  };
 
   const rewriteSelectedText = async () => {
     if (!editor) return;
@@ -243,7 +243,7 @@ export default function DocumentAIEditorPage() {
     } finally {
       setRewriting(false);
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

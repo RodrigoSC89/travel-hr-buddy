@@ -373,7 +373,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
       title: "Upload concluído",
       description: `${uploadedFiles.length} arquivo(s) enviado(s) com sucesso.`,
     });
-  });
+  };
 
   const handleNewDocument = () => {
     setIsNewDocDialogOpen(true);
@@ -424,7 +424,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
       title: "Documento criado",
       description: "O novo documento foi criado com sucesso.",
     });
-  });
+  };
 
   const handleDownload = (doc: Document) => {
     setDocuments(prev => prev.map(d => 

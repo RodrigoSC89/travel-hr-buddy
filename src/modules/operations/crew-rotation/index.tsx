@@ -108,7 +108,7 @@ export default function CrewRotationModule() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const setupRealtimeSubscription = () => {
     const channel = supabase
@@ -231,7 +231,7 @@ export default function CrewRotationModule() {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const sendRotationNotification = async (type: string, rotation: unknown: unknown: unknown) => {
     try {
@@ -246,7 +246,7 @@ export default function CrewRotationModule() {
       console.error("Error sending notification:", error);
       console.error("Error sending notification:", error);
     }
-  });
+  };
 
   const upcomingRotations = rotations.filter(r => 
     new Date(r.rotation_start) > new Date() && 

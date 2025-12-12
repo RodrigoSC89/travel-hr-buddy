@@ -39,7 +39,7 @@ export default function MMICopilot() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleExamplePrompt = (example: string) => {
     setPrompt(example);

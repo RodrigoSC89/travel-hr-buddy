@@ -147,7 +147,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       return;
     }
     onAIAssist?.(newMessage);
-  });
+  };
 
   const handleVoiceRecord = async () => {
     if (isRecording) {
@@ -176,7 +176,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
         });
       }
     }
-  });
+  };
 
   const handleEmojiSelect = (emoji: string) => {
     setNewMessage(prev => prev + emoji);
@@ -225,7 +225,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       setShowFileUpload(false);
       setShowImageUpload(false);
     }
-  });
+  };
 
   const handleGetLocation = async () => {
     setIsGettingLocation(true);
@@ -255,7 +255,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
     } finally {
       setIsGettingLocation(false);
     }
-  });
+  };
 
   const handleShareLocation = () => {
     if (userLocation) {

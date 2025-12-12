@@ -141,7 +141,7 @@ const ComplianceReports = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // PDF Export using jsPDF
   const exportToPDF = async (data: unknown[]) => {
@@ -193,7 +193,7 @@ const ComplianceReports = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   // CSV Export with Excel compatibility
   const exportToCSV = (data: unknown[]) => {
@@ -339,7 +339,7 @@ const ComplianceReports = () => {
     if (reportConfig.schedule === "manual") {
       setTimeout(() => handleGenerateReport(report.id), 1000);
     }
-  });
+  };
 
   const handleGenerateReport = async (reportId: string) => {
     const report = reports.find(r => r.id === reportId);

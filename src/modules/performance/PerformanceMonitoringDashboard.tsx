@@ -89,7 +89,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const exportLogs = async () => {
     try {
@@ -125,7 +125,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Group metrics by system for charts
   const systemMetrics = metrics.reduce((acc, metric) => {

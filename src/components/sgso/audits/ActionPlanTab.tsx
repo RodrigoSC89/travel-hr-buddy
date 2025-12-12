@@ -60,7 +60,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,7 +105,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
       logger.error("Failed to save action plan", error);
       toast.error("Failed to save action plan");
     }
-  });
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this action plan?")) return;

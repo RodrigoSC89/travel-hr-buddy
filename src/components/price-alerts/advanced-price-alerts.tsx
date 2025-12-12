@@ -158,7 +158,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const loadHistory = async () => {
     try {
@@ -294,7 +294,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     } finally {
       setIsCreating(false);
     }
-  });
+  };
 
   const toggleAlert = async (alertId: string) => {
     const alert = alerts.find(a => a.id === alertId);
@@ -323,7 +323,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const refreshPrices = async () => {
     setIsRefreshing(true);
@@ -348,7 +348,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     } finally {
       setIsRefreshing(false);
     }
-  });
+  };
 
   const navigateToTravel = (alert: PriceAlert) => {
     // Navigate to travel module with pre-filled data

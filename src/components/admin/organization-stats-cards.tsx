@@ -71,7 +71,7 @@ export const OrganizationStatsCards: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   if (!currentOrganization) {
     return null;

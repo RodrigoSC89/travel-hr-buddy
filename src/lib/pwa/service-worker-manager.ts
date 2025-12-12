@@ -203,7 +203,7 @@ export function useServiceWorker() {
       
       const size = await serviceWorkerManager.getCacheSize();
       setCacheSize(size);
-    });
+    };
 
     init();
 

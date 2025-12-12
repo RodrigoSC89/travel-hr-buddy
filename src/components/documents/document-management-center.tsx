@@ -174,7 +174,7 @@ export const DocumentManagementCenter = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const calculateStats = () => {
     if (documents.length === 0) return;

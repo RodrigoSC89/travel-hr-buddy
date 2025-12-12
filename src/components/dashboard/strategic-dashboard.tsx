@@ -265,7 +265,7 @@ const StrategicDashboard: React.FC = () => {
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   // Customize dashboard
   const handleCustomizeDashboard = () => {

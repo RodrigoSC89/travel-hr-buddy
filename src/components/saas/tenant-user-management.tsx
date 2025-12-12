@@ -185,7 +185,7 @@ export const TenantUserManagement: React.FC = () => {
       title: "Convite enviado",
       description: `Convite enviado para ${newUserEmail}`,
     });
-  });
+  };
 
   const handleRoleChange = (userId: string, newRole: string) => {
     setUsers(prev => 

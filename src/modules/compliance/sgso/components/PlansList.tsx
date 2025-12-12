@@ -41,7 +41,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleExportPDF = async (plan: unknown: unknown: unknown) => {
     try {
@@ -69,7 +69,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (isLoading) {
     return <div className="text-center py-8">Loading plans...</div>;

@@ -129,7 +129,7 @@ const MaritimeFleetManagement = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-azure/5 to-primary/10">

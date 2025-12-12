@@ -72,7 +72,7 @@ export const ProgressDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const completionRate = stats.totalCourses > 0
     ? Math.round((stats.completedCourses / stats.totalCourses) * 100)

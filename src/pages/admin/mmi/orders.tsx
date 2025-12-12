@@ -44,7 +44,7 @@ export default function MMIOrdersPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleUpdate = async (
     orderId: string,

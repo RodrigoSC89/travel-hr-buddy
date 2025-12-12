@@ -119,7 +119,7 @@ export const SyncStatus = memo(function() {
     } finally {
       setIsSyncing(false);
     }
-  });
+  };
 
   return (
     <div className="fixed bottom-4 right-4 z-50">

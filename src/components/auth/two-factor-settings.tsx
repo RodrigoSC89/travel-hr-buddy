@@ -84,7 +84,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const verifyTwoFactor = async () => {
     if (!verificationCode || verificationCode.length !== 6) {
@@ -122,7 +122,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const disableTwoFactor = async (factorId: string) => {
     setIsLoading(true);
@@ -146,7 +146,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

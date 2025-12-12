@@ -57,7 +57,7 @@ const AnalyticsCore = () => {
     } finally {
       setIsLoadingInsights(false);
     }
-  });
+  };
 
   const handleExportPDF = async () => {
     toast({
@@ -89,7 +89,7 @@ const AnalyticsCore = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleExportCSV = async () => {
     toast({
@@ -115,7 +115,7 @@ const AnalyticsCore = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

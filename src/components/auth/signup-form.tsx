@@ -63,7 +63,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto">

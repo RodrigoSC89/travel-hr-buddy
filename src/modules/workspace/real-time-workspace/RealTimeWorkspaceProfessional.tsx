@@ -177,7 +177,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     } finally {
       setIsRefreshing(false);
     }
-  });
+  };
 
   const handleSendMessage = useCallback((content: string, type?: ChatMessage["type"]) => {
     const newMessage: ChatMessage = {
@@ -310,7 +310,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     } finally {
       setIsCreatingChannel(false);
     }
-  });
+  };
 
   const handleStartMeeting = async () => {
     // Generate meeting link
@@ -347,7 +347,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const handleJoinMeeting = () => {
     window.open(meetingLink, "_blank");

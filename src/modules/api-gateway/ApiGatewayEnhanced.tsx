@@ -213,7 +213,7 @@ const ApiGatewayEnhanced = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const createRoute = async () => {
     try {
@@ -249,7 +249,7 @@ const ApiGatewayEnhanced = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const revokeKey = async (keyId: string) => {
     try {
@@ -273,7 +273,7 @@ const ApiGatewayEnhanced = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const generateDocumentation = async () => {
     try {
@@ -330,7 +330,7 @@ const ApiGatewayEnhanced = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

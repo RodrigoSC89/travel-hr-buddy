@@ -54,7 +54,7 @@ export const MaintenanceCalendarView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getTasksForDate = (date: Date) => {
     return tasks.filter(task => 

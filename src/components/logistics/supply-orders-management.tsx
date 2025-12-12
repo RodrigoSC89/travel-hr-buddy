@@ -111,7 +111,7 @@ export const SupplyOrdersManagement = memo(() => {
       notes: ""
     });
     fetchOrders();
-  });
+  };
 
   const updateOrderStatus = async (orderId: string, status: string, failureReason?: string) => {
     const updates: unknown = { status };

@@ -127,7 +127,7 @@ export const PerformanceMonitor: React.FC = () => {
       console.error("Error in persistMetrics:", error);
       console.error("Error in persistMetrics:", error);
     }
-  });
+  };
 
   const loadHistoricalData = async () => {
     try {

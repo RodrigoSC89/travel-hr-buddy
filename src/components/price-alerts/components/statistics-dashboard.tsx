@@ -70,7 +70,7 @@ export const StatisticsDashboard = memo(() => {
       }
     } catch (error) {
     }
-  });
+  };
 
   const loadMetrics = async () => {
     try {
@@ -119,7 +119,7 @@ export const StatisticsDashboard = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getEfficiencyPercentage = () => {
     if (statistics.total_alerts === 0) return 0;

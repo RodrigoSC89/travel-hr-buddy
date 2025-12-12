@@ -171,7 +171,7 @@ export const EmployeeDossierSummary: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

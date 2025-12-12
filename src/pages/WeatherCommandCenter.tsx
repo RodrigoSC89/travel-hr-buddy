@@ -206,7 +206,7 @@ export default function WeatherCommandCenter() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadGlobalForecast = async () => {
     setLoadingGlobal(true);

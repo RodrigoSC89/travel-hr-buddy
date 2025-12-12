@@ -171,7 +171,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleNewNotification = (payload: unknown) => {
     const newNotification: Notification = {
@@ -271,7 +271,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       });
     } catch (error) {
     }
-  });
+  };
 
   const deleteNotification = async (notificationId: string) => {
     try {

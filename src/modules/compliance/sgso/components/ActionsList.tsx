@@ -44,7 +44,7 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

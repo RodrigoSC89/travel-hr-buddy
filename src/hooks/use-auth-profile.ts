@@ -129,7 +129,7 @@ export const useAuthProfile = () => {
       } finally {
         setIsLoading(false);
       }
-    });
+    };
 
     fetchProfile();
   }, [user]);
@@ -183,7 +183,7 @@ export const useAuthProfile = () => {
     } finally {
       setIsUpdating(false);
     }
-  });
+  };
 
   const uploadAvatar = async (file: File) => {
     if (!profile) return false;
@@ -230,7 +230,7 @@ export const useAuthProfile = () => {
     } finally {
       setIsUpdating(false);
     }
-  });
+  };
 
   return {
     profile,

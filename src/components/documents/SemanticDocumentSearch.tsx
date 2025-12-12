@@ -99,7 +99,7 @@ export const SemanticDocumentSearch = memo(function() {
     } finally {
       setSearching(false);
     }
-  });
+  };
 
   const getCategoryColor = (category?: string) => {
     switch (category) {

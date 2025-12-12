@@ -49,7 +49,7 @@ export const ActionButton = memo(function({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   return (
     <Button 

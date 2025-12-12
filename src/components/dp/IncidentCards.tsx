@@ -252,7 +252,7 @@ export default function IncidentCards() {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   const exportAnalysisToPDF = async () => {
     if (!selectedIncident || !aiAnalysis) return;
@@ -312,7 +312,7 @@ export default function IncidentCards() {
         variant: "destructive"
       });
     }
-  });
+  };
 
   return (
     <div className="space-y-4">

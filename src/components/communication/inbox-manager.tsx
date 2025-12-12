@@ -182,7 +182,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // Realtime subscription removed to prevent infinite re-render loops
   // Enable only when connected to real database with proper debouncing
@@ -252,7 +252,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const archiveMessage = async (messageId: string) => {
     try {
@@ -276,7 +276,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

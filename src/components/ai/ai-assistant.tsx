@@ -231,7 +231,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);

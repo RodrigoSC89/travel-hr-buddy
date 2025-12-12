@@ -67,7 +67,7 @@ export default function ForecastPage() {
       } finally {
         setLoading(false);
       }
-    });
+    };
 
     fetchForecasts();
   }, [toast]);
@@ -171,7 +171,7 @@ export default function ForecastPage() {
     } finally {
       setGeneratingOrderId(null);
     }
-  });
+  };
 
   // Export to CSV
   const exportToCSV = () => {

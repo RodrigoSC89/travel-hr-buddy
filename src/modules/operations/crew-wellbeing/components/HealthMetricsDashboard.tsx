@@ -82,7 +82,7 @@ export const HealthMetricsDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const chartData = metrics.map(m => ({
     date: new Date(m.recorded_at).toLocaleDateString(),

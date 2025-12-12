@@ -43,7 +43,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       });
       return false;
     }
-  });
+  };
 
   // Iniciar gravação
   const startRecording = async () => {
@@ -77,7 +77,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Parar gravação
   const stopRecording = () => {
@@ -146,7 +146,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
     } finally {
       setIsProcessing(false);
     }
-  });
+  };
 
   // Converter texto para fala usando ElevenLabs
   const textToSpeech = async (text: string) => {

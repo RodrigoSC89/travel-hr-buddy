@@ -60,7 +60,7 @@ export default function VirtualizedLogsCenter() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const applyFilters = () => {
     let filtered = [...logs];
@@ -133,7 +133,7 @@ export default function VirtualizedLogsCenter() {
     } finally {
       setAiLoading(false);
     }
-  });
+  };
 
   const getLevelIcon = (level: LogLevel) => {
     switch (level) {

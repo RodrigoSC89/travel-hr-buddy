@@ -111,7 +111,7 @@ export const BetaFeedbackForm = memo(function() {
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Card className="w-full max-w-3xl mx-auto">

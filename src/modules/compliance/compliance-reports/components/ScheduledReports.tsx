@@ -81,7 +81,7 @@ export const ScheduledReports: React.FC = () => {
       console.error("Error fetching scheduled reports:", error);
       setReports([]);
     }
-  });
+  };
 
   const createScheduledReport = async () => {
     if (!formData.title || !formData.template) {
@@ -123,7 +123,7 @@ export const ScheduledReports: React.FC = () => {
         description: "Feature demonstration - database not configured",
       });
     }
-  });
+  };
 
   const calculateNextRun = (frequency: string): string => {
     const now = new Date();
@@ -215,7 +215,7 @@ export const ScheduledReports: React.FC = () => {
         description: "Feature demonstration - database not configured",
       });
     }
-  });
+  };
 
   const getFrequencyBadge = (frequency: string) => {
     const colors: Record<string, string> = {

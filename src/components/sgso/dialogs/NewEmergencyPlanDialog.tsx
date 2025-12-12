@@ -115,7 +115,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

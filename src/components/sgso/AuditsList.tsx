@@ -55,7 +55,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { variant: unknown: unknown: unknown; icon: unknown: unknown: unknown }> = {
@@ -100,7 +100,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
         variant: "destructive",
       });
     }
-  });
+  };
 
   if (loading) {
     return (

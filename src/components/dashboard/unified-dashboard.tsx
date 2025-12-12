@@ -141,7 +141,7 @@ const UnifiedDashboard = () => {
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
     });
-  });
+  };
 
   const handleKPIToggle = (kpi: string) => {
     setSelectedKPIs(prev => 

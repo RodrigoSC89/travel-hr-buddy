@@ -97,7 +97,7 @@ const OperationsDashboard = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const mapStatusToOperationType = (status: string): string => {
     const typeMap: Record<string, string> = {

@@ -203,7 +203,7 @@ export const SystemHealthCheck: React.FC = () => {
         description: "Todos os testes passaram com sucesso",
       });
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

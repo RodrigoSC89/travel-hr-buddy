@@ -99,7 +99,7 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
           setIsLoading(false);
         }
       }
-    });
+    };
 
     initMap();
 

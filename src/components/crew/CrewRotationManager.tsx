@@ -278,7 +278,7 @@ export const CrewRotationManager: React.FC = () => {
       console.error("Error scheduling rotation:", error);
       toast.error("Failed to schedule rotation");
     }
-  });
+  };
 
   const generateRotationAlert = async (crewMemberId: string, date: string, type: string) => {
     try {
@@ -299,7 +299,7 @@ export const CrewRotationManager: React.FC = () => {
     } catch (error) {
       console.error("Error generating alert:", error);
     }
-  });
+  };
 
   const handleCreateRotation = async () => {
     try {
@@ -350,7 +350,7 @@ export const CrewRotationManager: React.FC = () => {
       console.error("Error updating rotation:", error);
       toast.error("Failed to update rotation");
     }
-  });
+  };
 
   const exportToCalendar = (rotation: CrewRotation) => {
     // Generate iCal format

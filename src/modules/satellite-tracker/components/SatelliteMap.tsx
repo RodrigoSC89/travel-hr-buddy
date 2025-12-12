@@ -130,7 +130,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
         zoom: 4,
         duration: 1500
       });
-    });
+    };
 
     updateMarker();
   }, [satellite]);

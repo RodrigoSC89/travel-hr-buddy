@@ -62,7 +62,7 @@ export const MissionPlanner: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const activateMission = async (missionId: string) => {
     setActivating(missionId);
@@ -94,7 +94,7 @@ export const MissionPlanner: React.FC = () => {
     } finally {
       setActivating(null);
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

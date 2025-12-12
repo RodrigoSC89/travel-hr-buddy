@@ -152,7 +152,7 @@ export default function TemplatesPage() {
     } finally {
       setGenerating(false);
     }
-  });
+  };
 
   // Rewrite content with AI
   const rewriteContent = async () => {
@@ -188,7 +188,7 @@ export default function TemplatesPage() {
     } finally {
       setRewriting(false);
     }
-  });
+  };
 
   // Auto-suggest title from content
   const suggestTitle = async () => {
@@ -224,7 +224,7 @@ export default function TemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Save or update template
   const saveTemplate = async () => {
@@ -297,7 +297,7 @@ export default function TemplatesPage() {
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   // Toggle favorite
   const toggleFavorite = async (template: Template) => {
@@ -323,7 +323,7 @@ export default function TemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Toggle private
   const togglePrivate = async (template: Template) => {
@@ -349,7 +349,7 @@ export default function TemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Delete template
   const deleteTemplate = async (id: string) => {
@@ -375,7 +375,7 @@ export default function TemplatesPage() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   // Load template for editing
   const editTemplate = (id: string) => {
@@ -449,7 +449,7 @@ export default function TemplatesPage() {
     } finally {
       setExporting(false);
     }
-  });
+  };
 
   // Reset form
   const resetForm = () => {

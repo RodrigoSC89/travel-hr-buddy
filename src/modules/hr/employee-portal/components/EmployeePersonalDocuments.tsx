@@ -91,7 +91,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const uploadDocument = async () => {
     try {
@@ -167,7 +167,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
     } finally {
       setUploading(false);
     }
-  });
+  };
 
   const deleteDocument = async (documentId: string) => {
     if (!confirm("Are you sure you want to delete this document?")) return;
@@ -193,7 +193,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const resetForm = () => {
     setFormData({

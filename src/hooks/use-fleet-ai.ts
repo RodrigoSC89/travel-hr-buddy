@@ -249,7 +249,7 @@ export const useFleetAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   return {
     isAnalyzing,

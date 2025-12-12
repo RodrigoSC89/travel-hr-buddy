@@ -137,7 +137,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: "Assinatura salva localmente"
       });
     }
-  });
+  };
 
   const handleAddAction = async () => {
     if (!incident || !newAction.action_description || !newAction.assigned_to) {
@@ -177,7 +177,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: "Ação salva localmente"
       });
     }
-  });
+  };
 
   const handleStatusUpdate = async (newStatus: string) => {
     if (!incident) return;
@@ -205,7 +205,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         description: "Alteração registrada localmente"
       });
     }
-  });
+  };
 
   // PDF Export for individual incident
   const exportToPDF = () => {

@@ -104,7 +104,7 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   if (isLoading) {
     return (

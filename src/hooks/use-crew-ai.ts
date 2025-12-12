@@ -292,7 +292,7 @@ export const useCrewAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  });
+  };
 
   return {
     isAnalyzing,

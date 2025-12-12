@@ -124,7 +124,7 @@ export const TemplatesDynamic = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const loadVersions = async (templateId: string) => {
     try {
@@ -299,7 +299,7 @@ export const TemplatesDynamic = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadTemplate = (template: TemplateVersion) => {
     setSelectedTemplate(template);
@@ -338,7 +338,7 @@ export const TemplatesDynamic = memo(() => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const exportToPDF = async () => {
     try {
@@ -385,7 +385,7 @@ export const TemplatesDynamic = memo(() => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const exportToDOCX = async () => {
     try {

@@ -149,7 +149,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
 
       markers.current.push(marker);
   });
-  });
+  };
 
   // Update markers when satellites or selection changes
   useEffect(() => {

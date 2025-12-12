@@ -104,7 +104,7 @@ export default function SystemHealthPage() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   useEffect(() => {
     validateSystem();

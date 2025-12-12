@@ -37,7 +37,7 @@ export const PreviewValidator = memo(function({
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

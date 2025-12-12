@@ -128,7 +128,7 @@ const MarineAROverlay = () => {
       setIsStreamActive(true);
       drawOverlay();
     }
-  });
+  };
 
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {

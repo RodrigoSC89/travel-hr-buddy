@@ -274,7 +274,7 @@ export const SmartInsights: React.FC = () => {
     }
 
     setIsGenerating(false);
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

@@ -205,7 +205,7 @@ export const OrganizationCustomization: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const availableModules = [
     { id: "fleet", name: "Gestão de Frota", description: "Gerenciar embarcações e frotas" },

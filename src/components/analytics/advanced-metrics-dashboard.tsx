@@ -155,7 +155,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const getMetricColor = (value: number, target?: number) => {
     if (!target) return "text-foreground";

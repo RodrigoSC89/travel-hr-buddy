@@ -166,7 +166,7 @@ const CollaboratorRegistry: React.FC = () => {
     
     setIsLoading(false);
     toast.success(`Colaborador ${novoColab.nome} cadastrado com sucesso!`);
-  });
+  };
 
   const handleViewDocuments = (colaborador: Colaborador) => {
     setSelectedColaborador(colaborador);

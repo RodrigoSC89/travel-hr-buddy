@@ -167,7 +167,7 @@ export const SuperAdminDashboard: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const updateOrganizationStatus = async (orgId: string, status: string) => {
     try {
@@ -191,7 +191,7 @@ export const SuperAdminDashboard: React.FC = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

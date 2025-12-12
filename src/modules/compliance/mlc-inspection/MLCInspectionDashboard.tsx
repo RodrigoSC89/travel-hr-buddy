@@ -47,7 +47,7 @@ export default function MLCInspectionDashboard() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleInspectionCreated = (inspectionId: string) => {
     setShowCreateDialog(false);

@@ -149,7 +149,7 @@ const NauticalCopilot: React.FC = () => {
       setMessages(prev => [...prev, assistantMessage]);
       setIsTyping(false);
     }, 1500);
-  });
+  };
 
   const generateIntelligentResponse = (message: string): { content: string; category: CopilotMessage["category"] } => {
     const lowerMessage = message.toLowerCase();

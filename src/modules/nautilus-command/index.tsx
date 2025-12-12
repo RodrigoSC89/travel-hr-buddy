@@ -209,7 +209,7 @@ const NautilusCommandCenter = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const criticalAlerts = alerts.filter(a => a.type === "critical").length;
   const warningAlerts = alerts.filter(a => a.type === "warning").length;

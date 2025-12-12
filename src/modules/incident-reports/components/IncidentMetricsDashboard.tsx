@@ -57,7 +57,7 @@ export const IncidentMetricsDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   // Calculate aggregate metrics
   const latestMetrics = metrics[metrics.length - 1];

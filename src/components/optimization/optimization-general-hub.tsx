@@ -203,7 +203,7 @@ export const OptimizationGeneralHub = memo(() => {
       description: "Sistema otimizado com sucesso! Performance melhorada em 12%",
       duration: 4000
     });
-  });
+  };
 
   const applyOptimization = async (optimizationId: string) => {
     const optimization = optimizations.find(opt => opt.id === optimizationId);

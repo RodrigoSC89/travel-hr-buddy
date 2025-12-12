@@ -160,7 +160,7 @@ const TravelManagement = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const loadConflicts = async () => {
     try {
@@ -211,7 +211,7 @@ const TravelManagement = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const exportToPDF = (itinerary: TravelItinerary) => {
     const doc = new jsPDF();
@@ -303,7 +303,7 @@ const TravelManagement = () => {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

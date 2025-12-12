@@ -86,7 +86,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

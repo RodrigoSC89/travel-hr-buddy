@@ -83,7 +83,7 @@ const ApiGateway = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleCheckStatus = async (route: unknown: unknown: unknown) => {
     const status = await apiProxyRouter.checkEndpointStatus(route.path);
@@ -91,7 +91,7 @@ const ApiGateway = () => {
       title: "Endpoint Status",
       description: `Status: ${status.status}, Latency: ${status.latency}ms`
     });
-  });
+  };
 
   const handleCreateKey = () => {
     if (!newKeyName.trim()) {
@@ -174,7 +174,7 @@ const ApiGateway = () => {
       title: "Test Complete",
       description: "Check webhook logs for details"
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

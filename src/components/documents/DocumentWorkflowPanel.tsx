@@ -87,7 +87,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleCreateDocument = async () => {
     try {

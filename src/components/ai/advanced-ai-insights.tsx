@@ -139,7 +139,7 @@ const AdvancedAIInsights = () => {
       title: "Análise concluída",
       description: "Novos insights foram gerados pela IA",
     });
-  });
+  };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {

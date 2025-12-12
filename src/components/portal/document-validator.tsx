@@ -145,7 +145,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       setIsValidating(false);
       setValidationProgress(0);
     }
-  });
+  };
 
   // Convert file to base64
   const fileToBase64 = (file: File): Promise<string> => {

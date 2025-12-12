@@ -117,7 +117,7 @@ Responda em formato estruturado usando markdown.`,
       setIsAnalyzing(false);
       setTimeout(() => setProgress(0), 1000);
     }
-  });
+  };
 
   const handleCopy = async () => {
     if (analysisResult) {
@@ -127,7 +127,7 @@ Responda em formato estruturado usando markdown.`,
         description: "Resultado copiado para a área de transferência.",
       });
     }
-  });
+  };
 
   const clearAll = () => {
     setDocumentText("");
