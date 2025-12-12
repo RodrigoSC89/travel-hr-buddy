@@ -287,7 +287,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           title: "❌ Erro de Validação",
           description: `Corrija os seguintes erros: ${validationErrors.join(", ")}`,
           variant: "destructive",
-        };
+        });
         setIsSaving(false);
         return;
       }
