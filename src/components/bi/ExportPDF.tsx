@@ -62,7 +62,7 @@ export const ExportBIReport = memo(function({ trend, forecast }: { trend: TrendD
       }).catch((error) => {
         logger.error("Error generating PDF", error);
         toast.error("Erro ao gerar PDF. Tente novamente.");
-  });
+  };
     } catch (error) {
       logger.error("Error in handleExport", error);
       toast.error("Erro ao gerar PDF. Tente novamente.");

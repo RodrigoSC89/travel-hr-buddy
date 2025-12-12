@@ -60,7 +60,7 @@ export default function JobsTrendChart() {
           const monthsMap = new Map<string, number>();
           result.forEach((item: { month: string; count: number }) => {
             monthsMap.set(item.month, item.count);
-});
+};
           
           const last6Months = initializeLast6Months();
           const updatedData = last6Months.map(m => ({

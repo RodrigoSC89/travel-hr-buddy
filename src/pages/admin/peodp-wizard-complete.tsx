@@ -450,8 +450,8 @@ export default function PeoDpWizardComplete() {
     toast({
       title: "PDF Exportado",
       description: "Relatório de auditoria PEO-DP salvo com sucesso"
-    });
-  });
+    };
+  };
 
   const handleFieldChange = (field: string, value: unknown: unknown: unknown) => {
     const newData = { ...formData, [field]: value };
@@ -498,7 +498,7 @@ export default function PeoDpWizardComplete() {
       toast({
         title: "Auditoria Salva",
         description: "Auditoria PEO-DP registrada com sucesso"
-      });
+      };
 
       // Auto-export PDF
       await exportToPDF();
@@ -508,7 +508,7 @@ export default function PeoDpWizardComplete() {
         title: "Erro",
         description: "Falha ao salvar auditoria",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsSubmitting(false);
     }

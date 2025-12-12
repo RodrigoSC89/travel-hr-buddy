@@ -70,7 +70,7 @@ const FuelOptimizer = () => {
     toast({
       title: "Otimização concluída",
       description: `Economia estimada: ${result.savings_liters}L (${result.savings_percentage}%)`
-    });
+    };
   };
 
   const totalSavings = history.reduce((sum, h) => sum + h.savings, 0);

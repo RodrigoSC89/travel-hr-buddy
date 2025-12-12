@@ -326,14 +326,14 @@ export const FuelOptimizer = memo(() => {
       toast({
         title: "Relatório exportado",
         description: "PDF baixado com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar",
         description: "Não foi possível gerar o PDF",
         variant: "destructive",
-      });
+      };
     }
   };
 

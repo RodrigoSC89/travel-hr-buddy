@@ -77,7 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           } else if (event === "SIGNED_OUT") {
             setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
           }
-        });
+        };
         
         authSubscription = data.subscription;
 
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           emailRedirectTo: `${window.location.origin}/`,
           data: { full_name: fullName }
         }
-      });
+      };
 
       if (error) {
         toast.error("Erro no cadastro", { description: error.message });
@@ -167,7 +167,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: `${window.location.origin}/` }
-      });
+      };
 
       if (error) {
         toast.error("Erro no login", { description: error.message });
@@ -201,7 +201,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     try {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/auth?type=recovery`
-        });
+        };
 
       if (error) {
         toast.error("Erro", { description: error.message });

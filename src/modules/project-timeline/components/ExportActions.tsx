@@ -171,7 +171,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
     toast({
       title: "Calendar exported successfully",
       description: "Import the .ics file to your calendar application",
-    });
+    };
   };
 
   return (

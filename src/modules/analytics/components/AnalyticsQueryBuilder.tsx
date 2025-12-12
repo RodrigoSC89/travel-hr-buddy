@@ -118,14 +118,14 @@ export const AnalyticsQueryBuilder: React.FC = () => {
       toast({
         title: "Success",
         description: `Query returned ${data?.length || 0} results`
-      });
+      };
     } catch (error) {
       console.error("Error executing query:", error);
       toast({
         title: "Error",
         description: "Failed to execute query",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -163,7 +163,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     toast({
       title: "Success",
       description: "Data exported to CSV"
-    });
+    };
   };
 
   return (

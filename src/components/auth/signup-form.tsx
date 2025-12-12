@@ -47,7 +47,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
         title: "Erro",
         description: "A senha deve ter pelo menos 6 caracteres",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -59,7 +59,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
         title: "Erro no cadastro",
         description: "Não foi possível criar a conta",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

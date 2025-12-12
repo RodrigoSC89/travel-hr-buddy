@@ -75,7 +75,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
           })),
           context
         }
-      });
+      };
 
       if (error) throw error;
 

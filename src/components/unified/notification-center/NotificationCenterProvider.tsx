@@ -151,7 +151,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
               title: newNotif.title,
               description: newNotif.message,
               variant: newNotif.priority === "critical" ? "destructive" : "default",
-            });
+            };
           }
         }
       )
@@ -207,7 +207,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
         title: "Error",
         description: "Failed to mark all as read",
         variant: "destructive",
-      });
+      };
     }
   }, [effectiveUserId, toast]);
 
@@ -222,13 +222,13 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
         toast({
           title: "Deleted",
           description: "Notification deleted",
-        });
+        };
       } catch (err) {
         toast({
           title: "Error",
           description: "Failed to delete notification",
           variant: "destructive",
-        });
+        };
       }
     },
     [toast]

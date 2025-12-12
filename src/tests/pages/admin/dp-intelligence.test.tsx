@@ -85,8 +85,8 @@ describe("DPIntelligencePage", () => {
       expect(screen.getByText("Severidade")).toBeInTheDocument();
       expect(screen.getByText("IA")).toBeInTheDocument();
       expect(screen.getByText("Ações")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("fetches and displays incidents correctly", async () => {
     const mockFrom = vi.fn().mockReturnValue({
@@ -107,8 +107,8 @@ describe("DPIntelligencePage", () => {
       expect(screen.getByText("DP Shuttle Tanker X")).toBeInTheDocument();
       expect(screen.getByText("Thruster Control Software Failure")).toBeInTheDocument();
       expect(screen.getByText("DP DSV Subsea Alpha")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("shows \"Não analisado\" when no GPT analysis exists", async () => {
     const mockFrom = vi.fn().mockReturnValue({
@@ -118,7 +118,7 @@ describe("DPIntelligencePage", () => {
           error: null,
         }),
       }),
-    });
+    };
 
     (supabase.from as unknown).mockImplementation(mockFrom);
 
@@ -126,8 +126,8 @@ describe("DPIntelligencePage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Não analisado")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("has \"Explicar com IA\" button for each incident", async () => {
     const mockFrom = vi.fn().mockReturnValue({
@@ -137,7 +137,7 @@ describe("DPIntelligencePage", () => {
           error: null,
         }),
       }),
-    });
+    };
 
     (supabase.from as unknown).mockImplementation(mockFrom);
 
@@ -146,14 +146,14 @@ describe("DPIntelligencePage", () => {
     await waitFor(() => {
       const buttons = screen.getAllByText("Explicar com IA");
       expect(buttons.length).toBe(2);
-  });
-  });
+  };
+  };
 
   it("calls explain API when button is clicked", async () => {
     const mockInvoke = vi.fn().mockResolvedValue({
       data: { result: "Análise de IA completa" },
       error: null,
-    });
+    };
 
     const mockUpdate = vi.fn().mockReturnValue({
       eq: vi.fn().mockResolvedValue({
@@ -191,7 +191,7 @@ describe("DPIntelligencePage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Loss of Position Due to Gyro Drift")).toBeInTheDocument();
-  });
+  };
 
     const button = screen.getByText("Explicar com IA");
     fireEvent.click(button);
@@ -203,9 +203,9 @@ describe("DPIntelligencePage", () => {
             id: "imca-2025-014",
           }),
         }),
-      });
-  });
-  });
+      };
+  };
+  };
 
   it("formats dates correctly (dd/MM/yyyy)", async () => {
     const mockFrom = vi.fn().mockReturnValue({
@@ -223,8 +223,8 @@ describe("DPIntelligencePage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("12/09/2025")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("displays \"-\" when no date provided", async () => {
     const incidentWithoutDate = {
@@ -248,8 +248,8 @@ describe("DPIntelligencePage", () => {
     await waitFor(() => {
       const cells = screen.getAllByText("-");
       expect(cells.length).toBeGreaterThan(0);
-  });
-  });
+  };
+  };
 
   it("disables button during analysis", async () => {
     const mockInvoke = vi.fn().mockImplementation(
@@ -259,7 +259,7 @@ describe("DPIntelligencePage", () => {
             resolve({
               data: { result: "Análise de IA completa" },
               error: null,
-            });
+            };
           }, 100);
         })
     );
@@ -300,7 +300,7 @@ describe("DPIntelligencePage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Loss of Position Due to Gyro Drift")).toBeInTheDocument();
-  });
+  };
 
     const button = screen.getByText("Explicar com IA");
     fireEvent.click(button);
@@ -308,6 +308,6 @@ describe("DPIntelligencePage", () => {
     // Button should be disabled during analysis
     await waitFor(() => {
       expect(screen.getByText("Analisando...")).toBeInTheDocument();
-  });
-  });
-});
+  };
+  };
+};

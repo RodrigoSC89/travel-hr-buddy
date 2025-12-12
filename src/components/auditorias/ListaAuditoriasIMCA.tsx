@@ -153,7 +153,7 @@ export default function ListaAuditoriasIMCA() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
-      });
+      };
       const dataPlano = await resPlano.json();
       setPlano((prev) => ({ ...prev, [id]: dataPlano.plano }));
 

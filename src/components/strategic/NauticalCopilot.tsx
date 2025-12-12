@@ -204,7 +204,7 @@ const NauticalCopilot: React.FC = () => {
     toast({
       title: "Ação Executada",
       description: "Informações atualizadas pelo Copilot",
-    });
+    };
   };
 
   const toggleVoiceInput = () => {

@@ -308,7 +308,7 @@ export const EnhancedCommunicationCenter = memo(() => {
               toast({
                 title: "Sucesso",
                 description: "Mensagem enviada com sucesso"
-              });
+              };
               // Stats will be refreshed on next page load
               setStats(prev => ({
                 ...prev,

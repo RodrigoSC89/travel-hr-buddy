@@ -114,7 +114,7 @@ export default function SGSOAudits() {
           action: "sgso_audit_created",
           resource: "sgso_audits",
           details: { title: formData.title },
-        });
+        };
 
         toast.success("Audit created successfully");
       }
@@ -127,7 +127,7 @@ export default function SGSOAudits() {
         criticality: "minor",
         responsible: "",
         status: "open",
-      });
+      };
       loadAudits();
     } catch (error) {
       logger.error("Failed to save audit", error);

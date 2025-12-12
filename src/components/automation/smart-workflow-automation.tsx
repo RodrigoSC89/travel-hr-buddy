@@ -323,7 +323,7 @@ const SmartWorkflowAutomation = () => {
     toast({
       title: "Workflow criado",
       description: "Novo workflow adicionado como rascunho"
-    });
+    };
   };
 
   const duplicateWorkflow = (workflow: Workflow) => {

@@ -115,7 +115,7 @@ export default function UserProfilePage() {
         title: "Erro",
         description: "Não foi possível carregar o perfil",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -135,21 +135,21 @@ export default function UserProfilePage() {
           phone: profile.phone,
           department: profile.department,
           updated_at: new Date().toISOString()
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "Sucesso",
         description: "Perfil atualizado com sucesso"
-      });
+      };
     } catch (error) {
       console.error("Error saving profile:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar o perfil",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsSaving(false);
     }
@@ -170,7 +170,7 @@ export default function UserProfilePage() {
       day: "2-digit",
       month: "long",
       year: "numeric"
-    });
+    };
   };
 
   if (isLoading) {

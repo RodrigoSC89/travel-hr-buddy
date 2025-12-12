@@ -153,7 +153,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       toast({
         title: "✅ Document Uploaded",
         description: "Your document has been uploaded successfully",
-      });
+      };
 
       setIsUploadOpen(false);
       resetForm();
@@ -163,7 +163,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error uploading document",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setUploading(false);
     }
@@ -191,7 +191,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error deleting document",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 

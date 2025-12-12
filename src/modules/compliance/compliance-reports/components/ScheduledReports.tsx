@@ -111,7 +111,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Created (Demo)",
         description: `Report will be generated ${formData.frequency}`,
-      });
+      };
 
       setShowForm(false);
       fetchScheduledReports();
@@ -121,7 +121,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Created (Demo)",
         description: "Feature demonstration - database not configured",
-      });
+      };
     }
   };
 
@@ -176,7 +176,7 @@ export const ScheduledReports: React.FC = () => {
         toast({
           title: "Report Generated",
           description: "Report has been stored and is ready for download",
-        });
+        };
 
         fetchScheduledReports();
       } catch (error) {
@@ -186,7 +186,7 @@ export const ScheduledReports: React.FC = () => {
           title: "Generation Failed",
           description: "Failed to generate report",
           variant: "destructive",
-        });
+        };
       }
     }, 2000);
   };
@@ -213,7 +213,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Deleted (Demo)",
         description: "Feature demonstration - database not configured",
-      });
+      };
     }
   };
 

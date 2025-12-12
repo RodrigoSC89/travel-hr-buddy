@@ -223,7 +223,7 @@ export const SharedAlerts = memo(() => {
             shared_alert_id: sharedAlertId,
             user_id: user.id,
             vote_type: voteType,
-          });
+          };
 
         if (error) throw error;
 
@@ -266,13 +266,13 @@ export const SharedAlerts = memo(() => {
       toast({
         title: "Voto registrado",
         description: "Seu voto foi registrado com sucesso!",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao registrar seu voto. Tente novamente.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -301,7 +301,7 @@ export const SharedAlerts = memo(() => {
       toast({
         title: "Sucesso",
         description: "Alerta compartilhado com a comunidade!",
-      });
+      };
 
       setShareForm({ alert_id: "", title: "", description: "" });
       setIsShareDialogOpen(false);
@@ -311,7 +311,7 @@ export const SharedAlerts = memo(() => {
         title: "Erro",
         description: "Erro ao compartilhar alerta. Tente novamente.",
         variant: "destructive",
-      });
+      };
     }
   };
 

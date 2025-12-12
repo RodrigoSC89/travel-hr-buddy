@@ -100,7 +100,7 @@ const ComplianceChecklist = () => {
         title: "Error",
         description: "Failed to load compliance records",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

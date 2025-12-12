@@ -101,7 +101,7 @@ export default function ExecutionLogsPage() {
             title: "Erro ao carregar logs",
             description: "Não foi possível carregar os registros de execução.",
             variant: "destructive",
-          });
+          };
           throw executionError;
         }
 
@@ -258,7 +258,7 @@ export default function ExecutionLogsPage() {
         title: "Nenhum dado para exportar",
         description: "Não há registros de execução para exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -267,7 +267,7 @@ export default function ExecutionLogsPage() {
         title: "Erro de validação",
         description: "Por favor, corrija os erros de data antes de exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -303,14 +303,14 @@ export default function ExecutionLogsPage() {
       toast({
         title: "CSV exportado com sucesso",
         description: `${filteredExecutions.length} registros foram exportados.`,
-      });
+      };
     } catch (error) {
       logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Ocorreu um erro ao tentar exportar os dados.",
         variant: "destructive",
-      });
+      };
     } finally {
       setExportingCsv(false);
     }
@@ -323,7 +323,7 @@ export default function ExecutionLogsPage() {
         title: "Nenhum dado para exportar",
         description: "Não há registros de execução para exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -332,7 +332,7 @@ export default function ExecutionLogsPage() {
         title: "Erro de validação",
         description: "Por favor, corrija os erros de data antes de exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -394,14 +394,14 @@ export default function ExecutionLogsPage() {
       toast({
         title: "PDF exportado com sucesso",
         description: `${filteredExecutions.length} registros foram exportados.`,
-      });
+      };
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Ocorreu um erro ao tentar exportar os dados.",
         variant: "destructive",
-      });
+      };
     } finally {
       setExportingPdf(false);
     }

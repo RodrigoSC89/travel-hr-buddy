@@ -265,12 +265,12 @@ export const SmartInsights: React.FC = () => {
       toast({
         title: "Insight Implementado",
         description: `${insight.title} foi aplicado com sucesso!`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Insight Implementado",
         description: `${insight.title} foi aplicado com sucesso!`,
-      });
+      };
     }
 
     setIsGenerating(false);

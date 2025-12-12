@@ -86,11 +86,11 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
           title: "Erro ao capturar GPS",
           description: "Não foi possível obter sua localização",
           variant: "destructive",
-        });
+        };
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  });
+  };
 
   // Photo upload handler (max 5 photos, 5MB each)
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,14 +184,14 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         incident_date: new Date().toISOString(),
         status: "new",
         photo_urls: photoUrls.length > 0 ? photoUrls : null,
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Incidente criado",
         description: `Número: ${incidentNumber}`,
-      });
+      };
 
       onSuccess();
       onOpenChange(false);
@@ -206,7 +206,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         incident_type: "minor",
         incident_location: "",
         gps_coordinates: "",
-      });
+      };
       setPhotos([]);
       setPhotoPreviews([]);
     } catch (error) {
@@ -216,7 +216,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "Erro",
         description: "Falha ao criar relatório de incidente",
         variant: "destructive",
-      });
+      };
     } finally {
       setSubmitting(false);
     }

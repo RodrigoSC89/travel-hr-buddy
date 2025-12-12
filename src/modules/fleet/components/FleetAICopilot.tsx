@@ -101,7 +101,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
           query,
           context: { fleet_summary: fleetSummary }
         }
-      });
+      };
 
       if (error) throw error;
 

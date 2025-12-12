@@ -165,14 +165,14 @@ export const PeotramPermissionsManager: React.FC = () => {
         area_access: [],
         location_type: "both",
         expires_at: ""
-      });
+      };
       fetchPermissions();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a permissão.",
         variant: "destructive",
-      });
+      };
     }
   };
 

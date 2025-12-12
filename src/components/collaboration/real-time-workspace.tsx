@@ -163,7 +163,7 @@ const RealTimeWorkspace: React.FC = () => {
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
 };
-  });
+  };
 
         // Configurar mensagens de chat
         channel.on("broadcast", { event: "chat_message" }, (payload) => {
@@ -178,7 +178,7 @@ const RealTimeWorkspace: React.FC = () => {
           };
           
           setChatMessages(prev => [...prev, message]);
-        });
+        };
 
         // Configurar atualizações do workspace
         channel.on("broadcast", { event: "workspace_update" }, (payload) => {
@@ -222,7 +222,7 @@ const RealTimeWorkspace: React.FC = () => {
           title: "Erro",
           description: "Falha ao conectar ao workspace em tempo real",
           variant: "destructive"
-        });
+        };
       } finally {
         setIsLoading(false);
       }
@@ -293,7 +293,7 @@ const RealTimeWorkspace: React.FC = () => {
         title: "Erro",
         description: "Falha ao enviar mensagem",
         variant: "destructive"
-      });
+      };
     }
   };
 

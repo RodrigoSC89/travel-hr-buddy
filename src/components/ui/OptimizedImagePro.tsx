@@ -140,6 +140,6 @@ export const OptimizedImagePro = memo(function OptimizedImagePro({
       )}
     </div>
   );
-});
+};
 
 OptimizedImagePro.displayName = "OptimizedImagePro";

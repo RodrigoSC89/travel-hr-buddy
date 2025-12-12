@@ -202,14 +202,14 @@ const TravelManagement = () => {
         arrival_date: "",
         travel_purpose: "",
         status: "pending"
-      });
+      };
       loadItineraries();
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating itinerary",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -270,12 +270,12 @@ const TravelManagement = () => {
       export_type: "pdf",
       itinerary_id: itinerary.id,
       file_name: `travel-itinerary-${itinerary.itinerary_number}.pdf`
-    });
+    };
     
     toast({
       title: "✅ PDF Exported",
       description: "Itinerary exported successfully",
-    });
+    };
   };
 
   const resolveConflict = async (conflictId: string) => {
@@ -301,7 +301,7 @@ const TravelManagement = () => {
         title: "Error resolving conflict",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 

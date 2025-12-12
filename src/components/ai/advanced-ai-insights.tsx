@@ -138,7 +138,7 @@ const AdvancedAIInsights = () => {
     toast({
       title: "Análise concluída",
       description: "Novos insights foram gerados pela IA",
-    });
+    };
   };
 
   const getImpactColor = (impact: string) => {

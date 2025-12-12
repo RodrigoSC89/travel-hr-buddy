@@ -138,7 +138,7 @@ export const EmployeePortal: React.FC = () => {
     toast({
       title: "Entrada registrada",
       description: "Suas horas foram registradas para aprovação"
-    });
+    };
   };
 
   const submitLeaveRequest = () => {

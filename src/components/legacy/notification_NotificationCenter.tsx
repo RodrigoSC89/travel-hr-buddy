@@ -167,7 +167,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         title: "Erro ao carregar notificações",
         description: "Não foi possível carregar as notificações",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

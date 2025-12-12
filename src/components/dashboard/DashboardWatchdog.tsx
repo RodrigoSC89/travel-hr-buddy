@@ -154,7 +154,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
       await logWatchdogEvent({
         action: "auto_heal_error",
         error: error instanceof Error ? error.message : "Unknown error"
-      });
+      };
     }
   }, [state, onHeal, runWatchdogChecks]);
 

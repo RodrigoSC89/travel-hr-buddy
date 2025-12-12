@@ -163,7 +163,7 @@ export default function WorkOrderManager() {
     toast({
       title: "OS Criada",
       description: `${newOrder.number} criada com sucesso`,
-    });
+    };
   };
 
   const handleApprove = (id: string) => {

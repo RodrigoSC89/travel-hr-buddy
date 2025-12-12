@@ -49,7 +49,7 @@ export default function SmartWorkflowPage() {
         title: "Erro",
         description: "Não foi possível carregar os fluxos de trabalho",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +61,7 @@ export default function SmartWorkflowPage() {
         title: "Erro",
         description: "Por favor, insira um título para o fluxo de trabalho",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -74,7 +74,7 @@ export default function SmartWorkflowPage() {
         .insert({ 
           title: newTitle,
           created_by: user?.id 
-        });
+        };
       
       if (error) throw error;
       
@@ -82,7 +82,7 @@ export default function SmartWorkflowPage() {
       toast({
         title: "Sucesso",
         description: "Fluxo de trabalho criado com sucesso!"
-      });
+      };
       fetchWorkflows();
     } catch (error) {
       console.error("Error creating workflow:", error);
@@ -90,7 +90,7 @@ export default function SmartWorkflowPage() {
         title: "Erro",
         description: "Não foi possível criar o fluxo de trabalho",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsCreating(false);
     }

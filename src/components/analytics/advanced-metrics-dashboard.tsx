@@ -153,7 +153,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         title: "Erro ao gerar relatório",
         description: "Não foi possível gerar o relatório",
         variant: "destructive"
-      });
+      };
     }
   };
 

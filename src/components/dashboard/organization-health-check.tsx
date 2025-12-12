@@ -101,7 +101,7 @@ export const OrganizationHealthCheck: React.FC = () => {
           action: "Configurar Agora",
           actionUrl: "/organization-setup",
           priority: "high"
-        });
+        };
       } else {
         checks.push({
           id: "setup",

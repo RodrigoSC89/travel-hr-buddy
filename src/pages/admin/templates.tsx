@@ -106,7 +106,7 @@ export default function TemplatesPage() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -141,14 +141,14 @@ export default function TemplatesPage() {
       toast({
         title: "Conteúdo gerado com sucesso",
         description: "O template foi gerado com IA.",
-      });
+      };
     } catch (err) {
       logger.error("Error generating content:", err);
       toast({
         title: "Erro ao gerar conteúdo",
         description: "Não foi possível gerar o conteúdo com IA.",
         variant: "destructive",
-      });
+      };
     } finally {
       setGenerating(false);
     }
@@ -177,14 +177,14 @@ export default function TemplatesPage() {
       toast({
         title: "Conteúdo reformulado com sucesso",
         description: "O template foi reformulado com IA.",
-      });
+      };
     } catch (err) {
       logger.error("Error rewriting content:", err);
       toast({
         title: "Erro ao reformular conteúdo",
         description: "Não foi possível reformular o conteúdo.",
         variant: "destructive",
-      });
+      };
     } finally {
       setRewriting(false);
     }
@@ -215,14 +215,14 @@ export default function TemplatesPage() {
       toast({
         title: "Título sugerido",
         description: "Um título foi sugerido com base no conteúdo.",
-      });
+      };
     } catch (err) {
       logger.error("Error suggesting title:", err);
       toast({
         title: "Erro ao sugerir título",
         description: "Não foi possível sugerir um título.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -265,7 +265,7 @@ export default function TemplatesPage() {
         toast({
           title: "Template atualizado",
           description: "O template foi atualizado com sucesso.",
-        });
+        };
       } else {
         // Create new template
         const { error } = await (supabase as unknown)
@@ -274,14 +274,14 @@ export default function TemplatesPage() {
             title: title.trim(),
             content: content.trim(),
             created_by: user.id,
-          });
+          };
 
         if (error) throw error;
 
         toast({
           title: "Template salvo",
           description: "O template foi salvo com sucesso.",
-        });
+        };
       }
 
       // Reset form and reload templates
@@ -293,7 +293,7 @@ export default function TemplatesPage() {
         title: "Erro ao salvar template",
         description: "Não foi possível salvar o template.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -321,7 +321,7 @@ export default function TemplatesPage() {
         title: "Erro",
         description: "Não foi possível alterar o favorito.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -347,7 +347,7 @@ export default function TemplatesPage() {
         title: "Erro",
         description: "Não foi possível alterar a privacidade.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -373,7 +373,7 @@ export default function TemplatesPage() {
         title: "Erro ao excluir",
         description: "Não foi possível excluir o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -438,14 +438,14 @@ export default function TemplatesPage() {
       toast({
         title: "PDF exportado",
         description: "O template foi exportado como PDF.",
-      });
+      };
     } catch (err) {
       logger.error("Error exporting PDF:", err);
       toast({
         title: "Erro ao exportar",
         description: "Não foi possível exportar o template.",
         variant: "destructive",
-      });
+      };
     } finally {
       setExporting(false);
     }

@@ -104,7 +104,7 @@ export default function CrewRotationModule() {
         title: "Erro ao carregar rotações",
         description: "Não foi possível carregar as rotações de tripulação.",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -200,14 +200,14 @@ export default function CrewRotationModule() {
           rotation_end: newRotation.end_date,
           status: "scheduled",
           conflicts: conflicts.map(c => c.message)
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "Rotação criada",
         description: "A rotação foi agendada com sucesso.",
-      });
+      };
 
       setShowNewRotation(false);
       setNewRotation({
@@ -215,7 +215,7 @@ export default function CrewRotationModule() {
         vessel_id: "",
         start_date: "",
         end_date: ""
-      });
+      };
       
       loadRotations();
       
@@ -229,7 +229,7 @@ export default function CrewRotationModule() {
         title: "Erro ao criar rotação",
         description: "Não foi possível criar a rotação.",
         variant: "destructive"
-      });
+      };
     }
   };
 

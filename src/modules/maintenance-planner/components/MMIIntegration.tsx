@@ -110,13 +110,13 @@ export const MMIIntegration: React.FC = () => {
       toast({
         title: "Maintenance Scheduled",
         description: `Task created for ${prediction.equipment_name}`,
-      });
+      };
     } catch (error) {
       console.error("Error scheduling maintenance:", error);
       toast({
         title: "Scheduled (Demo Mode)",
         description: "Feature demonstration - database not configured",
-      });
+      };
     }
   };
 

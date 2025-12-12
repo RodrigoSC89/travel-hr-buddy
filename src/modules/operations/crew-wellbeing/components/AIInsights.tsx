@@ -49,14 +49,14 @@ export const AIInsights = memo(() => {
       toast({
         title: "Análise concluída",
         description: "A IA gerou insights sobre seu bem-estar",
-      });
+      };
     } catch (error) {
       console.error("Error requesting analysis:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar análise",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsAnalyzing(false);
     }

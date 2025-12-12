@@ -373,7 +373,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
         title: "Erro",
         description: "Não foi possível marcar como lida",
         variant: "destructive",
-      });
+      };
     }
   }, [toast]);
 
@@ -402,7 +402,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
         title: "Erro",
         description: "Não foi possível marcar todas como lidas",
         variant: "destructive",
-      });
+      };
     }
   }, [effectiveUserId, toast]);
 
@@ -452,7 +452,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
         title: "Erro",
         description: "Não foi possível limpar notificações",
         variant: "destructive",
-      });
+      };
     }
   }, [effectiveUserId, toast]);
 

@@ -71,7 +71,7 @@ export const PriceRangeConfig = memo(function() {
       toast({
         title: "Alerta criado!",
         description: `Você será notificado quando o preço de ${route} cair ${calculatedDiscount}%`,
-      });
+      };
 
       // Reset form
       setOrigin("");
@@ -85,7 +85,7 @@ export const PriceRangeConfig = memo(function() {
         title: "Erro ao salvar",
         description: "Não foi possível criar o alerta de preço",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsSaving(false);
     }

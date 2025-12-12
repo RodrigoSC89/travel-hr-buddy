@@ -237,8 +237,8 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("Título *")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should create new template", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));

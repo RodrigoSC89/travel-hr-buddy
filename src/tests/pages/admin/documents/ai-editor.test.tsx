@@ -188,8 +188,8 @@ describe("DocumentAIEditorPage", () => {
           title: "Documento salvo com sucesso",
         })
       );
-  });
-  });
+  };
+  };
 
   it("should export document as PDF", async () => {
     const toastMod: unknown = await import("@/hooks/use-toast");
@@ -237,5 +237,5 @@ describe("DocumentAIEditorPage", () => {
     
     // Verify that supabase.from was NOT called (validation failed)
     expect(supaMod.supabase.from).not.toHaveBeenCalled();
-  });
-});
+  };
+};

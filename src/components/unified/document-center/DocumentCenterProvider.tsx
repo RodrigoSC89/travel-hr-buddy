@@ -140,7 +140,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +154,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           title: "Authentication required",
           description: "Please sign in to upload documents",
           variant: "destructive",
-        });
+        };
         return null;
       }
 
@@ -165,7 +165,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           title: "File too large",
           description: `Maximum file size is ${maxSize}MB`,
           variant: "destructive",
-        });
+        };
         return null;
       }
 
@@ -178,7 +178,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           toast({
             title: "Success",
             description: "Document uploaded successfully",
-          });
+          };
           return doc;
         }
 
@@ -225,7 +225,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
         toast({
           title: "Success",
           description: "Document uploaded successfully",
-        });
+        };
 
         return newDoc;
       } catch (err) {
@@ -234,7 +234,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           title: "Upload failed",
           description: errorMessage,
           variant: "destructive",
-        });
+        };
         return null;
       } finally {
         setIsLoading(false);
@@ -257,7 +257,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           toast({
             title: "Success",
             description: "Document updated successfully",
-          });
+          };
           return doc;
         }
 
@@ -273,7 +273,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
         toast({
           title: "Success",
           description: "Document updated successfully",
-        });
+        };
 
         return documents.find((d) => d.id === id) || null;
       } catch (err) {
@@ -282,7 +282,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           title: "Update failed",
           description: errorMessage,
           variant: "destructive",
-        });
+        };
         return null;
       } finally {
         setIsLoading(false);
@@ -303,7 +303,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           toast({
             title: "Success",
             description: "Document deleted successfully",
-          });
+          };
           return true;
         }
 
@@ -313,7 +313,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
         toast({
           title: "Success",
           description: "Document deleted successfully",
-        });
+        };
 
         return true;
       } catch (err) {
@@ -322,7 +322,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           title: "Delete failed",
           description: errorMessage,
           variant: "destructive",
-        });
+        };
         return false;
       } finally {
         setIsLoading(false);
@@ -363,19 +363,19 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
               ...doc.analytics,
               downloadCount: doc.analytics.downloadCount + 1,
             },
-          });
+          };
         }
 
         toast({
           title: "Success",
           description: "Document downloaded successfully",
-        });
+        };
       } catch (err) {
         toast({
           title: "Download failed",
           description: "Failed to download document",
           variant: "destructive",
-        });
+        };
       }
     },
     [documents, toast, updateDocument]

@@ -104,7 +104,7 @@ export default function RestoreAnalyticsPage() {
         title: "Erro ao carregar estatísticas",
         description: "Não foi possível carregar as estatísticas de restauração.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ export default function RestoreAnalyticsPage() {
         title: "Sem dados",
         description: "Não há dados para exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -148,14 +148,14 @@ export default function RestoreAnalyticsPage() {
       toast({
         title: "CSV exportado",
         description: "O arquivo CSV foi baixado com sucesso.",
-      });
+      };
     } catch (error) {
       logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Não foi possível exportar o arquivo CSV.",
         variant: "destructive",
-      });
+      };
     }
   }
 
@@ -165,7 +165,7 @@ export default function RestoreAnalyticsPage() {
         title: "Sem dados",
         description: "Não há dados para exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -218,7 +218,7 @@ export default function RestoreAnalyticsPage() {
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o arquivo PDF.",
         variant: "destructive",
-      });
+      };
     }
   }
 

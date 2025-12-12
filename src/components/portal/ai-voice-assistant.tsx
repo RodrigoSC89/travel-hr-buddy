@@ -75,7 +75,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Erro",
         description: "Não foi possível iniciar a gravação",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -123,7 +123,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
             crewMemberId,
             responseFormat: "voice"
           }
-        });
+        };
 
         if (aiError) throw aiError;
 
@@ -142,7 +142,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Erro",
         description: "Não foi possível processar o áudio",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsProcessing(false);
     }

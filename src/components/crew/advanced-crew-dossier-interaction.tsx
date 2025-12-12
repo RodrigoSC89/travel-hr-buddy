@@ -102,7 +102,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -140,7 +140,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         title: "Erro ao gerar insights",
         description: "Não foi possível gerar a análise de IA.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoadingAI(false);
     }

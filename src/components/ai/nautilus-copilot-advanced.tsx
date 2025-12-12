@@ -212,12 +212,12 @@ What would you like assistance with today?`,
           "Show related metrics",
           "Set up monitoring alert"
         ]
-      });
+      };
 
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);
     }, 2000);
-  });
+  };
 
   const generateAIResponse = (input: string): string => {
     const responses = [

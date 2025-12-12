@@ -168,7 +168,7 @@ const VesselTrackingMap = () => {
         title: "Erro",
         description: "Falha ao carregar dados das embarcações",
         variant: "destructive"
-      });
+      };
     }
   };
 

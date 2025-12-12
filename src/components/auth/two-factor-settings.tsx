@@ -80,7 +80,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao configurar 2FA",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -112,13 +112,13 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "2FA Ativado",
         description: "Autenticação de dois fatores foi ativada com sucesso!",
-      });
+      };
     } catch (error) {
       toast({
         title: "Código Incorreto",
         description: error instanceof Error ? error.message : "Verifique o código e tente novamente",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

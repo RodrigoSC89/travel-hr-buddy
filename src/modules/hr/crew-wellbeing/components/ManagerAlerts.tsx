@@ -78,7 +78,7 @@ export const ManagerAlerts: React.FC = () => {
         title: "Error",
         description: "Failed to acknowledge alert",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -106,7 +106,7 @@ export const ManagerAlerts: React.FC = () => {
         title: "Error",
         description: "Failed to resolve alert",
         variant: "destructive",
-      });
+      };
     }
   };
 

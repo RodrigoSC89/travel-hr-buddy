@@ -195,7 +195,7 @@ Gere sugestões em formato JSON array.`
       toast({
         title: "Sugestões geradas com IA",
         description: `${aiSuggestions.length} novas sugestões disponíveis`
-      });
+      };
 
     } catch (error) {
       logger.error("Failed to generate AI suggestions", error);
@@ -208,7 +208,7 @@ Gere sugestões em formato JSON array.`
       toast({
         title: "Sugestões geradas",
         description: "Sugestões baseadas em análise de padrões"
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }

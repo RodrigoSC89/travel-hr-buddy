@@ -71,10 +71,10 @@ const AICommandCenter = () => {
             title: "Erro",
             description: "Não foi possível processar o comando",
             variant: "destructive",
-          });
+          };
           setIsLoading(false);
         },
-      });
+      };
     } catch (error) {
       console.error("Error sending message:", error);
       console.error("Error sending message:", error);

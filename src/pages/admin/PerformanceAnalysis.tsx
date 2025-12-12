@@ -64,7 +64,7 @@ const PerformanceAnalysis: React.FC = () => {
         title: "Analysis Failed",
         description: error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsAnalyzing(false);
     }

@@ -181,7 +181,7 @@ export const AIAssistantPanel = memo(() => {
           title: "Erro na análise",
           description: "Não foi possível processar sua consulta.",
           variant: "destructive",
-        });
+        };
       } finally {
         setIsProcessing(false);
       }

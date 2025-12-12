@@ -88,7 +88,7 @@ describe("DocumentHistoryPage Component", () => {
     vi.clearAllMocks();
     // Default mock for empty versions
     vi.mocked(supabase.from).mockReturnValue(createVersionQueryBuilder());
-  });
+  };
 
   it("should render the page with loading state initially", async () => {
     render(
@@ -101,7 +101,7 @@ describe("DocumentHistoryPage Component", () => {
 
     // Should show loading state initially
     expect(screen.getByText(/Carregando histórico de versões.../i)).toBeInTheDocument();
-  });
+  };
 
   it("should display no versions message when there are no versions", async () => {
     render(
@@ -188,7 +188,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-  });
+  };
 
     // Filter by email
     const emailInput = screen.getByLabelText(/Filtrar por Email do Autor/i);
@@ -196,7 +196,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/1 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-  });
+  };
   });
 
   it("should filter versions by date", async () => {
@@ -231,7 +231,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-  });
+  };
 
     // Filter by date - only show versions from Oct 5 onwards
     const dateInput = screen.getByLabelText(/Filtrar por Data/i);
@@ -239,7 +239,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/1 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-  });
+  };
   });
 
   it("should show clear filters button when filters are active", async () => {
@@ -359,6 +359,6 @@ describe("DocumentHistoryPage Component", () => {
     await waitFor(() => {
       expect(screen.getByText(/Caracteres:/i)).toBeInTheDocument();
       expect(screen.getByText(/13/)).toBeInTheDocument(); // "Short content" has 13 characters
-    });
-  });
-});
+    };
+  };
+};

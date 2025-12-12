@@ -134,7 +134,7 @@ const ReportsCommandCenter = () => {
         title: "Erro",
         description: "Falha ao carregar dados de analytics",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoadingAnalytics(false);
     }

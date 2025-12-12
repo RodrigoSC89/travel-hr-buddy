@@ -25,17 +25,17 @@ describe("DashboardJobs Component", () => {
 
     render(<DashboardJobs />);
     expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
-  });
+  };
 
   it("should render the chart title", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: [],
       error: null,
-    });
+    };
 
     render(<DashboardJobs />);
     expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
-  });
+  };
 
   it("should call the bi-jobs-by-component function on mount", async () => {
     const mockData = [
@@ -46,21 +46,21 @@ describe("DashboardJobs Component", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: mockData,
       error: null,
-    });
+    };
 
     render(<DashboardJobs />);
 
     await waitFor(() => {
       expect(supabase.functions.invoke).toHaveBeenCalledWith("bi-jobs-by-component");
-  });
-  });
+  };
+  };
 
   it("should handle errors gracefully", async () => {
     const mockError = new Error("API Error");
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: null,
       error: mockError,
-    });
+    };
 
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
@@ -83,4 +83,4 @@ describe("DashboardJobs Component", () => {
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
   };
-});
+};

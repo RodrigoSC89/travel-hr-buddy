@@ -82,7 +82,7 @@ export default function SGSOReportPage({
       logger.error("Erro ao gerar PDF", { error });
       toast.error("Erro ao gerar PDF", {
         description: "Não foi possível gerar o relatório. Tente novamente." 
-      });
+      };
     } finally {
       setIsExporting(false);
     }

@@ -61,7 +61,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar notificações",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -91,7 +91,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Falha ao marcar como lida",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -118,7 +118,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Falha ao marcar todas como lidas",
         variant: "destructive"
-      });
+      };
     }
   };
 

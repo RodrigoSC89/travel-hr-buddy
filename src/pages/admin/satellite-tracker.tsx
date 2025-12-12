@@ -75,7 +75,7 @@ export default function SatelliteTracker() {
             title: "Satellite Alert",
             description: payload.new.title,
             variant: payload.new.severity === "critical" ? "destructive" : "default",
-          });
+          };
           fetchAlerts();
         }
       )
@@ -239,7 +239,7 @@ export default function SatelliteTracker() {
         title: "Error",
         description: "Failed to start tracking session",
         variant: "destructive",
-      });
+      };
     }
   };
 

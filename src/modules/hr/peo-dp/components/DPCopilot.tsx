@@ -164,7 +164,7 @@ export default function DPCopilot() {
           },
           history: messages.slice(-6).map(m => ({ role: m.role, content: m.content }))
         }
-      });
+      };
 
       if (response.error) throw response.error;
 

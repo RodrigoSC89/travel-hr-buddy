@@ -67,7 +67,7 @@ export default function ForecastHistoryPage() {
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",
         variant: "destructive",
-      });
+      };
     } finally {
       setGeneratingOrderId(null);
     }

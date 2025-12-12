@@ -173,7 +173,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to create task",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -199,7 +199,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to update task",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -302,7 +302,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     
     doc.save("project_timeline.pdf");
     toast({ title: "Success", description: "Timeline exported to PDF" });
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

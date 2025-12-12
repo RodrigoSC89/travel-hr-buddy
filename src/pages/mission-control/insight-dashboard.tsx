@@ -87,7 +87,7 @@ export default function InsightDashboard() {
         title: "Erro",
         description: "Falha ao gerar relatório com IA",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsGenerating(false);
     }
@@ -132,8 +132,8 @@ ${logs.slice(0, 10).map(log =>
     toast({
       title: "Relatório Baixado",
       description: "Arquivo salvo com sucesso",
-    });
-  });
+    };
+  };
 
   const sendReportByEmail = async () => {
     toast({

@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         logger.error("Error fetching cron status:", error);
         setCronStatus("warning");
         setCronMessage("Erro ao carregar status do cron");
-  });
+  };
   }, []);
 
   // Fetch restore activity trend data
@@ -282,14 +282,14 @@ export default function AdminDashboard() {
       toast({
         title: "PDF exportado com sucesso",
         description: "O relatório foi baixado para o seu dispositivo",
-      });
+      };
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Ocorreu um erro ao gerar o relatório",
         variant: "destructive",
-      });
+      };
     } finally {
       setExportingPDF(false);
     }

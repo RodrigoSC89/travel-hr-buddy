@@ -67,7 +67,7 @@ export default function EditTemplatePage() {
         title: "Erro ao carregar template",
         description: "Não foi possível carregar o template.",
         variant: "destructive",
-      });
+      };
       navigate("/admin/templates");
     } finally {
       setLoading(false);
@@ -99,14 +99,14 @@ export default function EditTemplatePage() {
       toast({
         title: "Conteúdo gerado com sucesso",
         description: "O template foi gerado com IA.",
-      });
+      };
     } catch (err) {
       logger.error("Error generating content:", err);
       toast({
         title: "Erro ao gerar conteúdo",
         description: "Não foi possível gerar o conteúdo com IA.",
         variant: "destructive",
-      });
+      };
     } finally {
       setGenerating(false);
     }
@@ -135,14 +135,14 @@ export default function EditTemplatePage() {
       toast({
         title: "Conteúdo reformulado com sucesso",
         description: "O template foi reformulado com IA.",
-      });
+      };
     } catch (err) {
       logger.error("Error rewriting content:", err);
       toast({
         title: "Erro ao reformular conteúdo",
         description: "Não foi possível reformular o conteúdo.",
         variant: "destructive",
-      });
+      };
     } finally {
       setRewriting(false);
     }
@@ -173,14 +173,14 @@ export default function EditTemplatePage() {
       toast({
         title: "Título sugerido",
         description: "Um título foi sugerido com base no conteúdo.",
-      });
+      };
     } catch (err) {
       logger.error("Error suggesting title:", err);
       toast({
         title: "Erro ao sugerir título",
         description: "Não foi possível sugerir um título.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -210,7 +210,7 @@ export default function EditTemplatePage() {
       toast({
         title: "Template atualizado",
         description: "O template foi atualizado com sucesso.",
-      });
+      };
       
       navigate("/admin/templates");
     } catch (err) {
@@ -219,7 +219,7 @@ export default function EditTemplatePage() {
         title: "Erro ao atualizar template",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }

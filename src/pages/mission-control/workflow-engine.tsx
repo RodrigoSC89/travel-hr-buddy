@@ -90,12 +90,12 @@ const WorkflowEngine = () => {
         title: "Erro",
         description: "Não foi possível criar workflow",
         variant: "destructive",
-      });
+      };
     } else {
       toast({
         title: "Workflow criado",
         description: "Workflow salvo com sucesso",
-      });
+      };
       setIsCreating(false);
       setNewWorkflow({ name: "", description: "", steps: [] });
       loadWorkflows();

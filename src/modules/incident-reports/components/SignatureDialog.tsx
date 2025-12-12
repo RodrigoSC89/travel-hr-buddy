@@ -82,7 +82,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
     toast({
       title: "Assinatura registrada",
       description: "A assinatura foi salva com sucesso",
-    });
+    };
   };
 
   return (

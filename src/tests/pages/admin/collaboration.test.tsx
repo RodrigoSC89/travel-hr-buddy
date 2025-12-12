@@ -120,7 +120,7 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Voltar/i)).toBeInTheDocument();
-  });
+  };
 
   it("shows empty state when no comments", async () => {
     render(

@@ -127,7 +127,7 @@ export default function DocumentHistoryPage() {
         title: "Erro ao restaurar versão",
         description: "Não foi possível restaurar esta versão do documento.",
         variant: "destructive",
-      });
+      };
     } finally {
       setRestoring(null);
     }

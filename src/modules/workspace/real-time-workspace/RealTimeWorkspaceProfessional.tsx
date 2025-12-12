@@ -173,7 +173,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Erro ao atualizar",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }
@@ -249,7 +249,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Erro",
         description: "Falha ao obter resposta da IA. Usando modo offline.",
         variant: "destructive",
-      });
+      };
       
       // Fallback message
       const fallbackMessage: ChatMessage = {
@@ -297,7 +297,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Canal criado",
         description: `#${newChannelName} está pronto para uso`,
-      });
+      };
       
       setShowNewChannelDialog(false);
       setNewChannelName("");
@@ -306,7 +306,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Erro ao criar canal",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsCreatingChannel(false);
     }
@@ -747,6 +747,6 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       </Dialog>
     </ModulePageWrapper>
   );
-});
+};
 
 export default RealTimeWorkspaceProfessional;

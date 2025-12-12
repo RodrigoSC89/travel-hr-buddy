@@ -129,7 +129,7 @@ export default function VaultAIComplete() {
       toast({
         title: "Busca Concluída",
         description: `${results.length} resultados encontrados em ${searchDuration}ms`
-      });
+      };
 
       loadSearchLogs();
     } catch (error) {
@@ -138,7 +138,7 @@ export default function VaultAIComplete() {
         title: "Erro",
         description: "Falha ao realizar busca",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

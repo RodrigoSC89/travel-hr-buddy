@@ -525,7 +525,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         toast({
           title: "Insights Gerados com Sucesso",
           description: `${newInsights.length} insights de IA foram gerados`
-        });
+        };
       } else {
         throw new Error(response.error?.message || "Failed to generate insights");
       }
@@ -570,7 +570,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Insights Gerados",
         description: "Insights de demonstração foram gerados"
-      });
+      };
     } finally {
       setIsGeneratingInsights(false);
       setTimeout(() => setReportProgress(0), 1000);
@@ -605,7 +605,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     toast({
       title: "Exportação CSV Concluída",
       description: "Arquivo CSV baixado com sucesso"
-    });
+    };
   };
 
   // Export to PDF using jsPDF
@@ -741,14 +741,14 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "PDF Gerado com Sucesso",
         description: "Relatório PDF baixado"
-      });
+      };
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Não foi possível gerar o relatório. Tente novamente.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsExportingPDF(false);
     }
@@ -786,7 +786,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         toast({
           title: "Relatório Gerado com Sucesso",
           description: "O relatório de IA está pronto para visualização"
-        });
+        };
       } else {
         throw new Error("Failed to generate report");
       }
@@ -824,7 +824,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       toast({
         title: "Relatório Gerado",
         description: "Relatório de demonstração foi gerado"
-      });
+      };
     } finally {
       setIsGeneratingReport(false);
       setTimeout(() => setReportProgress(0), 1000);

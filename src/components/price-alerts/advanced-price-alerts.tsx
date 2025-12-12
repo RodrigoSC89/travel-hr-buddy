@@ -154,7 +154,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os alertas",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -283,14 +283,14 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: "Alerta criado!",
         description: `Alerta para ${newAlert.product_name} foi configurado com sucesso.`,
-      });
+      };
 
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsCreating(false);
     }
@@ -321,7 +321,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
         variant: "destructive"
-      });
+      };
     }
   };
 

@@ -219,7 +219,7 @@ export const ChatInterface = memo(() => {
         title: "Erro",
         description: "Não foi possível carregar as conversas",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -460,13 +460,13 @@ export const ChatInterface = memo(() => {
       toast({
         title: "Sucesso",
         description: "Nova conversa criada",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a conversa",
         variant: "destructive",
-      });
+      };
     }
   };
 

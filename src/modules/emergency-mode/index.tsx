@@ -368,7 +368,7 @@ const EmergencyMode = () => {
           question: aiInput,
           elapsedTime,
         }
-      });
+      };
 
       const aiResponse: AIMessage = {
         role: "assistant",

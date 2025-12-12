@@ -79,13 +79,13 @@ export const IMCAAuditGenerator = memo(function() {
       toast({
         title: "Audit Generated",
         description: "IMCA audit report generated successfully",
-      });
+      };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate audit report",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

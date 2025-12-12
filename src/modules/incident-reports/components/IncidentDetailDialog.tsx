@@ -135,7 +135,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Assinatura registrada",
         description: "Assinatura salva localmente"
-      });
+      };
     }
   };
 
@@ -165,7 +165,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Ação adicionada",
         description: "Ação corretiva registrada"
-      });
+      };
     } catch (error) {
       console.error("Error adding action:", error);
       // Continue without database if it fails
@@ -175,7 +175,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Ação registrada",
         description: "Ação salva localmente"
-      });
+      };
     }
   };
 
@@ -203,7 +203,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Status atualizado",
         description: "Alteração registrada localmente"
-      });
+      };
     }
   };
 
@@ -322,14 +322,14 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "PDF gerado",
         description: "Download iniciado"
-      });
+      };
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 

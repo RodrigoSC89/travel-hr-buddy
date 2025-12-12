@@ -84,7 +84,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         title: "Error",
         description: "Failed to add finding",
         variant: "destructive",
-      });
+      };
     }
   };
 

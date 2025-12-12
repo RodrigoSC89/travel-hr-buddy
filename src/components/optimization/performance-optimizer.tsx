@@ -121,8 +121,8 @@ const PerformanceOptimizer = () => {
     toast({
       title: "Otimização concluída",
       description: `${optimization.title} aplicada com sucesso`,
-    });
-  });
+    };
+  };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {

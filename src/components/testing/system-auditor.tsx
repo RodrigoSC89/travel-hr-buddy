@@ -200,7 +200,7 @@ const SystemAuditor: React.FC = () => {
           status: "success",
           description: "Sessão de usuário válida",
           severity: "low"
-        });
+        };
       } else {
         results.push({
           module: "Sistema de Autenticação",
@@ -208,7 +208,7 @@ const SystemAuditor: React.FC = () => {
           description: "Usuário não autenticado",
           severity: "medium",
           actionRequired: "Testar com usuário logado"
-        });
+        };
       }
     } catch (error) {
       results.push({
@@ -268,7 +268,7 @@ const SystemAuditor: React.FC = () => {
         severity: "critical",
         details: String(error),
         actionRequired: "Verificar configuração de conexão"
-      });
+      };
     }
 
     return results;

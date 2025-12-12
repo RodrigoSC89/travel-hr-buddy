@@ -35,7 +35,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         toast({
           title: "ℹ️ Nenhum resultado",
           description: "Não foram encontrados casos similares para esta descrição.",
-        });
+        };
       }
     } catch (err) {
       console.error("Erro ao buscar exemplos:", err);
@@ -43,7 +43,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         title: "❌ Erro ao buscar",
         description: "Ocorreu um erro ao buscar exemplos. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

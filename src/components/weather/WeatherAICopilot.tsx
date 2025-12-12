@@ -225,7 +225,7 @@ Dados meteorológicos atuais:
             })),
           context,
         },
-      });
+      };
 
       let responseContent: string;
 

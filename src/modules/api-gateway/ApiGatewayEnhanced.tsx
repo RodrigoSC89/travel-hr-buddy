@@ -211,7 +211,7 @@ const ApiGatewayEnhanced = () => {
         title: "Error creating API key",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -240,14 +240,14 @@ const ApiGatewayEnhanced = () => {
         description: "",
         requires_auth: true,
         is_public: false
-      });
+      };
       loadRoutes();
     } catch (error: unknown) {
       toast({
         title: "Error creating route",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -322,13 +322,13 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "✅ Documentation Generated",
         description: "API documentation has been exported",
-      });
+      };
     } catch (error: unknown) {
       toast({
         title: "Error generating documentation",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      });
+      };
     }
   };
 

@@ -69,13 +69,13 @@ export const PEODPAuditComponent = memo(function() {
       toast({
         title: "Auditoria Concluída",
         description: `Score: ${resultado.score}% - ${getScoreLevel(resultado.score)}`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao executar auditoria PEO-DP",
         variant: "destructive",
-      });
+      };
       console.error("Erro na auditoria:", error);
     } finally {
       setLoading(false);

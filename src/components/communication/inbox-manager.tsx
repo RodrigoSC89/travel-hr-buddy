@@ -178,7 +178,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         title: "Erro",
         description: "Erro ao carregar mensagens",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -250,7 +250,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         title: "Erro",
         description: "Não foi possível marcar a mensagem como lida",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -527,7 +527,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Responder Mensagem",
                                     description: `Abrindo resposta para ${message.sender_name}`,
-                                  });
+                                  };
                                 }}
                               >
                                 <Reply className="h-4 w-4 mr-2" />
@@ -540,7 +540,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Encaminhar Mensagem",
                                     description: "Conteúdo copiado. Selecione o destinatário para encaminhar.",
-                                  });
+                                  };
                                 }}
                               >
                                 <Forward className="h-4 w-4 mr-2" />
@@ -563,7 +563,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Download Concluído",
                                     description: "Mensagem baixada com sucesso",
-                                  });
+                                  };
                                 }}
                               >
                                 <Download className="h-4 w-4 mr-2" />
@@ -577,7 +577,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Mensagem Excluída",
                                     description: "A mensagem foi removida com sucesso",
-                                  });
+                                  };
                                 }}
                                 className="text-destructive focus:text-destructive"
                               >

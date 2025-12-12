@@ -138,7 +138,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
     try {
       const { data, error } = await supabase.functions.invoke("sgso-assistant", {
         body: { question: messageText, type: messageType }
-      });
+      };
 
       if (error) throw error;
 
@@ -158,7 +158,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
         title: "Erro na consulta",
         description: "Não foi possível processar sua solicitação. Tente novamente.",
         variant: "destructive"
-      });
+      };
       
       // Remove user message on error
       setMessages(prev => prev.filter(m => m.id !== userMessage.id));

@@ -80,7 +80,7 @@ const AICopilot: React.FC = () => {
           type: "nlp",
           context: "Processamento de Linguagem Natural para operações marítimas",
         },
-      });
+      };
 
       if (error) {
         throw error;
@@ -92,13 +92,13 @@ const AICopilot: React.FC = () => {
             title: "Limite de requisições",
             description: "Aguarde um momento e tente novamente.",
             variant: "destructive",
-          });
+          };
         } else if (data.error.includes("Payment")) {
           toast({
             title: "Créditos insuficientes",
             description: "Adicione créditos ao workspace para continuar.",
             variant: "destructive",
-          });
+          };
         }
         throw new Error(data.error);
       }
@@ -117,7 +117,7 @@ const AICopilot: React.FC = () => {
         title: "Erro ao processar",
         description: "Não foi possível obter resposta da IA. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

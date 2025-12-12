@@ -59,7 +59,7 @@ export const Patch605Validation = memo(function() {
         event,
         weightAdjustment: event.adjustedWeight - event.initialWeight,
         feedbackType: event.feedback
-      });
+      };
     }
     
     setIsLearning(false);
@@ -68,7 +68,7 @@ export const Patch605Validation = memo(function() {
     toast({
       title: "Learning Loop Complete",
       description: `Processed ${iterations} iterations with weight adjustments`,
-    });
+    };
   };
 
   const getRandomDecision = () => {

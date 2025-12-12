@@ -88,7 +88,7 @@ export const FleetCommandCenter: React.FC = () => {
       return data as VesselWithMission[];
     },
     refetchInterval: autoRefresh ? 30000 : false, // Refresh every 30 seconds if enabled
-  });
+  };
 
   // Fetch active missions
   const { data: missions, isLoading: missionsLoading } = useQuery({
@@ -97,7 +97,7 @@ export const FleetCommandCenter: React.FC = () => {
       return await MissionEngine.getMissions({ status: "active" });
     },
     refetchInterval: autoRefresh ? 30000 : false,
-  });
+  };
 
   // Fetch logs for selected vessel
   const { data: vesselLogs } = useQuery({
@@ -120,7 +120,7 @@ export const FleetCommandCenter: React.FC = () => {
       return data;
     },
     enabled: !!selectedVessel,
-  });
+  };
 
   // Filter vessels by search query
   const filteredVessels = vessels?.filter(vessel => 

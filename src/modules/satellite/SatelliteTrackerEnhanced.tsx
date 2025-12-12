@@ -114,7 +114,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
         title: "Error loading satellites",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -219,7 +219,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
           azimuth: update.azimuth,
           elevation: update.elevation,
           range_km: update.range_km,
-        });
+        };
       }
 
       // Check for coverage events

@@ -207,7 +207,7 @@ const MaintenanceManagement: React.FC = () => {
     toast({
       title: "Manutenção Agendada",
       description: `${newRecord.title} foi agendada com sucesso`,
-    });
+    };
   };
 
   const getStatusColor = (status: string) => {

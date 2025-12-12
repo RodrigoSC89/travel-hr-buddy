@@ -123,7 +123,7 @@ const MarineAROverlay = () => {
         title: "Erro na Câmera",
         description: "Não foi possível acessar a câmera. Usando demo.",
         variant: "destructive",
-      });
+      };
       // Use demo mode
       setIsStreamActive(true);
       drawOverlay();

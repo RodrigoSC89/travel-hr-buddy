@@ -183,15 +183,15 @@ export const Patch613Validation = memo(function() {
       logger.error("PATCH 613: Validation error", error as Error, {
         testResults,
         errorType: "decision_simulator_validation"
-      });
+      };
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+  };
     }
 
     setResults(testResults);
     setLoading(false);
-  });
+  };
 
   const allPassed = Object.values(results).every(v => v === true);
   const hasResults = Object.keys(results).length > 0;

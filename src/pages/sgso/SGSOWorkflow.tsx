@@ -77,7 +77,7 @@ export default function SGSOWorkflow() {
         title: "Error loading stats",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

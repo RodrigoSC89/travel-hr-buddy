@@ -102,7 +102,7 @@ export const ReservationsDashboard: React.FC = () => {
         toast({
           title: "Sucesso",
           description: "Reserva atualizada com sucesso!"
-        });
+        };
       } else {
         const { error } = await supabase
           .from("reservations")
@@ -112,7 +112,7 @@ export const ReservationsDashboard: React.FC = () => {
         toast({
           title: "Sucesso",
           description: "Reserva criada com sucesso!"
-        });
+        };
       }
 
       setIsDialogOpen(false);
@@ -123,7 +123,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao salvar reserva",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -148,7 +148,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao excluir reserva",
         variant: "destructive"
-      });
+      };
     }
   };
 

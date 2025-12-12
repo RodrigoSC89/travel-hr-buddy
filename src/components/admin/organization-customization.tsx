@@ -195,13 +195,13 @@ export const OrganizationCustomization: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Personalização salva com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar personalização",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

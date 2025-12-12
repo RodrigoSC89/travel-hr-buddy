@@ -141,7 +141,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         title: "Erro",
         description: "Falha ao carregar notificações",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -178,7 +178,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         toast({
           title: "Notificação Gerada",
           description: data.notification.title,
-        });
+        };
         loadNotifications();
       }
     } catch (error) {
@@ -186,7 +186,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         title: "Erro",
         description: "Falha ao gerar notificação",
         variant: "destructive",
-      });
+      };
     }
   };
 

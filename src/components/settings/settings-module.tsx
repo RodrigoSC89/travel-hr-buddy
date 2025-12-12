@@ -78,7 +78,7 @@ export const SettingsModule: React.FC = () => {
     toast({
       title: "Configurações restauradas",
       description: "As configurações padrão foram restauradas.",
-    });
+    };
   };
 
   return (

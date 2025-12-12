@@ -284,7 +284,7 @@ export const TemplatesDynamic = memo(() => {
       toast({
         title: "Template saved",
         description: `Template saved as version ${nextVersion}`,
-      });
+      };
 
       setSelectedTemplate(data);
       setChangeDescription("");
@@ -295,7 +295,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Error saving template",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -336,7 +336,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Error restoring version",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -368,20 +368,20 @@ export const TemplatesDynamic = memo(() => {
         output_format: "pdf",
         generation_duration_ms: Date.now() - startTime,
         status: "completed",
-      });
+      };
 
       await loadGenerationHistory();
 
       toast({
         title: "PDF exported",
         description: "Document has been exported successfully",
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Export failed",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -411,20 +411,20 @@ export const TemplatesDynamic = memo(() => {
         output_format: "docx",
         generation_duration_ms: Date.now() - startTime,
         status: "completed",
-      });
+      };
 
       await loadGenerationHistory();
 
       toast({
         title: "Document exported",
         description: "Document has been exported as HTML",
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Export failed",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     };

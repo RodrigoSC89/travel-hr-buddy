@@ -93,7 +93,7 @@ const OperationsDashboard = () => {
         title: "Erro",
         description: "Falha ao carregar dados operacionais",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

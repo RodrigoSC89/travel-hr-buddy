@@ -151,7 +151,7 @@ export const SecurityDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao executar scan de segurança",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsScanning(false);
     }

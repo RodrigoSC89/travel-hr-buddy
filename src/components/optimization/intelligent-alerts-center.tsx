@@ -222,7 +222,7 @@ export const IntelligentAlertsCenter = memo(() => {
       title: "Novo Alerta Inteligente",
       description: newAlert.message,
       duration: 4000
-    });
+    };
   };
 
   const markAsRead = (alertId: string) => {

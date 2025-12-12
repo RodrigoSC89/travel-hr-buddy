@@ -113,8 +113,8 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
-  });
-  });
+  };
+  };
 
   it("should display templates in the list", async () => {
     const onApply = vi.fn();
@@ -127,8 +127,8 @@ describe("ApplyTemplateModal Component", () => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
       expect(screen.getByText("Template 2")).toBeInTheDocument();
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should filter templates based on search input", async () => {
     const onApply = vi.fn();
@@ -272,9 +272,9 @@ describe("ApplyTemplateModal Component", () => {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
-      });
-  });
-  });
+      };
+  };
+  };
 
   it("should close modal after applying template", async () => {
     const onApply = vi.fn();

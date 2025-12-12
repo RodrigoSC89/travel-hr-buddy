@@ -109,7 +109,7 @@ export const OfflineSyncManager: React.FC = () => {
       toast({
         title: "Sincronização Completa",
         description: `${pendingItems.length} item(s) sincronizado(s) com sucesso`,
-      });
+      };
 
       // Recarregar itens
       await loadPendingItems();
@@ -119,7 +119,7 @@ export const OfflineSyncManager: React.FC = () => {
         title: "Erro na Sincronização",
         description: "Alguns itens podem não ter sido sincronizados",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsSync(false);
       setSyncProgress(0);
@@ -171,7 +171,7 @@ export const OfflineSyncManager: React.FC = () => {
     toast({
       title: "Ação Offline Criada",
       description: `Ação "${randomAction.action}" será sincronizada quando online`,
-    });
+    };
 
     await loadPendingItems();
   };

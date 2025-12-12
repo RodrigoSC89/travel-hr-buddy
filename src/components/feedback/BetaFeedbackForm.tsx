@@ -82,12 +82,12 @@ export const BetaFeedbackForm = memo(function() {
         const feedbacks = JSON.parse(existing);
         feedbacks.push(feedbackData);
         localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
-  });
+  };
 
       toast({
         title: "Feedback Enviado!",
         description: "Obrigado por sua contribuição ao Travel HR Buddy Beta.",
-      });
+      };
 
       // Reset form
       setFormData({
@@ -100,14 +100,14 @@ export const BetaFeedbackForm = memo(function() {
         comments: "",
         suggestions: "",
         bugs: "",
-      });
+      };
     } catch (error) {
       logger.error("[BetaFeedbackForm] Error submitting feedback:", error as Error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar o feedback. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSubmitting(false);
     }

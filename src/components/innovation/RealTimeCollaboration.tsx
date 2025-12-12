@@ -203,7 +203,7 @@ export const RealTimeCollaboration = memo(() => {
           title: "Erro",
           description: "Não foi possível enviar a mensagem.",
           variant: "destructive"
-        });
+        };
       }
     }
   };

@@ -105,7 +105,7 @@ export const ConsolidatedCrewManagement = memo(() => {
         title: "Error",
         description: "Failed to load crew data",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

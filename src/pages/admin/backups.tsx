@@ -119,7 +119,7 @@ export default function BackupsPage() {
       toast({
         title: "Success",
         description: "Backup completed successfully",
-      });
+      };
 
       loadBackups();
       loadStats();
@@ -128,7 +128,7 @@ export default function BackupsPage() {
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to trigger backup",
         variant: "destructive",
-      });
+      };
     } finally {
       setTriggering(false);
     }
@@ -159,13 +159,13 @@ export default function BackupsPage() {
       toast({
         title: "Success",
         description: "Backup downloaded successfully",
-      });
+      };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to download backup",
         variant: "destructive",
-      });
+      };
     }
   };
 

@@ -231,7 +231,7 @@ const IntelligentAlerts: React.FC = () => {
         title: "⚠️ Novo Alerta Crítico",
         description: `${newAlert.title} - ${newAlert.vessel_name}`,
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -240,7 +240,7 @@ const IntelligentAlerts: React.FC = () => {
     id: "intelligent-alerts-generation",
     callback: generateNewAlert,
     interval: 45000,
-  });
+  };
 
   const acknowledgeAlert = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 

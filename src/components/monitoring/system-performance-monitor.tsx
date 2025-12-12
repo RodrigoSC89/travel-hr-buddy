@@ -189,7 +189,7 @@ const SystemPerformanceMonitor = () => {
         title: "Erro na Exportação",
         description: "Falha ao exportar relatório de performance.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }
@@ -623,7 +623,7 @@ const SystemPerformanceMonitor = () => {
               toast({
                 title: "Configurações salvas",
                 description: "As configurações de alertas foram atualizadas com sucesso.",
-              });
+              };
               setAlertConfigOpen(false);
             }}>
               <Save className="w-4 h-4 mr-2" />
@@ -634,6 +634,6 @@ const SystemPerformanceMonitor = () => {
       </Dialog>
     </div>
   );
-});
+};
 
 export default SystemPerformanceMonitor;

@@ -103,9 +103,9 @@ export const FunctionalReportsDashboard: React.FC = () => {
       toast({
         title: "Relatório Concluído",
         description: "Seu relatório foi gerado com sucesso!",
-      });
+      };
     }, 3000);
-  });
+  };
 
   const downloadReport = (reportId: string) => {
     toast({

@@ -146,7 +146,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Data de fim deve ser posterior à data de início",
         variant: "destructive"
-      });
+      };
       return false;
     }
 
@@ -191,7 +191,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         toast({
           title: "Sucesso",
           description: "Reserva atualizada com sucesso!"
-        });
+        };
       } else {
         const { error } = await supabase
           .from("reservations")
@@ -205,7 +205,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         toast({
           title: "Sucesso",
           description: "Reserva criada com sucesso!"
-        });
+        };
       }
 
       onSaved();
@@ -214,7 +214,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro",
         description: "Erro ao salvar reserva. Tente novamente.",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

@@ -219,7 +219,7 @@ const StrategicDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
       loadingRef.current = false;
@@ -261,7 +261,7 @@ const StrategicDashboard: React.FC = () => {
         title: "Erro na Exportação",
         description: "Falha ao exportar dados do dashboard",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsExporting(false);
     }

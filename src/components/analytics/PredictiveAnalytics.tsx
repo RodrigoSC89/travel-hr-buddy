@@ -125,7 +125,7 @@ const PredictiveAnalytics: React.FC = () => {
         title: "Usando dados simulados",
         description: "Conecte-se à API para obter previsões reais",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsGenerating(false);
     }

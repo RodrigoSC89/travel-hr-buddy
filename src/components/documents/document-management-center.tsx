@@ -170,7 +170,7 @@ export const DocumentManagementCenter = memo(() => {
         title: "Erro",
         description: "Erro ao carregar documentos",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

@@ -70,7 +70,7 @@ describe("DocumentViewPage Component", () => {
         }),
       }),
     } as unknown);
-  });
+  };
 
   it("should display document not found message", async () => {
     render(

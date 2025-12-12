@@ -166,7 +166,7 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
-    });
+    };
   };
 
   const handleRemoveEmployee = (id: string) => {

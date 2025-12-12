@@ -64,7 +64,7 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "Template aplicado",
         description: "O template foi carregado no editor.",
-      });
+      };
     }
   }, [editor]);
 
@@ -98,7 +98,7 @@ export default function DocumentAIEditorPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado para salvar documentos.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -119,14 +119,14 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "Documento salvo com sucesso",
         description: "O documento foi salvo no Supabase.",
-      });
+      };
     } catch (err) {
       logger.error("Error saving document:", err);
       toast({
         title: "Erro ao salvar documento",
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -188,14 +188,14 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "PDF exportado com sucesso",
         description: "O documento foi exportado como PDF.",
-      });
+      };
     } catch (err) {
       logger.error("Error exporting PDF:", err);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o documento.",
         variant: "destructive",
-      });
+      };
     } finally {
       setExporting(false);
     }
@@ -232,14 +232,14 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "Texto reformulado com sucesso",
         description: "O trecho selecionado foi reformulado com IA.",
-      });
+      };
     } catch (err) {
       logger.error("Error rewriting text:", err);
       toast({
         title: "Erro ao reformular texto",
         description: "Não foi possível reformular o texto selecionado.",
         variant: "destructive",
-      });
+      };
     } finally {
       setRewriting(false);
     }

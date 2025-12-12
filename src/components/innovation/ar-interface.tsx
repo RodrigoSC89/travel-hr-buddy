@@ -174,13 +174,13 @@ export const ARInterface: React.FC = () => {
       toast({
         title: "AR Ativado",
         description: "Aponte a câmera para objetos com QR codes",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível acessar a câmera",
         variant: "destructive"
-      });
+      };
     }
   };
 

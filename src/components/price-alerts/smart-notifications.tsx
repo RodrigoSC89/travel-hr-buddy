@@ -202,7 +202,7 @@ export const SmartNotifications: React.FC = () => {
         title: "Erro",
         description: "Não foi possível enviar a notificação de teste",
         variant: "destructive"
-      });
+      };
     }
   };
 

@@ -372,7 +372,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     toast({
       title: "Upload concluído",
       description: `${uploadedFiles.length} arquivo(s) enviado(s) com sucesso.`,
-    });
+    };
   };
 
   const handleNewDocument = () => {
@@ -423,7 +423,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     toast({
       title: "Documento criado",
       description: "O novo documento foi criado com sucesso.",
-    });
+    };
   };
 
   const handleDownload = (doc: Document) => {
@@ -462,7 +462,7 @@ Este é um documento de demonstração do Centro de Documentos.
     toast({
       title: "Download iniciado",
       description: `Baixando "${doc.title}"...`,
-    });
+    };
   };
 
   const handleView = (document: Document) => {
@@ -558,7 +558,7 @@ Este é um documento de demonstração do Centro de Documentos.
     toast({
       title: "Documento criado",
       description: `Documento criado a partir do template "${selectedTemplate.name}".`,
-    });
+    };
   };
 
   if (isLoading) {

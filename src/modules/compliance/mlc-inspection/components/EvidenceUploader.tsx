@@ -52,7 +52,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
         title: "Error",
         description: "Failed to upload file",
         variant: "destructive",
-      });
+      };
     } finally {
       setUploading(false);
     }

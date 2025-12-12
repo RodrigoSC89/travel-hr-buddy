@@ -132,7 +132,7 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Item adicionado",
       description: "Novo item de checklist adicionado com sucesso."
-    });
+    };
   };
 
   const handleUpdateItem = () => {

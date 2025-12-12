@@ -86,7 +86,7 @@ export default function Dashboard() {
         totalCrew: crewResult.count || 0,
         pendingMaintenance: maintenanceResult.count || 0,
         efficiency: 94.8,
-      });
+      };
     } catch (error) {
       console.error("Error loading dashboard data:", error);
     } finally {

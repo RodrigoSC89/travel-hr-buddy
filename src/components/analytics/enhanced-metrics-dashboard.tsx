@@ -140,7 +140,7 @@ const EnhancedMetricsDashboard = () => {
       title: "Métricas atualizadas",
       description: "Dados atualizados com sucesso",
     };
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     return trend === "up" ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />;

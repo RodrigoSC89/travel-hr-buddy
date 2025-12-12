@@ -73,13 +73,13 @@ export const MyCertificates: React.FC = () => {
       toast({
         title: "Certificate downloaded",
         description: "Your certificate has been downloaded.",
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error downloading certificate",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 

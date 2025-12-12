@@ -217,7 +217,7 @@ export const PerformanceMonitor: React.FC = () => {
     toast({
       title: "CSV exported",
       description: "Performance metrics have been downloaded",
-    });
+    };
   };
 
   const exportToPDF = () => {
@@ -284,7 +284,7 @@ export const PerformanceMonitor: React.FC = () => {
     toast({
       title: "PDF exported",
       description: "Performance report has been downloaded",
-    });
+    };
   };
 
   const getChartData = () => {

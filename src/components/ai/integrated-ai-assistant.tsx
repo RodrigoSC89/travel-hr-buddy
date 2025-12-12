@@ -192,7 +192,7 @@ const IntegratedAIAssistant = () => {
         title: "Erro",
         description: "Falha ao processar mensagem. Tente novamente.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

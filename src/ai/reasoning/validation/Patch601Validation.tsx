@@ -72,7 +72,7 @@ export const Patch601Validation = memo(function() {
       toast({
         title: "Strategic Reasoning Complete",
         description: `Processed ${steps.length} reasoning steps with coherent justifications`,
-      });
+      };
       
     }, 1500);
   };

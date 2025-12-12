@@ -170,7 +170,7 @@ export default function SGSOAuditEditor() {
         title: "Erro ao salvar",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive"
-      });
+      };
     } finally {
       setSaving(false);
     }

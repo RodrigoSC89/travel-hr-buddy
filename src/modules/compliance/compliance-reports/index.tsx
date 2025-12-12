@@ -183,7 +183,7 @@ const ComplianceReports = () => {
       toast({
         title: "PDF gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating PDF:", error);
       console.error("Error generating PDF:", error);
@@ -191,7 +191,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -261,7 +261,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar Excel",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -293,7 +293,7 @@ const ComplianceReports = () => {
       toast({
         title: "JSON gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating JSON:", error);
       console.error("Error generating JSON:", error);
@@ -301,7 +301,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar JSON",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -333,7 +333,7 @@ const ComplianceReports = () => {
     toast({
       title: "Relatório configurado",
       description: report.scheduled ? "Será gerado automaticamente" : "Iniciando geração"
-    });
+    };
 
     // If manual, generate immediately
     if (reportConfig.schedule === "manual") {

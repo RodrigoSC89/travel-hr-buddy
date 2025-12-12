@@ -232,7 +232,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               toast({
                 title: "Localização ativada",
                 description: "O app pode acessar sua localização"
-              });
+              };
             },
             () => {
               saveMobileSettings({ location: false });
@@ -240,7 +240,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 title: "Localização negada",
                 description: "Ative nas configurações do navegador",
                 variant: "destructive"
-              });
+              };
             }
           );
         }
@@ -255,14 +255,14 @@ export const EnhancedMobileSupport: React.FC = () => {
             toast({
               title: "Câmera ativada",
               description: "O app pode acessar a câmera"
-            });
+            };
           } catch (error) {
             saveMobileSettings({ camera: false });
             toast({
               title: "Câmera negada",
               description: "Ative nas configurações do navegador",
               variant: "destructive"
-            });
+            };
           }
         }
         break;
@@ -276,14 +276,14 @@ export const EnhancedMobileSupport: React.FC = () => {
             toast({
               title: "Microfone ativado",
               description: "O app pode acessar o microfone"
-            });
+            };
           } catch (error) {
             saveMobileSettings({ microphone: false });
             toast({
               title: "Microfone negado",
               description: "Ative nas configurações do navegador",
               variant: "destructive"
-            });
+            };
           }
         }
         break;
@@ -295,7 +295,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           toast({
             title: "Vibração ativada",
             description: "O app pode usar vibração"
-          });
+          };
         }
         break;
       }
@@ -304,7 +304,7 @@ export const EnhancedMobileSupport: React.FC = () => {
         title: "Erro",
         description: `Não foi possível ativar ${permission}`,
         variant: "destructive"
-      });
+      };
     }
   };
 

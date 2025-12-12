@@ -99,7 +99,7 @@ const GenerativeAIPage: React.FC = () => {
             { role: "user", content: prompt }
           ]
         }
-      });
+      };
 
       if (response.error) {
         throw new Error(response.error.message);
@@ -109,7 +109,7 @@ const GenerativeAIPage: React.FC = () => {
       toast({
         title: "Conteúdo Gerado",
         description: "O documento foi gerado com sucesso!",
-      });
+      };
     } catch (error) {
       console.error("Error generating content:", error);
       // Fallback com conteúdo simulado
@@ -144,7 +144,7 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
       toast({
         title: "Conteúdo Gerado (Demo)",
         description: "Conteúdo de demonstração gerado.",
-      });
+      };
     } finally {
       setIsGenerating(false);
     }

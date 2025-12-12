@@ -230,7 +230,7 @@ export const WebhookBuilder: React.FC = () => {
           maxRetries: 3,
           backoffStrategy: "exponential"
         }
-      });
+      };
     }, 1500);
   };
 

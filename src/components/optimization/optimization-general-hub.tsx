@@ -202,7 +202,7 @@ export const OptimizationGeneralHub = memo(() => {
       title: "Otimização Concluída",
       description: "Sistema otimizado com sucesso! Performance melhorada em 12%",
       duration: 4000
-    });
+    };
   };
 
   const applyOptimization = async (optimizationId: string) => {
@@ -234,9 +234,9 @@ export const OptimizationGeneralHub = memo(() => {
         title: "Otimização Aplicada",
         description: `${optimization.title} foi implementada com sucesso!`,
         duration: 3000
-      });
+      };
     }, 3000);
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

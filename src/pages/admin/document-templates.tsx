@@ -182,7 +182,7 @@ export default function DocumentTemplates() {
           title: "Error",
           description: "Failed to create template",
           variant: "destructive",
-        });
+        };
       }
     } else {
       // Update existing template (create new version)
@@ -192,14 +192,14 @@ export default function DocumentTemplates() {
           p_content: templateContent,
           p_variables: extractVariables(templateContent),
           p_change_summary: "Manual update"
-        });
+        };
 
         if (error) throw error;
 
         toast({
           title: "Template Updated",
           description: "New version created successfully",
-        });
+        };
 
         fetchTemplates();
         fetchTemplateVersions(selectedTemplate.id);
@@ -209,7 +209,7 @@ export default function DocumentTemplates() {
           title: "Error",
           description: "Failed to update template",
           variant: "destructive",
-        });
+        };
       }
     }
   };
@@ -239,7 +239,7 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to generate document",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -267,7 +267,7 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to rollback version",
         variant: "destructive",
-      });
+      };
     }
   };
 

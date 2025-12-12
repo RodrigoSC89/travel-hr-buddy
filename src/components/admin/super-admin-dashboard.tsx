@@ -146,7 +146,7 @@ export const SuperAdminDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Organização criada com sucesso",
-      });
+      };
 
       setShowCreateModal(false);
       setNewOrgForm({
@@ -157,7 +157,7 @@ export const SuperAdminDashboard: React.FC = () => {
         max_vessels: 2,
         max_storage_gb: 1,
         billing_email: ""
-      });
+      };
       
       loadOrganizations();
     } catch (error) {
@@ -165,7 +165,7 @@ export const SuperAdminDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao criar organização",
         variant: "destructive",
-      });
+      };
     }
   };
 

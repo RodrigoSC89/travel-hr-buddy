@@ -189,7 +189,7 @@ export const IntelligentHelpCenter: React.FC = () => {
           context: "help_search",
           modules: modules.map(m => m.id)
         }
-      });
+      };
 
       // Cast results to proper types - in production this would be properly mapped
       setSearchResults((searchResults || []) as unknown as (Tutorial | FAQ)[]);
@@ -197,14 +197,14 @@ export const IntelligentHelpCenter: React.FC = () => {
       toast({
         title: "Busca realizada",
         description: `Encontrados ${searchResults?.length || 0} resultados para "${query}"`,
-      });
+      };
 
     } catch (error) {
       toast({
         title: "Erro na busca",
         description: "Não foi possível realizar a busca",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

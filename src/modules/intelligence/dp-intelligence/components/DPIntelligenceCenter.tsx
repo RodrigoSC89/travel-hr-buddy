@@ -183,7 +183,7 @@ export default function DPIntelligenceCenter() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ incident_id: incident.id })
-      });
+      };
 
       if (response.ok) {
         const data = await response.json();

@@ -56,7 +56,7 @@ describe("RestoreDashboard - New Features", () => {
         return Promise.resolve({ data: mockDepartmentData, error: null }) as unknown;
       }
       return Promise.resolve({ data: null, error: null }) as unknown;
-    });
+    };
 
     render(
       <MemoryRouter>
@@ -67,13 +67,13 @@ describe("RestoreDashboard - New Features", () => {
     // Wait for data to load
     await waitFor(() => {
       expect(supabase.rpc).toHaveBeenCalledWith("get_monthly_restore_summary_by_department");
-  });
+  };
 
     // Check if department comparison section is rendered
     await waitFor(() => {
       expect(screen.getByText(/Comparativo Mensal por Departamento/i)).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should display QR code for public access in non-public mode", async () => {
     // Mock RPC responses with minimal data
@@ -87,7 +87,7 @@ describe("RestoreDashboard - New Features", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Link Público com QR Code/i)).toBeInTheDocument();
-  });
+  };
 
     // Check QR code is rendered
     const qrCode = screen.getByTestId("qr-code");
@@ -96,7 +96,7 @@ describe("RestoreDashboard - New Features", () => {
 
     // Check public URL text is displayed
     expect(screen.getByText(/Link de acesso público/i)).toBeInTheDocument();
-  });
+  };
 
   it("should hide QR code in public view mode", async () => {
     // Mock RPC responses
@@ -110,13 +110,13 @@ describe("RestoreDashboard - New Features", () => {
 
     await waitFor(() => {
       expect(screen.queryByText(/Link Público com QR Code/i)).not.toBeInTheDocument();
-  });
+  };
 
     // Should show TV Wall indicator instead
     await waitFor(() => {
       expect(screen.getByText(/TV Wall Ativado/i)).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should display enhanced public mode indicator", async () => {
     // Mock RPC responses
@@ -132,8 +132,8 @@ describe("RestoreDashboard - New Features", () => {
       const publicIndicator = screen.getByText(/TV Wall Ativado/i);
       expect(publicIndicator).toBeInTheDocument();
       expect(publicIndicator).toHaveTextContent("Modo público somente leitura");
-  });
-  });
+  };
+  };
 
   it("should render department summary chart when data is available", async () => {
     const mockDepartmentData = [
@@ -153,7 +153,7 @@ describe("RestoreDashboard - New Features", () => {
         }) as unknown;
       }
       return Promise.resolve({ data: [], error: null }) as unknown;
-    });
+    };
 
     render(
       <MemoryRouter>
@@ -174,7 +174,7 @@ describe("RestoreDashboard - New Features", () => {
         return Promise.resolve({ data: [], error: null }) as unknown;
       }
       return Promise.resolve({ data: [], error: null }) as unknown;
-  });
+  };
 
     render(
       <MemoryRouter>
@@ -185,6 +185,6 @@ describe("RestoreDashboard - New Features", () => {
     await waitFor(() => {
       // Should not find department comparison text
       expect(screen.queryByText(/Comparativo Mensal por Departamento/i)).not.toBeInTheDocument();
-  });
-  });
-});
+  };
+  };
+};

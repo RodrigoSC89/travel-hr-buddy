@@ -84,7 +84,7 @@ export default function CreateFromTemplate({
       toast({
         title: "✅ Variáveis aplicadas",
         description: "O conteúdo foi atualizado com sucesso.",
-      });
+      };
     } catch (err) {
       // If parsing fails, use as string
       setContent(raw);
@@ -92,7 +92,7 @@ export default function CreateFromTemplate({
       toast({
         title: "✅ Variáveis aplicadas",
         description: "O conteúdo foi atualizado com sucesso.",
-      });
+      };
     }
   };
 
@@ -123,7 +123,7 @@ export default function CreateFromTemplate({
         title: "❌ Erro",
         description: "Ocorreu um erro ao salvar o documento.",
         variant: "destructive",
-      });
+      };
     }
   };
 

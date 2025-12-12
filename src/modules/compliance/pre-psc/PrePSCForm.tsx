@@ -159,7 +159,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Error",
         description: "Failed to save inspection",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }

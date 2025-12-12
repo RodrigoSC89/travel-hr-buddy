@@ -382,7 +382,7 @@ const FinanceCommandCenter: React.FC = () => {
     }
 
     toast({ title: "Exportado", description: `Dados exportados em formato ${format.toUpperCase()}.` });
-  });
+  };
 
   // Generate PDF Report
   const generatePDFReport = async () => {

@@ -173,7 +173,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
           title: "Erro ao acessar microfone",
           description: "Permita o acesso ao microfone para gravar",
           variant: "destructive",
-        });
+        };
       }
     }
   };
@@ -218,7 +218,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
         title: "Erro ao enviar arquivo",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSendingFile(false);
       setSelectedFile(null);
@@ -251,7 +251,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
         title: "Erro ao obter localização",
         description: "Permita o acesso à localização",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsGettingLocation(false);
     }

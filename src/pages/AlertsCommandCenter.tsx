@@ -311,7 +311,7 @@ const AlertsCommandCenter = () => {
         title: "Erro",
         description: "Erro ao carregar dados",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

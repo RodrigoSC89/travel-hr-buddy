@@ -153,7 +153,7 @@ export const KnowledgeManagement: React.FC = () => {
         title: "Erro ao carregar",
         description: "Não foi possível carregar os itens da base de conhecimento",
         variant: "destructive",
-      });
+      };
     }
   }, [toast]);
 
@@ -226,7 +226,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item atualizado",
           description: "O conteúdo foi atualizado com sucesso",
-        });
+        };
       } else {
         // Criar novo item
         const { error } = await supabase
@@ -249,7 +249,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item criado",
           description: "Novo conteúdo adicionado à base de conhecimento",
-        });
+        };
       }
       
       setIsEditDialogOpen(false);
@@ -261,7 +261,7 @@ export const KnowledgeManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível salvar o item",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -286,7 +286,7 @@ export const KnowledgeManagement: React.FC = () => {
           title: "Erro",
           description: "Não foi possível excluir o item",
           variant: "destructive",
-        });
+        };
       }
     }
   };

@@ -325,7 +325,7 @@ export const ShipmentTracking = memo(() => {
                               toast({
                                 title: "Copied",
                                 description: "Tracking number copied to clipboard",
-                              });
+                              };
                             }}
                           >
                             Copy

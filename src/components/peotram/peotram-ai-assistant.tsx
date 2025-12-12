@@ -216,7 +216,7 @@ Use as **ações rápidas** ou faça sua pergunta diretamente!`,
           })),
           action
         }
-      });
+      };
 
       if (functionError) {
         throw new Error(functionError.message);

@@ -118,7 +118,7 @@ export default function LogisticsHub() {
         status: "pending",
         requested_by: "",
         notes: "",
-      });
+      };
       loadRequests();
     } catch (error) {
       logger.error("Failed to submit request", error);

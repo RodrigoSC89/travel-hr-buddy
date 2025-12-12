@@ -89,7 +89,7 @@ export const VesselTracking = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados dos navios",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

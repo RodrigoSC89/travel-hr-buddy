@@ -50,7 +50,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
       toast({
         title: "Health check-in recorded",
         description: "Your health data has been saved successfully.",
-      });
+      };
 
       // Reset form
       setFormData({
@@ -64,7 +64,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
         stress_level: 5,
         energy_level: 5,
         notes: "",
-      });
+      };
 
       onSuccess();
     } catch (error: unknown: unknown: unknown) {
@@ -72,7 +72,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
         title: "Error recording health data",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSubmitting(false);
     }

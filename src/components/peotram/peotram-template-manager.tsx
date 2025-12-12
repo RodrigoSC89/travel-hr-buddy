@@ -63,7 +63,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         title: "Erro",
         description: "Não foi possível criar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -88,7 +88,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 

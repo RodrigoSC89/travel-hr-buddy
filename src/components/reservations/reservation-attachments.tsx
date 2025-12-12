@@ -73,7 +73,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         title: "Erro",
         description: "Erro ao carregar anexos",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -123,7 +123,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
             file_type: file.type,
             file_size: file.size,
             uploaded_by: (await supabase.auth.getUser()).data.user?.id
-          });
+          };
 
         if (dbError) throw dbError;
       }
@@ -131,7 +131,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
       toast({
         title: "Sucesso",
         description: "Anexos enviados com sucesso!"
-      });
+      };
 
       fetchAttachments();
     } catch (error) {
@@ -139,7 +139,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         title: "Erro",
         description: "Erro ao enviar anexos",
         variant: "destructive"
-      });
+      };
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -176,7 +176,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
         title: "Erro",
         description: "Erro ao excluir anexo",
         variant: "destructive"
-      });
+      };
     }
   };
 

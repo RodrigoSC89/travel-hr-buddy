@@ -137,13 +137,13 @@ export default function JobCards() {
         title: "PDF Exportado",
         description: `Ordem de Serviço ${order.os_number} exportada com sucesso!`,
         variant: "default",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Não foi possível exportar o PDF da OS.",
         variant: "destructive",
-      });
+      };
     } finally {
       setExportingOrderPDF(null);
     }

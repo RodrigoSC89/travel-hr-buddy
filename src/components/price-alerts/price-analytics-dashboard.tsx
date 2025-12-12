@@ -276,7 +276,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
           title: "Sem dados",
           description: "Não há dados para exportar no período selecionado",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -285,14 +285,14 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "CSV Exportado",
         description: "Arquivo baixado com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }

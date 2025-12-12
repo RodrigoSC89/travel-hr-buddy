@@ -126,7 +126,7 @@ export default function AdvancedCopilot() {
             systems: ["Propulsão", "DP", "Geração"],
           },
         },
-      });
+      };
 
       if (error) {
         

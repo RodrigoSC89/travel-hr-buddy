@@ -95,7 +95,7 @@ const AdvancedReportsSystem = () => {
         title: "Erro na Exportação",
         description: "Falha ao exportar o relatório.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }

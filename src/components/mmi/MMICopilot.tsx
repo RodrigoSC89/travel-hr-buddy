@@ -34,7 +34,7 @@ export default function MMICopilot() {
         title: "Erro",
         description: error instanceof Error ? error.message : "Não foi possível obter sugestões.",
         variant: "destructive",
-      });
+      };
       console.error("Error getting copilot suggestion:", error);
     } finally {
       setIsLoading(false);

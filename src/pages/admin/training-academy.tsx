@@ -139,7 +139,7 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso criado",
         description: "O curso foi criado com sucesso.",
-      });
+      };
       setIsCreateDialogOpen(false);
       resetForm();
     },
@@ -148,9 +148,9 @@ export default function TrainingAcademyAdmin() {
         title: "Erro ao criar curso",
         description: error.message,
         variant: "destructive"
-      });
+      };
     }
-  });
+  };
 
   // Update course mutation
   const updateCourseMutation = useMutation({
@@ -178,9 +178,9 @@ export default function TrainingAcademyAdmin() {
         title: "Erro ao atualizar curso",
         description: error.message,
         variant: "destructive"
-      });
+      };
     }
-  });
+  };
 
   // Delete course mutation
   const deleteCourseMutation = useMutation({
@@ -197,16 +197,16 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso deletado",
         description: "O curso foi removido com sucesso.",
-      });
+      };
     },
     onError: (error: SupabaseError | null) => {
       toast({
         title: "Erro ao deletar curso",
         description: error.message,
         variant: "destructive"
-      });
+      };
     }
-  });
+  };
 
   const resetForm = () => {
     setNewCourse({

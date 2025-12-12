@@ -200,14 +200,14 @@ const DocumentTemplatesManager = () => {
         content: "",
         format: "html",
         tags: ""
-      });
+      };
       loadTemplates();
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating template",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -286,12 +286,12 @@ const DocumentTemplatesManager = () => {
       variables_used: variables,
       generation_time_ms: processingTime,
       success: true
-    });
+    };
     
     toast({
       title: "✅ PDF Exported",
       description: `Template exported to ${fileName}`,
-    });
+    };
   };
 
   const exportToWord = async (template: Template, variables: Record<string, string>) => {
@@ -330,12 +330,12 @@ const DocumentTemplatesManager = () => {
       variables_used: variables,
       generation_time_ms: processingTime,
       success: true
-    });
+    };
     
     toast({
       title: "✅ Word Document Exported",
       description: `Template exported to ${fileName}`,
-    });
+    };
   };
 
   const getCategoryBadge = (category: string) => {

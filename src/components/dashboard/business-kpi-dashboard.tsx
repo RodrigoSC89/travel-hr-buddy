@@ -165,13 +165,13 @@ export const BusinessKPIDashboard: React.FC = () => {
       toast({
         title: "KPIs Atualizados",
         description: "Indicadores de performance carregados com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar KPIs",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
       loadingRef.current = false;

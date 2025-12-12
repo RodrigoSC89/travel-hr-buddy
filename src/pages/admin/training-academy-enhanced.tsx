@@ -112,7 +112,7 @@ export default function TrainingAcademyEnhanced() {
         title: "Erro",
         description: "Falha ao carregar dados",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -197,7 +197,7 @@ export default function TrainingAcademyEnhanced() {
       toast({
         title: "🎓 Certificado Gerado",
         description: `Certificado ${certificateNumber} emitido com sucesso!`
-      });
+      };
 
       // Refresh certificates
       loadData();
@@ -207,7 +207,7 @@ export default function TrainingAcademyEnhanced() {
         title: "Erro",
         description: "Falha ao gerar certificado",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -268,7 +268,7 @@ export default function TrainingAcademyEnhanced() {
     toast({
       title: "Download Concluído",
       description: "Certificado baixado com sucesso"
-    });
+    };
   };
 
   const updateProgress = async (enrollmentId: string, progress: number) => {
@@ -297,7 +297,7 @@ export default function TrainingAcademyEnhanced() {
         title: "Erro",
         description: "Falha ao atualizar progresso",
         variant: "destructive"
-      });
+      };
     }
   };
 

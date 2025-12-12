@@ -174,7 +174,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar feedbacks",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -204,7 +204,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "",
         description: "",
         rating: 5
-      });
+      };
 
       // Recarregar feedbacks
       loadFeedbacks();
@@ -214,7 +214,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Falha ao enviar feedback",
         variant: "destructive"
-      });
+      };
     }
   };
 

@@ -89,7 +89,7 @@ ${plannedVoyages.map((v) => `- ${v.name}: partida ${v.departureDate}, ${v.distan
           ],
           context,
         },
-      });
+      };
 
       if (response.error) throw response.error;
 

@@ -214,7 +214,7 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível resolver o alerta.",
         variant: "destructive"
-      });
+      };
     }
   };
 

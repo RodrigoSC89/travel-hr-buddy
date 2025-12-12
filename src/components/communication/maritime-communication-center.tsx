@@ -159,7 +159,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         title: "Erro",
         description: "Erro ao carregar comunicações",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -246,7 +246,7 @@ export const MaritimeCommunicationCenter = memo(() => {
       toast({
         title: "Sucesso",
         description: "Mensagem enviada com sucesso",
-      });
+      };
 
       // Reset form and close dialog
       setNewMessage({
@@ -255,7 +255,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         content: "",
         priority: "normal",
         coordinates: { latitude: 0, longitude: 0 }
-      });
+      };
       setIsNewMessageOpen(false);
 
       // Reload communications
@@ -265,7 +265,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         title: "Erro",
         description: "Erro ao enviar mensagem",
         variant: "destructive"
-      });
+      };
     }
   };
 

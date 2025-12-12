@@ -56,14 +56,14 @@ const ThoughtChainPage = () => {
           title: "Erro na Cadeia",
           description: result.error,
           variant: "destructive",
-        });
+        };
       }
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsRunning(false);
     }

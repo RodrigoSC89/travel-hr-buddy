@@ -172,7 +172,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
         atRisk: 3,
         preventedFailures: 47,
         accuracy: 94.2
-      });
+      };
     } catch (error) {
       console.error("Error loading predictions:", error);
       console.error("Error loading predictions:", error);

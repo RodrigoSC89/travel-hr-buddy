@@ -135,7 +135,7 @@ export default function DocumentViewPage() {
         title: "Erro ao carregar documento",
         description: "Não foi possível carregar o documento.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -179,7 +179,7 @@ export default function DocumentViewPage() {
         title: "Erro ao carregar comentários",
         description: "Não foi possível carregar os comentários.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoadingComments(false);
     }
@@ -251,14 +251,14 @@ export default function DocumentViewPage() {
       toast({
         title: "Comentário adicionado",
         description: "Seu comentário foi adicionado com sucesso.",
-      });
+      };
     } catch (error) {
       logger.error("Error adding comment:", error);
       toast({
         title: "Erro ao adicionar comentário",
         description: "Não foi possível adicionar o comentário.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSubmittingComment(false);
     }

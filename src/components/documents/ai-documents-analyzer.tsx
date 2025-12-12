@@ -107,7 +107,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       toast({
         title: "Arquivo selecionado",
         description: `${file.name} pronto para upload`,
-      });
+      };
     }
   };
 
@@ -387,7 +387,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       toast({
         title: "Documento processado com sucesso",
         description: `${extractedEntities.length} entidades extraídas`,
-      });
+      };
 
       // Refresh documents list
       await loadDocuments();
@@ -402,7 +402,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao processar documento",
         description: error.message || "Tente novamente mais tarde",
         variant: "destructive",
-      });
+      };
     } finally {
       setUploading(false);
       setProcessing(false);
@@ -454,7 +454,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao carregar detalhes",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -480,7 +480,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro na busca",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      });
+      };
     }
   };
 

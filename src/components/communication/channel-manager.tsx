@@ -204,7 +204,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         title: "Erro",
         description: "Erro ao carregar canais",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -278,13 +278,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Canal criado com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao criar canal",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -309,7 +309,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         title: "Erro",
         description: "Não foi possível entrar no canal",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -537,7 +537,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           toast({
                             title: "Configurações",
                             description: `Abrindo configurações do canal ${channel.name}`
-                          });
+                          };
                         }}>
                           <Settings className="h-4 w-4 mr-2" />
                           Configurações
@@ -547,7 +547,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           toast({
                             title: "Gerenciar Membros",
                             description: `Gerenciando ${channel.member_count} membros do canal ${channel.name}`
-                          });
+                          };
                         }}>
                           <Users className="h-4 w-4 mr-2" />
                           Gerenciar membros
@@ -561,7 +561,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                             toast({
                               title: "Canal excluído",
                               description: `O canal ${channel.name} foi excluído`
-                            });
+                            };
                           }}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />

@@ -81,13 +81,13 @@ const AnalyticsCore = () => {
       toast({
         title: "Export Complete",
         description: "PDF report has been downloaded"
-      });
+      };
     } catch (error) {
       toast({
         title: "Export Failed",
         description: "Could not generate PDF report",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -113,7 +113,7 @@ const AnalyticsCore = () => {
         title: "Export Failed",
         description: "Could not generate CSV file",
         variant: "destructive"
-      });
+      };
     }
   };
 

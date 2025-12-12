@@ -67,7 +67,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
         title: "Error generating PDF",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 

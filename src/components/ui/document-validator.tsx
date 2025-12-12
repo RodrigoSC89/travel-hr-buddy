@@ -162,14 +162,14 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           ? "Documento validado com sucesso" 
           : `Encontrados ${issues.length} problema(s)`,
         variant: result.isValid ? "default" : "destructive"
-      });
+      };
 
     } catch (error) {
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsValidating(false);
     }

@@ -289,7 +289,7 @@ const FuelOptimizerPage = () => {
       toast({ 
         title: "Análise concluída!", 
         description: `Economia estimada: ${savingsPercentage.toFixed(1)}% (${(estimatedConsumption - optimizedConsumption).toFixed(2)}t)`
-      });
+      };
 
       setIsCreating(false);
       setNewRoute({
@@ -300,7 +300,7 @@ const FuelOptimizerPage = () => {
         estimated_consumption: "",
         vessel_type: "psv",
         current_speed: "12"
-      });
+      };
 
     } catch (error) {
       console.error("Error creating optimization:", error);

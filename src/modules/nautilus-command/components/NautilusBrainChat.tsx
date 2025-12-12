@@ -112,7 +112,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join("\n")}
           sessionId: `brain-${Date.now()}`,
           mode: "safe"
         }
-      });
+      };
 
       if (error) throw error;
 

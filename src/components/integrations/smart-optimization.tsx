@@ -234,7 +234,7 @@ export const SmartOptimization: React.FC = () => {
     toast({
       title: "Análise Concluída",
       description: "4 novas otimizações foram identificadas.",
-    });
+    };
   };
 
   const implementSuggestion = (suggestionId: string) => {

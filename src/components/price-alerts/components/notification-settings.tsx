@@ -109,7 +109,7 @@ export const NotificationSettings = memo(() => {
         title: "Erro",
         description: "Erro ao salvar configurações. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }

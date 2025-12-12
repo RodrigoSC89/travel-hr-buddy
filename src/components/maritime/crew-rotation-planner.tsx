@@ -640,7 +640,7 @@ export const CrewRotationPlanner: React.FC = () => {
               toast({
                 title: "Rotação Criada",
                 description: "Nova rotação adicionada ao cronograma",
-              });
+              };
             }}>
               Criar Rotação
             </Button>
@@ -649,4 +649,4 @@ export const CrewRotationPlanner: React.FC = () => {
       </Dialog>
     </div>
   );
-});
+};

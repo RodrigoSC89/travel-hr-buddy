@@ -90,7 +90,7 @@ export const PerformanceEngineV1: React.FC = () => {
         title: "Error",
         description: "Failed to load performance data",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

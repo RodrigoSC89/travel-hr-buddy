@@ -128,7 +128,7 @@ export const TravelReservations: React.FC = () => {
         title: "Error",
         description: "Failed to create reservation",
         variant: "destructive"
-      });
+      };
     }
   };
 

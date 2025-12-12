@@ -96,10 +96,10 @@ const VoiceAssistant: React.FC = () => {
           title: "Erro de reconhecimento",
           description: "Houve um problema com o microfone.",
           variant: "destructive",
-        });
+        };
       }
       setIsListening(false);
-    });
+    };
 
     recognitionRef.current.onend = () => {
       if (isListening) {
@@ -186,7 +186,7 @@ const VoiceAssistant: React.FC = () => {
           message: command,
           conversationHistory,
         },
-      });
+      };
 
       if (error) throw error;
 
@@ -226,7 +226,7 @@ const VoiceAssistant: React.FC = () => {
           toast({
             title: "Navegando",
             description: `Indo para ${navigation}`,
-          });
+          };
         }, 1500);
       }
 
@@ -273,7 +273,7 @@ const VoiceAssistant: React.FC = () => {
             audioRef.current.onerror = () => {
               setIsSpeaking(false);
               fallbackSpeak(text);
-            });
+            };
             await audioRef.current.play();
             return;
           }

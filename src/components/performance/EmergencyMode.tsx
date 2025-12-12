@@ -161,7 +161,7 @@ function EmergencyModeOverlay() {
         title: "Erro na sincronização",
         description: "Tente novamente em alguns instantes",
         variant: "destructive",
-      });
+      };
     }
   };
 

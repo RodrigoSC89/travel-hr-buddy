@@ -18,7 +18,7 @@ export const ChecklistsPage = memo(function() {
   React.useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUserId(data?.user?.id || "");
-});
+};
   }, []);
 
   const {

@@ -105,7 +105,7 @@ export const BusinessIntelligence = memo(() => {
         title: "Erro",
         description: "Não foi possível gerar o relatório.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsGenerating(false);
     }

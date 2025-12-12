@@ -166,8 +166,8 @@ describe("ExecutionLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Nenhuma execução encontrada")).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should render date filter inputs", () => {
     render(

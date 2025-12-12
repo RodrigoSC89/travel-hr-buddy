@@ -106,7 +106,7 @@ export const AIPricePredictor: React.FC = () => {
       toast({
         title: "Previsão gerada!",
         description: `Análise de IA criada para ${selectedProduct}`,
-      });
+      };
 
       // Clear form
       setSelectedProduct("");
@@ -120,7 +120,7 @@ export const AIPricePredictor: React.FC = () => {
         title: "Erro",
         description: "Não foi possível gerar a previsão",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

@@ -61,7 +61,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao iniciar verificação 2FA",
         variant: "destructive"
-      });
+      };
       onCancel();
     }
   }, [toast, onCancel]);
@@ -97,7 +97,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
       toast({
         title: "Verificação Concluída",
         description: "Código 2FA verificado com sucesso",
-      });
+      };
 
       onSuccess();
     } catch (error) {
@@ -105,7 +105,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         title: "Código Incorreto",
         description: error instanceof Error ? error.message : "Verifique o código e tente novamente",
         variant: "destructive"
-      });
+      };
       setCode("");
     } finally {
       setIsLoading(false);

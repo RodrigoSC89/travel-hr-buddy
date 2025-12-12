@@ -202,7 +202,7 @@ export default function WeatherCommandCenter() {
         title: "Erro ao carregar dados",
         description: error.message,
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

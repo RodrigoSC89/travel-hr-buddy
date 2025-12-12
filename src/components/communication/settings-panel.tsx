@@ -233,7 +233,7 @@ export const SettingsPanel = memo(() => {
         toast({
           title: "Sucesso",
           description: "Foto de perfil atualizada"
-        });
+        };
       }
     };
     input.click();
@@ -264,13 +264,13 @@ export const SettingsPanel = memo(() => {
       toast({
         title: "Sucesso",
         description: "Dados exportados com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao exportar dados",
         variant: "destructive"
-      });
+      };
     }
   };
 

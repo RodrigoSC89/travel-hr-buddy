@@ -45,7 +45,7 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
       toast({
         title: "Sucesso",
         description: "Sugestão da IA aceita e salva com sucesso!",
-      });
+      };
     } catch (error) {
       console.error("Error accepting suggestion:", error);
       console.error("Error accepting suggestion:", error);
@@ -53,7 +53,7 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
         title: "Erro",
         description: "Ocorreu um erro ao processar a sugestão",
         variant: "destructive",
-      });
+      };
       // Revert the accepted state on error
       setAccepted((prev) => prev.filter(e => e !== etapa));
     }

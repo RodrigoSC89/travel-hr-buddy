@@ -109,13 +109,13 @@ export const SyncStatus = memo(function() {
       toast({
         title: "Sync complete",
         description: "All pending changes have been synchronized",
-      });
+      };
     } catch (error) {
       toast({
         title: "Sync failed",
         description: "Failed to sync some changes. Will retry automatically.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSyncing(false);
     }

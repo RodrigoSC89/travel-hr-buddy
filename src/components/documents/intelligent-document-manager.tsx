@@ -268,7 +268,7 @@ const IntelligentDocumentManager = () => {
         description: "Documento analisado com sucesso"
       };
     }, 3000);
-  });
+  };
 
   const shareDocument = (document: Document) => {
     toast({

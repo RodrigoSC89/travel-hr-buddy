@@ -98,7 +98,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
         title: "Error",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 

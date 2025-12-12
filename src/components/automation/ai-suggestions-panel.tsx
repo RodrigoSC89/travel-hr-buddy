@@ -132,7 +132,7 @@ export const AISuggestionsPanel: React.FC = () => {
         toast({
           title: "Atualizado",
           description: "Sugestões de IA atualizadas com sucesso.",
-        });
+        };
       }
     } catch (error) {
       console.error("Error loading suggestions:", error);
@@ -237,12 +237,12 @@ export const AISuggestionsPanel: React.FC = () => {
       toast({
         title: "Ação executada!",
         description: "A sugestão da IA foi implementada com sucesso.",
-      });
+      };
     } else {
       toast({
         title: "Sugestão dispensada",
         description: "A sugestão foi removida da sua lista.",
-      });
+      };
     }
   };
 

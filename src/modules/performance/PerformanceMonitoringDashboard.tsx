@@ -117,13 +117,13 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
       toast({
         title: "Export Complete",
         description: "Performance logs exported successfully",
-      });
+      };
     } catch (error) {
       toast({
         title: "Export Failed",
         description: "Failed to export logs",
         variant: "destructive",
-      });
+      };
     }
   };
 

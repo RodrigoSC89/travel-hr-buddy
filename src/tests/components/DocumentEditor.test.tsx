@@ -87,7 +87,7 @@ describe("DocumentEditor", () => {
       if (table === "document_versions") {
         return { insert: mockVersionInsert };
       }
-    });
+    };
 
     const onSave = vi.fn();
     render(<DocumentEditor onSave={onSave} />);
@@ -127,7 +127,7 @@ describe("DocumentEditor", () => {
       if (table === "document_versions") {
         return { insert: mockVersionInsert };
       }
-    });
+    };
 
     render(
       <DocumentEditor 

@@ -63,7 +63,7 @@ export const CollaborativeDocumentEditor = memo(function({
         title: "Error saving document",
         description: "Failed to save document to database",
         variant: "destructive",
-      });
+      };
     }
   }, [documentId, user]);
 

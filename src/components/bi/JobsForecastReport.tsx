@@ -26,7 +26,7 @@ export default function JobsForecastReport({ trend, onForecastUpdate }: JobsFore
     try {
       const { data, error } = await supabase.functions.invoke("bi-jobs-forecast", {
         body: { trend }
-      });
+      };
 
       if (error) {
         const errorMsg = "Erro ao buscar previsão. Tente novamente.";

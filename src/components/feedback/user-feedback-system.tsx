@@ -116,7 +116,7 @@ export const UserFeedbackSystem: React.FC = () => {
       toast({
         title: "Feedback enviado!",
         description: "Obrigado pelo seu feedback. Nossa equipe irá analisá-lo.",
-      });
+      };
 
       // Reset form
       setFormData({
@@ -127,7 +127,7 @@ export const UserFeedbackSystem: React.FC = () => {
         rating: 5,
         page_url: window.location.href,
         browser_info: navigator.userAgent
-      });
+      };
 
       // Reload feedbacks
       loadFeedbacks();
@@ -136,7 +136,7 @@ export const UserFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Não foi possível enviar o feedback",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsSubmitting(false);
     }

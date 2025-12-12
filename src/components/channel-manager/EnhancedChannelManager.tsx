@@ -165,10 +165,10 @@ export const EnhancedChannelManager: React.FC = () => {
           toast({
             title: "Connected",
             description: "Real-time updates enabled",
-          });
+          };
         }
-      });
-  });
+      };
+  };
 
   const unsubscribeFromChannel = () => {
     if (channelSubscription) {
@@ -207,7 +207,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to create channel",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -236,7 +236,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to send message",
         variant: "destructive"
-      });
+      };
     }
   };
 

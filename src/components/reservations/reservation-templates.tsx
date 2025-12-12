@@ -110,7 +110,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro",
         description: "Erro ao carregar templates",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -157,7 +157,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         toast({
           title: "Sucesso",
           description: "Template atualizado com sucesso!"
-        });
+        };
       } else {
         const { error } = await supabase
           .from("reservation_templates")
@@ -168,7 +168,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         toast({
           title: "Sucesso",
           description: "Template criado com sucesso!"
-        });
+        };
       }
 
       resetForm();
@@ -180,7 +180,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro",
         description: "Erro ao salvar template",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -206,7 +206,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro",
         description: "Erro ao excluir template",
         variant: "destructive"
-      });
+      };
     }
   };
 

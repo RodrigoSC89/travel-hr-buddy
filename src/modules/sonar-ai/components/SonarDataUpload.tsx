@@ -119,7 +119,7 @@ export const SonarDataUpload = memo(function() {
       toast({
         title: "Upload successful",
         description: `File ${file.name} analyzed successfully. ${mockAlerts.length} alerts generated.`,
-      });
+      };
 
       setProgress(100);
       setTimeout(() => {
@@ -133,7 +133,7 @@ export const SonarDataUpload = memo(function() {
         title: "Upload failed",
         description: error instanceof Error ? error.message : "Failed to process file",
         variant: "destructive",
-      });
+      };
       setIsUploading(false);
       setProgress(0);
     }

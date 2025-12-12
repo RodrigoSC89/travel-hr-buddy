@@ -184,7 +184,7 @@ export default function AdvancedAnalyticsDashboard() {
         title: "Error",
         description: "Failed to add widget",
         variant: "destructive",
-      });
+      };
     }
   };
 

@@ -110,7 +110,7 @@ const SmartAlerts = () => {
         title: "Error",
         description: "Failed to load smart alerts",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -162,7 +162,7 @@ const SmartAlerts = () => {
         title: "Error",
         description: "Failed to acknowledge alert",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -187,7 +187,7 @@ const SmartAlerts = () => {
         title: "Error",
         description: "Failed to resolve alert",
         variant: "destructive",
-      });
+      };
     }
   };
 

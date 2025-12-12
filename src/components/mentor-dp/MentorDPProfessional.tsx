@@ -389,7 +389,7 @@ export default function MentorDPProfessional() {
     setQuizHistory(prev => prev.map((q, i) => i === 0 ? { ...q, score, completedAt: new Date() } : q));
     setActiveQuiz(null);
     setQuizAnswers({});
-  });
+  };
 
   // Create new module
   const createNewModule = () => {

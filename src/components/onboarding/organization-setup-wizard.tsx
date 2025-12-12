@@ -170,7 +170,7 @@ export const OrganizationSetupWizard: React.FC = () => {
             company_size: orgData.size,
             description: orgData.description
           } as any
-        });
+        };
 
       if (brandingError) throw brandingError;
 
@@ -193,7 +193,7 @@ export const OrganizationSetupWizard: React.FC = () => {
       toast({
         title: "Configuração Concluída!",
         description: "Sua organização foi configurada com sucesso.",
-      });
+      };
 
       // Redirect to dashboard
       navigate("/");
@@ -203,7 +203,7 @@ export const OrganizationSetupWizard: React.FC = () => {
         title: "Erro na Configuração",
         description: (error as Error)?.message || "Erro ao salvar configurações",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

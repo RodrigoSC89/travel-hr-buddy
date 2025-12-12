@@ -180,7 +180,7 @@ export const HRDashboard = memo(() => {
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
-    });
+    };
   };
 
   const handleOpenCertificates = (employee: Employee) => {
@@ -738,7 +738,7 @@ export const HRDashboard = memo(() => {
               toast({
                 title: "Edição em desenvolvimento",
                 description: "Funcionalidade de edição será implementada em breve",
-              });
+              };
             }}>
               Editar Funcionário
             </Button>

@@ -178,7 +178,7 @@ Dados atuais do sistema:
             })),
           context,
         },
-      });
+      };
 
       let responseContent: string;
 

@@ -299,7 +299,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Erro",
         description: "Erro ao salvar rascunho",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -338,7 +338,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Erro",
         description: "Erro ao enviar mensagem",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

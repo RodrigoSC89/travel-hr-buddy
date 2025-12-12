@@ -99,7 +99,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         toast({
           title: "Recomendações Atualizadas",
           description: `${data.recommendations?.length || 0} recomendações personalizadas geradas`,
-        });
+        };
       } else {
         throw new Error(data.error || "Erro ao gerar recomendações");
       }
@@ -162,7 +162,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         title: "Usando dados simulados",
         description: "Conecte-se à API para obter recomendações reais",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

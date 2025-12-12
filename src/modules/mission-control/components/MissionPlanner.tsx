@@ -90,7 +90,7 @@ export const MissionPlanner: React.FC = () => {
         title: "Activation Failed",
         description: error.message || "Failed to activate mission",
         variant: "destructive",
-      });
+      };
     } finally {
       setActivating(null);
     }

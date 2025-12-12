@@ -61,7 +61,7 @@ export default function MMIOrdersPage() {
           executed_at: executedAt || null,
           technician_comment: technicianComment || null,
         },
-      });
+      };
 
       if (error) throw error;
 
@@ -69,7 +69,7 @@ export default function MMIOrdersPage() {
         toast({
           title: "✅ Ordem de serviço atualizada",
           description: "As informações foram salvas com sucesso.",
-        });
+        };
         // Reload work orders to show updated data
         await loadWorkOrders();
       } else {
@@ -81,7 +81,7 @@ export default function MMIOrdersPage() {
         title: "❌ Erro ao atualizar",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      });
+      };
     } finally {
       setSavingId(null);
     }

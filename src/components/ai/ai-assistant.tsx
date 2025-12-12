@@ -113,12 +113,12 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           title: "Erro no reconhecimento de voz",
           description: "Não foi possível capturar o áudio",
           variant: "destructive"
-        });
-      });
+        };
+      };
 
       recognition.onend = () => {
         setIsListening(false);
-      });
+      };
 
       setRecognition(recognition);
     }
@@ -191,7 +191,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           user_id: user?.id,
           conversation_history: messages.slice(-5) // Last 5 messages for context
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -227,7 +227,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Erro no assistente",
         description: "Não foi possível processar sua mensagem",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

@@ -130,7 +130,7 @@ export const ApplyTemplateDialog = memo(function({
         title: "Export failed",
         description: result.error || "Failed to export document",
         variant: "destructive",
-      });
+      };
     }
   };
 

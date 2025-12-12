@@ -107,7 +107,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
       toast({
         title: "Sucesso",
         description: "Manutenção agendada com sucesso!"
-      });
+      };
 
       setShowAddDialog(false);
       setNewMaintenance({
@@ -116,14 +116,14 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
         description: "",
         scheduled_date: "",
         priority: "medium",
-      });
+      };
       onRefresh();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao agendar manutenção",
         variant: "destructive"
-      });
+      };
     }
   };
 

@@ -304,13 +304,13 @@ export const EnhancedSettingsHub: React.FC = () => {
       toast({
         title: "✅ Configurações Salvas",
         description: "Todas as alterações foram aplicadas com sucesso.",
-      });
+      };
     } catch (error) {
       toast({
         title: "❌ Erro ao Salvar",
         description: "Não foi possível salvar as configurações. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSaving(false);
     }
@@ -418,7 +418,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     toast({
       title: "🔄 Configurações Restauradas",
       description: "Todas as configurações foram restauradas aos valores padrão.",
-    });
+    };
   };
 
   const exportSettings = () => {
@@ -443,7 +443,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     toast({
       title: "📥 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
-    });
+    };
   };
 
   const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -472,7 +472,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           title: "❌ Erro na Importação",
           description: "Arquivo inválido ou corrompido.",
           variant: "destructive",
-        });
+        };
       }
     };
     reader.readAsText(file);
@@ -507,7 +507,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       toast({
         title: "✨ Recomendações da IA",
         description: `${recommendations.length} sugestões de otimização encontradas. Verifique a aba 'Recursos Avançados'.`,
-      });
+      };
     }, 2000);
   };
 

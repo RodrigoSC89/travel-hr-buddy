@@ -165,7 +165,7 @@ export default function AITemplatesPage() {
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -192,7 +192,7 @@ export default function AITemplatesPage() {
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -225,7 +225,7 @@ export default function AITemplatesPage() {
         toast({
           title: "Template atualizado",
           description: "O template foi atualizado com sucesso.",
-        });
+        };
       } else {
         // Create new template
         const { error } = await (supabase as unknown)
@@ -237,14 +237,14 @@ export default function AITemplatesPage() {
             is_private: formData.is_private,
             tags: formData.tags,
             created_by: user.id,
-          });
+          };
 
         if (error) throw error;
 
         toast({
           title: "Template criado",
           description: "O template foi criado com sucesso.",
-        });
+        };
       }
 
       setShowCreateDialog(false);
@@ -257,7 +257,7 @@ export default function AITemplatesPage() {
         title: "Erro ao salvar template",
         description: "Não foi possível salvar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -284,7 +284,7 @@ export default function AITemplatesPage() {
         title: "Erro ao excluir template",
         description: "Não foi possível excluir o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 

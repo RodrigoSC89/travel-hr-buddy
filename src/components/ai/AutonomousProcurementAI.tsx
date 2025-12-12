@@ -192,7 +192,7 @@ export const AutonomousProcurementAI: React.FC = () => {
       autoOrders: 12,
       savingsThisMonth: 4850,
       supplierScore: 96
-    });
+    };
     setIsAnalyzing(false);
   };
 

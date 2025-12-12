@@ -220,7 +220,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao excluir reserva",
         variant: "destructive"
-      });
+      };
     }
   };
 

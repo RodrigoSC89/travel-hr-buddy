@@ -273,7 +273,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Curso gerado com sucesso!", 
         description: `"${aiCoursePrompt.slice(0, 40)}..." foi criado com ${modules.length} módulos` 
-      });
+      };
       setShowAICourseGenerator(false);
       setAiCoursePrompt("");
     } catch (error) {

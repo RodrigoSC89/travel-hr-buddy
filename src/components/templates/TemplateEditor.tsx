@@ -92,7 +92,7 @@ export default function TemplateEditor() {
       toast({
         title: "Template salvo com sucesso!",
         description: "O template foi salvo e está disponível para uso.",
-      });
+      };
 
       // Reset form after successful save
       setTitle("");
@@ -103,7 +103,7 @@ export default function TemplateEditor() {
         title: "Erro ao salvar template",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSaving(false);
     }
@@ -131,14 +131,14 @@ export default function TemplateEditor() {
       toast({
         title: "PDF exportado com sucesso!",
         description: "O arquivo foi baixado para o seu dispositivo.",
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }
@@ -167,7 +167,7 @@ export default function TemplateEditor() {
         title: "Erro ao exportar HTML",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -215,7 +215,7 @@ export default function TemplateEditor() {
         toast({
           title: "Conteúdo gerado com sucesso!",
           description: "O template foi gerado pela IA. Você pode editá-lo conforme necessário.",
-        });
+        };
       } else {
         throw new Error("Nenhum conteúdo foi gerado");
       }
@@ -225,7 +225,7 @@ export default function TemplateEditor() {
         title: "Erro ao gerar com IA",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsGenerating(false);
     }

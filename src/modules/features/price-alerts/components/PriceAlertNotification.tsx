@@ -96,7 +96,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         title: "Error",
         description: "Failed to save settings",
         variant: "destructive"
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -129,7 +129,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
         title: "Error",
         description: "Failed to send test notification",
         variant: "destructive"
-      });
+      };
     }
   };
 

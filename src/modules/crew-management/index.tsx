@@ -72,7 +72,7 @@ const CrewManagement = () => {
         title: "Erro",
         description: "Falha ao carregar dados da tripulação",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

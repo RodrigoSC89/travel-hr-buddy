@@ -110,7 +110,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
         title: "Erro",
         description: "Falha ao criar plano de manutenção",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSubmitting(false);
     }
