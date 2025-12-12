@@ -101,14 +101,14 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
       toast({
         title: "Exportação concluída",
         description: `Dados exportados como ${type.toUpperCase()}`
-      };
+      });
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Falha ao exportar dados",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsExporting(false);
       setIsExportDialogOpen(false);
@@ -119,7 +119,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
     toast({
       title: "Preparando impressão",
       description: "Abrindo visualização para impressão..."
-    };
+    });
     setTimeout(() => window.print(), 500);
   }, [toast]);
 
@@ -138,7 +138,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
         toast({
           title: "Link copiado",
           description: "O link foi copiado para a área de transferência"
-        };
+        });
       }
     } catch (error) {
       console.error("Share error:", error);
