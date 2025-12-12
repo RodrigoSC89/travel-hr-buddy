@@ -81,7 +81,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
 
       if (error) throw error;
       setDocuments(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading documents:", error);
       toast({
         title: "Error loading documents",
@@ -158,7 +158,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       setIsUploadOpen(false);
       resetForm();
       loadDocuments();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error uploading document",
         description: error.message,
@@ -186,7 +186,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       });
 
       loadDocuments();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error deleting document",
         description: error.message,
@@ -208,7 +208,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
   };
 
   const getStatusBadge = (status: string, expiryDate?: string) => {
-    const config: Record<string, { label: string; className: string; icon: any }> = {
+    const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {
       valid: { label: "Valid", className: "bg-green-500", icon: CheckCircle },
       expiring_soon: { label: "Expiring Soon", className: "bg-yellow-500", icon: AlertTriangle },
       expired: { label: "Expired", className: "bg-red-500", icon: XCircle },

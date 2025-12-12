@@ -13,14 +13,14 @@ interface Column {
   label: string;
   width?: string;
   align?: "left" | "center" | "right";
-  format?: (value: any) => string | React.ReactNode;
+  format?: (value: unknown: unknown: unknown) => string | React.ReactNode;
 }
 
 interface TableWidgetProps {
   title?: string;
   description?: string;
   columns: Column[];
-  data: any[];
+  data: unknown[];
   className?: string;
   striped?: boolean;
   hoverable?: boolean;

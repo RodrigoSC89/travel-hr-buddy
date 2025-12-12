@@ -39,7 +39,7 @@ interface ReplayEvent {
   type: "mode_change" | "alarm" | "sensor" | "position" | "thruster" | "environmental";
   description: string;
   severity: "info" | "warning" | "critical";
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 interface ReplaySession {

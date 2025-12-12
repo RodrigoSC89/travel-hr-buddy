@@ -20,7 +20,7 @@ const loadJsPDF = async () => {
   return { jsPDF, autoTable: autoTableModule.default };
 };
 
-let XLSX: any = null;
+let XLSX: unknown = null;
 const loadXLSX = async () => {
   if (!XLSX) {
     XLSX = await import("xlsx");
@@ -103,7 +103,7 @@ const ComplianceReports = () => {
   const fetchComplianceData = async () => {
     try {
       setLoading(true);
-      let query = supabase.from("compliance_items" as any).select("*");
+      let query = supabase.from("compliance_items" as unknown).select("*");
       
       // Apply filters if any
       if (reportConfig.categories?.length > 0) {
@@ -144,7 +144,7 @@ const ComplianceReports = () => {
   };
 
   // PDF Export using jsPDF
-  const exportToPDF = async (data: any[]) => {
+  const exportToPDF = async (data: unknown[]) => {
     try {
       const { jsPDF, autoTable } = await loadJsPDF();
       const doc = new jsPDF();
@@ -196,7 +196,7 @@ const ComplianceReports = () => {
   };
 
   // CSV Export with Excel compatibility
-  const exportToCSV = (data: any[]) => {
+  const exportToCSV = (data: unknown[]) => {
     try {
       const headers = ["ID", "Category", "Severity", "Status", "Title", "Date"];
       const rows = data.map(item => [
@@ -234,7 +234,7 @@ const ComplianceReports = () => {
   };
 
   // Excel Export using xlsx
-  const exportToExcel = (data: any[]) => {
+  const exportToExcel = (data: unknown[]) => {
     try {
       const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
         "ID": item.id,
@@ -266,7 +266,7 @@ const ComplianceReports = () => {
   };
 
   // JSON Export with metadata
-  const exportToJSON = (data: any[]) => {
+  const exportToJSON = (data: unknown[]) => {
     try {
       const jsonData = {
         metadata: {
@@ -361,7 +361,7 @@ const ComplianceReports = () => {
     }, 2000);
   };
 
-  const handleDownload = (report: any) => {
+  const handleDownload = (report: unknown) => {
     // Export based on format
     if (report.format === "pdf") {
       exportToPDF(complianceData);

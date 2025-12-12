@@ -207,7 +207,7 @@ export const ManagerAlerts: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {getSeverityIcon(alert.severity)}
-                      <Badge variant={getSeverityColor(alert.severity) as any}>
+                      <Badge variant={getSeverityColor(alert.severity) as unknown}>
                         {alert.alert_type.replace("_", " ")}
                       </Badge>
                     </div>

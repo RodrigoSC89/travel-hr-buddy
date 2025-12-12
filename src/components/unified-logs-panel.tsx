@@ -20,7 +20,7 @@ interface LogEntry {
   level: string;
   source: string;
   timestamp: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export function UnifiedLogsPanel() {
@@ -254,7 +254,7 @@ export function UnifiedLogsPanel() {
     });
 
     // Logs table
-    const finalY = (doc as any).lastAutoTable?.finalY || 100;
+    const finalY = (doc as unknown).lastAutoTable?.finalY || 100;
     doc.setFontSize(14);
     doc.text("Log Entries", 14, finalY + 10);
     autoTable(doc, {
@@ -419,7 +419,7 @@ export function UnifiedLogsPanel() {
                       <div className="mt-1">{getSeverityIcon(log.level)}</div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <Badge variant={getSeverityColor(log.level) as any}>
+                          <Badge variant={getSeverityColor(log.level) as unknown}>
                             {log.level}
                           </Badge>
                           <Badge variant="outline" className={`text-${getSourceColor(log.source)}-600`}>

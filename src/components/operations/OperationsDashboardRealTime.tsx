@@ -41,7 +41,7 @@ interface OperationalMetrics {
   mission_status: Record<string, number>;
   vessel_health: Record<string, number>;
   alerts_by_severity: Record<string, number>;
-  telemetry_data: any[];
+  telemetry_data: unknown[];
   active_operations: number;
   crew_availability: number;
   system_health: number;
@@ -62,7 +62,7 @@ interface RealTimeAlert {
   message: string;
   source: "supabase" | "mqtt" | "websocket";
   timestamp: string;
-  metadata: any;
+  metadata: unknown;
 }
 
 export const OperationsDashboardRealTime: React.FC = () => {
@@ -227,7 +227,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }, 15000);
   };
 
-  const handleSupabaseUpdate = (payload: any, type: string) => {
+  const handleSupabaseUpdate = (payload: unknown, type: string) => {
     const newAlert: RealTimeAlert = {
       id: `alert-${Date.now()}`,
       type,
@@ -242,7 +242,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     loadRealTimeData();
   };
 
-  const handleMQTTMessage = (data: any) => {
+  const handleMQTTMessage = (data: unknown) => {
     const newAlert: RealTimeAlert = {
       id: `mqtt-${Date.now()}`,
       type: "telemetry",
@@ -256,7 +256,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
   };
 
-  const handleWebSocketMessage = (data: any) => {
+  const handleWebSocketMessage = (data: unknown) => {
     const newAlert: RealTimeAlert = {
       id: `ws-${Date.now()}`,
       type: "system",
@@ -364,8 +364,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }
   };
 
-  const calculateSystemHealth = (vesselHealth: any, alerts: any): number => {
-    const totalVessels = Object.values(vesselHealth).reduce((a: any, b: any) => a + b, 0);
+  const calculateSystemHealth = (vesselHealth: unknown: unknown: unknown, alerts: unknown: unknown: unknown): number => {
+    const totalVessels = Object.values(vesselHealth).reduce((a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b, 0);
     const healthyVessels = vesselHealth.healthy || 0;
     const criticalAlerts = alerts.critical || 0;
 
@@ -593,7 +593,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{metrics.active_operations}</div>
             <p className="text-xs text-muted-foreground">
-              {Object.values(metrics.mission_status).reduce((a: any, b: any) => a + b, 0)} total
+              {Object.values(metrics.mission_status).reduce((a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b, 0)} total
             </p>
           </CardContent>
         </Card>
@@ -605,7 +605,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {Object.values(metrics.alerts_by_severity).reduce((a: any, b: any) => a + b, 0)}
+              {Object.values(metrics.alerts_by_severity).reduce((a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b, 0)}
             </div>
             <p className="text-xs text-muted-foreground">
               {metrics.alerts_by_severity.critical || 0} critical
@@ -668,7 +668,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           value={
                             (count /
                               Object.values(metrics.vessel_health).reduce(
-                                (a: any, b: any) => a + b,
+                                (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
                                 0
                               )) *
                             100
@@ -782,7 +782,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                   <div className="space-y-2">
                     {Object.entries(metrics.alerts_by_severity).map(([severity, count]) => {
                       const total = Object.values(metrics.alerts_by_severity).reduce(
-                        (a: any, b: any) => a + b,
+                        (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
                         0
                       );
                       const percentage = total > 0 ? (count / total) * 100 : 0;
@@ -817,7 +817,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                             ? Math.round(
                               (metrics.active_operations /
                                   Object.values(metrics.mission_status).reduce(
-                                    (a: any, b: any) => a + b,
+                                    (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
                                     1
                                   )) *
                                   100
@@ -831,7 +831,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           metrics.active_operations > 0
                             ? (metrics.active_operations /
                                 Object.values(metrics.mission_status).reduce(
-                                  (a: any, b: any) => a + b,
+                                  (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
                                   1
                                 )) *
                               100

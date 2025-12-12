@@ -169,7 +169,7 @@ export function Patch608Validation() {
               <li>Comandos Executados: {commandData.commands.length}</li>
               <li>Módulos Acionados: {commandData.modules.length}</li>
               <li>Logs Auditáveis: {commandData.logs.length}</li>
-              <li>Latência Média: {(commandData.commands.reduce((sum: number, c: any) => sum + c.latency, 0) / commandData.commands.length).toFixed(0)}ms</li>
+              <li>Latência Média: {(commandData.commands.reduce((sum: number, c: unknown) => sum + c.latency, 0) / commandData.commands.length).toFixed(0)}ms</li>
               <li>Taxa de Sucesso: 100%</li>
             </ul>
           </div>

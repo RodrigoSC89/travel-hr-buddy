@@ -35,7 +35,7 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
 
       if (error) throw error;
       setVersions(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading versions",
         description: error.message,

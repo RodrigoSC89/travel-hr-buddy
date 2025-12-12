@@ -91,7 +91,7 @@ export default function IncidentCards() {
 
       if (data && data.length > 0) {
         // Map database incidents to the expected format
-        setIncidents(data.map((inc: any) => ({
+        setIncidents(data.map((inc: unknown) => ({
           id: inc.id,
           title: inc.title,
           date: inc.incident_date,

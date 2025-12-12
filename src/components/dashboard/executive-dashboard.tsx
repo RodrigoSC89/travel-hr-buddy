@@ -55,7 +55,7 @@ const operationalMetrics = [
   { name: "Crítico", value: 2, color: "#ef4444" },
 ];
 
-const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: any) => {
+const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: unknown: unknown: unknown) => {
   const isPositive = change >= 0;
   const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
 
@@ -95,7 +95,7 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix 
   );
 };
 
-const MetricIndicator = ({ label, value, target, color = "blue" }: any) => {
+const MetricIndicator = ({ label, value, target, color = "blue" }: unknown: unknown: unknown) => {
   const percentage = (value / target) * 100;
   const isExceeding = percentage >= 100;
 
@@ -123,7 +123,7 @@ const MetricIndicator = ({ label, value, target, color = "blue" }: any) => {
   );
 };
 
-const VesselPerformanceCard = ({ vessel }: any) => (
+const VesselPerformanceCard = ({ vessel }: unknown: unknown: unknown) => (
   <Card>
     <CardContent className="pt-6">
       <div className="space-y-4">

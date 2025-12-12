@@ -97,7 +97,7 @@ export default function SGSOAuditPage() {
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData];
-    (updated[index] as any)[field] = value;
+    (updated[index] as unknown)[field] = value;
     setAuditData(updated);
   };
 

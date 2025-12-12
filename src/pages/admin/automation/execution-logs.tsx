@@ -106,7 +106,7 @@ export default function ExecutionLogsPage() {
         }
 
         // Transform data to include workflow name
-        const transformedData = (executionData || []).map((execution: any) => ({
+        const transformedData = (executionData || []).map((execution: unknown) => ({
           ...execution,
           workflow_name: execution.automation_workflows?.name || "Workflow Desconhecido"
         }));

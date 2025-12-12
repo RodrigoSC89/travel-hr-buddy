@@ -346,7 +346,7 @@ const MissionCommandCenter: React.FC = () => {
                     </div>
                     <div>
                       <Label>Status</Label>
-                      <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
+                      <Select value={formData.status} onValueChange={(value: unknown) => setFormData({ ...formData, status: value })}>
                         <SelectTrigger className="bg-zinc-800 border-zinc-700">
                           <SelectValue />
                         </SelectTrigger>

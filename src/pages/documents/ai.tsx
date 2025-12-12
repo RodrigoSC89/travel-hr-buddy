@@ -36,7 +36,7 @@ interface AIDocument {
   file_type: string;
   ocr_text: string;
   ocr_status: string;
-  extracted_keywords: any[];
+  extracted_keywords: unknown[];
   category: string;
   confidence_score: number;
   created_at: string;
@@ -120,7 +120,7 @@ export default function AIDocuments() {
       });
       
       setSelectedFile(null);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Upload failed",
         description: error.message,
@@ -194,7 +194,7 @@ export default function AIDocuments() {
         p_results: { confidence, word_count: text.split(/\s+/).length }
       });
       
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("OCR Error:", error);
       
       // Log analysis failure
@@ -230,7 +230,7 @@ export default function AIDocuments() {
       }));
   };
 
-  const highlightKeywords = (text: string, keywords: any[]) => {
+  const highlightKeywords = (text: string, keywords: unknown[]) => {
     if (!keywords || keywords.length === 0) return text;
     
     let highlighted = text;
@@ -386,7 +386,7 @@ export default function AIDocuments() {
                         
                         {doc.extracted_keywords && doc.extracted_keywords.length > 0 && (
                           <div className="flex flex-wrap gap-1">
-                            {doc.extracted_keywords.slice(0, 5).map((kw: any, i: number) => (
+                            {doc.extracted_keywords.slice(0, 5).map((kw: unknown, i: number) => (
                               <Badge key={i} variant="outline" className="text-xs">
                                 {kw.text || kw}
                               </Badge>

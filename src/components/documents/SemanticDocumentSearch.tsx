@@ -90,7 +90,7 @@ export function SemanticDocumentSearch() {
         title: "Search complete",
         description: `Found ${resultsWithSimilarity.length} documents in ${searchTime}ms`,
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Search failed",
         description: error.message,

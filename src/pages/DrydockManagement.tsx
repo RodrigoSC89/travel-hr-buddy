@@ -26,7 +26,7 @@ interface DrydockEvent {
   actual_cost: number | null;
   currency: string;
   status: string;
-  work_scope: any[];
+  work_scope: unknown[];
   notes: string;
 }
 

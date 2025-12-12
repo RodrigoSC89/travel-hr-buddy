@@ -196,7 +196,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
           <Label>Alert Frequency</Label>
           <Select
             value={settings.frequency}
-            onValueChange={(value: any) =>
+            onValueChange={(value: unknown) =>
               setSettings({ ...settings, frequency: value })
             }
           >

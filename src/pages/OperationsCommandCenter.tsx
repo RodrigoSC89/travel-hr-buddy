@@ -247,11 +247,11 @@ export default function OperationsCommandCenter() {
       const vesselsList = vessels || [];
       const crewList = crew || [];
       
-      const activeVessels = vesselsList.filter((v: any) => v.status === "active" || v.status === "operational").length;
-      const vesselsInOperation = vesselsList.filter((v: any) => v.status === "operational").length;
-      const vesselsAtPort = vesselsList.filter((v: any) => v.status === "at_port" || v.status === "docked" || v.status === "active").length;
-      const vesselsInMaintenance = vesselsList.filter((v: any) => v.status === "maintenance").length;
-      const activeCrew = crewList.filter((c: any) => c.status === "active" || c.status === "onboard").length;
+      const activeVessels = vesselsList.filter((v: unknown) => v.status === "active" || v.status === "operational").length;
+      const vesselsInOperation = vesselsList.filter((v: unknown) => v.status === "operational").length;
+      const vesselsAtPort = vesselsList.filter((v: unknown) => v.status === "at_port" || v.status === "docked" || v.status === "active").length;
+      const vesselsInMaintenance = vesselsList.filter((v: unknown) => v.status === "maintenance").length;
+      const activeCrew = crewList.filter((c: unknown) => c.status === "active" || c.status === "onboard").length;
 
       setData({
         activeVessels,
@@ -276,7 +276,7 @@ export default function OperationsCommandCenter() {
         { name: "Inativos", value: Math.max(0, vesselsList.length - activeVessels), color: "hsl(var(--chart-4))" },
       ]);
 
-      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: any) => ({
+      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: unknown) => ({
         id: insight.id,
         title: insight.title || "Insight Operacional",
         message: insight.description || "",
@@ -1016,7 +1016,7 @@ export default function OperationsCommandCenter() {
               </div>
               <Switch
                 checked={settings.autoRefresh}
-                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, autoRefresh: v }))}
+                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, autoRefresh: v }))}
               />
             </div>
             <Separator />
@@ -1025,7 +1025,7 @@ export default function OperationsCommandCenter() {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={(e) => setSettings((prev: any) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
+                onChange={(e) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
                 disabled={!settings.autoRefresh}
               />
             </div>
@@ -1037,7 +1037,7 @@ export default function OperationsCommandCenter() {
               </div>
               <Switch
                 checked={settings.showNotifications}
-                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, showNotifications: v }))}
+                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, showNotifications: v }))}
               />
             </div>
           </div>

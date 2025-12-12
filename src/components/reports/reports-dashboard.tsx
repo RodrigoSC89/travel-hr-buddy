@@ -9,7 +9,7 @@ import DocumentProcessor from "../intelligence/DocumentProcessor";
 const ReportsDashboard = () => {
   const [activeReport, setActiveReport] = useState<unknown>(null);
 
-  const handleReportGenerated = (report: any) => {
+  const handleReportGenerated = (report: unknown) => {
     setActiveReport(report);
   };
 

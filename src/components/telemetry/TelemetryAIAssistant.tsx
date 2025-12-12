@@ -30,9 +30,9 @@ interface Message {
 }
 
 interface TelemetryAIAssistantProps {
-  weatherData?: any[];
-  satelliteData?: any[];
-  syncStatus?: any[];
+  weatherData?: unknown[];
+  satelliteData?: unknown[];
+  syncStatus?: unknown[];
 }
 
 export function TelemetryAIAssistant({ 
@@ -147,7 +147,7 @@ export function TelemetryAIAssistant({
         </div>
 
         {/* Messages Area */}
-        <ScrollArea className="flex-1 pr-4" ref={scrollRef as any}>
+        <ScrollArea className="flex-1 pr-4" ref={scrollRef as unknown}>
           <div className="space-y-4">
             <AnimatePresence>
               {messages.map((msg, idx) => (

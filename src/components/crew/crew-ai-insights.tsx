@@ -23,7 +23,7 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [rotations, setRotations] = useState<any[]>([]);
   const [skillGaps, setSkillGaps] = useState<any[]>([]);
-  const [insights, setInsights] = useState<any>(null);
+  const [insights, setInsights] = useState<unknown>(null);
 
   const handleGenerateRecommendations = async () => {
     const recs = await generateCrewRecommendations(crew);

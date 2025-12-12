@@ -60,7 +60,7 @@ interface BudgetCategory {
   allocated: number;
   spent: number;
   color: string;
-  icon: any;
+  icon: React.ComponentType<any>;
 }
 
 interface RouteCost {
@@ -98,7 +98,7 @@ const CHART_COLORS = [
   "hsl(var(--chart-4))",
 ];
 
-const CATEGORY_ICONS: Record<string, any> = {
+const CATEGORY_ICONS: Record<string, unknown> = {
   fuel: Fuel,
   maintenance: Wrench,
   crew: Users,
@@ -261,7 +261,7 @@ const FinanceCommandCenter: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(10);
 
-      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: any) => ({
+      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: unknown) => ({
         id: insight.id,
         title: insight.title || "Insight Financeiro",
         message: insight.description || "",
@@ -1299,7 +1299,7 @@ const FinanceCommandCenter: React.FC = () => {
               </div>
               <Switch
                 checked={settings.autoRefresh}
-                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, autoRefresh: v }))}
+                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, autoRefresh: v }))}
               />
             </div>
             <Separator />
@@ -1308,7 +1308,7 @@ const FinanceCommandCenter: React.FC = () => {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={(e) => setSettings((prev: any) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
+                onChange={(e) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
                 disabled={!settings.autoRefresh}
               />
             </div>
@@ -1320,7 +1320,7 @@ const FinanceCommandCenter: React.FC = () => {
               </div>
               <Switch
                 checked={settings.showNotifications}
-                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, showNotifications: v }))}
+                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, showNotifications: v }))}
               />
             </div>
           </div>

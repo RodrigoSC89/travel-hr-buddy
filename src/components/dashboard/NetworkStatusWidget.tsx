@@ -35,7 +35,7 @@ const NetworkStatusWidgetComponent: React.FC = () => {
   });
 
   const updateStats = useCallback(() => {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown).connection;
     setStats({
       downlink: connection?.downlink || 10,
       rtt: connection?.rtt || 50,
@@ -52,14 +52,14 @@ const NetworkStatusWidgetComponent: React.FC = () => {
     window.addEventListener("offline", updateStats);
     
     if ("connection" in navigator) {
-      (navigator as any).connection?.addEventListener("change", updateStats);
+      (navigator as unknown).connection?.addEventListener("change", updateStats);
     }
 
     return () => {
       window.removeEventListener("online", updateStats);
       window.removeEventListener("offline", updateStats);
       if ("connection" in navigator) {
-        (navigator as any).connection?.removeEventListener("change", updateStats);
+        (navigator as unknown).connection?.removeEventListener("change", updateStats);
       }
     };
   }, [updateStats]);

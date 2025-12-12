@@ -77,7 +77,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
 
       onOpenChange(false);
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown: unknown: unknown) {
       toast({
         title: "Error creating plan",
         description: error.message,

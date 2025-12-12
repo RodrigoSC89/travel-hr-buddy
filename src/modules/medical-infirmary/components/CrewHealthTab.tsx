@@ -27,7 +27,7 @@ export default function CrewHealthTab() {
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
   const [showFilters, setShowFilters] = useState(false);
-  const [aiPrediction, setAiPrediction] = useState<any>(null);
+  const [aiPrediction, setAiPrediction] = useState<unknown>(null);
 
   const filteredCrew = mockCrewMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

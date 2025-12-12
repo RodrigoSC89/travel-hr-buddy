@@ -284,7 +284,7 @@ export default function AcademyDashboard() {
     }
   };
 
-  const handleSuggestionAction = (type: string, suggestion?: any) => {
+  const handleSuggestionAction = (type: string, suggestion?: unknown: unknown: unknown) => {
     if (type === "gap") {
       setAiGenerationType("gap");
       setAiCoursePrompt("Renovação STCW para tripulantes com certificação vencendo nos próximos 90 dias. Incluir: atualização regulatória, procedimentos de segurança e avaliação prática.");
@@ -653,9 +653,9 @@ export default function AcademyDashboard() {
                         <Badge variant="secondary" className="text-xs">
                           <Award className="h-3 w-3 mr-1" />{crew.certifications}
                         </Badge>
-                        {(crew as any).expiringCerts > 0 && (
+                        {(crew as unknown).expiringCerts > 0 && (
                           <Badge variant="destructive" className="text-xs">
-                            {(crew as any).expiringCerts} vencendo
+                            {(crew as unknown).expiringCerts} vencendo
                           </Badge>
                         )}
                       </div>
@@ -1166,7 +1166,7 @@ export default function AcademyDashboard() {
               <div>
                 <h4 className="font-medium mb-2">Módulos</h4>
                 <div className="space-y-2">
-                  {selectedCourse.modules.map((mod: any, idx: number) => (
+                  {selectedCourse.modules.map((mod: unknown, idx: number) => (
                     <div key={idx} className="flex items-center justify-between p-2 border rounded">
                       <div className="flex items-center gap-2">
                         <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">{idx + 1}</span>

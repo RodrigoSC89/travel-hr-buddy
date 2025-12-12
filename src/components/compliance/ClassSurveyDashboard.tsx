@@ -27,8 +27,8 @@ interface ClassSurvey {
   surveyor_name: string | null;
   survey_location: string | null;
   status: string;
-  findings: any[];
-  conditions_of_class: any[];
+  findings: unknown[];
+  conditions_of_class: unknown[];
   cost: number | null;
 }
 

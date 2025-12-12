@@ -215,7 +215,7 @@ export const HRDashboard = () => {
           </div>
           <div>
             <div className="font-medium">{String(value)}</div>
-            <div className="text-sm text-muted-foreground">{(row as any).position}</div>
+            <div className="text-sm text-muted-foreground">{(row as unknown).position}</div>
           </div>
         </div>
       )

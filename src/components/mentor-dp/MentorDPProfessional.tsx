@@ -67,7 +67,7 @@ interface LogEntry {
   title: string;
   summary: string;
   timestamp: Date;
-  data?: any;
+  data?: unknown;
 }
 
 interface RepositoryQuestion {
@@ -153,7 +153,7 @@ export default function MentorDPProfessional() {
   const [quizTopic, setQuizTopic] = useState("");
   const [showQuizDialog, setShowQuizDialog] = useState(false);
   const [quizHistory, setQuizHistory] = useState<QuizItem[]>([]);
-  const [activeQuiz, setActiveQuiz] = useState<any>(null);
+  const [activeQuiz, setActiveQuiz] = useState<unknown>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
 
   // Logbook state
@@ -194,7 +194,7 @@ export default function MentorDPProfessional() {
   }, [logEntries]);
 
   // Add log entry helper
-  const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: any) => {
+  const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: unknown: unknown: unknown) => {
     const entry: LogEntry = {
       id: crypto.randomUUID(),
       type,
@@ -207,7 +207,7 @@ export default function MentorDPProfessional() {
   }, []);
 
   // Call AI Edge Function with enhanced error handling
-  const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
+  const callMentorAI = async (action: string, params: unknown = {}): Promise<any> => {
     
     try {
       const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai", {
@@ -238,7 +238,7 @@ export default function MentorDPProfessional() {
       }
 
       return data;
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("[MentorDP] callMentorAI error:", error);
       console.error("[MentorDP] callMentorAI error:", error);
       throw error;
@@ -263,7 +263,7 @@ export default function MentorDPProfessional() {
       const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content, timestamp: new Date(), type: "chat" };
       setMessages(prev => [...prev, assistantMessage]);
       addLogEntry("chat", "Conversa com Mentor", messageText.substring(0, 100) + "...");
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({ title: "Erro", description: error.message || "Não foi possível obter resposta", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -285,7 +285,7 @@ export default function MentorDPProfessional() {
       setAcademyModules(prev => prev.map(m => m.id === module.id ? { ...m, progress: Math.min((m.progress || 0) + 25, 100) } : m));
       
       toast({ title: "Lição Gerada", description: `Lição sobre "${module.name}" pronta!` });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({ title: "Erro", description: error.message || "Não foi possível gerar a lição", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -309,7 +309,7 @@ export default function MentorDPProfessional() {
       addLogEntry("simulation", `Simulação: ${scenario.name}`, scenario.description);
       
       toast({ title: "Simulação Iniciada", description: `Cenário "${scenario.name}" carregado!` });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({ title: "Erro", description: error.message || "Não foi possível iniciar a simulação", variant: "destructive" });
       setActiveSimulation(null);
     } finally {
@@ -359,7 +359,7 @@ export default function MentorDPProfessional() {
 
       toast({ title: "Quiz Gerado", description: `Quiz sobre "${quizTopicToUse}" pronto!` });
       setQuizTopic("");
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({ title: "Erro", description: error.message || "Não foi possível gerar o quiz", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -371,7 +371,7 @@ export default function MentorDPProfessional() {
     if (!activeQuiz) return;
     
     let correctCount = 0;
-    activeQuiz.questions.forEach((q: any, idx: number) => {
+    activeQuiz.questions.forEach((q: unknown: unknown: unknown, idx: number) => {
       if (quizAnswers[idx] === q.correctAnswer) {
         correctCount++;
       }
@@ -405,7 +405,7 @@ export default function MentorDPProfessional() {
       category: "custom",
       lessons: 5,
       duration: "3h",
-      difficulty: newModuleDifficulty as any,
+      difficulty: newModuleDifficulty as unknown,
       icon: <BookOpen className="h-5 w-5" />,
       progress: 0,
     };
@@ -429,7 +429,7 @@ export default function MentorDPProfessional() {
       name: newScenarioName,
       description: newScenarioDescription || "Cenário personalizado",
       type: newScenarioType,
-      difficulty: newScenarioDifficulty as any,
+      difficulty: newScenarioDifficulty as unknown,
       duration: "20 min",
       isCustom: true,
     };
@@ -452,7 +452,7 @@ export default function MentorDPProfessional() {
       setRepositoryQuestions(prev => prev.map(q => q.id === question.id ? { ...q, answer: data.content, answers: q.answers + 1 } : q));
       setSelectedQuestion({ ...question, answer: data.content });
       toast({ title: "Resposta Gerada", description: "A IA respondeu sua pergunta!" });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({ title: "Erro", description: error.message || "Não foi possível gerar resposta", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -801,11 +801,11 @@ export default function MentorDPProfessional() {
                   <CardDescription>{activeQuiz.questions.length} questões • {activeQuiz.quiz?.passingScore || 70}% para aprovação</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {activeQuiz.questions.map((q: any, idx: number) => (
+                  {activeQuiz.questions.map((q: unknown, idx: number) => (
                     <div key={idx} className="space-y-3 p-4 bg-muted/50 rounded-lg">
                       <p className="font-medium">{idx + 1}. {q.question}</p>
                       <div className="space-y-2">
-                        {q.options.map((opt: any, optIdx: number) => (
+                        {q.options.map((opt: unknown, optIdx: number) => (
                           <label key={optIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "bg-primary/10 border border-primary" : "bg-background hover:bg-muted"}`}>
                             <input type="radio" name={`q${idx}`} value={opt.key || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx))} onChange={(e) => setQuizAnswers(prev => ({ ...prev, [idx]: e.target.value }))} className="sr-only" />
                             <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "border-primary bg-primary" : "border-muted-foreground"}`}>

@@ -298,7 +298,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                     </div>
                   </div>
                   
-                  <Badge variant={getTypeBadgeVariant(doc.type) as any} className="text-xs">
+                  <Badge variant={getTypeBadgeVariant(doc.type) as unknown} className="text-xs">
                     {doc.type}
                   </Badge>
                   

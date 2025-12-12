@@ -102,7 +102,7 @@ export default function DocumentAIEditorPage() {
         return;
       }
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("ai_generated_documents")
         .insert({
           title: title.trim(),

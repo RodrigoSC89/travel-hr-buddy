@@ -312,10 +312,10 @@ export function Patch614Validation() {
             <p className="text-sm font-medium mb-2">Status do Threat Monitor:</p>
             <ul className="text-xs space-y-1">
               <li>Ameaças Detectadas: {threatData.threats.length}</li>
-              <li>Alertas Críticos: {threatData.threats.filter((t: any) => t.severity === "critical").length}</li>
+              <li>Alertas Críticos: {threatData.threats.filter((t: unknown) => t.severity === "critical").length}</li>
               <li>Watchdog Alerts: {threatData.watchdogAlerts.length}</li>
-              <li>Scores Ajustados: {threatData.scores.filter((s: any) => s.wasAdjusted).length}</li>
-              <li>Score Médio: {(threatData.scores.reduce((sum: number, s: any) => sum + s.adjustedScore, 0) / threatData.scores.length).toFixed(1)}</li>
+              <li>Scores Ajustados: {threatData.scores.filter((s: unknown) => s.wasAdjusted).length}</li>
+              <li>Score Médio: {(threatData.scores.reduce((sum: number, s: unknown) => sum + s.adjustedScore, 0) / threatData.scores.length).toFixed(1)}</li>
             </ul>
           </div>
         )}

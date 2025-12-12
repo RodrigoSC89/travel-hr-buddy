@@ -221,7 +221,7 @@ export default function SGSOAuditEditor() {
     const nonCompliant = auditResults.filter(r => r.status === "non_compliant").length;
     const partial = auditResults.filter(r => r.status === "partial").length;
     
-    const finalY = ((doc as any).lastAutoTable?.finalY || 100) + 10;
+    const finalY = ((doc as unknown).lastAutoTable?.finalY || 100) + 10;
     doc.text("Resumo:", 14, finalY);
     doc.text(`Conformes: ${compliant}`, 14, finalY + 6);
     doc.text(`Não Conformes: ${nonCompliant}`, 14, finalY + 12);

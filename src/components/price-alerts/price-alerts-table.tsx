@@ -83,8 +83,8 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
 
     // Apply sorting
     filtered.sort((a, b) => {
-      let aValue: any = a[sortField];
-      let bValue: any = b[sortField];
+      let aValue: unknown = a[sortField];
+      let bValue: unknown = b[sortField];
 
       if (sortField === "created_at" || sortField === "travel_date") {
         aValue = aValue ? new Date(aValue).getTime() : 0;
@@ -142,7 +142,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
           />
         </div>
         <div className="flex gap-2">
-          <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
+          <Select value={filterStatus} onValueChange={(value: unknown) => setFilterStatus(value)}>
             <SelectTrigger className="w-[180px]">
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Filter by status" />

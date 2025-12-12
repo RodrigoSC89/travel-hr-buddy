@@ -102,7 +102,7 @@ export default function DocumentViewPage() {
   const loadDocument = async () => {
     try {
       // Use explicit foreign key relationship for better type safety and clarity
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("ai_generated_documents")
         .select(`
           title, 
@@ -146,7 +146,7 @@ export default function DocumentViewPage() {
     
     setLoadingComments(true);
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("document_comments")
         .select(`
           id,
@@ -162,7 +162,7 @@ export default function DocumentViewPage() {
 
       // Fetch user emails for comments
       const commentsWithEmails = await Promise.all(
-        (data || []).map(async (comment: any) => ({
+        (data || []).map(async (comment: unknown) => ({
           ...comment,
           user_email: await fetchUserEmail(comment.user_id)
         }))
@@ -236,7 +236,7 @@ export default function DocumentViewPage() {
         throw new Error("User not authenticated");
       }
 
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("document_comments")
         .insert({
           document_id: id,
@@ -267,7 +267,7 @@ export default function DocumentViewPage() {
   const deleteComment = async (commentId: string) => {
     setDeletingCommentId(commentId);
     try {
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("document_comments")
         .delete()
         .eq("id", commentId);

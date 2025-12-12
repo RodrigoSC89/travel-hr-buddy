@@ -37,7 +37,7 @@ export function FindingsManager() {
 
       if (error) throw error;
       setFindings(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading findings",
         description: error.message,
@@ -49,7 +49,7 @@ export function FindingsManager() {
   };
 
   const getSeverityBadge = (type: string) => {
-    const severityConfig: Record<string, { variant: any; color: string }> = {
+    const severityConfig: Record<string, { variant: unknown: unknown: unknown; color: string }> = {
       "major": { variant: "destructive", color: "text-red-600" },
       "minor": { variant: "default", color: "text-yellow-600" },
       "observation": { variant: "outline", color: "text-blue-600" },
@@ -65,7 +65,7 @@ export function FindingsManager() {
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: any }> = {
+    const statusConfig: Record<string, { variant: unknown: unknown: unknown }> = {
       "open": { variant: "destructive" },
       "investigating": { variant: "default" },
       "action_planned": { variant: "secondary" },

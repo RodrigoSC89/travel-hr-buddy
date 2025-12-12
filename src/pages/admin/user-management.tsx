@@ -45,7 +45,7 @@ export default function UserManagement() {
       setLoading(true);
       
       // Fetch users from profiles table joined with auth.users
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("profiles")
         .select(`
           id,
@@ -72,7 +72,7 @@ export default function UserManagement() {
 
   const handleRoleUpdate = async (userId: string, newRole: string) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("profiles")
         .update({ role: newRole })
         .eq("id", userId);
@@ -91,7 +91,7 @@ export default function UserManagement() {
     const newStatus = currentStatus === "active" ? "inactive" : "active";
 
     try {
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("profiles")
         .update({ status: newStatus })
         .eq("id", userId);

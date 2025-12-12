@@ -19,7 +19,7 @@ interface WindyMapPluginProps {
   height?: string;
   showControls?: boolean;
   overlay?: "wind" | "rain" | "temp" | "clouds" | "waves" | "pressure";
-  onMapReady?: (api: any) => void;
+  onMapReady?: (api: unknown: unknown: unknown) => void;
 }
 
 const WINDY_API_KEY = "5XejbCIAVmWgaG78DrWz0BkwEuyl6rrV";
@@ -47,7 +47,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentOverlay, setCurrentOverlay] = useState<string>(overlay);
-  const [windyAPI, setWindyAPI] = useState<any>(null);
+  const [windyAPI, setWindyAPI] = useState<unknown>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   };
 
   const initializeWindy = () => {
-    if (!(window as any).windyInit) {
+    if (!(window as unknown).windyInit) {
       setTimeout(initializeWindy, 100);
       return;
     }
@@ -117,7 +117,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       overlay: currentOverlay,
     };
 
-    (window as any).windyInit(options, (api: any) => {
+    (window as unknown).windyInit(options, (api: unknown: unknown: unknown) => {
       setWindyAPI(api);
       setIsLoading(false);
       

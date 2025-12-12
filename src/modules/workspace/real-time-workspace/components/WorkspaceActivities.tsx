@@ -392,7 +392,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                             </div>
                             {activity.priority && activity.priority !== "low" && (
                               <Badge 
-                                variant={getPriorityColor(activity.priority) as any}
+                                variant={getPriorityColor(activity.priority) as unknown}
                                 className="text-xs flex-shrink-0"
                               >
                                 {activity.priority === "high" ? "Alta" : "Média"}

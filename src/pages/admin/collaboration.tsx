@@ -92,7 +92,7 @@ export default function CollaborationPage() {
 
   const fetchComments = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("colab_comments")
         .select(`
           id,
@@ -107,7 +107,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails
       const commentsWithEmails = await Promise.all(
-        (data || []).map(async (comment: any) => {
+        (data || []).map(async (comment: unknown) => {
           const { data: profile } = await supabase
             .from("profiles")
             .select("email")
@@ -166,7 +166,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("colab_comments")
         .insert({
           author_id: user.id,
@@ -194,7 +194,7 @@ export default function CollaborationPage() {
 
   const fetchReplies = async (commentId: string) => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("colab_replies")
         .select(`
           id,
@@ -210,7 +210,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails for replies
       const repliesWithEmails = await Promise.all(
-        (data || []).map(async (reply: any) => {
+        (data || []).map(async (reply: unknown) => {
           const { data: profile } = await supabase
             .from("profiles")
             .select("email")
@@ -243,7 +243,7 @@ export default function CollaborationPage() {
         [emoji]: (currentReactions[emoji] || 0) + 1
       };
 
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("colab_comments")
         .update({ reactions: newReactions })
         .eq("id", commentId);
@@ -284,7 +284,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("colab_replies")
         .insert({
           comment_id: commentId,

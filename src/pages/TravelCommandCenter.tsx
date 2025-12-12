@@ -773,7 +773,7 @@ export default function TravelCommandCenter() {
             <ReservationStats reservations={reservations} />
             <ReservationFilters 
               filters={filters} 
-              onFiltersChange={(newFilters) => setFilters(newFilters as any)}
+              onFiltersChange={(newFilters) => setFilters(newFilters as unknown)}
               reservations={reservations}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

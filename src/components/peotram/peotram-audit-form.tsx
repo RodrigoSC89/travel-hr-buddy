@@ -67,7 +67,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
   const [auditResponses, setAuditResponses] = useState<Record<string, AuditResponse[]>>({});
   const [nonConformities, setNonConformities] = useState<NonConformity[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [aiInsights, setAiInsights] = useState<Record<string, any>>({});
+  const [aiInsights, setAiInsights] = useState<Record<string, unknown>>({});
   const [overallProgress, setOverallProgress] = useState(0);
 
   const elements = template.template_data.elements;

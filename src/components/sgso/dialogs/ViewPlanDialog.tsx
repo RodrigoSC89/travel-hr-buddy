@@ -45,7 +45,7 @@ interface ViewPlanDialogProps {
 }
 
 const getPlanDetails = (plan: EmergencyPlan) => {
-  const details: Record<string, any> = {
+  const details: Record<string, unknown> = {
     fire: {
       objective: "Combater e extinguir incêndios a bordo, protegendo vidas e propriedade.",
       scope: "Aplica-se a todas as embarcações e instalações marítimas da organização.",
@@ -289,7 +289,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
                   Contatos de Emergência
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {details.contacts.map((contact: any, idx: number) => (
+                  {details.contacts.map((contact: unknown, idx: number) => (
                     <div key={idx} className="p-3 bg-muted/50 rounded-lg">
                       <p className="font-medium text-sm">{contact.name}</p>
                       <p className="text-primary font-bold">{contact.phone}</p>

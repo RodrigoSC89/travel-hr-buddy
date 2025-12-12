@@ -63,7 +63,7 @@ export const ProgressDashboard: React.FC = () => {
         averageScore: Math.round(avgScore),
         progressData,
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading progress",
         description: error.message,

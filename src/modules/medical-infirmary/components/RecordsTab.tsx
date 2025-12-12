@@ -100,7 +100,7 @@ export default function RecordsTab() {
               </div>
               <div className="space-y-2">
                 <Label>Tipo</Label>
-                <Select value={newRecord.type} onValueChange={(v: any) => setNewRecord(prev => ({ ...prev, type: v }))}>
+                <Select value={newRecord.type} onValueChange={(v: unknown: unknown: unknown) => setNewRecord(prev => ({ ...prev, type: v }))}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="consultation">Consulta</SelectItem>

@@ -64,7 +64,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
       return;
     }
 
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const SpeechRecognition = (window as unknown).webkitSpeechRecognition || (window as unknown).SpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = "pt-BR";
     recognition.interimResults = true;
@@ -75,9 +75,9 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");
     };
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: Event) => {
       const transcript = Array.from(event.results)
-        .map((result: any) => result[0].transcript)
+        .map((result: unknown) => result[0].transcript)
         .join("");
       setInput(transcript);
     };

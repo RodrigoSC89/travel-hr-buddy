@@ -37,7 +37,7 @@ export const MMIIntegration: React.FC = () => {
     try {
       // Fetch from MMI system (mocked for now, would integrate with real MMI API)
       const { data, error } = await supabase
-        .from("mmi_maintenance_jobs" as any)
+        .from("mmi_maintenance_jobs" as unknown)
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
@@ -68,7 +68,7 @@ export const MMIIntegration: React.FC = () => {
         ]);
       } else {
         // Transform MMI data to predictions
-        const transformed = (data || []).slice(0, 5).map((job: any) => ({
+        const transformed = (data || []).slice(0, 5).map((job: unknown) => ({
           id: job.id,
           equipment_id: job.component_id || "N/A",
           equipment_name: job.title || "Unknown Equipment",
@@ -90,7 +90,7 @@ export const MMIIntegration: React.FC = () => {
 
   const scheduleMaintenanceFromPrediction = async (prediction: MMIPrediction) => {
     try {
-      const { error } = await supabase.from("maintenance_tasks" as any).insert({
+      const { error } = await supabase.from("maintenance_tasks" as unknown).insert({
         task_name: `Preventive: ${prediction.equipment_name}`,
         equipment_id: prediction.equipment_id,
         scheduled_date: prediction.predicted_date.split("T")[0],

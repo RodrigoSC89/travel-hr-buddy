@@ -18,7 +18,7 @@ interface AccessLog {
   ip_address: string | null;
   user_agent: string | null;
   severity: string;
-  details: any;
+  details: unknown: unknown: unknown;
 }
 
 export default function AuditDashboard() {
@@ -70,11 +70,11 @@ export default function AuditDashboard() {
 
       if (error) throw error;
 
-      setLogs((data || []) as any);
+      setLogs((data || []) as unknown);
       if (count) {
         setTotalPages(Math.ceil(count / pageSize));
       }
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast.error("Failed to fetch audit logs");
     } finally {
       setLoading(false);
@@ -128,7 +128,7 @@ export default function AuditDashboard() {
       window.URL.revokeObjectURL(url);
 
       toast.success("Logs exported successfully");
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast.error("Failed to export logs");
     }
   }

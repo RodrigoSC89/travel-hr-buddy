@@ -73,7 +73,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 // Custom Node Types
-const WorkflowNode = ({ data }: { data: any }) => {
+const WorkflowNode = ({ data }: { data: unknown }) => {
   const getStatusColor = () => {
     switch (data.status) {
     case "completed": return "border-green-500 bg-green-50 dark:bg-green-900/20";
@@ -222,7 +222,7 @@ const WorkflowVisual = () => {
         const suggestions = Array.isArray(result.response) ? result.response : [
           { nodeId: "3", suggestion: result.response.toString().slice(0, 100), priority: "high" as const, action: "Aplicar sugestão" }
         ];
-        setAiSuggestions(suggestions.map((s: any, i: number) => ({
+        setAiSuggestions(suggestions.map((s: unknown, i: number) => ({
           nodeId: s.nodeId || nodes[i % nodes.length]?.id || "1",
           suggestion: s.suggestion || s.message || s.toString(),
           priority: s.priority || "medium" as const,

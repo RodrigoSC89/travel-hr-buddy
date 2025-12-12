@@ -105,7 +105,7 @@ export default function IncidentReportsComplete() {
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("incident_reports")
         .select("*")
         .order("created_at", { ascending: false });
@@ -126,7 +126,7 @@ export default function IncidentReportsComplete() {
 
   const loadFollowups = async (incidentId: string) => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("incident_followups")
         .select("*")
         .eq("incident_id", incidentId)
@@ -146,7 +146,7 @@ export default function IncidentReportsComplete() {
 
       const incidentNumber = `INC-${Date.now()}`;
       
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("incident_reports")
         .insert({
           incident_number: incidentNumber,
@@ -201,7 +201,7 @@ export default function IncidentReportsComplete() {
     
     // Create workflow state
     try {
-      await (supabase as any)
+      await (supabase as unknown)
         .from("incident_workflow_states")
         .insert({
           incident_id: incident.id,
@@ -222,7 +222,7 @@ export default function IncidentReportsComplete() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("incident_followups")
         .insert({
           incident_id: selectedIncident.id,
@@ -236,7 +236,7 @@ export default function IncidentReportsComplete() {
       
       // Update incident status if changed
       if (newFollowup.new_status && newFollowup.new_status !== selectedIncident.status) {
-        await (supabase as any)
+        await (supabase as unknown)
           .from("incident_reports")
           .update({ 
             status: newFollowup.new_status,

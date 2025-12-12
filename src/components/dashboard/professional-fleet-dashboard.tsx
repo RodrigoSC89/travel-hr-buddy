@@ -99,7 +99,7 @@ const performanceMetrics = [
   { metric: "Compliance", value: 97 }
 ];
 
-const VesselCard = ({ vessel }: any) => {
+const VesselCard = ({ vessel }: unknown: unknown: unknown) => {
   const statusConfig = {
     operational: { color: "bg-green-500", label: "Operacional", variant: "default" as const },
     "in-port": { color: "bg-blue-500", label: "Em Porto", variant: "secondary" as const },

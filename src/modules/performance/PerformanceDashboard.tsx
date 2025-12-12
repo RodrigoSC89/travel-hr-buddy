@@ -85,9 +85,9 @@ const PerformanceDashboard: React.FC = () => {
 
       // Using mock data as these tables don't exist yet
       // TODO: Create fleet_logs, mission_activities, fuel_usage tables
-      const fleetLogs: any[] = [];
-      const missionActivities: any[] = [];
-      const fuelUsage: any[] = [];
+      const fleetLogs: unknown[] = [];
+      const missionActivities: unknown[] = [];
+      const fuelUsage: unknown[] = [];
 
       // If tables don't exist, use simulated data
       const simulatedMetrics: PerformanceMetrics = {

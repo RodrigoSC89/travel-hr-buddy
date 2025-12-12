@@ -40,7 +40,7 @@ interface APIRoute {
   route_name: string;
   method: string;
   description: string;
-  schema_validation: any;
+  schema_validation: unknown: unknown: unknown;
   requires_auth: boolean;
   is_public: boolean;
   status: string;

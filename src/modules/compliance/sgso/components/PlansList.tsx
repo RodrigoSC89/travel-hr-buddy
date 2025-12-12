@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { generateSgsoReportPDF } from "../services/generateSgsoReportPDF";
 
 interface PlansListProps {
-  onSelectPlan: (plan: any) => void;
+  onSelectPlan: (plan: unknown: unknown: unknown) => void;
   onRefresh: () => void;
 }
 
@@ -32,7 +32,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
 
       if (error) throw error;
       setPlans(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading plans",
         description: error.message,
@@ -43,7 +43,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
     }
   };
 
-  const handleExportPDF = async (plan: any) => {
+  const handleExportPDF = async (plan: unknown: unknown: unknown) => {
     try {
       const { data: actions } = await supabase
         .from("sgso_actions")
@@ -62,7 +62,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
         title: "PDF generated",
         description: "SGSO report has been downloaded.",
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error generating PDF",
         description: error.message,

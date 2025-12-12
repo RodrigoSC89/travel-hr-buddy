@@ -30,7 +30,7 @@ vi.mock("@tiptap/react", () => ({
       },
     },
   })),
-  EditorContent: ({ editor }: any) => <div data-testid="editor-content">Editor</div>,
+  EditorContent: ({ editor }: unknown: unknown: unknown) => <div data-testid="editor-content">Editor</div>,
 }));
 
 vi.mock("@tiptap/starter-kit", () => ({
@@ -124,7 +124,7 @@ describe("DocumentAIEditorPage", () => {
 
   it("should apply template from localStorage on mount", async () => {
     const mockSetContent = vi.fn();
-    const mod: any = await import("@tiptap/react");
+    const mod: unknown = await import("@tiptap/react");
     mod.useEditor.mockReturnValue({
       commands: { setContent: mockSetContent },
       getHTML: vi.fn(() => "<p>Test content</p>"),
@@ -144,7 +144,7 @@ describe("DocumentAIEditorPage", () => {
       expect(mockSetContent).toHaveBeenCalledWith("<p>Template content</p>");
     });
 
-    const toastMod: any = await import("@/hooks/use-toast");
+    const toastMod: unknown = await import("@/hooks/use-toast");
     expect(toastMod.toast).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Template aplicado",
@@ -166,8 +166,8 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should save document to database", async () => {
-    const supaMod: any = await import("@/integrations/supabase/client");
-    const toastMod: any = await import("@/hooks/use-toast");
+    const supaMod: unknown = await import("@/integrations/supabase/client");
+    const toastMod: unknown = await import("@/hooks/use-toast");
     
     render(
       <MemoryRouter>
@@ -192,7 +192,7 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should export document as PDF", async () => {
-    const toastMod: any = await import("@/hooks/use-toast");
+    const toastMod: unknown = await import("@/hooks/use-toast");
     
     render(
       <MemoryRouter>
@@ -216,7 +216,7 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should show validation error when saving without title", async () => {
-    const supaMod: any = await import("@/integrations/supabase/client");
+    const supaMod: unknown = await import("@/integrations/supabase/client");
     
     render(
       <MemoryRouter>

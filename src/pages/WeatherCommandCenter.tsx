@@ -197,7 +197,7 @@ export default function WeatherCommandCenter() {
         title: "Dados atualizados",
         description: `Meteorologia carregada para ${locationName}`,
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Erro ao carregar dados",
         description: error.message,
@@ -402,7 +402,7 @@ export default function WeatherCommandCenter() {
           <CardContent>
             {weatherData.alerts.map((alert, i) => (
               <div key={i} className="flex items-center gap-3">
-                <Badge variant={getSeverityColor(alert.severity) as any}>{alert.severity}</Badge>
+                <Badge variant={getSeverityColor(alert.severity) as unknown}>{alert.severity}</Badge>
                 <span className="font-semibold">{alert.event}</span>
                 <span className="text-sm text-muted-foreground">- {alert.description}</span>
               </div>

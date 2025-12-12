@@ -47,7 +47,7 @@ export default function ForecastPage() {
         const data = await res.json();
         
         // Transform data to ensure correct format
-        const transformed = data.map((f: any) => ({
+        const transformed = data.map((f: unknown) => ({
           ...f,
           last_maintenance: Array.isArray(f.last_maintenance) 
             ? f.last_maintenance 

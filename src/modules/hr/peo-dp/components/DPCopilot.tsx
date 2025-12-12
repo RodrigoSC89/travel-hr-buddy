@@ -102,13 +102,13 @@ export default function DPCopilot() {
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition;
+      const SpeechRecognition = (window as unknown).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = "pt-BR";
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: Event) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);

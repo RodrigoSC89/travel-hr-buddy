@@ -93,8 +93,8 @@ export interface UnifiedNotification {
   actionUrl?: string;
   actionLabel?: string;
   action_type?: string;
-  action_data?: any;
-  metadata?: Record<string, any>;
+  action_data?: unknown;
+  metadata?: Record<string, unknown>;
   auto_dismiss?: boolean;
 }
 
@@ -156,7 +156,7 @@ const typeIcons: Record<string, React.ReactNode> = {
 // HELPER FUNCTIONS
 // ============================================
 
-const normalizeNotification = (n: any): UnifiedNotification => ({
+const normalizeNotification = (n: unknown: unknown: unknown): UnifiedNotification => ({
   id: n.id,
   title: n.title,
   message: n.message || n.description || "",
@@ -174,7 +174,7 @@ const normalizeNotification = (n: any): UnifiedNotification => ({
   action_type: nullToUndefined(n.action_type),
   action_data: n.action_data || n.actionData,
   metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
-    ? n.metadata as Record<string, any>
+    ? n.metadata as Record<string, unknown>
     : {},
   auto_dismiss: n.auto_dismiss,
 });

@@ -16,7 +16,7 @@ vi.mock("@/hooks/use-toast", () => ({
 }));
 
 vi.mock("@/components/editor/TipTapEditor", () => ({
-  default: ({ content, onChange }: any) => (
+  default: ({ content, onChange }: unknown: unknown: unknown) => (
     <div data-testid="tiptap-editor">
       <textarea
         data-testid="editor-content"

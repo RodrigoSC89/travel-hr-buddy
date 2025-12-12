@@ -41,7 +41,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   const [mapError, setMapError] = useState(false);
   const [useAlternative, setUseAlternative] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
-  const [weatherData, setWeatherData] = useState<any>(null);
+  const [weatherData, setWeatherData] = useState<unknown>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
 

@@ -60,7 +60,7 @@ const SonarAI: React.FC = () => {
   const [riskAssessment, setRiskAssessment] = useState<RiskAssessment | null>(null);
   const [detections, setDetections] = useState<SonarDetection[]>([]);
   const [detectionHistory, setDetectionHistory] = useState<SonarDetection[]>([]);
-  const [visualizationData, setVisualizationData] = useState<any>(null);
+  const [visualizationData, setVisualizationData] = useState<unknown>(null);
   
   // Scan parameters
   const [scanDepth, setScanDepth] = useState(50);

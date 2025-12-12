@@ -39,7 +39,7 @@ interface Integration {
   category: "database" | "communication" | "reporting" | "storage" | "mobile" | "external-api";
   status: "connected" | "disconnected" | "error" | "configuring";
   lastSync?: string;
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   isActive: boolean;
 }
 

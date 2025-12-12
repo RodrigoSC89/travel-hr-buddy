@@ -9,7 +9,7 @@ interface LazyComponentProps {
   fallback?: React.ReactNode;
   children?: React.ReactNode;
   componentName?: string;
-  [key: string]: any;
+  [key: string]: unknown: unknown: unknown;
 }
 
 export const LazyComponent: React.FC<LazyComponentProps> = memo(({ 
@@ -47,7 +47,7 @@ export const usePerformanceMonitor = (componentName: string) => {
 };
 
 // Componente otimizado para cards
-export const OptimizedCard = memo(({ children, className, ...props }: any) => {
+export const OptimizedCard = memo(({ children, className, ...props }: unknown: unknown: unknown) => {
   return (
     <div className={`transition-all duration-200 ${className}`} {...props}>
       {children}

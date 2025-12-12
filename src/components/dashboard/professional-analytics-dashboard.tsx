@@ -78,7 +78,7 @@ const scatterData = [
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
 
-const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
+const MetricCard = ({ title, value, change, icon: Icon, trend }: unknown: unknown: unknown) => {
   const isPositive = change >= 0;
   
   return (

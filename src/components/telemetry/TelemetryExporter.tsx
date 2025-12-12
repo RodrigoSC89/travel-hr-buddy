@@ -18,10 +18,10 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 interface TelemetryExporterProps {
-  weatherData: any[];
-  satelliteData: any[];
-  syncStatus: any[];
-  autonomyActions: any[];
+  weatherData: unknown[];
+  satelliteData: unknown[];
+  syncStatus: unknown[];
+  autonomyActions: unknown[];
 }
 
 export function TelemetryExporter({
@@ -69,7 +69,7 @@ export function TelemetryExporter({
           theme: "striped",
           headStyles: { fillColor: [59, 130, 246] },
         });
-        yPos = (doc as any).lastAutoTable.finalY + 15;
+        yPos = (doc as unknown).lastAutoTable.finalY + 15;
       }
 
       // Weather Data Section
@@ -91,7 +91,7 @@ export function TelemetryExporter({
           theme: "striped",
           headStyles: { fillColor: [34, 197, 94] },
         });
-        yPos = (doc as any).lastAutoTable.finalY + 15;
+        yPos = (doc as unknown).lastAutoTable.finalY + 15;
       }
 
       // Check for new page
@@ -118,7 +118,7 @@ export function TelemetryExporter({
           theme: "striped",
           headStyles: { fillColor: [168, 85, 247] },
         });
-        yPos = (doc as any).lastAutoTable.finalY + 15;
+        yPos = (doc as unknown).lastAutoTable.finalY + 15;
       }
 
       // Check for new page
@@ -148,7 +148,7 @@ export function TelemetryExporter({
       }
 
       // Footer
-      const pageCount = (doc as any).internal.getNumberOfPages();
+      const pageCount = (doc as unknown).internal.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.setFontSize(8);

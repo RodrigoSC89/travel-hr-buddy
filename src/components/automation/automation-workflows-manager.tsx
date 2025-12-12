@@ -230,7 +230,7 @@ export const AutomationWorkflowsManager = () => {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
             const formattedSuggestions = parsed.suggestions
-              .map((s: any) => `• ${s.title}: ${s.description} (${s.impact})`)
+              .map((s: unknown) => `• ${s.title}: ${s.description} (${s.impact})`)
               .join("\n\n");
             setAiSuggestion(formattedSuggestions);
           } else {

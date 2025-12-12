@@ -71,7 +71,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     }
   };
 
-  const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: any) => {
+  const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: unknown: unknown: unknown) => {
     const updated = [...checklistItems];
     updated[index] = { ...updated[index], [field]: value };
     

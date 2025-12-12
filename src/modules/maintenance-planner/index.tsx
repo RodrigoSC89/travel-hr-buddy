@@ -68,7 +68,7 @@ const MaintenancePlanner = () => {
     });
   };
 
-  const handleJobCreated = (job: any) => {
+  const handleJobCreated = (job: unknown) => {
     toast({
       title: "Job Criado via IA",
       description: `${job.nome} - ${job.equipamento_nome}`,

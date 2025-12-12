@@ -22,7 +22,7 @@ const FleetModule = () => {
   const [crewAssignments, setCrewAssignments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedVessel, setSelectedVessel] = useState<any>(null);
+  const [selectedVessel, setSelectedVessel] = useState<unknown>(null);
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
 
   const loadData = async () => {
@@ -31,10 +31,10 @@ const FleetModule = () => {
       const { data: vesselsData } = await supabase.from("vessels").select("*").order("name").limit(50);
       setVessels(vesselsData || []);
 
-      const { data: maintenanceData } = await supabase.from("maintenance_schedules" as any).select("*").order("scheduled_date", { ascending: false }).limit(50);
+      const { data: maintenanceData } = await supabase.from("maintenance_schedules" as unknown).select("*").order("scheduled_date", { ascending: false }).limit(50);
       setMaintenance((maintenanceData as any[]) || []);
 
-      const { data: crewData } = await supabase.from("crew_assignments" as any).select("*").limit(100);
+      const { data: crewData } = await supabase.from("crew_assignments" as unknown).select("*").limit(100);
       setCrewAssignments((crewData as any[]) || []);
     } catch (error) {
       console.error("Error loading fleet data:", error);

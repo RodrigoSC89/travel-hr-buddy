@@ -50,7 +50,7 @@ export function SmartInventory() {
         .limit(30);
 
       if (!error && data && data.length > 0) {
-        const mappedItems: InventoryItem[] = data.map((item: any) => ({
+        const mappedItems: InventoryItem[] = data.map((item: unknown) => ({
           id: item.id,
           name: item.item_name || item.name || "Item",
           category: item.category || "Geral",
@@ -76,13 +76,13 @@ export function SmartInventory() {
     }
   };
 
-  const calculatePredictedDays = (item: any): number => {
+  const calculatePredictedDays = (item: unknown: unknown: unknown): number => {
     const stock = item.quantity || item.current_stock || 50;
     const dailyUsage = 2; // Estimated
     return Math.floor(stock / dailyUsage);
   };
 
-  const calculateTrend = (item: any): "up" | "down" | "stable" => {
+  const calculateTrend = (item: unknown: unknown: unknown): "up" | "down" | "stable" => {
     const stock = item.quantity || item.current_stock || 50;
     const min = item.min_quantity || item.min_stock || 10;
     if (stock < min) return "down";

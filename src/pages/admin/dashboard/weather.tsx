@@ -93,7 +93,7 @@ export default function WeatherDashboard() {
             caution: "secondary",
             warning: "outline",
             danger: "destructive",
-          }[severity] as any;
+          }[severity] as unknown;
 
           return (
             <Card key={weather.location.name} className="relative">

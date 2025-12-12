@@ -17,7 +17,7 @@ interface MLCRestHours {
   crew_member_id: string;
   vessel_id: string;
   record_date: string;
-  rest_periods: any[];
+  rest_periods: unknown[];
   total_rest_hours: number;
   total_work_hours: number;
   compliant: boolean;

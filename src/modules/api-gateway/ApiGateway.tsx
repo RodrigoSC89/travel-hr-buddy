@@ -64,7 +64,7 @@ const ApiGateway = () => {
     return <Badge variant={variants[method] || "default"}>{method}</Badge>;
   };
 
-  const handleTestEndpoint = async (route: any) => {
+  const handleTestEndpoint = async (route: unknown: unknown: unknown) => {
     toast({
       title: "Testing Endpoint",
       description: `Testing ${route.service}...`
@@ -85,7 +85,7 @@ const ApiGateway = () => {
     }
   };
 
-  const handleCheckStatus = async (route: any) => {
+  const handleCheckStatus = async (route: unknown: unknown: unknown) => {
     const status = await apiProxyRouter.checkEndpointStatus(route.path);
     toast({
       title: "Endpoint Status",

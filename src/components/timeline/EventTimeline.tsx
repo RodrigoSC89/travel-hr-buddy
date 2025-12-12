@@ -25,7 +25,7 @@ export interface TimelineEvent {
   title: string;
   description?: string;
   user_id?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 

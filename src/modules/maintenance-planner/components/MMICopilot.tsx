@@ -45,12 +45,12 @@ interface CopilotResponse {
 }
 
 interface MMICopilotProps {
-  onJobCreated?: (job: any) => void;
+  onJobCreated?: (job: unknown: unknown: unknown) => void;
   context?: {
-    jobs?: any[];
-    equipamentos?: any[];
-    historico?: any[];
-    estoque?: any[];
+    jobs?: unknown[];
+    equipamentos?: unknown[];
+    historico?: unknown[];
+    estoque?: unknown[];
   };
 }
 
@@ -120,7 +120,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       if (data.tipo_resposta === "criacao_job" && data.job && onJobCreated) {
         onJobCreated(data.job);
       }
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Copilot error:", error);
       
       const errorMessage: CopilotMessage = {

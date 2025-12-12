@@ -46,7 +46,7 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
 
       if (error) throw error;
       setAudits(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading audits",
         description: error.message,
@@ -58,7 +58,7 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: any; icon: any }> = {
+    const statusConfig: Record<string, { variant: unknown: unknown: unknown; icon: unknown: unknown: unknown }> = {
       "planned": { variant: "outline", icon: Clock },
       "in_progress": { variant: "default", icon: Clock },
       "completed": { variant: "default", icon: CheckCircle },
@@ -93,7 +93,7 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
 
       loadAudits();
       if (onRefresh) onRefresh();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error",
         description: error.message,

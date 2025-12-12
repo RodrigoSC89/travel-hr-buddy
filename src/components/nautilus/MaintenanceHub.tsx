@@ -64,7 +64,7 @@ export function MaintenanceHub() {
         .limit(20);
 
       if (!schedulesError && schedulesData && schedulesData.length > 0) {
-        const mappedTasks: MaintenanceTask[] = schedulesData.map((s: any) => ({
+        const mappedTasks: MaintenanceTask[] = schedulesData.map((s: unknown) => ({
           id: s.id,
           title: s.maintenance_type || "Manutenção Programada",
           description: s.description || "Manutenção preventiva",
@@ -89,7 +89,7 @@ export function MaintenanceHub() {
         .limit(10);
 
       if (vesselsData && vesselsData.length > 0) {
-        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any) => [
+        const healthData: ComponentHealth[] = vesselsData.flatMap((v: unknown: unknown: unknown) => [
           {
             id: `${v.id}-engine`,
             name: "Motor Principal",
@@ -140,7 +140,7 @@ export function MaintenanceHub() {
     return "pending";
   };
 
-  const generateAIRecommendation = (schedule: any): string | undefined => {
+  const generateAIRecommendation = (schedule: unknown: unknown: unknown): string | undefined => {
     const daysUntil = Math.ceil((new Date(schedule.scheduled_date).getTime() - Date.now()) / 86400000);
     if (daysUntil < 7 && daysUntil > 0) {
       return `Manutenção programada para os próximos ${daysUntil} dias. Recomendamos preparar peças de reposição.`;

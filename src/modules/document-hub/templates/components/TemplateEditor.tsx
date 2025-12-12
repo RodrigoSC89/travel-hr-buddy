@@ -82,7 +82,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
     return <div>Loading editor...</div>;
   }
 
-  const MenuButton = ({ onClick, active, children, title }: any) => (
+  const MenuButton = ({ onClick, active, children, title }: unknown: unknown: unknown) => (
     <Button
       variant={active ? "default" : "ghost"}
       size="sm"

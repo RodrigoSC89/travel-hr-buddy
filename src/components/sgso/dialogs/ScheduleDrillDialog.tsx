@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 interface ScheduleDrillDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDrillScheduled?: (drill: any) => void;
+  onDrillScheduled?: (drill: unknown: unknown: unknown) => void;
 }
 
 const DRILL_TYPES = [

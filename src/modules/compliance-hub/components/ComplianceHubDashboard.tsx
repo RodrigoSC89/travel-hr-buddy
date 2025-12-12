@@ -112,7 +112,7 @@ export function ComplianceHubDashboard() {
     { id: "marpol", name: "MARPOL" },
   ];
 
-  const handleCreateAudit = async (auditData: any) => {
+  const handleCreateAudit = async (auditData: unknown: unknown: unknown) => {
     toast.success("Auditoria criada com sucesso");
     setShowCreateAudit(false);
   };

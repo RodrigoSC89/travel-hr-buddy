@@ -17,7 +17,7 @@ const FuelOptimizer = () => {
     weather_condition: "normal"
   });
 
-  const [optimization, setOptimization] = useState<any>(null);
+  const [optimization, setOptimization] = useState<unknown>(null);
   const [history, setHistory] = useState([
     {
       id: "1",

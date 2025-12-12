@@ -82,7 +82,7 @@ export const PerformanceMonitor: React.FC = () => {
     try {
       const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
-      const memory = (performance as any).memory;
+      const memory = (performance as unknown).memory;
       const memoryUsage = memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 0;
       const renderTime = navigation.loadEventEnd - navigation.domContentLoadedEventStart;
       const networkLatency = navigation.responseEnd - navigation.requestStart;
@@ -140,7 +140,7 @@ export const PerformanceMonitor: React.FC = () => {
       if (error) throw error;
 
       if (data) {
-        const formatted = data.reverse().map((d: any) => ({
+        const formatted = data.reverse().map((d: unknown) => ({
           timestamp: new Date(d.measured_at).toLocaleTimeString(),
           loadTime: d.load_time,
           memoryUsage: d.memory_usage,
@@ -248,7 +248,7 @@ export const PerformanceMonitor: React.FC = () => {
       `${t.threshold}${t.unit}`,
       t.enabled ? "Enabled" : "Disabled"
     ]);
-    (doc as any).autoTable({
+    (doc as unknown).autoTable({
       startY: 85,
       head: [["Metric", "Threshold", "Status"]],
       body: thresholdData,
@@ -258,7 +258,7 @@ export const PerformanceMonitor: React.FC = () => {
 
     // Historical Data
     if (historicalData.length > 0) {
-      const finalY = (doc as any).lastAutoTable.finalY || 120;
+      const finalY = (doc as unknown).lastAutoTable.finalY || 120;
       doc.setFontSize(14);
       doc.text("Recent Historical Data", 14, finalY + 15);
 
@@ -270,7 +270,7 @@ export const PerformanceMonitor: React.FC = () => {
         d.score.toString()
       ]);
 
-      (doc as any).autoTable({
+      (doc as unknown).autoTable({
         startY: finalY + 20,
         head: [["Time", "Load Time", "Memory", "Latency", "Score"]],
         body: histData,

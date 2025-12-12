@@ -56,7 +56,7 @@ export default function EvidenceLedgerPage() {
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState<EvidenceEntry | null>(null);
   const [verifying, setVerifying] = useState(false);
-  const [integrityResult, setIntegrityResult] = useState<any>(null);
+  const [integrityResult, setIntegrityResult] = useState<unknown>(null);
 
   // Filter state
   const [filterEventType, setFilterEventType] = useState<string>("");
@@ -109,7 +109,7 @@ export default function EvidenceLedgerPage() {
   };
 
   const applyFilters = async () => {
-    const filters: any = {};
+    const filters: unknown = {};
     if (filterEventType) filters.eventType = filterEventType;
     if (filterModule) filters.moduleId = filterModule;
     filters.limit = 100;

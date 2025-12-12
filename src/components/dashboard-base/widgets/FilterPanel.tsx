@@ -15,8 +15,8 @@ import { cn } from "@/lib/utils";
 
 interface FilterPanelProps {
   filters: FilterConfig[];
-  values: Record<string, any>;
-  onChange: (filterId: string, value: any) => void;
+  values: Record<string, unknown>;
+  onChange: (filterId: string, value: unknown: unknown: unknown) => void;
   onReset?: () => void;
   className?: string;
   horizontal?: boolean;

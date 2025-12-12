@@ -30,7 +30,7 @@ import { AlertTriangle, Users, Phone, FileText, Save } from "lucide-react";
 interface NewEmergencyPlanDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onPlanCreated?: (plan: any) => void;
+  onPlanCreated?: (plan: unknown: unknown: unknown) => void;
 }
 
 const PLAN_TYPES = [

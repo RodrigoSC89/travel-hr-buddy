@@ -120,7 +120,7 @@ const DocumentTemplatesManager = () => {
       }));
       
       setTemplates(templatesWithVars);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading templates:", error);
       toast({
         title: "Error loading templates",
@@ -142,7 +142,7 @@ const DocumentTemplatesManager = () => {
 
       if (error) throw error;
       setVersions(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading versions:", error);
     }
   };
@@ -202,7 +202,7 @@ const DocumentTemplatesManager = () => {
         tags: ""
       });
       loadTemplates();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating template",
         description: error.message,
@@ -226,7 +226,7 @@ const DocumentTemplatesManager = () => {
       });
 
       loadTemplates();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error updating template",
         description: error.message,
@@ -250,7 +250,7 @@ const DocumentTemplatesManager = () => {
       });
 
       loadTemplates();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error archiving template",
         description: error.message,

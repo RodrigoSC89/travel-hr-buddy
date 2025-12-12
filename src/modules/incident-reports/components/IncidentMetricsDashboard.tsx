@@ -17,7 +17,7 @@ interface IncidentMetrics {
   low_incidents: number;
   avg_response_time_hours: number;
   avg_resolution_time_hours: number;
-  incidents_by_category: any;
+  incidents_by_category: unknown: unknown: unknown;
 }
 
 const COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6"];

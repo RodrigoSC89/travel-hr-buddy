@@ -55,7 +55,7 @@ const AuditCenter = () => {
 
       // Map PEOTRAM audits
       if (peotramAudits && peotramAudits.length > 0) {
-        const mappedPeotram: AuditItem[] = peotramAudits.map((a: any) => ({
+        const mappedPeotram: AuditItem[] = peotramAudits.map((a: unknown) => ({
           id: a.id,
           title: `PEOTRAM ${a.audit_type === "vessel" ? "Vessel" : "Shore"} Audit - ${a.audit_period}`,
           type: "PEOTRAM",
@@ -71,7 +71,7 @@ const AuditCenter = () => {
 
       // Map SGSO audits
       if (sgsoAudits && sgsoAudits.length > 0) {
-        const mappedSgso: AuditItem[] = sgsoAudits.map((a: any) => ({
+        const mappedSgso: AuditItem[] = sgsoAudits.map((a: unknown) => ({
           id: a.id,
           title: `SGSO Audit - ${a.audit_type || "Internal"}`,
           type: "SGSO",

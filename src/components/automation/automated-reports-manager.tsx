@@ -224,7 +224,7 @@ export const AutomatedReportsManager = () => {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
             const formattedSuggestions = parsed.suggestions
-              .map((s: any) => `• ${s.title}: ${s.description} (${s.schedule})`)
+              .map((s: unknown) => `• ${s.title}: ${s.description} (${s.schedule})`)
               .join("\n\n");
             setAiSuggestion(formattedSuggestions);
           } else {

@@ -9,10 +9,10 @@ import { ReactNode } from "react";
 
 // Mock audit hook
 const useAuditWorkflow = () => {
-  let audits: any[] = [];
-  let currentAudit: any = null;
+  let audits: unknown[] = [];
+  let currentAudit: unknown = null;
 
-  const createAudit = async (data: any) => {
+  const createAudit = async (data: unknown) => {
     const newAudit = {
       id: `audit-${Date.now()}`,
       ...data,
@@ -24,16 +24,16 @@ const useAuditWorkflow = () => {
   };
 
   const startAudit = async (auditId: string) => {
-    const audit = audits.find((a: any) => a.id === auditId);
+    const audit = audits.find((a: unknown: unknown: unknown) => a.id === auditId);
     if (audit) {
       const updated = { ...audit, status: "in_progress", startedAt: new Date() };
-      audits = audits.map((a: any) => (a.id === auditId ? updated : a));
+      audits = audits.map((a: unknown) => (a.id === auditId ? updated : a));
       currentAudit = updated;
     }
   };
 
-  const completeAudit = async (auditId: string, findings: any[]) => {
-    const audit = audits.find((a: any) => a.id === auditId);
+  const completeAudit = async (auditId: string, findings: unknown[]) => {
+    const audit = audits.find((a: unknown: unknown: unknown) => a.id === auditId);
     if (audit) {
       const updated = { 
         ...audit, 
@@ -41,7 +41,7 @@ const useAuditWorkflow = () => {
         completedAt: new Date(),
         findings 
       };
-      audits = audits.map((a: any) => (a.id === auditId ? updated : a));
+      audits = audits.map((a: unknown) => (a.id === auditId ? updated : a));
       return updated;
     }
   };
@@ -175,7 +175,7 @@ describe("Audit Center Workflow", () => {
         await result.current.completeAudit(auditId, findings);
       });
 
-      const completed = result.current.audits.find((a: any) => a.id === auditId);
+      const completed = result.current.audits.find((a: unknown: unknown: unknown) => a.id === auditId);
       expect(completed?.status).toBe("completed");
       expect(completed?.findings).toEqual(findings);
       expect(completed?.completedAt).toBeInstanceOf(Date);
@@ -197,7 +197,7 @@ describe("Audit Center Workflow", () => {
         await result.current.completeAudit(auditId, []);
       });
 
-      const completed = result.current.audits.find((a: any) => a.id === auditId);
+      const completed = result.current.audits.find((a: unknown: unknown: unknown) => a.id === auditId);
       expect(completed?.status).toBe("completed");
       expect(completed?.findings).toEqual([]);
     });
@@ -216,7 +216,7 @@ describe("Audit Center Workflow", () => {
       });
 
       expect(result.current.audits).toHaveLength(3);
-      expect(result.current.audits.map((a: any) => a.type)).toEqual([
+      expect(result.current.audits.map((a: unknown) => a.type)).toEqual([
         "safety",
         "compliance",
         "routine",

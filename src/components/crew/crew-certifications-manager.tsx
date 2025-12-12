@@ -112,7 +112,7 @@ const demoCertifications: Certification[] = [
 ];
 
 interface CrewCertificationsManagerProps {
-  crewMembers?: any[];
+  crewMembers?: unknown[];
 }
 
 export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificationsManagerProps) {

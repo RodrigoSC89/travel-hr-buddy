@@ -11,7 +11,7 @@ interface HistoryEvent {
   description: string;
   timestamp: string;
   status: "success" | "pending" | "error";
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export function EmployeeHistory() {
@@ -27,7 +27,7 @@ export function EmployeeHistory() {
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
-        .limit(20) as any;
+        .limit(20) as unknown;
 
       if (error) throw error;
 

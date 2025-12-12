@@ -32,7 +32,7 @@ interface MissionEvent {
   title: string;
   description: string;
   module: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface Mission {

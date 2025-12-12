@@ -26,8 +26,8 @@ interface Message {
 }
 
 interface CrewAICopilotProps {
-  crewData?: any[];
-  certificates?: any[];
+  crewData?: unknown[];
+  certificates?: unknown[];
 }
 
 const quickActions = [

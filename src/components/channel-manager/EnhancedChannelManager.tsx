@@ -140,7 +140,7 @@ export const EnhancedChannelManager: React.FC = () => {
     }
   };
 
-  let channelSubscription: any = null;
+  let channelSubscription: unknown = null;
 
   const subscribeToChannel = (channelId: string) => {
     channelSubscription = supabase

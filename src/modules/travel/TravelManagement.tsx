@@ -150,7 +150,7 @@ const TravelManagement = () => {
 
       if (error) throw error;
       setItineraries(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading itineraries:", error);
       toast({
         title: "Error loading itineraries",
@@ -173,7 +173,7 @@ const TravelManagement = () => {
 
       if (error) throw error;
       setConflicts(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading conflicts:", error);
     }
   };
@@ -204,7 +204,7 @@ const TravelManagement = () => {
         status: "pending"
       });
       loadItineraries();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating itinerary",
         description: error.message,
@@ -248,7 +248,7 @@ const TravelManagement = () => {
         leg.status
       ]);
 
-      (doc as any).autoTable({
+      (doc as unknown).autoTable({
         startY: 100,
         head: [["Leg", "Type", "Carrier", "From", "To", "Departure", "Status"]],
         body: tableData,
@@ -258,7 +258,7 @@ const TravelManagement = () => {
     }
     
     // Footer
-    const pageCount = (doc as any).internal.getNumberOfPages();
+    const pageCount = (doc as unknown).internal.getNumberOfPages();
     doc.setFontSize(8);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 14, doc.internal.pageSize.height - 10);
     doc.text(`Page ${pageCount}`, doc.internal.pageSize.width - 30, doc.internal.pageSize.height - 10);
@@ -296,7 +296,7 @@ const TravelManagement = () => {
       });
 
       loadConflicts();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error resolving conflict",
         description: error.message,

@@ -32,7 +32,7 @@ vi.mock("@tanstack/react-query", () => ({
   useQuery: vi.fn(() => ({ data: null, isLoading: false })),
   useQueryClient: vi.fn(() => ({})),
   QueryClient: vi.fn(),
-  QueryClientProvider: ({ children }: any) => children,
+  QueryClientProvider: ({ children }: unknown: unknown: unknown) => children,
 }));
 
 // Mock useToast

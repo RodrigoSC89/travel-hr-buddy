@@ -45,7 +45,7 @@ export const ScheduledReports: React.FC = () => {
   const fetchScheduledReports = async () => {
     try {
       const { data, error } = await supabase
-        .from("scheduled_compliance_reports" as any)
+        .from("scheduled_compliance_reports" as unknown)
         .select("*")
         .order("next_run", { ascending: true });
 
@@ -74,7 +74,7 @@ export const ScheduledReports: React.FC = () => {
           },
         ]);
       } else {
-        setReports((data as any) || []);
+        setReports((data as unknown) || []);
       }
     } catch (error) {
       console.error("Error fetching scheduled reports:", error);
@@ -96,7 +96,7 @@ export const ScheduledReports: React.FC = () => {
     try {
       const nextRun = calculateNextRun(formData.frequency);
 
-      const { error } = await supabase.from("scheduled_compliance_reports" as any).insert({
+      const { error } = await supabase.from("scheduled_compliance_reports" as unknown).insert({
         title: formData.title,
         template: formData.template,
         format: formData.format,
@@ -163,7 +163,7 @@ export const ScheduledReports: React.FC = () => {
         // Update last_run and next_run
         try {
           await supabase
-            .from("scheduled_compliance_reports" as any)
+            .from("scheduled_compliance_reports" as unknown)
             .update({
               last_run: new Date().toISOString(),
               next_run: calculateNextRun(report.frequency),
@@ -194,7 +194,7 @@ export const ScheduledReports: React.FC = () => {
   const deleteSchedule = async (reportId: string) => {
     try {
       const { error } = await supabase
-        .from("scheduled_compliance_reports" as any)
+        .from("scheduled_compliance_reports" as unknown)
         .delete()
         .eq("id", reportId);
 
@@ -290,7 +290,7 @@ export const ScheduledReports: React.FC = () => {
                   <Label>Frequency</Label>
                   <Select
                     value={formData.frequency}
-                    onValueChange={(v: any) => setFormData({ ...formData, frequency: v })}
+                    onValueChange={(v: unknown: unknown: unknown) => setFormData({ ...formData, frequency: v })}
                   >
                     <SelectTrigger>
                       <SelectValue />

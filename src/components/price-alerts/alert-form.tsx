@@ -33,7 +33,7 @@ import { CreatePriceAlertInput, PriceAlert, UpdatePriceAlertInput } from "@/serv
 interface AlertFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: unknown: unknown: unknown) => Promise<void>;
   alert?: PriceAlert | null;
   mode: "create" | "edit";
 }
@@ -249,7 +249,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
               <Label htmlFor="notification_frequency">Notification Frequency</Label>
               <Select
                 value={formData.notification_frequency}
-                onValueChange={(value: any) =>
+                onValueChange={(value: unknown) =>
                   setFormData({ ...formData, notification_frequency: value })
                 }
               >

@@ -225,7 +225,7 @@ export function ProductionChecklist() {
   const runPerformanceChecks = async (): Promise<CheckItem[]> => {
     const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
     const loadTime = navigation?.loadEventEnd - navigation?.startTime || 0;
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown).memory;
     
     const apmHealth = apm.getHealthStatus();
     

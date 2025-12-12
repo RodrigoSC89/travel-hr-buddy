@@ -16,7 +16,7 @@ interface SearchFiltersProps {
     status?: string[];
     dateRange?: { start: Date; end: Date };
   };
-  onFiltersChange?: (filters: any) => void;
+  onFiltersChange?: (filters: unknown: unknown: unknown) => void;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   onSortChange?: (sortBy: string, order: "asc" | "desc") => void;

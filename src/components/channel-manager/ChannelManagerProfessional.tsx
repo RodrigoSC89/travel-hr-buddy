@@ -136,9 +136,9 @@ interface Message {
   message_content: string;
   message_type?: string;
   created_at?: string;
-  attachments?: any[];
+  attachments?: unknown[];
   is_ai_generated?: boolean;
-  reactions?: any[];
+  reactions?: unknown[];
 }
 
 interface ChannelMember {
@@ -395,11 +395,11 @@ export default function ChannelManagerProfessional() {
       const mergedChannels: Channel[] = [
         ...dbChannels.map(ch => ({
           id: ch.id,
-          name: (ch as any).channel_name || (ch as any).name || "",
+          name: (ch as unknown).channel_name || (ch as unknown).name || "",
           description: ch.description || undefined,
           is_active: ch.is_active,
-          channel_type: (ch as any).channel_type,
-          is_private: !(ch as any).is_public,
+          channel_type: (ch as unknown).channel_type,
+          is_private: !(ch as unknown).is_public,
           created_at: ch.created_at,
           created_by: ch.created_by,
           member_count: Math.floor(Math.random() * 20) + 5,
@@ -502,7 +502,7 @@ export default function ChannelManagerProfessional() {
           channel_type: newChannelType,
           is_private: newChannelPrivate,
           created_by: user?.id,
-        } as any)
+        } as unknown)
         .select()
         .single();
 
@@ -567,7 +567,7 @@ export default function ChannelManagerProfessional() {
           channel_id: selectedChannel.id,
           sender_id: user?.id,
           message_content: messageContent,
-        } as any);
+        } as unknown);
 
       const newMessage: Message = {
         id: Date.now().toString(),

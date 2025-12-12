@@ -89,7 +89,7 @@ const PerformanceOptimizer = () => {
     { time: "20:00", cpu: 45, memory: 58, network: 35 }
   ];
 
-  const runOptimization = async (optimization: any) => {
+  const runOptimization = async (optimization: unknown: unknown: unknown) => {
     setIsOptimizing(true);
     
     toast({

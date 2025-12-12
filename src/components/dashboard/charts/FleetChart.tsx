@@ -9,7 +9,7 @@ export default function FleetChart({ data }: FleetChartProps) {
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>
         <Pie
-          data={data as any}
+          data={data as unknown}
           cx="50%"
           cy="50%"
           innerRadius={60}

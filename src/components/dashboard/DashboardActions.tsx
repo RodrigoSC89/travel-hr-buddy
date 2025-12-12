@@ -77,9 +77,9 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
         // Create CSV content
         const headers = ["Tipo", "Nome", "Status", "Atualizado em"];
         const rows = [
-          ...(vessels || []).map((v: any) => ["Embarcação", v.name || "-", v.status || "-", v.updated_at || "-"]),
-          ...(crew || []).map((c: any) => ["Tripulante", c.full_name || "-", c.status || "-", c.updated_at || "-"]),
-          ...(checklists || []).map((c: any) => ["Checklist", c.title || "-", c.status || "-", c.updated_at || "-"])
+          ...(vessels || []).map((v: unknown) => ["Embarcação", v.name || "-", v.status || "-", v.updated_at || "-"]),
+          ...(crew || []).map((c: unknown) => ["Tripulante", c.full_name || "-", c.status || "-", c.updated_at || "-"]),
+          ...(checklists || []).map((c: unknown) => ["Checklist", c.title || "-", c.status || "-", c.updated_at || "-"])
         ];
 
         content = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");

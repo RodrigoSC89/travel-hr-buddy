@@ -70,7 +70,7 @@ export function PerformanceDashboard() {
   useEffect(() => {
     getCacheSize().then(setCacheSize);
     
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown).connection;
     if (connection) {
       setNetworkType(connection.effectiveType || "unknown");
     }

@@ -43,7 +43,7 @@ interface SmartAlert {
   confidence_score: number | null;
   impact_estimate: string | null;
   cause_analysis: string | null;
-  recommended_actions: any[];
+  recommended_actions: unknown[];
   affected_systems: string[];
   acknowledged: boolean;
   resolved: boolean;
@@ -75,7 +75,7 @@ const SmartAlerts = () => {
       setLoading(true);
       
       let query = supabase
-        .from("active_alerts_dashboard" as any)
+        .from("active_alerts_dashboard" as unknown)
         .select("*");
       
       if (!showResolved) {
@@ -88,22 +88,22 @@ const SmartAlerts = () => {
 
       // Fetch full details for alerts with actions
       const alertsWithDetails = await Promise.all(
-        (data || []).map(async (alert: any) => {
+        (data || []).map(async (alert: unknown) => {
           const { data: fullAlert } = await supabase
-            .from("smart_alerts" as any)
+            .from("smart_alerts" as unknown)
             .select("recommended_actions, affected_systems")
             .eq("id", alert.id)
             .single();
           
           return {
             ...alert,
-            recommended_actions: (fullAlert as any)?.recommended_actions || [],
-            affected_systems: (fullAlert as any)?.affected_systems || []
+            recommended_actions: (fullAlert as unknown)?.recommended_actions || [],
+            affected_systems: (fullAlert as unknown)?.affected_systems || []
           };
         })
       );
 
-      setAlerts(alertsWithDetails as any);
+      setAlerts(alertsWithDetails as unknown);
     } catch (error) {
       console.error("Error loading smart alerts:", error);
       toast({
@@ -144,8 +144,8 @@ const SmartAlerts = () => {
   const handleAcknowledge = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("smart_alerts" as any)
-        .update({ acknowledged: true } as any)
+        .from("smart_alerts" as unknown)
+        .update({ acknowledged: true } as unknown)
         .eq("id", alertId);
 
       if (error) throw error;
@@ -169,8 +169,8 @@ const SmartAlerts = () => {
   const handleResolve = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("smart_alerts" as any)
-        .update({ resolved: true, acknowledged: true } as any)
+        .from("smart_alerts" as unknown)
+        .update({ resolved: true, acknowledged: true } as unknown)
         .eq("id", alertId);
 
       if (error) throw error;
@@ -439,7 +439,7 @@ const SmartAlerts = () => {
                           <div className="mt-3">
                             <h4 className="text-sm font-semibold mb-2">Recommended Actions:</h4>
                             <div className="space-y-1">
-                              {alert.recommended_actions.slice(0, 3).map((action: any, idx: number) => (
+                              {alert.recommended_actions.slice(0, 3).map((action: unknown, idx: number) => (
                                 <div key={idx} className="text-sm pl-4 text-muted-foreground flex items-start gap-2">
                                   <span className="text-primary">•</span>
                                   <span className="flex-1">

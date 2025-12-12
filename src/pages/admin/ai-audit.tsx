@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger";
 
 export default function AIAuditDashboard() {
   const [logs, setLogs] = useState<any[]>([]);
-  const [metrics, setMetrics] = useState<any>(null);
+  const [metrics, setMetrics] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -34,7 +34,7 @@ export default function AIAuditDashboard() {
       // Fetch metrics
       const metricsData = await aiLogger.getMetrics(selectedService || undefined);
       setMetrics(metricsData);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       logger.error("Error fetching AI audit data", { error, selectedService, selectedStatus });
       toast.error("Failed to fetch AI audit data");
     } finally {

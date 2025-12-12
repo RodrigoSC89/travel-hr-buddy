@@ -100,7 +100,7 @@ interface PeotramTemplate {
   id: string;
   year: number;
   version: string;
-  template_data: any;
+  template_data: unknown;
   is_active: boolean;
   checklist_type: "vessel" | "shore";
   created_at: string;
@@ -226,20 +226,20 @@ export const EnhancedPeotramManager: React.FC = () => {
     }
   ];
 
-  const handleSaveAudit = async (auditData: any) => {
+  const handleSaveAudit = async (auditData: unknown: unknown: unknown) => {
     // Implementar salvamento na API Supabase
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
     await loadData(); // Recarregar dados
   };
 
-  const handleCompleteAudit = async (auditData: any) => {
+  const handleCompleteAudit = async (auditData: unknown: unknown: unknown) => {
     setIsNewAuditOpen(false);
     setSelectedAudit(null);
     // Implementar finalização na API
     await loadData();
   };
 
-  const handleUpdateNonConformity = async (id: string, updates: any) => {
+  const handleUpdateNonConformity = async (id: string, updates: Record<string, unknown>) => {
     // Implementar atualização na API
     await loadData();
   };
@@ -650,7 +650,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramNonConformities 
               nonConformities={nonConformities}
-              onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+              onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
             />
           </Suspense>
         </TabsContent>
@@ -693,7 +693,7 @@ export const EnhancedPeotramManager: React.FC = () => {
             {managementSubView === "non-conformities" && (
               <PeotramNonConformities 
                 nonConformities={nonConformities}
-                onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+                onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
               />
             )}
             {managementSubView === "reports" && <PeotramReportsGenerator />}
@@ -725,7 +725,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="non-conformities">
           <PeotramNonConformities 
             nonConformities={nonConformities}
-            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+            onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
           />
         </TabsContent>
 

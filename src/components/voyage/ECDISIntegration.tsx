@@ -23,7 +23,7 @@ interface ECDISData {
   enc_cells_installed: number;
   last_update_date: string;
   next_update_due: string;
-  routes: any[];
+  routes: unknown[];
   chart_folios: string[];
   backup_arrangements: string;
   type_approval_number: string;

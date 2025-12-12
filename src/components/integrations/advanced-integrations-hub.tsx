@@ -64,7 +64,7 @@ interface Integration {
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
   template?: boolean;
   provider: string;
   healthScore: number;

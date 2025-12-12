@@ -85,7 +85,7 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
 // Example: Generate suggestions dynamically based on workflow analysis
 export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<Suggestion[]> {
   // Fetch workflow steps
-  const { data: steps } = await (supabase as any)
+  const { data: steps } = await (supabase as unknown)
     .from("smart_workflow_steps")
     .select("*")
     .eq("workflow_id", workflowId);

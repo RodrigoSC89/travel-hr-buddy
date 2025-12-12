@@ -15,7 +15,7 @@ export default function SimulationsPage() {
   const { data: stats } = useQuery<SimulationStats>({
     queryKey: ["simulation-stats"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .rpc("get_simulation_stats");
       
       if (error) throw error;
@@ -27,7 +27,7 @@ export default function SimulationsPage() {
   const { data: simulations = [], isLoading } = useQuery<SimulationExercise[]>({
     queryKey: ["simulations", selectedType],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = (supabase as unknown)
         .from("simulation_exercises")
         .select("*")
         .order("next_due", { ascending: true });

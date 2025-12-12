@@ -33,7 +33,7 @@ vi.mock("@tiptap/react", () => ({
       insertContentAt: vi.fn(),
     },
   }),
-  EditorContent: ({ editor }: any) => (
+  EditorContent: ({ editor }: unknown: unknown: unknown) => (
     <div data-testid="editor-content">Editor Content</div>
   ),
 }));
@@ -60,7 +60,7 @@ describe("TemplateEditorWithRewrite Component", () => {
     vi.mocked(supabase.functions.invoke).mockImplementation(
       () =>
         new Promise((resolve) =>
-          setTimeout(() => resolve({ data: { result: "Rewritten text" }, error: null } as any), 100)
+          setTimeout(() => resolve({ data: { result: "Rewritten text" }, error: null } as unknown), 100)
         )
     );
 

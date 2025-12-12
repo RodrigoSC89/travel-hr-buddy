@@ -139,7 +139,7 @@ export interface ErrorContext {
   userId?: string;
   status?: number;
   code?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -159,7 +159,7 @@ export function logError(error: Error, context?: ErrorContext): void {
 /**
  * Handle API errors
  */
-export function handleApiError(error: any, context?: ErrorContext): {
+export function handleApiError(error: SupabaseError | null, context?: ErrorContext): {
   message: string;
   code?: string;
   status?: number;

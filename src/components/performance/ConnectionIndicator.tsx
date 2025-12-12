@@ -26,7 +26,7 @@ export function ConnectionIndicator({
   const [downlink, setDownlink] = useState<number | null>(null);
 
   useEffect(() => {
-    const connection = (navigator as any).connection;
+    const connection = (navigator as unknown).connection;
     if (connection) {
       setDownlink(connection.downlink);
       

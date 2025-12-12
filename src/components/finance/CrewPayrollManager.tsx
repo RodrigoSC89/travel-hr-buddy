@@ -26,9 +26,9 @@ interface CrewPayroll {
   days_onboard: number;
   overtime_hours: number;
   overtime_amount: number;
-  bonuses: any[];
-  deductions: any[];
-  allowances: any[];
+  bonuses: unknown[];
+  deductions: unknown[];
+  allowances: unknown[];
   gross_pay: number;
   net_pay: number;
   tax_amount: number;

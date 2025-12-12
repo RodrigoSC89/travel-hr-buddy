@@ -48,7 +48,7 @@ export default function IncidentsPage() {
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("incidents")
         .select("*")
         .order("created_at", { ascending: false })

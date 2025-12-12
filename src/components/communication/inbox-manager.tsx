@@ -52,14 +52,14 @@ interface Message {
   is_broadcast: boolean;
   created_at: string;
   read_at?: string;
-  attachments?: any[];
-  metadata?: any;
+  attachments?: unknown[];
+  metadata?: Record<string, unknown>;
 }
 
 interface InboxManagerProps {
   unreadCount: number;
   urgentCount: number;
-  onStatsUpdate: (stats: any) => void;
+  onStatsUpdate: (stats: unknown) => void;
 }
 
 export const InboxManager: React.FC<InboxManagerProps> = ({

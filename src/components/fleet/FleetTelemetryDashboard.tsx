@@ -67,7 +67,7 @@ interface SensorReading {
   threshold_max: number;
   is_alert: boolean;
   reading_timestamp: string;
-  metadata: any;
+  metadata: unknown;
 }
 
 interface MaintenanceAlert {
@@ -76,7 +76,7 @@ interface MaintenanceAlert {
   alert_type: string;
   severity: "low" | "medium" | "high" | "critical";
   message: string;
-  sensor_data: any;
+  sensor_data: unknown;
   predicted_failure_date?: string;
   recommended_action: string;
   status: "active" | "acknowledged" | "resolved";
@@ -283,7 +283,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
     if (!vesselsData) return;
 
     const sensorTypes = ["temperature", "pressure", "vibration", "fuel_level", "engine_rpm"];
-    const newReadings: any[] = [];
+    const newReadings: unknown[] = [];
 
     vesselsData.forEach((vessel) => {
       sensorTypes.forEach((type) => {

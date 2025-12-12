@@ -48,7 +48,7 @@ interface Integration {
   connection_status: string;
   access_token?: string;
   scopes?: string[];
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   last_sync_at?: string;
   created_at: string;
 }
@@ -57,7 +57,7 @@ interface WebhookEvent {
   id: string;
   event_type: string;
   webhook_url: string;
-  payload: any;
+  payload: unknown;
   status: string;
   response_code?: number;
   attempts: number;
@@ -99,7 +99,7 @@ export const IntegrationsHubEnhanced = () => {
 
       if (error) throw error;
       setIntegrations(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading integrations",
         description: error.message,
@@ -120,12 +120,12 @@ export const IntegrationsHubEnhanced = () => {
 
       if (error) throw error;
       setWebhookEvents(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading webhook events:", error);
     }
   };
 
-  const connectOAuth = async (provider: any) => {
+  const connectOAuth = async (provider: unknown: unknown: unknown) => {
     try {
       // Simulate OAuth flow
       const mockToken = `mock_token_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
@@ -160,7 +160,7 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadIntegrations();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Connection failed",
         description: error.message,
@@ -184,7 +184,7 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadIntegrations();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error disconnecting",
         description: error.message,
@@ -233,7 +233,7 @@ export const IntegrationsHubEnhanced = () => {
       setWebhookUrl("");
       setWebhookSecret("");
       await loadIntegrations();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating webhook",
         description: error.message,
@@ -271,7 +271,7 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadWebhookEvents();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Webhook test failed",
         description: error.message,
@@ -303,7 +303,7 @@ export const IntegrationsHubEnhanced = () => {
       });
 
       await loadWebhookEvents();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Retry failed",
         description: error.message,

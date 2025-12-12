@@ -68,7 +68,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             "focus:outline-none focus:ring-2 focus:ring-[var(--nautilus-primary)]",
             className
           )} 
-          ref={ref as any}
+          ref={ref as unknown}
           {...props}
         >
           {children}

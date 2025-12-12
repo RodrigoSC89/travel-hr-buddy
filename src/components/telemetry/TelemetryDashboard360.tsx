@@ -106,7 +106,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
     }
   }, []);
 
-  const generateAlerts = (weather: any[], satellite: any[], status: any[]) => {
+  const generateAlerts = (weather: unknown[], satellite: unknown[], status: unknown[]) => {
     const newAlerts: TelemetryAlert[] = [];
 
     // Check for dangerous weather

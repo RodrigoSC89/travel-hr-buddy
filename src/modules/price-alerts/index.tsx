@@ -303,7 +303,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       y: {
         beginAtZero: false,
         ticks: {
-          callback: (value: any) => `$${value}`,
+          callback: (value: unknown: unknown: unknown) => `$${value}`,
         },
       },
     },

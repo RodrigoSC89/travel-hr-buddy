@@ -18,7 +18,7 @@ export default function BIForecastsPage() {
     fetch("/api/mmi/forecast/all")
       .then(res => res.json())
       .then((forecasts) => {
-        const grouped = forecasts.reduce((acc: any, item: any) => {
+        const grouped = forecasts.reduce((acc: unknown: unknown: unknown, item: unknown: unknown: unknown) => {
           const key = item.system_name;
           acc[key] = (acc[key] || 0) + 1;
           return acc;

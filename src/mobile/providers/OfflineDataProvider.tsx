@@ -22,7 +22,7 @@ interface OfflineDataContextType {
   // Data operations
   getData: <T>(table: string, id: string) => Promise<T | null>;
   getAllData: <T>(table: string) => Promise<T[]>;
-  saveData: (table: string, data: Record<string, any>, priority?: "high" | "medium" | "low") => Promise<void>;
+  saveData: (table: string, data: Record<string, unknown>, priority?: "high" | "medium" | "low") => Promise<void>;
   deleteData: (table: string, id: string) => Promise<void>;
   
   // Sync operations
@@ -83,7 +83,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     // If online, fetch from server and cache
     if (isOnline) {
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await (supabase as unknown)
           .from(table)
           .select("*")
           .eq("id", id)
@@ -112,7 +112,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     // If online and cache is empty, fetch from server
     if (cached.length === 0 && isOnline) {
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await (supabase as unknown)
           .from(table)
           .select("*")
           .limit(500);
@@ -135,7 +135,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
    */
   const saveData = useCallback(async (
     table: string,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
     priority: "high" | "medium" | "low" = "medium"
   ): Promise<void> => {
     const action = data.id ? "update" : "create";

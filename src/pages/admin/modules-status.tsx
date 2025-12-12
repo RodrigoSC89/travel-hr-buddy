@@ -80,7 +80,7 @@ const ModulesStatusDashboard: React.FC = () => {
       
       const data = await response.json();
       
-      const modulesData: Module[] = data.modules.map((m: any) => ({
+      const modulesData: Module[] = data.modules.map((m: unknown) => ({
         id: m.id,
         name: m.name,
         category: m.category || "uncategorized",
