@@ -77,7 +77,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             step="0.01"
             placeholder="0,00"
             className="pl-10 bg-card border-border text-foreground"
-            {...register("amount", { valueAsNumber: true })}
+            {...register("amount", { valueAsNumber: true ))}
           />
         </div>
         {errors.amount && (

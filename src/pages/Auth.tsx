@@ -286,7 +286,7 @@ const Auth: React.FC = () => {
 
                 {/* Sign In Form */}
                 <TabsContent value="signin" className="space-y-4">
-                  <form onSubmit={signInForm.handleSubmit(handleSignIn} className="space-y-4">
+                  <form onSubmit={signInForm.handleSubmit(handleSignIn) className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signin-email">Email</Label>
                       <div className="relative">
@@ -296,7 +296,7 @@ const Auth: React.FC = () => {
                           type="email"
                           placeholder="seu@email.com"
                           className="pl-10"
-                          {...signInForm.register("email")}
+                          {...signInForm.register("email"}
                         />
                       </div>
                       {signInForm.formState.errors.email && (
@@ -355,7 +355,7 @@ const Auth: React.FC = () => {
 
                 {/* Sign Up Form */}
                 <TabsContent value="signup" className="space-y-4">
-                  <form onSubmit={signUpForm.handleSubmit(handleSignUp} className="space-y-4">
+                  <form onSubmit={signUpForm.handleSubmit(handleSignUp) className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signup-name">Nome Completo</Label>
                       <div className="relative">
@@ -365,7 +365,7 @@ const Auth: React.FC = () => {
                           type="text"
                           placeholder="Seu nome completo"
                           className="pl-10"
-                          {...signUpForm.register("fullName")}
+                          {...signUpForm.register("fullName"}
                         />
                       </div>
                       {signUpForm.formState.errors.fullName && (
@@ -449,7 +449,7 @@ const Auth: React.FC = () => {
                 {/* Reset Password Tab */}
                 {activeTab === "reset" && (
                   <div className="space-y-4">
-                    <form onSubmit={resetForm.handleSubmit(handleResetPassword} className="space-y-4">
+                    <form onSubmit={resetForm.handleSubmit(handleResetPassword) className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="reset-email">Email</Label>
                         <div className="relative">
@@ -459,7 +459,7 @@ const Auth: React.FC = () => {
                             type="email"
                             placeholder="seu@email.com"
                             className="pl-10"
-                            {...resetForm.register("email")}
+                            {...resetForm.register("email"}
                           />
                         </div>
                         {resetForm.formState.errors.email && (
