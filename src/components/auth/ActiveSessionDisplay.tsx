@@ -96,7 +96,7 @@ export const ActiveSessionDisplay = memo(function() {
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to logout",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoggingOut(false);
     }
