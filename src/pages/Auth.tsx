@@ -301,7 +301,7 @@ const Auth: React.FC = () => {
                       </div>
                       {signInForm.formState.errors.email && (
                         <p className="text-sm text-red-500">{signInForm.formState.errors.email.message}</p>
-                      }
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -370,7 +370,7 @@ const Auth: React.FC = () => {
                       </div>
                       {signUpForm.formState.errors.fullName && (
                         <p className="text-sm text-red-500">{signUpForm.formState.errors.fullName.message}</p>
-                      }
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -464,7 +464,7 @@ const Auth: React.FC = () => {
                         </div>
                         {resetForm.formState.errors.email && (
                           <p className="text-sm text-red-500">{resetForm.formState.errors.email.message}</p>
-                        }
+                        )}
                       </div>
 
                       <Button
