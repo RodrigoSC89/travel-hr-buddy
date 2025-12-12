@@ -64,7 +64,7 @@ export function ThemeProvider({
       {children}
     </ThemeProviderContext.Provider>
   );
-});
+}
 
 export const useTheme = memo(() => {
   const context = useContext(ThemeProviderContext);
