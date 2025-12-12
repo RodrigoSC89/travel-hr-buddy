@@ -404,7 +404,7 @@ const EnhancedAIChatbot: React.FC = () => {
                       ${selectedCapability === capability.id ? "ring-2 ring-primary shadow-primary/25 bg-primary/5" : ""}
                       ${capability.active ? "opacity-100" : "opacity-50 cursor-not-allowed"}
                       bg-gradient-to-br from-card via-card/95 to-${capability.color}/5 border-${capability.color}/20 hover:border-${capability.color}/40`}
-                    onClick={() => capability.active && setSelectedCapability(capability.id)}
+                    onClick={() => capability.active && setSelectedCapability(capability.id}
                   >
                     <CardContent className="p-4 flex flex-col items-center gap-2 text-center">
                       <div className={`p-3 rounded-xl bg-${capability.color}/20 group-hover:scale-110 transition-transform duration-300`}>
@@ -560,7 +560,7 @@ const EnhancedAIChatbot: React.FC = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => fileInputRef.current?.click()}
+                                onClick={() => fileInputRef.current?.click(}
                                 className="h-8 w-8 p-0"
                                 aria-label="Enviar arquivo"
                               >

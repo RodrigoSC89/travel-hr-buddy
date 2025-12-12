@@ -367,7 +367,7 @@ export default function DPIntelligenceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => window.open(incident.imca_report_url, "_blank")}
+                    onClick={() => window.open(incident.imca_report_url, "_blank"}
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Relatório
@@ -426,7 +426,7 @@ export default function DPIntelligenceCenter() {
       )}
 
       {/* AI Analysis Modal */}
-      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null)}>
+      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>

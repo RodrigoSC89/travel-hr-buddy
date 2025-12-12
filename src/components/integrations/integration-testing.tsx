@@ -406,7 +406,7 @@ export const IntegrationTesting: React.FC = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => copyToClipboard(JSON.stringify(result.response, null, 2))}
+                            onClick={() => copyToClipboard(JSON.stringify(result.response, null, 2}
                           >
                             <Copy className="w-3 h-3" />
                           </Button>

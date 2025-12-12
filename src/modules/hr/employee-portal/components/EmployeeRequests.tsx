@@ -166,7 +166,7 @@ export const EmployeeRequests = memo(function() {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Tipo de Solicitação</label>
-                <Select value={requestType} onValueChange={(v) => setRequestType(v as RequestType)}>
+                <Select value={requestType} onValueChange={(v) => setRequestType(v as RequestType}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -261,7 +261,7 @@ export const EmployeeRequests = memo(function() {
               )}
 
               <Button
-                onClick={() => createRequestMutation.mutate()}
+                onClick={() => createRequestMutation.mutate(}
                 disabled={!title || createRequestMutation.isPending}
                 className="w-full"
               >

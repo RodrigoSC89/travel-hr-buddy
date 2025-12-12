@@ -278,7 +278,7 @@ export default function MobilityDashboard() {
                 placeholder="Pergunte sobre seu voo, hotel..."
                 value={chatMessage}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
               />
               <Button size="icon" onClick={handleSendMessage}>
                 <Send className="h-4 w-4" />

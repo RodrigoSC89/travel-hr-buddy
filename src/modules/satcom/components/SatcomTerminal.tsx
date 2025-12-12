@@ -297,7 +297,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
           <Input
             value={inputMessage}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+            onKeyPress={(e) => e.key === "Enter" && sendMessage(}
             placeholder="Type message to transmit..."
             disabled={isTransmitting || signalStrength < 20}
             className="flex-1"

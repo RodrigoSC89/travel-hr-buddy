@@ -343,7 +343,7 @@ export default function DPHistory() {
                       <label key={type} className="flex items-center gap-2 cursor-pointer">
                         <Checkbox
                           checked={filters.types.includes(type)}
-                          onCheckedChange={() => handleToggleType(type)}
+                          onCheckedChange={() => handleToggleType(type}
                         />
                         <span className="text-sm">{getTypeLabel(type)}</span>
                       </label>
@@ -359,7 +359,7 @@ export default function DPHistory() {
                       <label key={status} className="flex items-center gap-2 cursor-pointer">
                         <Checkbox
                           checked={filters.statuses.includes(status)}
-                          onCheckedChange={() => handleToggleStatus(status)}
+                          onCheckedChange={() => handleToggleStatus(status}
                         />
                         <span className="text-sm">{getStatusLabel(status)}</span>
                       </label>

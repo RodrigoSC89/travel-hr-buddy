@@ -186,5 +186,5 @@ export const DevPerformanceOverlay = memo(function() {
 
   if (!import.meta.env.DEV) return null;
 
-  return <PerformanceMonitor visible={show} onClose={() => setShow(false)} />;
+  return <PerformanceMonitor visible={show} onClose={() => setShow(false} />;
 }

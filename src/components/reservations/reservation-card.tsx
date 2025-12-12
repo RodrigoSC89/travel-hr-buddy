@@ -240,7 +240,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(reservation.supplier_url, "_blank")}
+              onClick={() => window.open(reservation.supplier_url, "_blank"}
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
@@ -261,13 +261,13 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
       <ReservationAttachments
         reservationId={reservation.id}
         isOpen={showAttachments}
-        onClose={() => setShowAttachments(false)}
+        onClose={() => setShowAttachments(false}
       />
       
       <ReservationPDFGenerator
         reservation={reservation}
         isOpen={showPDFGenerator}
-        onClose={() => setShowPDFGenerator(false)}
+        onClose={() => setShowPDFGenerator(false}
       />
     </Card>
   );

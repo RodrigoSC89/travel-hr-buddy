@@ -223,7 +223,7 @@ const MaintenancePlanner = () => {
         </TabsContent>
 
         <TabsContent value="jobs" className="mt-6">
-          <JobsCenter onCreateJob={() => setShowCreateDialog(true)} />
+          <JobsCenter onCreateJob={() => setShowCreateDialog(true} />
         </TabsContent>
 
         <TabsContent value="horimetros" className="mt-6">

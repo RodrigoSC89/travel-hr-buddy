@@ -173,7 +173,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
       return (
         <Checkbox
           checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
+          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked}
           className="mr-2"
         />
       );

@@ -45,7 +45,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
         variant="ghost"
         size="sm"
         className="h-7 px-2 text-destructive-foreground hover:bg-destructive-foreground/10"
-        onClick={() => window.location.reload()}
+        onClick={() => window.location.reload(}
       >
         <RefreshCw className="h-3 w-3 mr-1" />
         Tentar novamente

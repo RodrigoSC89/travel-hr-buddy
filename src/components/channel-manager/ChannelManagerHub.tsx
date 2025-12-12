@@ -186,7 +186,7 @@ export default function ChannelManagerHub() {
                 />
               </div>
               <Button
-                onClick={() => createChannelMutation.mutate()}
+                onClick={() => createChannelMutation.mutate(}
                 disabled={!channelName || createChannelMutation.isPending}
                 className="w-full"
               >
@@ -261,7 +261,7 @@ export default function ChannelManagerHub() {
                     }}
                   />
                   <Button
-                    onClick={() => sendMessageMutation.mutate()}
+                    onClick={() => sendMessageMutation.mutate(}
                     disabled={!messageContent.trim() || sendMessageMutation.isPending}
                   >
                     <Send className="h-4 w-4" />

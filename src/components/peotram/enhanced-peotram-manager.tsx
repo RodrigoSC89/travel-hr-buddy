@@ -277,7 +277,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           auditId={selectedAudit.id}
           onSave={handleSaveAudit}
           onComplete={handleCompleteAudit}
-          onCancel={() => setSelectedAudit(null)}
+          onCancel={() => setSelectedAudit(null}
         />
       </Suspense>
     );
@@ -310,7 +310,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                 <PeotramAuditWizard
                   onSave={handleSaveAudit}
                   onComplete={handleCompleteAudit}
-                  onCancel={() => setIsNewAuditOpen(false)}
+                  onCancel={() => setIsNewAuditOpen(false}
                 />
               </Suspense>
             </DialogContent>
@@ -650,7 +650,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramNonConformities 
               nonConformities={nonConformities}
-              onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
+              onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates}
             />
           </Suspense>
         </TabsContent>
@@ -665,7 +665,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramTemplateManager 
               templates={templates}
-              onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
+              onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template}
             />
           </Suspense>
         </TabsContent>
@@ -693,14 +693,14 @@ export const EnhancedPeotramManager: React.FC = () => {
             {managementSubView === "non-conformities" && (
               <PeotramNonConformities 
                 nonConformities={nonConformities}
-                onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
+                onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates}
               />
             )}
             {managementSubView === "reports" && <PeotramReportsGenerator />}
             {managementSubView === "templates" && (
               <PeotramTemplateManager 
                 templates={templates}
-                onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
+                onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template}
               />
             )}
             {managementSubView === "analytics" && (
@@ -725,7 +725,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="non-conformities">
           <PeotramNonConformities 
             nonConformities={nonConformities}
-            onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates)}
+            onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates}
           />
         </TabsContent>
 
@@ -736,7 +736,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="templates">
           <PeotramTemplateManager 
             templates={templates}
-            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
+            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template}
           />
         </TabsContent>
 

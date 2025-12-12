@@ -207,7 +207,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                   <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={(d) => d && setDate(d)}
+                    onSelect={(d) => d && setDate(d}
                     disabled={(date) => date > new Date()}
                     initialFocus
                   />

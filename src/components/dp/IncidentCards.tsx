@@ -358,7 +358,7 @@ export default function IncidentCards() {
                 <div className="pt-2 border-t">
                   <PlanStatusSelect 
                     incident={incident} 
-                    onUpdate={(status) => handleStatusUpdate(incident.id, status)}
+                    onUpdate={(status) => handleStatusUpdate(incident.id, status}
                   />
                 </div>
               )}
@@ -613,7 +613,7 @@ export default function IncidentCards() {
                 <div className="flex gap-2">
                   <Button 
                     variant="outline" 
-                    onClick={() => selectedIncident && handleAnalyzeWithAI(selectedIncident)}
+                    onClick={() => selectedIncident && handleAnalyzeWithAI(selectedIncident}
                     disabled={!customPrompt}
                   >
                     <Brain className="mr-2 h-4 w-4" />

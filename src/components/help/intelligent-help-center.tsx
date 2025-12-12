@@ -273,7 +273,7 @@ export const IntelligentHelpCenter: React.FC = () => {
                   placeholder="Digite sua dúvida ou o que deseja aprender (ex: 'como criar escala?')"
                   value={searchQuery}
                   onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && handleSmartSearch(searchQuery)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSmartSearch(searchQuery}
                   className="pl-12 text-lg h-14"
                 />
               </div>

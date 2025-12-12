@@ -407,7 +407,7 @@ export const OptimizationGeneralHub = memo(() => {
                         <label className="text-sm font-medium">Nível de Otimização</label>
                         <Slider
                           value={[optimizationLevel]}
-                          onValueChange={(value) => setOptimizationLevel(value[0])}
+                          onValueChange={(value) => setOptimizationLevel(value[0]}
                           max={100}
                           min={25}
                           step={25}

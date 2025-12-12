@@ -429,7 +429,7 @@ export const PerformanceMonitor: React.FC = () => {
                   </div>
                   <Switch
                     checked={threshold.enabled}
-                    onCheckedChange={() => toggleThreshold(threshold.metric)}
+                    onCheckedChange={() => toggleThreshold(threshold.metric}
                   />
                 </div>
               ))}

@@ -130,7 +130,7 @@ export default function DashboardLogs() {
                 <Input
                   placeholder="Status (success/error)"
                   value={statusFilter}
-                  onChange={e => setStatusFilter(e.target.value)}
+                  onChange={e => setStatusFilter(e.target.value}
                 />
               </div>
               <div className="flex-1">
@@ -138,7 +138,7 @@ export default function DashboardLogs() {
                 <Input
                   type="date"
                   value={dateStart}
-                  onChange={e => setDateStart(e.target.value)}
+                  onChange={e => setDateStart(e.target.value}
                 />
               </div>
               <div className="flex-1">
@@ -146,7 +146,7 @@ export default function DashboardLogs() {
                 <Input
                   type="date"
                   value={dateEnd}
-                  onChange={e => setDateEnd(e.target.value)}
+                  onChange={e => setDateEnd(e.target.value}
                 />
               </div>
             </div>

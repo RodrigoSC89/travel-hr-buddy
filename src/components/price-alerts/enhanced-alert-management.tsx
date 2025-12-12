@@ -249,7 +249,7 @@ export const EnhancedAlertManagement: React.FC = () => {
                     </div>
                     <Switch
                       checked={alert.isActive}
-                      onCheckedChange={() => toggleAlert(alert.id)}
+                      onCheckedChange={() => toggleAlert(alert.id}
                     />
                   </div>
                 </CardHeader>

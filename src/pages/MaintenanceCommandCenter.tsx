@@ -521,7 +521,7 @@ const MaintenanceCommandCenter = () => {
 
         {/* Jobs Center */}
         <TabsContent value="jobs" className="mt-6">
-          <JobsCenter onCreateJob={() => setShowCreateDialog(true)} />
+          <JobsCenter onCreateJob={() => setShowCreateDialog(true} />
         </TabsContent>
 
         {/* Tasks */}

@@ -566,15 +566,15 @@ const Templates = () => {
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => selectedTemplate && handlePrint(selectedTemplate)}>
+            <Button variant="outline" onClick={() => selectedTemplate && handlePrint(selectedTemplate}>
               <Printer className="h-4 w-4 mr-2" />
               Imprimir
             </Button>
-            <Button variant="outline" onClick={() => selectedTemplate && handleDuplicate(selectedTemplate)}>
+            <Button variant="outline" onClick={() => selectedTemplate && handleDuplicate(selectedTemplate}>
               <Copy className="h-4 w-4 mr-2" />
               Duplicar
             </Button>
-            <Button onClick={() => selectedTemplate && handleDownload(selectedTemplate)}>
+            <Button onClick={() => selectedTemplate && handleDownload(selectedTemplate}>
               <Download className="h-4 w-4 mr-2" />
               Baixar
             </Button>

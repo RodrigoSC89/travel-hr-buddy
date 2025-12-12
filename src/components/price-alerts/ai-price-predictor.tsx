@@ -477,7 +477,7 @@ export const AIPricePredictor: React.FC = () => {
               Use nossa IA para gerar previsões inteligentes de preços
             </p>
             <Button 
-              onClick={() => document.getElementById("product_name")?.focus()}
+              onClick={() => document.getElementById("product_name")?.focus(}
               className="bg-primary hover:bg-primary/90"
             >
               <Brain className="w-4 h-4 mr-2" />

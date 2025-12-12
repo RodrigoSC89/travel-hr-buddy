@@ -256,7 +256,7 @@ export const IntegrationAutomation: React.FC = () => {
                     </div>
                     <Switch 
                       checked={rule.isActive}
-                      onCheckedChange={() => handleToggleRule(rule.id)}
+                      onCheckedChange={() => handleToggleRule(rule.id}
                     />
                   </div>
                 </CardHeader>

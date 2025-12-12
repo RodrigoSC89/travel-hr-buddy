@@ -358,7 +358,7 @@ Para informações mais específicas, pergunte sobre:
           <Input
             value={input}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && sendMessage(input)}
+            onKeyPress={(e) => e.key === "Enter" && sendMessage(input}
             placeholder="Pergunte sobre satélites, órbitas, passagens..."
             disabled={isLoading}
             className="flex-1"

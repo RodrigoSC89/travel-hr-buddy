@@ -78,7 +78,7 @@ export const AISMarker: React.FC<AISMarkerProps> = ({ vessels, onVesselClick }) 
               <div
                 key={vessel.mmsi}
                 className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent cursor-pointer transition-colors"
-                onClick={() => onVesselClick?.(vessel)}
+                onClick={() => onVesselClick?.(vessel}
               >
                 <div className="flex items-center gap-3">
                   <div className={getStatusColor(vessel.status)}>

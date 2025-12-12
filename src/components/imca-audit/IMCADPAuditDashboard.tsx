@@ -444,7 +444,7 @@ export const IMCADPAuditDashboard = memo(function() {
         <TabsContent value="sections">
           <IMCAAuditSections 
             selectedDPClass={selectedDPClass}
-            sectionScores={getSectionScores()}
+            sectionScores={getSectionScores(}
           />
         </TabsContent>
 
@@ -472,11 +472,11 @@ export const IMCADPAuditDashboard = memo(function() {
           <IMCAAuditManager
             customItems={customItems}
             customCategories={customCategories}
-            onAddItem={(item) => setCustomItems([...customItems, item])}
-            onEditItem={(item) => setCustomItems(customItems.map(i => i.id === item.id ? item : i))}
-            onDeleteItem={(id) => setCustomItems(customItems.filter(i => i.id !== id))}
-            onAddCategory={(cat) => setCustomCategories([...customCategories, cat])}
-            onDeleteCategory={(code) => setCustomCategories(customCategories.filter(c => c.code !== code))}
+            onAddItem={(item) => setCustomItems([...customItems, item]}
+            onEditItem={(item) => setCustomItems(customItems.map(i => i.id === item.id ? item : i}
+            onDeleteItem={(id) => setCustomItems(customItems.filter(i => i.id !== id}
+            onAddCategory={(cat) => setCustomCategories([...customCategories, cat]}
+            onDeleteCategory={(code) => setCustomCategories(customCategories.filter(c => c.code !== code}
           />
         </TabsContent>
 

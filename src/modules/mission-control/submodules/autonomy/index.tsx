@@ -95,7 +95,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="auto-opt"
               checked={settings.autoOptimization}
-              onCheckedChange={() => handleToggle("autoOptimization")}
+              onCheckedChange={() => handleToggle("autoOptimization"}
             />
           </div>
 
@@ -109,7 +109,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="risk-mit"
               checked={settings.riskMitigation}
-              onCheckedChange={() => handleToggle("riskMitigation")}
+              onCheckedChange={() => handleToggle("riskMitigation"}
             />
           </div>
 
@@ -123,7 +123,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="ai-insights"
               checked={settings.aiInsights}
-              onCheckedChange={() => handleToggle("aiInsights")}
+              onCheckedChange={() => handleToggle("aiInsights"}
             />
           </div>
 
@@ -137,7 +137,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="pred-analytics"
               checked={settings.predictiveAnalytics}
-              onCheckedChange={() => handleToggle("predictiveAnalytics")}
+              onCheckedChange={() => handleToggle("predictiveAnalytics"}
             />
           </div>
         </CardContent>

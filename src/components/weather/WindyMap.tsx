@@ -313,7 +313,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Zoom:</span>
-            <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v))}>
+            <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v}>
               <SelectTrigger className="w-24 h-8">
                 <SelectValue />
               </SelectTrigger>

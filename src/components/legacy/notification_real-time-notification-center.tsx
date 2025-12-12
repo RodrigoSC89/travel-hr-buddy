@@ -423,7 +423,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
                         className={`p-2 border rounded text-xs transition-all cursor-pointer hover:bg-accent/50 ${
                           !notification.read ? "border-l-2 border-l-primary bg-accent/20" : ""
                         }`}
-                        onClick={() => !notification.read && markAsRead(notification.id)}
+                        onClick={() => !notification.read && markAsRead(notification.id}
                       >
                         <div className="flex items-start gap-2">
                           {getNotificationIcon(notification.type)}

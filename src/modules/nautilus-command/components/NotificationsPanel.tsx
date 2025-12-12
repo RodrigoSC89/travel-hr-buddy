@@ -196,7 +196,7 @@ export const NotificationsPanel = memo(function({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs"
-                              onClick={() => toast.info("Ver detalhes")}
+                              onClick={() => toast.info("Ver detalhes"}
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               Ver

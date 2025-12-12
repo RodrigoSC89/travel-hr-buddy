@@ -432,7 +432,7 @@ export const EmployeeManagement = memo(() => {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-4 md:mt-0">
-                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"])}>
+                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"]}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>

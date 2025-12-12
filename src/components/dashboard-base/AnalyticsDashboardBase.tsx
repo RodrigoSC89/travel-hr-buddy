@@ -222,7 +222,7 @@ export const AnalyticsDashboardBase = ({
 
           {/* Export Buttons */}
           {config.exportFormats && config.exportFormats.length > 0 && (
-            <Select onValueChange={(format) => handleExport(format as unknown)}>
+            <Select onValueChange={(format) => handleExport(format as unknown}>
               <SelectTrigger className="w-[140px]">
                 <Download className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Exportar" />

@@ -287,7 +287,7 @@ export default function VaultAIComplete() {
               placeholder="Digite sua busca... (ex: procedimentos de segurança, manutenção preventiva)"
               value={searchQuery}
               onChange={handleChange}
-              onKeyPress={(e) => e.key === "Enter" && performVectorSearch()}
+              onKeyPress={(e) => e.key === "Enter" && performVectorSearch(}
               className="flex-1"
             />
             <Button onClick={performVectorSearch} disabled={loading}>
@@ -326,7 +326,7 @@ export default function VaultAIComplete() {
               </SelectContent>
             </Select>
 
-            <Select value={similarityThreshold.toString()} onValueChange={(val) => setSimilarityThreshold(parseFloat(val))}>
+            <Select value={similarityThreshold.toString()} onValueChange={(val) => setSimilarityThreshold(parseFloat(val}>
               <SelectTrigger className="w-48">
                 <SelectValue />
               </SelectTrigger>

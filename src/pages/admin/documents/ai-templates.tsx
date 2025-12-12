@@ -543,7 +543,7 @@ export default function AITemplatesPage() {
                   placeholder="Adicionar tag..."
                   value={tagInput}
                   onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
+                  onKeyPress={(e) => e.key === "Enter" && handleAddTag(}
                 />
                 <Button type="button" onClick={handleAddTag} variant="outline">
                   Adicionar

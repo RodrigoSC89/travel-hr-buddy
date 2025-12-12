@@ -646,8 +646,8 @@ export default function MentorDPProfessional() {
                   </ScrollArea>
                   <div className="p-4 border-t">
                     <div className="flex gap-2">
-                      <Input value={inputMessage} onChange={handleChange} onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()} placeholder="Faça uma pergunta sobre DP..." disabled={isLoading} className="flex-1" />
-                      <Button onClick={() => sendMessage()} disabled={isLoading || !inputMessage.trim()}>
+                      <Input value={inputMessage} onChange={handleChange} onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage(} placeholder="Faça uma pergunta sobre DP..." disabled={isLoading} className="flex-1" />
+                      <Button onClick={() => sendMessage(} disabled={isLoading || !inputMessage.trim()}>
                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                       </Button>
                     </div>
@@ -993,7 +993,7 @@ export default function MentorDPProfessional() {
             </div>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={handleSetShowQuizDialog}>Cancelar</Button>
-              <Button onClick={() => generateQuiz()} disabled={!quizTopic.trim() || isLoading}>
+              <Button onClick={() => generateQuiz(} disabled={!quizTopic.trim() || isLoading}>
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />}
                 Gerar Quiz
               </Button>
@@ -1141,7 +1141,7 @@ export default function MentorDPProfessional() {
                 <div className="text-center py-8">
                   <HelpCircle className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
                   <p className="text-muted-foreground mb-4">Esta pergunta ainda não foi respondida.</p>
-                  <Button onClick={() => selectedQuestion && answerQuestion(selectedQuestion)} disabled={isLoading}>
+                  <Button onClick={() => selectedQuestion && answerQuestion(selectedQuestion} disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />}
                     Gerar Resposta com IA
                   </Button>
@@ -1149,7 +1149,7 @@ export default function MentorDPProfessional() {
               )}
             </div>
             <div className="flex justify-between">
-              <Button variant="outline" onClick={() => selectedQuestion && voteQuestion(selectedQuestion.id)}>
+              <Button variant="outline" onClick={() => selectedQuestion && voteQuestion(selectedQuestion.id}>
                 <ThumbsUp className="h-4 w-4 mr-2" />
                 Útil ({selectedQuestion?.votes})
               </Button>

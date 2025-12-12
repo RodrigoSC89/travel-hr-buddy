@@ -538,7 +538,7 @@ export const IMCAAuditManager = memo(function({
       </Card>
 
       {/* Edit Item Dialog */}
-      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
+      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null}>
         <DialogContent className="max-w-2xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Editar Item de Checklist</DialogTitle>

@@ -385,7 +385,7 @@ export const EmployeeDossierSummary: React.FC = () => {
       {/* Ações */}
       <div className="flex gap-4">
         <Button 
-          onClick={() => window.open("/crew-dossier", "_blank")} 
+          onClick={() => window.open("/crew-dossier", "_blank"} 
           className="flex-1"
         >
           <ExternalLink className="h-4 w-4 mr-2" />

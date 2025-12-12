@@ -222,7 +222,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
       return (
         <Checkbox
           checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
+          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked}
           className="mr-2"
         />
       );

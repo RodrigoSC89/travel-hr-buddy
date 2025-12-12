@@ -302,7 +302,7 @@ export default function WeatherCommandCenter() {
               placeholder="Buscar localização..."
               value={searchQuery}
               onChange={handleChange}
-              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch(}
               className="w-64"
             />
             <Button onClick={handleSearch} variant="outline">

@@ -490,9 +490,9 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <div
                       key={element.id}
                       draggable={isEditing}
-                      onDragStart={() => handleDragStart(element.id)}
+                      onDragStart={() => handleDragStart(element.id}
                       onDragOver={handleDragOver}
-                      onDrop={() => handleDrop(element.id)}
+                      onDrop={() => handleDrop(element.id}
                       className="p-4 border rounded-lg space-y-3"
                     >
                       <div className="flex items-center gap-3">

@@ -319,7 +319,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                                 key={idx}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10 transition-colors"
-                                onClick={() => citation.link && window.open(citation.link, "_blank")}
+                                onClick={() => citation.link && window.open(citation.link, "_blank"}
                               >
                                 <BookOpen className="h-2 w-2 mr-1" />
                                 {citation.norma} - {citation.artigo}
@@ -358,7 +358,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                 }}
               />
               <Button
-                onClick={() => handleSendMessage()}
+                onClick={() => handleSendMessage(}
                 disabled={isLoading || !input.trim()}
                 className="px-6 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700"
               >

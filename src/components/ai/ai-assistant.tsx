@@ -355,7 +355,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
             value={input}
             onChange={handleChange}
             placeholder="Digite sua mensagem ou use o microfone..."
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
             className="flex-1"
           />
           

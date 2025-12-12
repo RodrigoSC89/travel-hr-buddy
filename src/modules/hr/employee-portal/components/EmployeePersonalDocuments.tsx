@@ -417,10 +417,10 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <div className="flex items-center justify-end gap-2">
                         {doc.file_url && (
                           <>
-                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank")}>
+                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank"}>
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank")}>
+                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank"}>
                               <Download className="h-4 w-4" />
                             </Button>
                           </>

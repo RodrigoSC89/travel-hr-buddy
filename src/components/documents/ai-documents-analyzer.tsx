@@ -718,7 +718,7 @@ export const AIDocumentsAnalyzer = memo(function() {
                   placeholder="Digite sua busca..."
                   value={searchQuery}
                   onChange={handleChange}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch(}
                 />
                 <Button onClick={handleSearch}>
                   <Search className="h-4 w-4 mr-2" />

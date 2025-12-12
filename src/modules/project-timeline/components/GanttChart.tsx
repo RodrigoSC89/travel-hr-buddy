@@ -283,7 +283,7 @@ export const GanttChart = memo(() => {
             dependencyMode && dependencySource?.id === task.id ? "bg-blue-100" : ""
           }`}
           draggable
-          onDragStart={() => handleDragStart(task)}
+          onDragStart={() => handleDragStart(task}
           onDragEnd={handleDragEnd}
         >
           <div className="w-56 shrink-0" style={{ paddingLeft: `${indent}px` }}>

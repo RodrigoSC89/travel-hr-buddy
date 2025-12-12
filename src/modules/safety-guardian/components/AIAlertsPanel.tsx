@@ -170,7 +170,7 @@ export const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({
       </Card>
 
       {/* Alert Details Dialog */}
-      <Dialog open={!!selectedAlert} onOpenChange={() => setSelectedAlert(null)}>
+      <Dialog open={!!selectedAlert} onOpenChange={() => setSelectedAlert(null}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

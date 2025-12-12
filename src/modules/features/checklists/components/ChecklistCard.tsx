@@ -28,7 +28,7 @@ export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: Che
   return (
     <Card 
       className="cursor-pointer hover:shadow-md transition-shadow"
-      onClick={() => onView?.(checklist)}
+      onClick={() => onView?.(checklist}
     >
       <CardContent className="p-6">
         <div className="flex items-start justify-between">

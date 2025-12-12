@@ -1317,7 +1317,7 @@ export default function AcademyDashboard() {
                 placeholder="Digite sua pergunta..."
                 value={chatInput}
                 onChange={handleChange}
-                onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
+                onKeyDown={(e) => e.key === "Enter" && handleChatSend(}
               />
               <Button onClick={handleChatSend} disabled={isChatLoading}>
                 <Sparkles className="h-4 w-4" />
@@ -1344,7 +1344,7 @@ export default function AcademyDashboard() {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>Tipo de Geração</Label>
-              <Select value={aiGenerationType} onValueChange={(v: "gap" | "incident" | "custom") => setAiGenerationType(v)}>
+              <Select value={aiGenerationType} onValueChange={(v: "gap" | "incident" | "custom") => setAiGenerationType(v}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="gap">Gap de Auditoria</SelectItem>

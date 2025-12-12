@@ -129,7 +129,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 <Switch
                   id="notifications"
                   checked={settings.enableNotifications}
-                  onCheckedChange={(v) => updateSetting("enableNotifications", v)}
+                  onCheckedChange={(v) => updateSetting("enableNotifications", v}
                 />
               </div>
 
@@ -143,7 +143,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 <Switch
                   id="sound"
                   checked={settings.notificationSound}
-                  onCheckedChange={(v) => updateSetting("notificationSound", v)}
+                  onCheckedChange={(v) => updateSetting("notificationSound", v}
                   disabled={!settings.enableNotifications}
                 />
               </div>
@@ -158,7 +158,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 <Switch
                   id="darkMap"
                   checked={settings.darkMapTheme}
-                  onCheckedChange={(v) => updateSetting("darkMapTheme", v)}
+                  onCheckedChange={(v) => updateSetting("darkMapTheme", v}
                 />
               </div>
 
@@ -167,7 +167,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 <div className="flex items-center gap-4">
                   <Slider
                     value={[settings.dataRetentionDays]}
-                    onValueChange={([v]) => updateSetting("dataRetentionDays", v)}
+                    onValueChange={([v]) => updateSetting("dataRetentionDays", v}
                     min={7}
                     max={90}
                     step={1}
@@ -188,7 +188,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 <div className="flex items-center gap-4">
                   <Slider
                     value={[settings.autoSyncInterval]}
-                    onValueChange={([v]) => updateSetting("autoSyncInterval", v)}
+                    onValueChange={([v]) => updateSetting("autoSyncInterval", v}
                     min={10}
                     max={300}
                     step={10}
@@ -208,7 +208,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 <div className="flex items-center gap-4">
                   <Slider
                     value={[settings.mapRefreshRate]}
-                    onValueChange={([v]) => updateSetting("mapRefreshRate", v)}
+                    onValueChange={([v]) => updateSetting("mapRefreshRate", v}
                     min={5}
                     max={120}
                     step={5}
@@ -258,7 +258,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 </div>
                 <Switch
                   checked={settings.showWeatherAlerts}
-                  onCheckedChange={(v) => updateSetting("showWeatherAlerts", v)}
+                  onCheckedChange={(v) => updateSetting("showWeatherAlerts", v}
                 />
               </div>
 
@@ -271,7 +271,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 </div>
                 <Switch
                   checked={settings.showSatelliteAlerts}
-                  onCheckedChange={(v) => updateSetting("showSatelliteAlerts", v)}
+                  onCheckedChange={(v) => updateSetting("showSatelliteAlerts", v}
                 />
               </div>
 
@@ -284,7 +284,7 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
                 </div>
                 <Switch
                   checked={settings.showSystemAlerts}
-                  onCheckedChange={(v) => updateSetting("showSystemAlerts", v)}
+                  onCheckedChange={(v) => updateSetting("showSystemAlerts", v}
                 />
               </div>
             </div>

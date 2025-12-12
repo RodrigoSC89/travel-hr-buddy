@@ -136,7 +136,7 @@ export const SemanticDocumentSearch = memo(function() {
             placeholder="Search for documents (e.g., 'safety procedures', 'fuel reports')..."
             value={searchQuery}
             onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch(}
             className="flex-1"
           />
           <Button onClick={handleSearch} disabled={searching}>

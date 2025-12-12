@@ -233,7 +233,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                     />
                     <Select
                       value={filter.operator}
-                      onValueChange={(value) => updateFilter(index, "operator", value)}
+                      onValueChange={(value) => updateFilter(index, "operator", value}
                     >
                       <SelectTrigger className="text-sm">
                         <SelectValue />

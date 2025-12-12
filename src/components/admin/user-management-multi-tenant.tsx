@@ -262,7 +262,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                           <>
                             <Select
                               value={user.role}
-                              onValueChange={(newRole) => handleUpdateRole(user.id, newRole)}
+                              onValueChange={(newRole) => handleUpdateRole(user.id, newRole}
                             >
                               <SelectTrigger className="w-32">
                                 <SelectValue />

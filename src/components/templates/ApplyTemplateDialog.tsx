@@ -162,7 +162,7 @@ export const ApplyTemplateDialog = memo(function({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "edit" | "preview")}>
+        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "edit" | "preview"}>
           <div className="flex items-center justify-between">
             <TabsList>
               <TabsTrigger value="edit" className="flex items-center gap-2">

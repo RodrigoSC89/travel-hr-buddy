@@ -434,7 +434,7 @@ export const PeotramReportsGenerator: React.FC = () => {
                             <Checkbox
                               id={section.id}
                               checked={reportConfig.sections.includes(section.id)}
-                              onCheckedChange={(checked) => handleSectionToggle(section.id, checked as boolean)}
+                              onCheckedChange={(checked) => handleSectionToggle(section.id, checked as boolean}
                               disabled={section.required}
                             />
                             <div className="flex-1">

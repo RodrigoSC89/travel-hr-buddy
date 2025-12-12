@@ -322,7 +322,7 @@ export default function SGSOAuditReviewPage() {
                     <label className="text-sm font-medium mb-1 block">Status de Conformidade</label>
                     <Select
                       value={item.compliance_status}
-                      onValueChange={(value) => handleItemUpdate(item.id, "compliance_status", value)}
+                      onValueChange={(value) => handleItemUpdate(item.id, "compliance_status", value}
                     >
                       <SelectTrigger>
                         <SelectValue />

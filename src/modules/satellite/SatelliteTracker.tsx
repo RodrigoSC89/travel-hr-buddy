@@ -354,7 +354,7 @@ const SatelliteTracker = () => {
       {selectedVessel && (
         <AISMapOverlay 
           vessel={selectedVessel}
-          onClose={() => setSelectedVessel(null)}
+          onClose={() => setSelectedVessel(null}
         />
       )}
 

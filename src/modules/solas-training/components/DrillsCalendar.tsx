@@ -136,7 +136,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
             <Calendar
               mode="single"
               selected={selectedDate}
-              onSelect={(date) => date && setSelectedDate(date)}
+              onSelect={(date) => date && setSelectedDate(date}
               locale={ptBR}
               className="rounded-md border"
               modifiers={{

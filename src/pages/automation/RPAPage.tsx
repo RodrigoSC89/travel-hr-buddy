@@ -258,7 +258,7 @@ export default function RPAPage() {
                   <div className="flex items-center gap-4">
                     <Switch
                       checked={botStates[bot.id]}
-                      onCheckedChange={() => toggleBot(bot.id)}
+                      onCheckedChange={() => toggleBot(bot.id}
                     />
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline">

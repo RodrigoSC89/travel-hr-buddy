@@ -656,7 +656,7 @@ export default function WorkflowDetailPage() {
                   <Input
                     placeholder="Adicionar tarefa rápida (pressione Enter)"
                     value={newTitle}
-                    onChange={e => setNewTitle(e.target.value)}
+                    onChange={e => setNewTitle(e.target.value}
                     onKeyPress={handleKeyPress}
                     disabled={isCreating}
                   />
@@ -677,7 +677,7 @@ export default function WorkflowDetailPage() {
                     key={statusColumn.value} 
                     className={`p-4 ${statusColumn.color}`}
                     onDragOver={handleDragOver}
-                    onDrop={(e) => handleDrop(e, statusColumn.value)}
+                    onDrop={(e) => handleDrop(e, statusColumn.value}
                   >
                     <h3 className="text-md font-semibold capitalize mb-3 flex items-center gap-2">
                       {statusColumn.value === "pendente" && "🟡"}
@@ -697,7 +697,7 @@ export default function WorkflowDetailPage() {
                             key={step.id} 
                             className="p-3 bg-white hover:shadow-md transition cursor-move"
                             draggable
-                            onDragStart={(e) => handleDragStart(e, step)}
+                            onDragStart={(e) => handleDragStart(e, step}
                           >
                             <div className="flex items-start gap-2 mb-2">
                               <GripVertical className="w-4 h-4 text-muted-foreground mt-1 flex-shrink-0" />
@@ -825,7 +825,7 @@ export default function WorkflowDetailPage() {
           </Card>
 
           {/* Delete Confirmation Dialog */}
-          <AlertDialog open={!!deleteStepId} onOpenChange={() => setDeleteStepId(null)}>
+          <AlertDialog open={!!deleteStepId} onOpenChange={() => setDeleteStepId(null}>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirmar Exclusão</AlertDialogTitle>
@@ -836,7 +836,7 @@ export default function WorkflowDetailPage() {
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                 <AlertDialogAction 
-                  onClick={() => deleteStepId && deleteStep(deleteStepId)}
+                  onClick={() => deleteStepId && deleteStep(deleteStepId}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
                   Excluir

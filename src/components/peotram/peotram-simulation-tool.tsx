@@ -380,7 +380,7 @@ export const PeotramSimulationTool: React.FC = () => {
                 <div className="px-3">
                   <Slider
                     value={[param.simulatedValue]}
-                    onValueChange={(value) => updateParameter(key as keyof typeof parameters, value[0])}
+                    onValueChange={(value) => updateParameter(key as keyof typeof parameters, value[0]}
                     max={param.max}
                     min={param.min}
                     step={(param.max - param.min) / 100}

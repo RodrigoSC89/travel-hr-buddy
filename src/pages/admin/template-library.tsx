@@ -172,7 +172,7 @@ export default function TemplateLibraryPage() {
       </Tabs>
 
       {/* Preview Dialog */}
-      <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null)}>
+      <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

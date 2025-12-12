@@ -295,7 +295,7 @@ export const RealTimeCollaboration = memo(() => {
                 placeholder="Compartilhe uma atualização..."
                 value={newMessage}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                onKeyPress={(e) => e.key === "Enter" && sendMessage(}
                 className="flex-1"
               />
               <Button onClick={sendMessage} size="sm">

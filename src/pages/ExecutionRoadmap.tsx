@@ -301,7 +301,7 @@ function TaskList({
           >
             <Checkbox 
               checked={task.completed}
-              onCheckedChange={() => onToggle(task.id)}
+              onCheckedChange={() => onToggle(task.id}
               className="mt-1"
             />
             <div className="flex-1">

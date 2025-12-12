@@ -136,7 +136,7 @@ export const IMCADPAIAssistant = memo(function({ selectedDPClass }: Props) {
               onChange={handleChange}
               placeholder="Pergunte sobre IMCA, IMO, FMEA, ASOG..."
               className="min-h-[60px]"
-              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage(}
             />
             <Button onClick={sendMessage} disabled={isLoading}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}

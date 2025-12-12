@@ -40,7 +40,7 @@ export default function IncidentReportsValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.singleModule}
-              onCheckedChange={() => toggleCheck("singleModule")}
+              onCheckedChange={() => toggleCheck("singleModule"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -57,7 +57,7 @@ export default function IncidentReportsValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.completeUI}
-              onCheckedChange={() => toggleCheck("completeUI")}
+              onCheckedChange={() => toggleCheck("completeUI"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -74,7 +74,7 @@ export default function IncidentReportsValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.complianceIntegration}
-              onCheckedChange={() => toggleCheck("complianceIntegration")}
+              onCheckedChange={() => toggleCheck("complianceIntegration"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ export default function IncidentReportsValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.dataPersistence}
-              onCheckedChange={() => toggleCheck("dataPersistence")}
+              onCheckedChange={() => toggleCheck("dataPersistence"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

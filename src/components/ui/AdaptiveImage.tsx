@@ -144,7 +144,7 @@ export const AdaptiveAvatar = memo(function({
       height={size}
       loading="lazy"
       decoding="async"
-      onError={() => setError(true)}
+      onError={() => setError(true}
       className={cn("rounded-full object-cover", className)}
     />
   );

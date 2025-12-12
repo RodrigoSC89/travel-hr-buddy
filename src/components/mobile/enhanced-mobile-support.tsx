@@ -475,7 +475,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.notifications}
-                  onCheckedChange={() => requestPermission("notifications")}
+                  onCheckedChange={() => requestPermission("notifications"}
                 />
               </div>
               
@@ -486,7 +486,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.location}
-                  onCheckedChange={() => requestPermission("location")}
+                  onCheckedChange={() => requestPermission("location"}
                 />
               </div>
               
@@ -497,7 +497,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.camera}
-                  onCheckedChange={() => requestPermission("camera")}
+                  onCheckedChange={() => requestPermission("camera"}
                 />
               </div>
               
@@ -508,7 +508,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.microphone}
-                  onCheckedChange={() => requestPermission("microphone")}
+                  onCheckedChange={() => requestPermission("microphone"}
                 />
               </div>
               
@@ -519,7 +519,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.vibration}
-                  onCheckedChange={() => requestPermission("vibration")}
+                  onCheckedChange={() => requestPermission("vibration"}
                 />
               </div>
             </div>

@@ -41,7 +41,7 @@ export const AppLayout: React.FC = () => {
             />
             <EnhancedNotifications 
               isOpen={isNotificationsOpen}
-              onClose={() => setIsNotificationsOpen(false)}
+              onClose={() => setIsNotificationsOpen(false}
             />
             
             {/* Floating Action Button */}

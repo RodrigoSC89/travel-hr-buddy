@@ -312,7 +312,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.open(item.url, "_blank")}
+                    onClick={() => window.open(item.url, "_blank"}
                   >
                     <Download className="w-4 h-4" />
                   </Button>

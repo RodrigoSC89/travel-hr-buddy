@@ -451,7 +451,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => fileInputRef.current?.click(}
                 >
                   <Paperclip className="h-4 w-4" />
                 </Button>
@@ -468,7 +468,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                   placeholder="Digite sua mensagem..."
                   value={newMessage}
                   onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                  onKeyPress={(e) => e.key === "Enter" && sendMessage(}
                   className="flex-1"
                 />
                 <Button onClick={sendMessage} disabled={!newMessage.trim()}>

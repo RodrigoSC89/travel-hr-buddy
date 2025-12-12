@@ -63,7 +63,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       {/* Basic Meta Tags */}
       <title>{pageTitle}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content={keywords.join(", ")} />
+      <meta name="keywords" content={keywords.join(", "} />
       
       {/* Robots */}
       {noIndex && <meta name="robots" content="noindex, nofollow" />}

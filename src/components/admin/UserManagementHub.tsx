@@ -467,7 +467,7 @@ export const UserManagementHub: React.FC = () => {
                       <TableCell>
                         <Checkbox
                           checked={selectedUsers.includes(user.id)}
-                          onCheckedChange={() => toggleSelectUser(user.id)}
+                          onCheckedChange={() => toggleSelectUser(user.id}
                         />
                       </TableCell>
                       <TableCell>

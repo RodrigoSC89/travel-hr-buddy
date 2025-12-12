@@ -108,7 +108,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
         <div className="flex flex-wrap gap-1 p-2 bg-zinc-900/50 rounded-lg border border-zinc-700">
           {/* Text Formatting */}
           <MenuButton
-            onClick={() => editor.chain().focus().toggleBold().run()}
+            onClick={() => editor.chain().focus().toggleBold().run(}
             active={editor.isActive("bold")}
             title="Bold"
           >
@@ -116,7 +116,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
           </MenuButton>
           
           <MenuButton
-            onClick={() => editor.chain().focus().toggleItalic().run()}
+            onClick={() => editor.chain().focus().toggleItalic().run(}
             active={editor.isActive("italic")}
             title="Italic"
           >
@@ -124,7 +124,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
           </MenuButton>
 
           <MenuButton
-            onClick={() => editor.chain().focus().toggleCode().run()}
+            onClick={() => editor.chain().focus().toggleCode().run(}
             active={editor.isActive("code")}
             title="Code"
           >
@@ -154,7 +154,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
           {/* Lists */}
           <MenuButton
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            onClick={() => editor.chain().focus().toggleBulletList().run(}
             active={editor.isActive("bulletList")}
             title="Bullet List"
           >
@@ -162,7 +162,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
           </MenuButton>
 
           <MenuButton
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            onClick={() => editor.chain().focus().toggleOrderedList().run(}
             active={editor.isActive("orderedList")}
             title="Ordered List"
           >
@@ -170,7 +170,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
           </MenuButton>
 
           <MenuButton
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            onClick={() => editor.chain().focus().toggleBlockquote().run(}
             active={editor.isActive("blockquote")}
             title="Quote"
           >
@@ -181,7 +181,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
           {/* Undo/Redo */}
           <MenuButton
-            onClick={() => editor.chain().focus().undo().run()}
+            onClick={() => editor.chain().focus().undo().run(}
             disabled={!editor.can().undo()}
             title="Undo"
           >
@@ -189,7 +189,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
           </MenuButton>
 
           <MenuButton
-            onClick={() => editor.chain().focus().redo().run()}
+            onClick={() => editor.chain().focus().redo().run(}
             disabled={!editor.can().redo()}
             title="Redo"
           >

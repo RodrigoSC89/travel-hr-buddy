@@ -104,8 +104,8 @@ export const LiveSearch = ({
         <Input
           value={value}
           onChange={handleChange}
-          onFocus={() => value.length === 0 && setIsOpen(true)}
-          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+          onFocus={() => value.length === 0 && setIsOpen(true}
+          onBlur={() => setTimeout(() => setIsOpen(false), 200}
           placeholder={placeholder}
           className="pl-10 pr-10"
         />
@@ -140,7 +140,7 @@ export const LiveSearch = ({
                   <button
                     key={suggestion.id}
                     className="w-full text-left p-3 hover:bg-accent rounded-lg transition-colors"
-                    onMouseDown={() => handleSelect(suggestion)}
+                    onMouseDown={() => handleSelect(suggestion}
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -167,7 +167,7 @@ export const LiveSearch = ({
                   <button
                     key={suggestion.id}
                     className="w-full text-left p-3 hover:bg-accent rounded-lg transition-colors"
-                    onMouseDown={() => handleSelect(suggestion)}
+                    onMouseDown={() => handleSelect(suggestion}
                   >
                     <div className="flex items-center justify-between">
                       <div>

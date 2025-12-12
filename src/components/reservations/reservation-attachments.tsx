@@ -235,7 +235,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                   className="hidden"
                 />
                 <Button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => fileInputRef.current?.click(}
                   disabled={uploading}
                 >
                   {uploading ? "Enviando..." : "Selecionar Arquivos"}
@@ -290,7 +290,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(attachment.file_url, "_blank")}
+                            onClick={() => window.open(attachment.file_url, "_blank"}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>

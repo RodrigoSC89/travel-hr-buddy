@@ -306,7 +306,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                     <Label>Status</Label>
                     <Select
                       value={item.status || "pending"}
-                      onValueChange={(value) => handleItemChange(index, "status", value)}
+                      onValueChange={(value) => handleItemChange(index, "status", value}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -326,7 +326,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                       <Label>Priority</Label>
                       <Select
                         value={item.action_priority || "medium"}
-                        onValueChange={(value) => handleItemChange(index, "action_priority", value)}
+                        onValueChange={(value) => handleItemChange(index, "action_priority", value}
                       >
                         <SelectTrigger>
                           <SelectValue />

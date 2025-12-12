@@ -569,7 +569,7 @@ const ComplianceReports = () => {
                           <Checkbox
                             id={`cat-${category}`}
                             checked={reportConfig.categories.includes(category)}
-                            onCheckedChange={() => toggleCategory(category)}
+                            onCheckedChange={() => toggleCategory(category}
                           />
                           <label
                             htmlFor={`cat-${category}`}
@@ -591,7 +591,7 @@ const ComplianceReports = () => {
                           <Checkbox
                             id={`sev-${severity}`}
                             checked={reportConfig.severities.includes(severity)}
-                            onCheckedChange={() => toggleSeverity(severity)}
+                            onCheckedChange={() => toggleSeverity(severity}
                           />
                           <label
                             htmlFor={`sev-${severity}`}

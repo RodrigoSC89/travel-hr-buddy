@@ -508,7 +508,7 @@ export const HRDashboard = memo(() => {
             edit: (employee) => handleViewProfile(employee),
             delete: (employee) => setEmployeeToRemove(employee)
           }}
-          onRowClick={(employee) => handleViewProfile(employee)}
+          onRowClick={(employee) => handleViewProfile(employee}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -615,7 +615,7 @@ export const HRDashboard = memo(() => {
                       size="sm" 
                       variant="destructive"
                       className="ml-2"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => e.stopPropagation(}
                     >
                       <UserMinus size={16} />
                     </Button>
@@ -778,7 +778,7 @@ export const HRDashboard = memo(() => {
       </Dialog>
 
       {/* Remove Employee Confirmation Dialog */}
-      <AlertDialog open={!!employeeToRemove} onOpenChange={() => setEmployeeToRemove(null)}>
+      <AlertDialog open={!!employeeToRemove} onOpenChange={() => setEmployeeToRemove(null}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
@@ -790,7 +790,7 @@ export const HRDashboard = memo(() => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction 
-              onClick={() => employeeToRemove && handleRemoveEmployee(employeeToRemove)}
+              onClick={() => employeeToRemove && handleRemoveEmployee(employeeToRemove}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Remover

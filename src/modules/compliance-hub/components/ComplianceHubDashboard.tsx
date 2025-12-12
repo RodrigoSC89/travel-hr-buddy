@@ -209,26 +209,26 @@ export const ComplianceHubDashboard = memo(function() {
         <TabsContent value="audits">
           <AuditsPanel
             audits={audits}
-            onCreateAudit={() => setShowCreateAudit(true)}
+            onCreateAudit={() => setShowCreateAudit(true}
             onViewAudit={(id) => toast.info(`Visualizando auditoria ${id}`)}
             onEditAudit={(id) => toast.info(`Editando auditoria ${id}`)}
-            onDeleteAudit={(id) => toast.success("Auditoria excluída")}
+            onDeleteAudit={(id) => toast.success("Auditoria excluída"}
             onGenerateChecklist={async (id) => {
               await generateAuditChecklist("internal", "vessel");
               toast.success("Checklist gerado com IA");
             }}
-            onExportAudit={(id) => toast.success("Auditoria exportada")}
+            onExportAudit={(id) => toast.success("Auditoria exportada"}
           />
         </TabsContent>
 
         <TabsContent value="certificates">
           <CertificatesPanel
             certificates={certificates}
-            onAddCertificate={() => toast.info("Adicionar certificado")}
+            onAddCertificate={() => toast.info("Adicionar certificado"}
             onViewCertificate={(id) => toast.info(`Visualizando certificado ${id}`)}
             onEditCertificate={(id) => toast.info(`Editando certificado ${id}`)}
-            onDownloadCertificate={(id) => toast.success("Download iniciado")}
-            onSetReminder={(id) => toast.success("Lembrete configurado")}
+            onDownloadCertificate={(id) => toast.success("Download iniciado"}
+            onSetReminder={(id) => toast.success("Lembrete configurado"}
           />
         </TabsContent>
 
@@ -237,7 +237,7 @@ export const ComplianceHubDashboard = memo(function() {
             trainings={trainings}
             matrix={trainingMatrix}
             onGenerateRecommendations={handleGenerateRecommendations}
-            onExportMatrix={() => toast.success("Matriz exportada")}
+            onExportMatrix={() => toast.success("Matriz exportada"}
           />
         </TabsContent>
 

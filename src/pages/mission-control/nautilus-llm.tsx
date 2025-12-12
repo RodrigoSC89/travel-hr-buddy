@@ -219,7 +219,7 @@ const NautilusLLM: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Tabs value={mode} onValueChange={(v) => setMode(v as NautilusMode)}>
+            <Tabs value={mode} onValueChange={(v) => setMode(v as NautilusMode}>
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="deterministic">Determinístico</TabsTrigger>
                 <TabsTrigger value="safe">Seguro</TabsTrigger>
@@ -288,7 +288,7 @@ const NautilusLLM: React.FC = () => {
                 placeholder="Digite sua pergunta ou comando..."
                 value={prompt}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && handleSend()}
+                onKeyPress={(e) => e.key === "Enter" && handleSend(}
                 disabled={isLoading}
               />
               <Button onClick={handleSend} disabled={isLoading || !prompt.trim()}>

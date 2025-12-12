@@ -495,7 +495,7 @@ export const DPCompetenceHub: React.FC = () => {
       </Tabs>
 
       {/* Detail Dialog */}
-      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
+      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selectedMember && (
             <>

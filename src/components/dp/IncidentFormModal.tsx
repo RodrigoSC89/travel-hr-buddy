@@ -88,7 +88,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
                 <Label htmlFor="class_dp">Classe DP *</Label>
                 <Select
                   value={formData.class_dp}
-                  onValueChange={(value) => handleChange("class_dp", value)}
+                  onValueChange={(value) => handleChange("class_dp", value}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione a classe" />
@@ -105,7 +105,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
                 <Label htmlFor="severity">Severidade *</Label>
                 <Select
                   value={formData.severity}
-                  onValueChange={(value) => handleChange("severity", value as "Alta" | "Média" | "Baixa")}
+                  onValueChange={(value) => handleChange("severity", value as "Alta" | "Média" | "Baixa"}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione a severidade" />
@@ -172,7 +172,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Label htmlFor="sgso_category">Categoria SGSO</Label>
               <Select
                 value={formData.sgso_category}
-                onValueChange={(value) => handleChange("sgso_category", value)}
+                onValueChange={(value) => handleChange("sgso_category", value}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione a categoria" />
@@ -189,7 +189,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Label htmlFor="sgso_risk_level">Nível de Risco SGSO</Label>
               <Select
                 value={formData.sgso_risk_level}
-                onValueChange={(value) => handleChange("sgso_risk_level", value as SGSORiskLevel)}
+                onValueChange={(value) => handleChange("sgso_risk_level", value as SGSORiskLevel}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o nível de risco" />

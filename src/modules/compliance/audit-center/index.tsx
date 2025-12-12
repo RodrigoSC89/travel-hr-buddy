@@ -396,7 +396,7 @@ const AuditCenter = () => {
                       </div>
                       <Select
                         value={checklistData[item.id] || "not_checked"}
-                        onValueChange={(value) => handleChecklistChange(item.id, value as ChecklistStatus)}
+                        onValueChange={(value) => handleChecklistChange(item.id, value as ChecklistStatus}
                       >
                         <SelectTrigger className="w-[140px]">
                           <SelectValue />

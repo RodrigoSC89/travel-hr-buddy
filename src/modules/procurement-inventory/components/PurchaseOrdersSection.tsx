@@ -558,8 +558,8 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
           {selectedOrder && (
             <ReceiveItemsForm
               order={selectedOrder}
-              onConfirm={(items) => handleReceiveItems(selectedOrder.id, items)}
-              onCancel={() => setShowReceive(false)}
+              onConfirm={(items) => handleReceiveItems(selectedOrder.id, items}
+              onCancel={() => setShowReceive(false}
             />
           )}
         </DialogContent>

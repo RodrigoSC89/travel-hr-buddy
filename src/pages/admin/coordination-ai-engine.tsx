@@ -318,7 +318,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                 </div>
                 <div>
                   <Label htmlFor="agent-type">Agent Type</Label>
-                  <Select value={newAgentType} onValueChange={(v) => setNewAgentType(v as AgentType)}>
+                  <Select value={newAgentType} onValueChange={(v) => setNewAgentType(v as AgentType}>
                     <SelectTrigger id="agent-type">
                       <SelectValue />
                     </SelectTrigger>

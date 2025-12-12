@@ -261,7 +261,7 @@ const WorkflowEngine = () => {
 
                         <Select
                           value={step.type}
-                          onValueChange={(value) => updateStep(index, "type", value)}
+                          onValueChange={(value) => updateStep(index, "type", value}
                         >
                           <SelectTrigger>
                             <SelectValue />

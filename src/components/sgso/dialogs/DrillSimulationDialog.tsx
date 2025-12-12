@@ -288,7 +288,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
                     >
                       <Checkbox
                         checked={step.completed}
-                        onCheckedChange={() => handleStepToggle(step.id)}
+                        onCheckedChange={() => handleStepToggle(step.id}
                         disabled={!drillStarted}
                       />
                       <div className="flex-1">

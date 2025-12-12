@@ -699,7 +699,7 @@ export default function NotificationCenterProfessional() {
               <div className="flex items-center gap-2 pt-3 border-t mt-3">
                 <Checkbox
                   checked={selectedNotifications.length === filteredNotifications.length}
-                  onCheckedChange={(checked) => handleSelectAll(!!checked)}
+                  onCheckedChange={(checked) => handleSelectAll(!!checked}
                 />
                 <span className="text-sm text-muted-foreground">
                   {selectedNotifications.length} selecionada(s)
@@ -750,7 +750,7 @@ export default function NotificationCenterProfessional() {
                             onCheckedChange={(checked) => {
                               handleSelectNotification(notification.id, !!checked);
                             }}
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => e.stopPropagation(}
                           />
                           <div className="p-2 rounded-lg bg-background/50">
                             {getTypeIcon(notification.type)}
@@ -834,7 +834,7 @@ export default function NotificationCenterProfessional() {
                               </Tooltip>
 
                               <DropdownMenu>
-                                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation(}>
                                   <Button variant="ghost" size="icon" className="h-8 w-8">
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
@@ -1204,14 +1204,14 @@ export default function NotificationCenterProfessional() {
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => selectedNotification && handleToggleStar(selectedNotification.id)}
+                  onClick={() => selectedNotification && handleToggleStar(selectedNotification.id}
                 >
                   <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? "fill-yellow-500 text-yellow-500" : ""}`} />
                 </Button>
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => selectedNotification && handleArchive(selectedNotification.id)}
+                  onClick={() => selectedNotification && handleArchive(selectedNotification.id}
                 >
                   <Archive className="h-4 w-4" />
                 </Button>
@@ -1219,7 +1219,7 @@ export default function NotificationCenterProfessional() {
                   variant="outline" 
                   size="icon"
                   className="text-destructive"
-                  onClick={() => selectedNotification && handleDelete(selectedNotification)}
+                  onClick={() => selectedNotification && handleDelete(selectedNotification}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

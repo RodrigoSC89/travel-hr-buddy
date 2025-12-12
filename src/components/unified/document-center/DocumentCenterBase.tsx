@@ -333,7 +333,7 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
       {/* Upload Dialog */}
       <DocumentUploader
         open={uploadDialogOpen}
-        onClose={() => setUploadDialogOpen(false)}
+        onClose={() => setUploadDialogOpen(false}
       />
 
       {/* Document View/Edit Dialog */}

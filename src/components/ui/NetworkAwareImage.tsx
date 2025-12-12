@@ -208,8 +208,8 @@ export const NetworkAwareAvatar = memo(function({
           alt={alt}
           loading="lazy"
           decoding="async"
-          onLoad={() => setLoadState("loaded")}
-          onError={() => setLoadState("error")}
+          onLoad={() => setLoadState("loaded"}
+          onError={() => setLoadState("error"}
           className={cn(
             "absolute inset-0 w-full h-full object-cover transition-opacity duration-200",
             loadState === "loaded" ? "opacity-100" : "opacity-0"

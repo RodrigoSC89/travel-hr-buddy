@@ -154,8 +154,8 @@ export const LazyAvatar = memo(function({
           alt={alt}
           loading="lazy"
           decoding="async"
-          onLoad={() => setIsLoaded(true)}
-          onError={() => setHasError(true)}
+          onLoad={() => setIsLoaded(true}
+          onError={() => setHasError(true}
           className={cn(
             "absolute inset-0 w-full h-full object-cover transition-opacity duration-200",
             isLoaded ? "opacity-100" : "opacity-0"

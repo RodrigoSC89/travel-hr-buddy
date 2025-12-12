@@ -255,7 +255,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                   <Checkbox
                     id={module.id}
                     checked={selectedModules.includes(module.id)}
-                    onCheckedChange={(checked) => handleModuleChange(module.id, !!checked)}
+                    onCheckedChange={(checked) => handleModuleChange(module.id, !!checked}
                   />
                   <Label htmlFor={module.id} className="text-sm font-normal cursor-pointer">
                     {module.label}

@@ -858,7 +858,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                       </div>
                       <Switch
                         checked={alert.is_active}
-                        onCheckedChange={() => toggleAlert(alert.id)}
+                        onCheckedChange={() => toggleAlert(alert.id}
                         className="data-[state=checked]:bg-primary"
                       />
                     </div>

@@ -164,7 +164,7 @@ const CrewManagement = () => {
               <CrewList
                 crewMembers={crewMembers}
                 onViewMember={setSelectedMember}
-                onAddMember={() => setShowAddDialog(true)}
+                onAddMember={() => setShowAddDialog(true}
                 onExport={handleExport}
               />
             </TabsContent>

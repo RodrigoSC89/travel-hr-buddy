@@ -215,7 +215,7 @@ export default function AuditDashboard() {
               value={filters.module_accessed}
               onChange={handleChange}
             />
-            <Select value={filters.result || "all"} onValueChange={(value) => handleFilterChange("result", value === "all" ? "" : value)}>
+            <Select value={filters.result || "all"} onValueChange={(value) => handleFilterChange("result", value === "all" ? "" : value}>
               <SelectTrigger>
                 <SelectValue placeholder="Result" />
               </SelectTrigger>
@@ -227,7 +227,7 @@ export default function AuditDashboard() {
                 <SelectItem value="error">Error</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.severity || "all"} onValueChange={(value) => handleFilterChange("severity", value === "all" ? "" : value)}>
+            <Select value={filters.severity || "all"} onValueChange={(value) => handleFilterChange("severity", value === "all" ? "" : value}>
               <SelectTrigger>
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>

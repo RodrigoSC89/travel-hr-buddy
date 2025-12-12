@@ -186,7 +186,7 @@ export const CopilotAI = memo(() => {
                   placeholder="Pergunte qualquer coisa sobre o sistema... Ex: 'Mostrar reservas da próxima semana'"
                   value={query}
                   onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendQuery()}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendQuery(}
                 />
               </div>
               <Button

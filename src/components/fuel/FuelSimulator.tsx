@@ -97,7 +97,7 @@ export const FuelSimulator: React.FC = () => {
               </Label>
               <Slider
                 value={[distance]}
-                onValueChange={(v) => setDistance(v[0])}
+                onValueChange={(v) => setDistance(v[0]}
                 min={50}
                 max={2000}
                 step={50}
@@ -111,7 +111,7 @@ export const FuelSimulator: React.FC = () => {
               </Label>
               <Slider
                 value={[currentSpeed]}
-                onValueChange={(v) => setCurrentSpeed(v[0])}
+                onValueChange={(v) => setCurrentSpeed(v[0]}
                 min={8}
                 max={20}
                 step={0.5}

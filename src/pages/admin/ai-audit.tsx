@@ -119,7 +119,7 @@ export default function AIAuditDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Select value={selectedService || "all"} onValueChange={(value) => setSelectedService(value === "all" ? "" : value)}>
+            <Select value={selectedService || "all"} onValueChange={(value) => setSelectedService(value === "all" ? "" : value}>
               <SelectTrigger>
                 <SelectValue placeholder="All Services" />
               </SelectTrigger>
@@ -133,7 +133,7 @@ export default function AIAuditDashboard() {
               </SelectContent>
             </Select>
 
-            <Select value={selectedStatus || "all"} onValueChange={(value) => setSelectedStatus(value === "all" ? "" : value)}>
+            <Select value={selectedStatus || "all"} onValueChange={(value) => setSelectedStatus(value === "all" ? "" : value}>
               <SelectTrigger>
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>

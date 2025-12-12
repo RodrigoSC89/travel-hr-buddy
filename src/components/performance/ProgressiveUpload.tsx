@@ -127,7 +127,7 @@ export const ProgressiveUpload = memo(function({
       {/* Drop Zone */}
       <div
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-        onDragLeave={() => setIsDragging(false)}
+        onDragLeave={() => setIsDragging(false}
         onDrop={handleDrop}
         className={cn(
           "border-2 border-dashed rounded-lg p-8 text-center transition-colors",

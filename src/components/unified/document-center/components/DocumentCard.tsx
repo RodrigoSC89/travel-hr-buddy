@@ -114,7 +114,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
               <input
                 type="checkbox"
                 checked={selected}
-                onChange={() => onSelect(document.id)}
+                onChange={() => onSelect(document.id}
                 className="w-4 h-4 rounded border-gray-300"
               />
             )}

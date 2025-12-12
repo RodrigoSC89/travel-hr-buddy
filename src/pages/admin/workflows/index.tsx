@@ -129,7 +129,7 @@ export default function SmartWorkflowPage() {
               <Input
                 placeholder="Novo fluxo (ex: Aprovação de Viagens)"
                 value={newTitle}
-                onChange={e => setNewTitle(e.target.value)}
+                onChange={e => setNewTitle(e.target.value}
                 onKeyPress={handleKeyPress}
                 disabled={isCreating}
               />

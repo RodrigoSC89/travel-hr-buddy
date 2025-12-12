@@ -142,7 +142,7 @@ const DocumentListRow: React.FC<DocumentListRowProps> = ({
         <TableCell>
           <Checkbox
             checked={selected}
-            onCheckedChange={() => onSelect(document.id)}
+            onCheckedChange={() => onSelect(document.id}
           />
         </TableCell>
       )}
@@ -187,19 +187,19 @@ const DocumentListRow: React.FC<DocumentListRowProps> = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {actions.canPerform("view") && (
-              <DropdownMenuItem onClick={() => onView?.(document)}>
+              <DropdownMenuItem onClick={() => onView?.(document}>
                 <Eye className="w-4 h-4 mr-2" />
                 View
               </DropdownMenuItem>
             )}
             {actions.canPerform("edit") && (
-              <DropdownMenuItem onClick={() => onEdit?.(document)}>
+              <DropdownMenuItem onClick={() => onEdit?.(document}>
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
               </DropdownMenuItem>
             )}
             {actions.canPerform("download") && (
-              <DropdownMenuItem onClick={() => actions.download()}>
+              <DropdownMenuItem onClick={() => actions.download(}>
                 <Download className="w-4 h-4 mr-2" />
                 Download
               </DropdownMenuItem>

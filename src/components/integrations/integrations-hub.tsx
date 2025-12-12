@@ -237,7 +237,7 @@ export const IntegrationsHub: React.FC = () => {
                       </div>
                       <Switch 
                         checked={integration.isEnabled}
-                        onCheckedChange={() => handleToggleIntegration(integration.id)}
+                        onCheckedChange={() => handleToggleIntegration(integration.id}
                       />
                     </div>
                     <CardDescription>{integration.description}</CardDescription>

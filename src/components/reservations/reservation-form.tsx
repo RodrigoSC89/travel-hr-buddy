@@ -528,7 +528,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       {/* Templates Dialog */}
       <ReservationTemplates
         isOpen={showTemplates}
-        onClose={() => setShowTemplates(false)}
+        onClose={() => setShowTemplates(false}
         onUseTemplate={handleTemplateUse}
       />
     </>

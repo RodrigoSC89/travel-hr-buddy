@@ -173,7 +173,7 @@ export const AIAdvisorPanel: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={profile} onValueChange={(v) => setProfile(v as UserProfile)}>
+          <Select value={profile} onValueChange={(v) => setProfile(v as UserProfile}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>
@@ -310,7 +310,7 @@ export const AIAdvisorPanel: React.FC = () => {
                   value={input}
                   onChange={handleChange}
                   placeholder={`Pergunte ao assistente ${profileConfig[profile].label}...`}
-                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend(}
                   disabled={loading}
                 />
                 <Button onClick={handleSend} disabled={loading || !input.trim()}>

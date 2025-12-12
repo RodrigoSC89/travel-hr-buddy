@@ -142,7 +142,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   onCancel
 }) => {
   return (
-    <AlertDialog open={isOpen} onOpenChange={(open) => !open && onCancel()}>
+    <AlertDialog open={isOpen} onOpenChange={(open) => !open && onCancel(}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>

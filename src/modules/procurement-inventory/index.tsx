@@ -206,7 +206,7 @@ export default function ProcurementInventory() {
           {/* AI Panel */}
           {showAIPanel && (
             <div className="lg:col-span-1">
-              <AIAssistantPanel onClose={() => setShowAIPanel(false)} />
+              <AIAssistantPanel onClose={() => setShowAIPanel(false} />
             </div>
           )}
         </div>

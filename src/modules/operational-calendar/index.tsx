@@ -414,7 +414,7 @@ const OperationalCalendar = () => {
                 onSelectSlot={handleSelectSlot}
                 selectable
                 view={view}
-                onView={(v) => setView(v)}
+                onView={(v) => setView(v}
                 date={date}
                 onNavigate={setDate}
                 messages={{

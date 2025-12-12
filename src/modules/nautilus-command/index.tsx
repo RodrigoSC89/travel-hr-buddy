@@ -439,7 +439,7 @@ const NautilusCommandCenter = () => {
                 <SystemHealthGrid status={systemStatus} />
               </div>
               <div className="space-y-6">
-                <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))} />
+                <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id} />
                 <QuickActionsPanel />
               </div>
             </div>
@@ -454,7 +454,7 @@ const NautilusCommandCenter = () => {
           </TabsContent>
 
           <TabsContent value="alerts">
-            <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))} expanded />
+            <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id} expanded />
           </TabsContent>
 
           <TabsContent value="insights">
@@ -470,7 +470,7 @@ const NautilusCommandCenter = () => {
         <AnimatePresence>
           {showBrain && (
             <NautilusBrainChat 
-              onClose={() => setShowBrain(false)}
+              onClose={() => setShowBrain(false}
               systemStatus={systemStatus}
               alerts={alerts}
             />

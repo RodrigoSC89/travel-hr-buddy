@@ -229,7 +229,7 @@ export const SimpleGlobalSearch: React.FC = () => {
                   <CommandItem
                     key={result.id}
                     value={result.id}
-                    onSelect={() => handleSelect(result.path)}
+                    onSelect={() => handleSelect(result.path}
                     className="flex items-center gap-3 p-3"
                   >
                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10">

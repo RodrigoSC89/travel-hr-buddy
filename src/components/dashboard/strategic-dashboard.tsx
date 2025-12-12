@@ -372,7 +372,7 @@ const StrategicDashboard: React.FC = () => {
             
             <div className="flex items-center gap-4">
               {/* Profile Selector */}
-              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as unknown)}>
+              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as unknown}>
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="admin" className="flex items-center gap-2">
                     <Crown className="h-4 w-4" />
@@ -509,7 +509,7 @@ const StrategicDashboard: React.FC = () => {
                       className={`p-3 rounded-lg border cursor-pointer hover:shadow-md transition-all ${
                         !alert.isRead ? "bg-muted/50" : ""
                       }`}
-                      onClick={() => alert.actionUrl && navigate(alert.actionUrl)}
+                      onClick={() => alert.actionUrl && navigate(alert.actionUrl}
                     >
                       <div className="flex items-start gap-3">
                         <div className={`p-1 rounded-full ${

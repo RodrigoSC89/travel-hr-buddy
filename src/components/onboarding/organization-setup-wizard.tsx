@@ -280,7 +280,7 @@ export const OrganizationSetupWizard: React.FC = () => {
                 <Checkbox
                   id={module.id}
                   checked={orgData.modules.includes(module.id)}
-                  onCheckedChange={() => handleModuleToggle(module.id)}
+                  onCheckedChange={() => handleModuleToggle(module.id}
                 />
                 <div className="flex-1">
                   <Label htmlFor={module.id} className="text-base font-medium cursor-pointer">

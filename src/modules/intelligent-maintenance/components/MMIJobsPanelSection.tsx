@@ -154,7 +154,7 @@ export default function MMIJobsPanelSection() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => toast.info("Abrindo detalhes...")}>
+                    <DropdownMenuItem onClick={() => toast.info("Abrindo detalhes..."}>
                       <Eye className="h-4 w-4 mr-2" />
                       Ver Detalhes
                     </DropdownMenuItem>

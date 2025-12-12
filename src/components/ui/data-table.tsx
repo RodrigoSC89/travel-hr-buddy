@@ -282,7 +282,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     "border-b border-border hover:bg-accent/50 transition-colors",
                     onRowClick && "cursor-pointer"
                   )}
-                  onClick={() => onRowClick?.(row)}
+                  onClick={() => onRowClick?.(row}
                 >
                   {columns.map((column) => (
                     <td
@@ -345,7 +345,7 @@ export function DataTable<T extends Record<string, unknown>>({
                               <Button 
                                 variant="ghost" 
                                 size="sm"
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation(}
                               >
                                 <MoreHorizontal size={16} />
                               </Button>

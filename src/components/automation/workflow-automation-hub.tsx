@@ -107,9 +107,9 @@ export const WorkflowAutomationHub: React.FC = () => {
     <div className="space-y-6 p-1">
       <WorkflowHeader
         onExport={exportWorkflows}
-        onNewWorkflow={() => setShowNewWorkflow(true)}
+        onNewWorkflow={() => setShowNewWorkflow(true}
         onRefresh={refetch}
-        onSettings={() => setShowSettings(true)}
+        onSettings={() => setShowSettings(true}
         onMarkAllRead={handleMarkAllRead}
         unreadCount={unreadCount}
         isLoading={isLoading}

@@ -830,9 +830,9 @@ export default function SmartChecklistsPage() {
                   value={newItemTitle}
                   onChange={handleChange}
                   placeholder="Adicionar item..."
-                  onKeyDown={(e) => e.key === "Enter" && handleAddItem()}
+                  onKeyDown={(e) => e.key === "Enter" && handleAddItem(}
                 />
-                <Select value={newItemCriticality} onValueChange={(v: unknown: unknown: unknown) => setNewItemCriticality(v)}>
+                <Select value={newItemCriticality} onValueChange={(v: unknown: unknown: unknown) => setNewItemCriticality(v}>
                   <SelectTrigger className="w-[120px]">
                     <SelectValue />
                   </SelectTrigger>
@@ -943,7 +943,7 @@ export default function SmartChecklistsPage() {
           <DialogFooter className="gap-2">
             <Button
               variant="outline"
-              onClick={() => selectedChecklist && handleSummarize(selectedChecklist)}
+              onClick={() => selectedChecklist && handleSummarize(selectedChecklist}
               disabled={isSummarizing}
             >
               {isSummarizing ? (
@@ -953,7 +953,7 @@ export default function SmartChecklistsPage() {
               )}
               Analisar com IA
             </Button>
-            <Button onClick={() => selectedChecklist && handleExportPDF(selectedChecklist)}>
+            <Button onClick={() => selectedChecklist && handleExportPDF(selectedChecklist}>
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>

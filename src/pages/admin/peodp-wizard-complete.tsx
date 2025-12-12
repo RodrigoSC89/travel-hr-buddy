@@ -623,7 +623,7 @@ export default function PeoDpWizardComplete() {
                         rows={4}
                       />
                     ) : field.includes("dp_class") ? (
-                      <Select value={formData[field] || ""} onValueChange={(value) => handleFieldChange(field, value)}>
+                      <Select value={formData[field] || ""} onValueChange={(value) => handleFieldChange(field, value}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>

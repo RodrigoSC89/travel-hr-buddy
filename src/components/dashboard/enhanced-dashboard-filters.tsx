@@ -136,7 +136,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                     </div>
                     <Switch
                       checked={selectedKPIs.includes(kpi.id)}
-                      onCheckedChange={() => onKPIToggle(kpi.id)}
+                      onCheckedChange={() => onKPIToggle(kpi.id}
                     />
                   </div>
                 ))}

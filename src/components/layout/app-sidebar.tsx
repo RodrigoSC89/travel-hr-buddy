@@ -889,7 +889,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                       <Collapsible 
                         key={item.url || item.title}
                         open={openItems.includes(item.url || item.title)}
-                        onOpenChange={() => toggleItem(item.url || item.title)}
+                        onOpenChange={() => toggleItem(item.url || item.title}
                       >
                         <SidebarMenuItem>
                           <CollapsibleTrigger asChild>

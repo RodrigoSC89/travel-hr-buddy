@@ -245,7 +245,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Module Filter</Label>
-              <Select value={moduleFilter || "all"} onValueChange={(value) => setModuleFilter(value === "all" ? "" : value)}>
+              <Select value={moduleFilter || "all"} onValueChange={(value) => setModuleFilter(value === "all" ? "" : value}>
                 <SelectTrigger>
                   <SelectValue placeholder="All modules" />
                 </SelectTrigger>

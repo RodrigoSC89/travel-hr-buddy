@@ -357,7 +357,7 @@ export const PluginManager: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Switch
                               checked={plugin.enabled}
-                              onCheckedChange={() => togglePlugin(plugin.id)}
+                              onCheckedChange={() => togglePlugin(plugin.id}
                             />
                             <span className="text-sm">
                               {plugin.enabled ? "Ativo" : "Inativo"}

@@ -394,14 +394,14 @@ const ModulesStatusDashboard: React.FC = () => {
                           <span className="text-xs text-muted-foreground">Active</span>
                           <Switch
                             checked={module.status === "active" || module.status === "beta"}
-                            onCheckedChange={() => toggleModuleStatus(module.id)}
+                            onCheckedChange={() => toggleModuleStatus(module.id}
                           />
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground">Visible</span>
                           <Switch
                             checked={module.status !== "deprecated"}
-                            onCheckedChange={() => toggleModuleVisibility(module.id)}
+                            onCheckedChange={() => toggleModuleVisibility(module.id}
                           />
                         </div>
                         <Link to={module.route}>

@@ -521,7 +521,7 @@ export default function TravelCommandCenter() {
                       placeholder="Pergunte sobre seu voo, hotel..."
                       value={chatMessage}
                       onChange={handleChange}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
                     />
                     <Button size="icon" onClick={handleSendMessage}>
                       <Send className="h-4 w-4" />
@@ -773,7 +773,7 @@ export default function TravelCommandCenter() {
             <ReservationStats reservations={reservations} />
             <ReservationFilters 
               filters={filters} 
-              onFiltersChange={(newFilters) => setFilters(newFilters as unknown)}
+              onFiltersChange={(newFilters) => setFilters(newFilters as unknown}
               reservations={reservations}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

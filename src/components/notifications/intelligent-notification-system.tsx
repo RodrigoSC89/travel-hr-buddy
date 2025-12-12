@@ -444,7 +444,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.emailEnabled}
-                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked)}
+                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -454,7 +454,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.pushEnabled}
-                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked)}
+                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -464,7 +464,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.smsEnabled}
-                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked)}
+                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -474,7 +474,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.aiInsights}
-                    onCheckedChange={(checked) => updateSettings("aiInsights", checked)}
+                    onCheckedChange={(checked) => updateSettings("aiInsights", checked}
                   />
                 </div>
               </CardContent>

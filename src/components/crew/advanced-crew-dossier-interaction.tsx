@@ -247,7 +247,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
           <div className="flex items-center justify-center space-x-2">
             <Button
-              onClick={isSpeaking ? stopSpeaking : () => speak("Olá! Como posso ajudar você hoje?")}
+              onClick={isSpeaking ? stopSpeaking : () => speak("Olá! Como posso ajudar você hoje?"}
               variant="outline"
               size="sm"
             >

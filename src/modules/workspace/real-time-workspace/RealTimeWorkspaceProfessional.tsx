@@ -578,7 +578,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
             <div className="space-y-2">
               <Label>Tipo de Canal</Label>
-              <Select value={newChannelType} onValueChange={(v: "public" | "private") => setNewChannelType(v)}>
+              <Select value={newChannelType} onValueChange={(v: "public" | "private") => setNewChannelType(v}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

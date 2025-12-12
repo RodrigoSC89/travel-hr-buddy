@@ -552,7 +552,7 @@ export const FuelOptimizer = memo(() => {
         <TabsContent value="analysis">
           <FuelAnalysisPanel 
             averageEfficiency={getAverageEfficiency()}
-            totalConsumption={optimizationResults.reduce((sum, r) => sum + r.original_consumption, 0)}
+            totalConsumption={optimizationResults.reduce((sum, r) => sum + r.original_consumption, 0}
             targetReduction={15}
           />
         </TabsContent>

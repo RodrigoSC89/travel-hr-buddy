@@ -248,7 +248,7 @@ Qual área você gostaria de explorar em detalhes?`;
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onClick={(e) => e.target === e.currentTarget && onClose(}
     >
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
@@ -392,7 +392,7 @@ Qual área você gostaria de explorar em detalhes?`;
               ref={inputRef}
               value={input}
               onChange={handleChange}
-              onKeyPress={(e) => e.key === "Enter" && handleSend()}
+              onKeyPress={(e) => e.key === "Enter" && handleSend(}
               placeholder="Pergunte ao Nautilus Brain..."
               className="flex-1"
               disabled={isLoading}

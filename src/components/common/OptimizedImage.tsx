@@ -98,7 +98,7 @@ export function OptimizedImage({
               isLoaded ? "opacity-100" : "opacity-0",
               className
             )}
-            onLoad={() => setIsLoaded(true)}
+            onLoad={() => setIsLoaded(true}
           />
         </picture>
       )}

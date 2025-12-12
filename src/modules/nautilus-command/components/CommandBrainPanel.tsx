@@ -143,7 +143,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
             </div>
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico em desenvolvimento")}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico em desenvolvimento"}>
               <History className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat}>
@@ -277,7 +277,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
             ref={inputRef}
             value={input}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && handleSend(}
             placeholder="Pergunte ao Nautilus Brain..."
             disabled={isLoading}
             className="flex-1"

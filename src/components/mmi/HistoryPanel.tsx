@@ -225,7 +225,7 @@ export default function HistoryPanel() {
                     <input
                       type="checkbox"
                       checked={selectedHistories.has(history.id)}
-                      onChange={() => toggleSelection(history.id)}
+                      onChange={() => toggleSelection(history.id}
                       className="mt-1 h-4 w-4 rounded border-gray-300"
                     />
                     <div className="flex-1 space-y-3">

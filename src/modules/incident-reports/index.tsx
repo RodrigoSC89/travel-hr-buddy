@@ -423,7 +423,7 @@ const IncidentReports = () => {
         <IncidentDetailDialog
           incident={selectedIncident}
           open={!!selectedIncident}
-          onOpenChange={(open) => !open && setSelectedIncident(null)}
+          onOpenChange={(open) => !open && setSelectedIncident(null}
         />
       )}
     </div>

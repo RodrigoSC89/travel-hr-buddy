@@ -256,7 +256,7 @@ export const FleetCommandCenter: React.FC = () => {
                       className="pl-8 w-64"
                     />
                   </div>
-                  <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as FilterStatus)}>
+                  <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as FilterStatus}>
                     <SelectTrigger className="w-40">
                       <Filter className="h-4 w-4 mr-2" />
                       <SelectValue />

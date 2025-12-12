@@ -318,7 +318,7 @@ const SmartAutomationPage: React.FC = () => {
                       <span className="text-sm text-muted-foreground">Ativo</span>
                       <Switch 
                         checked={workflow.status === "active"}
-                        onCheckedChange={() => handleToggleWorkflow(workflow.id, workflow.status)}
+                        onCheckedChange={() => handleToggleWorkflow(workflow.id, workflow.status}
                       />
                     </div>
                   </div>

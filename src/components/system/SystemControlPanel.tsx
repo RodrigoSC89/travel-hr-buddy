@@ -203,19 +203,19 @@ const AccessibilityControls = () => {
       <CardContent className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm">Alto Contraste</span>
-          <Switch checked={settings.highContrast} onCheckedChange={() => toggle("highContrast")} />
+          <Switch checked={settings.highContrast} onCheckedChange={() => toggle("highContrast"} />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Texto Grande</span>
-          <Switch checked={settings.largeText} onCheckedChange={() => toggle("largeText")} />
+          <Switch checked={settings.largeText} onCheckedChange={() => toggle("largeText"} />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Reduzir Animações</span>
-          <Switch checked={settings.reducedMotion} onCheckedChange={() => toggle("reducedMotion")} />
+          <Switch checked={settings.reducedMotion} onCheckedChange={() => toggle("reducedMotion"} />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Fonte Dislexia</span>
-          <Switch checked={settings.dyslexiaFont} onCheckedChange={() => toggle("dyslexiaFont")} />
+          <Switch checked={settings.dyslexiaFont} onCheckedChange={() => toggle("dyslexiaFont"} />
         </div>
       </CardContent>
     </Card>

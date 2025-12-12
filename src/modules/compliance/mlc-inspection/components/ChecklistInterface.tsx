@@ -140,7 +140,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
                         handleAddFinding(item, compliance, severity, corrective_action);
                         setExpandedItem(null);
                       }}
-                      onCancel={() => setExpandedItem(null)}
+                      onCancel={() => setExpandedItem(null}
                     />
                   </CardContent>
                 )}
@@ -189,7 +189,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
         <Checkbox
           id={`compliance-${item.regulation}`}
           checked={compliance}
-          onCheckedChange={(checked) => setCompliance(checked as boolean)}
+          onCheckedChange={(checked) => setCompliance(checked as boolean}
         />
         <Label htmlFor={`compliance-${item.regulation}`} className="text-sm font-medium">
           Item is compliant

@@ -222,7 +222,7 @@ export const DPIntelCenter: React.FC = () => {
       )}
 
       {/* Analysis Dialog */}
-      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null)}>
+      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null}>
         <DialogContent className="max-w-3xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

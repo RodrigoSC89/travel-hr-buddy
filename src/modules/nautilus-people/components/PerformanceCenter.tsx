@@ -282,7 +282,7 @@ const PerformanceCenter: React.FC = () => {
                 <SelectItem value="q2-2025">Q2 2025</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={() => toast.info("Funcionalidade de nova avaliação")}>
+            <Button onClick={() => toast.info("Funcionalidade de nova avaliação"}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Avaliação
             </Button>
@@ -363,7 +363,7 @@ const PerformanceCenter: React.FC = () => {
                       <Button 
                         size="sm" 
                         className="flex-1"
-                        onClick={() => avaliacao.status === "pendente" ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao)}
+                        onClick={() => avaliacao.status === "pendente" ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao}
                         disabled={isLoading}
                       >
                         {isLoading ? (

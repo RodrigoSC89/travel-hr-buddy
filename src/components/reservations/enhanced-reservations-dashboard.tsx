@@ -311,7 +311,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           {/* Filters */}
           <ReservationFilters 
             filters={filters} 
-            onFiltersChange={(newFilters) => setFilters(newFilters as unknown)}
+            onFiltersChange={(newFilters) => setFilters(newFilters as unknown}
             reservations={reservations}
           />
 

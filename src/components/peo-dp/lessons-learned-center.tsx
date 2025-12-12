@@ -535,7 +535,7 @@ export const LessonsLearnedCenter: React.FC = () => {
       </Tabs>
 
       {/* Detail Dialog */}
-      <Dialog open={!!selectedLesson} onOpenChange={() => setSelectedLesson(null)}>
+      <Dialog open={!!selectedLesson} onOpenChange={() => setSelectedLesson(null}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           {selectedLesson && (
             <>

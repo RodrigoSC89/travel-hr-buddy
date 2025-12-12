@@ -553,7 +553,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                     <div className="col-span-2">
                       <Select
                         value={item.unit}
-                        onValueChange={(v) => updateItem(index, "unit", v)}
+                        onValueChange={(v) => updateItem(index, "unit", v}
                       >
                         <SelectTrigger>
                           <SelectValue />

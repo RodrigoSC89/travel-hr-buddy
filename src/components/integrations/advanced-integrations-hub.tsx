@@ -372,7 +372,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                     Configure uma nova integração em poucos passos
                   </DialogDescription>
                 </DialogHeader>
-                <IntegrationWizard onClose={() => setIsWizardOpen(false)} />
+                <IntegrationWizard onClose={() => setIsWizardOpen(false} />
               </DialogContent>
             </Dialog>
           </div>
@@ -599,7 +599,7 @@ const IntegrationCard: React.FC<{
           </div>
           <Switch 
             checked={integration.isEnabled}
-            onCheckedChange={() => onToggle(integration.id)}
+            onCheckedChange={() => onToggle(integration.id}
           />
         </div>
       </CardHeader>

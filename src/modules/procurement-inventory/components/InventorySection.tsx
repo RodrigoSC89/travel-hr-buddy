@@ -691,7 +691,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Label>Tipo de Movimentação</Label>
                 <Select 
                   value={movementType} 
-                  onValueChange={(v: "in" | "out" | "adjustment") => setMovementType(v)}
+                  onValueChange={(v: "in" | "out" | "adjustment") => setMovementType(v}
                 >
                   <SelectTrigger>
                     <SelectValue />

@@ -256,7 +256,7 @@ export default function UserManagement() {
                   <TableCell>
                     <Select
                       value={user.role}
-                      onValueChange={(value) => handleRoleUpdate(user.id, value)}
+                      onValueChange={(value) => handleRoleUpdate(user.id, value}
                     >
                       <SelectTrigger className="w-32">
                         <SelectValue />

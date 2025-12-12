@@ -391,7 +391,7 @@ const VesselTrackingMap = () => {
               <Button size="sm" variant="outline" onClick={() => map.current?.flyTo({ zoom: 2 })}>
                 Visão Geral
               </Button>
-              <Button size="sm" variant="outline" onClick={() => loadVesselData()}>
+              <Button size="sm" variant="outline" onClick={() => loadVesselData(}>
                 Atualizar
               </Button>
             </div>

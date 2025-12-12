@@ -288,7 +288,7 @@ export default function EvidenceLedgerPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Event Type</Label>
-              <Select value={filterEventType || "all"} onValueChange={(value) => setFilterEventType(value === "all" ? "" : value)}>
+              <Select value={filterEventType || "all"} onValueChange={(value) => setFilterEventType(value === "all" ? "" : value}>
                 <SelectTrigger>
                   <SelectValue placeholder="All types" />
                 </SelectTrigger>
@@ -374,7 +374,7 @@ export default function EvidenceLedgerPage() {
       </Card>
 
       {/* Entry Detail Dialog */}
-      <Dialog open={!!selectedEntry} onOpenChange={() => setSelectedEntry(null)}>
+      <Dialog open={!!selectedEntry} onOpenChange={() => setSelectedEntry(null}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

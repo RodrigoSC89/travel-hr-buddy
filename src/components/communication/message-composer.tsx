@@ -456,7 +456,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Prioridade</Label>
-              <Select value={priority} onValueChange={(value: "low" | "normal" | "high" | "critical") => setPriority(value)}>
+              <Select value={priority} onValueChange={(value: "low" | "normal" | "high" | "critical") => setPriority(value}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -471,7 +471,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             
             <div>
               <Label>Categoria</Label>
-              <Select value={category} onValueChange={(value: "general" | "hr" | "operations" | "emergency") => setCategory(value)}>
+              <Select value={category} onValueChange={(value: "general" | "hr" | "operations" | "emergency") => setCategory(value}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -592,7 +592,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => document.getElementById("file-upload")?.click()}
+                onClick={() => document.getElementById("file-upload")?.click(}
                 type="button"
               >
                 <Paperclip className="h-4 w-4 mr-2" />

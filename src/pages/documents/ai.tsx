@@ -423,7 +423,7 @@ export default function AIDocuments() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open(doc.file_url, "_blank")}
+                          onClick={() => window.open(doc.file_url, "_blank"}
                         >
                           <Download className="w-4 h-4" />
                         </Button>

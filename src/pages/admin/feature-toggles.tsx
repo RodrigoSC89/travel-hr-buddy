@@ -165,7 +165,7 @@ function FeatureFlagsList({ flags, onToggle }: FeatureFlagsListProps) {
               </div>
               <Switch
                 checked={flag.enabled}
-                onCheckedChange={() => onToggle(flag.key, flag.enabled)}
+                onCheckedChange={() => onToggle(flag.key, flag.enabled}
               />
             </div>
           </CardHeader>

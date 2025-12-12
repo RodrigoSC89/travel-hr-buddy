@@ -219,7 +219,7 @@ export const PEODPAuditForm = memo(function({
       </Card>
 
       {/* Section tabs */}
-      <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as PEODPSection)}>
+      <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as PEODPSection}>
         <TabsList className="grid w-full grid-cols-6 h-auto">
           {PEODP_SECTIONS.map(section => {
             const Icon = SECTION_ICONS[section.icon] || FileText;
@@ -267,7 +267,7 @@ export const PEODPAuditForm = memo(function({
                         <Collapsible
                           key={req.id}
                           open={isExpanded}
-                          onOpenChange={() => toggleExpanded(req.id)}
+                          onOpenChange={() => toggleExpanded(req.id}
                         >
                           <div className={`p-4 ${getStatusBgColor(item?.status || "pendente")}`}>
                             <CollapsibleTrigger className="w-full">

@@ -313,7 +313,7 @@ export const QuickStartGuide = memo(function() {
                         >
                           <Checkbox
                             checked={isCompleted}
-                            onCheckedChange={() => toggleTask(task.id)}
+                            onCheckedChange={() => toggleTask(task.id}
                           />
                           <span className={cn(
                             "flex-1 text-sm",

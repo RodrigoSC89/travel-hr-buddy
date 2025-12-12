@@ -83,7 +83,7 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
               <TooltipProvider key={member.id}>
                 <div
                   className="group flex items-center gap-3 p-2.5 rounded-lg hover:bg-accent/50 cursor-pointer transition-all duration-200"
-                  onClick={() => onMemberClick?.(member)}
+                  onClick={() => onMemberClick?.(member}
                 >
                   <div className="relative flex-shrink-0">
                     <Avatar className="h-10 w-10 ring-2 ring-background">
@@ -136,13 +136,13 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
                           variant="ghost" 
                           size="icon" 
                           className="h-7 w-7"
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => e.stopPropagation(}
                         >
                           <MoreVertical className="h-3.5 w-3.5" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onStartVideo?.(member)}>
+                        <DropdownMenuItem onClick={() => onStartVideo?.(member}>
                           <Video className="h-4 w-4 mr-2" />
                           Videochamada
                         </DropdownMenuItem>

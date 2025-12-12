@@ -193,7 +193,7 @@ export const HistoricalWeatherChart: React.FC<HistoricalWeatherChartProps> = ({
           </div>
           
           <div className="flex gap-2">
-            <Select value={metric} onValueChange={(v) => setMetric(v as MetricType)}>
+            <Select value={metric} onValueChange={(v) => setMetric(v as MetricType}>
               <SelectTrigger className="w-44">
                 <SelectValue />
               </SelectTrigger>

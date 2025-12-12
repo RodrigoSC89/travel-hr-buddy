@@ -465,15 +465,15 @@ export default function AuditTrail() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório..."}>
                   <FileText className="h-6 w-6 mb-2" />
                   <span>Relatório Diário</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório..."}>
                   <Shield className="h-6 w-6 mb-2" />
                   <span>Relatório de Segurança</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório..."}>
                   <Brain className="h-6 w-6 mb-2" />
                   <span>Análise de IA</span>
                 </Button>

@@ -377,7 +377,7 @@ const RecruitmentPipeline: React.FC = () => {
                 key={etapa.id} 
                 className="space-y-3"
                 onDragOver={handleDragOver}
-                onDrop={() => handleDrop(etapa.id)}
+                onDrop={() => handleDrop(etapa.id}
               >
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${etapa.color}`} />
@@ -398,7 +398,7 @@ const RecruitmentPipeline: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         draggable
-                        onDragStart={() => handleDragStart(candidato.id)}
+                        onDragStart={() => handleDragStart(candidato.id}
                         onDragEnd={handleDragEnd}
                         className="p-3 bg-card rounded-lg border shadow-sm cursor-grab hover:shadow-md transition-shadow active:cursor-grabbing"
                       >

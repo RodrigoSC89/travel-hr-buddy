@@ -502,7 +502,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
                       onChange={handleChange}
-                      onKeyPress={(e) => e.key === "Enter" && handleAIChat(newMessage)}
+                      onKeyPress={(e) => e.key === "Enter" && handleAIChat(newMessage}
                       disabled={isProcessing}
                     />
                     <Button 
@@ -772,7 +772,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       onChange={handleChange}}
                     />
                     <Button 
-                      onClick={() => document.getElementById("file-upload")?.click()}
+                      onClick={() => document.getElementById("file-upload")?.click(}
                       disabled={uploadingDoc}
                     >
                       {uploadingDoc ? "Enviando..." : "Selecionar Arquivos"}
@@ -879,7 +879,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       Visualize todas suas informações profissionais, certificações e histórico
                     </p>
                     <Button 
-                      onClick={() => window.open("/crew-dossier", "_blank")}
+                      onClick={() => window.open("/crew-dossier", "_blank"}
                       className="w-full max-w-sm"
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />

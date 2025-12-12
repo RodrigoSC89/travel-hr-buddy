@@ -465,7 +465,7 @@ const FuelManager = () => {
             <CardDescription>Adicione um novo registro de consumo de combustível</CardDescription>
           </CardHeader>
           <CardContent>
-            <ConsumptionForm onClose={() => setShowForm(false)} />
+            <ConsumptionForm onClose={() => setShowForm(false} />
           </CardContent>
         </Card>
       )}

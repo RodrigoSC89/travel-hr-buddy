@@ -226,7 +226,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           ? "bg-muted/30 border-border"
           : "bg-card border-primary/20 shadow-sm"
       )}
-      onClick={() => !isRead && onMarkAsRead(notification.id)}
+      onClick={() => !isRead && onMarkAsRead(notification.id}
     >
       <div className="flex gap-3">
         {/* Icon */}
@@ -294,7 +294,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               <a
                 href={notification.actionUrl}
                 className="text-xs text-primary hover:underline flex items-center gap-1"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation(}
               >
                 {notification.actionLabel || "Ver mais"}
                 <ChevronRight className="w-3 h-3" />
@@ -1060,7 +1060,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
       <NotificationCenter
         variant="panel"
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => setOpen(false}
         userId={userId}
       />
     </>

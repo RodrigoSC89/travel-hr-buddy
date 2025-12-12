@@ -197,7 +197,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => window.location.reload()}>
+              <Button variant="outline" onClick={() => window.location.reload(}>
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Atualizar
               </Button>
@@ -422,7 +422,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                         alert.severity === "medium" ? "border-yellow-200 bg-yellow-50/50" :
                           "border-blue-200 bg-blue-50/50"
                     }`}
-                    onClick={() => !alert.isRead && markAlertAsRead(alert.id)}
+                    onClick={() => !alert.isRead && markAlertAsRead(alert.id}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3 flex-1">

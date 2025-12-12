@@ -42,7 +42,7 @@ export const FilterPanel = ({
           <label className="text-sm font-medium">{filter.label}</label>
           <Select
             value={value}
-            onValueChange={(v) => onChange(filter.id, v)}
+            onValueChange={(v) => onChange(filter.id, v}
           >
             <SelectTrigger>
               <SelectValue placeholder={filter.placeholder} />

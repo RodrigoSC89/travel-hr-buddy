@@ -109,7 +109,7 @@ export const MLCInspectionDashboard: React.FC = () => {
           <p className="text-muted-foreground">Convenção do Trabalho Marítimo - ILO</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => toast.info("Filtros aplicados")}><Filter className="w-4 h-4 mr-2" />Filtros</Button>
+          <Button variant="outline" onClick={() => toast.info("Filtros aplicados"}><Filter className="w-4 h-4 mr-2" />Filtros</Button>
           <Button onClick={() => { setInspectionStarted(true); setActiveTab("checklist"); toast.success("Inspeção iniciada"); }}>
             <Plus className="w-4 h-4 mr-2" />Nova Inspeção
           </Button>
@@ -176,7 +176,7 @@ export const MLCInspectionDashboard: React.FC = () => {
           <Card><CardHeader><CardTitle><Brain className="w-5 h-5 inline mr-2" />Assistente IA MLC 2006</CardTitle></CardHeader>
             <CardContent><ScrollArea className="h-[300px] mb-4 p-4 border rounded">{aiMessages.length === 0 ? <p className="text-muted-foreground text-center">Pergunte sobre MLC 2006, requisitos, conformidade...</p> : 
               aiMessages.map((m, i) => <div key={i} className={`mb-3 p-2 rounded ${m.role === "user" ? "bg-primary/10 ml-8" : "bg-muted mr-8"}`}><p className="text-sm whitespace-pre-wrap">{m.content}</p></div>)}</ScrollArea>
-            <div className="flex gap-2"><Textarea value={aiInput} onChange={e => setAiInput(e.target.value)} placeholder="Ex: Quais são os requisitos de horas de descanso?" className="flex-1" onKeyDown={e => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendAiMessage())} />
+            <div className="flex gap-2"><Textarea value={aiInput} onChange={e => setAiInput(e.target.value} placeholder="Ex: Quais são os requisitos de horas de descanso?" className="flex-1" onKeyDown={e => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendAiMessage(} />
               <Button onClick={sendAiMessage} disabled={isLoading}><MessageSquare className="w-4 h-4" /></Button></div></CardContent></Card>
         </TabsContent>
 

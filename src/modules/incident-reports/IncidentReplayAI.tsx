@@ -98,7 +98,7 @@ export const IncidentReplayAI: React.FC = () => {
         </Button>
         <IncidentReplay
           incidentId={selectedIncidentId}
-          onClose={() => setSelectedIncidentId(null)}
+          onClose={() => setSelectedIncidentId(null}
         />
       </div>
     );

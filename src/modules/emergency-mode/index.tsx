@@ -492,7 +492,7 @@ const EmergencyMode = () => {
               <p className="text-muted-foreground">
                 Selecione o tipo de emergência para ativar o protocolo correspondente:
               </p>
-              <Select onValueChange={(v) => activateEmergency(v as EmergencyType)}>
+              <Select onValueChange={(v) => activateEmergency(v as EmergencyType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tipo de emergência" />
                 </SelectTrigger>
@@ -575,7 +575,7 @@ const EmergencyMode = () => {
                           size="sm"
                           variant={step.completed ? "default" : "outline"}
                           className={step.completed ? "bg-green-600" : ""}
-                          onClick={() => !step.completed && completeStep(step.id)}
+                          onClick={() => !step.completed && completeStep(step.id}
                           disabled={step.completed}
                         >
                           {step.completed ? (
@@ -678,7 +678,7 @@ const EmergencyMode = () => {
                     onChange={handleChange}
                     placeholder="Pergunte à IA..."
                     className="bg-red-800/50 border-red-700 text-white placeholder:text-red-400"
-                    onKeyDown={(e) => e.key === "Enter" && askAI()}
+                    onKeyDown={(e) => e.key === "Enter" && askAI(}
                   />
                   <Button onClick={askAI} disabled={isAiProcessing}>
                     <Send className="h-4 w-4" />

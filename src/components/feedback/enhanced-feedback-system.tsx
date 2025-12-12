@@ -539,7 +539,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
               <div>
                 <Label htmlFor="rating">Avaliação Geral (1-5)</Label>
-                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value)})}>
+                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

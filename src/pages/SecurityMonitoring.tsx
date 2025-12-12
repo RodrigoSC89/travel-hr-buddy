@@ -279,7 +279,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                   placeholder="Ex: Quais são os principais riscos de segurança atuais?"
                   value={query}
                   onChange={handleChange}
-                  onKeyDown={(e) => e.key === "Enter" && analyzeWithAI()}
+                  onKeyDown={(e) => e.key === "Enter" && analyzeWithAI(}
                   disabled={isAnalyzing}
                 />
                 <Button onClick={analyzeWithAI} disabled={isAnalyzing}>

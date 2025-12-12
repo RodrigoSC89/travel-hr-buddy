@@ -48,7 +48,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.editorFunctional}
-              onCheckedChange={() => toggleCheck("editorFunctional")}
+              onCheckedChange={() => toggleCheck("editorFunctional"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.variablesWorking}
-              onCheckedChange={() => toggleCheck("variablesWorking")}
+              onCheckedChange={() => toggleCheck("variablesWorking"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -85,7 +85,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.pdfExport}
-              onCheckedChange={() => toggleCheck("pdfExport")}
+              onCheckedChange={() => toggleCheck("pdfExport"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.moduleIntegration}
-              onCheckedChange={() => toggleCheck("moduleIntegration")}
+              onCheckedChange={() => toggleCheck("moduleIntegration"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

@@ -365,7 +365,7 @@ export const ANPDossierExport: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <Checkbox
                           checked={selectedPractices.includes(practice.id)}
-                          onCheckedChange={() => togglePractice(practice.id)}
+                          onCheckedChange={() => togglePractice(practice.id}
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">

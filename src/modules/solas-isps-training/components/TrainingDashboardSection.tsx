@@ -348,7 +348,7 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
                 placeholder="Pergunte sobre drills, SOLAS, ISPS..."
                 value={chatMessage}
                 onChange={handleChange}
-                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                onKeyDown={(e) => e.key === "Enter" && handleSendMessage(}
                 disabled={isLoading}
               />
               <Button size="icon" onClick={handleSendMessage} disabled={isLoading}>

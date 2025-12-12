@@ -322,7 +322,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                           variant="ghost" 
                           size="icon" 
                           className="h-8 w-8"
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => e.stopPropagation(}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -369,7 +369,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             }`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            onClick={() => document.getElementById("file-input")?.click()}
+            onClick={() => document.getElementById("file-input")?.click(}
           >
             {selectedFile ? (
               <div className="flex flex-col items-center gap-2">
@@ -454,7 +454,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             <Button variant="outline" onClick={handleSetIsViewOpen}>
               Fechar
             </Button>
-            <Button onClick={() => selectedDoc && handleDownload(selectedDoc)}>
+            <Button onClick={() => selectedDoc && handleDownload(selectedDoc}>
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>

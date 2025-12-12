@@ -411,7 +411,7 @@ const WorkflowVisual = () => {
                   onEdgesChange={onEdgesChange}
                   onConnect={onConnect}
                   nodeTypes={nodeTypes}
-                  onNodeClick={(_, node) => setSelectedNode(node)}
+                  onNodeClick={(_, node) => setSelectedNode(node}
                   fitView
                   attributionPosition="bottom-left"
                 >
@@ -507,7 +507,7 @@ const WorkflowVisual = () => {
                     placeholder="Ex: Como otimizar este workflow?"
                     value={aiPrompt}
                     onChange={handleChange}
-                    onKeyDown={(e) => e.key === "Enter" && askAI()}
+                    onKeyDown={(e) => e.key === "Enter" && askAI(}
                   />
                   <Button size="icon" onClick={askAI} disabled={isAnalyzing}>
                     {isAnalyzing ? (

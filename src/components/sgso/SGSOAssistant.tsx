@@ -368,7 +368,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                                 key={idx}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10"
-                                onClick={() => citation.link && window.open(citation.link, "_blank")}
+                                onClick={() => citation.link && window.open(citation.link, "_blank"}
                               >
                                 <BookOpen className="h-2 w-2 mr-1" />
                                 {citation.norma} - {citation.artigo}
@@ -407,7 +407,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                 }}
               />
               <Button
-                onClick={() => handleSendMessage()}
+                onClick={() => handleSendMessage(}
                 disabled={isLoading || !input.trim()}
                 className="px-6"
               >

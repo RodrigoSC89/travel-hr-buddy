@@ -122,7 +122,7 @@ export default function SGSOManager() {
                 />
               </div>
               <Button
-                onClick={() => createPlanMutation.mutate()}
+                onClick={() => createPlanMutation.mutate(}
                 disabled={!planName || createPlanMutation.isPending}
                 className="w-full"
               >

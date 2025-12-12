@@ -183,7 +183,7 @@ export const ASOGStatusDisplay = memo(function({
                 size="sm" 
                 variant={data.status === "green" ? "default" : "outline"}
                 className={data.status === "green" ? "bg-green-500 hover:bg-green-600 text-white" : ""}
-                onClick={() => onStatusChange?.("green")}
+                onClick={() => onStatusChange?.("green"}
               >
                 <CheckCircle className="h-4 w-4 mr-1" /> Normal
               </Button>
@@ -191,7 +191,7 @@ export const ASOGStatusDisplay = memo(function({
                 size="sm" 
                 variant={data.status === "blue" ? "default" : "outline"}
                 className={data.status === "blue" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
-                onClick={() => onStatusChange?.("blue")}
+                onClick={() => onStatusChange?.("blue"}
               >
                 <Info className="h-4 w-4 mr-1" /> Advisory
               </Button>
@@ -199,7 +199,7 @@ export const ASOGStatusDisplay = memo(function({
                 size="sm" 
                 variant={data.status === "yellow" ? "default" : "outline"}
                 className={data.status === "yellow" ? "bg-yellow-500 hover:bg-yellow-600 text-white" : ""}
-                onClick={() => onStatusChange?.("yellow")}
+                onClick={() => onStatusChange?.("yellow"}
               >
                 <AlertTriangle className="h-4 w-4 mr-1" /> Degradado
               </Button>
@@ -207,7 +207,7 @@ export const ASOGStatusDisplay = memo(function({
                 size="sm" 
                 variant={data.status === "red" ? "default" : "outline"}
                 className={data.status === "red" ? "bg-red-500 hover:bg-red-600 text-white" : ""}
-                onClick={() => onStatusChange?.("red")}
+                onClick={() => onStatusChange?.("red"}
               >
                 <XCircle className="h-4 w-4 mr-1" /> Emergência
               </Button>
@@ -361,7 +361,7 @@ export const ASOGStatusDisplay = memo(function({
               size="sm" 
               variant={data.status === "green" ? "default" : "outline"}
               className={data.status === "green" ? "bg-green-500 hover:bg-green-600" : ""}
-              onClick={() => onStatusChange?.("green")}
+              onClick={() => onStatusChange?.("green"}
             >
               <CheckCircle className="h-4 w-4 mr-1" /> Normal
             </Button>
@@ -369,7 +369,7 @@ export const ASOGStatusDisplay = memo(function({
               size="sm" 
               variant={data.status === "blue" ? "default" : "outline"}
               className={data.status === "blue" ? "bg-blue-500 hover:bg-blue-600" : ""}
-              onClick={() => onStatusChange?.("blue")}
+              onClick={() => onStatusChange?.("blue"}
             >
               <Info className="h-4 w-4 mr-1" /> Advisory
             </Button>
@@ -377,7 +377,7 @@ export const ASOGStatusDisplay = memo(function({
               size="sm" 
               variant={data.status === "yellow" ? "default" : "outline"}
               className={data.status === "yellow" ? "bg-yellow-500 hover:bg-yellow-600" : ""}
-              onClick={() => onStatusChange?.("yellow")}
+              onClick={() => onStatusChange?.("yellow"}
             >
               <AlertTriangle className="h-4 w-4 mr-1" /> Degradado
             </Button>
@@ -385,7 +385,7 @@ export const ASOGStatusDisplay = memo(function({
               size="sm" 
               variant={data.status === "red" ? "default" : "outline"}
               className={data.status === "red" ? "bg-red-500 hover:bg-red-600" : ""}
-              onClick={() => onStatusChange?.("red")}
+              onClick={() => onStatusChange?.("red"}
             >
               <XCircle className="h-4 w-4 mr-1" /> Emergência
             </Button>

@@ -347,7 +347,7 @@ const NauticalCopilot: React.FC = () => {
                     <Input
                       value={inputMessage}
                       onChange={handleChange}
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
                       placeholder="Digite sua pergunta sobre operações marítimas..."
                       className="flex-1"
                       disabled={isTyping}

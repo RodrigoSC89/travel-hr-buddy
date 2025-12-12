@@ -150,7 +150,7 @@ export const IMCAAuditGenerator = memo(function() {
 
                 <div className="grid gap-2">
                   <Label htmlFor="dpClass">DP Class *</Label>
-                  <Select value={dpClass} onValueChange={(value) => setDpClass(value as DPClass)}>
+                  <Select value={dpClass} onValueChange={(value) => setDpClass(value as DPClass}>
                     <SelectTrigger id="dpClass">
                       <SelectValue placeholder="Select DP Class" />
                     </SelectTrigger>

@@ -229,7 +229,7 @@ export const TechnicalValidationPanel: React.FC = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="all" onValueChange={(v) => setFilter(v as "all" | "issues" | "healthy")}>
+      <Tabs defaultValue="all" onValueChange={(v) => setFilter(v as "all" | "issues" | "healthy"}>
         <TabsList>
           <TabsTrigger value="all">All ({modules.length})</TabsTrigger>
           <TabsTrigger value="healthy">Healthy ({stats.healthy})</TabsTrigger>

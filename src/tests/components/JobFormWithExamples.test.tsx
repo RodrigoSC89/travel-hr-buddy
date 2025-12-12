@@ -17,7 +17,7 @@ vi.mock("@/components/copilot/SimilarExamples", () => ({
       <div data-testid="similar-examples-input">{input}</div>
       <button
         data-testid="select-suggestion"
-        onClick={() => onSelect?.("Test suggestion from similar examples")}
+        onClick={() => onSelect?.("Test suggestion from similar examples"}
       >
         Use Suggestion
       </button>

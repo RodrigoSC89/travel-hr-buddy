@@ -827,7 +827,7 @@ export default function WorkflowCommandCenter() {
         </Dialog>
 
         {/* Visual Workflow Details Dialog */}
-        <Dialog open={!!selectedVisualWorkflow} onOpenChange={() => setSelectedVisualWorkflow(null)}>
+        <Dialog open={!!selectedVisualWorkflow} onOpenChange={() => setSelectedVisualWorkflow(null}>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">

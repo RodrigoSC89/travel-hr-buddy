@@ -478,7 +478,7 @@ export const ApiKeyManagement: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={key.is_active ?? false}
-                      onCheckedChange={() => toggleApiKey(key.id, key.is_active ?? false)}
+                      onCheckedChange={() => toggleApiKey(key.id, key.is_active ?? false}
                     />
                     <Button
                       variant="ghost"

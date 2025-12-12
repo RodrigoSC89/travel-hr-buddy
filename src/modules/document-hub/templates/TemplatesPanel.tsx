@@ -269,7 +269,7 @@ export default function TemplatesPanel() {
               <div className="grid gap-2">
                 <div className="flex items-center justify-between mb-2">
                   <Label htmlFor="content">Conteúdo *</Label>
-                  <Tabs value={editorMode} onValueChange={(v) => setEditorMode(v as "wysiwyg" | "html")}>
+                  <Tabs value={editorMode} onValueChange={(v) => setEditorMode(v as "wysiwyg" | "html"}>
                     <TabsList className="h-8">
                       <TabsTrigger value="wysiwyg" className="text-xs">Editor</TabsTrigger>
                       <TabsTrigger value="html" className="text-xs">HTML</TabsTrigger>
@@ -375,7 +375,7 @@ export default function TemplatesPanel() {
 
       {/* Edit Dialog */}
       {editingTemplate && (
-        <Dialog open={true} onOpenChange={() => setEditingTemplate(null)}>
+        <Dialog open={true} onOpenChange={() => setEditingTemplate(null}>
           <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Editar Template</DialogTitle>
@@ -419,7 +419,7 @@ export default function TemplatesPanel() {
 
       {/* Preview Dialog */}
       {previewTemplate && (
-        <Dialog open={true} onOpenChange={() => setPreviewTemplate(null)}>
+        <Dialog open={true} onOpenChange={() => setPreviewTemplate(null}>
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Visualizar Template: {previewTemplate.name}</DialogTitle>
