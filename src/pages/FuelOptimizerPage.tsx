@@ -353,11 +353,11 @@ const FuelOptimizerPage = () => {
 
   const getWeatherIcon = (condition: string) => {
     switch (condition) {
-      case "calm": return "🌤️";
-      case "moderate": return "⛅";
-      case "rough": return "🌧️";
-      case "stormy": return "⛈️";
-      default: return "🌤️";
+    case "calm": return "🌤️";
+    case "moderate": return "⛅";
+    case "rough": return "🌧️";
+    case "stormy": return "⛈️";
+    default: return "🌤️";
     }
   };
 

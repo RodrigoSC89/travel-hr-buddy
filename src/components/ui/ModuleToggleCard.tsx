@@ -3,19 +3,19 @@
  * UI component for toggling module activation status
  */
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { MoreVertical, ExternalLink, History, Shield, Brain } from 'lucide-react';
-import { ModuleStatus } from '@/hooks/useNavigationStructure';
+} from "@/components/ui/dropdown-menu";
+import { MoreVertical, ExternalLink, History, Shield, Brain } from "lucide-react";
+import { ModuleStatus } from "@/hooks/useNavigationStructure";
 
 export interface ModuleToggleCardProps {
   id: string;
@@ -33,17 +33,17 @@ export interface ModuleToggleCardProps {
 }
 
 const STATUS_COLORS: Record<ModuleStatus, string> = {
-  production: 'bg-green-500',
-  development: 'bg-yellow-500',
-  experimental: 'bg-purple-500',
-  deprecated: 'bg-red-500',
+  production: "bg-green-500",
+  development: "bg-yellow-500",
+  experimental: "bg-purple-500",
+  deprecated: "bg-red-500",
 };
 
 const STATUS_LABELS: Record<ModuleStatus, string> = {
-  production: '✅ Production',
-  development: '⚠️ Development',
-  experimental: '🧪 Experimental',
-  deprecated: '❌ Deprecated',
+  production: "✅ Production",
+  development: "⚠️ Development",
+  experimental: "🧪 Experimental",
+  deprecated: "❌ Deprecated",
 };
 
 export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
@@ -61,7 +61,7 @@ export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
   path,
 }) => {
   const handleToggle = (checked: boolean) => {
-    if (status === 'deprecated') {
+    if (status === "deprecated") {
       return; // Don't allow toggling deprecated modules
     }
     onToggle(id, checked);
@@ -97,7 +97,7 @@ export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
             <Switch
               checked={isActive}
               onCheckedChange={handleToggle}
-              disabled={status === 'deprecated'}
+              disabled={status === "deprecated"}
               aria-label={`Toggle ${name}`}
             />
             <DropdownMenu>
@@ -131,7 +131,7 @@ export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
         {requiresRole && requiresRole.length > 0 && (
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Shield className="w-3 h-3" />
-            <span>Required roles: {requiresRole.join(', ')}</span>
+            <span>Required roles: {requiresRole.join(", ")}</span>
           </div>
         )}
       </CardContent>

@@ -2,20 +2,20 @@
  * DDS Panel - Diálogo Diário de Segurança
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Plus, Users, Clock, FileText, CheckCircle, Search } from 'lucide-react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { toast } from 'sonner';
-import type { DDSRecord } from '../types';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar, Plus, Users, Clock, FileText, CheckCircle, Search } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
+import type { DDSRecord } from "../types";
 
 interface DDSPanelProps {
   records: DDSRecord[];
@@ -25,19 +25,19 @@ interface DDSPanelProps {
 
 export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loading }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
-    topic: '',
-    vessel_name: '',
-    conductor: '',
+    topic: "",
+    vessel_name: "",
+    conductor: "",
     participants_count: 0,
     duration_minutes: 15,
-    notes: ''
+    notes: ""
   });
 
   const handleSubmit = async () => {
     if (!formData.topic || !formData.vessel_name || !formData.conductor) {
-      toast.error('Preencha todos os campos obrigatórios');
+      toast.error("Preencha todos os campos obrigatórios");
       return;
     }
 
@@ -48,15 +48,15 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
     });
 
     setFormData({
-      topic: '',
-      vessel_name: '',
-      conductor: '',
+      topic: "",
+      vessel_name: "",
+      conductor: "",
       participants_count: 0,
       duration_minutes: 15,
-      notes: ''
+      notes: ""
     });
     setDialogOpen(false);
-    toast.success('DDS registrado com sucesso!');
+    toast.success("DDS registrado com sucesso!");
   };
 
   const filteredRecords = records.filter(r =>

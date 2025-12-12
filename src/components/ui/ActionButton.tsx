@@ -3,13 +3,13 @@
  * Reusable button with built-in loading state and feedback
  */
 
-import { useState, useCallback, forwardRef } from 'react';
-import { Button, ButtonProps } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { executeAction, ActionConfig, ActionResult } from '@/lib/actions/action-handler';
-import { cn } from '@/lib/utils';
+import { useState, useCallback, forwardRef } from "react";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { executeAction, ActionConfig, ActionResult } from "@/lib/actions/action-handler";
+import { cn } from "@/lib/utils";
 
-export interface ActionButtonProps extends Omit<ButtonProps, 'onClick'> {
+export interface ActionButtonProps extends Omit<ButtonProps, "onClick"> {
   /** Action configuration */
   action?: ActionConfig;
   /** Simple click handler (alternative to action config) */
@@ -81,7 +81,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
           setIsLoading(true);
           const result = await onClick();
           
-          if (result && typeof result === 'object' && 'success' in result) {
+          if (result && typeof result === "object" && "success" in result) {
             onComplete?.(result);
           } else {
             onComplete?.({ success: true });
@@ -89,7 +89,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         } catch (error) {
           onComplete?.({ 
             success: false, 
-            message: error instanceof Error ? error.message : 'Erro desconhecido' 
+            message: error instanceof Error ? error.message : "Erro desconhecido" 
           });
         } finally {
           setIsLoading(false);
@@ -103,8 +103,8 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
         onClick={handleClick}
         disabled={disabled || isLoading}
         className={cn(
-          'transition-all duration-200',
-          isLoading && 'cursor-wait',
+          "transition-all duration-200",
+          isLoading && "cursor-wait",
           className
         )}
         {...props}

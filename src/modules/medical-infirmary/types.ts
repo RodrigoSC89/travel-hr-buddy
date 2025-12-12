@@ -12,7 +12,7 @@ export interface CrewMember {
   lastCheckup: string;
   nextCheckup: string;
   vaccinations: Vaccination[];
-  status: 'fit' | 'restricted' | 'unfit';
+  status: "fit" | "restricted" | "unfit";
   photoUrl?: string;
 }
 
@@ -20,7 +20,7 @@ export interface Vaccination {
   name: string;
   date: string;
   expiryDate: string;
-  status: 'valid' | 'expiring' | 'expired';
+  status: "valid" | "expiring" | "expired";
 }
 
 export interface MedicalSupply {
@@ -33,7 +33,7 @@ export interface MedicalSupply {
   expiryDate: string;
   batchNumber: string;
   location: string;
-  status: 'ok' | 'low' | 'expiring' | 'critical';
+  status: "ok" | "low" | "expiring" | "critical";
   lastRestock: string;
 }
 
@@ -43,7 +43,7 @@ export interface MedicalRecord {
   crewMemberName: string;
   date: string;
   time: string;
-  type: 'consultation' | 'emergency' | 'routine' | 'telemedicine';
+  type: "consultation" | "emergency" | "routine" | "telemedicine";
   chiefComplaint: string;
   symptoms: string[];
   diagnosis: string;
@@ -52,7 +52,7 @@ export interface MedicalRecord {
   vitalSigns: VitalSigns;
   notes: string;
   followUp?: string;
-  status: 'resolved' | 'monitoring' | 'referred' | 'pending';
+  status: "resolved" | "monitoring" | "referred" | "pending";
   aiSuggestions?: string[];
 }
 
@@ -73,16 +73,16 @@ export interface VitalSigns {
 
 export interface MedicalReport {
   id: string;
-  type: 'mlc' | 'port_state' | 'incident' | 'monthly' | 'inventory';
+  type: "mlc" | "port_state" | "incident" | "monthly" | "inventory";
   title: string;
   generatedAt: string;
   period: string;
-  status: 'draft' | 'completed' | 'submitted';
+  status: "draft" | "completed" | "submitted";
   data: Record<string, any>;
 }
 
 export interface AIAnalysis {
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel: "low" | "medium" | "high";
   recommendations: string[];
   predictedIssues: string[];
   confidence: number;

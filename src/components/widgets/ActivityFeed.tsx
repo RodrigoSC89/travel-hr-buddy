@@ -3,9 +3,9 @@
  * Displays recent system activities
  */
 
-import React, { memo } from 'react';
-import { formatRelativeTime } from '@/utils/format-utils';
-import { cn } from '@/lib/utils';
+import React, { memo } from "react";
+import { formatRelativeTime } from "@/utils/format-utils";
+import { cn } from "@/lib/utils";
 import { 
   CheckCircle2, 
   AlertCircle, 
@@ -15,9 +15,9 @@ import {
   FileText,
   Settings,
   Bell
-} from 'lucide-react';
+} from "lucide-react";
 
-type ActivityType = 'success' | 'warning' | 'info' | 'pending';
+type ActivityType = "success" | "warning" | "info" | "pending";
 
 interface Activity {
   id: string;
@@ -26,7 +26,7 @@ interface Activity {
   description?: string;
   timestamp: Date | string;
   user?: string;
-  category?: 'user' | 'document' | 'system' | 'notification';
+  category?: "user" | "document" | "system" | "notification";
 }
 
 interface ActivityFeedProps {
@@ -44,10 +44,10 @@ const typeIcons: Record<ActivityType, typeof CheckCircle2> = {
 };
 
 const typeColors: Record<ActivityType, string> = {
-  success: 'text-green-500 bg-green-500/10',
-  warning: 'text-yellow-500 bg-yellow-500/10',
-  info: 'text-blue-500 bg-blue-500/10',
-  pending: 'text-muted-foreground bg-muted/50'
+  success: "text-green-500 bg-green-500/10",
+  warning: "text-yellow-500 bg-yellow-500/10",
+  info: "text-blue-500 bg-blue-500/10",
+  pending: "text-muted-foreground bg-muted/50"
 };
 
 const categoryIcons: Record<string, typeof User> = {

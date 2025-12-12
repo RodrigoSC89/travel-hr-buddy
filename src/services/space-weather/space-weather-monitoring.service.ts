@@ -9,14 +9,14 @@
  * Fornece status Green/Amber/Red para gates ASOG/DP
  */
 
-import NOAASWPC from './noaa-swpc.service';
-import CelesTrak from './celestrak.service';
+import NOAASWPC from "./noaa-swpc.service";
+import CelesTrak from "./celestrak.service";
 import type {
   SpaceWeatherStatus,
   SpaceWeatherRiskLevel,
   GNSSPlanningRequest,
   GNSSPlanningWindow,
-} from '@/types/space-weather.types';
+} from "@/types/space-weather.types";
 
 // ============================================
 // Configuration & Thresholds
@@ -100,52 +100,52 @@ export async function getSpaceWeatherStatus(
   const dop = CelesTrak.calculateDOP(visibility, lat, lon);
   
   // Determine overall risk level
-  let riskLevel: SpaceWeatherRiskLevel = 'GREEN';
+  let riskLevel: SpaceWeatherRiskLevel = "GREEN";
   const recommendations: string[] = [];
   
   // 1. Space weather risk (Kp, solar wind, Bz)
   if (noaaSummary.kp_current !== null) {
     if (noaaSummary.kp_current >= config.kp_red) {
-      riskLevel = 'RED';
-      recommendations.push('🔴 CRITICAL: Strong geomagnetic storm in progress. Consider postponing critical DP operations.');
+      riskLevel = "RED";
+      recommendations.push("🔴 CRITICAL: Strong geomagnetic storm in progress. Consider postponing critical DP operations.");
     } else if (noaaSummary.kp_current >= config.kp_amber) {
-      if (riskLevel === 'GREEN') riskLevel = 'AMBER';
-      recommendations.push('🟡 WARNING: Minor geomagnetic storm. Monitor GNSS performance closely.');
+      if (riskLevel === "GREEN") riskLevel = "AMBER";
+      recommendations.push("🟡 WARNING: Minor geomagnetic storm. Monitor GNSS performance closely.");
     }
   }
   
   if (noaaSummary.solar_wind_speed !== null) {
     if (noaaSummary.solar_wind_speed >= config.solar_wind_speed_red) {
-      riskLevel = 'RED';
+      riskLevel = "RED";
       recommendations.push(`🔴 High-speed solar wind (${noaaSummary.solar_wind_speed.toFixed(0)} km/s). Expect geomagnetic disturbances.`);
     } else if (noaaSummary.solar_wind_speed >= config.solar_wind_speed_amber) {
-      if (riskLevel === 'GREEN') riskLevel = 'AMBER';
+      if (riskLevel === "GREEN") riskLevel = "AMBER";
       recommendations.push(`🟡 Elevated solar wind speed (${noaaSummary.solar_wind_speed.toFixed(0)} km/s).`);
     }
   }
   
   if (noaaSummary.bz_gsm !== null && noaaSummary.bz_gsm < config.bz_amber) {
     if (noaaSummary.bz_gsm < config.bz_red) {
-      riskLevel = 'RED';
+      riskLevel = "RED";
       recommendations.push(`🔴 Strong southward Bz (${noaaSummary.bz_gsm.toFixed(1)} nT). High risk of magnetic reconnection and storm intensification.`);
     } else {
-      if (riskLevel === 'GREEN') riskLevel = 'AMBER';
+      if (riskLevel === "GREEN") riskLevel = "AMBER";
       recommendations.push(`🟡 Southward Bz component detected (${noaaSummary.bz_gsm.toFixed(1)} nT). Monitor for storm development.`);
     }
   }
   
   // 2. GNSS performance risk (DOP, satellite count)
   if (dop.pdop >= config.pdop_red || dop.visible_satellites <= config.min_satellites_red) {
-    riskLevel = 'RED';
+    riskLevel = "RED";
     recommendations.push(`🔴 Poor GNSS geometry (PDOP=${dop.pdop}, Sats=${dop.visible_satellites}). Position accuracy degraded.`);
   } else if (dop.pdop >= config.pdop_amber || dop.visible_satellites <= config.min_satellites_amber) {
-    if (riskLevel === 'GREEN') riskLevel = 'AMBER';
+    if (riskLevel === "GREEN") riskLevel = "AMBER";
     recommendations.push(`🟡 Marginal GNSS geometry (PDOP=${dop.pdop}, Sats=${dop.visible_satellites}). Monitor position accuracy.`);
   }
   
   // 3. Active alerts
   if (noaaSummary.critical_alerts.length > 0) {
-    riskLevel = 'RED';
+    riskLevel = "RED";
     recommendations.push(`🔴 ${noaaSummary.critical_alerts.length} active critical space weather alert(s).`);
   }
   
@@ -155,53 +155,53 @@ export async function getSpaceWeatherStatus(
   }
   
   // Determine scintillation risk (primarily latitude-dependent)
-  let scintillationRisk: 'LOW' | 'MODERATE' | 'HIGH' = 'LOW';
+  let scintillationRisk: "LOW" | "MODERATE" | "HIGH" = "LOW";
   const absLat = Math.abs(lat);
   
   if (absLat < 30) { // Equatorial region
     if (noaaSummary.kp_current !== null && noaaSummary.kp_current >= 5) {
-      scintillationRisk = 'HIGH';
-      recommendations.push('⚠️ Equatorial scintillation risk HIGH. Post-sunset hours most affected.');
+      scintillationRisk = "HIGH";
+      recommendations.push("⚠️ Equatorial scintillation risk HIGH. Post-sunset hours most affected.");
     } else if (noaaSummary.kp_current !== null && noaaSummary.kp_current >= 3) {
-      scintillationRisk = 'MODERATE';
+      scintillationRisk = "MODERATE";
     }
   } else if (absLat > 60) { // Polar region
     if (noaaSummary.kp_current !== null && noaaSummary.kp_current >= 4) {
-      scintillationRisk = 'HIGH';
-      recommendations.push('⚠️ Polar scintillation risk HIGH during geomagnetic activity.');
+      scintillationRisk = "HIGH";
+      recommendations.push("⚠️ Polar scintillation risk HIGH during geomagnetic activity.");
     }
   }
   
   // Determine DP gate status
-  let dpGateStatus: 'PROCEED' | 'CAUTION' | 'HOLD' = 'PROCEED';
+  let dpGateStatus: "PROCEED" | "CAUTION" | "HOLD" = "PROCEED";
   
-  if (riskLevel === 'RED') {
-    dpGateStatus = 'HOLD';
-    recommendations.push('🛑 DP GATE: HOLD - Critical conditions detected. Postpone operations if possible.');
-  } else if (riskLevel === 'AMBER') {
-    dpGateStatus = 'CAUTION';
-    recommendations.push('⚠️ DP GATE: CAUTION - Elevated risk. Increase monitoring frequency, prepare contingencies.');
+  if (riskLevel === "RED") {
+    dpGateStatus = "HOLD";
+    recommendations.push("🛑 DP GATE: HOLD - Critical conditions detected. Postpone operations if possible.");
+  } else if (riskLevel === "AMBER") {
+    dpGateStatus = "CAUTION";
+    recommendations.push("⚠️ DP GATE: CAUTION - Elevated risk. Increase monitoring frequency, prepare contingencies.");
   } else {
-    recommendations.push('✅ DP GATE: PROCEED - Conditions nominal.');
+    recommendations.push("✅ DP GATE: PROCEED - Conditions nominal.");
   }
   
   // Add general recommendations
-  if (riskLevel !== 'GREEN') {
-    recommendations.push('📊 Recommendation: Increase GNSS monitoring frequency to 1-minute intervals.');
-    recommendations.push('🔧 Recommendation: Verify backup positioning systems (INS, Radar, etc.) are operational.');
-    recommendations.push('📡 Recommendation: Consider enabling dual-frequency or multi-constellation mode if available.');
+  if (riskLevel !== "GREEN") {
+    recommendations.push("📊 Recommendation: Increase GNSS monitoring frequency to 1-minute intervals.");
+    recommendations.push("🔧 Recommendation: Verify backup positioning systems (INS, Radar, etc.) are operational.");
+    recommendations.push("📡 Recommendation: Consider enabling dual-frequency or multi-constellation mode if available.");
   }
   
   // Calculate forecast risk levels (simplified)
   const forecast6h = noaaSummary.kp_forecast_3h !== null && noaaSummary.kp_forecast_3h >= config.kp_amber 
-    ? 'AMBER' 
-    : 'GREEN';
+    ? "AMBER" 
+    : "GREEN";
   
   const forecast24h = noaaSummary.kp_max_24h !== null && noaaSummary.kp_max_24h >= config.kp_red
-    ? 'RED'
+    ? "RED"
     : noaaSummary.kp_max_24h !== null && noaaSummary.kp_max_24h >= config.kp_amber
-    ? 'AMBER'
-    : 'GREEN';
+      ? "AMBER"
+      : "GREEN";
   
   const forecast48h = forecast24h; // Simplified (would need WAM-IPE for real 48h forecast)
   
@@ -289,7 +289,7 @@ export async function planGNSSWindow(
     longitude,
     altitude_m = 0,
     mask_angle_deg = 5,
-    constellations = ['GPS-OPS', 'GALILEO'],
+    constellations = ["GPS-OPS", "GALILEO"],
   } = request;
   
   const startDate = new Date(start_time);
@@ -307,7 +307,7 @@ export async function planGNSSWindow(
   );
   
   if (dopTimeline.length === 0) {
-    throw new Error('Failed to calculate DOP timeline');
+    throw new Error("Failed to calculate DOP timeline");
   }
   
   // Find best and worst windows
@@ -358,9 +358,9 @@ export async function planGNSSWindow(
   
   // Overlay space weather risk (simplified - would fetch real data in production)
   const spaceWeatherRisk: SpaceWeatherRiskLevel[] = dopTimeline.map(dop => {
-    if (dop.pdop >= 10) return 'RED';
-    if (dop.pdop >= 6) return 'AMBER';
-    return 'GREEN';
+    if (dop.pdop >= 10) return "RED";
+    if (dop.pdop >= 6) return "AMBER";
+    return "GREEN";
   });
   
   // Generate recommended windows (PDOP < 4, > 8 satellites)
@@ -414,22 +414,22 @@ export async function planGNSSWindow(
  * Quick DP gate check - returns simple GO/NO-GO
  */
 export async function quickDPCheck(lat: number = 0, lon: number = 0): Promise<{
-  status: 'GO' | 'CAUTION' | 'NO-GO';
+  status: "GO" | "CAUTION" | "NO-GO";
   kp: number;
   pdop: number;
   message: string;
 }> {
   const spaceWeather = await getSpaceWeatherStatus(lat, lon);
   
-  let status: 'GO' | 'CAUTION' | 'NO-GO' = 'GO';
-  let message = 'All systems nominal';
+  let status: "GO" | "CAUTION" | "NO-GO" = "GO";
+  let message = "All systems nominal";
   
-  if (spaceWeather.dp_gate_status === 'HOLD') {
-    status = 'NO-GO';
-    message = 'Critical space weather or GNSS conditions';
-  } else if (spaceWeather.dp_gate_status === 'CAUTION') {
-    status = 'CAUTION';
-    message = 'Elevated risk - monitor closely';
+  if (spaceWeather.dp_gate_status === "HOLD") {
+    status = "NO-GO";
+    message = "Critical space weather or GNSS conditions";
+  } else if (spaceWeather.dp_gate_status === "CAUTION") {
+    status = "CAUTION";
+    message = "Elevated risk - monitor closely";
   }
   
   return {

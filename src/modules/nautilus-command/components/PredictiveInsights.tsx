@@ -27,8 +27,8 @@ interface PredictiveInsightsProps {
 
 interface Insight {
   id: string;
-  type: 'prediction' | 'recommendation' | 'risk' | 'opportunity';
-  priority: 'high' | 'medium' | 'low';
+  type: "prediction" | "recommendation" | "risk" | "opportunity";
+  priority: "high" | "medium" | "low";
   title: string;
   description: string;
   impact: string;
@@ -54,90 +54,90 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
     // Maintenance predictions
     if (systemStatus.maintenance.overdue > 0) {
       generatedInsights.push({
-        id: '1',
-        type: 'risk',
-        priority: 'high',
-        title: 'Risco de Falha Operacional',
+        id: "1",
+        type: "risk",
+        priority: "high",
+        title: "Risco de Falha Operacional",
         description: `${systemStatus.maintenance.overdue} manutenções vencidas podem causar paradas não programadas.`,
-        impact: 'Potencial perda de R$ 50.000/dia por embarcação parada',
+        impact: "Potencial perda de R$ 50.000/dia por embarcação parada",
         confidence: 92,
-        action: 'Agendar manutenções urgentes',
-        module: 'Manutenção'
+        action: "Agendar manutenções urgentes",
+        module: "Manutenção"
       });
     }
 
     // Crew certificate predictions
     if (systemStatus.crew.expiringCerts > 0) {
       generatedInsights.push({
-        id: '2',
-        type: 'prediction',
-        priority: 'medium',
-        title: 'Certificações Expirando',
+        id: "2",
+        type: "prediction",
+        priority: "medium",
+        title: "Certificações Expirando",
         description: `${systemStatus.crew.expiringCerts} certificados expiram nos próximos 30 dias.`,
-        impact: 'Risco de não-conformidade regulatória',
+        impact: "Risco de não-conformidade regulatória",
         confidence: 100,
-        action: 'Iniciar processo de renovação',
-        module: 'Tripulação'
+        action: "Iniciar processo de renovação",
+        module: "Tripulação"
       });
     }
 
     // Inventory optimization
     if (systemStatus.inventory.lowStock > 0) {
       generatedInsights.push({
-        id: '3',
-        type: 'recommendation',
-        priority: 'medium',
-        title: 'Otimização de Estoque',
+        id: "3",
+        type: "recommendation",
+        priority: "medium",
+        title: "Otimização de Estoque",
         description: `Previsão de ruptura em ${systemStatus.inventory.lowStock} itens críticos nas próximas 2 semanas.`,
-        impact: 'Economia potencial de 15% com compras antecipadas',
+        impact: "Economia potencial de 15% com compras antecipadas",
         confidence: 87,
-        action: 'Gerar ordens de compra automáticas',
-        module: 'Estoque'
+        action: "Gerar ordens de compra automáticas",
+        module: "Estoque"
       });
     }
 
     // Efficiency opportunity
     if (systemStatus.maintenance.efficiency < 95) {
       generatedInsights.push({
-        id: '4',
-        type: 'opportunity',
-        priority: 'low',
-        title: 'Oportunidade de Melhoria',
-        description: 'Análise sugere otimização no cronograma de manutenção preventiva.',
-        impact: 'Aumento de 5% na eficiência operacional',
+        id: "4",
+        type: "opportunity",
+        priority: "low",
+        title: "Oportunidade de Melhoria",
+        description: "Análise sugere otimização no cronograma de manutenção preventiva.",
+        impact: "Aumento de 5% na eficiência operacional",
         confidence: 78,
-        action: 'Revisar cronograma com IA',
-        module: 'Manutenção'
+        action: "Revisar cronograma com IA",
+        module: "Manutenção"
       });
     }
 
     // Fleet utilization
     if (systemStatus.fleet.active < systemStatus.fleet.vessels * 0.8) {
       generatedInsights.push({
-        id: '5',
-        type: 'recommendation',
-        priority: 'medium',
-        title: 'Utilização da Frota',
-        description: 'Taxa de utilização abaixo do ideal. Considere redistribuição de rotas.',
-        impact: 'Aumento potencial de 12% na receita',
+        id: "5",
+        type: "recommendation",
+        priority: "medium",
+        title: "Utilização da Frota",
+        description: "Taxa de utilização abaixo do ideal. Considere redistribuição de rotas.",
+        impact: "Aumento potencial de 12% na receita",
         confidence: 85,
-        action: 'Analisar rotas alternativas',
-        module: 'Frota'
+        action: "Analisar rotas alternativas",
+        module: "Frota"
       });
     }
 
     // Compliance score
     if (systemStatus.compliance.score >= 95) {
       generatedInsights.push({
-        id: '6',
-        type: 'opportunity',
-        priority: 'low',
-        title: 'Excelência em Compliance',
-        description: 'Score de compliance acima de 95%. Elegível para certificação premium.',
-        impact: 'Redução de 20% em prêmios de seguro',
+        id: "6",
+        type: "opportunity",
+        priority: "low",
+        title: "Excelência em Compliance",
+        description: "Score de compliance acima de 95%. Elegível para certificação premium.",
+        impact: "Redução de 20% em prêmios de seguro",
         confidence: 95,
-        action: 'Solicitar certificação',
-        module: 'Compliance'
+        action: "Solicitar certificação",
+        module: "Compliance"
       });
     }
 
@@ -147,29 +147,29 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'prediction': return <TrendingUp className="h-4 w-4 text-blue-500" />;
-      case 'recommendation': return <Lightbulb className="h-4 w-4 text-yellow-500" />;
-      case 'risk': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'opportunity': return <Target className="h-4 w-4 text-green-500" />;
-      default: return <Sparkles className="h-4 w-4" />;
+    case "prediction": return <TrendingUp className="h-4 w-4 text-blue-500" />;
+    case "recommendation": return <Lightbulb className="h-4 w-4 text-yellow-500" />;
+    case "risk": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "opportunity": return <Target className="h-4 w-4 text-green-500" />;
+    default: return <Sparkles className="h-4 w-4" />;
     }
   };
 
   const getTypeBadge = (type: string) => {
     switch (type) {
-      case 'prediction': return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Previsão</Badge>;
-      case 'recommendation': return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Recomendação</Badge>;
-      case 'risk': return <Badge variant="destructive">Risco</Badge>;
-      case 'opportunity': return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Oportunidade</Badge>;
-      default: return <Badge variant="secondary">{type}</Badge>;
+    case "prediction": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Previsão</Badge>;
+    case "recommendation": return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Recomendação</Badge>;
+    case "risk": return <Badge variant="destructive">Risco</Badge>;
+    case "opportunity": return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Oportunidade</Badge>;
+    default: return <Badge variant="secondary">{type}</Badge>;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'border-l-red-500';
-      case 'medium': return 'border-l-yellow-500';
-      default: return 'border-l-green-500';
+    case "high": return "border-l-red-500";
+    case "medium": return "border-l-yellow-500";
+    default: return "border-l-green-500";
     }
   };
 

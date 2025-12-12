@@ -324,8 +324,8 @@ export function CBTLibrary() {
                           statusColors[courseProgress.status]?.split(" ")[1]
                         )}>
                           {courseProgress.status === "completed" ? "Concluído" :
-                           courseProgress.status === "in_progress" ? "Em Andamento" :
-                           courseProgress.status === "failed" ? "Não Aprovado" : "Expirado"}
+                            courseProgress.status === "in_progress" ? "Em Andamento" :
+                              courseProgress.status === "failed" ? "Não Aprovado" : "Expirado"}
                         </span>
                         <span className="text-muted-foreground">{courseProgress.progress_percent}%</span>
                       </div>

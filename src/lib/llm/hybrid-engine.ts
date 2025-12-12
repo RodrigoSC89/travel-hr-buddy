@@ -3,12 +3,12 @@
  * Offline-first LLM with cloud fallback optimized for 2Mbps
  */
 
-import { openDB, IDBPDatabase } from 'idb';
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
+import { openDB, IDBPDatabase } from "idb";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
-const DB_NAME = 'nautilus-llm-cache';
-const STORE_NAME = 'responses';
+const DB_NAME = "nautilus-llm-cache";
+const STORE_NAME = "responses";
 const DB_VERSION = 1;
 
 interface CachedResponse {
@@ -17,7 +17,7 @@ interface CachedResponse {
   response: string;
   confidence: number;
   timestamp: number;
-  source: 'cloud' | 'local' | 'fallback';
+  source: "cloud" | "local" | "fallback";
   expiresAt: number;
 }
 
@@ -39,48 +39,48 @@ const DEFAULT_CONFIG: HybridLLMConfig = {
 
 // Predefined offline responses for common queries
 const OFFLINE_RESPONSES: Record<string, { response: string; confidence: number }> = {
-  'greeting': {
-    response: 'Olá! Sou o assistente Nautilus. Como posso ajudar?',
+  "greeting": {
+    response: "Olá! Sou o assistente Nautilus. Como posso ajudar?",
     confidence: 1.0
   },
-  'help': {
-    response: 'Posso ajudar com: navegação, documentos, compliance, manutenção, operações marítimas, gestão de tripulação e relatórios.',
+  "help": {
+    response: "Posso ajudar com: navegação, documentos, compliance, manutenção, operações marítimas, gestão de tripulação e relatórios.",
     confidence: 1.0
   },
-  'compliance': {
-    response: 'Para questões de compliance, verifique os checklists de auditoria ISM no módulo de Compliance. Acesse via menu principal > Compliance.',
+  "compliance": {
+    response: "Para questões de compliance, verifique os checklists de auditoria ISM no módulo de Compliance. Acesse via menu principal > Compliance.",
     confidence: 0.85
   },
-  'maintenance': {
-    response: 'O sistema de manutenção preventiva está disponível no módulo de Manutenção. Você pode criar ordens de serviço e acompanhar o histórico.',
+  "maintenance": {
+    response: "O sistema de manutenção preventiva está disponível no módulo de Manutenção. Você pode criar ordens de serviço e acompanhar o histórico.",
     confidence: 0.85
   },
-  'crew': {
-    response: 'O módulo de Tripulação permite gerenciar documentos, certificações e escalas. Acesse via menu principal > RH > Tripulação.',
+  "crew": {
+    response: "O módulo de Tripulação permite gerenciar documentos, certificações e escalas. Acesse via menu principal > RH > Tripulação.",
     confidence: 0.85
   },
-  'navigation': {
-    response: 'Para informações de navegação, acesse o módulo de Operações > Navegação. Lá você encontra rotas, cartas náuticas e condições meteorológicas.',
+  "navigation": {
+    response: "Para informações de navegação, acesse o módulo de Operações > Navegação. Lá você encontra rotas, cartas náuticas e condições meteorológicas.",
     confidence: 0.85
   },
-  'documents': {
-    response: 'Todos os documentos estão no módulo de Documentação. Você pode pesquisar, filtrar por categoria e fazer upload de novos arquivos.',
+  "documents": {
+    response: "Todos os documentos estão no módulo de Documentação. Você pode pesquisar, filtrar por categoria e fazer upload de novos arquivos.",
     confidence: 0.85
   },
-  'reports': {
-    response: 'Relatórios estão disponíveis em cada módulo específico ou no painel central de Analytics. Exporte em PDF, Excel ou envie por email.',
+  "reports": {
+    response: "Relatórios estão disponíveis em cada módulo específico ou no painel central de Analytics. Exporte em PDF, Excel ou envie por email.",
     confidence: 0.85
   },
-  'status': {
-    response: 'Para verificar o status do sistema, acesse o Dashboard principal ou a página de Health Check em /health.',
+  "status": {
+    response: "Para verificar o status do sistema, acesse o Dashboard principal ou a página de Health Check em /health.",
     confidence: 0.9
   },
-  'offline': {
-    response: 'Você está offline. Os dados foram salvos localmente e serão sincronizados quando a conexão for restaurada.',
+  "offline": {
+    response: "Você está offline. Os dados foram salvos localmente e serão sincronizados quando a conexão for restaurada.",
     confidence: 1.0
   },
-  'error': {
-    response: 'Desculpe, não consegui processar sua solicitação no momento. Tente novamente quando estiver online.',
+  "error": {
+    response: "Desculpe, não consegui processar sua solicitação no momento. Tente novamente quando estiver online.",
     confidence: 0.5
   }
 };
@@ -96,16 +96,16 @@ class HybridLLMEngine {
   }
 
   private setupNetworkListeners() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOnline = true;
-      logger.info('[HybridLLM] Online mode activated');
+      logger.info("[HybridLLM] Online mode activated");
     });
 
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOnline = false;
-      logger.info('[HybridLLM] Offline mode activated');
+      logger.info("[HybridLLM] Offline mode activated");
     });
   }
 
@@ -115,9 +115,9 @@ class HybridLLMEngine {
     this.db = await openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {
         if (!db.objectStoreNames.contains(STORE_NAME)) {
-          const store = db.createObjectStore(STORE_NAME, { keyPath: 'key' });
-          store.createIndex('timestamp', 'timestamp');
-          store.createIndex('expiresAt', 'expiresAt');
+          const store = db.createObjectStore(STORE_NAME, { keyPath: "key" });
+          store.createIndex("timestamp", "timestamp");
+          store.createIndex("expiresAt", "expiresAt");
         }
       },
     });
@@ -152,12 +152,12 @@ class HybridLLMEngine {
 
       return cached;
     } catch (error) {
-      logger.warn('[HybridLLM] Cache read error:', { error });
+      logger.warn("[HybridLLM] Cache read error:", { error });
       return null;
     }
   }
 
-  private async cacheResponse(prompt: string, response: string, confidence: number, source: 'cloud' | 'local' | 'fallback'): Promise<void> {
+  private async cacheResponse(prompt: string, response: string, confidence: number, source: "cloud" | "local" | "fallback"): Promise<void> {
     try {
       const db = await this.getDB();
       const key = this.generateCacheKey(prompt);
@@ -177,16 +177,16 @@ class HybridLLMEngine {
       // Cleanup old entries if cache is full
       await this.cleanupCache();
     } catch (error) {
-      logger.warn('[HybridLLM] Cache write error:', { error });
+      logger.warn("[HybridLLM] Cache write error:", { error });
     }
   }
 
   private async cleanupCache(): Promise<void> {
     try {
       const db = await this.getDB();
-      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const tx = db.transaction(STORE_NAME, "readwrite");
       const store = tx.objectStore(STORE_NAME);
-      const index = store.index('timestamp');
+      const index = store.index("timestamp");
 
       // Get all entries sorted by timestamp
       const entries = await index.getAll();
@@ -202,42 +202,42 @@ class HybridLLMEngine {
 
       await tx.done;
     } catch (error) {
-      logger.warn('[HybridLLM] Cache cleanup error:', { error });
+      logger.warn("[HybridLLM] Cache cleanup error:", { error });
     }
   }
 
   private matchOfflinePattern(prompt: string): { response: string; confidence: number } | null {
     const lowerPrompt = prompt.toLowerCase();
 
-    if (lowerPrompt.includes('olá') || lowerPrompt.includes('oi') || lowerPrompt.includes('bom dia') || lowerPrompt.includes('boa tarde')) {
-      return OFFLINE_RESPONSES['greeting'];
+    if (lowerPrompt.includes("olá") || lowerPrompt.includes("oi") || lowerPrompt.includes("bom dia") || lowerPrompt.includes("boa tarde")) {
+      return OFFLINE_RESPONSES["greeting"];
     }
-    if (lowerPrompt.includes('ajuda') || lowerPrompt.includes('help') || lowerPrompt.includes('como')) {
-      return OFFLINE_RESPONSES['help'];
+    if (lowerPrompt.includes("ajuda") || lowerPrompt.includes("help") || lowerPrompt.includes("como")) {
+      return OFFLINE_RESPONSES["help"];
     }
-    if (lowerPrompt.includes('compliance') || lowerPrompt.includes('auditoria') || lowerPrompt.includes('ism')) {
-      return OFFLINE_RESPONSES['compliance'];
+    if (lowerPrompt.includes("compliance") || lowerPrompt.includes("auditoria") || lowerPrompt.includes("ism")) {
+      return OFFLINE_RESPONSES["compliance"];
     }
-    if (lowerPrompt.includes('manutenção') || lowerPrompt.includes('maintenance') || lowerPrompt.includes('ordem de serviço')) {
-      return OFFLINE_RESPONSES['maintenance'];
+    if (lowerPrompt.includes("manutenção") || lowerPrompt.includes("maintenance") || lowerPrompt.includes("ordem de serviço")) {
+      return OFFLINE_RESPONSES["maintenance"];
     }
-    if (lowerPrompt.includes('tripulação') || lowerPrompt.includes('crew') || lowerPrompt.includes('marinheiro')) {
-      return OFFLINE_RESPONSES['crew'];
+    if (lowerPrompt.includes("tripulação") || lowerPrompt.includes("crew") || lowerPrompt.includes("marinheiro")) {
+      return OFFLINE_RESPONSES["crew"];
     }
-    if (lowerPrompt.includes('navegação') || lowerPrompt.includes('rota') || lowerPrompt.includes('carta')) {
-      return OFFLINE_RESPONSES['navigation'];
+    if (lowerPrompt.includes("navegação") || lowerPrompt.includes("rota") || lowerPrompt.includes("carta")) {
+      return OFFLINE_RESPONSES["navigation"];
     }
-    if (lowerPrompt.includes('documento') || lowerPrompt.includes('arquivo') || lowerPrompt.includes('upload')) {
-      return OFFLINE_RESPONSES['documents'];
+    if (lowerPrompt.includes("documento") || lowerPrompt.includes("arquivo") || lowerPrompt.includes("upload")) {
+      return OFFLINE_RESPONSES["documents"];
     }
-    if (lowerPrompt.includes('relatório') || lowerPrompt.includes('report') || lowerPrompt.includes('exportar')) {
-      return OFFLINE_RESPONSES['reports'];
+    if (lowerPrompt.includes("relatório") || lowerPrompt.includes("report") || lowerPrompt.includes("exportar")) {
+      return OFFLINE_RESPONSES["reports"];
     }
-    if (lowerPrompt.includes('status') || lowerPrompt.includes('saúde') || lowerPrompt.includes('health')) {
-      return OFFLINE_RESPONSES['status'];
+    if (lowerPrompt.includes("status") || lowerPrompt.includes("saúde") || lowerPrompt.includes("health")) {
+      return OFFLINE_RESPONSES["status"];
     }
     if (!navigator.onLine) {
-      return OFFLINE_RESPONSES['offline'];
+      return OFFLINE_RESPONSES["offline"];
     }
 
     return null;
@@ -249,7 +249,7 @@ class HybridLLMEngine {
   async query(prompt: string, options?: { forceOnline?: boolean; context?: string }): Promise<{
     response: string;
     confidence: number;
-    source: 'cache' | 'cloud' | 'local' | 'fallback';
+    source: "cache" | "cloud" | "local" | "fallback";
     latency: number;
   }> {
     const startTime = performance.now();
@@ -258,11 +258,11 @@ class HybridLLMEngine {
     if (!options?.forceOnline) {
       const cached = await this.getCachedResponse(prompt);
       if (cached && cached.confidence >= this.config.minConfidence) {
-        logger.info('[HybridLLM] Cache hit');
+        logger.info("[HybridLLM] Cache hit");
         return {
           response: cached.response,
           confidence: cached.confidence,
-          source: 'cache',
+          source: "cache",
           latency: performance.now() - startTime,
         };
       }
@@ -278,7 +278,7 @@ class HybridLLMEngine {
           return {
             response,
             confidence: 0.9,
-            source: 'cloud',
+            source: "cloud",
             latency: performance.now() - startTime,
           };
         }
@@ -288,19 +288,19 @@ class HybridLLMEngine {
 
         try {
           const response = await requestPromise;
-          await this.cacheResponse(prompt, response, 0.95, 'cloud');
+          await this.cacheResponse(prompt, response, 0.95, "cloud");
 
           return {
             response,
             confidence: 0.95,
-            source: 'cloud',
+            source: "cloud",
             latency: performance.now() - startTime,
           };
         } finally {
           this.pendingRequests.delete(cacheKey);
         }
       } catch (error) {
-        logger.warn('[HybridLLM] Cloud request failed, falling back to local', { error });
+        logger.warn("[HybridLLM] Cloud request failed, falling back to local", { error });
       }
     }
 
@@ -311,7 +311,7 @@ class HybridLLMEngine {
         return {
           response: offlineMatch.response,
           confidence: offlineMatch.confidence,
-          source: 'local',
+          source: "local",
           latency: performance.now() - startTime,
         };
       }
@@ -319,36 +319,36 @@ class HybridLLMEngine {
 
     // 4. Return generic fallback
     return {
-      response: OFFLINE_RESPONSES['error'].response,
-      confidence: OFFLINE_RESPONSES['error'].confidence,
-      source: 'fallback',
+      response: OFFLINE_RESPONSES["error"].response,
+      confidence: OFFLINE_RESPONSES["error"].confidence,
+      source: "fallback",
       latency: performance.now() - startTime,
     };
   }
 
   private async fetchFromCloud(prompt: string, context?: string): Promise<string> {
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
         body: {
           prompt,
           context,
-          mode: 'safe',
+          mode: "safe",
         },
       });
 
       if (error) {
-        logger.warn('[HybridLLM] Cloud error:', { error });
+        logger.warn("[HybridLLM] Cloud error:", { error });
         throw error;
       }
       
       // Handle rate limiting gracefully
-      if (data?.source === 'rate_limited' || data?.source === 'fallback') {
-        logger.info('[HybridLLM] Using fallback response from cloud');
+      if (data?.source === "rate_limited" || data?.source === "fallback") {
+        logger.info("[HybridLLM] Using fallback response from cloud");
       }
       
-      return data?.response || 'Não foi possível obter resposta.';
+      return data?.response || "Não foi possível obter resposta.";
     } catch (error) {
-      logger.error('[HybridLLM] fetchFromCloud failed:', { error });
+      logger.error("[HybridLLM] fetchFromCloud failed:", { error });
       throw error;
     }
   }
@@ -377,7 +377,7 @@ class HybridLLMEngine {
   async clearCache(): Promise<void> {
     const db = await this.getDB();
     await db.clear(STORE_NAME);
-    logger.info('[HybridLLM] Cache cleared');
+    logger.info("[HybridLLM] Cache cleared");
   }
 
   /**
@@ -385,7 +385,7 @@ class HybridLLMEngine {
    */
   updateConfig(newConfig: Partial<HybridLLMConfig>): void {
     this.config = { ...this.config, ...newConfig };
-    logger.info('[HybridLLM] Config updated', this.config);
+    logger.info("[HybridLLM] Config updated", this.config);
   }
 }
 

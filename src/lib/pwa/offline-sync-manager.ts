@@ -3,29 +3,29 @@
  * PATCH 850: PWA & Offline - Background sync and queue management
  */
 
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { openDB, DBSchema, IDBPDatabase } from "idb";
 
 interface OfflineSyncDB extends DBSchema {
   pendingMutations: {
     key: string;
     value: PendingMutation;
-    indexes: { 'by-timestamp': number; 'by-type': string };
+    indexes: { "by-timestamp": number; "by-type": string };
   };
   cachedData: {
     key: string;
     value: CachedDataEntry;
-    indexes: { 'by-expiry': number };
+    indexes: { "by-expiry": number };
   };
 }
 
 interface PendingMutation {
   id: string;
-  type: 'create' | 'update' | 'delete';
+  type: "create" | "update" | "delete";
   endpoint: string;
   payload: unknown;
   timestamp: number;
   retryCount: number;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 interface CachedDataEntry {
@@ -44,26 +44,26 @@ class OfflineSyncManager {
   async initialize(): Promise<void> {
     if (this.db) return;
 
-    this.db = await openDB<OfflineSyncDB>('maritime-offline-db', 1, {
+    this.db = await openDB<OfflineSyncDB>("maritime-offline-db", 1, {
       upgrade(db) {
         // Pending mutations store
-        const mutationsStore = db.createObjectStore('pendingMutations', {
-          keyPath: 'id',
+        const mutationsStore = db.createObjectStore("pendingMutations", {
+          keyPath: "id",
         });
-        mutationsStore.createIndex('by-timestamp', 'timestamp');
-        mutationsStore.createIndex('by-type', 'type');
+        mutationsStore.createIndex("by-timestamp", "timestamp");
+        mutationsStore.createIndex("by-type", "type");
 
         // Cached data store
-        const cacheStore = db.createObjectStore('cachedData', {
-          keyPath: 'key',
+        const cacheStore = db.createObjectStore("cachedData", {
+          keyPath: "key",
         });
-        cacheStore.createIndex('by-expiry', 'expiry');
+        cacheStore.createIndex("by-expiry", "expiry");
       },
     });
 
     // Setup online/offline listeners
-    window.addEventListener('online', () => this.onOnline());
-    window.addEventListener('offline', () => this.onOffline());
+    window.addEventListener("online", () => this.onOnline());
+    window.addEventListener("offline", () => this.onOffline());
 
     // Register for background sync if supported
     this.registerBackgroundSync();
@@ -72,23 +72,23 @@ class OfflineSyncManager {
   private async registerBackgroundSync(): Promise<void> {
     try {
       // Only register if we have a valid service worker with sync support
-      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
         const registration = await navigator.serviceWorker.ready;
-        if (registration && 'sync' in registration) {
+        if (registration && "sync" in registration) {
           // Use a short tag name to avoid "tag too long" error
-          await (registration as any).sync.register('sync');
+          await (registration as any).sync.register("sync");
         }
       }
     } catch (error) {
       // Silently handle - background sync is an enhancement, not required
-      if (error instanceof Error && !error.message.includes('without a window')) {
-        console.warn('[OfflineSync] Background sync not available');
-        console.warn('[OfflineSync] Background sync not available');
+      if (error instanceof Error && !error.message.includes("without a window")) {
+        console.warn("[OfflineSync] Background sync not available");
+        console.warn("[OfflineSync] Background sync not available");
       }
     }
   }
 
-  async queueMutation(mutation: Omit<PendingMutation, 'id' | 'timestamp' | 'retryCount'>): Promise<string> {
+  async queueMutation(mutation: Omit<PendingMutation, "id" | "timestamp" | "retryCount">): Promise<string> {
     await this.initialize();
 
     const id = `mutation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -99,7 +99,7 @@ class OfflineSyncManager {
       retryCount: 0,
     };
 
-    await this.db!.put('pendingMutations', entry);
+    await this.db!.put("pendingMutations", entry);
     this.notifyListeners({ pendingCount: await this.getPendingCount() });
 
     // Try to sync immediately if online
@@ -123,8 +123,8 @@ class OfflineSyncManager {
 
     try {
       const mutations = await this.db!.getAllFromIndex(
-        'pendingMutations',
-        'by-timestamp'
+        "pendingMutations",
+        "by-timestamp"
       );
 
       // Sort by priority
@@ -136,19 +136,19 @@ class OfflineSyncManager {
       for (const mutation of mutations) {
         try {
           await this.executeMutation(mutation);
-          await this.db!.delete('pendingMutations', mutation.id);
+          await this.db!.delete("pendingMutations", mutation.id);
           synced++;
         } catch (error) {
           mutation.retryCount++;
           
           if (mutation.retryCount >= 5) {
             // Move to dead letter queue or notify user
-            console.error('[OfflineSync] Mutation failed after max retries:', mutation);
-            console.error('[OfflineSync] Mutation failed after max retries:', mutation);
-            await this.db!.delete('pendingMutations', mutation.id);
+            console.error("[OfflineSync] Mutation failed after max retries:", mutation);
+            console.error("[OfflineSync] Mutation failed after max retries:", mutation);
+            await this.db!.delete("pendingMutations", mutation.id);
             failed++;
           } else {
-            await this.db!.put('pendingMutations', mutation);
+            await this.db!.put("pendingMutations", mutation);
           }
         }
       }
@@ -165,9 +165,9 @@ class OfflineSyncManager {
 
   private async executeMutation(mutation: PendingMutation): Promise<void> {
     const response = await fetch(mutation.endpoint, {
-      method: mutation.type === 'delete' ? 'DELETE' : mutation.type === 'create' ? 'POST' : 'PUT',
+      method: mutation.type === "delete" ? "DELETE" : mutation.type === "create" ? "POST" : "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(mutation.payload),
     });
@@ -185,21 +185,21 @@ class OfflineSyncManager {
       data,
       timestamp: Date.now(),
       expiry: Date.now() + ttlSeconds * 1000,
-      version: '1.0',
+      version: "1.0",
     };
 
-    await this.db!.put('cachedData', entry);
+    await this.db!.put("cachedData", entry);
   }
 
   async getCachedData<T>(key: string): Promise<T | null> {
     await this.initialize();
 
-    const entry = await this.db!.get('cachedData', key);
+    const entry = await this.db!.get("cachedData", key);
     
     if (!entry) return null;
     
     if (entry.expiry < Date.now()) {
-      await this.db!.delete('cachedData', key);
+      await this.db!.delete("cachedData", key);
       return null;
     }
 
@@ -210,12 +210,12 @@ class OfflineSyncManager {
     await this.initialize();
 
     const now = Date.now();
-    const allEntries = await this.db!.getAllFromIndex('cachedData', 'by-expiry');
+    const allEntries = await this.db!.getAllFromIndex("cachedData", "by-expiry");
     let cleared = 0;
 
     for (const entry of allEntries) {
       if (entry.expiry < now) {
-        await this.db!.delete('cachedData', entry.key);
+        await this.db!.delete("cachedData", entry.key);
         cleared++;
       }
     }
@@ -225,7 +225,7 @@ class OfflineSyncManager {
 
   async getPendingCount(): Promise<number> {
     await this.initialize();
-    return (await this.db!.count('pendingMutations'));
+    return (await this.db!.count("pendingMutations"));
   }
 
   subscribe(listener: (status: SyncStatus) => void): () => void {

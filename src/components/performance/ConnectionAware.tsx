@@ -3,13 +3,13 @@
  * Adaptive UI based on network conditions
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { cn } from '@/lib/utils';
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
 
 // Connection types
-type ConnectionQuality = 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
-type EffectiveType = '4g' | '3g' | '2g' | 'slow-2g';
+type ConnectionQuality = "excellent" | "good" | "fair" | "poor" | "offline";
+type EffectiveType = "4g" | "3g" | "2g" | "slow-2g";
 
 interface ConnectionInfo {
   isOnline: boolean;
@@ -44,25 +44,25 @@ function getConnectionInfo(): ConnectionInfo {
   const connection = nav.connection;
 
   if (!isOnline) {
-    return { isOnline: false, quality: 'offline' };
+    return { isOnline: false, quality: "offline" };
   }
 
   if (!connection) {
-    return { isOnline: true, quality: 'good' };
+    return { isOnline: true, quality: "good" };
   }
 
   const { effectiveType, downlink, rtt, saveData } = connection;
 
-  let quality: ConnectionQuality = 'good';
+  let quality: ConnectionQuality = "good";
 
-  if (effectiveType === '4g' && (rtt === undefined || rtt < 100)) {
-    quality = 'excellent';
-  } else if (effectiveType === '4g') {
-    quality = rtt && rtt > 300 ? 'fair' : 'good';
-  } else if (effectiveType === '3g') {
-    quality = 'fair';
-  } else if (effectiveType === '2g' || effectiveType === 'slow-2g') {
-    quality = 'poor';
+  if (effectiveType === "4g" && (rtt === undefined || rtt < 100)) {
+    quality = "excellent";
+  } else if (effectiveType === "4g") {
+    quality = rtt && rtt > 300 ? "fair" : "good";
+  } else if (effectiveType === "3g") {
+    quality = "fair";
+  } else if (effectiveType === "2g" || effectiveType === "slow-2g") {
+    quality = "poor";
   }
 
   return {
@@ -85,8 +85,8 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
     };
 
     // Listen for online/offline events
-    window.addEventListener('online', updateConnection);
-    window.addEventListener('offline', updateConnection);
+    window.addEventListener("online", updateConnection);
+    window.addEventListener("offline", updateConnection);
 
     // Listen for connection changes
     const nav = navigator as Navigator & {
@@ -97,24 +97,24 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
     };
 
     if (nav.connection) {
-      nav.connection.addEventListener('change', updateConnection);
+      nav.connection.addEventListener("change", updateConnection);
     }
 
     return () => {
-      window.removeEventListener('online', updateConnection);
-      window.removeEventListener('offline', updateConnection);
+      window.removeEventListener("online", updateConnection);
+      window.removeEventListener("offline", updateConnection);
       if (nav.connection) {
-        nav.connection.removeEventListener('change', updateConnection);
+        nav.connection.removeEventListener("change", updateConnection);
       }
     };
   }, []);
 
   const value: ConnectionContextValue = {
     ...connectionInfo,
-    shouldReduceData: connectionInfo.quality === 'poor' || connectionInfo.saveData || false,
-    shouldDisableAnimations: connectionInfo.quality === 'poor' || connectionInfo.quality === 'offline',
-    shouldUseLowQuality: connectionInfo.quality !== 'excellent' && connectionInfo.quality !== 'good',
-    isSlowConnection: connectionInfo.quality === 'poor' || connectionInfo.quality === 'fair',
+    shouldReduceData: connectionInfo.quality === "poor" || connectionInfo.saveData || false,
+    shouldDisableAnimations: connectionInfo.quality === "poor" || connectionInfo.quality === "offline",
+    shouldUseLowQuality: connectionInfo.quality !== "excellent" && connectionInfo.quality !== "good",
+    isSlowConnection: connectionInfo.quality === "poor" || connectionInfo.quality === "fair",
   };
 
   return (
@@ -131,7 +131,7 @@ export function useConnection() {
     // Return default values if not wrapped in provider
     return {
       isOnline: navigator.onLine,
-      quality: 'good' as ConnectionQuality,
+      quality: "good" as ConnectionQuality,
       shouldReduceData: false,
       shouldDisableAnimations: false,
       shouldUseLowQuality: false,
@@ -145,54 +145,54 @@ export function useConnection() {
 export function ConnectionIndicator({ 
   className,
   showLabel = false,
-  size = 'sm',
+  size = "sm",
 }: { 
   className?: string;
   showLabel?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }) {
   const { isOnline, quality } = useConnection();
 
   const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-5 w-5',
-    lg: 'h-6 w-6',
+    sm: "h-4 w-4",
+    md: "h-5 w-5",
+    lg: "h-6 w-6",
   };
 
   const iconClass = sizeClasses[size];
 
   const getIcon = () => {
     if (!isOnline) {
-      return <WifiOff className={cn(iconClass, 'text-destructive')} />;
+      return <WifiOff className={cn(iconClass, "text-destructive")} />;
     }
 
     switch (quality) {
-      case 'excellent':
-        return <SignalHigh className={cn(iconClass, 'text-green-500')} />;
-      case 'good':
-        return <SignalMedium className={cn(iconClass, 'text-green-400')} />;
-      case 'fair':
-        return <SignalLow className={cn(iconClass, 'text-yellow-500')} />;
-      case 'poor':
-        return <Signal className={cn(iconClass, 'text-orange-500')} />;
-      default:
-        return <Wifi className={cn(iconClass, 'text-muted-foreground')} />;
+    case "excellent":
+      return <SignalHigh className={cn(iconClass, "text-green-500")} />;
+    case "good":
+      return <SignalMedium className={cn(iconClass, "text-green-400")} />;
+    case "fair":
+      return <SignalLow className={cn(iconClass, "text-yellow-500")} />;
+    case "poor":
+      return <Signal className={cn(iconClass, "text-orange-500")} />;
+    default:
+      return <Wifi className={cn(iconClass, "text-muted-foreground")} />;
     }
   };
 
   const getLabel = () => {
-    if (!isOnline) return 'Offline';
+    if (!isOnline) return "Offline";
     switch (quality) {
-      case 'excellent': return 'Excelente';
-      case 'good': return 'Boa';
-      case 'fair': return 'Regular';
-      case 'poor': return 'Fraca';
-      default: return 'Conectado';
+    case "excellent": return "Excelente";
+    case "good": return "Boa";
+    case "fair": return "Regular";
+    case "poor": return "Fraca";
+    default: return "Conectado";
     }
   };
 
   return (
-    <div className={cn('flex items-center gap-1.5', className)}>
+    <div className={cn("flex items-center gap-1.5", className)}>
       {getIcon()}
       {showLabel && (
         <span className="text-xs text-muted-foreground">{getLabel()}</span>
@@ -225,10 +225,10 @@ export function OfflineBanner({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 px-4 py-2 text-center text-sm font-medium transition-all duration-300',
+        "fixed top-0 left-0 right-0 z-50 px-4 py-2 text-center text-sm font-medium transition-all duration-300",
         isOnline 
-          ? 'bg-green-500 text-white' 
-          : 'bg-destructive text-destructive-foreground',
+          ? "bg-green-500 text-white" 
+          : "bg-destructive text-destructive-foreground",
         className
       )}
     >
@@ -267,7 +267,7 @@ export function withConnectionAware<P extends object>(
 export function ConnectionConditional({
   children,
   fallback,
-  minQuality = 'poor',
+  minQuality = "poor",
 }: {
   children: ReactNode;
   fallback?: ReactNode;
@@ -275,7 +275,7 @@ export function ConnectionConditional({
 }) {
   const { quality, isOnline } = useConnection();
 
-  const qualityOrder: ConnectionQuality[] = ['offline', 'poor', 'fair', 'good', 'excellent'];
+  const qualityOrder: ConnectionQuality[] = ["offline", "poor", "fair", "good", "excellent"];
   const currentIndex = qualityOrder.indexOf(quality);
   const minIndex = qualityOrder.indexOf(minQuality);
 
@@ -314,7 +314,7 @@ export function useAdaptiveFetch<T>(
       const result = await fetchFn();
       setData(result);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Fetch failed'));
+      setError(err instanceof Error ? err : new Error("Fetch failed"));
     } finally {
       setIsLoading(false);
     }

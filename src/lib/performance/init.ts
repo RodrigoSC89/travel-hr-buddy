@@ -3,9 +3,9 @@
  * Sets up all performance optimizations for 2Mbps networks
  */
 
-import { memoryManager } from './memory-manager';
-import { resourceHints } from './resource-hints';
-import { bandwidthOptimizer } from './low-bandwidth-optimizer';
+import { memoryManager } from "./memory-manager";
+import { resourceHints } from "./resource-hints";
+import { bandwidthOptimizer } from "./low-bandwidth-optimizer";
 import { Logger } from "@/lib/utils/logger";
 
 let isInitialized = false;
@@ -16,22 +16,22 @@ const milestones: Map<string, number> = new Map();
  * Initialize performance optimizations
  */
 export function initializePerformance() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   if (isInitialized) return;
   
   isInitialized = true;
   startTime = performance.now();
-  recordMilestone('init-start');
+  recordMilestone("init-start");
 
   Logger.info("Initializing performance optimizations", undefined, "PerfInit");
 
   // 1. Bandwidth optimizer first (critical for slow networks)
   bandwidthOptimizer.init();
-  recordMilestone('bandwidth-init');
+  recordMilestone("bandwidth-init");
 
   // 2. Apply critical CSS optimizations
   applyCriticalOptimizations();
-  recordMilestone('critical-css');
+  recordMilestone("critical-css");
 
   // 3. Memory monitoring (light)
   memoryManager.startMonitoring(60000); // 60s for lower overhead
@@ -54,11 +54,11 @@ export function initializePerformance() {
   setupPerformanceObserver();
 
   // 7. Cleanup on page unload
-  window.addEventListener('beforeunload', () => {
+  window.addEventListener("beforeunload", () => {
     memoryManager.stopMonitoring();
   });
 
-  recordMilestone('init-complete');
+  recordMilestone("init-complete");
   Logger.info(`Performance init complete in ${(performance.now() - startTime).toFixed(2)}ms`, undefined, "PerfInit");
 }
 
@@ -66,13 +66,13 @@ export function initializePerformance() {
  * Apply critical CSS optimizations
  */
 function applyCriticalOptimizations() {
-  document.documentElement.classList.add('perf-optimized');
+  document.documentElement.classList.add("perf-optimized");
 
   // Check for existing style
-  if (document.getElementById('critical-perf-styles')) return;
+  if (document.getElementById("critical-perf-styles")) return;
 
-  const style = document.createElement('style');
-  style.id = 'critical-perf-styles';
+  const style = document.createElement("style");
+  style.id = "critical-perf-styles";
   style.textContent = `
     .perf-optimized {
       text-rendering: optimizeSpeed;
@@ -122,28 +122,28 @@ function recordMilestone(name: string) {
  * Register Service Worker for offline support
  */
 async function registerServiceWorker() {
-  if (!('serviceWorker' in navigator)) return;
+  if (!("serviceWorker" in navigator)) return;
 
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-      updateViaCache: 'none',
+    const registration = await navigator.serviceWorker.register("/sw.js", {
+      scope: "/",
+      updateViaCache: "none",
     });
 
-    registration.addEventListener('updatefound', () => {
+    registration.addEventListener("updatefound", () => {
       const newWorker = registration.installing;
       if (newWorker) {
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            dispatchEvent(new CustomEvent('sw-update-available'));
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            dispatchEvent(new CustomEvent("sw-update-available"));
           }
         });
       }
     });
 
-    navigator.serviceWorker.addEventListener('message', (event) => {
-      if (event.data.type === 'SYNC_COMPLETE') {
-        dispatchEvent(new CustomEvent('sync-complete', { detail: event.data }));
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      if (event.data.type === "SYNC_COMPLETE") {
+        dispatchEvent(new CustomEvent("sync-complete", { detail: event.data }));
       }
     });
 
@@ -156,7 +156,7 @@ async function registerServiceWorker() {
  * Setup Performance Observer for metrics
  */
 function setupPerformanceObserver() {
-  if (!('PerformanceObserver' in window)) return;
+  if (!("PerformanceObserver" in window)) return;
 
   try {
     // LCP Observer
@@ -165,7 +165,7 @@ function setupPerformanceObserver() {
       const lastEntry = entries[entries.length - 1];
       recordMilestone(`lcp-${lastEntry.startTime.toFixed(0)}`);
     });
-    lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+    lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
 
     // CLS Observer
     let clsScore = 0;
@@ -176,7 +176,7 @@ function setupPerformanceObserver() {
         }
       }
     });
-    clsObserver.observe({ type: 'layout-shift', buffered: true });
+    clsObserver.observe({ type: "layout-shift", buffered: true });
 
   } catch (e) {
     // Ignore observer errors
@@ -212,7 +212,7 @@ export function requestIdleCallbackPolyfill(
   callback: IdleRequestCallback,
   options?: IdleRequestOptions
 ): number {
-  if ('requestIdleCallback' in window) {
+  if ("requestIdleCallback" in window) {
     return requestIdleCallback(callback, options);
   }
   return setTimeout(() => callback({ 
@@ -225,7 +225,7 @@ export function requestIdleCallbackPolyfill(
  * Cancel idle callback with fallback
  */
 export function cancelIdleCallbackPolyfill(id: number) {
-  if ('cancelIdleCallback' in window) {
+  if ("cancelIdleCallback" in window) {
     cancelIdleCallback(id);
   } else {
     clearTimeout(id);

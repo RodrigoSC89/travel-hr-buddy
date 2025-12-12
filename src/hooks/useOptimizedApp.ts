@@ -3,11 +3,11 @@
  * Unified hook for all app optimizations
  */
 
-import { useEffect, useMemo, useCallback } from 'react';
-import { useBandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
-import { useNetworkStatus } from '@/hooks/use-network-status';
-import { memoryManager, shouldReduceMemory } from '@/lib/performance/memory-manager';
-import { smartPrefetch } from '@/lib/performance/smart-prefetch';
+import { useEffect, useMemo, useCallback } from "react";
+import { useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
+import { useNetworkStatus } from "@/hooks/use-network-status";
+import { memoryManager, shouldReduceMemory } from "@/lib/performance/memory-manager";
+import { smartPrefetch } from "@/lib/performance/smart-prefetch";
 
 export interface OptimizedAppConfig {
   shouldReduceAnimations: boolean;
@@ -17,14 +17,14 @@ export interface OptimizedAppConfig {
   imageQuality: number;
   batchSize: number;
   timeout: number;
-  connectionQuality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  connectionQuality: "excellent" | "good" | "fair" | "poor" | "offline";
   isLowMemory: boolean;
 }
 
 export function useOptimizedApp(): OptimizedAppConfig & {
   prefetchRoute: (route: string) => void;
   optimizedFetch: (url: string, options?: RequestInit) => Promise<Response>;
-} {
+  } {
   const { 
     connectionType, 
     isLowBandwidth, 
@@ -38,11 +38,11 @@ export function useOptimizedApp(): OptimizedAppConfig & {
 
   // Determine connection quality
   const connectionQuality = useMemo(() => {
-    if (!online) return 'offline' as const;
-    if (connectionType === '4g') return 'excellent' as const;
-    if (connectionType === '3g') return 'good' as const;
-    if (connectionType === '2g') return 'fair' as const;
-    return 'poor' as const;
+    if (!online) return "offline" as const;
+    if (connectionType === "4g") return "excellent" as const;
+    if (connectionType === "3g") return "good" as const;
+    if (connectionType === "2g") return "fair" as const;
+    return "poor" as const;
   }, [connectionType, online]);
 
   // Memory-aware optimizations
@@ -50,10 +50,10 @@ export function useOptimizedApp(): OptimizedAppConfig & {
 
   // Combined optimization config
   const config = useMemo((): OptimizedAppConfig => ({
-    shouldReduceAnimations: isLowBandwidth || isLowMemory || connectionQuality === 'poor',
-    shouldReduceData: isLowBandwidth || connectionQuality === 'fair' || connectionQuality === 'poor',
+    shouldReduceAnimations: isLowBandwidth || isLowMemory || connectionQuality === "poor",
+    shouldReduceData: isLowBandwidth || connectionQuality === "fair" || connectionQuality === "poor",
     shouldLazyLoadImages: true,
-    shouldPrefetch: connectionQuality === 'excellent' || connectionQuality === 'good',
+    shouldPrefetch: connectionQuality === "excellent" || connectionQuality === "good",
     imageQuality,
     batchSize,
     timeout,
@@ -80,21 +80,21 @@ export function useOptimizedApp(): OptimizedAppConfig & {
     const html = document.documentElement;
     
     if (config.shouldReduceAnimations) {
-      html.classList.add('reduce-motion');
+      html.classList.add("reduce-motion");
     } else {
-      html.classList.remove('reduce-motion');
+      html.classList.remove("reduce-motion");
     }
 
     if (config.shouldReduceData) {
-      html.classList.add('low-bandwidth');
+      html.classList.add("low-bandwidth");
     } else {
-      html.classList.remove('low-bandwidth');
+      html.classList.remove("low-bandwidth");
     }
 
     if (config.isLowMemory) {
-      html.classList.add('low-memory');
+      html.classList.add("low-memory");
     } else {
-      html.classList.remove('low-memory');
+      html.classList.remove("low-memory");
     }
   }, [config]);
 
@@ -112,11 +112,11 @@ export function useAdaptiveImage(originalSrc: string, width?: number) {
   const { imageQuality, isLowBandwidth, getOptimizedImageUrl } = useBandwidthOptimizer();
   
   return useMemo(() => {
-    if (!originalSrc) return '';
+    if (!originalSrc) return "";
     
     // Skip images in ultra-low bandwidth mode
-    if (isLowBandwidth && !originalSrc.includes('avatar')) {
-      return '';
+    if (isLowBandwidth && !originalSrc.includes("avatar")) {
+      return "";
     }
     
     return getOptimizedImageUrl(originalSrc, width);
@@ -134,7 +134,7 @@ export function useAdaptivePolling(
   
   useEffect(() => {
     // Don't poll when offline
-    if (connectionQuality === 'offline') return;
+    if (connectionQuality === "offline") return;
     
     // Adjust interval based on connection
     const multiplier = {

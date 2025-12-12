@@ -2,13 +2,13 @@
  * People Analytics - Analytics Avançado de RH com IA
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   BarChart3,
   TrendingUp,
@@ -26,85 +26,85 @@ import {
   Brain,
   Download,
   Filter
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from 'recharts';
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Area, AreaChart } from "recharts";
 
 const PeopleAnalytics: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('12m');
+  const [selectedPeriod, setSelectedPeriod] = useState("12m");
 
   // Mock data for charts
   const turnoverData = [
-    { mes: 'Jan', turnover: 3.2, benchmark: 4.0 },
-    { mes: 'Fev', turnover: 2.8, benchmark: 4.0 },
-    { mes: 'Mar', turnover: 4.1, benchmark: 4.0 },
-    { mes: 'Abr', turnover: 3.5, benchmark: 4.0 },
-    { mes: 'Mai', turnover: 3.0, benchmark: 4.0 },
-    { mes: 'Jun', turnover: 2.5, benchmark: 4.0 },
-    { mes: 'Jul', turnover: 3.8, benchmark: 4.0 },
-    { mes: 'Ago', turnover: 4.2, benchmark: 4.0 },
-    { mes: 'Set', turnover: 3.6, benchmark: 4.0 },
-    { mes: 'Out', turnover: 2.9, benchmark: 4.0 },
-    { mes: 'Nov', turnover: 3.3, benchmark: 4.0 },
-    { mes: 'Dez', turnover: 2.7, benchmark: 4.0 }
+    { mes: "Jan", turnover: 3.2, benchmark: 4.0 },
+    { mes: "Fev", turnover: 2.8, benchmark: 4.0 },
+    { mes: "Mar", turnover: 4.1, benchmark: 4.0 },
+    { mes: "Abr", turnover: 3.5, benchmark: 4.0 },
+    { mes: "Mai", turnover: 3.0, benchmark: 4.0 },
+    { mes: "Jun", turnover: 2.5, benchmark: 4.0 },
+    { mes: "Jul", turnover: 3.8, benchmark: 4.0 },
+    { mes: "Ago", turnover: 4.2, benchmark: 4.0 },
+    { mes: "Set", turnover: 3.6, benchmark: 4.0 },
+    { mes: "Out", turnover: 2.9, benchmark: 4.0 },
+    { mes: "Nov", turnover: 3.3, benchmark: 4.0 },
+    { mes: "Dez", turnover: 2.7, benchmark: 4.0 }
   ];
 
   const headcountData = [
-    { mes: 'Jan', headcount: 1180, contratacoes: 25, desligamentos: 15 },
-    { mes: 'Fev', headcount: 1190, contratacoes: 20, desligamentos: 10 },
-    { mes: 'Mar', headcount: 1205, contratacoes: 30, desligamentos: 15 },
-    { mes: 'Abr', headcount: 1215, contratacoes: 22, desligamentos: 12 },
-    { mes: 'Mai', headcount: 1225, contratacoes: 18, desligamentos: 8 },
-    { mes: 'Jun', headcount: 1235, contratacoes: 15, desligamentos: 5 },
-    { mes: 'Jul', headcount: 1230, contratacoes: 10, desligamentos: 15 },
-    { mes: 'Ago', headcount: 1238, contratacoes: 20, desligamentos: 12 },
-    { mes: 'Set', headcount: 1242, contratacoes: 12, desligamentos: 8 },
-    { mes: 'Out', headcount: 1245, contratacoes: 14, desligamentos: 11 },
-    { mes: 'Nov', headcount: 1247, contratacoes: 18, desligamentos: 16 },
-    { mes: 'Dez', headcount: 1247, contratacoes: 23, desligamentos: 5 }
+    { mes: "Jan", headcount: 1180, contratacoes: 25, desligamentos: 15 },
+    { mes: "Fev", headcount: 1190, contratacoes: 20, desligamentos: 10 },
+    { mes: "Mar", headcount: 1205, contratacoes: 30, desligamentos: 15 },
+    { mes: "Abr", headcount: 1215, contratacoes: 22, desligamentos: 12 },
+    { mes: "Mai", headcount: 1225, contratacoes: 18, desligamentos: 8 },
+    { mes: "Jun", headcount: 1235, contratacoes: 15, desligamentos: 5 },
+    { mes: "Jul", headcount: 1230, contratacoes: 10, desligamentos: 15 },
+    { mes: "Ago", headcount: 1238, contratacoes: 20, desligamentos: 12 },
+    { mes: "Set", headcount: 1242, contratacoes: 12, desligamentos: 8 },
+    { mes: "Out", headcount: 1245, contratacoes: 14, desligamentos: 11 },
+    { mes: "Nov", headcount: 1247, contratacoes: 18, desligamentos: 16 },
+    { mes: "Dez", headcount: 1247, contratacoes: 23, desligamentos: 5 }
   ];
 
   const departmentDistribution = [
-    { name: 'Operações', value: 45, color: '#3B82F6' },
-    { name: 'Administrativo', value: 20, color: '#10B981' },
-    { name: 'Técnico', value: 18, color: '#F59E0B' },
-    { name: 'Gestão', value: 10, color: '#8B5CF6' },
-    { name: 'Outros', value: 7, color: '#6B7280' }
+    { name: "Operações", value: 45, color: "#3B82F6" },
+    { name: "Administrativo", value: 20, color: "#10B981" },
+    { name: "Técnico", value: 18, color: "#F59E0B" },
+    { name: "Gestão", value: 10, color: "#8B5CF6" },
+    { name: "Outros", value: 7, color: "#6B7280" }
   ];
 
   const turnoverRiskData = [
-    { colaborador: 'Maria Silva', risco: 85, departamento: 'Operações', motivo: 'Estagnação de carreira' },
-    { colaborador: 'João Santos', risco: 78, departamento: 'TI', motivo: 'Proposta de mercado' },
-    { colaborador: 'Ana Costa', risco: 72, departamento: 'Financeiro', motivo: 'Insatisfação salarial' },
-    { colaborador: 'Pedro Lima', risco: 68, departamento: 'QSMS', motivo: 'Clima com liderança' },
-    { colaborador: 'Lucia Ferreira', risco: 65, departamento: 'RH', motivo: 'Falta de desafios' }
+    { colaborador: "Maria Silva", risco: 85, departamento: "Operações", motivo: "Estagnação de carreira" },
+    { colaborador: "João Santos", risco: 78, departamento: "TI", motivo: "Proposta de mercado" },
+    { colaborador: "Ana Costa", risco: 72, departamento: "Financeiro", motivo: "Insatisfação salarial" },
+    { colaborador: "Pedro Lima", risco: 68, departamento: "QSMS", motivo: "Clima com liderança" },
+    { colaborador: "Lucia Ferreira", risco: 65, departamento: "RH", motivo: "Falta de desafios" }
   ];
 
   const costMetrics = [
-    { label: 'Custo por Contratação', value: 'R$ 4.850', change: '-12%', trend: 'down' },
-    { label: 'Custo de Turnover', value: 'R$ 18.500', change: '+5%', trend: 'up' },
-    { label: 'ROI Treinamento', value: '287%', change: '+15%', trend: 'up' },
-    { label: 'Custo por Funcionário', value: 'R$ 12.400', change: '-3%', trend: 'down' }
+    { label: "Custo por Contratação", value: "R$ 4.850", change: "-12%", trend: "down" },
+    { label: "Custo de Turnover", value: "R$ 18.500", change: "+5%", trend: "up" },
+    { label: "ROI Treinamento", value: "287%", change: "+15%", trend: "up" },
+    { label: "Custo por Funcionário", value: "R$ 12.400", change: "-3%", trend: "down" }
   ];
 
   const aiInsights = [
     {
-      tipo: 'alerta',
-      titulo: 'Risco de Turnover Elevado no Setor de TI',
-      descricao: 'Análise preditiva indica 23% de probabilidade de saída nos próximos 3 meses.',
-      acao: 'Revisar política salarial e plano de carreira'
+      tipo: "alerta",
+      titulo: "Risco de Turnover Elevado no Setor de TI",
+      descricao: "Análise preditiva indica 23% de probabilidade de saída nos próximos 3 meses.",
+      acao: "Revisar política salarial e plano de carreira"
     },
     {
-      tipo: 'oportunidade',
-      titulo: 'Potencial de Promoção Identificado',
-      descricao: '12 colaboradores atingiram critérios para promoção segundo análise de performance.',
-      acao: 'Avaliar candidatos para posições disponíveis'
+      tipo: "oportunidade",
+      titulo: "Potencial de Promoção Identificado",
+      descricao: "12 colaboradores atingiram critérios para promoção segundo análise de performance.",
+      acao: "Avaliar candidatos para posições disponíveis"
     },
     {
-      tipo: 'tendencia',
-      titulo: 'Melhoria no Engajamento',
-      descricao: 'Score de engajamento subiu 8% após implementação do programa de bem-estar.',
-      acao: 'Expandir programa para outras unidades'
+      tipo: "tendencia",
+      titulo: "Melhoria no Engajamento",
+      descricao: "Score de engajamento subiu 8% após implementação do programa de bem-estar.",
+      acao: "Expandir programa para outras unidades"
     }
   ];
 
@@ -165,14 +165,14 @@ const PeopleAnalytics: React.FC = () => {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm text-muted-foreground">{metric.label}</p>
-                  {metric.trend === 'up' ? (
-                    <TrendingUp className={`w-4 h-4 ${metric.label.includes('ROI') ? 'text-green-500' : 'text-red-500'}`} />
+                  {metric.trend === "up" ? (
+                    <TrendingUp className={`w-4 h-4 ${metric.label.includes("ROI") ? "text-green-500" : "text-red-500"}`} />
                   ) : (
-                    <TrendingDown className={`w-4 h-4 ${metric.label.includes('Custo') ? 'text-green-500' : 'text-red-500'}`} />
+                    <TrendingDown className={`w-4 h-4 ${metric.label.includes("Custo") ? "text-green-500" : "text-red-500"}`} />
                   )}
                 </div>
                 <p className="text-2xl font-bold">{metric.value}</p>
-                <p className={`text-xs ${metric.trend === 'up' && !metric.label.includes('ROI') ? 'text-red-500' : 'text-green-500'}`}>
+                <p className={`text-xs ${metric.trend === "up" && !metric.label.includes("ROI") ? "text-red-500" : "text-green-500"}`}>
                   {metric.change} vs período anterior
                 </p>
               </CardContent>
@@ -199,15 +199,15 @@ const PeopleAnalytics: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`p-4 rounded-lg border ${
-                  insight.tipo === 'alerta' ? 'bg-red-500/10 border-red-500/30' :
-                  insight.tipo === 'oportunidade' ? 'bg-green-500/10 border-green-500/30' :
-                  'bg-blue-500/10 border-blue-500/30'
+                  insight.tipo === "alerta" ? "bg-red-500/10 border-red-500/30" :
+                    insight.tipo === "oportunidade" ? "bg-green-500/10 border-green-500/30" :
+                      "bg-blue-500/10 border-blue-500/30"
                 }`}
               >
                 <div className="flex items-center gap-2 mb-2">
-                  {insight.tipo === 'alerta' ? (
+                  {insight.tipo === "alerta" ? (
                     <AlertTriangle className="w-4 h-4 text-red-500" />
-                  ) : insight.tipo === 'oportunidade' ? (
+                  ) : insight.tipo === "oportunidade" ? (
                     <Sparkles className="w-4 h-4 text-green-500" />
                   ) : (
                     <TrendingUp className="w-4 h-4 text-blue-500" />
@@ -342,9 +342,9 @@ const PeopleAnalytics: React.FC = () => {
                       <span className="font-medium text-sm">{item.colaborador}</span>
                       <Badge
                         className={
-                          item.risco >= 80 ? 'bg-red-500' :
-                          item.risco >= 70 ? 'bg-orange-500' :
-                          'bg-yellow-500'
+                          item.risco >= 80 ? "bg-red-500" :
+                            item.risco >= 70 ? "bg-orange-500" :
+                              "bg-yellow-500"
                         }
                       >
                         {item.risco}% risco

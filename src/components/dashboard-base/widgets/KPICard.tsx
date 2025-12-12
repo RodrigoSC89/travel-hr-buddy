@@ -73,14 +73,14 @@ export const KPICard = ({ config, className, animated = true }: KPICardProps) =>
               className={cn(
                 "p-3 rounded-lg",
                 color ? `bg-${color}-100 dark:bg-${color}-900/20` : 
-                isPositive ? "bg-green-100 dark:bg-green-900/20" : "bg-blue-100 dark:bg-blue-900/20"
+                  isPositive ? "bg-green-100 dark:bg-green-900/20" : "bg-blue-100 dark:bg-blue-900/20"
               )}
             >
               <Icon
                 className={cn(
                   "h-6 w-6",
                   color ? `text-${color}-600 dark:text-${color}-400` :
-                  isPositive ? "text-green-600 dark:text-green-400" : "text-blue-600 dark:text-blue-400"
+                    isPositive ? "text-green-600 dark:text-green-400" : "text-blue-600 dark:text-blue-400"
                 )}
               />
             </div>

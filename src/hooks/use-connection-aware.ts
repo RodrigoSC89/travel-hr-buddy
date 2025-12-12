@@ -3,7 +3,7 @@
  * React hook for connection-aware optimizations
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   getConnectionInfo,
   onConnectionChange,
@@ -14,17 +14,17 @@ import {
   getOptimalPollingInterval,
   getOptimalTimeout,
   type ConnectionInfo
-} from '@/lib/performance/connection-aware';
+} from "@/lib/performance/connection-aware";
 
 export interface UseConnectionAwareResult {
   connectionInfo: ConnectionInfo;
   isSlowConnection: boolean;
   isOffline: boolean;
-  imageQuality: 'low' | 'medium' | 'high';
-  animationLevel: 'none' | 'reduced' | 'full';
+  imageQuality: "low" | "medium" | "high";
+  animationLevel: "none" | "reduced" | "full";
   getPollingInterval: (base: number) => number;
   timeout: number;
-  quality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  quality: "excellent" | "good" | "fair" | "poor" | "offline";
   shouldReduceData: boolean;
 }
 
@@ -44,13 +44,13 @@ export function useConnectionAware(): UseConnectionAwareResult {
     const handleOnline = () => setOffline(false);
     const handleOffline = () => setOffline(true);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
       unsubscribe();
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -59,10 +59,10 @@ export function useConnectionAware(): UseConnectionAwareResult {
   }, [connectionInfo]);
 
   const slow = isSlowConnection();
-  const quality = offline ? 'offline' as const : 
-    connectionInfo.effectiveType === '4g' ? 'excellent' as const :
-    connectionInfo.effectiveType === '3g' ? 'good' as const :
-    connectionInfo.effectiveType === '2g' ? 'fair' as const : 'poor' as const;
+  const quality = offline ? "offline" as const : 
+    connectionInfo.effectiveType === "4g" ? "excellent" as const :
+      connectionInfo.effectiveType === "3g" ? "good" as const :
+        connectionInfo.effectiveType === "2g" ? "fair" as const : "poor" as const;
 
   return useMemo(() => ({
     connectionInfo,
@@ -73,7 +73,7 @@ export function useConnectionAware(): UseConnectionAwareResult {
     getPollingInterval,
     timeout: getOptimalTimeout(),
     quality,
-    shouldReduceData: slow || quality === 'fair' || quality === 'poor'
+    shouldReduceData: slow || quality === "fair" || quality === "poor"
   }), [connectionInfo, offline, getPollingInterval, slow, quality]);
 }
 

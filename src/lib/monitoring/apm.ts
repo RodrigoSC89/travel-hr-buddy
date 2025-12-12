@@ -3,7 +3,7 @@
  * Production-grade monitoring for Nautilus One
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface APMMetric {
   name: string;
@@ -16,11 +16,11 @@ export interface APMMetric {
 export interface APMTransaction {
   id: string;
   name: string;
-  type: 'page-load' | 'api-call' | 'user-action' | 'background';
+  type: "page-load" | "api-call" | "user-action" | "background";
   startTime: number;
   endTime?: number;
   duration?: number;
-  status: 'in-progress' | 'success' | 'error';
+  status: "in-progress" | "success" | "error";
   spans: APMSpan[];
   metadata?: Record<string, unknown>;
 }
@@ -61,7 +61,7 @@ class APMService {
   /**
    * Start a new transaction
    */
-  startTransaction(name: string, type: APMTransaction['type'] = 'user-action'): string {
+  startTransaction(name: string, type: APMTransaction["type"] = "user-action"): string {
     const id = `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const transaction: APMTransaction = {
@@ -69,7 +69,7 @@ class APMService {
       name,
       type,
       startTime: performance.now(),
-      status: 'in-progress',
+      status: "in-progress",
       spans: [],
     };
     
@@ -82,7 +82,7 @@ class APMService {
   /**
    * End a transaction
    */
-  endTransaction(id: string, status: 'success' | 'error' = 'success', metadata?: Record<string, unknown>) {
+  endTransaction(id: string, status: "success" | "error" = "success", metadata?: Record<string, unknown>) {
     const transaction = this.transactions.get(id);
     if (!transaction) {
       logger.warn(`[APM] Transaction not found: ${id}`);
@@ -101,7 +101,7 @@ class APMService {
     });
 
     // Store metric
-    this.recordMetric(`transaction.${transaction.type}.duration`, transaction.duration, 'ms', {
+    this.recordMetric(`transaction.${transaction.type}.duration`, transaction.duration, "ms", {
       name: transaction.name,
       status,
     });
@@ -120,7 +120,7 @@ class APMService {
     const transaction = this.transactions.get(transactionId);
     if (!transaction) {
       logger.warn(`[APM] Transaction not found for span: ${transactionId}`);
-      return '';
+      return "";
     }
 
     const spanId = `span_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -152,7 +152,7 @@ class APMService {
   /**
    * Record a metric
    */
-  recordMetric(name: string, value: number, unit: string = 'count', tags?: Record<string, string>) {
+  recordMetric(name: string, value: number, unit: string = "count", tags?: Record<string, string>) {
     const metric: APMMetric = {
       name,
       value,
@@ -172,7 +172,7 @@ class APMService {
   /**
    * Record an error
    */
-  recordError(error: Error | string, type: string = 'unknown', transactionId?: string, metadata?: Record<string, unknown>) {
+  recordError(error: Error | string, type: string = "unknown", transactionId?: string, metadata?: Record<string, unknown>) {
     const apmError: APMError = {
       id: `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       message: error instanceof Error ? error.message : error,
@@ -240,15 +240,15 @@ class APMService {
    * Get health status
    */
   getHealthStatus(): {
-    status: 'healthy' | 'degraded' | 'unhealthy';
+    status: "healthy" | "degraded" | "unhealthy";
     metrics: {
       errorRate: number;
       avgResponseTime: number;
       transactionCount: number;
     };
-  } {
+    } {
     const recentTransactions = this.getRecentTransactions(50);
-    const errorCount = recentTransactions.filter(t => t.status === 'error').length;
+    const errorCount = recentTransactions.filter(t => t.status === "error").length;
     const errorRate = recentTransactions.length > 0 ? errorCount / recentTransactions.length : 0;
     
     const completedTransactions = recentTransactions.filter(t => t.duration);
@@ -256,12 +256,12 @@ class APMService {
       ? completedTransactions.reduce((acc, t) => acc + (t.duration || 0), 0) / completedTransactions.length
       : 0;
 
-    let status: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
+    let status: "healthy" | "degraded" | "unhealthy" = "healthy";
     if (errorRate > 0.1 || avgResponseTime > 3000) {
-      status = 'degraded';
+      status = "degraded";
     }
     if (errorRate > 0.3 || avgResponseTime > 5000) {
-      status = 'unhealthy';
+      status = "unhealthy";
     }
 
     return {
@@ -278,20 +278,20 @@ class APMService {
    * Setup global error handlers
    */
   private setupGlobalErrorHandlers() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    window.addEventListener('error', (event) => {
-      this.recordError(event.error || event.message, 'uncaught', undefined, {
+    window.addEventListener("error", (event) => {
+      this.recordError(event.error || event.message, "uncaught", undefined, {
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
       });
     });
 
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       this.recordError(
         event.reason instanceof Error ? event.reason : String(event.reason),
-        'unhandled-rejection'
+        "unhandled-rejection"
       );
     });
   }
@@ -300,25 +300,25 @@ class APMService {
    * Setup performance observer for web vitals
    */
   private setupPerformanceObserver() {
-    if (typeof window === 'undefined' || !('PerformanceObserver' in window)) return;
+    if (typeof window === "undefined" || !("PerformanceObserver" in window)) return;
 
     try {
       // Observe LCP
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        this.recordMetric('web-vitals.lcp', lastEntry.startTime, 'ms');
+        this.recordMetric("web-vitals.lcp", lastEntry.startTime, "ms");
       });
-      lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+      lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
 
       // Observe FID
       const fidObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry: any) => {
-          this.recordMetric('web-vitals.fid', entry.processingStart - entry.startTime, 'ms');
+          this.recordMetric("web-vitals.fid", entry.processingStart - entry.startTime, "ms");
         });
       });
-      fidObserver.observe({ type: 'first-input', buffered: true });
+      fidObserver.observe({ type: "first-input", buffered: true });
 
       // Observe CLS
       let clsValue = 0;
@@ -328,23 +328,23 @@ class APMService {
             clsValue += entry.value;
           }
         }
-        this.recordMetric('web-vitals.cls', clsValue, 'score');
+        this.recordMetric("web-vitals.cls", clsValue, "score");
       });
-      clsObserver.observe({ type: 'layout-shift', buffered: true });
+      clsObserver.observe({ type: "layout-shift", buffered: true });
 
       // Observe resource timing
       const resourceObserver = new PerformanceObserver((list) => {
         list.getEntries().forEach((entry: any) => {
-          if (entry.initiatorType === 'fetch' || entry.initiatorType === 'xmlhttprequest') {
-            this.recordMetric('resource.api.duration', entry.duration, 'ms', {
-              url: entry.name.split('?')[0],
+          if (entry.initiatorType === "fetch" || entry.initiatorType === "xmlhttprequest") {
+            this.recordMetric("resource.api.duration", entry.duration, "ms", {
+              url: entry.name.split("?")[0],
             });
           }
         });
       });
-      resourceObserver.observe({ type: 'resource', buffered: true });
+      resourceObserver.observe({ type: "resource", buffered: true });
     } catch (e) {
-      logger.warn('[APM] Failed to setup performance observer:', { error: String(e) });
+      logger.warn("[APM] Failed to setup performance observer:", { error: String(e) });
     }
   }
 
@@ -352,17 +352,17 @@ class APMService {
    * Start flush interval for metrics
    */
   private startFlushInterval() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     this.flushInterval = window.setInterval(() => {
       const health = this.getHealthStatus();
-      logger.debug('[APM] Health check:', health);
+      logger.debug("[APM] Health check:", health);
       
       // Record system metrics
       const memory = (performance as any).memory;
       if (memory) {
-        this.recordMetric('system.memory.used', memory.usedJSHeapSize / 1024 / 1024, 'MB');
-        this.recordMetric('system.memory.total', memory.totalJSHeapSize / 1024 / 1024, 'MB');
+        this.recordMetric("system.memory.used", memory.usedJSHeapSize / 1024 / 1024, "MB");
+        this.recordMetric("system.memory.total", memory.totalJSHeapSize / 1024 / 1024, "MB");
       }
     }, 30000); // Every 30 seconds
   }
@@ -386,17 +386,17 @@ export const apm = new APMService();
 export function withAPM<T extends (...args: any[]) => Promise<any>>(
   name: string,
   fn: T,
-  type: APMTransaction['type'] = 'api-call'
+  type: APMTransaction["type"] = "api-call"
 ): T {
   return (async (...args: Parameters<T>) => {
     const txnId = apm.startTransaction(name, type);
     try {
       const result = await fn(...args);
-      apm.endTransaction(txnId, 'success');
+      apm.endTransaction(txnId, "success");
       return result;
     } catch (error) {
-      apm.endTransaction(txnId, 'error', { error: String(error) });
-      apm.recordError(error as Error, 'api-error', txnId);
+      apm.endTransaction(txnId, "error", { error: String(error) });
+      apm.recordError(error as Error, "api-error", txnId);
       throw error;
     }
   }) as T;
@@ -405,15 +405,15 @@ export function withAPM<T extends (...args: any[]) => Promise<any>>(
 /**
  * React hook for tracking component performance
  */
-export function useAPMTransaction(name: string, type: APMTransaction['type'] = 'user-action') {
-  const txnIdRef = { current: '' };
+export function useAPMTransaction(name: string, type: APMTransaction["type"] = "user-action") {
+  const txnIdRef = { current: "" };
 
   const start = () => {
     txnIdRef.current = apm.startTransaction(name, type);
     return txnIdRef.current;
   };
 
-  const end = (status: 'success' | 'error' = 'success', metadata?: Record<string, unknown>) => {
+  const end = (status: "success" | "error" = "success", metadata?: Record<string, unknown>) => {
     if (txnIdRef.current) {
       apm.endTransaction(txnIdRef.current, status, metadata);
     }
@@ -423,7 +423,7 @@ export function useAPMTransaction(name: string, type: APMTransaction['type'] = '
     if (txnIdRef.current) {
       return apm.startSpan(txnIdRef.current, spanName, spanType);
     }
-    return '';
+    return "";
   };
 
   const endSpan = (spanId: string) => {
@@ -436,6 +436,6 @@ export function useAPMTransaction(name: string, type: APMTransaction['type'] = '
 }
 
 // Export for global access
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   (window as any).__apm = apm;
 }

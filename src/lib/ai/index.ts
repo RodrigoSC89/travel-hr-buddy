@@ -4,7 +4,7 @@
  */
 
 // Smart Assistant
-export { smartAssistant, useSmartAssistant } from './smart-assistant';
+export { smartAssistant, useSmartAssistant } from "./smart-assistant";
 
 // Predictive Maintenance System
 export {
@@ -13,7 +13,7 @@ export {
   type EquipmentMetrics,
   type PredictionResult,
   type AnomalyPattern,
-} from './predictive-maintenance';
+} from "./predictive-maintenance";
 
 // Anomaly Detection System
 export {
@@ -22,7 +22,7 @@ export {
   type SystemMetric,
   type AnomalyAlert,
   type OperationalBaseline,
-} from './anomaly-detection';
+} from "./anomaly-detection";
 
 // Operational Efficiency Analysis
 export {
@@ -31,7 +31,7 @@ export {
   type EfficiencyInsight,
   type WorkflowStep,
   type EfficiencyReport,
-} from './operational-efficiency';
+} from "./operational-efficiency";
 
 // Self-Adjusting System
 export {
@@ -39,7 +39,7 @@ export {
   type UsageMetrics,
   type PerformanceAdjustment,
   type SystemProfile,
-} from './self-adjusting-system';
+} from "./self-adjusting-system";
 
 // Mini Wiki / Knowledge Base
 export {
@@ -47,7 +47,7 @@ export {
   type WikiArticle,
   type FAQEntry,
   type WikiSearchResult,
-} from './mini-wiki';
+} from "./mini-wiki";
 
 // Diagnostic Assistant
 export {
@@ -55,7 +55,7 @@ export {
   type DiagnosticStep,
   type DiagnosticFlow,
   type DiagnosticSession,
-} from './diagnostic-assistant';
+} from "./diagnostic-assistant";
 
 // Compliance Checker (ANTAQ, MARPOL, ESG)
 export {
@@ -63,7 +63,7 @@ export {
   type ComplianceRule,
   type ComplianceCheckResult,
   type ComplianceReport,
-} from './compliance-checker';
+} from "./compliance-checker";
 
 // AI Audit Logger (PATCH 850)
 export {
@@ -73,7 +73,7 @@ export {
   exportAuditLogsCSV,
   type AIAuditEntry,
   type AuditSearchFilters,
-} from './audit-logger';
+} from "./audit-logger";
 
 // Predictive Engine (PHASE 1 - PATCH 851)
 export {
@@ -84,4 +84,4 @@ export {
   usePredictiveEngine,
   type PredictiveRecommendation,
   type PredictiveAnalysis
-} from './predictive-engine';
+} from "./predictive-engine";

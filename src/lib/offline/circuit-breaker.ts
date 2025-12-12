@@ -3,9 +3,9 @@
  * Prevents cascading failures and provides graceful degradation
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
-export type CircuitState = 'closed' | 'open' | 'half-open';
+export type CircuitState = "closed" | "open" | "half-open";
 
 export interface CircuitBreakerConfig {
   failureThreshold: number;
@@ -32,7 +32,7 @@ const DEFAULT_CONFIG: CircuitBreakerConfig = {
 };
 
 class CircuitBreaker {
-  private state: CircuitState = 'closed';
+  private state: CircuitState = "closed";
   private failures = 0;
   private successes = 0;
   private lastFailure: number | null = null;
@@ -57,11 +57,11 @@ class CircuitBreaker {
   }
 
   private checkStateTransition(): void {
-    if (this.state === 'open' && this.lastFailure) {
+    if (this.state === "open" && this.lastFailure) {
       const elapsed = Date.now() - this.lastFailure;
       
       if (elapsed >= this.config.timeout) {
-        this.transitionTo('half-open');
+        this.transitionTo("half-open");
       }
     }
   }
@@ -72,11 +72,11 @@ class CircuitBreaker {
     
     logger.info(`[CircuitBreaker:${this.name}] State transition: ${oldState} -> ${newState}`);
     
-    if (newState === 'half-open') {
+    if (newState === "half-open") {
       this.successes = 0;
     }
     
-    if (newState === 'closed') {
+    if (newState === "closed") {
       this.failures = 0;
       this.successes = 0;
     }
@@ -95,7 +95,7 @@ class CircuitBreaker {
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     this.totalRequests++;
     
-    if (this.state === 'open') {
+    if (this.state === "open") {
       const elapsed = this.lastFailure ? Date.now() - this.lastFailure : Infinity;
       
       if (elapsed < this.config.timeout) {
@@ -103,7 +103,7 @@ class CircuitBreaker {
         throw new CircuitOpenError(this.name, this.config.timeout - elapsed);
       }
       
-      this.transitionTo('half-open');
+      this.transitionTo("half-open");
     }
     
     try {
@@ -120,11 +120,11 @@ class CircuitBreaker {
     this.successes++;
     this.lastSuccess = Date.now();
     
-    if (this.state === 'half-open') {
+    if (this.state === "half-open") {
       if (this.successes >= this.config.successThreshold) {
-        this.transitionTo('closed');
+        this.transitionTo("closed");
       }
-    } else if (this.state === 'closed') {
+    } else if (this.state === "closed") {
       // Decay failures over time on success
       this.failures = Math.max(0, this.failures - 1);
     }
@@ -136,11 +136,11 @@ class CircuitBreaker {
     this.failures++;
     this.lastFailure = Date.now();
     
-    if (this.state === 'half-open') {
-      this.transitionTo('open');
-    } else if (this.state === 'closed') {
+    if (this.state === "half-open") {
+      this.transitionTo("open");
+    } else if (this.state === "closed") {
       if (this.failures >= this.config.failureThreshold) {
-        this.transitionTo('open');
+        this.transitionTo("open");
       }
     }
     
@@ -168,14 +168,14 @@ class CircuitBreaker {
    * Check if circuit is allowing requests
    */
   isAvailable(): boolean {
-    return this.state !== 'open';
+    return this.state !== "open";
   }
 
   /**
    * Force circuit to open state
    */
   trip(): void {
-    this.transitionTo('open');
+    this.transitionTo("open");
     this.lastFailure = Date.now();
   }
 
@@ -183,7 +183,7 @@ class CircuitBreaker {
    * Force circuit to closed state
    */
   reset(): void {
-    this.transitionTo('closed');
+    this.transitionTo("closed");
     this.failures = 0;
     this.successes = 0;
   }
@@ -217,7 +217,7 @@ export class CircuitOpenError extends Error {
     public readonly retryAfterMs: number
   ) {
     super(`Circuit breaker '${circuitName}' is open. Retry after ${retryAfterMs}ms`);
-    this.name = 'CircuitOpenError';
+    this.name = "CircuitOpenError";
   }
 }
 
@@ -268,17 +268,17 @@ export const circuitBreakerRegistry = new CircuitBreakerRegistry();
  * Pre-configured circuit breakers for common services
  */
 export const circuits = {
-  supabase: circuitBreakerRegistry.get('supabase', {
+  supabase: circuitBreakerRegistry.get("supabase", {
     failureThreshold: 5,
     successThreshold: 2,
     timeout: 30000,
   }),
-  api: circuitBreakerRegistry.get('api', {
+  api: circuitBreakerRegistry.get("api", {
     failureThreshold: 3,
     successThreshold: 2,
     timeout: 20000,
   }),
-  sync: circuitBreakerRegistry.get('sync', {
+  sync: circuitBreakerRegistry.get("sync", {
     failureThreshold: 3,
     successThreshold: 1,
     timeout: 60000,

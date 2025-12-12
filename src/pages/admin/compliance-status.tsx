@@ -104,7 +104,7 @@ export default function ComplianceStatusPage() {
         </div>
         <div className="text-right">
           <Button onClick={loadData} disabled={loading} variant="outline">
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Run Audit
           </Button>
           <p className="text-sm text-muted-foreground mt-2">

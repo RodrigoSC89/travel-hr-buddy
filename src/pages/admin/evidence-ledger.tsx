@@ -167,7 +167,7 @@ export default function EvidenceLedgerPage() {
         </div>
         <div className="flex gap-2">
           <Button onClick={handleVerifyIntegrity} disabled={verifying} variant="outline">
-            <CheckCircle2 className={`h-4 w-4 mr-2 ${verifying ? 'animate-spin' : ''}`} />
+            <CheckCircle2 className={`h-4 w-4 mr-2 ${verifying ? "animate-spin" : ""}`} />
             Verify Integrity
           </Button>
           <Button onClick={handleExport} variant="outline">

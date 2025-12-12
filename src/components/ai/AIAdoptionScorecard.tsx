@@ -49,7 +49,7 @@ export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionSco
       const { data: adoptionData, error: adoptionError } = await supabase
         .from("ia_adoption_metrics")
         .select("*")
-        .gte("period_end", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0])
+        .gte("period_end", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0])
         .order("created_at", { ascending: false });
 
       if (adoptionError) throw adoptionError;

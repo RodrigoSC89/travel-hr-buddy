@@ -160,13 +160,13 @@ function generatePrediction(
   riskLevel: RiskScore["riskLevel"]
 ): string {
   if (riskLevel === "critical") {
-    return `⚠️ CRITICAL: High probability of compliance failure within 7 days. Immediate action required.`;
+    return "⚠️ CRITICAL: High probability of compliance failure within 7 days. Immediate action required.";
   } else if (riskLevel === "high") {
-    return `⚠️ HIGH RISK: Predicted non-conformance within 14-30 days. Schedule inspection urgently.`;
+    return "⚠️ HIGH RISK: Predicted non-conformance within 14-30 days. Schedule inspection urgently.";
   } else if (riskLevel === "medium") {
-    return `⚡ MEDIUM RISK: Potential issues detected. Consider scheduling inspection within 60 days.`;
+    return "⚡ MEDIUM RISK: Potential issues detected. Consider scheduling inspection within 60 days.";
   } else {
-    return `✅ LOW RISK: Module appears compliant. Maintain regular inspection schedule.`;
+    return "✅ LOW RISK: Module appears compliant. Maintain regular inspection schedule.";
   }
 }
 

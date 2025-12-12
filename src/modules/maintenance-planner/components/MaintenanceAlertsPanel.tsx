@@ -121,16 +121,16 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "overdue":
-        return <XCircle className="h-4 w-4 text-destructive" />;
-      case "critical":
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case "upcoming":
-        return <Clock className="h-4 w-4 text-warning" />;
-      case "warning":
-        return <Bell className="h-4 w-4 text-muted-foreground" />;
-      default:
-        return <Bell className="h-4 w-4" />;
+    case "overdue":
+      return <XCircle className="h-4 w-4 text-destructive" />;
+    case "critical":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "upcoming":
+      return <Clock className="h-4 w-4 text-warning" />;
+    case "warning":
+      return <Bell className="h-4 w-4 text-muted-foreground" />;
+    default:
+      return <Bell className="h-4 w-4" />;
     }
   };
 
@@ -272,8 +272,8 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                               </h4>
                               <Badge className={getPriorityBadge(alert.priority)} variant="secondary">
                                 {alert.priority === "critical" ? "Crítico" : 
-                                 alert.priority === "high" ? "Alto" :
-                                 alert.priority === "medium" ? "Médio" : "Baixo"}
+                                  alert.priority === "high" ? "Alto" :
+                                    alert.priority === "medium" ? "Médio" : "Baixo"}
                               </Badge>
                             </div>
                             <p className="text-xs text-muted-foreground mt-1">
@@ -288,7 +288,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                             </div>
                             <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                               <Calendar className="h-3 w-3" />
-                              <span>Prazo: {new Date(alert.dueDate).toLocaleDateString('pt-BR')}</span>
+                              <span>Prazo: {new Date(alert.dueDate).toLocaleDateString("pt-BR")}</span>
                             </div>
                             <div className="flex gap-2 mt-2">
                               <Button

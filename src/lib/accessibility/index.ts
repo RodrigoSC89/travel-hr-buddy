@@ -8,4 +8,4 @@ export {
   useA11y, 
   useReducedMotion,
   useHighContrast,
-} from './a11y-manager';
+} from "./a11y-manager";

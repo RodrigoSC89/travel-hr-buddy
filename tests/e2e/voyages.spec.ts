@@ -13,12 +13,12 @@ test.describe("Voyages Management", () => {
 
   test("should display voyage list", async ({ page }) => {
     await expect(
-      page.locator('[data-testid="voyage-list"]').or(page.getByText(/viagens|voyages/i).first())
+      page.locator("[data-testid=\"voyage-list\"]").or(page.getByText(/viagens|voyages/i).first())
     ).toBeVisible({ timeout: 10000 });
   });
 
   test("should show voyage details", async ({ page }) => {
-    const voyageCard = page.locator('[data-testid="voyage-card"]').first().or(
+    const voyageCard = page.locator("[data-testid=\"voyage-card\"]").first().or(
       page.locator(".voyage-item").first()
     );
     
@@ -30,7 +30,7 @@ test.describe("Voyages Management", () => {
 
   test("should filter voyages by status", async ({ page }) => {
     const statusFilter = page.getByRole("combobox").first().or(
-      page.locator('[data-testid="status-filter"]')
+      page.locator("[data-testid=\"status-filter\"]")
     );
     
     if (await statusFilter.isVisible()) {
@@ -49,7 +49,7 @@ test.describe("Voyages Management", () => {
       await page.waitForTimeout(2000); // Wait for map to load
       
       // Check for map container
-      const mapContainer = page.locator('.mapboxgl-map').or(page.locator('[data-testid="voyage-map"]'));
+      const mapContainer = page.locator(".mapboxgl-map").or(page.locator("[data-testid=\"voyage-map\"]"));
       if (await mapContainer.isVisible()) {
         await expect(mapContainer).toBeVisible();
       }

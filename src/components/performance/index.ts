@@ -4,13 +4,13 @@
  */
 
 // Data loading
-export { DataLoader, SuspenseLoader, InlineLoader } from './DataLoader';
+export { DataLoader, SuspenseLoader, InlineLoader } from "./DataLoader";
 
 // Connection awareness
-export { ConnectionIndicator, ConnectionBadge, useSlowConnectionWarning } from './ConnectionIndicator';
+export { ConnectionIndicator, ConnectionBadge, useSlowConnectionWarning } from "./ConnectionIndicator";
 
 // Performance monitoring
-export { PerformanceMonitor, DevPerformanceOverlay } from './PerformanceMonitor';
+export { PerformanceMonitor, DevPerformanceOverlay } from "./PerformanceMonitor";
 
 // Main wrapper
 export { 
@@ -18,13 +18,13 @@ export {
   withPerformance, 
   PerformanceProvider, 
   usePerformanceContext 
-} from './PerformanceWrapper';
+} from "./PerformanceWrapper";
 
 // Virtualized list
-export { VirtualizedList, useVirtualizedData } from './VirtualizedList';
+export { VirtualizedList, useVirtualizedData } from "./VirtualizedList";
 
 // Error boundary
-export { ErrorBoundaryAdvanced, useErrorBoundary } from './ErrorBoundaryAdvanced';
+export { ErrorBoundaryAdvanced, useErrorBoundary } from "./ErrorBoundaryAdvanced";
 
 // Connection aware
 export { 
@@ -33,13 +33,13 @@ export {
   ConnectionConditional,
   withConnectionAware,
   useAdaptiveFetch 
-} from './ConnectionAware';
+} from "./ConnectionAware";
 
 // Optimized image (re-export from lib)
-export { OptimizedImage, OptimizedAvatar } from './OptimizedImage';
+export { OptimizedImage, OptimizedAvatar } from "./OptimizedImage";
 
 // Bandwidth indicator
-export { BandwidthIndicator, BandwidthBadge } from './BandwidthIndicator';
+export { BandwidthIndicator, BandwidthBadge } from "./BandwidthIndicator";
 
 // Skeleton loaders
 export { 
@@ -51,11 +51,11 @@ export {
 } from "@/components/unified/Skeletons.unified";
 
 // Network status
-export { NetworkStatusIndicator } from './NetworkStatusIndicator';
+export { NetworkStatusIndicator } from "./NetworkStatusIndicator";
 
 // Resilience indicator (PATCH 900)
-export { ResilienceIndicator, ResilienceBadge } from './ResilienceIndicator';
+export { ResilienceIndicator, ResilienceBadge } from "./ResilienceIndicator";
 
 // System Health Dashboard (PATCH 970)
-export { SystemHealthDashboard } from './SystemHealthDashboard';
+export { SystemHealthDashboard } from "./SystemHealthDashboard";
 

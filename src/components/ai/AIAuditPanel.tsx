@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 import { 
   Brain, 
   Download, 
@@ -13,14 +13,14 @@ import {
   XCircle,
   AlertTriangle,
   Activity
-} from 'lucide-react';
+} from "lucide-react";
 import { 
   searchAuditLogs, 
   getAuditStatistics, 
   exportAuditLogsCSV,
   type AIAuditEntry 
-} from '@/lib/ai/audit-logger';
-import { toast } from 'sonner';
+} from "@/lib/ai/audit-logger";
+import { toast } from "sonner";
 
 export const AIAuditPanel: React.FC = () => {
   const [logs, setLogs] = useState<AIAuditEntry[]>([]);
@@ -31,8 +31,8 @@ export const AIAuditPanel: React.FC = () => {
     ragUsageRate: 0
   });
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
     loadLogs();
@@ -43,7 +43,7 @@ export const AIAuditPanel: React.FC = () => {
     try {
       const [logsData, statsData] = await Promise.all([
         searchAuditLogs({}, 100, 0),
-        getAuditStatistics('').catch(() => ({
+        getAuditStatistics("").catch(() => ({
           totalInteractions: 0,
           avgConfidence: 0,
           avgResponseTime: 0,
@@ -61,8 +61,8 @@ export const AIAuditPanel: React.FC = () => {
         ragUsageRate: statsData.ragUsageRate
       });
     } catch (error) {
-      console.error('Error loading AI logs:', error);
-      toast.error('Erro ao carregar logs de IA');
+      console.error("Error loading AI logs:", error);
+      toast.error("Erro ao carregar logs de IA");
     } finally {
       setLoading(false);
     }
@@ -72,15 +72,15 @@ export const AIAuditPanel: React.FC = () => {
     try {
       const csvContent = exportAuditLogsCSV(logs);
       
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `ai_audit_logs_${new Date().toISOString().split('T')[0]}.csv`;
+      link.download = `ai_audit_logs_${new Date().toISOString().split("T")[0]}.csv`;
       link.click();
       
-      toast.success('Logs exportados com sucesso');
+      toast.success("Logs exportados com sucesso");
     } catch (error) {
-      toast.error('Erro ao exportar logs');
+      toast.error("Erro ao exportar logs");
     }
   };
 
@@ -89,11 +89,11 @@ export const AIAuditPanel: React.FC = () => {
       log.user_input.toLowerCase().includes(searchTerm.toLowerCase()) ||
       log.ai_response?.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesFilter = filter === 'all' ||
-      (filter === 'approved' && log.approval_decision === 'approved') ||
-      (filter === 'rejected' && log.approval_decision === 'rejected') ||
-      (filter === 'pending' && log.requires_approval && !log.approval_decision) ||
-      (filter === 'rag' && log.rag_enabled);
+    const matchesFilter = filter === "all" ||
+      (filter === "approved" && log.approval_decision === "approved") ||
+      (filter === "rejected" && log.approval_decision === "rejected") ||
+      (filter === "pending" && log.requires_approval && !log.approval_decision) ||
+      (filter === "rag" && log.rag_enabled);
     
     return matchesSearch && matchesFilter;
   });
@@ -190,18 +190,18 @@ export const AIAuditPanel: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              {['all', 'approved', 'rejected', 'pending', 'rag'].map((f) => (
+              {["all", "approved", "rejected", "pending", "rag"].map((f) => (
                 <Button
                   key={f}
-                  variant={filter === f ? 'default' : 'outline'}
+                  variant={filter === f ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFilter(f)}
                 >
-                  {f === 'all' && 'Todos'}
-                  {f === 'approved' && 'Aprovados'}
-                  {f === 'rejected' && 'Rejeitados'}
-                  {f === 'pending' && 'Pendentes'}
-                  {f === 'rag' && 'Com RAG'}
+                  {f === "all" && "Todos"}
+                  {f === "approved" && "Aprovados"}
+                  {f === "rejected" && "Rejeitados"}
+                  {f === "pending" && "Pendentes"}
+                  {f === "rag" && "Com RAG"}
                 </Button>
               ))}
             </div>
@@ -235,8 +235,8 @@ export const AIAuditPanel: React.FC = () => {
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Badge variant="outline">{log.module_name || 'N/A'}</Badge>
-                        <Badge variant="outline">{log.interaction_type || 'N/A'}</Badge>
+                        <Badge variant="outline">{log.module_name || "N/A"}</Badge>
+                        <Badge variant="outline">{log.interaction_type || "N/A"}</Badge>
                         {log.model_version && (
                           <Badge variant="secondary">{log.model_version}</Badge>
                         )}
@@ -245,12 +245,12 @@ export const AIAuditPanel: React.FC = () => {
                           <Badge className="bg-purple-500/20 text-purple-600">RAG</Badge>
                         )}
                         {log.requires_approval && (
-                          log.approval_decision === 'approved' ? (
+                          log.approval_decision === "approved" ? (
                             <Badge className="bg-green-500/20 text-green-600">
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Aprovado
                             </Badge>
-                          ) : log.approval_decision === 'rejected' ? (
+                          ) : log.approval_decision === "rejected" ? (
                             <Badge className="bg-red-500/20 text-red-600">
                               <XCircle className="h-3 w-3 mr-1" />
                               Rejeitado
@@ -264,7 +264,7 @@ export const AIAuditPanel: React.FC = () => {
                         )}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {log.created_at ? new Date(log.created_at).toLocaleString('pt-BR') : 'N/A'}
+                        {log.created_at ? new Date(log.created_at).toLocaleString("pt-BR") : "N/A"}
                       </span>
                     </div>
                     

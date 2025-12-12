@@ -146,166 +146,166 @@ interface ChannelMember {
   name: string;
   avatar?: string;
   role: string;
-  status: 'online' | 'offline' | 'away';
+  status: "online" | "offline" | "away";
   joined_at: string;
 }
 
 // Mock data for enhanced features
 const mockChannels: Channel[] = [
   {
-    id: '1',
-    name: 'Operações - Navio Alpha',
-    description: 'Canal principal de operações do Navio Alpha',
+    id: "1",
+    name: "Operações - Navio Alpha",
+    description: "Canal principal de operações do Navio Alpha",
     is_active: true,
-    channel_type: 'operations',
+    channel_type: "operations",
     is_private: false,
     created_at: new Date().toISOString(),
     member_count: 12,
     unread_count: 5,
     is_favorite: true,
     is_muted: false,
-    last_message: 'Atualização de rota confirmada',
+    last_message: "Atualização de rota confirmada",
     last_message_time: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
   },
   {
-    id: '2',
-    name: 'Emergências',
-    description: 'Canal para comunicação de emergências',
+    id: "2",
+    name: "Emergências",
+    description: "Canal para comunicação de emergências",
     is_active: true,
-    channel_type: 'emergency',
+    channel_type: "emergency",
     is_private: false,
     created_at: new Date().toISOString(),
     member_count: 45,
     unread_count: 0,
     is_favorite: true,
     is_muted: false,
-    last_message: 'Nenhuma emergência ativa',
+    last_message: "Nenhuma emergência ativa",
     last_message_time: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
   },
   {
-    id: '3',
-    name: 'Manutenção - Frota B',
-    description: 'Coordenação de manutenção da Frota B',
+    id: "3",
+    name: "Manutenção - Frota B",
+    description: "Coordenação de manutenção da Frota B",
     is_active: true,
-    channel_type: 'maintenance',
+    channel_type: "maintenance",
     is_private: true,
     created_at: new Date().toISOString(),
     member_count: 8,
     unread_count: 12,
     is_favorite: false,
     is_muted: true,
-    last_message: 'Inspeção programada para amanhã',
+    last_message: "Inspeção programada para amanhã",
     last_message_time: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
   },
   {
-    id: '4',
-    name: 'Ponte de Comando',
-    description: 'Comunicação oficial da ponte',
+    id: "4",
+    name: "Ponte de Comando",
+    description: "Comunicação oficial da ponte",
     is_active: false,
-    channel_type: 'command',
+    channel_type: "command",
     is_private: true,
     created_at: new Date().toISOString(),
     member_count: 5,
     unread_count: 0,
     is_favorite: false,
     is_muted: false,
-    last_message: 'Canal offline',
+    last_message: "Canal offline",
     last_message_time: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
   },
 ];
 
 const mockMessages: Message[] = [
   {
-    id: '1',
-    channel_id: '1',
-    sender_id: 'user1',
-    sender_name: 'Capitão Silva',
-    sender_avatar: '',
-    message_content: 'Bom dia equipe! Iniciando operações do dia.',
-    message_type: 'text',
+    id: "1",
+    channel_id: "1",
+    sender_id: "user1",
+    sender_name: "Capitão Silva",
+    sender_avatar: "",
+    message_content: "Bom dia equipe! Iniciando operações do dia.",
+    message_type: "text",
     created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
     is_ai_generated: false,
-    reactions: [{ emoji: '👍', count: 3 }],
+    reactions: [{ emoji: "👍", count: 3 }],
   },
   {
-    id: '2',
-    channel_id: '1',
-    sender_id: 'user2',
-    sender_name: 'Oficial Santos',
-    message_content: 'Confirmado. Sistemas operacionais verificados.',
-    message_type: 'text',
+    id: "2",
+    channel_id: "1",
+    sender_id: "user2",
+    sender_name: "Oficial Santos",
+    message_content: "Confirmado. Sistemas operacionais verificados.",
+    message_type: "text",
     created_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
     is_ai_generated: false,
   },
   {
-    id: '3',
-    channel_id: '1',
-    sender_id: 'ai',
-    sender_name: 'Nautilus AI',
-    message_content: '📊 Análise automática: Todas as métricas operacionais estão dentro dos parâmetros normais. Condições meteorológicas favoráveis para as próximas 12 horas.',
-    message_type: 'ai_analysis',
+    id: "3",
+    channel_id: "1",
+    sender_id: "ai",
+    sender_name: "Nautilus AI",
+    message_content: "📊 Análise automática: Todas as métricas operacionais estão dentro dos parâmetros normais. Condições meteorológicas favoráveis para as próximas 12 horas.",
+    message_type: "ai_analysis",
     created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
     is_ai_generated: true,
   },
   {
-    id: '4',
-    channel_id: '1',
-    sender_id: 'user3',
-    sender_name: 'Eng. Costa',
-    message_content: 'Atualização de rota confirmada. ETA ajustado para 14:30.',
-    message_type: 'text',
+    id: "4",
+    channel_id: "1",
+    sender_id: "user3",
+    sender_name: "Eng. Costa",
+    message_content: "Atualização de rota confirmada. ETA ajustado para 14:30.",
+    message_type: "text",
     created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
     is_ai_generated: false,
-    reactions: [{ emoji: '✅', count: 2 }],
+    reactions: [{ emoji: "✅", count: 2 }],
   },
 ];
 
 const mockMembers: ChannelMember[] = [
-  { id: '1', user_id: 'user1', name: 'Capitão Silva', role: 'admin', status: 'online', joined_at: new Date().toISOString() },
-  { id: '2', user_id: 'user2', name: 'Oficial Santos', role: 'moderator', status: 'online', joined_at: new Date().toISOString() },
-  { id: '3', user_id: 'user3', name: 'Eng. Costa', role: 'member', status: 'away', joined_at: new Date().toISOString() },
-  { id: '4', user_id: 'user4', name: 'Téc. Oliveira', role: 'member', status: 'offline', joined_at: new Date().toISOString() },
+  { id: "1", user_id: "user1", name: "Capitão Silva", role: "admin", status: "online", joined_at: new Date().toISOString() },
+  { id: "2", user_id: "user2", name: "Oficial Santos", role: "moderator", status: "online", joined_at: new Date().toISOString() },
+  { id: "3", user_id: "user3", name: "Eng. Costa", role: "member", status: "away", joined_at: new Date().toISOString() },
+  { id: "4", user_id: "user4", name: "Téc. Oliveira", role: "member", status: "offline", joined_at: new Date().toISOString() },
 ];
 
 // Utility functions
 const formatTime = (date: string | undefined) => {
-  if (!date) return '';
+  if (!date) return "";
   const d = new Date(date);
   const now = new Date();
   const diff = now.getTime() - d.getTime();
   
-  if (diff < 60000) return 'Agora';
+  if (diff < 60000) return "Agora";
   if (diff < 3600000) return `${Math.floor(diff / 60000)}min`;
-  if (diff < 86400000) return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  if (diff < 86400000) return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
 };
 
 const getChannelTypeIcon = (type?: string) => {
   switch (type) {
-    case 'emergency': return <AlertCircle className="h-4 w-4 text-destructive" />;
-    case 'operations': return <Radio className="h-4 w-4 text-primary" />;
-    case 'maintenance': return <Settings className="h-4 w-4 text-warning" />;
-    case 'command': return <Shield className="h-4 w-4 text-purple-500" />;
-    default: return <Hash className="h-4 w-4 text-muted-foreground" />;
+  case "emergency": return <AlertCircle className="h-4 w-4 text-destructive" />;
+  case "operations": return <Radio className="h-4 w-4 text-primary" />;
+  case "maintenance": return <Settings className="h-4 w-4 text-warning" />;
+  case "command": return <Shield className="h-4 w-4 text-purple-500" />;
+  default: return <Hash className="h-4 w-4 text-muted-foreground" />;
   }
 };
 
 const getChannelTypeBadge = (type?: string) => {
   switch (type) {
-    case 'emergency': return <Badge variant="destructive" className="text-xs">Emergência</Badge>;
-    case 'operations': return <Badge className="text-xs bg-primary/20 text-primary">Operações</Badge>;
-    case 'maintenance': return <Badge className="text-xs bg-yellow-500/20 text-yellow-600">Manutenção</Badge>;
-    case 'command': return <Badge className="text-xs bg-purple-500/20 text-purple-500">Comando</Badge>;
-    default: return <Badge variant="secondary" className="text-xs">Geral</Badge>;
+  case "emergency": return <Badge variant="destructive" className="text-xs">Emergência</Badge>;
+  case "operations": return <Badge className="text-xs bg-primary/20 text-primary">Operações</Badge>;
+  case "maintenance": return <Badge className="text-xs bg-yellow-500/20 text-yellow-600">Manutenção</Badge>;
+  case "command": return <Badge className="text-xs bg-purple-500/20 text-purple-500">Comando</Badge>;
+  default: return <Badge variant="secondary" className="text-xs">Geral</Badge>;
   }
 };
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'online': return 'bg-green-500';
-    case 'away': return 'bg-yellow-500';
-    case 'offline': return 'bg-muted-foreground';
-    default: return 'bg-muted-foreground';
+  case "online": return "bg-green-500";
+  case "away": return "bg-yellow-500";
+  case "offline": return "bg-muted-foreground";
+  default: return "bg-muted-foreground";
   }
 };
 
@@ -324,8 +324,8 @@ const StatCard: React.FC<{
           <p className="text-xs text-muted-foreground font-medium">{title}</p>
           <p className="text-2xl font-bold text-foreground">{value}</p>
           {trend && (
-            <p className={`text-xs ${trendUp ? 'text-green-500' : 'text-red-500'}`}>
-              {trendUp ? '↑' : '↓'} {trend}
+            <p className={`text-xs ${trendUp ? "text-green-500" : "text-red-500"}`}>
+              {trendUp ? "↑" : "↓"} {trend}
             </p>
           )}
         </div>
@@ -394,7 +394,7 @@ export default function ChannelManagerProfessional() {
       const mergedChannels: Channel[] = [
         ...dbChannels.map(ch => ({
           id: ch.id,
-          name: (ch as any).channel_name || (ch as any).name || '',
+          name: (ch as any).channel_name || (ch as any).name || "",
           description: ch.description || undefined,
           is_active: ch.is_active,
           channel_type: (ch as any).channel_type,
@@ -405,7 +405,7 @@ export default function ChannelManagerProfessional() {
           unread_count: Math.floor(Math.random() * 10),
           is_favorite: Math.random() > 0.5,
           is_muted: Math.random() > 0.8,
-          last_message: 'Última mensagem...',
+          last_message: "Última mensagem...",
           last_message_time: new Date().toISOString(),
         })),
         ...mockChannels.filter(mc => !dbChannels.find(dc => dc.id === mc.id)),
@@ -434,7 +434,7 @@ export default function ChannelManagerProfessional() {
             channel_id: payload.new.channel_id,
             message_content: payload.new.message_content,
             created_at: payload.new.created_at,
-            sender_name: 'Usuário',
+            sender_name: "Usuário",
           };
           setMessages(prev => [...prev, newMessage]);
         }
@@ -449,11 +449,11 @@ export default function ChannelManagerProfessional() {
   // Filtered channels
   const filteredChannels = useMemo(() => {
     return channels.filter(ch => {
-      const matchesSearch = (ch.name || '').toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesType = filterType === 'all' || ch.channel_type === filterType;
-      const matchesStatus = filterStatus === 'all' || 
-        (filterStatus === 'online' && ch.is_active) || 
-        (filterStatus === 'offline' && !ch.is_active);
+      const matchesSearch = (ch.name || "").toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesType = filterType === "all" || ch.channel_type === filterType;
+      const matchesStatus = filterStatus === "all" || 
+        (filterStatus === "online" && ch.is_active) || 
+        (filterStatus === "offline" && !ch.is_active);
       const matchesFavorites = !showFavoritesOnly || ch.is_favorite;
       
       return matchesSearch && matchesType && matchesStatus && matchesFavorites;
@@ -530,7 +530,7 @@ export default function ChannelManagerProfessional() {
       
       toast({ title: "Sucesso", description: "Canal criado com sucesso!" });
     } catch (error) {
-      console.error('Error creating channel:', error);
+      console.error("Error creating channel:", error);
       // Create local channel if DB fails
       const newChannel: Channel = {
         id: Date.now().toString(),
@@ -571,22 +571,22 @@ export default function ChannelManagerProfessional() {
       const newMessage: Message = {
         id: Date.now().toString(),
         channel_id: selectedChannel.id,
-        sender_name: 'Você',
+        sender_name: "Você",
         message_content: messageContent,
         created_at: new Date().toISOString(),
-        message_type: 'text',
+        message_type: "text",
       };
 
       setMessages(prev => [...prev, newMessage]);
       setMessageContent("");
       toast({ title: "Mensagem enviada" });
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       // Send locally if DB fails
       const newMessage: Message = {
         id: Date.now().toString(),
         channel_id: selectedChannel.id,
-        sender_name: 'Você',
+        sender_name: "Você",
         message_content: messageContent,
         created_at: new Date().toISOString(),
       };
@@ -601,7 +601,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_active ? "Canal desativado" : "Canal ativado",
-      description: `${channel.name} foi ${channel.is_active ? 'desativado' : 'ativado'}.`,
+      description: `${channel.name} foi ${channel.is_active ? "desativado" : "ativado"}.`,
     });
   }, [toast]);
 
@@ -636,10 +636,10 @@ export default function ChannelManagerProfessional() {
     
     setIsAiLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
         body: {
           prompt: `Análise de canal de comunicação: ${aiPrompt}\n\nContexto: Canal "${selectedChannel?.name}" com ${selectedChannel?.member_count} membros.`,
-          context: 'channel_management',
+          context: "channel_management",
         },
       });
 
@@ -647,7 +647,7 @@ export default function ChannelManagerProfessional() {
       
       setAiResponse(data?.response || data?.text || "Análise concluída com sucesso. O canal está operando dentro dos parâmetros normais. Sugestões: 1) Manter comunicação ativa, 2) Revisar membros periodicamente, 3) Configurar alertas automáticos.");
     } catch (error) {
-      console.error('AI Error:', error);
+      console.error("AI Error:", error);
       setAiResponse("🤖 Análise automática: O canal está configurado corretamente. Sugestões de melhoria: otimizar notificações, adicionar tags para categorização, e revisar permissões de membros.");
     } finally {
       setIsAiLoading(false);
@@ -667,9 +667,9 @@ export default function ChannelManagerProfessional() {
       messages: channelMessages,
       exportedAt: new Date().toISOString(),
     };
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `canal-${selectedChannel?.name}-export.json`;
     a.click();
@@ -706,7 +706,7 @@ export default function ChannelManagerProfessional() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
-                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Atualizar</TooltipContent>
@@ -776,9 +776,9 @@ export default function ChannelManagerProfessional() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                  className={showFavoritesOnly ? 'text-yellow-500' : ''}
+                  className={showFavoritesOnly ? "text-yellow-500" : ""}
                 >
-                  <Star className={`h-4 w-4 ${showFavoritesOnly ? 'fill-yellow-500' : ''}`} />
+                  <Star className={`h-4 w-4 ${showFavoritesOnly ? "fill-yellow-500" : ""}`} />
                 </Button>
               </div>
               
@@ -834,8 +834,8 @@ export default function ChannelManagerProfessional() {
                         key={channel.id}
                         className={`group p-3 rounded-lg cursor-pointer transition-all border ${
                           selectedChannel?.id === channel.id
-                            ? 'bg-primary/10 border-primary/30'
-                            : 'bg-background/50 border-transparent hover:bg-accent/50 hover:border-border'
+                            ? "bg-primary/10 border-primary/30"
+                            : "bg-background/50 border-transparent hover:bg-accent/50 hover:border-border"
                         }`}
                         onClick={() => setSelectedChannel(channel)}
                       >
@@ -890,7 +890,7 @@ export default function ChannelManagerProfessional() {
                             className="h-6 w-6"
                             onClick={(e) => { e.stopPropagation(); handleToggleFavorite(channel); }}
                           >
-                            <Star className={`h-3 w-3 ${channel.is_favorite ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+                            <Star className={`h-3 w-3 ${channel.is_favorite ? "fill-yellow-500 text-yellow-500" : ""}`} />
                           </Button>
                           <Button
                             variant="ghost"
@@ -906,7 +906,7 @@ export default function ChannelManagerProfessional() {
                             className="h-6 w-6"
                             onClick={(e) => { e.stopPropagation(); handleToggleChannel(channel); }}
                           >
-                            <Power className={`h-3 w-3 ${channel.is_active ? 'text-green-500' : 'text-muted-foreground'}`} />
+                            <Power className={`h-3 w-3 ${channel.is_active ? "text-green-500" : "text-muted-foreground"}`} />
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
@@ -1035,7 +1035,7 @@ export default function ChannelManagerProfessional() {
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleToggleChannel(selectedChannel)}>
                             <Power className="h-4 w-4 mr-2" />
-                            {selectedChannel.is_active ? 'Desativar' : 'Ativar'}
+                            {selectedChannel.is_active ? "Desativar" : "Ativar"}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-destructive" onClick={() => setIsDeleteDialogOpen(true)}>
@@ -1082,18 +1082,18 @@ export default function ChannelManagerProfessional() {
                             channelMessages.map((msg) => (
                               <div
                                 key={msg.id}
-                                className={`flex gap-3 ${msg.is_ai_generated ? 'bg-primary/5 rounded-lg p-3 border border-primary/20' : ''}`}
+                                className={`flex gap-3 ${msg.is_ai_generated ? "bg-primary/5 rounded-lg p-3 border border-primary/20" : ""}`}
                               >
                                 <Avatar className="h-8 w-8">
                                   <AvatarImage src={msg.sender_avatar} />
-                                  <AvatarFallback className={msg.is_ai_generated ? 'bg-primary/20' : ''}>
-                                    {msg.is_ai_generated ? <Bot className="h-4 w-4 text-primary" /> : msg.sender_name?.charAt(0) || 'U'}
+                                  <AvatarFallback className={msg.is_ai_generated ? "bg-primary/20" : ""}>
+                                    {msg.is_ai_generated ? <Bot className="h-4 w-4 text-primary" /> : msg.sender_name?.charAt(0) || "U"}
                                   </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
-                                    <span className={`font-medium text-sm ${msg.is_ai_generated ? 'text-primary' : ''}`}>
-                                      {msg.sender_name || 'Usuário'}
+                                    <span className={`font-medium text-sm ${msg.is_ai_generated ? "text-primary" : ""}`}>
+                                      {msg.sender_name || "Usuário"}
                                     </span>
                                     {msg.is_ai_generated && (
                                       <Badge variant="outline" className="text-xs gap-1 border-primary/30 text-primary">
@@ -1140,7 +1140,7 @@ export default function ChannelManagerProfessional() {
                               placeholder="Digite sua mensagem..."
                               className="border-0 bg-transparent focus-visible:ring-0"
                               onKeyPress={(e) => {
-                                if (e.key === 'Enter' && messageContent.trim()) {
+                                if (e.key === "Enter" && messageContent.trim()) {
                                   handleSendMessage();
                                 }
                               }}
@@ -1194,13 +1194,13 @@ export default function ChannelManagerProfessional() {
                                   <div>
                                     <div className="flex items-center gap-2">
                                       <span className="font-medium text-sm">{member.name}</span>
-                                      {member.role === 'admin' && (
+                                      {member.role === "admin" && (
                                         <Badge variant="default" className="text-xs gap-1">
                                           <Crown className="h-2.5 w-2.5" />
                                           Admin
                                         </Badge>
                                       )}
-                                      {member.role === 'moderator' && (
+                                      {member.role === "moderator" && (
                                         <Badge variant="secondary" className="text-xs gap-1">
                                           <Shield className="h-2.5 w-2.5" />
                                           Mod
@@ -1594,7 +1594,7 @@ export default function ChannelManagerProfessional() {
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-medium">{member.name}</span>
-                            {member.role === 'admin' && <Crown className="h-4 w-4 text-yellow-500" />}
+                            {member.role === "admin" && <Crown className="h-4 w-4 text-yellow-500" />}
                           </div>
                           <span className="text-xs text-muted-foreground capitalize">{member.role}</span>
                         </div>
@@ -1630,7 +1630,7 @@ export default function ChannelManagerProfessional() {
               </div>
               <div className="space-y-2">
                 <Label>Tipo</Label>
-                <Select defaultValue={selectedChannel?.channel_type || 'general'}>
+                <Select defaultValue={selectedChannel?.channel_type || "general"}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

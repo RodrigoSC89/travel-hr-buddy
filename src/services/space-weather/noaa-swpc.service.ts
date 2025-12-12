@@ -17,9 +17,9 @@ import type {
   NOAASolarWind,
   NOAAMagnetometer,
   SpaceWeatherAPIResponse,
-} from '@/types/space-weather.types';
+} from "@/types/space-weather.types";
 
-const NOAA_BASE_URL = 'https://services.swpc.noaa.gov';
+const NOAA_BASE_URL = "https://services.swpc.noaa.gov";
 
 // Cache simples em memória (15 min default)
 interface CacheEntry<T> {
@@ -47,7 +47,7 @@ async function fetchWithCache<T>(
       success: true,
       data: cached.data,
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: true,
       cache_expires_at: new Date(cached.expires_at).toISOString(),
     };
@@ -57,7 +57,7 @@ async function fetchWithCache<T>(
   try {
     const response = await fetch(`${NOAA_BASE_URL}${endpoint}`, {
       headers: {
-        'Accept': 'application/json',
+        "Accept": "application/json",
       },
     });
     
@@ -78,15 +78,15 @@ async function fetchWithCache<T>(
       success: true,
       data,
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: false,
     };
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: false,
     };
   }
@@ -112,7 +112,7 @@ async function fetchWithCache<T>(
  */
 export async function getKpIndex(): Promise<SpaceWeatherAPIResponse<NOAAKpIndex[]>> {
   return fetchWithCache<NOAAKpIndex[]>(
-    '/products/noaa-planetary-k-index.json',
+    "/products/noaa-planetary-k-index.json",
     10 * 60 * 1000 // 10 min cache
   );
 }
@@ -137,7 +137,7 @@ export async function getCurrentKp(): Promise<number | null> {
  */
 export async function getKpForecast3h(): Promise<number | null> {
   const response = await fetchWithCache<number[][]>(
-    '/products/noaa-estimated-planetary-k-index-1-minute.json',
+    "/products/noaa-estimated-planetary-k-index-1-minute.json",
     10 * 60 * 1000
   );
   
@@ -176,7 +176,7 @@ export async function getKpForecast3h(): Promise<number | null> {
  */
 export async function getAlerts(): Promise<SpaceWeatherAPIResponse<NOAAAlert[]>> {
   return fetchWithCache<NOAAAlert[]>(
-    '/products/alerts.json',
+    "/products/alerts.json",
     5 * 60 * 1000 // 5 min cache (alerts são urgentes)
   );
 }
@@ -193,8 +193,8 @@ export async function getCriticalAlerts(): Promise<NOAAAlert[]> {
   
   // Filter para alertas críticos (Warning/Alert, não Watch ou Summary)
   return response.data.filter(alert => 
-    alert.space_weather_message_code.includes('WARP') || 
-    alert.space_weather_message_code.includes('ALTP')
+    alert.space_weather_message_code.includes("WARP") || 
+    alert.space_weather_message_code.includes("ALTP")
   );
 }
 
@@ -208,7 +208,7 @@ export async function getCriticalAlerts(): Promise<NOAAAlert[]> {
  */
 export async function getSolarWind(): Promise<SpaceWeatherAPIResponse<NOAASolarWind[]>> {
   return fetchWithCache<NOAASolarWind[]>(
-    '/products/solar-wind/plasma-1-day.json',
+    "/products/solar-wind/plasma-1-day.json",
     15 * 60 * 1000 // 15 min cache
   );
 }
@@ -243,7 +243,7 @@ export async function getCurrentSolarWindSpeed(): Promise<number | null> {
  */
 export async function getMagnetometer(): Promise<SpaceWeatherAPIResponse<NOAAMagnetometer[]>> {
   return fetchWithCache<NOAAMagnetometer[]>(
-    '/products/solar-wind/mag-1-day.json',
+    "/products/solar-wind/mag-1-day.json",
     15 * 60 * 1000
   );
 }
@@ -289,7 +289,7 @@ export async function getKpForecast3Day(): Promise<SpaceWeatherAPIResponse<{
     
     // Parse text format (8 values per day)
     // Format: "NOAA Kp index forecast <date>\n<day1 values>\n<day2 values>\n<day3 values>"
-    const lines = text.split('\n').filter(line => line.trim() && !line.startsWith('#') && !line.startsWith('NOAA'));
+    const lines = text.split("\n").filter(line => line.trim() && !line.startsWith("#") && !line.startsWith("NOAA"));
     
     const parseKpLine = (line: string): number[] => {
       return line.trim().split(/\s+/).map(Number).filter(n => !isNaN(n));
@@ -303,15 +303,15 @@ export async function getKpForecast3Day(): Promise<SpaceWeatherAPIResponse<{
         day3: lines[2] ? parseKpLine(lines[2]) : [],
       },
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: false,
     };
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: false,
     };
   }
@@ -335,15 +335,15 @@ export async function get27DayOutlook(): Promise<SpaceWeatherAPIResponse<string>
       success: true,
       data,
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: false,
     };
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       timestamp: new Date().toISOString(),
-      source: 'noaa',
+      source: "noaa",
       cached: false,
     };
   }
@@ -366,7 +366,7 @@ export async function getSpaceWeatherSummary(): Promise<{
   bz_gsm: number | null;
   active_alerts: NOAAAlert[];
   critical_alerts: NOAAAlert[];
-  risk_level: 'GREEN' | 'AMBER' | 'RED';
+  risk_level: "GREEN" | "AMBER" | "RED";
   warnings: string[];
 }> {
   // Fetch all data in parallel
@@ -381,8 +381,8 @@ export async function getSpaceWeatherSummary(): Promise<{
   
   const activeAlerts = alerts.success && alerts.data ? alerts.data : [];
   const criticalAlerts = activeAlerts.filter(alert => 
-    alert.space_weather_message_code.includes('WARP') || 
-    alert.space_weather_message_code.includes('ALTP')
+    alert.space_weather_message_code.includes("WARP") || 
+    alert.space_weather_message_code.includes("ALTP")
   );
   
   // Calculate max Kp in next 24h
@@ -393,36 +393,36 @@ export async function getSpaceWeatherSummary(): Promise<{
   }
   
   // Determine risk level
-  let riskLevel: 'GREEN' | 'AMBER' | 'RED' = 'GREEN';
+  let riskLevel: "GREEN" | "AMBER" | "RED" = "GREEN";
   const warnings: string[] = [];
   
   // Kp-based risk
   if (kpCurrent !== null) {
     if (kpCurrent >= 7) {
-      riskLevel = 'RED';
+      riskLevel = "RED";
       warnings.push(`CRITICAL: Kp=${kpCurrent} (Strong geomagnetic storm)`);
     } else if (kpCurrent >= 5) {
-      riskLevel = 'AMBER';
+      riskLevel = "AMBER";
       warnings.push(`WARNING: Kp=${kpCurrent} (Minor geomagnetic storm)`);
     }
   }
   
   // Solar wind speed
   if (solarWindSpeed !== null && solarWindSpeed > 600) {
-    if (riskLevel === 'GREEN') riskLevel = 'AMBER';
+    if (riskLevel === "GREEN") riskLevel = "AMBER";
     warnings.push(`High solar wind speed: ${solarWindSpeed.toFixed(0)} km/s`);
   }
   
   // Bz southward component
   if (bzGsm !== null && bzGsm < -10) {
-    if (riskLevel === 'GREEN') riskLevel = 'AMBER';
-    if (bzGsm < -20) riskLevel = 'RED';
+    if (riskLevel === "GREEN") riskLevel = "AMBER";
+    if (bzGsm < -20) riskLevel = "RED";
     warnings.push(`Southward Bz: ${bzGsm.toFixed(1)} nT (favors magnetic reconnection)`);
   }
   
   // Critical alerts
   if (criticalAlerts.length > 0) {
-    riskLevel = 'RED';
+    riskLevel = "RED";
     warnings.push(`${criticalAlerts.length} active critical space weather alert(s)`);
   }
   
@@ -446,31 +446,31 @@ export async function getSpaceWeatherSummary(): Promise<{
  * Returns PROCEED/CAUTION/HOLD based on space weather
  */
 export async function checkDPGateStatus(): Promise<{
-  status: 'PROCEED' | 'CAUTION' | 'HOLD';
+  status: "PROCEED" | "CAUTION" | "HOLD";
   reason: string;
   details: any;
 }> {
   const summary = await getSpaceWeatherSummary();
   
-  if (summary.risk_level === 'RED') {
+  if (summary.risk_level === "RED") {
     return {
-      status: 'HOLD',
-      reason: 'Critical space weather conditions detected',
+      status: "HOLD",
+      reason: "Critical space weather conditions detected",
       details: summary,
     };
   }
   
-  if (summary.risk_level === 'AMBER') {
+  if (summary.risk_level === "AMBER") {
     return {
-      status: 'CAUTION',
-      reason: 'Elevated space weather activity - monitor closely',
+      status: "CAUTION",
+      reason: "Elevated space weather activity - monitor closely",
       details: summary,
     };
   }
   
   return {
-    status: 'PROCEED',
-    reason: 'Space weather conditions normal',
+    status: "PROCEED",
+    reason: "Space weather conditions normal",
     details: summary,
   };
 }

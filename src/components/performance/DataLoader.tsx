@@ -3,12 +3,12 @@
  * PATCH 834: Optimized data loading with skeleton states
  */
 
-import React, { Suspense, ReactNode } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { AlertCircle, RefreshCw, WifiOff } from 'lucide-react';
-import { useBandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import React, { Suspense, ReactNode } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, RefreshCw, WifiOff } from "lucide-react";
+import { useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
 import { 
   Skeleton, 
   CardSkeleton, 
@@ -19,7 +19,7 @@ import {
 } from "@/components/unified/Skeletons.unified";
 
 // Skeleton type options
-type SkeletonType = 'card' | 'table' | 'list' | 'dashboard' | 'form' | 'custom';
+type SkeletonType = "card" | "table" | "list" | "dashboard" | "form" | "custom";
 
 interface DataLoaderProps {
   children: ReactNode;
@@ -53,8 +53,8 @@ function ErrorFallback({
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center space-y-4">
       <div className={cn(
-        'p-3 rounded-full',
-        isOffline ? 'bg-yellow-500/10' : 'bg-destructive/10'
+        "p-3 rounded-full",
+        isOffline ? "bg-yellow-500/10" : "bg-destructive/10"
       )}>
         {isOffline ? (
           <WifiOff className="h-6 w-6 text-yellow-500" />
@@ -64,12 +64,12 @@ function ErrorFallback({
       </div>
       <div>
         <p className="font-medium">
-          {isOffline ? 'Você está offline' : 'Erro ao carregar dados'}
+          {isOffline ? "Você está offline" : "Erro ao carregar dados"}
         </p>
         <p className="text-sm text-muted-foreground mt-1">
           {isOffline 
-            ? 'Verifique sua conexão e tente novamente'
-            : error.message || 'Ocorreu um erro inesperado'}
+            ? "Verifique sua conexão e tente novamente"
+            : error.message || "Ocorreu um erro inesperado"}
         </p>
       </div>
       <Button variant="outline" size="sm" onClick={resetErrorBoundary}>
@@ -82,7 +82,7 @@ function ErrorFallback({
 
 // Empty State Component
 function EmptyState({ 
-  message = 'Nenhum dado encontrado',
+  message = "Nenhum dado encontrado",
   icon
 }: { 
   message?: string;
@@ -104,24 +104,24 @@ function getSkeletonComponent(
   props: { rows?: number; columns?: number; items?: number }
 ): ReactNode {
   switch (type) {
-    case 'card':
-      return (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <CardSkeleton key={i} />
-          ))}
-        </div>
-      );
-    case 'table':
-      return <TableSkeleton rows={props.rows || 5} columns={props.columns || 5} />;
-    case 'list':
-      return <ListSkeleton items={props.items || 5} />;
-    case 'dashboard':
-      return <DashboardSkeleton />;
-    case 'form':
-      return <FormSkeleton />;
-    default:
-      return <Skeleton className="h-48 w-full" />;
+  case "card":
+    return (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <CardSkeleton key={i} />
+        ))}
+      </div>
+    );
+  case "table":
+    return <TableSkeleton rows={props.rows || 5} columns={props.columns || 5} />;
+  case "list":
+    return <ListSkeleton items={props.items || 5} />;
+  case "dashboard":
+    return <DashboardSkeleton />;
+  case "form":
+    return <FormSkeleton />;
+  default:
+    return <Skeleton className="h-48 w-full" />;
   }
 }
 
@@ -130,24 +130,24 @@ export function DataLoader({
   isLoading = false,
   error = null,
   isEmpty = false,
-  skeleton = 'card',
+  skeleton = "card",
   customSkeleton,
   emptyMessage,
   emptyIcon,
   onRetry,
-  retryLabel = 'Tentar novamente',
+  retryLabel = "Tentar novamente",
   className,
   tableRows,
   tableColumns,
   listItems,
 }: DataLoaderProps) {
   const { connectionType } = useBandwidthOptimizer();
-  const isOffline = connectionType === 'offline';
+  const isOffline = connectionType === "offline";
 
   // Loading state
   if (isLoading) {
     return (
-      <div className={cn('animate-in fade-in duration-300', className)}>
+      <div className={cn("animate-in fade-in duration-300", className)}>
         {customSkeleton || getSkeletonComponent(skeleton, { 
           rows: tableRows, 
           columns: tableColumns,
@@ -191,7 +191,7 @@ export function DataLoader({
       )}
       onReset={onRetry}
     >
-      <div className={cn('animate-in fade-in duration-300', className)}>
+      <div className={cn("animate-in fade-in duration-300", className)}>
         {children}
       </div>
     </ErrorBoundary>
@@ -201,7 +201,7 @@ export function DataLoader({
 // Suspense wrapper with skeleton
 export function SuspenseLoader({
   children,
-  skeleton = 'card',
+  skeleton = "card",
   customSkeleton,
   className,
 }: {
@@ -223,21 +223,21 @@ export function SuspenseLoader({
 
 // Inline loading indicator
 export function InlineLoader({ 
-  size = 'sm',
+  size = "sm",
   text 
 }: { 
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   text?: string;
 }) {
   const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-5 w-5',
-    lg: 'h-6 w-6',
+    sm: "h-4 w-4",
+    md: "h-5 w-5",
+    lg: "h-6 w-6",
   };
 
   return (
     <div className="flex items-center gap-2 text-muted-foreground">
-      <RefreshCw className={cn(sizeClasses[size], 'animate-spin')} />
+      <RefreshCw className={cn(sizeClasses[size], "animate-spin")} />
       {text && <span className="text-sm">{text}</span>}
     </div>
   );

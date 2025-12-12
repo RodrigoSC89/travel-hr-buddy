@@ -3,16 +3,16 @@
  * Beautiful, animated suggestion cards
  */
 
-import React from 'react';
-import { X, Lightbulb, Zap, AlertTriangle, Info, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { useHapticFeedback } from '@/lib/ux/haptic-feedback';
+import React from "react";
+import { X, Lightbulb, Zap, AlertTriangle, Info, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { useHapticFeedback } from "@/lib/ux/haptic-feedback";
 
 interface Suggestion {
   id: string;
-  type: 'action' | 'shortcut' | 'feature' | 'tip' | 'warning';
+  type: "action" | "shortcut" | "feature" | "tip" | "warning";
   title: string;
   description: string;
   action?: () => void;
@@ -25,40 +25,40 @@ interface SmartSuggestionCardProps {
   suggestion: Suggestion;
   onDismiss?: (id: string) => void;
   onAction?: () => void;
-  variant?: 'default' | 'compact' | 'banner';
+  variant?: "default" | "compact" | "banner";
   className?: string;
 }
 
 const typeConfig = {
   action: {
     icon: Zap,
-    color: 'text-primary',
-    bg: 'bg-primary/10',
-    border: 'border-primary/20',
+    color: "text-primary",
+    bg: "bg-primary/10",
+    border: "border-primary/20",
   },
   shortcut: {
     icon: Zap,
-    color: 'text-blue-500',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+    border: "border-blue-500/20",
   },
   feature: {
     icon: Lightbulb,
-    color: 'text-amber-500',
-    bg: 'bg-amber-500/10',
-    border: 'border-amber-500/20',
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/20",
   },
   tip: {
     icon: Info,
-    color: 'text-green-500',
-    bg: 'bg-green-500/10',
-    border: 'border-green-500/20',
+    color: "text-green-500",
+    bg: "bg-green-500/10",
+    border: "border-green-500/20",
   },
   warning: {
     icon: AlertTriangle,
-    color: 'text-orange-500',
-    bg: 'bg-orange-500/10',
-    border: 'border-orange-500/20',
+    color: "text-orange-500",
+    bg: "bg-orange-500/10",
+    border: "border-orange-500/20",
   },
 };
 
@@ -66,7 +66,7 @@ export function SmartSuggestionCard({
   suggestion,
   onDismiss,
   onAction,
-  variant = 'default',
+  variant = "default",
   className,
 }: SmartSuggestionCardProps) {
   const { trigger } = useHapticFeedback();
@@ -74,28 +74,28 @@ export function SmartSuggestionCard({
   const Icon = config.icon;
   
   const handleDismiss = () => {
-    trigger('light');
+    trigger("light");
     onDismiss?.(suggestion.id);
   };
   
   const handleAction = () => {
-    trigger('success');
+    trigger("success");
     suggestion.action?.();
     onAction?.();
   };
   
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div
         className={cn(
-          'flex items-center gap-3 p-3 rounded-lg border transition-all hover:shadow-sm',
+          "flex items-center gap-3 p-3 rounded-lg border transition-all hover:shadow-sm",
           config.bg,
           config.border,
           className
         )}
       >
-        <div className={cn('p-1.5 rounded-full', config.bg)}>
-          <Icon className={cn('h-4 w-4', config.color)} />
+        <div className={cn("p-1.5 rounded-full", config.bg)}>
+          <Icon className={cn("h-4 w-4", config.color)} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium truncate">{suggestion.title}</p>
@@ -112,18 +112,18 @@ export function SmartSuggestionCard({
     );
   }
   
-  if (variant === 'banner') {
+  if (variant === "banner") {
     return (
       <div
         className={cn(
-          'flex items-center gap-4 p-4 rounded-lg border',
+          "flex items-center gap-4 p-4 rounded-lg border",
           config.bg,
           config.border,
           className
         )}
       >
-        <div className={cn('p-2 rounded-full', config.bg)}>
-          <Icon className={cn('h-5 w-5', config.color)} />
+        <div className={cn("p-2 rounded-full", config.bg)}>
+          <Icon className={cn("h-5 w-5", config.color)} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-medium">{suggestion.title}</p>
@@ -151,11 +151,11 @@ export function SmartSuggestionCard({
   
   // Default card variant
   return (
-    <Card className={cn('overflow-hidden border', config.border, className)}>
+    <Card className={cn("overflow-hidden border", config.border, className)}>
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className={cn('p-2 rounded-full shrink-0', config.bg)}>
-            <Icon className={cn('h-5 w-5', config.color)} />
+          <div className={cn("p-2 rounded-full shrink-0", config.bg)}>
+            <Icon className={cn("h-5 w-5", config.color)} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
@@ -197,7 +197,7 @@ interface SmartSuggestionsListProps {
   suggestions: Suggestion[];
   onDismiss: (id: string) => void;
   maxVisible?: number;
-  variant?: 'default' | 'compact' | 'banner';
+  variant?: "default" | "compact" | "banner";
   className?: string;
 }
 
@@ -205,7 +205,7 @@ export function SmartSuggestionsList({
   suggestions,
   onDismiss,
   maxVisible = 3,
-  variant = 'default',
+  variant = "default",
   className,
 }: SmartSuggestionsListProps) {
   const visible = suggestions.slice(0, maxVisible);
@@ -216,7 +216,7 @@ export function SmartSuggestionsList({
   }
   
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn("space-y-3", className)}>
       {visible.map((suggestion, index) => (
         <div
           key={suggestion.id}

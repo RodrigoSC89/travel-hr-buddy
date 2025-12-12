@@ -3,21 +3,21 @@
  * FASE B.4 - Helpers para testes de dashboards consolidados
  */
 
-import { Page, expect } from '@playwright/test';
-import { dashboardSelectors } from '../fixtures/dashboard.fixtures';
+import { Page, expect } from "@playwright/test";
+import { dashboardSelectors } from "../fixtures/dashboard.fixtures";
 
 export class DashboardHelpers {
   constructor(private page: Page) {}
 
   // Navigate to dashboard
-  async navigateToDashboard(type: 'executive' | 'analytics', route: string) {
+  async navigateToDashboard(type: "executive" | "analytics", route: string) {
     await this.page.goto(route);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   // Wait for dashboard to load
-  async waitForDashboardLoad(type: 'executive' | 'analytics') {
-    const selector = type === 'executive' 
+  async waitForDashboardLoad(type: "executive" | "analytics") {
+    const selector = type === "executive" 
       ? dashboardSelectors.executive.container
       : dashboardSelectors.analytics.container;
     await this.page.waitForSelector(selector, { timeout: 10000 });
@@ -53,7 +53,7 @@ export class DashboardHelpers {
   }
 
   // Export data
-  async exportData(format: 'pdf' | 'excel' | 'csv' | 'json') {
+  async exportData(format: "pdf" | "excel" | "csv" | "json") {
     await this.page.click(dashboardSelectors.executive.exportButton);
     await this.page.click(`text=${format}`);
     await this.page.waitForTimeout(1000);
@@ -76,14 +76,14 @@ export class DashboardHelpers {
 
   // Check for error state
   async checkErrorState() {
-    const errorElement = await this.page.locator('[data-testid="error-state"]');
+    const errorElement = await this.page.locator("[data-testid=\"error-state\"]");
     return await errorElement.isVisible();
   }
 
   // Verify drill-down functionality
   async performDrillDown() {
     await this.page.click(dashboardSelectors.analytics.drillDownButton);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   // Verify real-time updates

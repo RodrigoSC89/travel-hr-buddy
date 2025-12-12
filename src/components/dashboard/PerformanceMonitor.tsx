@@ -41,13 +41,13 @@ function PerformanceMonitorComponent() {
     resourceCount: 0,
     transferSize: 0,
   });
-  const [connectionType, setConnectionType] = useState('unknown');
+  const [connectionType, setConnectionType] = useState("unknown");
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Coletar métricas apenas uma vez no mount e sob demanda
   const collectMetrics = useCallback(() => {
-    const perfEntries = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    const resources = performance.getEntriesByType('resource');
+    const perfEntries = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+    const resources = performance.getEntriesByType("resource");
     
     const totalTransfer = resources.reduce((acc, r: any) => acc + (r.transferSize || 0), 0);
     
@@ -67,9 +67,9 @@ function PerformanceMonitorComponent() {
     const timer = setTimeout(collectMetrics, 1000);
 
     // Detectar tipo de conexão
-    if ('connection' in navigator) {
+    if ("connection" in navigator) {
       const conn = (navigator as any).connection;
-      setConnectionType(conn?.effectiveType || 'unknown');
+      setConnectionType(conn?.effectiveType || "unknown");
     }
 
     return () => clearTimeout(timer);

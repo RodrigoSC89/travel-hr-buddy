@@ -113,27 +113,27 @@ const EMERGENCY_EQUIPMENT = [
 
 const getTypeIcon = (type: string) => {
   switch (type) {
-    case "fire": return Flame;
-    case "medical": return Heart;
-    case "rescue": return LifeBuoy;
-    case "spill": return AlertTriangle;
-    case "primary": return Anchor;
-    case "secondary": return Navigation;
-    case "command": return Users;
-    default: return MapPin;
+  case "fire": return Flame;
+  case "medical": return Heart;
+  case "rescue": return LifeBuoy;
+  case "spill": return AlertTriangle;
+  case "primary": return Anchor;
+  case "secondary": return Navigation;
+  case "command": return Users;
+  default: return MapPin;
   }
 };
 
 const getTypeColor = (type: string) => {
   switch (type) {
-    case "fire": return "text-red-500 bg-red-100";
-    case "medical": return "text-purple-500 bg-purple-100";
-    case "rescue": return "text-blue-500 bg-blue-100";
-    case "spill": return "text-green-500 bg-green-100";
-    case "primary": return "text-orange-500 bg-orange-100";
-    case "secondary": return "text-yellow-500 bg-yellow-100";
-    case "command": return "text-indigo-500 bg-indigo-100";
-    default: return "text-gray-500 bg-gray-100";
+  case "fire": return "text-red-500 bg-red-100";
+  case "medical": return "text-purple-500 bg-purple-100";
+  case "rescue": return "text-blue-500 bg-blue-100";
+  case "spill": return "text-green-500 bg-green-100";
+  case "primary": return "text-orange-500 bg-orange-100";
+  case "secondary": return "text-yellow-500 bg-yellow-100";
+  case "command": return "text-indigo-500 bg-indigo-100";
+  default: return "text-gray-500 bg-gray-100";
   }
 };
 

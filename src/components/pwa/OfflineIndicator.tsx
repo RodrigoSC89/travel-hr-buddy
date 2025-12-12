@@ -3,11 +3,11 @@
  * Visual feedback for offline/sync status
  */
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Wifi, WifiOff, Cloud, CloudOff, RefreshCw, Check, AlertTriangle } from 'lucide-react';
-import { useOfflineSync } from '@/lib/pwa/offline-sync';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Wifi, WifiOff, Cloud, CloudOff, RefreshCw, Check, AlertTriangle } from "lucide-react";
+import { useOfflineSync } from "@/lib/pwa/offline-sync";
+import { cn } from "@/lib/utils";
 
 export function OfflineIndicator() {
   const { status, queueStatus } = useOfflineSync();
@@ -17,16 +17,16 @@ export function OfflineIndicator() {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
-  const isSyncing = status?.type === 'syncing';
+  const isSyncing = status?.type === "syncing";
   const hasPending = queueStatus.pending > 0;
 
   return (
@@ -43,10 +43,10 @@ export function OfflineIndicator() {
             !isOnline
               ? "bg-destructive text-destructive-foreground"
               : isSyncing
-              ? "bg-primary text-primary-foreground"
-              : hasPending
-              ? "bg-warning text-warning-foreground"
-              : "bg-muted text-muted-foreground"
+                ? "bg-primary text-primary-foreground"
+                : hasPending
+                  ? "bg-warning text-warning-foreground"
+                  : "bg-muted text-muted-foreground"
           )}
         >
           {!isOnline ? (
@@ -55,7 +55,7 @@ export function OfflineIndicator() {
               <span>Você está offline</span>
               {queueStatus.pending > 0 && (
                 <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs">
-                  {queueStatus.pending} pendente{queueStatus.pending > 1 ? 's' : ''}
+                  {queueStatus.pending} pendente{queueStatus.pending > 1 ? "s" : ""}
                 </span>
               )}
             </>
@@ -67,7 +67,7 @@ export function OfflineIndicator() {
           ) : hasPending ? (
             <>
               <Cloud className="w-4 h-4" />
-              <span>{queueStatus.pending} alteração{queueStatus.pending > 1 ? 'ões' : ''} pendente{queueStatus.pending > 1 ? 's' : ''}</span>
+              <span>{queueStatus.pending} alteração{queueStatus.pending > 1 ? "ões" : ""} pendente{queueStatus.pending > 1 ? "s" : ""}</span>
             </>
           ) : null}
         </motion.div>
@@ -81,15 +81,15 @@ export function SyncStatusBadge() {
   const isOnline = navigator.onLine;
 
   const getStatusColor = () => {
-    if (!isOnline) return 'bg-destructive';
-    if (status?.type === 'syncing') return 'bg-primary animate-pulse';
-    if (queueStatus.pending > 0) return 'bg-warning';
-    return 'bg-success';
+    if (!isOnline) return "bg-destructive";
+    if (status?.type === "syncing") return "bg-primary animate-pulse";
+    if (queueStatus.pending > 0) return "bg-warning";
+    return "bg-success";
   };
 
   const getStatusIcon = () => {
     if (!isOnline) return <CloudOff className="w-3 h-3" />;
-    if (status?.type === 'syncing') return <RefreshCw className="w-3 h-3 animate-spin" />;
+    if (status?.type === "syncing") return <RefreshCw className="w-3 h-3 animate-spin" />;
     if (queueStatus.pending > 0) return <AlertTriangle className="w-3 h-3" />;
     return <Check className="w-3 h-3" />;
   };

@@ -4,7 +4,7 @@
  * PATCH: Performance Optimization for 2Mb connections
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 // Request priority levels
 export enum RequestPriority {
@@ -59,15 +59,15 @@ class RequestQueue {
   }
 
   private setupNetworkListeners(): void {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOnline = true;
-      logger.info('[RequestQueue] Online - processing queue');
+      logger.info("[RequestQueue] Online - processing queue");
       this.processQueue();
     });
 
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOnline = false;
-      logger.warn('[RequestQueue] Offline - queuing requests');
+      logger.warn("[RequestQueue] Offline - queuing requests");
     });
   }
 
@@ -90,9 +90,9 @@ class RequestQueue {
         
         if (lowestPriority) {
           this.removeFromQueue(lowestPriority.id);
-          lowestPriority.reject(new Error('Request dropped due to queue overflow'));
+          lowestPriority.reject(new Error("Request dropped due to queue overflow"));
         } else {
-          reject(new Error('Request queue is full'));
+          reject(new Error("Request queue is full"));
           return;
         }
       }
@@ -191,9 +191,9 @@ class RequestQueue {
   private shouldRetry(error: unknown): boolean {
     if (error instanceof Error) {
       // Retry on network errors and 5xx
-      if (error.name === 'AbortError') return true;
-      if (error.message.includes('Server error')) return true;
-      if (error.message.includes('network')) return true;
+      if (error.name === "AbortError") return true;
+      if (error.message.includes("Server error")) return true;
+      if (error.message.includes("network")) return true;
     }
     return false;
   }
@@ -215,7 +215,7 @@ class RequestQueue {
     const request = this.queue.find(r => r.url === url);
     if (request) {
       this.removeFromQueue(request.id);
-      request.reject(new Error('Request cancelled'));
+      request.reject(new Error("Request cancelled"));
       return true;
     }
     return false;
@@ -228,7 +228,7 @@ class RequestQueue {
     const toCancel = this.queue.filter(r => r.priority === priority);
     toCancel.forEach(r => {
       this.removeFromQueue(r.id);
-      r.reject(new Error('Request cancelled'));
+      r.reject(new Error("Request cancelled"));
     });
     return toCancel.length;
   }
@@ -238,7 +238,7 @@ class RequestQueue {
    */
   public pause(): void {
     this.isPaused = true;
-    logger.info('[RequestQueue] Paused');
+    logger.info("[RequestQueue] Paused");
   }
 
   /**
@@ -246,7 +246,7 @@ class RequestQueue {
    */
   public resume(): void {
     this.isPaused = false;
-    logger.info('[RequestQueue] Resumed');
+    logger.info("[RequestQueue] Resumed");
     this.processQueue();
   }
 
@@ -254,9 +254,9 @@ class RequestQueue {
    * Clear all queued requests
    */
   public clear(): void {
-    this.queue.forEach(r => r.reject(new Error('Queue cleared')));
+    this.queue.forEach(r => r.reject(new Error("Queue cleared")));
     this.queue = [];
-    logger.info('[RequestQueue] Cleared');
+    logger.info("[RequestQueue] Cleared");
   }
 
   /**
@@ -267,7 +267,7 @@ class RequestQueue {
     active: number;
     isOnline: boolean;
     isPaused: boolean;
-  } {
+    } {
     return {
       queued: this.queue.length,
       active: this.activeRequests,
@@ -280,9 +280,9 @@ class RequestQueue {
    * Adjust concurrent limit based on network
    */
   public adjustConcurrency(connectionType?: string): void {
-    if (connectionType === 'slow-2g' || connectionType === '2g') {
+    if (connectionType === "slow-2g" || connectionType === "2g") {
       this.config.maxConcurrent = 2;
-    } else if (connectionType === '3g') {
+    } else if (connectionType === "3g") {
       this.config.maxConcurrent = 3;
     } else {
       this.config.maxConcurrent = DEFAULT_CONFIG.maxConcurrent;

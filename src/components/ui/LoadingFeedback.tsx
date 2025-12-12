@@ -301,8 +301,8 @@ export function CardSkeletonGrid({
         className
       )}
       style={{ 
-        gridTemplateColumns: `repeat(auto-fit, minmax(280px, 1fr))`,
-        maxWidth: '100%' 
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        maxWidth: "100%" 
       }}
     >
       {Array.from({ length: actualCount }).map((_, i) => (

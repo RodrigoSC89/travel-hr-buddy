@@ -138,7 +138,7 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
 
 ---
 *Gerado por Nautilus One - IA Generativa*
-*Data: ${new Date().toLocaleDateString('pt-BR')}*`);
+*Data: ${new Date().toLocaleDateString("pt-BR")}*`);
       
       toast({
         title: "Conteúdo Gerado (Demo)",
@@ -159,14 +159,14 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
 
   const getTypeBadge = (type: GeneratedContent["type"]) => {
     switch (type) {
-      case "document":
-        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Documento</Badge>;
-      case "report":
-        return <Badge variant="outline" className="border-green-500/30 text-green-400">Relatório</Badge>;
-      case "email":
-        return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Email</Badge>;
-      case "summary":
-        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Resumo</Badge>;
+    case "document":
+      return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Documento</Badge>;
+    case "report":
+      return <Badge variant="outline" className="border-green-500/30 text-green-400">Relatório</Badge>;
+    case "email":
+      return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Email</Badge>;
+    case "summary":
+      return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Resumo</Badge>;
     }
   };
 

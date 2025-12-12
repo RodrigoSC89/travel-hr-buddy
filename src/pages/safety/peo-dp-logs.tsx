@@ -61,8 +61,8 @@ export default function PEODPLogs() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold">{log.scenario}</h3>
-                      <Badge variant={log.type === 'real_event' ? 'destructive' : 'secondary'}>
-                        {log.type === 'real_event' ? 'Evento Real' : 'Simulação'}
+                      <Badge variant={log.type === "real_event" ? "destructive" : "secondary"}>
+                        {log.type === "real_event" ? "Evento Real" : "Simulação"}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">

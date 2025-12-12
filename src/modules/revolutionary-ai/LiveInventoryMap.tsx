@@ -3,23 +3,23 @@
  * Funcionalidade 4: Visualização Inteligente de Estoque Marítimo
  */
 
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
+import React, { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   Package, MapPin, Ship, Warehouse, AlertTriangle, 
   Search, Filter, TrendingDown, TrendingUp, Clock,
   Brain, Truck, RotateCcw
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface InventoryLocation {
   id: string;
   name: string;
-  type: 'vessel' | 'port' | 'warehouse';
+  type: "vessel" | "port" | "warehouse";
   location: { lat: number; lng: number; city: string };
   itemCount: number;
   criticalItems: number;
@@ -37,21 +37,21 @@ interface InventoryItem {
   minStock: number;
   maxStock: number;
   location: string;
-  locationType: 'vessel' | 'port' | 'warehouse';
+  locationType: "vessel" | "port" | "warehouse";
   expiryDate?: Date;
   leadTime: number;
   unitCost: number;
-  status: 'critical' | 'low' | 'ok' | 'excess';
+  status: "critical" | "low" | "ok" | "excess";
   lastMovement: Date;
   predictedRunout?: Date;
 }
 
 const MOCK_LOCATIONS: InventoryLocation[] = [
   {
-    id: '1',
-    name: 'Navio Atlas',
-    type: 'vessel',
-    location: { lat: -23.9, lng: -46.3, city: 'Santos' },
+    id: "1",
+    name: "Navio Atlas",
+    type: "vessel",
+    location: { lat: -23.9, lng: -46.3, city: "Santos" },
     itemCount: 245,
     criticalItems: 2,
     lowStockItems: 12,
@@ -59,10 +59,10 @@ const MOCK_LOCATIONS: InventoryLocation[] = [
     totalValue: 125000
   },
   {
-    id: '2',
-    name: 'Navio Vega',
-    type: 'vessel',
-    location: { lat: -22.9, lng: -43.1, city: 'Rio de Janeiro' },
+    id: "2",
+    name: "Navio Vega",
+    type: "vessel",
+    location: { lat: -22.9, lng: -43.1, city: "Rio de Janeiro" },
     itemCount: 198,
     criticalItems: 0,
     lowStockItems: 8,
@@ -70,10 +70,10 @@ const MOCK_LOCATIONS: InventoryLocation[] = [
     totalValue: 98000
   },
   {
-    id: '3',
-    name: 'Base Santos',
-    type: 'warehouse',
-    location: { lat: -23.96, lng: -46.33, city: 'Santos' },
+    id: "3",
+    name: "Base Santos",
+    type: "warehouse",
+    location: { lat: -23.96, lng: -46.33, city: "Santos" },
     itemCount: 1520,
     criticalItems: 5,
     lowStockItems: 45,
@@ -81,10 +81,10 @@ const MOCK_LOCATIONS: InventoryLocation[] = [
     totalValue: 850000
   },
   {
-    id: '4',
-    name: 'Porto Rio',
-    type: 'port',
-    location: { lat: -22.88, lng: -43.17, city: 'Rio de Janeiro' },
+    id: "4",
+    name: "Porto Rio",
+    type: "port",
+    location: { lat: -22.88, lng: -43.17, city: "Rio de Janeiro" },
     itemCount: 890,
     criticalItems: 3,
     lowStockItems: 28,
@@ -95,79 +95,79 @@ const MOCK_LOCATIONS: InventoryLocation[] = [
 
 const MOCK_ITEMS: InventoryItem[] = [
   {
-    id: '1',
-    name: 'Filtro de Óleo Motor',
-    sku: 'FLT-OLM-001',
-    category: 'Filtros',
+    id: "1",
+    name: "Filtro de Óleo Motor",
+    sku: "FLT-OLM-001",
+    category: "Filtros",
     quantity: 2,
     minStock: 5,
     maxStock: 20,
-    location: 'Navio Atlas',
-    locationType: 'vessel',
+    location: "Navio Atlas",
+    locationType: "vessel",
     leadTime: 7,
     unitCost: 450,
-    status: 'critical',
+    status: "critical",
     lastMovement: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     predictedRunout: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
   },
   {
-    id: '2',
-    name: 'Óleo Hidráulico 20L',
-    sku: 'OLH-20L-002',
-    category: 'Lubrificantes',
+    id: "2",
+    name: "Óleo Hidráulico 20L",
+    sku: "OLH-20L-002",
+    category: "Lubrificantes",
     quantity: 8,
     minStock: 10,
     maxStock: 50,
-    location: 'Base Santos',
-    locationType: 'warehouse',
+    location: "Base Santos",
+    locationType: "warehouse",
     leadTime: 3,
     unitCost: 280,
-    status: 'low',
+    status: "low",
     lastMovement: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
   },
   {
-    id: '3',
-    name: 'Extintor CO2 6kg',
-    sku: 'EXT-CO2-003',
-    category: 'Segurança',
+    id: "3",
+    name: "Extintor CO2 6kg",
+    sku: "EXT-CO2-003",
+    category: "Segurança",
     quantity: 25,
     minStock: 10,
     maxStock: 40,
-    location: 'Porto Rio',
-    locationType: 'port',
+    location: "Porto Rio",
+    locationType: "port",
     expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     leadTime: 14,
     unitCost: 320,
-    status: 'ok',
+    status: "ok",
     lastMovement: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   },
   {
-    id: '4',
-    name: 'Junta Cabeçote Motor',
-    sku: 'JNT-CBT-004',
-    category: 'Peças Motor',
+    id: "4",
+    name: "Junta Cabeçote Motor",
+    sku: "JNT-CBT-004",
+    category: "Peças Motor",
     quantity: 0,
     minStock: 2,
     maxStock: 8,
-    location: 'Navio Vega',
-    locationType: 'vessel',
+    location: "Navio Vega",
+    locationType: "vessel",
     leadTime: 21,
     unitCost: 1500,
-    status: 'critical',
+    status: "critical",
     lastMovement: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
   }
 ];
 
 export function LiveInventoryMap() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<InventoryLocation | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const filteredItems = useMemo(() => {
     return MOCK_ITEMS.filter(item => {
       const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            item.sku.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = filterStatus === 'all' || item.status === filterStatus;
+      const matchesStatus = filterStatus === "all" || item.status === filterStatus;
       const matchesLocation = !selectedLocation || item.location === selectedLocation.name;
       return matchesSearch && matchesStatus && matchesLocation;
     });
@@ -184,20 +184,20 @@ export function LiveInventoryMap() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      critical: 'bg-red-500/20 text-red-400 border-red-500/30',
-      low: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      ok: 'bg-green-500/20 text-green-400 border-green-500/30',
-      excess: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+      critical: "bg-red-500/20 text-red-400 border-red-500/30",
+      low: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      ok: "bg-green-500/20 text-green-400 border-green-500/30",
+      excess: "bg-blue-500/20 text-blue-400 border-blue-500/30"
     };
-    return colors[status as keyof typeof colors] || 'bg-muted';
+    return colors[status as keyof typeof colors] || "bg-muted";
   };
 
   const getLocationIcon = (type: string) => {
     switch (type) {
-      case 'vessel': return <Ship className="h-5 w-5" />;
-      case 'port': return <MapPin className="h-5 w-5" />;
-      case 'warehouse': return <Warehouse className="h-5 w-5" />;
-      default: return <Package className="h-5 w-5" />;
+    case "vessel": return <Ship className="h-5 w-5" />;
+    case "port": return <MapPin className="h-5 w-5" />;
+    case "warehouse": return <Warehouse className="h-5 w-5" />;
+    default: return <Package className="h-5 w-5" />;
     }
   };
 
@@ -276,8 +276,8 @@ export function LiveInventoryMap() {
                   <Card 
                     className={`cursor-pointer transition-all ${
                       selectedLocation?.id === location.id 
-                        ? 'border-primary ring-2 ring-primary/20' 
-                        : 'hover:border-primary/50'
+                        ? "border-primary ring-2 ring-primary/20" 
+                        : "hover:border-primary/50"
                     }`}
                     onClick={() => setSelectedLocation(
                       selectedLocation?.id === location.id ? null : location
@@ -286,9 +286,9 @@ export function LiveInventoryMap() {
                     <CardContent className="p-3">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          location.type === 'vessel' ? 'bg-blue-500/20 text-blue-400' :
-                          location.type === 'warehouse' ? 'bg-amber-500/20 text-amber-400' :
-                          'bg-green-500/20 text-green-400'
+                          location.type === "vessel" ? "bg-blue-500/20 text-blue-400" :
+                            location.type === "warehouse" ? "bg-amber-500/20 text-amber-400" :
+                              "bg-green-500/20 text-green-400"
                         }`}>
                           {getLocationIcon(location.type)}
                         </div>
@@ -398,9 +398,9 @@ export function LiveInventoryMap() {
                           <Progress 
                             value={(item.quantity / item.maxStock) * 100} 
                             className={`h-2 ${
-                              item.status === 'critical' ? '[&>div]:bg-red-500' :
-                              item.status === 'low' ? '[&>div]:bg-amber-500' :
-                              '[&>div]:bg-green-500'
+                              item.status === "critical" ? "[&>div]:bg-red-500" :
+                                item.status === "low" ? "[&>div]:bg-amber-500" :
+                                  "[&>div]:bg-green-500"
                             }`}
                           />
                         </div>
@@ -419,7 +419,7 @@ export function LiveInventoryMap() {
                           {item.predictedRunout && (
                             <span className="flex items-center gap-1 text-red-400">
                               <Brain className="h-3 w-3" />
-                              Esgota: {item.predictedRunout.toLocaleDateString('pt-BR')}
+                              Esgota: {item.predictedRunout.toLocaleDateString("pt-BR")}
                             </span>
                           )}
                         </div>

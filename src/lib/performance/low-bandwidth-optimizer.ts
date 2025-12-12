@@ -4,7 +4,7 @@
  * PATCH 1001: Fixed React hooks initialization order to prevent useState null error
  */
 
-import * as React from 'react';
+import * as React from "react";
 
 interface BandwidthConfig {
   maxImageSize: number;
@@ -13,50 +13,50 @@ interface BandwidthConfig {
   batchSize: number;
   requestTimeout: number;
   enableAnimations: boolean;
-  compressionLevel: 'none' | 'low' | 'high';
+  compressionLevel: "none" | "low" | "high";
   lazyLoadThreshold: string;
 }
 
 const BANDWIDTH_CONFIGS: Record<string, BandwidthConfig> = {
-  '4g': {
+  "4g": {
     maxImageSize: 500000, // 500KB
     imageQuality: 85,
     enablePrefetch: true,
     batchSize: 20,
     requestTimeout: 30000,
     enableAnimations: true,
-    compressionLevel: 'low',
-    lazyLoadThreshold: '200px',
+    compressionLevel: "low",
+    lazyLoadThreshold: "200px",
   },
-  '3g': {
+  "3g": {
     maxImageSize: 150000, // 150KB
     imageQuality: 70,
     enablePrefetch: false,
     batchSize: 10,
     requestTimeout: 45000,
     enableAnimations: false,
-    compressionLevel: 'high',
-    lazyLoadThreshold: '100px',
+    compressionLevel: "high",
+    lazyLoadThreshold: "100px",
   },
-  '2g': {
+  "2g": {
     maxImageSize: 50000, // 50KB
     imageQuality: 50,
     enablePrefetch: false,
     batchSize: 5,
     requestTimeout: 60000,
     enableAnimations: false,
-    compressionLevel: 'high',
-    lazyLoadThreshold: '50px',
+    compressionLevel: "high",
+    lazyLoadThreshold: "50px",
   },
-  'slow-2g': {
+  "slow-2g": {
     maxImageSize: 20000, // 20KB
     imageQuality: 30,
     enablePrefetch: false,
     batchSize: 3,
     requestTimeout: 90000,
     enableAnimations: false,
-    compressionLevel: 'high',
-    lazyLoadThreshold: '0px',
+    compressionLevel: "high",
+    lazyLoadThreshold: "0px",
   },
   offline: {
     maxImageSize: 0,
@@ -65,14 +65,14 @@ const BANDWIDTH_CONFIGS: Record<string, BandwidthConfig> = {
     batchSize: 1,
     requestTimeout: 0,
     enableAnimations: false,
-    compressionLevel: 'high',
-    lazyLoadThreshold: '0px',
+    compressionLevel: "high",
+    lazyLoadThreshold: "0px",
   },
 };
 
 class LowBandwidthOptimizer {
-  private config: BandwidthConfig = BANDWIDTH_CONFIGS['4g'];
-  private connectionType: string = '4g';
+  private config: BandwidthConfig = BANDWIDTH_CONFIGS["4g"];
+  private connectionType: string = "4g";
   private listeners: Set<(config: BandwidthConfig) => void> = new Set();
   private isInitialized = false;
 
@@ -89,25 +89,25 @@ class LowBandwidthOptimizer {
     const connection = (navigator as any).connection;
     
     if (connection) {
-      this.connectionType = connection.effectiveType || '4g';
+      this.connectionType = connection.effectiveType || "4g";
       
       // Also check downlink speed
       if (connection.downlink) {
         if (connection.downlink < 0.5) {
-          this.connectionType = 'slow-2g';
+          this.connectionType = "slow-2g";
         } else if (connection.downlink < 2) {
-          this.connectionType = '2g';
+          this.connectionType = "2g";
         } else if (connection.downlink < 5) {
-          this.connectionType = '3g';
+          this.connectionType = "3g";
         }
       }
     }
 
     if (!navigator.onLine) {
-      this.connectionType = 'offline';
+      this.connectionType = "offline";
     }
 
-    this.config = BANDWIDTH_CONFIGS[this.connectionType] || BANDWIDTH_CONFIGS['4g'];
+    this.config = BANDWIDTH_CONFIGS[this.connectionType] || BANDWIDTH_CONFIGS["4g"];
     this.notifyListeners();
   }
 
@@ -115,20 +115,20 @@ class LowBandwidthOptimizer {
     const connection = (navigator as any).connection;
     
     if (connection) {
-      connection.addEventListener('change', () => {
+      connection.addEventListener("change", () => {
         this.detectConnection();
         this.applyOptimizations();
       });
     }
 
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.detectConnection();
       this.applyOptimizations();
     });
 
-    window.addEventListener('offline', () => {
-      this.connectionType = 'offline';
-      this.config = BANDWIDTH_CONFIGS['offline'];
+    window.addEventListener("offline", () => {
+      this.connectionType = "offline";
+      this.config = BANDWIDTH_CONFIGS["offline"];
       this.notifyListeners();
     });
   }
@@ -136,24 +136,24 @@ class LowBandwidthOptimizer {
   private applyOptimizations() {
     // Disable animations for slow connections
     if (!this.config.enableAnimations) {
-      document.documentElement.style.setProperty('--animation-duration', '0s');
-      document.documentElement.classList.add('reduce-motion');
+      document.documentElement.style.setProperty("--animation-duration", "0s");
+      document.documentElement.classList.add("reduce-motion");
     } else {
-      document.documentElement.style.removeProperty('--animation-duration');
-      document.documentElement.classList.remove('reduce-motion');
+      document.documentElement.style.removeProperty("--animation-duration");
+      document.documentElement.classList.remove("reduce-motion");
     }
 
     // Set lazy load threshold
     document.documentElement.style.setProperty(
-      '--lazy-load-threshold',
+      "--lazy-load-threshold",
       this.config.lazyLoadThreshold
     );
 
     // Add low bandwidth class for CSS optimizations
-    if (this.connectionType === '2g' || this.connectionType === 'slow-2g') {
-      document.documentElement.classList.add('low-bandwidth');
+    if (this.connectionType === "2g" || this.connectionType === "slow-2g") {
+      document.documentElement.classList.add("low-bandwidth");
     } else {
-      document.documentElement.classList.remove('low-bandwidth');
+      document.documentElement.classList.remove("low-bandwidth");
     }
   }
 
@@ -166,7 +166,7 @@ class LowBandwidthOptimizer {
   }
 
   isLowBandwidth(): boolean {
-    return ['2g', 'slow-2g', 'offline'].includes(this.connectionType);
+    return ["2g", "slow-2g", "offline"].includes(this.connectionType);
   }
 
   shouldLoadImage(size: number): boolean {
@@ -203,18 +203,18 @@ class LowBandwidthOptimizer {
   getOptimizedImageUrl(
     url: string,
     width?: number,
-    format: 'webp' | 'jpeg' | 'auto' = 'auto'
+    format: "webp" | "jpeg" | "auto" = "auto"
   ): string {
     if (!url) return url;
 
     // If it's a Supabase storage URL, add transformation params
-    if (url.includes('supabase.co/storage')) {
+    if (url.includes("supabase.co/storage")) {
       const params = new URLSearchParams();
-      if (width) params.set('width', String(Math.min(width, 800)));
-      params.set('quality', String(this.config.imageQuality));
-      if (format !== 'auto') params.set('format', format);
+      if (width) params.set("width", String(Math.min(width, 800)));
+      params.set("quality", String(this.config.imageQuality));
+      if (format !== "auto") params.set("format", format);
       
-      const separator = url.includes('?') ? '&' : '?';
+      const separator = url.includes("?") ? "&" : "?";
       return `${url}${separator}${params.toString()}`;
     }
 
@@ -228,7 +228,7 @@ class LowBandwidthOptimizer {
       signal: AbortSignal.timeout(this.config.requestTimeout),
       headers: {
         ...options.headers,
-        'Accept-Encoding': 'gzip, deflate, br',
+        "Accept-Encoding": "gzip, deflate, br",
       },
     };
   }
@@ -237,7 +237,7 @@ class LowBandwidthOptimizer {
 export const bandwidthOptimizer = new LowBandwidthOptimizer();
 
 // Default config for SSR/initial render
-const DEFAULT_CONFIG: BandwidthConfig = BANDWIDTH_CONFIGS['4g'];
+const DEFAULT_CONFIG: BandwidthConfig = BANDWIDTH_CONFIGS["4g"];
 
 // React hook - using React namespace import to prevent null errors (PATCH 1001)
 export function useBandwidthOptimizer() {
@@ -253,7 +253,7 @@ export function useBandwidthOptimizer() {
     try {
       return bandwidthOptimizer.getConnectionType();
     } catch {
-      return '4g';
+      return "4g";
     }
   });
 
@@ -268,12 +268,12 @@ export function useBandwidthOptimizer() {
 
       return unsubscribe;
     } catch (error) {
-      console.warn('BandwidthOptimizer init failed:', error);
+      console.warn("BandwidthOptimizer init failed:", error);
     }
   }, []);
 
   const optimizations = React.useMemo(() => ({
-    isLowBandwidth: config ? ['2g', 'slow-2g', 'offline'].includes(connectionType) : false,
+    isLowBandwidth: config ? ["2g", "slow-2g", "offline"].includes(connectionType) : false,
     shouldLoadImages: config ? config.maxImageSize > 0 : true,
     shouldAnimate: config ? config.enableAnimations : true,
     shouldPrefetch: config ? config.enablePrefetch : true,
@@ -284,7 +284,7 @@ export function useBandwidthOptimizer() {
 
   return {
     config: config || DEFAULT_CONFIG,
-    connectionType: connectionType || '4g',
+    connectionType: connectionType || "4g",
     ...optimizations,
     getOptimizedImageUrl: bandwidthOptimizer.getOptimizedImageUrl.bind(bandwidthOptimizer),
     getOptimizedFetchOptions: bandwidthOptimizer.getOptimizedFetchOptions.bind(bandwidthOptimizer),

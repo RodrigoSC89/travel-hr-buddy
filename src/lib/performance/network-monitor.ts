@@ -3,15 +3,15 @@
  * Real-time network quality monitoring and adaptation
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export interface NetworkStatus {
   online: boolean;
-  effectiveType: 'slow-2g' | '2g' | '3g' | '4g' | 'unknown';
+  effectiveType: "slow-2g" | "2g" | "3g" | "4g" | "unknown";
   downlink: number; // Mbps
   rtt: number; // ms
   saveData: boolean;
-  quality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  quality: "excellent" | "good" | "fair" | "poor" | "offline";
   timestamp: number;
 }
 
@@ -42,13 +42,13 @@ class NetworkMonitor {
     
     return {
       online: navigator.onLine,
-      effectiveType: (connection?.effectiveType as NetworkStatus['effectiveType']) || 'unknown',
+      effectiveType: (connection?.effectiveType as NetworkStatus["effectiveType"]) || "unknown",
       downlink: connection?.downlink || 10,
       rtt: connection?.rtt || 50,
       saveData: connection?.saveData || false,
       quality: this.calculateQuality(
         navigator.onLine,
-        connection?.effectiveType || '4g',
+        connection?.effectiveType || "4g",
         connection?.rtt || 50
       ),
       timestamp: Date.now(),
@@ -59,25 +59,25 @@ class NetworkMonitor {
     online: boolean,
     effectiveType: string,
     rtt: number
-  ): NetworkStatus['quality'] {
-    if (!online) return 'offline';
+  ): NetworkStatus["quality"] {
+    if (!online) return "offline";
     
-    if (effectiveType === 'slow-2g' || effectiveType === '2g' || rtt > 500) {
-      return 'poor';
+    if (effectiveType === "slow-2g" || effectiveType === "2g" || rtt > 500) {
+      return "poor";
     }
-    if (effectiveType === '3g' || rtt > 200) {
-      return 'fair';
+    if (effectiveType === "3g" || rtt > 200) {
+      return "fair";
     }
     if (rtt > 100) {
-      return 'good';
+      return "good";
     }
-    return 'excellent';
+    return "excellent";
   }
   
   private setupListeners(): void {
     // Online/offline events
-    window.addEventListener('online', () => this.updateStatus({ online: true }));
-    window.addEventListener('offline', () => this.updateStatus({ online: false }));
+    window.addEventListener("online", () => this.updateStatus({ online: true }));
+    window.addEventListener("offline", () => this.updateStatus({ online: false }));
     
     // Connection change events
     const nav = navigator as Navigator & {
@@ -90,10 +90,10 @@ class NetworkMonitor {
     };
     
     if (nav.connection) {
-      nav.connection.addEventListener('change', () => {
+      nav.connection.addEventListener("change", () => {
         const conn = nav.connection!;
         this.updateStatus({
-          effectiveType: conn.effectiveType as NetworkStatus['effectiveType'],
+          effectiveType: conn.effectiveType as NetworkStatus["effectiveType"],
           downlink: conn.downlink,
           rtt: conn.rtt,
           saveData: conn.saveData,
@@ -155,9 +155,9 @@ class NetworkMonitor {
       const start = performance.now();
       
       // Ping a small resource
-      await fetch('/favicon.ico', {
-        method: 'HEAD',
-        cache: 'no-store',
+      await fetch("/favicon.ico", {
+        method: "HEAD",
+        cache: "no-store",
       });
       
       const latency = Math.round(performance.now() - start);
@@ -207,8 +207,8 @@ class NetworkMonitor {
   canPerformHeavyOperation(): boolean {
     return (
       this.status.online &&
-      this.status.quality !== 'poor' &&
-      this.status.quality !== 'offline' &&
+      this.status.quality !== "poor" &&
+      this.status.quality !== "offline" &&
       !this.status.saveData
     );
   }
@@ -222,10 +222,10 @@ class NetworkMonitor {
     batchSize: number;
     timeout: number;
     prefetchEnabled: boolean;
-  } {
+    } {
     const { quality, saveData } = this.status;
     
-    if (saveData || quality === 'poor') {
+    if (saveData || quality === "poor") {
       return {
         imageQuality: 30,
         enableAnimations: false,
@@ -235,7 +235,7 @@ class NetworkMonitor {
       };
     }
     
-    if (quality === 'fair') {
+    if (quality === "fair") {
       return {
         imageQuality: 50,
         enableAnimations: false,
@@ -245,7 +245,7 @@ class NetworkMonitor {
       };
     }
     
-    if (quality === 'good') {
+    if (quality === "good") {
       return {
         imageQuality: 70,
         enableAnimations: true,
@@ -302,11 +302,11 @@ export function useNetworkAware() {
         if (offlineFallback !== undefined) {
           return offlineFallback;
         }
-        throw new Error('No network connection');
+        throw new Error("No network connection");
       }
       
       if (requiresGoodConnection && !networkMonitor.canPerformHeavyOperation()) {
-        throw new Error('Network too slow for this operation');
+        throw new Error("Network too slow for this operation");
       }
       
       return operation();

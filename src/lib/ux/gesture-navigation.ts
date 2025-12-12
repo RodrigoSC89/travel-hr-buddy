@@ -3,19 +3,19 @@
  * Touch and mouse gesture recognition for navigation
  */
 
-import { useEffect, useCallback, useRef, useState } from 'react';
-import { hapticFeedback } from './haptic-feedback';
+import { useEffect, useCallback, useRef, useState } from "react";
+import { hapticFeedback } from "./haptic-feedback";
 
 type GestureType = 
-  | 'swipe-left' 
-  | 'swipe-right' 
-  | 'swipe-up' 
-  | 'swipe-down' 
-  | 'pinch-in' 
-  | 'pinch-out' 
-  | 'double-tap'
-  | 'long-press'
-  | 'pull-to-refresh';
+  | "swipe-left" 
+  | "swipe-right" 
+  | "swipe-up" 
+  | "swipe-down" 
+  | "pinch-in" 
+  | "pinch-out" 
+  | "double-tap"
+  | "long-press"
+  | "pull-to-refresh";
 
 interface GestureConfig {
   swipeThreshold: number;
@@ -89,8 +89,8 @@ export function useGestureNavigation(
     
     // Check for double tap
     if (now - lastTapRef.current < mergedConfig.doubleTapDelay) {
-      hapticFeedback.trigger('selection');
-      onGesture('double-tap');
+      hapticFeedback.trigger("selection");
+      onGesture("double-tap");
       lastTapRef.current = 0;
       return;
     }
@@ -103,8 +103,8 @@ export function useGestureNavigation(
         const dy = Math.abs(stateRef.current.currentY - stateRef.current.startY);
         
         if (dx < 10 && dy < 10) {
-          hapticFeedback.trigger('heavy');
-          onGesture('long-press');
+          hapticFeedback.trigger("heavy");
+          onGesture("long-press");
         }
       }
     }, mergedConfig.longPressDelay);
@@ -134,8 +134,8 @@ export function useGestureNavigation(
       const diff = currentDistance - stateRef.current.initialDistance;
       
       if (Math.abs(diff) > mergedConfig.pinchThreshold) {
-        hapticFeedback.trigger('light');
-        onGesture(diff > 0 ? 'pinch-out' : 'pinch-in', { scale: currentDistance / stateRef.current.initialDistance });
+        hapticFeedback.trigger("light");
+        onGesture(diff > 0 ? "pinch-out" : "pinch-in", { scale: currentDistance / stateRef.current.initialDistance });
         stateRef.current.initialDistance = currentDistance;
       }
     }
@@ -144,8 +144,8 @@ export function useGestureNavigation(
     if (stateRef.current.startY < 100 && touch.clientY - stateRef.current.startY > 100) {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       if (scrollTop === 0) {
-        hapticFeedback.trigger('medium');
-        onGesture('pull-to-refresh');
+        hapticFeedback.trigger("medium");
+        onGesture("pull-to-refresh");
       }
     }
   }, [onGesture, mergedConfig.pinchThreshold]);
@@ -171,12 +171,12 @@ export function useGestureNavigation(
       const absDy = Math.abs(dy);
       
       if (absDx > mergedConfig.swipeThreshold || absDy > mergedConfig.swipeThreshold) {
-        hapticFeedback.trigger('light');
+        hapticFeedback.trigger("light");
         
         if (absDx > absDy) {
-          onGesture(dx > 0 ? 'swipe-right' : 'swipe-left', { velocity, distance: absDx });
+          onGesture(dx > 0 ? "swipe-right" : "swipe-left", { velocity, distance: absDx });
         } else {
-          onGesture(dy > 0 ? 'swipe-down' : 'swipe-up', { velocity, distance: absDy });
+          onGesture(dy > 0 ? "swipe-down" : "swipe-up", { velocity, distance: absDy });
         }
       }
     }
@@ -186,26 +186,26 @@ export function useGestureNavigation(
   
   const bindGestures = useCallback((element: HTMLElement | null) => {
     if (elementRef.current) {
-      elementRef.current.removeEventListener('touchstart', handleTouchStart);
-      elementRef.current.removeEventListener('touchmove', handleTouchMove);
-      elementRef.current.removeEventListener('touchend', handleTouchEnd);
+      elementRef.current.removeEventListener("touchstart", handleTouchStart);
+      elementRef.current.removeEventListener("touchmove", handleTouchMove);
+      elementRef.current.removeEventListener("touchend", handleTouchEnd);
     }
     
     elementRef.current = element;
     
     if (element) {
-      element.addEventListener('touchstart', handleTouchStart, { passive: true });
-      element.addEventListener('touchmove', handleTouchMove, { passive: true });
-      element.addEventListener('touchend', handleTouchEnd, { passive: true });
+      element.addEventListener("touchstart", handleTouchStart, { passive: true });
+      element.addEventListener("touchmove", handleTouchMove, { passive: true });
+      element.addEventListener("touchend", handleTouchEnd, { passive: true });
     }
   }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
   
   useEffect(() => {
     return () => {
       if (elementRef.current) {
-        elementRef.current.removeEventListener('touchstart', handleTouchStart);
-        elementRef.current.removeEventListener('touchmove', handleTouchMove);
-        elementRef.current.removeEventListener('touchend', handleTouchEnd);
+        elementRef.current.removeEventListener("touchstart", handleTouchStart);
+        elementRef.current.removeEventListener("touchmove", handleTouchMove);
+        elementRef.current.removeEventListener("touchend", handleTouchEnd);
       }
       if (longPressTimerRef.current) {
         clearTimeout(longPressTimerRef.current);
@@ -223,9 +223,9 @@ export function useSwipeNavigation(routes: string[], currentIndex: number, navig
   const [swipeProgress, setSwipeProgress] = useState(0);
   
   const handleGesture = useCallback((gesture: GestureType) => {
-    if (gesture === 'swipe-left' && currentIndex < routes.length - 1) {
+    if (gesture === "swipe-left" && currentIndex < routes.length - 1) {
       navigate(routes[currentIndex + 1]);
-    } else if (gesture === 'swipe-right' && currentIndex > 0) {
+    } else if (gesture === "swipe-right" && currentIndex > 0) {
       navigate(routes[currentIndex - 1]);
     }
     setSwipeProgress(0);

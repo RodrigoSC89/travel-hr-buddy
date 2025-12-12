@@ -365,7 +365,7 @@ export default function AcademyDashboard() {
               <Settings className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" onClick={refetch} title="Atualizar dados">
-              <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
             </Button>
             <Button variant="outline" size="sm" onClick={exportData}>
               <Download className="h-4 w-4 mr-1" />Exportar
@@ -470,8 +470,8 @@ export default function AcademyDashboard() {
                   suggestion.priority === "high"
                     ? "bg-destructive/10 border border-destructive/20"
                     : suggestion.priority === "medium"
-                    ? "bg-amber-500/10 border border-amber-500/20"
-                    : "bg-muted/50 border border-border"
+                      ? "bg-amber-500/10 border border-amber-500/20"
+                      : "bg-muted/50 border border-border"
                 }`}
               >
                 {suggestion.type === "gap" && <AlertTriangle className="h-5 w-5 text-destructive" />}
@@ -1102,7 +1102,7 @@ export default function AcademyDashboard() {
                 notifications.map((notif) => (
                   <div
                     key={notif.id}
-                    className={`p-3 border rounded-lg flex items-start justify-between gap-3 ${!notif.read ? 'bg-primary/5 border-primary/20' : ''}`}
+                    className={`p-3 border rounded-lg flex items-start justify-between gap-3 ${!notif.read ? "bg-primary/5 border-primary/20" : ""}`}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">

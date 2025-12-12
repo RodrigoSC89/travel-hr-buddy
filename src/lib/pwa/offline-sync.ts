@@ -3,17 +3,17 @@
  * Revolutionary offline capabilities for maritime environments
  */
 
-import { useState, useEffect } from 'react';
-import { openDB, IDBPDatabase } from 'idb';
+import { useState, useEffect } from "react";
+import { openDB, IDBPDatabase } from "idb";
 
 interface SyncQueueItem {
   id: string;
-  action: 'create' | 'update' | 'delete';
+  action: "create" | "update" | "delete";
   table: string;
   data: any;
   timestamp: number;
   retries: number;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
 }
 
 interface CachedData {
@@ -24,7 +24,7 @@ interface CachedData {
   version: number;
 }
 
-const DB_NAME = 'nautica-offline-db';
+const DB_NAME = "nautica-offline-db";
 const DB_VERSION = 1;
 
 class OfflineSyncManager {
@@ -36,37 +36,37 @@ class OfflineSyncManager {
     this.db = await openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {
         // Sync queue store
-        if (!db.objectStoreNames.contains('syncQueue')) {
-          const syncStore = db.createObjectStore('syncQueue', { keyPath: 'id' });
-          syncStore.createIndex('timestamp', 'timestamp');
-          syncStore.createIndex('priority', 'priority');
-          syncStore.createIndex('table', 'table');
+        if (!db.objectStoreNames.contains("syncQueue")) {
+          const syncStore = db.createObjectStore("syncQueue", { keyPath: "id" });
+          syncStore.createIndex("timestamp", "timestamp");
+          syncStore.createIndex("priority", "priority");
+          syncStore.createIndex("table", "table");
         }
 
         // Cached data store
-        if (!db.objectStoreNames.contains('cache')) {
-          const cacheStore = db.createObjectStore('cache', { keyPath: 'key' });
-          cacheStore.createIndex('timestamp', 'timestamp');
-          cacheStore.createIndex('ttl', 'ttl');
+        if (!db.objectStoreNames.contains("cache")) {
+          const cacheStore = db.createObjectStore("cache", { keyPath: "key" });
+          cacheStore.createIndex("timestamp", "timestamp");
+          cacheStore.createIndex("ttl", "ttl");
         }
 
         // User actions store (for analytics)
-        if (!db.objectStoreNames.contains('pendingActions')) {
-          db.createObjectStore('pendingActions', { keyPath: 'id', autoIncrement: true });
+        if (!db.objectStoreNames.contains("pendingActions")) {
+          db.createObjectStore("pendingActions", { keyPath: "id", autoIncrement: true });
         }
       },
     });
 
     // Listen for online status
-    window.addEventListener('online', () => this.onOnline());
-    window.addEventListener('offline', () => this.onOffline());
+    window.addEventListener("online", () => this.onOnline());
+    window.addEventListener("offline", () => this.onOffline());
 
     // Start periodic sync check
     this.startPeriodicSync();
   }
 
   // Add item to sync queue
-  async queueSync(item: Omit<SyncQueueItem, 'id' | 'timestamp' | 'retries'>): Promise<string> {
+  async queueSync(item: Omit<SyncQueueItem, "id" | "timestamp" | "retries">): Promise<string> {
     if (!this.db) await this.init();
 
     const syncItem: SyncQueueItem = {
@@ -76,8 +76,8 @@ class OfflineSyncManager {
       retries: 0,
     };
 
-    await this.db!.put('syncQueue', syncItem);
-    this.notifyListeners({ type: 'queued', item: syncItem });
+    await this.db!.put("syncQueue", syncItem);
+    this.notifyListeners({ type: "queued", item: syncItem });
 
     // Try immediate sync if online
     if (navigator.onLine) {
@@ -99,20 +99,20 @@ class OfflineSyncManager {
       version: 1,
     };
 
-    await this.db!.put('cache', cached);
+    await this.db!.put("cache", cached);
   }
 
   // Get cached data
   async getCachedData<T>(key: string): Promise<T | null> {
     if (!this.db) await this.init();
 
-    const cached = await this.db!.get('cache', key) as CachedData | undefined;
+    const cached = await this.db!.get("cache", key) as CachedData | undefined;
 
     if (!cached) return null;
 
     // Check if expired
     if (Date.now() - cached.timestamp > cached.ttl) {
-      await this.db!.delete('cache', key);
+      await this.db!.delete("cache", key);
       return null;
     }
 
@@ -124,12 +124,12 @@ class OfflineSyncManager {
     if (this.syncInProgress || !navigator.onLine) return;
 
     this.syncInProgress = true;
-    this.notifyListeners({ type: 'syncing' });
+    this.notifyListeners({ type: "syncing" });
 
     try {
       if (!this.db) await this.init();
 
-      const items = await this.db!.getAllFromIndex('syncQueue', 'priority') as SyncQueueItem[];
+      const items = await this.db!.getAllFromIndex("syncQueue", "priority") as SyncQueueItem[];
       
       // Sort by priority and timestamp
       const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
@@ -145,20 +145,20 @@ class OfflineSyncManager {
       for (const item of sortedItems) {
         try {
           await this.syncItem(item);
-          await this.db!.delete('syncQueue', item.id);
-          this.notifyListeners({ type: 'synced', item });
+          await this.db!.delete("syncQueue", item.id);
+          this.notifyListeners({ type: "synced", item });
         } catch (error) {
           item.retries++;
           if (item.retries >= 3) {
-            this.notifyListeners({ type: 'failed', item, error });
-            await this.db!.delete('syncQueue', item.id);
+            this.notifyListeners({ type: "failed", item, error });
+            await this.db!.delete("syncQueue", item.id);
           } else {
-            await this.db!.put('syncQueue', item);
+            await this.db!.put("syncQueue", item);
           }
         }
       }
 
-      this.notifyListeners({ type: 'complete' });
+      this.notifyListeners({ type: "complete" });
     } finally {
       this.syncInProgress = false;
     }
@@ -167,21 +167,21 @@ class OfflineSyncManager {
   // Sync individual item
   private async syncItem(item: SyncQueueItem): Promise<void> {
     // This would be replaced with actual Supabase calls
-    const { supabase } = await import('@/integrations/supabase/client');
+    const { supabase } = await import("@/integrations/supabase/client");
     
     // Cast to any to allow dynamic table names
     const table = (supabase as any).from(item.table);
 
     switch (item.action) {
-      case 'create':
-        await table.insert(item.data);
-        break;
-      case 'update':
-        await table.update(item.data).eq('id', item.data.id);
-        break;
-      case 'delete':
-        await table.delete().eq('id', item.data.id);
-        break;
+    case "create":
+      await table.insert(item.data);
+      break;
+    case "update":
+      await table.update(item.data).eq("id", item.data.id);
+      break;
+    case "delete":
+      await table.delete().eq("id", item.data.id);
+      break;
     }
   }
 
@@ -189,7 +189,7 @@ class OfflineSyncManager {
   async getQueueStatus(): Promise<{ pending: number; failed: number }> {
     if (!this.db) await this.init();
 
-    const items = await this.db!.getAll('syncQueue');
+    const items = await this.db!.getAll("syncQueue");
     return {
       pending: items.filter(i => i.retries < 3).length,
       failed: items.filter(i => i.retries >= 3).length,
@@ -200,12 +200,12 @@ class OfflineSyncManager {
   async clearExpiredCache(): Promise<number> {
     if (!this.db) await this.init();
 
-    const allCached = await this.db!.getAll('cache');
+    const allCached = await this.db!.getAll("cache");
     let cleared = 0;
 
     for (const item of allCached) {
       if (Date.now() - item.timestamp > item.ttl) {
-        await this.db!.delete('cache', item.key);
+        await this.db!.delete("cache", item.key);
         cleared++;
       }
     }
@@ -224,12 +224,12 @@ class OfflineSyncManager {
   }
 
   private onOnline(): void {
-    this.notifyListeners({ type: 'online' });
+    this.notifyListeners({ type: "online" });
     this.processQueue();
   }
 
   private onOffline(): void {
-    this.notifyListeners({ type: 'offline' });
+    this.notifyListeners({ type: "offline" });
   }
 
   private startPeriodicSync(): void {
@@ -242,13 +242,13 @@ class OfflineSyncManager {
 }
 
 type SyncStatus = 
-  | { type: 'online' }
-  | { type: 'offline' }
-  | { type: 'syncing' }
-  | { type: 'queued'; item: SyncQueueItem }
-  | { type: 'synced'; item: SyncQueueItem }
-  | { type: 'failed'; item: SyncQueueItem; error: any }
-  | { type: 'complete' };
+  | { type: "online" }
+  | { type: "offline" }
+  | { type: "syncing" }
+  | { type: "queued"; item: SyncQueueItem }
+  | { type: "synced"; item: SyncQueueItem }
+  | { type: "failed"; item: SyncQueueItem; error: any }
+  | { type: "complete" };
 
 export const offlineSync = new OfflineSyncManager();
 

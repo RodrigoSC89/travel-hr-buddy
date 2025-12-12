@@ -3,11 +3,11 @@
  * Error boundary leve para componentes individuais
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { errorTrackingService } from '@/lib/errors';
-import { AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { errorTrackingService } from "@/lib/errors";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   children: ReactNode;
@@ -38,9 +38,9 @@ export class ComponentErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    errorTrackingService.track(error, 'warning', 'runtime', {
-      component: this.props.componentName || 'ComponentErrorBoundary',
-      action: 'componentDidCatch',
+    errorTrackingService.track(error, "warning", "runtime", {
+      component: this.props.componentName || "ComponentErrorBoundary",
+      action: "componentDidCatch",
       metadata: {
         componentStack: errorInfo.componentStack,
       },
@@ -73,7 +73,7 @@ export class ComponentErrorBoundary extends Component<Props, State> {
           <AlertTitle>Erro no Componente</AlertTitle>
           <AlertDescription className="mt-2 space-y-2">
             <p className="text-sm">
-              {this.props.componentName || 'Este componente'} encontrou um erro e não pode ser exibido.
+              {this.props.componentName || "Este componente"} encontrou um erro e não pode ser exibido.
             </p>
             {this.state.error && (
               <p className="text-xs font-mono bg-black/5 dark:bg-white/5 p-2 rounded">

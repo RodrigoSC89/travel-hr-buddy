@@ -3,8 +3,8 @@
  * React hook for StarFix API integration
  */
 
-import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
   registerVesselInStarFix,
   fetchStarFixInspections,
@@ -15,7 +15,7 @@ import {
   type StarFixVessel,
   type StarFixInspection,
   type StarFixPerformanceMetrics,
-} from '@/services/api/starfix/starfix.service';
+} from "@/services/api/starfix/starfix.service";
 
 export function useStarFix(vesselId?: string) {
   const { toast } = useToast();
@@ -44,15 +44,15 @@ export function useStarFix(vesselId?: string) {
         });
         return result;
       } else {
-        throw new Error(result.error || 'Registration failed');
+        throw new Error(result.error || "Registration failed");
       }
     } catch (error) {
       toast({
         title: "❌ Registration Failed",
-        description: error instanceof Error ? error.message : 'Unknown error',
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+      return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
     } finally {
       setLoading(false);
     }
@@ -76,7 +76,7 @@ export function useStarFix(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Sync Failed",
-        description: error instanceof Error ? error.message : 'Failed to fetch inspections',
+        description: error instanceof Error ? error.message : "Failed to fetch inspections",
         variant: "destructive",
       });
       throw error;
@@ -97,7 +97,7 @@ export function useStarFix(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Metrics Error",
-        description: error instanceof Error ? error.message : 'Failed to fetch metrics',
+        description: error instanceof Error ? error.message : "Failed to fetch metrics",
         variant: "destructive",
       });
       throw error;
@@ -125,17 +125,17 @@ export function useStarFix(vesselId?: string) {
           await fetchInspections(vesselId);
         }
       } else {
-        throw new Error(result.error || 'Submission failed');
+        throw new Error(result.error || "Submission failed");
       }
       
       return result;
     } catch (error) {
       toast({
         title: "❌ Submission Failed",
-        description: error instanceof Error ? error.message : 'Unknown error',
+        description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
-      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+      return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
     } finally {
       setLoading(false);
     }
@@ -163,7 +163,7 @@ export function useStarFix(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Sync Error",
-        description: error instanceof Error ? error.message : 'Sync failed',
+        description: error instanceof Error ? error.message : "Sync failed",
         variant: "destructive",
       });
       return { synced: 0, failed: 0 };
@@ -181,7 +181,7 @@ export function useStarFix(vesselId?: string) {
       setSyncStatus(status);
       return status;
     } catch (error) {
-      console.error('Error refreshing sync status:', error);
+      console.error("Error refreshing sync status:", error);
       return syncStatus;
     }
   };

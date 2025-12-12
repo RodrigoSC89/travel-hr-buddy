@@ -126,7 +126,7 @@ export function useNetworkStatus(): NetworkStatus {
       const isOnline = navigator.onLine;
       const quality = getConnectionQuality(conn);
       
-      logger.info(`Network: ${isOnline ? 'Online' : 'Offline'} (${quality})`);
+      logger.info(`Network: ${isOnline ? "Online" : "Offline"} (${quality})`);
       
       setStatus(prev => ({
         online: isOnline,

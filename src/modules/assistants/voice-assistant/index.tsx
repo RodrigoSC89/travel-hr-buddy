@@ -205,12 +205,12 @@ const VoiceAssistant: React.FC = () => {
         prev.map(msg =>
           msg.id === assistantMessageId
             ? {
-                ...msg,
-                content: response,
-                navigation,
-                action,
-                status: "success",
-              }
+              ...msg,
+              content: response,
+              navigation,
+              action,
+              status: "success",
+            }
             : msg
         )
       );
@@ -235,10 +235,10 @@ const VoiceAssistant: React.FC = () => {
         prev.map(msg =>
           msg.id === assistantMessageId
             ? {
-                ...msg,
-                content: "Desculpe, ocorreu um erro. Tente novamente.",
-                status: "error",
-              }
+              ...msg,
+              content: "Desculpe, ocorreu um erro. Tente novamente.",
+              status: "error",
+            }
             : msg
         )
       );
@@ -476,9 +476,9 @@ const VoiceAssistant: React.FC = () => {
                   className={`
                     h-16 w-16 rounded-full flex items-center justify-center transition-all
                     ${isListening 
-                      ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50" 
-                      : "bg-gradient-to-br from-primary to-purple-600 hover:opacity-90 shadow-lg shadow-primary/50"
-                    }
+      ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50" 
+      : "bg-gradient-to-br from-primary to-purple-600 hover:opacity-90 shadow-lg shadow-primary/50"
+    }
                     ${(!isSupported || isProcessing) && "opacity-50 cursor-not-allowed"}
                   `}
                 >

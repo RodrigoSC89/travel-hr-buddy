@@ -3,15 +3,15 @@
  * Loads content progressively based on connection speed
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { useConnectionAware } from '@/hooks/use-connection-aware';
-import { useInView } from 'react-intersection-observer';
-import { Skeleton } from './skeleton';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect, useCallback } from "react";
+import { useConnectionAware } from "@/hooks/use-connection-aware";
+import { useInView } from "react-intersection-observer";
+import { Skeleton } from "./skeleton";
+import { cn } from "@/lib/utils";
 
 interface ProgressiveContentProps {
   children: React.ReactNode;
-  priority?: 'high' | 'medium' | 'low';
+  priority?: "high" | "medium" | "low";
   placeholder?: React.ReactNode;
   className?: string;
   onVisible?: () => void;
@@ -19,29 +19,29 @@ interface ProgressiveContentProps {
 
 export const ProgressiveContent: React.FC<ProgressiveContentProps> = ({
   children,
-  priority = 'medium',
+  priority = "medium",
   placeholder,
   className,
   onVisible
 }) => {
-  const [shouldRender, setShouldRender] = useState(priority === 'high');
+  const [shouldRender, setShouldRender] = useState(priority === "high");
   const { shouldReduceData, isSlowConnection } = useConnectionAware();
   
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: true,
-    rootMargin: isSlowConnection ? '50px' : '200px'
+    rootMargin: isSlowConnection ? "50px" : "200px"
   });
 
   useEffect(() => {
-    if (priority === 'high') {
+    if (priority === "high") {
       setShouldRender(true);
       return;
     }
 
     if (inView) {
       const delay = shouldReduceData 
-        ? priority === 'medium' ? 100 : 300
+        ? priority === "medium" ? 100 : 300
         : 0;
       
       const timer = setTimeout(() => {
@@ -88,13 +88,13 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   height
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(lowResSrc || '');
+  const [currentSrc, setCurrentSrc] = useState(lowResSrc || "");
   const { shouldReduceData } = useConnectionAware();
 
   const { ref, inView } = useInView({
     threshold: 0,
     triggerOnce: true,
-    rootMargin: '100px'
+    rootMargin: "100px"
   });
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export function ProgressiveList<T>({
   
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: '200px'
+    rootMargin: "200px"
   });
 
   useEffect(() => {

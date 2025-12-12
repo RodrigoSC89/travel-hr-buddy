@@ -365,7 +365,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Tipo</Label>
-                <Select value={filter.type || "all"} onValueChange={(value) => setFilter({...filter, type: value === "all" ? undefined : value})}>
+                  <Select value={filter.type || "all"} onValueChange={(value) => setFilter({...filter, type: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os tipos" />
                     </SelectTrigger>
@@ -382,7 +382,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Status</Label>
-                <Select value={filter.status || "all"} onValueChange={(value) => setFilter({...filter, status: value === "all" ? undefined : value})}>
+                  <Select value={filter.status || "all"} onValueChange={(value) => setFilter({...filter, status: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os status" />
                     </SelectTrigger>
@@ -399,7 +399,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Módulo</Label>
-                <Select value={filter.module || "all"} onValueChange={(value) => setFilter({...filter, module: value === "all" ? undefined : value})}>
+                  <Select value={filter.module || "all"} onValueChange={(value) => setFilter({...filter, module: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os módulos" />
                     </SelectTrigger>

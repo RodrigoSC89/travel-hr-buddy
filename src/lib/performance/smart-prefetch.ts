@@ -3,8 +3,8 @@
  * Intelligent route and data prefetching based on user behavior
  */
 
-import { useEffect, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useCallback, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 // Route prediction based on navigation patterns
 interface NavigationPattern {
@@ -14,7 +14,7 @@ interface NavigationPattern {
   lastVisit: number;
 }
 
-const STORAGE_KEY = 'nav_patterns';
+const STORAGE_KEY = "nav_patterns";
 const MAX_PATTERNS = 50;
 const PATTERN_DECAY_DAYS = 30;
 
@@ -85,35 +85,35 @@ class SmartPrefetchManager {
     
     // Don't prefetch on slow connections
     const connection = (navigator as any).connection;
-    if (connection?.saveData || connection?.effectiveType === '2g') {
+    if (connection?.saveData || connection?.effectiveType === "2g") {
       return;
     }
 
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement("link");
+    link.rel = "prefetch";
     link.href = route;
-    link.as = 'document';
+    link.as = "document";
     document.head.appendChild(link);
     
     this.prefetchedRoutes.add(route);
   }
 
   private setupLinkObserver() {
-    if (typeof IntersectionObserver === 'undefined') return;
+    if (typeof IntersectionObserver === "undefined") return;
 
     this.observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const link = entry.target as HTMLAnchorElement;
-            const href = link.getAttribute('href');
-            if (href && href.startsWith('/')) {
+            const href = link.getAttribute("href");
+            if (href && href.startsWith("/")) {
               this.prefetchRoute(href);
             }
           }
         });
       },
-      { rootMargin: '200px' }
+      { rootMargin: "200px" }
     );
   }
 
@@ -147,7 +147,7 @@ class SmartPrefetchManager {
       }
     };
 
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       requestIdleCallback(callback, { timeout: 2000 });
     } else {
       setTimeout(callback, 100);

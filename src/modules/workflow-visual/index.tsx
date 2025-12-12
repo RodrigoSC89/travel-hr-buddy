@@ -75,23 +75,23 @@ import { motion, AnimatePresence } from "framer-motion";
 const WorkflowNode = ({ data }: { data: any }) => {
   const getStatusColor = () => {
     switch (data.status) {
-      case "completed": return "border-green-500 bg-green-50 dark:bg-green-900/20";
-      case "in_progress": return "border-blue-500 bg-blue-50 dark:bg-blue-900/20 animate-pulse";
-      case "pending": return "border-gray-300 bg-gray-50 dark:bg-gray-800";
-      case "blocked": return "border-red-500 bg-red-50 dark:bg-red-900/20";
-      case "warning": return "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20";
-      default: return "border-gray-300 bg-white dark:bg-gray-800";
+    case "completed": return "border-green-500 bg-green-50 dark:bg-green-900/20";
+    case "in_progress": return "border-blue-500 bg-blue-50 dark:bg-blue-900/20 animate-pulse";
+    case "pending": return "border-gray-300 bg-gray-50 dark:bg-gray-800";
+    case "blocked": return "border-red-500 bg-red-50 dark:bg-red-900/20";
+    case "warning": return "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20";
+    default: return "border-gray-300 bg-white dark:bg-gray-800";
     }
   };
 
   const getIcon = () => {
     switch (data.type) {
-      case "fleet": return <Ship className="h-4 w-4" />;
-      case "maintenance": return <Wrench className="h-4 w-4" />;
-      case "inventory": return <Package className="h-4 w-4" />;
-      case "crew": return <Users className="h-4 w-4" />;
-      case "compliance": return <FileCheck className="h-4 w-4" />;
-      default: return <Target className="h-4 w-4" />;
+    case "fleet": return <Ship className="h-4 w-4" />;
+    case "maintenance": return <Wrench className="h-4 w-4" />;
+    case "inventory": return <Package className="h-4 w-4" />;
+    case "crew": return <Users className="h-4 w-4" />;
+    case "compliance": return <FileCheck className="h-4 w-4" />;
+    default: return <Target className="h-4 w-4" />;
     }
   };
 
@@ -201,10 +201,10 @@ const WorkflowVisual = () => {
   const [showNewNodeDialog, setShowNewNodeDialog] = useState(false);
   const [executionHistory, setExecutionHistory] = useState<any[]>([]);
   const [newNodeData, setNewNodeData] = useState({
-    label: '',
-    type: 'other',
-    description: '',
-    status: 'pending'
+    label: "",
+    type: "other",
+    description: "",
+    status: "pending"
   });
 
   const onConnect = useCallback(
@@ -281,7 +281,7 @@ const WorkflowVisual = () => {
       const result = await analyzeWorkflow(nodes, edges, aiPrompt);
       
       if (result?.success) {
-        setAiResponse(typeof result.response === 'string' ? result.response : JSON.stringify(result.response, null, 2));
+        setAiResponse(typeof result.response === "string" ? result.response : JSON.stringify(result.response, null, 2));
       } else {
         setAiResponse("Com base na análise do workflow, identifiquei que a etapa de 'Ordem de Compra' e 'Aprovação Financeira' podem ser executadas em paralelo para reduzir o tempo total em 40%.");
       }
@@ -302,7 +302,7 @@ const WorkflowVisual = () => {
     };
     setNodes(prev => [...prev, newNode]);
     setShowNewNodeDialog(false);
-    setNewNodeData({ label: '', type: 'other', description: '', status: 'pending' });
+    setNewNodeData({ label: "", type: "other", description: "", status: "pending" });
     toast({ title: "Etapa Adicionada", description: newNodeData.label });
   };
 
@@ -316,7 +316,7 @@ const WorkflowVisual = () => {
   const advanceNode = (nodeId: string) => {
     setNodes(prev => prev.map(n => 
       n.id === nodeId 
-        ? { ...n, data: { ...n.data, status: n.data.status === 'pending' ? 'in_progress' : 'completed' } }
+        ? { ...n, data: { ...n.data, status: n.data.status === "pending" ? "in_progress" : "completed" } }
         : n
     ));
     toast({ title: "Etapa Avançada" });
@@ -326,10 +326,10 @@ const WorkflowVisual = () => {
     toast({ title: "Executando Workflow", description: "Iniciando automação..." });
     
     // Simulate workflow execution
-    for (const node of nodes.filter(n => n.data.status !== 'completed')) {
+    for (const node of nodes.filter(n => n.data.status !== "completed")) {
       await new Promise(resolve => setTimeout(resolve, 500));
       setNodes(prev => prev.map(n => 
-        n.id === node.id ? { ...n, data: { ...n.data, status: 'in_progress' } } : n
+        n.id === node.id ? { ...n, data: { ...n.data, status: "in_progress" } } : n
       ));
     }
     
@@ -338,9 +338,9 @@ const WorkflowVisual = () => {
 
   const exportWorkflow = () => {
     const data = JSON.stringify({ nodes, edges }, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
+    const blob = new Blob([data], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `workflow-${Date.now()}.json`;
     a.click();
@@ -460,8 +460,8 @@ const WorkflowVisual = () => {
                           animate={{ opacity: 1, x: 0 }}
                           className={`p-3 rounded-lg border ${
                             s.priority === "high" ? "border-red-200 bg-red-50 dark:bg-red-900/20" :
-                            s.priority === "medium" ? "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20" :
-                            "border-blue-200 bg-blue-50 dark:bg-blue-900/20"
+                              s.priority === "medium" ? "border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20" :
+                                "border-blue-200 bg-blue-50 dark:bg-blue-900/20"
                           }`}
                         >
                           <p className="text-sm">{s.suggestion}</p>

@@ -193,23 +193,23 @@ Formate a resposta em markdown estruturado.`,
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up":
-        return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case "down":
-        return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default:
-        return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "up":
+      return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="h-4 w-4 text-red-500" />;
+    default:
+      return <Clock className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      default:
-        return "secondary";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "default";
+    default:
+      return "secondary";
     }
   };
 
@@ -284,7 +284,7 @@ Formate a resposta em markdown estruturado.`,
                         {getTrendIcon(prediction.trend)}
                         <Badge variant={getImpactColor(prediction.impact) as any}>
                           {prediction.impact === "high" ? "Alto Impacto" : 
-                           prediction.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
+                            prediction.impact === "medium" ? "Médio Impacto" : "Baixo Impacto"}
                         </Badge>
                       </div>
                     </div>

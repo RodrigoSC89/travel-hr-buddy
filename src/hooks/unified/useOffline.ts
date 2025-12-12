@@ -5,9 +5,9 @@
  * Provides offline-aware data fetching, mutations, and storage
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import { useToast } from "@/hooks/use-toast";
 
 // =============================================================================
@@ -60,7 +60,7 @@ interface QueuedAction {
 }
 
 class OfflineQueue {
-  private readonly STORAGE_KEY = 'offline_queue';
+  private readonly STORAGE_KEY = "offline_queue";
 
   async add(actionType: string, variables: unknown): Promise<void> {
     const queue = await this.getQueue();
@@ -132,11 +132,11 @@ export function useOfflineMutation<TData = unknown, TVariables = unknown>(
   
   const {
     mutationFn,
-    actionType = 'generic',
+    actionType = "generic",
     showToasts = true,
-    successMessage = 'Operação realizada com sucesso',
-    errorMessage = 'Erro ao realizar operação',
-    offlineMessage = 'Você está offline. A operação será realizada quando reconectar.',
+    successMessage = "Operação realizada com sucesso",
+    errorMessage = "Erro ao realizar operação",
+    offlineMessage = "Você está offline. A operação será realizada quando reconectar.",
     onSuccess,
     onError,
     onOfflineQueue,
@@ -243,10 +243,10 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
           timestamp: Date.now()
         }));
       } else if (!data) {
-        throw new Error('No cached data available offline');
+        throw new Error("No cached data available offline");
       }
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to fetch');
+      const error = err instanceof Error ? err : new Error("Failed to fetch");
       setError(error);
     } finally {
       setIsLoading(false);
@@ -265,8 +265,8 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
       }
     };
 
-    window.addEventListener('online', handleOnline);
-    return () => window.removeEventListener('online', handleOnline);
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
   }, [fetchData, isStale]);
 
   return {
@@ -312,7 +312,7 @@ export function useOfflineStorage<T>(key: string, initialValue: T) {
 
   const setStoredValue = useCallback((newValue: T | ((prev: T) => T)) => {
     setValue(prev => {
-      const resolvedValue = typeof newValue === 'function' 
+      const resolvedValue = typeof newValue === "function" 
         ? (newValue as (prev: T) => T)(prev) 
         : newValue;
       localStorage.setItem(`offline-storage:${key}`, JSON.stringify(resolvedValue));

@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export default function MaintenancePlanner() {
-  const [filter, setFilter] = useState<'all' | 'pending' | 'completed' | 'overdue'>('all');
+  const [filter, setFilter] = useState<"all" | "pending" | "completed" | "overdue">("all");
 
   const stats = {
     total: 156,
@@ -58,20 +58,20 @@ export default function MaintenancePlanner() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      default: return 'outline';
+    case "critical": return "destructive";
+    case "high": return "destructive";
+    case "medium": return "secondary";
+    default: return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600';
-      case 'pending': return 'text-yellow-600';
-      case 'overdue': return 'text-red-600';
-      case 'scheduled': return 'text-blue-600';
-      default: return 'text-gray-600';
+    case "completed": return "text-green-600";
+    case "pending": return "text-yellow-600";
+    case "overdue": return "text-red-600";
+    case "scheduled": return "text-blue-600";
+    default: return "text-gray-600";
     }
   };
 
@@ -139,16 +139,16 @@ export default function MaintenancePlanner() {
       {/* Actions Bar */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex gap-2">
-          <Button onClick={() => setFilter('all')} variant={filter === 'all' ? 'default' : 'outline'}>
+          <Button onClick={() => setFilter("all")} variant={filter === "all" ? "default" : "outline"}>
             Todas
           </Button>
-          <Button onClick={() => setFilter('pending')} variant={filter === 'pending' ? 'default' : 'outline'}>
+          <Button onClick={() => setFilter("pending")} variant={filter === "pending" ? "default" : "outline"}>
             Pendentes
           </Button>
-          <Button onClick={() => setFilter('completed')} variant={filter === 'completed' ? 'default' : 'outline'}>
+          <Button onClick={() => setFilter("completed")} variant={filter === "completed" ? "default" : "outline"}>
             Concluídas
           </Button>
-          <Button onClick={() => setFilter('overdue')} variant={filter === 'overdue' ? 'default' : 'outline'}>
+          <Button onClick={() => setFilter("overdue")} variant={filter === "overdue" ? "default" : "outline"}>
             Atrasadas
           </Button>
         </div>

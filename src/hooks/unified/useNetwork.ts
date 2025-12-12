@@ -101,7 +101,7 @@ export function useNetwork(): NetworkStatus & {
   shouldReduceData: boolean;
   isSlow: boolean;
   isFast: boolean;
-} {
+  } {
   const [status, setStatus] = useState<NetworkStatus>(() => {
     const connection = getConnection();
     const quality = getConnectionQuality(connection);

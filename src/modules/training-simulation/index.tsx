@@ -200,20 +200,20 @@ export default function TrainingSimulation() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "beginner": return "bg-green-500/20 text-green-400";
-      case "intermediate": return "bg-yellow-500/20 text-yellow-400";
-      case "advanced": return "bg-red-500/20 text-red-400";
-      default: return "bg-muted text-muted-foreground";
+    case "beginner": return "bg-green-500/20 text-green-400";
+    case "intermediate": return "bg-yellow-500/20 text-yellow-400";
+    case "advanced": return "bg-red-500/20 text-red-400";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "emergency": return "bg-red-500/20 text-red-400";
-      case "operation": return "bg-blue-500/20 text-blue-400";
-      case "navigation": return "bg-cyan-500/20 text-cyan-400";
-      case "maintenance": return "bg-orange-500/20 text-orange-400";
-      default: return "bg-muted text-muted-foreground";
+    case "emergency": return "bg-red-500/20 text-red-400";
+    case "operation": return "bg-blue-500/20 text-blue-400";
+    case "navigation": return "bg-cyan-500/20 text-cyan-400";
+    case "maintenance": return "bg-orange-500/20 text-orange-400";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -255,7 +255,7 @@ export default function TrainingSimulation() {
               const isCompleted = completedSimulations.includes(sim.id);
               
               return (
-                <Card key={sim.id} className={`hover:border-primary/50 transition-colors ${isCompleted ? 'border-green-500/50' : ''}`}>
+                <Card key={sim.id} className={`hover:border-primary/50 transition-colors ${isCompleted ? "border-green-500/50" : ""}`}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="p-2 rounded-lg bg-primary/10">
@@ -270,12 +270,12 @@ export default function TrainingSimulation() {
                     <div className="flex flex-wrap gap-2">
                       <Badge className={getTypeColor(sim.type)}>
                         {sim.type === "emergency" ? "Emergência" : 
-                         sim.type === "operation" ? "Operação" :
-                         sim.type === "navigation" ? "Navegação" : "Manutenção"}
+                          sim.type === "operation" ? "Operação" :
+                            sim.type === "navigation" ? "Navegação" : "Manutenção"}
                       </Badge>
                       <Badge className={getDifficultyColor(sim.difficulty)}>
                         {sim.difficulty === "beginner" ? "Iniciante" :
-                         sim.difficulty === "intermediate" ? "Intermediário" : "Avançado"}
+                          sim.difficulty === "intermediate" ? "Intermediário" : "Avançado"}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -334,23 +334,23 @@ export default function TrainingSimulation() {
                       className={`w-full p-4 rounded-lg border text-left transition-all ${
                         selectedAnswer === idx
                           ? option.correct
-                            ? 'border-green-500 bg-green-500/10'
-                            : 'border-red-500 bg-red-500/10'
-                          : 'border-border hover:border-primary/50 hover:bg-muted/50'
-                      } ${showFeedback ? 'cursor-default' : 'cursor-pointer'}`}
+                            ? "border-green-500 bg-green-500/10"
+                            : "border-red-500 bg-red-500/10"
+                          : "border-border hover:border-primary/50 hover:bg-muted/50"
+                      } ${showFeedback ? "cursor-default" : "cursor-pointer"}`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-sm ${
                           selectedAnswer === idx
-                            ? option.correct ? 'bg-green-500 border-green-500 text-white' : 'bg-red-500 border-red-500 text-white'
-                            : 'border-muted-foreground'
+                            ? option.correct ? "bg-green-500 border-green-500 text-white" : "bg-red-500 border-red-500 text-white"
+                            : "border-muted-foreground"
                         }`}>
                           {String.fromCharCode(65 + idx)}
                         </div>
                         <span>{option.text}</span>
                       </div>
                       {showFeedback && selectedAnswer === idx && (
-                        <p className={`mt-2 text-sm ${option.correct ? 'text-green-400' : 'text-red-400'}`}>
+                        <p className={`mt-2 text-sm ${option.correct ? "text-green-400" : "text-red-400"}`}>
                           {option.feedback}
                         </p>
                       )}

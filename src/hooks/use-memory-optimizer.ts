@@ -3,8 +3,8 @@
  * React hook for memory status monitoring
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { memoryOptimizer } from '@/lib/performance/memory-optimizer';
+import { useState, useEffect, useCallback } from "react";
+import { memoryOptimizer } from "@/lib/performance/memory-optimizer";
 
 export function useMemoryOptimizer() {
   const [stats, setStats] = useState(memoryOptimizer.getStats());

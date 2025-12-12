@@ -7,17 +7,17 @@
  * logs de inspeções e feedbacks de conformidade.
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
-export type InspectionType = 'PSC' | 'ISM' | 'MLC' | 'OVID' | 'LSA';
+export type InspectionType = "PSC" | "ISM" | "MLC" | "OVID" | "LSA";
 
 export interface FeedbackEntry {
   id?: string;
   inspection_type: InspectionType;
   feedback_text: string;
   is_non_conformity: boolean;
-  severity?: 'low' | 'medium' | 'high' | 'critical';
+  severity?: "low" | "medium" | "high" | "critical";
   inspector_profile?: string;
   created_at?: string;
   context?: Record<string, any>;
@@ -43,7 +43,7 @@ export interface InspectorProfile {
  * Armazenamento incremental de feedbacks por tipo de inspeção
  */
 export class FeedbackStorage {
-  private static readonly TABLE_NAME = 'ai_inspection_feedback';
+  private static readonly TABLE_NAME = "ai_inspection_feedback";
 
   /**
    * Armazena feedback de uma inspeção
@@ -55,7 +55,7 @@ export class FeedbackStorage {
         inspection_type: feedback.inspection_type,
         feedback_text: feedback.feedback_text,
         is_non_conformity: feedback.is_non_conformity,
-        severity: feedback.severity || 'medium',
+        severity: feedback.severity || "medium",
         inspector_profile: feedback.inspector_profile,
         context: feedback.context || {},
         created_at: new Date().toISOString(),
@@ -64,7 +64,7 @@ export class FeedbackStorage {
       .single();
 
     if (error) {
-      logger.error('Error storing feedback', error as Error, { 
+      logger.error("Error storing feedback", error as Error, { 
         inspectionType: feedback.inspection_type,
         isNonConformity: feedback.is_non_conformity 
       });
@@ -83,13 +83,13 @@ export class FeedbackStorage {
   ): Promise<FeedbackEntry[]> {
     const { data, error } = await supabase
       .from(this.TABLE_NAME)
-      .select('*')
-      .eq('inspection_type', inspectionType)
-      .order('created_at', { ascending: false })
+      .select("*")
+      .eq("inspection_type", inspectionType)
+      .order("created_at", { ascending: false })
       .limit(limit);
 
     if (error) {
-      logger.error('Error fetching feedbacks', error as Error, { 
+      logger.error("Error fetching feedbacks", error as Error, { 
         inspectionType,
         limit 
       });
@@ -170,7 +170,7 @@ export class PromptAdjuster {
 
     // Add adjustments
     if (config.adjustments.length > 0) {
-      finalPrompt += '\n\n**Áreas de Atenção Prioritária (baseadas em não conformidades frequentes):**\n';
+      finalPrompt += "\n\n**Áreas de Atenção Prioritária (baseadas em não conformidades frequentes):**\n";
       config.adjustments.forEach((adj) => {
         finalPrompt += `- ${adj}\n`;
       });
@@ -178,7 +178,7 @@ export class PromptAdjuster {
 
     // Add learned patterns
     if (config.learned_patterns.length > 0) {
-      finalPrompt += '\n\n**Padrões Identificados (aprendizado de inspeções anteriores):**\n';
+      finalPrompt += "\n\n**Padrões Identificados (aprendizado de inspeções anteriores):**\n";
       config.learned_patterns.forEach((pattern) => {
         finalPrompt += `- ${pattern}\n`;
       });
@@ -186,7 +186,7 @@ export class PromptAdjuster {
 
     // Add context if provided
     if (context) {
-      finalPrompt += '\n\n**Contexto Atual:**\n';
+      finalPrompt += "\n\n**Contexto Atual:**\n";
       Object.entries(context).forEach(([key, value]) => {
         finalPrompt += `- ${key}: ${JSON.stringify(value)}\n`;
       });
@@ -291,7 +291,7 @@ Assegure conformidade com SOLAS e identificque deficiências críticas.`,
     const avgFrequency = totalIssues / Object.keys(nonConformityFrequency).length;
 
     if (avgFrequency > 3) {
-      patterns.push('Alta taxa de não conformidades detectadas - aumentar rigor na inspeção');
+      patterns.push("Alta taxa de não conformidades detectadas - aumentar rigor na inspeção");
     }
 
     const highFrequencyIssues = Object.entries(nonConformityFrequency).filter(
@@ -312,7 +312,7 @@ Assegure conformidade com SOLAS e identificque deficiências críticas.`,
  * Respostas condicionadas ao perfil do inspetor
  */
 export class InspectorProfileManager {
-  private static readonly TABLE_NAME = 'inspector_profiles';
+  private static readonly TABLE_NAME = "inspector_profiles";
 
   /**
    * Obtém perfil do inspetor
@@ -320,12 +320,12 @@ export class InspectorProfileManager {
   static async getProfile(inspectorId: string): Promise<InspectorProfile | null> {
     const { data, error } = await supabase
       .from(this.TABLE_NAME)
-      .select('*')
-      .eq('id', inspectorId)
+      .select("*")
+      .eq("id", inspectorId)
       .single();
 
     if (error) {
-      logger.error('Error fetching inspector profile', error as Error, { inspectorId });
+      logger.error("Error fetching inspector profile", error as Error, { inspectorId });
       return null;
     }
 
@@ -337,10 +337,10 @@ export class InspectorProfileManager {
    */
   static async updateProfileFromHistory(inspectorId: string): Promise<void> {
     const feedbacks = await supabase
-      .from('ai_inspection_feedback')
-      .select('*')
-      .eq('inspector_profile', inspectorId)
-      .order('created_at', { ascending: false })
+      .from("ai_inspection_feedback")
+      .select("*")
+      .eq("inspector_profile", inspectorId)
+      .order("created_at", { ascending: false })
       .limit(100);
 
     if (!feedbacks.data || feedbacks.data.length === 0) return;
@@ -370,7 +370,7 @@ export class InspectorProfileManager {
         historical_focus_areas: focusAreas,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', inspectorId);
+      .eq("id", inspectorId);
   }
 
   /**
@@ -389,17 +389,17 @@ export class InspectorProfileManager {
     // Add personalized context if this is inspector's expertise area
     if (profile.expertise.includes(inspectionType)) {
       adaptedResponse +=
-        '\n\n**Nota:** Esta é uma área de sua expertise. Detalhes técnicos adicionais disponíveis mediante solicitação.';
+        "\n\n**Nota:** Esta é uma área de sua expertise. Detalhes técnicos adicionais disponíveis mediante solicitação.";
     } else {
       adaptedResponse +=
-        '\n\n**Dica:** Considere consultar especialista em ' +
+        "\n\n**Dica:** Considere consultar especialista em " +
         inspectionType +
-        ' para validação adicional.';
+        " para validação adicional.";
     }
 
     // Add focus areas if relevant
     if (profile.historical_focus_areas.length > 0) {
-      adaptedResponse += '\n\n**Áreas de foco histórico:**\n';
+      adaptedResponse += "\n\n**Áreas de foco histórico:**\n";
       profile.historical_focus_areas.slice(0, 3).forEach((area) => {
         adaptedResponse += `- ${area}\n`;
       });
@@ -449,7 +449,7 @@ export class AdaptiveIntelligence {
     feedbackText: string,
     isNonConformity: boolean,
     options?: {
-      severity?: 'low' | 'medium' | 'high' | 'critical';
+      severity?: "low" | "medium" | "high" | "critical";
       inspectorId?: string;
       context?: Record<string, any>;
     }

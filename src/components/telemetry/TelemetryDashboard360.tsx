@@ -292,7 +292,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                 </div>
                 <Badge variant={getStatusBadgeVariant(status.status)} className="text-xs">
                   {status.status === "active" ? "Ativo" : 
-                   status.status === "error" ? "Erro" : "Inativo"}
+                    status.status === "error" ? "Erro" : "Inativo"}
                 </Badge>
               </CardTitle>
             </CardHeader>
@@ -391,8 +391,8 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
                           </div>
                           <Badge variant={getRiskBadgeVariant(weather.risk_level)}>
                             {weather.risk_level === "safe" ? "Seguro" :
-                             weather.risk_level === "caution" ? "Atenção" :
-                             weather.risk_level === "warning" ? "Alerta" : "Perigo"}
+                              weather.risk_level === "caution" ? "Atenção" :
+                                weather.risk_level === "warning" ? "Alerta" : "Perigo"}
                           </Badge>
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-sm">

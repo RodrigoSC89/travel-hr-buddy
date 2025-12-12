@@ -87,18 +87,18 @@ export async function optimizedQuery<T = any>(
         } else if (typeof value === "object" && value.operator) {
           // Support for complex filters like { operator: 'gte', value: 10 }
           switch (value.operator) {
-            case "gte":
-              query = query.gte(key, value.value);
-              break;
-            case "lte":
-              query = query.lte(key, value.value);
-              break;
-            case "like":
-              query = query.ilike(key, `%${value.value}%`);
-              break;
-            case "is":
-              query = query.is(key, value.value);
-              break;
+          case "gte":
+            query = query.gte(key, value.value);
+            break;
+          case "lte":
+            query = query.lte(key, value.value);
+            break;
+          case "like":
+            query = query.ilike(key, `%${value.value}%`);
+            break;
+          case "is":
+            query = query.is(key, value.value);
+            break;
           }
         } else {
           query = query.eq(key, value);
@@ -206,13 +206,13 @@ export function getAdaptivePageSize(): number {
   if (connection.saveData) return 10;
   
   switch (connection.effectiveType) {
-    case "slow-2g":
-    case "2g":
-      return 5;
-    case "3g":
-      return 15;
-    case "4g":
-    default:
-      return 25;
+  case "slow-2g":
+  case "2g":
+    return 5;
+  case "3g":
+    return 15;
+  case "4g":
+  default:
+    return 25;
   }
 }

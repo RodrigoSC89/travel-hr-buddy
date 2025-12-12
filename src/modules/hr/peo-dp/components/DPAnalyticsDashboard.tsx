@@ -287,8 +287,8 @@ export default function DPAnalyticsDashboard() {
                 key={i}
                 className={`p-4 rounded-lg border ${
                   insight.type === "alert" ? "bg-red-500/10 border-red-500/30" :
-                  insight.type === "prediction" ? "bg-purple-500/10 border-purple-500/30" :
-                  "bg-blue-500/10 border-blue-500/30"
+                    insight.type === "prediction" ? "bg-purple-500/10 border-purple-500/30" :
+                      "bg-blue-500/10 border-blue-500/30"
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -335,7 +335,7 @@ export default function DPAnalyticsDashboard() {
                     </div>
                     <Badge variant={
                       system.riskLevel === "low" ? "outline" :
-                      system.riskLevel === "medium" ? "secondary" : "destructive"
+                        system.riskLevel === "medium" ? "secondary" : "destructive"
                     }>
                       {system.health}%
                     </Badge>

@@ -3,9 +3,9 @@
  * Cards de métricas de segurança
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertCircle,
   AlertTriangle,
@@ -15,8 +15,8 @@ import {
   CheckCircle,
   Users,
   ClipboardCheck,
-} from 'lucide-react';
-import type { SafetyMetrics } from '../types';
+} from "lucide-react";
+import type { SafetyMetrics } from "../types";
 
 interface SafetyKPICardsProps {
   metrics: SafetyMetrics;
@@ -26,64 +26,64 @@ interface SafetyKPICardsProps {
 export const SafetyKPICards: React.FC<SafetyKPICardsProps> = ({ metrics, loading }) => {
   const kpis = [
     {
-      title: 'Incidentes (YTD)',
+      title: "Incidentes (YTD)",
       value: metrics.totalIncidentsYTD,
       icon: AlertCircle,
-      color: 'border-l-destructive',
-      trend: '-42%',
+      color: "border-l-destructive",
+      trend: "-42%",
       trendPositive: true,
-      subtitle: 'vs. mesmo período ano anterior',
+      subtitle: "vs. mesmo período ano anterior",
     },
     {
-      title: 'Near Misses',
+      title: "Near Misses",
       value: metrics.nearMissesYTD,
       icon: AlertTriangle,
-      color: 'border-l-warning',
-      trend: '-28%',
+      color: "border-l-warning",
+      trend: "-28%",
       trendPositive: true,
     },
     {
-      title: 'TRIR',
+      title: "TRIR",
       value: metrics.trir.toFixed(2),
       icon: Activity,
-      color: 'border-l-primary',
-      badge: metrics.trir < metrics.trirTarget ? 'Abaixo da meta' : 'Acima da meta',
+      color: "border-l-primary",
+      badge: metrics.trir < metrics.trirTarget ? "Abaixo da meta" : "Acima da meta",
       badgePositive: metrics.trir < metrics.trirTarget,
       subtitle: `Meta: < ${metrics.trirTarget}`,
     },
     {
-      title: 'DDS Realizados',
+      title: "DDS Realizados",
       value: metrics.totalDDS.toLocaleString(),
       icon: FileText,
-      color: 'border-l-secondary',
+      color: "border-l-secondary",
       badge: `${metrics.ddsCompliance}%`,
       badgePositive: true,
-      subtitle: 'Compliance DDS',
+      subtitle: "Compliance DDS",
     },
     {
-      title: 'Investigações Abertas',
+      title: "Investigações Abertas",
       value: metrics.openInvestigations,
       icon: ClipboardCheck,
-      color: 'border-l-warning',
+      color: "border-l-warning",
     },
     {
-      title: 'Ações Pendentes',
+      title: "Ações Pendentes",
       value: metrics.pendingActions,
       icon: AlertCircle,
-      color: 'border-l-destructive',
+      color: "border-l-destructive",
     },
     {
-      title: 'Compliance Treinamento',
+      title: "Compliance Treinamento",
       value: `${metrics.trainingCompliance}%`,
       icon: Users,
-      color: 'border-l-success',
+      color: "border-l-success",
       badgePositive: metrics.trainingCompliance >= 90,
     },
     {
-      title: 'Alertas Críticos',
+      title: "Alertas Críticos",
       value: metrics.criticalAlerts,
       icon: AlertTriangle,
-      color: metrics.criticalAlerts > 0 ? 'border-l-destructive' : 'border-l-success',
+      color: metrics.criticalAlerts > 0 ? "border-l-destructive" : "border-l-success",
     },
   ];
 
@@ -99,15 +99,15 @@ export const SafetyKPICards: React.FC<SafetyKPICardsProps> = ({ metrics, loading
           </CardHeader>
           <CardContent>
             <div className="flex items-end justify-between">
-              <div className="text-3xl font-bold">{loading ? '...' : kpi.value}</div>
+              <div className="text-3xl font-bold">{loading ? "..." : kpi.value}</div>
               {kpi.trend && (
-                <Badge className={kpi.trendPositive ? 'bg-success/10 text-success border-success/20' : 'bg-destructive/10 text-destructive'}>
+                <Badge className={kpi.trendPositive ? "bg-success/10 text-success border-success/20" : "bg-destructive/10 text-destructive"}>
                   <TrendingDown className="h-3 w-3 mr-1" />
                   {kpi.trend}
                 </Badge>
               )}
               {kpi.badge && (
-                <Badge className={kpi.badgePositive ? 'bg-success/10 text-success border-success/20' : 'bg-warning/10 text-warning'}>
+                <Badge className={kpi.badgePositive ? "bg-success/10 text-success border-success/20" : "bg-warning/10 text-warning"}>
                   {kpi.badgePositive && <CheckCircle className="h-3 w-3 mr-1" />}
                   {kpi.badge}
                 </Badge>

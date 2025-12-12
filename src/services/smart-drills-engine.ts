@@ -9,8 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Database, Json } from "@/integrations/supabase/types";
 
-export type DrillType = 'FIRE' | 'ABANDON_SHIP' | 'MAN_OVERBOARD' | 'COLLISION' | 'POLLUTION' | 'MEDICAL' | 'SECURITY' | 'GENERAL';
-export type DrillDifficulty = 'basic' | 'intermediate' | 'advanced' | 'expert';
+export type DrillType = "FIRE" | "ABANDON_SHIP" | "MAN_OVERBOARD" | "COLLISION" | "POLLUTION" | "MEDICAL" | "SECURITY" | "GENERAL";
+export type DrillDifficulty = "basic" | "intermediate" | "advanced" | "expert";
 
 export interface DrillScenario {
   id?: string;
@@ -33,7 +33,7 @@ export interface DrillScenario {
 export interface ExpectedResponse {
   action: string;
   timeframe: string;
-  criticalityLevel: 'critical' | 'high' | 'medium' | 'low';
+  criticalityLevel: "critical" | "high" | "medium" | "low";
   responsibleRole: string;
 }
 
@@ -471,8 +471,8 @@ function buildDrillScenarioPrompt(
   historicalFailures: string[]
 ): string {
   const failuresContext = historicalFailures.length > 0 
-    ? `\n\nPast failures to address:\n${historicalFailures.map(f => `- ${f}`).join('\n')}`
-    : '';
+    ? `\n\nPast failures to address:\n${historicalFailures.map(f => `- ${f}`).join("\n")}`
+    : "";
 
   return `
 Create a realistic ${type} emergency drill scenario for a vessel crew.
@@ -679,7 +679,7 @@ Evaluation Criteria: ${JSON.stringify(mappedScenario.evaluationCriteria)}
 
 CREW MEMBER PERFORMANCE:
 Reaction Time: ${response.reactionTimeSeconds} seconds
-Actions Taken: ${response.actionsTaken.join(', ')}
+Actions Taken: ${response.actionsTaken.join(", ")}
 Responses: ${JSON.stringify(response.responses)}
 
 Provide:
@@ -836,18 +836,18 @@ function calculateNextDrillDate(frequency: DrillScheduleFrequency): Date {
   const now = new Date();
   
   switch (frequency) {
-    case "weekly":
-      return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    case "biweekly":
-      return new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-    case "monthly":
-      return new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    case "quarterly":
-      return new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
-    case "annually":
-      return new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
-    default:
-      return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+  case "weekly":
+    return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+  case "biweekly":
+    return new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+  case "monthly":
+    return new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  case "quarterly":
+    return new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
+  case "annually":
+    return new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+  default:
+    return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
   }
 }
 

@@ -3,14 +3,14 @@
  * PATCH 624 - Context provider para funcionalidades de performance
  */
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useConnectionAdaptive } from '@/hooks/useConnectionAdaptive';
-import { useOfflineMode } from '@/hooks/useOfflineMode';
-import { PERFORMANCE_CONFIG } from '@/lib/performance';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useConnectionAdaptive } from "@/hooks/useConnectionAdaptive";
+import { useOfflineMode } from "@/hooks/useOfflineMode";
+import { PERFORMANCE_CONFIG } from "@/lib/performance";
 
 interface PerformanceContextValue {
   // Conexão
-  connectionQuality: 'fast' | 'moderate' | 'slow' | 'offline';
+  connectionQuality: "fast" | "moderate" | "slow" | "offline";
   isOnline: boolean;
   saveData: boolean;
   
@@ -40,20 +40,20 @@ export function PerformanceProvider({ children }: { children: React.ReactNode })
   
   // Carregar preferência de lightMode
   useEffect(() => {
-    const saved = localStorage.getItem('lightMode');
+    const saved = localStorage.getItem("lightMode");
     if (saved !== null) {
-      setLightModeState(saved === 'true');
+      setLightModeState(saved === "true");
     }
   }, []);
   
   // Salvar preferência de lightMode
   const setLightMode = (value: boolean) => {
     setLightModeState(value);
-    localStorage.setItem('lightMode', String(value));
+    localStorage.setItem("lightMode", String(value));
   };
   
   // Determinar se deve carregar imagens
-  const shouldLoadImages = !lightMode && connection.quality !== 'slow' && connection.quality !== 'offline';
+  const shouldLoadImages = !lightMode && connection.quality !== "slow" && connection.quality !== "offline";
   
   // Determinar se deve animar
   const shouldAnimate = !lightMode && connection.recommendations.enableAnimations;
@@ -87,7 +87,7 @@ export function PerformanceProvider({ children }: { children: React.ReactNode })
 export function usePerformance() {
   const context = useContext(PerformanceContext);
   if (!context) {
-    throw new Error('usePerformance must be used within a PerformanceProvider');
+    throw new Error("usePerformance must be used within a PerformanceProvider");
   }
   return context;
 }
@@ -97,5 +97,5 @@ export function usePerformance() {
  */
 export function useShouldOptimize(): boolean {
   const { lightMode, connectionQuality, saveData } = usePerformance();
-  return lightMode || connectionQuality === 'slow' || connectionQuality === 'offline' || saveData;
+  return lightMode || connectionQuality === "slow" || connectionQuality === "offline" || saveData;
 }

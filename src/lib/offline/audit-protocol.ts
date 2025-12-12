@@ -3,7 +3,7 @@
  * Complete audit trail for offline operations
  */
 
-import { localCrypto } from '@/lib/security/local-crypto';
+import { localCrypto } from "@/lib/security/local-crypto";
 
 export interface AuditEntry {
   id: string;
@@ -47,10 +47,10 @@ export interface AuditReport {
   entries: AuditEntry[];
 }
 
-const STORAGE_KEY = 'nautilus_audit_log';
+const STORAGE_KEY = "nautilus_audit_log";
 const MAX_ENTRIES = 10000;
 const RETENTION_DAYS = 90;
-const AUDIT_PASSWORD = 'nautilus_audit_secure_key_2024';
+const AUDIT_PASSWORD = "nautilus_audit_secure_key_2024";
 
 class AuditProtocol {
   private entries: AuditEntry[] = [];
@@ -96,7 +96,7 @@ class AuditProtocol {
         }
       }
     } catch (error) {
-      console.warn('Failed to load audit log:', error);
+      console.warn("Failed to load audit log:", error);
       this.entries = [];
     }
   }
@@ -114,14 +114,14 @@ class AuditProtocol {
         localStorage.setItem(STORAGE_KEY, data);
       }
     } catch (error) {
-      console.warn('Failed to save audit log:', error);
+      console.warn("Failed to save audit log:", error);
     }
   }
 
   /**
    * Generate entry hash for integrity
    */
-  private generateHash(entry: Omit<AuditEntry, 'hash'>): string {
+  private generateHash(entry: Omit<AuditEntry, "hash">): string {
     const data = JSON.stringify({
       id: entry.id,
       timestamp: entry.timestamp.toISOString(),
@@ -174,7 +174,7 @@ class AuditProtocol {
   /**
    * Log an audit entry
    */
-  async log(entry: Omit<AuditEntry, 'id' | 'timestamp' | 'synced' | 'hash' | 'sessionId'>): Promise<AuditEntry> {
+  async log(entry: Omit<AuditEntry, "id" | "timestamp" | "synced" | "hash" | "sessionId">): Promise<AuditEntry> {
     const fullEntry: AuditEntry = {
       ...entry,
       id: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -197,11 +197,11 @@ class AuditProtocol {
   async logCreate(userId: string, module: string, resourceType: string, resourceId: string, data: any): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: 'CREATE',
+      action: "CREATE",
       module,
       resourceType,
       resourceId,
-      details: { operation: 'create' },
+      details: { operation: "create" },
       newValue: data
     });
   }
@@ -209,11 +209,11 @@ class AuditProtocol {
   async logUpdate(userId: string, module: string, resourceType: string, resourceId: string, oldValue: any, newValue: any): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: 'UPDATE',
+      action: "UPDATE",
       module,
       resourceType,
       resourceId,
-      details: { operation: 'update', changedFields: this.getChangedFields(oldValue, newValue) },
+      details: { operation: "update", changedFields: this.getChangedFields(oldValue, newValue) },
       previousValue: oldValue,
       newValue
     });
@@ -222,11 +222,11 @@ class AuditProtocol {
   async logDelete(userId: string, module: string, resourceType: string, resourceId: string, data: any): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: 'DELETE',
+      action: "DELETE",
       module,
       resourceType,
       resourceId,
-      details: { operation: 'delete' },
+      details: { operation: "delete" },
       previousValue: data
     });
   }
@@ -234,20 +234,20 @@ class AuditProtocol {
   async logAccess(userId: string, module: string, resourceType: string, resourceId?: string): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: 'ACCESS',
+      action: "ACCESS",
       module,
       resourceType,
       resourceId,
-      details: { operation: 'access' }
+      details: { operation: "access" }
     });
   }
 
   async logLogin(userId: string, success: boolean, method: string): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: success ? 'LOGIN_SUCCESS' : 'LOGIN_FAILED',
-      module: 'auth',
-      resourceType: 'session',
+      action: success ? "LOGIN_SUCCESS" : "LOGIN_FAILED",
+      module: "auth",
+      resourceType: "session",
       details: { method, success }
     });
   }
@@ -255,19 +255,19 @@ class AuditProtocol {
   async logLogout(userId: string): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: 'LOGOUT',
-      module: 'auth',
-      resourceType: 'session',
-      details: { operation: 'logout' }
+      action: "LOGOUT",
+      module: "auth",
+      resourceType: "session",
+      details: { operation: "logout" }
     });
   }
 
   async logAIAction(userId: string, action: string, input: string, output: string): Promise<AuditEntry> {
     return this.log({
       userId,
-      action: 'AI_ACTION',
-      module: 'ai',
-      resourceType: 'inference',
+      action: "AI_ACTION",
+      module: "ai",
+      resourceType: "inference",
       details: { action, inputLength: input.length, outputLength: output.length }
     });
   }
@@ -425,7 +425,7 @@ class AuditProtocol {
     byModule: Record<string, number>;
     oldestEntry?: Date;
     newestEntry?: Date;
-  } {
+    } {
     const byModule: Record<string, number> = {};
     this.entries.forEach(e => {
       byModule[e.module] = (byModule[e.module] || 0) + 1;

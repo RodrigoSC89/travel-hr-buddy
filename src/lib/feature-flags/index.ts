@@ -71,7 +71,7 @@ class FeatureFlagsManager {
 
   private loadFromStorage() {
     try {
-      const stored = localStorage.getItem('feature-flags');
+      const stored = localStorage.getItem("feature-flags");
       if (stored) {
         const flags = JSON.parse(stored);
         Object.entries(flags).forEach(([key, flag]) => {
@@ -89,7 +89,7 @@ class FeatureFlagsManager {
       this.flags.forEach((flag, key) => {
         flags[key] = flag;
       });
-      localStorage.setItem('feature-flags', JSON.stringify(flags));
+      localStorage.setItem("feature-flags", JSON.stringify(flags));
     } catch (e) {
       // Ignore storage errors
     }
@@ -101,8 +101,8 @@ class FeatureFlagsManager {
     try {
       const response = await fetch(this.config.remoteEndpoint, {
         headers: {
-          'X-User-Id': this.config.userId || '',
-          'X-User-Groups': (this.config.userGroups || []).join(','),
+          "X-User-Id": this.config.userId || "",
+          "X-User-Groups": (this.config.userGroups || []).join(","),
         },
       });
 
@@ -115,7 +115,7 @@ class FeatureFlagsManager {
         this.notifyListeners();
       }
     } catch (error) {
-      console.warn('[FeatureFlags] Failed to fetch remote flags:', error);
+      console.warn("[FeatureFlags] Failed to fetch remote flags:", error);
     }
   }
 
@@ -205,7 +205,7 @@ export const featureFlags = new FeatureFlagsManager();
 /**
  * React hook for feature flags
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useFeatureFlag(key: string): boolean {
   const [enabled, setEnabled] = useState(() => featureFlags.isEnabled(key));
@@ -235,12 +235,12 @@ export function useAllFeatureFlags(): Record<string, boolean> {
  * Default feature flags for the application
  */
 export const DEFAULT_FLAGS: Record<string, boolean> = {
-  'lite-mode': true,
-  'offline-sync': true,
-  'progressive-upload': true,
-  'web-vitals-tracking': true,
-  'delta-sync': false,
-  'experimental-ui': false,
-  'ai-suggestions': true,
-  'advanced-analytics': false,
+  "lite-mode": true,
+  "offline-sync": true,
+  "progressive-upload": true,
+  "web-vitals-tracking": true,
+  "delta-sync": false,
+  "experimental-ui": false,
+  "ai-suggestions": true,
+  "advanced-analytics": false,
 };

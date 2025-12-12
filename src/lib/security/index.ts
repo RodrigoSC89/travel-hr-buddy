@@ -131,24 +131,24 @@ export function maskSensitiveData(
   if (!data) return "";
 
   switch (type) {
-    case "email": {
-      const [local, domain] = data.split("@");
-      if (!domain) return "***";
-      const maskedLocal =
+  case "email": {
+    const [local, domain] = data.split("@");
+    if (!domain) return "***";
+    const maskedLocal =
         local.length > 2 ? local[0] + "***" + local.slice(-1) : "***";
-      return `${maskedLocal}@${domain}`;
-    }
-    case "phone":
-      return data.length > 4 ? "***" + data.slice(-4) : "***";
-    case "passport":
-      return data.length > 3 ? data.slice(0, 2) + "***" + data.slice(-1) : "***";
-    case "card":
-      return data.length > 4 ? "**** **** **** " + data.slice(-4) : "***";
-    case "generic":
-    default:
-      return data.length > 4
-        ? data.slice(0, 2) + "***" + data.slice(-2)
-        : "***";
+    return `${maskedLocal}@${domain}`;
+  }
+  case "phone":
+    return data.length > 4 ? "***" + data.slice(-4) : "***";
+  case "passport":
+    return data.length > 3 ? data.slice(0, 2) + "***" + data.slice(-1) : "***";
+  case "card":
+    return data.length > 4 ? "**** **** **** " + data.slice(-4) : "***";
+  case "generic":
+  default:
+    return data.length > 4
+      ? data.slice(0, 2) + "***" + data.slice(-2)
+      : "***";
   }
 }
 

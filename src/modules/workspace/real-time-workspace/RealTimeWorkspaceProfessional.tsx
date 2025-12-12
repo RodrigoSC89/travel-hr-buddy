@@ -208,7 +208,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     
     try {
       // Try to call the edge function for real AI response
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
         body: { 
           message,
           context: "workspace_chat",
@@ -222,8 +222,8 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         // Fallback to mock responses
         const aiResponses = [
           `Analisando sua mensagem sobre "${message.substring(0, 30)}...":\n\n1. Verifique os protocolos de segurança\n2. Consulte a documentação técnica\n3. Agende uma reunião com a equipe se necessário`,
-          `Com base na sua solicitação, recomendo:\n\n• Revisar o checklist de operações\n• Confirmar com o comandante\n• Atualizar o log de atividades`,
-          `Análise do contexto marítimo:\n\n✓ Condições meteorológicas: Favoráveis\n✓ Status da embarcação: Operacional\n✓ Próxima parada: Conforme programação\n\nSugestão: Mantenha a equipe informada sobre atualizações.`,
+          "Com base na sua solicitação, recomendo:\n\n• Revisar o checklist de operações\n• Confirmar com o comandante\n• Atualizar o log de atividades",
+          "Análise do contexto marítimo:\n\n✓ Condições meteorológicas: Favoráveis\n✓ Status da embarcação: Operacional\n✓ Próxima parada: Conforme programação\n\nSugestão: Mantenha a equipe informada sobre atualizações.",
         ];
         aiContent = aiResponses[Math.floor(Math.random() * aiResponses.length)];
       } else {
@@ -243,7 +243,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       setMessages(prev => [...prev, aiMessage]);
       
     } catch (error) {
-      console.error('AI assist error:', error);
+      console.error("AI assist error:", error);
       toast({
         title: "Erro",
         description: "Falha ao obter resposta da IA. Usando modo offline.",
@@ -281,7 +281,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       // Simulate channel creation
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setCurrentChannel(newChannelName.toLowerCase().replace(/\s+/g, '-'));
+      setCurrentChannel(newChannelName.toLowerCase().replace(/\s+/g, "-"));
       
       const activity: WorkspaceActivity = {
         id: String(Date.now()),
@@ -349,7 +349,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
   };
 
   const handleJoinMeeting = () => {
-    window.open(meetingLink, '_blank');
+    window.open(meetingLink, "_blank");
     toast({
       title: "Entrando na reunião",
       description: "Abrindo em nova aba...",
@@ -359,7 +359,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
   const handleMemberClick = (member: TeamMember) => {
     toast({
       title: member.name,
-      description: `${member.role} - ${member.status === 'online' ? 'Online' : member.status === 'away' ? 'Ausente' : member.status === 'busy' ? 'Ocupado' : 'Offline'}`,
+      description: `${member.role} - ${member.status === "online" ? "Online" : member.status === "away" ? "Ausente" : member.status === "busy" ? "Ocupado" : "Offline"}`,
     });
   };
 
@@ -367,7 +367,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     const newDoc: SharedDocument = {
       id: String(Date.now()),
       name: file.name,
-      type: file.name.split('.').pop()?.toUpperCase() as any || "OTHER",
+      type: file.name.split(".").pop()?.toUpperCase() as any || "OTHER",
       size: `${(file.size / 1024).toFixed(1)} KB`,
       lastModified: "Agora",
       modifiedBy: "Você",
@@ -400,8 +400,8 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
   return (

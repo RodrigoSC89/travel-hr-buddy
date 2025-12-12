@@ -119,20 +119,20 @@ export const GRCModule: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "green": return "text-green-500";
-      case "yellow": return "text-yellow-500";
-      case "red": return "text-red-500";
-      default: return "text-muted-foreground";
+    case "green": return "text-green-500";
+    case "yellow": return "text-yellow-500";
+    case "red": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getComplianceStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
-      case "partial": return <Badge className="bg-yellow-500 text-black">Parcial</Badge>;
-      case "non_compliant": return <Badge variant="destructive">Não Conforme</Badge>;
-      case "pending": return <Badge variant="outline">Pendente</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
+    case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
+    case "partial": return <Badge className="bg-yellow-500 text-black">Parcial</Badge>;
+    case "non_compliant": return <Badge variant="destructive">Não Conforme</Badge>;
+    case "pending": return <Badge variant="outline">Pendente</Badge>;
+    default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 

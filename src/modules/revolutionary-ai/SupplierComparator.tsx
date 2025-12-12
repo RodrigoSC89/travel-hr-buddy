@@ -3,18 +3,18 @@
  * Funcionalidade 14: Comparador de fornecedores com IA
  */
 
-import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
+import React, { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   Building2, Star, TrendingUp, Clock, DollarSign,
   ThumbsUp, ThumbsDown, Brain, Search, Filter,
   CheckCircle, AlertTriangle, Award, Package, Truck
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface Supplier {
   id: string;
@@ -39,9 +39,9 @@ interface Supplier {
 
 const MOCK_SUPPLIERS: Supplier[] = [
   {
-    id: '1',
-    name: 'Marine Parts Global',
-    category: 'Peças de Motor',
+    id: "1",
+    name: "Marine Parts Global",
+    category: "Peças de Motor",
     rating: 4.8,
     scores: { price: 85, quality: 95, delivery: 90, reliability: 92, support: 88 },
     averageDeliveryDays: 5,
@@ -50,12 +50,12 @@ const MOCK_SUPPLIERS: Supplier[] = [
     totalOrders: 245,
     priceCompetitiveness: 92,
     aiRecommendation: true,
-    aiReason: 'Melhor equilíbrio entre custo e qualidade. Histórico excelente de entregas.'
+    aiReason: "Melhor equilíbrio entre custo e qualidade. Histórico excelente de entregas."
   },
   {
-    id: '2',
-    name: 'NavalTech Solutions',
-    category: 'Peças de Motor',
+    id: "2",
+    name: "NavalTech Solutions",
+    category: "Peças de Motor",
     rating: 4.5,
     scores: { price: 95, quality: 85, delivery: 80, reliability: 85, support: 75 },
     averageDeliveryDays: 7,
@@ -64,12 +64,12 @@ const MOCK_SUPPLIERS: Supplier[] = [
     totalOrders: 180,
     priceCompetitiveness: 98,
     aiRecommendation: false,
-    aiReason: 'Preço competitivo mas taxa de defeitos acima da média.'
+    aiReason: "Preço competitivo mas taxa de defeitos acima da média."
   },
   {
-    id: '3',
-    name: 'Premium Maritime',
-    category: 'Peças de Motor',
+    id: "3",
+    name: "Premium Maritime",
+    category: "Peças de Motor",
     rating: 4.9,
     scores: { price: 70, quality: 98, delivery: 95, reliability: 98, support: 95 },
     averageDeliveryDays: 3,
@@ -78,12 +78,12 @@ const MOCK_SUPPLIERS: Supplier[] = [
     totalOrders: 320,
     priceCompetitiveness: 75,
     aiRecommendation: false,
-    aiReason: 'Qualidade premium mas preço 20% acima da média do mercado.'
+    aiReason: "Qualidade premium mas preço 20% acima da média do mercado."
   },
   {
-    id: '4',
-    name: 'FastShip Marine',
-    category: 'Peças de Motor',
+    id: "4",
+    name: "FastShip Marine",
+    category: "Peças de Motor",
     rating: 4.2,
     scores: { price: 88, quality: 80, delivery: 95, reliability: 78, support: 70 },
     averageDeliveryDays: 2,
@@ -92,37 +92,37 @@ const MOCK_SUPPLIERS: Supplier[] = [
     totalOrders: 95,
     priceCompetitiveness: 85,
     aiRecommendation: false,
-    aiReason: 'Entrega rápida mas menor confiabilidade em pedidos recorrentes.'
+    aiReason: "Entrega rápida mas menor confiabilidade em pedidos recorrentes."
   }
 ];
 
 export function SupplierComparator() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<string>('aiScore');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState<string>("aiScore");
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
 
   const sortedSuppliers = useMemo(() => {
-    let sorted = [...MOCK_SUPPLIERS];
+    const sorted = [...MOCK_SUPPLIERS];
     switch (sortBy) {
-      case 'price':
-        sorted.sort((a, b) => b.priceCompetitiveness - a.priceCompetitiveness);
-        break;
-      case 'quality':
-        sorted.sort((a, b) => b.scores.quality - a.scores.quality);
-        break;
-      case 'delivery':
-        sorted.sort((a, b) => a.averageDeliveryDays - b.averageDeliveryDays);
-        break;
-      case 'rating':
-        sorted.sort((a, b) => b.rating - a.rating);
-        break;
-      case 'aiScore':
-      default:
-        sorted.sort((a, b) => {
-          const scoreA = Object.values(a.scores).reduce((acc, v) => acc + v, 0) / 5;
-          const scoreB = Object.values(b.scores).reduce((acc, v) => acc + v, 0) / 5;
-          return scoreB - scoreA;
-        });
+    case "price":
+      sorted.sort((a, b) => b.priceCompetitiveness - a.priceCompetitiveness);
+      break;
+    case "quality":
+      sorted.sort((a, b) => b.scores.quality - a.scores.quality);
+      break;
+    case "delivery":
+      sorted.sort((a, b) => a.averageDeliveryDays - b.averageDeliveryDays);
+      break;
+    case "rating":
+      sorted.sort((a, b) => b.rating - a.rating);
+      break;
+    case "aiScore":
+    default:
+      sorted.sort((a, b) => {
+        const scoreA = Object.values(a.scores).reduce((acc, v) => acc + v, 0) / 5;
+        const scoreB = Object.values(b.scores).reduce((acc, v) => acc + v, 0) / 5;
+        return scoreB - scoreA;
+      });
     }
     return sorted;
   }, [sortBy]);
@@ -132,9 +132,9 @@ export function SupplierComparator() {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-400';
-    if (score >= 75) return 'text-amber-400';
-    return 'text-red-400';
+    if (score >= 90) return "text-green-400";
+    if (score >= 75) return "text-amber-400";
+    return "text-red-400";
   };
 
   return (
@@ -174,15 +174,15 @@ export function SupplierComparator() {
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Ordenar por:</span>
               {[
-                { key: 'aiScore', label: 'Score IA' },
-                { key: 'price', label: 'Preço' },
-                { key: 'quality', label: 'Qualidade' },
-                { key: 'delivery', label: 'Entrega' },
-                { key: 'rating', label: 'Avaliação' }
+                { key: "aiScore", label: "Score IA" },
+                { key: "price", label: "Preço" },
+                { key: "quality", label: "Qualidade" },
+                { key: "delivery", label: "Entrega" },
+                { key: "rating", label: "Avaliação" }
               ].map(option => (
                 <Button
                   key={option.key}
-                  variant={sortBy === option.key ? 'default' : 'outline'}
+                  variant={sortBy === option.key ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSortBy(option.key)}
                 >
@@ -206,15 +206,15 @@ export function SupplierComparator() {
             >
               <Card 
                 className={`cursor-pointer transition-all hover:border-primary/50 ${
-                  selectedSupplier?.id === supplier.id ? 'border-primary ring-2 ring-primary/20' : ''
-                } ${supplier.aiRecommendation ? 'bg-gradient-to-r from-primary/5 to-transparent' : ''}`}
+                  selectedSupplier?.id === supplier.id ? "border-primary ring-2 ring-primary/20" : ""
+                } ${supplier.aiRecommendation ? "bg-gradient-to-r from-primary/5 to-transparent" : ""}`}
                 onClick={() => setSelectedSupplier(supplier)}
               >
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`p-3 rounded-xl ${supplier.aiRecommendation ? 'bg-primary/20' : 'bg-muted'}`}>
-                        <Building2 className={`h-6 w-6 ${supplier.aiRecommendation ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <div className={`p-3 rounded-xl ${supplier.aiRecommendation ? "bg-primary/20" : "bg-muted"}`}>
+                        <Building2 className={`h-6 w-6 ${supplier.aiRecommendation ? "text-primary" : "text-muted-foreground"}`} />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -241,11 +241,11 @@ export function SupplierComparator() {
                   {/* Score Bars */}
                   <div className="grid grid-cols-5 gap-4 mb-4">
                     {[
-                      { key: 'price', label: 'Preço', icon: DollarSign },
-                      { key: 'quality', label: 'Qualidade', icon: Award },
-                      { key: 'delivery', label: 'Entrega', icon: Truck },
-                      { key: 'reliability', label: 'Confiab.', icon: CheckCircle },
-                      { key: 'support', label: 'Suporte', icon: ThumbsUp }
+                      { key: "price", label: "Preço", icon: DollarSign },
+                      { key: "quality", label: "Qualidade", icon: Award },
+                      { key: "delivery", label: "Entrega", icon: Truck },
+                      { key: "reliability", label: "Confiab.", icon: CheckCircle },
+                      { key: "support", label: "Suporte", icon: ThumbsUp }
                     ].map(({ key, label, icon: Icon }) => (
                       <div key={key} className="text-center">
                         <div className="flex items-center justify-center gap-1 mb-1">
@@ -275,7 +275,7 @@ export function SupplierComparator() {
                         {supplier.onTimeDelivery}% pontual
                       </span>
                       <span className="flex items-center gap-1">
-                        <AlertTriangle className={`h-4 w-4 ${supplier.defectRate < 1 ? 'text-green-400' : 'text-amber-400'}`} />
+                        <AlertTriangle className={`h-4 w-4 ${supplier.defectRate < 1 ? "text-green-400" : "text-amber-400"}`} />
                         {supplier.defectRate}% defeitos
                       </span>
                     </div>
@@ -286,7 +286,7 @@ export function SupplierComparator() {
 
                   {supplier.aiReason && (
                     <div className={`mt-3 p-3 rounded-lg text-sm ${
-                      supplier.aiRecommendation ? 'bg-primary/10 text-primary' : 'bg-muted/50 text-muted-foreground'
+                      supplier.aiRecommendation ? "bg-primary/10 text-primary" : "bg-muted/50 text-muted-foreground"
                     }`}>
                       <div className="flex items-start gap-2">
                         <Brain className="h-4 w-4 mt-0.5 shrink-0" />
@@ -315,16 +315,16 @@ export function SupplierComparator() {
                 <h4 className="text-sm font-medium mb-3">Melhores por Categoria</h4>
                 <div className="space-y-2">
                   {[
-                    { label: 'Melhor Preço', supplier: 'NavalTech Solutions', score: 98 },
-                    { label: 'Melhor Qualidade', supplier: 'Premium Maritime', score: 98 },
-                    { label: 'Entrega Mais Rápida', supplier: 'FastShip Marine', score: 2 },
-                    { label: 'Mais Confiável', supplier: 'Premium Maritime', score: 98 },
-                    { label: 'Melhor Custo-Benefício', supplier: 'Marine Parts Global', score: 90 }
+                    { label: "Melhor Preço", supplier: "NavalTech Solutions", score: 98 },
+                    { label: "Melhor Qualidade", supplier: "Premium Maritime", score: 98 },
+                    { label: "Entrega Mais Rápida", supplier: "FastShip Marine", score: 2 },
+                    { label: "Mais Confiável", supplier: "Premium Maritime", score: 98 },
+                    { label: "Melhor Custo-Benefício", supplier: "Marine Parts Global", score: 90 }
                   ].map((item, i) => (
                     <div key={i} className="p-2 rounded bg-muted/30">
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">{item.label}</span>
-                        <Badge variant="outline" className="text-xs">{item.score}{item.label.includes('Entrega') ? ' dias' : ''}</Badge>
+                        <Badge variant="outline" className="text-xs">{item.score}{item.label.includes("Entrega") ? " dias" : ""}</Badge>
                       </div>
                       <p className="text-sm font-medium">{item.supplier}</p>
                     </div>

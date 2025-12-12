@@ -7,22 +7,22 @@
  * - NotificationCenter: recebimento, mark as read, filtros, real-time updates
  */
 
-import { test, expect } from '@playwright/test';
-import { CommandCenterHelpers } from './helpers/command-center.helpers';
+import { test, expect } from "@playwright/test";
+import { CommandCenterHelpers } from "./helpers/command-center.helpers";
 import { 
   commandCenterFixtures, 
   documentCenterSelectors, 
   notificationCenterSelectors 
-} from './fixtures/command-center.fixtures';
+} from "./fixtures/command-center.fixtures";
 
-test.describe('Command Centers Consolidados - Document Center', () => {
+test.describe("Command Centers Consolidados - Document Center", () => {
   let helpers: CommandCenterHelpers;
 
   test.beforeEach(async ({ page }) => {
     helpers = new CommandCenterHelpers(page);
   });
 
-  test('DOC-CENTER-001: Deve carregar DocumentCenter corretamente', async ({ page }) => {
+  test("DOC-CENTER-001: Deve carregar DocumentCenter corretamente", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     // Verify container is visible
@@ -36,7 +36,7 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     expect(await uploadButton.isVisible() || await searchInput.isVisible()).toBeTruthy();
   });
 
-  test('DOC-CENTER-002: Deve permitir upload de documentos', async ({ page }) => {
+  test("DOC-CENTER-002: Deve permitir upload de documentos", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     // Check if upload button exists
@@ -58,16 +58,16 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     }
   });
 
-  test('DOC-CENTER-003: Deve alternar entre view modes (grid/list/table)', async ({ page }) => {
+  test("DOC-CENTER-003: Deve alternar entre view modes (grid/list/table)", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     // Try switching view modes
-    const viewModes: Array<'grid' | 'list' | 'table'> = ['grid', 'list', 'table'];
+    const viewModes: Array<"grid" | "list" | "table"> = ["grid", "list", "table"];
     
     for (const mode of viewModes) {
-      const selector = mode === 'grid' ? documentCenterSelectors.viewModeGrid
-        : mode === 'list' ? documentCenterSelectors.viewModeList
-        : documentCenterSelectors.viewModeTable;
+      const selector = mode === "grid" ? documentCenterSelectors.viewModeGrid
+        : mode === "list" ? documentCenterSelectors.viewModeList
+          : documentCenterSelectors.viewModeTable;
       
       const button = await page.locator(selector);
       
@@ -81,13 +81,13 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     }
   });
 
-  test('DOC-CENTER-004: Deve buscar documentos com filtros', async ({ page }) => {
+  test("DOC-CENTER-004: Deve buscar documentos com filtros", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     const searchInput = await page.locator(documentCenterSelectors.searchInput);
     
     if (await searchInput.isVisible()) {
-      await helpers.searchDocuments('certificate');
+      await helpers.searchDocuments("certificate");
       
       // Wait for search results
       await page.waitForTimeout(1000);
@@ -98,7 +98,7 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     }
   });
 
-  test('DOC-CENTER-005: Deve realizar download de documentos', async ({ page }) => {
+  test("DOC-CENTER-005: Deve realizar download de documentos", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     // Check if documents exist
@@ -120,7 +120,7 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     }
   });
 
-  test('DOC-CENTER-006: Deve preview documentos', async ({ page }) => {
+  test("DOC-CENTER-006: Deve preview documentos", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     const documents = await page.locator(documentCenterSelectors.documentCard);
@@ -138,16 +138,16 @@ test.describe('Command Centers Consolidados - Document Center', () => {
         await page.waitForTimeout(1000);
         
         // Check for preview container
-        const previewModal = await page.locator('[data-testid="preview-modal"]');
+        const previewModal = await page.locator("[data-testid=\"preview-modal\"]");
         const isVisible = await previewModal.isVisible();
         
         // Modal should open or page should navigate
-        expect(isVisible || await page.url().includes('preview')).toBeTruthy();
+        expect(isVisible || await page.url().includes("preview")).toBeTruthy();
       }
     }
   });
 
-  test('DOC-CENTER-007: Deve realizar bulk operations (seleção múltipla)', async ({ page }) => {
+  test("DOC-CENTER-007: Deve realizar bulk operations (seleção múltipla)", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     const documents = await page.locator(documentCenterSelectors.documentCard);
@@ -174,7 +174,7 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     }
   });
 
-  test('DOC-CENTER-008: Deve filtrar por tipo de documento', async ({ page }) => {
+  test("DOC-CENTER-008: Deve filtrar por tipo de documento", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     const filterButton = await page.locator(documentCenterSelectors.filterButton);
@@ -186,10 +186,10 @@ test.describe('Command Centers Consolidados - Document Center', () => {
       await page.waitForTimeout(500);
       
       // Select a document type
-      const typeFilter = await page.locator('select[name="type"]');
+      const typeFilter = await page.locator("select[name=\"type\"]");
       
       if (await typeFilter.isVisible()) {
-        await helpers.applyDocumentFilter('type', 'certificate');
+        await helpers.applyDocumentFilter("type", "certificate");
         
         // Verify filter applied
         await page.waitForTimeout(1000);
@@ -199,7 +199,7 @@ test.describe('Command Centers Consolidados - Document Center', () => {
     }
   });
 
-  test('DOC-CENTER-009: Deve exibir estatísticas de documentos', async ({ page }) => {
+  test("DOC-CENTER-009: Deve exibir estatísticas de documentos", async ({ page }) => {
     await helpers.navigateToDocumentCenter(commandCenterFixtures.documentCenter.route);
 
     // Check for stats card
@@ -216,14 +216,14 @@ test.describe('Command Centers Consolidados - Document Center', () => {
   });
 });
 
-test.describe('Command Centers Consolidados - Notification Center', () => {
+test.describe("Command Centers Consolidados - Notification Center", () => {
   let helpers: CommandCenterHelpers;
 
   test.beforeEach(async ({ page }) => {
     helpers = new CommandCenterHelpers(page);
   });
 
-  test('NOTIF-CENTER-001: Deve carregar NotificationCenter corretamente', async ({ page }) => {
+  test("NOTIF-CENTER-001: Deve carregar NotificationCenter corretamente", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     // Verify container
@@ -234,7 +234,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     await helpers.verifyNotificationCount();
   });
 
-  test('NOTIF-CENTER-002: Deve marcar notificação como lida', async ({ page }) => {
+  test("NOTIF-CENTER-002: Deve marcar notificação como lida", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const notifications = await page.locator(notificationCenterSelectors.notificationItem);
@@ -259,7 +259,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     }
   });
 
-  test('NOTIF-CENTER-003: Deve marcar todas notificações como lidas', async ({ page }) => {
+  test("NOTIF-CENTER-003: Deve marcar todas notificações como lidas", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const markAllButton = await page.locator(notificationCenterSelectors.markAllAsRead);
@@ -275,19 +275,19 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
       
       if (await unreadBadge.isVisible()) {
         const text = await unreadBadge.textContent();
-        expect(text).toContain('0');
+        expect(text).toContain("0");
       }
     }
   });
 
-  test('NOTIF-CENTER-004: Deve filtrar por categoria', async ({ page }) => {
+  test("NOTIF-CENTER-004: Deve filtrar por categoria", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const categoryFilter = await page.locator(notificationCenterSelectors.filterByCategory);
     
     if (await categoryFilter.isVisible()) {
       // Try filtering by different categories
-      await helpers.filterNotifications('category', 'warning');
+      await helpers.filterNotifications("category", "warning");
       
       // Verify filter applied
       await page.waitForTimeout(1000);
@@ -298,13 +298,13 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     }
   });
 
-  test('NOTIF-CENTER-005: Deve filtrar por prioridade', async ({ page }) => {
+  test("NOTIF-CENTER-005: Deve filtrar por prioridade", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const priorityFilter = await page.locator(notificationCenterSelectors.filterByPriority);
     
     if (await priorityFilter.isVisible()) {
-      await helpers.filterNotifications('priority', 'high');
+      await helpers.filterNotifications("priority", "high");
       
       // Verify filter applied
       await page.waitForTimeout(1000);
@@ -314,7 +314,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     }
   });
 
-  test('NOTIF-CENTER-006: Deve deletar notificação', async ({ page }) => {
+  test("NOTIF-CENTER-006: Deve deletar notificação", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const notifications = await page.locator(notificationCenterSelectors.notificationItem);
@@ -337,7 +337,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     }
   });
 
-  test('NOTIF-CENTER-007: Deve exibir badge de notificações não lidas', async ({ page }) => {
+  test("NOTIF-CENTER-007: Deve exibir badge de notificações não lidas", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const unreadBadge = await page.locator(notificationCenterSelectors.unreadBadge);
@@ -349,7 +349,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     }
   });
 
-  test('NOTIF-CENTER-008: Deve suportar real-time updates', async ({ page }) => {
+  test("NOTIF-CENTER-008: Deve suportar real-time updates", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     // Check for real-time indicator
@@ -360,7 +360,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
     }
   });
 
-  test('NOTIF-CENTER-009: Deve limpar todas notificações', async ({ page }) => {
+  test("NOTIF-CENTER-009: Deve limpar todas notificações", async ({ page }) => {
     await helpers.navigateToNotificationCenter(commandCenterFixtures.notificationCenter.route);
 
     const clearAllButton = await page.locator(notificationCenterSelectors.clearAll);
@@ -369,7 +369,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
       await clearAllButton.click();
       
       // Confirm action if needed
-      const confirmButton = await page.locator('button:has-text("Confirm")');
+      const confirmButton = await page.locator("button:has-text(\"Confirm\")");
       if (await confirmButton.isVisible()) {
         await confirmButton.click();
       }
@@ -378,7 +378,7 @@ test.describe('Command Centers Consolidados - Notification Center', () => {
       await page.waitForTimeout(1000);
       
       // Check if empty state is shown
-      const emptyState = await page.locator('[data-testid="empty-state"]');
+      const emptyState = await page.locator("[data-testid=\"empty-state\"]");
       const isEmpty = await emptyState.isVisible();
       
       // Either empty state or very few notifications

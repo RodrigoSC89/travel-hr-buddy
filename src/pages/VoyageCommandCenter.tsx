@@ -254,14 +254,14 @@ export default function VoyageCommandCenter() {
     setVoyages(prev => prev.map(v => 
       v.id === voyageId 
         ? { 
-            ...v, 
-            fuelConsumption: Math.round(v.fuelConsumption * 0.92),
-            aiRecommendations: [
-              ...(v.aiRecommendations || []),
-              "Rota otimizada com economia de 8% em combustível",
-              `Novo consumo estimado: ${Math.round(v.fuelConsumption * 0.92)} ton`
-            ]
-          }
+          ...v, 
+          fuelConsumption: Math.round(v.fuelConsumption * 0.92),
+          aiRecommendations: [
+            ...(v.aiRecommendations || []),
+            "Rota otimizada com economia de 8% em combustível",
+            `Novo consumo estimado: ${Math.round(v.fuelConsumption * 0.92)} ton`
+          ]
+        }
         : v
     ));
     
@@ -289,10 +289,10 @@ export default function VoyageCommandCenter() {
       fuelConsumption: Math.floor(Math.random() * 2000) + 1500,
       status: "planned",
       vesselName: newVoyage.vessel || "A definir",
-      departureDate: newVoyage.departure || new Date().toISOString().split('T')[0],
-      arrivalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      departureDate: newVoyage.departure || new Date().toISOString().split("T")[0],
+      arrivalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       weatherRisk: "medium",
-      createdAt: new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString().split("T")[0],
       estimatedCost: Math.floor(Math.random() * 500000) + 200000,
       aiRecommendations: ["Aguardando análise de IA para otimização de rota"]
     };
@@ -816,8 +816,8 @@ export default function VoyageCommandCenter() {
                   </div>
                   <Badge className={`w-full justify-center ${
                     weather.risk === "low" ? "bg-green-500/20 text-green-600" :
-                    weather.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
-                    "bg-red-500/20 text-red-600"
+                      weather.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
+                        "bg-red-500/20 text-red-600"
                   }`}>
                     Risco {weather.risk === "low" ? "Baixo" : weather.risk === "medium" ? "Médio" : "Alto"}
                   </Badge>
@@ -951,8 +951,8 @@ export default function VoyageCommandCenter() {
                     </div>
                     <Badge className={`mt-2 ${
                       port.type === "origin" ? "bg-green-500/10 text-green-600" :
-                      port.type === "destination" ? "bg-blue-500/10 text-blue-600" :
-                      "bg-amber-500/10 text-amber-600"
+                        port.type === "destination" ? "bg-blue-500/10 text-blue-600" :
+                          "bg-amber-500/10 text-amber-600"
                     }`}>
                       {port.type === "origin" ? "Origem" : port.type === "destination" ? "Destino" : "Escala"}
                     </Badge>

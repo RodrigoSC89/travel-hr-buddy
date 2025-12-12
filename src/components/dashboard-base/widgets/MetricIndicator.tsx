@@ -23,14 +23,14 @@ export const MetricIndicator = ({ config, className }: MetricIndicatorProps) => 
 
   const formatValue = (val: number): string => {
     switch (format) {
-      case "percentage":
-        return `${val.toFixed(1)}%`;
-      case "currency":
-        return `R$ ${val.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
-      case "time":
-        return `${val.toFixed(1)}h`;
-      default:
-        return val.toLocaleString("pt-BR");
+    case "percentage":
+      return `${val.toFixed(1)}%`;
+    case "currency":
+      return `R$ ${val.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
+    case "time":
+      return `${val.toFixed(1)}h`;
+    default:
+      return val.toLocaleString("pt-BR");
     }
   };
 

@@ -3,20 +3,20 @@
  * Container with gesture detection
  */
 
-import React, { useRef, useEffect } from 'react';
-import { useGestureNavigation } from '@/lib/ux/gesture-navigation';
-import { cn } from '@/lib/utils';
+import React, { useRef, useEffect } from "react";
+import { useGestureNavigation } from "@/lib/ux/gesture-navigation";
+import { cn } from "@/lib/utils";
 
 type GestureType = 
-  | 'swipe-left' 
-  | 'swipe-right' 
-  | 'swipe-up' 
-  | 'swipe-down' 
-  | 'pinch-in' 
-  | 'pinch-out' 
-  | 'double-tap'
-  | 'long-press'
-  | 'pull-to-refresh';
+  | "swipe-left" 
+  | "swipe-right" 
+  | "swipe-up" 
+  | "swipe-down" 
+  | "pinch-in" 
+  | "pinch-out" 
+  | "double-tap"
+  | "long-press"
+  | "pull-to-refresh";
 
 interface GestureAreaProps {
   children: React.ReactNode;
@@ -51,27 +51,27 @@ export function GestureArea({
     onGesture?.(gesture, data);
     
     switch (gesture) {
-      case 'swipe-left':
-        onSwipeLeft?.();
-        break;
-      case 'swipe-right':
-        onSwipeRight?.();
-        break;
-      case 'swipe-up':
-        onSwipeUp?.();
-        break;
-      case 'swipe-down':
-        onSwipeDown?.();
-        break;
-      case 'double-tap':
-        onDoubleTap?.();
-        break;
-      case 'long-press':
-        onLongPress?.();
-        break;
-      case 'pull-to-refresh':
-        onPullToRefresh?.();
-        break;
+    case "swipe-left":
+      onSwipeLeft?.();
+      break;
+    case "swipe-right":
+      onSwipeRight?.();
+      break;
+    case "swipe-up":
+      onSwipeUp?.();
+      break;
+    case "swipe-down":
+      onSwipeDown?.();
+      break;
+    case "double-tap":
+      onDoubleTap?.();
+      break;
+    case "long-press":
+      onLongPress?.();
+      break;
+    case "pull-to-refresh":
+      onPullToRefresh?.();
+      break;
     }
   };
   
@@ -84,7 +84,7 @@ export function GestureArea({
   }, [enabled, bindGestures]);
   
   return (
-    <div ref={containerRef} className={cn('touch-pan-y', className)}>
+    <div ref={containerRef} className={cn("touch-pan-y", className)}>
       {children}
     </div>
   );
@@ -138,8 +138,8 @@ export function PullToRefresh({
         >
           <div 
             className={cn(
-              'h-8 w-8 rounded-full border-2 border-primary border-t-transparent',
-              isRefreshing && 'animate-spin'
+              "h-8 w-8 rounded-full border-2 border-primary border-t-transparent",
+              isRefreshing && "animate-spin"
             )}
             style={{
               transform: `rotate(${pullProgress * 360}deg)`,

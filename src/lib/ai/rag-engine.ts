@@ -3,7 +3,7 @@
  * PATCH 850 - AI com RAG + HITL
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface RAGDocument {
   id: string;
@@ -39,12 +39,12 @@ const CONFIDENCE_THRESHOLDS = {
 
 // Categories that require HITL validation
 const HITL_REQUIRED_CATEGORIES = [
-  'safety',
-  'compliance',
-  'regulatory',
-  'medical',
-  'financial',
-  'legal',
+  "safety",
+  "compliance",
+  "regulatory",
+  "medical",
+  "financial",
+  "legal",
 ];
 
 /**
@@ -106,8 +106,8 @@ function extractSnippet(content: string, query: string, maxLength: number = 200)
   let snippet = content.substring(startIndex, startIndex + maxLength);
   
   // Clean up snippet edges
-  if (startIndex > 0) snippet = '...' + snippet;
-  if (startIndex + maxLength < content.length) snippet = snippet + '...';
+  if (startIndex > 0) snippet = "..." + snippet;
+  if (startIndex + maxLength < content.length) snippet = snippet + "...";
   
   return snippet;
 }
@@ -128,10 +128,10 @@ export async function searchDocuments(
   
   try {
     // Build query
-    let dbQuery = supabase
-      .from('ai_documents')
-      .select('*')
-      .eq('organization_id', organizationId)
+    const dbQuery = supabase
+      .from("ai_documents")
+      .select("*")
+      .eq("organization_id", organizationId)
       .limit(limit * 2); // Fetch more to filter by relevance
     
     const { data: documents, error } = await dbQuery;
@@ -147,7 +147,7 @@ export async function searchDocuments(
     // Score and rank documents
     const scoredResults: RAGSearchResult[] = documents
       .map(doc => {
-        const relevanceScore = keywordRelevance(query, doc.file_name || '');
+        const relevanceScore = keywordRelevance(query, doc.file_name || "");
         return {
           document: {
             id: doc.id,
@@ -158,7 +158,7 @@ export async function searchDocuments(
             metadata: { ocr_status: doc.ocr_status },
           },
           relevanceScore,
-          snippet: extractSnippet(doc.file_name || '', query),
+          snippet: extractSnippet(doc.file_name || "", query),
         };
       })
       .filter(result => result.relevanceScore >= minRelevance)
@@ -167,8 +167,8 @@ export async function searchDocuments(
     
     return scoredResults;
   } catch (error) {
-    console.error('RAG search failed:', error);
-    console.error('RAG search failed:', error);
+    console.error("RAG search failed:", error);
+    console.error("RAG search failed:", error);
     return [];
   }
 }
@@ -221,19 +221,19 @@ function calculateConfidence(sources: RAGSearchResult[]): number {
 async function createAuditEntry(
   userId: string,
   query: string,
-  response: Omit<RAGResponse, 'auditId'>,
+  response: Omit<RAGResponse, "auditId">,
   organizationId: string
 ): Promise<string> {
   const auditId = crypto.randomUUID();
   
   try {
-    await supabase.from('ai_logs').insert({
+    await supabase.from("ai_logs").insert({
       id: auditId,
-      service: 'rag-engine',
+      service: "rag-engine",
       prompt_hash: btoa(query).substring(0, 64),
       prompt_length: query.length,
       response_length: response.answer.length,
-      status: 'success',
+      status: "success",
       metadata: {
         confidence: response.confidence,
         sources_count: response.sources.length,
@@ -243,8 +243,8 @@ async function createAuditEntry(
       },
     });
   } catch (error) {
-    console.error('Failed to create audit entry:', error);
-    console.error('Failed to create audit entry:', error);
+    console.error("Failed to create audit entry:", error);
+    console.error("Failed to create audit entry:", error);
   }
   
   return auditId;
@@ -285,12 +285,12 @@ export async function queryWithRAG(
   // Generate answer based on sources
   let answer: string;
   if (sources.length === 0) {
-    answer = 'Não foram encontrados documentos relevantes para responder sua pergunta. Por favor, reformule ou consulte um especialista.';
+    answer = "Não foram encontrados documentos relevantes para responder sua pergunta. Por favor, reformule ou consulte um especialista.";
   } else {
     // Build answer from sources
     const sourceReferences = sources
       .map((s, i) => `[${i + 1}] ${s.document.title}`)
-      .join('\n');
+      .join("\n");
     
     answer = `Baseado nos documentos encontrados:\n\n${sources[0].snippet}\n\nFontes:\n${sourceReferences}`;
   }
@@ -322,16 +322,16 @@ export async function submitHITLValidation(
   feedback?: string
 ): Promise<void> {
   try {
-    await supabase.from('ai_feedback_scores').insert({
-      command_type: 'rag-validation',
+    await supabase.from("ai_feedback_scores").insert({
+      command_type: "rag-validation",
       self_score: approved ? 1 : 0,
       user_id: userId,
       command_data: { auditId },
       feedback_data: { approved, feedback },
     });
   } catch (error) {
-    console.error('Failed to submit HITL validation:', error);
-    console.error('Failed to submit HITL validation:', error);
+    console.error("Failed to submit HITL validation:", error);
+    console.error("Failed to submit HITL validation:", error);
     throw error;
   }
 }

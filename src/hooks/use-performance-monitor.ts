@@ -3,8 +3,8 @@
  * Real-time performance metrics tracking
  */
 
-import { useCallback, useRef } from 'react';
-import { useOptimizedPolling } from './use-optimized-polling';
+import { useCallback, useRef } from "react";
+import { useOptimizedPolling } from "./use-optimized-polling";
 
 export interface PerformanceMetrics {
   lcp: number | null;
@@ -48,7 +48,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
 
     try {
       // Collect Web Vitals using PerformanceObserver
-      if ('PerformanceObserver' in window) {
+      if ("PerformanceObserver" in window) {
         // Clean up existing observers
         observersRef.current.forEach(observer => observer.disconnect());
         observersRef.current = [];
@@ -60,7 +60,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
             const lastEntry = entries[entries.length - 1] as any;
             metrics.lcp = lastEntry?.renderTime || lastEntry?.loadTime || null;
           });
-          lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
+          lcpObserver.observe({ entryTypes: ["largest-contentful-paint"], buffered: true });
           observersRef.current.push(lcpObserver);
         } catch (e) {
           // LCP not supported
@@ -74,7 +74,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
               metrics.fid = entry.processingStart - entry.startTime;
             });
           });
-          fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
+          fidObserver.observe({ entryTypes: ["first-input"], buffered: true });
           observersRef.current.push(fidObserver);
         } catch (e) {
           // FID not supported
@@ -91,7 +91,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
             });
             metrics.cls = clsValue;
           });
-          clsObserver.observe({ entryTypes: ['layout-shift'], buffered: true });
+          clsObserver.observe({ entryTypes: ["layout-shift"], buffered: true });
           observersRef.current.push(clsObserver);
         } catch (e) {
           // CLS not supported
@@ -99,14 +99,14 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
       }
 
       // Navigation Timing API
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       if (navigation) {
         metrics.ttfb = navigation.responseStart - navigation.requestStart;
         metrics.fcp = navigation.responseEnd - navigation.fetchStart;
       }
 
       // Memory Usage (Chrome/Edge only)
-      if ('memory' in performance) {
+      if ("memory" in performance) {
         const memory = (performance as any).memory;
         metrics.memory = {
           used: memory.usedJSHeapSize,
@@ -116,7 +116,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
       }
 
       // Store in window for debugging
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         (window as any).__NAUTILUS_PERFORMANCE__ = metrics;
       }
 
@@ -125,7 +125,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
         options.onMetricsUpdate(metrics);
       }
     } catch (error) {
-      console.error('Error collecting performance metrics:', error);
+      console.error("Error collecting performance metrics:", error);
     }
 
     return metrics;
@@ -133,7 +133,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
 
   // Use optimized polling for periodic metric collection
   useOptimizedPolling({
-    id: 'performance-monitor',
+    id: "performance-monitor",
     callback: () => void collectMetrics(),
     interval,
     enabled
@@ -153,7 +153,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
  * Get current performance metrics snapshot
  */
 export const getPerformanceSnapshot = (): PerformanceMetrics | null => {
-  if (typeof window !== 'undefined' && (window as any).__NAUTILUS_PERFORMANCE__) {
+  if (typeof window !== "undefined" && (window as any).__NAUTILUS_PERFORMANCE__) {
     return (window as any).__NAUTILUS_PERFORMANCE__;
   }
   return null;
@@ -164,7 +164,7 @@ export const getPerformanceSnapshot = (): PerformanceMetrics | null => {
  */
 export const evaluatePerformance = (metrics: PerformanceMetrics): {
   score: number;
-  rating: 'excellent' | 'good' | 'needs-improvement' | 'poor';
+  rating: "excellent" | "good" | "needs-improvement" | "poor";
   recommendations: string[];
 } => {
   const recommendations: string[] = [];
@@ -174,10 +174,10 @@ export const evaluatePerformance = (metrics: PerformanceMetrics): {
   if (metrics.lcp) {
     if (metrics.lcp > 4000) {
       score -= 25;
-      recommendations.push('LCP too high - optimize largest content loading');
+      recommendations.push("LCP too high - optimize largest content loading");
     } else if (metrics.lcp > 2500) {
       score -= 10;
-      recommendations.push('LCP could be improved - consider lazy loading');
+      recommendations.push("LCP could be improved - consider lazy loading");
     }
   }
 
@@ -185,10 +185,10 @@ export const evaluatePerformance = (metrics: PerformanceMetrics): {
   if (metrics.fid) {
     if (metrics.fid > 300) {
       score -= 25;
-      recommendations.push('FID too high - reduce JavaScript execution time');
+      recommendations.push("FID too high - reduce JavaScript execution time");
     } else if (metrics.fid > 100) {
       score -= 10;
-      recommendations.push('FID could be improved - optimize event handlers');
+      recommendations.push("FID could be improved - optimize event handlers");
     }
   }
 
@@ -196,25 +196,25 @@ export const evaluatePerformance = (metrics: PerformanceMetrics): {
   if (metrics.cls !== null) {
     if (metrics.cls > 0.25) {
       score -= 25;
-      recommendations.push('CLS too high - stabilize layout shifts');
+      recommendations.push("CLS too high - stabilize layout shifts");
     } else if (metrics.cls > 0.1) {
       score -= 10;
-      recommendations.push('CLS could be improved - add size attributes to images');
+      recommendations.push("CLS could be improved - add size attributes to images");
     }
   }
 
   // Memory scoring
   if (metrics.memory && metrics.memory.percentage > 85) {
     score -= 15;
-    recommendations.push('High memory usage - check for memory leaks');
+    recommendations.push("High memory usage - check for memory leaks");
   }
 
   // Determine rating
-  let rating: 'excellent' | 'good' | 'needs-improvement' | 'poor';
-  if (score >= 90) rating = 'excellent';
-  else if (score >= 75) rating = 'good';
-  else if (score >= 50) rating = 'needs-improvement';
-  else rating = 'poor';
+  let rating: "excellent" | "good" | "needs-improvement" | "poor";
+  if (score >= 90) rating = "excellent";
+  else if (score >= 75) rating = "good";
+  else if (score >= 50) rating = "needs-improvement";
+  else rating = "poor";
 
   return { score, rating, recommendations };
 };

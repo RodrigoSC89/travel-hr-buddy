@@ -427,15 +427,15 @@ const EmergencyMode = () => {
 
   const getEmergencyIcon = (type: EmergencyType) => {
     switch (type) {
-      case "fire": return <Flame className="h-6 w-6" />;
-      case "collision": return <Ship className="h-6 w-6" />;
-      case "man_overboard": return <Users className="h-6 w-6" />;
-      case "medical": return <Heart className="h-6 w-6" />;
-      case "flooding": return <Waves className="h-6 w-6" />;
-      case "grounding": return <Anchor className="h-6 w-6" />;
-      case "piracy": return <Shield className="h-6 w-6" />;
-      case "abandon_ship": return <Navigation className="h-6 w-6" />;
-      default: return <AlertOctagon className="h-6 w-6" />;
+    case "fire": return <Flame className="h-6 w-6" />;
+    case "collision": return <Ship className="h-6 w-6" />;
+    case "man_overboard": return <Users className="h-6 w-6" />;
+    case "medical": return <Heart className="h-6 w-6" />;
+    case "flooding": return <Waves className="h-6 w-6" />;
+    case "grounding": return <Anchor className="h-6 w-6" />;
+    case "piracy": return <Shield className="h-6 w-6" />;
+    case "abandon_ship": return <Navigation className="h-6 w-6" />;
+    default: return <AlertOctagon className="h-6 w-6" />;
     }
   };
 

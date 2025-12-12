@@ -161,34 +161,34 @@ export const CrewDossierManager = () => {
 
   const getStatusBadge = (status: CrewMember["status"]) => {
     switch (status) {
-      case "active":
-        return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
-      case "shore_leave":
-        return <Badge className="bg-warning text-warning-foreground">Licença Terra</Badge>;
-      case "medical_leave":
-        return <Badge className="bg-orange-500 text-white">Licença Médica</Badge>;
-      case "inactive":
-        return <Badge variant="secondary">Inativo</Badge>;
+    case "active":
+      return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
+    case "shore_leave":
+      return <Badge className="bg-warning text-warning-foreground">Licença Terra</Badge>;
+    case "medical_leave":
+      return <Badge className="bg-orange-500 text-white">Licença Médica</Badge>;
+    case "inactive":
+      return <Badge variant="secondary">Inativo</Badge>;
     }
   };
 
   const getCertStatusBadge = (status: Certificate["status"]) => {
     switch (status) {
-      case "valid":
-        return <Badge className="bg-success text-success-foreground">Válido</Badge>;
-      case "expiring":
-        return <Badge className="bg-warning text-warning-foreground">Expirando</Badge>;
-      case "expired":
-        return <Badge variant="destructive">Expirado</Badge>;
+    case "valid":
+      return <Badge className="bg-success text-success-foreground">Válido</Badge>;
+    case "expiring":
+      return <Badge className="bg-warning text-warning-foreground">Expirando</Badge>;
+    case "expired":
+      return <Badge variant="destructive">Expirado</Badge>;
     }
   };
 
   const getCategoryIcon = (category: Document["category"]) => {
     switch (category) {
-      case "personal": return <User className="h-4 w-4" />;
-      case "professional": return <Briefcase className="h-4 w-4" />;
-      case "medical": return <Heart className="h-4 w-4" />;
-      case "training": return <GraduationCap className="h-4 w-4" />;
+    case "personal": return <User className="h-4 w-4" />;
+    case "professional": return <Briefcase className="h-4 w-4" />;
+    case "medical": return <Heart className="h-4 w-4" />;
+    case "training": return <GraduationCap className="h-4 w-4" />;
     }
   };
 

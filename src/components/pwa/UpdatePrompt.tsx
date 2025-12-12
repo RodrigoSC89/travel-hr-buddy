@@ -3,11 +3,11 @@
  * Prompt users to update the app
  */
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, X, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useServiceWorker } from '@/lib/pwa/service-worker-manager';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { RefreshCw, X, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useServiceWorker } from "@/lib/pwa/service-worker-manager";
 
 export function UpdatePrompt() {
   const { updateAvailable, skipWaiting } = useServiceWorker();

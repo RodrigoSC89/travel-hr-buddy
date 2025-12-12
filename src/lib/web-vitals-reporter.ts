@@ -4,7 +4,7 @@
  * PATCH: Audit Plan 2025 - Observability
  */
 
-import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
+import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from "web-vitals";
 
 // Thresholds based on Google's recommendations
 const THRESHOLDS = {
@@ -16,7 +16,7 @@ const THRESHOLDS = {
 };
 
 type VitalName = keyof typeof THRESHOLDS;
-type VitalRating = 'good' | 'needs-improvement' | 'poor';
+type VitalRating = "good" | "needs-improvement" | "poor";
 
 interface VitalReport {
   name: VitalName;
@@ -36,18 +36,18 @@ let flushTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const getRating = (name: VitalName, value: number): VitalRating => {
   const threshold = THRESHOLDS[name];
-  if (!threshold) return 'good';
+  if (!threshold) return "good";
   
-  if (value <= threshold.good) return 'good';
-  if (value <= threshold.needsImprovement) return 'needs-improvement';
-  return 'poor';
+  if (value <= threshold.good) return "good";
+  if (value <= threshold.needsImprovement) return "needs-improvement";
+  return "poor";
 };
 
 const getConnectionType = (): string => {
   const nav = navigator as Navigator & { 
     connection?: { effectiveType?: string } 
   };
-  return nav.connection?.effectiveType || 'unknown';
+  return nav.connection?.effectiveType || "unknown";
 };
 
 const handleVital = (metric: Metric) => {
@@ -57,7 +57,7 @@ const handleVital = (metric: Metric) => {
     rating: getRating(metric.name as VitalName, metric.value),
     delta: metric.delta,
     id: metric.id,
-    navigationType: metric.navigationType || 'navigate',
+    navigationType: metric.navigationType || "navigate",
     timestamp: Date.now(),
     url: window.location.href,
     connectionType: getConnectionType(),
@@ -67,8 +67,8 @@ const handleVital = (metric: Metric) => {
   
   // Log in development
   if (import.meta.env.DEV) {
-    const color = report.rating === 'good' ? '🟢' : 
-                  report.rating === 'needs-improvement' ? '🟡' : '🔴';
+    const color = report.rating === "good" ? "🟢" : 
+      report.rating === "needs-improvement" ? "🟡" : "🔴";
   }
   
   // Schedule flush
@@ -111,9 +111,9 @@ const flushVitals = async () => {
       navigator.sendBeacon(analyticsUrl, data);
     } else {
       fetch(analyticsUrl, {
-        method: 'POST',
+        method: "POST",
         body: data,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         keepalive: true,
       }).catch(() => {
         // Silent fail - analytics shouldn't break the app
@@ -129,7 +129,7 @@ const checkForIssues = (vitals: VitalReport[]) => {
   const issues: string[] = [];
   
   vitals.forEach(vital => {
-    if (vital.rating === 'poor') {
+    if (vital.rating === "poor") {
       issues.push(`${vital.name} is poor (${vital.value.toFixed(2)})`);
     }
   });
@@ -143,7 +143,7 @@ const checkForIssues = (vitals: VitalReport[]) => {
 // Initialize web vitals collection
 export const initWebVitals = () => {
   // Only run in browser
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   
   try {
     onCLS(handleVital);
@@ -153,20 +153,20 @@ export const initWebVitals = () => {
     onINP(handleVital);
     
     // Flush on page unload
-    window.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
         flushVitals();
       }
     });
     
     // Flush on beforeunload as backup
-    window.addEventListener('beforeunload', flushVitals);
+    window.addEventListener("beforeunload", flushVitals);
     
     if (import.meta.env.DEV) {
     }
   } catch (error) {
-    console.warn('[Web Vitals] Failed to initialize:', error);
-    console.warn('[Web Vitals] Failed to initialize:', error);
+    console.warn("[Web Vitals] Failed to initialize:", error);
+    console.warn("[Web Vitals] Failed to initialize:", error);
   }
 };
 

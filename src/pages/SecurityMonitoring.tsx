@@ -140,23 +140,23 @@ Forneça análises detalhadas e recomendações de segurança.`;
 
   const getAlertIcon = (type: SecurityAlert["type"]) => {
     switch (type) {
-      case "critical":
-        return <XCircle className="h-5 w-5 text-destructive" />;
-      case "warning":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      default:
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "critical":
+      return <XCircle className="h-5 w-5 text-destructive" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    default:
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
     }
   };
 
   const getStatusBadge = (status: SecurityAlert["status"]) => {
     switch (status) {
-      case "open":
-        return <Badge variant="destructive">Aberto</Badge>;
-      case "investigating":
-        return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Investigando</Badge>;
-      default:
-        return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Resolvido</Badge>;
+    case "open":
+      return <Badge variant="destructive">Aberto</Badge>;
+    case "investigating":
+      return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Investigando</Badge>;
+    default:
+      return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Resolvido</Badge>;
     }
   };
 

@@ -241,8 +241,8 @@ export default function IntelligentTriggersPage() {
                               {trigger.type === "event"
                                 ? "Evento"
                                 : trigger.type === "schedule"
-                                ? "Agendado"
-                                : "Webhook"}
+                                  ? "Agendado"
+                                  : "Webhook"}
                             </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground mt-1">{trigger.description}</p>

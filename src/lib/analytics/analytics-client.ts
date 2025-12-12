@@ -3,7 +3,7 @@
  * PATCH 833: Client-side analytics tracking with batching
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 interface AnalyticsEvent {
   event_name: string;
@@ -54,8 +54,8 @@ class AnalyticsClient {
   }
 
   private setupBeforeUnload() {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('beforeunload', () => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", () => {
         this.flush(true);
       });
     }
@@ -69,10 +69,10 @@ class AnalyticsClient {
 
     supabase.auth.onAuthStateChange((event, session) => {
       this.userId = session?.user?.id || null;
-      if (event === 'SIGNED_IN') {
-        this.track('user_signed_in');
-      } else if (event === 'SIGNED_OUT') {
-        this.track('user_signed_out');
+      if (event === "SIGNED_IN") {
+        this.track("user_signed_in");
+      } else if (event === "SIGNED_OUT") {
+        this.track("user_signed_out");
         this.sessionId = this.generateSessionId();
       }
     });
@@ -96,8 +96,8 @@ class AnalyticsClient {
         user_id: this.userId,
         session_id: this.sessionId,
       },
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
+      page_url: typeof window !== "undefined" ? window.location.href : undefined,
+      referrer: typeof document !== "undefined" ? document.referrer : undefined,
       timestamp: new Date().toISOString(),
     };
 
@@ -112,17 +112,17 @@ class AnalyticsClient {
   }
 
   private inferCategory(eventName: string): string {
-    if (eventName.startsWith('page_')) return 'navigation';
-    if (eventName.startsWith('click_')) return 'interaction';
-    if (eventName.startsWith('form_')) return 'form';
-    if (eventName.startsWith('error_')) return 'error';
-    if (eventName.startsWith('user_')) return 'user';
-    if (eventName.startsWith('api_')) return 'api';
-    return 'general';
+    if (eventName.startsWith("page_")) return "navigation";
+    if (eventName.startsWith("click_")) return "interaction";
+    if (eventName.startsWith("form_")) return "form";
+    if (eventName.startsWith("error_")) return "error";
+    if (eventName.startsWith("user_")) return "user";
+    if (eventName.startsWith("api_")) return "api";
+    return "general";
   }
 
   pageView(pageName?: string, properties?: Record<string, any>) {
-    this.track('page_view', {
+    this.track("page_view", {
       page_name: pageName || document.title,
       page_path: window.location.pathname,
       ...properties,
@@ -130,11 +130,11 @@ class AnalyticsClient {
   }
 
   click(elementId: string, properties?: Record<string, any>) {
-    this.track('click_' + elementId, properties);
+    this.track("click_" + elementId, properties);
   }
 
   error(errorType: string, error: Error | string, properties?: Record<string, any>) {
-    this.track('error_' + errorType, {
+    this.track("error_" + errorType, {
       error_message: error instanceof Error ? error.message : error,
       error_stack: error instanceof Error ? error.stack : undefined,
       ...properties,
@@ -142,7 +142,7 @@ class AnalyticsClient {
   }
 
   timing(category: string, variable: string, timeMs: number) {
-    this.track('timing', {
+    this.track("timing", {
       timing_category: category,
       timing_variable: variable,
       timing_value: timeMs,
@@ -171,7 +171,7 @@ class AnalyticsClient {
         );
       } else {
         // Use fetch for async sends
-        await supabase.functions.invoke('track-analytics', {
+        await supabase.functions.invoke("track-analytics", {
           body: { events, metadata },
         });
       }
@@ -183,41 +183,41 @@ class AnalyticsClient {
       this.queue = [...events, ...this.queue];
       
       if (this.config.debug) {
-        console.error('[Analytics] Flush failed:', error);
-        console.error('[Analytics] Flush failed:', error);
+        console.error("[Analytics] Flush failed:", error);
+        console.error("[Analytics] Flush failed:", error);
       }
     }
   }
 
   private getDeviceType(): string {
     const ua = navigator.userAgent;
-    if (/mobile/i.test(ua)) return 'mobile';
-    if (/tablet|ipad/i.test(ua)) return 'tablet';
-    return 'desktop';
+    if (/mobile/i.test(ua)) return "mobile";
+    if (/tablet|ipad/i.test(ua)) return "tablet";
+    return "desktop";
   }
 
   private getBrowser(): string {
     const ua = navigator.userAgent;
-    if (/chrome/i.test(ua) && !/edge/i.test(ua)) return 'Chrome';
-    if (/safari/i.test(ua) && !/chrome/i.test(ua)) return 'Safari';
-    if (/firefox/i.test(ua)) return 'Firefox';
-    if (/edge/i.test(ua)) return 'Edge';
-    return 'Unknown';
+    if (/chrome/i.test(ua) && !/edge/i.test(ua)) return "Chrome";
+    if (/safari/i.test(ua) && !/chrome/i.test(ua)) return "Safari";
+    if (/firefox/i.test(ua)) return "Firefox";
+    if (/edge/i.test(ua)) return "Edge";
+    return "Unknown";
   }
 
   private getOS(): string {
     const ua = navigator.userAgent;
-    if (/windows/i.test(ua)) return 'Windows';
-    if (/macintosh/i.test(ua)) return 'macOS';
-    if (/linux/i.test(ua)) return 'Linux';
-    if (/android/i.test(ua)) return 'Android';
-    if (/iphone|ipad/i.test(ua)) return 'iOS';
-    return 'Unknown';
+    if (/windows/i.test(ua)) return "Windows";
+    if (/macintosh/i.test(ua)) return "macOS";
+    if (/linux/i.test(ua)) return "Linux";
+    if (/android/i.test(ua)) return "Android";
+    if (/iphone|ipad/i.test(ua)) return "iOS";
+    return "Unknown";
   }
 
   identify(userId: string, traits?: Record<string, any>) {
     this.userId = userId;
-    this.track('user_identified', { user_id: userId, ...traits });
+    this.track("user_identified", { user_id: userId, ...traits });
   }
 
   reset() {
@@ -246,8 +246,8 @@ class AnalyticsClient {
 export const analytics = new AnalyticsClient();
 
 // React hook
-import { useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 
 export function useAnalytics() {
   const location = useLocation();

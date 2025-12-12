@@ -3,8 +3,8 @@
  * Natural language voice control system
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { hapticFeedback } from '@/lib/ux/haptic-feedback';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { hapticFeedback } from "@/lib/ux/haptic-feedback";
 
 interface VoiceCommand {
   id: string;
@@ -31,7 +31,7 @@ class AdvancedVoiceEngine {
   private state: VoiceState = {
     isListening: false,
     isProcessing: false,
-    transcript: '',
+    transcript: "",
     lastCommand: null,
     error: null,
     confidence: 0,
@@ -56,12 +56,12 @@ class AdvancedVoiceEngine {
     this.recognition = new SpeechRecognition();
     this.recognition.continuous = false;
     this.recognition.interimResults = true;
-    this.recognition.lang = 'pt-BR';
+    this.recognition.lang = "pt-BR";
     this.recognition.maxAlternatives = 3;
     
     this.recognition.onstart = () => {
       this.updateState({ isListening: true, error: null });
-      hapticFeedback.trigger('light');
+      hapticFeedback.trigger("light");
     };
     
     this.recognition.onend = () => {
@@ -90,109 +90,109 @@ class AdvancedVoiceEngine {
         isListening: false,
         isProcessing: false,
       });
-      hapticFeedback.trigger('error');
+      hapticFeedback.trigger("error");
     };
   }
   
   private registerDefaultCommands(): void {
     // Navigation commands
     this.registerCommand({
-      id: 'nav-dashboard',
-      patterns: ['ir para dashboard', 'abrir dashboard', 'mostrar dashboard', 'início'],
-      action: () => window.location.href = '/dashboard',
-      description: 'Navegar para o Dashboard',
-      category: 'navigation',
+      id: "nav-dashboard",
+      patterns: ["ir para dashboard", "abrir dashboard", "mostrar dashboard", "início"],
+      action: () => window.location.href = "/dashboard",
+      description: "Navegar para o Dashboard",
+      category: "navigation",
     });
     
     this.registerCommand({
-      id: 'nav-travel',
-      patterns: ['ir para viagens', 'abrir viagens', 'módulo de viagens'],
-      action: () => window.location.href = '/travel',
-      description: 'Navegar para Viagens',
-      category: 'navigation',
+      id: "nav-travel",
+      patterns: ["ir para viagens", "abrir viagens", "módulo de viagens"],
+      action: () => window.location.href = "/travel",
+      description: "Navegar para Viagens",
+      category: "navigation",
     });
     
     this.registerCommand({
-      id: 'nav-hr',
-      patterns: ['ir para rh', 'recursos humanos', 'abrir rh', 'gestão de pessoas'],
-      action: () => window.location.href = '/hr',
-      description: 'Navegar para RH',
-      category: 'navigation',
+      id: "nav-hr",
+      patterns: ["ir para rh", "recursos humanos", "abrir rh", "gestão de pessoas"],
+      action: () => window.location.href = "/hr",
+      description: "Navegar para RH",
+      category: "navigation",
     });
     
     this.registerCommand({
-      id: 'nav-fleet',
-      patterns: ['ir para frota', 'abrir frota', 'embarcações', 'navios'],
-      action: () => window.location.href = '/fleet',
-      description: 'Navegar para Frota',
-      category: 'navigation',
+      id: "nav-fleet",
+      patterns: ["ir para frota", "abrir frota", "embarcações", "navios"],
+      action: () => window.location.href = "/fleet",
+      description: "Navegar para Frota",
+      category: "navigation",
     });
     
     this.registerCommand({
-      id: 'nav-documents',
-      patterns: ['ir para documentos', 'abrir documentos', 'meus documentos'],
-      action: () => window.location.href = '/documents',
-      description: 'Navegar para Documentos',
-      category: 'navigation',
+      id: "nav-documents",
+      patterns: ["ir para documentos", "abrir documentos", "meus documentos"],
+      action: () => window.location.href = "/documents",
+      description: "Navegar para Documentos",
+      category: "navigation",
     });
     
     // Action commands
     this.registerCommand({
-      id: 'action-search',
-      patterns: ['buscar', 'pesquisar', 'procurar'],
+      id: "action-search",
+      patterns: ["buscar", "pesquisar", "procurar"],
       action: () => {
-        const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true });
+        const event = new KeyboardEvent("keydown", { key: "k", ctrlKey: true });
         document.dispatchEvent(event);
       },
-      description: 'Abrir busca',
-      category: 'action',
+      description: "Abrir busca",
+      category: "action",
     });
     
     this.registerCommand({
-      id: 'action-new',
-      patterns: ['criar novo', 'novo registro', 'adicionar'],
+      id: "action-new",
+      patterns: ["criar novo", "novo registro", "adicionar"],
       action: () => {
-        const newButton = document.querySelector('[data-action="new"]') as HTMLButtonElement;
+        const newButton = document.querySelector("[data-action=\"new\"]") as HTMLButtonElement;
         newButton?.click();
       },
-      description: 'Criar novo item',
-      category: 'action',
+      description: "Criar novo item",
+      category: "action",
     });
     
     this.registerCommand({
-      id: 'action-refresh',
-      patterns: ['atualizar', 'recarregar', 'refresh'],
+      id: "action-refresh",
+      patterns: ["atualizar", "recarregar", "refresh"],
       action: () => window.location.reload(),
-      description: 'Atualizar página',
-      category: 'action',
+      description: "Atualizar página",
+      category: "action",
     });
     
     this.registerCommand({
-      id: 'action-back',
-      patterns: ['voltar', 'página anterior', 'retornar'],
+      id: "action-back",
+      patterns: ["voltar", "página anterior", "retornar"],
       action: () => window.history.back(),
-      description: 'Voltar',
-      category: 'action',
+      description: "Voltar",
+      category: "action",
     });
     
     // System commands
     this.registerCommand({
-      id: 'system-help',
-      patterns: ['ajuda', 'comandos', 'o que você pode fazer'],
+      id: "system-help",
+      patterns: ["ajuda", "comandos", "o que você pode fazer"],
       action: () => this.speakCommands(),
-      description: 'Mostrar ajuda',
-      category: 'system',
+      description: "Mostrar ajuda",
+      category: "system",
     });
     
     this.registerCommand({
-      id: 'system-notifications',
-      patterns: ['notificações', 'alertas', 'avisos'],
+      id: "system-notifications",
+      patterns: ["notificações", "alertas", "avisos"],
       action: () => {
-        const notifButton = document.querySelector('[data-onboarding="notifications"]') as HTMLButtonElement;
+        const notifButton = document.querySelector("[data-onboarding=\"notifications\"]") as HTMLButtonElement;
         notifButton?.click();
       },
-      description: 'Abrir notificações',
-      category: 'system',
+      description: "Abrir notificações",
+      category: "system",
     });
   }
   
@@ -229,7 +229,7 @@ class AdvancedVoiceEngine {
       lastCommand: null,
       isProcessing: false,
     });
-    this.speak('Desculpe, não entendi o comando.');
+    this.speak("Desculpe, não entendi o comando.");
   }
   
   private executeCommand(command: VoiceCommand): void {
@@ -238,7 +238,7 @@ class AdvancedVoiceEngine {
       isProcessing: false,
     });
     
-    hapticFeedback.trigger('success');
+    hapticFeedback.trigger("success");
     command.action();
   }
   
@@ -246,9 +246,9 @@ class AdvancedVoiceEngine {
    * Speak text using TTS
    */
   speak(text: string): void {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pt-BR';
+      utterance.lang = "pt-BR";
       utterance.rate = 1.1;
       window.speechSynthesis.speak(utterance);
     }
@@ -258,8 +258,8 @@ class AdvancedVoiceEngine {
     const categories = [...new Set(this.commands.map(c => c.category))];
     const text = categories.map(cat => {
       const cmds = this.commands.filter(c => c.category === cat);
-      return `${cat}: ${cmds.map(c => c.patterns[0]).join(', ')}`;
-    }).join('. ');
+      return `${cat}: ${cmds.map(c => c.patterns[0]).join(", ")}`;
+    }).join(". ");
     
     this.speak(`Comandos disponíveis: ${text}`);
   }
@@ -269,7 +269,7 @@ class AdvancedVoiceEngine {
    */
   start(): void {
     if (!this.isSupported || !this.recognition) {
-      this.updateState({ error: 'Reconhecimento de voz não suportado' });
+      this.updateState({ error: "Reconhecimento de voz não suportado" });
       return;
     }
     
@@ -328,7 +328,7 @@ export function useVoiceCommands() {
   const [state, setState] = useState<VoiceState>({
     isListening: false,
     isProcessing: false,
-    transcript: '',
+    transcript: "",
     lastCommand: null,
     error: null,
     confidence: 0,

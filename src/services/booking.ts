@@ -187,10 +187,10 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
     const destResponse = await fetch(
       `https://booking-com.p.rapidapi.com/v1/hotels/locations?name=${encodeURIComponent(destination)}&locale=pt-br`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'booking-com.p.rapidapi.com',
+          "X-RapidAPI-Key": apiKey,
+          "X-RapidAPI-Host": "booking-com.p.rapidapi.com",
         },
       }
     );
@@ -210,28 +210,28 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
       return {
         success: false,
         offers: [],
-        error: 'Destination not found',
+        error: "Destination not found",
       };
     }
 
     // Search hotels
-    const searchUrl = new URL('https://booking-com.p.rapidapi.com/v1/hotels/search');
-    searchUrl.searchParams.append('dest_id', destId);
-    searchUrl.searchParams.append('dest_type', 'city');
-    searchUrl.searchParams.append('checkin_date', checkIn);
-    searchUrl.searchParams.append('checkout_date', checkOut);
-    searchUrl.searchParams.append('adults_number', adults.toString());
-    searchUrl.searchParams.append('children_number', children.toString());
-    searchUrl.searchParams.append('room_number', rooms.toString());
-    searchUrl.searchParams.append('locale', 'pt-br');
-    searchUrl.searchParams.append('currency', 'BRL');
-    searchUrl.searchParams.append('order_by', 'popularity');
+    const searchUrl = new URL("https://booking-com.p.rapidapi.com/v1/hotels/search");
+    searchUrl.searchParams.append("dest_id", destId);
+    searchUrl.searchParams.append("dest_type", "city");
+    searchUrl.searchParams.append("checkin_date", checkIn);
+    searchUrl.searchParams.append("checkout_date", checkOut);
+    searchUrl.searchParams.append("adults_number", adults.toString());
+    searchUrl.searchParams.append("children_number", children.toString());
+    searchUrl.searchParams.append("room_number", rooms.toString());
+    searchUrl.searchParams.append("locale", "pt-br");
+    searchUrl.searchParams.append("currency", "BRL");
+    searchUrl.searchParams.append("order_by", "popularity");
 
     const response = await fetch(searchUrl.toString(), {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': 'booking-com.p.rapidapi.com',
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "booking-com.p.rapidapi.com",
       },
     });
 
@@ -254,7 +254,7 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
           id: hotel.hotel_id,
           name: hotel.hotel_name,
           price: hotel.min_total_price || hotel.price_breakdown?.gross_price?.value || 0,
-          currency: hotel.currency_code || 'BRL',
+          currency: hotel.currency_code || "BRL",
           rating: hotel.class || 0,
           reviewScore: hotel.review_score || 0,
           location: hotel.address || destination,
@@ -279,7 +279,7 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
     return {
       success: false,
       offers: [],
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

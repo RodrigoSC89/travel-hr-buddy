@@ -182,9 +182,9 @@ export const SmartDPLogbook: React.FC = () => {
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "warning": return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
-      default: return <Badge variant="secondary">Info</Badge>;
+    case "critical": return <Badge variant="destructive">Crítico</Badge>;
+    case "warning": return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
+    default: return <Badge variant="secondary">Info</Badge>;
     }
   };
 

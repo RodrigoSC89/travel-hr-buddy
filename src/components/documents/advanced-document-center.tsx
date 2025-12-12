@@ -337,11 +337,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const newDocuments: Document[] = uploadedFiles.map((file, index) => {
-      const fileType = file.name.split('.').pop()?.toLowerCase() || 'other';
+      const fileType = file.name.split(".").pop()?.toLowerCase() || "other";
       return {
         id: `new-${Date.now()}-${index}`,
         title: file.name.replace(/\.[^/.]+$/, ""),
-        description: `Documento enviado via upload`,
+        description: "Documento enviado via upload",
         type: (["pdf", "docx", "xlsx", "pptx"].includes(fileType) ? fileType : "other") as Document["type"],
         category: "manuais",
         size: file.size,
@@ -448,9 +448,9 @@ Status: ${doc.status}
 Este é um documento de demonstração do Centro de Documentos.
     `.trim();
 
-    const blob = new Blob([content], { type: 'text/plain' });
+    const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `${doc.title}.txt`;
     document.body.appendChild(a);

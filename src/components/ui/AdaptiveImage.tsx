@@ -14,7 +14,7 @@ interface AdaptiveImageProps {
   width?: number;
   height?: number;
   priority?: boolean;
-  placeholder?: 'blur' | 'empty';
+  placeholder?: "blur" | "empty";
   onLoad?: () => void;
   onError?: () => void;
 }
@@ -26,7 +26,7 @@ export function AdaptiveImage({
   width,
   height,
   priority = false,
-  placeholder = 'blur',
+  placeholder = "blur",
   onLoad,
   onError,
 }: AdaptiveImageProps) {
@@ -38,7 +38,7 @@ export function AdaptiveImage({
   useEffect(() => {
     if (priority && imgRef.current) {
       // Carregar imediatamente se for prioritária
-      imgRef.current.loading = 'eager';
+      imgRef.current.loading = "eager";
     }
   }, [priority]);
 
@@ -74,7 +74,7 @@ export function AdaptiveImage({
   return (
     <div className={cn("relative overflow-hidden", className)}>
       {/* Placeholder blur */}
-      {placeholder === 'blur' && !loaded && (
+      {placeholder === "blur" && !loaded && (
         <div 
           className="absolute inset-0 bg-muted animate-pulse"
           style={{ width: adaptiveWidth, height }}
@@ -87,7 +87,7 @@ export function AdaptiveImage({
         alt={alt}
         width={adaptiveWidth}
         height={height}
-        loading={priority ? 'eager' : 'lazy'}
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}
@@ -116,10 +116,10 @@ export function AdaptiveAvatar({
   const [error, setError] = useState(false);
 
   const initials = alt
-    .split(' ')
+    .split(" ")
     .map(n => n[0])
     .slice(0, 2)
-    .join('')
+    .join("")
     .toUpperCase();
 
   if (!src || error) {

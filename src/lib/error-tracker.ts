@@ -3,8 +3,8 @@
  * Centralized error tracking and logging
  */
 
-export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type ErrorCategory = 'network' | 'validation' | 'authentication' | 'runtime' | 'unknown';
+export type ErrorSeverity = "low" | "medium" | "high" | "critical";
+export type ErrorCategory = "network" | "validation" | "authentication" | "runtime" | "unknown";
 
 export interface ErrorLog {
   id: string;
@@ -37,20 +37,20 @@ class ErrorTracker {
    */
   track(
     error: Error | string,
-    severity: ErrorSeverity = 'medium',
-    category: ErrorCategory = 'unknown',
+    severity: ErrorSeverity = "medium",
+    category: ErrorCategory = "unknown",
     context?: Record<string, unknown>
   ): ErrorLog {
     const errorLog: ErrorLog = {
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: Date.now(),
-      message: typeof error === 'string' ? error : error.message,
-      stack: typeof error === 'object' ? error.stack : undefined,
+      message: typeof error === "string" ? error : error.message,
+      stack: typeof error === "object" ? error.stack : undefined,
       severity,
       category,
       context,
-      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      url: typeof window !== 'undefined' ? window.location.href : undefined,
+      userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
+      url: typeof window !== "undefined" ? window.location.href : undefined,
     };
 
     // Add to errors array
@@ -65,7 +65,7 @@ class ErrorTracker {
     this.listeners.forEach(listener => listener(errorLog));
 
     // Store in window for debugging
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).__NAUTILUS_ERRORS__ = this.errors;
     }
 
@@ -79,28 +79,28 @@ class ErrorTracker {
    * Track network error
    */
   trackNetworkError(error: Error | string, context?: Record<string, unknown>): ErrorLog {
-    return this.track(error, 'medium', 'network', context);
+    return this.track(error, "medium", "network", context);
   }
 
   /**
    * Track validation error
    */
   trackValidationError(error: Error | string, context?: Record<string, unknown>): ErrorLog {
-    return this.track(error, 'low', 'validation', context);
+    return this.track(error, "low", "validation", context);
   }
 
   /**
    * Track authentication error
    */
   trackAuthError(error: Error | string, context?: Record<string, unknown>): ErrorLog {
-    return this.track(error, 'high', 'authentication', context);
+    return this.track(error, "high", "authentication", context);
   }
 
   /**
    * Track runtime error
    */
   trackRuntimeError(error: Error | string, context?: Record<string, unknown>): ErrorLog {
-    return this.track(error, 'high', 'runtime', context);
+    return this.track(error, "high", "runtime", context);
   }
 
   /**
@@ -162,7 +162,7 @@ class ErrorTracker {
    */
   clear(): void {
     this.errors = [];
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).__NAUTILUS_ERRORS__ = [];
     }
   }
@@ -182,13 +182,13 @@ class ErrorTracker {
     const prefix = `[ErrorTracker][${error.severity.toUpperCase()}][${error.category}]`;
     
     switch (error.severity) {
-      case 'critical':
-      case 'high':
-        break;
-      case 'medium':
-        break;
-      case 'low':
-        break;
+    case "critical":
+    case "high":
+      break;
+    case "medium":
+      break;
+    case "low":
+      break;
     }
   }
 
@@ -196,14 +196,14 @@ class ErrorTracker {
    * Initialize global error handlers
    */
   initGlobalHandlers(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Handle uncaught errors
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       this.track(
         event.error || event.message,
-        'high',
-        'runtime',
+        "high",
+        "runtime",
         {
           filename: event.filename,
           lineno: event.lineno,
@@ -213,13 +213,13 @@ class ErrorTracker {
     });
 
     // Handle unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       this.track(
         event.reason instanceof Error ? event.reason : String(event.reason),
-        'high',
-        'runtime',
+        "high",
+        "runtime",
         {
-          type: 'unhandledRejection',
+          type: "unhandledRejection",
         }
       );
     });
@@ -230,11 +230,11 @@ class ErrorTracker {
 export const errorTracker = new ErrorTracker();
 
 // Initialize global handlers
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   errorTracker.initGlobalHandlers();
 }
 
 // Export for debugging
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   (window as any).__NAUTILUS_ERROR_TRACKER__ = errorTracker;
 }

@@ -229,7 +229,7 @@ class BackgroundSyncService {
     isSyncing: boolean;
     lastSyncTime: number;
     timeSinceLastSync: number;
-  } {
+    } {
     return {
       isSyncing: this.isSyncing,
       lastSyncTime: this.lastSyncTime,

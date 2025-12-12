@@ -3,17 +3,17 @@
  * Intelligent, contextual notifications with priority management
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-export type NotificationPriority = 'urgent' | 'high' | 'normal' | 'low';
+export type NotificationPriority = "urgent" | "high" | "normal" | "low";
 export type NotificationCategory = 
-  | 'safety' 
-  | 'maintenance' 
-  | 'crew' 
-  | 'compliance' 
-  | 'system' 
-  | 'performance'
-  | 'alert';
+  | "safety" 
+  | "maintenance" 
+  | "crew" 
+  | "compliance" 
+  | "system" 
+  | "performance"
+  | "alert";
 
 interface SmartNotification {
   id: string;
@@ -45,7 +45,7 @@ class SmartNotificationManager {
   private notifications: SmartNotification[] = [];
   private preferences: NotificationPreferences;
   private listeners: Set<(notifications: SmartNotification[]) => void> = new Set();
-  private permission: NotificationPermission = 'default';
+  private permission: NotificationPermission = "default";
 
   constructor() {
     this.preferences = this.loadPreferences();
@@ -53,7 +53,7 @@ class SmartNotificationManager {
   }
 
   private loadPreferences(): NotificationPreferences {
-    const saved = localStorage.getItem('notification-preferences');
+    const saved = localStorage.getItem("notification-preferences");
     if (saved) {
       return JSON.parse(saved);
     }
@@ -77,12 +77,12 @@ class SmartNotificationManager {
   }
 
   private savePreferences(): void {
-    localStorage.setItem('notification-preferences', JSON.stringify(this.preferences));
+    localStorage.setItem("notification-preferences", JSON.stringify(this.preferences));
   }
 
   async checkPermission(): Promise<NotificationPermission> {
-    if (!('Notification' in window)) {
-      this.permission = 'denied';
+    if (!("Notification" in window)) {
+      this.permission = "denied";
       return this.permission;
     }
 
@@ -91,8 +91,8 @@ class SmartNotificationManager {
   }
 
   async requestPermission(): Promise<NotificationPermission> {
-    if (!('Notification' in window)) {
-      return 'denied';
+    if (!("Notification" in window)) {
+      return "denied";
     }
 
     this.permission = await Notification.requestPermission();
@@ -100,7 +100,7 @@ class SmartNotificationManager {
   }
 
   // Add a notification
-  add(notification: Omit<SmartNotification, 'id' | 'timestamp' | 'read'>): string {
+  add(notification: Omit<SmartNotification, "id" | "timestamp" | "read">): string {
     const id = `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const newNotification: SmartNotification = {
@@ -218,7 +218,7 @@ class SmartNotificationManager {
     if (!this.preferences.categories[notification.category]) return false;
 
     // Check quiet hours
-    if (this.preferences.quietHours && notification.priority !== 'urgent') {
+    if (this.preferences.quietHours && notification.priority !== "urgent") {
       const now = new Date();
       const hour = now.getHours();
       const { start, end } = this.preferences.quietHours;
@@ -239,15 +239,15 @@ class SmartNotificationManager {
   }
 
   private async showNativeNotification(notification: SmartNotification): Promise<void> {
-    if (this.permission !== 'granted') return;
+    if (this.permission !== "granted") return;
     if (!this.preferences.enabled) return;
 
     const options: NotificationOptions = {
       body: notification.message,
-      icon: notification.icon || '/favicon.ico',
-      badge: '/favicon.ico',
+      icon: notification.icon || "/favicon.ico",
+      badge: "/favicon.ico",
       tag: notification.groupId || notification.id,
-      requireInteraction: notification.priority === 'urgent',
+      requireInteraction: notification.priority === "urgent",
       data: { url: notification.actionUrl },
     };
 
@@ -263,7 +263,7 @@ class SmartNotificationManager {
         native.close();
       };
     } catch (error) {
-      console.error('Failed to show native notification:', error);
+      console.error("Failed to show native notification:", error);
     }
   }
 
@@ -271,9 +271,9 @@ class SmartNotificationManager {
     if (!this.preferences.sound) return;
 
     // Play different sounds based on priority
-    const soundUrl = notification.priority === 'urgent'
-      ? '/sounds/urgent.mp3'
-      : '/sounds/notification.mp3';
+    const soundUrl = notification.priority === "urgent"
+      ? "/sounds/urgent.mp3"
+      : "/sounds/notification.mp3";
 
     try {
       const audio = new Audio(soundUrl);
@@ -284,8 +284,8 @@ class SmartNotificationManager {
     }
 
     // Vibration for mobile
-    if (this.preferences.vibration && 'vibrate' in navigator) {
-      const pattern = notification.priority === 'urgent'
+    if (this.preferences.vibration && "vibrate" in navigator) {
+      const pattern = notification.priority === "urgent"
         ? [200, 100, 200, 100, 200]
         : [100, 50, 100];
       navigator.vibrate(pattern);
@@ -324,7 +324,7 @@ export function useNotifications() {
 }
 
 export function useNotificationPermission() {
-  const [permission, setPermission] = useState<NotificationPermission>('default');
+  const [permission, setPermission] = useState<NotificationPermission>("default");
 
   useEffect(() => {
     smartNotifications.checkPermission().then(setPermission);

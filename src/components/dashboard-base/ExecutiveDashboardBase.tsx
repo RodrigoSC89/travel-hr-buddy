@@ -62,48 +62,48 @@ export const ExecutiveDashboardBase = ({
     );
 
     switch (widget.type) {
-      case "kpi":
-        return (
-          <div key={widget.id} className={gridClasses}>
-            <KPICard config={widget.config} />
-          </div>
-        );
+    case "kpi":
+      return (
+        <div key={widget.id} className={gridClasses}>
+          <KPICard config={widget.config} />
+        </div>
+      );
 
-      case "chart":
-        return (
-          <div key={widget.id} className={gridClasses}>
-            <ChartWidget config={widget.config} />
-          </div>
-        );
+    case "chart":
+      return (
+        <div key={widget.id} className={gridClasses}>
+          <ChartWidget config={widget.config} />
+        </div>
+      );
 
-      case "metric":
-        return (
-          <div key={widget.id} className={gridClasses}>
-            <Card>
-              <CardContent className="pt-6">
-                <MetricIndicator config={widget.config} />
-              </CardContent>
-            </Card>
-          </div>
-        );
+    case "metric":
+      return (
+        <div key={widget.id} className={gridClasses}>
+          <Card>
+            <CardContent className="pt-6">
+              <MetricIndicator config={widget.config} />
+            </CardContent>
+          </Card>
+        </div>
+      );
 
-      case "table":
-        return (
-          <div key={widget.id} className={gridClasses}>
-            <TableWidget {...widget.config} />
-          </div>
-        );
+    case "table":
+      return (
+        <div key={widget.id} className={gridClasses}>
+          <TableWidget {...widget.config} />
+        </div>
+      );
 
-      case "custom":
-        // Allow custom widget components
-        return (
-          <div key={widget.id} className={gridClasses}>
-            {widget.config.component}
-          </div>
-        );
+    case "custom":
+      // Allow custom widget components
+      return (
+        <div key={widget.id} className={gridClasses}>
+          {widget.config.component}
+        </div>
+      );
 
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 

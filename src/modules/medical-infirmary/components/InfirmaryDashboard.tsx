@@ -76,8 +76,8 @@ export default function InfirmaryDashboard() {
       
       const key = chatMessage.toLowerCase().includes("dor") ? "dor" 
         : chatMessage.toLowerCase().includes("corte") || chatMessage.toLowerCase().includes("ferimento") ? "corte"
-        : chatMessage.toLowerCase().includes("estoque") || chatMessage.toLowerCase().includes("medicamento") ? "estoque"
-        : "default";
+          : chatMessage.toLowerCase().includes("estoque") || chatMessage.toLowerCase().includes("medicamento") ? "estoque"
+            : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
@@ -269,9 +269,9 @@ export default function InfirmaryDashboard() {
             {mockSupplies.map((supply) => (
               <div key={supply.id} className={`p-4 rounded-lg border ${
                 supply.status === "critical" ? "bg-red-500/10 border-red-500/30" :
-                supply.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
-                supply.status === "low" ? "bg-yellow-500/10 border-yellow-500/30" :
-                "bg-muted/30 border-border"
+                  supply.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
+                    supply.status === "low" ? "bg-yellow-500/10 border-yellow-500/30" :
+                      "bg-muted/30 border-border"
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <Badge variant={supply.status === "ok" ? "outline" : supply.status === "critical" ? "destructive" : "secondary"}>

@@ -3,28 +3,28 @@
  * PATCH 850 - ISM/MLC/PSC Document Management
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export type DocumentCategory = 
-  | 'ism_procedure'
-  | 'mlc_agreement'
-  | 'psc_checklist'
-  | 'audit_report'
-  | 'safety_manual'
-  | 'crew_certificate'
-  | 'vessel_certificate'
-  | 'emergency_procedure'
-  | 'training_record'
-  | 'maintenance_procedure';
+  | "ism_procedure"
+  | "mlc_agreement"
+  | "psc_checklist"
+  | "audit_report"
+  | "safety_manual"
+  | "crew_certificate"
+  | "vessel_certificate"
+  | "emergency_procedure"
+  | "training_record"
+  | "maintenance_procedure";
 
 export type ApprovalStatus = 
-  | 'draft'
-  | 'pending_review'
-  | 'pending_approval'
-  | 'approved'
-  | 'rejected'
-  | 'superseded'
-  | 'archived';
+  | "draft"
+  | "pending_review"
+  | "pending_approval"
+  | "approved"
+  | "rejected"
+  | "superseded"
+  | "archived";
 
 export interface Document {
   id: string;
@@ -66,7 +66,7 @@ export interface ApprovalStep {
   approver_id?: string;
   approver_name?: string;
   approver_role?: string;
-  decision: 'pending' | 'approved' | 'rejected' | 'delegated';
+  decision: "pending" | "approved" | "rejected" | "delegated";
   comments?: string;
   signature_data?: Record<string, unknown>;
   signed_at?: string;
@@ -78,10 +78,10 @@ export interface DistributionRecord {
   id: string;
   document_id: string;
   version: number;
-  recipient_type: 'user' | 'department' | 'vessel' | 'role';
+  recipient_type: "user" | "department" | "vessel" | "role";
   recipient_id?: string;
   recipient_name?: string;
-  distribution_method: 'email' | 'system' | 'print' | 'manual';
+  distribution_method: "email" | "system" | "print" | "manual";
   distributed_at: string;
   distributed_by?: string;
   acknowledged: boolean;
@@ -95,7 +95,7 @@ export interface DistributionRecord {
  * Create a new document
  */
 export async function createDocument(
-  data: Omit<Document, 'id' | 'created_at' | 'updated_at' | 'version' | 'is_current_version'>
+  data: Omit<Document, "id" | "created_at" | "updated_at" | "version" | "is_current_version">
 ): Promise<Document | null> {
   // Use type assertion for new columns not yet in generated types
   const insertData = {
@@ -105,11 +105,11 @@ export async function createDocument(
     title: data.title,
     category: data.category,
     description: data.description,
-    status: 'draft',
+    status: "draft",
   } as Record<string, unknown>;
 
   const { data: doc, error } = await supabase
-    .from('document_registry')
+    .from("document_registry")
     .insert(insertData as any)
     .select()
     .single();
@@ -133,22 +133,22 @@ export async function getDocuments(
   }
 ): Promise<Document[]> {
   let query = supabase
-    .from('document_registry')
-    .select('*')
-    .eq('organization_id', organizationId)
-    .eq('is_current_version', true);
+    .from("document_registry")
+    .select("*")
+    .eq("organization_id", organizationId)
+    .eq("is_current_version", true);
 
   if (filters?.category) {
-    query = query.eq('category', filters.category);
+    query = query.eq("category", filters.category);
   }
   if (filters?.status) {
-    query = query.eq('status', filters.status);
+    query = query.eq("status", filters.status);
   }
   if (filters?.vesselId) {
-    query = query.eq('vessel_id', filters.vesselId);
+    query = query.eq("vessel_id", filters.vesselId);
   }
 
-  const { data, error } = await query.order('created_at', { ascending: false });
+  const { data, error } = await query.order("created_at", { ascending: false });
 
   if (error) {
     return [];
@@ -165,9 +165,9 @@ export async function updateDocumentStatus(
   status: ApprovalStatus
 ): Promise<boolean> {
   const { error } = await supabase
-    .from('document_registry')
+    .from("document_registry")
     .update({ status })
-    .eq('id', documentId);
+    .eq("id", documentId);
 
   if (error) {
     return false;
@@ -186,9 +186,9 @@ export async function createNewVersion(
 ): Promise<Document | null> {
   // Get current document
   const { data: current, error: fetchError } = await supabase
-    .from('document_registry')
-    .select('*')
-    .eq('id', documentId)
+    .from("document_registry")
+    .select("*")
+    .eq("id", documentId)
     .single();
 
   if (fetchError || !current) {
@@ -197,23 +197,23 @@ export async function createNewVersion(
 
   // Mark current as superseded
   await supabase
-    .from('document_registry')
+    .from("document_registry")
     .update({ 
       is_current_version: false,
-      status: 'superseded'
+      status: "superseded"
     })
-    .eq('id', documentId);
+    .eq("id", documentId);
 
   // Create new version
   const newVersion = (current as any).version + 1;
   const { data: newDoc, error: createError } = await supabase
-    .from('document_registry')
+    .from("document_registry")
     .insert({
       ...current,
       id: undefined,
       version: newVersion,
       is_current_version: true,
-      status: 'draft',
+      status: "draft",
       parent_document_id: documentId,
       created_by: userId,
       created_at: undefined,
@@ -227,7 +227,7 @@ export async function createNewVersion(
   }
 
   // Record version history
-  await supabase.from('document_versions').insert({
+  await supabase.from("document_versions").insert({
     document_id: documentId,
     version: (current as any).version,
     file_path: (current as any).file_path,
@@ -250,9 +250,9 @@ export async function submitForApproval(
 ): Promise<boolean> {
   // Get document
   const { data: doc, error: fetchError } = await supabase
-    .from('document_registry')
-    .select('*')
-    .eq('id', documentId)
+    .from("document_registry")
+    .select("*")
+    .eq("id", documentId)
     .single();
 
   if (fetchError || !doc) {
@@ -266,11 +266,11 @@ export async function submitForApproval(
     step_order: index + 1,
     step_name: step.step_name,
     required_role: step.required_role,
-    decision: 'pending',
+    decision: "pending",
   }));
 
   const { error: stepsError } = await supabase
-    .from('document_approvals')
+    .from("document_approvals")
     .insert(steps);
 
   if (stepsError) {
@@ -278,7 +278,7 @@ export async function submitForApproval(
   }
 
   // Update document status
-  await updateDocumentStatus(documentId, 'pending_approval');
+  await updateDocumentStatus(documentId, "pending_approval");
 
   return true;
 }
@@ -288,7 +288,7 @@ export async function submitForApproval(
  */
 export async function processApproval(
   approvalId: string,
-  decision: 'approved' | 'rejected',
+  decision: "approved" | "rejected",
   userId: string,
   userName: string,
   userRole: string,
@@ -306,9 +306,9 @@ export async function processApproval(
   } as Record<string, unknown>;
 
   const { error } = await supabase
-    .from('document_approvals')
+    .from("document_approvals")
     .update(updateData as any)
-    .eq('id', approvalId);
+    .eq("id", approvalId);
 
   if (error) {
     return false;
@@ -324,11 +324,11 @@ export async function distributeDocument(
   documentId: string,
   version: number,
   recipients: Array<{
-    type: 'user' | 'department' | 'vessel' | 'role';
+    type: "user" | "department" | "vessel" | "role";
     id?: string;
     name: string;
   }>,
-  method: 'email' | 'system' | 'print' | 'manual',
+  method: "email" | "system" | "print" | "manual",
   distributedBy: string
 ): Promise<boolean> {
   const records = recipients.map(r => ({
@@ -344,7 +344,7 @@ export async function distributeDocument(
   }));
 
   const { error } = await supabase
-    .from('document_distribution')
+    .from("document_distribution")
     .insert(records);
 
   if (error) {
@@ -368,9 +368,9 @@ export async function acknowledgeDocument(
   } as Record<string, unknown>;
 
   const { error } = await supabase
-    .from('document_distribution')
+    .from("document_distribution")
     .update(updateData as any)
-    .eq('id', distributionId);
+    .eq("id", distributionId);
 
   if (error) {
     return false;
@@ -386,10 +386,10 @@ export async function getApprovalHistory(
   documentId: string
 ): Promise<ApprovalStep[]> {
   const { data, error } = await supabase
-    .from('document_approvals')
-    .select('*')
-    .eq('document_id', documentId)
-    .order('step_order', { ascending: true });
+    .from("document_approvals")
+    .select("*")
+    .eq("document_id", documentId)
+    .order("step_order", { ascending: true });
 
   if (error) {
     return [];
@@ -405,10 +405,10 @@ export async function getDistributionRecords(
   documentId: string
 ): Promise<DistributionRecord[]> {
   const { data, error } = await supabase
-    .from('document_distribution')
-    .select('*')
-    .eq('document_id', documentId)
-    .order('distributed_at', { ascending: false });
+    .from("document_distribution")
+    .select("*")
+    .eq("document_id", documentId)
+    .order("distributed_at", { ascending: false });
 
   if (error) {
     return [];
@@ -422,7 +422,7 @@ export async function getDistributionRecords(
  */
 export async function calculateChecksum(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }

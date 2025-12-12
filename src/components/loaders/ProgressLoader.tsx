@@ -4,9 +4,9 @@
  * Loading state com progress bar para operações longas
  */
 
-import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
+import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 
 interface ProgressLoaderProps {
   /** Mensagem de carregamento */
@@ -20,7 +20,7 @@ interface ProgressLoaderProps {
 }
 
 export function ProgressLoader({
-  message = 'Carregando...',
+  message = "Carregando...",
   timeout = 10,
   onTimeout,
   className,
@@ -48,7 +48,7 @@ export function ProgressLoader({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-4 p-8',
+        "flex flex-col items-center justify-center gap-4 p-8",
         className
       )}
     >

@@ -8,12 +8,12 @@
  * Carrega CSS não-crítico de forma assíncrona
  */
 export function loadDeferredCSS(href: string) {
-  const link = document.createElement('link');
-  link.rel = 'preload';
-  link.as = 'style';
+  const link = document.createElement("link");
+  link.rel = "preload";
+  link.as = "style";
   link.href = href;
   link.onload = function () {
-    this.rel = 'stylesheet';
+    this.rel = "stylesheet";
   };
   document.head.appendChild(link);
 }
@@ -23,10 +23,10 @@ export function loadDeferredCSS(href: string) {
  */
 export function preconnectDomains(domains: string[]) {
   domains.forEach((domain) => {
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
+    const link = document.createElement("link");
+    link.rel = "preconnect";
     link.href = domain;
-    link.crossOrigin = 'anonymous';
+    link.crossOrigin = "anonymous";
     document.head.appendChild(link);
   });
 }
@@ -34,9 +34,9 @@ export function preconnectDomains(domains: string[]) {
 /**
  * Prefetch de recursos futuros
  */
-export function prefetchResource(href: string, as: string = 'fetch') {
-  const link = document.createElement('link');
-  link.rel = 'prefetch';
+export function prefetchResource(href: string, as: string = "fetch") {
+  const link = document.createElement("link");
+  link.rel = "prefetch";
   link.href = href;
   link.as = as;
   document.head.appendChild(link);
@@ -48,24 +48,24 @@ export function prefetchResource(href: string, as: string = 'fetch') {
 export function initCriticalCSS() {
   // Preconectar com domínios externos
   preconnectDomains([
-    'https://fonts.googleapis.com',
-    'https://fonts.gstatic.com',
-    'https://api.mapbox.com',
+    "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com",
+    "https://api.mapbox.com",
   ]);
 
   // Detectar conexão lenta e ajustar estratégia
-  if ('connection' in navigator) {
+  if ("connection" in navigator) {
     const connection = (navigator as any).connection;
     const isSlowConnection = 
-      connection?.effectiveType === 'slow-2g' ||
-      connection?.effectiveType === '2g' ||
-      connection?.effectiveType === '3g' ||
+      connection?.effectiveType === "slow-2g" ||
+      connection?.effectiveType === "2g" ||
+      connection?.effectiveType === "3g" ||
       connection?.saveData === true;
 
     if (isSlowConnection) {
-      console.log('🐌 Conexão lenta detectada - aplicando otimizações');
+      console.log("🐌 Conexão lenta detectada - aplicando otimizações");
       // Desabilitar recursos não essenciais
-      document.documentElement.classList.add('slow-connection');
+      document.documentElement.classList.add("slow-connection");
     }
   }
 }

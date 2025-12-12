@@ -2,15 +2,15 @@
  * Time & Attendance - Controle de Frequência e Escalas
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Clock,
   Calendar as CalendarIcon,
@@ -30,8 +30,8 @@ import {
   Search,
   Filter,
   Download
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface TimeRecord {
   id: string;
@@ -43,82 +43,82 @@ interface TimeRecord {
   saida: string;
   horasTrabalhadas: string;
   extras: string;
-  status: 'normal' | 'atraso' | 'falta' | 'ferias' | 'folga';
+  status: "normal" | "atraso" | "falta" | "ferias" | "folga";
 }
 
 interface BankHours {
   colaborador: string;
   saldoAtual: number;
   horasMes: number;
-  tendencia: 'up' | 'down' | 'stable';
+  tendencia: "up" | "down" | "stable";
 }
 
 const TimeAttendance: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('ponto');
+  const [activeTab, setActiveTab] = useState("ponto");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [isPontoActive, setIsPontoActive] = useState(false);
 
   const timeRecords: TimeRecord[] = [
     {
-      id: '1',
-      colaborador: 'Carlos Silva',
-      data: '2025-12-07',
-      entrada: '08:02',
-      saidaAlmoco: '12:05',
-      retornoAlmoco: '13:00',
-      saida: '17:15',
-      horasTrabalhadas: '08:15',
-      extras: '+0:15',
-      status: 'normal'
+      id: "1",
+      colaborador: "Carlos Silva",
+      data: "2025-12-07",
+      entrada: "08:02",
+      saidaAlmoco: "12:05",
+      retornoAlmoco: "13:00",
+      saida: "17:15",
+      horasTrabalhadas: "08:15",
+      extras: "+0:15",
+      status: "normal"
     },
     {
-      id: '2',
-      colaborador: 'Ana Martins',
-      data: '2025-12-07',
-      entrada: '08:45',
-      saidaAlmoco: '12:00',
-      retornoAlmoco: '13:00',
-      saida: '17:00',
-      horasTrabalhadas: '07:15',
-      extras: '-0:45',
-      status: 'atraso'
+      id: "2",
+      colaborador: "Ana Martins",
+      data: "2025-12-07",
+      entrada: "08:45",
+      saidaAlmoco: "12:00",
+      retornoAlmoco: "13:00",
+      saida: "17:00",
+      horasTrabalhadas: "07:15",
+      extras: "-0:45",
+      status: "atraso"
     },
     {
-      id: '3',
-      colaborador: 'Roberto Santos',
-      data: '2025-12-07',
-      entrada: '-',
-      saidaAlmoco: '-',
-      retornoAlmoco: '-',
-      saida: '-',
-      horasTrabalhadas: '0:00',
-      extras: '-8:00',
-      status: 'ferias'
+      id: "3",
+      colaborador: "Roberto Santos",
+      data: "2025-12-07",
+      entrada: "-",
+      saidaAlmoco: "-",
+      retornoAlmoco: "-",
+      saida: "-",
+      horasTrabalhadas: "0:00",
+      extras: "-8:00",
+      status: "ferias"
     }
   ];
 
   const bankHoursData: BankHours[] = [
-    { colaborador: 'Carlos Silva', saldoAtual: 16.5, horasMes: 4.5, tendencia: 'up' },
-    { colaborador: 'Ana Martins', saldoAtual: -8.25, horasMes: -3.75, tendencia: 'down' },
-    { colaborador: 'Roberto Santos', saldoAtual: 24.0, horasMes: 0, tendencia: 'stable' },
-    { colaborador: 'Maria Costa', saldoAtual: 12.0, horasMes: 6.0, tendencia: 'up' },
-    { colaborador: 'Pedro Lima', saldoAtual: -4.5, horasMes: -2.0, tendencia: 'down' }
+    { colaborador: "Carlos Silva", saldoAtual: 16.5, horasMes: 4.5, tendencia: "up" },
+    { colaborador: "Ana Martins", saldoAtual: -8.25, horasMes: -3.75, tendencia: "down" },
+    { colaborador: "Roberto Santos", saldoAtual: 24.0, horasMes: 0, tendencia: "stable" },
+    { colaborador: "Maria Costa", saldoAtual: 12.0, horasMes: 6.0, tendencia: "up" },
+    { colaborador: "Pedro Lima", saldoAtual: -4.5, horasMes: -2.0, tendencia: "down" }
   ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'normal':
-        return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Normal</Badge>;
-      case 'atraso':
-        return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Atraso</Badge>;
-      case 'falta':
-        return <Badge className="bg-red-500"><XCircle className="w-3 h-3 mr-1" />Falta</Badge>;
-      case 'ferias':
-        return <Badge className="bg-blue-500"><Sun className="w-3 h-3 mr-1" />Férias</Badge>;
-      case 'folga':
-        return <Badge variant="secondary"><Coffee className="w-3 h-3 mr-1" />Folga</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "normal":
+      return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Normal</Badge>;
+    case "atraso":
+      return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Atraso</Badge>;
+    case "falta":
+      return <Badge className="bg-red-500"><XCircle className="w-3 h-3 mr-1" />Falta</Badge>;
+    case "ferias":
+      return <Badge className="bg-blue-500"><Sun className="w-3 h-3 mr-1" />Férias</Badge>;
+    case "folga":
+      return <Badge variant="secondary"><Coffee className="w-3 h-3 mr-1" />Folga</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -224,7 +224,7 @@ const TimeAttendance: React.FC = () => {
             <CardHeader>
               <CardTitle>Registros de Hoje</CardTitle>
               <CardDescription>
-                {new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {new Date().toLocaleDateString("pt-BR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -255,7 +255,7 @@ const TimeAttendance: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Avatar className="w-8 h-8">
                               <AvatarFallback className="text-xs bg-primary/10 text-primary">
-                                {record.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                                {record.colaborador.split(" ").map(n => n[0]).join("").slice(0, 2)}
                               </AvatarFallback>
                             </Avatar>
                             <span className="text-sm font-medium">{record.colaborador}</span>
@@ -267,8 +267,8 @@ const TimeAttendance: React.FC = () => {
                         <td className="text-center p-3 text-sm">{record.saida}</td>
                         <td className="text-center p-3 text-sm font-medium">{record.horasTrabalhadas}</td>
                         <td className={`text-center p-3 text-sm font-medium ${
-                          record.extras.startsWith('+') ? 'text-green-500' : 
-                          record.extras.startsWith('-') ? 'text-red-500' : ''
+                          record.extras.startsWith("+") ? "text-green-500" : 
+                            record.extras.startsWith("-") ? "text-red-500" : ""
                         }`}>
                           {record.extras}
                         </td>
@@ -302,25 +302,25 @@ const TimeAttendance: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback className="bg-primary/10 text-primary">
-                          {item.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                          {item.colaborador.split(" ").map(n => n[0]).join("").slice(0, 2)}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{item.colaborador}</p>
                         <p className="text-sm text-muted-foreground">
-                          Mês atual: {item.horasMes >= 0 ? '+' : ''}{item.horasMes}h
+                          Mês atual: {item.horasMes >= 0 ? "+" : ""}{item.horasMes}h
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className={`text-2xl font-bold ${
-                        item.saldoAtual >= 0 ? 'text-green-500' : 'text-red-500'
+                        item.saldoAtual >= 0 ? "text-green-500" : "text-red-500"
                       }`}>
-                        {item.saldoAtual >= 0 ? '+' : ''}{item.saldoAtual}h
+                        {item.saldoAtual >= 0 ? "+" : ""}{item.saldoAtual}h
                       </div>
-                      {item.tendencia === 'up' && <TrendingUp className="w-5 h-5 text-green-500" />}
-                      {item.tendencia === 'down' && <TrendingUp className="w-5 h-5 text-red-500 rotate-180" />}
-                      {item.tendencia === 'stable' && <span className="text-yellow-500">→</span>}
+                      {item.tendencia === "up" && <TrendingUp className="w-5 h-5 text-green-500" />}
+                      {item.tendencia === "down" && <TrendingUp className="w-5 h-5 text-red-500 rotate-180" />}
+                      {item.tendencia === "stable" && <span className="text-yellow-500">→</span>}
                     </div>
                   </motion.div>
                 ))}
@@ -349,7 +349,7 @@ const TimeAttendance: React.FC = () => {
               <CardHeader>
                 <CardTitle>Escalas do Dia</CardTitle>
                 <CardDescription>
-                  {selectedDate?.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+                  {selectedDate?.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -385,16 +385,16 @@ const TimeAttendance: React.FC = () => {
             <CardHeader className="text-center">
               <CardTitle>Registrar Ponto</CardTitle>
               <CardDescription>
-                {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-center">
                 <div className="text-5xl font-bold text-primary mb-2">
-                  {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                  {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                 </div>
                 <p className="text-muted-foreground">
-                  {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
+                  {new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
                 </p>
               </div>
 

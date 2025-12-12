@@ -123,7 +123,7 @@ export async function recordTrustEvent(event: TrustEvent): Promise<void> {
     throw insertError;
   }
   
-  logger.info(`Trust event recorded`, { 
+  logger.info("Trust event recorded", { 
     entity_id: event.entity_id, 
     event_type: event.event_type, 
     old_score: oldScore, 

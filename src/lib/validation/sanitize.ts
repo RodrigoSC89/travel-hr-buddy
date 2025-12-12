@@ -8,12 +8,12 @@
  */
 export function escapeHtml(str: string): string {
   const htmlEscapes: Record<string, string> = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#x27;',
-    '/': '&#x2F;',
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#x27;",
+    "/": "&#x2F;",
   };
   return str.replace(/[&<>"'/]/g, (char) => htmlEscapes[char] || char);
 }
@@ -22,7 +22,7 @@ export function escapeHtml(str: string): string {
  * Removes HTML tags from a string
  */
 export function stripHtml(str: string): string {
-  return str.replace(/<[^>]*>/g, '');
+  return str.replace(/<[^>]*>/g, "");
 }
 
 /**
@@ -37,8 +37,8 @@ export function sanitizeForUrl(str: string): string {
  */
 export function sanitizeFilename(filename: string): string {
   return filename
-    .replace(/[^a-zA-Z0-9À-ÿ._-]/g, '_')
-    .replace(/_{2,}/g, '_')
+    .replace(/[^a-zA-Z0-9À-ÿ._-]/g, "_")
+    .replace(/_{2,}/g, "_")
     .substring(0, 255);
 }
 
@@ -47,10 +47,10 @@ export function sanitizeFilename(filename: string): string {
  */
 export function sanitizeSqlInput(str: string): string {
   return str
-    .replace(/['";\\]/g, '')
-    .replace(/--/g, '')
-    .replace(/\/\*/g, '')
-    .replace(/\*\//g, '');
+    .replace(/['";\\]/g, "")
+    .replace(/--/g, "")
+    .replace(/\/\*/g, "")
+    .replace(/\*\//g, "");
 }
 
 /**
@@ -67,7 +67,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(
   const { escapeHtml: shouldEscape = true, stripHtml: shouldStrip = false, maxStringLength = 10000 } = options;
 
   const sanitize = (value: unknown): unknown => {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       let result = value.substring(0, maxStringLength);
       if (shouldStrip) {
         result = stripHtml(result);
@@ -82,7 +82,7 @@ export function sanitizeObject<T extends Record<string, unknown>>(
       return value.map(sanitize);
     }
 
-    if (value && typeof value === 'object') {
+    if (value && typeof value === "object") {
       return Object.fromEntries(
         Object.entries(value).map(([k, v]) => [k, sanitize(v)])
       );

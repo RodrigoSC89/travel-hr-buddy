@@ -3,26 +3,26 @@
  * Funcionalidade 2: Visão 360º de cada embarcação com IA contextual
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Ship, Anchor, Users, Fuel, AlertTriangle, FileCheck, 
   Wrench, Package, MapPin, Activity, Brain, TrendingUp,
   Calendar, ThermometerSun, Gauge, Battery, Clock
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface VesselData {
   id: string;
   name: string;
   imo: string;
   type: string;
-  status: 'operational' | 'maintenance' | 'docked' | 'offline';
+  status: "operational" | "maintenance" | "docked" | "offline";
   location: { lat: number; lng: number; port?: string };
   metrics: {
     fuelLevel: number;
@@ -40,72 +40,72 @@ interface VesselData {
 
 const MOCK_VESSELS: VesselData[] = [
   {
-    id: '1',
-    name: 'Navio Atlas',
-    imo: 'IMO9876543',
-    type: 'Tanker',
-    status: 'operational',
-    location: { lat: -23.9, lng: -46.3, port: 'Santos' },
+    id: "1",
+    name: "Navio Atlas",
+    imo: "IMO9876543",
+    type: "Tanker",
+    status: "operational",
+    location: { lat: -23.9, lng: -46.3, port: "Santos" },
     metrics: { fuelLevel: 75, engineHours: 12450, speed: 12.5, heading: 180 },
     crew: { total: 25, onboard: 24 },
     certificates: { total: 45, expiring: 3, expired: 0 },
     maintenance: { pending: 5, overdue: 1, scheduled: 8 },
     inventory: { critical: 0, lowStock: 5 },
     alerts: { critical: 1, warning: 3, info: 7 },
-    aiInsight: 'O Navio Atlas está 95% operacional. Atenção: 3 certificados vencem em 30 dias e há 1 manutenção atrasada no sistema hidráulico. Recomendo priorizar inspeção do motor auxiliar #2.'
+    aiInsight: "O Navio Atlas está 95% operacional. Atenção: 3 certificados vencem em 30 dias e há 1 manutenção atrasada no sistema hidráulico. Recomendo priorizar inspeção do motor auxiliar #2."
   },
   {
-    id: '2',
-    name: 'Navio Vega',
-    imo: 'IMO9876544',
-    type: 'Container',
-    status: 'operational',
-    location: { lat: -22.9, lng: -43.1, port: 'Rio de Janeiro' },
+    id: "2",
+    name: "Navio Vega",
+    imo: "IMO9876544",
+    type: "Container",
+    status: "operational",
+    location: { lat: -22.9, lng: -43.1, port: "Rio de Janeiro" },
     metrics: { fuelLevel: 45, engineHours: 8900, speed: 0, heading: 90 },
     crew: { total: 22, onboard: 22 },
     certificates: { total: 42, expiring: 2, expired: 0 },
     maintenance: { pending: 3, overdue: 0, scheduled: 5 },
     inventory: { critical: 1, lowStock: 3 },
     alerts: { critical: 0, warning: 2, info: 4 },
-    aiInsight: 'O Navio Vega está 100% operacional. Nível de combustível 30% abaixo da média da rota. Sugiro reabastecer antes da próxima viagem. 1 item crítico em estoque precisa de reposição urgente.'
+    aiInsight: "O Navio Vega está 100% operacional. Nível de combustível 30% abaixo da média da rota. Sugiro reabastecer antes da próxima viagem. 1 item crítico em estoque precisa de reposição urgente."
   },
   {
-    id: '3',
-    name: 'Navio Sirius',
-    imo: 'IMO9876545',
-    type: 'Bulk Carrier',
-    status: 'maintenance',
-    location: { lat: -25.4, lng: -49.2, port: 'Paranaguá' },
+    id: "3",
+    name: "Navio Sirius",
+    imo: "IMO9876545",
+    type: "Bulk Carrier",
+    status: "maintenance",
+    location: { lat: -25.4, lng: -49.2, port: "Paranaguá" },
     metrics: { fuelLevel: 90, engineHours: 15200, speed: 0, heading: 0 },
     crew: { total: 20, onboard: 8 },
     certificates: { total: 40, expiring: 0, expired: 1 },
     maintenance: { pending: 12, overdue: 2, scheduled: 15 },
     inventory: { critical: 0, lowStock: 8 },
     alerts: { critical: 2, warning: 5, info: 3 },
-    aiInsight: 'Navio Sirius em manutenção programada. Previsão de retorno: 5 dias. 1 certificado expirado requer ação imediata. 2 manutenções críticas em andamento no motor principal.'
+    aiInsight: "Navio Sirius em manutenção programada. Previsão de retorno: 5 dias. 1 certificado expirado requer ação imediata. 2 manutenções críticas em andamento no motor principal."
   }
 ];
 
 export function FleetCockpit360() {
   const [selectedVessel, setSelectedVessel] = useState<VesselData>(MOCK_VESSELS[0]);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
 
   const getStatusColor = (status: string) => {
     const colors = {
-      operational: 'bg-green-500/20 text-green-400 border-green-500/30',
-      maintenance: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      docked: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      offline: 'bg-red-500/20 text-red-400 border-red-500/30'
+      operational: "bg-green-500/20 text-green-400 border-green-500/30",
+      maintenance: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      docked: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      offline: "bg-red-500/20 text-red-400 border-red-500/30"
     };
-    return colors[status as keyof typeof colors] || 'bg-muted';
+    return colors[status as keyof typeof colors] || "bg-muted";
   };
 
   const getStatusLabel = (status: string) => {
     const labels = {
-      operational: 'Operacional',
-      maintenance: 'Manutenção',
-      docked: 'Atracado',
-      offline: 'Offline'
+      operational: "Operacional",
+      maintenance: "Manutenção",
+      docked: "Atracado",
+      offline: "Offline"
     };
     return labels[status as keyof typeof labels] || status;
   };
@@ -123,8 +123,8 @@ export function FleetCockpit360() {
             <Card 
               className={`cursor-pointer transition-all ${
                 selectedVessel.id === vessel.id 
-                  ? 'border-primary ring-2 ring-primary/20' 
-                  : 'border-border/50 hover:border-primary/50'
+                  ? "border-primary ring-2 ring-primary/20" 
+                  : "border-border/50 hover:border-primary/50"
               }`}
               onClick={() => setSelectedVessel(vessel)}
             >

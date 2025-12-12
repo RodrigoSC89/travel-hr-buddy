@@ -56,12 +56,12 @@ const AuditCenter = () => {
       if (peotramAudits && peotramAudits.length > 0) {
         const mappedPeotram: AuditItem[] = peotramAudits.map((a: any) => ({
           id: a.id,
-          title: `PEOTRAM ${a.audit_type === 'vessel' ? 'Vessel' : 'Shore'} Audit - ${a.audit_period}`,
+          title: `PEOTRAM ${a.audit_type === "vessel" ? "Vessel" : "Shore"} Audit - ${a.audit_period}`,
           type: "PEOTRAM",
           status: mapStatus(a.status),
           score: a.compliance_score,
           scheduled_date: a.audit_date,
-          completion_date: a.status === 'concluido' || a.status === 'aprovado' ? a.audit_date : undefined,
+          completion_date: a.status === "concluido" || a.status === "aprovado" ? a.audit_date : undefined,
           findings_count: a.non_conformities_count || 0,
           checklist_data: a.metadata?.checklist_data
         }));
@@ -72,7 +72,7 @@ const AuditCenter = () => {
       if (sgsoAudits && sgsoAudits.length > 0) {
         const mappedSgso: AuditItem[] = sgsoAudits.map((a: any) => ({
           id: a.id,
-          title: `SGSO Audit - ${a.audit_type || 'Internal'}`,
+          title: `SGSO Audit - ${a.audit_type || "Internal"}`,
           type: "SGSO",
           status: mapStatus(a.status),
           score: a.score,
@@ -108,16 +108,16 @@ const AuditCenter = () => {
 
   const mapStatus = (status: string): AuditItem["status"] => {
     const statusMap: Record<string, AuditItem["status"]> = {
-      'concluido': 'completed',
-      'aprovado': 'completed',
-      'em_andamento': 'in_progress',
-      'in_progress': 'in_progress',
-      'agendado': 'scheduled',
-      'scheduled': 'scheduled',
-      'pendente': 'scheduled',
-      'atrasado': 'overdue'
+      "concluido": "completed",
+      "aprovado": "completed",
+      "em_andamento": "in_progress",
+      "in_progress": "in_progress",
+      "agendado": "scheduled",
+      "scheduled": "scheduled",
+      "pendente": "scheduled",
+      "atrasado": "overdue"
     };
-    return statusMap[status?.toLowerCase()] || 'scheduled';
+    return statusMap[status?.toLowerCase()] || "scheduled";
   };
 
   const handleStartAudit = (audit: AuditItem) => {

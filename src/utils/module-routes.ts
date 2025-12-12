@@ -12,21 +12,21 @@ export type ModuleRoute = {
 
 // Lista de rotas críticas que requerem error boundary especial
 const CRITICAL_ROUTES = new Set([
-  'intelligence.ai-command',
-  'intelligence.workflow-command',
-  'features.alerts-command',
-  'intelligence.bi-dashboard',
-  'maintenance.command',
-  'planning.voyage-command',
-  'documents.reports-command',
-  'intelligence.ai-modules-status',
-  'intelligence.nautilus-command',
-  'intelligence.nautilus-llm',
-  'compliance.sgso',
-  'compliance.sgso-workflow',
-  'operations.fleet-command',
-  'finance.command',
-  'operations.maritime-command',
+  "intelligence.ai-command",
+  "intelligence.workflow-command",
+  "features.alerts-command",
+  "intelligence.bi-dashboard",
+  "maintenance.command",
+  "planning.voyage-command",
+  "documents.reports-command",
+  "intelligence.ai-modules-status",
+  "intelligence.nautilus-command",
+  "intelligence.nautilus-llm",
+  "compliance.sgso",
+  "compliance.sgso-workflow",
+  "operations.fleet-command",
+  "finance.command",
+  "operations.maritime-command",
 ]);
 
 // Glob import all pages - Vite handles this correctly
@@ -54,17 +54,17 @@ function resolveModulePath(registryPath: string): string {
 // Fallback component for failed module loads
 const ModuleLoadError: React.FC<{ moduleId: string }> = ({ moduleId }) => {
   return React.createElement(
-    'div',
-    { className: 'p-8 text-center' },
-    React.createElement('h2', { className: 'text-xl font-bold text-destructive mb-2' }, 'Erro ao carregar módulo'),
-    React.createElement('p', { className: 'text-muted-foreground' }, `Módulo: ${moduleId}`),
+    "div",
+    { className: "p-8 text-center" },
+    React.createElement("h2", { className: "text-xl font-bold text-destructive mb-2" }, "Erro ao carregar módulo"),
+    React.createElement("p", { className: "text-muted-foreground" }, `Módulo: ${moduleId}`),
     React.createElement(
-      'button',
+      "button",
       { 
-        className: 'mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md',
+        className: "mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md",
         onClick: () => window.location.reload()
       },
-      'Recarregar'
+      "Recarregar"
     )
   );
 };
@@ -85,10 +85,10 @@ export function getModuleRoutes(): ModuleRoute[] {
         try {
           const mod = await (allModules[resolvedPath]() as Promise<Record<string, unknown>>);
           const exported = mod.default ?? Object.values(mod)[0];
-          if (typeof exported === 'function') {
+          if (typeof exported === "function") {
             return { default: exported as React.ComponentType<unknown> };
           }
-          throw new Error('Invalid module export');
+          throw new Error("Invalid module export");
         } catch (err) {
           console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
           console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);

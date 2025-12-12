@@ -3,7 +3,7 @@
  * Preloads resources when elements approach viewport
  */
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useState } from "react";
 
 interface PreloadOptions {
   rootMargin?: string;
@@ -14,7 +14,7 @@ interface PreloadOptions {
 
 export function useIntersectionPreload<T extends HTMLElement>(options: PreloadOptions = {}) {
   const {
-    rootMargin = '200px',
+    rootMargin = "200px",
     threshold = 0,
     onVisible,
     preloadUrls = [],
@@ -29,8 +29,8 @@ export function useIntersectionPreload<T extends HTMLElement>(options: PreloadOp
 
     // Preload URLs
     preloadUrls.forEach(url => {
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
+      const link = document.createElement("link");
+      link.rel = "prefetch";
       link.href = url;
       document.head.appendChild(link);
     });

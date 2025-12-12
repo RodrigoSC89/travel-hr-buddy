@@ -144,25 +144,25 @@ const FleetOperationsCenter: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "operational":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Operacional</Badge>;
-      case "transit":
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Em Trânsito</Badge>;
-      case "docked":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Atracado</Badge>;
-      case "maintenance":
-        return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Manutenção</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
+    case "operational":
+      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Operacional</Badge>;
+    case "transit":
+      return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Em Trânsito</Badge>;
+    case "docked":
+      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Atracado</Badge>;
+    case "maintenance":
+      return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Manutenção</Badge>;
+    default:
+      return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
   const getMetricColor = (status: string) => {
     switch (status) {
-      case "good": return "text-green-400";
-      case "warning": return "text-yellow-400";
-      case "critical": return "text-red-400";
-      default: return "text-foreground";
+    case "good": return "text-green-400";
+    case "warning": return "text-yellow-400";
+    case "critical": return "text-red-400";
+    default: return "text-foreground";
     }
   };
 
@@ -497,7 +497,7 @@ const FleetOperationsCenter: React.FC = () => {
                           <div>
                             <p className="font-medium text-foreground">{vessel.name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Última: {vessel.lastMaintenance.toLocaleDateString('pt-BR')}
+                              Última: {vessel.lastMaintenance.toLocaleDateString("pt-BR")}
                             </p>
                           </div>
                           <Badge variant={daysSince > 30 ? "destructive" : "secondary"}>

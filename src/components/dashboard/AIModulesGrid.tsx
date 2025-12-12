@@ -26,109 +26,109 @@ interface AIModule {
   name: string;
   description: string;
   icon: React.ReactNode;
-  status: 'active' | 'standby' | 'learning';
+  status: "active" | "standby" | "learning";
   accuracy: number;
-  category: 'core' | 'operations' | 'safety' | 'analytics';
+  category: "core" | "operations" | "safety" | "analytics";
   route: string;
 }
 
 const modules: AIModule[] = [
   {
-    id: 'nlp',
-    name: 'Processamento de Linguagem',
-    description: 'Análise e compreensão de texto',
+    id: "nlp",
+    name: "Processamento de Linguagem",
+    description: "Análise e compreensão de texto",
     icon: <MessageSquare className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 94,
-    category: 'core',
-    route: '/ai/copilot'
+    category: "core",
+    route: "/ai/copilot"
   },
   {
-    id: 'document',
-    name: 'Análise de Documentos',
-    description: 'OCR e extração de dados',
+    id: "document",
+    name: "Análise de Documentos",
+    description: "OCR e extração de dados",
     icon: <FileText className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 91,
-    category: 'core',
-    route: '/ai/document-analysis'
+    category: "core",
+    route: "/ai/document-analysis"
   },
   {
-    id: 'predictive',
-    name: 'Análise Preditiva',
-    description: 'Previsões e tendências',
+    id: "predictive",
+    name: "Análise Preditiva",
+    description: "Previsões e tendências",
     icon: <BarChart3 className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 87,
-    category: 'analytics',
-    route: '/ai/insights'
+    category: "analytics",
+    route: "/ai/insights"
   },
   {
-    id: 'safety',
-    name: 'Monitoramento de Segurança',
-    description: 'Detecção de riscos e alertas',
+    id: "safety",
+    name: "Monitoramento de Segurança",
+    description: "Detecção de riscos e alertas",
     icon: <Shield className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 96,
-    category: 'safety',
-    route: '/security'
+    category: "safety",
+    route: "/security"
   },
   {
-    id: 'crew',
-    name: 'Gestão de Tripulação',
-    description: 'Otimização de escalas',
+    id: "crew",
+    name: "Gestão de Tripulação",
+    description: "Otimização de escalas",
     icon: <Users className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 89,
-    category: 'operations',
-    route: '/crew'
+    category: "operations",
+    route: "/crew"
   },
   {
-    id: 'vessel',
-    name: 'Monitoramento de Embarcações',
-    description: 'Tracking e manutenção',
+    id: "vessel",
+    name: "Monitoramento de Embarcações",
+    description: "Tracking e manutenção",
     icon: <Ship className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 92,
-    category: 'operations',
-    route: '/fleet'
+    category: "operations",
+    route: "/fleet"
   },
   {
-    id: 'navigation',
-    name: 'Assistente de Navegação',
-    description: 'Rotas otimizadas',
+    id: "navigation",
+    name: "Assistente de Navegação",
+    description: "Rotas otimizadas",
     icon: <Navigation className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 88,
-    category: 'operations',
-    route: '/ai/navigation'
+    category: "operations",
+    route: "/ai/navigation"
   },
   {
-    id: 'compliance',
-    name: 'Compliance Marítimo',
-    description: 'Verificação de conformidade',
+    id: "compliance",
+    name: "Compliance Marítimo",
+    description: "Verificação de conformidade",
     icon: <CheckCircle className="h-5 w-5" />,
-    status: 'active',
+    status: "active",
     accuracy: 95,
-    category: 'safety',
-    route: '/ai/compliance'
+    category: "safety",
+    route: "/ai/compliance"
   },
 ];
 
 const categories = [
-  { id: 'all', name: 'Todos' },
-  { id: 'core', name: 'Core' },
-  { id: 'operations', name: 'Operações' },
-  { id: 'safety', name: 'Segurança' },
-  { id: 'analytics', name: 'Analytics' },
+  { id: "all", name: "Todos" },
+  { id: "core", name: "Core" },
+  { id: "operations", name: "Operações" },
+  { id: "safety", name: "Segurança" },
+  { id: "analytics", name: "Analytics" },
 ];
 
 const ModuleCard = memo(({ module, onClick }: { module: AIModule; onClick: () => void }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500/20 text-green-500 border-green-500/30';
-      case 'standby': return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
-      default: return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
+    case "active": return "bg-green-500/20 text-green-500 border-green-500/30";
+    case "standby": return "bg-yellow-500/20 text-yellow-500 border-yellow-500/30";
+    default: return "bg-blue-500/20 text-blue-500 border-blue-500/30";
     }
   };
 
@@ -146,7 +146,7 @@ const ModuleCard = memo(({ module, onClick }: { module: AIModule; onClick: () =>
             variant="outline" 
             className={`text-[10px] ${getStatusColor(module.status)}`}
           >
-            {module.status === 'active' ? 'Ativo' : 'Standby'}
+            {module.status === "active" ? "Ativo" : "Standby"}
           </Badge>
         </div>
         
@@ -174,18 +174,18 @@ const ModuleCard = memo(({ module, onClick }: { module: AIModule; onClick: () =>
   );
 });
 
-ModuleCard.displayName = 'ModuleCard';
+ModuleCard.displayName = "ModuleCard";
 
 function AIModulesGridComponent() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const filteredModules = useMemo(() => 
-    selectedCategory === 'all' 
+    selectedCategory === "all" 
       ? modules 
       : modules.filter(m => m.category === selectedCategory),
-    [selectedCategory]
+  [selectedCategory]
   );
 
   const handleCategoryChange = useCallback((id: string) => {

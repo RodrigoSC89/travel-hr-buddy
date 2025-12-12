@@ -15,8 +15,8 @@ class RequestDeduplicator {
    * Generate a unique key for a request
    */
   private generateKey(url: string, options?: RequestInit): RequestKey {
-    const method = options?.method || 'GET';
-    const body = options?.body ? JSON.stringify(options.body) : '';
+    const method = options?.method || "GET";
+    const body = options?.body ? JSON.stringify(options.body) : "";
     return `${method}:${url}:${body}`;
   }
 
@@ -34,7 +34,7 @@ class RequestDeduplicator {
     const key = this.generateKey(url, fetchOptions);
 
     // Check cache first (only for GET requests)
-    if (!forceRefresh && (!fetchOptions.method || fetchOptions.method === 'GET')) {
+    if (!forceRefresh && (!fetchOptions.method || fetchOptions.method === "GET")) {
       const cached = this.cache.get(key);
       if (cached && Date.now() - cached.timestamp < cacheDuration) {
         return cached.data as T;
@@ -175,7 +175,7 @@ export class RequestBatcher<T, R> {
         }
       });
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Batch request failed');
+      const err = error instanceof Error ? error : new Error("Batch request failed");
       batch.forEach(item => item.reject(err));
     }
   }
@@ -211,7 +211,7 @@ export async function fetchWithRetry<T>(
       
       return await response.json();
     } catch (error) {
-      lastError = error instanceof Error ? error : new Error('Request failed');
+      lastError = error instanceof Error ? error : new Error("Request failed");
       
       if (attempt < maxRetries) {
         const delay = Math.min(baseDelay * Math.pow(2, attempt), maxDelay);

@@ -7,7 +7,7 @@ export interface SyncItem {
   id: string;
   module: string;
   data: any;
-  priority: 'critical' | 'high' | 'normal' | 'low';
+  priority: "critical" | "high" | "normal" | "low";
   size: number;
   retries: number;
   createdAt: number;
@@ -69,17 +69,17 @@ class SmartSyncManager {
   }
 
   private detectConnectionSpeed(): void {
-    if ('connection' in navigator) {
+    if ("connection" in navigator) {
       const conn = (navigator as any).connection;
-      const effectiveType = conn?.effectiveType || '4g';
+      const effectiveType = conn?.effectiveType || "4g";
       
-      if (effectiveType === '2g' || effectiveType === 'slow-2g' || effectiveType === '3g') {
+      if (effectiveType === "2g" || effectiveType === "slow-2g" || effectiveType === "3g") {
         this.config = SLOW_CONNECTION_CONFIG;
       }
 
-      conn?.addEventListener('change', () => {
+      conn?.addEventListener("change", () => {
         const newType = conn.effectiveType;
-        if (newType === '2g' || newType === 'slow-2g' || newType === '3g') {
+        if (newType === "2g" || newType === "slow-2g" || newType === "3g") {
           this.config = SLOW_CONNECTION_CONFIG;
         } else {
           this.config = DEFAULT_CONFIG;
@@ -88,7 +88,7 @@ class SmartSyncManager {
     }
   }
 
-  add(item: Omit<SyncItem, 'id' | 'size' | 'retries' | 'createdAt'>): string {
+  add(item: Omit<SyncItem, "id" | "size" | "retries" | "createdAt">): string {
     const id = `sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const size = new Blob([JSON.stringify(item.data)]).size;
     
@@ -118,7 +118,7 @@ class SmartSyncManager {
     return id;
   }
 
-  private getPriorityValue(priority: SyncItem['priority']): number {
+  private getPriorityValue(priority: SyncItem["priority"]): number {
     const values = { critical: 4, high: 3, normal: 2, low: 1 };
     return values[priority];
   }
@@ -216,7 +216,7 @@ class SmartSyncManager {
           if (Math.random() > 0.05) { // 95% success rate simulation
             resolve(true);
           } else {
-            reject(new Error('Simulated sync failure'));
+            reject(new Error("Simulated sync failure"));
           }
         }, 100 + Math.random() * 200);
       });
@@ -245,16 +245,16 @@ class SmartSyncManager {
 
   private saveQueue(): void {
     try {
-      localStorage.setItem('smart_sync_queue', JSON.stringify(this.queue));
+      localStorage.setItem("smart_sync_queue", JSON.stringify(this.queue));
     } catch (e) {
-      console.warn('[SmartSync] Failed to save queue:', e);
-      console.warn('[SmartSync] Failed to save queue:', e);
+      console.warn("[SmartSync] Failed to save queue:", e);
+      console.warn("[SmartSync] Failed to save queue:", e);
     }
   }
 
   private loadQueue(): void {
     try {
-      const saved = localStorage.getItem('smart_sync_queue');
+      const saved = localStorage.getItem("smart_sync_queue");
       if (saved) {
         this.queue = JSON.parse(saved);
       }
@@ -265,13 +265,13 @@ class SmartSyncManager {
 
   private saveFailedItem(item: SyncItem): void {
     try {
-      const failed = JSON.parse(localStorage.getItem('smart_sync_failed') || '[]');
+      const failed = JSON.parse(localStorage.getItem("smart_sync_failed") || "[]");
       failed.push({ ...item, failedAt: Date.now() });
       if (failed.length > 100) failed.shift();
-      localStorage.setItem('smart_sync_failed', JSON.stringify(failed));
+      localStorage.setItem("smart_sync_failed", JSON.stringify(failed));
     } catch (e) {
-      console.warn('[SmartSync] Failed to save failed item:', e);
-      console.warn('[SmartSync] Failed to save failed item:', e);
+      console.warn("[SmartSync] Failed to save failed item:", e);
+      console.warn("[SmartSync] Failed to save failed item:", e);
     }
   }
 
@@ -307,12 +307,12 @@ class SmartSyncManager {
   }
 
   clearFailed(): void {
-    localStorage.removeItem('smart_sync_failed');
+    localStorage.removeItem("smart_sync_failed");
   }
 
   retryFailed(): void {
     try {
-      const failed = JSON.parse(localStorage.getItem('smart_sync_failed') || '[]');
+      const failed = JSON.parse(localStorage.getItem("smart_sync_failed") || "[]");
       for (const item of failed) {
         item.retries = 0;
         this.queue.push(item);

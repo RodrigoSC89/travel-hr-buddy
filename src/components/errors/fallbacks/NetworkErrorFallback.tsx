@@ -3,10 +3,10 @@
  * Fallback UI específico para erros de rede
  */
 
-import React from 'react';
-import { WifiOff, RefreshCw, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import React from "react";
+import { WifiOff, RefreshCw, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 export interface NetworkErrorFallbackProps {
   error?: Error;
@@ -26,12 +26,12 @@ export const NetworkErrorFallback: React.FC<NetworkErrorFallbackProps> = ({
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -74,24 +74,24 @@ export const NetworkErrorFallback: React.FC<NetworkErrorFallbackProps> = ({
           {/* Connection Status */}
           <div className={`flex items-center gap-3 p-4 rounded-lg ${
             isOnline 
-              ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-              : 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800'
+              ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+              : "bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800"
           }`}>
             <AlertCircle className={`w-5 h-5 ${
-              isOnline ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'
+              isOnline ? "text-green-600 dark:text-green-400" : "text-orange-600 dark:text-orange-400"
             }`} />
             <div>
               <p className={`text-sm font-semibold ${
-                isOnline ? 'text-green-900 dark:text-green-300' : 'text-orange-900 dark:text-orange-300'
+                isOnline ? "text-green-900 dark:text-green-300" : "text-orange-900 dark:text-orange-300"
               }`}>
-                {isOnline ? 'Conexão Detectada' : 'Sem Conexão'}
+                {isOnline ? "Conexão Detectada" : "Sem Conexão"}
               </p>
               <p className={`text-xs ${
-                isOnline ? 'text-green-700 dark:text-green-400' : 'text-orange-700 dark:text-orange-400'
+                isOnline ? "text-green-700 dark:text-green-400" : "text-orange-700 dark:text-orange-400"
               }`}>
                 {isOnline 
-                  ? 'Sua conexão com a internet foi restabelecida. Tente novamente.'
-                  : 'Verifique seu Wi-Fi ou dados móveis e tente novamente.'
+                  ? "Sua conexão com a internet foi restabelecida. Tente novamente."
+                  : "Verifique seu Wi-Fi ou dados móveis e tente novamente."
                 }
               </p>
             </div>
@@ -129,8 +129,8 @@ export const NetworkErrorFallback: React.FC<NetworkErrorFallbackProps> = ({
             className="w-full gap-2"
             size="lg"
           >
-            <RefreshCw className={`w-4 h-4 ${isRetrying ? 'animate-spin' : ''}`} />
-            {isRetrying ? 'Tentando reconectar...' : 'Tentar Novamente'}
+            <RefreshCw className={`w-4 h-4 ${isRetrying ? "animate-spin" : ""}`} />
+            {isRetrying ? "Tentando reconectar..." : "Tentar Novamente"}
           </Button>
           
           <p className="text-xs text-center text-gray-500 dark:text-gray-400">

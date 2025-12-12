@@ -259,13 +259,13 @@ const FleetAICopilot = ({ vessels }: { vessels: any[] }) => {
           {insights.map((insight, i) => (
             <div key={i} className={`flex items-start gap-2 p-2 rounded-lg ${
               insight.type === "success" ? "bg-green-50 dark:bg-green-950/20" :
-              insight.type === "warning" ? "bg-yellow-50 dark:bg-yellow-950/20" :
-              "bg-blue-50 dark:bg-blue-950/20"
+                insight.type === "warning" ? "bg-yellow-50 dark:bg-yellow-950/20" :
+                  "bg-blue-50 dark:bg-blue-950/20"
             }`}>
               <insight.icon className={`h-4 w-4 mt-0.5 ${
                 insight.type === "success" ? "text-green-600" :
-                insight.type === "warning" ? "text-yellow-600" :
-                "text-blue-600"
+                  insight.type === "warning" ? "text-yellow-600" :
+                    "text-blue-600"
               }`} />
               <span className="text-sm">{insight.text}</span>
             </div>

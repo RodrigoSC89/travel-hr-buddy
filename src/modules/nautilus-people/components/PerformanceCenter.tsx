@@ -3,19 +3,19 @@
  * Versão funcional completa
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import {
   Target,
   Star,
@@ -33,52 +33,52 @@ import {
   Loader2,
   Download,
   Eye
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { mockAvaliacoes, mockOKRs, mockNineBox, mockColaboradores } from '../data/mockData';
-import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
-import type { Avaliacao, OKR } from '../types';
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { mockAvaliacoes, mockOKRs, mockNineBox, mockColaboradores } from "../data/mockData";
+import { useNautilusPeopleAI } from "../hooks/useNautilusPeopleAI";
+import type { Avaliacao, OKR } from "../types";
 
 const PerformanceCenter: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('avaliacoes');
-  const [selectedCiclo, setSelectedCiclo] = useState('q4-2025');
+  const [activeTab, setActiveTab] = useState("avaliacoes");
+  const [selectedCiclo, setSelectedCiclo] = useState("q4-2025");
   const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>(mockAvaliacoes);
   const [okrs, setOkrs] = useState<OKR[]>(mockOKRs);
   const [isNewOKROpen, setIsNewOKROpen] = useState(false);
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [selectedAvaliacao, setSelectedAvaliacao] = useState<Avaliacao | null>(null);
-  const [feedbackText, setFeedbackText] = useState('');
-  const [feedbackTarget, setFeedbackTarget] = useState('');
-  const [feedbackType, setFeedbackType] = useState<'reconhecimento' | 'construtivo'>('reconhecimento');
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackTarget, setFeedbackTarget] = useState("");
+  const [feedbackType, setFeedbackType] = useState<"reconhecimento" | "construtivo">("reconhecimento");
   
   const { isLoading, generateOKR, analyzePerformance } = useNautilusPeopleAI();
 
   const [newOKR, setNewOKR] = useState({
-    objetivo: '',
-    keyResults: '',
-    responsavel: '',
-    prazo: ''
+    objetivo: "",
+    keyResults: "",
+    responsavel: "",
+    prazo: ""
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'concluida':
-        return <Badge className="bg-green-500">Concluída</Badge>;
-      case 'em_andamento':
-        return <Badge className="bg-blue-500">Em Andamento</Badge>;
-      case 'pendente':
-        return <Badge variant="secondary">Pendente</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "concluida":
+      return <Badge className="bg-green-500">Concluída</Badge>;
+    case "em_andamento":
+      return <Badge className="bg-blue-500">Em Andamento</Badge>;
+    case "pendente":
+      return <Badge variant="secondary">Pendente</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getNotaColor = (nota: number) => {
-    if (nota >= 4.5) return 'text-green-500';
-    if (nota >= 3.5) return 'text-blue-500';
-    if (nota >= 2.5) return 'text-yellow-500';
-    return 'text-red-500';
+    if (nota >= 4.5) return "text-green-500";
+    if (nota >= 3.5) return "text-blue-500";
+    if (nota >= 2.5) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const handleStartAvaliacao = async (avaliacao: Avaliacao) => {
@@ -93,10 +93,10 @@ const PerformanceCenter: React.FC = () => {
     if (result) {
       setAvaliacoes(prev => prev.map(a => 
         a.id === avaliacao.id 
-          ? { ...a, status: 'em_andamento' as const }
+          ? { ...a, status: "em_andamento" as const }
           : a
       ));
-      toast.success('Avaliação iniciada com análise de IA!');
+      toast.success("Avaliação iniciada com análise de IA!");
     }
   };
 
@@ -107,89 +107,89 @@ const PerformanceCenter: React.FC = () => {
 
   const handleCreateOKR = async () => {
     if (!newOKR.objetivo || !newOKR.responsavel) {
-      toast.error('Preencha os campos obrigatórios');
+      toast.error("Preencha os campos obrigatórios");
       return;
     }
 
     const novoOKR: OKR = {
       id: Date.now().toString(),
       objetivo: newOKR.objetivo,
-      keyResults: newOKR.keyResults.split('\n').filter(kr => kr.trim()).map((kr, idx) => ({
+      keyResults: newOKR.keyResults.split("\n").filter(kr => kr.trim()).map((kr, idx) => ({
         id: `kr-${idx}`,
         titulo: kr.trim(),
         meta: 100,
         atual: 0,
-        unidade: '%'
+        unidade: "%"
       })),
       responsavel: newOKR.responsavel,
-      prazo: newOKR.prazo || '31/12/2025',
+      prazo: newOKR.prazo || "31/12/2025",
       progresso: 0,
-      status: 'ativo'
+      status: "ativo"
     };
 
     setOkrs([novoOKR, ...okrs]);
     setIsNewOKROpen(false);
-    setNewOKR({ objetivo: '', keyResults: '', responsavel: '', prazo: '' });
-    toast.success('OKR criado com sucesso!');
+    setNewOKR({ objetivo: "", keyResults: "", responsavel: "", prazo: "" });
+    toast.success("OKR criado com sucesso!");
   };
 
   const handleGenerateOKRWithAI = async () => {
-    toast.info('Gerando OKR com IA...');
-    const result = await generateOKR('Melhorar eficiência operacional', 'Operações', 'Q1 2026');
+    toast.info("Gerando OKR com IA...");
+    const result = await generateOKR("Melhorar eficiência operacional", "Operações", "Q1 2026");
     
     if (result) {
       try {
         const parsed = JSON.parse(result);
         setNewOKR({
-          objetivo: parsed.objective || '',
-          keyResults: parsed.keyResults?.map((kr: { title: string }) => kr.title).join('\n') || '',
-          responsavel: parsed.owner || '',
-          prazo: parsed.quarter || ''
+          objetivo: parsed.objective || "",
+          keyResults: parsed.keyResults?.map((kr: { title: string }) => kr.title).join("\n") || "",
+          responsavel: parsed.owner || "",
+          prazo: parsed.quarter || ""
         });
-        toast.success('OKR gerado pela IA!');
+        toast.success("OKR gerado pela IA!");
       } catch {
         setNewOKR(prev => ({ ...prev, objetivo: result }));
-        toast.success('Sugestão de objetivo gerada!');
+        toast.success("Sugestão de objetivo gerada!");
       }
     }
   };
 
   const handleSendFeedback = () => {
     if (!feedbackText || !feedbackTarget) {
-      toast.error('Preencha todos os campos');
+      toast.error("Preencha todos os campos");
       return;
     }
 
     toast.success(`Feedback ${feedbackType} enviado para ${feedbackTarget}!`);
-    setFeedbackText('');
-    setFeedbackTarget('');
+    setFeedbackText("");
+    setFeedbackTarget("");
     setIsFeedbackOpen(false);
   };
 
   const handleExportNineBox = () => {
-    const csvContent = 'Colaborador,Performance,Potencial,Classificação\n' +
-      mockNineBox.map(n => `${n.colaborador},${n.performance},${n.potential},${n.label}`).join('\n');
+    const csvContent = "Colaborador,Performance,Potencial,Classificação\n" +
+      mockNineBox.map(n => `${n.colaborador},${n.performance},${n.potential},${n.label}`).join("\n");
     
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'nine_box_matrix.csv';
+    link.download = "nine_box_matrix.csv";
     link.click();
     
-    toast.success('Matriz 9-Box exportada!');
+    toast.success("Matriz 9-Box exportada!");
   };
 
   const nineBoxGrid = [
-    { row: 0, col: 0, label: 'Enigma', performance: 'low', potential: 'high', color: 'bg-yellow-500/20' },
-    { row: 0, col: 1, label: 'Potencial Crescente', performance: 'medium', potential: 'high', color: 'bg-blue-500/20' },
-    { row: 0, col: 2, label: 'Estrela', performance: 'high', potential: 'high', color: 'bg-green-500/20' },
-    { row: 1, col: 0, label: 'Questionável', performance: 'low', potential: 'medium', color: 'bg-orange-500/20' },
-    { row: 1, col: 1, label: 'Profissional Chave', performance: 'medium', potential: 'medium', color: 'bg-purple-500/20' },
-    { row: 1, col: 2, label: 'Alto Performer', performance: 'high', potential: 'medium', color: 'bg-teal-500/20' },
-    { row: 2, col: 0, label: 'Em Risco', performance: 'low', potential: 'low', color: 'bg-red-500/20' },
-    { row: 2, col: 1, label: 'Eficiente', performance: 'medium', potential: 'low', color: 'bg-gray-500/20' },
-    { row: 2, col: 2, label: 'Especialista', performance: 'high', potential: 'low', color: 'bg-indigo-500/20' },
+    { row: 0, col: 0, label: "Enigma", performance: "low", potential: "high", color: "bg-yellow-500/20" },
+    { row: 0, col: 1, label: "Potencial Crescente", performance: "medium", potential: "high", color: "bg-blue-500/20" },
+    { row: 0, col: 2, label: "Estrela", performance: "high", potential: "high", color: "bg-green-500/20" },
+    { row: 1, col: 0, label: "Questionável", performance: "low", potential: "medium", color: "bg-orange-500/20" },
+    { row: 1, col: 1, label: "Profissional Chave", performance: "medium", potential: "medium", color: "bg-purple-500/20" },
+    { row: 1, col: 2, label: "Alto Performer", performance: "high", potential: "medium", color: "bg-teal-500/20" },
+    { row: 2, col: 0, label: "Em Risco", performance: "low", potential: "low", color: "bg-red-500/20" },
+    { row: 2, col: 1, label: "Eficiente", performance: "medium", potential: "low", color: "bg-gray-500/20" },
+    { row: 2, col: 2, label: "Especialista", performance: "high", potential: "low", color: "bg-indigo-500/20" },
   ];
 
   const getCollaboratorsInBox = (performance: string, potential: string) => {
@@ -237,7 +237,7 @@ const PerformanceCenter: React.FC = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">{avaliacoes.filter(a => a.status === 'pendente').length}</p>
+                <p className="text-2xl font-bold">{avaliacoes.filter(a => a.status === "pendente").length}</p>
                 <p className="text-sm text-muted-foreground">Avaliações Pendentes</p>
               </div>
               <Clock className="w-8 h-8 text-orange-500" />
@@ -281,7 +281,7 @@ const PerformanceCenter: React.FC = () => {
                 <SelectItem value="q2-2025">Q2 2025</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={() => toast.info('Funcionalidade de nova avaliação')}>
+            <Button onClick={() => toast.info("Funcionalidade de nova avaliação")}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Avaliação
             </Button>
@@ -301,7 +301,7 @@ const PerformanceCenter: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <Avatar className="w-12 h-12">
                           <AvatarFallback className="bg-primary/10 text-primary">
-                            {avaliacao.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            {avaliacao.colaborador.split(" ").map(n => n[0]).join("").slice(0, 2)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
@@ -319,7 +319,7 @@ const PerformanceCenter: React.FC = () => {
                       </div>
                     </div>
 
-                    {avaliacao.status !== 'pendente' && (
+                    {avaliacao.status !== "pendente" && (
                       <div className="mt-4 grid grid-cols-3 gap-4">
                         <div className="text-center p-2 bg-muted/50 rounded-lg">
                           <p className="text-xs text-muted-foreground">Auto-avaliação</p>
@@ -362,18 +362,18 @@ const PerformanceCenter: React.FC = () => {
                       <Button 
                         size="sm" 
                         className="flex-1"
-                        onClick={() => avaliacao.status === 'pendente' ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao)}
+                        onClick={() => avaliacao.status === "pendente" ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao)}
                         disabled={isLoading}
                       >
                         {isLoading ? (
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        ) : avaliacao.status === 'pendente' ? (
+                        ) : avaliacao.status === "pendente" ? (
                           <>
                             <Sparkles className="w-4 h-4 mr-2" />
                             Iniciar Avaliação
                           </>
                         ) : (
-                          'Continuar'
+                          "Continuar"
                         )}
                       </Button>
                     </div>
@@ -528,17 +528,17 @@ const PerformanceCenter: React.FC = () => {
               />
               <div className="flex gap-2">
                 <Button 
-                  variant={feedbackType === 'reconhecimento' ? 'default' : 'outline'} 
+                  variant={feedbackType === "reconhecimento" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType('reconhecimento')}
+                  onClick={() => setFeedbackType("reconhecimento")}
                 >
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Reconhecimento
                 </Button>
                 <Button 
-                  variant={feedbackType === 'construtivo' ? 'default' : 'outline'} 
+                  variant={feedbackType === "construtivo" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType('construtivo')}
+                  onClick={() => setFeedbackType("construtivo")}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Construtivo
@@ -557,15 +557,15 @@ const PerformanceCenter: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               {[
-                { de: 'Carlos Silva', para: 'Ana Martins', tipo: 'reconhecimento', texto: 'Excelente trabalho na apresentação do projeto!' },
-                { de: 'Maria Lima', para: 'João Pedro', tipo: 'construtivo', texto: 'Sugestão para melhorar a comunicação nas reuniões.' },
-                { de: 'Roberto Santos', para: 'Carlos Silva', tipo: 'reconhecimento', texto: 'Liderança exemplar no projeto de segurança.' }
+                { de: "Carlos Silva", para: "Ana Martins", tipo: "reconhecimento", texto: "Excelente trabalho na apresentação do projeto!" },
+                { de: "Maria Lima", para: "João Pedro", tipo: "construtivo", texto: "Sugestão para melhorar a comunicação nas reuniões." },
+                { de: "Roberto Santos", para: "Carlos Silva", tipo: "reconhecimento", texto: "Liderança exemplar no projeto de segurança." }
               ].map((feedback, idx) => (
                 <div key={idx} className="p-4 bg-muted/50 rounded-lg border">
                   <div className="flex items-center gap-3 mb-2">
                     <Avatar className="w-8 h-8">
                       <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                        {feedback.de.split(' ').map(n => n[0]).join('')}
+                        {feedback.de.split(" ").map(n => n[0]).join("")}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -573,7 +573,7 @@ const PerformanceCenter: React.FC = () => {
                       <p className="text-xs text-muted-foreground">há 2 horas</p>
                     </div>
                     <Badge variant="outline" className="ml-auto">
-                      {feedback.tipo === 'reconhecimento' ? '👍 Reconhecimento' : '💬 Construtivo'}
+                      {feedback.tipo === "reconhecimento" ? "👍 Reconhecimento" : "💬 Construtivo"}
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">{feedback.texto}</p>
@@ -616,7 +616,7 @@ const PerformanceCenter: React.FC = () => {
                         {collaborators.map(c => (
                           <Avatar key={c.colaboradorId} className="w-8 h-8" title={c.colaborador}>
                             <AvatarFallback className="text-[10px] bg-background">
-                              {c.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                              {c.colaborador.split(" ").map(n => n[0]).join("").slice(0, 2)}
                             </AvatarFallback>
                           </Avatar>
                         ))}
@@ -651,7 +651,7 @@ const PerformanceCenter: React.FC = () => {
               <div className="flex items-center gap-4">
                 <Avatar className="w-16 h-16">
                   <AvatarFallback className="text-lg bg-primary/10 text-primary">
-                    {selectedAvaliacao.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    {selectedAvaliacao.colaborador.split(" ").map(n => n[0]).join("").slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div>

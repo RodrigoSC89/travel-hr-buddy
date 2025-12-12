@@ -3,9 +3,9 @@
  * Cards de métricas principais do módulo de conformidade
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { 
   Shield, 
   FileCheck, 
@@ -15,22 +15,22 @@ import {
   Award,
   Clock,
   CheckCircle2 
-} from 'lucide-react';
-import type { ComplianceKPIs } from '../types';
+} from "lucide-react";
+import type { ComplianceKPIs } from "../types";
 
 interface ComplianceKPICardsProps {
   kpis: ComplianceKPIs;
 }
 
 export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
-  const TrendIcon = kpis.trendDirection === 'up' ? TrendingUp : 
-                    kpis.trendDirection === 'down' ? TrendingDown : TrendingUp;
+  const TrendIcon = kpis.trendDirection === "up" ? TrendingUp : 
+    kpis.trendDirection === "down" ? TrendingDown : TrendingUp;
   
-  const trendColor = kpis.trendDirection === 'up' ? 'text-green-500' : 
-                     kpis.trendDirection === 'down' ? 'text-red-500' : 'text-muted-foreground';
+  const trendColor = kpis.trendDirection === "up" ? "text-green-500" : 
+    kpis.trendDirection === "down" ? "text-red-500" : "text-muted-foreground";
 
-  const scoreColor = kpis.overallScore >= 90 ? 'text-green-500' : 
-                     kpis.overallScore >= 75 ? 'text-yellow-500' : 'text-red-500';
+  const scoreColor = kpis.overallScore >= 90 ? "text-green-500" : 
+    kpis.overallScore >= 75 ? "text-yellow-500" : "text-red-500";
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -48,7 +48,7 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
           <div className="flex items-center gap-1 mt-1">
             <TrendIcon className={`h-3 w-3 ${trendColor}`} />
             <span className={`text-xs ${trendColor}`}>
-              {kpis.trendDirection === 'up' ? '+' : kpis.trendDirection === 'down' ? '-' : ''}
+              {kpis.trendDirection === "up" ? "+" : kpis.trendDirection === "down" ? "-" : ""}
               {kpis.trendPercentage}% este mês
             </span>
           </div>
@@ -102,7 +102,7 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
 
       {/* Overdue Items */}
       <Card className="relative overflow-hidden">
-        <div className={`absolute top-0 right-0 w-20 h-20 ${kpis.overdueItems > 0 ? 'bg-red-500/10' : 'bg-blue-500/10'} rounded-full -mr-10 -mt-10`} />
+        <div className={`absolute top-0 right-0 w-20 h-20 ${kpis.overdueItems > 0 ? "bg-red-500/10" : "bg-blue-500/10"} rounded-full -mr-10 -mt-10`} />
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Itens Vencidos</CardTitle>
           {kpis.overdueItems > 0 ? (
@@ -112,7 +112,7 @@ export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
           )}
         </CardHeader>
         <CardContent>
-          <div className={`text-3xl font-bold ${kpis.overdueItems > 0 ? 'text-red-500' : ''}`}>
+          <div className={`text-3xl font-bold ${kpis.overdueItems > 0 ? "text-red-500" : ""}`}>
             {kpis.overdueItems}
           </div>
           <div className="flex items-center gap-2 mt-1">

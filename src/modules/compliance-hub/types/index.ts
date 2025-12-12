@@ -3,10 +3,10 @@
  * Tipos centralizados para o módulo de conformidade
  */
 
-export type ComplianceStatus = 'compliant' | 'non-compliant' | 'partial' | 'pending' | 'expired';
-export type AuditStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
-export type FindingSeverity = 'critical' | 'major' | 'minor' | 'observation';
-export type CertificateStatus = 'valid' | 'expiring-soon' | 'expired' | 'pending-renewal';
+export type ComplianceStatus = "compliant" | "non-compliant" | "partial" | "pending" | "expired";
+export type AuditStatus = "scheduled" | "in-progress" | "completed" | "cancelled";
+export type FindingSeverity = "critical" | "major" | "minor" | "observation";
+export type CertificateStatus = "valid" | "expiring-soon" | "expired" | "pending-renewal";
 
 export interface ComplianceItem {
   id: string;
@@ -28,7 +28,7 @@ export interface ComplianceItem {
 
 export interface AuditSession {
   id: string;
-  auditType: 'internal' | 'external' | 'flag-state' | 'class' | 'psc';
+  auditType: "internal" | "external" | "flag-state" | "class" | "psc";
   vesselId: string;
   vesselName: string;
   auditorId: string;
@@ -47,7 +47,7 @@ export interface AuditFinding {
   category: string;
   description: string;
   severity: FindingSeverity;
-  status: 'open' | 'in-progress' | 'closed' | 'verified';
+  status: "open" | "in-progress" | "closed" | "verified";
   correctiveAction: string;
   responsibleId: string;
   responsibleName: string;
@@ -93,10 +93,10 @@ export interface RegulationRequirement {
 
 export interface ComplianceAlert {
   id: string;
-  type: 'certificate-expiry' | 'audit-due' | 'finding-overdue' | 'regulation-update' | 'ai-insight';
+  type: "certificate-expiry" | "audit-due" | "finding-overdue" | "regulation-update" | "ai-insight";
   title: string;
   message: string;
-  severity: 'info' | 'warning' | 'critical';
+  severity: "info" | "warning" | "critical";
   relatedItemId: string;
   relatedItemType: string;
   createdAt: string;
@@ -113,15 +113,15 @@ export interface ComplianceKPIs {
   upcomingAudits: number;
   overdueItems: number;
   trendPercentage: number;
-  trendDirection: 'up' | 'down' | 'stable';
+  trendDirection: "up" | "down" | "stable";
 }
 
 export interface AIComplianceAnalysis {
-  overallRiskLevel: 'low' | 'medium' | 'high' | 'critical';
+  overallRiskLevel: "low" | "medium" | "high" | "critical";
   riskAreas: {
     area: string;
     risk: number;
-    trend: 'improving' | 'stable' | 'worsening';
+    trend: "improving" | "stable" | "worsening";
     recommendation: string;
   }[];
   predictedIssues: {
@@ -133,7 +133,7 @@ export interface AIComplianceAnalysis {
   complianceGaps: {
     regulation: string;
     gap: string;
-    priority: 'high' | 'medium' | 'low';
+    priority: "high" | "medium" | "low";
     suggestedAction: string;
   }[];
   auditReadiness: {
@@ -153,7 +153,7 @@ export interface ComplianceTraining {
   courseId: string;
   courseName: string;
   category: string;
-  status: 'not-started' | 'in-progress' | 'completed' | 'expired';
+  status: "not-started" | "in-progress" | "completed" | "expired";
   progress: number;
   startDate?: string;
   completedDate?: string;
@@ -173,7 +173,7 @@ export interface TrainingMatrix {
     trainings: {
       courseId: string;
       courseName: string;
-      status: ComplianceTraining['status'];
+      status: ComplianceTraining["status"];
       expiryDate?: string;
     }[];
   }[];

@@ -253,7 +253,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     setTasks(prev => 
       prev.map(task => 
         task.id === taskId 
-          ? { ...task, status: "completed" as const, completedDate: new Date().toISOString().split('T')[0] } 
+          ? { ...task, status: "completed" as const, completedDate: new Date().toISOString().split("T")[0] } 
           : task
       )
     );
@@ -378,12 +378,12 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
                     <TableCell>
                       <div className="flex items-center gap-1 text-sm">
                         <Calendar className="h-3 w-3" />
-                        {new Date(task.scheduledDate).toLocaleDateString('pt-BR')}
+                        {new Date(task.scheduledDate).toLocaleDateString("pt-BR")}
                       </div>
                       {task.completedDate && (
                         <div className="text-xs text-success flex items-center gap-1 mt-1">
                           <CheckCircle className="h-3 w-3" />
-                          {new Date(task.completedDate).toLocaleDateString('pt-BR')}
+                          {new Date(task.completedDate).toLocaleDateString("pt-BR")}
                         </div>
                       )}
                     </TableCell>

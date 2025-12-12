@@ -324,7 +324,7 @@ class DeltaSyncService {
     entityTypes: string[];
     totalSize: number;
     oldestSync: number | null;
-  } {
+    } {
     const entityTypes = Array.from(this.localState.keys());
     let totalSize = 0;
     let oldestSync: number | null = null;

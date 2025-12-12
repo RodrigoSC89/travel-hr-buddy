@@ -112,10 +112,10 @@ export const DGNSSDashboard: React.FC = () => {
 
   const getStatusColor = (status: "online" | "offline" | "maintenance") => {
     switch (status) {
-      case "online": return "bg-green-500";
-      case "offline": return "bg-red-500";
-      case "maintenance": return "bg-yellow-500";
-      default: return "bg-gray-500";
+    case "online": return "bg-green-500";
+    case "offline": return "bg-red-500";
+    case "maintenance": return "bg-yellow-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -128,11 +128,11 @@ export const DGNSSDashboard: React.FC = () => {
 
   const getConstellationIcon = (constellation: string) => {
     switch (constellation) {
-      case "GPS": return "🇺🇸";
-      case "GLONASS": return "🇷🇺";
-      case "GALILEO": return "🇪🇺";
-      case "SBAS": return "📡";
-      default: return "🛰️";
+    case "GPS": return "🇺🇸";
+    case "GLONASS": return "🇷🇺";
+    case "GALILEO": return "🇪🇺";
+    case "SBAS": return "📡";
+    default: return "🛰️";
     }
   };
 

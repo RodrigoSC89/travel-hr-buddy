@@ -3,10 +3,10 @@
  * Fallback elegante para estados vazios de dados
  */
 
-import React from 'react';
-import { Database, Plus, RefreshCw, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Database, Plus, RefreshCw, Filter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface DataEmptyProps {
   title?: string;
@@ -19,12 +19,12 @@ export interface DataEmptyProps {
   showRefresh?: boolean;
   onRefresh?: () => void;
   className?: string;
-  variant?: 'default' | 'compact' | 'card';
+  variant?: "default" | "compact" | "card";
 }
 
 export const DataEmpty: React.FC<DataEmptyProps> = ({
-  title = 'Nenhum dado encontrado',
-  description = 'Não há dados disponíveis no momento. Tente adicionar novos itens ou ajustar seus filtros.',
+  title = "Nenhum dado encontrado",
+  description = "Não há dados disponíveis no momento. Tente adicionar novos itens ou ajustar seus filtros.",
   icon: Icon = Database,
   actionLabel,
   onAction,
@@ -33,11 +33,11 @@ export const DataEmpty: React.FC<DataEmptyProps> = ({
   showRefresh = true,
   onRefresh,
   className,
-  variant = 'default',
+  variant = "default",
 }) => {
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
-      <div className={cn('flex flex-col items-center justify-center p-6 text-center', className)}>
+      <div className={cn("flex flex-col items-center justify-center p-6 text-center", className)}>
         <div className="mb-3 p-2 rounded-full bg-muted">
           <Icon className="w-6 h-6 text-muted-foreground" />
         </div>
@@ -62,9 +62,9 @@ export const DataEmpty: React.FC<DataEmptyProps> = ({
     );
   }
 
-  if (variant === 'card') {
+  if (variant === "card") {
     return (
-      <div className={cn('bg-card border border-border rounded-lg p-8 text-center shadow-sm', className)}>
+      <div className={cn("bg-card border border-border rounded-lg p-8 text-center shadow-sm", className)}>
         <div className="flex justify-center mb-4">
           <div className="p-4 rounded-full bg-muted">
             <Icon className="w-10 h-10 text-muted-foreground" />
@@ -100,7 +100,7 @@ export const DataEmpty: React.FC<DataEmptyProps> = ({
 
   // Default variant
   return (
-    <div className={cn('text-center py-16 px-4', className)}>
+    <div className={cn("text-center py-16 px-4", className)}>
       <div className="flex justify-center mb-6">
         <div className="p-6 rounded-full bg-gradient-to-br from-muted to-muted/50 shadow-soft">
           <Icon className="w-14 h-14 text-muted-foreground" />

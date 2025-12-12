@@ -1,8 +1,8 @@
-import React from 'react';
-import { WifiOff, RefreshCw } from 'lucide-react';
-import { useOfflineMode } from '@/hooks/useOfflineMode';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { WifiOff, RefreshCw } from "lucide-react";
+import { useOfflineMode } from "@/hooks/useOfflineMode";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface OfflineBannerProps {
   className?: string;
@@ -20,10 +20,10 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
   return (
     <div
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 bg-destructive/95 backdrop-blur-sm',
-        'text-destructive-foreground px-4 py-2',
-        'flex items-center justify-between gap-4',
-        'animate-fade-in',
+        "fixed top-0 left-0 right-0 z-50 bg-destructive/95 backdrop-blur-sm",
+        "text-destructive-foreground px-4 py-2",
+        "flex items-center justify-between gap-4",
+        "animate-fade-in",
         className
       )}
       role="alert"
@@ -36,7 +36,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
         </span>
         {showSyncStatus && hasPendingSync && (
           <span className="text-xs opacity-80">
-            • {pendingSync.length} {pendingSync.length === 1 ? 'item' : 'itens'} aguardando sync
+            • {pendingSync.length} {pendingSync.length === 1 ? "item" : "itens"} aguardando sync
           </span>
         )}
       </div>
@@ -66,8 +66,8 @@ export const CacheIndicator: React.FC<{ isFromCache: boolean; className?: string
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 text-xs text-muted-foreground',
-        'bg-muted/50 px-2 py-0.5 rounded-full',
+        "inline-flex items-center gap-1 text-xs text-muted-foreground",
+        "bg-muted/50 px-2 py-0.5 rounded-full",
         className
       )}
     >

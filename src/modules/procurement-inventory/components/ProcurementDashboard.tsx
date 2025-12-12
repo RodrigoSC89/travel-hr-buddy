@@ -309,7 +309,7 @@ export default function ProcurementDashboard() {
                   <span className="text-sm font-medium truncate">{alert.item}</span>
                   <Badge variant={
                     alert.status === "critical" ? "destructive" : 
-                    alert.status === "warning" ? "default" : "secondary"
+                      alert.status === "warning" ? "default" : "secondary"
                   }>
                     {alert.current}/{alert.min}
                   </Badge>
@@ -318,7 +318,7 @@ export default function ProcurementDashboard() {
                   value={(alert.current / alert.min) * 100} 
                   className={`h-2 ${
                     alert.status === "critical" ? "[&>div]:bg-destructive" : 
-                    alert.status === "warning" ? "[&>div]:bg-amber-500" : "[&>div]:bg-primary"
+                      alert.status === "warning" ? "[&>div]:bg-amber-500" : "[&>div]:bg-primary"
                   }`}
                 />
               </div>
@@ -349,7 +349,7 @@ export default function ProcurementDashboard() {
                   <span className="text-sm font-medium">{pred.item}</span>
                   <span className={`text-xs font-semibold ${
                     pred.daysUntilStockout <= 7 ? "text-destructive" : 
-                    pred.daysUntilStockout <= 14 ? "text-amber-600" : "text-green-600"
+                      pred.daysUntilStockout <= 14 ? "text-amber-600" : "text-green-600"
                   }`}>
                     {pred.daysUntilStockout} dias
                   </span>

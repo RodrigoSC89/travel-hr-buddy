@@ -36,76 +36,76 @@ export const FilterPanel = ({
     const value = values[filter.id] || filter.defaultValue;
 
     switch (filter.type) {
-      case "select":
-        return (
-          <div key={filter.id} className="space-y-2">
-            <label className="text-sm font-medium">{filter.label}</label>
-            <Select
-              value={value}
-              onValueChange={(v) => onChange(filter.id, v)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder={filter.placeholder} />
-              </SelectTrigger>
-              <SelectContent>
-                {filter.options?.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        );
+    case "select":
+      return (
+        <div key={filter.id} className="space-y-2">
+          <label className="text-sm font-medium">{filter.label}</label>
+          <Select
+            value={value}
+            onValueChange={(v) => onChange(filter.id, v)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder={filter.placeholder} />
+            </SelectTrigger>
+            <SelectContent>
+              {filter.options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      );
 
-      case "search":
-        return (
-          <div key={filter.id} className="space-y-2">
-            <label className="text-sm font-medium">{filter.label}</label>
-            <Input
-              type="text"
-              placeholder={filter.placeholder}
-              value={value || ""}
-              onChange={(e) => onChange(filter.id, e.target.value)}
-            />
-          </div>
-        );
+    case "search":
+      return (
+        <div key={filter.id} className="space-y-2">
+          <label className="text-sm font-medium">{filter.label}</label>
+          <Input
+            type="text"
+            placeholder={filter.placeholder}
+            value={value || ""}
+            onChange={(e) => onChange(filter.id, e.target.value)}
+          />
+        </div>
+      );
 
-      case "date":
-        return (
-          <div key={filter.id} className="space-y-2">
-            <label className="text-sm font-medium">{filter.label}</label>
+    case "date":
+      return (
+        <div key={filter.id} className="space-y-2">
+          <label className="text-sm font-medium">{filter.label}</label>
+          <Input
+            type="date"
+            value={value || ""}
+            onChange={(e) => onChange(filter.id, e.target.value)}
+          />
+        </div>
+      );
+
+    case "daterange":
+      return (
+        <div key={filter.id} className="space-y-2">
+          <label className="text-sm font-medium">{filter.label}</label>
+          <div className="flex gap-2">
             <Input
               type="date"
-              value={value || ""}
-              onChange={(e) => onChange(filter.id, e.target.value)}
+              placeholder="Início"
+              value={value?.start || ""}
+              onChange={(e) => onChange(filter.id, { ...value, start: e.target.value })}
+            />
+            <Input
+              type="date"
+              placeholder="Fim"
+              value={value?.end || ""}
+              onChange={(e) => onChange(filter.id, { ...value, end: e.target.value })}
             />
           </div>
-        );
+        </div>
+      );
 
-      case "daterange":
-        return (
-          <div key={filter.id} className="space-y-2">
-            <label className="text-sm font-medium">{filter.label}</label>
-            <div className="flex gap-2">
-              <Input
-                type="date"
-                placeholder="Início"
-                value={value?.start || ""}
-                onChange={(e) => onChange(filter.id, { ...value, start: e.target.value })}
-              />
-              <Input
-                type="date"
-                placeholder="Fim"
-                value={value?.end || ""}
-                onChange={(e) => onChange(filter.id, { ...value, end: e.target.value })}
-              />
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 

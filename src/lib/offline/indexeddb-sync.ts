@@ -3,26 +3,26 @@
  * Robust offline queue using IndexedDB with worker support
  */
 
-import { logger } from '@/lib/logger';
-import { compressPayload, decompressPayload } from './payload-compression';
+import { logger } from "@/lib/logger";
+import { compressPayload, decompressPayload } from "./payload-compression";
 
-const DB_NAME = 'nautilus_offline_db';
+const DB_NAME = "nautilus_offline_db";
 const DB_VERSION = 2;
 const STORES = {
-  SYNC_QUEUE: 'sync_queue',
-  CACHE: 'data_cache',
-  PRIORITY_QUEUE: 'priority_queue',
+  SYNC_QUEUE: "sync_queue",
+  CACHE: "data_cache",
+  PRIORITY_QUEUE: "priority_queue",
 } as const;
 
 interface SyncItem {
   id: string;
-  operation: 'insert' | 'update' | 'delete';
+  operation: "insert" | "update" | "delete";
   table: string;
   data: any;
   timestamp: number;
   retryCount: number;
-  priority: 'critical' | 'high' | 'normal' | 'low';
-  status: 'pending' | 'syncing' | 'completed' | 'failed';
+  priority: "critical" | "high" | "normal" | "low";
+  status: "pending" | "syncing" | "completed" | "failed";
   compressed: boolean;
   chunkId?: string;
   totalChunks?: number;
@@ -50,14 +50,14 @@ class IndexedDBSync {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
 
       request.onerror = () => {
-        logger.error('[IndexedDBSync] Failed to open database', { error: request.error });
+        logger.error("[IndexedDBSync] Failed to open database", { error: request.error });
         reject(request.error);
       };
 
       request.onsuccess = () => {
         this.db = request.result;
         this.isInitialized = true;
-        logger.info('[IndexedDBSync] Database initialized');
+        logger.info("[IndexedDBSync] Database initialized");
         resolve();
       };
 
@@ -66,24 +66,24 @@ class IndexedDBSync {
 
         // Sync Queue Store
         if (!db.objectStoreNames.contains(STORES.SYNC_QUEUE)) {
-          const syncStore = db.createObjectStore(STORES.SYNC_QUEUE, { keyPath: 'id' });
-          syncStore.createIndex('status', 'status', { unique: false });
-          syncStore.createIndex('priority', 'priority', { unique: false });
-          syncStore.createIndex('timestamp', 'timestamp', { unique: false });
-          syncStore.createIndex('table', 'table', { unique: false });
+          const syncStore = db.createObjectStore(STORES.SYNC_QUEUE, { keyPath: "id" });
+          syncStore.createIndex("status", "status", { unique: false });
+          syncStore.createIndex("priority", "priority", { unique: false });
+          syncStore.createIndex("timestamp", "timestamp", { unique: false });
+          syncStore.createIndex("table", "table", { unique: false });
         }
 
         // Cache Store
         if (!db.objectStoreNames.contains(STORES.CACHE)) {
-          const cacheStore = db.createObjectStore(STORES.CACHE, { keyPath: 'key' });
-          cacheStore.createIndex('timestamp', 'timestamp', { unique: false });
-          cacheStore.createIndex('ttl', 'ttl', { unique: false });
+          const cacheStore = db.createObjectStore(STORES.CACHE, { keyPath: "key" });
+          cacheStore.createIndex("timestamp", "timestamp", { unique: false });
+          cacheStore.createIndex("ttl", "ttl", { unique: false });
         }
 
         // Priority Queue
         if (!db.objectStoreNames.contains(STORES.PRIORITY_QUEUE)) {
-          const priorityStore = db.createObjectStore(STORES.PRIORITY_QUEUE, { keyPath: 'id' });
-          priorityStore.createIndex('priority', 'priority', { unique: false });
+          const priorityStore = db.createObjectStore(STORES.PRIORITY_QUEUE, { keyPath: "id" });
+          priorityStore.createIndex("priority", "priority", { unique: false });
         }
       };
     });
@@ -91,9 +91,9 @@ class IndexedDBSync {
     return this.initPromise;
   }
 
-  private async getStore(storeName: string, mode: IDBTransactionMode = 'readonly'): Promise<IDBObjectStore> {
+  private async getStore(storeName: string, mode: IDBTransactionMode = "readonly"): Promise<IDBObjectStore> {
     await this.init();
-    if (!this.db) throw new Error('Database not initialized');
+    if (!this.db) throw new Error("Database not initialized");
     
     const transaction = this.db.transaction(storeName, mode);
     return transaction.objectStore(storeName);
@@ -102,12 +102,12 @@ class IndexedDBSync {
   // ============ SYNC QUEUE OPERATIONS ============
 
   async queueOperation(
-    operation: 'insert' | 'update' | 'delete',
+    operation: "insert" | "update" | "delete",
     table: string,
     data: any,
-    priority: 'critical' | 'high' | 'normal' | 'low' = 'normal'
+    priority: "critical" | "high" | "normal" | "low" = "normal"
   ): Promise<string> {
-    const store = await this.getStore(STORES.SYNC_QUEUE, 'readwrite');
+    const store = await this.getStore(STORES.SYNC_QUEUE, "readwrite");
     
     const item: SyncItem = {
       id: `sync-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
@@ -117,7 +117,7 @@ class IndexedDBSync {
       timestamp: Date.now(),
       retryCount: 0,
       priority,
-      status: 'pending',
+      status: "pending",
       compressed: false,
     };
 
@@ -132,7 +132,7 @@ class IndexedDBSync {
     return new Promise((resolve, reject) => {
       const request = store.add(item);
       request.onsuccess = () => {
-        logger.debug('[IndexedDBSync] Queued operation', { id: item.id, table, operation });
+        logger.debug("[IndexedDBSync] Queued operation", { id: item.id, table, operation });
         resolve(item.id);
       };
       request.onerror = () => reject(request.error);
@@ -140,12 +140,12 @@ class IndexedDBSync {
   }
 
   async getPendingOperations(limit = 50): Promise<SyncItem[]> {
-    const store = await this.getStore(STORES.SYNC_QUEUE, 'readonly');
-    const index = store.index('status');
+    const store = await this.getStore(STORES.SYNC_QUEUE, "readonly");
+    const index = store.index("status");
     
     return new Promise((resolve, reject) => {
       const items: SyncItem[] = [];
-      const request = index.openCursor(IDBKeyRange.only('pending'));
+      const request = index.openCursor(IDBKeyRange.only("pending"));
       
       request.onsuccess = (event) => {
         const cursor = (event.target as IDBRequest).result;
@@ -166,8 +166,8 @@ class IndexedDBSync {
     });
   }
 
-  async updateOperationStatus(id: string, status: SyncItem['status'], incrementRetry = false): Promise<void> {
-    const store = await this.getStore(STORES.SYNC_QUEUE, 'readwrite');
+  async updateOperationStatus(id: string, status: SyncItem["status"], incrementRetry = false): Promise<void> {
+    const store = await this.getStore(STORES.SYNC_QUEUE, "readwrite");
     
     return new Promise((resolve, reject) => {
       const getRequest = store.get(id);
@@ -191,12 +191,12 @@ class IndexedDBSync {
   }
 
   async clearCompletedOperations(): Promise<number> {
-    const store = await this.getStore(STORES.SYNC_QUEUE, 'readwrite');
-    const index = store.index('status');
+    const store = await this.getStore(STORES.SYNC_QUEUE, "readwrite");
+    const index = store.index("status");
     
     return new Promise((resolve, reject) => {
       let cleared = 0;
-      const request = index.openCursor(IDBKeyRange.only('completed'));
+      const request = index.openCursor(IDBKeyRange.only("completed"));
       
       request.onsuccess = (event) => {
         const cursor = (event.target as IDBRequest).result;
@@ -205,7 +205,7 @@ class IndexedDBSync {
           cleared++;
           cursor.continue();
         } else {
-          logger.info('[IndexedDBSync] Cleared completed operations', { count: cleared });
+          logger.info("[IndexedDBSync] Cleared completed operations", { count: cleared });
           resolve(cleared);
         }
       };
@@ -224,7 +224,7 @@ class IndexedDBSync {
     byNormal: number;
     byLow: number;
   }> {
-    const store = await this.getStore(STORES.SYNC_QUEUE, 'readonly');
+    const store = await this.getStore(STORES.SYNC_QUEUE, "readonly");
     
     return new Promise((resolve, reject) => {
       const stats = {
@@ -248,10 +248,10 @@ class IndexedDBSync {
           stats.total++;
           stats[item.status as keyof typeof stats]++;
           
-          if (item.priority === 'critical') stats.byCritical++;
-          else if (item.priority === 'high') stats.byHigh++;
-          else if (item.priority === 'normal') stats.byNormal++;
-          else if (item.priority === 'low') stats.byLow++;
+          if (item.priority === "critical") stats.byCritical++;
+          else if (item.priority === "high") stats.byHigh++;
+          else if (item.priority === "normal") stats.byNormal++;
+          else if (item.priority === "low") stats.byLow++;
           
           cursor.continue();
         } else {
@@ -265,7 +265,7 @@ class IndexedDBSync {
   // ============ CACHE OPERATIONS ============
 
   async cacheData(key: string, data: any, ttl = 3600000): Promise<void> {
-    const store = await this.getStore(STORES.CACHE, 'readwrite');
+    const store = await this.getStore(STORES.CACHE, "readwrite");
     
     let compressed = false;
     let storedData = data;
@@ -292,7 +292,7 @@ class IndexedDBSync {
   }
 
   async getCachedData<T>(key: string): Promise<T | null> {
-    const store = await this.getStore(STORES.CACHE, 'readonly');
+    const store = await this.getStore(STORES.CACHE, "readonly");
     
     return new Promise((resolve, reject) => {
       const request = store.get(key);
@@ -326,7 +326,7 @@ class IndexedDBSync {
   }
 
   async removeCachedData(key: string): Promise<void> {
-    const store = await this.getStore(STORES.CACHE, 'readwrite');
+    const store = await this.getStore(STORES.CACHE, "readwrite");
     
     return new Promise((resolve, reject) => {
       const request = store.delete(key);
@@ -336,7 +336,7 @@ class IndexedDBSync {
   }
 
   async clearExpiredCache(): Promise<number> {
-    const store = await this.getStore(STORES.CACHE, 'readwrite');
+    const store = await this.getStore(STORES.CACHE, "readwrite");
     const now = Date.now();
     
     return new Promise((resolve, reject) => {
@@ -379,19 +379,19 @@ class IndexedDBSync {
     await this.init();
     if (!this.db) return;
     
-    const transaction = this.db.transaction(Object.values(STORES), 'readwrite');
+    const transaction = this.db.transaction(Object.values(STORES), "readwrite");
     
     for (const storeName of Object.values(STORES)) {
       transaction.objectStore(storeName).clear();
     }
     
-    logger.info('[IndexedDBSync] All stores cleared');
+    logger.info("[IndexedDBSync] All stores cleared");
   }
 }
 
 export const indexedDBSync = new IndexedDBSync();
 
 // Initialize on module load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   indexedDBSync.init().catch(console.error);
 }

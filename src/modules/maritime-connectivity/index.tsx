@@ -121,10 +121,10 @@ export default function MaritimeConnectivity() {
 
   const getConnectionIcon = (type: string) => {
     switch (type) {
-      case "satellite": return <Satellite className="h-5 w-5" />;
-      case "4g": return <Signal className="h-5 w-5" />;
-      case "wifi": return <Wifi className="h-5 w-5" />;
-      default: return <WifiOff className="h-5 w-5" />;
+    case "satellite": return <Satellite className="h-5 w-5" />;
+    case "4g": return <Signal className="h-5 w-5" />;
+    case "wifi": return <Wifi className="h-5 w-5" />;
+    default: return <WifiOff className="h-5 w-5" />;
     }
   };
 
@@ -161,7 +161,7 @@ export default function MaritimeConnectivity() {
           </div>
         </div>
         <Button onClick={handleRefresh} disabled={isRefreshing}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
           Atualizar
         </Button>
       </div>
@@ -228,7 +228,7 @@ export default function MaritimeConnectivity() {
       {/* Connection Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {connections.map(conn => (
-          <Card key={conn.id} className={`overflow-hidden ${conn.status === "offline" ? 'opacity-80' : ''}`}>
+          <Card key={conn.id} className={`overflow-hidden ${conn.status === "offline" ? "opacity-80" : ""}`}>
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -266,7 +266,7 @@ export default function MaritimeConnectivity() {
                 </div>
                 <Progress 
                   value={conn.signalStrength} 
-                  className={`h-2 ${conn.signalStrength >= 70 ? '[&>div]:bg-green-500' : conn.signalStrength >= 40 ? '[&>div]:bg-amber-500' : '[&>div]:bg-red-500'}`}
+                  className={`h-2 ${conn.signalStrength >= 70 ? "[&>div]:bg-green-500" : conn.signalStrength >= 40 ? "[&>div]:bg-amber-500" : "[&>div]:bg-red-500"}`}
                 />
               </div>
 
@@ -275,17 +275,17 @@ export default function MaritimeConnectivity() {
                 <div className="p-2 bg-muted/30 rounded">
                   <Clock className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
                   <p className="text-xs text-muted-foreground">Latência</p>
-                  <p className="font-medium">{conn.latency > 0 ? `${conn.latency}ms` : '-'}</p>
+                  <p className="font-medium">{conn.latency > 0 ? `${conn.latency}ms` : "-"}</p>
                 </div>
                 <div className="p-2 bg-muted/30 rounded">
                   <Upload className="h-4 w-4 mx-auto mb-1 text-blue-500" />
                   <p className="text-xs text-muted-foreground">Upload</p>
-                  <p className="font-medium">{conn.bandwidth.up > 0 ? formatBytes(conn.bandwidth.up) : '-'}</p>
+                  <p className="font-medium">{conn.bandwidth.up > 0 ? formatBytes(conn.bandwidth.up) : "-"}</p>
                 </div>
                 <div className="p-2 bg-muted/30 rounded">
                   <Download className="h-4 w-4 mx-auto mb-1 text-green-500" />
                   <p className="text-xs text-muted-foreground">Download</p>
-                  <p className="font-medium">{conn.bandwidth.down > 0 ? formatBytes(conn.bandwidth.down) : '-'}</p>
+                  <p className="font-medium">{conn.bandwidth.down > 0 ? formatBytes(conn.bandwidth.down) : "-"}</p>
                 </div>
               </div>
 

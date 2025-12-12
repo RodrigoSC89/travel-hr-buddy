@@ -4,7 +4,7 @@
  */
 
 // PATCH 831: Offline sync
-export { offlineSync, useOfflineSync } from './offline-sync';
+export { offlineSync, useOfflineSync } from "./offline-sync";
 
 // PATCH 831: Optimistic updates
 export {
@@ -12,7 +12,7 @@ export {
   useOptimisticList,
   createOptimisticMutation,
   useDebouncedOptimisticUpdate,
-} from './optimistic-updates';
+} from "./optimistic-updates";
 
 // PATCH 831: Form optimization
 export {
@@ -21,13 +21,13 @@ export {
   useValidatedField,
   useOptimizedForm,
   useAutoSave,
-} from './form-optimization';
+} from "./form-optimization";
 
 // PATCH 832: Request queue manager (advanced)
-export { requestQueue as advancedRequestQueue, useRequestQueue } from './request-queue-manager';
+export { requestQueue as advancedRequestQueue, useRequestQueue } from "./request-queue-manager";
 
 // PATCH 832: API cache layer
-export { apiCache, createCachedFetch, useCachedFetch } from './api-cache-layer';
+export { apiCache, createCachedFetch, useCachedFetch } from "./api-cache-layer";
 
 /**
  * Configurações padrão de performance
@@ -58,24 +58,24 @@ export const PERFORMANCE_CONFIG = {
 } as const;
 
 // Connection awareness
-export * from './connection-aware';
-export { connectionAdaptive, type ConnectionQuality, useConnectionQuality } from './connection-adaptive';
+export * from "./connection-aware";
+export { connectionAdaptive, type ConnectionQuality, useConnectionQuality } from "./connection-adaptive";
 
 // Request deduplication and optimization
 export { 
   requestDeduplicator, 
   RequestBatcher, 
   fetchWithRetry 
-} from './request-deduplication';
+} from "./request-deduplication";
 
 // Offline support
-export { offlineQueue, fetchWithOfflineSupport } from './offline-queue';
+export { offlineQueue, fetchWithOfflineSupport } from "./offline-queue";
 
 // Image optimization
-export { imagePreloader, preloadVisibleImages, preloadRouteImages } from './image-preloader';
+export { imagePreloader, preloadVisibleImages, preloadRouteImages } from "./image-preloader";
 
 // Resource hints
-export { resourceHints } from './resource-hints';
+export { resourceHints } from "./resource-hints";
 
 // Data compression
 export { 
@@ -84,10 +84,10 @@ export {
   compressJSON, 
   decompressJSON,
   shouldCompress 
-} from './compression';
+} from "./compression";
 
 // Existing utilities
-export { offlineManager, cachedFetch } from './offline-manager';
+export { offlineManager, cachedFetch } from "./offline-manager";
 export { 
   checkFormatSupport,
   getBestFormat,
@@ -101,10 +101,10 @@ export {
   calculateOptimalDimensions,
   loadImage,
   isImageInViewport
-} from './image-optimizer';
-export { pollingManager } from './polling-manager';
-export { lazyWithPreload, preloadStrategy, moduleCache } from './lazy-with-preload';
-export { createOptimizedQueryClient } from './query-config';
+} from "./image-optimizer";
+export { pollingManager } from "./polling-manager";
+export { lazyWithPreload, preloadStrategy, moduleCache } from "./lazy-with-preload";
+export { createOptimizedQueryClient } from "./query-config";
 
 // PATCH 800: Enhanced lazy loading
 export { 
@@ -112,7 +112,7 @@ export {
   LazyWrapper, 
   preloadComponent,
   useInViewport 
-} from './lazy-loader';
+} from "./lazy-loader";
 
 // PATCH 800: Data compression utilities
 export {
@@ -123,7 +123,7 @@ export {
   logDataTransfer,
   chunkArray,
   createRequestDeduplicator,
-} from './data-compression';
+} from "./data-compression";
 
 // PATCH 800: Query optimization
 export {
@@ -133,7 +133,7 @@ export {
   prefetchQuery,
   minimalFields,
   getAdaptivePageSize,
-} from './query-optimizer';
+} from "./query-optimizer";
 
 // PATCH 810: API compression
 export {
@@ -145,14 +145,14 @@ export {
   deduplicatedRequest,
   streamResponse,
   useAdaptiveApiSettings,
-} from './api-compression';
+} from "./api-compression";
 
 // PATCH 810: Smart prefetch
 export {
   smartPrefetch,
   useSmartPrefetch,
   usePrefetchLink,
-} from './smart-prefetch';
+} from "./smart-prefetch";
 
 // PATCH 815: Bundle & Memory optimization
 export { 
@@ -161,22 +161,22 @@ export {
   calculatePotentialSavings,
   getCriticalDependencies,
   logBundleAnalysis 
-} from './bundle-analyzer';
-export { memoryManager, shouldReduceMemory, getMemoryAwareSettings } from './memory-manager';
+} from "./bundle-analyzer";
+export { memoryManager, shouldReduceMemory, getMemoryAwareSettings } from "./memory-manager";
 export { 
   initializePerformance, 
   stopPerformance,
   getPerformanceReport,
   requestIdleCallbackPolyfill, 
   cancelIdleCallbackPolyfill 
-} from './init';
+} from "./init";
 
 // PATCH 820: Critical resources & request queue
-export { criticalResourceLoader, useResourcePreload } from './critical-resource-loader';
-export { requestQueue, prioritizedFetch } from './request-queue';
+export { criticalResourceLoader, useResourcePreload } from "./critical-resource-loader";
+export { requestQueue, prioritizedFetch } from "./request-queue";
 
 // PATCH 825: Delta sync & cursor pagination
-export { deltaSyncManager, useDeltaSync } from './delta-sync';
+export { deltaSyncManager, useDeltaSync } from "./delta-sync";
 export { 
   encodeCursor, 
   decodeCursor, 
@@ -185,7 +185,7 @@ export {
   useCursorPagination,
   type CursorPaginationParams,
   type CursorPaginationResult 
-} from './cursor-pagination';
+} from "./cursor-pagination";
 
 // PATCH 825: Code splitting
 export { 
@@ -195,14 +195,14 @@ export {
   preloadRouteModules,
   dynamicImport,
   lazyOnVisible 
-} from './code-splitting';
+} from "./code-splitting";
 
 // PATCH 833: Web Vitals monitoring
-export { webVitalsMonitor, useWebVitals } from './web-vitals-monitor';
+export { webVitalsMonitor, useWebVitals } from "./web-vitals-monitor";
 
 // PATCH 834: Low bandwidth optimizations
-export { bandwidthOptimizer, useBandwidthOptimizer } from './low-bandwidth-optimizer';
-export { requestOptimizer, optimizedFetch, useOptimizedFetch } from './request-optimizer';
+export { bandwidthOptimizer, useBandwidthOptimizer } from "./low-bandwidth-optimizer";
+export { requestOptimizer, optimizedFetch, useOptimizedFetch } from "./request-optimizer";
 
 // PATCH 835: Advanced data handling
 export { 
@@ -214,21 +214,21 @@ export {
   calculateSavings,
   estimateTransferTime,
   useCompressedFetch 
-} from './data-compressor';
+} from "./data-compressor";
 export { 
   useVirtualScroll, 
   useInfiniteScroll, 
   useWindowedData 
-} from './virtual-scroll';
+} from "./virtual-scroll";
 export { 
   networkMonitor, 
   useNetworkStatus, 
   useNetworkAware,
   type NetworkStatus 
-} from './network-monitor';
+} from "./network-monitor";
 
 // PATCH 840: Preload strategy
-export { preloadStrategy as routePreloadStrategy } from './preload-strategy';
+export { preloadStrategy as routePreloadStrategy } from "./preload-strategy";
 
 // PATCH 840: Final optimizations
 export { 
@@ -242,25 +242,25 @@ export {
   measureTimeAsync,
   LRUCache,
   finalOptimizations
-} from './final-optimizations';
+} from "./final-optimizations";
 
 // PATCH 850: Memory & Resource Management
-export { memoryOptimizer } from './memory-optimizer';
-export { resourceManager, type ResourceStatus } from './resource-manager';
+export { memoryOptimizer } from "./memory-optimizer";
+export { resourceManager, type ResourceStatus } from "./resource-manager";
 
 // PATCH 970: Advanced Performance Optimization
-export { systemBenchmark, type BenchmarkResult } from './system-benchmark';
-export { dataRetentionManager, type RetentionPolicy, type CleanupResult } from './data-retention';
-export { smartSyncManager, type SyncItem, type SyncStats } from './smart-sync';
+export { systemBenchmark, type BenchmarkResult } from "./system-benchmark";
+export { dataRetentionManager, type RetentionPolicy, type CleanupResult } from "./data-retention";
+export { smartSyncManager, type SyncItem, type SyncStats } from "./smart-sync";
 
 // PATCH 975: Memory, Indexing, AI Cache, Dashboard & Module Optimization
-export { memoryLeakDetector, throttle, debounce, createCleanupEffect } from './memory-leak-detector';
-export { indexedDBOptimizer } from './indexed-db-optimizer';
-export { aiResponseCache, useAICache } from './ai-response-cache';
+export { memoryLeakDetector, throttle, debounce, createCleanupEffect } from "./memory-leak-detector";
+export { indexedDBOptimizer } from "./indexed-db-optimizer";
+export { aiResponseCache, useAICache } from "./ai-response-cache";
 export { 
   dashboardOptimizer, 
   useOptimizedWidget, 
   useVirtualDashboard,
   calculateInWorker 
-} from './dashboard-optimizer';
-export { moduleLoader, useModuleLoader } from './module-loader';
+} from "./dashboard-optimizer";
+export { moduleLoader, useModuleLoader } from "./module-loader";

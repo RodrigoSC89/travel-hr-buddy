@@ -3,12 +3,12 @@
  * Fallback elegante para módulos não encontrados
  */
 
-import React from 'react';
-import { PackageX, Home, Search, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
-import { logger } from '@/lib/logger';
+import React from "react";
+import { PackageX, Home, Search, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 export interface ModuleNotFoundProps {
   moduleName?: string;
@@ -17,14 +17,14 @@ export interface ModuleNotFoundProps {
 }
 
 export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
-  moduleName = 'Módulo',
+  moduleName = "Módulo",
   moduleId,
   error,
 }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    logger.error('Module Not Found:', {
+    logger.error("Module Not Found:", {
       moduleName,
       moduleId,
       error: error?.message,
@@ -68,7 +68,7 @@ export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
             </ul>
           </div>
 
-          {error && process.env.NODE_ENV === 'development' && (
+          {error && process.env.NODE_ENV === "development" && (
             <details className="text-xs text-muted-foreground">
               <summary className="cursor-pointer hover:text-foreground mb-2 font-semibold">
                 🔧 Detalhes técnicos (desenvolvimento)
@@ -94,7 +94,7 @@ export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
 
         <CardFooter className="flex flex-wrap gap-3 justify-center pt-4">
           <Button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             variant="default"
             className="gap-2"
           >
@@ -112,7 +112,7 @@ export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
           </Button>
 
           <Button
-            onClick={() => navigate('/search')}
+            onClick={() => navigate("/search")}
             variant="outline"
             className="gap-2"
           >

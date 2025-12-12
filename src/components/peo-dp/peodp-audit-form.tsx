@@ -177,11 +177,11 @@ export function PEODPAuditForm({
 
   const getStatusIcon = (status: ComplianceStatus) => {
     switch (status) {
-      case "conforme": return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-      case "parcial": return <MinusCircle className="h-4 w-4 text-yellow-600" />;
-      case "nao_conforme": return <AlertCircle className="h-4 w-4 text-red-600" />;
-      case "nao_aplicavel": return <HelpCircle className="h-4 w-4 text-gray-400" />;
-      default: return <HelpCircle className="h-4 w-4 text-muted-foreground" />;
+    case "conforme": return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+    case "parcial": return <MinusCircle className="h-4 w-4 text-yellow-600" />;
+    case "nao_conforme": return <AlertCircle className="h-4 w-4 text-red-600" />;
+    case "nao_aplicavel": return <HelpCircle className="h-4 w-4 text-gray-400" />;
+    default: return <HelpCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -300,7 +300,7 @@ export function PEODPAuditForm({
                                   {getStatusIcon(item?.status || "pendente")}
                                   <Badge
                                     variant={item?.status === "conforme" ? "default" : 
-                                            item?.status === "nao_conforme" ? "destructive" : "secondary"}
+                                      item?.status === "nao_conforme" ? "destructive" : "secondary"}
                                   >
                                     {getStatusLabel(item?.status || "pendente")}
                                   </Badge>

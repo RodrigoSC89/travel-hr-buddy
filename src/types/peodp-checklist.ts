@@ -605,16 +605,16 @@ export function calculateAuditScore(items: PEODPAuditItem[], requirements: PEODP
     totalWeight += req.weight;
     
     switch (item.status) {
-      case "conforme":
-        earnedWeight += req.weight;
-        break;
-      case "parcial":
-        earnedWeight += req.weight * 0.5;
-        break;
-      case "nao_conforme":
-      case "pendente":
-        // No points
-        break;
+    case "conforme":
+      earnedWeight += req.weight;
+      break;
+    case "parcial":
+      earnedWeight += req.weight * 0.5;
+      break;
+    case "nao_conforme":
+    case "pendente":
+      // No points
+      break;
     }
   });
 
@@ -642,12 +642,12 @@ export function calculateSectionScores(
     sectionScores[req.section].total += req.weight;
     
     switch (item.status) {
-      case "conforme":
-        sectionScores[req.section].earned += req.weight;
-        break;
-      case "parcial":
-        sectionScores[req.section].earned += req.weight * 0.5;
-        break;
+    case "conforme":
+      sectionScores[req.section].earned += req.weight;
+      break;
+    case "parcial":
+      sectionScores[req.section].earned += req.weight * 0.5;
+      break;
     }
   });
 
@@ -663,34 +663,34 @@ export function calculateSectionScores(
 
 export function getStatusColor(status: ComplianceStatus): string {
   switch (status) {
-    case "conforme": return "text-green-600";
-    case "parcial": return "text-yellow-600";
-    case "nao_conforme": return "text-red-600";
-    case "nao_aplicavel": return "text-gray-400";
-    case "pendente": return "text-muted-foreground";
-    default: return "text-muted-foreground";
+  case "conforme": return "text-green-600";
+  case "parcial": return "text-yellow-600";
+  case "nao_conforme": return "text-red-600";
+  case "nao_aplicavel": return "text-gray-400";
+  case "pendente": return "text-muted-foreground";
+  default: return "text-muted-foreground";
   }
 }
 
 export function getStatusBgColor(status: ComplianceStatus): string {
   switch (status) {
-    case "conforme": return "bg-green-50 border-green-200";
-    case "parcial": return "bg-yellow-50 border-yellow-200";
-    case "nao_conforme": return "bg-red-50 border-red-200";
-    case "nao_aplicavel": return "bg-gray-50 border-gray-200";
-    case "pendente": return "bg-muted border-border";
-    default: return "bg-muted border-border";
+  case "conforme": return "bg-green-50 border-green-200";
+  case "parcial": return "bg-yellow-50 border-yellow-200";
+  case "nao_conforme": return "bg-red-50 border-red-200";
+  case "nao_aplicavel": return "bg-gray-50 border-gray-200";
+  case "pendente": return "bg-muted border-border";
+  default: return "bg-muted border-border";
   }
 }
 
 export function getStatusLabel(status: ComplianceStatus): string {
   switch (status) {
-    case "conforme": return "Conforme";
-    case "parcial": return "Parcial";
-    case "nao_conforme": return "Não Conforme";
-    case "nao_aplicavel": return "N/A";
-    case "pendente": return "Pendente";
-    default: return status;
+  case "conforme": return "Conforme";
+  case "parcial": return "Parcial";
+  case "nao_conforme": return "Não Conforme";
+  case "nao_aplicavel": return "N/A";
+  case "pendente": return "Pendente";
+  default: return status;
   }
 }
 

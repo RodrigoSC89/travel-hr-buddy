@@ -4,8 +4,8 @@
  * PATCH: Audit Plan 2025 - Data & Queries
  */
 
-import { QueryClient, QueryClientConfig } from '@tanstack/react-query';
-import { isSlowConnection } from './llm-optimizer';
+import { QueryClient, QueryClientConfig } from "@tanstack/react-query";
+import { isSlowConnection } from "./llm-optimizer";
 
 // Default stale times based on data freshness requirements
 const STALE_TIMES = {
@@ -43,7 +43,7 @@ const createQueryClientConfig = (): QueryClientConfig => ({
       // Retry with exponential backoff
       retry: (failureCount, error) => {
         // Don't retry on 4xx errors
-        if (error instanceof Error && error.message.includes('4')) {
+        if (error instanceof Error && error.message.includes("4")) {
           return false;
         }
         return failureCount < 3;
@@ -56,7 +56,7 @@ const createQueryClientConfig = (): QueryClientConfig => ({
       refetchOnMount: true,
       
       // Network mode - always fetch but use cache while loading
-      networkMode: 'offlineFirst',
+      networkMode: "offlineFirst",
       
       // Placeholder data while loading
       placeholderData: (previousData: unknown) => previousData,
@@ -67,7 +67,7 @@ const createQueryClientConfig = (): QueryClientConfig => ({
       retryDelay: 1000,
       
       // Network mode for mutations
-      networkMode: 'online',
+      networkMode: "online",
     },
   },
 });
@@ -86,47 +86,47 @@ export const getQueryClient = (): QueryClient => {
 export const queryKeys = {
   // User queries
   user: {
-    all: ['user'] as const,
-    profile: (userId: string) => ['user', 'profile', userId] as const,
-    preferences: (userId: string) => ['user', 'preferences', userId] as const,
+    all: ["user"] as const,
+    profile: (userId: string) => ["user", "profile", userId] as const,
+    preferences: (userId: string) => ["user", "preferences", userId] as const,
   },
   
   // Crew queries
   crew: {
-    all: ['crew'] as const,
-    list: (filters?: Record<string, unknown>) => ['crew', 'list', filters] as const,
-    detail: (crewId: string) => ['crew', 'detail', crewId] as const,
-    documents: (crewId: string) => ['crew', 'documents', crewId] as const,
+    all: ["crew"] as const,
+    list: (filters?: Record<string, unknown>) => ["crew", "list", filters] as const,
+    detail: (crewId: string) => ["crew", "detail", crewId] as const,
+    documents: (crewId: string) => ["crew", "documents", crewId] as const,
   },
   
   // Mission queries
   missions: {
-    all: ['missions'] as const,
-    list: (filters?: Record<string, unknown>) => ['missions', 'list', filters] as const,
-    detail: (missionId: string) => ['missions', 'detail', missionId] as const,
-    active: () => ['missions', 'active'] as const,
+    all: ["missions"] as const,
+    list: (filters?: Record<string, unknown>) => ["missions", "list", filters] as const,
+    detail: (missionId: string) => ["missions", "detail", missionId] as const,
+    active: () => ["missions", "active"] as const,
   },
   
   // Documents queries
   documents: {
-    all: ['documents'] as const,
-    list: (folderId?: string) => ['documents', 'list', folderId] as const,
-    detail: (docId: string) => ['documents', 'detail', docId] as const,
-    search: (query: string) => ['documents', 'search', query] as const,
+    all: ["documents"] as const,
+    list: (folderId?: string) => ["documents", "list", folderId] as const,
+    detail: (docId: string) => ["documents", "detail", docId] as const,
+    search: (query: string) => ["documents", "search", query] as const,
   },
   
   // Analytics queries
   analytics: {
-    all: ['analytics'] as const,
-    dashboard: () => ['analytics', 'dashboard'] as const,
-    metrics: (range: string) => ['analytics', 'metrics', range] as const,
+    all: ["analytics"] as const,
+    dashboard: () => ["analytics", "dashboard"] as const,
+    metrics: (range: string) => ["analytics", "metrics", range] as const,
   },
   
   // AI queries
   ai: {
-    all: ['ai'] as const,
-    suggestions: (context: string) => ['ai', 'suggestions', context] as const,
-    insights: () => ['ai', 'insights'] as const,
+    all: ["ai"] as const,
+    suggestions: (context: string) => ["ai", "suggestions", context] as const,
+    insights: () => ["ai", "insights"] as const,
   },
 };
 
@@ -135,9 +135,9 @@ export const createQueryOptions = <T>(
   type: keyof typeof STALE_TIMES,
   queryFn: () => Promise<T>
 ) => ({
-  queryFn,
-  staleTime: getAdjustedStaleTime(STALE_TIMES[type]),
-});
+    queryFn,
+    staleTime: getAdjustedStaleTime(STALE_TIMES[type]),
+  });
 
 // Prefetch critical queries
 export const prefetchCriticalQueries = async (queryClient: QueryClient) => {

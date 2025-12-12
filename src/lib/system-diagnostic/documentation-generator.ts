@@ -108,79 +108,79 @@ O Nautilus Offshore é um sistema completo de gestão marítima com suporte a op
   /**
    * Generate module documentation
    */
-  private generateModuleDocs(): SystemDocumentation['modules'] {
+  private generateModuleDocs(): SystemDocumentation["modules"] {
     return [
       {
-        name: 'Dashboard',
-        description: 'Painel central com KPIs, alertas e resumo executivo',
-        endpoints: ['/api/dashboard/stats', '/api/dashboard/alerts'],
-        inputs: ['Filtros de data', 'Seleção de embarcação'],
-        outputs: ['KPIs agregados', 'Alertas priorizados', 'Resumo IA'],
-        dependencies: ['fleet', 'maintenance', 'compliance'],
-        aiCapabilities: ['Resumo executivo', 'Previsões', 'Alertas inteligentes']
+        name: "Dashboard",
+        description: "Painel central com KPIs, alertas e resumo executivo",
+        endpoints: ["/api/dashboard/stats", "/api/dashboard/alerts"],
+        inputs: ["Filtros de data", "Seleção de embarcação"],
+        outputs: ["KPIs agregados", "Alertas priorizados", "Resumo IA"],
+        dependencies: ["fleet", "maintenance", "compliance"],
+        aiCapabilities: ["Resumo executivo", "Previsões", "Alertas inteligentes"]
       },
       {
-        name: 'Frota',
-        description: 'Gestão completa de embarcações e equipamentos',
-        endpoints: ['/api/vessels', '/api/vessels/:id', '/api/vessels/:id/equipment'],
-        inputs: ['Dados de embarcação', 'Telemetria', 'Localização GPS'],
-        outputs: ['Status da frota', 'Histórico de operações', 'Previsões'],
-        dependencies: ['maintenance', 'compliance', 'logistics'],
-        aiCapabilities: ['Otimização de rotas', 'Previsão de consumo', 'Análise de eficiência']
+        name: "Frota",
+        description: "Gestão completa de embarcações e equipamentos",
+        endpoints: ["/api/vessels", "/api/vessels/:id", "/api/vessels/:id/equipment"],
+        inputs: ["Dados de embarcação", "Telemetria", "Localização GPS"],
+        outputs: ["Status da frota", "Histórico de operações", "Previsões"],
+        dependencies: ["maintenance", "compliance", "logistics"],
+        aiCapabilities: ["Otimização de rotas", "Previsão de consumo", "Análise de eficiência"]
       },
       {
-        name: 'Manutenção',
-        description: 'Ordens de serviço, manutenção preventiva e preditiva',
-        endpoints: ['/api/maintenance/orders', '/api/maintenance/schedule', '/api/maintenance/history'],
-        inputs: ['Dados de equipamento', 'Histórico de falhas', 'Telemetria'],
-        outputs: ['Ordens de serviço', 'Cronograma', 'Relatórios'],
-        dependencies: ['fleet', 'inventory', 'hr'],
-        aiCapabilities: ['Previsão de falhas', 'Recomendações', 'Análise de padrões']
+        name: "Manutenção",
+        description: "Ordens de serviço, manutenção preventiva e preditiva",
+        endpoints: ["/api/maintenance/orders", "/api/maintenance/schedule", "/api/maintenance/history"],
+        inputs: ["Dados de equipamento", "Histórico de falhas", "Telemetria"],
+        outputs: ["Ordens de serviço", "Cronograma", "Relatórios"],
+        dependencies: ["fleet", "inventory", "hr"],
+        aiCapabilities: ["Previsão de falhas", "Recomendações", "Análise de padrões"]
       },
       {
-        name: 'Compliance',
-        description: 'Gestão de conformidade regulatória',
-        endpoints: ['/api/compliance/audits', '/api/compliance/certificates', '/api/compliance/regulations'],
-        inputs: ['Dados de auditoria', 'Certificados', 'Documentos'],
-        outputs: ['Status de conformidade', 'Alertas de vencimento', 'Relatórios'],
-        dependencies: ['fleet', 'documents', 'hr'],
-        aiCapabilities: ['Análise de conformidade', 'Alertas', 'Sugestões de correção']
+        name: "Compliance",
+        description: "Gestão de conformidade regulatória",
+        endpoints: ["/api/compliance/audits", "/api/compliance/certificates", "/api/compliance/regulations"],
+        inputs: ["Dados de auditoria", "Certificados", "Documentos"],
+        outputs: ["Status de conformidade", "Alertas de vencimento", "Relatórios"],
+        dependencies: ["fleet", "documents", "hr"],
+        aiCapabilities: ["Análise de conformidade", "Alertas", "Sugestões de correção"]
       },
       {
-        name: 'RH',
-        description: 'Gestão de tripulação e certificações',
-        endpoints: ['/api/crew', '/api/crew/:id', '/api/certifications'],
-        inputs: ['Dados pessoais', 'Certificações', 'Histórico de embarque'],
-        outputs: ['Perfil de tripulante', 'Status de certificações', 'Escalas'],
-        dependencies: ['training', 'compliance'],
-        aiCapabilities: ['Recomendações de treinamento', 'Análise de competências', 'Alertas']
+        name: "RH",
+        description: "Gestão de tripulação e certificações",
+        endpoints: ["/api/crew", "/api/crew/:id", "/api/certifications"],
+        inputs: ["Dados pessoais", "Certificações", "Histórico de embarque"],
+        outputs: ["Perfil de tripulante", "Status de certificações", "Escalas"],
+        dependencies: ["training", "compliance"],
+        aiCapabilities: ["Recomendações de treinamento", "Análise de competências", "Alertas"]
       },
       {
-        name: 'Documentos',
-        description: 'Gestão documental com OCR e categorização',
-        endpoints: ['/api/documents', '/api/documents/upload', '/api/documents/search'],
-        inputs: ['Arquivos', 'Metadados', 'Texto de busca'],
-        outputs: ['Documentos indexados', 'Resultados de busca', 'Extrações OCR'],
-        dependencies: ['compliance', 'fleet', 'hr'],
-        aiCapabilities: ['OCR inteligente', 'Categorização automática', 'Busca semântica']
+        name: "Documentos",
+        description: "Gestão documental com OCR e categorização",
+        endpoints: ["/api/documents", "/api/documents/upload", "/api/documents/search"],
+        inputs: ["Arquivos", "Metadados", "Texto de busca"],
+        outputs: ["Documentos indexados", "Resultados de busca", "Extrações OCR"],
+        dependencies: ["compliance", "fleet", "hr"],
+        aiCapabilities: ["OCR inteligente", "Categorização automática", "Busca semântica"]
       },
       {
-        name: 'Relatórios',
-        description: 'Geração e exportação de relatórios',
-        endpoints: ['/api/reports', '/api/reports/generate', '/api/reports/templates'],
-        inputs: ['Parâmetros', 'Período', 'Módulos selecionados'],
-        outputs: ['Relatórios PDF/Excel', 'Resumos', 'Gráficos'],
-        dependencies: ['Todos os módulos'],
-        aiCapabilities: ['Geração automática', 'Resumo executivo', 'Análise de tendências']
+        name: "Relatórios",
+        description: "Geração e exportação de relatórios",
+        endpoints: ["/api/reports", "/api/reports/generate", "/api/reports/templates"],
+        inputs: ["Parâmetros", "Período", "Módulos selecionados"],
+        outputs: ["Relatórios PDF/Excel", "Resumos", "Gráficos"],
+        dependencies: ["Todos os módulos"],
+        aiCapabilities: ["Geração automática", "Resumo executivo", "Análise de tendências"]
       },
       {
-        name: 'Estoque',
-        description: 'Controle de inventário e suprimentos',
-        endpoints: ['/api/inventory', '/api/inventory/items', '/api/inventory/orders'],
-        inputs: ['Movimentações', 'Pedidos', 'Fornecedores'],
-        outputs: ['Níveis de estoque', 'Alertas', 'Previsões'],
-        dependencies: ['maintenance', 'logistics'],
-        aiCapabilities: ['Previsão de demanda', 'Otimização de compras', 'Alertas']
+        name: "Estoque",
+        description: "Controle de inventário e suprimentos",
+        endpoints: ["/api/inventory", "/api/inventory/items", "/api/inventory/orders"],
+        inputs: ["Movimentações", "Pedidos", "Fornecedores"],
+        outputs: ["Níveis de estoque", "Alertas", "Previsões"],
+        dependencies: ["maintenance", "logistics"],
+        aiCapabilities: ["Previsão de demanda", "Otimização de compras", "Alertas"]
       }
     ];
   }
@@ -188,11 +188,11 @@ O Nautilus Offshore é um sistema completo de gestão marítima com suporte a op
   /**
    * Generate data flow documentation
    */
-  private generateDataFlowDocs(): SystemDocumentation['dataFlows'] {
+  private generateDataFlowDocs(): SystemDocumentation["dataFlows"] {
     return [
       {
-        name: 'Fluxo de Manutenção',
-        description: 'Desde a detecção de falha até a conclusão da ordem de serviço',
+        name: "Fluxo de Manutenção",
+        description: "Desde a detecção de falha até a conclusão da ordem de serviço",
         diagram: `
 1. Sensor detecta anomalia → 2. Sistema gera alerta
 3. IA analisa padrão → 4. Recomendação de ação
@@ -201,8 +201,8 @@ O Nautilus Offshore é um sistema completo de gestão marítima com suporte a op
 `
       },
       {
-        name: 'Fluxo de Compliance',
-        description: 'Monitoramento contínuo de conformidade regulatória',
+        name: "Fluxo de Compliance",
+        description: "Monitoramento contínuo de conformidade regulatória",
         diagram: `
 1. Cadastro de requisitos → 2. Monitoramento contínuo
 3. Detecção de não-conformidade → 4. Alerta automático
@@ -211,8 +211,8 @@ O Nautilus Offshore é um sistema completo de gestão marítima com suporte a op
 `
       },
       {
-        name: 'Fluxo Offline',
-        description: 'Operação sem conectividade e sincronização',
+        name: "Fluxo Offline",
+        description: "Operação sem conectividade e sincronização",
         diagram: `
 1. Operação normal → 2. Perda de conexão detectada
 3. Modo offline ativado → 4. Dados em IndexedDB
@@ -379,31 +379,31 @@ Authorization: Bearer <token>
   /**
    * Generate FAQ
    */
-  private generateFAQ(): SystemDocumentation['faq'] {
+  private generateFAQ(): SystemDocumentation["faq"] {
     return [
       {
-        question: 'Como funciona o modo offline?',
-        answer: 'O sistema armazena dados localmente no IndexedDB e mantém uma fila de sincronização. Ao reconectar, os dados são sincronizados automaticamente com resolução de conflitos.'
+        question: "Como funciona o modo offline?",
+        answer: "O sistema armazena dados localmente no IndexedDB e mantém uma fila de sincronização. Ao reconectar, os dados são sincronizados automaticamente com resolução de conflitos."
       },
       {
-        question: 'A IA funciona offline?',
-        answer: 'Sim. Utilizamos cache semântico e templates pré-definidos para responder perguntas frequentes mesmo sem conexão. Perguntas mais complexas são enfileiradas para processamento quando online.'
+        question: "A IA funciona offline?",
+        answer: "Sim. Utilizamos cache semântico e templates pré-definidos para responder perguntas frequentes mesmo sem conexão. Perguntas mais complexas são enfileiradas para processamento quando online."
       },
       {
-        question: 'Como é garantida a segurança dos dados?',
-        answer: 'Utilizamos Row Level Security (RLS) do Supabase, criptografia em trânsito (HTTPS) e em repouso, além de auditoria completa de acessos.'
+        question: "Como é garantida a segurança dos dados?",
+        answer: "Utilizamos Row Level Security (RLS) do Supabase, criptografia em trânsito (HTTPS) e em repouso, além de auditoria completa de acessos."
       },
       {
-        question: 'Como gerar relatórios?',
-        answer: 'Acesse o módulo de Relatórios, selecione o tipo desejado, defina os parâmetros e clique em Gerar. A IA pode gerar resumos executivos automaticamente.'
+        question: "Como gerar relatórios?",
+        answer: "Acesse o módulo de Relatórios, selecione o tipo desejado, defina os parâmetros e clique em Gerar. A IA pode gerar resumos executivos automaticamente."
       },
       {
-        question: 'O que acontece se houver conflito de dados?',
-        answer: 'O sistema resolve automaticamente usando a estratégia configurada (last-write-wins por padrão). Conflitos críticos são sinalizados para revisão manual.'
+        question: "O que acontece se houver conflito de dados?",
+        answer: "O sistema resolve automaticamente usando a estratégia configurada (last-write-wins por padrão). Conflitos críticos são sinalizados para revisão manual."
       },
       {
-        question: 'Como a IA aprende com o uso?',
-        answer: 'A IA mantém um cache semântico de respostas aprovadas e ajusta recomendações com base em feedback e padrões de uso histórico.'
+        question: "Como a IA aprende com o uso?",
+        answer: "A IA mantém um cache semântico de respostas aprovadas e ajusta recomendações com base em feedback e padrões de uso histórico."
       }
     ];
   }
@@ -414,25 +414,25 @@ Authorization: Bearer <token>
   exportAsMarkdown(): string {
     const doc = this.generate();
     
-    let md = doc.overview + '\n\n';
+    let md = doc.overview + "\n\n";
     
-    md += '# Módulos\n\n';
+    md += "# Módulos\n\n";
     for (const module of doc.modules) {
       md += `## ${module.name}\n\n`;
       md += `${module.description}\n\n`;
-      md += `**Endpoints:** ${module.endpoints.join(', ')}\n\n`;
-      md += `**Entradas:** ${module.inputs.join(', ')}\n\n`;
-      md += `**Saídas:** ${module.outputs.join(', ')}\n\n`;
-      md += `**Dependências:** ${module.dependencies.join(', ')}\n\n`;
-      md += `**IA:** ${module.aiCapabilities.join(', ')}\n\n`;
+      md += `**Endpoints:** ${module.endpoints.join(", ")}\n\n`;
+      md += `**Entradas:** ${module.inputs.join(", ")}\n\n`;
+      md += `**Saídas:** ${module.outputs.join(", ")}\n\n`;
+      md += `**Dependências:** ${module.dependencies.join(", ")}\n\n`;
+      md += `**IA:** ${module.aiCapabilities.join(", ")}\n\n`;
     }
     
-    md += doc.offlineArchitecture + '\n\n';
-    md += doc.aiArchitecture + '\n\n';
-    md += doc.databaseSchema + '\n\n';
-    md += doc.apiReference + '\n\n';
+    md += doc.offlineArchitecture + "\n\n";
+    md += doc.aiArchitecture + "\n\n";
+    md += doc.databaseSchema + "\n\n";
+    md += doc.apiReference + "\n\n";
     
-    md += '# FAQ\n\n';
+    md += "# FAQ\n\n";
     for (const item of doc.faq) {
       md += `## ${item.question}\n\n${item.answer}\n\n`;
     }

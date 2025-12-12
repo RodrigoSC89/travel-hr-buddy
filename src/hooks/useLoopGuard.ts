@@ -3,7 +3,7 @@
  * Detects and prevents infinite loops in React components
  */
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect } from "react";
 
 interface LoopGuardOptions {
   maxExecutions?: number;
@@ -33,7 +33,7 @@ export const useLoopGuard = (
   const {
     maxExecutions = DEFAULT_MAX_EXECUTIONS,
     timeWindow = DEFAULT_TIME_WINDOW,
-    componentName = 'UnknownComponent',
+    componentName = "UnknownComponent",
     onLoopDetected,
   } = options;
 
@@ -59,7 +59,7 @@ export const useLoopGuard = (
         componentName,
         executionCount: executionHistory.current.length,
         timestamp: now,
-        stackTrace: new Error().stack || 'No stack trace available',
+        stackTrace: new Error().stack || "No stack trace available",
       };
 
 

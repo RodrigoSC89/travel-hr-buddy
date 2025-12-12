@@ -3,7 +3,7 @@
  * Intelligent caching for API responses with stale-while-revalidate
  */
 
-import { logger } from '@/lib/monitoring/structured-logging';
+import { logger } from "@/lib/monitoring/structured-logging";
 
 interface CacheEntry<T> {
   data: T;
@@ -17,14 +17,14 @@ interface CacheConfig {
   defaultMaxAge: number;
   defaultStaleWhileRevalidate: number;
   maxEntries: number;
-  storage: 'memory' | 'localStorage' | 'sessionStorage';
+  storage: "memory" | "localStorage" | "sessionStorage";
 }
 
 const DEFAULT_CONFIG: CacheConfig = {
   defaultMaxAge: 5 * 60 * 1000, // 5 minutes
   defaultStaleWhileRevalidate: 60 * 1000, // 1 minute
   maxEntries: 100,
-  storage: 'memory',
+  storage: "memory",
 };
 
 class APICacheLayer {
@@ -38,40 +38,40 @@ class APICacheLayer {
   }
 
   private loadFromStorage() {
-    if (this.config.storage === 'memory') return;
+    if (this.config.storage === "memory") return;
 
     try {
-      const storage = this.config.storage === 'localStorage' ? localStorage : sessionStorage;
-      const keys = Object.keys(storage).filter((k) => k.startsWith('api-cache:'));
+      const storage = this.config.storage === "localStorage" ? localStorage : sessionStorage;
+      const keys = Object.keys(storage).filter((k) => k.startsWith("api-cache:"));
 
       keys.forEach((key) => {
         const value = storage.getItem(key);
         if (value) {
           const entry = JSON.parse(value) as CacheEntry<unknown>;
-          this.memoryCache.set(key.replace('api-cache:', ''), entry);
+          this.memoryCache.set(key.replace("api-cache:", ""), entry);
         }
       });
     } catch (error) {
-      logger.warn('Failed to load API cache from storage', { error });
+      logger.warn("Failed to load API cache from storage", { error });
     }
   }
 
   private saveToStorage(key: string, entry: CacheEntry<unknown>) {
-    if (this.config.storage === 'memory') return;
+    if (this.config.storage === "memory") return;
 
     try {
-      const storage = this.config.storage === 'localStorage' ? localStorage : sessionStorage;
+      const storage = this.config.storage === "localStorage" ? localStorage : sessionStorage;
       storage.setItem(`api-cache:${key}`, JSON.stringify(entry));
     } catch (error) {
-      logger.warn('Failed to save to API cache storage', { error });
+      logger.warn("Failed to save to API cache storage", { error });
     }
   }
 
   private removeFromStorage(key: string) {
-    if (this.config.storage === 'memory') return;
+    if (this.config.storage === "memory") return;
 
     try {
-      const storage = this.config.storage === 'localStorage' ? localStorage : sessionStorage;
+      const storage = this.config.storage === "localStorage" ? localStorage : sessionStorage;
       storage.removeItem(`api-cache:${key}`);
     } catch {
       // Ignore
@@ -80,9 +80,9 @@ class APICacheLayer {
 
   // Generate cache key from URL and options
   private generateKey(url: string, options?: RequestInit): string {
-    const method = options?.method || 'GET';
-    const body = options?.body ? JSON.stringify(options.body) : '';
-    return `${method}:${url}:${body}`.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 200);
+    const method = options?.method || "GET";
+    const body = options?.body ? JSON.stringify(options.body) : "";
+    return `${method}:${url}:${body}`.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 200);
   }
 
   // Check if entry is fresh
@@ -155,7 +155,7 @@ class APICacheLayer {
 
   // Invalidate by pattern
   invalidateByPattern(pattern: string | RegExp): void {
-    const regex = typeof pattern === 'string' ? new RegExp(pattern) : pattern;
+    const regex = typeof pattern === "string" ? new RegExp(pattern) : pattern;
 
     for (const key of this.memoryCache.keys()) {
       if (regex.test(key)) {
@@ -169,10 +169,10 @@ class APICacheLayer {
   clear(): void {
     this.memoryCache.clear();
 
-    if (this.config.storage !== 'memory') {
-      const storage = this.config.storage === 'localStorage' ? localStorage : sessionStorage;
+    if (this.config.storage !== "memory") {
+      const storage = this.config.storage === "localStorage" ? localStorage : sessionStorage;
       Object.keys(storage)
-        .filter((k) => k.startsWith('api-cache:'))
+        .filter((k) => k.startsWith("api-cache:"))
         .forEach((k) => storage.removeItem(k));
     }
   }
@@ -221,7 +221,7 @@ class APICacheLayer {
     }
 
     const data = (await response.json()) as T;
-    const etag = response.headers.get('etag') || undefined;
+    const etag = response.headers.get("etag") || undefined;
 
     this.set(key, data, {
       maxAge: cacheOptions?.maxAge,
@@ -243,7 +243,7 @@ class APICacheLayer {
 
       if (response.ok) {
         const data = await response.json();
-        const etag = response.headers.get('etag') || undefined;
+        const etag = response.headers.get("etag") || undefined;
 
         this.set(key, data, {
           maxAge: cacheOptions?.maxAge,
@@ -251,10 +251,10 @@ class APICacheLayer {
           etag,
         });
 
-        logger.debug('Cache revalidated', { key });
+        logger.debug("Cache revalidated", { key });
       }
     } catch (error) {
-      logger.warn('Background revalidation failed', { key, error });
+      logger.warn("Background revalidation failed", { key, error });
     }
   }
 
@@ -294,7 +294,7 @@ export function createCachedFetch(baseConfig: Partial<CacheConfig> = {}) {
 }
 
 // React hook for cached API calls
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
 
 export function useCachedFetch<T>(
   url: string | null,
@@ -321,7 +321,7 @@ export function useCachedFetch<T>(
     setError(null);
 
     try {
-      const key = `${fetchOptions.method || 'GET'}:${url}`;
+      const key = `${fetchOptions.method || "GET"}:${url}`;
       const cached = apiCache.get<T>(key);
 
       if (cached) {
@@ -338,7 +338,7 @@ export function useCachedFetch<T>(
       setData(result);
       setIsStale(false);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Fetch failed'));
+      setError(err instanceof Error ? err : new Error("Fetch failed"));
     } finally {
       setIsLoading(false);
     }
@@ -359,7 +359,7 @@ export function useCachedFetch<T>(
 
   const invalidate = useCallback(() => {
     if (url) {
-      const key = `${fetchOptions.method || 'GET'}:${url}`;
+      const key = `${fetchOptions.method || "GET"}:${url}`;
       apiCache.invalidate(key);
     }
   }, [url, fetchOptions.method]);

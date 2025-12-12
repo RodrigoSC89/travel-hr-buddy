@@ -237,8 +237,8 @@ export default function IncidentCards() {
           "Sistema de alerta antecipado",
           "Redundância de comunicação"
         ],
-        regulatoryCompliance: `**Conformidade Regulatória:**\n\n- IMO MSC.1/Circ.1580 - Guidelines for Dynamic Positioning\n- IMCA M 117 - DP Operations\n- SOLAS Chapter II-1\n- Normam-01/DPC\n\nRecomenda-se verificar a conformidade com todas as regulamentações aplicáveis e documentar as ações corretivas tomadas.`,
-        lessonsLearned: `**Lições Aprendidas:**\n\n1. A importância de manutenção preventiva rigorosa\n2. Necessidade de comunicação clara durante operações críticas\n3. Valor de exercícios e simulações regulares\n4. Importância da documentação adequada de procedimentos`,
+        regulatoryCompliance: "**Conformidade Regulatória:**\n\n- IMO MSC.1/Circ.1580 - Guidelines for Dynamic Positioning\n- IMCA M 117 - DP Operations\n- SOLAS Chapter II-1\n- Normam-01/DPC\n\nRecomenda-se verificar a conformidade com todas as regulamentações aplicáveis e documentar as ações corretivas tomadas.",
+        lessonsLearned: "**Lições Aprendidas:**\n\n1. A importância de manutenção preventiva rigorosa\n2. Necessidade de comunicação clara durante operações críticas\n3. Valor de exercícios e simulações regulares\n4. Importância da documentação adequada de procedimentos",
         similarIncidents: [
           "Incidente similar em Mar do Norte (2023) - Mesmo tipo de falha",
           "Caso documentado pela IMCA (2022) - Lições aplicáveis",

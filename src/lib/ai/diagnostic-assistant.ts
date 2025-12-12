@@ -3,12 +3,12 @@
  * AI-powered troubleshooting and diagnostics
  */
 
-import { hybridLLMEngine } from '@/lib/llm/hybrid-engine';
+import { hybridLLMEngine } from "@/lib/llm/hybrid-engine";
 
 export interface DiagnosticStep {
   id: string;
   instruction: string;
-  type: 'check' | 'action' | 'question' | 'result';
+  type: "check" | "action" | "question" | "result";
   options?: string[];
   expectedResult?: string;
   nextOnSuccess?: string;
@@ -29,7 +29,7 @@ export interface DiagnosticSession {
   flowId: string;
   currentStepId: string;
   history: { stepId: string; response: string; timestamp: Date }[];
-  status: 'in_progress' | 'resolved' | 'escalated';
+  status: "in_progress" | "resolved" | "escalated";
   startedAt: Date;
   resolvedAt?: Date;
   resolution?: string;
@@ -38,252 +38,252 @@ export interface DiagnosticSession {
 // Built-in diagnostic flows
 const DIAGNOSTIC_FLOWS: DiagnosticFlow[] = [
   {
-    id: 'screen-not-opening',
-    name: 'Tela não abre',
-    description: 'Diagnóstico quando uma tela ou módulo não carrega',
-    category: 'Interface',
-    symptoms: ['tela não abre', 'página em branco', 'não carrega', 'travou'],
+    id: "screen-not-opening",
+    name: "Tela não abre",
+    description: "Diagnóstico quando uma tela ou módulo não carrega",
+    category: "Interface",
+    symptoms: ["tela não abre", "página em branco", "não carrega", "travou"],
     steps: [
       {
-        id: 'check-internet',
-        instruction: 'Verifique se há conexão com a internet. Você vê o ícone de WiFi ou dados móveis?',
-        type: 'question',
-        options: ['Sim, tenho internet', 'Não, estou offline', 'Não sei'],
-        nextOnSuccess: 'check-cache',
-        nextOnFailure: 'offline-mode'
+        id: "check-internet",
+        instruction: "Verifique se há conexão com a internet. Você vê o ícone de WiFi ou dados móveis?",
+        type: "question",
+        options: ["Sim, tenho internet", "Não, estou offline", "Não sei"],
+        nextOnSuccess: "check-cache",
+        nextOnFailure: "offline-mode"
       },
       {
-        id: 'offline-mode',
-        instruction: 'Você está offline. A tela que está tentando acessar funciona no modo offline?',
-        type: 'question',
-        options: ['Sim, deveria funcionar', 'Não, precisa de internet'],
-        nextOnSuccess: 'clear-cache',
-        nextOnFailure: 'need-internet'
+        id: "offline-mode",
+        instruction: "Você está offline. A tela que está tentando acessar funciona no modo offline?",
+        type: "question",
+        options: ["Sim, deveria funcionar", "Não, precisa de internet"],
+        nextOnSuccess: "clear-cache",
+        nextOnFailure: "need-internet"
       },
       {
-        id: 'need-internet',
-        instruction: 'Esta funcionalidade requer conexão com internet. Por favor, conecte-se a uma rede Wi-Fi ou use dados móveis.',
-        type: 'result',
-        expectedResult: 'resolved'
+        id: "need-internet",
+        instruction: "Esta funcionalidade requer conexão com internet. Por favor, conecte-se a uma rede Wi-Fi ou use dados móveis.",
+        type: "result",
+        expectedResult: "resolved"
       },
       {
-        id: 'check-cache',
-        instruction: 'Vamos limpar o cache do aplicativo. Vá em Menu > Configurações > Limpar Cache',
-        type: 'action',
-        nextOnSuccess: 'verify-fixed',
-        nextOnFailure: 'restart-app'
+        id: "check-cache",
+        instruction: "Vamos limpar o cache do aplicativo. Vá em Menu > Configurações > Limpar Cache",
+        type: "action",
+        nextOnSuccess: "verify-fixed",
+        nextOnFailure: "restart-app"
       },
       {
-        id: 'clear-cache',
-        instruction: 'Limpe o cache do app em Menu > Configurações > Limpar Cache e tente novamente.',
-        type: 'action',
-        nextOnSuccess: 'verify-fixed',
-        nextOnFailure: 'restart-app'
+        id: "clear-cache",
+        instruction: "Limpe o cache do app em Menu > Configurações > Limpar Cache e tente novamente.",
+        type: "action",
+        nextOnSuccess: "verify-fixed",
+        nextOnFailure: "restart-app"
       },
       {
-        id: 'restart-app',
-        instruction: 'Feche completamente o aplicativo e abra novamente. O problema foi resolvido?',
-        type: 'question',
-        options: ['Sim, resolveu!', 'Não, ainda não funciona'],
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'escalate'
+        id: "restart-app",
+        instruction: "Feche completamente o aplicativo e abra novamente. O problema foi resolvido?",
+        type: "question",
+        options: ["Sim, resolveu!", "Não, ainda não funciona"],
+        nextOnSuccess: "resolved",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'verify-fixed',
-        instruction: 'Tente acessar a tela novamente. Funcionou?',
-        type: 'question',
-        options: ['Sim, funcionou!', 'Não, ainda não abre'],
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'restart-app'
+        id: "verify-fixed",
+        instruction: "Tente acessar a tela novamente. Funcionou?",
+        type: "question",
+        options: ["Sim, funcionou!", "Não, ainda não abre"],
+        nextOnSuccess: "resolved",
+        nextOnFailure: "restart-app"
       },
       {
-        id: 'resolved',
-        instruction: '✅ Problema resolvido! Se ocorrer novamente, não hesite em usar o diagnóstico.',
-        type: 'result',
-        expectedResult: 'resolved'
+        id: "resolved",
+        instruction: "✅ Problema resolvido! Se ocorrer novamente, não hesite em usar o diagnóstico.",
+        type: "result",
+        expectedResult: "resolved"
       },
       {
-        id: 'escalate',
-        instruction: '⚠️ Não foi possível resolver automaticamente. Registre um ticket de suporte em Menu > Ajuda > Suporte com a descrição do problema.',
-        type: 'result',
-        expectedResult: 'escalated'
+        id: "escalate",
+        instruction: "⚠️ Não foi possível resolver automaticamente. Registre um ticket de suporte em Menu > Ajuda > Suporte com a descrição do problema.",
+        type: "result",
+        expectedResult: "escalated"
       }
     ]
   },
   {
-    id: 'sync-failed',
-    name: 'Falha na sincronização',
-    description: 'Diagnóstico para problemas de sincronização de dados',
-    category: 'Sincronização',
-    symptoms: ['não sincroniza', 'erro sync', 'dados pendentes', 'E101', 'E102', 'E103'],
+    id: "sync-failed",
+    name: "Falha na sincronização",
+    description: "Diagnóstico para problemas de sincronização de dados",
+    category: "Sincronização",
+    symptoms: ["não sincroniza", "erro sync", "dados pendentes", "E101", "E102", "E103"],
     steps: [
       {
-        id: 'check-queue',
-        instruction: 'Vamos verificar a fila de sincronização. Vá em Menu > Sincronização. Quantos itens pendentes você vê?',
-        type: 'question',
-        options: ['Menos de 10', 'Entre 10 e 50', 'Mais de 50'],
-        nextOnSuccess: 'try-manual-sync',
-        nextOnFailure: 'queue-full'
+        id: "check-queue",
+        instruction: "Vamos verificar a fila de sincronização. Vá em Menu > Sincronização. Quantos itens pendentes você vê?",
+        type: "question",
+        options: ["Menos de 10", "Entre 10 e 50", "Mais de 50"],
+        nextOnSuccess: "try-manual-sync",
+        nextOnFailure: "queue-full"
       },
       {
-        id: 'queue-full',
-        instruction: 'A fila está muito grande. Vamos tentar sincronizar em partes. Clique em "Sincronizar Urgentes" primeiro.',
-        type: 'action',
-        nextOnSuccess: 'verify-partial',
-        nextOnFailure: 'clear-old'
+        id: "queue-full",
+        instruction: "A fila está muito grande. Vamos tentar sincronizar em partes. Clique em \"Sincronizar Urgentes\" primeiro.",
+        type: "action",
+        nextOnSuccess: "verify-partial",
+        nextOnFailure: "clear-old"
       },
       {
-        id: 'try-manual-sync',
-        instruction: 'Clique no botão "Sincronizar Agora". Aguarde até 30 segundos.',
-        type: 'action',
-        nextOnSuccess: 'verify-sync',
-        nextOnFailure: 'check-conflicts'
+        id: "try-manual-sync",
+        instruction: "Clique no botão \"Sincronizar Agora\". Aguarde até 30 segundos.",
+        type: "action",
+        nextOnSuccess: "verify-sync",
+        nextOnFailure: "check-conflicts"
       },
       {
-        id: 'verify-sync',
-        instruction: 'A sincronização foi concluída com sucesso?',
-        type: 'question',
-        options: ['Sim, tudo sincronizado!', 'Parcialmente', 'Falhou novamente'],
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'check-conflicts'
+        id: "verify-sync",
+        instruction: "A sincronização foi concluída com sucesso?",
+        type: "question",
+        options: ["Sim, tudo sincronizado!", "Parcialmente", "Falhou novamente"],
+        nextOnSuccess: "resolved",
+        nextOnFailure: "check-conflicts"
       },
       {
-        id: 'verify-partial',
-        instruction: 'Alguns itens foram sincronizados?',
-        type: 'question',
-        options: ['Sim, diminuiu a fila', 'Não, nada mudou'],
-        nextOnSuccess: 'repeat-sync',
-        nextOnFailure: 'escalate'
+        id: "verify-partial",
+        instruction: "Alguns itens foram sincronizados?",
+        type: "question",
+        options: ["Sim, diminuiu a fila", "Não, nada mudou"],
+        nextOnSuccess: "repeat-sync",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'check-conflicts',
-        instruction: 'Verifique se há conflitos em Menu > Sincronização > Conflitos. Existem conflitos?',
-        type: 'question',
-        options: ['Sim, há conflitos', 'Não, sem conflitos'],
-        nextOnSuccess: 'resolve-conflicts',
-        nextOnFailure: 'restart-app'
+        id: "check-conflicts",
+        instruction: "Verifique se há conflitos em Menu > Sincronização > Conflitos. Existem conflitos?",
+        type: "question",
+        options: ["Sim, há conflitos", "Não, sem conflitos"],
+        nextOnSuccess: "resolve-conflicts",
+        nextOnFailure: "restart-app"
       },
       {
-        id: 'resolve-conflicts',
-        instruction: 'Para cada conflito, escolha a versão mais recente ou correta. Clique em "Resolver" para cada item.',
-        type: 'action',
-        nextOnSuccess: 'try-manual-sync',
-        nextOnFailure: 'escalate'
+        id: "resolve-conflicts",
+        instruction: "Para cada conflito, escolha a versão mais recente ou correta. Clique em \"Resolver\" para cada item.",
+        type: "action",
+        nextOnSuccess: "try-manual-sync",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'clear-old',
-        instruction: 'Vamos limpar dados antigos. Vá em Menu > Configurações > Armazenamento > Limpar dados antigos',
-        type: 'action',
-        nextOnSuccess: 'try-manual-sync',
-        nextOnFailure: 'escalate'
+        id: "clear-old",
+        instruction: "Vamos limpar dados antigos. Vá em Menu > Configurações > Armazenamento > Limpar dados antigos",
+        type: "action",
+        nextOnSuccess: "try-manual-sync",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'repeat-sync',
-        instruction: 'Continue sincronizando até a fila ficar vazia. Pode levar alguns minutos.',
-        type: 'action',
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'escalate'
+        id: "repeat-sync",
+        instruction: "Continue sincronizando até a fila ficar vazia. Pode levar alguns minutos.",
+        type: "action",
+        nextOnSuccess: "resolved",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'restart-app',
-        instruction: 'Reinicie o aplicativo completamente e tente sincronizar novamente.',
-        type: 'action',
-        nextOnSuccess: 'verify-sync',
-        nextOnFailure: 'escalate'
+        id: "restart-app",
+        instruction: "Reinicie o aplicativo completamente e tente sincronizar novamente.",
+        type: "action",
+        nextOnSuccess: "verify-sync",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'resolved',
-        instruction: '✅ Sincronização concluída com sucesso!',
-        type: 'result',
-        expectedResult: 'resolved'
+        id: "resolved",
+        instruction: "✅ Sincronização concluída com sucesso!",
+        type: "result",
+        expectedResult: "resolved"
       },
       {
-        id: 'escalate',
-        instruction: '⚠️ Problema persistente de sincronização. Anote o código de erro (se houver) e entre em contato com o suporte técnico.',
-        type: 'result',
-        expectedResult: 'escalated'
+        id: "escalate",
+        instruction: "⚠️ Problema persistente de sincronização. Anote o código de erro (se houver) e entre em contato com o suporte técnico.",
+        type: "result",
+        expectedResult: "escalated"
       }
     ]
   },
   {
-    id: 'slow-performance',
-    name: 'Sistema lento',
-    description: 'Diagnóstico para problemas de performance',
-    category: 'Performance',
-    symptoms: ['lento', 'demora', 'travando', 'lag', 'não responde'],
+    id: "slow-performance",
+    name: "Sistema lento",
+    description: "Diagnóstico para problemas de performance",
+    category: "Performance",
+    symptoms: ["lento", "demora", "travando", "lag", "não responde"],
     steps: [
       {
-        id: 'check-storage',
-        instruction: 'Verifique o espaço disponível em Menu > Configurações > Armazenamento. Qual o percentual usado?',
-        type: 'question',
-        options: ['Menos de 70%', 'Entre 70% e 90%', 'Mais de 90%'],
-        nextOnSuccess: 'check-memory',
-        nextOnFailure: 'free-storage'
+        id: "check-storage",
+        instruction: "Verifique o espaço disponível em Menu > Configurações > Armazenamento. Qual o percentual usado?",
+        type: "question",
+        options: ["Menos de 70%", "Entre 70% e 90%", "Mais de 90%"],
+        nextOnSuccess: "check-memory",
+        nextOnFailure: "free-storage"
       },
       {
-        id: 'free-storage',
-        instruction: 'O armazenamento está cheio. Vamos liberar espaço:\n1. Menu > Configurações > Limpar Cache\n2. Excluir relatórios antigos\n3. Compactar banco de dados',
-        type: 'action',
-        nextOnSuccess: 'verify-speed',
-        nextOnFailure: 'check-memory'
+        id: "free-storage",
+        instruction: "O armazenamento está cheio. Vamos liberar espaço:\n1. Menu > Configurações > Limpar Cache\n2. Excluir relatórios antigos\n3. Compactar banco de dados",
+        type: "action",
+        nextOnSuccess: "verify-speed",
+        nextOnFailure: "check-memory"
       },
       {
-        id: 'check-memory',
-        instruction: 'Feche outros aplicativos em segundo plano. Quantos apps você tem abertos?',
-        type: 'question',
-        options: ['Apenas este', 'Alguns (2-5)', 'Muitos (mais de 5)'],
-        nextOnSuccess: 'reduce-features',
-        nextOnFailure: 'close-apps'
+        id: "check-memory",
+        instruction: "Feche outros aplicativos em segundo plano. Quantos apps você tem abertos?",
+        type: "question",
+        options: ["Apenas este", "Alguns (2-5)", "Muitos (mais de 5)"],
+        nextOnSuccess: "reduce-features",
+        nextOnFailure: "close-apps"
       },
       {
-        id: 'close-apps',
-        instruction: 'Feche todos os outros aplicativos e reinicie este. Melhorou?',
-        type: 'question',
-        options: ['Sim, está mais rápido', 'Não, ainda lento'],
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'reduce-features'
+        id: "close-apps",
+        instruction: "Feche todos os outros aplicativos e reinicie este. Melhorou?",
+        type: "question",
+        options: ["Sim, está mais rápido", "Não, ainda lento"],
+        nextOnSuccess: "resolved",
+        nextOnFailure: "reduce-features"
       },
       {
-        id: 'reduce-features',
-        instruction: 'Vamos ativar o modo de economia. Vá em Menu > Configurações > Performance > Modo Econômico',
-        type: 'action',
-        nextOnSuccess: 'verify-speed',
-        nextOnFailure: 'restart-device'
+        id: "reduce-features",
+        instruction: "Vamos ativar o modo de economia. Vá em Menu > Configurações > Performance > Modo Econômico",
+        type: "action",
+        nextOnSuccess: "verify-speed",
+        nextOnFailure: "restart-device"
       },
       {
-        id: 'verify-speed',
-        instruction: 'O sistema está mais rápido agora?',
-        type: 'question',
-        options: ['Sim, melhorou!', 'Um pouco melhor', 'Não, ainda lento'],
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'restart-device'
+        id: "verify-speed",
+        instruction: "O sistema está mais rápido agora?",
+        type: "question",
+        options: ["Sim, melhorou!", "Um pouco melhor", "Não, ainda lento"],
+        nextOnSuccess: "resolved",
+        nextOnFailure: "restart-device"
       },
       {
-        id: 'restart-device',
-        instruction: 'Reinicie o dispositivo completamente (não apenas o app). Isso limpa a memória do sistema.',
-        type: 'action',
-        nextOnSuccess: 'final-check',
-        nextOnFailure: 'escalate'
+        id: "restart-device",
+        instruction: "Reinicie o dispositivo completamente (não apenas o app). Isso limpa a memória do sistema.",
+        type: "action",
+        nextOnSuccess: "final-check",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'final-check',
-        instruction: 'Após reiniciar, o sistema está funcionando normalmente?',
-        type: 'question',
-        options: ['Sim, resolvido!', 'Não, ainda com problemas'],
-        nextOnSuccess: 'resolved',
-        nextOnFailure: 'escalate'
+        id: "final-check",
+        instruction: "Após reiniciar, o sistema está funcionando normalmente?",
+        type: "question",
+        options: ["Sim, resolvido!", "Não, ainda com problemas"],
+        nextOnSuccess: "resolved",
+        nextOnFailure: "escalate"
       },
       {
-        id: 'resolved',
-        instruction: '✅ Performance restaurada! Dica: execute a limpeza de cache semanalmente para manter o bom desempenho.',
-        type: 'result',
-        expectedResult: 'resolved'
+        id: "resolved",
+        instruction: "✅ Performance restaurada! Dica: execute a limpeza de cache semanalmente para manter o bom desempenho.",
+        type: "result",
+        expectedResult: "resolved"
       },
       {
-        id: 'escalate',
-        instruction: '⚠️ O dispositivo pode não atender aos requisitos mínimos ou há um problema mais profundo. Contate o suporte técnico.',
-        type: 'result',
-        expectedResult: 'escalated'
+        id: "escalate",
+        instruction: "⚠️ O dispositivo pode não atender aos requisitos mínimos ou há um problema mais profundo. Contate o suporte técnico.",
+        type: "result",
+        expectedResult: "escalated"
       }
     ]
   }
@@ -320,7 +320,7 @@ class DiagnosticAssistant {
       flowId,
       currentStepId: flow.steps[0].id,
       history: [],
-      status: 'in_progress',
+      status: "in_progress",
       startedAt: new Date()
     };
 
@@ -373,20 +373,20 @@ class DiagnosticAssistant {
     // Determine next step
     let nextStepId: string | undefined;
     
-    if (currentStep.type === 'result') {
+    if (currentStep.type === "result") {
       // End of flow
-      session.status = currentStep.expectedResult === 'resolved' ? 'resolved' : 'escalated';
+      session.status = currentStep.expectedResult === "resolved" ? "resolved" : "escalated";
       session.resolvedAt = new Date();
       session.resolution = currentStep.instruction;
       return { nextStep: null, session };
     }
 
     // Check if response indicates success
-    const isSuccess = response.toLowerCase().includes('sim') || 
-                     response.includes('sucesso') ||
-                     response.includes('funcionou') ||
-                     response.includes('resolveu') ||
-                     response.includes('Menos');
+    const isSuccess = response.toLowerCase().includes("sim") || 
+                     response.includes("sucesso") ||
+                     response.includes("funcionou") ||
+                     response.includes("resolveu") ||
+                     response.includes("Menos");
 
     nextStepId = isSuccess ? currentStep.nextOnSuccess : currentStep.nextOnFailure;
 
@@ -480,10 +480,10 @@ Ou contate o suporte técnico.`;
     resolved: number;
     escalated: number;
     avgResolutionTime: number;
-  } {
+    } {
     const sessions = Array.from(this.sessions.values());
-    const resolved = sessions.filter(s => s.status === 'resolved');
-    const escalated = sessions.filter(s => s.status === 'escalated');
+    const resolved = sessions.filter(s => s.status === "resolved");
+    const escalated = sessions.filter(s => s.status === "escalated");
     
     const resolutionTimes = resolved
       .filter(s => s.resolvedAt)

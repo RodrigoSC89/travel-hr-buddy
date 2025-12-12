@@ -3,9 +3,9 @@
  * Handles data conflicts during offline sync with multiple strategies
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
-export type ConflictStrategy = 'server-wins' | 'client-wins' | 'last-write-wins' | 'merge' | 'manual';
+export type ConflictStrategy = "server-wins" | "client-wins" | "last-write-wins" | "merge" | "manual";
 
 export interface VersionedData {
   id: string;
@@ -28,7 +28,7 @@ export interface ConflictConfig {
 }
 
 const DEFAULT_CONFIG: ConflictConfig = {
-  defaultStrategy: 'last-write-wins',
+  defaultStrategy: "last-write-wins",
 };
 
 /**
@@ -41,52 +41,52 @@ export function resolveConflict<T extends VersionedData>(
 ): ConflictResult<T> {
   const strategy = config.defaultStrategy;
   
-  logger.debug('[ConflictResolution] Resolving conflict', {
+  logger.debug("[ConflictResolution] Resolving conflict", {
     localVersion: local.version,
     remoteVersion: remote.version,
     strategy,
   });
 
   switch (strategy) {
-    case 'server-wins':
-      return {
-        resolved: true,
-        data: remote,
-        strategy,
-      };
+  case "server-wins":
+    return {
+      resolved: true,
+      data: remote,
+      strategy,
+    };
 
-    case 'client-wins':
-      return {
-        resolved: true,
-        data: { ...local, version: Math.max(local.version, remote.version) + 1 },
-        strategy,
-      };
+  case "client-wins":
+    return {
+      resolved: true,
+      data: { ...local, version: Math.max(local.version, remote.version) + 1 },
+      strategy,
+    };
 
-    case 'last-write-wins':
-      const winner = local.updatedAt > remote.updatedAt ? local : remote;
-      return {
-        resolved: true,
-        data: { ...winner, version: Math.max(local.version, remote.version) + 1 },
-        strategy,
-      };
+  case "last-write-wins":
+    const winner = local.updatedAt > remote.updatedAt ? local : remote;
+    return {
+      resolved: true,
+      data: { ...winner, version: Math.max(local.version, remote.version) + 1 },
+      strategy,
+    };
 
-    case 'merge':
-      return mergeData(local, remote, config);
+  case "merge":
+    return mergeData(local, remote, config);
 
-    case 'manual':
-      return {
-        resolved: false,
-        data: local,
-        strategy,
-        conflicts: detectConflicts(local, remote),
-      };
+  case "manual":
+    return {
+      resolved: false,
+      data: local,
+      strategy,
+      conflicts: detectConflicts(local, remote),
+    };
 
-    default:
-      return {
-        resolved: true,
-        data: remote,
-        strategy: 'server-wins',
-      };
+  default:
+    return {
+      resolved: true,
+      data: remote,
+      strategy: "server-wins",
+    };
   }
 }
 
@@ -104,7 +104,7 @@ function mergeData<T extends VersionedData>(
 
   for (const key of allKeys) {
     // Skip metadata fields
-    if (['id', 'version', 'updatedAt', 'createdAt'].includes(key)) {
+    if (["id", "version", "updatedAt", "createdAt"].includes(key)) {
       continue;
     }
 
@@ -118,24 +118,24 @@ function mergeData<T extends VersionedData>(
     }
 
     // Get field-specific strategy or use default
-    const fieldStrategy = config.fieldStrategies?.[key] || 'last-write-wins';
+    const fieldStrategy = config.fieldStrategies?.[key] || "last-write-wins";
 
     switch (fieldStrategy) {
-      case 'server-wins':
-        merged[key] = remoteValue;
-        break;
-      case 'client-wins':
-        merged[key] = localValue;
-        break;
-      case 'last-write-wins':
-        merged[key] = local.updatedAt > remote.updatedAt ? localValue : remoteValue;
-        break;
-      case 'manual':
-        conflicts.push(key);
-        merged[key] = localValue; // Keep local until resolved
-        break;
-      default:
-        merged[key] = remoteValue;
+    case "server-wins":
+      merged[key] = remoteValue;
+      break;
+    case "client-wins":
+      merged[key] = localValue;
+      break;
+    case "last-write-wins":
+      merged[key] = local.updatedAt > remote.updatedAt ? localValue : remoteValue;
+      break;
+    case "manual":
+      conflicts.push(key);
+      merged[key] = localValue; // Keep local until resolved
+      break;
+    default:
+      merged[key] = remoteValue;
     }
   }
 
@@ -147,7 +147,7 @@ function mergeData<T extends VersionedData>(
       version: Math.max(local.version, remote.version) + 1,
       updatedAt: Date.now(),
     } as T,
-    strategy: 'merge',
+    strategy: "merge",
     conflicts: conflicts.length > 0 ? conflicts : undefined,
   };
 }
@@ -160,7 +160,7 @@ function detectConflicts<T extends VersionedData>(local: T, remote: T): string[]
   const allKeys = new Set([...Object.keys(local), ...Object.keys(remote)]);
 
   for (const key of allKeys) {
-    if (['id', 'version', 'updatedAt', 'createdAt'].includes(key)) {
+    if (["id", "version", "updatedAt", "createdAt"].includes(key)) {
       continue;
     }
 
@@ -228,7 +228,7 @@ class ConflictStore {
       remote,
       detectedAt: Date.now(),
     });
-    logger.warn('[ConflictStore] New conflict detected', { id });
+    logger.warn("[ConflictStore] New conflict detected", { id });
   }
 
   get(id: string) {
@@ -237,7 +237,7 @@ class ConflictStore {
 
   resolve(id: string): void {
     this.conflicts.delete(id);
-    logger.info('[ConflictStore] Conflict resolved', { id });
+    logger.info("[ConflictStore] Conflict resolved", { id });
   }
 
   getPending(): string[] {

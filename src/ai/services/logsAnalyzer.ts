@@ -18,7 +18,7 @@ import { logsEngine } from "@/lib/monitoring/LogsEngine";
 import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
 
-type SystemLogRow = Database['public']['Tables']['system_logs']['Row'];
+type SystemLogRow = Database["public"]["Tables"]["system_logs"]["Row"];
 
 export interface LogAnalysisResult {
   anomalies: Anomaly[];

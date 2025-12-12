@@ -208,11 +208,11 @@ export const ApiKeyManagement: React.FC = () => {
 
   const getTierBadgeColor = (tier: string) => {
     switch (tier) {
-      case "free": return "secondary";
-      case "standard": return "default";
-      case "premium": return "outline";
-      case "enterprise": return "destructive";
-      default: return "secondary";
+    case "free": return "secondary";
+    case "standard": return "default";
+    case "premium": return "outline";
+    case "enterprise": return "destructive";
+    default: return "secondary";
     }
   };
 
@@ -444,8 +444,8 @@ export const ApiKeyManagement: React.FC = () => {
                   className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`p-2 rounded-full ${key.is_active ? 'bg-green-500/10' : 'bg-muted'}`}>
-                      <Key className={`h-5 w-5 ${key.is_active ? 'text-green-500' : 'text-muted-foreground'}`} />
+                    <div className={`p-2 rounded-full ${key.is_active ? "bg-green-500/10" : "bg-muted"}`}>
+                      <Key className={`h-5 w-5 ${key.is_active ? "text-green-500" : "text-muted-foreground"}`} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">

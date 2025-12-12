@@ -3,10 +3,10 @@
  * AI-powered user behavior prediction for pre-loading content
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface UserAction {
-  type: 'click' | 'hover' | 'scroll' | 'navigation' | 'search';
+  type: "click" | "hover" | "scroll" | "navigation" | "search";
   target: string;
   timestamp: number;
   context?: Record<string, unknown>;
@@ -23,7 +23,7 @@ class PredictiveUIEngine {
   private actions: UserAction[] = [];
   private patterns: Map<string, number> = new Map();
   private maxHistory = 100;
-  private storageKey = 'nautilus_user_patterns';
+  private storageKey = "nautilus_user_patterns";
   
   constructor() {
     this.loadPatterns();
@@ -53,7 +53,7 @@ class PredictiveUIEngine {
   /**
    * Track user action
    */
-  trackAction(action: Omit<UserAction, 'timestamp'>): void {
+  trackAction(action: Omit<UserAction, "timestamp">): void {
     const fullAction: UserAction = {
       ...action,
       timestamp: Date.now(),
@@ -78,7 +78,7 @@ class PredictiveUIEngine {
     const patternKey = recentActions
       .slice(0, -1)
       .map(a => `${a.type}:${a.target}`)
-      .join('->');
+      .join("->");
     
     const currentAction = `${action.type}:${action.target}`;
     const fullPattern = `${patternKey}->${currentAction}`;
@@ -104,7 +104,7 @@ class PredictiveUIEngine {
     const recentPattern = this.actions
       .slice(-2)
       .map(a => `${a.type}:${a.target}`)
-      .join('->');
+      .join("->");
     
     const predictions: PredictionResult[] = [];
     let totalMatches = 0;
@@ -112,7 +112,7 @@ class PredictiveUIEngine {
     // Find matching patterns
     this.patterns.forEach((count, pattern) => {
       if (pattern.startsWith(recentPattern)) {
-        const nextAction = pattern.split('->').pop() || '';
+        const nextAction = pattern.split("->").pop() || "";
         totalMatches += count;
         
         predictions.push({
@@ -136,31 +136,31 @@ class PredictiveUIEngine {
   }
   
   private getPrefetchUrls(action: string): string[] {
-    const [, target] = action.split(':');
+    const [, target] = action.split(":");
     
     // Map actions to URLs
     const urlMappings: Record<string, string[]> = {
-      'dashboard': ['/api/dashboard-stats', '/api/notifications'],
-      'travel': ['/api/travel-requests', '/api/travel-stats'],
-      'hr': ['/api/employees', '/api/hr-stats'],
-      'documents': ['/api/documents', '/api/recent-docs'],
-      'fleet': ['/api/vessels', '/api/fleet-status'],
-      'operations': ['/api/operations', '/api/schedules'],
+      "dashboard": ["/api/dashboard-stats", "/api/notifications"],
+      "travel": ["/api/travel-requests", "/api/travel-stats"],
+      "hr": ["/api/employees", "/api/hr-stats"],
+      "documents": ["/api/documents", "/api/recent-docs"],
+      "fleet": ["/api/vessels", "/api/fleet-status"],
+      "operations": ["/api/operations", "/api/schedules"],
     };
     
     return urlMappings[target] || [];
   }
   
   private getPreloadComponents(action: string): string[] {
-    const [, target] = action.split(':');
+    const [, target] = action.split(":");
     
     // Map actions to components
     const componentMappings: Record<string, string[]> = {
-      'dashboard': ['DashboardStats', 'ActivityFeed'],
-      'travel': ['TravelRequestForm', 'TravelHistory'],
-      'hr': ['EmployeeList', 'HRDashboard'],
-      'documents': ['DocumentViewer', 'DocumentList'],
-      'fleet': ['VesselMap', 'FleetStatus'],
+      "dashboard": ["DashboardStats", "ActivityFeed"],
+      "travel": ["TravelRequestForm", "TravelHistory"],
+      "hr": ["EmployeeList", "HRDashboard"],
+      "documents": ["DocumentViewer", "DocumentList"],
+      "fleet": ["VesselMap", "FleetStatus"],
     };
     
     return componentMappings[target] || [];
@@ -187,7 +187,7 @@ class PredictiveUIEngine {
     const featureCounts: Record<string, number> = {};
     
     this.actions
-      .filter(a => a.type === 'navigation' || a.type === 'click')
+      .filter(a => a.type === "navigation" || a.type === "click")
       .forEach(a => {
         featureCounts[a.target] = (featureCounts[a.target] || 0) + 1;
       });
@@ -219,7 +219,7 @@ export function usePredictiveUI() {
   const [engagement, setEngagement] = useState(0);
   
   const trackAction = useCallback((
-    type: UserAction['type'],
+    type: UserAction["type"],
     target: string,
     context?: Record<string, unknown>
   ) => {
@@ -229,15 +229,15 @@ export function usePredictiveUI() {
   }, []);
   
   const trackNavigation = useCallback((path: string) => {
-    trackAction('navigation', path);
+    trackAction("navigation", path);
   }, [trackAction]);
   
   const trackClick = useCallback((element: string) => {
-    trackAction('click', element);
+    trackAction("click", element);
   }, [trackAction]);
   
   const trackHover = useCallback((element: string) => {
-    trackAction('hover', element);
+    trackAction("hover", element);
   }, [trackAction]);
   
   return {
@@ -263,8 +263,8 @@ export function useSmartPrefetching() {
     predictions.forEach(prediction => {
       if (prediction.confidence > 0.3) {
         prediction.prefetchUrls.forEach(url => {
-          const link = document.createElement('link');
-          link.rel = 'prefetch';
+          const link = document.createElement("link");
+          link.rel = "prefetch";
           link.href = url;
           document.head.appendChild(link);
         });

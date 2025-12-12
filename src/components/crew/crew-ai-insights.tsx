@@ -274,9 +274,9 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                       <p className="font-medium">{rot.currentVessel}</p>
                     </div>
                     <div>
-                        <span className="text-muted-foreground">Embarcação Sugerida:</span>
-                        <p className="font-medium text-success">{rot.suggestedVessel}</p>
-                      </div>
+                      <span className="text-muted-foreground">Embarcação Sugerida:</span>
+                      <p className="font-medium text-success">{rot.suggestedVessel}</p>
+                    </div>
                     <div>
                       <span className="text-muted-foreground">Data de Rotação:</span>
                       <p className="font-medium">{new Date(rot.rotationDate).toLocaleDateString()}</p>

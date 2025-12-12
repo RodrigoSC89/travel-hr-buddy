@@ -373,7 +373,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
 
       if (events && events.length > 0) {
         const monthlyData = events.reduce((acc: Record<string, any>, event: any) => {
-          const month = new Date(event.created_at).toLocaleString('pt-BR', { month: 'short' });
+          const month = new Date(event.created_at).toLocaleString("pt-BR", { month: "short" });
           if (!acc[month]) {
             acc[month] = { month, receita: 0, custos: 0, lucro: 0 };
           }
@@ -585,12 +585,12 @@ const AnalyticsCoreProfessional: React.FC = () => {
         m.value,
         m.unit,
         m.trend,
-        `${m.change >= 0 ? '+' : ''}${m.change.toFixed(1)}`,
+        `${m.change >= 0 ? "+" : ""}${m.change.toFixed(1)}`,
         m.category
       ].join(","))
     ].join("\n");
 
-    const BOM = '\uFEFF';
+    const BOM = "\uFEFF";
     const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -709,7 +709,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           i.title,
           i.type === "prediction" ? "Previsão" : 
             i.type === "recommendation" ? "Recomendação" : 
-            i.type === "alert" ? "Alerta" : "Tendência",
+              i.type === "alert" ? "Alerta" : "Tendência",
           `${i.confidence.toFixed(1)}%`,
           i.priority === "high" ? "Alta" : i.priority === "medium" ? "Média" : "Baixa"
         ]);
@@ -846,7 +846,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
 
   // Print report
   const printReport = () => {
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open("", "_blank");
     if (printWindow) {
       printWindow.document.write(`
         <html>
@@ -864,7 +864,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
             <h1>Analytics Core - Relatório</h1>
             <p>Gerado em: ${new Date().toLocaleString("pt-BR")}</p>
             <hr />
-            ${aiReportContent.replace(/\n/g, '<br/>').replace(/#{1,3}\s/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+            ${aiReportContent.replace(/\n/g, "<br/>").replace(/#{1,3}\s/g, "<h2>").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")}
           </body>
         </html>
       `);
@@ -886,7 +886,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
 
   // Filter Functions
   const getFilteredNotifications = useCallback(() => {
-    let filtered = notifications.filter(n => {
+    const filtered = notifications.filter(n => {
       if (filters.showOnlyUnread && n.isRead) return false;
       if (filters.categories.length > 0 && !filters.categories.includes(n.category)) return false;
       if (filters.notificationTypes.length > 0 && !filters.notificationTypes.includes(n.type)) return false;
@@ -968,18 +968,18 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <ArrowUpRight className="h-4 w-4 text-green-500" />;
-      case "down": return <ArrowDownRight className="h-4 w-4 text-red-500" />;
-      default: return <Activity className="h-4 w-4 text-muted-foreground" />;
+    case "up": return <ArrowUpRight className="h-4 w-4 text-green-500" />;
+    case "down": return <ArrowDownRight className="h-4 w-4 text-red-500" />;
+    default: return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "success": return <Check className="h-4 w-4 text-green-500" />;
-      case "warning": return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      case "error": return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default: return <Bell className="h-4 w-4 text-blue-500" />;
+    case "success": return <Check className="h-4 w-4 text-green-500" />;
+    case "warning": return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+    case "error": return <AlertCircle className="h-4 w-4 text-red-500" />;
+    default: return <Bell className="h-4 w-4 text-blue-500" />;
     }
   };
 
@@ -1045,7 +1045,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                 onClick={refreshData}
                 disabled={isRefreshing}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
                 Atualizar
               </Button>
 
@@ -1464,9 +1464,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                   <div className="text-3xl font-bold">
                     {metric.value.toLocaleString("pt-BR")}{metric.unit}
                   </div>
-                  <p className={`text-xs mt-1 flex items-center gap-1 ${metric.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-xs mt-1 flex items-center gap-1 ${metric.change >= 0 ? "text-green-500" : "text-red-500"}`}>
                     {metric.change >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                    {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}% vs período anterior
+                    {metric.change >= 0 ? "+" : ""}{metric.change.toFixed(1)}% vs período anterior
                   </p>
                 </CardContent>
               </Card>
@@ -1626,7 +1626,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant={metric.change >= 0 ? "default" : "secondary"} className="text-xs">
-                            {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                            {metric.change >= 0 ? "+" : ""}{metric.change.toFixed(1)}%
                           </Badge>
                           <span className="text-xs text-muted-foreground capitalize">{metric.category}</span>
                         </div>
@@ -1700,14 +1700,14 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 20 }}
-                            className={`p-4 border rounded-lg transition-colors ${!notification.isRead ? 'bg-primary/5 border-primary/20' : 'hover:bg-muted/50'}`}
+                            className={`p-4 border rounded-lg transition-colors ${!notification.isRead ? "bg-primary/5 border-primary/20" : "hover:bg-muted/50"}`}
                           >
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex items-start gap-3">
                                 <div className={`p-2 rounded-full ${
-                                  notification.type === 'success' ? 'bg-green-500/10' :
-                                  notification.type === 'warning' ? 'bg-yellow-500/10' :
-                                  notification.type === 'error' ? 'bg-red-500/10' : 'bg-blue-500/10'
+                                  notification.type === "success" ? "bg-green-500/10" :
+                                    notification.type === "warning" ? "bg-yellow-500/10" :
+                                      notification.type === "error" ? "bg-red-500/10" : "bg-blue-500/10"
                                 }`}>
                                   {getNotificationIcon(notification.type)}
                                 </div>
@@ -1811,7 +1811,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         key={insight.id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`p-4 border rounded-lg space-y-3 hover:shadow-md transition-shadow ${insight.applied ? 'bg-green-500/5 border-green-500/20' : ''}`}
+                        className={`p-4 border rounded-lg space-y-3 hover:shadow-md transition-shadow ${insight.applied ? "bg-green-500/5 border-green-500/20" : ""}`}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -1891,7 +1891,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                   </Card>
 
                   <Card 
-                    className={`cursor-pointer hover:border-primary transition-all hover:shadow-lg group ${isExportingPDF ? 'opacity-70' : ''}`}
+                    className={`cursor-pointer hover:border-primary transition-all hover:shadow-lg group ${isExportingPDF ? "opacity-70" : ""}`}
                     onClick={!isExportingPDF ? exportToPDF : undefined}
                   >
                     <CardContent className="pt-6 text-center">
@@ -1910,7 +1910,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                   </Card>
 
                   <Card 
-                    className={`cursor-pointer hover:border-primary transition-all hover:shadow-lg group ${isGeneratingInsights ? 'opacity-70' : ''}`}
+                    className={`cursor-pointer hover:border-primary transition-all hover:shadow-lg group ${isGeneratingInsights ? "opacity-70" : ""}`}
                     onClick={!isGeneratingInsights ? generateAIInsights : undefined}
                   >
                     <CardContent className="pt-6 text-center">

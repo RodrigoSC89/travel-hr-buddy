@@ -114,7 +114,7 @@ export function PEODPEnhancedAI() {
       // Simulated ASOG check
       const newStatus: ASOGStatus = {
         current: pillars.some(p => p.status === "red") ? "red" : 
-                 pillars.some(p => p.status === "yellow") ? "yellow" : "green",
+          pillars.some(p => p.status === "yellow") ? "yellow" : "green",
         reason: "Pilares 3 e 6 requerem atenção",
         timestamp: new Date().toISOString(),
         recommendations: [
@@ -133,10 +133,10 @@ export function PEODPEnhancedAI() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "green": return "bg-green-500";
-      case "yellow": return "bg-yellow-500";
-      case "red": return "bg-red-500";
-      default: return "bg-gray-500";
+    case "green": return "bg-green-500";
+    case "yellow": return "bg-yellow-500";
+    case "red": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -176,8 +176,8 @@ export function PEODPEnhancedAI() {
       {/* ASOG Status Card */}
       <Card className={`border-2 ${
         asogStatus.current === "green" ? "border-green-500 bg-green-500/5" :
-        asogStatus.current === "yellow" ? "border-yellow-500 bg-yellow-500/5" :
-        "border-red-500 bg-red-500/5"
+          asogStatus.current === "yellow" ? "border-yellow-500 bg-yellow-500/5" :
+            "border-red-500 bg-red-500/5"
       }`}>
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
@@ -242,8 +242,8 @@ export function PEODPEnhancedAI() {
                   </div>
                   <Progress value={pillar.score} className={`h-2 mb-2 ${
                     pillar.status === "green" ? "[&>div]:bg-green-500" :
-                    pillar.status === "yellow" ? "[&>div]:bg-yellow-500" :
-                    "[&>div]:bg-red-500"
+                      pillar.status === "yellow" ? "[&>div]:bg-yellow-500" :
+                        "[&>div]:bg-red-500"
                   }`} />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{pillar.compliant}/{pillar.items} itens conformes</span>

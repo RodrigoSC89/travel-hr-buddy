@@ -300,14 +300,14 @@ const FinanceCommandCenter: React.FC = () => {
   // Status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "approved":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Aprovado</Badge>;
-      case "pending":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
-      case "rejected":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejeitado</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "approved":
+      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Aprovado</Badge>;
+    case "pending":
+      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
+    case "rejected":
+      return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejeitado</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -1036,7 +1036,7 @@ const FinanceCommandCenter: React.FC = () => {
                       <p className="text-2xl font-bold">R$ {(cost.totalCost / 1000).toFixed(0)}k</p>
                       <p className={`text-sm flex items-center gap-1 justify-end ${getCostColor(cost.variance)}`}>
                         {cost.variance > 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                        {cost.variance > 0 ? '+' : ''}{cost.variance}% vs orçado
+                        {cost.variance > 0 ? "+" : ""}{cost.variance}% vs orçado
                       </p>
                     </div>
                   </div>
@@ -1093,13 +1093,13 @@ const FinanceCommandCenter: React.FC = () => {
                     </div>
                     <ul className="space-y-1">
                       {cost.aiInsights.map((insight, idx) => (
-                        <li key={idx} className={`text-sm flex items-start gap-2 ${insight.startsWith('⚠️') ? 'text-amber-600' : 'text-muted-foreground'}`}>
-                          {insight.startsWith('⚠️') ? (
+                        <li key={idx} className={`text-sm flex items-start gap-2 ${insight.startsWith("⚠️") ? "text-amber-600" : "text-muted-foreground"}`}>
+                          {insight.startsWith("⚠️") ? (
                             <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
                           ) : (
                             <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                           )}
-                          {insight.replace('⚠️ ', '')}
+                          {insight.replace("⚠️ ", "")}
                         </li>
                       ))}
                     </ul>

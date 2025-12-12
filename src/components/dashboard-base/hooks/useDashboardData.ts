@@ -36,57 +36,57 @@ export const useDashboardData = (options: UseDashboardDataOptions) => {
       let data;
 
       switch (dataSource.type) {
-        case "static":
-          // For static data, just return it
-          data = dataSource.query;
-          break;
+      case "static":
+        // For static data, just return it
+        data = dataSource.query;
+        break;
 
-        case "supabase":
-          // Fetch from Supabase
-          if (dataSource.endpoint) {
-            const response = await supabase
-              .from(dataSource.endpoint)
-              .select("*");
+      case "supabase":
+        // Fetch from Supabase
+        if (dataSource.endpoint) {
+          const response = await supabase
+            .from(dataSource.endpoint)
+            .select("*");
             
-            if (response.error) throw response.error;
-            data = response.data;
-          }
-          break;
+          if (response.error) throw response.error;
+          data = response.data;
+        }
+        break;
 
-        case "api":
-          // Fetch from API endpoint
-          if (dataSource.endpoint) {
-            const response = await fetch(dataSource.endpoint);
-            if (!response.ok) throw new Error("API request failed");
-            data = await response.json();
-          }
-          break;
+      case "api":
+        // Fetch from API endpoint
+        if (dataSource.endpoint) {
+          const response = await fetch(dataSource.endpoint);
+          if (!response.ok) throw new Error("API request failed");
+          data = await response.json();
+        }
+        break;
 
-        case "realtime":
-          // Setup realtime subscription
-          if (dataSource.endpoint) {
-            const channel = supabase
-              .channel(dataSource.endpoint)
-              .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: dataSource.endpoint },
-                (payload) => {
-                  setState((prev) => ({
-                    ...prev,
-                    data: dataSource.transform ? dataSource.transform(payload.new) : payload.new,
-                  }));
-                }
-              )
-              .subscribe();
+      case "realtime":
+        // Setup realtime subscription
+        if (dataSource.endpoint) {
+          const channel = supabase
+            .channel(dataSource.endpoint)
+            .on(
+              "postgres_changes",
+              { event: "*", schema: "public", table: dataSource.endpoint },
+              (payload) => {
+                setState((prev) => ({
+                  ...prev,
+                  data: dataSource.transform ? dataSource.transform(payload.new) : payload.new,
+                }));
+              }
+            )
+            .subscribe();
 
-            return () => {
-              supabase.removeChannel(channel);
-            };
-          }
-          break;
+          return () => {
+            supabase.removeChannel(channel);
+          };
+        }
+        break;
 
-        default:
-          throw new Error(`Unsupported data source type: ${dataSource.type}`);
+      default:
+        throw new Error(`Unsupported data source type: ${dataSource.type}`);
       }
 
       // Apply transform if provided

@@ -44,27 +44,27 @@ export const FuelAnalysisPanel: React.FC<FuelAnalysisPanelProps> = ({
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "optimal":
-        return "bg-green-500";
-      case "warning":
-        return "bg-yellow-500";
-      case "critical":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "optimal":
+      return "bg-green-500";
+    case "warning":
+      return "bg-yellow-500";
+    case "critical":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "optimal":
-        return <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">Ótimo</Badge>;
-      case "warning":
-        return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">Atenção</Badge>;
-      case "critical":
-        return <Badge className="bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">Crítico</Badge>;
-      default:
-        return null;
+    case "optimal":
+      return <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">Ótimo</Badge>;
+    case "warning":
+      return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">Atenção</Badge>;
+    case "critical":
+      return <Badge className="bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">Crítico</Badge>;
+    default:
+      return null;
     }
   };
 

@@ -3,8 +3,8 @@
  * React hook for resource status and adaptive settings
  */
 
-import { useState, useEffect } from 'react';
-import { resourceManager, type ResourceStatus } from '@/lib/performance/resource-manager';
+import { useState, useEffect } from "react";
+import { resourceManager, type ResourceStatus } from "@/lib/performance/resource-manager";
 
 export function useResourceManager() {
   const [status, setStatus] = useState<ResourceStatus>(resourceManager.getStatus());

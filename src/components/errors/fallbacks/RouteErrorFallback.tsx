@@ -3,11 +3,11 @@
  * Fallback UI para erros de rota
  */
 
-import React from 'react';
-import { MapPinOff, Home, Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { MapPinOff, Home, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 export interface RouteErrorFallbackProps {
   error?: Error;
@@ -22,30 +22,30 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
 
   const getErrorContent = () => {
     switch (statusCode) {
-      case 404:
-        return {
-          title: 'Página Não Encontrada',
-          message: 'A página que você está procurando não existe ou foi movida.',
-          icon: MapPinOff,
-        };
-      case 403:
-        return {
-          title: 'Acesso Negado',
-          message: 'Você não tem permissão para acessar esta página.',
-          icon: MapPinOff,
-        };
-      case 500:
-        return {
-          title: 'Erro do Servidor',
-          message: 'Algo deu errado no servidor. Estamos trabalhando para resolver.',
-          icon: MapPinOff,
-        };
-      default:
-        return {
-          title: 'Erro na Rota',
-          message: 'Ocorreu um erro ao carregar esta página.',
-          icon: MapPinOff,
-        };
+    case 404:
+      return {
+        title: "Página Não Encontrada",
+        message: "A página que você está procurando não existe ou foi movida.",
+        icon: MapPinOff,
+      };
+    case 403:
+      return {
+        title: "Acesso Negado",
+        message: "Você não tem permissão para acessar esta página.",
+        icon: MapPinOff,
+      };
+    case 500:
+      return {
+        title: "Erro do Servidor",
+        message: "Algo deu errado no servidor. Estamos trabalhando para resolver.",
+        icon: MapPinOff,
+      };
+    default:
+      return {
+        title: "Erro na Rota",
+        message: "Ocorreu um erro ao carregar esta página.",
+        icon: MapPinOff,
+      };
     }
   };
 
@@ -100,7 +100,7 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
 
         <CardFooter className="flex flex-wrap gap-3 justify-center">
           <Button
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
             variant="default"
             className="gap-2"
           >
@@ -116,7 +116,7 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
           </Button>
 
           <Button
-            onClick={() => navigate('/search')}
+            onClick={() => navigate("/search")}
             variant="outline"
             className="gap-2"
           >

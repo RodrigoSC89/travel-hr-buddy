@@ -324,86 +324,86 @@ OfflineFallback.displayName = "OfflineFallback";
 
 function getBannerConfig(quality: ConnectionQuality) {
   switch (quality) {
-    case "offline":
-      return {
-        bgClass: "bg-destructive",
-        textClass: "text-destructive-foreground",
-        icon: <WifiOff className="h-4 w-4" />,
-        message: "Sem conexão com a internet",
-      };
-    case "slow":
-      return {
-        bgClass: "bg-amber-500",
-        textClass: "text-amber-950",
-        icon: <AlertTriangle className="h-4 w-4" />,
-        message: "Conexão lenta detectada. Carregando de forma otimizada...",
-      };
-    case "moderate":
-      return {
-        bgClass: "bg-yellow-100",
-        textClass: "text-yellow-900",
-        icon: <Signal className="h-4 w-4" />,
-        message: "Conexão moderada",
-      };
-    case "good":
-      return {
-        bgClass: "bg-green-100",
-        textClass: "text-green-900",
-        icon: <Wifi className="h-4 w-4" />,
-        message: "Conexão boa",
-      };
-    case "excellent":
-      return {
-        bgClass: "bg-green-500",
-        textClass: "text-white",
-        icon: <Zap className="h-4 w-4" />,
-        message: "Conexão excelente",
-      };
+  case "offline":
+    return {
+      bgClass: "bg-destructive",
+      textClass: "text-destructive-foreground",
+      icon: <WifiOff className="h-4 w-4" />,
+      message: "Sem conexão com a internet",
+    };
+  case "slow":
+    return {
+      bgClass: "bg-amber-500",
+      textClass: "text-amber-950",
+      icon: <AlertTriangle className="h-4 w-4" />,
+      message: "Conexão lenta detectada. Carregando de forma otimizada...",
+    };
+  case "moderate":
+    return {
+      bgClass: "bg-yellow-100",
+      textClass: "text-yellow-900",
+      icon: <Signal className="h-4 w-4" />,
+      message: "Conexão moderada",
+    };
+  case "good":
+    return {
+      bgClass: "bg-green-100",
+      textClass: "text-green-900",
+      icon: <Wifi className="h-4 w-4" />,
+      message: "Conexão boa",
+    };
+  case "excellent":
+    return {
+      bgClass: "bg-green-500",
+      textClass: "text-white",
+      icon: <Zap className="h-4 w-4" />,
+      message: "Conexão excelente",
+    };
   }
 }
 
 function getBadgeConfig(quality: ConnectionQuality) {
   switch (quality) {
-    case "offline":
-      return {
-        bgClass: "bg-destructive/10",
-        textClass: "text-destructive",
-        borderClass: "border-destructive/30",
-        icon: <WifiOff />,
-        label: "Offline",
-      };
-    case "slow":
-      return {
-        bgClass: "bg-amber-500/10",
-        textClass: "text-amber-600",
-        borderClass: "border-amber-500/30",
-        icon: <Signal />,
-        label: "Lenta",
-      };
-    case "moderate":
-      return {
-        bgClass: "bg-yellow-500/10",
-        textClass: "text-yellow-600",
-        borderClass: "border-yellow-500/30",
-        icon: <Wifi />,
-        label: "Moderada",
-      };
-    case "good":
-      return {
-        bgClass: "bg-green-500/10",
-        textClass: "text-green-600",
-        borderClass: "border-green-500/30",
-        icon: <Wifi />,
-        label: "Boa",
-      };
-    case "excellent":
-      return {
-        bgClass: "bg-green-600/10",
-        textClass: "text-green-700",
-        borderClass: "border-green-600/30",
-        icon: <Zap />,
-        label: "Excelente",
-      };
+  case "offline":
+    return {
+      bgClass: "bg-destructive/10",
+      textClass: "text-destructive",
+      borderClass: "border-destructive/30",
+      icon: <WifiOff />,
+      label: "Offline",
+    };
+  case "slow":
+    return {
+      bgClass: "bg-amber-500/10",
+      textClass: "text-amber-600",
+      borderClass: "border-amber-500/30",
+      icon: <Signal />,
+      label: "Lenta",
+    };
+  case "moderate":
+    return {
+      bgClass: "bg-yellow-500/10",
+      textClass: "text-yellow-600",
+      borderClass: "border-yellow-500/30",
+      icon: <Wifi />,
+      label: "Moderada",
+    };
+  case "good":
+    return {
+      bgClass: "bg-green-500/10",
+      textClass: "text-green-600",
+      borderClass: "border-green-500/30",
+      icon: <Wifi />,
+      label: "Boa",
+    };
+  case "excellent":
+    return {
+      bgClass: "bg-green-600/10",
+      textClass: "text-green-700",
+      borderClass: "border-green-600/30",
+      icon: <Zap />,
+      label: "Excelente",
+    };
   }
 }
 

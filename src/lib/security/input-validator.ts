@@ -6,7 +6,7 @@
 export class ValidationError extends Error {
   constructor(message: string, public field?: string) {
     super(message);
-    this.name = 'ValidationError';
+    this.name = "ValidationError";
   }
 }
 
@@ -32,7 +32,7 @@ export const validateString = {
   /**
    * Check if string is not empty
    */
-  notEmpty(value: string, fieldName = 'Field'): string {
+  notEmpty(value: string, fieldName = "Field"): string {
     if (!value || value.trim().length === 0) {
       throw new ValidationError(`${fieldName} cannot be empty`, fieldName);
     }
@@ -42,7 +42,7 @@ export const validateString = {
   /**
    * Check string length
    */
-  length(value: string, min: number, max: number, fieldName = 'Field'): string {
+  length(value: string, min: number, max: number, fieldName = "Field"): string {
     const trimmed = value.trim();
     if (trimmed.length < min || trimmed.length > max) {
       throw new ValidationError(
@@ -56,7 +56,7 @@ export const validateString = {
   /**
    * Validate email format
    */
-  email(value: string, fieldName = 'Email'): string {
+  email(value: string, fieldName = "Email"): string {
     const trimmed = value.trim();
     if (!VALIDATION_PATTERNS.EMAIL.test(trimmed)) {
       throw new ValidationError(`${fieldName} must be a valid email address`, fieldName);
@@ -67,7 +67,7 @@ export const validateString = {
   /**
    * Validate URL format
    */
-  url(value: string, fieldName = 'URL'): string {
+  url(value: string, fieldName = "URL"): string {
     const trimmed = value.trim();
     if (!VALIDATION_PATTERNS.URL.test(trimmed)) {
       throw new ValidationError(`${fieldName} must be a valid URL`, fieldName);
@@ -78,7 +78,7 @@ export const validateString = {
   /**
    * Validate UUID format
    */
-  uuid(value: string, fieldName = 'ID'): string {
+  uuid(value: string, fieldName = "ID"): string {
     const trimmed = value.trim();
     if (!VALIDATION_PATTERNS.UUID.test(trimmed)) {
       throw new ValidationError(`${fieldName} must be a valid UUID`, fieldName);
@@ -91,18 +91,18 @@ export const validateString = {
    */
   sanitize(value: string): string {
     return value
-      .replace(VALIDATION_PATTERNS.NO_SCRIPT_TAGS, '')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#x27;')
-      .replace(/\//g, '&#x2F;');
+      .replace(VALIDATION_PATTERNS.NO_SCRIPT_TAGS, "")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/\//g, "&#x2F;");
   },
 
   /**
    * Check for SQL injection attempts
    */
-  noSqlInjection(value: string, fieldName = 'Field'): string {
+  noSqlInjection(value: string, fieldName = "Field"): string {
     if (VALIDATION_PATTERNS.NO_SQL_INJECTION.test(value)) {
       throw new ValidationError(`${fieldName} contains invalid characters`, fieldName);
     }
@@ -112,7 +112,7 @@ export const validateString = {
   /**
    * Alphanumeric only
    */
-  alphanumeric(value: string, fieldName = 'Field'): string {
+  alphanumeric(value: string, fieldName = "Field"): string {
     const trimmed = value.trim();
     if (!/^[a-zA-Z0-9]+$/.test(trimmed)) {
       throw new ValidationError(`${fieldName} must contain only letters and numbers`, fieldName);
@@ -128,7 +128,7 @@ export const validateNumber = {
   /**
    * Check if value is a valid number
    */
-  isNumber(value: any, fieldName = 'Field'): number {
+  isNumber(value: any, fieldName = "Field"): number {
     const num = Number(value);
     if (isNaN(num)) {
       throw new ValidationError(`${fieldName} must be a valid number`, fieldName);
@@ -139,7 +139,7 @@ export const validateNumber = {
   /**
    * Check number range
    */
-  range(value: number, min: number, max: number, fieldName = 'Field'): number {
+  range(value: number, min: number, max: number, fieldName = "Field"): number {
     if (value < min || value > max) {
       throw new ValidationError(
         `${fieldName} must be between ${min} and ${max}`,
@@ -152,7 +152,7 @@ export const validateNumber = {
   /**
    * Check if positive
    */
-  positive(value: number, fieldName = 'Field'): number {
+  positive(value: number, fieldName = "Field"): number {
     if (value <= 0) {
       throw new ValidationError(`${fieldName} must be positive`, fieldName);
     }
@@ -162,7 +162,7 @@ export const validateNumber = {
   /**
    * Check if integer
    */
-  integer(value: number, fieldName = 'Field'): number {
+  integer(value: number, fieldName = "Field"): number {
     if (!Number.isInteger(value)) {
       throw new ValidationError(`${fieldName} must be an integer`, fieldName);
     }
@@ -177,7 +177,7 @@ export const validateArray = {
   /**
    * Check if not empty
    */
-  notEmpty<T>(value: T[], fieldName = 'Field'): T[] {
+  notEmpty<T>(value: T[], fieldName = "Field"): T[] {
     if (!Array.isArray(value) || value.length === 0) {
       throw new ValidationError(`${fieldName} cannot be empty`, fieldName);
     }
@@ -187,7 +187,7 @@ export const validateArray = {
   /**
    * Check array length
    */
-  length<T>(value: T[], min: number, max: number, fieldName = 'Field'): T[] {
+  length<T>(value: T[], min: number, max: number, fieldName = "Field"): T[] {
     if (!Array.isArray(value)) {
       throw new ValidationError(`${fieldName} must be an array`, fieldName);
     }
@@ -206,7 +206,7 @@ export const validateArray = {
   each<T>(
     value: T[],
     validator: (item: T, index: number) => void,
-    fieldName = 'Field'
+    fieldName = "Field"
   ): T[] {
     if (!Array.isArray(value)) {
       throw new ValidationError(`${fieldName} must be an array`, fieldName);
@@ -226,12 +226,12 @@ export const validateObject = {
   requiredFields<T extends Record<string, any>>(
     obj: T,
     fields: (keyof T)[],
-    objectName = 'Object'
+    objectName = "Object"
   ): T {
     const missing = fields.filter(field => !(field in obj) || obj[field] === undefined || obj[field] === null);
     if (missing.length > 0) {
       throw new ValidationError(
-        `${objectName} is missing required fields: ${missing.join(', ')}`,
+        `${objectName} is missing required fields: ${missing.join(", ")}`,
         objectName
       );
     }
@@ -244,7 +244,7 @@ export const validateObject = {
   shape<T extends Record<string, any>>(
     obj: T,
     validators: { [K in keyof T]?: (value: T[K]) => void },
-    objectName = 'Object'
+    objectName = "Object"
   ): T {
     Object.entries(validators).forEach(([key, validator]) => {
       if (key in obj && validator) {
@@ -287,7 +287,7 @@ export function createValidator<T extends Record<string, any>>(
 }
 
 // Export for debugging
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   (window as any).__NAUTILUS_VALIDATOR__ = {
     validateString,
     validateNumber,

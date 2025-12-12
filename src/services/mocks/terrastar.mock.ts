@@ -9,10 +9,10 @@ import {
   TerrastarIonosphereData, 
   TerrastarCorrection, 
   TerrastarAlert 
-} from '../api/terrastar/terrastar.service';
+} from "../api/terrastar/terrastar.service";
 
 // Feature flag - controla se usa mock ou API real
-const USE_MOCK_API = (import.meta as any).env.VITE_USE_MOCK_TERRASTAR !== 'false';
+const USE_MOCK_API = (import.meta as any).env.VITE_USE_MOCK_TERRASTAR !== "false";
 
 /**
  * Gera dados ionosféricos simulados baseados em localização
@@ -56,7 +56,7 @@ export function generateMockIonosphereData(
     vtec: Math.round(vtec * 100) / 100,
     stec: Math.round(stec * 100) / 100,
     ionospheric_delay: Math.round(ionospheric_delay * 100) / 100,
-    correction_type: 'L1',
+    correction_type: "L1",
     quality_indicator: Math.round(quality_indicator),
     satellite_count,
   };
@@ -69,7 +69,7 @@ export function generateMockCorrection(
   vesselId: string,
   latitude: number,
   longitude: number,
-  serviceLevel: 'BASIC' | 'PREMIUM' | 'RTK' = 'PREMIUM'
+  serviceLevel: "BASIC" | "PREMIUM" | "RTK" = "PREMIUM"
 ): TerrastarCorrection {
   // Precisão baseada no service level
   const accuracyMap = {
@@ -85,8 +85,8 @@ export function generateMockCorrection(
   const vtec_correction = ionoData.vtec * 0.4; // Fator de correção
   
   // Signal quality - melhor em níveis premium
-  const signal_quality = serviceLevel === 'RTK' ? 95 : 
-                        serviceLevel === 'PREMIUM' ? 85 : 70;
+  const signal_quality = serviceLevel === "RTK" ? 95 : 
+    serviceLevel === "PREMIUM" ? 85 : 70;
   
   // Correction age - quanto tempo desde a última atualização
   const correction_age = Math.floor(Math.random() * 5); // 0-5 segundos
@@ -121,9 +121,9 @@ export function generateMockAlerts(
     // Alerta de tempestade ionosférica
     alerts.push({
       vessel_id: vesselId,
-      alert_type: 'IONOSPHERIC_STORM',
-      severity: 'medium',
-      message: 'Atividade ionosférica moderada detectada na região. Possível degradação na precisão GPS.',
+      alert_type: "IONOSPHERIC_STORM",
+      severity: "medium",
+      message: "Atividade ionosférica moderada detectada na região. Possível degradação na precisão GPS.",
       affected_area: {
         lat_min: latitude - 5,
         lat_max: latitude + 5,
@@ -140,9 +140,9 @@ export function generateMockAlerts(
   if (Math.random() < 0.1) {
     alerts.push({
       vessel_id: vesselId,
-      alert_type: 'SIGNAL_DEGRADATION',
-      severity: 'low',
-      message: 'Qualidade do sinal GPS abaixo do normal. Verificar antena e obstruções.',
+      alert_type: "SIGNAL_DEGRADATION",
+      severity: "low",
+      message: "Qualidade do sinal GPS abaixo do normal. Verificar antena e obstruções.",
       affected_area: {
         lat_min: latitude - 1,
         lat_max: latitude + 1,
@@ -237,7 +237,7 @@ export const TerrastarMockAPI = {
     vesselId: string, 
     latitude: number, 
     longitude: number,
-    serviceLevel: 'BASIC' | 'PREMIUM' | 'RTK' = 'PREMIUM'
+    serviceLevel: "BASIC" | "PREMIUM" | "RTK" = "PREMIUM"
   ): Promise<TerrastarCorrection> {
     await simulateNetworkDelay();
     const correction = generateMockCorrection(vesselId, latitude, longitude, serviceLevel);
@@ -277,8 +277,8 @@ export const TerrastarMockAPI = {
   async checkServiceStatus(): Promise<{ status: string; message: string }> {
     await simulateNetworkDelay(50, 150);
     const status = {
-      status: 'operational',
-      message: 'Mock service is operational. Replace with real API when ready.',
+      status: "operational",
+      message: "Mock service is operational. Replace with real API when ready.",
     };
     return status;
   },

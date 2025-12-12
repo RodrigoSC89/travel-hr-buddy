@@ -49,19 +49,19 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operacional": return "bg-green-500";
-      case "atencao": return "bg-yellow-500";
-      case "critico": return "bg-red-500";
-      default: return "bg-gray-500";
+    case "operacional": return "bg-green-500";
+    case "atencao": return "bg-yellow-500";
+    case "critico": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "operacional": return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "atencao": return <Clock className="h-4 w-4 text-yellow-500" />;
-      case "critico": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default: return <Activity className="h-4 w-4" />;
+    case "operacional": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "atencao": return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "critico": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default: return <Activity className="h-4 w-4" />;
     }
   };
 
@@ -163,8 +163,8 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
                 key={equip.id}
                 className={`p-3 rounded-lg border ${
                   equip.status === "critico" ? "border-red-500/50 bg-red-500/5" :
-                  equip.status === "atencao" ? "border-yellow-500/50 bg-yellow-500/5" :
-                  "border-border"
+                    equip.status === "atencao" ? "border-yellow-500/50 bg-yellow-500/5" :
+                      "border-border"
                 }`}
               >
                 <div className="flex items-center justify-between">

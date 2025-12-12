@@ -156,8 +156,8 @@ export default function MobilityDashboard() {
       
       const key = chatMessage.toLowerCase().includes("voo") ? "voo" 
         : chatMessage.toLowerCase().includes("hotel") ? "hotel"
-        : chatMessage.toLowerCase().includes("transfer") ? "transfer"
-        : "default";
+          : chatMessage.toLowerCase().includes("transfer") ? "transfer"
+            : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
@@ -337,14 +337,14 @@ export default function MobilityDashboard() {
                     <div className="flex items-center gap-2">
                       <Badge variant={
                         trip.status === "completed" ? "default" :
-                        trip.status === "delayed" ? "destructive" :
-                        trip.status === "in_progress" ? "secondary" : "outline"
+                          trip.status === "delayed" ? "destructive" :
+                            trip.status === "in_progress" ? "secondary" : "outline"
                       }>
                         {trip.status === "completed" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                         {trip.status === "delayed" && <AlertTriangle className="h-3 w-3 mr-1" />}
                         {trip.status === "scheduled" ? "Agendada" :
-                         trip.status === "in_progress" ? "Em andamento" :
-                         trip.status === "completed" ? "Concluída" : "Atrasada"}
+                          trip.status === "in_progress" ? "Em andamento" :
+                            trip.status === "completed" ? "Concluída" : "Atrasada"}
                       </Badge>
                     </div>
                   </div>

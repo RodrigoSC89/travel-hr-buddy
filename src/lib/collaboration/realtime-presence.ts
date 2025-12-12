@@ -3,9 +3,9 @@
  * Live collaboration and presence awareness
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import type { RealtimeChannel } from '@supabase/supabase-js';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 
 interface UserPresence {
   id: string;
@@ -15,7 +15,7 @@ interface UserPresence {
   cursor?: { x: number; y: number };
   currentPage: string;
   lastSeen: number;
-  status: 'online' | 'away' | 'busy';
+  status: "online" | "away" | "busy";
 }
 
 interface PresenceState {
@@ -27,8 +27,8 @@ interface PresenceState {
 // Generate consistent color from user ID
 function generateUserColor(userId: string): string {
   const colors = [
-    '#ef4444', '#f97316', '#eab308', '#22c55e', 
-    '#14b8a6', '#3b82f6', '#8b5cf6', '#ec4899',
+    "#ef4444", "#f97316", "#eab308", "#22c55e", 
+    "#14b8a6", "#3b82f6", "#8b5cf6", "#ec4899",
   ];
   let hash = 0;
   for (let i = 0; i < userId.length; i++) {
@@ -48,7 +48,7 @@ class RealtimePresenceManager {
   /**
    * Initialize presence for a user
    */
-  async init(user: { id: string; name: string; avatar?: string }, roomId = 'global'): Promise<void> {
+  async init(user: { id: string; name: string; avatar?: string }, roomId = "global"): Promise<void> {
     if (this.channel) {
       await this.disconnect();
     }
@@ -60,7 +60,7 @@ class RealtimePresenceManager {
       color: generateUserColor(user.id),
       currentPage: window.location.pathname,
       lastSeen: Date.now(),
-      status: 'online',
+      status: "online",
     };
     
     this.channel = supabase.channel(`presence:${roomId}`, {
@@ -68,7 +68,7 @@ class RealtimePresenceManager {
     });
     
     this.channel
-      .on('presence', { event: 'sync' }, () => {
+      .on("presence", { event: "sync" }, () => {
         const state = this.channel?.presenceState() || {};
         this.users.clear();
         
@@ -81,19 +81,19 @@ class RealtimePresenceManager {
         
         this.notify();
       })
-      .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+      .on("presence", { event: "join" }, ({ key, newPresences }) => {
         const presence = (newPresences as unknown[])[0] as UserPresence | undefined;
         if (presence && key !== this.currentUser?.id) {
           this.users.set(key, presence);
           this.notify();
         }
       })
-      .on('presence', { event: 'leave' }, ({ key }) => {
+      .on("presence", { event: "leave" }, ({ key }) => {
         this.users.delete(key);
         this.notify();
       })
       .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED' && this.currentUser) {
+        if (status === "SUBSCRIBED" && this.currentUser) {
           await this.channel?.track(this.currentUser);
           this.isConnected = true;
           this.startHeartbeat();
@@ -134,7 +134,7 @@ class RealtimePresenceManager {
   /**
    * Update current user's status
    */
-  async updateStatus(status: UserPresence['status']): Promise<void> {
+  async updateStatus(status: UserPresence["status"]): Promise<void> {
     if (this.currentUser && this.channel) {
       this.currentUser.status = status;
       await this.channel.track(this.currentUser);
@@ -205,7 +205,7 @@ export function usePresence(roomId?: string) {
     presenceManager.updatePage(page);
   }, []);
   
-  const updateStatus = useCallback((status: UserPresence['status']) => {
+  const updateStatus = useCallback((status: UserPresence["status"]) => {
     presenceManager.updateStatus(status);
   }, []);
   
@@ -234,8 +234,8 @@ export function useCursorTracking(enabled = true) {
       }
     };
     
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => document.removeEventListener('mousemove', handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove);
+    return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [enabled]);
 }
 

@@ -3,8 +3,8 @@
  * Provides instant UI feedback while waiting for server response
  */
 
-import { useState, useCallback, useRef } from 'react';
-import { toast } from 'sonner';
+import { useState, useCallback, useRef } from "react";
+import { toast } from "sonner";
 
 interface OptimisticState<T> {
   data: T;
@@ -64,7 +64,7 @@ export function useOptimisticUpdate<T>(
       onSuccess?.(serverData);
       return serverData;
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Update failed');
+      const err = error instanceof Error ? error : new Error("Update failed");
       
       // Rollback to previous data
       setState({
@@ -73,7 +73,7 @@ export function useOptimisticUpdate<T>(
         error: err
       });
 
-      toast.error(errorMessage || 'Falha ao atualizar. Alterações revertidas.');
+      toast.error(errorMessage || "Falha ao atualizar. Alterações revertidas.");
       onError?.(err, previousData.current);
       throw err;
     }
@@ -121,7 +121,7 @@ export function useOptimisticToggle(
     } catch {
       // Rollback
       setValue(previousValue.current);
-      toast.error('Falha ao atualizar');
+      toast.error("Falha ao atualizar");
     } finally {
       setIsPending(false);
     }
@@ -155,7 +155,7 @@ export function useOptimisticList<T extends { id: string }>(
       setItems(prev => prev.map(i => i.id === item.id ? serverItem : i));
     } catch {
       setItems(previousItems.current);
-      toast.error('Falha ao adicionar item');
+      toast.error("Falha ao adicionar item");
     } finally {
       setPendingIds(prev => {
         const next = new Set(prev);
@@ -179,7 +179,7 @@ export function useOptimisticList<T extends { id: string }>(
       await serverRemove();
     } catch {
       setItems(previousItems.current);
-      toast.error('Falha ao remover item');
+      toast.error("Falha ao remover item");
     } finally {
       setPendingIds(prev => {
         const next = new Set(prev);
@@ -205,7 +205,7 @@ export function useOptimisticList<T extends { id: string }>(
       setItems(prev => prev.map(i => i.id === id ? serverItem : i));
     } catch {
       setItems(previousItems.current);
-      toast.error('Falha ao atualizar item');
+      toast.error("Falha ao atualizar item");
     } finally {
       setPendingIds(prev => {
         const next = new Set(prev);

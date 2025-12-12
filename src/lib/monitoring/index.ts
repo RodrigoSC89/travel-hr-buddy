@@ -8,12 +8,12 @@ export {
   useWebVitals, 
   PERFORMANCE_BUDGETS, 
   checkBudget 
-} from './web-vitals';
+} from "./web-vitals";
 
 export { 
   logger, 
   createModuleLogger 
-} from './structured-logging';
+} from "./structured-logging";
 
 export {
   apm,
@@ -23,4 +23,4 @@ export {
   type APMTransaction,
   type APMSpan,
   type APMError,
-} from './apm';
+} from "./apm";

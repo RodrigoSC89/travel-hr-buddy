@@ -146,9 +146,9 @@ export default function MMIDashboardSection() {
                 <YAxis className="text-xs" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'hsl(var(--background))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))", 
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }} 
                 />
                 <Area type="monotone" dataKey="preventiva" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="Preventiva" />
@@ -176,11 +176,11 @@ export default function MMIDashboardSection() {
                 <YAxis dataKey="vessel" type="category" className="text-xs" width={100} />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'hsl(var(--background))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))", 
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
-                  formatter={(value) => [`R$ ${Number(value).toLocaleString('pt-BR')}`, 'Custo']}
+                  formatter={(value) => [`R$ ${Number(value).toLocaleString("pt-BR")}`, "Custo"]}
                 />
                 <Bar dataKey="cost" fill="#f97316" radius={[0, 4, 4, 0]} />
               </BarChart>
@@ -216,11 +216,11 @@ export default function MMIDashboardSection() {
                 </Pie>
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'hsl(var(--background))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))", 
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
-                  formatter={(value) => [`${value}%`, '']}
+                  formatter={(value) => [`${value}%`, ""]}
                 />
                 <Legend />
               </PieChart>
@@ -244,11 +244,11 @@ export default function MMIDashboardSection() {
                 <YAxis domain={[80, 100]} className="text-xs" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: 'hsl(var(--background))', 
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
+                    backgroundColor: "hsl(var(--background))", 
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px"
                   }}
-                  formatter={(value) => [`${value}%`, 'Eficiência']}
+                  formatter={(value) => [`${value}%`, "Eficiência"]}
                 />
                 <Area type="monotone" dataKey="efficiency" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
               </AreaChart>

@@ -3,21 +3,21 @@
  * Visualização detalhada de incidentes com análise de IA
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import {
   AlertCircle,
   AlertTriangle,
@@ -33,8 +33,8 @@ import {
   Lightbulb,
   BookOpen,
   Scale,
-} from 'lucide-react';
-import type { SafetyIncident, AIIncidentAnalysis } from '../types';
+} from "lucide-react";
+import type { SafetyIncident, AIIncidentAnalysis } from "../types";
 
 interface IncidentDetailsDialogProps {
   incident: SafetyIncident | null;
@@ -45,25 +45,25 @@ interface IncidentDetailsDialogProps {
 }
 
 const statusConfig = {
-  open: { label: 'Aberto', color: 'bg-warning/10 text-warning border-warning/20' },
-  investigating: { label: 'Investigando', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-  action_pending: { label: 'Ação Pendente', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' },
-  resolved: { label: 'Resolvido', color: 'bg-success/10 text-success border-success/20' },
-  closed: { label: 'Fechado', color: 'bg-muted text-muted-foreground' },
+  open: { label: "Aberto", color: "bg-warning/10 text-warning border-warning/20" },
+  investigating: { label: "Investigando", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
+  action_pending: { label: "Ação Pendente", color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" },
+  resolved: { label: "Resolvido", color: "bg-success/10 text-success border-success/20" },
+  closed: { label: "Fechado", color: "bg-muted text-muted-foreground" },
 };
 
 const severityConfig = {
-  low: { label: 'Baixa', color: 'bg-success/10 text-success border-success/20' },
-  medium: { label: 'Média', color: 'bg-warning/10 text-warning border-warning/20' },
-  high: { label: 'Alta', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30' },
-  critical: { label: 'Crítica', color: 'bg-destructive/10 text-destructive border-destructive/20' },
+  low: { label: "Baixa", color: "bg-success/10 text-success border-success/20" },
+  medium: { label: "Média", color: "bg-warning/10 text-warning border-warning/20" },
+  high: { label: "Alta", color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30" },
+  critical: { label: "Crítica", color: "bg-destructive/10 text-destructive border-destructive/20" },
 };
 
 const typeConfig = {
-  incident: { label: 'Incidente', icon: AlertCircle, color: 'text-destructive' },
-  near_miss: { label: 'Near Miss', icon: AlertTriangle, color: 'text-warning' },
-  unsafe_condition: { label: 'Condição Insegura', icon: Shield, color: 'text-blue-500' },
-  unsafe_act: { label: 'Ato Inseguro', icon: AlertTriangle, color: 'text-orange-500' },
+  incident: { label: "Incidente", icon: AlertCircle, color: "text-destructive" },
+  near_miss: { label: "Near Miss", icon: AlertTriangle, color: "text-warning" },
+  unsafe_condition: { label: "Condição Insegura", icon: Shield, color: "text-blue-500" },
+  unsafe_act: { label: "Ato Inseguro", icon: AlertTriangle, color: "text-orange-500" },
 };
 
 export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
@@ -74,14 +74,14 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
   analysisLoading,
 }) => {
   const [analysis, setAnalysis] = useState<AIIncidentAnalysis | null>(null);
-  const [activeTab, setActiveTab] = useState('details');
+  const [activeTab, setActiveTab] = useState("details");
 
   const handleAnalyze = async () => {
     if (!incident) return;
     const result = await onAnalyze(incident);
     if (result) {
       setAnalysis(result);
-      setActiveTab('analysis');
+      setActiveTab("analysis");
     }
   };
 
@@ -95,7 +95,7 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
       <DialogContent className="max-w-3xl max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <div className={`p-2 rounded-lg bg-muted`}>
+            <div className={"p-2 rounded-lg bg-muted"}>
               <TypeIcon className={`h-5 w-5 ${typeInfo.color}`} />
             </div>
             <span className="truncate">{incident.title}</span>
@@ -141,7 +141,7 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
                   <p className="text-xs text-muted-foreground flex items-center gap-1">
                     <MapPin className="h-3 w-3" /> Local
                   </p>
-                  <p className="font-medium">{incident.location || 'Não especificado'}</p>
+                  <p className="font-medium">{incident.location || "Não especificado"}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground flex items-center gap-1">
@@ -153,7 +153,7 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
                   <p className="text-xs text-muted-foreground flex items-center gap-1">
                     <User className="h-3 w-3" /> Reportado por
                   </p>
-                  <p className="font-medium">{incident.reporter_name || 'Anônimo'}</p>
+                  <p className="font-medium">{incident.reporter_name || "Anônimo"}</p>
                 </div>
               </div>
 
@@ -310,11 +310,11 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
                         </div>
                         <Badge
                           className={
-                            action.status === 'completed'
-                              ? 'bg-success/10 text-success'
-                              : action.status === 'overdue'
-                              ? 'bg-destructive/10 text-destructive'
-                              : 'bg-warning/10 text-warning'
+                            action.status === "completed"
+                              ? "bg-success/10 text-success"
+                              : action.status === "overdue"
+                                ? "bg-destructive/10 text-destructive"
+                                : "bg-warning/10 text-warning"
                           }
                         >
                           {action.status}

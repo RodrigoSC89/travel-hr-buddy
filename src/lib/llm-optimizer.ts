@@ -3,7 +3,7 @@
  * PATCH: Performance optimization for ~2Mb connections
  */
 
-import { openDB, IDBPDatabase } from 'idb';
+import { openDB, IDBPDatabase } from "idb";
 
 // Connection quality detection
 interface ConnectionInfo {
@@ -17,7 +17,7 @@ export const getConnectionInfo = (): ConnectionInfo => {
   const nav = navigator as Navigator & { connection?: ConnectionInfo };
   return nav.connection || {
     downlink: 10,
-    effectiveType: '4g',
+    effectiveType: "4g",
     rtt: 50,
     saveData: false
   };
@@ -25,7 +25,7 @@ export const getConnectionInfo = (): ConnectionInfo => {
 
 export const isSlowConnection = (): boolean => {
   const conn = getConnectionInfo();
-  return conn.downlink < 3 || conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g' || conn.saveData;
+  return conn.downlink < 3 || conn.effectiveType === "2g" || conn.effectiveType === "slow-2g" || conn.saveData;
 };
 
 // Token budget management
@@ -37,10 +37,10 @@ interface TokenBudget {
 }
 
 const TOKEN_BUDGETS: Record<string, number> = {
-  '/ai/dashboard': 2000,
-  '/ai/suggestions': 1500,
-  '/ai/chat': 4000,
-  '/ai/reports': 3000,
+  "/ai/dashboard": 2000,
+  "/ai/suggestions": 1500,
+  "/ai/chat": 4000,
+  "/ai/reports": 3000,
   default: 1000
 };
 
@@ -58,8 +58,8 @@ export const getTokenBudget = (route: string): number => {
 // Prompt compression utilities
 export const compressPrompt = (prompt: string): string => {
   return prompt
-    .replace(/\s+/g, ' ')
-    .replace(/\n+/g, '\n')
+    .replace(/\s+/g, " ")
+    .replace(/\n+/g, "\n")
     .trim();
 };
 
@@ -71,14 +71,14 @@ export const truncateContext = (messages: Array<{ role: string; content: string 
   const result: Array<{ role: string; content: string }> = [];
   
   // Always keep system message
-  const systemMsg = messages.find(m => m.role === 'system');
+  const systemMsg = messages.find(m => m.role === "system");
   if (systemMsg) {
     result.push(systemMsg);
     totalTokens += estimateTokens(systemMsg.content);
   }
   
   // Add messages from newest to oldest, respecting budget
-  const nonSystemMessages = messages.filter(m => m.role !== 'system').reverse();
+  const nonSystemMessages = messages.filter(m => m.role !== "system").reverse();
   
   for (const msg of nonSystemMessages) {
     const msgTokens = estimateTokens(msg.content);
@@ -94,8 +94,8 @@ export const truncateContext = (messages: Array<{ role: string; content: string 
 };
 
 // Response caching with IndexedDB
-const DB_NAME = 'llm-cache';
-const STORE_NAME = 'responses';
+const DB_NAME = "llm-cache";
+const STORE_NAME = "responses";
 const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
 
 interface CachedResponse {
@@ -112,7 +112,7 @@ const getDB = async (): Promise<IDBPDatabase> => {
     dbPromise = openDB(DB_NAME, 1, {
       upgrade(db) {
         if (!db.objectStoreNames.contains(STORE_NAME)) {
-          db.createObjectStore(STORE_NAME, { keyPath: 'key' });
+          db.createObjectStore(STORE_NAME, { keyPath: "key" });
         }
       }
     });
@@ -123,9 +123,9 @@ const getDB = async (): Promise<IDBPDatabase> => {
 export const hashPrompt = async (prompt: string): Promise<string> => {
   const encoder = new TextEncoder();
   const data = encoder.encode(prompt);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 };
 
 export const getCachedResponse = async (prompt: string): Promise<string | null> => {
@@ -191,15 +191,15 @@ export const withRetry = async <T>(
 };
 
 // Model selection based on connection quality
-type ModelTier = 'fast' | 'balanced' | 'powerful';
+type ModelTier = "fast" | "balanced" | "powerful";
 
 const MODEL_MAP: Record<ModelTier, string> = {
-  fast: 'google/gemini-2.5-flash-lite',
-  balanced: 'google/gemini-2.5-flash',
-  powerful: 'google/gemini-2.5-pro'
+  fast: "google/gemini-2.5-flash-lite",
+  balanced: "google/gemini-2.5-flash",
+  powerful: "google/gemini-2.5-pro"
 };
 
-export const selectModel = (preferredTier: ModelTier = 'balanced'): string => {
+export const selectModel = (preferredTier: ModelTier = "balanced"): string => {
   if (isSlowConnection()) {
     return MODEL_MAP.fast;
   }
@@ -208,7 +208,7 @@ export const selectModel = (preferredTier: ModelTier = 'balanced'): string => {
 
 // Streaming utilities for low-bandwidth
 export const createStreamHandler = (onChunk: (text: string) => void, onDone: () => void) => {
-  let buffer = '';
+  let buffer = "";
   
   return {
     processChunk: (chunk: string) => {
@@ -217,13 +217,13 @@ export const createStreamHandler = (onChunk: (text: string) => void, onDone: () 
       // Flush buffer periodically to avoid UI jank
       if (buffer.length > 50) {
         onChunk(buffer);
-        buffer = '';
+        buffer = "";
       }
     },
     flush: () => {
       if (buffer) {
         onChunk(buffer);
-        buffer = '';
+        buffer = "";
       }
       onDone();
     }

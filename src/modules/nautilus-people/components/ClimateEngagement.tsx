@@ -3,17 +3,17 @@
  * Versão funcional completa com todas as ações
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 import {
   Heart,
   TrendingUp,
@@ -31,15 +31,15 @@ import {
   AlertTriangle,
   CheckCircle,
   Loader2
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
-import { departamentos } from '../data/mockData';
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { useNautilusPeopleAI } from "../hooks/useNautilusPeopleAI";
+import { departamentos } from "../data/mockData";
 
 interface ClimateResult {
   categoria: string;
   score: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   participacao: number;
 }
 
@@ -50,88 +50,88 @@ interface PulseSurveyQuestion {
 }
 
 const ClimateEngagement: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [surveyResponses, setSurveyResponses] = useState<Record<string, number>>({});
-  const [feedbackText, setFeedbackText] = useState('');
-  const [feedbackType, setFeedbackType] = useState<'elogio' | 'sugestao' | 'critica'>('sugestao');
-  const [moodComment, setMoodComment] = useState('');
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackType, setFeedbackType] = useState<"elogio" | "sugestao" | "critica">("sugestao");
+  const [moodComment, setMoodComment] = useState("");
   
   const { isLoading, analyzeFeedback, analyzeClimate } = useNautilusPeopleAI();
 
   const climateResults: ClimateResult[] = [
-    { categoria: 'Satisfação Geral', score: 87, trend: 'up', participacao: 92 },
-    { categoria: 'Liderança', score: 82, trend: 'up', participacao: 88 },
-    { categoria: 'Comunicação', score: 78, trend: 'stable', participacao: 90 },
-    { categoria: 'Desenvolvimento', score: 75, trend: 'down', participacao: 85 },
-    { categoria: 'Ambiente de Trabalho', score: 89, trend: 'up', participacao: 94 },
-    { categoria: 'Equilíbrio Vida-Trabalho', score: 72, trend: 'down', participacao: 87 },
-    { categoria: 'Reconhecimento', score: 80, trend: 'stable', participacao: 89 },
-    { categoria: 'Colaboração', score: 85, trend: 'up', participacao: 91 }
+    { categoria: "Satisfação Geral", score: 87, trend: "up", participacao: 92 },
+    { categoria: "Liderança", score: 82, trend: "up", participacao: 88 },
+    { categoria: "Comunicação", score: 78, trend: "stable", participacao: 90 },
+    { categoria: "Desenvolvimento", score: 75, trend: "down", participacao: 85 },
+    { categoria: "Ambiente de Trabalho", score: 89, trend: "up", participacao: 94 },
+    { categoria: "Equilíbrio Vida-Trabalho", score: 72, trend: "down", participacao: 87 },
+    { categoria: "Reconhecimento", score: 80, trend: "stable", participacao: 89 },
+    { categoria: "Colaboração", score: 85, trend: "up", participacao: 91 }
   ];
 
   const pulseSurveyQuestions: PulseSurveyQuestion[] = [
-    { id: '1', pergunta: 'Como você avalia sua semana de trabalho?', categoria: 'Bem-estar' },
-    { id: '2', pergunta: 'Você se sentiu reconhecido pelo seu trabalho?', categoria: 'Reconhecimento' },
-    { id: '3', pergunta: 'A comunicação com sua liderança foi clara?', categoria: 'Comunicação' },
-    { id: '4', pergunta: 'Você teve os recursos necessários para seu trabalho?', categoria: 'Recursos' }
+    { id: "1", pergunta: "Como você avalia sua semana de trabalho?", categoria: "Bem-estar" },
+    { id: "2", pergunta: "Você se sentiu reconhecido pelo seu trabalho?", categoria: "Reconhecimento" },
+    { id: "3", pergunta: "A comunicação com sua liderança foi clara?", categoria: "Comunicação" },
+    { id: "4", pergunta: "Você teve os recursos necessários para seu trabalho?", categoria: "Recursos" }
   ];
 
   const recentFeedback = [
     {
-      id: '1',
-      tipo: 'sugestao',
-      texto: 'Seria interessante ter mais opções de horário flexível para quem tem filhos.',
-      departamento: 'Operações',
-      data: '2025-12-05',
-      status: 'em_analise'
+      id: "1",
+      tipo: "sugestao",
+      texto: "Seria interessante ter mais opções de horário flexível para quem tem filhos.",
+      departamento: "Operações",
+      data: "2025-12-05",
+      status: "em_analise"
     },
     {
-      id: '2',
-      tipo: 'elogio',
-      texto: 'A nova política de home office melhorou muito minha qualidade de vida!',
-      departamento: 'TI',
-      data: '2025-12-04',
-      status: 'respondido'
+      id: "2",
+      tipo: "elogio",
+      texto: "A nova política de home office melhorou muito minha qualidade de vida!",
+      departamento: "TI",
+      data: "2025-12-04",
+      status: "respondido"
     },
     {
-      id: '3',
-      tipo: 'critica',
-      texto: 'Os computadores do setor precisam de atualização urgente.',
-      departamento: 'Financeiro',
-      data: '2025-12-03',
-      status: 'resolvido'
+      id: "3",
+      tipo: "critica",
+      texto: "Os computadores do setor precisam de atualização urgente.",
+      departamento: "Financeiro",
+      data: "2025-12-03",
+      status: "resolvido"
     }
   ];
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
-      case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
-      default:
-        return <span className="w-4 h-4 text-yellow-500">→</span>;
+    case "up":
+      return <TrendingUp className="w-4 h-4 text-green-500" />;
+    case "down":
+      return <TrendingDown className="w-4 h-4 text-red-500" />;
+    default:
+      return <span className="w-4 h-4 text-yellow-500">→</span>;
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-500';
-    if (score >= 70) return 'text-blue-500';
-    if (score >= 50) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 85) return "text-green-500";
+    if (score >= 70) return "text-blue-500";
+    if (score >= 50) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'resolvido':
-        return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Resolvido</Badge>;
-      case 'em_analise':
-        return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Em Análise</Badge>;
-      case 'respondido':
-        return <Badge className="bg-blue-500"><MessageSquare className="w-3 h-3 mr-1" />Respondido</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
+    case "resolvido":
+      return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Resolvido</Badge>;
+    case "em_analise":
+      return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Em Análise</Badge>;
+    case "respondido":
+      return <Badge className="bg-blue-500"><MessageSquare className="w-3 h-3 mr-1" />Respondido</Badge>;
+    default:
+      return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
@@ -142,65 +142,65 @@ const ClimateEngagement: React.FC = () => {
       return;
     }
 
-    toast.info('Enviando respostas...');
+    toast.info("Enviando respostas...");
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    toast.success('Respostas enviadas com sucesso! Obrigado pela participação.');
+    toast.success("Respostas enviadas com sucesso! Obrigado pela participação.");
     setSurveyResponses({});
   };
 
   const handleRegisterMood = async () => {
     if (!selectedMood) {
-      toast.error('Selecione como você está se sentindo');
+      toast.error("Selecione como você está se sentindo");
       return;
     }
 
-    toast.info('Registrando seu humor...');
+    toast.info("Registrando seu humor...");
     await new Promise(resolve => setTimeout(resolve, 800));
     
     const moodLabels: Record<string, string> = {
-      great: 'Ótimo',
-      good: 'Bem',
-      neutral: 'Neutro',
-      bad: 'Ruim',
-      terrible: 'Péssimo'
+      great: "Ótimo",
+      good: "Bem",
+      neutral: "Neutro",
+      bad: "Ruim",
+      terrible: "Péssimo"
     };
     
     toast.success(`Humor "${moodLabels[selectedMood]}" registrado com sucesso!`);
     setSelectedMood(null);
-    setMoodComment('');
+    setMoodComment("");
   };
 
   const handleSendFeedback = async () => {
     if (!feedbackText.trim()) {
-      toast.error('Digite sua mensagem antes de enviar');
+      toast.error("Digite sua mensagem antes de enviar");
       return;
     }
 
-    toast.info('Analisando feedback com IA...');
+    toast.info("Analisando feedback com IA...");
     
-    const result = await analyzeFeedback(feedbackText, 'Geral');
+    const result = await analyzeFeedback(feedbackText, "Geral");
     
     if (result) {
-      toast.success('Feedback enviado anonimamente! A IA identificou pontos importantes.');
+      toast.success("Feedback enviado anonimamente! A IA identificou pontos importantes.");
     } else {
-      toast.success('Feedback enviado anonimamente! Obrigado pela contribuição.');
+      toast.success("Feedback enviado anonimamente! Obrigado pela contribuição.");
     }
     
-    setFeedbackText('');
+    setFeedbackText("");
   };
 
   const handleGenerateInsights = async () => {
-    toast.info('Gerando insights com IA...');
+    toast.info("Gerando insights com IA...");
     
     const result = await analyzeClimate({
       results: climateResults,
-      period: 'Q4 2025',
+      period: "Q4 2025",
       participationRate: 91
     });
     
     if (result) {
-      toast.success('Insights gerados! Confira o relatório completo.');
+      toast.success("Insights gerados! Confira o relatório completo.");
     }
   };
 
@@ -438,11 +438,11 @@ const ClimateEngagement: React.FC = () => {
             <CardContent>
               <div className="flex justify-center gap-6 py-8">
                 {[
-                  { value: 'great', icon: Smile, label: 'Ótimo', color: 'text-green-500 hover:bg-green-500/20' },
-                  { value: 'good', icon: Smile, label: 'Bem', color: 'text-blue-500 hover:bg-blue-500/20' },
-                  { value: 'neutral', icon: Meh, label: 'Neutro', color: 'text-yellow-500 hover:bg-yellow-500/20' },
-                  { value: 'bad', icon: Frown, label: 'Ruim', color: 'text-orange-500 hover:bg-orange-500/20' },
-                  { value: 'terrible', icon: Frown, label: 'Péssimo', color: 'text-red-500 hover:bg-red-500/20' }
+                  { value: "great", icon: Smile, label: "Ótimo", color: "text-green-500 hover:bg-green-500/20" },
+                  { value: "good", icon: Smile, label: "Bem", color: "text-blue-500 hover:bg-blue-500/20" },
+                  { value: "neutral", icon: Meh, label: "Neutro", color: "text-yellow-500 hover:bg-yellow-500/20" },
+                  { value: "bad", icon: Frown, label: "Ruim", color: "text-orange-500 hover:bg-orange-500/20" },
+                  { value: "terrible", icon: Frown, label: "Péssimo", color: "text-red-500 hover:bg-red-500/20" }
                 ].map((mood) => (
                   <motion.button
                     key={mood.value}
@@ -450,7 +450,7 @@ const ClimateEngagement: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedMood(mood.value)}
                     className={`p-4 rounded-full transition-all ${mood.color} ${
-                      selectedMood === mood.value ? 'ring-2 ring-offset-2 ring-primary bg-primary/10' : ''
+                      selectedMood === mood.value ? "ring-2 ring-offset-2 ring-primary bg-primary/10" : ""
                     }`}
                   >
                     <mood.icon className="w-12 h-12" />
@@ -497,25 +497,25 @@ const ClimateEngagement: React.FC = () => {
               />
               <div className="flex gap-2">
                 <Button 
-                  variant={feedbackType === 'elogio' ? 'default' : 'outline'} 
+                  variant={feedbackType === "elogio" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType('elogio')}
+                  onClick={() => setFeedbackType("elogio")}
                 >
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Elogio
                 </Button>
                 <Button 
-                  variant={feedbackType === 'sugestao' ? 'default' : 'outline'} 
+                  variant={feedbackType === "sugestao" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType('sugestao')}
+                  onClick={() => setFeedbackType("sugestao")}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Sugestão
                 </Button>
                 <Button 
-                  variant={feedbackType === 'critica' ? 'default' : 'outline'} 
+                  variant={feedbackType === "critica" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType('critica')}
+                  onClick={() => setFeedbackType("critica")}
                 >
                   <ThumbsDown className="w-4 h-4 mr-2" />
                   Crítica
@@ -545,7 +545,7 @@ const ClimateEngagement: React.FC = () => {
                   </div>
                   <p className="text-sm">{feedback.texto}</p>
                   <p className="text-xs text-muted-foreground mt-2">
-                    Enviado em {new Date(feedback.data).toLocaleDateString('pt-BR')}
+                    Enviado em {new Date(feedback.data).toLocaleDateString("pt-BR")}
                   </p>
                 </div>
               ))}

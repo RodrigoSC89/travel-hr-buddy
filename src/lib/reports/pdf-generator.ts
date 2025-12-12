@@ -149,15 +149,15 @@ export class PDFReportGenerator {
     this.doc.setFont("helvetica", "normal");
 
     switch (section.type) {
-      case "text":
-        this.addText(section.content as string);
-        break;
-      case "list":
-        this.addList(section.content as string[]);
-        break;
-      case "table":
-        this.addTable(section.content as TableData);
-        break;
+    case "text":
+      this.addText(section.content as string);
+      break;
+    case "list":
+      this.addList(section.content as string[]);
+      break;
+    case "table":
+      this.addTable(section.content as TableData);
+      break;
     }
 
     this.yPosition += 10;

@@ -45,7 +45,7 @@ export default function MMIForecastSection() {
 Com base no histórico fornecido e nos padrões de desgaste típicos, a IA identificou os seguintes pontos:
 
 1. PRÓXIMA MANUTENÇÃO PREVENTIVA
-   ├─ Data Estimada: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}
+   ├─ Data Estimada: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString("pt-BR")}
    ├─ Horímetro Previsto: ${Number(hourmeter) + 150}h
    └─ Tipo: Manutenção preventiva de rotina
 
@@ -68,7 +68,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
    └─ Estimativa: R$ 2.500,00 - R$ 4.200,00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 Gerado por IA | ${new Date().toLocaleString('pt-BR')}
+🤖 Gerado por IA | ${new Date().toLocaleString("pt-BR")}
       `.trim();
 
       // Simulate streaming

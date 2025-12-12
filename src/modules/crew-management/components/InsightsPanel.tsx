@@ -179,21 +179,21 @@ export function InsightsPanel() {
 
   const getFatigueColor = (risk: string) => {
     switch (risk) {
-      case "low": return "bg-emerald-500";
-      case "medium": return "bg-amber-500";
-      case "high": return "bg-orange-500";
-      case "critical": return "bg-rose-500";
-      default: return "bg-muted";
+    case "low": return "bg-emerald-500";
+    case "medium": return "bg-amber-500";
+    case "high": return "bg-orange-500";
+    case "critical": return "bg-rose-500";
+    default: return "bg-muted";
     }
   };
 
   const getInsightStyles = (type: string) => {
     switch (type) {
-      case "warning": return { bg: "bg-rose-500/10 border-rose-500/20", icon: AlertTriangle, color: "text-rose-500" };
-      case "success": return { bg: "bg-emerald-500/10 border-emerald-500/20", icon: TrendingUp, color: "text-emerald-500" };
-      case "recommendation": return { bg: "bg-blue-500/10 border-blue-500/20", icon: Target, color: "text-blue-500" };
-      case "info": return { bg: "bg-primary/10 border-primary/20", icon: Zap, color: "text-primary" };
-      default: return { bg: "bg-muted", icon: Zap, color: "text-muted-foreground" };
+    case "warning": return { bg: "bg-rose-500/10 border-rose-500/20", icon: AlertTriangle, color: "text-rose-500" };
+    case "success": return { bg: "bg-emerald-500/10 border-emerald-500/20", icon: TrendingUp, color: "text-emerald-500" };
+    case "recommendation": return { bg: "bg-blue-500/10 border-blue-500/20", icon: Target, color: "text-blue-500" };
+    case "info": return { bg: "bg-primary/10 border-primary/20", icon: Zap, color: "text-primary" };
+    default: return { bg: "bg-muted", icon: Zap, color: "text-muted-foreground" };
     }
   };
 
@@ -315,9 +315,9 @@ export function InsightsPanel() {
           >
             <Card className={`p-4 border-l-4 ${
               crew.fatigueRisk === "critical" ? "border-l-rose-500 bg-rose-500/5" :
-              crew.fatigueRisk === "high" ? "border-l-orange-500 bg-orange-500/5" :
-              crew.fatigueRisk === "medium" ? "border-l-amber-500" :
-              "border-l-emerald-500"
+                crew.fatigueRisk === "high" ? "border-l-orange-500 bg-orange-500/5" :
+                  crew.fatigueRisk === "medium" ? "border-l-amber-500" :
+                    "border-l-emerald-500"
             }`}>
               <div className="flex items-start justify-between mb-3">
                 <div>
@@ -334,12 +334,12 @@ export function InsightsPanel() {
                 </div>
                 <Badge variant={
                   crew.fatigueRisk === "critical" ? "destructive" :
-                  crew.fatigueRisk === "high" ? "default" :
-                  crew.fatigueRisk === "medium" ? "secondary" : "outline"
+                    crew.fatigueRisk === "high" ? "default" :
+                      crew.fatigueRisk === "medium" ? "secondary" : "outline"
                 }>
                   {crew.fatigueRisk === "critical" ? "Crítico" :
-                   crew.fatigueRisk === "high" ? "Alerta" :
-                   crew.fatigueRisk === "medium" ? "Atenção" : "OK"}
+                    crew.fatigueRisk === "high" ? "Alerta" :
+                      crew.fatigueRisk === "medium" ? "Atenção" : "OK"}
                 </Badge>
               </div>
 

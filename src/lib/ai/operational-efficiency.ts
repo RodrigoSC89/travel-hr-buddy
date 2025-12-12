@@ -6,18 +6,18 @@
 export interface OperationalMetric {
   id: string;
   name: string;
-  category: 'workflow' | 'resource' | 'time' | 'cost';
+  category: "workflow" | "resource" | "time" | "cost";
   value: number;
   target: number;
   unit: string;
-  trend: 'improving' | 'stable' | 'declining';
+  trend: "improving" | "stable" | "declining";
   timestamp: Date;
 }
 
 export interface EfficiencyInsight {
   id: string;
-  type: 'bottleneck' | 'rework' | 'delay' | 'waste' | 'opportunity';
-  severity: 'low' | 'medium' | 'high';
+  type: "bottleneck" | "rework" | "delay" | "waste" | "opportunity";
+  severity: "low" | "medium" | "high";
   title: string;
   description: string;
   impact: string;
@@ -32,7 +32,7 @@ export interface WorkflowStep {
   name: string;
   startTime: Date;
   endTime?: Date;
-  status: 'pending' | 'in_progress' | 'completed' | 'blocked';
+  status: "pending" | "in_progress" | "completed" | "blocked";
   userId?: string;
   retries: number;
   errors: string[];
@@ -82,16 +82,16 @@ class OperationalEfficiencyEngine {
     const now = new Date();
 
     // Detect blocked steps
-    const blockedSteps = steps.filter(s => s.status === 'blocked');
+    const blockedSteps = steps.filter(s => s.status === "blocked");
     if (blockedSteps.length > 0) {
       insights.push({
         id: `bottleneck_${workflowId}`,
-        type: 'bottleneck',
-        severity: blockedSteps.length > 2 ? 'high' : 'medium',
-        title: 'Gargalo no Fluxo de Trabalho',
-        description: `${blockedSteps.length} etapa(s) bloqueada(s): ${blockedSteps.map(s => s.name).join(', ')}`,
-        impact: 'Atraso na conclusão do processo',
-        recommendation: 'Identificar e resolver dependências bloqueantes',
+        type: "bottleneck",
+        severity: blockedSteps.length > 2 ? "high" : "medium",
+        title: "Gargalo no Fluxo de Trabalho",
+        description: `${blockedSteps.length} etapa(s) bloqueada(s): ${blockedSteps.map(s => s.name).join(", ")}`,
+        impact: "Atraso na conclusão do processo",
+        recommendation: "Identificar e resolver dependências bloqueantes",
         affectedArea: workflowId,
         timestamp: now
       });
@@ -103,12 +103,12 @@ class OperationalEfficiencyEngine {
       const totalRetries = reworkSteps.reduce((sum, s) => sum + s.retries, 0);
       insights.push({
         id: `rework_${workflowId}`,
-        type: 'rework',
-        severity: totalRetries > 5 ? 'high' : 'medium',
-        title: 'Retrabalho Detectado',
+        type: "rework",
+        severity: totalRetries > 5 ? "high" : "medium",
+        title: "Retrabalho Detectado",
         description: `${totalRetries} tentativas extras em ${reworkSteps.length} etapa(s)`,
         impact: `Aproximadamente ${totalRetries * 15} minutos perdidos`,
-        recommendation: 'Revisar procedimentos e treinamento para reduzir erros',
+        recommendation: "Revisar procedimentos e treinamento para reduzir erros",
         potentialSavings: totalRetries * 50, // R$ estimate
         affectedArea: workflowId,
         timestamp: now
@@ -116,7 +116,7 @@ class OperationalEfficiencyEngine {
     }
 
     // Detect delays (steps taking too long)
-    const completedSteps = steps.filter(s => s.status === 'completed' && s.endTime);
+    const completedSteps = steps.filter(s => s.status === "completed" && s.endTime);
     completedSteps.forEach(step => {
       const duration = step.endTime!.getTime() - step.startTime.getTime();
       const expectedDuration = 30 * 60 * 1000; // 30 minutes baseline
@@ -124,12 +124,12 @@ class OperationalEfficiencyEngine {
       if (duration > expectedDuration * 2) {
         insights.push({
           id: `delay_${step.id}`,
-          type: 'delay',
-          severity: duration > expectedDuration * 3 ? 'high' : 'medium',
-          title: 'Atraso na Execução',
+          type: "delay",
+          severity: duration > expectedDuration * 3 ? "high" : "medium",
+          title: "Atraso na Execução",
           description: `"${step.name}" levou ${Math.round(duration / 60000)} minutos (esperado: ~30min)`,
-          impact: 'Atraso cascata nas etapas seguintes',
-          recommendation: 'Analisar causa raiz do atraso e otimizar processo',
+          impact: "Atraso cascata nas etapas seguintes",
+          recommendation: "Analisar causa raiz do atraso e otimizar processo",
           affectedArea: workflowId,
           timestamp: now
         });
@@ -152,12 +152,12 @@ class OperationalEfficiencyEngine {
       if (frequentErrors.length > 0) {
         insights.push({
           id: `errors_${workflowId}`,
-          type: 'waste',
-          severity: 'high',
-          title: 'Erros Recorrentes',
-          description: `Erros frequentes: ${frequentErrors.join(', ')}`,
-          impact: 'Perda de produtividade e possíveis retrabalhos',
-          recommendation: 'Implementar validações e treinamento específico',
+          type: "waste",
+          severity: "high",
+          title: "Erros Recorrentes",
+          description: `Erros frequentes: ${frequentErrors.join(", ")}`,
+          impact: "Perda de produtividade e possíveis retrabalhos",
+          recommendation: "Implementar validações e treinamento específico",
           affectedArea: workflowId,
           timestamp: now
         });
@@ -186,16 +186,16 @@ class OperationalEfficiencyEngine {
       const change = ((newAvg - oldAvg) / oldAvg) * 100;
       
       // Determine if higher is better based on metric name
-      const higherIsBetter = !['error_rate', 'delay', 'cost', 'waste'].some(
+      const higherIsBetter = !["error_rate", "delay", "cost", "waste"].some(
         keyword => metric.name.toLowerCase().includes(keyword)
       );
 
       if (Math.abs(change) < 5) {
-        metric.trend = 'stable';
+        metric.trend = "stable";
       } else if ((change > 0 && higherIsBetter) || (change < 0 && !higherIsBetter)) {
-        metric.trend = 'improving';
+        metric.trend = "improving";
       } else {
-        metric.trend = 'declining';
+        metric.trend = "declining";
       }
     }
 
@@ -217,7 +217,7 @@ class OperationalEfficiencyEngine {
 
     // Calculate category scores
     const categoryScores: Record<string, number> = {};
-    const categories = ['workflow', 'resource', 'time', 'cost'];
+    const categories = ["workflow", "resource", "time", "cost"];
     
     categories.forEach(cat => {
       const catMetrics = periodMetrics.filter(m => m.category === cat);
@@ -255,19 +255,19 @@ class OperationalEfficiencyEngine {
     const recommendations: string[] = [];
     
     if (overallScore < 70) {
-      recommendations.push('Revisar processos críticos e identificar gargalos principais');
+      recommendations.push("Revisar processos críticos e identificar gargalos principais");
     }
     if (categoryScores.time < 80) {
-      recommendations.push('Otimizar tempos de execução com automação de tarefas repetitivas');
+      recommendations.push("Otimizar tempos de execução com automação de tarefas repetitivas");
     }
     if (categoryScores.resource < 80) {
-      recommendations.push('Melhorar alocação de recursos e reduzir desperdícios');
+      recommendations.push("Melhorar alocação de recursos e reduzir desperdícios");
     }
-    if (periodInsights.filter(i => i.type === 'rework').length > 0) {
-      recommendations.push('Implementar validações para reduzir retrabalho');
+    if (periodInsights.filter(i => i.type === "rework").length > 0) {
+      recommendations.push("Implementar validações para reduzir retrabalho");
     }
-    if (periodInsights.filter(i => i.type === 'bottleneck').length > 0) {
-      recommendations.push('Resolver gargalos identificados para melhorar fluxo');
+    if (periodInsights.filter(i => i.type === "bottleneck").length > 0) {
+      recommendations.push("Resolver gargalos identificados para melhorar fluxo");
     }
 
     return {
@@ -285,13 +285,13 @@ class OperationalEfficiencyEngine {
    */
   getRealTimeScore(): {
     score: number;
-    trending: 'up' | 'down' | 'stable';
+    trending: "up" | "down" | "stable";
     topIssue?: EfficiencyInsight;
-  } {
+    } {
     const recentMetrics = this.metrics.slice(-50);
     
     if (recentMetrics.length === 0) {
-      return { score: 100, trending: 'stable' };
+      return { score: 100, trending: "stable" };
     }
 
     const avgPerformance = recentMetrics.reduce((sum, m) => {
@@ -309,9 +309,9 @@ class OperationalEfficiencyEngine {
       ? newMetrics.reduce((sum, m) => sum + m.value, 0) / newMetrics.length
       : 0;
 
-    let trending: 'up' | 'down' | 'stable' = 'stable';
-    if (newAvg > oldAvg * 1.05) trending = 'up';
-    else if (newAvg < oldAvg * 0.95) trending = 'down';
+    let trending: "up" | "down" | "stable" = "stable";
+    if (newAvg > oldAvg * 1.05) trending = "up";
+    else if (newAvg < oldAvg * 0.95) trending = "down";
 
     // Get top issue
     const recentInsights = this.insights
@@ -331,7 +331,7 @@ class OperationalEfficiencyEngine {
   /**
    * Get insights by type
    */
-  getInsights(type?: EfficiencyInsight['type']): EfficiencyInsight[] {
+  getInsights(type?: EfficiencyInsight["type"]): EfficiencyInsight[] {
     if (!type) return [...this.insights];
     return this.insights.filter(i => i.type === type);
   }

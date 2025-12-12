@@ -3,11 +3,11 @@
  * Tests for usePerformanceMonitor hook functionality
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { usePerformanceMonitor, evaluatePerformance } from '@/hooks/use-performance-monitor';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { usePerformanceMonitor, evaluatePerformance } from "@/hooks/use-performance-monitor";
 
-describe('usePerformanceMonitor', () => {
+describe("usePerformanceMonitor", () => {
   // Mock PerformanceObserver
   const mockPerformanceObserver = vi.fn((callback) => {
     return {
@@ -22,7 +22,7 @@ describe('usePerformanceMonitor', () => {
     global.PerformanceObserver = mockPerformanceObserver as any;
     
     // Mock performance.memory (Chrome only)
-    Object.defineProperty(performance, 'memory', {
+    Object.defineProperty(performance, "memory", {
       configurable: true,
       value: {
         usedJSHeapSize: 50000000,
@@ -32,7 +32,7 @@ describe('usePerformanceMonitor', () => {
     });
 
     // Mock performance timing
-    vi.spyOn(performance, 'getEntriesByType').mockReturnValue([
+    vi.spyOn(performance, "getEntriesByType").mockReturnValue([
       {
         responseStart: 100,
         requestStart: 50,
@@ -47,28 +47,28 @@ describe('usePerformanceMonitor', () => {
     delete (window as any).__NAUTILUS_PERFORMANCE__;
   });
 
-  it('should initialize with default options', () => {
+  it("should initialize with default options", () => {
     const { result } = renderHook(() => usePerformanceMonitor());
     
     expect(result.current.collectMetrics).toBeDefined();
     expect(result.current.cleanup).toBeDefined();
   });
 
-  it('should collect performance metrics', async () => {
+  it("should collect performance metrics", async () => {
     const { result } = renderHook(() => usePerformanceMonitor({ enabled: false }));
     
     const metrics = result.current.collectMetrics();
     
-    expect(metrics).toHaveProperty('lcp');
-    expect(metrics).toHaveProperty('fid');
-    expect(metrics).toHaveProperty('cls');
-    expect(metrics).toHaveProperty('ttfb');
-    expect(metrics).toHaveProperty('fcp');
-    expect(metrics).toHaveProperty('memory');
+    expect(metrics).toHaveProperty("lcp");
+    expect(metrics).toHaveProperty("fid");
+    expect(metrics).toHaveProperty("cls");
+    expect(metrics).toHaveProperty("ttfb");
+    expect(metrics).toHaveProperty("fcp");
+    expect(metrics).toHaveProperty("memory");
     expect(metrics.timestamp).toBeGreaterThan(0);
   });
 
-  it('should store metrics in window object for debugging', () => {
+  it("should store metrics in window object for debugging", () => {
     const { result } = renderHook(() => usePerformanceMonitor({ enabled: false }));
     
     result.current.collectMetrics();
@@ -77,7 +77,7 @@ describe('usePerformanceMonitor', () => {
     expect((window as any).__NAUTILUS_PERFORMANCE__.timestamp).toBeGreaterThan(0);
   });
 
-  it('should call onMetricsUpdate callback', async () => {
+  it("should call onMetricsUpdate callback", async () => {
     const onMetricsUpdate = vi.fn();
     
     const { result } = renderHook(() => 
@@ -96,7 +96,7 @@ describe('usePerformanceMonitor', () => {
     );
   });
 
-  it('should cleanup observers on unmount', () => {
+  it("should cleanup observers on unmount", () => {
     const { result, unmount } = renderHook(() => usePerformanceMonitor({ enabled: false }));
     
     result.current.collectMetrics();
@@ -107,7 +107,7 @@ describe('usePerformanceMonitor', () => {
     expect(result.current.cleanup).toBeDefined();
   });
 
-  it('should handle missing performance APIs gracefully', () => {
+  it("should handle missing performance APIs gracefully", () => {
     // Remove PerformanceObserver
     delete (global as any).PerformanceObserver;
     
@@ -117,8 +117,8 @@ describe('usePerformanceMonitor', () => {
   });
 });
 
-describe('evaluatePerformance', () => {
-  it('should return excellent rating for good metrics', () => {
+describe("evaluatePerformance", () => {
+  it("should return excellent rating for good metrics", () => {
     const metrics = {
       lcp: 1500,
       fid: 50,
@@ -135,12 +135,12 @@ describe('evaluatePerformance', () => {
 
     const evaluation = evaluatePerformance(metrics);
 
-    expect(evaluation.rating).toBe('excellent');
+    expect(evaluation.rating).toBe("excellent");
     expect(evaluation.score).toBeGreaterThanOrEqual(90);
     expect(evaluation.recommendations).toHaveLength(0);
   });
 
-  it('should return poor rating for bad metrics', () => {
+  it("should return poor rating for bad metrics", () => {
     const metrics = {
       lcp: 5000,
       fid: 400,
@@ -157,12 +157,12 @@ describe('evaluatePerformance', () => {
 
     const evaluation = evaluatePerformance(metrics);
 
-    expect(evaluation.rating).toBe('poor');
+    expect(evaluation.rating).toBe("poor");
     expect(evaluation.score).toBeLessThan(50);
     expect(evaluation.recommendations.length).toBeGreaterThan(0);
   });
 
-  it('should provide specific recommendations for LCP issues', () => {
+  it("should provide specific recommendations for LCP issues", () => {
     const metrics = {
       lcp: 5000,
       fid: 50,
@@ -175,10 +175,10 @@ describe('evaluatePerformance', () => {
 
     const evaluation = evaluatePerformance(metrics);
 
-    expect(evaluation.recommendations).toContain('LCP too high - optimize largest content loading');
+    expect(evaluation.recommendations).toContain("LCP too high - optimize largest content loading");
   });
 
-  it('should provide specific recommendations for high memory usage', () => {
+  it("should provide specific recommendations for high memory usage", () => {
     const metrics = {
       lcp: 1500,
       fid: 50,
@@ -195,6 +195,6 @@ describe('evaluatePerformance', () => {
 
     const evaluation = evaluatePerformance(metrics);
 
-    expect(evaluation.recommendations).toContain('High memory usage - check for memory leaks');
+    expect(evaluation.recommendations).toContain("High memory usage - check for memory leaks");
   });
 });

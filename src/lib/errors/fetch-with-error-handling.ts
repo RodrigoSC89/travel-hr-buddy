@@ -3,9 +3,9 @@
  * Wrapper do fetch com retry, timeout e error tracking
  */
 
-import { retryWithBackoff, RetryOptions } from './retry-logic';
-import { errorTrackingService } from './error-tracking-service';
-import { NetworkError, APIError } from './types';
+import { retryWithBackoff, RetryOptions } from "./retry-logic";
+import { errorTrackingService } from "./error-tracking-service";
+import { NetworkError, APIError } from "./types";
 
 export interface FetchOptions extends RequestInit {
   timeout?: number;
@@ -46,10 +46,10 @@ export async function fetchWithErrorHandling<T = any>(
           `HTTP ${response.status}: ${response.statusText}`,
           response.status,
           {
-            action: 'fetch',
+            action: "fetch",
             metadata: {
               url,
-              method: fetchOptions.method || 'GET',
+              method: fetchOptions.method || "GET",
             },
           }
         );
@@ -59,8 +59,8 @@ export async function fetchWithErrorHandling<T = any>(
             error,
             response.status,
             {
-              action: 'fetch',
-              metadata: { url, method: fetchOptions.method || 'GET' },
+              action: "fetch",
+              metadata: { url, method: fetchOptions.method || "GET" },
             }
           );
         }
@@ -69,8 +69,8 @@ export async function fetchWithErrorHandling<T = any>(
       }
 
       // Parse response
-      const contentType = response.headers.get('content-type');
-      if (contentType?.includes('application/json')) {
+      const contentType = response.headers.get("content-type");
+      if (contentType?.includes("application/json")) {
         return await response.json();
       } else {
         return (await response.text()) as any;
@@ -79,15 +79,15 @@ export async function fetchWithErrorHandling<T = any>(
       clearTimeout(timeoutId);
 
       // Handle abort (timeout)
-      if (error.name === 'AbortError') {
-        const timeoutError = new NetworkError('Request timeout', {
-          action: 'fetch',
+      if (error.name === "AbortError") {
+        const timeoutError = new NetworkError("Request timeout", {
+          action: "fetch",
           metadata: { url, timeout },
         });
 
         if (trackErrors) {
           errorTrackingService.trackNetworkError(timeoutError, {
-            action: 'fetch',
+            action: "fetch",
             metadata: { url, timeout },
           });
         }
@@ -96,18 +96,18 @@ export async function fetchWithErrorHandling<T = any>(
       }
 
       // Handle network errors
-      if (error instanceof TypeError || error.message?.includes('fetch')) {
+      if (error instanceof TypeError || error.message?.includes("fetch")) {
         const networkError = new NetworkError(
-          'Network request failed',
+          "Network request failed",
           {
-            action: 'fetch',
+            action: "fetch",
             metadata: { url, originalError: error.message },
           }
         );
 
         if (trackErrors) {
           errorTrackingService.trackNetworkError(networkError, {
-            action: 'fetch',
+            action: "fetch",
             metadata: { url },
           });
         }
@@ -133,14 +133,14 @@ export async function fetchWithErrorHandling<T = any>(
  */
 export const fetchJSON = {
   get: <T = any>(url: string, options?: FetchOptions) =>
-    fetchWithErrorHandling<T>(url, { ...options, method: 'GET' }),
+    fetchWithErrorHandling<T>(url, { ...options, method: "GET" }),
 
   post: <T = any>(url: string, data?: any, options?: FetchOptions) =>
     fetchWithErrorHandling<T>(url, {
       ...options,
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options?.headers,
       },
       body: JSON.stringify(data),
@@ -149,9 +149,9 @@ export const fetchJSON = {
   put: <T = any>(url: string, data?: any, options?: FetchOptions) =>
     fetchWithErrorHandling<T>(url, {
       ...options,
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options?.headers,
       },
       body: JSON.stringify(data),
@@ -160,14 +160,14 @@ export const fetchJSON = {
   patch: <T = any>(url: string, data?: any, options?: FetchOptions) =>
     fetchWithErrorHandling<T>(url, {
       ...options,
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...options?.headers,
       },
       body: JSON.stringify(data),
     }),
 
   delete: <T = any>(url: string, options?: FetchOptions) =>
-    fetchWithErrorHandling<T>(url, { ...options, method: 'DELETE' }),
+    fetchWithErrorHandling<T>(url, { ...options, method: "DELETE" }),
 };

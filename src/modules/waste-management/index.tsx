@@ -72,8 +72,8 @@ function WasteManagement() {
       
       const key = chatMessage.toLowerCase().includes("marpol") ? "marpol" 
         : chatMessage.toLowerCase().includes("descart") ? "descarte"
-        : chatMessage.toLowerCase().includes("relat") ? "relatorio"
-        : "default";
+          : chatMessage.toLowerCase().includes("relat") ? "relatorio"
+            : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
@@ -86,11 +86,11 @@ function WasteManagement() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "oily": return <Droplets className="h-5 w-5 text-amber-600" />;
-      case "sewage": return <Trash2 className="h-5 w-5 text-stone-600" />;
-      case "bilge": return <Droplets className="h-5 w-5 text-blue-600" />;
-      case "garbage": return <Recycle className="h-5 w-5 text-green-600" />;
-      default: return <Trash2 className="h-5 w-5" />;
+    case "oily": return <Droplets className="h-5 w-5 text-amber-600" />;
+    case "sewage": return <Trash2 className="h-5 w-5 text-stone-600" />;
+    case "bilge": return <Droplets className="h-5 w-5 text-blue-600" />;
+    case "garbage": return <Recycle className="h-5 w-5 text-green-600" />;
+    default: return <Trash2 className="h-5 w-5" />;
     }
   };
 

@@ -4,12 +4,12 @@
  * Now integrated with Hybrid LLM Engine for offline-first AI
  */
 
-import { useState, useCallback, useEffect } from 'react';
-import { hybridLLMEngine } from '@/lib/llm/hybrid-engine';
+import { useState, useCallback, useEffect } from "react";
+import { hybridLLMEngine } from "@/lib/llm/hybrid-engine";
 
 interface AssistantMessage {
   id: string;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   timestamp: Date;
   metadata?: {
@@ -54,34 +54,34 @@ Ajude os usuários a navegar pelo sistema e realizar suas tarefas de forma efici
 // Quick actions by context
 const QUICK_ACTIONS: Record<string, QuickAction[]> = {
   travel: [
-    { id: 'new-travel', label: 'Nova viagem', prompt: 'Como criar uma nova solicitação de viagem?' },
-    { id: 'pending', label: 'Pendentes', prompt: 'Quais solicitações estão pendentes de aprovação?' },
-    { id: 'reports', label: 'Relatórios', prompt: 'Como gerar relatório de viagens do mês?' },
+    { id: "new-travel", label: "Nova viagem", prompt: "Como criar uma nova solicitação de viagem?" },
+    { id: "pending", label: "Pendentes", prompt: "Quais solicitações estão pendentes de aprovação?" },
+    { id: "reports", label: "Relatórios", prompt: "Como gerar relatório de viagens do mês?" },
   ],
   hr: [
-    { id: 'expiring-docs', label: 'Docs expirando', prompt: 'Quais documentos de tripulantes expiram em breve?' },
-    { id: 'add-crew', label: 'Novo tripulante', prompt: 'Como cadastrar um novo tripulante?' },
-    { id: 'certifications', label: 'Certificações', prompt: 'Como verificar certificações STCW?' },
+    { id: "expiring-docs", label: "Docs expirando", prompt: "Quais documentos de tripulantes expiram em breve?" },
+    { id: "add-crew", label: "Novo tripulante", prompt: "Como cadastrar um novo tripulante?" },
+    { id: "certifications", label: "Certificações", prompt: "Como verificar certificações STCW?" },
   ],
   fleet: [
-    { id: 'vessel-status', label: 'Status', prompt: 'Qual o status atual da frota?' },
-    { id: 'maintenance', label: 'Manutenções', prompt: 'Quais manutenções estão programadas?' },
-    { id: 'positions', label: 'Posições', prompt: 'Onde estão as embarcações agora?' },
+    { id: "vessel-status", label: "Status", prompt: "Qual o status atual da frota?" },
+    { id: "maintenance", label: "Manutenções", prompt: "Quais manutenções estão programadas?" },
+    { id: "positions", label: "Posições", prompt: "Onde estão as embarcações agora?" },
   ],
   default: [
-    { id: 'help', label: 'Ajuda', prompt: 'O que você pode fazer?' },
-    { id: 'shortcuts', label: 'Atalhos', prompt: 'Quais são os atalhos de teclado?' },
-    { id: 'navigation', label: 'Navegação', prompt: 'Como navegar pelo sistema?' },
+    { id: "help", label: "Ajuda", prompt: "O que você pode fazer?" },
+    { id: "shortcuts", label: "Atalhos", prompt: "Quais são os atalhos de teclado?" },
+    { id: "navigation", label: "Navegação", prompt: "Como navegar pelo sistema?" },
   ],
 };
 
 class SmartAssistant {
   private messages: AssistantMessage[] = [];
   private context: AssistantContext = {
-    currentPage: '/',
-    userRole: 'user',
+    currentPage: "/",
+    userRole: "user",
     recentActions: [],
-    activeModule: 'default',
+    activeModule: "default",
   };
   private listeners = new Set<(messages: AssistantMessage[]) => void>();
   
@@ -123,7 +123,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
     // Add user message
     const userMessage: AssistantMessage = {
       id: `user-${Date.now()}`,
-      role: 'user',
+      role: "user",
       content,
       timestamp: new Date(),
     };
@@ -136,7 +136,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
     
     const assistantMessage: AssistantMessage = {
       id: `assistant-${Date.now()}`,
-      role: 'assistant',
+      role: "assistant",
       content: response.content,
       timestamp: new Date(),
       metadata: response.metadata,
@@ -153,26 +153,26 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
    */
   private async generateResponse(input: string): Promise<{
     content: string;
-    metadata?: AssistantMessage['metadata'];
+    metadata?: AssistantMessage["metadata"];
   }> {
     const lowerInput = input.toLowerCase();
     
     // Navigation intents - handle locally for instant response
-    if (lowerInput.includes('ir para') || lowerInput.includes('abrir') || lowerInput.includes('navegar')) {
+    if (lowerInput.includes("ir para") || lowerInput.includes("abrir") || lowerInput.includes("navegar")) {
       const destinations: Record<string, { path: string; name: string }> = {
-        'dashboard': { path: '/dashboard', name: 'Dashboard' },
-        'viagens': { path: '/travel', name: 'Viagens' },
-        'viagem': { path: '/travel', name: 'Viagens' },
-        'rh': { path: '/hr', name: 'Recursos Humanos' },
-        'recursos humanos': { path: '/hr', name: 'Recursos Humanos' },
-        'frota': { path: '/fleet', name: 'Frota' },
-        'documentos': { path: '/documents', name: 'Documentos' },
-        'manutenção': { path: '/mmi', name: 'Manutenção (MMI)' },
-        'mmi': { path: '/mmi', name: 'Manutenção (MMI)' },
-        'compliance': { path: '/compliance-hub', name: 'Compliance Hub' },
-        'configurações': { path: '/settings', name: 'Configurações' },
-        'tripulação': { path: '/crew', name: 'Tripulação' },
-        'crew': { path: '/crew', name: 'Tripulação' },
+        "dashboard": { path: "/dashboard", name: "Dashboard" },
+        "viagens": { path: "/travel", name: "Viagens" },
+        "viagem": { path: "/travel", name: "Viagens" },
+        "rh": { path: "/hr", name: "Recursos Humanos" },
+        "recursos humanos": { path: "/hr", name: "Recursos Humanos" },
+        "frota": { path: "/fleet", name: "Frota" },
+        "documentos": { path: "/documents", name: "Documentos" },
+        "manutenção": { path: "/mmi", name: "Manutenção (MMI)" },
+        "mmi": { path: "/mmi", name: "Manutenção (MMI)" },
+        "compliance": { path: "/compliance-hub", name: "Compliance Hub" },
+        "configurações": { path: "/settings", name: "Configurações" },
+        "tripulação": { path: "/crew", name: "Tripulação" },
+        "crew": { path: "/crew", name: "Tripulação" },
       };
       
       for (const [key, dest] of Object.entries(destinations)) {
@@ -180,7 +180,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
           return {
             content: `Posso te levar para ${dest.name}. Clique no botão abaixo para navegar.`,
             metadata: {
-              action: 'navigate',
+              action: "navigate",
               data: { path: dest.path, name: dest.name },
               suggestions: [`Ir para ${dest.name}`],
             },
@@ -196,9 +196,9 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
       });
 
       // Build suggestions based on response source
-      const suggestions = llmResponse.source === 'cloud' 
-        ? ['Ver mais detalhes', 'Outra pergunta']
-        : ['Tentar novamente online', 'Ver ajuda'];
+      const suggestions = llmResponse.source === "cloud" 
+        ? ["Ver mais detalhes", "Outra pergunta"]
+        : ["Tentar novamente online", "Ver ajuda"];
 
       return {
         content: llmResponse.response,
@@ -212,11 +212,11 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
         },
       };
     } catch (error) {
-      console.warn('[SmartAssistant] LLM query failed, using fallback:', error);
+      console.warn("[SmartAssistant] LLM query failed, using fallback:", error);
     }
 
     // Fallback responses for common intents
-    if (lowerInput.includes('ajuda') || lowerInput.includes('o que você pode')) {
+    if (lowerInput.includes("ajuda") || lowerInput.includes("o que você pode")) {
       return {
         content: `Posso ajudar você com:
 
@@ -229,7 +229,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
 
 Use os botões de ação rápida abaixo ou digite sua pergunta.`,
         metadata: {
-          suggestions: ['Ir para MMI', 'Ver pendentes', 'Compliance'],
+          suggestions: ["Ir para MMI", "Ver pendentes", "Compliance"],
         },
       };
     }
@@ -245,7 +245,7 @@ No momento estou processando localmente. Para respostas mais detalhadas:
 
 Como posso ajudar?`,
       metadata: {
-        suggestions: ['Ver ajuda', 'Ir para dashboard'],
+        suggestions: ["Ver ajuda", "Ir para dashboard"],
       },
     };
   }

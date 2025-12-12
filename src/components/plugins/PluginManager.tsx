@@ -316,7 +316,7 @@ export const PluginManager: React.FC = () => {
               {filteredPlugins.map((plugin) => {
                 const IconComponent = plugin.icon;
                 return (
-                  <Card key={plugin.id} className={`relative ${plugin.featured ? 'border-primary/50' : ''}`}>
+                  <Card key={plugin.id} className={`relative ${plugin.featured ? "border-primary/50" : ""}`}>
                     {plugin.featured && (
                       <Badge className="absolute -top-2 -right-2 bg-primary">
                         <Star className="h-3 w-3 mr-1" />

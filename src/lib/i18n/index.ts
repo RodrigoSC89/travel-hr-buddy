@@ -9,4 +9,4 @@ export {
   useI18nContext,
   I18nContext,
   type SupportedLanguage,
-} from './translation-manager';
+} from "./translation-manager";

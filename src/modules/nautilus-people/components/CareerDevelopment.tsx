@@ -2,13 +2,13 @@
  * Career Development - Plano de Carreira e Desenvolvimento
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   TrendingUp,
   Target,
@@ -24,8 +24,8 @@ import {
   CheckCircle,
   Clock,
   Zap
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface CareerPath {
   id: string;
@@ -52,88 +52,88 @@ interface Mentoria {
 }
 
 const CareerDevelopment: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('trilha');
+  const [activeTab, setActiveTab] = useState("trilha");
 
   const careerPath: CareerPath = {
-    id: '1',
-    titulo: 'Trilha de Engenharia',
+    id: "1",
+    titulo: "Trilha de Engenharia",
     nivelAtual: 3,
     nivelMax: 6,
     progresso: 68,
-    proximoPasso: 'Engenheiro Sênior',
-    competenciasNecessarias: ['Gestão de Projetos', 'Liderança Técnica', 'Mentoria'],
-    tempoEstimado: '12-18 meses'
+    proximoPasso: "Engenheiro Sênior",
+    competenciasNecessarias: ["Gestão de Projetos", "Liderança Técnica", "Mentoria"],
+    tempoEstimado: "12-18 meses"
   };
 
   const careerLevels = [
-    { nivel: 1, titulo: 'Trainee', status: 'completed', ano: '2020' },
-    { nivel: 2, titulo: 'Engenheiro Júnior', status: 'completed', ano: '2021' },
-    { nivel: 3, titulo: 'Engenheiro Pleno', status: 'current', ano: '2023' },
-    { nivel: 4, titulo: 'Engenheiro Sênior', status: 'next', ano: '' },
-    { nivel: 5, titulo: 'Especialista', status: 'future', ano: '' },
-    { nivel: 6, titulo: 'Principal Engineer', status: 'future', ano: '' }
+    { nivel: 1, titulo: "Trainee", status: "completed", ano: "2020" },
+    { nivel: 2, titulo: "Engenheiro Júnior", status: "completed", ano: "2021" },
+    { nivel: 3, titulo: "Engenheiro Pleno", status: "current", ano: "2023" },
+    { nivel: 4, titulo: "Engenheiro Sênior", status: "next", ano: "" },
+    { nivel: 5, titulo: "Especialista", status: "future", ano: "" },
+    { nivel: 6, titulo: "Principal Engineer", status: "future", ano: "" }
   ];
 
   const skills: Skill[] = [
-    { nome: 'Gestão de Processos', nivel: 85, categoria: 'Técnica' },
-    { nome: 'Lean Manufacturing', nivel: 90, categoria: 'Técnica' },
-    { nome: 'Python', nivel: 70, categoria: 'Técnica' },
-    { nome: 'Comunicação', nivel: 80, categoria: 'Soft Skill' },
-    { nome: 'Liderança', nivel: 65, categoria: 'Soft Skill' },
-    { nome: 'Gestão de Projetos', nivel: 55, categoria: 'Gestão' },
-    { nome: 'Power BI', nivel: 75, categoria: 'Técnica' },
-    { nome: 'Excel Avançado', nivel: 95, categoria: 'Técnica' }
+    { nome: "Gestão de Processos", nivel: 85, categoria: "Técnica" },
+    { nome: "Lean Manufacturing", nivel: 90, categoria: "Técnica" },
+    { nome: "Python", nivel: 70, categoria: "Técnica" },
+    { nome: "Comunicação", nivel: 80, categoria: "Soft Skill" },
+    { nome: "Liderança", nivel: 65, categoria: "Soft Skill" },
+    { nome: "Gestão de Projetos", nivel: 55, categoria: "Gestão" },
+    { nome: "Power BI", nivel: 75, categoria: "Técnica" },
+    { nome: "Excel Avançado", nivel: 95, categoria: "Técnica" }
   ];
 
   const trainingRecommendations = [
     {
-      titulo: 'Gestão de Projetos Avançada',
-      provedor: 'PMI',
-      duracao: '40h',
+      titulo: "Gestão de Projetos Avançada",
+      provedor: "PMI",
+      duracao: "40h",
       match: 95,
-      tipo: 'Certificação'
+      tipo: "Certificação"
     },
     {
-      titulo: 'Liderança de Equipes Técnicas',
-      provedor: 'Nautilus Academy',
-      duracao: '16h',
+      titulo: "Liderança de Equipes Técnicas",
+      provedor: "Nautilus Academy",
+      duracao: "16h",
       match: 88,
-      tipo: 'Curso'
+      tipo: "Curso"
     },
     {
-      titulo: 'Scrum Master',
-      provedor: 'Scrum.org',
-      duracao: '20h',
+      titulo: "Scrum Master",
+      provedor: "Scrum.org",
+      duracao: "20h",
       match: 82,
-      tipo: 'Certificação'
+      tipo: "Certificação"
     },
     {
-      titulo: 'Comunicação Executiva',
-      provedor: 'Dale Carnegie',
-      duracao: '12h',
+      titulo: "Comunicação Executiva",
+      provedor: "Dale Carnegie",
+      duracao: "12h",
       match: 78,
-      tipo: 'Workshop'
+      tipo: "Workshop"
     }
   ];
 
   const mentoria: Mentoria = {
-    mentor: 'Roberto Mendes',
-    cargo: 'Diretor de Operações',
-    proximaSessao: '12/12/2025 às 14:00',
-    topico: 'Transição para cargo de liderança'
+    mentor: "Roberto Mendes",
+    cargo: "Diretor de Operações",
+    proximaSessao: "12/12/2025 às 14:00",
+    topico: "Transição para cargo de liderança"
   };
 
   const successorCandidates = [
-    { nome: 'Ana Paula', cargo: 'Engenheira Júnior', readiness: 75, departamento: 'Operações' },
-    { nome: 'Lucas Silva', cargo: 'Engenheiro Trainee', readiness: 60, departamento: 'Operações' },
-    { nome: 'Mariana Costa', cargo: 'Técnica Sênior', readiness: 85, departamento: 'Manutenção' }
+    { nome: "Ana Paula", cargo: "Engenheira Júnior", readiness: 75, departamento: "Operações" },
+    { nome: "Lucas Silva", cargo: "Engenheiro Trainee", readiness: 60, departamento: "Operações" },
+    { nome: "Mariana Costa", cargo: "Técnica Sênior", readiness: 85, departamento: "Manutenção" }
   ];
 
   const getSkillColor = (nivel: number) => {
-    if (nivel >= 80) return 'bg-green-500';
-    if (nivel >= 60) return 'bg-blue-500';
-    if (nivel >= 40) return 'bg-yellow-500';
-    return 'bg-orange-500';
+    if (nivel >= 80) return "bg-green-500";
+    if (nivel >= 60) return "bg-blue-500";
+    if (nivel >= 40) return "bg-yellow-500";
+    return "bg-orange-500";
   };
 
   return (
@@ -234,20 +234,20 @@ const CareerDevelopment: React.FC = () => {
                         animate={{ scale: 1 }}
                         transition={{ delay: index * 0.1 }}
                         className={`w-12 h-12 rounded-full flex items-center justify-center z-10 ${
-                          level.status === 'completed' ? 'bg-green-500 text-white' :
-                          level.status === 'current' ? 'bg-primary text-primary-foreground ring-4 ring-primary/30' :
-                          level.status === 'next' ? 'bg-blue-500/20 border-2 border-blue-500 text-blue-500' :
-                          'bg-muted text-muted-foreground'
+                          level.status === "completed" ? "bg-green-500 text-white" :
+                            level.status === "current" ? "bg-primary text-primary-foreground ring-4 ring-primary/30" :
+                              level.status === "next" ? "bg-blue-500/20 border-2 border-blue-500 text-blue-500" :
+                                "bg-muted text-muted-foreground"
                         }`}
                       >
-                        {level.status === 'completed' ? (
+                        {level.status === "completed" ? (
                           <CheckCircle className="w-6 h-6" />
                         ) : (
                           <span className="font-bold">{level.nivel}</span>
                         )}
                       </motion.div>
                       <p className={`text-xs mt-2 text-center max-w-16 ${
-                        level.status === 'current' ? 'font-bold text-primary' : 'text-muted-foreground'
+                        level.status === "current" ? "font-bold text-primary" : "text-muted-foreground"
                       }`}>
                         {level.titulo}
                       </p>
@@ -256,8 +256,8 @@ const CareerDevelopment: React.FC = () => {
                       )}
                       {index < careerLevels.length - 1 && (
                         <div className={`absolute top-6 left-12 w-full h-0.5 ${
-                          level.status === 'completed' ? 'bg-green-500' : 'bg-muted'
-                        }`} style={{ width: 'calc(100% - 48px)' }} />
+                          level.status === "completed" ? "bg-green-500" : "bg-muted"
+                        }`} style={{ width: "calc(100% - 48px)" }} />
                       )}
                     </div>
                   ))}
@@ -381,9 +381,9 @@ const CareerDevelopment: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        training.match >= 90 ? 'bg-green-500/20 text-green-500' :
-                        training.match >= 80 ? 'bg-blue-500/20 text-blue-500' :
-                        'bg-yellow-500/20 text-yellow-500'
+                        training.match >= 90 ? "bg-green-500/20 text-green-500" :
+                          training.match >= 80 ? "bg-blue-500/20 text-blue-500" :
+                            "bg-yellow-500/20 text-yellow-500"
                       }`}>
                         <Zap className="w-6 h-6" />
                       </div>
@@ -399,9 +399,9 @@ const CareerDevelopment: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <Badge className={
-                        training.match >= 90 ? 'bg-green-500' :
-                        training.match >= 80 ? 'bg-blue-500' :
-                        'bg-yellow-500'
+                        training.match >= 90 ? "bg-green-500" :
+                          training.match >= 80 ? "bg-blue-500" :
+                            "bg-yellow-500"
                       }>
                         {training.match}% match
                       </Badge>
@@ -457,7 +457,7 @@ const CareerDevelopment: React.FC = () => {
                     <div className="flex justify-between items-start mb-1">
                       <span className="font-medium text-sm">Sessão {3 - idx}</span>
                       <Badge variant="outline" className="text-xs">
-                        {new Date(Date.now() - idx * 14 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}
+                        {new Date(Date.now() - idx * 14 * 24 * 60 * 60 * 1000).toLocaleDateString("pt-BR")}
                       </Badge>
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -492,7 +492,7 @@ const CareerDevelopment: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <Avatar>
                         <AvatarFallback className="bg-primary/10 text-primary">
-                          {candidate.nome.split(' ').map(n => n[0]).join('')}
+                          {candidate.nome.split(" ").map(n => n[0]).join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
@@ -506,9 +506,9 @@ const CareerDevelopment: React.FC = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm text-muted-foreground">Readiness</span>
                         <Badge className={
-                          candidate.readiness >= 80 ? 'bg-green-500' :
-                          candidate.readiness >= 60 ? 'bg-blue-500' :
-                          'bg-yellow-500'
+                          candidate.readiness >= 80 ? "bg-green-500" :
+                            candidate.readiness >= 60 ? "bg-blue-500" :
+                              "bg-yellow-500"
                         }>
                           {candidate.readiness}%
                         </Badge>

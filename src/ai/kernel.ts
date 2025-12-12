@@ -809,7 +809,7 @@ async function logAIContext(request: AIContextRequest, response: AIContextRespon
     // Keep only last 100 logs
     if (logs.length > 100) logs.shift();
     localStorage.setItem("ai_context_logs", JSON.stringify(logs));
-    } catch (error) {
+  } catch (error) {
     logger.warn("Failed to log AI context", { error });
   }
 }

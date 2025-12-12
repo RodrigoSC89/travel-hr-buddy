@@ -190,33 +190,33 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "ready": return <Badge className="bg-green-500">Pronto</Badge>;
-      case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
-      case "draft": return <Badge variant="secondary">Rascunho</Badge>;
-      case "submitted": return <Badge className="bg-purple-500">Enviado</Badge>;
-      default: return <Badge variant="outline">{status}</Badge>;
+    case "ready": return <Badge className="bg-green-500">Pronto</Badge>;
+    case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
+    case "draft": return <Badge variant="secondary">Rascunho</Badge>;
+    case "submitted": return <Badge className="bg-purple-500">Enviado</Badge>;
+    default: return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getItemStatusIcon = (status: string) => {
     switch (status) {
-      case "available": return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "pending": return <Clock className="h-4 w-4 text-yellow-500" />;
-      case "missing": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default: return null;
+    case "available": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "pending": return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "missing": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default: return null;
     }
   };
 
   const getItemTypeIcon = (type: string) => {
     switch (type) {
-      case "logbook": return <BookOpen className="h-4 w-4" />;
-      case "checklist": return <FileCheck className="h-4 w-4" />;
-      case "certificate": return <Shield className="h-4 w-4" />;
-      case "report": return <FileText className="h-4 w-4" />;
-      case "photo": return <Eye className="h-4 w-4" />;
-      case "system_log": return <Layers className="h-4 w-4" />;
-      case "training": return <Target className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
+    case "logbook": return <BookOpen className="h-4 w-4" />;
+    case "checklist": return <FileCheck className="h-4 w-4" />;
+    case "certificate": return <Shield className="h-4 w-4" />;
+    case "report": return <FileText className="h-4 w-4" />;
+    case "photo": return <Eye className="h-4 w-4" />;
+    case "system_log": return <Layers className="h-4 w-4" />;
+    case "training": return <Target className="h-4 w-4" />;
+    default: return <FileText className="h-4 w-4" />;
     }
   };
 

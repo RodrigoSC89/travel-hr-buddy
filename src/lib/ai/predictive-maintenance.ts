@@ -3,12 +3,12 @@
  * Offline-first predictive maintenance with embedded AI
  */
 
-import { getCachedData, cacheData } from '@/lib/offline/sync-queue';
+import { getCachedData, cacheData } from "@/lib/offline/sync-queue";
 
 export interface MaintenanceHistory {
   equipmentId: string;
   timestamp: Date;
-  type: 'preventive' | 'corrective' | 'emergency';
+  type: "preventive" | "corrective" | "emergency";
   description: string;
   hoursWorked: number;
   cost?: number;
@@ -35,7 +35,7 @@ export interface PredictionResult {
   predictedFailureDate?: Date;
   confidence: number;
   recommendedAction: string;
-  urgency: 'low' | 'medium' | 'high' | 'critical';
+  urgency: "low" | "medium" | "high" | "critical";
   reasoning: string[];
   estimatedCost?: number;
   partsNeeded?: string[];
@@ -111,8 +111,8 @@ class PredictiveMaintenanceEngine {
     // Detect frequent emergency repairs
     if (byType.emergency && byType.emergency.length >= 2) {
       patterns.push({
-        type: 'frequent_emergency',
-        description: 'Multiple emergency repairs detected',
+        type: "frequent_emergency",
+        description: "Multiple emergency repairs detected",
         occurrences: byType.emergency.length,
         lastOccurrence: new Date(Math.max(...byType.emergency.map(h => h.timestamp.getTime()))),
         severity: Math.min(100, byType.emergency.length * 25)
@@ -136,8 +136,8 @@ class PredictiveMaintenanceEngine {
       const trend = intervals[intervals.length - 1] - intervals[0];
       if (trend < -7) { // Decreasing by more than 7 days
         patterns.push({
-          type: 'decreasing_mtbf',
-          description: 'Time between failures is decreasing',
+          type: "decreasing_mtbf",
+          description: "Time between failures is decreasing",
           occurrences: intervals.length,
           lastOccurrence: sortedHistory[sortedHistory.length - 1].timestamp,
           severity: Math.min(100, Math.abs(trend) * 5)
@@ -156,7 +156,7 @@ class PredictiveMaintenanceEngine {
     Object.entries(partCounts).forEach(([part, count]) => {
       if (count >= 3) {
         patterns.push({
-          type: 'repeated_part_failure',
+          type: "repeated_part_failure",
           description: `Part "${part}" replaced ${count} times`,
           occurrences: count,
           lastOccurrence: history
@@ -210,7 +210,7 @@ class PredictiveMaintenanceEngine {
     // Determine equipment profile
     const profileKey = Object.keys(EQUIPMENT_PROFILES).find(key => 
       metrics.name.toLowerCase().includes(key)
-    ) || 'default';
+    ) || "default";
     const profile = EQUIPMENT_PROFILES[profileKey];
 
     // Calculate base failure probability
@@ -256,10 +256,10 @@ class PredictiveMaintenanceEngine {
     riskScore = Math.min(100, Math.max(0, riskScore));
 
     // Determine urgency
-    let urgency: PredictionResult['urgency'] = 'low';
-    if (riskScore > 80) urgency = 'critical';
-    else if (riskScore > 60) urgency = 'high';
-    else if (riskScore > 40) urgency = 'medium';
+    let urgency: PredictionResult["urgency"] = "low";
+    if (riskScore > 80) urgency = "critical";
+    else if (riskScore > 60) urgency = "high";
+    else if (riskScore > 40) urgency = "medium";
 
     // Build reasoning
     const reasoning: string[] = [];
@@ -268,23 +268,23 @@ class PredictiveMaintenanceEngine {
     reasoning.push(`Vida útil remanescente estimada: ${rul.toFixed(0)}h`);
     
     if (patterns.length > 0) {
-      reasoning.push(`Padrões detectados: ${patterns.map(p => p.type).join(', ')}`);
+      reasoning.push(`Padrões detectados: ${patterns.map(p => p.type).join(", ")}`);
     }
     
     sensorAnomalies.forEach(a => reasoning.push(a));
 
     // Determine recommended action
-    let recommendedAction = 'Monitoramento contínuo';
+    let recommendedAction = "Monitoramento contínuo";
     const partsNeeded: string[] = [];
     
-    if (urgency === 'critical') {
-      recommendedAction = 'MANUTENÇÃO IMEDIATA NECESSÁRIA - Parar equipamento';
-      partsNeeded.push('Kit de reparo completo', 'Óleo lubrificante', 'Filtros');
-    } else if (urgency === 'high') {
-      recommendedAction = 'Agendar manutenção preventiva em 7 dias';
-      partsNeeded.push('Filtros', 'Juntas');
-    } else if (urgency === 'medium') {
-      recommendedAction = 'Planejar manutenção para próximas 4 semanas';
+    if (urgency === "critical") {
+      recommendedAction = "MANUTENÇÃO IMEDIATA NECESSÁRIA - Parar equipamento";
+      partsNeeded.push("Kit de reparo completo", "Óleo lubrificante", "Filtros");
+    } else if (urgency === "high") {
+      recommendedAction = "Agendar manutenção preventiva em 7 dias";
+      partsNeeded.push("Filtros", "Juntas");
+    } else if (urgency === "medium") {
+      recommendedAction = "Planejar manutenção para próximas 4 semanas";
     }
 
     // Calculate predicted failure date
@@ -293,10 +293,10 @@ class PredictiveMaintenanceEngine {
       : undefined;
 
     // Estimate cost based on urgency
-    const estimatedCost = urgency === 'critical' ? 25000 
-      : urgency === 'high' ? 15000 
-      : urgency === 'medium' ? 8000 
-      : 3000;
+    const estimatedCost = urgency === "critical" ? 25000 
+      : urgency === "high" ? 15000 
+        : urgency === "medium" ? 8000 
+          : 3000;
 
     const result: PredictionResult = {
       equipmentId: metrics.equipmentId,
@@ -356,17 +356,17 @@ class PredictiveMaintenanceEngine {
 
     return {
       week: predictions.filter(p => 
-        p.urgency === 'critical' || p.urgency === 'high' ||
+        p.urgency === "critical" || p.urgency === "high" ||
         (p.predictedFailureDate && p.predictedFailureDate.getTime() - now < oneWeek)
       ),
       month: predictions.filter(p => 
-        p.urgency === 'medium' ||
+        p.urgency === "medium" ||
         (p.predictedFailureDate && 
          p.predictedFailureDate.getTime() - now >= oneWeek &&
          p.predictedFailureDate.getTime() - now < oneMonth)
       ),
       quarter: predictions.filter(p => 
-        p.urgency === 'low' ||
+        p.urgency === "low" ||
         (p.predictedFailureDate && 
          p.predictedFailureDate.getTime() - now >= oneMonth &&
          p.predictedFailureDate.getTime() - now < oneQuarter)

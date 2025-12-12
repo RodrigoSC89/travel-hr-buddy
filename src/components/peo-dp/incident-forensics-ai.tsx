@@ -149,29 +149,29 @@ export const IncidentForensicsAI: React.FC = () => {
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "major": return <Badge className="bg-orange-500 text-white">Maior</Badge>;
-      default: return <Badge className="bg-yellow-500 text-black">Menor</Badge>;
+    case "critical": return <Badge variant="destructive">Crítico</Badge>;
+    case "major": return <Badge className="bg-orange-500 text-white">Maior</Badge>;
+    default: return <Badge className="bg-yellow-500 text-black">Menor</Badge>;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "analyzing": return <Badge className="bg-blue-500">Analisando</Badge>;
-      case "analyzed": return <Badge className="bg-green-500">Analisado</Badge>;
-      case "reported": return <Badge className="bg-purple-500">Reportado</Badge>;
-      case "closed": return <Badge variant="secondary">Fechado</Badge>;
-      default: return <Badge variant="outline">{status}</Badge>;
+    case "analyzing": return <Badge className="bg-blue-500">Analisando</Badge>;
+    case "analyzed": return <Badge className="bg-green-500">Analisado</Badge>;
+    case "reported": return <Badge className="bg-purple-500">Reportado</Badge>;
+    case "closed": return <Badge variant="secondary">Fechado</Badge>;
+    default: return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case "alarm": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "action": return <User className="h-4 w-4 text-blue-500" />;
-      case "system": return <Zap className="h-4 w-4 text-yellow-500" />;
-      case "environmental": return <Activity className="h-4 w-4 text-green-500" />;
-      default: return <Clock className="h-4 w-4" />;
+    case "alarm": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "action": return <User className="h-4 w-4 text-blue-500" />;
+    case "system": return <Zap className="h-4 w-4 text-yellow-500" />;
+    case "environmental": return <Activity className="h-4 w-4 text-green-500" />;
+    default: return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -314,8 +314,8 @@ export const IncidentForensicsAI: React.FC = () => {
                 <Progress value={analysisProgress} className="w-64 h-3" />
                 <p className="text-sm text-muted-foreground">
                   {analysisProgress < 30 ? "Agregando logs..." : 
-                   analysisProgress < 60 ? "Construindo timeline..." :
-                   analysisProgress < 90 ? "Identificando causas raiz..." : "Gerando relatório..."}
+                    analysisProgress < 60 ? "Construindo timeline..." :
+                      analysisProgress < 90 ? "Identificando causas raiz..." : "Gerando relatório..."}
                 </p>
               </div>
             ) : selectedIncident ? (

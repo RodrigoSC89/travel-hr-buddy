@@ -10,10 +10,10 @@ import {
   StarFixInspection, 
   StarFixDeficiency,
   StarFixPerformanceMetrics 
-} from '../api/starfix/starfix.service';
+} from "../api/starfix/starfix.service";
 
 // Feature flag - controla se usa mock ou API real
-const USE_MOCK_API = (import.meta as any).env.VITE_USE_MOCK_STARFIX !== 'false';
+const USE_MOCK_API = (import.meta as any).env.VITE_USE_MOCK_STARFIX !== "false";
 
 /**
  * Banco de dados mock de vessels
@@ -29,9 +29,9 @@ const mockInspections: Map<string, StarFixInspection[]> = new Map();
  * Gera vessel simulado
  */
 export function generateMockVessel(imoNumber: string, vesselName: string): StarFixVessel {
-  const flagStates = ['BRA', 'PAN', 'LBR', 'MLT', 'CYP', 'GRC', 'USA'];
-  const vesselTypes = ['BULK_CARRIER', 'CONTAINER', 'TANKER', 'GENERAL_CARGO', 'PASSENGER'];
-  const classificationSocieties = ['DNV', 'ABS', 'LR', 'BV', 'RINA', 'CCS'];
+  const flagStates = ["BRA", "PAN", "LBR", "MLT", "CYP", "GRC", "USA"];
+  const vesselTypes = ["BULK_CARRIER", "CONTAINER", "TANKER", "GENERAL_CARGO", "PASSENGER"];
+  const classificationSocieties = ["DNV", "ABS", "LR", "BV", "RINA", "CCS"];
   
   return {
     imo_number: imoNumber,
@@ -49,14 +49,14 @@ export function generateMockVessel(imoNumber: string, vesselName: string): StarF
  */
 function generateMockDeficiencies(count: number): StarFixDeficiency[] {
   const deficiencyCodes = [
-    { code: '01306', desc: 'Fire doors', convention: 'SOLAS', severity: 'medium' as const },
-    { code: '15150', desc: 'ISM - Procedures for reporting accidents', convention: 'ISM', severity: 'high' as const },
-    { code: '07115', desc: 'Lifeboats', convention: 'SOLAS', severity: 'critical' as const },
-    { code: '11101', desc: 'Charts', convention: 'SOLAS', severity: 'low' as const },
-    { code: '02106', desc: 'Stability information', convention: 'LOADLINE', severity: 'medium' as const },
-    { code: '13216', desc: 'Food and catering', convention: 'MLC', severity: 'low' as const },
-    { code: '04118', desc: 'Oil discharge monitoring', convention: 'MARPOL', severity: 'high' as const },
-    { code: '18305', desc: 'Safe working load test', convention: 'SOLAS', severity: 'medium' as const },
+    { code: "01306", desc: "Fire doors", convention: "SOLAS", severity: "medium" as const },
+    { code: "15150", desc: "ISM - Procedures for reporting accidents", convention: "ISM", severity: "high" as const },
+    { code: "07115", desc: "Lifeboats", convention: "SOLAS", severity: "critical" as const },
+    { code: "11101", desc: "Charts", convention: "SOLAS", severity: "low" as const },
+    { code: "02106", desc: "Stability information", convention: "LOADLINE", severity: "medium" as const },
+    { code: "13216", desc: "Food and catering", convention: "MLC", severity: "low" as const },
+    { code: "04118", desc: "Oil discharge monitoring", convention: "MARPOL", severity: "high" as const },
+    { code: "18305", desc: "Safe working load test", convention: "SOLAS", severity: "medium" as const },
   ];
   
   const deficiencies: StarFixDeficiency[] = [];
@@ -71,13 +71,13 @@ function generateMockDeficiencies(count: number): StarFixDeficiency[] {
       deficiency_description: def.desc,
       convention: def.convention,
       severity: def.severity,
-      action_taken: rectified ? 'Rectified on board' : 'Rectification required',
+      action_taken: rectified ? "Rectified on board" : "Rectification required",
       rectification_deadline: !rectified ? 
-        new Date(Date.now() + (30 + Math.random() * 60) * 24 * 3600000).toISOString().split('T')[0] : 
+        new Date(Date.now() + (30 + Math.random() * 60) * 24 * 3600000).toISOString().split("T")[0] : 
         undefined,
       rectified,
       rectification_date: rectified ? 
-        new Date(Date.now() - daysAgo * 24 * 3600000).toISOString().split('T')[0] : 
+        new Date(Date.now() - daysAgo * 24 * 3600000).toISOString().split("T")[0] : 
         undefined,
     });
   }
@@ -89,17 +89,17 @@ function generateMockDeficiencies(count: number): StarFixDeficiency[] {
  * Gera inspeção simulada
  */
 export function generateMockInspection(vesselId: string, imoNumber: string): StarFixInspection {
-  const inspectionTypes = ['PSC', 'FSI', 'ISM', 'ISPS'] as const;
+  const inspectionTypes = ["PSC", "FSI", "ISM", "ISPS"] as const;
   const ports = [
-    { name: 'Santos', country: 'Brazil' },
-    { name: 'Rotterdam', country: 'Netherlands' },
-    { name: 'Singapore', country: 'Singapore' },
-    { name: 'Houston', country: 'USA' },
-    { name: 'Antwerp', country: 'Belgium' },
-    { name: 'Hamburg', country: 'Germany' },
-    { name: 'Tokyo', country: 'Japan' },
+    { name: "Santos", country: "Brazil" },
+    { name: "Rotterdam", country: "Netherlands" },
+    { name: "Singapore", country: "Singapore" },
+    { name: "Houston", country: "USA" },
+    { name: "Antwerp", country: "Belgium" },
+    { name: "Hamburg", country: "Germany" },
+    { name: "Tokyo", country: "Japan" },
   ];
-  const authorities = ['Paris MOU', 'Tokyo MOU', 'US Coast Guard', 'Vigiagro', 'Caribbean MOU'];
+  const authorities = ["Paris MOU", "Tokyo MOU", "US Coast Guard", "Vigiagro", "Caribbean MOU"];
   
   const port = ports[Math.floor(Math.random() * ports.length)];
   const deficienciesCount = Math.random() < 0.6 ? 
@@ -109,9 +109,9 @@ export function generateMockInspection(vesselId: string, imoNumber: string): Sta
   const detentions = deficienciesCount > 8 && Math.random() < 0.3 ? 1 : 0; // Detenção se muitas deficiências
   
   const deficiencies = generateMockDeficiencies(deficienciesCount);
-  const result = detentions > 0 ? 'DETENTION' : 
-                 deficienciesCount > 0 ? 'DEFICIENCY' : 
-                 'CLEAR';
+  const result = detentions > 0 ? "DETENTION" : 
+    deficienciesCount > 0 ? "DEFICIENCY" : 
+      "CLEAR";
   
   const daysAgo = Math.floor(Math.random() * 365); // último ano
   
@@ -119,7 +119,7 @@ export function generateMockInspection(vesselId: string, imoNumber: string): Sta
     id: crypto.randomUUID(),
     vessel_id: vesselId,
     imo_number: imoNumber,
-    inspection_date: new Date(Date.now() - daysAgo * 24 * 3600000).toISOString().split('T')[0],
+    inspection_date: new Date(Date.now() - daysAgo * 24 * 3600000).toISOString().split("T")[0],
     port_name: port.name,
     port_country: port.country,
     inspection_type: inspectionTypes[Math.floor(Math.random() * inspectionTypes.length)],
@@ -128,7 +128,7 @@ export function generateMockInspection(vesselId: string, imoNumber: string): Sta
     detentions: detentions,
     inspection_result: result,
     deficiencies,
-    starfix_sync_status: 'synced',
+    starfix_sync_status: "synced",
     last_sync_date: new Date().toISOString(),
   };
 }
@@ -160,22 +160,22 @@ export function generateMockPerformanceMetrics(
   const comparisonToFleet = performanceScore - flagStateAverageScore;
   
   // Cálculo de risk level
-  let riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  let riskLevel: "low" | "medium" | "high" | "critical";
   if (performanceScore >= 80) {
-    riskLevel = 'low';
+    riskLevel = "low";
   } else if (performanceScore >= 60) {
-    riskLevel = 'medium';
+    riskLevel = "medium";
   } else if (performanceScore >= 40) {
-    riskLevel = 'high';
+    riskLevel = "high";
   } else {
-    riskLevel = 'critical';
+    riskLevel = "critical";
   }
   
   return {
     vessel_id: vesselId,
     imo_number: imoNumber,
-    period_start: periodStart.toISOString().split('T')[0],
-    period_end: now.toISOString().split('T')[0],
+    period_start: periodStart.toISOString().split("T")[0],
+    period_end: now.toISOString().split("T")[0],
     total_inspections: totalInspections,
     detentions_count: detentionsCount,
     deficiencies_count: deficienciesCount,
@@ -208,7 +208,7 @@ export const StarFixMockAPI = {
     
     const vessel = generateMockVessel(
       vesselData.imo_number || `IMO${Math.floor(1000000 + Math.random() * 9000000)}`,
-      vesselData.vessel_name || 'Mock Vessel'
+      vesselData.vessel_name || "Mock Vessel"
     );
     
     // Armazenar no "banco de dados" mock
@@ -218,7 +218,7 @@ export const StarFixMockAPI = {
     const initialInspections = [];
     const inspectionCount = Math.floor(3 + Math.random() * 7); // 3-10 inspeções
     for (let i = 0; i < inspectionCount; i++) {
-      initialInspections.push(generateMockInspection('vessel-id', vessel.imo_number));
+      initialInspections.push(generateMockInspection("vessel-id", vessel.imo_number));
     }
     mockInspections.set(vessel.imo_number, initialInspections);
     
@@ -237,7 +237,7 @@ export const StarFixMockAPI = {
     if (inspections.length === 0) {
       const count = Math.floor(3 + Math.random() * 7);
       for (let i = 0; i < count; i++) {
-        inspections.push(generateMockInspection('vessel-id', imoNumber));
+        inspections.push(generateMockInspection("vessel-id", imoNumber));
       }
       mockInspections.set(imoNumber, inspections);
     }
@@ -265,7 +265,7 @@ export const StarFixMockAPI = {
     await simulateNetworkDelay();
     
     const inspections = await this.fetchInspections(imoNumber);
-    const metrics = generateMockPerformanceMetrics('vessel-id', imoNumber, inspections);
+    const metrics = generateMockPerformanceMetrics("vessel-id", imoNumber, inspections);
     
     return metrics;
   },
@@ -277,24 +277,24 @@ export const StarFixMockAPI = {
     await simulateNetworkDelay(300, 1000);
     
     const inspectionId = crypto.randomUUID();
-    const imoNumber = inspection.imo_number || 'IMO0000000';
+    const imoNumber = inspection.imo_number || "IMO0000000";
     
     // Adicionar ao banco mock
     const existingInspections = mockInspections.get(imoNumber) || [];
     const newInspection: StarFixInspection = {
       id: inspectionId,
-      vessel_id: inspection.vessel_id || 'vessel-id',
+      vessel_id: inspection.vessel_id || "vessel-id",
       imo_number: imoNumber,
-      inspection_date: inspection.inspection_date || new Date().toISOString().split('T')[0],
-      port_name: inspection.port_name || 'Unknown Port',
-      port_country: inspection.port_country || 'Unknown',
-      inspection_type: inspection.inspection_type || 'PSC',
-      authority: inspection.authority || 'Unknown Authority',
+      inspection_date: inspection.inspection_date || new Date().toISOString().split("T")[0],
+      port_name: inspection.port_name || "Unknown Port",
+      port_country: inspection.port_country || "Unknown",
+      inspection_type: inspection.inspection_type || "PSC",
+      authority: inspection.authority || "Unknown Authority",
       deficiencies_count: inspection.deficiencies_count || 0,
       detentions: inspection.detentions || 0,
-      inspection_result: inspection.inspection_result || 'CLEAR',
+      inspection_result: inspection.inspection_result || "CLEAR",
       deficiencies: inspection.deficiencies || [],
-      starfix_sync_status: 'synced',
+      starfix_sync_status: "synced",
       last_sync_date: new Date().toISOString(),
     };
     
@@ -312,7 +312,7 @@ export const StarFixMockAPI = {
     
     const synced = vesselIds.length;
     const failed = Math.random() < 0.1 ? 1 : 0; // 10% de chance de falha
-    const errors = failed > 0 ? ['Mock sync error for testing'] : [];
+    const errors = failed > 0 ? ["Mock sync error for testing"] : [];
     
     return { synced, failed, errors };
   },
@@ -323,12 +323,12 @@ export const StarFixMockAPI = {
   async getSyncStatus(vesselId: string): Promise<{ 
     last_sync: string; 
     pending_count: number; 
-    status: 'ok' | 'pending' | 'error' 
+    status: "ok" | "pending" | "error" 
   }> {
     await simulateNetworkDelay(100, 300);
     
     const pendingCount = Math.floor(Math.random() * 3); // 0-2 pendentes
-    const status: 'ok' | 'pending' | 'error' = pendingCount > 0 ? 'pending' : 'ok';
+    const status: "ok" | "pending" | "error" = pendingCount > 0 ? "pending" : "ok";
     
     const result = {
       last_sync: new Date(Date.now() - Math.random() * 3600000).toISOString(), // última hora

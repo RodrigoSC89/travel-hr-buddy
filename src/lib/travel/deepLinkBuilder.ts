@@ -11,7 +11,7 @@ export interface FlightSearchParams {
   adults?: number;
   children?: number;
   infants?: number;
-  cabinClass?: 'economy' | 'premium' | 'business' | 'first';
+  cabinClass?: "economy" | "premium" | "business" | "first";
 }
 
 export interface HotelSearchParams {
@@ -37,7 +37,7 @@ export function buildGoogleFlightsLink(params: FlightSearchParams): string {
     infants = 0,
   } = params;
 
-  const baseUrl = 'https://www.google.com/travel/flights';
+  const baseUrl = "https://www.google.com/travel/flights";
   const passengers = adults + children + infants;
   
   // Format: /flights?q=Flights%20from%20GRU%20to%20MRS%20on%202025-03-10
@@ -46,8 +46,8 @@ export function buildGoogleFlightsLink(params: FlightSearchParams): string {
     : `Flights from ${origin} to ${destination} on ${departureDate}`;
 
   const url = new URL(baseUrl);
-  url.searchParams.append('q', searchQuery);
-  url.searchParams.append('hl', 'pt-BR');
+  url.searchParams.append("q", searchQuery);
+  url.searchParams.append("hl", "pt-BR");
   
   return url.toString();
 }
@@ -63,29 +63,29 @@ export function buildLatamLink(params: FlightSearchParams): string {
     returnDate,
     adults = 1,
     children = 0,
-    cabinClass = 'economy',
+    cabinClass = "economy",
   } = params;
 
-  const baseUrl = 'https://www.latamairlines.com/br/pt/ofertas-voos';
+  const baseUrl = "https://www.latamairlines.com/br/pt/ofertas-voos";
   const cabinMap = {
-    economy: 'Economy',
-    premium: 'Premium_Economy',
-    business: 'Business',
-    first: 'First',
+    economy: "Economy",
+    premium: "Premium_Economy",
+    business: "Business",
+    first: "First",
   };
 
   const url = new URL(baseUrl);
-  url.searchParams.append('origin', origin);
-  url.searchParams.append('destination', destination);
-  url.searchParams.append('outboundDate', departureDate);
+  url.searchParams.append("origin", origin);
+  url.searchParams.append("destination", destination);
+  url.searchParams.append("outboundDate", departureDate);
   if (returnDate) {
-    url.searchParams.append('inboundDate', returnDate);
+    url.searchParams.append("inboundDate", returnDate);
   }
-  url.searchParams.append('adults', adults.toString());
-  url.searchParams.append('children', children.toString());
-  url.searchParams.append('cabin', cabinMap[cabinClass]);
-  url.searchParams.append('utm_source', 'travel-hr-buddy');
-  url.searchParams.append('utm_medium', 'deeplink');
+  url.searchParams.append("adults", adults.toString());
+  url.searchParams.append("children", children.toString());
+  url.searchParams.append("cabin", cabinMap[cabinClass]);
+  url.searchParams.append("utm_source", "travel-hr-buddy");
+  url.searchParams.append("utm_medium", "deeplink");
 
   return url.toString();
 }
@@ -103,19 +103,19 @@ export function buildGolLink(params: FlightSearchParams): string {
     children = 0,
   } = params;
 
-  const baseUrl = 'https://www.voegol.com.br/pt/compre';
+  const baseUrl = "https://www.voegol.com.br/pt/compre";
   const url = new URL(baseUrl);
   
-  url.searchParams.append('originCode', origin);
-  url.searchParams.append('destinationCode', destination);
-  url.searchParams.append('departureDate', departureDate);
+  url.searchParams.append("originCode", origin);
+  url.searchParams.append("destinationCode", destination);
+  url.searchParams.append("departureDate", departureDate);
   if (returnDate) {
-    url.searchParams.append('returningDate', returnDate);
+    url.searchParams.append("returningDate", returnDate);
   }
-  url.searchParams.append('adults', adults.toString());
-  url.searchParams.append('children', children.toString());
-  url.searchParams.append('utm_source', 'travel-hr-buddy');
-  url.searchParams.append('utm_medium', 'deeplink');
+  url.searchParams.append("adults", adults.toString());
+  url.searchParams.append("children", children.toString());
+  url.searchParams.append("utm_source", "travel-hr-buddy");
+  url.searchParams.append("utm_medium", "deeplink");
 
   return url.toString();
 }
@@ -133,19 +133,19 @@ export function buildAzulLink(params: FlightSearchParams): string {
     children = 0,
   } = params;
 
-  const baseUrl = 'https://www.voeazul.com.br/br/pt/home';
+  const baseUrl = "https://www.voeazul.com.br/br/pt/home";
   const url = new URL(baseUrl);
   
-  url.searchParams.append('from', origin);
-  url.searchParams.append('to', destination);
-  url.searchParams.append('departure', departureDate);
+  url.searchParams.append("from", origin);
+  url.searchParams.append("to", destination);
+  url.searchParams.append("departure", departureDate);
   if (returnDate) {
-    url.searchParams.append('return', returnDate);
+    url.searchParams.append("return", returnDate);
   }
-  url.searchParams.append('adults', adults.toString());
-  url.searchParams.append('children', children.toString());
-  url.searchParams.append('utm_source', 'travel-hr-buddy');
-  url.searchParams.append('utm_medium', 'deeplink');
+  url.searchParams.append("adults", adults.toString());
+  url.searchParams.append("children", children.toString());
+  url.searchParams.append("utm_source", "travel-hr-buddy");
+  url.searchParams.append("utm_medium", "deeplink");
 
   return url.toString();
 }
@@ -162,18 +162,18 @@ export function buildMaxMilhasLink(params: FlightSearchParams): string {
     adults = 1,
   } = params;
 
-  const baseUrl = 'https://www.maxmilhas.com.br/passagens-aereas';
+  const baseUrl = "https://www.maxmilhas.com.br/passagens-aereas";
   const url = new URL(baseUrl);
   
-  url.searchParams.append('origem', origin);
-  url.searchParams.append('destino', destination);
-  url.searchParams.append('ida', departureDate);
+  url.searchParams.append("origem", origin);
+  url.searchParams.append("destino", destination);
+  url.searchParams.append("ida", departureDate);
   if (returnDate) {
-    url.searchParams.append('volta', returnDate);
+    url.searchParams.append("volta", returnDate);
   }
-  url.searchParams.append('passageiros', adults.toString());
-  url.searchParams.append('utm_source', 'travel-hr-buddy');
-  url.searchParams.append('utm_medium', 'deeplink');
+  url.searchParams.append("passageiros", adults.toString());
+  url.searchParams.append("utm_source", "travel-hr-buddy");
+  url.searchParams.append("utm_medium", "deeplink");
 
   return url.toString();
 }
@@ -190,13 +190,13 @@ export function buildAirbnbLink(params: HotelSearchParams): string {
     children = 0,
   } = params;
 
-  const baseUrl = 'https://www.airbnb.com.br/s';
+  const baseUrl = "https://www.airbnb.com.br/s";
   const url = new URL(`${baseUrl}/${encodeURIComponent(destination)}/homes`);
   
-  url.searchParams.append('checkin', checkIn);
-  url.searchParams.append('checkout', checkOut);
-  url.searchParams.append('adults', adults.toString());
-  url.searchParams.append('children', children.toString());
+  url.searchParams.append("checkin", checkIn);
+  url.searchParams.append("checkout", checkOut);
+  url.searchParams.append("adults", adults.toString());
+  url.searchParams.append("children", children.toString());
 
   return url.toString();
 }
@@ -212,13 +212,13 @@ export function buildTripAdvisorLink(params: HotelSearchParams): string {
     adults = 2,
   } = params;
 
-  const baseUrl = 'https://www.tripadvisor.com.br/Hotels';
+  const baseUrl = "https://www.tripadvisor.com.br/Hotels";
   const url = new URL(baseUrl);
   
-  url.searchParams.append('q', destination);
-  url.searchParams.append('checkin', checkIn);
-  url.searchParams.append('checkout', checkOut);
-  url.searchParams.append('adults', adults.toString());
+  url.searchParams.append("q", destination);
+  url.searchParams.append("checkin", checkIn);
+  url.searchParams.append("checkout", checkOut);
+  url.searchParams.append("adults", adults.toString());
 
   return url.toString();
 }

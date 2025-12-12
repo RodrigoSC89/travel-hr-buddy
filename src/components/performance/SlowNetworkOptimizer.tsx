@@ -244,8 +244,8 @@ export function NetworkStatusBadge() {
     <div className={`
       fixed bottom-4 left-4 z-50 px-3 py-1.5 rounded-full text-xs font-medium
       ${isCriticallySlowNetwork 
-        ? "bg-destructive/90 text-destructive-foreground" 
-        : "bg-warning/90 text-warning-foreground"}
+      ? "bg-destructive/90 text-destructive-foreground" 
+      : "bg-warning/90 text-warning-foreground"}
       backdrop-blur-sm shadow-lg
     `}>
       {isCriticallySlowNetwork ? "⚠️ Conexão muito lenta" : "📶 Conexão lenta"} 

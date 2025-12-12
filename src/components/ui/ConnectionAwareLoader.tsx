@@ -3,11 +3,11 @@
  * Shows appropriate loading states based on network quality
  */
 
-import React from 'react';
-import { useConnectionAware } from '@/hooks/use-connection-aware';
-import { Skeleton } from './skeleton';
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { useConnectionAware } from "@/hooks/use-connection-aware";
+import { Skeleton } from "./skeleton";
+import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ConnectionAwareLoaderProps {
   children: React.ReactNode;
@@ -72,55 +72,55 @@ const DefaultLoadingSkeleton: React.FC = () => (
 );
 
 interface NetworkQualityBadgeProps {
-  quality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  quality: "excellent" | "good" | "fair" | "poor" | "offline";
 }
 
 const NetworkQualityBadge: React.FC<NetworkQualityBadgeProps> = ({ quality }) => {
   const getIcon = () => {
     switch (quality) {
-      case 'excellent':
-        return <SignalHigh className="h-3 w-3" />;
-      case 'good':
-        return <SignalMedium className="h-3 w-3" />;
-      case 'fair':
-        return <SignalLow className="h-3 w-3" />;
-      case 'poor':
-        return <Signal className="h-3 w-3" />;
-      case 'offline':
-        return <WifiOff className="h-3 w-3" />;
+    case "excellent":
+      return <SignalHigh className="h-3 w-3" />;
+    case "good":
+      return <SignalMedium className="h-3 w-3" />;
+    case "fair":
+      return <SignalLow className="h-3 w-3" />;
+    case "poor":
+      return <Signal className="h-3 w-3" />;
+    case "offline":
+      return <WifiOff className="h-3 w-3" />;
     }
   };
 
   const getColor = () => {
     switch (quality) {
-      case 'excellent':
-      case 'good':
-        return 'bg-green-500/10 text-green-600 border-green-500/20';
-      case 'fair':
-        return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
-      case 'poor':
-        return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
-      case 'offline':
-        return 'bg-red-500/10 text-red-600 border-red-500/20';
+    case "excellent":
+    case "good":
+      return "bg-green-500/10 text-green-600 border-green-500/20";
+    case "fair":
+      return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+    case "poor":
+      return "bg-orange-500/10 text-orange-600 border-orange-500/20";
+    case "offline":
+      return "bg-red-500/10 text-red-600 border-red-500/20";
     }
   };
 
   const getLabel = () => {
     switch (quality) {
-      case 'excellent':
-        return 'Excelente';
-      case 'good':
-        return 'Boa';
-      case 'fair':
-        return 'Regular';
-      case 'poor':
-        return 'Lenta';
-      case 'offline':
-        return 'Offline';
+    case "excellent":
+      return "Excelente";
+    case "good":
+      return "Boa";
+    case "fair":
+      return "Regular";
+    case "poor":
+      return "Lenta";
+    case "offline":
+      return "Offline";
     }
   };
 
-  if (quality === 'excellent' || quality === 'good') return null;
+  if (quality === "excellent" || quality === "good") return null;
 
   return (
     <div className={cn(

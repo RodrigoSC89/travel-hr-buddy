@@ -3,8 +3,8 @@
  * FASE B.4 - Helpers para testes de command centers consolidados
  */
 
-import { Page, expect } from '@playwright/test';
-import { documentCenterSelectors, notificationCenterSelectors } from '../fixtures/command-center.fixtures';
+import { Page, expect } from "@playwright/test";
+import { documentCenterSelectors, notificationCenterSelectors } from "../fixtures/command-center.fixtures";
 
 export class CommandCenterHelpers {
   constructor(private page: Page) {}
@@ -13,7 +13,7 @@ export class CommandCenterHelpers {
 
   async navigateToDocumentCenter(route: string) {
     await this.page.goto(route);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   async uploadDocument(filePath: string) {
@@ -28,10 +28,10 @@ export class CommandCenterHelpers {
     await this.page.waitForTimeout(2000);
   }
 
-  async switchViewMode(mode: 'grid' | 'list' | 'table') {
-    const selector = mode === 'grid' ? documentCenterSelectors.viewModeGrid
-      : mode === 'list' ? documentCenterSelectors.viewModeList
-      : documentCenterSelectors.viewModeTable;
+  async switchViewMode(mode: "grid" | "list" | "table") {
+    const selector = mode === "grid" ? documentCenterSelectors.viewModeGrid
+      : mode === "list" ? documentCenterSelectors.viewModeList
+        : documentCenterSelectors.viewModeTable;
     
     await this.page.click(selector);
     await this.page.waitForTimeout(500);
@@ -59,7 +59,7 @@ export class CommandCenterHelpers {
     await document.locator(documentCenterSelectors.deleteButton).click();
     
     // Confirm deletion
-    await this.page.click('button:has-text("Confirm")');
+    await this.page.click("button:has-text(\"Confirm\")");
     await this.page.waitForTimeout(1000);
   }
 
@@ -79,7 +79,7 @@ export class CommandCenterHelpers {
     }
   }
 
-  async performBulkAction(action: 'download' | 'delete' | 'archive') {
+  async performBulkAction(action: "download" | "delete" | "archive") {
     await this.page.click(documentCenterSelectors.bulkActionsMenu);
     await this.page.click(`text=${action}`);
     await this.page.waitForTimeout(1000);
@@ -100,7 +100,7 @@ export class CommandCenterHelpers {
 
   async navigateToNotificationCenter(route: string) {
     await this.page.goto(route);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   async verifyNotificationCount(expectedCount?: number) {
@@ -131,8 +131,8 @@ export class CommandCenterHelpers {
     await this.page.waitForTimeout(500);
   }
 
-  async filterNotifications(filterType: 'category' | 'priority', value: string) {
-    const selector = filterType === 'category' 
+  async filterNotifications(filterType: "category" | "priority", value: string) {
+    const selector = filterType === "category" 
       ? notificationCenterSelectors.filterByCategory
       : notificationCenterSelectors.filterByPriority;
     

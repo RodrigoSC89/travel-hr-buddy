@@ -3,7 +3,7 @@
  * Compress/decompress data for low bandwidth networks
  */
 
-import { bandwidthOptimizer } from './low-bandwidth-optimizer';
+import { bandwidthOptimizer } from "./low-bandwidth-optimizer";
 
 // LZ-based compression (simplified, browser-compatible)
 const DICTIONARY_SIZE = 4096;
@@ -16,7 +16,7 @@ export function compressLZ(input: string): string {
   
   const dict: Record<string, number> = {};
   let dictSize = 256;
-  let w = '';
+  let w = "";
   const result: number[] = [];
   
   // Initialize dictionary with single chars
@@ -42,14 +42,14 @@ export function compressLZ(input: string): string {
   }
   
   // Convert to base64-like string
-  return result.map(n => String.fromCharCode(n + 0x100)).join('');
+  return result.map(n => String.fromCharCode(n + 0x100)).join("");
 }
 
 /**
  * Decompress LZ-compressed string
  */
 export function decompressLZ(compressed: string): string {
-  if (!compressed) return '';
+  if (!compressed) return "";
   
   // Check if actually compressed
   if (!compressed.startsWith(String.fromCharCode(0x100))) {
@@ -64,7 +64,7 @@ export function decompressLZ(compressed: string): string {
     dict[i] = String.fromCharCode(i);
   }
   
-  const data = compressed.split('').map(c => c.charCodeAt(0) - 0x100);
+  const data = compressed.split("").map(c => c.charCodeAt(0) - 0x100);
   let w = String.fromCharCode(data[0]);
   let result = w;
   
@@ -77,7 +77,7 @@ export function decompressLZ(compressed: string): string {
     } else if (k === dictSize) {
       entry = w + w[0];
     } else {
-      throw new Error('Invalid compressed data');
+      throw new Error("Invalid compressed data");
     }
     
     result += entry;
@@ -137,7 +137,7 @@ export function compressJSON<T extends Record<string, unknown>>(
  * Decompress JSON
  */
 export function decompressJSON<T>(compressed: string): T {
-  if (compressed.startsWith('__LZ__')) {
+  if (compressed.startsWith("__LZ__")) {
     const decompressed = decompressLZ(compressed.slice(6));
     return JSON.parse(decompressed);
   }
@@ -170,7 +170,7 @@ export function reducePayload<T extends Record<string, unknown>>(
     result = result.sort((a, b) => {
       const aVal = a[priorityField];
       const bVal = b[priorityField];
-      if (typeof aVal === 'number' && typeof bVal === 'number') {
+      if (typeof aVal === "number" && typeof bVal === "number") {
         return bVal - aVal;
       }
       return 0;
@@ -234,12 +234,12 @@ export function useCompressedFetch() {
     
     const headers = new Headers(fetchOptions.headers);
     if (compress) {
-      headers.set('Accept-Encoding', 'gzip, deflate');
+      headers.set("Accept-Encoding", "gzip, deflate");
     }
     
     // Add field selection header if supported
     if (fields?.length) {
-      headers.set('X-Fields', fields.join(','));
+      headers.set("X-Fields", fields.join(","));
     }
     
     const response = await fetch(url, {

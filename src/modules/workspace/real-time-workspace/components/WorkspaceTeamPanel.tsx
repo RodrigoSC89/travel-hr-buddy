@@ -33,19 +33,19 @@ interface WorkspaceTeamPanelProps {
 
 const getStatusColor = (status: TeamMember["status"]) => {
   switch (status) {
-    case "online": return "bg-green-500";
-    case "away": return "bg-yellow-500";
-    case "busy": return "bg-red-500";
-    default: return "bg-muted-foreground/50";
+  case "online": return "bg-green-500";
+  case "away": return "bg-yellow-500";
+  case "busy": return "bg-red-500";
+  default: return "bg-muted-foreground/50";
   }
 };
 
 const getStatusLabel = (status: TeamMember["status"]) => {
   switch (status) {
-    case "online": return "Online";
-    case "away": return "Ausente";
-    case "busy": return "Ocupado";
-    default: return "Offline";
+  case "online": return "Online";
+  case "away": return "Ausente";
+  case "busy": return "Ocupado";
+  default: return "Offline";
   }
 };
 

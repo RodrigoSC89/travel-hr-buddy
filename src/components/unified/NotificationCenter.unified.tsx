@@ -180,18 +180,18 @@ const normalizeNotification = (n: any): UnifiedNotification => ({
 
 const getPriorityIcon = (priority: NotificationPriority) => {
   switch (priority) {
-    case "critical":
-    case "urgent":
-      return <AlertTriangle className="h-4 w-4 text-destructive" />;
-    case "high":
-      return <TrendingUp className="h-4 w-4 text-warning" />;
-    case "normal":
-    case "medium":
-      return <Activity className="h-4 w-4 text-primary" />;
-    case "low":
-      return <TrendingDown className="h-4 w-4 text-muted-foreground" />;
-    default:
-      return <Bell className="h-4 w-4 text-muted-foreground" />;
+  case "critical":
+  case "urgent":
+    return <AlertTriangle className="h-4 w-4 text-destructive" />;
+  case "high":
+    return <TrendingUp className="h-4 w-4 text-warning" />;
+  case "normal":
+  case "medium":
+    return <Activity className="h-4 w-4 text-primary" />;
+  case "low":
+    return <TrendingDown className="h-4 w-4 text-muted-foreground" />;
+  default:
+    return <Bell className="h-4 w-4 text-muted-foreground" />;
   }
 };
 
@@ -238,8 +238,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {notification.category
             ? categoryIcons[notification.category]
             : notification.type
-            ? typeIcons[notification.type] || <Bell className="w-4 h-4" />
-            : getPriorityIcon(notification.priority)}
+              ? typeIcons[notification.type] || <Bell className="w-4 h-4" />
+              : getPriorityIcon(notification.priority)}
         </div>
 
         {/* Content */}
@@ -672,12 +672,12 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
     if (!matchesSearch) return false;
 
     switch (filter) {
-      case "unread":
-        return !isRead;
-      case "priority":
-        return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
-      default:
-        return true;
+    case "unread":
+      return !isRead;
+    case "priority":
+      return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
+    default:
+      return true;
     }
   });
 

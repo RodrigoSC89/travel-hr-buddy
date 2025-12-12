@@ -2,10 +2,10 @@
  * People Dashboard - KPIs e Visão Geral de RH
  */
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Users, 
   UserPlus, 
@@ -22,8 +22,8 @@ import {
   GraduationCap,
   DollarSign,
   BarChart3
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 const PeopleDashboard: React.FC = () => {
   // KPIs Mock Data
@@ -41,22 +41,22 @@ const PeopleDashboard: React.FC = () => {
   };
 
   const alertas = [
-    { tipo: 'warning', texto: '8 certificados vencem em 30 dias', prioridade: 'alta' },
-    { tipo: 'info', texto: '12 avaliações pendentes de revisão', prioridade: 'media' },
-    { tipo: 'danger', texto: '3 colaboradores em risco de turnover', prioridade: 'critica' },
-    { tipo: 'success', texto: '5 promoções aguardando aprovação', prioridade: 'media' }
+    { tipo: "warning", texto: "8 certificados vencem em 30 dias", prioridade: "alta" },
+    { tipo: "info", texto: "12 avaliações pendentes de revisão", prioridade: "media" },
+    { tipo: "danger", texto: "3 colaboradores em risco de turnover", prioridade: "critica" },
+    { tipo: "success", texto: "5 promoções aguardando aprovação", prioridade: "media" }
   ];
 
   const aniversariantes = [
-    { nome: 'Carlos Silva', data: 'Hoje', departamento: 'Operações' },
-    { nome: 'Ana Martins', data: 'Amanhã', departamento: 'Engenharia' },
-    { nome: 'Pedro Santos', data: '10/12', departamento: 'TI' }
+    { nome: "Carlos Silva", data: "Hoje", departamento: "Operações" },
+    { nome: "Ana Martins", data: "Amanhã", departamento: "Engenharia" },
+    { nome: "Pedro Santos", data: "10/12", departamento: "TI" }
   ];
 
   const topPerformers = [
-    { nome: 'Maria Oliveira', score: 98, departamento: 'Vendas' },
-    { nome: 'João Costa', score: 96, departamento: 'Operações' },
-    { nome: 'Laura Mendes', score: 94, departamento: 'RH' }
+    { nome: "Maria Oliveira", score: 98, departamento: "Vendas" },
+    { nome: "João Costa", score: 96, departamento: "Operações" },
+    { nome: "Laura Mendes", score: 94, departamento: "RH" }
   ];
 
   return (
@@ -182,20 +182,20 @@ const PeopleDashboard: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`p-3 rounded-lg border flex items-center justify-between ${
-                  alerta.tipo === 'danger' 
-                    ? 'bg-red-500/10 border-red-500/30' 
-                    : alerta.tipo === 'warning'
-                    ? 'bg-yellow-500/10 border-yellow-500/30'
-                    : alerta.tipo === 'success'
-                    ? 'bg-green-500/10 border-green-500/30'
-                    : 'bg-blue-500/10 border-blue-500/30'
+                  alerta.tipo === "danger" 
+                    ? "bg-red-500/10 border-red-500/30" 
+                    : alerta.tipo === "warning"
+                      ? "bg-yellow-500/10 border-yellow-500/30"
+                      : alerta.tipo === "success"
+                        ? "bg-green-500/10 border-green-500/30"
+                        : "bg-blue-500/10 border-blue-500/30"
                 }`}
               >
                 <span className="text-sm">{alerta.texto}</span>
                 <Badge variant={
-                  alerta.prioridade === 'critica' ? 'destructive' 
-                  : alerta.prioridade === 'alta' ? 'default' 
-                  : 'secondary'
+                  alerta.prioridade === "critica" ? "destructive" 
+                    : alerta.prioridade === "alta" ? "default" 
+                      : "secondary"
                 }>
                   {alerta.prioridade}
                 </Badge>
@@ -219,7 +219,7 @@ const PeopleDashboard: React.FC = () => {
                   <p className="font-medium text-sm">{pessoa.nome}</p>
                   <p className="text-xs text-muted-foreground">{pessoa.departamento}</p>
                 </div>
-                <Badge variant={pessoa.data === 'Hoje' ? 'default' : 'secondary'}>
+                <Badge variant={pessoa.data === "Hoje" ? "default" : "secondary"}>
                   {pessoa.data}
                 </Badge>
               </div>

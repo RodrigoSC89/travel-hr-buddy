@@ -80,7 +80,7 @@ export default function MaintenanceAnalytics() {
                   <span className="text-sm">Preventiva</span>
                   <div className="flex items-center gap-2">
                     <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500" style={{ width: '65%' }}></div>
+                      <div className="h-full bg-blue-500" style={{ width: "65%" }}></div>
                     </div>
                     <span className="text-sm font-medium">65%</span>
                   </div>
@@ -89,7 +89,7 @@ export default function MaintenanceAnalytics() {
                   <span className="text-sm">Corretiva</span>
                   <div className="flex items-center gap-2">
                     <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-orange-500" style={{ width: '25%' }}></div>
+                      <div className="h-full bg-orange-500" style={{ width: "25%" }}></div>
                     </div>
                     <span className="text-sm font-medium">25%</span>
                   </div>
@@ -98,7 +98,7 @@ export default function MaintenanceAnalytics() {
                   <span className="text-sm">Preditiva</span>
                   <div className="flex items-center gap-2">
                     <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500" style={{ width: '10%' }}></div>
+                      <div className="h-full bg-green-500" style={{ width: "10%" }}></div>
                     </div>
                     <span className="text-sm font-medium">10%</span>
                   </div>
@@ -115,11 +115,11 @@ export default function MaintenanceAnalytics() {
             <CardContent>
               <div className="space-y-3">
                 {[
-                  { cause: 'Desgaste natural', count: 42 },
-                  { cause: 'Vazamentos', count: 28 },
-                  { cause: 'Falha elétrica', count: 18 },
-                  { cause: 'Vibração excessiva', count: 12 },
-                  { cause: 'Superaquecimento', count: 8 }
+                  { cause: "Desgaste natural", count: 42 },
+                  { cause: "Vazamentos", count: 28 },
+                  { cause: "Falha elétrica", count: 18 },
+                  { cause: "Vibração excessiva", count: 12 },
+                  { cause: "Superaquecimento", count: 8 }
                 ].map((item, index) => (
                   <div key={index} className="flex items-center justify-between">
                     <span className="text-sm">{item.cause}</span>
@@ -146,7 +146,7 @@ export default function MaintenanceAnalytics() {
                     style={{ height: `${(value / 50) * 100}%` }}
                   ></div>
                   <span className="text-xs mt-2 text-muted-foreground">
-                    {['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'][index]}
+                    {["Jul", "Ago", "Set", "Out", "Nov", "Dez"][index]}
                   </span>
                   <span className="text-xs font-medium">{value}</span>
                 </div>

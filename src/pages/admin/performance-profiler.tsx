@@ -180,18 +180,18 @@ export default function PerformanceProfiler() {
             } else {
               acc.push(item);
             }
-          return acc;
-        }, [] as SlowComponent[]);
+            return acc;
+          }, [] as SlowComponent[]);
         
-        // Keep only recent ones (last 5 minutes)
-        const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-        return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
-      });
+          // Keep only recent ones (last 5 minutes)
+          const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+          return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
+        });
+      }
+    } catch (error) {
+      logger.error("Error detecting slow components in performance profiler", { error });
     }
-  } catch (error) {
-    logger.error("Error detecting slow components in performance profiler", { error });
-  }
-};
+  };
 
   const identifyBottlenecks = (metric: PerformanceMetric) => {
     const issues: string[] = [];

@@ -225,7 +225,7 @@ export default function DrydockManagement() {
                             <span className="font-medium text-foreground">{event.shipyard_name}</span>
                             <Badge className={cn("border", statusColors[event.status])}>
                               {event.status === "planned" ? "Planejada" : 
-                               event.status === "in_progress" ? "Em Andamento" : event.status}
+                                event.status === "in_progress" ? "Em Andamento" : event.status}
                             </Badge>
                           </div>
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -362,7 +362,7 @@ export default function DrydockManagement() {
                             <span className={cn(
                               "font-bold",
                               inspection.hull_condition_score >= 8 ? "text-emerald-400" :
-                              inspection.hull_condition_score >= 6 ? "text-amber-400" : "text-destructive"
+                                inspection.hull_condition_score >= 6 ? "text-amber-400" : "text-destructive"
                             )}>
                               {inspection.hull_condition_score}/10
                             </span>

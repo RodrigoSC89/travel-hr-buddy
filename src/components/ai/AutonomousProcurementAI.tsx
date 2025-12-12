@@ -26,7 +26,7 @@ interface StockItem {
   unit: string;
   avgConsumption: number;
   daysUntilEmpty: number;
-  status: 'critical' | 'low' | 'normal' | 'excess';
+  status: "critical" | "low" | "normal" | "excess";
   autoOrderEnabled: boolean;
 }
 
@@ -47,7 +47,7 @@ interface PurchaseRecommendation {
   suggestedQuantity: number;
   suggestedSupplier: Supplier;
   estimatedCost: number;
-  urgency: 'immediate' | 'soon' | 'planned';
+  urgency: "immediate" | "soon" | "planned";
   aiReasoning: string;
   savingsOpportunity: number;
 }
@@ -74,111 +74,111 @@ export const AutonomousProcurementAI: React.FC = () => {
 
     const mockStock: StockItem[] = [
       {
-        id: 'stk-001',
-        name: 'Óleo Lubrificante 15W-40',
-        category: 'Lubrificantes',
+        id: "stk-001",
+        name: "Óleo Lubrificante 15W-40",
+        category: "Lubrificantes",
         currentStock: 50,
         minStock: 100,
         maxStock: 500,
-        unit: 'litros',
+        unit: "litros",
         avgConsumption: 25,
         daysUntilEmpty: 2,
-        status: 'critical',
+        status: "critical",
         autoOrderEnabled: true
       },
       {
-        id: 'stk-002',
-        name: 'Filtro de Combustível Primário',
-        category: 'Filtros',
+        id: "stk-002",
+        name: "Filtro de Combustível Primário",
+        category: "Filtros",
         currentStock: 8,
         minStock: 10,
         maxStock: 50,
-        unit: 'unidades',
+        unit: "unidades",
         avgConsumption: 2,
         daysUntilEmpty: 4,
-        status: 'low',
+        status: "low",
         autoOrderEnabled: true
       },
       {
-        id: 'stk-003',
-        name: 'Kit Vedação Bomba Hidráulica',
-        category: 'Vedações',
+        id: "stk-003",
+        name: "Kit Vedação Bomba Hidráulica",
+        category: "Vedações",
         currentStock: 15,
         minStock: 5,
         maxStock: 30,
-        unit: 'kits',
+        unit: "kits",
         avgConsumption: 0.5,
         daysUntilEmpty: 30,
-        status: 'normal',
+        status: "normal",
         autoOrderEnabled: false
       },
       {
-        id: 'stk-004',
-        name: 'Graxa Marítima EP2',
-        category: 'Lubrificantes',
+        id: "stk-004",
+        name: "Graxa Marítima EP2",
+        category: "Lubrificantes",
         currentStock: 180,
         minStock: 50,
         maxStock: 200,
-        unit: 'kg',
+        unit: "kg",
         avgConsumption: 5,
         daysUntilEmpty: 36,
-        status: 'normal',
+        status: "normal",
         autoOrderEnabled: true
       }
     ];
 
     const mockSuppliers: Supplier[] = [
       {
-        id: 'sup-001',
-        name: 'MarineSupply Global',
+        id: "sup-001",
+        name: "MarineSupply Global",
         rating: 4.8,
         leadTime: 3,
         priceIndex: 0.95,
         reliability: 98,
         lastOrder: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
-        category: ['Lubrificantes', 'Filtros']
+        category: ["Lubrificantes", "Filtros"]
       },
       {
-        id: 'sup-002',
-        name: 'OceanParts Ltd',
+        id: "sup-002",
+        name: "OceanParts Ltd",
         rating: 4.5,
         leadTime: 5,
         priceIndex: 0.88,
         reliability: 95,
         lastOrder: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-        category: ['Vedações', 'Peças']
+        category: ["Vedações", "Peças"]
       },
       {
-        id: 'sup-003',
-        name: 'NavalTech Solutions',
+        id: "sup-003",
+        name: "NavalTech Solutions",
         rating: 4.2,
         leadTime: 7,
         priceIndex: 0.82,
         reliability: 92,
         lastOrder: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
-        category: ['Lubrificantes', 'Equipamentos']
+        category: ["Lubrificantes", "Equipamentos"]
       }
     ];
 
     const mockRecommendations: PurchaseRecommendation[] = [
       {
-        id: 'rec-001',
+        id: "rec-001",
         item: mockStock[0],
         suggestedQuantity: 200,
         suggestedSupplier: mockSuppliers[0],
         estimatedCost: 4500,
-        urgency: 'immediate',
-        aiReasoning: 'Estoque crítico com apenas 2 dias de suprimento. Consumo médio alto. Fornecedor MarineSupply oferece melhor lead time (3 dias) e excelente rating.',
+        urgency: "immediate",
+        aiReasoning: "Estoque crítico com apenas 2 dias de suprimento. Consumo médio alto. Fornecedor MarineSupply oferece melhor lead time (3 dias) e excelente rating.",
         savingsOpportunity: 320
       },
       {
-        id: 'rec-002',
+        id: "rec-002",
         item: mockStock[1],
         suggestedQuantity: 20,
         suggestedSupplier: mockSuppliers[0],
         estimatedCost: 1800,
-        urgency: 'soon',
-        aiReasoning: 'Estoque baixo com 4 dias restantes. Pedido conjunto com óleo lubrificante reduz custo de frete.',
+        urgency: "soon",
+        aiReasoning: "Estoque baixo com 4 dias restantes. Pedido conjunto com óleo lubrificante reduz custo de frete.",
         savingsOpportunity: 150
       }
     ];
@@ -197,20 +197,20 @@ export const AutonomousProcurementAI: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'low': return 'bg-yellow-500 text-black';
-      case 'normal': return 'bg-green-500 text-white';
-      case 'excess': return 'bg-blue-500 text-white';
-      default: return 'bg-gray-500 text-white';
+    case "critical": return "bg-red-500 text-white";
+    case "low": return "bg-yellow-500 text-black";
+    case "normal": return "bg-green-500 text-white";
+    case "excess": return "bg-blue-500 text-white";
+    default: return "bg-gray-500 text-white";
     }
   };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'immediate': return 'text-red-500 bg-red-500/10 border-red-500/30';
-      case 'soon': return 'text-yellow-500 bg-yellow-500/10 border-yellow-500/30';
-      case 'planned': return 'text-blue-500 bg-blue-500/10 border-blue-500/30';
-      default: return 'text-gray-500 bg-gray-500/10';
+    case "immediate": return "text-red-500 bg-red-500/10 border-red-500/30";
+    case "soon": return "text-yellow-500 bg-yellow-500/10 border-yellow-500/30";
+    case "planned": return "text-blue-500 bg-blue-500/10 border-blue-500/30";
+    default: return "text-gray-500 bg-gray-500/10";
     }
   };
 
@@ -303,16 +303,16 @@ export const AutonomousProcurementAI: React.FC = () => {
               transition={{ delay: index * 0.1 }}
             >
               <Card className={`border-l-4 ${
-                rec.urgency === 'immediate' ? 'border-l-red-500' :
-                rec.urgency === 'soon' ? 'border-l-yellow-500' : 'border-l-blue-500'
+                rec.urgency === "immediate" ? "border-l-red-500" :
+                  rec.urgency === "soon" ? "border-l-yellow-500" : "border-l-blue-500"
               }`}>
                 <CardContent className="p-6">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center gap-3">
                         <Badge className={getUrgencyColor(rec.urgency)}>
-                          {rec.urgency === 'immediate' ? 'Urgente' : 
-                           rec.urgency === 'soon' ? 'Em breve' : 'Planejado'}
+                          {rec.urgency === "immediate" ? "Urgente" : 
+                            rec.urgency === "soon" ? "Em breve" : "Planejado"}
                         </Badge>
                         <h3 className="text-lg font-semibold">{rec.item.name}</h3>
                       </div>
@@ -364,10 +364,10 @@ export const AutonomousProcurementAI: React.FC = () => {
                     <div className="flex flex-col gap-2">
                       <Button 
                         onClick={() => executeAutoPurchase(rec)}
-                        className={rec.urgency === 'immediate' ? 'bg-red-500 hover:bg-red-600' : ''}
+                        className={rec.urgency === "immediate" ? "bg-red-500 hover:bg-red-600" : ""}
                       >
                         <ShoppingCart className="h-4 w-4 mr-2" />
-                        {rec.urgency === 'immediate' ? 'Comprar Agora' : 'Aprovar Compra'}
+                        {rec.urgency === "immediate" ? "Comprar Agora" : "Aprovar Compra"}
                       </Button>
                       <Button variant="outline" size="sm">
                         Ver Alternativas
@@ -382,7 +382,7 @@ export const AutonomousProcurementAI: React.FC = () => {
 
         <TabsContent value="stock" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {stockItems.filter(item => item.status === 'critical' || item.status === 'low').map((item, index) => (
+            {stockItems.filter(item => item.status === "critical" || item.status === "low").map((item, index) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -397,7 +397,7 @@ export const AutonomousProcurementAI: React.FC = () => {
                         <p className="text-sm text-muted-foreground">{item.category}</p>
                       </div>
                       <Badge className={getStatusColor(item.status)}>
-                        {item.status === 'critical' ? 'Crítico' : 'Baixo'}
+                        {item.status === "critical" ? "Crítico" : "Baixo"}
                       </Badge>
                     </div>
 
@@ -409,13 +409,13 @@ export const AutonomousProcurementAI: React.FC = () => {
                       <Progress 
                         value={(item.currentStock / item.maxStock) * 100}
                         className={`h-2 ${
-                          item.status === 'critical' ? '[&>div]:bg-red-500' :
-                          item.status === 'low' ? '[&>div]:bg-yellow-500' : ''
+                          item.status === "critical" ? "[&>div]:bg-red-500" :
+                            item.status === "low" ? "[&>div]:bg-yellow-500" : ""
                         }`}
                       />
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>Mínimo: {item.minStock}</span>
-                        <span className={item.daysUntilEmpty <= 7 ? 'text-red-500 font-medium' : ''}>
+                        <span className={item.daysUntilEmpty <= 7 ? "text-red-500 font-medium" : ""}>
                           {item.daysUntilEmpty} dias até esgotamento
                         </span>
                       </div>
@@ -460,7 +460,7 @@ export const AutonomousProcurementAI: React.FC = () => {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Índice de Preço</span>
-                        <span className={supplier.priceIndex < 0.9 ? 'text-green-500' : ''}>
+                        <span className={supplier.priceIndex < 0.9 ? "text-green-500" : ""}>
                           {Math.round((1 - supplier.priceIndex) * 100)}% abaixo do mercado
                         </span>
                       </div>

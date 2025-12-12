@@ -25,9 +25,9 @@ export function successToast(message: string, options?: ToastOptions) {
     icon: <CheckCircle className="h-5 w-5 text-green-500" />,
     action: options?.action
       ? {
-          label: options.action.label,
-          onClick: options.action.onClick,
-        }
+        label: options.action.label,
+        onClick: options.action.onClick,
+      }
       : undefined,
   });
 }
@@ -42,9 +42,9 @@ export function errorToast(message: string, options?: ToastOptions) {
     icon: <XCircle className="h-5 w-5 text-red-500" />,
     action: options?.action
       ? {
-          label: options.action.label,
-          onClick: options.action.onClick,
-        }
+        label: options.action.label,
+        onClick: options.action.onClick,
+      }
       : undefined,
   });
 }
@@ -59,9 +59,9 @@ export function warningToast(message: string, options?: ToastOptions) {
     icon: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
     action: options?.action
       ? {
-          label: options.action.label,
-          onClick: options.action.onClick,
-        }
+        label: options.action.label,
+        onClick: options.action.onClick,
+      }
       : undefined,
   });
 }
@@ -76,9 +76,9 @@ export function infoToast(message: string, options?: ToastOptions) {
     icon: <Info className="h-5 w-5 text-blue-500" />,
     action: options?.action
       ? {
-          label: options.action.label,
-          onClick: options.action.onClick,
-        }
+        label: options.action.label,
+        onClick: options.action.onClick,
+      }
       : undefined,
   });
 }

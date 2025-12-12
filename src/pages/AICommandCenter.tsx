@@ -196,35 +196,35 @@ export default function AICommandCenter() {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <ArrowUp className="h-4 w-4 text-green-500" />;
-      case "down": return <ArrowDown className="h-4 w-4 text-red-500" />;
-      default: return <span className="h-4 w-4 text-muted-foreground">-</span>;
+    case "up": return <ArrowUp className="h-4 w-4 text-green-500" />;
+    case "down": return <ArrowDown className="h-4 w-4 text-red-500" />;
+    default: return <span className="h-4 w-4 text-muted-foreground">-</span>;
     }
   };
 
   const getHealthStatusColor = (status?: string) => {
     switch (status) {
-      case "healthy": return "text-green-500";
-      case "degraded": return "text-yellow-500";
-      case "critical": case "unhealthy": return "text-red-500";
-      default: return "text-muted-foreground";
+    case "healthy": return "text-green-500";
+    case "degraded": return "text-yellow-500";
+    case "critical": case "unhealthy": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getHealthStatusIcon = (status?: string) => {
     switch (status) {
-      case "healthy": return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case "degraded": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case "critical": case "unhealthy": return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      default: return <Activity className="h-5 w-5 text-muted-foreground" />;
+    case "healthy": return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "degraded": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "critical": case "unhealthy": return <AlertTriangle className="h-5 w-5 text-red-500" />;
+    default: return <Activity className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "high": return "bg-red-500/10 text-red-500 border-red-500/20";
-      case "medium": return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      default: return "bg-green-500/10 text-green-500 border-green-500/20";
+    case "high": return "bg-red-500/10 text-red-500 border-red-500/20";
+    case "medium": return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    default: return "bg-green-500/10 text-green-500 border-green-500/20";
     }
   };
 
@@ -249,15 +249,15 @@ export default function AICommandCenter() {
 
   const renderRevolutionaryContent = () => {
     switch (activeFeature) {
-      case "command": return <NaturalLanguageCommand />;
-      case "cockpit": return <FleetCockpit360 />;
-      case "maintenance": return <PredictiveMaintenanceScheduler />;
-      case "inventory": return <LiveInventoryMap />;
-      case "agent": return <AutonomousAgent />;
-      case "simulator": return <ScenarioSimulator />;
-      case "audit": return <AuditAssistant />;
-      case "suppliers": return <SupplierComparator />;
-      default: return <NaturalLanguageCommand />;
+    case "command": return <NaturalLanguageCommand />;
+    case "cockpit": return <FleetCockpit360 />;
+    case "maintenance": return <PredictiveMaintenanceScheduler />;
+    case "inventory": return <LiveInventoryMap />;
+    case "agent": return <AutonomousAgent />;
+    case "simulator": return <ScenarioSimulator />;
+    case "audit": return <AuditAssistant />;
+    case "suppliers": return <SupplierComparator />;
+    default: return <NaturalLanguageCommand />;
     }
   };
 
@@ -936,8 +936,8 @@ export default function AICommandCenter() {
                             <div className="flex items-start gap-3">
                               <AlertTriangle className={`h-5 w-5 mt-0.5 ${
                                 alert.severity === "critical" ? "text-red-500" :
-                                alert.severity === "high" ? "text-orange-500" :
-                                alert.severity === "medium" ? "text-yellow-500" : "text-blue-500"
+                                  alert.severity === "high" ? "text-orange-500" :
+                                    alert.severity === "medium" ? "text-yellow-500" : "text-blue-500"
                               }`} />
                               <div>
                                 <div className="flex items-center gap-2">

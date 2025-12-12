@@ -9,7 +9,7 @@ export interface ImageOptimizationConfig {
   quality: number;
   maxWidth: number;
   maxHeight: number;
-  format: 'webp' | 'avif' | 'jpeg' | 'png';
+  format: "webp" | "avif" | "jpeg" | "png";
   lazy: boolean;
 }
 
@@ -17,7 +17,7 @@ const DEFAULT_CONFIG: ImageOptimizationConfig = {
   quality: 80,
   maxWidth: 1920,
   maxHeight: 1080,
-  format: 'webp',
+  format: "webp",
   lazy: true
 };
 
@@ -25,7 +25,7 @@ const SLOW_NETWORK_CONFIG: ImageOptimizationConfig = {
   quality: 60,
   maxWidth: 800,
   maxHeight: 600,
-  format: 'webp',
+  format: "webp",
   lazy: true
 };
 
@@ -42,17 +42,17 @@ export const checkImageSupport = async (): Promise<{
       img.onload = () => resolve(true);
       img.onerror = () => resolve(false);
       
-      if (format === 'webp') {
-        img.src = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=';
-      } else if (format === 'avif') {
-        img.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKBzgABo0xAP7/';
+      if (format === "webp") {
+        img.src = "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=";
+      } else if (format === "avif") {
+        img.src = "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKBzgABo0xAP7/";
       }
     });
   };
 
   const [webp, avif] = await Promise.all([
-    checkFormat('webp'),
-    checkFormat('avif')
+    checkFormat("webp"),
+    checkFormat("avif")
   ]);
 
   return { webp, avif };
@@ -74,7 +74,7 @@ export const generateSrcSet = (
 ): string => {
   return widths
     .map(w => `${baseUrl}?w=${w} ${w}w`)
-    .join(', ');
+    .join(", ");
 };
 
 /**
@@ -82,19 +82,19 @@ export const generateSrcSet = (
  */
 export const generateSizes = (breakpoints: Record<string, string> = {}): string => {
   const defaultBreakpoints = {
-    '(max-width: 640px)': '100vw',
-    '(max-width: 768px)': '80vw',
-    '(max-width: 1024px)': '60vw',
-    'default': '50vw'
+    "(max-width: 640px)": "100vw",
+    "(max-width: 768px)": "80vw",
+    "(max-width: 1024px)": "60vw",
+    "default": "50vw"
   };
 
   const merged = { ...defaultBreakpoints, ...breakpoints };
   
   return Object.entries(merged)
-    .filter(([key]) => key !== 'default')
+    .filter(([key]) => key !== "default")
     .map(([media, size]) => `${media} ${size}`)
-    .concat([merged.default || '50vw'])
-    .join(', ');
+    .concat([merged.default || "50vw"])
+    .join(", ");
 };
 
 /**
@@ -108,8 +108,8 @@ export const compressImage = async (
   
   return new Promise((resolve, reject) => {
     const img = new Image();
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     
     img.onload = () => {
       // Calculate dimensions
@@ -136,7 +136,7 @@ export const compressImage = async (
           if (blob) {
             resolve(blob);
           } else {
-            reject(new Error('Failed to compress image'));
+            reject(new Error("Failed to compress image"));
           }
         },
         `image/${finalConfig.format}`,
@@ -144,7 +144,7 @@ export const compressImage = async (
       );
     };
     
-    img.onerror = () => reject(new Error('Failed to load image'));
+    img.onerror = () => reject(new Error("Failed to load image"));
     img.src = URL.createObjectURL(file);
   });
 };
@@ -154,9 +154,9 @@ export const compressImage = async (
  */
 export const preloadImages = (urls: string[]): void => {
   urls.forEach(url => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
     link.href = url;
     document.head.appendChild(link);
   });
@@ -171,7 +171,7 @@ export const createLazyLoadObserver = (
 ): IntersectionObserver => {
   const defaultOptions: IntersectionObserverInit = {
     root: null,
-    rootMargin: '50px 0px',
+    rootMargin: "50px 0px",
     threshold: 0.1,
     ...options
   };
@@ -201,7 +201,7 @@ class ImageOptimizationService {
       
       if (src) {
         img.src = src;
-        img.removeAttribute('data-src');
+        img.removeAttribute("data-src");
         this.observer?.unobserve(img);
       }
     });
@@ -219,10 +219,10 @@ class ImageOptimizationService {
     this.observer?.unobserve(img);
   }
   
-  getBestFormat(): 'avif' | 'webp' | 'jpeg' {
-    if (this.support?.avif) return 'avif';
-    if (this.support?.webp) return 'webp';
-    return 'jpeg';
+  getBestFormat(): "avif" | "webp" | "jpeg" {
+    if (this.support?.avif) return "avif";
+    if (this.support?.webp) return "webp";
+    return "jpeg";
   }
   
   async compress(file: File, isSlowConnection: boolean = false): Promise<Blob> {

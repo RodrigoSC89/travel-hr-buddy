@@ -207,7 +207,7 @@ Use as **ações rápidas** ou faça sua pergunta diretamente!`,
     setIsLoading(true);
 
     try {
-      const { data: functionData, error: functionError } = await supabase.functions.invoke('peotram-ai-chat', {
+      const { data: functionData, error: functionError } = await supabase.functions.invoke("peotram-ai-chat", {
         body: { 
           messages: [...messages.filter(m => m.id !== "welcome"), userMessage].map(m => ({
             role: m.role,
@@ -384,13 +384,13 @@ Por favor, tente novamente ou consulte:
                               className="prose prose-sm dark:prose-invert max-w-none text-sm"
                               dangerouslySetInnerHTML={{ 
                                 __html: message.content
-                                  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                                  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-                                  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                                  .replace(/\n- /g, '<br/>• ')
-                                  .replace(/\n/g, '<br/>') 
+                                  .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+                                  .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+                                  .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+                                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                                  .replace(/\*(.*?)\*/g, "<em>$1</em>")
+                                  .replace(/\n- /g, "<br/>• ")
+                                  .replace(/\n/g, "<br/>") 
                               }} 
                             />
                             {message.references && message.references.length > 0 && (

@@ -34,7 +34,7 @@ const RechartsLoader = lazy(() =>
 );
 
 interface LazyChartProps {
-  type?: 'line' | 'bar' | 'pie' | 'area' | 'radar';
+  type?: "line" | "bar" | "pie" | "area" | "radar";
   data?: any;
   config?: any;
   height?: number;
@@ -52,7 +52,7 @@ function ChartSkeleton({ height = 300 }: { height?: number }) {
 }
 
 export function LazyChart({ 
-  type = 'line',
+  type = "line",
   data,
   config,
   height = 300,

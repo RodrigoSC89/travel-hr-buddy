@@ -3,7 +3,7 @@
  * PATCH 850: PWA & Offline - Smart caching strategies
  */
 
-export const SW_VERSION = '1.0.0';
+export const SW_VERSION = "1.0.0";
 
 // Cache names for different resource types
 export const CACHE_NAMES = {
@@ -16,9 +16,9 @@ export const CACHE_NAMES = {
 
 // Resources to precache (critical path)
 export const PRECACHE_RESOURCES = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  "/",
+  "/index.html",
+  "/manifest.json",
 ];
 
 // Caching strategies configuration
@@ -53,9 +53,9 @@ export const CACHE_STRATEGIES = {
 export const SYNC_CONFIG = {
   // Queue names for different operation types
   queues: {
-    mutations: 'offline-mutations',
-    analytics: 'offline-analytics',
-    uploads: 'offline-uploads',
+    mutations: "offline-mutations",
+    analytics: "offline-analytics",
+    uploads: "offline-uploads",
   },
   // Retry configuration
   retry: {

@@ -28,27 +28,27 @@ interface SatelliteDetailPanelProps {
 export const SatelliteDetailPanel: React.FC<SatelliteDetailPanelProps> = ({ satellite }) => {
   const getOrbitColor = (orbit: string) => {
     switch (orbit) {
-      case "LEO": return "bg-blue-500";
-      case "MEO": return "bg-green-500";
-      case "GEO": return "bg-purple-500";
-      case "HEO": return "bg-orange-500";
-      default: return "bg-gray-500";
+    case "LEO": return "bg-blue-500";
+    case "MEO": return "bg-green-500";
+    case "GEO": return "bg-purple-500";
+    case "HEO": return "bg-orange-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getVisibilityStatus = (visibility: string) => {
     switch (visibility) {
-      case "visible": return { label: "Visível", color: "text-green-500" };
-      case "eclipsed": return { label: "Eclipsado", color: "text-gray-500" };
-      case "daylight": return { label: "Luz do dia", color: "text-yellow-500" };
-      default: return { label: visibility, color: "text-muted-foreground" };
+    case "visible": return { label: "Visível", color: "text-green-500" };
+    case "eclipsed": return { label: "Eclipsado", color: "text-gray-500" };
+    case "daylight": return { label: "Luz do dia", color: "text-yellow-500" };
+    default: return { label: visibility, color: "text-muted-foreground" };
     }
   };
 
   const visibilityStatus = getVisibilityStatus(satellite.visibility);
 
   // Calculate signal strength based on altitude and visibility
-  const signalStrength = satellite.visibility === 'visible' 
+  const signalStrength = satellite.visibility === "visible" 
     ? Math.min(100, Math.max(60, 100 - (satellite.altitude_km / 500)))
     : Math.min(80, Math.max(40, 80 - (satellite.altitude_km / 500)));
 
@@ -66,8 +66,8 @@ export const SatelliteDetailPanel: React.FC<SatelliteDetailPanelProps> = ({ sate
                 <Badge className={getOrbitColor(satellite.orbit_type)}>
                   {satellite.orbit_type}
                 </Badge>
-                <Badge variant={satellite.status === 'active' ? 'default' : 'secondary'}>
-                  {satellite.status === 'active' ? 'Ativo' : satellite.status}
+                <Badge variant={satellite.status === "active" ? "default" : "secondary"}>
+                  {satellite.status === "active" ? "Ativo" : satellite.status}
                 </Badge>
               </div>
             </div>
@@ -178,7 +178,7 @@ export const SatelliteDetailPanel: React.FC<SatelliteDetailPanelProps> = ({ sate
               <div>
                 <span className="text-xs text-muted-foreground">Lançamento:</span>
                 <span className="text-sm ml-2">
-                  {new Date(satellite.launch_date).toLocaleDateString('pt-BR')}
+                  {new Date(satellite.launch_date).toLocaleDateString("pt-BR")}
                 </span>
               </div>
             </div>
@@ -195,7 +195,7 @@ export const SatelliteDetailPanel: React.FC<SatelliteDetailPanelProps> = ({ sate
 
         {/* Last Update */}
         <div className="text-xs text-muted-foreground text-center pt-2 border-t">
-          Última atualização: {new Date(satellite.timestamp).toLocaleString('pt-BR')}
+          Última atualização: {new Date(satellite.timestamp).toLocaleString("pt-BR")}
         </div>
       </CardContent>
     </Card>

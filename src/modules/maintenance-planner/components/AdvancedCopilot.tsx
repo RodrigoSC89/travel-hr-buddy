@@ -189,23 +189,23 @@ export default function AdvancedCopilot() {
     const input = userInput.toLowerCase();
     
     if (input.includes("job") || input.includes("criar") || input.includes("manutenção")) {
-      return `Entendi que você precisa de suporte com manutenção. Para criar um novo job:\n\n1. Clique em "Novo Plano" no topo da página\n2. Preencha os dados do equipamento e tipo de manutenção\n3. Defina a prioridade e data programada\n\nPosso ajudar com mais alguma coisa?`;
+      return "Entendi que você precisa de suporte com manutenção. Para criar um novo job:\n\n1. Clique em \"Novo Plano\" no topo da página\n2. Preencha os dados do equipamento e tipo de manutenção\n3. Defina a prioridade e data programada\n\nPosso ajudar com mais alguma coisa?";
     }
     
     if (input.includes("vazamento") || input.includes("falha") || input.includes("problema")) {
-      return `Para problemas técnicos como vazamentos ou falhas:\n\n**Ações Recomendadas:**\n1. Isole o sistema afetado se possível\n2. Documente com fotos e descrição detalhada\n3. Verifique o histórico de manutenções do equipamento\n4. Crie um job corretivo com prioridade alta\n\n**Próximos passos:** Acesse a aba "Jobs" para registrar o problema.`;
+      return "Para problemas técnicos como vazamentos ou falhas:\n\n**Ações Recomendadas:**\n1. Isole o sistema afetado se possível\n2. Documente com fotos e descrição detalhada\n3. Verifique o histórico de manutenções do equipamento\n4. Crie um job corretivo com prioridade alta\n\n**Próximos passos:** Acesse a aba \"Jobs\" para registrar o problema.";
     }
     
     if (input.includes("thruster") || input.includes("dp") || input.includes("posicionamento")) {
-      return `Para questões de Posicionamento Dinâmico (DP):\n\n**Verificações importantes:**\n- Status dos thrusters\n- Sistemas de referência (DGNSS, HPR)\n- Power Management System\n- Redundância operacional\n\nConsulte o manual ISM ou entre em contato com o comandante para procedimentos específicos.`;
+      return "Para questões de Posicionamento Dinâmico (DP):\n\n**Verificações importantes:**\n- Status dos thrusters\n- Sistemas de referência (DGNSS, HPR)\n- Power Management System\n- Redundância operacional\n\nConsulte o manual ISM ou entre em contato com o comandante para procedimentos específicos.";
     }
     
     if (input.includes("relatório") || input.includes("conformidade") || input.includes("auditoria")) {
-      return `Para relatórios de conformidade:\n\n1. Acesse a aba "Jobs" para ver histórico de manutenções\n2. Use a aba "Timeline" para visão cronológica\n3. Exporte os dados pelo botão "Exportar"\n\nRelatórios detalhados incluem: taxa de conclusão, MTBF, MTTR e compliance com normas ISM/IMCA.`;
+      return "Para relatórios de conformidade:\n\n1. Acesse a aba \"Jobs\" para ver histórico de manutenções\n2. Use a aba \"Timeline\" para visão cronológica\n3. Exporte os dados pelo botão \"Exportar\"\n\nRelatórios detalhados incluem: taxa de conclusão, MTBF, MTTR e compliance com normas ISM/IMCA.";
     }
     
     if (input.includes("oi") || input.includes("olá") || input.includes("bom dia") || input.includes("boa tarde")) {
-      return `Olá! Sou o Copilot de Manutenção Inteligente. Posso ajudar com:\n\n🔧 **Criar jobs** de manutenção\n🔍 **Diagnosticar** problemas técnicos\n📋 **Consultar procedimentos** ISM/IMCA\n📊 **Gerar relatórios** de conformidade\n\nComo posso ajudá-lo hoje?`;
+      return "Olá! Sou o Copilot de Manutenção Inteligente. Posso ajudar com:\n\n🔧 **Criar jobs** de manutenção\n🔍 **Diagnosticar** problemas técnicos\n📋 **Consultar procedimentos** ISM/IMCA\n📊 **Gerar relatórios** de conformidade\n\nComo posso ajudá-lo hoje?";
     }
     
     return `Entendi sua solicitação: "${userInput}"\n\nPosso ajudar com:\n- Criar jobs de manutenção preventiva/corretiva\n- Diagnosticar problemas em equipamentos\n- Consultar procedimentos técnicos\n- Verificar status de manutenções\n\nPor favor, descreva com mais detalhes o que você precisa.`;
@@ -287,27 +287,27 @@ export default function AdvancedCopilot() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-destructive text-destructive-foreground";
-      case "high":
-        return "bg-orange-500 text-white";
-      case "medium":
-        return "bg-warning text-warning-foreground";
-      default:
-        return "bg-muted text-muted-foreground";
+    case "critical":
+      return "bg-destructive text-destructive-foreground";
+    case "high":
+      return "bg-orange-500 text-white";
+    case "medium":
+      return "bg-warning text-warning-foreground";
+    default:
+      return "bg-muted text-muted-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "maintenance":
-        return <Wrench className="h-4 w-4" />;
-      case "certification":
-        return <Clock className="h-4 w-4" />;
-      case "risk":
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <Lightbulb className="h-4 w-4" />;
+    case "maintenance":
+      return <Wrench className="h-4 w-4" />;
+    case "certification":
+      return <Clock className="h-4 w-4" />;
+    case "risk":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <Lightbulb className="h-4 w-4" />;
     }
   };
 

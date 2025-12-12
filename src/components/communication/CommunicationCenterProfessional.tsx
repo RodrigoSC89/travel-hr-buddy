@@ -190,30 +190,30 @@ const formatTimeAgo = (timestamp: string) => {
 
 const getPriorityColor = (priority: Message["priority"]) => {
   switch (priority) {
-    case "critical": return "bg-destructive text-destructive-foreground";
-    case "high": return "bg-orange-500 text-white";
-    case "normal": return "bg-primary text-primary-foreground";
-    default: return "bg-muted text-muted-foreground";
+  case "critical": return "bg-destructive text-destructive-foreground";
+  case "high": return "bg-orange-500 text-white";
+  case "normal": return "bg-primary text-primary-foreground";
+  default: return "bg-muted text-muted-foreground";
   }
 };
 
 const getCategoryIcon = (category: Message["category"]) => {
   switch (category) {
-    case "hr": return User;
-    case "operations": return Building;
-    case "emergency": return AlertTriangle;
-    case "system": return Shield;
-    case "ai": return Bot;
-    default: return MessageSquare;
+  case "hr": return User;
+  case "operations": return Building;
+  case "emergency": return AlertTriangle;
+  case "system": return Shield;
+  case "ai": return Bot;
+  default: return MessageSquare;
   }
 };
 
 const getChannelIcon = (type: Channel["type"]) => {
   switch (type) {
-    case "department": return Building;
-    case "broadcast": return Megaphone;
-    case "emergency": return AlertTriangle;
-    default: return Users;
+  case "department": return Building;
+  case "broadcast": return Megaphone;
+  case "emergency": return AlertTriangle;
+  default: return Users;
   }
 };
 
@@ -346,7 +346,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
       senderId: "ai-assistant",
       senderName: "Assistente IA",
       senderRole: "Inteligência Artificial",
-      content: `Com base na sua mensagem, sugiro:\n\n• Verifique os protocolos de comunicação padrão\n• Consulte a documentação relacionada\n• Considere agendar uma reunião se necessário\n\nPosso ajudar com mais alguma coisa?`,
+      content: "Com base na sua mensagem, sugiro:\n\n• Verifique os protocolos de comunicação padrão\n• Consulte a documentação relacionada\n• Considere agendar uma reunião se necessário\n\nPosso ajudar com mais alguma coisa?",
       timestamp: new Date().toISOString(),
       priority: "normal",
       category: "ai",
@@ -709,9 +709,9 @@ export const CommunicationCenterProfessional: React.FC = () => {
                     <div className="flex items-start gap-3">
                       <div className={`p-2.5 rounded-lg ${
                         channel.type === "emergency" ? "bg-destructive/10 text-destructive" :
-                        channel.type === "department" ? "bg-blue-500/10 text-blue-500" :
-                        channel.type === "broadcast" ? "bg-orange-500/10 text-orange-500" :
-                        "bg-green-500/10 text-green-500"
+                          channel.type === "department" ? "bg-blue-500/10 text-blue-500" :
+                            channel.type === "broadcast" ? "bg-orange-500/10 text-orange-500" :
+                              "bg-green-500/10 text-green-500"
                       }`}>
                         <ChannelIcon className="h-5 w-5" />
                       </div>
@@ -848,9 +848,9 @@ export const CommunicationCenterProfessional: React.FC = () => {
                   <div key={i} className="flex items-start gap-4 p-4 rounded-lg border border-border/50 hover:bg-accent/50 cursor-pointer">
                     <div className={`p-2 rounded-full ${
                       notification.type === "urgent" ? "bg-destructive/10 text-destructive" :
-                      notification.type === "warning" ? "bg-orange-500/10 text-orange-500" :
-                      notification.type === "success" ? "bg-green-500/10 text-green-500" :
-                      "bg-blue-500/10 text-blue-500"
+                        notification.type === "warning" ? "bg-orange-500/10 text-orange-500" :
+                          notification.type === "success" ? "bg-green-500/10 text-green-500" :
+                            "bg-blue-500/10 text-blue-500"
                     }`}>
                       <Bell className="h-4 w-4" />
                     </div>

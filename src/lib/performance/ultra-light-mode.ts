@@ -77,12 +77,12 @@ class UltraLightMode {
       const rtt = connection.rtt || 0;
       
       // Ultra light for very slow connections
-      if (effectiveType === 'slow-2g' || downlink < 0.5 || rtt > 1000) {
-        this.enable('ultra');
+      if (effectiveType === "slow-2g" || downlink < 0.5 || rtt > 1000) {
+        this.enable("ultra");
       } 
       // Light mode for 2g/3g
-      else if (effectiveType === '2g' || downlink < 2 || rtt > 400) {
-        this.enable('light');
+      else if (effectiveType === "2g" || downlink < 2 || rtt > 400) {
+        this.enable("light");
       }
       // Default for fast connections
       else {
@@ -92,11 +92,11 @@ class UltraLightMode {
     
     // Check for save-data header preference
     if (connection?.saveData) {
-      this.enable('ultra');
+      this.enable("ultra");
     }
     
     // Check for reduced motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       this.config.disableAnimations = true;
       this.applyStyles();
     }
@@ -106,18 +106,18 @@ class UltraLightMode {
     const connection = (navigator as any).connection;
     
     if (connection) {
-      connection.addEventListener('change', () => this.detectAndApply());
+      connection.addEventListener("change", () => this.detectAndApply());
     }
 
     // Listen for user preference changes
-    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+    window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => {
       this.config.disableAnimations = e.matches;
       this.applyStyles();
     });
   }
 
-  enable(mode: 'light' | 'ultra' = 'light') {
-    this.config = mode === 'ultra' ? { ...ULTRA_LIGHT_CONFIG } : { ...LIGHT_CONFIG };
+  enable(mode: "light" | "ultra" = "light") {
+    this.config = mode === "ultra" ? { ...ULTRA_LIGHT_CONFIG } : { ...LIGHT_CONFIG };
     this.applyStyles();
     Logger.info(`Ultra Light Mode enabled: ${mode}`, undefined, "UltraLightMode");
   }
@@ -130,8 +130,8 @@ class UltraLightMode {
 
   private applyStyles() {
     if (!this.styleElement) {
-      this.styleElement = document.createElement('style');
-      this.styleElement.id = 'ultra-light-mode';
+      this.styleElement = document.createElement("style");
+      this.styleElement.id = "ultra-light-mode";
       document.head.appendChild(this.styleElement);
     }
 
@@ -188,17 +188,17 @@ class UltraLightMode {
     }
 
     // Add bandwidth indicator class
-    document.documentElement.classList.toggle('ultra-light-mode', this.config.enabled);
-    document.documentElement.classList.toggle('low-bandwidth', this.config.enabled);
+    document.documentElement.classList.toggle("ultra-light-mode", this.config.enabled);
+    document.documentElement.classList.toggle("low-bandwidth", this.config.enabled);
 
-    this.styleElement.textContent = styles.join('\n');
+    this.styleElement.textContent = styles.join("\n");
   }
 
   private removeStyles() {
     if (this.styleElement) {
-      this.styleElement.textContent = '';
+      this.styleElement.textContent = "";
     }
-    document.documentElement.classList.remove('ultra-light-mode', 'low-bandwidth');
+    document.documentElement.classList.remove("ultra-light-mode", "low-bandwidth");
   }
 
   getConfig(): UltraLightConfig {
@@ -229,7 +229,7 @@ class UltraLightMode {
 export const ultraLightMode = new UltraLightMode();
 
 // React hook
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useUltraLightMode() {
   const [config, setConfig] = useState<UltraLightConfig>(ultraLightMode.getConfig());

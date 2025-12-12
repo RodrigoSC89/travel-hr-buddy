@@ -45,7 +45,7 @@ export default function MapComponent({
 
       map.current = mapInstance;
 
-      mapInstance.on('load', () => {
+      mapInstance.on("load", () => {
         if (onMapLoad) {
           onMapLoad(mapInstance);
         }
