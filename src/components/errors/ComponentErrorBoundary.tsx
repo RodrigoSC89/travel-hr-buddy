@@ -44,15 +44,15 @@ export class ComponentErrorBoundary extends Component<Props, State> {
       metadata: {
         componentStack: errorInfo.componentStack,
       },
-    });
+    };
   }
 
   handleReset = (): void => {
     this.setState({
       hasError: false,
       error: null,
-    });
-  });
+    };
+  };
 
   render(): ReactNode {
     if (this.state.hasError) {
