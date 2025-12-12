@@ -283,4 +283,4 @@ export const NaturalLanguageInterface = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});
