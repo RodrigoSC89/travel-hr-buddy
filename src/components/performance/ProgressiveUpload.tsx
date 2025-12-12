@@ -3,17 +3,17 @@
  * Shows detailed progress for uploads on slow connections
  */
 
-import { useState, useCallback } from 'react';
-import { Upload, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { useState, useCallback } from "react";
+import { Upload, X, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface UploadFile {
   id: string;
   file: File;
   progress: number;
-  status: 'pending' | 'uploading' | 'success' | 'error';
+  status: "pending" | "uploading" | "success" | "error";
   error?: string;
   speed?: number; // bytes per second
   eta?: number; // seconds remaining
@@ -29,7 +29,7 @@ interface ProgressiveUploadProps {
 
 export function ProgressiveUpload({
   onUpload,
-  accept = '*',
+  accept = "*",
   multiple = false,
   maxSize = 10,
   className,
@@ -38,11 +38,11 @@ export function ProgressiveUpload({
   const [isDragging, setIsDragging] = useState(false);
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 B';
+    if (bytes === 0) return "0 B";
     const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
   };
 
   const formatTime = (seconds: number) => {
@@ -59,7 +59,7 @@ export function ProgressiveUpload({
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         file,
         progress: 0,
-        status: 'pending' as const,
+        status: "pending" as const,
       }));
 
     setFiles(prev => [...prev, ...newFiles]);
@@ -68,7 +68,7 @@ export function ProgressiveUpload({
     for (const uploadFile of newFiles) {
       setFiles(prev =>
         prev.map(f =>
-          f.id === uploadFile.id ? { ...f, status: 'uploading' as const } : f
+          f.id === uploadFile.id ? { ...f, status: "uploading" as const } : f
         )
       );
 
@@ -95,14 +95,14 @@ export function ProgressiveUpload({
 
         setFiles(prev =>
           prev.map(f =>
-            f.id === uploadFile.id ? { ...f, status: 'success' as const, progress: 100 } : f
+            f.id === uploadFile.id ? { ...f, status: "success" as const, progress: 100 } : f
           )
         );
       } catch (error) {
         setFiles(prev =>
           prev.map(f =>
             f.id === uploadFile.id
-              ? { ...f, status: 'error' as const, error: 'Upload falhou' }
+              ? { ...f, status: "error" as const, error: "Upload falhou" }
               : f
           )
         );
@@ -123,15 +123,15 @@ export function ProgressiveUpload({
   };
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Drop Zone */}
       <div
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         className={cn(
-          'border-2 border-dashed rounded-lg p-8 text-center transition-colors',
-          isDragging ? 'border-primary bg-primary/5' : 'border-border',
+          "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
+          isDragging ? "border-primary bg-primary/5" : "border-border",
         )}
       >
         <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
@@ -165,16 +165,16 @@ export function ProgressiveUpload({
             >
               {/* Status Icon */}
               <div className="shrink-0">
-                {file.status === 'uploading' && (
+                {file.status === "uploading" && (
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
                 )}
-                {file.status === 'success' && (
+                {file.status === "success" && (
                   <CheckCircle className="h-5 w-5 text-green-500" />
                 )}
-                {file.status === 'error' && (
+                {file.status === "error" && (
                   <AlertCircle className="h-5 w-5 text-destructive" />
                 )}
-                {file.status === 'pending' && (
+                {file.status === "pending" && (
                   <div className="h-5 w-5 rounded-full border-2 border-muted" />
                 )}
               </div>
@@ -184,7 +184,7 @@ export function ProgressiveUpload({
                 <p className="text-sm font-medium truncate">{file.file.name}</p>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{formatBytes(file.file.size)}</span>
-                  {file.status === 'uploading' && file.speed && (
+                  {file.status === "uploading" && file.speed && (
                     <>
                       <span>•</span>
                       <span>{formatBytes(file.speed)}/s</span>
@@ -196,17 +196,17 @@ export function ProgressiveUpload({
                       )}
                     </>
                   )}
-                  {file.status === 'error' && (
+                  {file.status === "error" && (
                     <span className="text-destructive">{file.error}</span>
                   )}
                 </div>
-                {file.status === 'uploading' && (
+                {file.status === "uploading" && (
                   <Progress value={file.progress} className="h-1 mt-2" />
                 )}
               </div>
 
               {/* Remove Button */}
-              {file.status !== 'uploading' && (
+              {file.status !== "uploading" && (
                 <Button
                   variant="ghost"
                   size="icon"

@@ -20,62 +20,62 @@ interface LiveMetric {
   label: string;
   value: string | number;
   icon: React.ReactNode;
-  status?: 'success' | 'warning' | 'error';
+  status?: "success" | "warning" | "error";
 }
 
 function LiveMetricsBarComponent() {
   // Dados estáticos - não precisa de intervals constantes
   const metrics = useMemo<LiveMetric[]>(() => [
     {
-      id: 'vessels',
-      label: 'Embarcações',
+      id: "vessels",
+      label: "Embarcações",
       value: 47,
       icon: <Ship className="h-3 w-3" />,
-      status: 'success'
+      status: "success"
     },
     {
-      id: 'crew',
-      label: 'Tripulantes',
+      id: "crew",
+      label: "Tripulantes",
       value: 1284,
       icon: <Users className="h-3 w-3" />,
-      status: 'success'
+      status: "success"
     },
     {
-      id: 'alerts',
-      label: 'Alertas',
+      id: "alerts",
+      label: "Alertas",
       value: 3,
       icon: <AlertTriangle className="h-3 w-3" />,
-      status: 'warning'
+      status: "warning"
     },
     {
-      id: 'compliance',
-      label: 'Compliance',
-      value: '98%',
+      id: "compliance",
+      label: "Compliance",
+      value: "98%",
       icon: <CheckCircle className="h-3 w-3" />,
-      status: 'success'
+      status: "success"
     },
     {
-      id: 'operations',
-      label: 'Operações',
+      id: "operations",
+      label: "Operações",
       value: 156,
       icon: <Activity className="h-3 w-3" />,
-      status: 'success'
+      status: "success"
     },
     {
-      id: 'ports',
-      label: 'Portos',
+      id: "ports",
+      label: "Portos",
       value: 12,
       icon: <Anchor className="h-3 w-3" />,
-      status: 'success'
+      status: "success"
     },
   ], []);
 
   const getStatusColor = (status?: string) => {
     switch (status) {
-      case 'success': return 'text-emerald-400';
-      case 'warning': return 'text-amber-400';
-      case 'error': return 'text-red-400';
-      default: return 'text-slate-300';
+    case "success": return "text-emerald-400";
+    case "warning": return "text-amber-400";
+    case "error": return "text-red-400";
+    default: return "text-slate-300";
     }
   };
 

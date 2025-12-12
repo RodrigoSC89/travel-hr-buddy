@@ -12,11 +12,11 @@ export async function generateSignatureHash(data: string): Promise<string> {
   const dataBuffer = encoder.encode(data);
 
   // Generate SHA-256 hash
-  const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
 
   // Convert to hex string
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
   return hashHex;
 }
@@ -57,7 +57,7 @@ export async function validatePSCSignature(
 
     return calculatedHash === providedHash;
   } catch (error) {
-    console.error('Error validating signature:', error);
+    console.error("Error validating signature:", error);
     return false;
   }
 }
@@ -87,7 +87,7 @@ export async function validatePSCSignatureDetailed(
   if (!providedHash) {
     return {
       isValid: false,
-      message: 'No signature hash provided',
+      message: "No signature hash provided",
       timestamp,
     };
   }
@@ -105,14 +105,14 @@ export async function validatePSCSignatureDetailed(
     return {
       isValid,
       message: isValid 
-        ? 'Signature is valid and inspection data is intact'
-        : 'Signature validation failed - data may have been modified',
+        ? "Signature is valid and inspection data is intact"
+        : "Signature validation failed - data may have been modified",
       timestamp,
     };
   } catch (error) {
     return {
       isValid: false,
-      message: `Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      message: `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
       timestamp,
     };
   }
@@ -145,7 +145,7 @@ export async function verifyInspectionIntegrity(
   if (!inspection.signature_hash) {
     return {
       isValid: false,
-      message: 'Inspection is not signed',
+      message: "Inspection is not signed",
       timestamp: new Date(),
     };
   }

@@ -3,19 +3,19 @@
  * Versão funcional com drag-and-drop e todas as ações
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 import {
   Plus,
   Search,
@@ -39,11 +39,11 @@ import {
   X,
   Loader2,
   CheckCircle
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { mockCandidatos, mockVagas, departamentos } from '../data/mockData';
-import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
-import type { Candidato, Vaga } from '../types';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { mockCandidatos, mockVagas, departamentos } from "../data/mockData";
+import { useNautilusPeopleAI } from "../hooks/useNautilusPeopleAI";
+import type { Candidato, Vaga } from "../types";
 
 const RecruitmentPipeline: React.FC = () => {
   const [selectedVaga, setSelectedVaga] = useState<Vaga | null>(mockVagas[0]);
@@ -54,34 +54,34 @@ const RecruitmentPipeline: React.FC = () => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isMessageOpen, setIsMessageOpen] = useState(false);
-  const [filterStatus, setFilterStatus] = useState('todas');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState("todas");
+  const [searchTerm, setSearchTerm] = useState("");
   const [draggedCandidate, setDraggedCandidate] = useState<string | null>(null);
   
   const { isLoading, screenCandidate, generateJobDescription } = useNautilusPeopleAI();
 
   const [newVaga, setNewVaga] = useState({
-    titulo: '',
-    departamento: '',
-    urgencia: 'media',
-    descricao: '',
-    requisitos: ''
+    titulo: "",
+    departamento: "",
+    urgencia: "media",
+    descricao: "",
+    requisitos: ""
   });
 
   const etapas = [
-    { id: 'triagem', label: 'Triagem IA', color: 'bg-blue-500' },
-    { id: 'entrevista_rh', label: 'Entrevista RH', color: 'bg-purple-500' },
-    { id: 'entrevista_tecnica', label: 'Entrevista Técnica', color: 'bg-orange-500' },
-    { id: 'proposta', label: 'Proposta', color: 'bg-green-500' },
-    { id: 'contratado', label: 'Contratado', color: 'bg-emerald-500' }
+    { id: "triagem", label: "Triagem IA", color: "bg-blue-500" },
+    { id: "entrevista_rh", label: "Entrevista RH", color: "bg-purple-500" },
+    { id: "entrevista_tecnica", label: "Entrevista Técnica", color: "bg-orange-500" },
+    { id: "proposta", label: "Proposta", color: "bg-green-500" },
+    { id: "contratado", label: "Contratado", color: "bg-emerald-500" }
   ];
 
   const getUrgenciaColor = (urgencia: string) => {
     switch (urgencia) {
-      case 'critica': return 'bg-red-500 text-white';
-      case 'alta': return 'bg-orange-500 text-white';
-      case 'media': return 'bg-yellow-500 text-black';
-      default: return 'bg-blue-500 text-white';
+    case "critica": return "bg-red-500 text-white";
+    case "alta": return "bg-orange-500 text-white";
+    case "media": return "bg-yellow-500 text-black";
+    default: return "bg-blue-500 text-white";
     }
   };
 
@@ -106,7 +106,7 @@ const RecruitmentPipeline: React.FC = () => {
       setCandidatos(prev => prev.map(c => {
         if (c.id === draggedCandidate) {
           toast.success(`${c.nome} movido para ${etapas.find(e => e.id === etapaId)?.label}`);
-          return { ...c, etapa: etapaId as Candidato['etapa'] };
+          return { ...c, etapa: etapaId as Candidato["etapa"] };
         }
         return c;
       }));
@@ -115,10 +115,10 @@ const RecruitmentPipeline: React.FC = () => {
   };
 
   const handleTriagemIA = async () => {
-    const candidatosPendentes = candidatos.filter(c => c.etapa === 'triagem' && !c.aiInsights);
+    const candidatosPendentes = candidatos.filter(c => c.etapa === "triagem" && !c.aiInsights);
     
     if (candidatosPendentes.length === 0) {
-      toast.info('Todos os candidatos já foram triados');
+      toast.info("Todos os candidatos já foram triados");
       return;
     }
 
@@ -127,7 +127,7 @@ const RecruitmentPipeline: React.FC = () => {
     for (const candidato of candidatosPendentes) {
       const result = await screenCandidate(
         { nome: candidato.nome, skills: candidato.skills, experiencia: candidato.experiencia },
-        { titulo: selectedVaga?.titulo || '', requisitos: selectedVaga?.requisitos || [] }
+        { titulo: selectedVaga?.titulo || "", requisitos: selectedVaga?.requisitos || [] }
       );
       
       if (result) {
@@ -139,12 +139,12 @@ const RecruitmentPipeline: React.FC = () => {
       }
     }
     
-    toast.success('Triagem IA concluída!');
+    toast.success("Triagem IA concluída!");
   };
 
   const handleCreateVaga = async () => {
     if (!newVaga.titulo || !newVaga.departamento) {
-      toast.error('Preencha os campos obrigatórios');
+      toast.error("Preencha os campos obrigatórios");
       return;
     }
 
@@ -152,33 +152,33 @@ const RecruitmentPipeline: React.FC = () => {
       id: Date.now().toString(),
       titulo: newVaga.titulo,
       departamento: newVaga.departamento,
-      tipo: 'CLT',
-      urgencia: newVaga.urgencia as Vaga['urgencia'],
+      tipo: "CLT",
+      urgencia: newVaga.urgencia as Vaga["urgencia"],
       candidatos: 0,
-      status: 'aberta',
-      dataAbertura: new Date().toISOString().split('T')[0],
+      status: "aberta",
+      dataAbertura: new Date().toISOString().split("T")[0],
       descricao: newVaga.descricao,
-      requisitos: newVaga.requisitos.split(',').map(r => r.trim())
+      requisitos: newVaga.requisitos.split(",").map(r => r.trim())
     };
 
     setVagas([novaVaga, ...vagas]);
     setIsNewVagaOpen(false);
-    setNewVaga({ titulo: '', departamento: '', urgencia: 'media', descricao: '', requisitos: '' });
+    setNewVaga({ titulo: "", departamento: "", urgencia: "media", descricao: "", requisitos: "" });
     toast.success(`Vaga "${novaVaga.titulo}" criada com sucesso!`);
   };
 
   const handleGenerateDescription = async () => {
     if (!newVaga.titulo || !newVaga.departamento) {
-      toast.error('Informe título e departamento primeiro');
+      toast.error("Informe título e departamento primeiro");
       return;
     }
 
-    toast.info('Gerando descrição com IA...');
-    const result = await generateJobDescription(newVaga.titulo, newVaga.departamento, 'Sênior');
+    toast.info("Gerando descrição com IA...");
+    const result = await generateJobDescription(newVaga.titulo, newVaga.departamento, "Sênior");
     
     if (result) {
       setNewVaga(prev => ({ ...prev, descricao: result }));
-      toast.success('Descrição gerada!');
+      toast.success("Descrição gerada!");
     }
   };
 
@@ -202,7 +202,7 @@ const RecruitmentPipeline: React.FC = () => {
   };
 
   const filteredVagas = vagas.filter(v => 
-    filterStatus === 'todas' || v.status === filterStatus
+    filterStatus === "todas" || v.status === filterStatus
   );
 
   return (
@@ -334,7 +334,7 @@ const RecruitmentPipeline: React.FC = () => {
             className="cursor-pointer"
             onClick={() => setSelectedVaga(vaga)}
           >
-            <Card className={`transition-all ${selectedVaga?.id === vaga.id ? 'border-primary ring-2 ring-primary/20' : 'hover:border-primary/50'}`}>
+            <Card className={`transition-all ${selectedVaga?.id === vaga.id ? "border-primary ring-2 ring-primary/20" : "hover:border-primary/50"}`}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div>
@@ -386,7 +386,7 @@ const RecruitmentPipeline: React.FC = () => {
                   </Badge>
                 </div>
                 <div className={`space-y-2 min-h-[200px] p-2 bg-muted/30 rounded-lg border-2 border-dashed transition-colors ${
-                  draggedCandidate ? 'border-primary/50 bg-primary/5' : 'border-transparent'
+                  draggedCandidate ? "border-primary/50 bg-primary/5" : "border-transparent"
                 }`}>
                   <AnimatePresence>
                     {getCandidatosByEtapa(etapa.id).map((candidato) => (
@@ -405,7 +405,7 @@ const RecruitmentPipeline: React.FC = () => {
                           <GripVertical className="w-3 h-3 text-muted-foreground" />
                           <Avatar className="w-6 h-6">
                             <AvatarFallback className="text-xs bg-primary/10 text-primary">
-                              {candidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                              {candidato.nome.split(" ").map(n => n[0]).join("").slice(0, 2)}
                             </AvatarFallback>
                           </Avatar>
                           <span className="text-sm font-medium truncate">{candidato.nome}</span>
@@ -515,7 +515,7 @@ const RecruitmentPipeline: React.FC = () => {
               <div className="flex items-center gap-4">
                 <Avatar className="w-16 h-16">
                   <AvatarFallback className="text-lg bg-primary/10 text-primary">
-                    {selectedCandidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    {selectedCandidato.nome.split(" ").map(n => n[0]).join("").slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
@@ -543,7 +543,7 @@ const RecruitmentPipeline: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar className="w-4 h-4 text-muted-foreground" />
-                  Aplicou em {new Date(selectedCandidato.dataAplicacao).toLocaleDateString('pt-BR')}
+                  Aplicou em {new Date(selectedCandidato.dataAplicacao).toLocaleDateString("pt-BR")}
                 </div>
               </div>
 

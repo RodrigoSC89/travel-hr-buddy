@@ -3,13 +3,13 @@
  * Intelligent resource loading based on network conditions
  */
 
-import { bandwidthOptimizer } from './low-bandwidth-optimizer';
-import { ultraLightMode } from './ultra-light-mode';
+import { bandwidthOptimizer } from "./low-bandwidth-optimizer";
+import { ultraLightMode } from "./ultra-light-mode";
 import { Logger } from "@/lib/utils/logger";
 
 interface LoaderConfig {
-  priority: 'critical' | 'high' | 'normal' | 'low';
-  type: 'script' | 'style' | 'image' | 'data' | 'module';
+  priority: "critical" | "high" | "normal" | "low";
+  type: "script" | "style" | "image" | "data" | "module";
   timeout?: number;
 }
 
@@ -47,7 +47,7 @@ class SmartLoader {
     }
 
     // Skip non-critical in ultra-light mode
-    if (ultraLightMode.isCriticalOnly() && config.priority !== 'critical') {
+    if (ultraLightMode.isCriticalOnly() && config.priority !== "critical") {
       return Promise.resolve(null as T);
     }
 
@@ -102,23 +102,23 @@ class SmartLoader {
       let result: any;
 
       switch (config.type) {
-        case 'script':
-          result = await this.loadScript(url);
-          break;
-        case 'style':
-          result = await this.loadStyle(url);
-          break;
-        case 'image':
-          result = await this.loadImage(url);
-          break;
-        case 'data':
-          result = await this.loadData(url, controller.signal);
-          break;
-        case 'module':
-          result = await this.loadModule(url);
-          break;
-        default:
-          result = await this.loadData(url, controller.signal);
+      case "script":
+        result = await this.loadScript(url);
+        break;
+      case "style":
+        result = await this.loadStyle(url);
+        break;
+      case "image":
+        result = await this.loadImage(url);
+        break;
+      case "data":
+        result = await this.loadData(url, controller.signal);
+        break;
+      case "module":
+        result = await this.loadModule(url);
+        break;
+      default:
+        result = await this.loadData(url, controller.signal);
       }
 
       clearTimeout(timeoutId);
@@ -132,7 +132,7 @@ class SmartLoader {
 
   private loadScript(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = url;
       script.async = true;
       script.onload = () => resolve();
@@ -143,8 +143,8 @@ class SmartLoader {
 
   private loadStyle(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
       link.href = url;
       link.onload = () => resolve();
       link.onerror = reject;
@@ -165,7 +165,7 @@ class SmartLoader {
     const response = await fetch(url, {
       signal,
       headers: {
-        'Accept-Encoding': 'gzip, deflate, br',
+        "Accept-Encoding": "gzip, deflate, br",
       },
     });
     return response.json();
@@ -176,14 +176,14 @@ class SmartLoader {
   }
 
   // Preload a resource
-  preload(url: string, as: 'script' | 'style' | 'image' | 'font' = 'script') {
+  preload(url: string, as: "script" | "style" | "image" | "font" = "script") {
     if (document.querySelector(`link[href="${url}"]`)) return;
     
-    const link = document.createElement('link');
-    link.rel = 'preload';
+    const link = document.createElement("link");
+    link.rel = "preload";
     link.href = url;
     link.as = as;
-    if (as === 'font') link.crossOrigin = 'anonymous';
+    if (as === "font") link.crossOrigin = "anonymous";
     document.head.appendChild(link);
   }
 
@@ -192,8 +192,8 @@ class SmartLoader {
     if (!bandwidthOptimizer.shouldPrefetch()) return;
     if (document.querySelector(`link[href="${url}"]`)) return;
     
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement("link");
+    link.rel = "prefetch";
     link.href = url;
     document.head.appendChild(link);
   }

@@ -42,7 +42,7 @@ const useSystemMetrics = () => {
   const [metrics, setMetrics] = useState({
     cpu: 15,
     memory: 45,
-    network: 'online' as 'online' | 'offline',
+    network: "online" as "online" | "offline",
     latency: 35,
     fps: 60,
     cacheHit: 92,
@@ -54,7 +54,7 @@ const useSystemMetrics = () => {
     setMetrics({
       cpu: Math.random() * 30 + 10,
       memory: memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 45,
-      network: navigator.onLine ? 'online' : 'offline',
+      network: navigator.onLine ? "online" : "offline",
       latency: Math.round((navigator as any).connection?.rtt || 50),
       fps: 60,
       cacheHit: 92,
@@ -67,13 +67,13 @@ const useSystemMetrics = () => {
     const timer = setTimeout(updateMetrics, 500);
     
     // Atualizar apenas quando status de rede muda
-    window.addEventListener('online', updateMetrics);
-    window.addEventListener('offline', updateMetrics);
+    window.addEventListener("online", updateMetrics);
+    window.addEventListener("offline", updateMetrics);
     
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('online', updateMetrics);
-      window.removeEventListener('offline', updateMetrics);
+      window.removeEventListener("online", updateMetrics);
+      window.removeEventListener("offline", updateMetrics);
     };
   }, [updateMetrics]);
 
@@ -139,13 +139,13 @@ const MetricCard = ({ icon: Icon, label, value, color, progress }: {
 
 // Controles de Idioma
 const LanguageControls = () => {
-  const [currentLang, setCurrentLang] = useState('pt-BR');
+  const [currentLang, setCurrentLang] = useState("pt-BR");
   const languages = [
-    { code: 'pt-BR', name: 'Português', flag: '🇧🇷' },
-    { code: 'en-US', name: 'English', flag: '🇺🇸' },
-    { code: 'es-ES', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr-FR', name: 'Français', flag: '🇫🇷' },
-    { code: 'zh-CN', name: '中文', flag: '🇨🇳' },
+    { code: "pt-BR", name: "Português", flag: "🇧🇷" },
+    { code: "en-US", name: "English", flag: "🇺🇸" },
+    { code: "es-ES", name: "Español", flag: "🇪🇸" },
+    { code: "fr-FR", name: "Français", flag: "🇫🇷" },
+    { code: "zh-CN", name: "中文", flag: "🇨🇳" },
   ];
 
   return (
@@ -184,7 +184,7 @@ const AccessibilityControls = () => {
     reducedMotion: false,
     dyslexiaFont: false,
     screenReader: false,
-    colorBlindMode: 'none' as 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia'
+    colorBlindMode: "none" as "none" | "protanopia" | "deuteranopia" | "tritanopia"
   });
 
   const toggle = (key: keyof typeof settings) => {
@@ -202,19 +202,19 @@ const AccessibilityControls = () => {
       <CardContent className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm">Alto Contraste</span>
-          <Switch checked={settings.highContrast} onCheckedChange={() => toggle('highContrast')} />
+          <Switch checked={settings.highContrast} onCheckedChange={() => toggle("highContrast")} />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Texto Grande</span>
-          <Switch checked={settings.largeText} onCheckedChange={() => toggle('largeText')} />
+          <Switch checked={settings.largeText} onCheckedChange={() => toggle("largeText")} />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Reduzir Animações</span>
-          <Switch checked={settings.reducedMotion} onCheckedChange={() => toggle('reducedMotion')} />
+          <Switch checked={settings.reducedMotion} onCheckedChange={() => toggle("reducedMotion")} />
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Fonte Dislexia</span>
-          <Switch checked={settings.dyslexiaFont} onCheckedChange={() => toggle('dyslexiaFont')} />
+          <Switch checked={settings.dyslexiaFont} onCheckedChange={() => toggle("dyslexiaFont")} />
         </div>
       </CardContent>
     </Card>
@@ -231,16 +231,16 @@ const PWAControls = () => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
     
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
     
     // Check if installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
     setIsInstalled(isStandalone);
     
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -259,13 +259,13 @@ const PWAControls = () => {
             Status da Rede
           </span>
           <Badge variant={isOnline ? "default" : "destructive"}>
-            {isOnline ? 'Online' : 'Offline'}
+            {isOnline ? "Online" : "Offline"}
           </Badge>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">App Instalado</span>
           <Badge variant={isInstalled ? "default" : "outline"}>
-            {isInstalled ? 'Sim' : 'Não'}
+            {isInstalled ? "Sim" : "Não"}
           </Badge>
         </div>
         <div className="flex items-center justify-between">
@@ -310,15 +310,15 @@ const NotificationControls = () => {
       <CardContent className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm">Permissão</span>
-          <Badge variant={permission === 'granted' ? "default" : "outline"}>
-            {permission === 'granted' ? 'Ativado' : permission === 'denied' ? 'Bloqueado' : 'Pendente'}
+          <Badge variant={permission === "granted" ? "default" : "outline"}>
+            {permission === "granted" ? "Ativado" : permission === "denied" ? "Bloqueado" : "Pendente"}
           </Badge>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-sm">Não Lidas</span>
           <Badge variant="destructive">{unread}</Badge>
         </div>
-        {permission !== 'granted' && (
+        {permission !== "granted" && (
           <Button size="sm" onClick={requestPermission} className="w-full gap-1">
             <Bell className="h-3 w-3" />
             Ativar Notificações
@@ -332,36 +332,36 @@ const NotificationControls = () => {
 // Sistema Status Geral
 const SystemStatus = () => {
   const [status, setStatus] = useState({
-    database: 'operational',
-    api: 'operational',
-    storage: 'operational',
-    auth: 'operational',
-    cache: 'operational'
+    database: "operational",
+    api: "operational",
+    storage: "operational",
+    auth: "operational",
+    cache: "operational"
   });
 
   const statusColor = (s: string) => {
     switch (s) {
-      case 'operational': return 'text-green-500';
-      case 'degraded': return 'text-yellow-500';
-      case 'down': return 'text-red-500';
-      default: return 'text-muted-foreground';
+    case "operational": return "text-green-500";
+    case "degraded": return "text-yellow-500";
+    case "down": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const statusIcon = (s: string) => {
     switch (s) {
-      case 'operational': return CheckCircle2;
-      case 'degraded': return AlertTriangle;
-      default: return AlertTriangle;
+    case "operational": return CheckCircle2;
+    case "degraded": return AlertTriangle;
+    default: return AlertTriangle;
     }
   };
 
   const services = [
-    { name: 'Database', status: status.database, icon: Database },
-    { name: 'API', status: status.api, icon: Cloud },
-    { name: 'Storage', status: status.storage, icon: HardDrive },
-    { name: 'Auth', status: status.auth, icon: Shield },
-    { name: 'Cache', status: status.cache, icon: Zap },
+    { name: "Database", status: status.database, icon: Database },
+    { name: "API", status: status.api, icon: Cloud },
+    { name: "Storage", status: status.storage, icon: HardDrive },
+    { name: "Auth", status: status.auth, icon: Shield },
+    { name: "Cache", status: status.cache, icon: Zap },
   ];
 
   return (
@@ -384,7 +384,7 @@ const SystemStatus = () => {
                 </span>
                 <span className={cn("flex items-center gap-1 text-xs", statusColor(service.status))}>
                   <StatusIcon className="h-3 w-3" />
-                  {service.status === 'operational' ? 'OK' : service.status}
+                  {service.status === "operational" ? "OK" : service.status}
                 </span>
               </div>
             );
@@ -482,7 +482,7 @@ const OptimizationItem = ({ label, active }: { label: string; active: boolean })
   <div className="flex items-center justify-between">
     <span className="text-sm">{label}</span>
     <Badge variant={active ? "default" : "outline"} className="text-xs">
-      {active ? 'Ativo' : 'Inativo'}
+      {active ? "Ativo" : "Inativo"}
     </Badge>
   </div>
 );

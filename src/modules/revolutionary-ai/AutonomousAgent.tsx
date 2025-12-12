@@ -3,29 +3,29 @@
  * Funcionalidade 6 & 10: Gestor Digital Autônomo + Agente Autônomo de Decisão
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Brain, Zap, CheckCircle, AlertTriangle, Clock, 
   ShoppingCart, Wrench, FileText, Bell, Activity,
   Play, Pause, Settings, Eye, ThumbsUp, ThumbsDown,
   RefreshCw, Target
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface AgentAction {
   id: string;
-  type: 'purchase' | 'maintenance' | 'report' | 'alert' | 'optimization';
+  type: "purchase" | "maintenance" | "report" | "alert" | "optimization";
   title: string;
   description: string;
-  status: 'pending' | 'executing' | 'completed' | 'failed' | 'cancelled';
+  status: "pending" | "executing" | "completed" | "failed" | "cancelled";
   confidence: number;
-  impact: 'high' | 'medium' | 'low';
+  impact: "high" | "medium" | "low";
   timestamp: Date;
   result?: string;
   requiresApproval: boolean;
@@ -41,59 +41,59 @@ interface AgentMetrics {
 
 const MOCK_ACTIONS: AgentAction[] = [
   {
-    id: '1',
-    type: 'purchase',
-    title: 'Pedido Automático: Filtros de Óleo',
-    description: 'Estoque abaixo do mínimo (2 unidades). Gerando pedido para 10 unidades ao fornecedor preferencial.',
-    status: 'pending',
+    id: "1",
+    type: "purchase",
+    title: "Pedido Automático: Filtros de Óleo",
+    description: "Estoque abaixo do mínimo (2 unidades). Gerando pedido para 10 unidades ao fornecedor preferencial.",
+    status: "pending",
     confidence: 95,
-    impact: 'medium',
+    impact: "medium",
     timestamp: new Date(),
     requiresApproval: true
   },
   {
-    id: '2',
-    type: 'maintenance',
-    title: 'Agendamento: Manutenção Preventiva Motor #2',
-    description: 'Baseado em padrão de vibração e horas de operação, agendando manutenção para próxima janela disponível.',
-    status: 'executing',
+    id: "2",
+    type: "maintenance",
+    title: "Agendamento: Manutenção Preventiva Motor #2",
+    description: "Baseado em padrão de vibração e horas de operação, agendando manutenção para próxima janela disponível.",
+    status: "executing",
     confidence: 87,
-    impact: 'high',
+    impact: "high",
     timestamp: new Date(Date.now() - 30 * 60 * 1000),
     requiresApproval: false
   },
   {
-    id: '3',
-    type: 'report',
-    title: 'Relatório Semanal de Compliance',
-    description: 'Gerando e enviando relatório automático para stakeholders conforme cronograma.',
-    status: 'completed',
+    id: "3",
+    type: "report",
+    title: "Relatório Semanal de Compliance",
+    description: "Gerando e enviando relatório automático para stakeholders conforme cronograma.",
+    status: "completed",
     confidence: 100,
-    impact: 'low',
+    impact: "low",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    result: 'Relatório enviado para 5 destinatários',
+    result: "Relatório enviado para 5 destinatários",
     requiresApproval: false
   },
   {
-    id: '4',
-    type: 'alert',
-    title: 'Alerta: Certificado STCW Vencendo',
-    description: 'Notificando RH e tripulante sobre certificação vencendo em 15 dias.',
-    status: 'completed',
+    id: "4",
+    type: "alert",
+    title: "Alerta: Certificado STCW Vencendo",
+    description: "Notificando RH e tripulante sobre certificação vencendo em 15 dias.",
+    status: "completed",
     confidence: 100,
-    impact: 'high',
+    impact: "high",
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-    result: 'Notificações enviadas via email e push',
+    result: "Notificações enviadas via email e push",
     requiresApproval: false
   },
   {
-    id: '5',
-    type: 'optimization',
-    title: 'Otimização: Rota de Abastecimento',
-    description: 'Sugerindo rota alternativa com economia de 12% no combustível baseado em condições climáticas.',
-    status: 'pending',
+    id: "5",
+    type: "optimization",
+    title: "Otimização: Rota de Abastecimento",
+    description: "Sugerindo rota alternativa com economia de 12% no combustível baseado em condições climáticas.",
+    status: "pending",
     confidence: 78,
-    impact: 'high',
+    impact: "high",
     timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
     requiresApproval: true
   }
@@ -115,45 +115,45 @@ export function AutonomousAgent() {
 
   const handleApprove = (actionId: string) => {
     setActions(prev => prev.map(a => 
-      a.id === actionId ? { ...a, status: 'executing' as const } : a
+      a.id === actionId ? { ...a, status: "executing" as const } : a
     ));
   };
 
   const handleReject = (actionId: string) => {
     setActions(prev => prev.map(a => 
-      a.id === actionId ? { ...a, status: 'cancelled' as const } : a
+      a.id === actionId ? { ...a, status: "cancelled" as const } : a
     ));
   };
 
   const getActionIcon = (type: string) => {
     switch (type) {
-      case 'purchase': return <ShoppingCart className="h-4 w-4" />;
-      case 'maintenance': return <Wrench className="h-4 w-4" />;
-      case 'report': return <FileText className="h-4 w-4" />;
-      case 'alert': return <Bell className="h-4 w-4" />;
-      case 'optimization': return <Target className="h-4 w-4" />;
-      default: return <Activity className="h-4 w-4" />;
+    case "purchase": return <ShoppingCart className="h-4 w-4" />;
+    case "maintenance": return <Wrench className="h-4 w-4" />;
+    case "report": return <FileText className="h-4 w-4" />;
+    case "alert": return <Bell className="h-4 w-4" />;
+    case "optimization": return <Target className="h-4 w-4" />;
+    default: return <Activity className="h-4 w-4" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     const colors = {
-      pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      executing: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      completed: 'bg-green-500/20 text-green-400 border-green-500/30',
-      failed: 'bg-red-500/20 text-red-400 border-red-500/30',
-      cancelled: 'bg-muted text-muted-foreground border-muted'
+      pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      executing: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      completed: "bg-green-500/20 text-green-400 border-green-500/30",
+      failed: "bg-red-500/20 text-red-400 border-red-500/30",
+      cancelled: "bg-muted text-muted-foreground border-muted"
     };
-    return colors[status as keyof typeof colors] || 'bg-muted';
+    return colors[status as keyof typeof colors] || "bg-muted";
   };
 
   const getImpactColor = (impact: string) => {
     const colors = {
-      high: 'text-red-400',
-      medium: 'text-amber-400',
-      low: 'text-green-400'
+      high: "text-red-400",
+      medium: "text-amber-400",
+      low: "text-green-400"
     };
-    return colors[impact as keyof typeof colors] || 'text-muted-foreground';
+    return colors[impact as keyof typeof colors] || "text-muted-foreground";
   };
 
   return (
@@ -163,8 +163,8 @@ export function AutonomousAgent() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className={`p-4 rounded-2xl ${isAgentActive ? 'bg-primary/20' : 'bg-muted'}`}>
-                <Brain className={`h-8 w-8 ${isAgentActive ? 'text-primary' : 'text-muted-foreground'}`} />
+              <div className={`p-4 rounded-2xl ${isAgentActive ? "bg-primary/20" : "bg-muted"}`}>
+                <Brain className={`h-8 w-8 ${isAgentActive ? "text-primary" : "text-muted-foreground"}`} />
               </div>
               <div>
                 <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -179,7 +179,7 @@ export function AutonomousAgent() {
                   )}
                 </h2>
                 <p className="text-muted-foreground">
-                  {isAgentActive ? 'Monitorando e agindo proativamente' : 'Pausado - Aguardando ativação'}
+                  {isAgentActive ? "Monitorando e agindo proativamente" : "Pausado - Aguardando ativação"}
                 </p>
               </div>
             </div>
@@ -267,17 +267,17 @@ export function AutonomousAgent() {
                       >
                         <Card 
                           className={`cursor-pointer transition-all hover:border-primary/50 ${
-                            selectedAction?.id === action.id ? 'border-primary ring-2 ring-primary/20' : ''
+                            selectedAction?.id === action.id ? "border-primary ring-2 ring-primary/20" : ""
                           }`}
                           onClick={() => setSelectedAction(action)}
                         >
                           <CardContent className="p-4">
                             <div className="flex items-start gap-3">
                               <div className={`p-2 rounded-lg ${
-                                action.status === 'executing' ? 'bg-blue-500/20 text-blue-400' :
-                                action.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                                action.status === 'pending' ? 'bg-amber-500/20 text-amber-400' :
-                                'bg-muted text-muted-foreground'
+                                action.status === "executing" ? "bg-blue-500/20 text-blue-400" :
+                                  action.status === "completed" ? "bg-green-500/20 text-green-400" :
+                                    action.status === "pending" ? "bg-amber-500/20 text-amber-400" :
+                                      "bg-muted text-muted-foreground"
                               }`}>
                                 {getActionIcon(action.type)}
                               </div>
@@ -301,11 +301,11 @@ export function AutonomousAgent() {
                                     {action.impact}
                                   </span>
                                   <span className="text-muted-foreground">
-                                    {action.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                    {action.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                                   </span>
                                 </div>
                               </div>
-                              {action.status === 'pending' && action.requiresApproval && (
+                              {action.status === "pending" && action.requiresApproval && (
                                 <div className="flex gap-1">
                                   <Button 
                                     size="icon" 
@@ -348,7 +348,7 @@ export function AutonomousAgent() {
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Eye className="h-5 w-5" />
-                {selectedAction ? 'Detalhes da Ação' : 'Selecione uma ação'}
+                {selectedAction ? "Detalhes da Ação" : "Selecione uma ação"}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -356,9 +356,9 @@ export function AutonomousAgent() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <div className={`p-3 rounded-lg ${
-                      selectedAction.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                      selectedAction.status === 'executing' ? 'bg-blue-500/20 text-blue-400' :
-                      'bg-amber-500/20 text-amber-400'
+                      selectedAction.status === "completed" ? "bg-green-500/20 text-green-400" :
+                        selectedAction.status === "executing" ? "bg-blue-500/20 text-blue-400" :
+                          "bg-amber-500/20 text-amber-400"
                     }`}>
                       {getActionIcon(selectedAction.type)}
                     </div>
@@ -390,7 +390,7 @@ export function AutonomousAgent() {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">Requer Aprovação</span>
-                      <span className="text-sm">{selectedAction.requiresApproval ? 'Sim' : 'Não'}</span>
+                      <span className="text-sm">{selectedAction.requiresApproval ? "Sim" : "Não"}</span>
                     </div>
                   </div>
 
@@ -401,7 +401,7 @@ export function AutonomousAgent() {
                     </div>
                   )}
 
-                  {selectedAction.status === 'pending' && selectedAction.requiresApproval && (
+                  {selectedAction.status === "pending" && selectedAction.requiresApproval && (
                     <div className="flex gap-2 pt-2">
                       <Button 
                         className="flex-1 bg-green-600 hover:bg-green-700"

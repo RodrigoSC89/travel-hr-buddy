@@ -154,7 +154,7 @@ Forneça uma análise completa com recomendações práticas.`;
               role: "system", 
               content: `Você é um assistente especializado em telemetria marítima e operações navais. 
 Responda de forma clara e profissional em português brasileiro.
-${context ? `Contexto atual: ${JSON.stringify(context)}` : ''}`
+${context ? `Contexto atual: ${JSON.stringify(context)}` : ""}`
             },
             { role: "user", content: question }
           ]

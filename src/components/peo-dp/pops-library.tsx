@@ -174,10 +174,10 @@ export const POPsLibrary: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
-      case "draft": return <Badge variant="secondary">Rascunho</Badge>;
-      case "review": return <Badge className="bg-yellow-500 text-black">Em Revisão</Badge>;
-      default: return <Badge variant="outline">Arquivado</Badge>;
+    case "active": return <Badge className="bg-green-500">Ativo</Badge>;
+    case "draft": return <Badge variant="secondary">Rascunho</Badge>;
+    case "review": return <Badge className="bg-yellow-500 text-black">Em Revisão</Badge>;
+    default: return <Badge variant="outline">Arquivado</Badge>;
     }
   };
 

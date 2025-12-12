@@ -3,38 +3,38 @@
  * Tests for StarFix and Terrastar mock APIs
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 // Mock StarFix API responses
 const mockStarFixResponse = {
   vessels: [
     {
-      id: 'v-001',
-      imo: '1234567',
-      name: 'MV Atlantic Star',
-      type: 'Tanker',
-      flag: 'Panama',
+      id: "v-001",
+      imo: "1234567",
+      name: "MV Atlantic Star",
+      type: "Tanker",
+      flag: "Panama",
       complianceScore: 95,
-      lastInspection: '2024-01-15',
+      lastInspection: "2024-01-15",
       deficiencies: 2,
-      status: 'active'
+      status: "active"
     }
   ],
   inspections: [
     {
-      id: 'insp-001',
-      vesselId: 'v-001',
-      type: 'PSC',
-      date: '2024-01-15',
-      port: 'Rotterdam',
-      result: 'passed',
+      id: "insp-001",
+      vesselId: "v-001",
+      type: "PSC",
+      date: "2024-01-15",
+      port: "Rotterdam",
+      result: "passed",
       deficiencies: []
     }
   ],
   compliance: {
-    ism: { valid: true, expiry: '2025-06-30' },
-    isps: { valid: true, expiry: '2025-08-15' },
-    solas: { valid: true, expiry: '2025-04-20' }
+    ism: { valid: true, expiry: "2025-06-30" },
+    isps: { valid: true, expiry: "2025-08-15" },
+    solas: { valid: true, expiry: "2025-04-20" }
   }
 };
 
@@ -54,8 +54,8 @@ const mockTerrastarResponse = {
   },
   alerts: [],
   forecast: {
-    next24h: 'stable',
-    solarActivity: 'low',
+    next24h: "stable",
+    solarActivity: "low",
     geomagneticIndex: 2
   }
 };
@@ -75,7 +75,7 @@ const createMockFetch = (response: any, delay = 100) => {
   );
 };
 
-describe('StarFix Mock API', () => {
+describe("StarFix Mock API", () => {
   let originalFetch: typeof fetch;
 
   beforeEach(() => {
@@ -87,61 +87,61 @@ describe('StarFix Mock API', () => {
     global.fetch = originalFetch;
   });
 
-  describe('Vessel Compliance', () => {
-    it('should return vessel list with compliance scores', async () => {
-      const response = await fetch('/api/starfix/vessels');
+  describe("Vessel Compliance", () => {
+    it("should return vessel list with compliance scores", async () => {
+      const response = await fetch("/api/starfix/vessels");
       const data = await response.json();
       
       expect(data.vessels).toBeDefined();
       expect(data.vessels.length).toBeGreaterThan(0);
-      expect(data.vessels[0]).toHaveProperty('complianceScore');
+      expect(data.vessels[0]).toHaveProperty("complianceScore");
     });
 
-    it('should have valid vessel structure', async () => {
-      const response = await fetch('/api/starfix/vessels');
+    it("should have valid vessel structure", async () => {
+      const response = await fetch("/api/starfix/vessels");
       const data = await response.json();
       
       const vessel = data.vessels[0];
-      expect(vessel).toHaveProperty('id');
-      expect(vessel).toHaveProperty('imo');
-      expect(vessel).toHaveProperty('name');
-      expect(vessel).toHaveProperty('type');
-      expect(vessel).toHaveProperty('flag');
+      expect(vessel).toHaveProperty("id");
+      expect(vessel).toHaveProperty("imo");
+      expect(vessel).toHaveProperty("name");
+      expect(vessel).toHaveProperty("type");
+      expect(vessel).toHaveProperty("flag");
     });
   });
 
-  describe('Inspection History', () => {
-    it('should return inspection records', async () => {
-      const response = await fetch('/api/starfix/inspections');
+  describe("Inspection History", () => {
+    it("should return inspection records", async () => {
+      const response = await fetch("/api/starfix/inspections");
       const data = await response.json();
       
       expect(data.inspections).toBeDefined();
       expect(Array.isArray(data.inspections)).toBe(true);
     });
 
-    it('should have valid inspection types', async () => {
-      const response = await fetch('/api/starfix/inspections');
+    it("should have valid inspection types", async () => {
+      const response = await fetch("/api/starfix/inspections");
       const data = await response.json();
       
-      const validTypes = ['PSC', 'ISM', 'ISPS', 'SOLAS', 'Flag State'];
+      const validTypes = ["PSC", "ISM", "ISPS", "SOLAS", "Flag State"];
       data.inspections.forEach((insp: any) => {
         expect(validTypes.some(t => insp.type.includes(t) || true)).toBe(true);
       });
     });
   });
 
-  describe('Compliance Status', () => {
-    it('should return compliance certificates', async () => {
-      const response = await fetch('/api/starfix/compliance');
+  describe("Compliance Status", () => {
+    it("should return compliance certificates", async () => {
+      const response = await fetch("/api/starfix/compliance");
       const data = await response.json();
       
       expect(data.compliance).toBeDefined();
-      expect(data.compliance).toHaveProperty('ism');
-      expect(data.compliance).toHaveProperty('isps');
+      expect(data.compliance).toHaveProperty("ism");
+      expect(data.compliance).toHaveProperty("isps");
     });
 
-    it('should have valid expiry dates', async () => {
-      const response = await fetch('/api/starfix/compliance');
+    it("should have valid expiry dates", async () => {
+      const response = await fetch("/api/starfix/compliance");
       const data = await response.json();
       
       const ismExpiry = new Date(data.compliance.ism.expiry);
@@ -151,7 +151,7 @@ describe('StarFix Mock API', () => {
   });
 });
 
-describe('Terrastar Mock API', () => {
+describe("Terrastar Mock API", () => {
   let originalFetch: typeof fetch;
 
   beforeEach(() => {
@@ -163,9 +163,9 @@ describe('Terrastar Mock API', () => {
     global.fetch = originalFetch;
   });
 
-  describe('Ionosphere Data', () => {
-    it('should return VTEC and STEC values', async () => {
-      const response = await fetch('/api/terrastar/ionosphere');
+  describe("Ionosphere Data", () => {
+    it("should return VTEC and STEC values", async () => {
+      const response = await fetch("/api/terrastar/ionosphere");
       const data = await response.json();
       
       expect(data.ionosphere).toBeDefined();
@@ -173,8 +173,8 @@ describe('Terrastar Mock API', () => {
       expect(data.ionosphere.stec).toBeGreaterThan(0);
     });
 
-    it('should include location coordinates', async () => {
-      const response = await fetch('/api/terrastar/ionosphere');
+    it("should include location coordinates", async () => {
+      const response = await fetch("/api/terrastar/ionosphere");
       const data = await response.json();
       
       expect(data.ionosphere.latitude).toBeDefined();
@@ -184,9 +184,9 @@ describe('Terrastar Mock API', () => {
     });
   });
 
-  describe('GNSS Corrections', () => {
-    it('should return corrections for multiple constellations', async () => {
-      const response = await fetch('/api/terrastar/corrections');
+  describe("GNSS Corrections", () => {
+    it("should return corrections for multiple constellations", async () => {
+      const response = await fetch("/api/terrastar/corrections");
       const data = await response.json();
       
       expect(data.corrections).toBeDefined();
@@ -195,8 +195,8 @@ describe('Terrastar Mock API', () => {
       expect(data.corrections.galileo).toBeDefined();
     });
 
-    it('should have accuracy values within expected range', async () => {
-      const response = await fetch('/api/terrastar/corrections');
+    it("should have accuracy values within expected range", async () => {
+      const response = await fetch("/api/terrastar/corrections");
       const data = await response.json();
       
       const { gps, glonass, galileo } = data.corrections;
@@ -208,17 +208,17 @@ describe('Terrastar Mock API', () => {
     });
   });
 
-  describe('Solar/Geomagnetic Alerts', () => {
-    it('should return forecast data', async () => {
-      const response = await fetch('/api/terrastar/forecast');
+  describe("Solar/Geomagnetic Alerts", () => {
+    it("should return forecast data", async () => {
+      const response = await fetch("/api/terrastar/forecast");
       const data = await response.json();
       
       expect(data.forecast).toBeDefined();
       expect(data.forecast.next24h).toBeDefined();
     });
 
-    it('should have valid geomagnetic index', async () => {
-      const response = await fetch('/api/terrastar/forecast');
+    it("should have valid geomagnetic index", async () => {
+      const response = await fetch("/api/terrastar/forecast");
       const data = await response.json();
       
       // Kp index is 0-9
@@ -226,8 +226,8 @@ describe('Terrastar Mock API', () => {
       expect(data.forecast.geomagneticIndex).toBeLessThanOrEqual(9);
     });
 
-    it('should return alerts array', async () => {
-      const response = await fetch('/api/terrastar/alerts');
+    it("should return alerts array", async () => {
+      const response = await fetch("/api/terrastar/alerts");
       const data = await response.json();
       
       expect(data.alerts).toBeDefined();
@@ -236,56 +236,56 @@ describe('Terrastar Mock API', () => {
   });
 });
 
-describe('Mock System Behavior', () => {
-  describe('Network Latency Simulation', () => {
-    it('should simulate realistic network latency', async () => {
+describe("Mock System Behavior", () => {
+  describe("Network Latency Simulation", () => {
+    it("should simulate realistic network latency", async () => {
       const startTime = Date.now();
       
       global.fetch = createMockFetch(mockStarFixResponse, 150) as any;
-      await fetch('/api/starfix/vessels');
+      await fetch("/api/starfix/vessels");
       
       const elapsed = Date.now() - startTime;
       expect(elapsed).toBeGreaterThanOrEqual(100); // At least 100ms
     });
   });
 
-  describe('Error Simulation', () => {
-    it('should handle mock errors gracefully', async () => {
+  describe("Error Simulation", () => {
+    it("should handle mock errors gracefully", async () => {
       global.fetch = vi.fn(() => 
         Promise.resolve({
           ok: false,
           status: 503,
-          json: () => Promise.resolve({ error: 'Service unavailable' })
+          json: () => Promise.resolve({ error: "Service unavailable" })
         })
       ) as any;
 
-      const response = await fetch('/api/starfix/vessels');
+      const response = await fetch("/api/starfix/vessels");
       expect(response.ok).toBe(false);
       expect(response.status).toBe(503);
     });
   });
 
-  describe('Data Consistency', () => {
-    it('should return consistent data structure', async () => {
+  describe("Data Consistency", () => {
+    it("should return consistent data structure", async () => {
       global.fetch = createMockFetch(mockStarFixResponse) as any;
       
       // Multiple calls should return same structure
-      const response1 = await (await fetch('/api/starfix/vessels')).json();
-      const response2 = await (await fetch('/api/starfix/vessels')).json();
+      const response1 = await (await fetch("/api/starfix/vessels")).json();
+      const response2 = await (await fetch("/api/starfix/vessels")).json();
       
       expect(Object.keys(response1)).toEqual(Object.keys(response2));
     });
   });
 });
 
-describe('Environment Configuration', () => {
-  it('should respect VITE_USE_MOCK_STARFIX flag', () => {
-    const useMock = process.env.VITE_USE_MOCK_STARFIX !== 'false';
-    expect(typeof useMock).toBe('boolean');
+describe("Environment Configuration", () => {
+  it("should respect VITE_USE_MOCK_STARFIX flag", () => {
+    const useMock = process.env.VITE_USE_MOCK_STARFIX !== "false";
+    expect(typeof useMock).toBe("boolean");
   });
 
-  it('should respect VITE_USE_MOCK_TERRASTAR flag', () => {
-    const useMock = process.env.VITE_USE_MOCK_TERRASTAR !== 'false';
-    expect(typeof useMock).toBe('boolean');
+  it("should respect VITE_USE_MOCK_TERRASTAR flag", () => {
+    const useMock = process.env.VITE_USE_MOCK_TERRASTAR !== "false";
+    expect(typeof useMock).toBe("boolean");
   });
 });

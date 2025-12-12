@@ -111,7 +111,7 @@ export default function AIJournaling() {
         id: Date.now().toString(),
         date: today.toISOString().split("T")[0],
         vessel: "MV Atlântico Sul",
-        summary: typeof result?.response === 'string' ? result.response : "Dia operacional transcorreu conforme planejado. Todas as atividades programadas foram concluídas dentro do cronograma estabelecido. Condições meteorológicas estáveis permitiram operação normal.",
+        summary: typeof result?.response === "string" ? result.response : "Dia operacional transcorreu conforme planejado. Todas as atividades programadas foram concluídas dentro do cronograma estabelecido. Condições meteorológicas estáveis permitiram operação normal.",
         highlights: [
           "Operações concluídas conforme cronograma",
           "Manutenção preventiva realizada",
@@ -181,7 +181,7 @@ export default function AIJournaling() {
             </SelectContent>
           </Select>
           <Button onClick={handleGenerateJournal} disabled={isGenerating}>
-            <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? 'animate-spin' : ''}`} />
+            <Sparkles className={`h-4 w-4 mr-2 ${isGenerating ? "animate-spin" : ""}`} />
             {isGenerating ? "Gerando..." : "Gerar Journal Hoje"}
           </Button>
         </div>

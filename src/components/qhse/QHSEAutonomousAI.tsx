@@ -167,19 +167,19 @@ export function QHSEAutonomousAI() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "compliant": return "bg-green-500";
-      case "partial": return "bg-yellow-500";
-      case "non-compliant": return "bg-red-500";
-      default: return "bg-gray-500";
+    case "compliant": return "bg-green-500";
+    case "partial": return "bg-yellow-500";
+    case "non-compliant": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "compliant": return "Conforme";
-      case "partial": return "Parcial";
-      case "non-compliant": return "Não Conforme";
-      default: return "Pendente";
+    case "compliant": return "Conforme";
+    case "partial": return "Parcial";
+    case "non-compliant": return "Não Conforme";
+    default: return "Pendente";
     }
   };
 

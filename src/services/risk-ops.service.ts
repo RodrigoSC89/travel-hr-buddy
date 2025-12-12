@@ -1,13 +1,13 @@
 // PATCH 600: Risk Operations Service
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   RiskOperation,
   RiskAssessment,
   RiskStatistics,
   RiskHeatmapCell,
   RiskExportData,
-} from '@/types/risk-ops';
+} from "@/types/risk-ops";
 
 export class RiskOpsService {
   /**
@@ -15,21 +15,21 @@ export class RiskOpsService {
    */
   static async getRisks(vesselId?: string, module?: string): Promise<RiskOperation[]> {
     let query = (supabase as any)
-      .from('risk_operations')
-      .select('*')
-      .order('risk_score', { ascending: false });
+      .from("risk_operations")
+      .select("*")
+      .order("risk_score", { ascending: false });
 
     if (vesselId) {
-      query = query.eq('vessel_id', vesselId);
+      query = query.eq("vessel_id", vesselId);
     }
     if (module) {
-      query = query.eq('module', module);
+      query = query.eq("module", module);
     }
 
     const { data, error } = await query;
 
     if (error) {
-      logger.error('Error fetching risks', error as Error, { vesselId, module });
+      logger.error("Error fetching risks", error as Error, { vesselId, module });
       throw error;
     }
 
@@ -41,13 +41,13 @@ export class RiskOpsService {
    */
   static async createRisk(risk: Partial<RiskOperation>): Promise<RiskOperation> {
     const { data, error } = await (supabase as any)
-      .from('risk_operations')
+      .from("risk_operations")
       .insert(risk)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error creating risk', error as Error, { riskTitle: risk.title });
+      logger.error("Error creating risk", error as Error, { riskTitle: risk.title });
       throw error;
     }
 
@@ -59,14 +59,14 @@ export class RiskOpsService {
    */
   static async updateRisk(id: string, updates: Partial<RiskOperation>): Promise<RiskOperation> {
     const { data, error } = await (supabase as any)
-      .from('risk_operations')
+      .from("risk_operations")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error updating risk', error as Error, { riskId: id });
+      logger.error("Error updating risk", error as Error, { riskId: id });
       throw error;
     }
 
@@ -78,12 +78,12 @@ export class RiskOpsService {
    */
   static async deleteRisk(id: string): Promise<void> {
     const { error } = await (supabase as any)
-      .from('risk_operations')
+      .from("risk_operations")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      logger.error('Error deleting risk', error as Error, { riskId: id });
+      logger.error("Error deleting risk", error as Error, { riskId: id });
       throw error;
     }
   }
@@ -93,13 +93,13 @@ export class RiskOpsService {
    */
   static async getRiskAssessments(riskId: string): Promise<RiskAssessment[]> {
     const { data, error } = await (supabase as any)
-      .from('risk_assessments')
-      .select('*')
-      .eq('risk_id', riskId)
-      .order('assessment_date', { ascending: false });
+      .from("risk_assessments")
+      .select("*")
+      .eq("risk_id", riskId)
+      .order("assessment_date", { ascending: false });
 
     if (error) {
-      logger.error('Error fetching assessments', error as Error, { riskId });
+      logger.error("Error fetching assessments", error as Error, { riskId });
       throw error;
     }
 
@@ -113,13 +113,13 @@ export class RiskOpsService {
     assessment: Partial<RiskAssessment>
   ): Promise<RiskAssessment> {
     const { data, error } = await (supabase as any)
-      .from('risk_assessments')
+      .from("risk_assessments")
       .insert(assessment)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error creating assessment', error as Error, { riskId: assessment.risk_id });
+      logger.error("Error creating assessment", error as Error, { riskId: assessment.risk_id });
       throw error;
     }
 
@@ -133,13 +133,13 @@ export class RiskOpsService {
     vesselId?: string,
     module?: string
   ): Promise<RiskStatistics> {
-    const { data, error } = await (supabase as any).rpc('get_risk_statistics', {
+    const { data, error } = await (supabase as any).rpc("get_risk_statistics", {
       p_vessel_id: vesselId || null,
       p_module: module || null,
     });
 
     if (error) {
-      logger.error('Error fetching risk statistics', error as Error, { vesselId, module });
+      logger.error("Error fetching risk statistics", error as Error, { vesselId, module });
       throw error;
     }
 
@@ -150,12 +150,12 @@ export class RiskOpsService {
    * Get risk heatmap data
    */
   static async getRiskHeatmap(vesselId?: string): Promise<RiskHeatmapCell[]> {
-    const { data, error } = await ((supabase as any).rpc as any)('get_risk_heatmap', {
+    const { data, error } = await ((supabase as any).rpc as any)("get_risk_heatmap", {
       p_vessel_id: vesselId || null,
     });
 
     if (error) {
-      logger.error('Error fetching risk heatmap', error as Error, { vesselId });
+      logger.error("Error fetching risk heatmap", error as Error, { vesselId });
       throw error;
     }
 
@@ -186,7 +186,7 @@ export class RiskOpsService {
   static async exportToCSV(vesselId?: string, module?: string): Promise<string> {
     const risks = await this.getRisks(vesselId, module);
 
-    let csv = 'ID,Title,Type,Module,Severity,Likelihood,Risk Score,Status,Created At\n';
+    let csv = "ID,Title,Type,Module,Severity,Likelihood,Risk Score,Status,Created At\n";
 
     risks.forEach(risk => {
       csv += `${risk.id},${risk.title},${risk.risk_type},${risk.module},${risk.severity},${risk.likelihood},${risk.risk_score},${risk.status},${new Date(risk.created_at).toLocaleDateString()}\n`;

@@ -3,20 +3,20 @@
  * Validates system components before production deployment
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface ReadinessCheck {
   name: string;
-  category: 'critical' | 'important' | 'optional';
-  status: 'pass' | 'fail' | 'warning' | 'skipped';
+  category: "critical" | "important" | "optional";
+  status: "pass" | "fail" | "warning" | "skipped";
   message: string;
   duration: number;
 }
 
 export interface ReadinessReport {
   timestamp: string;
-  overallStatus: 'ready' | 'warning' | 'not-ready';
+  overallStatus: "ready" | "warning" | "not-ready";
   checks: ReadinessCheck[];
   score: number;
   recommendations: string[];
@@ -58,31 +58,31 @@ class ProductionReadinessChecker {
   private async checkSupabaseConnection(): Promise<void> {
     const start = performance.now();
     try {
-      const { error } = await supabase.from('organizations').select('count').limit(1);
+      const { error } = await supabase.from("organizations").select("count").limit(1);
       
       if (error) {
         this.addCheck({
-          name: 'Supabase Connection',
-          category: 'critical',
-          status: 'fail',
+          name: "Supabase Connection",
+          category: "critical",
+          status: "fail",
           message: `Database connection failed: ${error.message}`,
           duration: performance.now() - start,
         });
       } else {
         this.addCheck({
-          name: 'Supabase Connection',
-          category: 'critical',
-          status: 'pass',
-          message: 'Database connection successful',
+          name: "Supabase Connection",
+          category: "critical",
+          status: "pass",
+          message: "Database connection successful",
           duration: performance.now() - start,
         });
       }
     } catch (error) {
       this.addCheck({
-        name: 'Supabase Connection',
-        category: 'critical',
-        status: 'fail',
-        message: `Connection error: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Supabase Connection",
+        category: "critical",
+        status: "fail",
+        message: `Connection error: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -94,18 +94,18 @@ class ProductionReadinessChecker {
       const { data: { session } } = await supabase.auth.getSession();
       
       this.addCheck({
-        name: 'Auth Configuration',
-        category: 'critical',
-        status: 'pass',
-        message: session ? 'User authenticated' : 'Auth system functional (no active session)',
+        name: "Auth Configuration",
+        category: "critical",
+        status: "pass",
+        message: session ? "User authenticated" : "Auth system functional (no active session)",
         duration: performance.now() - start,
       });
     } catch (error) {
       this.addCheck({
-        name: 'Auth Configuration',
-        category: 'critical',
-        status: 'fail',
-        message: `Auth check failed: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Auth Configuration",
+        category: "critical",
+        status: "fail",
+        message: `Auth check failed: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -114,12 +114,12 @@ class ProductionReadinessChecker {
   private async checkServiceWorker(): Promise<void> {
     const start = performance.now();
     
-    if (!('serviceWorker' in navigator)) {
+    if (!("serviceWorker" in navigator)) {
       this.addCheck({
-        name: 'Service Worker',
-        category: 'critical',
-        status: 'warning',
-        message: 'Service Worker not supported in this browser',
+        name: "Service Worker",
+        category: "critical",
+        status: "warning",
+        message: "Service Worker not supported in this browser",
         duration: performance.now() - start,
       });
       return;
@@ -131,27 +131,27 @@ class ProductionReadinessChecker {
       if (registrations.length > 0) {
         const activeWorker = registrations.find(r => r.active);
         this.addCheck({
-          name: 'Service Worker',
-          category: 'critical',
-          status: 'pass',
+          name: "Service Worker",
+          category: "critical",
+          status: "pass",
           message: `Service Worker active (${registrations.length} registration(s))`,
           duration: performance.now() - start,
         });
       } else {
         this.addCheck({
-          name: 'Service Worker',
-          category: 'critical',
-          status: 'warning',
-          message: 'No Service Worker registered yet',
+          name: "Service Worker",
+          category: "critical",
+          status: "warning",
+          message: "No Service Worker registered yet",
           duration: performance.now() - start,
         });
       }
     } catch (error) {
       this.addCheck({
-        name: 'Service Worker',
-        category: 'critical',
-        status: 'fail',
-        message: `SW check failed: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Service Worker",
+        category: "critical",
+        status: "fail",
+        message: `SW check failed: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -160,19 +160,19 @@ class ProductionReadinessChecker {
   private async checkOfflineCapability(): Promise<void> {
     const start = performance.now();
     
-    const hasIndexedDB = 'indexedDB' in window;
-    const hasLocalStorage = 'localStorage' in window;
-    const hasCacheAPI = 'caches' in window;
+    const hasIndexedDB = "indexedDB" in window;
+    const hasLocalStorage = "localStorage" in window;
+    const hasCacheAPI = "caches" in window;
 
     const allSupported = hasIndexedDB && hasLocalStorage && hasCacheAPI;
 
     this.addCheck({
-      name: 'Offline Capability',
-      category: 'critical',
-      status: allSupported ? 'pass' : 'warning',
+      name: "Offline Capability",
+      category: "critical",
+      status: allSupported ? "pass" : "warning",
       message: allSupported 
-        ? 'All offline APIs available (IndexedDB, localStorage, Cache API)'
-        : `Missing: ${!hasIndexedDB ? 'IndexedDB ' : ''}${!hasLocalStorage ? 'localStorage ' : ''}${!hasCacheAPI ? 'Cache API' : ''}`,
+        ? "All offline APIs available (IndexedDB, localStorage, Cache API)"
+        : `Missing: ${!hasIndexedDB ? "IndexedDB " : ""}${!hasLocalStorage ? "localStorage " : ""}${!hasCacheAPI ? "Cache API" : ""}`,
       duration: performance.now() - start,
     });
   }
@@ -180,12 +180,12 @@ class ProductionReadinessChecker {
   private async checkPerformanceMetrics(): Promise<void> {
     const start = performance.now();
     
-    if (!('performance' in window)) {
+    if (!("performance" in window)) {
       this.addCheck({
-        name: 'Performance API',
-        category: 'important',
-        status: 'warning',
-        message: 'Performance API not available',
+        name: "Performance API",
+        category: "important",
+        status: "warning",
+        message: "Performance API not available",
         duration: performance.now() - start,
       });
       return;
@@ -196,18 +196,18 @@ class ProductionReadinessChecker {
     if (memory) {
       const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
       this.addCheck({
-        name: 'Memory Usage',
-        category: 'important',
-        status: usagePercent < 70 ? 'pass' : usagePercent < 90 ? 'warning' : 'fail',
+        name: "Memory Usage",
+        category: "important",
+        status: usagePercent < 70 ? "pass" : usagePercent < 90 ? "warning" : "fail",
         message: `Heap usage: ${usagePercent.toFixed(1)}% (${(memory.usedJSHeapSize / 1024 / 1024).toFixed(1)}MB)`,
         duration: performance.now() - start,
       });
     } else {
       this.addCheck({
-        name: 'Memory Usage',
-        category: 'important',
-        status: 'skipped',
-        message: 'Memory info not available in this browser',
+        name: "Memory Usage",
+        category: "important",
+        status: "skipped",
+        message: "Memory info not available in this browser",
         duration: performance.now() - start,
       });
     }
@@ -217,14 +217,14 @@ class ProductionReadinessChecker {
     const start = performance.now();
     
     // Check if error boundary is set up
-    const hasErrorHandler = typeof window.onerror === 'function' || 
+    const hasErrorHandler = typeof window.onerror === "function" || 
                            window.addEventListener !== undefined;
 
     this.addCheck({
-      name: 'Error Tracking',
-      category: 'important',
-      status: 'pass',
-      message: 'Error tracking configured',
+      name: "Error Tracking",
+      category: "important",
+      status: "pass",
+      message: "Error tracking configured",
       duration: performance.now() - start,
     });
   }
@@ -232,12 +232,12 @@ class ProductionReadinessChecker {
   private async checkCacheConfiguration(): Promise<void> {
     const start = performance.now();
     
-    if (!('caches' in window)) {
+    if (!("caches" in window)) {
       this.addCheck({
-        name: 'Cache Configuration',
-        category: 'important',
-        status: 'warning',
-        message: 'Cache API not available',
+        name: "Cache Configuration",
+        category: "important",
+        status: "warning",
+        message: "Cache API not available",
         duration: performance.now() - start,
       });
       return;
@@ -247,18 +247,18 @@ class ProductionReadinessChecker {
       const cacheNames = await caches.keys();
       
       this.addCheck({
-        name: 'Cache Configuration',
-        category: 'important',
-        status: cacheNames.length > 0 ? 'pass' : 'warning',
-        message: `${cacheNames.length} cache(s) configured: ${cacheNames.join(', ') || 'none'}`,
+        name: "Cache Configuration",
+        category: "important",
+        status: cacheNames.length > 0 ? "pass" : "warning",
+        message: `${cacheNames.length} cache(s) configured: ${cacheNames.join(", ") || "none"}`,
         duration: performance.now() - start,
       });
     } catch (error) {
       this.addCheck({
-        name: 'Cache Configuration',
-        category: 'important',
-        status: 'fail',
-        message: `Cache check failed: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Cache Configuration",
+        category: "important",
+        status: "fail",
+        message: `Cache check failed: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -267,22 +267,22 @@ class ProductionReadinessChecker {
   private async checkPWAManifest(): Promise<void> {
     const start = performance.now();
     
-    const manifestLink = document.querySelector('link[rel="manifest"]');
+    const manifestLink = document.querySelector("link[rel=\"manifest\"]");
     
     if (manifestLink) {
       this.addCheck({
-        name: 'PWA Manifest',
-        category: 'optional',
-        status: 'pass',
-        message: 'Web App Manifest configured',
+        name: "PWA Manifest",
+        category: "optional",
+        status: "pass",
+        message: "Web App Manifest configured",
         duration: performance.now() - start,
       });
     } else {
       this.addCheck({
-        name: 'PWA Manifest',
-        category: 'optional',
-        status: 'warning',
-        message: 'Web App Manifest not found',
+        name: "PWA Manifest",
+        category: "optional",
+        status: "warning",
+        message: "Web App Manifest not found",
         duration: performance.now() - start,
       });
     }
@@ -295,18 +295,18 @@ class ProductionReadinessChecker {
     
     if (connection) {
       this.addCheck({
-        name: 'Network Info',
-        category: 'optional',
-        status: 'pass',
+        name: "Network Info",
+        category: "optional",
+        status: "pass",
         message: `Connection: ${connection.effectiveType}, Downlink: ${connection.downlink}Mbps`,
         duration: performance.now() - start,
       });
     } else {
       this.addCheck({
-        name: 'Network Info',
-        category: 'optional',
-        status: 'skipped',
-        message: 'Network Information API not available',
+        name: "Network Info",
+        category: "optional",
+        status: "skipped",
+        message: "Network Information API not available",
         duration: performance.now() - start,
       });
     }
@@ -316,22 +316,22 @@ class ProductionReadinessChecker {
     const start = performance.now();
     
     try {
-      const { resourceManager } = await import('@/lib/performance/resource-manager');
+      const { resourceManager } = await import("@/lib/performance/resource-manager");
       const status = resourceManager.getStatus();
       
       this.addCheck({
-        name: 'Resource Manager',
-        category: 'important',
-        status: status.overall === 'constrained' ? 'warning' : 'pass',
+        name: "Resource Manager",
+        category: "important",
+        status: status.overall === "constrained" ? "warning" : "pass",
         message: `Status: ${status.overall}, Network: ${status.network}, Memory: ${status.memory}`,
         duration: performance.now() - start,
       });
     } catch (error) {
       this.addCheck({
-        name: 'Resource Manager',
-        category: 'important',
-        status: 'fail',
-        message: `Failed to load: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Resource Manager",
+        category: "important",
+        status: "fail",
+        message: `Failed to load: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -341,22 +341,22 @@ class ProductionReadinessChecker {
     const start = performance.now();
     
     try {
-      const { memoryOptimizer } = await import('@/lib/performance/memory-optimizer');
+      const { memoryOptimizer } = await import("@/lib/performance/memory-optimizer");
       const stats = memoryOptimizer.getStats();
       
       this.addCheck({
-        name: 'Memory Optimizer',
-        category: 'important',
-        status: stats.status === 'critical' ? 'fail' : stats.status === 'high' ? 'warning' : 'pass',
+        name: "Memory Optimizer",
+        category: "important",
+        status: stats.status === "critical" ? "fail" : stats.status === "high" ? "warning" : "pass",
         message: `Status: ${stats.status}, Usage: ${(stats.usage * 100).toFixed(1)}%`,
         duration: performance.now() - start,
       });
     } catch (error) {
       this.addCheck({
-        name: 'Memory Optimizer',
-        category: 'important',
-        status: 'fail',
-        message: `Failed to load: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Memory Optimizer",
+        category: "important",
+        status: "fail",
+        message: `Failed to load: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -366,23 +366,23 @@ class ProductionReadinessChecker {
     const start = performance.now();
     
     try {
-      const { connectionResilience } = await import('@/lib/offline/connection-resilience');
+      const { connectionResilience } = await import("@/lib/offline/connection-resilience");
       const state = connectionResilience.getState();
       const settings = connectionResilience.getAdaptiveSettings();
       
       this.addCheck({
-        name: 'Connection Resilience',
-        category: 'optional',
-        status: state.isOnline ? 'pass' : 'warning',
+        name: "Connection Resilience",
+        category: "optional",
+        status: state.isOnline ? "pass" : "warning",
         message: `Online: ${state.isOnline}, Type: ${state.effectiveType}, Quality: ${settings.imageQuality}%`,
         duration: performance.now() - start,
       });
     } catch (error) {
       this.addCheck({
-        name: 'Connection Resilience',
-        category: 'optional',
-        status: 'fail',
-        message: `Failed to load: ${error instanceof Error ? error.message : 'Unknown'}`,
+        name: "Connection Resilience",
+        category: "optional",
+        status: "fail",
+        message: `Failed to load: ${error instanceof Error ? error.message : "Unknown"}`,
         duration: performance.now() - start,
       });
     }
@@ -394,28 +394,28 @@ class ProductionReadinessChecker {
   }
 
   private generateReport(totalDuration: number): ReadinessReport {
-    const criticalFails = this.checks.filter(c => c.category === 'critical' && c.status === 'fail');
-    const warnings = this.checks.filter(c => c.status === 'warning');
-    const passes = this.checks.filter(c => c.status === 'pass');
+    const criticalFails = this.checks.filter(c => c.category === "critical" && c.status === "fail");
+    const warnings = this.checks.filter(c => c.status === "warning");
+    const passes = this.checks.filter(c => c.status === "pass");
 
-    let overallStatus: 'ready' | 'warning' | 'not-ready';
+    let overallStatus: "ready" | "warning" | "not-ready";
     if (criticalFails.length > 0) {
-      overallStatus = 'not-ready';
+      overallStatus = "not-ready";
     } else if (warnings.length > 0) {
-      overallStatus = 'warning';
+      overallStatus = "warning";
     } else {
-      overallStatus = 'ready';
+      overallStatus = "ready";
     }
 
-    const score = Math.round((passes.length / this.checks.filter(c => c.status !== 'skipped').length) * 100);
+    const score = Math.round((passes.length / this.checks.filter(c => c.status !== "skipped").length) * 100);
 
     const recommendations: string[] = [];
     
     if (criticalFails.length > 0) {
-      recommendations.push(`Fix ${criticalFails.length} critical issue(s): ${criticalFails.map(c => c.name).join(', ')}`);
+      recommendations.push(`Fix ${criticalFails.length} critical issue(s): ${criticalFails.map(c => c.name).join(", ")}`);
     }
     if (warnings.length > 0) {
-      recommendations.push(`Address ${warnings.length} warning(s): ${warnings.map(c => c.name).join(', ')}`);
+      recommendations.push(`Address ${warnings.length} warning(s): ${warnings.map(c => c.name).join(", ")}`);
     }
 
     const report: ReadinessReport = {
@@ -426,7 +426,7 @@ class ProductionReadinessChecker {
       recommendations,
     };
 
-    logger.info('[ReadinessCheck] Report generated', {
+    logger.info("[ReadinessCheck] Report generated", {
       status: overallStatus,
       score,
       checks: this.checks.length,
@@ -441,7 +441,7 @@ class ProductionReadinessChecker {
 export const readinessChecker = new ProductionReadinessChecker();
 
 // React hook
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useReadinessChecker() {
   const [report, setReport] = useState<ReadinessReport | null>(null);

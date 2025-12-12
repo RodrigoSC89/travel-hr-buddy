@@ -3,7 +3,7 @@
  * Comprehensive diagnostic utilities for production testing
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface DiagnosticResult {
   name: string;
@@ -62,22 +62,22 @@ class SystemDiagnostics {
   private async testLocalStorage(): Promise<DiagnosticResult> {
     const start = performance.now();
     try {
-      const testKey = '__diagnostic_test__';
-      localStorage.setItem(testKey, 'test');
+      const testKey = "__diagnostic_test__";
+      localStorage.setItem(testKey, "test");
       const value = localStorage.getItem(testKey);
       localStorage.removeItem(testKey);
 
       return {
-        name: 'LocalStorage',
-        passed: value === 'test',
-        message: 'LocalStorage funcionando corretamente',
+        name: "LocalStorage",
+        passed: value === "test",
+        message: "LocalStorage funcionando corretamente",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'LocalStorage',
+        name: "LocalStorage",
         passed: false,
-        message: `LocalStorage indisponível: ${error instanceof Error ? error.message : 'Erro'}`,
+        message: `LocalStorage indisponível: ${error instanceof Error ? error.message : "Erro"}`,
         duration: performance.now() - start,
       };
     }
@@ -86,37 +86,37 @@ class SystemDiagnostics {
   private async testIndexedDB(): Promise<DiagnosticResult> {
     const start = performance.now();
     try {
-      if (!('indexedDB' in window)) {
+      if (!("indexedDB" in window)) {
         return {
-          name: 'IndexedDB',
+          name: "IndexedDB",
           passed: false,
-          message: 'IndexedDB não suportado neste navegador',
+          message: "IndexedDB não suportado neste navegador",
           duration: performance.now() - start,
         };
       }
 
-      const request = indexedDB.open('__diagnostic_test__', 1);
+      const request = indexedDB.open("__diagnostic_test__", 1);
       
       await new Promise<void>((resolve, reject) => {
         request.onsuccess = () => {
           request.result.close();
-          indexedDB.deleteDatabase('__diagnostic_test__');
+          indexedDB.deleteDatabase("__diagnostic_test__");
           resolve();
         };
         request.onerror = () => reject(request.error);
       });
 
       return {
-        name: 'IndexedDB',
+        name: "IndexedDB",
         passed: true,
-        message: 'IndexedDB funcionando corretamente',
+        message: "IndexedDB funcionando corretamente",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'IndexedDB',
+        name: "IndexedDB",
         passed: false,
-        message: `IndexedDB falhou: ${error instanceof Error ? error.message : 'Erro'}`,
+        message: `IndexedDB falhou: ${error instanceof Error ? error.message : "Erro"}`,
         duration: performance.now() - start,
       };
     }
@@ -125,32 +125,32 @@ class SystemDiagnostics {
   private async testCacheAPI(): Promise<DiagnosticResult> {
     const start = performance.now();
     try {
-      if (!('caches' in window)) {
+      if (!("caches" in window)) {
         return {
-          name: 'Cache API',
+          name: "Cache API",
           passed: false,
-          message: 'Cache API não suportada',
+          message: "Cache API não suportada",
           duration: performance.now() - start,
         };
       }
 
-      const cacheName = '__diagnostic_test__';
+      const cacheName = "__diagnostic_test__";
       const cache = await caches.open(cacheName);
-      await cache.put('test', new Response('test'));
-      const response = await cache.match('test');
+      await cache.put("test", new Response("test"));
+      const response = await cache.match("test");
       await caches.delete(cacheName);
 
       return {
-        name: 'Cache API',
+        name: "Cache API",
         passed: response !== undefined,
-        message: 'Cache API funcionando corretamente',
+        message: "Cache API funcionando corretamente",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'Cache API',
+        name: "Cache API",
         passed: false,
-        message: `Cache API falhou: ${error instanceof Error ? error.message : 'Erro'}`,
+        message: `Cache API falhou: ${error instanceof Error ? error.message : "Erro"}`,
         duration: performance.now() - start,
       };
     }
@@ -159,11 +159,11 @@ class SystemDiagnostics {
   private async testServiceWorker(): Promise<DiagnosticResult> {
     const start = performance.now();
     try {
-      if (!('serviceWorker' in navigator)) {
+      if (!("serviceWorker" in navigator)) {
         return {
-          name: 'Service Worker',
+          name: "Service Worker",
           passed: false,
-          message: 'Service Worker não suportado',
+          message: "Service Worker não suportado",
           duration: performance.now() - start,
         };
       }
@@ -171,19 +171,19 @@ class SystemDiagnostics {
       const registrations = await navigator.serviceWorker.getRegistrations();
       
       return {
-        name: 'Service Worker',
+        name: "Service Worker",
         passed: registrations.length > 0,
         message: registrations.length > 0 
           ? `${registrations.length} Service Worker(s) registrado(s)`
-          : 'Nenhum Service Worker registrado',
+          : "Nenhum Service Worker registrado",
         duration: performance.now() - start,
         details: { count: registrations.length },
       };
     } catch (error) {
       return {
-        name: 'Service Worker',
+        name: "Service Worker",
         passed: false,
-        message: `Falha ao verificar SW: ${error instanceof Error ? error.message : 'Erro'}`,
+        message: `Falha ao verificar SW: ${error instanceof Error ? error.message : "Erro"}`,
         duration: performance.now() - start,
       };
     }
@@ -206,11 +206,11 @@ class SystemDiagnostics {
     }
 
     return {
-      name: 'Network',
+      name: "Network",
       passed: true,
       message: isOnline 
-        ? `Online - ${connection?.effectiveType || 'Conexão'} (${connection?.downlink || '?'}Mbps)`
-        : 'Offline',
+        ? `Online - ${connection?.effectiveType || "Conexão"} (${connection?.downlink || "?"}Mbps)`
+        : "Offline",
       duration: performance.now() - start,
       details,
     };
@@ -219,26 +219,26 @@ class SystemDiagnostics {
   private async testWebWorkers(): Promise<DiagnosticResult> {
     const start = performance.now();
     try {
-      if (!('Worker' in window)) {
+      if (!("Worker" in window)) {
         return {
-          name: 'Web Workers',
+          name: "Web Workers",
           passed: false,
-          message: 'Web Workers não suportados',
+          message: "Web Workers não suportados",
           duration: performance.now() - start,
         };
       }
 
       return {
-        name: 'Web Workers',
+        name: "Web Workers",
         passed: true,
-        message: 'Web Workers suportados',
+        message: "Web Workers suportados",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'Web Workers',
+        name: "Web Workers",
         passed: false,
-        message: `Falha: ${error instanceof Error ? error.message : 'Erro'}`,
+        message: `Falha: ${error instanceof Error ? error.message : "Erro"}`,
         duration: performance.now() - start,
       };
     }
@@ -258,11 +258,11 @@ class SystemDiagnostics {
     }
 
     return {
-      name: 'Performance API',
+      name: "Performance API",
       passed: true,
       message: memory 
         ? `Memória: ${details.usagePercent}% utilizada`
-        : 'Performance API disponível (memória não acessível)',
+        : "Performance API disponível (memória não acessível)",
       duration: performance.now() - start,
       details,
     };
@@ -293,7 +293,7 @@ class SystemDiagnostics {
 export const systemDiagnostics = new SystemDiagnostics();
 
 // React hook
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useSystemDiagnostics() {
   const [report, setReport] = useState<DiagnosticsReport | null>(null);
@@ -304,7 +304,7 @@ export function useSystemDiagnostics() {
     try {
       const result = await systemDiagnostics.runAllDiagnostics();
       setReport(result);
-      logger.info('[Diagnostics] Report generated', { passed: result.overallPassed });
+      logger.info("[Diagnostics] Report generated", { passed: result.overallPassed });
       return result;
     } finally {
       setIsRunning(false);

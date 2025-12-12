@@ -205,11 +205,11 @@ export default function CommandCenter() {
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
   
@@ -473,35 +473,35 @@ export default function CommandCenter() {
                   const visual = kpiVisuals[index % kpiVisuals.length];
                   const IconComponent = visual.icon;
                   return (
-                  <Card
-                    key={index}
-                    className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60"
-                  >
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-slate-500 dark:text-white/70">
-                            {kpi.metric}
-                          </p>
-                          <p className="text-3xl font-semibold text-slate-900 dark:text-white">{kpi.value}</p>
+                    <Card
+                      key={index}
+                      className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60"
+                    >
+                      <CardContent className="p-6 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-500 dark:text-white/70">
+                              {kpi.metric}
+                            </p>
+                            <p className="text-3xl font-semibold text-slate-900 dark:text-white">{kpi.value}</p>
+                          </div>
+                          <div className={`rounded-2xl border ${visual.ringClass} p-3`}>
+                            <IconComponent className="h-6 w-6" />
+                          </div>
                         </div>
-                        <div className={`rounded-2xl border ${visual.ringClass} p-3`}>
-                          <IconComponent className="h-6 w-6" />
-                        </div>
-                      </div>
-                      <Badge
-                        variant="outline"
-                        className={`border-0 px-3 py-1 text-xs font-medium ${
-                          kpi.trend === "up"
-                            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200"
-                            : "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-200"
-                        }`}
-                      >
-                        {kpi.change} vs período anterior
-                      </Badge>
-                    </CardContent>
-                  </Card>
-                );
+                        <Badge
+                          variant="outline"
+                          className={`border-0 px-3 py-1 text-xs font-medium ${
+                            kpi.trend === "up"
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200"
+                              : "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-200"
+                          }`}
+                        >
+                          {kpi.change} vs período anterior
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  );
                 })}
               </div>
 

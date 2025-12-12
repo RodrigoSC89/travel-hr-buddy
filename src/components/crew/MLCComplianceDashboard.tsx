@@ -134,7 +134,7 @@ export function MLCComplianceDashboard() {
                 <span className={cn(
                   "text-5xl font-bold",
                   Number(complianceRate) >= 95 ? "text-emerald-400" :
-                  Number(complianceRate) >= 80 ? "text-amber-400" : "text-destructive"
+                    Number(complianceRate) >= 80 ? "text-amber-400" : "text-destructive"
                 )}>
                   {complianceRate}%
                 </span>

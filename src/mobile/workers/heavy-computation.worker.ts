@@ -27,54 +27,54 @@ self.onmessage = async (event: MessageEvent<WorkerMessage>) => {
     let result: any;
     
     switch (event.data.type) {
-      case "SORT_DATA":
-        result = sortData(
-          event.data.payload.data,
-          event.data.payload.key,
-          event.data.payload.order
-        );
-        break;
+    case "SORT_DATA":
+      result = sortData(
+        event.data.payload.data,
+        event.data.payload.key,
+        event.data.payload.order
+      );
+      break;
         
-      case "FILTER_DATA":
-        result = filterData(
-          event.data.payload.data,
-          event.data.payload.filters
-        );
-        break;
+    case "FILTER_DATA":
+      result = filterData(
+        event.data.payload.data,
+        event.data.payload.filters
+      );
+      break;
         
-      case "SEARCH_DATA":
-        result = searchData(
-          event.data.payload.data,
-          event.data.payload.query,
-          event.data.payload.fields
-        );
-        break;
+    case "SEARCH_DATA":
+      result = searchData(
+        event.data.payload.data,
+        event.data.payload.query,
+        event.data.payload.fields
+      );
+      break;
         
-      case "AGGREGATE_DATA":
-        result = aggregateData(
-          event.data.payload.data,
-          event.data.payload.groupBy,
-          event.data.payload.aggregate
-        );
-        break;
+    case "AGGREGATE_DATA":
+      result = aggregateData(
+        event.data.payload.data,
+        event.data.payload.groupBy,
+        event.data.payload.aggregate
+      );
+      break;
         
-      case "COMPRESS_DATA":
-        result = compressData(event.data.payload.data);
-        break;
+    case "COMPRESS_DATA":
+      result = compressData(event.data.payload.data);
+      break;
         
-      case "DECOMPRESS_DATA":
-        result = decompressData(event.data.payload.compressed);
-        break;
+    case "DECOMPRESS_DATA":
+      result = decompressData(event.data.payload.compressed);
+      break;
         
-      case "DIFF_DATA":
-        result = diffData(
-          event.data.payload.oldData,
-          event.data.payload.newData
-        );
-        break;
+    case "DIFF_DATA":
+      result = diffData(
+        event.data.payload.oldData,
+        event.data.payload.newData
+      );
+      break;
         
-      default:
-        throw new Error(`Unknown message type`);
+    default:
+      throw new Error("Unknown message type");
     }
     
     const duration = performance.now() - startTime;
@@ -164,20 +164,20 @@ function aggregateData(
   
   Object.entries(groups).forEach(([key, items]) => {
     switch (aggregate) {
-      case "count":
-        result[key] = items.length;
-        break;
-      case "sum":
-        result[key] = items.reduce((sum, item) => sum + (item.value || 0), 0);
-        break;
-      case "avg":
-        result[key] = items.reduce((sum, item) => sum + (item.value || 0), 0) / items.length;
-        break;
-      case "items":
-        result[key] = items;
-        break;
-      default:
-        result[key] = items;
+    case "count":
+      result[key] = items.length;
+      break;
+    case "sum":
+      result[key] = items.reduce((sum, item) => sum + (item.value || 0), 0);
+      break;
+    case "avg":
+      result[key] = items.reduce((sum, item) => sum + (item.value || 0), 0) / items.length;
+      break;
+    case "items":
+      result[key] = items;
+      break;
+    default:
+      result[key] = items;
     }
   });
   

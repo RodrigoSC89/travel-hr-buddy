@@ -181,9 +181,9 @@ export default function AuditTrail() {
       const aiResponse = result.response;
       const newInsight: AIInsight = {
         id: Date.now().toString(),
-        type: aiResponse.riskLevel === 'high' ? "risk" : aiResponse.riskLevel === 'medium' ? "anomaly" : "pattern",
+        type: aiResponse.riskLevel === "high" ? "risk" : aiResponse.riskLevel === "medium" ? "anomaly" : "pattern",
         title: aiResponse.summary || "Análise de IA concluída",
-        description: aiResponse.findings?.join(' ') || `Análise de ${auditEntries.length} registros concluída.`,
+        description: aiResponse.findings?.join(" ") || `Análise de ${auditEntries.length} registros concluída.`,
         confidence: aiResponse.confidence || 85,
         affectedEntries: aiResponse.affectedCount || auditEntries.length,
         timestamp: new Date()
@@ -213,30 +213,30 @@ export default function AuditTrail() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
-      case "warning": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
-      case "info": return "bg-blue-500/20 text-blue-400 border-blue-500/50";
-      default: return "bg-muted text-muted-foreground";
+    case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
+    case "warning": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
+    case "info": return "bg-blue-500/20 text-blue-400 border-blue-500/50";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case "anomaly": return <AlertTriangle className="h-5 w-5 text-red-400" />;
-      case "pattern": return <Activity className="h-5 w-5 text-blue-400" />;
-      case "recommendation": return <TrendingUp className="h-5 w-5 text-green-400" />;
-      case "risk": return <Shield className="h-5 w-5 text-orange-400" />;
-      default: return <Brain className="h-5 w-5 text-primary" />;
+    case "anomaly": return <AlertTriangle className="h-5 w-5 text-red-400" />;
+    case "pattern": return <Activity className="h-5 w-5 text-blue-400" />;
+    case "recommendation": return <TrendingUp className="h-5 w-5 text-green-400" />;
+    case "risk": return <Shield className="h-5 w-5 text-orange-400" />;
+    default: return <Brain className="h-5 w-5 text-primary" />;
     }
   };
 
   const getInsightColor = (type: string) => {
     switch (type) {
-      case "anomaly": return "border-red-500/50 bg-red-500/5";
-      case "pattern": return "border-blue-500/50 bg-blue-500/5";
-      case "recommendation": return "border-green-500/50 bg-green-500/5";
-      case "risk": return "border-orange-500/50 bg-orange-500/5";
-      default: return "border-primary/50 bg-primary/5";
+    case "anomaly": return "border-red-500/50 bg-red-500/5";
+    case "pattern": return "border-blue-500/50 bg-blue-500/5";
+    case "recommendation": return "border-green-500/50 bg-green-500/5";
+    case "risk": return "border-orange-500/50 bg-orange-500/5";
+    default: return "border-primary/50 bg-primary/5";
     }
   };
 
@@ -389,7 +389,7 @@ export default function AuditTrail() {
                               </Badge>
                               <Badge className={getSeverityColor(entry.severity)}>
                                 {entry.severity === "critical" ? "Crítico" :
-                                 entry.severity === "warning" ? "Alerta" : "Info"}
+                                  entry.severity === "warning" ? "Alerta" : "Info"}
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mt-1">{entry.details}</p>

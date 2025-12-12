@@ -3,8 +3,8 @@
  * Permite componentes reagirem a mudanças na qualidade da conexão
  */
 
-import { useState, useEffect } from 'react';
-import { connectionAdaptive, ConnectionQuality } from '@/lib/performance/connection-adaptive';
+import { useState, useEffect } from "react";
+import { connectionAdaptive, ConnectionQuality } from "@/lib/performance/connection-adaptive";
 
 export function useConnectionAdaptive() {
   const [info, setInfo] = useState(connectionAdaptive.getInfo());
@@ -16,10 +16,10 @@ export function useConnectionAdaptive() {
 
   return {
     quality: info.quality,
-    isOnline: info.quality !== 'offline',
-    isSlow: info.quality === 'slow',
-    isModerate: info.quality === 'moderate',
-    isFast: info.quality === 'fast',
+    isOnline: info.quality !== "offline",
+    isSlow: info.quality === "slow",
+    isModerate: info.quality === "moderate",
+    isFast: info.quality === "fast",
     saveData: info.saveData,
     recommendations: connectionAdaptive.getRecommendations(),
     shouldLoadHeavyResources: connectionAdaptive.shouldLoadHeavyResources(),
@@ -34,7 +34,7 @@ export function useConnectionAdaptive() {
  */
 export function useLightMode(): boolean {
   const { quality, saveData } = useConnectionAdaptive();
-  return quality === 'slow' || quality === 'offline' || saveData;
+  return quality === "slow" || quality === "offline" || saveData;
 }
 
 /**

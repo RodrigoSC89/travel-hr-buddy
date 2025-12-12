@@ -3,7 +3,7 @@
  * Syncs only changes instead of full data for bandwidth efficiency
  */
 
-import { openDB, IDBPDatabase } from 'idb';
+import { openDB, IDBPDatabase } from "idb";
 
 interface SyncState {
   table: string;
@@ -14,7 +14,7 @@ interface SyncState {
 
 interface DeltaChange<T = any> {
   id: string;
-  operation: 'insert' | 'update' | 'delete';
+  operation: "insert" | "update" | "delete";
   data: T;
   timestamp: string;
   version: number;
@@ -22,7 +22,7 @@ interface DeltaChange<T = any> {
 
 class DeltaSyncManager {
   private db: IDBPDatabase | null = null;
-  private dbName = 'delta-sync-db';
+  private dbName = "delta-sync-db";
   private syncStates: Map<string, SyncState> = new Map();
 
   async init() {
@@ -31,14 +31,14 @@ class DeltaSyncManager {
     this.db = await openDB(this.dbName, 1, {
       upgrade(db) {
         // Store sync states
-        if (!db.objectStoreNames.contains('sync_states')) {
-          db.createObjectStore('sync_states', { keyPath: 'table' });
+        if (!db.objectStoreNames.contains("sync_states")) {
+          db.createObjectStore("sync_states", { keyPath: "table" });
         }
         // Store pending changes
-        if (!db.objectStoreNames.contains('pending_changes')) {
-          const store = db.createObjectStore('pending_changes', { keyPath: 'id' });
-          store.createIndex('by_table', 'table');
-          store.createIndex('by_timestamp', 'timestamp');
+        if (!db.objectStoreNames.contains("pending_changes")) {
+          const store = db.createObjectStore("pending_changes", { keyPath: "id" });
+          store.createIndex("by_table", "table");
+          store.createIndex("by_timestamp", "timestamp");
         }
       },
     });
@@ -48,7 +48,7 @@ class DeltaSyncManager {
 
   private async loadSyncStates() {
     if (!this.db) return;
-    const states = await this.db.getAll('sync_states');
+    const states = await this.db.getAll("sync_states");
     states.forEach(state => {
       this.syncStates.set(state.table, state);
     });
@@ -74,14 +74,14 @@ class DeltaSyncManager {
       checksum,
     };
 
-    await this.db!.put('sync_states', state);
+    await this.db!.put("sync_states", state);
     this.syncStates.set(table, state);
   }
 
   /**
    * Queue a local change for sync
    */
-  async queueChange<T>(table: string, operation: DeltaChange['operation'], data: T, id: string) {
+  async queueChange<T>(table: string, operation: DeltaChange["operation"], data: T, id: string) {
     if (!this.db) await this.init();
 
     const change: DeltaChange<T> & { table: string } = {
@@ -93,7 +93,7 @@ class DeltaSyncManager {
       version: Date.now(),
     };
 
-    await this.db!.put('pending_changes', change);
+    await this.db!.put("pending_changes", change);
     return change;
   }
 
@@ -102,7 +102,7 @@ class DeltaSyncManager {
    */
   async getPendingChanges(table: string): Promise<DeltaChange[]> {
     if (!this.db) await this.init();
-    return this.db!.getAllFromIndex('pending_changes', 'by_table', table);
+    return this.db!.getAllFromIndex("pending_changes", "by_table", table);
   }
 
   /**
@@ -110,7 +110,7 @@ class DeltaSyncManager {
    */
   async clearPendingChanges(changeIds: string[]) {
     if (!this.db) await this.init();
-    const tx = this.db!.transaction('pending_changes', 'readwrite');
+    const tx = this.db!.transaction("pending_changes", "readwrite");
     await Promise.all(changeIds.map(id => tx.store.delete(id)));
     await tx.done;
   }
@@ -152,7 +152,7 @@ export const deltaSyncManager = new DeltaSyncManager();
 export function useDeltaSync(table: string) {
   return {
     getLastSyncAt: () => deltaSyncManager.getLastSyncAt(table),
-    queueChange: <T>(op: DeltaChange['operation'], data: T, id: string) =>
+    queueChange: <T>(op: DeltaChange["operation"], data: T, id: string) =>
       deltaSyncManager.queueChange(table, op, data, id),
     getPendingChanges: () => deltaSyncManager.getPendingChanges(table),
     buildQueryParams: () => deltaSyncManager.buildDeltaQueryParams(table),

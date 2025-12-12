@@ -3,17 +3,17 @@
  * Testes de funcionalidades transversais (busca, notificações, upload, configurações)
  */
 
-import { test, expect } from '@playwright/test';
-import { DashboardPage } from './pages/DashboardPage';
-import { loginAsUser } from './helpers/auth.helpers';
-import { expectPageLoaded } from './helpers/navigation.helpers';
+import { test, expect } from "@playwright/test";
+import { DashboardPage } from "./pages/DashboardPage";
+import { loginAsUser } from "./helpers/auth.helpers";
+import { expectPageLoaded } from "./helpers/navigation.helpers";
 
-test.describe('FASE 3 - Global Search', () => {
+test.describe("FASE 3 - Global Search", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
   });
 
-  test('SEARCH-001: Deve ter campo de busca global', async ({ page }) => {
+  test("SEARCH-001: Deve ter campo de busca global", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
@@ -23,13 +23,13 @@ test.describe('FASE 3 - Global Search', () => {
     }
   });
 
-  test('SEARCH-002: Deve permitir buscar conteúdo', async ({ page }) => {
+  test("SEARCH-002: Deve permitir buscar conteúdo", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
     const hasSearch = await dashboard.searchInput.isVisible({ timeout: 5000 }).catch(() => false);
     if (hasSearch) {
-      await dashboard.search('auditoria');
+      await dashboard.search("auditoria");
       await page.waitForTimeout(1500);
       
       // Verificar que a busca foi executada
@@ -37,21 +37,21 @@ test.describe('FASE 3 - Global Search', () => {
     }
   });
 
-  test('SEARCH-003: Busca deve retornar resultados relevantes', async ({ page }) => {
+  test("SEARCH-003: Busca deve retornar resultados relevantes", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
     const hasSearch = await dashboard.searchInput.isVisible({ timeout: 5000 }).catch(() => false);
     if (hasSearch) {
-      await dashboard.search('manutenção');
+      await dashboard.search("manutenção");
       await page.waitForTimeout(2000);
       
       // Procurar por resultados
       const resultsSelectors = [
-        '.search-results',
-        '[data-testid="search-results"]',
-        '.results',
-        '[role="list"]'
+        ".search-results",
+        "[data-testid=\"search-results\"]",
+        ".results",
+        "[role=\"list\"]"
       ];
       
       let hasResults = false;
@@ -68,13 +68,13 @@ test.describe('FASE 3 - Global Search', () => {
     }
   });
 
-  test('SEARCH-004: Busca vazia não deve quebrar aplicação', async ({ page }) => {
+  test("SEARCH-004: Busca vazia não deve quebrar aplicação", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
     const hasSearch = await dashboard.searchInput.isVisible({ timeout: 5000 }).catch(() => false);
     if (hasSearch) {
-      await dashboard.search('');
+      await dashboard.search("");
       await page.waitForTimeout(1000);
       
       // Deve continuar funcional
@@ -83,12 +83,12 @@ test.describe('FASE 3 - Global Search', () => {
   });
 });
 
-test.describe('FASE 3 - Notifications', () => {
+test.describe("FASE 3 - Notifications", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
   });
 
-  test('NOTIF-001: Deve ter ícone de notificações', async ({ page }) => {
+  test("NOTIF-001: Deve ter ícone de notificações", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
@@ -98,7 +98,7 @@ test.describe('FASE 3 - Notifications', () => {
     }
   });
 
-  test('NOTIF-002: Deve abrir painel de notificações', async ({ page }) => {
+  test("NOTIF-002: Deve abrir painel de notificações", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
@@ -108,7 +108,7 @@ test.describe('FASE 3 - Notifications', () => {
       
       // Verificar que algo abriu (dropdown, modal, sidebar)
       await page.waitForTimeout(1000);
-      const hasPanel = await page.locator('[role="dialog"], .notification-panel, [data-testid="notifications-panel"]')
+      const hasPanel = await page.locator("[role=\"dialog\"], .notification-panel, [data-testid=\"notifications-panel\"]")
         .first()
         .isVisible({ timeout: 2000 })
         .catch(() => false);
@@ -118,16 +118,16 @@ test.describe('FASE 3 - Notifications', () => {
     }
   });
 
-  test('NOTIF-003: Deve exibir contador de notificações não lidas', async ({ page }) => {
+  test("NOTIF-003: Deve exibir contador de notificações não lidas", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
     // Procurar por badge de contador
     const badgeSelectors = [
-      '.notification-badge',
-      '[data-testid="notification-count"]',
-      '.badge',
-      '[class*="badge"]'
+      ".notification-badge",
+      "[data-testid=\"notification-count\"]",
+      ".badge",
+      "[class*=\"badge\"]"
     ];
     
     let hasBadge = false;
@@ -144,32 +144,32 @@ test.describe('FASE 3 - Notifications', () => {
   });
 });
 
-test.describe('FASE 3 - User Settings', () => {
+test.describe("FASE 3 - User Settings", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
   });
 
-  test('SETTINGS-001: Deve acessar página de configurações', async ({ page }) => {
-    await page.goto('/settings');
-    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+  test("SETTINGS-001: Deve acessar página de configurações", async ({ page }) => {
+    await page.goto("/settings");
+    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
     
-    const is404 = (await page.locator('body').textContent() || '').includes('404');
+    const is404 = (await page.locator("body").textContent() || "").includes("404");
     if (!is404) {
       await expectPageLoaded(page);
     }
   });
 
-  test('SETTINGS-002: Deve acessar perfil de usuário', async ({ page }) => {
-    await page.goto('/profile');
-    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+  test("SETTINGS-002: Deve acessar perfil de usuário", async ({ page }) => {
+    await page.goto("/profile");
+    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
     
-    const is404 = (await page.locator('body').textContent() || '').includes('404');
+    const is404 = (await page.locator("body").textContent() || "").includes("404");
     if (!is404) {
       await expectPageLoaded(page);
     }
   });
 
-  test('SETTINGS-003: Deve abrir menu de usuário', async ({ page }) => {
+  test("SETTINGS-003: Deve abrir menu de usuário", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
@@ -183,7 +183,7 @@ test.describe('FASE 3 - User Settings', () => {
     }
   });
 
-  test('SETTINGS-004: Menu de usuário deve ter opção de perfil', async ({ page }) => {
+  test("SETTINGS-004: Menu de usuário deve ter opção de perfil", async ({ page }) => {
     const dashboard = new DashboardPage(page);
     await dashboard.goto();
     
@@ -193,7 +193,7 @@ test.describe('FASE 3 - User Settings', () => {
       await page.waitForTimeout(500);
       
       // Procurar por link de perfil
-      const profileLink = page.locator('a:has-text("Perfil"), a:has-text("Profile"), a:has-text("Conta")').first();
+      const profileLink = page.locator("a:has-text(\"Perfil\"), a:has-text(\"Profile\"), a:has-text(\"Conta\")").first();
       const hasProfile = await profileLink.isVisible({ timeout: 2000 }).catch(() => false);
       
       // Se não tem, pode estar em outra estrutura (ok)
@@ -202,23 +202,23 @@ test.describe('FASE 3 - User Settings', () => {
   });
 });
 
-test.describe('FASE 3 - File Upload', () => {
+test.describe("FASE 3 - File Upload", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
   });
 
-  test('UPLOAD-001: Deve ter funcionalidade de upload em documentos', async ({ page }) => {
-    await page.goto('/documents');
-    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+  test("UPLOAD-001: Deve ter funcionalidade de upload em documentos", async ({ page }) => {
+    await page.goto("/documents");
+    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
     
-    const is404 = (await page.locator('body').textContent() || '').includes('404');
+    const is404 = (await page.locator("body").textContent() || "").includes("404");
     if (!is404) {
       // Procurar por botão de upload
       const uploadSelectors = [
-        'button:has-text("Upload")',
-        'button:has-text("Enviar")',
-        'input[type="file"]',
-        '[data-testid="upload-button"]'
+        "button:has-text(\"Upload\")",
+        "button:has-text(\"Enviar\")",
+        "input[type=\"file\"]",
+        "[data-testid=\"upload-button\"]"
       ];
       
       let hasUpload = false;
@@ -235,32 +235,32 @@ test.describe('FASE 3 - File Upload', () => {
     }
   });
 
-  test('UPLOAD-002: Input de arquivo deve aceitar tipos permitidos', async ({ page }) => {
-    await page.goto('/documents');
-    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+  test("UPLOAD-002: Input de arquivo deve aceitar tipos permitidos", async ({ page }) => {
+    await page.goto("/documents");
+    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
     
-    const fileInput = page.locator('input[type="file"]').first();
+    const fileInput = page.locator("input[type=\"file\"]").first();
     const hasFileInput = await fileInput.isVisible({ timeout: 3000 }).catch(() => false);
     
     if (hasFileInput) {
-      const accept = await fileInput.getAttribute('accept');
+      const accept = await fileInput.getAttribute("accept");
       // Se tem atributo accept, está validando tipos
       expect(accept !== null || true).toBe(true);
     }
   });
 });
 
-test.describe('FASE 3 - Accessibility Features', () => {
+test.describe("FASE 3 - Accessibility Features", () => {
   test.beforeEach(async ({ page }) => {
     await loginAsUser(page);
   });
 
-  test('A11Y-001: Dashboard deve ter landmarks ARIA', async ({ page }) => {
-    await page.goto('/dashboard');
-    await page.waitForLoadState('networkidle');
+  test("A11Y-001: Dashboard deve ter landmarks ARIA", async ({ page }) => {
+    await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
     
-    const nav = page.locator('nav, [role="navigation"]').first();
-    const main = page.locator('main, [role="main"]').first();
+    const nav = page.locator("nav, [role=\"navigation\"]").first();
+    const main = page.locator("main, [role=\"main\"]").first();
     
     const hasNav = await nav.isVisible({ timeout: 3000 }).catch(() => false);
     const hasMain = await main.isVisible({ timeout: 3000 }).catch(() => false);
@@ -268,18 +268,18 @@ test.describe('FASE 3 - Accessibility Features', () => {
     expect(hasNav || hasMain).toBe(true);
   });
 
-  test('A11Y-002: Botões devem ter labels acessíveis', async ({ page }) => {
-    await page.goto('/dashboard');
-    await page.waitForLoadState('networkidle');
+  test("A11Y-002: Botões devem ter labels acessíveis", async ({ page }) => {
+    await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
     
-    const buttons = page.locator('button');
+    const buttons = page.locator("button");
     const count = await buttons.count();
     
     if (count > 0) {
       // Verificar primeiro botão
       const firstButton = buttons.first();
       const text = await firstButton.textContent();
-      const ariaLabel = await firstButton.getAttribute('aria-label');
+      const ariaLabel = await firstButton.getAttribute("aria-label");
       
       // Deve ter texto ou aria-label
       expect(text || ariaLabel).toBeTruthy();

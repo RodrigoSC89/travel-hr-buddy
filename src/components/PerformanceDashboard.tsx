@@ -33,7 +33,7 @@ function MetricCard({ title, value, unit, status, icon, description }: MetricCar
   return (
     <motion.div variants={staggerItem}>
       <Card className="relative overflow-hidden">
-        <div className={`absolute inset-0 opacity-5 ${status === 'good' ? 'bg-green-500' : status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`} />
+        <div className={`absolute inset-0 opacity-5 ${status === "good" ? "bg-green-500" : status === "warning" ? "bg-yellow-500" : "bg-red-500"}`} />
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground">
             {title}

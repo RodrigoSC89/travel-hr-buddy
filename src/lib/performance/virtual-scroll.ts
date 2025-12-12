@@ -3,8 +3,8 @@
  * Memory-efficient list rendering for large datasets
  */
 
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { bandwidthOptimizer } from './low-bandwidth-optimizer';
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { bandwidthOptimizer } from "./low-bandwidth-optimizer";
 
 interface VirtualScrollOptions {
   itemHeight: number;
@@ -40,7 +40,7 @@ export function useVirtualScroll<T>(
   // Adaptive overscan based on connection
   const config = bandwidthOptimizer.getConfig();
   const connectionType = bandwidthOptimizer.getConnectionType();
-  const overscan = customOverscan ?? (connectionType === '4g' ? 5 : 2);
+  const overscan = customOverscan ?? (connectionType === "4g" ? 5 : 2);
   
   // Calculate visible range
   const { startIndex, endIndex, virtualItems } = useMemo(() => {
@@ -54,7 +54,7 @@ export function useVirtualScroll<T>(
         item: items[i],
         index: i,
         style: {
-          position: 'absolute' as const,
+          position: "absolute" as const,
           top: i * itemHeight,
           left: 0,
           right: 0,
@@ -93,9 +93,9 @@ export function useVirtualScroll<T>(
     totalHeight,
     containerProps: {
       style: {
-        height: containerHeight || '100%',
-        overflow: 'auto',
-        position: 'relative',
+        height: containerHeight || "100%",
+        overflow: "auto",
+        position: "relative",
       },
       onScroll: handleScroll,
       ref: containerRef as React.RefObject<HTMLElement>,
@@ -103,7 +103,7 @@ export function useVirtualScroll<T>(
     innerProps: {
       style: {
         height: totalHeight,
-        position: 'relative',
+        position: "relative",
       },
     },
   };
@@ -118,7 +118,7 @@ export function useInfiniteScroll(options: {
   threshold?: number;
   rootMargin?: string;
 }) {
-  const { hasMore, loadMore, threshold = 0.8, rootMargin = '200px' } = options;
+  const { hasMore, loadMore, threshold = 0.8, rootMargin = "200px" } = options;
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadingRef = useRef(false);
   
@@ -205,7 +205,7 @@ export function useWindowedData<T>(
         setHasMore(false);
       }
     } catch (error) {
-      console.error('Failed to load page:', error);
+      console.error("Failed to load page:", error);
     } finally {
       setLoading(false);
     }

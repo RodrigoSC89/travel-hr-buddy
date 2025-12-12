@@ -14,7 +14,7 @@ export interface UsageMetrics {
 
 export interface PerformanceAdjustment {
   id: string;
-  type: 'preload' | 'cache' | 'lazy' | 'reduce' | 'optimize';
+  type: "preload" | "cache" | "lazy" | "reduce" | "optimize";
   target: string;
   reason: string;
   applied: boolean;
@@ -23,19 +23,19 @@ export interface PerformanceAdjustment {
 }
 
 export interface SystemProfile {
-  deviceType: 'high' | 'medium' | 'low';
-  networkSpeed: 'fast' | 'medium' | 'slow' | 'offline';
+  deviceType: "high" | "medium" | "low";
+  networkSpeed: "fast" | "medium" | "slow" | "offline";
   batteryLevel?: number;
-  memoryPressure: 'low' | 'medium' | 'high';
+  memoryPressure: "low" | "medium" | "high";
 }
 
 class SelfAdjustingSystem {
   private usageHistory: Map<string, UsageMetrics[]> = new Map();
   private adjustments: PerformanceAdjustment[] = [];
   private currentProfile: SystemProfile = {
-    deviceType: 'medium',
-    networkSpeed: 'medium',
-    memoryPressure: 'low'
+    deviceType: "medium",
+    networkSpeed: "medium",
+    memoryPressure: "low"
   };
   private preloadedModules: Set<string> = new Set();
   private cachedData: Map<string, { data: any; expiry: number }> = new Map();
@@ -82,12 +82,12 @@ class SelfAdjustingSystem {
     if (avgAccessCount > 10 && !this.preloadedModules.has(moduleName)) {
       this.applyAdjustment({
         id: `preload_${moduleName}_${Date.now()}`,
-        type: 'preload',
+        type: "preload",
         target: moduleName,
         reason: `Alto uso detectado (${avgAccessCount.toFixed(1)} acessos)`,
         applied: true,
         timestamp: new Date(),
-        impact: 'Módulo será pré-carregado para acesso mais rápido'
+        impact: "Módulo será pré-carregado para acesso mais rápido"
       });
       this.preloadedModules.add(moduleName);
     }
@@ -96,12 +96,12 @@ class SelfAdjustingSystem {
     if (avgLoadTime > 2000) {
       this.applyAdjustment({
         id: `optimize_${moduleName}_${Date.now()}`,
-        type: 'optimize',
+        type: "optimize",
         target: moduleName,
         reason: `Tempo de carga alto (${avgLoadTime.toFixed(0)}ms)`,
         applied: true,
         timestamp: new Date(),
-        impact: 'Aplicando lazy loading e code splitting'
+        impact: "Aplicando lazy loading e code splitting"
       });
     }
 
@@ -109,12 +109,12 @@ class SelfAdjustingSystem {
     if (avgErrorCount > 3) {
       this.applyAdjustment({
         id: `reduce_${moduleName}_${Date.now()}`,
-        type: 'reduce',
+        type: "reduce",
         target: moduleName,
         reason: `Taxa de erro alta (${avgErrorCount.toFixed(1)} erros)`,
         applied: true,
         timestamp: new Date(),
-        impact: 'Reduzindo funcionalidades para estabilidade'
+        impact: "Reduzindo funcionalidades para estabilidade"
       });
     }
 
@@ -122,12 +122,12 @@ class SelfAdjustingSystem {
     if (avgAccessCount < 1) {
       this.applyAdjustment({
         id: `lazy_${moduleName}_${Date.now()}`,
-        type: 'lazy',
+        type: "lazy",
         target: moduleName,
         reason: `Baixo uso detectado (${avgAccessCount.toFixed(1)} acessos)`,
         applied: true,
         timestamp: new Date(),
-        impact: 'Módulo será carregado sob demanda'
+        impact: "Módulo será carregado sob demanda"
       });
       this.preloadedModules.delete(moduleName);
     }
@@ -140,41 +140,41 @@ class SelfAdjustingSystem {
     const { deviceType, networkSpeed, memoryPressure, batteryLevel } = this.currentProfile;
 
     // Low-end device adjustments
-    if (deviceType === 'low') {
+    if (deviceType === "low") {
       this.applyAdjustment({
         id: `device_low_${Date.now()}`,
-        type: 'reduce',
-        target: 'animations',
-        reason: 'Dispositivo de baixa capacidade',
+        type: "reduce",
+        target: "animations",
+        reason: "Dispositivo de baixa capacidade",
         applied: true,
         timestamp: new Date(),
-        impact: 'Desabilitando animações e efeitos visuais'
+        impact: "Desabilitando animações e efeitos visuais"
       });
     }
 
     // Slow/offline network
-    if (networkSpeed === 'slow' || networkSpeed === 'offline') {
+    if (networkSpeed === "slow" || networkSpeed === "offline") {
       this.applyAdjustment({
         id: `network_${networkSpeed}_${Date.now()}`,
-        type: 'cache',
-        target: 'all_data',
-        reason: `Rede ${networkSpeed === 'offline' ? 'indisponível' : 'lenta'}`,
+        type: "cache",
+        target: "all_data",
+        reason: `Rede ${networkSpeed === "offline" ? "indisponível" : "lenta"}`,
         applied: true,
         timestamp: new Date(),
-        impact: 'Usando cache local e modo offline'
+        impact: "Usando cache local e modo offline"
       });
     }
 
     // High memory pressure
-    if (memoryPressure === 'high') {
+    if (memoryPressure === "high") {
       this.applyAdjustment({
         id: `memory_${Date.now()}`,
-        type: 'reduce',
-        target: 'cache_size',
-        reason: 'Memória sob pressão',
+        type: "reduce",
+        target: "cache_size",
+        reason: "Memória sob pressão",
         applied: true,
         timestamp: new Date(),
-        impact: 'Reduzindo tamanho do cache e liberando memória'
+        impact: "Reduzindo tamanho do cache e liberando memória"
       });
       this.clearOldCache();
     }
@@ -183,12 +183,12 @@ class SelfAdjustingSystem {
     if (batteryLevel !== undefined && batteryLevel < 20) {
       this.applyAdjustment({
         id: `battery_${Date.now()}`,
-        type: 'reduce',
-        target: 'background_tasks',
+        type: "reduce",
+        target: "background_tasks",
         reason: `Bateria baixa (${batteryLevel}%)`,
         applied: true,
         timestamp: new Date(),
-        impact: 'Desabilitando tarefas em background'
+        impact: "Desabilitando tarefas em background"
       });
     }
   }
@@ -234,7 +234,7 @@ class SelfAdjustingSystem {
     action: string;
     target: string;
     reason: string;
-    priority: 'low' | 'medium' | 'high';
+    priority: "low" | "medium" | "high";
   }[] {
     const recommendations: ReturnType<typeof this.getRecommendations> = [];
 
@@ -248,30 +248,30 @@ class SelfAdjustingSystem {
 
       if (avgLoadTime > 3000) {
         recommendations.push({
-          action: 'Otimizar carregamento',
+          action: "Otimizar carregamento",
           target: moduleName,
           reason: `Tempo médio de ${avgLoadTime.toFixed(0)}ms`,
-          priority: 'high'
+          priority: "high"
         });
       }
 
       if (avgErrorCount > 5) {
         recommendations.push({
-          action: 'Investigar erros',
+          action: "Investigar erros",
           target: moduleName,
           reason: `${avgErrorCount.toFixed(0)} erros em média`,
-          priority: 'high'
+          priority: "high"
         });
       }
     }
 
     // Profile-based recommendations
-    if (this.currentProfile.memoryPressure === 'high') {
+    if (this.currentProfile.memoryPressure === "high") {
       recommendations.push({
-        action: 'Liberar memória',
-        target: 'Sistema',
-        reason: 'Pressão de memória detectada',
-        priority: 'high'
+        action: "Liberar memória",
+        target: "Sistema",
+        reason: "Pressão de memória detectada",
+        priority: "high"
       });
     }
 
@@ -315,42 +315,42 @@ class SelfAdjustingSystem {
    */
   async detectSystemProfile(): Promise<SystemProfile> {
     const profile: SystemProfile = {
-      deviceType: 'medium',
-      networkSpeed: 'medium',
-      memoryPressure: 'low'
+      deviceType: "medium",
+      networkSpeed: "medium",
+      memoryPressure: "low"
     };
 
     // Detect device type based on cores and memory
     const cores = navigator.hardwareConcurrency || 2;
-    if (cores >= 8) profile.deviceType = 'high';
-    else if (cores <= 2) profile.deviceType = 'low';
+    if (cores >= 8) profile.deviceType = "high";
+    else if (cores <= 2) profile.deviceType = "low";
 
     // Detect network speed
     const connection = (navigator as any).connection;
     if (connection) {
-      if (connection.effectiveType === '4g' && connection.downlink > 5) {
-        profile.networkSpeed = 'fast';
-      } else if (connection.effectiveType === '2g' || connection.downlink < 1) {
-        profile.networkSpeed = 'slow';
+      if (connection.effectiveType === "4g" && connection.downlink > 5) {
+        profile.networkSpeed = "fast";
+      } else if (connection.effectiveType === "2g" || connection.downlink < 1) {
+        profile.networkSpeed = "slow";
       }
     }
 
     if (!navigator.onLine) {
-      profile.networkSpeed = 'offline';
+      profile.networkSpeed = "offline";
     }
 
     // Detect memory pressure
-    if ('memory' in performance) {
+    if ("memory" in performance) {
       const memory = (performance as any).memory;
       if (memory) {
         const usage = memory.usedJSHeapSize / memory.jsHeapSizeLimit;
-        if (usage > 0.8) profile.memoryPressure = 'high';
-        else if (usage > 0.5) profile.memoryPressure = 'medium';
+        if (usage > 0.8) profile.memoryPressure = "high";
+        else if (usage > 0.5) profile.memoryPressure = "medium";
       }
     }
 
     // Detect battery
-    if ('getBattery' in navigator) {
+    if ("getBattery" in navigator) {
       try {
         const battery = await (navigator as any).getBattery();
         profile.batteryLevel = Math.round(battery.level * 100);
@@ -367,6 +367,6 @@ class SelfAdjustingSystem {
 export const selfAdjustingSystem = new SelfAdjustingSystem();
 
 // Auto-detect profile on load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   selfAdjustingSystem.detectSystemProfile();
 }

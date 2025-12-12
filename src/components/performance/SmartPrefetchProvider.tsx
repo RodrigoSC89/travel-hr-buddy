@@ -3,8 +3,8 @@
  * PATCH 900: Corrigido para evitar erro de useContext null
  */
 
-import React, { useEffect, useState, memo } from 'react';
-import { resourceHints } from '@/lib/performance/resource-hints';
+import React, { useEffect, useState, memo } from "react";
+import { resourceHints } from "@/lib/performance/resource-hints";
 
 // Componente interno que usa os hooks de forma segura
 const PrefetchInitializer = memo(() => {
@@ -23,14 +23,14 @@ const PrefetchInitializer = memo(() => {
       
       setInitialized(true);
     } catch (error) {
-      console.warn('Prefetch initialization failed:', error);
+      console.warn("Prefetch initialization failed:", error);
     }
   }, [initialized]);
 
   return null;
 });
 
-PrefetchInitializer.displayName = 'PrefetchInitializer';
+PrefetchInitializer.displayName = "PrefetchInitializer";
 
 function SmartPrefetchProviderComponent({ children }: { children: React.ReactNode }) {
   return (

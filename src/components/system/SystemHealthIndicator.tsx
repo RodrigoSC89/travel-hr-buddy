@@ -3,14 +3,14 @@
  * PATCH 833: Compact system status display
  */
 
-import React from 'react';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { Badge } from "@/components/ui/badge";
 import { 
   Tooltip, 
   TooltipContent, 
   TooltipProvider, 
   TooltipTrigger 
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 import { 
   CheckCircle2, 
   AlertCircle, 
@@ -20,14 +20,14 @@ import {
   Database,
   Server,
   Clock
-} from 'lucide-react';
-import { usePWA } from '@/lib/pwa/service-worker-registration';
-import { useWebVitals } from '@/lib/performance/web-vitals-monitor';
+} from "lucide-react";
+import { usePWA } from "@/lib/pwa/service-worker-registration";
+import { useWebVitals } from "@/lib/performance/web-vitals-monitor";
 
 interface SystemStatus {
-  api: 'healthy' | 'degraded' | 'down';
-  database: 'healthy' | 'degraded' | 'down';
-  realtime: 'connected' | 'disconnected';
+  api: "healthy" | "degraded" | "down";
+  database: "healthy" | "degraded" | "down";
+  realtime: "connected" | "disconnected";
 }
 
 interface SystemHealthIndicatorProps {
@@ -36,17 +36,17 @@ interface SystemHealthIndicatorProps {
 }
 
 export function SystemHealthIndicator({ 
-  status = { api: 'healthy', database: 'healthy', realtime: 'connected' },
+  status = { api: "healthy", database: "healthy", realtime: "connected" },
   compact = true 
 }: SystemHealthIndicatorProps) {
   const { isOffline } = usePWA();
   const { score } = useWebVitals();
 
   const getOverallStatus = () => {
-    if (isOffline) return 'offline';
-    if (status.api === 'down' || status.database === 'down') return 'critical';
-    if (status.api === 'degraded' || status.database === 'degraded') return 'warning';
-    return 'healthy';
+    if (isOffline) return "offline";
+    if (status.api === "down" || status.database === "down") return "critical";
+    if (status.api === "degraded" || status.database === "degraded") return "warning";
+    return "healthy";
   };
 
   const overallStatus = getOverallStatus();
@@ -54,27 +54,27 @@ export function SystemHealthIndicator({
   const statusConfig = {
     healthy: {
       icon: CheckCircle2,
-      color: 'text-green-500',
-      bg: 'bg-green-500/10',
-      label: 'Todos os sistemas operacionais',
+      color: "text-green-500",
+      bg: "bg-green-500/10",
+      label: "Todos os sistemas operacionais",
     },
     warning: {
       icon: AlertCircle,
-      color: 'text-yellow-500',
-      bg: 'bg-yellow-500/10',
-      label: 'Alguns serviços degradados',
+      color: "text-yellow-500",
+      bg: "bg-yellow-500/10",
+      label: "Alguns serviços degradados",
     },
     critical: {
       icon: XCircle,
-      color: 'text-red-500',
-      bg: 'bg-red-500/10',
-      label: 'Problemas detectados',
+      color: "text-red-500",
+      bg: "bg-red-500/10",
+      label: "Problemas detectados",
     },
     offline: {
       icon: WifiOff,
-      color: 'text-gray-500',
-      bg: 'bg-gray-500/10',
-      label: 'Modo offline',
+      color: "text-gray-500",
+      bg: "bg-gray-500/10",
+      label: "Modo offline",
     },
   };
 
@@ -89,7 +89,7 @@ export function SystemHealthIndicator({
             <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full ${config.bg}`}>
               <Icon className={`h-3.5 w-3.5 ${config.color}`} />
               <span className={`text-xs font-medium ${config.color}`}>
-                {isOffline ? 'Offline' : score > 0 ? `${score}%` : 'OK'}
+                {isOffline ? "Offline" : score > 0 ? `${score}%` : "OK"}
               </span>
             </div>
           </TooltipTrigger>

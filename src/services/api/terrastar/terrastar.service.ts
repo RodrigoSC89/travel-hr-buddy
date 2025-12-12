@@ -14,7 +14,7 @@ export interface TerrastarIonosphereData {
   vtec: number; // Vertical Total Electron Content
   stec: number; // Slant Total Electron Content
   ionospheric_delay: number; // milliseconds
-  correction_type: 'L1' | 'L2' | 'L5';
+  correction_type: "L1" | "L2" | "L5";
   quality_indicator: number; // 0-100
   satellite_count: number;
 }
@@ -29,15 +29,15 @@ export interface TerrastarCorrection {
   horizontal_accuracy: number; // meters
   vertical_accuracy: number; // meters
   correction_age: number; // seconds
-  service_level: 'BASIC' | 'PREMIUM' | 'RTK';
+  service_level: "BASIC" | "PREMIUM" | "RTK";
   signal_quality: number;
 }
 
 export interface TerrastarAlert {
   id?: string;
   vessel_id: string;
-  alert_type: 'IONOSPHERIC_STORM' | 'SIGNAL_DEGRADATION' | 'CORRECTION_UNAVAILABLE' | 'ACCURACY_WARNING';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  alert_type: "IONOSPHERIC_STORM" | "SIGNAL_DEGRADATION" | "CORRECTION_UNAVAILABLE" | "ACCURACY_WARNING";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   affected_area: {
     lat_min: number;
@@ -53,7 +53,7 @@ export interface TerrastarAlert {
 export interface TerrastarAPIConfig {
   apiKey: string;
   apiUrl: string;
-  serviceLevel: 'BASIC' | 'PREMIUM' | 'RTK';
+  serviceLevel: "BASIC" | "PREMIUM" | "RTK";
 }
 
 /**
@@ -61,8 +61,8 @@ export interface TerrastarAPIConfig {
  */
 function getTerrastarConfig(): TerrastarAPIConfig {
   const apiKey = (import.meta as any).env.VITE_TERRASTAR_API_KEY as string;
-  const apiUrl = (import.meta as any).env.VITE_TERRASTAR_API_URL as string || 'https://api.terrastar.hexagon.com/v2';
-  const serviceLevel = ((import.meta as any).env.VITE_TERRASTAR_SERVICE_LEVEL as string || 'PREMIUM') as 'BASIC' | 'PREMIUM' | 'RTK';
+  const apiUrl = (import.meta as any).env.VITE_TERRASTAR_API_URL as string || "https://api.terrastar.hexagon.com/v2";
+  const serviceLevel = ((import.meta as any).env.VITE_TERRASTAR_SERVICE_LEVEL as string || "PREMIUM") as "BASIC" | "PREMIUM" | "RTK";
 
   if (!apiKey) {
     throw new Error("Terrastar API key not configured");
@@ -83,10 +83,10 @@ export async function getIonosphericData(
     const config = getTerrastarConfig();
 
     const response = await fetch(`${config.apiUrl}/ionosphere/data`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         latitude,
@@ -117,7 +117,7 @@ export async function getIonosphericData(
 
     return ionosphereData;
   } catch (error) {
-    logger.error('Error fetching ionospheric data', error as Error, { latitude, longitude, altitude });
+    logger.error("Error fetching ionospheric data", error as Error, { latitude, longitude, altitude });
     throw error;
   }
 }
@@ -135,10 +135,10 @@ export async function requestPositionCorrection(
     const config = getTerrastarConfig();
 
     const response = await fetch(`${config.apiUrl}/corrections/position`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         latitude,
@@ -170,12 +170,12 @@ export async function requestPositionCorrection(
 
     // Store correction in database
     await supabase
-      .from('terrastar_corrections')
+      .from("terrastar_corrections")
       .insert(correction as any);
 
     return correction;
   } catch (error) {
-    logger.error('Error requesting position correction', error as Error, { vesselId, latitude, longitude });
+    logger.error("Error requesting position correction", error as Error, { vesselId, latitude, longitude });
     throw error;
   }
 }
@@ -196,15 +196,15 @@ export async function subscribeToIonosphericAlerts(
     const config = getTerrastarConfig();
 
     const response = await fetch(`${config.apiUrl}/alerts/subscribe`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         vessel_id: vesselId,
         area: boundingBox,
-        alert_types: ['IONOSPHERIC_STORM', 'SIGNAL_DEGRADATION', 'CORRECTION_UNAVAILABLE'],
+        alert_types: ["IONOSPHERIC_STORM", "SIGNAL_DEGRADATION", "CORRECTION_UNAVAILABLE"],
       }),
     });
 
@@ -216,7 +216,7 @@ export async function subscribeToIonosphericAlerts(
 
     // Store subscription
     await (supabase as any)
-      .from('terrastar_alert_subscriptions')
+      .from("terrastar_alert_subscriptions")
       .insert({
         vessel_id: vesselId,
         subscription_id: data.subscription_id,
@@ -226,7 +226,7 @@ export async function subscribeToIonosphericAlerts(
 
     return { subscription_id: data.subscription_id };
   } catch (error) {
-    logger.error('Error subscribing to alerts', error as Error, { vesselId, boundingBox });
+    logger.error("Error subscribing to alerts", error as Error, { vesselId, boundingBox });
     throw error;
   }
 }
@@ -237,18 +237,18 @@ export async function subscribeToIonosphericAlerts(
 export async function getActiveAlerts(vesselId: string): Promise<TerrastarAlert[]> {
   try {
     const { data: alerts, error } = await (supabase as any)
-      .from('terrastar_alerts')
-      .select('*')
-      .eq('vessel_id', vesselId)
-      .eq('acknowledged', false)
-      .gte('expires_at', new Date().toISOString())
-      .order('severity', { ascending: false });
+      .from("terrastar_alerts")
+      .select("*")
+      .eq("vessel_id", vesselId)
+      .eq("acknowledged", false)
+      .gte("expires_at", new Date().toISOString())
+      .order("severity", { ascending: false });
 
     if (error) throw error;
 
     return (alerts || []) as TerrastarAlert[];
   } catch (error) {
-    logger.error('Error fetching active alerts', error as Error, { vesselId });
+    logger.error("Error fetching active alerts", error as Error, { vesselId });
     return [];
   }
 }
@@ -259,15 +259,15 @@ export async function getActiveAlerts(vesselId: string): Promise<TerrastarAlert[
 export async function acknowledgeAlert(alertId: string): Promise<boolean> {
   try {
     const { error } = await (supabase as any)
-      .from('terrastar_alerts')
+      .from("terrastar_alerts")
       .update({ acknowledged: true })
-      .eq('id', alertId);
+      .eq("id", alertId);
 
     if (error) throw error;
 
     return true;
   } catch (error) {
-    logger.error('Error acknowledging alert', error as Error, { alertId });
+    logger.error("Error acknowledging alert", error as Error, { alertId });
     return false;
   }
 }
@@ -284,17 +284,17 @@ export async function getIonosphericForecast(
     timestamp: string;
     vtec_predicted: number;
     confidence: number;
-    condition: 'quiet' | 'unsettled' | 'active' | 'storm';
+    condition: "quiet" | "unsettled" | "active" | "storm";
   }>;
 }> {
   try {
     const config = getTerrastarConfig();
 
     const response = await fetch(`${config.apiUrl}/ionosphere/forecast`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         latitude,
@@ -310,7 +310,7 @@ export async function getIonosphericForecast(
     const data = await response.json();
     return data;
   } catch (error) {
-    logger.error('Error fetching ionospheric forecast', error as Error, { latitude, longitude, hours });
+    logger.error("Error fetching ionospheric forecast", error as Error, { latitude, longitude, hours });
     throw error;
   }
 }
@@ -334,10 +334,10 @@ export async function getCorrectionStatistics(
     startDate.setDate(startDate.getDate() - days);
 
     const { data: corrections, error } = await supabase
-      .from('terrastar_corrections')
-      .select('*')
-      .eq('vessel_id', vesselId)
-      .gte('timestamp', startDate.toISOString());
+      .from("terrastar_corrections")
+      .select("*")
+      .eq("vessel_id", vesselId)
+      .gte("timestamp", startDate.toISOString());
 
     if (error || !corrections || corrections.length === 0) {
       return {
@@ -363,7 +363,7 @@ export async function getCorrectionStatistics(
       signal_quality_avg: signalQualities.reduce((a: number, b: number) => a + b, 0) / signalQualities.length,
     };
   } catch (error) {
-    logger.error('Error getting correction statistics', error as Error, { vesselId, days });
+    logger.error("Error getting correction statistics", error as Error, { vesselId, days });
     throw error;
   }
 }
@@ -382,9 +382,9 @@ export async function validateServiceStatus(): Promise<{
     const startTime = Date.now();
 
     const response = await fetch(`${config.apiUrl}/status`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
+        "Authorization": `Bearer ${config.apiKey}`,
       },
     });
 
@@ -402,7 +402,7 @@ export async function validateServiceStatus(): Promise<{
     const data = await response.json();
 
     return {
-      available: data.status === 'operational',
+      available: data.status === "operational",
       service_level: config.serviceLevel,
       latency_ms: latency,
       message: data.message,
@@ -410,9 +410,9 @@ export async function validateServiceStatus(): Promise<{
   } catch (error) {
     return {
       available: false,
-      service_level: 'UNKNOWN',
+      service_level: "UNKNOWN",
       latency_ms: 0,
-      message: error instanceof Error ? error.message : 'Connection failed',
+      message: error instanceof Error ? error.message : "Connection failed",
     };
   }
 }

@@ -133,19 +133,19 @@ export default function FacialAccess() {
 
   const getLevelColor = (level: string) => {
     switch (level) {
-      case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
-      case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/50";
-      case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
-      case "low": return "bg-green-500/20 text-green-400 border-green-500/50";
-      default: return "bg-muted text-muted-foreground";
+    case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
+    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/50";
+    case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
+    case "low": return "bg-green-500/20 text-green-400 border-green-500/50";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "granted": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
-      case "denied": return <XCircle className="h-4 w-4 text-red-400" />;
-      default: return <Clock className="h-4 w-4 text-yellow-400" />;
+    case "granted": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
+    case "denied": return <XCircle className="h-4 w-4 text-red-400" />;
+    default: return <Clock className="h-4 w-4 text-yellow-400" />;
     }
   };
 
@@ -207,14 +207,14 @@ export default function FacialAccess() {
             </div>
 
             {scanResult && (
-              <div className={`p-4 rounded-lg ${scanResult.success ? 'bg-green-500/10 border border-green-500/50' : 'bg-red-500/10 border border-red-500/50'}`}>
+              <div className={`p-4 rounded-lg ${scanResult.success ? "bg-green-500/10 border border-green-500/50" : "bg-red-500/10 border border-red-500/50"}`}>
                 <div className="flex items-center gap-2">
                   {scanResult.success ? (
                     <Unlock className="h-5 w-5 text-green-400" />
                   ) : (
                     <Lock className="h-5 w-5 text-red-400" />
                   )}
-                  <span className={scanResult.success ? 'text-green-400' : 'text-red-400'}>
+                  <span className={scanResult.success ? "text-green-400" : "text-red-400"}>
                     {scanResult.message}
                   </span>
                 </div>
@@ -270,8 +270,8 @@ export default function FacialAccess() {
                           <h3 className="font-semibold">{area.name}</h3>
                           <Badge className={getLevelColor(area.level)}>
                             {area.level === "critical" ? "Crítico" :
-                             area.level === "high" ? "Alto" :
-                             area.level === "medium" ? "Médio" : "Baixo"}
+                              area.level === "high" ? "Alto" :
+                                area.level === "medium" ? "Médio" : "Baixo"}
                           </Badge>
                         </div>
                         {area.requiresFacial ? (
@@ -289,8 +289,8 @@ export default function FacialAccess() {
                         <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
                           <div 
                             className={`h-full transition-all ${
-                              area.activeUsers / area.maxCapacity > 0.8 ? 'bg-red-500' :
-                              area.activeUsers / area.maxCapacity > 0.5 ? 'bg-yellow-500' : 'bg-green-500'
+                              area.activeUsers / area.maxCapacity > 0.8 ? "bg-red-500" :
+                                area.activeUsers / area.maxCapacity > 0.5 ? "bg-yellow-500" : "bg-green-500"
                             }`}
                             style={{ width: `${(area.activeUsers / area.maxCapacity) * 100}%` }}
                           />

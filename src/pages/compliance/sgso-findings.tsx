@@ -39,18 +39,18 @@ export default function SGSOFindings() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'major': return 'destructive';
-      case 'minor': return 'secondary';
-      default: return 'outline';
+    case "major": return "destructive";
+    case "minor": return "secondary";
+    default: return "outline";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'closed': return 'text-green-600';
-      case 'in_progress': return 'text-blue-600';
-      case 'open': return 'text-orange-600';
-      default: return 'text-gray-600';
+    case "closed": return "text-green-600";
+    case "in_progress": return "text-blue-600";
+    case "open": return "text-orange-600";
+    default: return "text-gray-600";
     }
   };
 

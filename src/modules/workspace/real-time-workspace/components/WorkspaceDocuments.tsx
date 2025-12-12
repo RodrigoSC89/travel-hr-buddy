@@ -74,20 +74,20 @@ interface WorkspaceDocumentsProps {
 
 const getFileIcon = (type: SharedDocument["type"]) => {
   switch (type) {
-    case "PDF": return <FileText className="h-5 w-5 text-red-500" />;
-    case "DOCX": return <FileText className="h-5 w-5 text-blue-500" />;
-    case "XLSX": return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
-    case "IMG": return <FileImage className="h-5 w-5 text-purple-500" />;
-    default: return <File className="h-5 w-5 text-muted-foreground" />;
+  case "PDF": return <FileText className="h-5 w-5 text-red-500" />;
+  case "DOCX": return <FileText className="h-5 w-5 text-blue-500" />;
+  case "XLSX": return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
+  case "IMG": return <FileImage className="h-5 w-5 text-purple-500" />;
+  default: return <File className="h-5 w-5 text-muted-foreground" />;
   }
 };
 
 const getTypeBadgeVariant = (type: SharedDocument["type"]) => {
   switch (type) {
-    case "PDF": return "destructive";
-    case "DOCX": return "default";
-    case "XLSX": return "secondary";
-    default: return "outline";
+  case "PDF": return "destructive";
+  case "DOCX": return "default";
+  case "XLSX": return "secondary";
+  default: return "outline";
   }
 };
 
@@ -364,7 +364,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           </DialogHeader>
           <div 
             className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              selectedFile ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+              selectedFile ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
             }`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -372,7 +372,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           >
             {selectedFile ? (
               <div className="flex flex-col items-center gap-2">
-                {getFileIcon(selectedFile.name.split('.').pop()?.toUpperCase() as any || "OTHER")}
+                {getFileIcon(selectedFile.name.split(".").pop()?.toUpperCase() as any || "OTHER")}
                 <p className="font-medium">{selectedFile.name}</p>
                 <p className="text-sm text-muted-foreground">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB

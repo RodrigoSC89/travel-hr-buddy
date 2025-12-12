@@ -7,7 +7,7 @@ export interface SystemConfig {
   app: {
     name: string;
     version: string;
-    environment: 'development' | 'staging' | 'production';
+    environment: "development" | "staging" | "production";
   };
   features: {
     pwa: boolean;
@@ -42,16 +42,16 @@ export interface SystemConfig {
   ui: {
     animationsEnabled: boolean;
     reducedMotion: boolean;
-    defaultTheme: 'light' | 'dark' | 'system';
+    defaultTheme: "light" | "dark" | "system";
     compactMode: boolean;
   };
 }
 
 const defaultConfig: SystemConfig = {
   app: {
-    name: 'Nautica',
-    version: '2.0.0',
-    environment: import.meta.env.MODE as SystemConfig['app']['environment'],
+    name: "Nautica",
+    version: "2.0.0",
+    environment: import.meta.env.MODE as SystemConfig["app"]["environment"],
   },
   features: {
     pwa: true,
@@ -64,7 +64,7 @@ const defaultConfig: SystemConfig = {
     multiLanguage: false,
   },
   api: {
-    baseUrl: import.meta.env.VITE_API_URL || '',
+    baseUrl: import.meta.env.VITE_API_URL || "",
     timeout: 30000,
     retryAttempts: 3,
     cacheEnabled: true,
@@ -86,7 +86,7 @@ const defaultConfig: SystemConfig = {
   ui: {
     animationsEnabled: true,
     reducedMotion: false,
-    defaultTheme: 'system',
+    defaultTheme: "system",
     compactMode: false,
   },
 };
@@ -101,21 +101,21 @@ class SystemConfigManager {
 
   private loadConfig(): SystemConfig {
     try {
-      const stored = localStorage.getItem('system_config');
+      const stored = localStorage.getItem("system_config");
       if (stored) {
         return { ...defaultConfig, ...JSON.parse(stored) };
       }
     } catch (error) {
-      console.error('Failed to load system config:', error);
+      console.error("Failed to load system config:", error);
     }
     return defaultConfig;
   }
 
   private saveConfig() {
     try {
-      localStorage.setItem('system_config', JSON.stringify(this.config));
+      localStorage.setItem("system_config", JSON.stringify(this.config));
     } catch (error) {
-      console.error('Failed to save system config:', error);
+      console.error("Failed to save system config:", error);
     }
   }
 
@@ -138,16 +138,16 @@ class SystemConfigManager {
     this.notifyListeners();
   }
 
-  isFeatureEnabled(feature: keyof SystemConfig['features']): boolean {
+  isFeatureEnabled(feature: keyof SystemConfig["features"]): boolean {
     return this.config.features[feature];
   }
 
-  enableFeature(feature: keyof SystemConfig['features']) {
-    this.set('features', { [feature]: true });
+  enableFeature(feature: keyof SystemConfig["features"]) {
+    this.set("features", { [feature]: true });
   }
 
-  disableFeature(feature: keyof SystemConfig['features']) {
-    this.set('features', { [feature]: false });
+  disableFeature(feature: keyof SystemConfig["features"]) {
+    this.set("features", { [feature]: false });
   }
 
   subscribe(callback: (config: SystemConfig) => void): () => void {
@@ -163,7 +163,7 @@ class SystemConfigManager {
 
   reset() {
     this.config = defaultConfig;
-    localStorage.removeItem('system_config');
+    localStorage.removeItem("system_config");
     this.notifyListeners();
   }
 
@@ -171,12 +171,12 @@ class SystemConfigManager {
   getAdaptiveConfig(): Partial<SystemConfig> {
     const connection = (navigator as any).connection;
     const memory = (navigator as any).deviceMemory;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const adaptations: Partial<SystemConfig> = {};
 
     // Slow connection adaptations
-    if (connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g') {
+    if (connection?.effectiveType === "2g" || connection?.effectiveType === "slow-2g") {
       adaptations.performance = {
         ...this.config.performance,
         lazyLoadImages: true,
@@ -214,7 +214,7 @@ class SystemConfigManager {
 export const systemConfig = new SystemConfigManager();
 
 // React hook
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useSystemConfig() {
   const [config, setConfig] = useState<SystemConfig>(systemConfig.get());

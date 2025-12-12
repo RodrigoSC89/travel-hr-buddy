@@ -3,8 +3,8 @@
  * Batches and deduplicates requests for low-bandwidth optimization
  */
 
-import { logger } from '@/lib/logger';
-import { compressPayload, decompressPayload, shouldCompress } from './payload-compression';
+import { logger } from "@/lib/logger";
+import { compressPayload, decompressPayload, shouldCompress } from "./payload-compression";
 
 interface BatchedRequest {
   id: string;
@@ -13,7 +13,7 @@ interface BatchedRequest {
   resolve: (value: Response) => void;
   reject: (reason: any) => void;
   timestamp: number;
-  priority: 'high' | 'normal' | 'low';
+  priority: "high" | "normal" | "low";
 }
 
 interface BatchConfig {
@@ -47,17 +47,17 @@ class RequestBatcher {
   async fetch(
     url: string,
     options: RequestInit = {},
-    priority: 'high' | 'normal' | 'low' = 'normal'
+    priority: "high" | "normal" | "low" = "normal"
   ): Promise<Response> {
-    const method = options.method?.toUpperCase() || 'GET';
+    const method = options.method?.toUpperCase() || "GET";
     
     // Handle GET deduplication
-    if (method === 'GET' && this.config.deduplicateGET) {
+    if (method === "GET" && this.config.deduplicateGET) {
       const cacheKey = this.getCacheKey(url, options);
       const cached = this.requestCache.get(cacheKey);
       
       if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
-        logger.debug('[RequestBatcher] Returning cached response', { url });
+        logger.debug("[RequestBatcher] Returning cached response", { url });
         return cached.response.clone();
       }
       
@@ -67,7 +67,7 @@ class RequestBatcher {
       );
       
       if (existing) {
-        logger.debug('[RequestBatcher] Deduplicating request', { url });
+        logger.debug("[RequestBatcher] Deduplicating request", { url });
         return new Promise((resolve, reject) => {
           // Chain to existing request
           const originalResolve = existing.resolve;
@@ -86,18 +86,18 @@ class RequestBatcher {
     }
 
     // Compress payload if needed
-    let processedOptions = { ...options };
+    const processedOptions = { ...options };
     if (
       this.config.compressPayloads &&
       options.body &&
-      typeof options.body === 'string' &&
+      typeof options.body === "string" &&
       shouldCompress(options.body)
     ) {
       const compressed = compressPayload(options.body);
       processedOptions.body = JSON.stringify(compressed);
       processedOptions.headers = {
         ...processedOptions.headers,
-        'X-Compressed': 'true',
+        "X-Compressed": "true",
       };
     }
 
@@ -116,7 +116,7 @@ class RequestBatcher {
       this.sortQueue();
 
       // High priority requests go immediately
-      if (priority === 'high') {
+      if (priority === "high") {
         this.flush();
       } else {
         this.scheduleFlush();
@@ -125,7 +125,7 @@ class RequestBatcher {
   }
 
   private getCacheKey(url: string, options: RequestInit): string {
-    return `${options.method || 'GET'}-${url}-${JSON.stringify(options.headers || {})}`;
+    return `${options.method || "GET"}-${url}-${JSON.stringify(options.headers || {})}`;
   }
 
   private sortQueue(): void {
@@ -171,7 +171,7 @@ class RequestBatcher {
       const response = await fetch(request.url, request.options);
       
       // Cache GET responses
-      if (this.config.deduplicateGET && request.options.method?.toUpperCase() !== 'POST') {
+      if (this.config.deduplicateGET && request.options.method?.toUpperCase() !== "POST") {
         const cacheKey = this.getCacheKey(request.url, request.options);
         this.requestCache.set(cacheKey, {
           response: response.clone(),
@@ -204,9 +204,9 @@ class RequestBatcher {
     return {
       queueLength: this.queue.length,
       cacheSize: this.requestCache.size,
-      pendingHigh: this.queue.filter(r => r.priority === 'high').length,
-      pendingNormal: this.queue.filter(r => r.priority === 'normal').length,
-      pendingLow: this.queue.filter(r => r.priority === 'low').length,
+      pendingHigh: this.queue.filter(r => r.priority === "high").length,
+      pendingNormal: this.queue.filter(r => r.priority === "normal").length,
+      pendingLow: this.queue.filter(r => r.priority === "low").length,
     };
   }
 
@@ -215,7 +215,7 @@ class RequestBatcher {
    */
   clear(): void {
     for (const request of this.queue) {
-      request.reject(new Error('Request cancelled'));
+      request.reject(new Error("Request cancelled"));
     }
     this.queue = [];
     this.requestCache.clear();
@@ -230,7 +230,7 @@ export const requestBatcher = new RequestBatcher();
 export function batchedFetch(
   url: string,
   options?: RequestInit,
-  priority?: 'high' | 'normal' | 'low'
+  priority?: "high" | "normal" | "low"
 ): Promise<Response> {
   return requestBatcher.fetch(url, options, priority);
 }

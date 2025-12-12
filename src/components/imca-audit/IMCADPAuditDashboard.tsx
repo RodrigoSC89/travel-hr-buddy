@@ -83,17 +83,17 @@ export function IMCADPAuditDashboard() {
 
     // Map category codes to section codes
     const categoryToSection: Record<string, string> = {
-      'ASOG': 'OPR', 'CAMO': 'OPR', 'DOC': 'DOC', 'MNT': 'TEC',
-      'INF': 'TEC', 'COMP': 'COMP', 'MON': 'OPR', 'EMG': 'OPR'
+      "ASOG": "OPR", "CAMO": "OPR", "DOC": "DOC", "MNT": "TEC",
+      "INF": "TEC", "COMP": "COMP", "MON": "OPR", "EMG": "OPR"
     };
 
     DP_CHECKLIST_ITEMS.forEach(item => {
       if (!item.applicableDPClass.includes(selectedDPClass)) return;
-      const section = categoryToSection[item.categoryCode] || 'TEC';
+      const section = categoryToSection[item.categoryCode] || "TEC";
       if (sections[section]) {
         sections[section].total++;
-        if (auditData[item.id]?.status === 'C') sections[section].compliant++;
-        if (auditData[item.id]?.status === 'NC') sections[section].nonCompliant++;
+        if (auditData[item.id]?.status === "C") sections[section].compliant++;
+        if (auditData[item.id]?.status === "NC") sections[section].nonCompliant++;
       }
     });
 

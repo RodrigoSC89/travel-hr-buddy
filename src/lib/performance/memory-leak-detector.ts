@@ -5,8 +5,8 @@
 
 interface LeakReport {
   component: string;
-  type: 'event-listener' | 'timer' | 'closure' | 'dom-reference' | 'subscription';
-  severity: 'low' | 'medium' | 'high';
+  type: "event-listener" | "timer" | "closure" | "dom-reference" | "subscription";
+  severity: "low" | "medium" | "high";
   suggestion: string;
 }
 
@@ -127,8 +127,8 @@ class MemoryLeakDetector {
       if (count > 10) {
         reports.push({
           component,
-          type: 'event-listener',
-          severity: count > 50 ? 'high' : count > 20 ? 'medium' : 'low',
+          type: "event-listener",
+          severity: count > 50 ? "high" : count > 20 ? "medium" : "low",
           suggestion: `Componente "${component}" tem ${count} listeners ativos. Verifique se estão sendo removidos no cleanup.`
         });
       }
@@ -137,9 +137,9 @@ class MemoryLeakDetector {
     // Check for many active timers
     if (this.timers.size > 20) {
       reports.push({
-        component: 'Global',
-        type: 'timer',
-        severity: this.timers.size > 50 ? 'high' : 'medium',
+        component: "Global",
+        type: "timer",
+        severity: this.timers.size > 50 ? "high" : "medium",
         suggestion: `${this.timers.size} timers ativos. Considere usar um único timer centralizado.`
       });
     }
@@ -156,7 +156,7 @@ class MemoryLeakDetector {
     averageGrowthKB: number;
     snapshotCount: number;
     potentialLeaks: boolean;
-  } {
+    } {
     const current = this.snapshots[this.snapshots.length - 1];
     const avgGrowth = this.snapshots.length > 1
       ? this.snapshots.slice(1).reduce((sum, s) => sum + s.growth, 0) / (this.snapshots.length - 1)
@@ -250,7 +250,7 @@ export function debounce<T extends (...args: any[]) => any>(
 export function createCleanupEffect(setup: () => (() => void) | void): () => void {
   const cleanup = setup();
   return () => {
-    if (typeof cleanup === 'function') {
+    if (typeof cleanup === "function") {
       cleanup();
     }
   };

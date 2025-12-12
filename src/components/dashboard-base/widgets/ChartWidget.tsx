@@ -55,98 +55,98 @@ export const ChartWidget = ({ config, className }: ChartWidgetProps) => {
     };
 
     switch (type) {
-      case "line":
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <LineChart {...commonProps}>
-              {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-              {xAxisKey && <XAxis dataKey={xAxisKey} />}
-              {yAxisKey && <YAxis />}
-              {showTooltip && <Tooltip />}
-              {showLegend && <Legend />}
-              {dataKeys.map((key, index) => (
-                <Line
-                  key={key}
-                  type="monotone"
-                  dataKey={key}
-                  stroke={colors[index % colors.length]}
-                  strokeWidth={2}
-                />
+    case "line":
+      return (
+        <ResponsiveContainer width="100%" height={height}>
+          <LineChart {...commonProps}>
+            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {xAxisKey && <XAxis dataKey={xAxisKey} />}
+            {yAxisKey && <YAxis />}
+            {showTooltip && <Tooltip />}
+            {showLegend && <Legend />}
+            {dataKeys.map((key, index) => (
+              <Line
+                key={key}
+                type="monotone"
+                dataKey={key}
+                stroke={colors[index % colors.length]}
+                strokeWidth={2}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      );
+
+    case "bar":
+      return (
+        <ResponsiveContainer width="100%" height={height}>
+          <BarChart {...commonProps}>
+            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {xAxisKey && <XAxis dataKey={xAxisKey} />}
+            {yAxisKey && <YAxis />}
+            {showTooltip && <Tooltip />}
+            {showLegend && <Legend />}
+            {dataKeys.map((key, index) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                fill={colors[index % colors.length]}
+              />
+            ))}
+          </BarChart>
+        </ResponsiveContainer>
+      );
+
+    case "area":
+      return (
+        <ResponsiveContainer width="100%" height={height}>
+          <AreaChart {...commonProps}>
+            {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+            {xAxisKey && <XAxis dataKey={xAxisKey} />}
+            {yAxisKey && <YAxis />}
+            {showTooltip && <Tooltip />}
+            {showLegend && <Legend />}
+            {dataKeys.map((key, index) => (
+              <Area
+                key={key}
+                type="monotone"
+                dataKey={key}
+                stroke={colors[index % colors.length]}
+                fill={colors[index % colors.length]}
+                fillOpacity={0.6}
+              />
+            ))}
+          </AreaChart>
+        </ResponsiveContainer>
+      );
+
+    case "pie":
+    case "donut":
+      return (
+        <ResponsiveContainer width="100%" height={height}>
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey={dataKeys[0] || "value"}
+              nameKey={xAxisKey || "name"}
+              cx="50%"
+              cy="50%"
+              innerRadius={type === "donut" ? "60%" : 0}
+              outerRadius="80%"
+              label
+            >
+              {data.map((_entry, index) => (
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
               ))}
-            </LineChart>
-          </ResponsiveContainer>
-        );
+            </Pie>
+            {showTooltip && <Tooltip />}
+            {showLegend && <Legend />}
+          </PieChart>
+        </ResponsiveContainer>
+      );
 
-      case "bar":
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <BarChart {...commonProps}>
-              {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-              {xAxisKey && <XAxis dataKey={xAxisKey} />}
-              {yAxisKey && <YAxis />}
-              {showTooltip && <Tooltip />}
-              {showLegend && <Legend />}
-              {dataKeys.map((key, index) => (
-                <Bar
-                  key={key}
-                  dataKey={key}
-                  fill={colors[index % colors.length]}
-                />
-              ))}
-            </BarChart>
-          </ResponsiveContainer>
-        );
-
-      case "area":
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <AreaChart {...commonProps}>
-              {showGrid && <CartesianGrid strokeDasharray="3 3" />}
-              {xAxisKey && <XAxis dataKey={xAxisKey} />}
-              {yAxisKey && <YAxis />}
-              {showTooltip && <Tooltip />}
-              {showLegend && <Legend />}
-              {dataKeys.map((key, index) => (
-                <Area
-                  key={key}
-                  type="monotone"
-                  dataKey={key}
-                  stroke={colors[index % colors.length]}
-                  fill={colors[index % colors.length]}
-                  fillOpacity={0.6}
-                />
-              ))}
-            </AreaChart>
-          </ResponsiveContainer>
-        );
-
-      case "pie":
-      case "donut":
-        return (
-          <ResponsiveContainer width="100%" height={height}>
-            <PieChart>
-              <Pie
-                data={data}
-                dataKey={dataKeys[0] || "value"}
-                nameKey={xAxisKey || "name"}
-                cx="50%"
-                cy="50%"
-                innerRadius={type === "donut" ? "60%" : 0}
-                outerRadius="80%"
-                label
-              >
-                {data.map((_entry, index) => (
-                  <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                ))}
-              </Pie>
-              {showTooltip && <Tooltip />}
-              {showLegend && <Legend />}
-            </PieChart>
-          </ResponsiveContainer>
-        );
-
-      default:
-        return <div className="text-center text-muted-foreground">Chart type not supported</div>;
+    default:
+      return <div className="text-center text-muted-foreground">Chart type not supported</div>;
     }
   };
 

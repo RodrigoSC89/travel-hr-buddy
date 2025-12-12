@@ -3,21 +3,21 @@
  * Track user interactions, page views, and custom events
  */
 
-import { useCallback, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { logger } from '@/lib/logger';
+import { useCallback, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 // Analytics event types
 export type AnalyticsEventType = 
-  | 'page_view'
-  | 'click'
-  | 'form_submit'
-  | 'search'
-  | 'navigation'
-  | 'error'
-  | 'performance'
-  | 'feature_use'
-  | 'conversion';
+  | "page_view"
+  | "click"
+  | "form_submit"
+  | "search"
+  | "navigation"
+  | "error"
+  | "performance"
+  | "feature_use"
+  | "conversion";
 
 export interface AnalyticsEvent {
   type: AnalyticsEventType;
@@ -59,7 +59,7 @@ const flushEvents = async () => {
     // await supabase.from('analytics_events').insert(events);
     
   } catch (error) {
-    logger.error('[Analytics] Failed to flush events', { error });
+    logger.error("[Analytics] Failed to flush events", { error });
     // Re-queue failed events
     eventQueue.push(...events);
   }
@@ -120,7 +120,7 @@ export const trackEvent = (event: AnalyticsEvent, config?: AnalyticsConfig) => {
  */
 export const useAnalytics = (config?: AnalyticsConfig) => {
   const location = useLocation();
-  const lastPath = useRef<string>('');
+  const lastPath = useRef<string>("");
   
   // Track page views
   useEffect(() => {
@@ -128,7 +128,7 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
       lastPath.current = location.pathname;
       
       trackEvent({
-        type: 'page_view',
+        type: "page_view",
         name: location.pathname,
         properties: {
           search: location.search,
@@ -141,7 +141,7 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
   // Track click events
   const trackClick = useCallback((name: string, properties?: Record<string, unknown>) => {
     trackEvent({
-      type: 'click',
+      type: "click",
       name,
       properties
     }, config);
@@ -150,7 +150,7 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
   // Track form submissions
   const trackFormSubmit = useCallback((name: string, properties?: Record<string, unknown>) => {
     trackEvent({
-      type: 'form_submit',
+      type: "form_submit",
       name,
       properties
     }, config);
@@ -159,8 +159,8 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
   // Track search
   const trackSearch = useCallback((query: string, properties?: Record<string, unknown>) => {
     trackEvent({
-      type: 'search',
-      name: 'search',
+      type: "search",
+      name: "search",
       properties: { query, ...properties }
     }, config);
   }, [config]);
@@ -168,7 +168,7 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
   // Track feature usage
   const trackFeature = useCallback((featureName: string, properties?: Record<string, unknown>) => {
     trackEvent({
-      type: 'feature_use',
+      type: "feature_use",
       name: featureName,
       properties
     }, config);
@@ -177,8 +177,8 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
   // Track errors
   const trackError = useCallback((error: Error | string, properties?: Record<string, unknown>) => {
     trackEvent({
-      type: 'error',
-      name: typeof error === 'string' ? error : error.message,
+      type: "error",
+      name: typeof error === "string" ? error : error.message,
       properties: {
         stack: error instanceof Error ? error.stack : undefined,
         ...properties
@@ -189,7 +189,7 @@ export const useAnalytics = (config?: AnalyticsConfig) => {
   // Track conversions
   const trackConversion = useCallback((name: string, value?: number, properties?: Record<string, unknown>) => {
     trackEvent({
-      type: 'conversion',
+      type: "conversion",
       name,
       properties: { value, ...properties }
     }, config);
@@ -213,8 +213,8 @@ export const trackPerformance = {
   // Track time to interactive
   tti: (value: number) => {
     trackEvent({
-      type: 'performance',
-      name: 'tti',
+      type: "performance",
+      name: "tti",
       properties: { value }
     });
   },
@@ -222,8 +222,8 @@ export const trackPerformance = {
   // Track largest contentful paint
   lcp: (value: number) => {
     trackEvent({
-      type: 'performance',
-      name: 'lcp',
+      type: "performance",
+      name: "lcp",
       properties: { value }
     });
   },
@@ -231,8 +231,8 @@ export const trackPerformance = {
   // Track first input delay
   fid: (value: number) => {
     trackEvent({
-      type: 'performance',
-      name: 'fid',
+      type: "performance",
+      name: "fid",
       properties: { value }
     });
   },
@@ -240,8 +240,8 @@ export const trackPerformance = {
   // Track cumulative layout shift
   cls: (value: number) => {
     trackEvent({
-      type: 'performance',
-      name: 'cls',
+      type: "performance",
+      name: "cls",
       properties: { value }
     });
   },
@@ -249,7 +249,7 @@ export const trackPerformance = {
   // Track custom timing
   timing: (name: string, duration: number) => {
     trackEvent({
-      type: 'performance',
+      type: "performance",
       name,
       properties: { duration }
     });

@@ -3,9 +3,9 @@
  * Provides offline-aware data fetching and mutations
  */
 
-import { useState, useCallback, useEffect } from 'react';
-import { offlineQueue, fetchWithOfflineSupport } from '@/lib/performance/offline-queue';
-import { toast } from 'sonner';
+import { useState, useCallback, useEffect } from "react";
+import { offlineQueue, fetchWithOfflineSupport } from "@/lib/performance/offline-queue";
+import { toast } from "sonner";
 
 interface UseOfflineMutationOptions<T> {
   onSuccess?: (data: T) => void;
@@ -29,9 +29,9 @@ export function useOfflineMutation<TData, TVariables>(
     onSuccess,
     onError,
     onOfflineQueue,
-    successMessage = 'Operação realizada com sucesso',
-    errorMessage = 'Erro ao realizar operação',
-    offlineMessage = 'Você está offline. A operação será realizada quando reconectar.'
+    successMessage = "Operação realizada com sucesso",
+    errorMessage = "Erro ao realizar operação",
+    offlineMessage = "Você está offline. A operação será realizada quando reconectar."
   } = options;
 
   const mutate = useCallback(async (variables: TVariables) => {
@@ -44,7 +44,7 @@ export function useOfflineMutation<TData, TVariables>(
       setData(result);
       
       // Check if the result indicates it was queued
-      if (result && typeof result === 'object' && 'queued' in result) {
+      if (result && typeof result === "object" && "queued" in result) {
         setIsQueued(true);
         toast.info(offlineMessage);
         onOfflineQueue?.();
@@ -55,7 +55,7 @@ export function useOfflineMutation<TData, TVariables>(
       
       return result;
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Unknown error');
+      const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);
       
       if (!navigator.onLine) {
@@ -142,10 +142,10 @@ export function useOfflineData<T>(
           timestamp: Date.now()
         }));
       } else if (!data) {
-        throw new Error('No cached data available offline');
+        throw new Error("No cached data available offline");
       }
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to fetch');
+      const error = err instanceof Error ? err : new Error("Failed to fetch");
       setError(error);
     } finally {
       setIsLoading(false);
@@ -164,8 +164,8 @@ export function useOfflineData<T>(
       }
     };
 
-    window.addEventListener('online', handleOnline);
-    return () => window.removeEventListener('online', handleOnline);
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
   }, [fetchData, isStale]);
 
   return {

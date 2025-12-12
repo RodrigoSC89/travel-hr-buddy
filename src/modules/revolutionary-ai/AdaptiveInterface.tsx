@@ -3,18 +3,18 @@
  * Interface modular adaptativa por perfil de uso
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   User, Settings, Layout, Palette, Eye,
   Sliders, Grid3X3, List, Zap, Moon, Sun,
   Monitor, Smartphone, Check, Sparkles
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface UserProfile {
   id: string;
@@ -29,54 +29,54 @@ interface UserProfile {
 
 const profiles: UserProfile[] = [
   {
-    id: 'engineer',
-    name: 'Engenheiro Embarcado',
-    role: 'engineer',
-    icon: '🔧',
-    description: 'Foco em manutenção, estoque a bordo e relatórios técnicos',
-    modules: ['Manutenção', 'Estoque', 'Checklists', 'Incidentes'],
-    shortcuts: ['Nova OS', 'Baixa de Material', 'Relatório Diário'],
-    theme: 'technical'
+    id: "engineer",
+    name: "Engenheiro Embarcado",
+    role: "engineer",
+    icon: "🔧",
+    description: "Foco em manutenção, estoque a bordo e relatórios técnicos",
+    modules: ["Manutenção", "Estoque", "Checklists", "Incidentes"],
+    shortcuts: ["Nova OS", "Baixa de Material", "Relatório Diário"],
+    theme: "technical"
   },
   {
-    id: 'buyer',
-    name: 'Comprador',
-    role: 'buyer',
-    icon: '🛒',
-    description: 'Gestão de fornecedores, cotações e pedidos de compra',
-    modules: ['Compras', 'Fornecedores', 'Cotações', 'Contratos'],
-    shortcuts: ['Nova Cotação', 'Aprovar Pedido', 'Consultar Preços'],
-    theme: 'commercial'
+    id: "buyer",
+    name: "Comprador",
+    role: "buyer",
+    icon: "🛒",
+    description: "Gestão de fornecedores, cotações e pedidos de compra",
+    modules: ["Compras", "Fornecedores", "Cotações", "Contratos"],
+    shortcuts: ["Nova Cotação", "Aprovar Pedido", "Consultar Preços"],
+    theme: "commercial"
   },
   {
-    id: 'fleet-manager',
-    name: 'Gestor de Frota',
-    role: 'manager',
-    icon: '🚢',
-    description: 'Visão estratégica da frota, KPIs e decisões operacionais',
-    modules: ['Dashboard', 'Frota', 'Relatórios', 'Análises'],
-    shortcuts: ['Cockpit 360°', 'Relatório Executivo', 'Alertas'],
-    theme: 'executive'
+    id: "fleet-manager",
+    name: "Gestor de Frota",
+    role: "manager",
+    icon: "🚢",
+    description: "Visão estratégica da frota, KPIs e decisões operacionais",
+    modules: ["Dashboard", "Frota", "Relatórios", "Análises"],
+    shortcuts: ["Cockpit 360°", "Relatório Executivo", "Alertas"],
+    theme: "executive"
   },
   {
-    id: 'auditor',
-    name: 'Auditor',
-    role: 'auditor',
-    icon: '📋',
-    description: 'Compliance, certificações e documentação regulatória',
-    modules: ['Compliance', 'Certificados', 'Auditorias', 'Documentos'],
-    shortcuts: ['Gerar Dossiê', 'Verificar Vencimentos', 'Relatório ANTAQ'],
-    theme: 'compliance'
+    id: "auditor",
+    name: "Auditor",
+    role: "auditor",
+    icon: "📋",
+    description: "Compliance, certificações e documentação regulatória",
+    modules: ["Compliance", "Certificados", "Auditorias", "Documentos"],
+    shortcuts: ["Gerar Dossiê", "Verificar Vencimentos", "Relatório ANTAQ"],
+    theme: "compliance"
   },
   {
-    id: 'hr',
-    name: 'RH / Tripulação',
-    role: 'hr',
-    icon: '👥',
-    description: 'Gestão de pessoal, escalas e treinamentos',
-    modules: ['Tripulação', 'Escalas', 'Treinamentos', 'Documentos'],
-    shortcuts: ['Nova Escala', 'Embarque', 'Certificados Vencendo'],
-    theme: 'people'
+    id: "hr",
+    name: "RH / Tripulação",
+    role: "hr",
+    icon: "👥",
+    description: "Gestão de pessoal, escalas e treinamentos",
+    modules: ["Tripulação", "Escalas", "Treinamentos", "Documentos"],
+    shortcuts: ["Nova Escala", "Embarque", "Certificados Vencendo"],
+    theme: "people"
   }
 ];
 
@@ -84,8 +84,8 @@ interface InterfaceSettings {
   compactMode: boolean;
   darkMode: boolean;
   animations: boolean;
-  viewMode: 'grid' | 'list';
-  density: 'comfortable' | 'compact' | 'spacious';
+  viewMode: "grid" | "list";
+  density: "comfortable" | "compact" | "spacious";
 }
 
 export function AdaptiveInterface() {
@@ -94,8 +94,8 @@ export function AdaptiveInterface() {
     compactMode: false,
     darkMode: true,
     animations: true,
-    viewMode: 'grid',
-    density: 'comfortable'
+    viewMode: "grid",
+    density: "comfortable"
   });
   const [isApplying, setIsApplying] = useState(false);
 
@@ -111,12 +111,12 @@ export function AdaptiveInterface() {
 
   const getThemeColors = (theme: string) => {
     switch (theme) {
-      case 'technical': return 'from-blue-500 to-cyan-500';
-      case 'commercial': return 'from-green-500 to-emerald-500';
-      case 'executive': return 'from-purple-500 to-indigo-500';
-      case 'compliance': return 'from-orange-500 to-amber-500';
-      case 'people': return 'from-pink-500 to-rose-500';
-      default: return 'from-gray-500 to-slate-500';
+    case "technical": return "from-blue-500 to-cyan-500";
+    case "commercial": return "from-green-500 to-emerald-500";
+    case "executive": return "from-purple-500 to-indigo-500";
+    case "compliance": return "from-orange-500 to-amber-500";
+    case "people": return "from-pink-500 to-rose-500";
+    default: return "from-gray-500 to-slate-500";
     }
   };
 
@@ -159,8 +159,8 @@ export function AdaptiveInterface() {
                 <Card 
                   className={`cursor-pointer transition-all hover:shadow-lg ${
                     selectedProfile?.id === profile.id 
-                      ? 'ring-2 ring-primary' 
-                      : 'hover:border-primary/50'
+                      ? "ring-2 ring-primary" 
+                      : "hover:border-primary/50"
                   }`}
                   onClick={() => handleApplyProfile(profile)}
                 >
@@ -278,18 +278,18 @@ export function AdaptiveInterface() {
               <p className="font-medium mb-3">Visualização</p>
               <div className="flex gap-2">
                 <Button
-                  variant={settings.viewMode === 'grid' ? 'default' : 'outline'}
+                  variant={settings.viewMode === "grid" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSettings(s => ({ ...s, viewMode: 'grid' }))}
+                  onClick={() => setSettings(s => ({ ...s, viewMode: "grid" }))}
                   className="gap-2"
                 >
                   <Grid3X3 className="h-4 w-4" />
                   Grade
                 </Button>
                 <Button
-                  variant={settings.viewMode === 'list' ? 'default' : 'outline'}
+                  variant={settings.viewMode === "list" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSettings(s => ({ ...s, viewMode: 'list' }))}
+                  onClick={() => setSettings(s => ({ ...s, viewMode: "list" }))}
                   className="gap-2"
                 >
                   <List className="h-4 w-4" />
@@ -301,16 +301,16 @@ export function AdaptiveInterface() {
             <div>
               <p className="font-medium mb-3">Densidade</p>
               <div className="flex gap-2">
-                {['compact', 'comfortable', 'spacious'].map(density => (
+                {["compact", "comfortable", "spacious"].map(density => (
                   <Button
                     key={density}
-                    variant={settings.density === density ? 'default' : 'outline'}
+                    variant={settings.density === density ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSettings(s => ({ ...s, density: density as InterfaceSettings['density'] }))}
+                    onClick={() => setSettings(s => ({ ...s, density: density as InterfaceSettings["density"] }))}
                   >
-                    {density === 'compact' && 'Compacto'}
-                    {density === 'comfortable' && 'Confortável'}
-                    {density === 'spacious' && 'Espaçoso'}
+                    {density === "compact" && "Compacto"}
+                    {density === "comfortable" && "Confortável"}
+                    {density === "spacious" && "Espaçoso"}
                   </Button>
                 ))}
               </div>
@@ -326,29 +326,29 @@ export function AdaptiveInterface() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`p-4 rounded-lg border ${settings.darkMode ? 'bg-slate-900' : 'bg-white'} transition-colors`}>
+            <div className={`p-4 rounded-lg border ${settings.darkMode ? "bg-slate-900" : "bg-white"} transition-colors`}>
               <div className="flex items-center gap-2 mb-4">
-                <div className={`p-2 rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                <div className={`p-2 rounded ${settings.darkMode ? "bg-slate-800" : "bg-gray-100"}`}>
                   <Monitor className="h-4 w-4" />
                 </div>
-                <div className={`p-2 rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                <div className={`p-2 rounded ${settings.darkMode ? "bg-slate-800" : "bg-gray-100"}`}>
                   <Smartphone className="h-4 w-4" />
                 </div>
               </div>
 
-              <div className={`grid ${settings.viewMode === 'grid' ? 'grid-cols-2' : 'grid-cols-1'} gap-2`}>
+              <div className={`grid ${settings.viewMode === "grid" ? "grid-cols-2" : "grid-cols-1"} gap-2`}>
                 {[1, 2, 3, 4].map(i => (
                   <motion.div
                     key={i}
                     animate={settings.animations ? { scale: [1, 1.02, 1] } : {}}
                     transition={{ duration: 0.3 }}
-                    className={`rounded ${settings.darkMode ? 'bg-slate-800' : 'bg-gray-100'} ${
-                      settings.density === 'compact' ? 'p-2' : 
-                      settings.density === 'spacious' ? 'p-6' : 'p-4'
+                    className={`rounded ${settings.darkMode ? "bg-slate-800" : "bg-gray-100"} ${
+                      settings.density === "compact" ? "p-2" : 
+                        settings.density === "spacious" ? "p-6" : "p-4"
                     }`}
                   >
-                    <div className={`h-2 rounded ${settings.darkMode ? 'bg-slate-700' : 'bg-gray-200'} mb-2 w-3/4`} />
-                    <div className={`h-2 rounded ${settings.darkMode ? 'bg-slate-700' : 'bg-gray-200'} w-1/2`} />
+                    <div className={`h-2 rounded ${settings.darkMode ? "bg-slate-700" : "bg-gray-200"} mb-2 w-3/4`} />
+                    <div className={`h-2 rounded ${settings.darkMode ? "bg-slate-700" : "bg-gray-200"} w-1/2`} />
                   </motion.div>
                 ))}
               </div>

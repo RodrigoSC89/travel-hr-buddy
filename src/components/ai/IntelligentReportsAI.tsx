@@ -33,64 +33,64 @@ interface GeneratedReport {
   content: string;
   sections: ReportSection[];
   generatedAt: Date;
-  format: 'executive' | 'detailed' | 'summary';
+  format: "executive" | "detailed" | "summary";
 }
 
 interface ReportSection {
   title: string;
   content: string;
-  metrics?: { label: string; value: string; trend?: 'up' | 'down' | 'stable' }[];
+  metrics?: { label: string; value: string; trend?: "up" | "down" | "stable" }[];
   insights?: string[];
 }
 
 const reportTemplates: ReportTemplate[] = [
   {
-    id: 'executive-fleet',
-    name: 'Relatório Executivo da Frota',
-    description: 'Visão geral de performance, custos e status operacional',
+    id: "executive-fleet",
+    name: "Relatório Executivo da Frota",
+    description: "Visão geral de performance, custos e status operacional",
     icon: <Ship className="h-5 w-5" />,
-    category: 'Executivo',
-    estimatedTime: '2 min'
+    category: "Executivo",
+    estimatedTime: "2 min"
   },
   {
-    id: 'maintenance-analysis',
-    name: 'Análise de Manutenção',
-    description: 'Manutenções realizadas, pendentes e previsões',
+    id: "maintenance-analysis",
+    name: "Análise de Manutenção",
+    description: "Manutenções realizadas, pendentes e previsões",
     icon: <Wrench className="h-5 w-5" />,
-    category: 'Operacional',
-    estimatedTime: '3 min'
+    category: "Operacional",
+    estimatedTime: "3 min"
   },
   {
-    id: 'crew-performance',
-    name: 'Performance da Tripulação',
-    description: 'Certificações, escalas e indicadores de desempenho',
+    id: "crew-performance",
+    name: "Performance da Tripulação",
+    description: "Certificações, escalas e indicadores de desempenho",
     icon: <Users className="h-5 w-5" />,
-    category: 'RH',
-    estimatedTime: '2 min'
+    category: "RH",
+    estimatedTime: "2 min"
   },
   {
-    id: 'cost-analysis',
-    name: 'Análise de Custos',
-    description: 'Custos por embarcação, categoria e período',
+    id: "cost-analysis",
+    name: "Análise de Custos",
+    description: "Custos por embarcação, categoria e período",
     icon: <DollarSign className="h-5 w-5" />,
-    category: 'Financeiro',
-    estimatedTime: '3 min'
+    category: "Financeiro",
+    estimatedTime: "3 min"
   },
   {
-    id: 'compliance-status',
-    name: 'Status de Compliance',
-    description: 'Conformidade regulatória e certificações',
+    id: "compliance-status",
+    name: "Status de Compliance",
+    description: "Conformidade regulatória e certificações",
     icon: <Shield className="h-5 w-5" />,
-    category: 'Compliance',
-    estimatedTime: '2 min'
+    category: "Compliance",
+    estimatedTime: "2 min"
   },
   {
-    id: 'kpi-dashboard',
-    name: 'Dashboard de KPIs',
-    description: 'Indicadores-chave de performance consolidados',
+    id: "kpi-dashboard",
+    name: "Dashboard de KPIs",
+    description: "Indicadores-chave de performance consolidados",
     icon: <BarChart3 className="h-5 w-5" />,
-    category: 'Estratégico',
-    estimatedTime: '1 min'
+    category: "Estratégico",
+    estimatedTime: "1 min"
   }
 ];
 
@@ -100,9 +100,9 @@ export const IntelligentReportsAI: React.FC = () => {
   const [generatedReport, setGeneratedReport] = useState<GeneratedReport | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [recentReports, setRecentReports] = useState<{ id: string; title: string; date: Date }[]>([
-    { id: '1', title: 'Relatório Executivo - Dezembro 2024', date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
-    { id: '2', title: 'Análise de Custos Q4', date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) },
-    { id: '3', title: 'Performance da Frota - Novembro', date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) }
+    { id: "1", title: "Relatório Executivo - Dezembro 2024", date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
+    { id: "2", title: "Análise de Custos Q4", date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) },
+    { id: "3", title: "Performance da Frota - Novembro", date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000) }
   ]);
 
   const handleGenerate = async (templateId?: string) => {
@@ -123,13 +123,13 @@ export const IntelligentReportsAI: React.FC = () => {
         content: generateReportContent(templateId || prompt),
         sections: generateReportSections(templateId || prompt),
         generatedAt: new Date(),
-        format: 'executive'
+        format: "executive"
       };
 
       setGeneratedReport(report);
     } catch (error) {
-      console.error('Error generating report:', error);
-      console.error('Error generating report:', error);
+      console.error("Error generating report:", error);
+      console.error("Error generating report:", error);
     } finally {
       setIsGenerating(false);
     }
@@ -144,43 +144,43 @@ A análise contempla o período atual e inclui comparações com períodos anter
   const generateReportSections = (input: string): ReportSection[] => {
     return [
       {
-        title: 'Resumo Executivo',
-        content: 'A frota apresenta operação estável com indicadores dentro dos parâmetros esperados. Destaque para redução de 12% nos custos de manutenção corretiva.',
+        title: "Resumo Executivo",
+        content: "A frota apresenta operação estável com indicadores dentro dos parâmetros esperados. Destaque para redução de 12% nos custos de manutenção corretiva.",
         metrics: [
-          { label: 'Disponibilidade da Frota', value: '94.5%', trend: 'up' },
-          { label: 'Custo/Dia Operação', value: 'R$ 45.230', trend: 'down' },
-          { label: 'Eficiência de Combustível', value: '87%', trend: 'stable' },
-          { label: 'Compliance Score', value: '98%', trend: 'up' }
+          { label: "Disponibilidade da Frota", value: "94.5%", trend: "up" },
+          { label: "Custo/Dia Operação", value: "R$ 45.230", trend: "down" },
+          { label: "Eficiência de Combustível", value: "87%", trend: "stable" },
+          { label: "Compliance Score", value: "98%", trend: "up" }
         ],
         insights: [
-          'Economia de R$ 127.000 com manutenção preditiva',
-          '3 embarcações com certificações próximas ao vencimento',
-          'Oportunidade de otimização de rota identificada'
+          "Economia de R$ 127.000 com manutenção preditiva",
+          "3 embarcações com certificações próximas ao vencimento",
+          "Oportunidade de otimização de rota identificada"
         ]
       },
       {
-        title: 'Performance Operacional',
-        content: 'As operações marítimas mantiveram alto nível de eficiência no período analisado.',
+        title: "Performance Operacional",
+        content: "As operações marítimas mantiveram alto nível de eficiência no período analisado.",
         metrics: [
-          { label: 'Viagens Concluídas', value: '47', trend: 'up' },
-          { label: 'Tempo Médio de Operação', value: '18.5h', trend: 'stable' },
-          { label: 'Incidentes Reportados', value: '2', trend: 'down' }
+          { label: "Viagens Concluídas", value: "47", trend: "up" },
+          { label: "Tempo Médio de Operação", value: "18.5h", trend: "stable" },
+          { label: "Incidentes Reportados", value: "2", trend: "down" }
         ]
       },
       {
-        title: 'Recomendações IA',
-        content: 'Com base na análise dos dados, o sistema identificou as seguintes recomendações prioritárias:',
+        title: "Recomendações IA",
+        content: "Com base na análise dos dados, o sistema identificou as seguintes recomendações prioritárias:",
         insights: [
-          'Antecipar manutenção do Motor BB do Navio Atlas (alta probabilidade de falha)',
-          'Renegociar contrato com fornecedor de combustível - potencial economia de 8%',
-          'Revisar escala da tripulação para otimizar horas extras',
-          'Considerar rota alternativa para viagens ao Norte - economia estimada de 15% em combustível'
+          "Antecipar manutenção do Motor BB do Navio Atlas (alta probabilidade de falha)",
+          "Renegociar contrato com fornecedor de combustível - potencial economia de 8%",
+          "Revisar escala da tripulação para otimizar horas extras",
+          "Considerar rota alternativa para viagens ao Norte - economia estimada de 15% em combustível"
         ]
       }
     ];
   };
 
-  const exportReport = (format: 'pdf' | 'excel' | 'word') => {
+  const exportReport = (format: "pdf" | "excel" | "word") => {
   };
 
   return (
@@ -242,7 +242,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
               >
                 <Card 
                   className={`cursor-pointer transition-colors hover:border-purple-500/50 ${
-                    selectedTemplate === template.id ? 'border-purple-500 bg-purple-500/5' : ''
+                    selectedTemplate === template.id ? "border-purple-500 bg-purple-500/5" : ""
                   }`}
                   onClick={() => handleGenerate(template.id)}
                 >
@@ -282,7 +282,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
                 <div key={report.id} className="p-3 rounded-lg bg-muted/50 hover:bg-muted cursor-pointer">
                   <p className="text-sm font-medium">{report.title}</p>
                   <p className="text-xs text-muted-foreground">
-                    {report.date.toLocaleDateString('pt-BR')}
+                    {report.date.toLocaleDateString("pt-BR")}
                   </p>
                 </div>
               ))}
@@ -327,15 +327,15 @@ A análise contempla o período atual e inclui comparações com períodos anter
                         {generatedReport.title}
                       </CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
-                        Gerado em {generatedReport.generatedAt.toLocaleString('pt-BR')}
+                        Gerado em {generatedReport.generatedAt.toLocaleString("pt-BR")}
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => exportReport('pdf')}>
+                      <Button variant="outline" size="sm" onClick={() => exportReport("pdf")}>
                         <Download className="h-4 w-4 mr-1" />
                         PDF
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => exportReport('excel')}>
+                      <Button variant="outline" size="sm" onClick={() => exportReport("excel")}>
                         <Download className="h-4 w-4 mr-1" />
                         Excel
                       </Button>
@@ -364,9 +364,9 @@ A análise contempla o período atual e inclui comparações com períodos anter
                                   <p className="text-lg font-bold">{metric.value}</p>
                                   {metric.trend && (
                                     <TrendingUp className={`h-4 w-4 ${
-                                      metric.trend === 'up' ? 'text-green-500' :
-                                      metric.trend === 'down' ? 'text-red-500 rotate-180' :
-                                      'text-muted-foreground'
+                                      metric.trend === "up" ? "text-green-500" :
+                                        metric.trend === "down" ? "text-red-500 rotate-180" :
+                                          "text-muted-foreground"
                                     }`} />
                                   )}
                                 </div>

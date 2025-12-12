@@ -32,8 +32,8 @@ export interface ChecklistHistory {
   user?: string;
 }
 
-type ChecklistCompletionRow = Database['public']['Tables']['checklist_completions']['Row'];
-type ChecklistCompletionInsert = Database['public']['Tables']['checklist_completions']['Insert'];
+type ChecklistCompletionRow = Database["public"]["Tables"]["checklist_completions"]["Row"];
+type ChecklistCompletionInsert = Database["public"]["Tables"]["checklist_completions"]["Insert"];
 
 export interface AutoFillResult {
   items: ChecklistItem[];
@@ -351,7 +351,7 @@ export const saveChecklistCompletion = async (
       completed_by: context?.userId || null,
       completed_at: new Date().toISOString(),
       started_at: new Date().toISOString(),
-      status: 'completed'
+      status: "completed"
     };
 
     const { error } = await supabase

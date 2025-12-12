@@ -3,19 +3,19 @@
  * Mobile haptic feedback and vibration patterns
  */
 
-type HapticPattern = 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error' | 'selection' | 'notification';
+type HapticPattern = "light" | "medium" | "heavy" | "success" | "warning" | "error" | "selection" | "notification";
 
 interface HapticConfig {
   enabled: boolean;
-  intensity: 'low' | 'medium' | 'high';
+  intensity: "low" | "medium" | "high";
 }
 
 class HapticFeedbackEngine {
   private config: HapticConfig = {
     enabled: true,
-    intensity: 'medium',
+    intensity: "medium",
   };
-  private storageKey = 'nautilus_haptic_config';
+  private storageKey = "nautilus_haptic_config";
   
   constructor() {
     this.loadConfig();
@@ -44,7 +44,7 @@ class HapticFeedbackEngine {
    * Check if haptic feedback is supported
    */
   isSupported(): boolean {
-    return 'vibrate' in navigator;
+    return "vibrate" in navigator;
   }
   
   /**
@@ -58,7 +58,7 @@ class HapticFeedbackEngine {
   /**
    * Set haptic intensity
    */
-  setIntensity(intensity: HapticConfig['intensity']): void {
+  setIntensity(intensity: HapticConfig["intensity"]): void {
     this.config.intensity = intensity;
     this.saveConfig();
   }
@@ -110,7 +110,7 @@ class HapticFeedbackEngine {
   /**
    * Trigger haptic feedback
    */
-  trigger(type: HapticPattern = 'medium'): void {
+  trigger(type: HapticPattern = "medium"): void {
     if (!this.config.enabled || !this.isSupported()) {
       return;
     }
@@ -161,16 +161,16 @@ export const hapticFeedback = new HapticFeedbackEngine();
 /**
  * React hook for haptic feedback
  */
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
 export function useHapticFeedback() {
-  const trigger = useCallback((type: HapticPattern = 'medium') => {
+  const trigger = useCallback((type: HapticPattern = "medium") => {
     hapticFeedback.trigger(type);
   }, []);
   
   const triggerOnClick = useCallback((
     callback?: () => void,
-    type: HapticPattern = 'light'
+    type: HapticPattern = "light"
   ) => {
     return () => {
       hapticFeedback.trigger(type);
@@ -179,15 +179,15 @@ export function useHapticFeedback() {
   }, []);
   
   const triggerOnSuccess = useCallback(() => {
-    hapticFeedback.trigger('success');
+    hapticFeedback.trigger("success");
   }, []);
   
   const triggerOnError = useCallback(() => {
-    hapticFeedback.trigger('error');
+    hapticFeedback.trigger("error");
   }, []);
   
   const triggerOnWarning = useCallback(() => {
-    hapticFeedback.trigger('warning');
+    hapticFeedback.trigger("warning");
   }, []);
   
   return {

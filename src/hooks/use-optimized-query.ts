@@ -3,12 +3,12 @@
  * Combines all performance optimizations for low-bandwidth connections
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
-import { useNetworkStatus, useAdaptiveSettings, ConnectionQuality } from './use-network-status';
-import { compressPayload, deduplicatedRequest } from '@/lib/performance/api-compression';
-import { queueAction, cacheData, getCachedData } from '@/lib/offline/sync-queue';
-import { supabase } from '@/integrations/supabase/client';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { useNetworkStatus, useAdaptiveSettings, ConnectionQuality } from "./use-network-status";
+import { compressPayload, deduplicatedRequest } from "@/lib/performance/api-compression";
+import { queueAction, cacheData, getCachedData } from "@/lib/offline/sync-queue";
+import { supabase } from "@/integrations/supabase/client";
 
 interface OptimizedQueryOptions<T> {
   queryKey: string[];
@@ -25,7 +25,7 @@ interface OptimizedQueryOptions<T> {
 
 interface OptimizedMutationOptions<T, V> {
   tableName: string;
-  operation: 'insert' | 'update' | 'delete';
+  operation: "insert" | "update" | "delete";
   onSuccess?: (data: T) => void;
   onError?: (error: Error) => void;
   offlineSupport?: boolean;
@@ -33,11 +33,11 @@ interface OptimizedMutationOptions<T, V> {
 
 function getAdaptivePageSizeFromQuality(quality: ConnectionQuality): number {
   switch (quality) {
-    case 'fast': return 50;
-    case 'medium': return 30;
-    case 'slow': return 15;
-    case 'offline': return 10;
-    default: return 20;
+  case "fast": return 50;
+  case "medium": return 30;
+  case "slow": return 15;
+  case "offline": return 10;
+  default: return 20;
   }
 }
 
@@ -47,7 +47,7 @@ function getAdaptivePageSizeFromQuality(quality: ConnectionQuality): number {
 export function useOptimizedQuery<T>({
   queryKey,
   tableName,
-  select = '*',
+  select = "*",
   filters = {},
   orderBy,
   pageSize,
@@ -64,19 +64,19 @@ export function useOptimizedQuery<T>({
   
   // Calculate adaptive stale time based on network
   const adaptiveStaleTime = staleTime ?? (
-    quality === 'slow' ? 10 * 60 * 1000 : // 10 min for slow
-    quality === 'medium' ? 5 * 60 * 1000 :  // 5 min for medium
-    2 * 60 * 1000                          // 2 min for fast
+    quality === "slow" ? 10 * 60 * 1000 : // 10 min for slow
+      quality === "medium" ? 5 * 60 * 1000 :  // 5 min for medium
+        2 * 60 * 1000                          // 2 min for fast
   );
   
   const fetchData = useCallback(async (): Promise<T[]> => {
-    const cacheKey = queryKey.join(':');
+    const cacheKey = queryKey.join(":");
     
     // Try offline cache first if offline
     if (!online && offlineCache) {
       const cached = await getCachedData<T[]>(cacheKey);
       if (cached) return cached;
-      throw new Error('Offline - no cached data available');
+      throw new Error("Offline - no cached data available");
     }
     
     // Deduplicated request
@@ -119,9 +119,9 @@ export function useOptimizedQuery<T>({
     enabled: enabled,
     staleTime: adaptiveStaleTime,
     gcTime: cacheTime ?? adaptiveStaleTime * 2,
-    retry: online ? (quality === 'slow' ? 1 : 2) : 0,
-    retryDelay: quality === 'slow' ? 2000 : 1000,
-    refetchOnWindowFocus: quality !== 'slow',
+    retry: online ? (quality === "slow" ? 1 : 2) : 0,
+    retryDelay: quality === "slow" ? 2000 : 1000,
+    refetchOnWindowFocus: quality !== "slow",
     refetchOnReconnect: true,
   });
 }
@@ -156,25 +156,25 @@ export function useOptimizedMutation<T extends Record<string, unknown>, V = T>({
     
     try {
       switch (operation) {
-        case 'insert': {
-          const { data, error } = await table.insert(variables as any).select().single();
-          if (error) throw error;
-          return data as unknown as T;
-        }
-        case 'update': {
-          const { id, ...updateData } = variables as any;
-          const { data, error } = await table.update(updateData).eq('id', id).select().single();
-          if (error) throw error;
-          return data as unknown as T;
-        }
-        case 'delete': {
-          const deleteId = (variables as any).id;
-          const { error } = await table.delete().eq('id', deleteId);
-          if (error) throw error;
-          return null;
-        }
-        default:
-          throw new Error(`Unknown operation: ${operation}`);
+      case "insert": {
+        const { data, error } = await table.insert(variables as any).select().single();
+        if (error) throw error;
+        return data as unknown as T;
+      }
+      case "update": {
+        const { id, ...updateData } = variables as any;
+        const { data, error } = await table.update(updateData).eq("id", id).select().single();
+        if (error) throw error;
+        return data as unknown as T;
+      }
+      case "delete": {
+        const deleteId = (variables as any).id;
+        const { error } = await table.delete().eq("id", deleteId);
+        if (error) throw error;
+        return null;
+      }
+      default:
+        throw new Error(`Unknown operation: ${operation}`);
       }
     } catch (error) {
       throw error;
@@ -200,10 +200,10 @@ export function useOptimizedMutation<T extends Record<string, unknown>, V = T>({
 export function useInfiniteOptimizedQuery<T>({
   queryKey,
   tableName,
-  select = '*',
+  select = "*",
   filters = {},
   orderBy,
-}: Omit<OptimizedQueryOptions<T>, 'pageSize'>) {
+}: Omit<OptimizedQueryOptions<T>, "pageSize">) {
   const { quality } = useNetworkStatus();
   const pageSize = getAdaptivePageSizeFromQuality(quality);
 

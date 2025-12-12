@@ -97,7 +97,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
               {recommendation.deadline && (
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  Prazo: {new Date(recommendation.deadline).toLocaleDateString('pt-BR')}
+                  Prazo: {new Date(recommendation.deadline).toLocaleDateString("pt-BR")}
                 </span>
               )}
             </div>
@@ -151,7 +151,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
           size="sm"
           onClick={() => setExpanded(!expanded)}
         >
-          <ChevronRight className={`h-4 w-4 transition-transform ${expanded ? 'rotate-90' : ''}`} />
+          <ChevronRight className={`h-4 w-4 transition-transform ${expanded ? "rotate-90" : ""}`} />
         </Button>
       </div>
     </motion.div>
@@ -162,20 +162,20 @@ interface InsightGaugeProps {
   label: string;
   value: number;
   icon: React.ReactNode;
-  trend?: 'improving' | 'stable' | 'declining';
+  trend?: "improving" | "stable" | "declining";
 }
 
 const InsightGauge: React.FC<InsightGaugeProps> = ({ label, value, icon, trend }) => {
   const trendColors = {
-    improving: 'text-green-500',
-    stable: 'text-yellow-500',
-    declining: 'text-red-500'
+    improving: "text-green-500",
+    stable: "text-yellow-500",
+    declining: "text-red-500"
   };
   
   const trendIcons = {
-    improving: '↑',
-    stable: '→',
-    declining: '↓'
+    improving: "↑",
+    stable: "→",
+    declining: "↓"
   };
 
   return (
@@ -210,7 +210,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
       const result = await generateFullPredictiveAnalysis();
       setAnalysis(result);
     } catch (error) {
-      console.error('Error loading predictive analysis:', error);
+      console.error("Error loading predictive analysis:", error);
       toast.error("Erro ao carregar análise preditiva");
     } finally {
       setLoading(false);
@@ -227,8 +227,8 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
     return analysis.recommendations.filter(r => r.type === type);
   };
 
-  const criticalCount = analysis?.recommendations.filter(r => r.priority === 'critical').length || 0;
-  const highCount = analysis?.recommendations.filter(r => r.priority === 'high').length || 0;
+  const criticalCount = analysis?.recommendations.filter(r => r.priority === "critical").length || 0;
+  const highCount = analysis?.recommendations.filter(r => r.priority === "high").length || 0;
 
   return (
     <div className="space-y-6">
@@ -265,7 +265,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
       {/* Summary Cards */}
       {analysis && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className={criticalCount > 0 ? 'border-red-500/50 bg-red-500/5' : ''}>
+          <Card className={criticalCount > 0 ? "border-red-500/50 bg-red-500/5" : ""}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>

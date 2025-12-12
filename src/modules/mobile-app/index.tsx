@@ -230,8 +230,8 @@ export default function MobileApp() {
                       onClick={() => setSelectedRole(role)}
                       className={`w-full p-4 rounded-lg border text-left transition-all ${
                         selectedRole.id === role.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border hover:border-primary/50 hover:bg-muted/50'
+                          ? "border-primary bg-primary/10"
+                          : "border-border hover:border-primary/50 hover:bg-muted/50"
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -352,7 +352,7 @@ export default function MobileApp() {
                         <div 
                           key={notif.id}
                           className={`p-2 rounded-lg text-xs ${
-                            notif.read ? 'bg-muted/30' : 'bg-primary/10 border border-primary/20'
+                            notif.read ? "bg-muted/30" : "bg-primary/10 border border-primary/20"
                           }`}
                         >
                           <div className="flex items-start gap-2">

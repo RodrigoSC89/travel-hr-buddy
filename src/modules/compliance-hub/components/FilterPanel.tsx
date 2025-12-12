@@ -3,35 +3,35 @@
  * Painel de filtros avançados para o módulo de conformidade
  */
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Separator } from "@/components/ui/separator";
 import { 
   Filter, 
   X, 
   Calendar as CalendarIcon, 
   Search,
   RotateCcw 
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 export interface ComplianceFilters {
   search: string;
@@ -62,29 +62,29 @@ export function FilterPanel({
   regulations,
 }: FilterPanelProps) {
   const statusOptions = [
-    { value: 'compliant', label: 'Conforme' },
-    { value: 'non-compliant', label: 'Não Conforme' },
-    { value: 'partial', label: 'Parcial' },
-    { value: 'pending', label: 'Pendente' },
+    { value: "compliant", label: "Conforme" },
+    { value: "non-compliant", label: "Não Conforme" },
+    { value: "partial", label: "Parcial" },
+    { value: "pending", label: "Pendente" },
   ];
 
   const auditTypeOptions = [
-    { value: 'internal', label: 'Interna' },
-    { value: 'external', label: 'Externa' },
-    { value: 'flag-state', label: 'Bandeira' },
-    { value: 'class', label: 'Classificadora' },
-    { value: 'psc', label: 'PSC' },
+    { value: "internal", label: "Interna" },
+    { value: "external", label: "Externa" },
+    { value: "flag-state", label: "Bandeira" },
+    { value: "class", label: "Classificadora" },
+    { value: "psc", label: "PSC" },
   ];
 
   const severityOptions = [
-    { value: 'critical', label: 'Crítico' },
-    { value: 'major', label: 'Maior' },
-    { value: 'minor', label: 'Menor' },
-    { value: 'observation', label: 'Observação' },
+    { value: "critical", label: "Crítico" },
+    { value: "major", label: "Maior" },
+    { value: "minor", label: "Menor" },
+    { value: "observation", label: "Observação" },
   ];
 
   const toggleArrayFilter = (
-    key: 'status' | 'auditType' | 'severity',
+    key: "status" | "auditType" | "severity",
     value: string
   ) => {
     const currentArray = filters[key];
@@ -238,9 +238,9 @@ export function FilterPanel({
           {statusOptions.map((option) => (
             <Badge
               key={option.value}
-              variant={filters.status.includes(option.value) ? 'default' : 'outline'}
+              variant={filters.status.includes(option.value) ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => toggleArrayFilter('status', option.value)}
+              onClick={() => toggleArrayFilter("status", option.value)}
             >
               {option.label}
               {filters.status.includes(option.value) && (
@@ -258,9 +258,9 @@ export function FilterPanel({
           {auditTypeOptions.map((option) => (
             <Badge
               key={option.value}
-              variant={filters.auditType.includes(option.value) ? 'default' : 'outline'}
+              variant={filters.auditType.includes(option.value) ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => toggleArrayFilter('auditType', option.value)}
+              onClick={() => toggleArrayFilter("auditType", option.value)}
             >
               {option.label}
               {filters.auditType.includes(option.value) && (
@@ -278,13 +278,13 @@ export function FilterPanel({
           {severityOptions.map((option) => (
             <Badge
               key={option.value}
-              variant={filters.severity.includes(option.value) ? 'default' : 'outline'}
+              variant={filters.severity.includes(option.value) ? "default" : "outline"}
               className={cn(
                 "cursor-pointer",
-                option.value === 'critical' && filters.severity.includes(option.value) && "bg-red-500",
-                option.value === 'major' && filters.severity.includes(option.value) && "bg-orange-500"
+                option.value === "critical" && filters.severity.includes(option.value) && "bg-red-500",
+                option.value === "major" && filters.severity.includes(option.value) && "bg-orange-500"
               )}
-              onClick={() => toggleArrayFilter('severity', option.value)}
+              onClick={() => toggleArrayFilter("severity", option.value)}
             >
               {option.label}
               {filters.severity.includes(option.value) && (

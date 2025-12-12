@@ -144,21 +144,21 @@ export default function ResourceAvailability() {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "inventory": return <Package className="h-4 w-4" />;
-      case "crew": return <Users className="h-4 w-4" />;
-      case "fuel": return <Fuel className="h-4 w-4" />;
-      case "equipment": return <Wrench className="h-4 w-4" />;
-      default: return <Package className="h-4 w-4" />;
+    case "inventory": return <Package className="h-4 w-4" />;
+    case "crew": return <Users className="h-4 w-4" />;
+    case "fuel": return <Fuel className="h-4 w-4" />;
+    case "equipment": return <Wrench className="h-4 w-4" />;
+    default: return <Package className="h-4 w-4" />;
     }
   };
 
   const getCategoryLabel = (category: string) => {
     switch (category) {
-      case "inventory": return "Estoque";
-      case "crew": return "Tripulação";
-      case "fuel": return "Combustível";
-      case "equipment": return "Equipamentos";
-      default: return category;
+    case "inventory": return "Estoque";
+    case "crew": return "Tripulação";
+    case "fuel": return "Combustível";
+    case "equipment": return "Equipamentos";
+    default: return category;
     }
   };
 
@@ -171,10 +171,10 @@ export default function ResourceAvailability() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "border-red-500 bg-red-500/10";
-      case "high": return "border-orange-500 bg-orange-500/10";
-      case "medium": return "border-amber-500 bg-amber-500/10";
-      default: return "border-blue-500 bg-blue-500/10";
+    case "critical": return "border-red-500 bg-red-500/10";
+    case "high": return "border-orange-500 bg-orange-500/10";
+    case "medium": return "border-amber-500 bg-amber-500/10";
+    default: return "border-blue-500 bg-blue-500/10";
     }
   };
 
@@ -203,7 +203,7 @@ export default function ResourceAvailability() {
           </div>
         </div>
         <Button onClick={handleAIPrediction} disabled={isLoading}>
-          <Sparkles className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+          <Sparkles className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
           Análise Preditiva
         </Button>
       </div>
@@ -245,11 +245,11 @@ export default function ResourceAvailability() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Níveis Críticos</p>
-                <p className={`text-2xl font-bold ${criticalResources > 0 ? 'text-red-600' : ''}`}>
+                <p className={`text-2xl font-bold ${criticalResources > 0 ? "text-red-600" : ""}`}>
                   {criticalResources}
                 </p>
               </div>
-              <AlertTriangle className={`h-8 w-8 ${criticalResources > 0 ? 'text-red-500' : 'text-muted-foreground'} opacity-80`} />
+              <AlertTriangle className={`h-8 w-8 ${criticalResources > 0 ? "text-red-500" : "text-muted-foreground"} opacity-80`} />
             </div>
           </CardContent>
         </Card>
@@ -258,7 +258,7 @@ export default function ResourceAvailability() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Baixo em 7 dias</p>
-                <p className={`text-2xl font-bold ${lowResources > 0 ? 'text-amber-600' : ''}`}>
+                <p className={`text-2xl font-bold ${lowResources > 0 ? "text-amber-600" : ""}`}>
                   {lowResources}
                 </p>
               </div>
@@ -328,8 +328,8 @@ export default function ResourceAvailability() {
                         <span className="text-muted-foreground">—</span>
                       )}
                       <span className={`text-sm ${
-                        resource.prediction.daysUntilLow <= 7 ? 'text-red-600 font-medium' :
-                        resource.prediction.daysUntilLow <= 14 ? 'text-amber-600' : 'text-muted-foreground'
+                        resource.prediction.daysUntilLow <= 7 ? "text-red-600 font-medium" :
+                          resource.prediction.daysUntilLow <= 14 ? "text-amber-600" : "text-muted-foreground"
                       }`}>
                         {resource.prediction.daysUntilLow} dias até nível baixo
                       </span>
@@ -369,7 +369,7 @@ export default function ResourceAvailability() {
                       <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          ETA: {gargalo.eta.toLocaleDateString('pt-BR')}
+                          ETA: {gargalo.eta.toLocaleDateString("pt-BR")}
                         </span>
                       </div>
                     </div>

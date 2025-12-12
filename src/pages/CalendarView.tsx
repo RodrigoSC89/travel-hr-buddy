@@ -1,13 +1,13 @@
 // PATCH 597: Calendar View for Smart Scheduler
-import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { SmartSchedulerService } from '@/services/smart-scheduler.service';
-import type { ScheduledTask } from '@/types/smart-scheduler';
-import { toast } from 'sonner';
-import { logger } from '@/lib/logger';
+import React, { useState, useEffect } from "react";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { SmartSchedulerService } from "@/services/smart-scheduler.service";
+import type { ScheduledTask } from "@/types/smart-scheduler";
+import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 const CalendarView: React.FC = () => {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
@@ -30,8 +30,8 @@ const CalendarView: React.FC = () => {
       });
       setTasks(data);
     } catch (error) {
-      logger.error('Error loading tasks', { error, currentMonth: currentDate.getMonth(), currentYear: currentDate.getFullYear() });
-      toast.error('Failed to load tasks');
+      logger.error("Error loading tasks", { error, currentMonth: currentDate.getMonth(), currentYear: currentDate.getFullYear() });
+      toast.error("Failed to load tasks");
     } finally {
       setLoading(false);
     }
@@ -82,11 +82,11 @@ const CalendarView: React.FC = () => {
   };
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
   ];
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const days = getDaysInMonth();
 
@@ -146,8 +146,8 @@ const CalendarView: React.FC = () => {
                   <div
                     key={index}
                     className={`min-h-[100px] p-2 border rounded-lg ${
-                      !date ? 'bg-muted' : 'bg-card hover:bg-accent'
-                    } ${isToday ? 'ring-2 ring-primary' : ''}`}
+                      !date ? "bg-muted" : "bg-card hover:bg-accent"
+                    } ${isToday ? "ring-2 ring-primary" : ""}`}
                   >
                     {date && (
                       <>
@@ -161,10 +161,10 @@ const CalendarView: React.FC = () => {
                               className="text-xs p-1 rounded truncate"
                               style={{
                                 backgroundColor: 
-                                  task.status === 'completed' ? '#22c55e20' :
-                                  task.status === 'overdue' ? '#ef444420' :
-                                  task.status === 'in_progress' ? '#3b82f620' :
-                                  '#eab30820'
+                                  task.status === "completed" ? "#22c55e20" :
+                                    task.status === "overdue" ? "#ef444420" :
+                                      task.status === "in_progress" ? "#3b82f620" :
+                                        "#eab30820"
                               }}
                             >
                               <div className="flex items-center gap-1">

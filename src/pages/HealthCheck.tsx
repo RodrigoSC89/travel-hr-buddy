@@ -32,16 +32,16 @@ export default function HealthCheckPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "healthy":
-      case "pass":
-        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
-      case "degraded":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case "unhealthy":
-      case "fail":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return null;
+    case "healthy":
+    case "pass":
+      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "unhealthy":
+    case "fail":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return null;
     }
   };
 
@@ -49,8 +49,8 @@ export default function HealthCheckPage() {
     const variant = status === "healthy" || status === "pass" 
       ? "default" 
       : status === "degraded" 
-      ? "secondary" 
-      : "destructive";
+        ? "secondary" 
+        : "destructive";
 
     return (
       <Badge variant={variant} className="ml-2">
@@ -93,164 +93,164 @@ export default function HealthCheckPage() {
         </TabsContent>
 
         <TabsContent value="modules" className="mt-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold flex items-center gap-3">
             System Health Check
-            {getStatusIcon(health.status)}
-            {getStatusBadge(health.status)}
-          </h1>
-          <p className="text-muted-foreground mt-1">
+                {getStatusIcon(health.status)}
+                {getStatusBadge(health.status)}
+              </h1>
+              <p className="text-muted-foreground mt-1">
             Last checked: {new Date(health.timestamp).toLocaleString()}
-          </p>
-        </div>
-        <Button onClick={runCheck} disabled={loading}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+              </p>
+            </div>
+            <Button onClick={runCheck} disabled={loading}>
+              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
-        </Button>
-      </div>
+            </Button>
+          </div>
 
-      {/* Errors */}
-      {health.errors.length > 0 && (
-        <Alert variant="destructive">
-          <XCircle className="h-4 w-4" />
-          <AlertTitle>Critical Issues Detected</AlertTitle>
-          <AlertDescription>
-            <ul className="list-disc list-inside space-y-1 mt-2">
-              {health.errors.map((error, i) => (
-                <li key={i}>{error}</li>
-              ))}
-            </ul>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {/* Warnings */}
-      {health.warnings.length > 0 && (
-        <Alert>
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Warnings</AlertTitle>
-          <AlertDescription>
-            <ul className="list-disc list-inside space-y-1 mt-2">
-              {health.warnings.map((warning, i) => (
-                <li key={i}>{warning}</li>
-              ))}
-            </ul>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {/* Health Checks */}
-      <div className="grid gap-6 md:grid-cols-3 space-y-6">
-        {/* Modules Check */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>Modules</span>
-              {getStatusIcon(health.checks.modules.status)}
-            </CardTitle>
-            <CardDescription>Module registry health</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-muted-foreground">Total</p>
-                <p className="text-2xl font-bold">{health.checks.modules.total}</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Active</p>
-                <p className="text-2xl font-bold text-green-500">{health.checks.modules.active}</p>
-              </div>
-            </div>
-            {health.checks.modules.issues.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-sm font-medium">Issues:</p>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  {health.checks.modules.issues.slice(0, 3).map((issue, i) => (
-                    <li key={i}>• {issue}</li>
-                  ))}
-                  {health.checks.modules.issues.length > 3 && (
-                    <li>• ... and {health.checks.modules.issues.length - 3} more</li>
-                  )}
-                </ul>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Routes Check */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>Routes</span>
-              {getStatusIcon(health.checks.routes.status)}
-            </CardTitle>
-            <CardDescription>Route configuration health</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-muted-foreground">Total Routes</p>
-                <p className="text-2xl font-bold">{health.checks.routes.total}</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground">Duplicates</p>
-                <p className={`text-2xl font-bold ${health.checks.routes.duplicates.length > 0 ? 'text-red-500' : 'text-green-500'}`}>
-                  {health.checks.routes.duplicates.length}
-                </p>
-              </div>
-            </div>
-            {health.checks.routes.duplicates.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-sm font-medium">Duplicate Routes:</p>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  {health.checks.routes.duplicates.map((dup, i) => (
-                    <li key={i}>• {dup}</li>
+          {/* Errors */}
+          {health.errors.length > 0 && (
+            <Alert variant="destructive">
+              <XCircle className="h-4 w-4" />
+              <AlertTitle>Critical Issues Detected</AlertTitle>
+              <AlertDescription>
+                <ul className="list-disc list-inside space-y-1 mt-2">
+                  {health.errors.map((error, i) => (
+                    <li key={i}>{error}</li>
                   ))}
                 </ul>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              </AlertDescription>
+            </Alert>
+          )}
 
-        {/* Dependencies Check */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>Dependencies</span>
-              {getStatusIcon(health.checks.dependencies.status)}
-            </CardTitle>
-            <CardDescription>Module dependencies health</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-muted-foreground">Missing</p>
-                <p className={`text-2xl font-bold ${health.checks.dependencies.missing.length > 0 ? 'text-yellow-500' : 'text-green-500'}`}>
-                  {health.checks.dependencies.missing.length}
-                </p>
-              </div>
-            </div>
-            {health.checks.dependencies.missing.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-sm font-medium">Missing Dependencies:</p>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  {health.checks.dependencies.missing.slice(0, 3).map((dep, i) => (
-                    <li key={i}>
+          {/* Warnings */}
+          {health.warnings.length > 0 && (
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Warnings</AlertTitle>
+              <AlertDescription>
+                <ul className="list-disc list-inside space-y-1 mt-2">
+                  {health.warnings.map((warning, i) => (
+                    <li key={i}>{warning}</li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Health Checks */}
+          <div className="grid gap-6 md:grid-cols-3 space-y-6">
+            {/* Modules Check */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Modules</span>
+                  {getStatusIcon(health.checks.modules.status)}
+                </CardTitle>
+                <CardDescription>Module registry health</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Total</p>
+                    <p className="text-2xl font-bold">{health.checks.modules.total}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Active</p>
+                    <p className="text-2xl font-bold text-green-500">{health.checks.modules.active}</p>
+                  </div>
+                </div>
+                {health.checks.modules.issues.length > 0 && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Issues:</p>
+                    <ul className="text-xs text-muted-foreground space-y-1">
+                      {health.checks.modules.issues.slice(0, 3).map((issue, i) => (
+                        <li key={i}>• {issue}</li>
+                      ))}
+                      {health.checks.modules.issues.length > 3 && (
+                        <li>• ... and {health.checks.modules.issues.length - 3} more</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Routes Check */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Routes</span>
+                  {getStatusIcon(health.checks.routes.status)}
+                </CardTitle>
+                <CardDescription>Route configuration health</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Total Routes</p>
+                    <p className="text-2xl font-bold">{health.checks.routes.total}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Duplicates</p>
+                    <p className={`text-2xl font-bold ${health.checks.routes.duplicates.length > 0 ? "text-red-500" : "text-green-500"}`}>
+                      {health.checks.routes.duplicates.length}
+                    </p>
+                  </div>
+                </div>
+                {health.checks.routes.duplicates.length > 0 && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Duplicate Routes:</p>
+                    <ul className="text-xs text-muted-foreground space-y-1">
+                      {health.checks.routes.duplicates.map((dup, i) => (
+                        <li key={i}>• {dup}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Dependencies Check */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Dependencies</span>
+                  {getStatusIcon(health.checks.dependencies.status)}
+                </CardTitle>
+                <CardDescription>Module dependencies health</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Missing</p>
+                    <p className={`text-2xl font-bold ${health.checks.dependencies.missing.length > 0 ? "text-yellow-500" : "text-green-500"}`}>
+                      {health.checks.dependencies.missing.length}
+                    </p>
+                  </div>
+                </div>
+                {health.checks.dependencies.missing.length > 0 && (
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Missing Dependencies:</p>
+                    <ul className="text-xs text-muted-foreground space-y-1">
+                      {health.checks.dependencies.missing.slice(0, 3).map((dep, i) => (
+                        <li key={i}>
                       • {dep.module} → {dep.dependency}
-                    </li>
-                  ))}
-                  {health.checks.dependencies.missing.length > 3 && (
-                    <li>• ... and {health.checks.dependencies.missing.length - 3} more</li>
-                  )}
-                </ul>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-      </TabsContent>
+                        </li>
+                      ))}
+                      {health.checks.dependencies.missing.length > 3 && (
+                        <li>• ... and {health.checks.dependencies.missing.length - 3} more</li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );

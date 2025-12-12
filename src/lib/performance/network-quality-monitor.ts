@@ -3,10 +3,10 @@
  * Real-time network quality detection and adaptive behavior
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface NetworkQuality {
-  type: 'slow-2g' | '2g' | '3g' | '4g' | 'unknown' | 'offline';
+  type: "slow-2g" | "2g" | "3g" | "4g" | "unknown" | "offline";
   downlink: number; // Mbps
   rtt: number; // ms
   saveData: boolean;
@@ -34,18 +34,18 @@ const DEFAULT_CONFIG: NetworkConfig = {
 
 // Thresholds for network classification (Mbps)
 const BANDWIDTH_THRESHOLDS = {
-  '4g': 10,
-  '3g': 2,
-  '2g': 0.5,
-  'slow-2g': 0.15,
+  "4g": 10,
+  "3g": 2,
+  "2g": 0.5,
+  "slow-2g": 0.15,
 } as const;
 
 // Thresholds for RTT classification (ms)
 const RTT_THRESHOLDS = {
-  '4g': 100,
-  '3g': 400,
-  '2g': 1000,
-  'slow-2g': 2000,
+  "4g": 100,
+  "3g": 400,
+  "2g": 1000,
+  "slow-2g": 2000,
 } as const;
 
 class NetworkQualityMonitor {
@@ -67,7 +67,7 @@ class NetworkQualityMonitor {
   start(): void {
     this.setupEventListeners();
     this.startPolling();
-    logger.info('[NetworkQuality] Monitor started');
+    logger.info("[NetworkQuality] Monitor started");
   }
 
   /**
@@ -78,7 +78,7 @@ class NetworkQualityMonitor {
       clearInterval(this.pollTimer);
       this.pollTimer = null;
     }
-    logger.info('[NetworkQuality] Monitor stopped');
+    logger.info("[NetworkQuality] Monitor stopped");
   }
 
   /**
@@ -121,7 +121,7 @@ class NetworkQualityMonitor {
         timestamp: now,
       });
     } catch (error) {
-      logger.warn('[NetworkQuality] Test failed', { error });
+      logger.warn("[NetworkQuality] Test failed", { error });
     }
     
     return this.currentQuality;
@@ -133,7 +133,7 @@ class NetworkQualityMonitor {
   canPerformHeavyOperation(): boolean {
     return (
       this.currentQuality.isOnline &&
-      ['4g', '3g'].includes(this.currentQuality.type) &&
+      ["4g", "3g"].includes(this.currentQuality.type) &&
       !this.currentQuality.saveData
     );
   }
@@ -142,7 +142,7 @@ class NetworkQualityMonitor {
    * Check if we're in low bandwidth mode
    */
   isLowBandwidth(): boolean {
-    return ['2g', 'slow-2g', 'offline'].includes(this.currentQuality.type);
+    return ["2g", "slow-2g", "offline"].includes(this.currentQuality.type);
   }
 
   /**
@@ -150,11 +150,11 @@ class NetworkQualityMonitor {
    */
   getRecommendedBatchSize(): number {
     switch (this.currentQuality.type) {
-      case '4g': return 20;
-      case '3g': return 10;
-      case '2g': return 5;
-      case 'slow-2g': return 2;
-      default: return 1;
+    case "4g": return 20;
+    case "3g": return 10;
+    case "2g": return 5;
+    case "slow-2g": return 2;
+    default: return 1;
     }
   }
 
@@ -163,11 +163,11 @@ class NetworkQualityMonitor {
    */
   getRecommendedTimeout(): number {
     switch (this.currentQuality.type) {
-      case '4g': return 10000;
-      case '3g': return 30000;
-      case '2g': return 60000;
-      case 'slow-2g': return 90000;
-      default: return 120000;
+    case "4g": return 10000;
+    case "3g": return 30000;
+    case "2g": return 60000;
+    case "slow-2g": return 90000;
+    default: return 120000;
     }
   }
 
@@ -175,7 +175,7 @@ class NetworkQualityMonitor {
     const info = this.getConnectionInfo();
     
     return {
-      type: info.effectiveType || 'unknown',
+      type: info.effectiveType || "unknown",
       downlink: info.downlink,
       rtt: info.rtt,
       saveData: info.saveData,
@@ -185,16 +185,16 @@ class NetworkQualityMonitor {
   }
 
   private getConnectionInfo(): {
-    effectiveType: NetworkQuality['type'];
+    effectiveType: NetworkQuality["type"];
     downlink: number;
     rtt: number;
     saveData: boolean;
-  } {
+    } {
     const connection = (navigator as any).connection;
     
     if (!connection) {
       return {
-        effectiveType: navigator.onLine ? 'unknown' : 'offline',
+        effectiveType: navigator.onLine ? "unknown" : "offline",
         downlink: 10,
         rtt: 100,
         saveData: false,
@@ -202,31 +202,31 @@ class NetworkQualityMonitor {
     }
     
     return {
-      effectiveType: connection.effectiveType || 'unknown',
+      effectiveType: connection.effectiveType || "unknown",
       downlink: connection.downlink || 10,
       rtt: connection.rtt || 100,
       saveData: connection.saveData || false,
     };
   }
 
-  private classifyConnection(downlink: number, rtt: number): NetworkQuality['type'] {
-    if (!navigator.onLine) return 'offline';
+  private classifyConnection(downlink: number, rtt: number): NetworkQuality["type"] {
+    if (!navigator.onLine) return "offline";
     
     // Use both downlink and RTT for classification
-    if (downlink >= BANDWIDTH_THRESHOLDS['4g'] && rtt <= RTT_THRESHOLDS['4g']) {
-      return '4g';
+    if (downlink >= BANDWIDTH_THRESHOLDS["4g"] && rtt <= RTT_THRESHOLDS["4g"]) {
+      return "4g";
     }
-    if (downlink >= BANDWIDTH_THRESHOLDS['3g'] && rtt <= RTT_THRESHOLDS['3g']) {
-      return '3g';
+    if (downlink >= BANDWIDTH_THRESHOLDS["3g"] && rtt <= RTT_THRESHOLDS["3g"]) {
+      return "3g";
     }
-    if (downlink >= BANDWIDTH_THRESHOLDS['2g'] && rtt <= RTT_THRESHOLDS['2g']) {
-      return '2g';
+    if (downlink >= BANDWIDTH_THRESHOLDS["2g"] && rtt <= RTT_THRESHOLDS["2g"]) {
+      return "2g";
     }
-    if (downlink >= BANDWIDTH_THRESHOLDS['slow-2g']) {
-      return 'slow-2g';
+    if (downlink >= BANDWIDTH_THRESHOLDS["slow-2g"]) {
+      return "slow-2g";
     }
     
-    return 'slow-2g';
+    return "slow-2g";
   }
 
   private async measureLatency(): Promise<number> {
@@ -236,9 +236,9 @@ class NetworkQualityMonitor {
       try {
         const start = performance.now();
         
-        await fetch('/favicon.ico', {
-          method: 'HEAD',
-          cache: 'no-store',
+        await fetch("/favicon.ico", {
+          method: "HEAD",
+          cache: "no-store",
           signal: AbortSignal.timeout(this.config.testTimeout),
         });
         
@@ -265,7 +265,7 @@ class NetworkQualityMonitor {
     
     // Connection API changes
     if (connection) {
-      connection.addEventListener('change', () => {
+      connection.addEventListener("change", () => {
         const info = this.getConnectionInfo();
         this.updateQuality({
           ...this.currentQuality,
@@ -279,7 +279,7 @@ class NetworkQualityMonitor {
     }
     
     // Online/offline events
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.updateQuality({
         ...this.currentQuality,
         isOnline: true,
@@ -288,11 +288,11 @@ class NetworkQualityMonitor {
       });
     });
     
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.updateQuality({
         ...this.currentQuality,
         isOnline: false,
-        type: 'offline',
+        type: "offline",
         timestamp: Date.now(),
       });
     });
@@ -300,7 +300,7 @@ class NetworkQualityMonitor {
 
   private startPolling(): void {
     this.pollTimer = window.setInterval(() => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === "visible") {
         this.runTest();
       }
     }, this.config.pollInterval);
@@ -311,7 +311,7 @@ class NetworkQualityMonitor {
     this.currentQuality = quality;
     
     if (changed) {
-      logger.debug('[NetworkQuality] Quality changed', quality);
+      logger.debug("[NetworkQuality] Quality changed", quality);
       this.notifyListeners();
     }
   }
@@ -324,7 +324,7 @@ class NetworkQualityMonitor {
 export const networkQualityMonitor = new NetworkQualityMonitor();
 
 // React hook
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useNetworkQuality() {
   const [quality, setQuality] = useState<NetworkQuality>(networkQualityMonitor.getQuality());

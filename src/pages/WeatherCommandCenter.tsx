@@ -235,9 +235,9 @@ export default function WeatherCommandCenter() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "high": return "destructive";
-      case "moderate": return "warning";
-      default: return "secondary";
+    case "high": return "destructive";
+    case "moderate": return "warning";
+    default: return "secondary";
     }
   };
 
@@ -643,7 +643,7 @@ export default function WeatherCommandCenter() {
                     <Card 
                       key={location.id} 
                       className={`cursor-pointer hover:shadow-lg transition-all ${
-                        selectedLocation === location.name ? 'ring-2 ring-primary' : ''
+                        selectedLocation === location.name ? "ring-2 ring-primary" : ""
                       }`}
                       onClick={() => fetchWeatherData(location.lat, location.lon, location.name)}
                     >

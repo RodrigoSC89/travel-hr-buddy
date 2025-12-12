@@ -10,7 +10,7 @@ import { logger } from "@/lib/logger";
 export interface ModuleIntegration {
   moduleId: string;
   moduleName: string;
-  status: 'active' | 'inactive' | 'error';
+  status: "active" | "inactive" | "error";
   lastSync: string | null;
   metrics: {
     totalItems: number;
@@ -24,7 +24,7 @@ export interface ComplianceScore {
   score: number;
   maxScore: number;
   percentage: number;
-  status: 'compliant' | 'partial' | 'non-compliant';
+  status: "compliant" | "partial" | "non-compliant";
 }
 
 class NautilusIntegrationService {
@@ -44,18 +44,18 @@ class NautilusIntegrationService {
 
   private initializeModules(): void {
     const modules: ModuleIntegration[] = [
-      { moduleId: 'compliance.mlc-inspection', moduleName: 'MLC Inspection', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'compliance.pre-ovid', moduleName: 'Pre-OVID Inspection', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'compliance.imca-audit', moduleName: 'IMCA Audit', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'compliance.peotram', moduleName: 'PEOTRAM', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'compliance.sgso', moduleName: 'SGSO', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'operations.fleet', moduleName: 'Fleet Management', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'operations.crew', moduleName: 'Crew Management', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'maintenance.intelligent', moduleName: 'Manutenção Inteligente', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'hr.nautilus-academy', moduleName: 'Nautilus Academy', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'operations.safety-guardian', moduleName: 'Safety Guardian', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'operations.esg-emissions', moduleName: 'ESG & Emissões', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
-      { moduleId: 'intelligence.nautilus-command', moduleName: 'Nautilus Command', status: 'active', lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "compliance.mlc-inspection", moduleName: "MLC Inspection", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "compliance.pre-ovid", moduleName: "Pre-OVID Inspection", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "compliance.imca-audit", moduleName: "IMCA Audit", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "compliance.peotram", moduleName: "PEOTRAM", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "compliance.sgso", moduleName: "SGSO", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "operations.fleet", moduleName: "Fleet Management", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "operations.crew", moduleName: "Crew Management", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "maintenance.intelligent", moduleName: "Manutenção Inteligente", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "hr.nautilus-academy", moduleName: "Nautilus Academy", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "operations.safety-guardian", moduleName: "Safety Guardian", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "operations.esg-emissions", moduleName: "ESG & Emissões", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
+      { moduleId: "intelligence.nautilus-command", moduleName: "Nautilus Command", status: "active", lastSync: null, metrics: { totalItems: 0, completedItems: 0, pendingItems: 0 } },
     ];
 
     modules.forEach(module => {
@@ -65,7 +65,7 @@ class NautilusIntegrationService {
     logger.info("[NautilusIntegration] Modules initialized", { count: modules.length });
   }
 
-  updateModuleMetrics(moduleId: string, metrics: Partial<ModuleIntegration['metrics']>): void {
+  updateModuleMetrics(moduleId: string, metrics: Partial<ModuleIntegration["metrics"]>): void {
     const module = this.moduleIntegrations.get(moduleId);
     if (module) {
       module.metrics = { ...module.metrics, ...metrics };
@@ -84,7 +84,7 @@ class NautilusIntegrationService {
   }
 
   getActiveModules(): ModuleIntegration[] {
-    return this.getAllModules().filter(m => m.status === 'active');
+    return this.getAllModules().filter(m => m.status === "active");
   }
 
   calculateOverallCompliance(): ComplianceScore {
@@ -102,11 +102,11 @@ class NautilusIntegrationService {
     const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
     
     return {
-      moduleId: 'overall',
+      moduleId: "overall",
       score: totalScore,
       maxScore,
       percentage,
-      status: percentage >= 85 ? 'compliant' : percentage >= 70 ? 'partial' : 'non-compliant'
+      status: percentage >= 85 ? "compliant" : percentage >= 70 ? "partial" : "non-compliant"
     };
   }
 
@@ -121,7 +121,7 @@ class NautilusIntegrationService {
         score: module.metrics.completedItems,
         maxScore: module.metrics.totalItems,
         percentage,
-        status: percentage >= 85 ? 'compliant' : percentage >= 70 ? 'partial' : 'non-compliant'
+        status: percentage >= 85 ? "compliant" : percentage >= 70 ? "partial" : "non-compliant"
       };
     });
   }

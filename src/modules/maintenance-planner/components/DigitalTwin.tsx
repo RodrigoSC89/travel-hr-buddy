@@ -185,22 +185,22 @@ const generateTelemetry = (): TelemetryData => ({
 const SystemCard = ({ system }: { system: SystemStatus }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational": return "bg-green-500";
-      case "warning": return "bg-yellow-500";
-      case "critical": return "bg-red-500";
-      case "offline": return "bg-gray-500";
-      default: return "bg-gray-500";
+    case "operational": return "bg-green-500";
+    case "warning": return "bg-yellow-500";
+    case "critical": return "bg-red-500";
+    case "offline": return "bg-gray-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "propulsion": return <Ship className="h-4 w-4" />;
-      case "electrical": return <Zap className="h-4 w-4" />;
-      case "hydraulic": return <Droplets className="h-4 w-4" />;
-      case "navigation": return <Navigation className="h-4 w-4" />;
-      case "safety": return <AlertTriangle className="h-4 w-4" />;
-      default: return <Settings className="h-4 w-4" />;
+    case "propulsion": return <Ship className="h-4 w-4" />;
+    case "electrical": return <Zap className="h-4 w-4" />;
+    case "hydraulic": return <Droplets className="h-4 w-4" />;
+    case "navigation": return <Navigation className="h-4 w-4" />;
+    case "safety": return <AlertTriangle className="h-4 w-4" />;
+    default: return <Settings className="h-4 w-4" />;
     }
   };
 
@@ -332,8 +332,8 @@ const VesselVisualization = ({ telemetry }: { telemetry: TelemetryData }) => {
                 key={sys.id}
                 className={`w-3 h-3 rounded-full ${
                   sys.status === "operational" ? "bg-green-500" :
-                  sys.status === "warning" ? "bg-yellow-500 animate-pulse" :
-                  "bg-red-500 animate-pulse"
+                    sys.status === "warning" ? "bg-yellow-500 animate-pulse" :
+                      "bg-red-500 animate-pulse"
                 }`}
                 title={sys.name}
               />

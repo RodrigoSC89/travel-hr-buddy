@@ -2,27 +2,27 @@
  * Crew Health Management Tab
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Users, Search, User, Heart, Syringe, AlertTriangle, 
   Calendar, FileText, Phone, CheckCircle2, Clock, Filter,
   Plus, Download, Brain
-} from 'lucide-react';
-import { mockCrewMembers } from '../data/mockData';
-import { CrewMember } from '../types';
-import { toast } from 'sonner';
-import { useMedicalAI } from '../hooks/useMedicalAI';
+} from "lucide-react";
+import { mockCrewMembers } from "../data/mockData";
+import { CrewMember } from "../types";
+import { toast } from "sonner";
+import { useMedicalAI } from "../hooks/useMedicalAI";
 
 export default function CrewHealthTab() {
   const { predictHealthIssues, isLoading } = useMedicalAI();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [selectedCrew, setSelectedCrew] = useState<CrewMember | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -36,26 +36,26 @@ export default function CrewHealthTab() {
   });
 
   const statusCounts = {
-    fit: mockCrewMembers.filter(m => m.status === 'fit').length,
-    restricted: mockCrewMembers.filter(m => m.status === 'restricted').length,
-    unfit: mockCrewMembers.filter(m => m.status === 'unfit').length
+    fit: mockCrewMembers.filter(m => m.status === "fit").length,
+    restricted: mockCrewMembers.filter(m => m.status === "restricted").length,
+    unfit: mockCrewMembers.filter(m => m.status === "unfit").length
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'fit': return <Badge className="bg-green-500/20 text-green-500">Apto</Badge>;
-      case 'restricted': return <Badge className="bg-amber-500/20 text-amber-500">Restrição</Badge>;
-      case 'unfit': return <Badge className="bg-red-500/20 text-red-500">Inapto</Badge>;
-      default: return null;
+    case "fit": return <Badge className="bg-green-500/20 text-green-500">Apto</Badge>;
+    case "restricted": return <Badge className="bg-amber-500/20 text-amber-500">Restrição</Badge>;
+    case "unfit": return <Badge className="bg-red-500/20 text-red-500">Inapto</Badge>;
+    default: return null;
     }
   };
 
   const getVaccinationStatus = (status: string) => {
     switch (status) {
-      case 'valid': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'expiring': return <Clock className="h-4 w-4 text-amber-500" />;
-      case 'expired': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default: return null;
+    case "valid": return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "expiring": return <Clock className="h-4 w-4 text-amber-500" />;
+    case "expired": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default: return null;
     }
   };
 
@@ -63,14 +63,14 @@ export default function CrewHealthTab() {
     const result = await predictHealthIssues(mockCrewMembers, []);
     if (result) {
       setAiPrediction(result);
-      toast.success('Análise preditiva concluída');
+      toast.success("Análise preditiva concluída");
     } else {
-      toast.error('Erro na análise');
+      toast.error("Erro na análise");
     }
   };
 
   const handleExport = () => {
-    toast.success('Exportando fichas médicas...');
+    toast.success("Exportando fichas médicas...");
   };
 
   return (
@@ -120,23 +120,23 @@ export default function CrewHealthTab() {
                 Todos ({mockCrewMembers.length})
               </Button>
               <Button 
-                variant={statusFilter === 'fit' ? "default" : "outline"} 
+                variant={statusFilter === "fit" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter('fit')}
+                onClick={() => setStatusFilter("fit")}
               >
                 Aptos ({statusCounts.fit})
               </Button>
               <Button 
-                variant={statusFilter === 'restricted' ? "default" : "outline"} 
+                variant={statusFilter === "restricted" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter('restricted')}
+                onClick={() => setStatusFilter("restricted")}
               >
                 Com Restrição ({statusCounts.restricted})
               </Button>
               <Button 
-                variant={statusFilter === 'unfit' ? "default" : "outline"} 
+                variant={statusFilter === "unfit" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter('unfit')}
+                onClick={() => setStatusFilter("unfit")}
               >
                 Inaptos ({statusCounts.unfit})
               </Button>
@@ -148,9 +148,9 @@ export default function CrewHealthTab() {
       {/* AI Prediction Alert */}
       {aiPrediction && (
         <Card className={`border-l-4 ${
-          aiPrediction.riskLevel === 'high' ? 'border-l-red-500 bg-red-500/5' :
-          aiPrediction.riskLevel === 'medium' ? 'border-l-amber-500 bg-amber-500/5' :
-          'border-l-green-500 bg-green-500/5'
+          aiPrediction.riskLevel === "high" ? "border-l-red-500 bg-red-500/5" :
+            aiPrediction.riskLevel === "medium" ? "border-l-amber-500 bg-amber-500/5" :
+              "border-l-green-500 bg-green-500/5"
         }`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -228,7 +228,7 @@ export default function CrewHealthTab() {
               <div>
                 <p className="text-2xl font-bold">
                   {mockCrewMembers.reduce((acc, m) => 
-                    acc + m.vaccinations.filter(v => v.status === 'expiring').length, 0)}
+                    acc + m.vaccinations.filter(v => v.status === "expiring").length, 0)}
                 </p>
                 <p className="text-xs text-muted-foreground">Vacinas a Vencer</p>
               </div>
@@ -287,7 +287,7 @@ export default function CrewHealthTab() {
                           <div className="text-right hidden sm:block">
                             <p className="text-sm">Tipo: {member.bloodType}</p>
                             <p className="text-xs text-muted-foreground">
-                              Próx. exame: {new Date(member.nextCheckup).toLocaleDateString('pt-BR')}
+                              Próx. exame: {new Date(member.nextCheckup).toLocaleDateString("pt-BR")}
                             </p>
                           </div>
                           {getStatusBadge(member.status)}
@@ -344,11 +344,11 @@ export default function CrewHealthTab() {
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50">
                             <p className="text-sm text-muted-foreground">Último Check-up</p>
-                            <p className="font-medium">{new Date(member.lastCheckup).toLocaleDateString('pt-BR')}</p>
+                            <p className="font-medium">{new Date(member.lastCheckup).toLocaleDateString("pt-BR")}</p>
                           </div>
                           <div className="p-3 rounded-lg bg-muted/50">
                             <p className="text-sm text-muted-foreground">Próximo Check-up</p>
-                            <p className="font-medium">{new Date(member.nextCheckup).toLocaleDateString('pt-BR')}</p>
+                            <p className="font-medium">{new Date(member.nextCheckup).toLocaleDateString("pt-BR")}</p>
                           </div>
                         </div>
                         
@@ -388,18 +388,18 @@ export default function CrewHealthTab() {
                                 <div>
                                   <p className="font-medium">{vaccine.name}</p>
                                   <p className="text-xs text-muted-foreground">
-                                    Aplicada: {new Date(vaccine.date).toLocaleDateString('pt-BR')}
+                                    Aplicada: {new Date(vaccine.date).toLocaleDateString("pt-BR")}
                                   </p>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="text-sm">Validade: {new Date(vaccine.expiryDate).toLocaleDateString('pt-BR')}</p>
+                                <p className="text-sm">Validade: {new Date(vaccine.expiryDate).toLocaleDateString("pt-BR")}</p>
                                 <Badge variant={
-                                  vaccine.status === 'valid' ? 'default' :
-                                  vaccine.status === 'expiring' ? 'secondary' : 'destructive'
+                                  vaccine.status === "valid" ? "default" :
+                                    vaccine.status === "expiring" ? "secondary" : "destructive"
                                 }>
-                                  {vaccine.status === 'valid' ? 'Válida' :
-                                   vaccine.status === 'expiring' ? 'A vencer' : 'Vencida'}
+                                  {vaccine.status === "valid" ? "Válida" :
+                                    vaccine.status === "expiring" ? "A vencer" : "Vencida"}
                                 </Badge>
                               </div>
                             </div>

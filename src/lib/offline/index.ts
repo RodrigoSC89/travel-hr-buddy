@@ -4,8 +4,8 @@
  * PATCH 900: Enhanced resilience features
  */
 
-export { requestQueue } from './request-queue';
-export { offlineSyncManager, initializeSyncManager } from './sync-manager';
+export { requestQueue } from "./request-queue";
+export { offlineSyncManager, initializeSyncManager } from "./sync-manager";
 export { 
   queueAction, 
   getPendingActions, 
@@ -15,14 +15,14 @@ export {
   getCachedData,
   clearExpiredCache,
   getQueueStats 
-} from './sync-queue';
+} from "./sync-queue";
 
 // PATCH 850: Connection resilience
 export { 
   connectionResilience, 
   type ConnectionState, 
   type RetryConfig 
-} from './connection-resilience';
+} from "./connection-resilience";
 
 // PATCH 900: Advanced resilience features
 export {
@@ -30,7 +30,7 @@ export {
   conflictStore,
   type ConflictStrategy,
   type ConflictResult,
-} from './conflict-resolution';
+} from "./conflict-resolution";
 
 export {
   compressPayload,
@@ -38,7 +38,7 @@ export {
   getCompressionStats,
   shouldCompress,
   type CompressedPayload,
-} from './payload-compression';
+} from "./payload-compression";
 
 export {
   circuits,
@@ -47,7 +47,7 @@ export {
   CircuitOpenError,
   type CircuitState,
   type CircuitStats,
-} from './circuit-breaker';
+} from "./circuit-breaker";
 
 export {
   getStorageQuota,
@@ -58,23 +58,23 @@ export {
   storageMonitor,
   formatBytes,
   type StorageQuota,
-} from './storage-quota';
+} from "./storage-quota";
 
 // PATCH 901: Advanced features
 export {
   requestBatcher,
   batchedFetch,
-} from './request-batcher';
+} from "./request-batcher";
 
 export {
   smartSync,
   initializeSmartSync,
   type SmartSyncConfig,
-} from './smart-sync';
+} from "./smart-sync";
 
 export {
   dataIntegrity,
   validateDataStructure,
   sanitizeForSync,
   type IntegrityCheck,
-} from './data-integrity';
+} from "./data-integrity";

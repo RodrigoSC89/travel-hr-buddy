@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface AIContext {
   drills?: any[];
@@ -24,13 +24,13 @@ export function useSOLASAI(): UseSOLASAIReturn {
   const { toast } = useToast();
 
   const callAI = useCallback(async (
-    type: 'chat' | 'analyze_drill' | 'generate_report' | 'predict_training' | 'suggest_schedule',
+    type: "chat" | "analyze_drill" | "generate_report" | "predict_training" | "suggest_schedule",
     message?: string,
     context?: AIContext
   ): Promise<string | null> => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('solas-training-ai', {
+      const { data, error } = await supabase.functions.invoke("solas-training-ai", {
         body: { type, message, context }
       });
 
@@ -39,17 +39,17 @@ export function useSOLASAI(): UseSOLASAIReturn {
       }
 
       if (data.error) {
-        if (data.code === 'RATE_LIMIT') {
+        if (data.code === "RATE_LIMIT") {
           toast({
-            title: 'Limite de requisições',
-            description: 'Aguarde um momento antes de tentar novamente.',
-            variant: 'destructive'
+            title: "Limite de requisições",
+            description: "Aguarde um momento antes de tentar novamente.",
+            variant: "destructive"
           });
-        } else if (data.code === 'CREDITS_EXHAUSTED') {
+        } else if (data.code === "CREDITS_EXHAUSTED") {
           toast({
-            title: 'Créditos insuficientes',
-            description: 'Adicione mais créditos para continuar usando a IA.',
-            variant: 'destructive'
+            title: "Créditos insuficientes",
+            description: "Adicione mais créditos para continuar usando a IA.",
+            variant: "destructive"
           });
         }
         return null;
@@ -57,11 +57,11 @@ export function useSOLASAI(): UseSOLASAIReturn {
 
       return data.response;
     } catch (error) {
-      console.error('SOLAS AI error:', error);
+      console.error("SOLAS AI error:", error);
       toast({
-        title: 'Erro na IA',
-        description: 'Não foi possível processar sua solicitação.',
-        variant: 'destructive'
+        title: "Erro na IA",
+        description: "Não foi possível processar sua solicitação.",
+        variant: "destructive"
       });
       return null;
     } finally {
@@ -70,19 +70,19 @@ export function useSOLASAI(): UseSOLASAIReturn {
   }, [toast]);
 
   const sendMessage = useCallback((message: string) => 
-    callAI('chat', message), [callAI]);
+    callAI("chat", message), [callAI]);
 
   const analyzeDrill = useCallback((drillData: any) => 
-    callAI('analyze_drill', undefined, { drillData }), [callAI]);
+    callAI("analyze_drill", undefined, { drillData }), [callAI]);
 
   const generateReport = useCallback((context: AIContext) => 
-    callAI('generate_report', undefined, context), [callAI]);
+    callAI("generate_report", undefined, context), [callAI]);
 
   const predictTraining = useCallback((context: AIContext) => 
-    callAI('predict_training', undefined, context), [callAI]);
+    callAI("predict_training", undefined, context), [callAI]);
 
   const suggestSchedule = useCallback((context: AIContext) => 
-    callAI('suggest_schedule', undefined, context), [callAI]);
+    callAI("suggest_schedule", undefined, context), [callAI]);
 
   return {
     isLoading,

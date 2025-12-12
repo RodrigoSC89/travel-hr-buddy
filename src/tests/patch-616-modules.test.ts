@@ -3,24 +3,24 @@
  * Tests core functionality without UI dependencies
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from "vitest";
 
-describe('Travel Search Module - Unit Tests', () => {
-  describe('Search Validation', () => {
-    it('should validate required search parameters', () => {
+describe("Travel Search Module - Unit Tests", () => {
+  describe("Search Validation", () => {
+    it("should validate required search parameters", () => {
       const validateSearch = (params: { origin?: string; destination?: string; date?: string }) => {
         if (!params.origin || !params.destination || !params.date) {
-          return { valid: false, errors: ['Missing required fields'] };
+          return { valid: false, errors: ["Missing required fields"] };
         }
         return { valid: true, errors: [] };
       };
 
-      const result = validateSearch({ origin: 'NYC', destination: 'LAX', date: '2025-01-15' });
+      const result = validateSearch({ origin: "NYC", destination: "LAX", date: "2025-01-15" });
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should reject invalid dates', () => {
+    it("should reject invalid dates", () => {
       const validateDate = (dateString: string) => {
         const date = new Date(dateString);
         const today = new Date();
@@ -29,13 +29,13 @@ describe('Travel Search Module - Unit Tests', () => {
         return date >= today;
       };
 
-      expect(validateDate('2025-12-31')).toBe(true);
-      expect(validateDate('2020-01-01')).toBe(false);
+      expect(validateDate("2025-12-31")).toBe(true);
+      expect(validateDate("2020-01-01")).toBe(false);
     });
   });
 
-  describe('Price Calculation', () => {
-    it('should calculate total with taxes', () => {
+  describe("Price Calculation", () => {
+    it("should calculate total with taxes", () => {
       const calculateTotal = (basePrice: number, taxRate: number = 0.1) => {
         return Math.round((basePrice * (1 + taxRate)) * 100) / 100;
       };
@@ -46,9 +46,9 @@ describe('Travel Search Module - Unit Tests', () => {
   });
 });
 
-describe('ISM Audits Module - Unit Tests', () => {
-  describe('Audit Scoring', () => {
-    it('should calculate audit compliance score', () => {
+describe("ISM Audits Module - Unit Tests", () => {
+  describe("Audit Scoring", () => {
+    it("should calculate audit compliance score", () => {
       const calculateComplianceScore = (compliantItems: number, totalItems: number) => {
         if (totalItems === 0) return 0;
         return Math.round((compliantItems / totalItems) * 100);
@@ -59,47 +59,47 @@ describe('ISM Audits Module - Unit Tests', () => {
       expect(calculateComplianceScore(0, 10)).toBe(0);
     });
 
-    it('should categorize audit status based on score', () => {
+    it("should categorize audit status based on score", () => {
       const getAuditStatus = (score: number) => {
-        if (score >= 90) return 'excellent';
-        if (score >= 75) return 'good';
-        if (score >= 60) return 'satisfactory';
-        return 'needs improvement';
+        if (score >= 90) return "excellent";
+        if (score >= 75) return "good";
+        if (score >= 60) return "satisfactory";
+        return "needs improvement";
       };
 
-      expect(getAuditStatus(95)).toBe('excellent');
-      expect(getAuditStatus(80)).toBe('good');
-      expect(getAuditStatus(65)).toBe('satisfactory');
-      expect(getAuditStatus(50)).toBe('needs improvement');
+      expect(getAuditStatus(95)).toBe("excellent");
+      expect(getAuditStatus(80)).toBe("good");
+      expect(getAuditStatus(65)).toBe("satisfactory");
+      expect(getAuditStatus(50)).toBe("needs improvement");
     });
   });
 
-  describe('Finding Severity', () => {
-    it('should classify finding severity', () => {
+  describe("Finding Severity", () => {
+    it("should classify finding severity", () => {
       const classifySeverity = (description: string) => {
         const lower = description.toLowerCase();
-        if (lower.includes('critical') || lower.includes('severe')) return 'critical';
-        if (lower.includes('major')) return 'major';
-        if (lower.includes('minor')) return 'minor';
-        return 'observation';
+        if (lower.includes("critical") || lower.includes("severe")) return "critical";
+        if (lower.includes("major")) return "major";
+        if (lower.includes("minor")) return "minor";
+        return "observation";
       };
 
-      expect(classifySeverity('Critical safety issue')).toBe('critical');
-      expect(classifySeverity('Major compliance violation')).toBe('major');
-      expect(classifySeverity('Minor documentation error')).toBe('minor');
-      expect(classifySeverity('General observation')).toBe('observation');
+      expect(classifySeverity("Critical safety issue")).toBe("critical");
+      expect(classifySeverity("Major compliance violation")).toBe("major");
+      expect(classifySeverity("Minor documentation error")).toBe("minor");
+      expect(classifySeverity("General observation")).toBe("observation");
     });
   });
 });
 
-describe('PSC Precheck Module - Unit Tests', () => {
-  describe('Risk Calculation', () => {
-    it('should calculate PSC inspection risk score', () => {
+describe("PSC Precheck Module - Unit Tests", () => {
+  describe("Risk Calculation", () => {
+    it("should calculate PSC inspection risk score", () => {
       interface RiskFactors {
         vesselAge: number;
         lastInspectionDays: number;
         deficiencyCount: number;
-        flagState: 'white' | 'grey' | 'black';
+        flagState: "white" | "grey" | "black";
       }
 
       const calculateRiskScore = (factors: RiskFactors) => {
@@ -118,8 +118,8 @@ describe('PSC Precheck Module - Unit Tests', () => {
         score += factors.deficiencyCount * 5;
         
         // Flag state
-        if (factors.flagState === 'black') score += 20;
-        else if (factors.flagState === 'grey') score += 10;
+        if (factors.flagState === "black") score += 20;
+        else if (factors.flagState === "grey") score += 10;
         
         return Math.min(score, 100);
       };
@@ -128,22 +128,22 @@ describe('PSC Precheck Module - Unit Tests', () => {
         vesselAge: 20,
         lastInspectionDays: 400,
         deficiencyCount: 3,
-        flagState: 'black'
+        flagState: "black"
       })).toBe(90);
 
       expect(calculateRiskScore({
         vesselAge: 3,
         lastInspectionDays: 60,
         deficiencyCount: 0,
-        flagState: 'white'
+        flagState: "white"
       })).toBe(0);
     });
   });
 
-  describe('Deficiency Priority', () => {
-    it('should prioritize deficiencies correctly', () => {
+  describe("Deficiency Priority", () => {
+    it("should prioritize deficiencies correctly", () => {
       interface Deficiency {
-        severity: 'critical' | 'major' | 'minor';
+        severity: "critical" | "major" | "minor";
         daysOpen: number;
       }
 
@@ -157,31 +157,31 @@ describe('PSC Precheck Module - Unit Tests', () => {
       };
 
       const deficiencies: Deficiency[] = [
-        { severity: 'minor', daysOpen: 10 },
-        { severity: 'critical', daysOpen: 5 },
-        { severity: 'major', daysOpen: 8 }
+        { severity: "minor", daysOpen: 10 },
+        { severity: "critical", daysOpen: 5 },
+        { severity: "major", daysOpen: 8 }
       ];
 
       const sorted = prioritizeDeficiencies(deficiencies);
-      expect(sorted[0].severity).toBe('critical');
-      expect(sorted[1].severity).toBe('major');
-      expect(sorted[2].severity).toBe('minor');
+      expect(sorted[0].severity).toBe("critical");
+      expect(sorted[1].severity).toBe("major");
+      expect(sorted[2].severity).toBe("minor");
     });
   });
 });
 
-describe('LSA-FFA Inspections Module - Unit Tests', () => {
-  describe('Equipment Status', () => {
-    it('should validate equipment serviceability', () => {
+describe("LSA-FFA Inspections Module - Unit Tests", () => {
+  describe("Equipment Status", () => {
+    it("should validate equipment serviceability", () => {
       interface Equipment {
         lastInspectionDate: Date;
-        condition: 'good' | 'fair' | 'poor';
+        condition: "good" | "fair" | "poor";
         defects: string[];
       }
 
       const isServiceable = (equipment: Equipment) => {
-        if (equipment.condition === 'poor') return false;
-        if (equipment.defects.some(d => d.toLowerCase().includes('critical'))) return false;
+        if (equipment.condition === "poor") return false;
+        if (equipment.defects.some(d => d.toLowerCase().includes("critical"))) return false;
         
         const daysSinceInspection = (Date.now() - equipment.lastInspectionDate.getTime()) / (1000 * 60 * 60 * 24);
         if (daysSinceInspection > 365) return false;
@@ -191,18 +191,18 @@ describe('LSA-FFA Inspections Module - Unit Tests', () => {
 
       expect(isServiceable({
         lastInspectionDate: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000), // 100 days ago
-        condition: 'good',
+        condition: "good",
         defects: []
       })).toBe(true);
 
       expect(isServiceable({
         lastInspectionDate: new Date(Date.now() - 100 * 24 * 60 * 60 * 1000), // 100 days ago
-        condition: 'poor',
+        condition: "poor",
         defects: []
       })).toBe(false);
     });
 
-    it('should calculate compliance percentage', () => {
+    it("should calculate compliance percentage", () => {
       const calculateCompliance = (inspectedItems: number, requiredItems: number, passedItems: number) => {
         if (requiredItems === 0) return 100;
         const inspectionRate = (inspectedItems / requiredItems) * 100;
@@ -217,9 +217,9 @@ describe('LSA-FFA Inspections Module - Unit Tests', () => {
   });
 });
 
-describe('OVID Precheck Module - Unit Tests', () => {
-  describe('Inspection Readiness', () => {
-    it('should calculate overall readiness score', () => {
+describe("OVID Precheck Module - Unit Tests", () => {
+  describe("Inspection Readiness", () => {
+    it("should calculate overall readiness score", () => {
       interface ReadinessFactors {
         documentationComplete: number; // 0-100
         equipmentStatus: number; // 0-100
@@ -258,7 +258,7 @@ describe('OVID Precheck Module - Unit Tests', () => {
       })).toBe(83);
     });
 
-    it('should identify critical gaps', () => {
+    it("should identify critical gaps", () => {
       interface InspectionArea {
         name: string;
         score: number;
@@ -272,37 +272,37 @@ describe('OVID Precheck Module - Unit Tests', () => {
       };
 
       const areas: InspectionArea[] = [
-        { name: 'Safety Equipment', score: 95, required: true },
-        { name: 'Fire Fighting', score: 70, required: true },
-        { name: 'Documentation', score: 85, required: true },
-        { name: 'Optional Training', score: 60, required: false }
+        { name: "Safety Equipment", score: 95, required: true },
+        { name: "Fire Fighting", score: 70, required: true },
+        { name: "Documentation", score: 85, required: true },
+        { name: "Optional Training", score: 60, required: false }
       ];
 
       const gaps = identifyCriticalGaps(areas);
-      expect(gaps).toContain('Fire Fighting');
-      expect(gaps).not.toContain('Safety Equipment');
-      expect(gaps).not.toContain('Optional Training');
+      expect(gaps).toContain("Fire Fighting");
+      expect(gaps).not.toContain("Safety Equipment");
+      expect(gaps).not.toContain("Optional Training");
     });
   });
 });
 
-describe('Cross-Module Integration - Unit Tests', () => {
-  describe('Data Consistency', () => {
-    it('should maintain consistent date formats', () => {
+describe("Cross-Module Integration - Unit Tests", () => {
+  describe("Data Consistency", () => {
+    it("should maintain consistent date formats", () => {
       const formatDate = (date: Date) => {
-        return date.toISOString().split('T')[0];
+        return date.toISOString().split("T")[0];
       };
 
-      const testDate = new Date('2025-01-15T10:30:00Z');
-      expect(formatDate(testDate)).toBe('2025-01-15');
+      const testDate = new Date("2025-01-15T10:30:00Z");
+      expect(formatDate(testDate)).toBe("2025-01-15");
     });
 
-    it('should handle null/undefined values gracefully', () => {
+    it("should handle null/undefined values gracefully", () => {
       const safeGet = <T>(obj: Record<string, unknown> | null | undefined, path: string, defaultValue: T): T => {
         try {
           if (!obj) return defaultValue;
-          const value = path.split('.').reduce<unknown>((acc, part) => {
-            if (acc && typeof acc === 'object') {
+          const value = path.split(".").reduce<unknown>((acc, part) => {
+            if (acc && typeof acc === "object") {
               return (acc as Record<string, unknown>)[part];
             }
             return undefined;
@@ -313,9 +313,9 @@ describe('Cross-Module Integration - Unit Tests', () => {
         }
       };
 
-      expect(safeGet({ a: { b: { c: 'value' } } }, 'a.b.c', 'default')).toBe('value');
-      expect(safeGet({ a: {} }, 'a.b.c', 'default')).toBe('default');
-      expect(safeGet(null, 'a.b.c', 'default')).toBe('default');
+      expect(safeGet({ a: { b: { c: "value" } } }, "a.b.c", "default")).toBe("value");
+      expect(safeGet({ a: {} }, "a.b.c", "default")).toBe("default");
+      expect(safeGet(null, "a.b.c", "default")).toBe("default");
     });
   });
 });

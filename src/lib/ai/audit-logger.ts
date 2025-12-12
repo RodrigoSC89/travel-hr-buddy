@@ -3,7 +3,7 @@
  * PATCH 850 - Logging avançado para auditoria regulamentar
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface AIAuditEntry {
   id?: string;
@@ -30,7 +30,7 @@ export interface AIAuditEntry {
   approved_by?: string;
   approved_by_name?: string;
   approved_at?: string;
-  approval_decision?: 'approved' | 'rejected' | 'modified';
+  approval_decision?: "approved" | "rejected" | "modified";
   approval_comments?: string;
   response_time_ms?: number;
   tokens_input?: number;
@@ -59,9 +59,9 @@ export interface AuditSearchFilters {
 async function hashString(str: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(str);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 32);
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("").substring(0, 32);
 }
 
 /**
@@ -91,9 +91,9 @@ export async function logAIInteraction(entry: AIAuditEntry): Promise<string | nu
     } as Record<string, unknown>;
 
     const { data, error } = await supabase
-      .from('ai_audit_logs')
+      .from("ai_audit_logs")
       .insert(insertData as any)
-      .select('id')
+      .select("id")
       .single();
 
     if (error) {
@@ -102,8 +102,8 @@ export async function logAIInteraction(entry: AIAuditEntry): Promise<string | nu
 
     return data?.id || null;
   } catch (error) {
-    console.error('Error logging AI interaction:', error);
-    console.error('Error logging AI interaction:', error);
+    console.error("Error logging AI interaction:", error);
+    console.error("Error logging AI interaction:", error);
     return null;
   }
 }
@@ -115,12 +115,12 @@ export async function updateAuditApproval(
   auditId: string,
   approvedBy: string,
   approvedByName: string,
-  decision: 'approved' | 'rejected' | 'modified',
+  decision: "approved" | "rejected" | "modified",
   comments?: string
 ): Promise<boolean> {
   try {
     const { error } = await supabase
-      .from('ai_audit_logs')
+      .from("ai_audit_logs")
       .update({
         approved_by: approvedBy,
         approved_by_name: approvedByName,
@@ -128,7 +128,7 @@ export async function updateAuditApproval(
         approval_decision: decision,
         approval_comments: comments,
       })
-      .eq('id', auditId);
+      .eq("id", auditId);
 
     if (error) {
       return false;
@@ -136,8 +136,8 @@ export async function updateAuditApproval(
 
     return true;
   } catch (error) {
-    console.error('Error updating audit approval:', error);
-    console.error('Error updating audit approval:', error);
+    console.error("Error updating audit approval:", error);
+    console.error("Error updating audit approval:", error);
     return false;
   }
 }
@@ -152,40 +152,40 @@ export async function searchAuditLogs(
 ): Promise<AIAuditEntry[]> {
   try {
     let query = supabase
-      .from('ai_audit_logs')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("ai_audit_logs")
+      .select("*")
+      .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (filters.organization_id) {
-      query = query.eq('organization_id', filters.organization_id);
+      query = query.eq("organization_id", filters.organization_id);
     }
     if (filters.user_id) {
-      query = query.eq('user_id', filters.user_id);
+      query = query.eq("user_id", filters.user_id);
     }
     if (filters.module_name) {
-      query = query.eq('module_name', filters.module_name);
+      query = query.eq("module_name", filters.module_name);
     }
     if (filters.interaction_type) {
-      query = query.eq('interaction_type', filters.interaction_type);
+      query = query.eq("interaction_type", filters.interaction_type);
     }
     if (filters.requires_approval !== undefined) {
-      query = query.eq('requires_approval', filters.requires_approval);
+      query = query.eq("requires_approval", filters.requires_approval);
     }
     if (filters.approval_decision) {
-      query = query.eq('approval_decision', filters.approval_decision);
+      query = query.eq("approval_decision", filters.approval_decision);
     }
     if (filters.date_from) {
-      query = query.gte('created_at', filters.date_from);
+      query = query.gte("created_at", filters.date_from);
     }
     if (filters.date_to) {
-      query = query.lte('created_at', filters.date_to);
+      query = query.lte("created_at", filters.date_to);
     }
     if (filters.min_confidence !== undefined) {
-      query = query.gte('confidence_score', filters.min_confidence);
+      query = query.gte("confidence_score", filters.min_confidence);
     }
     if (filters.max_confidence !== undefined) {
-      query = query.lte('confidence_score', filters.max_confidence);
+      query = query.lte("confidence_score", filters.max_confidence);
     }
 
     const { data, error } = await query;
@@ -196,8 +196,8 @@ export async function searchAuditLogs(
 
     return data as unknown as AIAuditEntry[];
   } catch (error) {
-    console.error('Error searching audit logs:', error);
-    console.error('Error searching audit logs:', error);
+    console.error("Error searching audit logs:", error);
+    console.error("Error searching audit logs:", error);
     return [];
   }
 }
@@ -220,15 +220,15 @@ export async function getAuditStatistics(
 }> {
   try {
     let query = supabase
-      .from('ai_audit_logs')
-      .select('*')
-      .eq('organization_id', organizationId);
+      .from("ai_audit_logs")
+      .select("*")
+      .eq("organization_id", organizationId);
 
     if (dateFrom) {
-      query = query.gte('created_at', dateFrom);
+      query = query.gte("created_at", dateFrom);
     }
     if (dateTo) {
-      query = query.lte('created_at', dateTo);
+      query = query.lte("created_at", dateTo);
     }
 
     const { data, error } = await query;
@@ -265,7 +265,7 @@ export async function getAuditStatistics(
       : 0;
 
     const requiresApproval = entries.filter(e => e.requires_approval);
-    const approved = requiresApproval.filter(e => e.approval_decision === 'approved');
+    const approved = requiresApproval.filter(e => e.approval_decision === "approved");
     const approvalRate = requiresApproval.length > 0
       ? (approved.length / requiresApproval.length) * 100
       : 100;
@@ -278,14 +278,14 @@ export async function getAuditStatistics(
     // By module
     const byModule: Record<string, number> = {};
     for (const entry of entries) {
-      const module = entry.module_name || 'unknown';
+      const module = entry.module_name || "unknown";
       byModule[module] = (byModule[module] || 0) + 1;
     }
 
     // By model
     const byModel: Record<string, number> = {};
     for (const entry of entries) {
-      const model = entry.model_version || 'unknown';
+      const model = entry.model_version || "unknown";
       byModel[model] = (byModel[model] || 0) + 1;
     }
 
@@ -299,8 +299,8 @@ export async function getAuditStatistics(
       byModel,
     };
   } catch (error) {
-    console.error('Error getting audit statistics:', error);
-    console.error('Error getting audit statistics:', error);
+    console.error("Error getting audit statistics:", error);
+    console.error("Error getting audit statistics:", error);
     return {
       totalInteractions: 0,
       avgConfidence: 0,
@@ -318,42 +318,42 @@ export async function getAuditStatistics(
  */
 export function exportAuditLogsCSV(entries: AIAuditEntry[]): string {
   const headers = [
-    'Timestamp',
-    'User',
-    'Role',
-    'Module',
-    'Input (hash)',
-    'Response (hash)',
-    'Model',
-    'Confidence',
-    'RAG Enabled',
-    'RAG Sources',
-    'Requires Approval',
-    'Approved By',
-    'Approval Decision',
-    'Response Time (ms)',
-    'Tokens Used',
+    "Timestamp",
+    "User",
+    "Role",
+    "Module",
+    "Input (hash)",
+    "Response (hash)",
+    "Model",
+    "Confidence",
+    "RAG Enabled",
+    "RAG Sources",
+    "Requires Approval",
+    "Approved By",
+    "Approval Decision",
+    "Response Time (ms)",
+    "Tokens Used",
   ];
 
   const rows = entries.map(e => [
-    e.created_at || '',
-    e.user_name || '',
-    e.user_role || '',
-    e.module_name || '',
-    `[HASH]`, // Don't export actual input for privacy
-    `[HASH]`, // Don't export actual response for privacy
-    e.model_version || '',
-    e.confidence_score?.toFixed(2) || '',
-    e.rag_enabled ? 'Yes' : 'No',
-    e.rag_source_documents?.join('; ') || '',
-    e.requires_approval ? 'Yes' : 'No',
-    e.approved_by_name || '',
-    e.approval_decision || '',
-    e.response_time_ms?.toString() || '',
+    e.created_at || "",
+    e.user_name || "",
+    e.user_role || "",
+    e.module_name || "",
+    "[HASH]", // Don't export actual input for privacy
+    "[HASH]", // Don't export actual response for privacy
+    e.model_version || "",
+    e.confidence_score?.toFixed(2) || "",
+    e.rag_enabled ? "Yes" : "No",
+    e.rag_source_documents?.join("; ") || "",
+    e.requires_approval ? "Yes" : "No",
+    e.approved_by_name || "",
+    e.approval_decision || "",
+    e.response_time_ms?.toString() || "",
     ((e.tokens_input || 0) + (e.tokens_output || 0)).toString(),
   ]);
 
-  return [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+  return [headers.join(","), ...rows.map(r => r.map(c => `"${c}"`).join(","))].join("\n");
 }
 
 /**
@@ -361,7 +361,7 @@ export function exportAuditLogsCSV(entries: AIAuditEntry[]): string {
  */
 export function createAuditLogger(moduleName: string, organizationId?: string) {
   return {
-    log: async (entry: Omit<AIAuditEntry, 'module_name' | 'organization_id'>) => {
+    log: async (entry: Omit<AIAuditEntry, "module_name" | "organization_id">) => {
       return logAIInteraction({
         ...entry,
         module_name: moduleName,
@@ -369,7 +369,7 @@ export function createAuditLogger(moduleName: string, organizationId?: string) {
       });
     },
     updateApproval: updateAuditApproval,
-    search: (filters: Omit<AuditSearchFilters, 'module_name' | 'organization_id'>) => {
+    search: (filters: Omit<AuditSearchFilters, "module_name" | "organization_id">) => {
       return searchAuditLogs({
         ...filters,
         module_name: moduleName,

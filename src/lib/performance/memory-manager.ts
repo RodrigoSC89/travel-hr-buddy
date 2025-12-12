@@ -13,7 +13,7 @@ interface MemoryStatus {
   available: boolean;
   usage: number; // 0-100 percentage
   isLow: boolean;
-  recommendation: 'normal' | 'reduce' | 'critical';
+  recommendation: "normal" | "reduce" | "critical";
 }
 
 class MemoryManager {
@@ -32,16 +32,16 @@ class MemoryManager {
         available: false,
         usage: 0,
         isLow: false,
-        recommendation: 'normal',
+        recommendation: "normal",
       };
     }
 
     const usage = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
     const isLow = usage > 80;
     
-    let recommendation: 'normal' | 'reduce' | 'critical' = 'normal';
-    if (usage > 90) recommendation = 'critical';
-    else if (usage > 70) recommendation = 'reduce';
+    let recommendation: "normal" | "reduce" | "critical" = "normal";
+    if (usage > 90) recommendation = "critical";
+    else if (usage > 70) recommendation = "reduce";
 
     return {
       available: true,
@@ -65,9 +65,9 @@ class MemoryManager {
   cleanup() {
     
     // Clear image caches
-    if ('caches' in window) {
+    if ("caches" in window) {
       caches.keys().then(names => {
-        names.filter(n => n.includes('image')).forEach(name => {
+        names.filter(n => n.includes("image")).forEach(name => {
           caches.delete(name);
         });
       });
@@ -78,13 +78,13 @@ class MemoryManager {
       try {
         cb();
       } catch (e) {
-        console.warn('[MemoryManager] Cleanup callback failed:', e);
-        console.warn('[MemoryManager] Cleanup callback failed:', e);
+        console.warn("[MemoryManager] Cleanup callback failed:", e);
+        console.warn("[MemoryManager] Cleanup callback failed:", e);
       }
     });
 
     // Suggest garbage collection (doesn't guarantee it runs)
-    if ('gc' in window) {
+    if ("gc" in window) {
       (window as any).gc();
     }
   }
@@ -100,7 +100,7 @@ class MemoryManager {
       
       if (status.available && status.recommendation !== this.lastStatus?.recommendation) {
         
-        if (status.recommendation === 'critical') {
+        if (status.recommendation === "critical") {
           this.cleanup();
         }
       }
@@ -127,23 +127,23 @@ class MemoryManager {
     const recommendations: string[] = [];
 
     if (!status.available) {
-      recommendations.push('Memory API not available in this browser');
+      recommendations.push("Memory API not available in this browser");
       return recommendations;
     }
 
     if (status.usage > 50) {
-      recommendations.push('Consider lazy loading more components');
-      recommendations.push('Reduce image quality on this device');
+      recommendations.push("Consider lazy loading more components");
+      recommendations.push("Reduce image quality on this device");
     }
 
     if (status.usage > 70) {
-      recommendations.push('Disable animations to reduce memory');
-      recommendations.push('Limit list virtualization window size');
+      recommendations.push("Disable animations to reduce memory");
+      recommendations.push("Limit list virtualization window size");
     }
 
     if (status.usage > 85) {
-      recommendations.push('Consider clearing cached data');
-      recommendations.push('Reduce real-time update frequency');
+      recommendations.push("Consider clearing cached data");
+      recommendations.push("Reduce real-time update frequency");
     }
 
     return recommendations;
@@ -157,7 +157,7 @@ export const memoryManager = new MemoryManager();
  */
 export function shouldReduceMemory(): boolean {
   const status = memoryManager.getStatus();
-  return status.recommendation !== 'normal';
+  return status.recommendation !== "normal";
 }
 
 /**
@@ -167,10 +167,10 @@ export function getMemoryAwareSettings() {
   const status = memoryManager.getStatus();
   
   return {
-    enableAnimations: status.recommendation === 'normal',
-    imageQuality: status.recommendation === 'critical' ? 40 : status.recommendation === 'reduce' ? 60 : 80,
-    virtualListOverscan: status.recommendation === 'critical' ? 1 : status.recommendation === 'reduce' ? 2 : 5,
-    cacheSize: status.recommendation === 'critical' ? 10 : status.recommendation === 'reduce' ? 25 : 50,
-    enablePrefetch: status.recommendation === 'normal',
+    enableAnimations: status.recommendation === "normal",
+    imageQuality: status.recommendation === "critical" ? 40 : status.recommendation === "reduce" ? 60 : 80,
+    virtualListOverscan: status.recommendation === "critical" ? 1 : status.recommendation === "reduce" ? 2 : 5,
+    cacheSize: status.recommendation === "critical" ? 10 : status.recommendation === "reduce" ? 25 : 50,
+    enablePrefetch: status.recommendation === "normal",
   };
 }

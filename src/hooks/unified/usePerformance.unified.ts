@@ -43,7 +43,7 @@ export interface PerformanceMetrics {
 
 export interface PerformanceEvaluation {
   score: number;
-  rating: 'excellent' | 'good' | 'needs-improvement' | 'poor';
+  rating: "excellent" | "good" | "needs-improvement" | "poor";
   recommendations: string[];
 }
 
@@ -128,14 +128,14 @@ export function getPerformanceMetrics(): PerformanceMetrics {
 
   try {
     // Navigation Timing API
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
     if (navigation) {
       metrics.ttfb = navigation.responseStart - navigation.requestStart;
       metrics.fcp = navigation.responseEnd - navigation.fetchStart;
     }
 
     // Memory Usage (Chrome/Edge only)
-    if ('memory' in performance) {
+    if ("memory" in performance) {
       const memory = (performance as any).memory;
       metrics.memory = {
         used: memory.usedJSHeapSize,
@@ -144,7 +144,7 @@ export function getPerformanceMetrics(): PerformanceMetrics {
       };
     }
   } catch (error) {
-    logger.error('Error collecting performance metrics:', error);
+    logger.error("Error collecting performance metrics:", error);
   }
 
   return metrics;
@@ -157,51 +157,51 @@ export function evaluatePerformance(metrics: PerformanceMetrics): PerformanceEva
   if (metrics.lcp !== null) {
     if (metrics.lcp > 4000) {
       score -= 25;
-      recommendations.push('LCP too high - optimize largest content loading');
+      recommendations.push("LCP too high - optimize largest content loading");
     } else if (metrics.lcp > 2500) {
       score -= 10;
-      recommendations.push('LCP could be improved - consider lazy loading');
+      recommendations.push("LCP could be improved - consider lazy loading");
     }
   }
 
   if (metrics.fid !== null) {
     if (metrics.fid > 300) {
       score -= 25;
-      recommendations.push('FID too high - reduce JavaScript execution time');
+      recommendations.push("FID too high - reduce JavaScript execution time");
     } else if (metrics.fid > 100) {
       score -= 10;
-      recommendations.push('FID could be improved - optimize event handlers');
+      recommendations.push("FID could be improved - optimize event handlers");
     }
   }
 
   if (metrics.cls !== null) {
     if (metrics.cls > 0.25) {
       score -= 25;
-      recommendations.push('CLS too high - stabilize layout shifts');
+      recommendations.push("CLS too high - stabilize layout shifts");
     } else if (metrics.cls > 0.1) {
       score -= 10;
-      recommendations.push('CLS could be improved - add size attributes to images');
+      recommendations.push("CLS could be improved - add size attributes to images");
     }
   }
 
   if (metrics.memory && metrics.memory.percentage > 85) {
     score -= 15;
-    recommendations.push('High memory usage - check for memory leaks');
+    recommendations.push("High memory usage - check for memory leaks");
   }
 
   if (metrics.fps < 30) {
     score -= 20;
-    recommendations.push('Low FPS - reduce rendering complexity');
+    recommendations.push("Low FPS - reduce rendering complexity");
   } else if (metrics.fps < 50) {
     score -= 10;
-    recommendations.push('FPS could be improved - optimize animations');
+    recommendations.push("FPS could be improved - optimize animations");
   }
 
-  let rating: 'excellent' | 'good' | 'needs-improvement' | 'poor';
-  if (score >= 90) rating = 'excellent';
-  else if (score >= 75) rating = 'good';
-  else if (score >= 50) rating = 'needs-improvement';
-  else rating = 'poor';
+  let rating: "excellent" | "good" | "needs-improvement" | "poor";
+  if (score >= 90) rating = "excellent";
+  else if (score >= 75) rating = "good";
+  else if (score >= 50) rating = "needs-improvement";
+  else rating = "poor";
 
   return { score, rating, recommendations };
 }
@@ -261,7 +261,7 @@ export function useWebVitals(): WebVitals {
   const [vitals, setVitals] = useState<WebVitals>({});
 
   useEffect(() => {
-    if (!('PerformanceObserver' in window)) return;
+    if (!("PerformanceObserver" in window)) return;
 
     const observers: PerformanceObserver[] = [];
 
@@ -272,7 +272,7 @@ export function useWebVitals(): WebVitals {
         const lastEntry = entries[entries.length - 1] as any;
         setVitals(prev => ({ ...prev, lcp: lastEntry?.renderTime || lastEntry?.loadTime }));
       });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
+      lcpObserver.observe({ entryTypes: ["largest-contentful-paint"], buffered: true });
       observers.push(lcpObserver);
     } catch {}
 
@@ -283,7 +283,7 @@ export function useWebVitals(): WebVitals {
           setVitals(prev => ({ ...prev, fid: entry.processingStart - entry.startTime }));
         });
       });
-      fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
+      fidObserver.observe({ entryTypes: ["first-input"], buffered: true });
       observers.push(fidObserver);
     } catch {}
 
@@ -298,7 +298,7 @@ export function useWebVitals(): WebVitals {
         });
         setVitals(prev => ({ ...prev, cls: clsValue }));
       });
-      clsObserver.observe({ entryTypes: ['layout-shift'], buffered: true });
+      clsObserver.observe({ entryTypes: ["layout-shift"], buffered: true });
       observers.push(clsObserver);
     } catch {}
 
@@ -317,7 +317,7 @@ export function useMemoryMonitor(interval: number = 5000): MemoryMetrics | null 
   const [memory, setMemory] = useState<MemoryMetrics | null>(null);
 
   useEffect(() => {
-    if (!('memory' in performance)) return;
+    if (!("memory" in performance)) return;
 
     const update = () => {
       const mem = (performance as any).memory;

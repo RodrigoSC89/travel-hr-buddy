@@ -111,7 +111,7 @@ const ReportsCommandCenter = () => {
 
       // Group insights by category
       const insightsByCategory = (insights || []).reduce((acc: Record<string, number>, insight: { category: string }) => {
-        const cat = insight.category || 'general';
+        const cat = insight.category || "general";
         acc[cat] = (acc[cat] || 0) + 1;
         return acc;
       }, {});
@@ -224,8 +224,8 @@ const ReportsCommandCenter = () => {
                         <FileText className="h-8 w-8 text-primary opacity-50" />
                       </div>
                       {getGrowthPercentage() && (
-                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                          {Number(getGrowthPercentage()) >= 0 ? '+' : ''}{getGrowthPercentage()}% vs mês anterior
+                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? "text-green-500" : "text-red-500"}`}>
+                          {Number(getGrowthPercentage()) >= 0 ? "+" : ""}{getGrowthPercentage()}% vs mês anterior
                         </p>
                       )}
                     </CardContent>
@@ -560,8 +560,8 @@ const ReportsCommandCenter = () => {
                         <FileText className="h-8 w-8 text-primary opacity-50" />
                       </div>
                       {getGrowthPercentage() && (
-                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                          {Number(getGrowthPercentage()) >= 0 ? '+' : ''}{getGrowthPercentage()}% vs mês anterior
+                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? "text-green-500" : "text-red-500"}`}>
+                          {Number(getGrowthPercentage()) >= 0 ? "+" : ""}{getGrowthPercentage()}% vs mês anterior
                         </p>
                       )}
                     </CardContent>

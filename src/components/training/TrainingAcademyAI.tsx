@@ -153,7 +153,7 @@ export function TrainingAcademyAI() {
       const quiz: QuizQuestion[] = [
         {
           id: "q1",
-          question: `Durante uma operação DP, qual é o procedimento correto quando o status ASOG muda de Verde para Amarelo?`,
+          question: "Durante uma operação DP, qual é o procedimento correto quando o status ASOG muda de Verde para Amarelo?",
           options: [
             "Continuar operação normalmente",
             "Reduzir operações e aumentar monitoramento",
@@ -224,10 +224,10 @@ export function TrainingAcademyAI() {
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
-      case "beginner": return "bg-green-500";
-      case "intermediate": return "bg-yellow-500";
-      case "advanced": return "bg-red-500";
-      default: return "bg-gray-500";
+    case "beginner": return "bg-green-500";
+    case "intermediate": return "bg-yellow-500";
+    case "advanced": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 

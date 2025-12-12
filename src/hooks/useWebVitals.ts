@@ -3,14 +3,14 @@
  * Provides real-time performance metrics in React components
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 import { 
   webVitalsMonitor, 
   VitalMetric, 
   VitalsCallback,
   AlertCallback 
-} from '@/lib/web-vitals-monitor';
-import { useToast } from '@/hooks/use-toast';
+} from "@/lib/web-vitals-monitor";
+import { useToast } from "@/hooks/use-toast";
 
 interface UseWebVitalsOptions {
   showAlerts?: boolean;
@@ -25,8 +25,8 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
   const [metrics, setMetrics] = useState<Record<string, VitalMetric>>({});
   const [score, setScore] = useState<{
     score: number;
-    rating: 'good' | 'needs-improvement' | 'poor';
-  }>({ score: 0, rating: 'needs-improvement' });
+    rating: "good" | "needs-improvement" | "poor";
+  }>({ score: 0, rating: "needs-improvement" });
 
   useEffect(() => {
     // Initialize monitor
@@ -39,8 +39,8 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
       },
       onAlert: showAlerts ? (metric, message) => {
         toast({
-          variant: 'destructive',
-          title: 'Performance Alert',
+          variant: "destructive",
+          title: "Performance Alert",
           description: message
         });
       } : undefined
@@ -48,10 +48,10 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
 
     // Flush on page unload
     const handleUnload = () => webVitalsMonitor.flush();
-    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener("beforeunload", handleUnload);
     
     return () => {
-      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener("beforeunload", handleUnload);
     };
   }, [reportEndpoint, isSlowNetwork, showAlerts, toast]);
 
@@ -67,23 +67,23 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
   } => {
     const metric = metrics[name];
     if (!metric) {
-      return { value: null, rating: 'unknown', formatted: '-' };
+      return { value: null, rating: "unknown", formatted: "-" };
     }
 
-    let formatted = '';
+    let formatted = "";
     switch (name) {
-      case 'CLS':
-        formatted = metric.value.toFixed(3);
-        break;
-      case 'LCP':
-      case 'FID':
-      case 'TTFB':
-      case 'FCP':
-      case 'INP':
-        formatted = `${Math.round(metric.value)}ms`;
-        break;
-      default:
-        formatted = metric.value.toFixed(2);
+    case "CLS":
+      formatted = metric.value.toFixed(3);
+      break;
+    case "LCP":
+    case "FID":
+    case "TTFB":
+    case "FCP":
+    case "INP":
+      formatted = `${Math.round(metric.value)}ms`;
+      break;
+    default:
+      formatted = metric.value.toFixed(2);
     }
 
     return {
@@ -98,12 +98,12 @@ export const useWebVitals = (options: UseWebVitalsOptions = {}) => {
     score,
     getMetricStatus,
     // Individual metrics for convenience (INP replaced FID in web-vitals v4+)
-    lcp: getMetricStatus('LCP'),
-    cls: getMetricStatus('CLS'),
-    ttfb: getMetricStatus('TTFB'),
-    fcp: getMetricStatus('FCP'),
-    inp: getMetricStatus('INP'),
-    fid: getMetricStatus('INP') // Alias for backward compatibility
+    lcp: getMetricStatus("LCP"),
+    cls: getMetricStatus("CLS"),
+    ttfb: getMetricStatus("TTFB"),
+    fcp: getMetricStatus("FCP"),
+    inp: getMetricStatus("INP"),
+    fid: getMetricStatus("INP") // Alias for backward compatibility
   };
 };
 

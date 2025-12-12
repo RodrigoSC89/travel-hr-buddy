@@ -122,28 +122,28 @@ export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificatio
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "valid": return "bg-success text-success-foreground";
-      case "expiring": return "bg-warning text-warning-foreground";
-      case "expired": return "bg-destructive text-destructive-foreground";
-      default: return "bg-muted";
+    case "valid": return "bg-success text-success-foreground";
+    case "expiring": return "bg-warning text-warning-foreground";
+    case "expired": return "bg-destructive text-destructive-foreground";
+    default: return "bg-muted";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "valid": return "Válido";
-      case "expiring": return "Vencendo";
-      case "expired": return "Vencido";
-      default: return status;
+    case "valid": return "Válido";
+    case "expiring": return "Vencendo";
+    case "expired": return "Vencido";
+    default: return status;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "valid": return <CheckCircle className="h-4 w-4" />;
-      case "expiring": return <Clock className="h-4 w-4" />;
-      case "expired": return <AlertTriangle className="h-4 w-4" />;
-      default: return null;
+    case "valid": return <CheckCircle className="h-4 w-4" />;
+    case "expiring": return <Clock className="h-4 w-4" />;
+    case "expired": return <AlertTriangle className="h-4 w-4" />;
+    default: return null;
     }
   };
 
@@ -376,8 +376,8 @@ export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificatio
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`p-2 rounded-lg ${cert.status === 'expired' ? 'bg-destructive/10' : cert.status === 'expiring' ? 'bg-warning/10' : 'bg-success/10'}`}>
-                    <FileText className={`h-5 w-5 ${cert.status === 'expired' ? 'text-destructive' : cert.status === 'expiring' ? 'text-warning' : 'text-success'}`} />
+                  <div className={`p-2 rounded-lg ${cert.status === "expired" ? "bg-destructive/10" : cert.status === "expiring" ? "bg-warning/10" : "bg-success/10"}`}>
+                    <FileText className={`h-5 w-5 ${cert.status === "expired" ? "text-destructive" : cert.status === "expiring" ? "text-warning" : "text-success"}`} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
@@ -395,7 +395,7 @@ export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificatio
                       <span>Nº: {cert.number}</span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        Venc: {new Date(cert.expiryDate).toLocaleDateString('pt-BR')}
+                        Venc: {new Date(cert.expiryDate).toLocaleDateString("pt-BR")}
                       </span>
                     </div>
                   </div>

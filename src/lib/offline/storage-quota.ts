@@ -3,7 +3,7 @@
  * Monitor and manage IndexedDB/Cache storage
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface StorageQuota {
   usage: number;
@@ -49,7 +49,7 @@ export async function getStorageQuota(): Promise<StorageQuota> {
       persisted,
     };
   } catch (error) {
-    logger.error('[StorageQuota] Failed to get storage estimate', { error });
+    logger.error("[StorageQuota] Failed to get storage estimate", { error });
     return {
       usage: 0,
       quota: 0,
@@ -70,10 +70,10 @@ export async function requestPersistence(): Promise<boolean> {
     }
 
     const granted = await navigator.storage.persist();
-    logger.info('[StorageQuota] Persistence requested', { granted });
+    logger.info("[StorageQuota] Persistence requested", { granted });
     return granted;
   } catch (error) {
-    logger.error('[StorageQuota] Failed to request persistence', { error });
+    logger.error("[StorageQuota] Failed to request persistence", { error });
     return false;
   }
 }
@@ -91,7 +91,7 @@ function getLocalStorageSize(): number {
       }
     }
   } catch (error) {
-    logger.warn('[StorageQuota] Cannot access localStorage');
+    logger.warn("[StorageQuota] Cannot access localStorage");
   }
   
   return total * 2; // UTF-16 encoding
@@ -102,7 +102,7 @@ function getLocalStorageSize(): number {
  */
 async function getCacheStorageSize(): Promise<number> {
   try {
-    if (!('caches' in window)) return 0;
+    if (!("caches" in window)) return 0;
     
     const cacheNames = await caches.keys();
     let total = 0;
@@ -122,7 +122,7 @@ async function getCacheStorageSize(): Promise<number> {
     
     return total;
   } catch (error) {
-    logger.warn('[StorageQuota] Cannot estimate cache size');
+    logger.warn("[StorageQuota] Cannot estimate cache size");
     return 0;
   }
 }
@@ -160,7 +160,7 @@ export async function isStorageLow(threshold = 0.9): Promise<boolean> {
  */
 export async function clearOldCaches(keepLast = 3): Promise<number> {
   try {
-    if (!('caches' in window)) return 0;
+    if (!("caches" in window)) return 0;
     
     const cacheNames = await caches.keys();
     let cleared = 0;
@@ -171,12 +171,12 @@ export async function clearOldCaches(keepLast = 3): Promise<number> {
     for (let i = keepLast; i < sorted.length; i++) {
       await caches.delete(sorted[i]);
       cleared++;
-      logger.info('[StorageQuota] Deleted old cache', { name: sorted[i] });
+      logger.info("[StorageQuota] Deleted old cache", { name: sorted[i] });
     }
     
     return cleared;
   } catch (error) {
-    logger.error('[StorageQuota] Failed to clear caches', { error });
+    logger.error("[StorageQuota] Failed to clear caches", { error });
     return 0;
   }
 }
@@ -185,13 +185,13 @@ export async function clearOldCaches(keepLast = 3): Promise<number> {
  * Format bytes to human readable
  */
 export function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B';
+  if (bytes === 0) return "0 B";
   
   const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const sizes = ["B", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 }
 
 /**
@@ -211,8 +211,8 @@ class StorageMonitor {
       
       // Notify if storage is low
       if (quota.usagePercent > 80) {
-        logger.warn('[StorageMonitor] Storage usage high', {
-          percent: quota.usagePercent.toFixed(1) + '%',
+        logger.warn("[StorageMonitor] Storage usage high", {
+          percent: quota.usagePercent.toFixed(1) + "%",
         });
       }
       

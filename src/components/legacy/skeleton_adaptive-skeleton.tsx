@@ -3,9 +3,9 @@
  * Optimized loading placeholders that adapt to connection speed
  */
 
-import React, { memo } from 'react';
-import { cn } from '@/lib/utils';
-import { useBandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import React, { memo } from "react";
+import { cn } from "@/lib/utils";
+import { useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
 
 interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -21,15 +21,15 @@ export const AdaptiveSkeleton = memo(function AdaptiveSkeleton({
   
   // Simpler animation on slow connections
   const animationClass = animate && !isLowBandwidth 
-    ? 'animate-pulse' 
+    ? "animate-pulse" 
     : isLowBandwidth 
-      ? 'opacity-50' 
-      : '';
+      ? "opacity-50" 
+      : "";
 
   return (
     <div
       className={cn(
-        'rounded-md bg-muted',
+        "rounded-md bg-muted",
         animationClass,
         className
       )}

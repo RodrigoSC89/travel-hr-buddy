@@ -175,31 +175,31 @@ export const ComplianceAutomation: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "compliant": return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "non-compliant": return <XCircle className="h-5 w-5 text-red-500" />;
-      case "pending": return <Clock className="h-5 w-5 text-amber-500" />;
-      case "expiring": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      default: return null;
+    case "compliant": return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "non-compliant": return <XCircle className="h-5 w-5 text-red-500" />;
+    case "pending": return <Clock className="h-5 w-5 text-amber-500" />;
+    case "expiring": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+    default: return null;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
-      case "non-compliant": return <Badge variant="destructive">Não Conforme</Badge>;
-      case "pending": return <Badge variant="secondary">Pendente</Badge>;
-      case "expiring": return <Badge className="bg-orange-500">Expirando</Badge>;
-      default: return null;
+    case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
+    case "non-compliant": return <Badge variant="destructive">Não Conforme</Badge>;
+    case "pending": return <Badge variant="secondary">Pendente</Badge>;
+    case "expiring": return <Badge className="bg-orange-500">Expirando</Badge>;
+    default: return null;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge variant="outline" className="border-orange-500 text-orange-500">Alto</Badge>;
-      case "medium": return <Badge variant="outline">Médio</Badge>;
-      case "low": return <Badge variant="secondary">Baixo</Badge>;
-      default: return null;
+    case "critical": return <Badge variant="destructive">Crítico</Badge>;
+    case "high": return <Badge variant="outline" className="border-orange-500 text-orange-500">Alto</Badge>;
+    case "medium": return <Badge variant="outline">Médio</Badge>;
+    case "low": return <Badge variant="secondary">Baixo</Badge>;
+    default: return null;
     }
   };
 
@@ -352,8 +352,8 @@ export const ComplianceAutomation: React.FC = () => {
                         key={item.id}
                         className={`p-4 border rounded-lg transition-colors ${
                           item.status === "non-compliant" ? "border-red-500/30 bg-red-500/5" :
-                          item.status === "expiring" ? "border-orange-500/30 bg-orange-500/5" :
-                          "hover:bg-muted/50"
+                            item.status === "expiring" ? "border-orange-500/30 bg-orange-500/5" :
+                              "hover:bg-muted/50"
                         }`}
                       >
                         <div className="flex items-start justify-between">

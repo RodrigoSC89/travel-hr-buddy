@@ -46,48 +46,48 @@ interface WorkflowCardProps {
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case "completed": return <CheckCircle className="h-4 w-4" />;
-    case "in_progress": return <RefreshCw className="h-4 w-4 animate-spin" />;
-    case "pending": return <Clock className="h-4 w-4" />;
-    case "failed": return <AlertTriangle className="h-4 w-4" />;
-    case "active": return <Play className="h-4 w-4" />;
-    case "paused": return <Pause className="h-4 w-4" />;
-    default: return <Clock className="h-4 w-4" />;
+  case "completed": return <CheckCircle className="h-4 w-4" />;
+  case "in_progress": return <RefreshCw className="h-4 w-4 animate-spin" />;
+  case "pending": return <Clock className="h-4 w-4" />;
+  case "failed": return <AlertTriangle className="h-4 w-4" />;
+  case "active": return <Play className="h-4 w-4" />;
+  case "paused": return <Pause className="h-4 w-4" />;
+  default: return <Clock className="h-4 w-4" />;
   }
 };
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "completed": return "bg-green-500/10 text-green-600 border-green-500/20";
-    case "in_progress": return "bg-blue-500/10 text-blue-600 border-blue-500/20";
-    case "pending": return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
-    case "failed": return "bg-red-500/10 text-red-600 border-red-500/20";
-    case "active": return "bg-green-500/10 text-green-600 border-green-500/20";
-    case "paused": return "bg-orange-500/10 text-orange-600 border-orange-500/20";
-    case "draft": return "bg-gray-500/10 text-gray-600 border-gray-500/20";
-    default: return "bg-gray-500/10 text-gray-600 border-gray-500/20";
+  case "completed": return "bg-green-500/10 text-green-600 border-green-500/20";
+  case "in_progress": return "bg-blue-500/10 text-blue-600 border-blue-500/20";
+  case "pending": return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+  case "failed": return "bg-red-500/10 text-red-600 border-red-500/20";
+  case "active": return "bg-green-500/10 text-green-600 border-green-500/20";
+  case "paused": return "bg-orange-500/10 text-orange-600 border-orange-500/20";
+  case "draft": return "bg-gray-500/10 text-gray-600 border-gray-500/20";
+  default: return "bg-gray-500/10 text-gray-600 border-gray-500/20";
   }
 };
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
-    case "urgent": return "bg-red-500/10 text-red-600 border-red-500/20";
-    case "high": return "bg-orange-500/10 text-orange-600 border-orange-500/20";
-    case "medium": return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
-    case "low": return "bg-green-500/10 text-green-600 border-green-500/20";
-    default: return "bg-gray-500/10 text-gray-600 border-gray-500/20";
+  case "urgent": return "bg-red-500/10 text-red-600 border-red-500/20";
+  case "high": return "bg-orange-500/10 text-orange-600 border-orange-500/20";
+  case "medium": return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+  case "low": return "bg-green-500/10 text-green-600 border-green-500/20";
+  default: return "bg-gray-500/10 text-gray-600 border-gray-500/20";
   }
 };
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
-    case "hr": return <Users className="h-5 w-5" />;
-    case "finance": return <TrendingUp className="h-5 w-5" />;
-    case "operations": return <Settings className="h-5 w-5" />;
-    case "marketing": return <Target className="h-5 w-5" />;
-    case "maintenance": return <Wrench className="h-5 w-5" />;
-    case "compliance": return <Shield className="h-5 w-5" />;
-    default: return <WorkflowIcon className="h-5 w-5" />;
+  case "hr": return <Users className="h-5 w-5" />;
+  case "finance": return <TrendingUp className="h-5 w-5" />;
+  case "operations": return <Settings className="h-5 w-5" />;
+  case "marketing": return <Target className="h-5 w-5" />;
+  case "maintenance": return <Wrench className="h-5 w-5" />;
+  case "compliance": return <Shield className="h-5 w-5" />;
+  default: return <WorkflowIcon className="h-5 w-5" />;
   }
 };
 
@@ -207,9 +207,9 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
                 </div>
                 <Badge variant="outline" className={`text-xs shrink-0 ${getStatusColor(step.status)}`}>
                   {step.status === "in_progress" ? "Em progresso" : 
-                   step.status === "completed" ? "Concluído" :
-                   step.status === "pending" ? "Pendente" :
-                   step.status === "failed" ? "Falhou" : step.status}
+                    step.status === "completed" ? "Concluído" :
+                      step.status === "pending" ? "Pendente" :
+                        step.status === "failed" ? "Falhou" : step.status}
                 </Badge>
               </div>
             ))}

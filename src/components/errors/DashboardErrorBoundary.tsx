@@ -3,9 +3,9 @@
  * Error boundary específico para o dashboard
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { errorTrackingService } from '@/lib/errors';
-import { ModuleErrorFallback } from './fallbacks';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { errorTrackingService } from "@/lib/errors";
+import { ModuleErrorFallback } from "./fallbacks";
 
 interface Props {
   children: ReactNode;
@@ -34,8 +34,8 @@ export class DashboardErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     errorTrackingService.trackRuntimeError(error, {
-      component: 'DashboardErrorBoundary',
-      action: 'componentDidCatch',
+      component: "DashboardErrorBoundary",
+      action: "componentDidCatch",
       metadata: {
         componentStack: errorInfo.componentStack,
       },

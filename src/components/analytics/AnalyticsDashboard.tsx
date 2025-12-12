@@ -3,8 +3,8 @@
  * Comprehensive analytics visualization
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import { 
   BarChart3, 
   TrendingUp, 
@@ -14,25 +14,25 @@ import {
   Eye,
   MousePointer,
   Zap
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAnalyticsData } from '@/lib/analytics/advanced-analytics';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAnalyticsData } from "@/lib/analytics/advanced-analytics";
+import { cn } from "@/lib/utils";
 
 export function AnalyticsDashboard() {
   const { events, metrics, session } = useAnalyticsData();
 
   // Calculate stats
-  const pageViews = events.filter(e => e.name === 'page_view').length;
-  const interactions = events.filter(e => e.category === 'engagement').length;
-  const errors = events.filter(e => e.category === 'system' && e.name === 'error').length;
+  const pageViews = events.filter(e => e.name === "page_view").length;
+  const interactions = events.filter(e => e.category === "engagement").length;
+  const errors = events.filter(e => e.category === "system" && e.name === "error").length;
   const sessionDuration = Math.floor(session.duration / 1000 / 60);
 
   // Get performance metrics
-  const lcp = metrics.find(m => m.name === 'LCP')?.value;
-  const fcp = metrics.find(m => m.name === 'FCP')?.value;
-  const cls = metrics.find(m => m.name === 'CLS')?.value;
-  const fid = metrics.find(m => m.name === 'FID')?.value;
+  const lcp = metrics.find(m => m.name === "LCP")?.value;
+  const fcp = metrics.find(m => m.name === "FCP")?.value;
+  const cls = metrics.find(m => m.name === "CLS")?.value;
+  const fid = metrics.find(m => m.name === "FID")?.value;
 
   return (
     <div className="space-y-6">
@@ -126,9 +126,9 @@ export function AnalyticsDashboard() {
               >
                 <div className={cn(
                   "w-2 h-2 rounded-full",
-                  event.category === 'navigation' && "bg-primary",
-                  event.category === 'engagement' && "bg-accent",
-                  event.category === 'system' && "bg-muted-foreground"
+                  event.category === "navigation" && "bg-primary",
+                  event.category === "engagement" && "bg-accent",
+                  event.category === "system" && "bg-muted-foreground"
                 )} />
                 <span className="font-medium text-foreground">{event.name}</span>
                 <span className="text-muted-foreground">{event.category}</span>
@@ -177,19 +177,19 @@ interface VitalCardProps {
 
 function VitalCard({ name, value, unit, description, thresholds }: VitalCardProps) {
   const getStatus = () => {
-    if (value === undefined) return 'unknown';
-    if (value <= thresholds.good) return 'good';
-    if (value <= thresholds.poor) return 'needs-improvement';
-    return 'poor';
+    if (value === undefined) return "unknown";
+    if (value <= thresholds.good) return "good";
+    if (value <= thresholds.poor) return "needs-improvement";
+    return "poor";
   };
 
   const status = getStatus();
 
   const statusColors = {
-    good: 'bg-success/10 text-success border-success/20',
-    'needs-improvement': 'bg-warning/10 text-warning border-warning/20',
-    poor: 'bg-destructive/10 text-destructive border-destructive/20',
-    unknown: 'bg-muted text-muted-foreground border-border',
+    good: "bg-success/10 text-success border-success/20",
+    "needs-improvement": "bg-warning/10 text-warning border-warning/20",
+    poor: "bg-destructive/10 text-destructive border-destructive/20",
+    unknown: "bg-muted text-muted-foreground border-border",
   };
 
   return (
@@ -199,12 +199,12 @@ function VitalCard({ name, value, unit, description, thresholds }: VitalCardProp
     )}>
       <div className="flex items-center justify-between mb-1">
         <span className="font-semibold text-sm">{name}</span>
-        {status !== 'unknown' && (
-          <span className="text-xs capitalize">{status.replace('-', ' ')}</span>
+        {status !== "unknown" && (
+          <span className="text-xs capitalize">{status.replace("-", " ")}</span>
         )}
       </div>
       <p className="text-lg font-bold">
-        {value !== undefined ? `${Math.round(value)}${unit}` : '—'}
+        {value !== undefined ? `${Math.round(value)}${unit}` : "—"}
       </p>
       <p className="text-xs opacity-70 mt-1">{description}</p>
     </div>

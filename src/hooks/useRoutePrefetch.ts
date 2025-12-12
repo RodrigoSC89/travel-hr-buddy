@@ -3,9 +3,9 @@
  * Intelligent route prefetching based on user behavior and network
  */
 
-import { useEffect, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { usePerformanceOptional } from '@/contexts/PerformanceContext';
+import { useEffect, useCallback, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { usePerformanceOptional } from "@/contexts/PerformanceContext";
 
 interface PrefetchConfig {
   // Routes to prefetch when this route is visited
@@ -14,16 +14,16 @@ interface PrefetchConfig {
 
 // Define which routes to prefetch based on current route
 const PREFETCH_CONFIG: PrefetchConfig = {
-  '/': ['/dashboard', '/settings'],
-  '/dashboard': ['/analytics', '/reports', '/missions'],
-  '/missions': ['/missions/new', '/crew'],
-  '/crew': ['/crew/new', '/hr'],
-  '/hr': ['/hr/crew', '/hr/documents'],
-  '/settings': ['/settings/profile', '/settings/security'],
+  "/": ["/dashboard", "/settings"],
+  "/dashboard": ["/analytics", "/reports", "/missions"],
+  "/missions": ["/missions/new", "/crew"],
+  "/crew": ["/crew/new", "/hr"],
+  "/hr": ["/hr/crew", "/hr/documents"],
+  "/settings": ["/settings/profile", "/settings/security"],
 };
 
 // Routes that are commonly visited - always prefetch these after initial load
-const COMMON_ROUTES = ['/dashboard', '/settings', '/notifications-center'];
+const COMMON_ROUTES = ["/dashboard", "/settings", "/notifications-center"];
 
 export const useRoutePrefetch = () => {
   const location = useLocation();
@@ -39,8 +39,8 @@ export const useRoutePrefetch = () => {
     if (performance?.isSlowConnection || performance?.isOffline) return;
     
     // Create prefetch link
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement("link");
+    link.rel = "prefetch";
     link.href = route;
     document.head.appendChild(link);
     

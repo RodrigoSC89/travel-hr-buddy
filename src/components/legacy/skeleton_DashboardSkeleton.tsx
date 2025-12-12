@@ -102,7 +102,7 @@ export const DashboardSkeleton: React.FC = () => {
   const isLightMode = useLightMode();
   
   // For slow connections, show minimal skeleton
-  if (isSlow || quality === 'offline') {
+  if (isSlow || quality === "offline") {
     return (
       <div className="space-y-6 p-6">
         <div className="flex justify-between items-center">

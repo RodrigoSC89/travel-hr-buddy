@@ -3,9 +3,9 @@
  * Connection-aware image loading with lazy loading and placeholders
  */
 
-import { useState, useRef, useEffect, memo } from 'react';
-import { useConnectionAware } from '@/hooks/use-connection-aware';
-import { cn } from '@/lib/utils';
+import { useState, useRef, useEffect, memo } from "react";
+import { useConnectionAware } from "@/hooks/use-connection-aware";
+import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
   src: string;
@@ -14,7 +14,7 @@ interface OptimizedImageProps {
   width?: number;
   height?: number;
   priority?: boolean;
-  placeholder?: 'blur' | 'skeleton' | 'none';
+  placeholder?: "blur" | "skeleton" | "none";
   onLoad?: () => void;
   onError?: () => void;
 }
@@ -37,7 +37,7 @@ export const OptimizedImage = memo(function OptimizedImage({
   width = 300,
   height = 200,
   priority = false,
-  placeholder = 'skeleton',
+  placeholder = "skeleton",
   onLoad,
   onError
 }: OptimizedImageProps) {
@@ -59,7 +59,7 @@ export const OptimizedImage = memo(function OptimizedImage({
         }
       },
       {
-        rootMargin: isSlowConnection ? '50px' : '200px', // Smaller margin for slow connections
+        rootMargin: isSlowConnection ? "50px" : "200px", // Smaller margin for slow connections
         threshold: 0.01
       }
     );
@@ -75,9 +75,9 @@ export const OptimizedImage = memo(function OptimizedImage({
     if (!isInView) return generatePlaceholder(width, height);
     
     // If it's a Supabase storage URL, add transformations
-    if (src.includes('supabase.co/storage')) {
+    if (src.includes("supabase.co/storage")) {
       const qualityMap = { low: 50, medium: 70, high: 85 };
-      const separator = src.includes('?') ? '&' : '?';
+      const separator = src.includes("?") ? "&" : "?";
       return `${src}${separator}quality=${qualityMap[imageQuality]}&width=${width}`;
     }
     
@@ -97,24 +97,24 @@ export const OptimizedImage = memo(function OptimizedImage({
   return (
     <div 
       className={cn(
-        'relative overflow-hidden bg-muted',
+        "relative overflow-hidden bg-muted",
         className
       )}
       style={{ width, height }}
     >
       {/* Skeleton placeholder */}
-      {placeholder === 'skeleton' && !isLoaded && (
+      {placeholder === "skeleton" && !isLoaded && (
         <div 
           className="absolute inset-0 animate-pulse bg-gradient-to-r from-muted via-muted-foreground/10 to-muted"
           style={{
-            backgroundSize: '200% 100%',
-            animation: 'shimmer 1.5s infinite'
+            backgroundSize: "200% 100%",
+            animation: "shimmer 1.5s infinite"
           }}
         />
       )}
 
       {/* Blur placeholder */}
-      {placeholder === 'blur' && !isLoaded && (
+      {placeholder === "blur" && !isLoaded && (
         <div 
           className="absolute inset-0 bg-muted backdrop-blur-xl"
         />
@@ -127,13 +127,13 @@ export const OptimizedImage = memo(function OptimizedImage({
         alt={alt}
         width={width}
         height={height}
-        loading={priority ? 'eager' : 'lazy'}
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}
         className={cn(
-          'w-full h-full object-cover transition-opacity duration-300',
-          isLoaded ? 'opacity-100' : 'opacity-0'
+          "w-full h-full object-cover transition-opacity duration-300",
+          isLoaded ? "opacity-100" : "opacity-0"
         )}
       />
 

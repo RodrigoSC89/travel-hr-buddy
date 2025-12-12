@@ -132,9 +132,9 @@ export const DPReplaySystem: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "text-red-500 bg-red-500/10";
-      case "warning": return "text-yellow-500 bg-yellow-500/10";
-      default: return "text-blue-500 bg-blue-500/10";
+    case "critical": return "text-red-500 bg-red-500/10";
+    case "warning": return "text-yellow-500 bg-yellow-500/10";
+    default: return "text-blue-500 bg-blue-500/10";
     }
   };
 

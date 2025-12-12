@@ -202,32 +202,32 @@ export default function SmartLogistics() {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "fuel": return <Fuel className="h-5 w-5" />;
-      case "water": return <Droplets className="h-5 w-5" />;
-      case "food": return <Utensils className="h-5 w-5" />;
-      case "parts": return <Wrench className="h-5 w-5" />;
-      case "medical": return <Pill className="h-5 w-5" />;
-      default: return <Package className="h-5 w-5" />;
+    case "fuel": return <Fuel className="h-5 w-5" />;
+    case "water": return <Droplets className="h-5 w-5" />;
+    case "food": return <Utensils className="h-5 w-5" />;
+    case "parts": return <Wrench className="h-5 w-5" />;
+    case "medical": return <Pill className="h-5 w-5" />;
+    default: return <Package className="h-5 w-5" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "ok": return "bg-green-500/20 text-green-400";
-      case "low": return "bg-yellow-500/20 text-yellow-400";
-      case "critical": return "bg-red-500/20 text-red-400";
-      case "ordered": return "bg-blue-500/20 text-blue-400";
-      default: return "bg-muted text-muted-foreground";
+    case "ok": return "bg-green-500/20 text-green-400";
+    case "low": return "bg-yellow-500/20 text-yellow-400";
+    case "critical": return "bg-red-500/20 text-red-400";
+    case "ordered": return "bg-blue-500/20 text-blue-400";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getRecommendationIcon = (type: string) => {
     switch (type) {
-      case "reorder": return <ShoppingCart className="h-5 w-5 text-blue-400" />;
-      case "optimization": return <TrendingUp className="h-5 w-5 text-green-400" />;
-      case "alert": return <AlertTriangle className="h-5 w-5 text-red-400" />;
-      case "savings": return <Sparkles className="h-5 w-5 text-yellow-400" />;
-      default: return <Brain className="h-5 w-5 text-primary" />;
+    case "reorder": return <ShoppingCart className="h-5 w-5 text-blue-400" />;
+    case "optimization": return <TrendingUp className="h-5 w-5 text-green-400" />;
+    case "alert": return <AlertTriangle className="h-5 w-5 text-red-400" />;
+    case "savings": return <Sparkles className="h-5 w-5 text-yellow-400" />;
+    default: return <Brain className="h-5 w-5 text-primary" />;
     }
   };
 
@@ -247,7 +247,7 @@ export default function SmartLogistics() {
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" onClick={runAIAnalysis} disabled={isAnalyzing}>
-            <Brain className={`h-4 w-4 mr-2 ${isAnalyzing ? 'animate-pulse' : ''}`} />
+            <Brain className={`h-4 w-4 mr-2 ${isAnalyzing ? "animate-pulse" : ""}`} />
             {isAnalyzing ? "Analisando..." : "Análise IA"}
           </Button>
           <Button>
@@ -329,16 +329,16 @@ export default function SmartLogistics() {
                       key={item.id} 
                       className={`p-4 rounded-lg border ${
                         item.status === "critical" ? "border-red-500/50 bg-red-500/5" :
-                        item.status === "low" ? "border-yellow-500/50 bg-yellow-500/5" :
-                        "border-border bg-muted/30"
+                          item.status === "low" ? "border-yellow-500/50 bg-yellow-500/5" :
+                            "border-border bg-muted/30"
                       }`}
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-lg ${
                             item.status === "critical" ? "bg-red-500/10" :
-                            item.status === "low" ? "bg-yellow-500/10" :
-                            "bg-primary/10"
+                              item.status === "low" ? "bg-yellow-500/10" :
+                                "bg-primary/10"
                           }`}>
                             {getCategoryIcon(item.category)}
                           </div>
@@ -351,17 +351,17 @@ export default function SmartLogistics() {
                         </div>
                         <Badge className={getStatusColor(item.status)}>
                           {item.status === "ok" ? "OK" :
-                           item.status === "low" ? "Baixo" :
-                           item.status === "critical" ? "Crítico" : "Pedido"}
+                            item.status === "low" ? "Baixo" :
+                              item.status === "critical" ? "Crítico" : "Pedido"}
                         </Badge>
                       </div>
 
                       <Progress 
                         value={stockPercentage(item)} 
                         className={`h-2 ${
-                          stockPercentage(item) < 20 ? '[&>div]:bg-red-500' :
-                          stockPercentage(item) < 40 ? '[&>div]:bg-yellow-500' :
-                          '[&>div]:bg-green-500'
+                          stockPercentage(item) < 20 ? "[&>div]:bg-red-500" :
+                            stockPercentage(item) < 40 ? "[&>div]:bg-yellow-500" :
+                              "[&>div]:bg-green-500"
                         }`}
                       />
 

@@ -3,14 +3,14 @@
  * Interactive, context-aware onboarding for new users
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface OnboardingStep {
   id: string;
   target: string; // CSS selector
   title: string;
   description: string;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
   highlight?: boolean;
   action?: {
     label: string;
@@ -38,93 +38,93 @@ interface OnboardingState {
 // Default onboarding flows
 const DEFAULT_FLOWS: OnboardingFlow[] = [
   {
-    id: 'welcome',
-    name: 'Bem-vindo ao Nautilus',
+    id: "welcome",
+    name: "Bem-vindo ao Nautilus",
     priority: 100,
     steps: [
       {
-        id: 'welcome-1',
-        target: '[data-onboarding="sidebar"]',
-        title: 'Menu de Navegação',
-        description: 'Acesse todos os módulos do sistema através do menu lateral.',
-        position: 'right',
+        id: "welcome-1",
+        target: "[data-onboarding=\"sidebar\"]",
+        title: "Menu de Navegação",
+        description: "Acesse todos os módulos do sistema através do menu lateral.",
+        position: "right",
         highlight: true,
       },
       {
-        id: 'welcome-2',
-        target: '[data-onboarding="search"]',
-        title: 'Busca Inteligente',
-        description: 'Use Ctrl+K para buscar qualquer coisa no sistema.',
-        position: 'bottom',
+        id: "welcome-2",
+        target: "[data-onboarding=\"search\"]",
+        title: "Busca Inteligente",
+        description: "Use Ctrl+K para buscar qualquer coisa no sistema.",
+        position: "bottom",
         highlight: true,
       },
       {
-        id: 'welcome-3',
-        target: '[data-onboarding="notifications"]',
-        title: 'Notificações',
-        description: 'Fique por dentro de todas as atualizações importantes.',
-        position: 'bottom',
+        id: "welcome-3",
+        target: "[data-onboarding=\"notifications\"]",
+        title: "Notificações",
+        description: "Fique por dentro de todas as atualizações importantes.",
+        position: "bottom",
         highlight: true,
       },
       {
-        id: 'welcome-4',
-        target: '[data-onboarding="profile"]',
-        title: 'Seu Perfil',
-        description: 'Acesse suas configurações e preferências.',
-        position: 'left',
+        id: "welcome-4",
+        target: "[data-onboarding=\"profile\"]",
+        title: "Seu Perfil",
+        description: "Acesse suas configurações e preferências.",
+        position: "left",
         highlight: true,
       },
     ],
   },
   {
-    id: 'travel-module',
-    name: 'Módulo de Viagens',
-    triggerRoute: '/travel',
+    id: "travel-module",
+    name: "Módulo de Viagens",
+    triggerRoute: "/travel",
     priority: 50,
     steps: [
       {
-        id: 'travel-1',
-        target: '[data-onboarding="travel-new"]',
-        title: 'Nova Solicitação',
-        description: 'Crie uma nova solicitação de viagem com apenas alguns cliques.',
-        position: 'bottom',
-        action: { label: 'Criar Agora' },
+        id: "travel-1",
+        target: "[data-onboarding=\"travel-new\"]",
+        title: "Nova Solicitação",
+        description: "Crie uma nova solicitação de viagem com apenas alguns cliques.",
+        position: "bottom",
+        action: { label: "Criar Agora" },
       },
       {
-        id: 'travel-2',
-        target: '[data-onboarding="travel-filters"]',
-        title: 'Filtros Avançados',
-        description: 'Filtre e encontre rapidamente as solicitações que precisa.',
-        position: 'bottom',
+        id: "travel-2",
+        target: "[data-onboarding=\"travel-filters\"]",
+        title: "Filtros Avançados",
+        description: "Filtre e encontre rapidamente as solicitações que precisa.",
+        position: "bottom",
       },
       {
-        id: 'travel-3',
-        target: '[data-onboarding="travel-bulk"]',
-        title: 'Ações em Massa',
-        description: 'Selecione múltiplas solicitações para aprovar ou rejeitar.',
-        position: 'left',
+        id: "travel-3",
+        target: "[data-onboarding=\"travel-bulk\"]",
+        title: "Ações em Massa",
+        description: "Selecione múltiplas solicitações para aprovar ou rejeitar.",
+        position: "left",
       },
     ],
   },
   {
-    id: 'hr-module',
-    name: 'Módulo de RH',
-    triggerRoute: '/hr',
+    id: "hr-module",
+    name: "Módulo de RH",
+    triggerRoute: "/hr",
     priority: 50,
     steps: [
       {
-        id: 'hr-1',
-        target: '[data-onboarding="hr-dashboard"]',
-        title: 'Dashboard de RH',
-        description: 'Visualize métricas importantes sobre sua equipe.',
-        position: 'bottom',
+        id: "hr-1",
+        target: "[data-onboarding=\"hr-dashboard\"]",
+        title: "Dashboard de RH",
+        description: "Visualize métricas importantes sobre sua equipe.",
+        position: "bottom",
       },
       {
-        id: 'hr-2',
-        target: '[data-onboarding="hr-employees"]',
-        title: 'Gestão de Tripulantes',
-        description: 'Gerencie documentos, certificados e informações.',
-        position: 'right',
+        id: "hr-2",
+        target: "[data-onboarding=\"hr-employees\"]",
+        title: "Gestão de Tripulantes",
+        description: "Gerencie documentos, certificados e informações.",
+        position: "right",
       },
     ],
   },
@@ -134,7 +134,7 @@ class OnboardingEngine {
   private state: OnboardingState;
   private flows: OnboardingFlow[];
   private listeners = new Set<(state: OnboardingState) => void>();
-  private storageKey = 'nautilus_onboarding';
+  private storageKey = "nautilus_onboarding";
   
   constructor() {
     this.flows = DEFAULT_FLOWS;

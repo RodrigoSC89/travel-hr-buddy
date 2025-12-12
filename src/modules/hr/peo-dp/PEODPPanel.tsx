@@ -134,16 +134,16 @@ export default function PEODPPanel() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "Excellent":
-        return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Excelente</Badge>;
-      case "Good":
-        return <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">Bom</Badge>;
-      case "Acceptable":
-        return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Aceitável</Badge>;
-      case "Critical":
-        return <Badge className="bg-red-500/20 text-red-500 border-red-500/30">Crítico</Badge>;
-      default:
-        return <Badge variant="secondary">N/A</Badge>;
+    case "Excellent":
+      return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Excelente</Badge>;
+    case "Good":
+      return <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">Bom</Badge>;
+    case "Acceptable":
+      return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Aceitável</Badge>;
+    case "Critical":
+      return <Badge className="bg-red-500/20 text-red-500 border-red-500/30">Crítico</Badge>;
+    default:
+      return <Badge variant="secondary">N/A</Badge>;
     }
   };
 
@@ -350,8 +350,8 @@ export default function PEODPPanel() {
                         <Badge
                           variant={
                             item.cumprimento === "OK" ? "default" :
-                            item.cumprimento === "Não Conforme" ? "destructive" :
-                            item.cumprimento === "Pendente" ? "secondary" : "outline"
+                              item.cumprimento === "Não Conforme" ? "destructive" :
+                                item.cumprimento === "Pendente" ? "secondary" : "outline"
                           }
                         >
                           {item.cumprimento}

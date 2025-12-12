@@ -165,22 +165,22 @@ export const FleetOperationsCenter: React.FC = () => {
 
   const getAsogStatusColor = (status: string) => {
     switch (status) {
-      case "green": return "bg-green-500";
-      case "yellow": return "bg-yellow-500";
-      case "red": return "bg-red-500";
-      default: return "bg-gray-500";
+    case "green": return "bg-green-500";
+    case "yellow": return "bg-yellow-500";
+    case "red": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getDPModeBadge = (mode: string) => {
     switch (mode) {
-      case "Auto DP": return <Badge className="bg-green-500">Auto DP</Badge>;
-      case "TAM": return <Badge className="bg-blue-500">TAM</Badge>;
-      case "CAM": return <Badge className="bg-purple-500">CAM</Badge>;
-      case "Joystick": return <Badge className="bg-yellow-500 text-black">Joystick</Badge>;
-      case "Manual": return <Badge variant="destructive">Manual</Badge>;
-      case "Standby": return <Badge variant="secondary">Standby</Badge>;
-      default: return <Badge variant="outline">{mode}</Badge>;
+    case "Auto DP": return <Badge className="bg-green-500">Auto DP</Badge>;
+    case "TAM": return <Badge className="bg-blue-500">TAM</Badge>;
+    case "CAM": return <Badge className="bg-purple-500">CAM</Badge>;
+    case "Joystick": return <Badge className="bg-yellow-500 text-black">Joystick</Badge>;
+    case "Manual": return <Badge variant="destructive">Manual</Badge>;
+    case "Standby": return <Badge variant="secondary">Standby</Badge>;
+    default: return <Badge variant="outline">{mode}</Badge>;
     }
   };
 
@@ -371,19 +371,19 @@ export const FleetOperationsCenter: React.FC = () => {
                         alert.type === "critical" && !alert.acknowledged 
                           ? "border-red-500/50 bg-red-500/5" 
                           : alert.type === "warning" && !alert.acknowledged 
-                          ? "border-yellow-500/50 bg-yellow-500/5" 
-                          : "border-border bg-card"
+                            ? "border-yellow-500/50 bg-yellow-500/5" 
+                            : "border-border bg-card"
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-lg ${
                             alert.type === "critical" ? "bg-red-500/10" : 
-                            alert.type === "warning" ? "bg-yellow-500/10" : "bg-blue-500/10"
+                              alert.type === "warning" ? "bg-yellow-500/10" : "bg-blue-500/10"
                           }`}>
                             <AlertTriangle className={`h-5 w-5 ${
                               alert.type === "critical" ? "text-red-500" : 
-                              alert.type === "warning" ? "text-yellow-500" : "text-blue-500"
+                                alert.type === "warning" ? "text-yellow-500" : "text-blue-500"
                             }`} />
                           </div>
                           <div>

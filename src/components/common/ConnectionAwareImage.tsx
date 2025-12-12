@@ -3,9 +3,9 @@
  * Optimizes image loading based on network conditions
  */
 
-import React, { useState, useEffect, memo } from 'react';
-import { useNetworkStatus } from '@/hooks/use-network-status';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect, memo } from "react";
+import { useNetworkStatus } from "@/hooks/use-network-status";
+import { cn } from "@/lib/utils";
 
 interface ConnectionAwareImageProps {
   src: string;
@@ -26,7 +26,7 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
   height,
   priority = false,
   placeholder,
-  fallback = '/placeholder.svg'
+  fallback = "/placeholder.svg"
 }: ConnectionAwareImageProps) {
   const { quality, online } = useNetworkStatus();
   const [loaded, setLoaded] = useState(false);
@@ -35,13 +35,13 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
 
   // Defer non-priority images on slow connections
   useEffect(() => {
-    if (priority || quality === 'fast') {
+    if (priority || quality === "fast") {
       setShouldLoad(true);
       return;
     }
 
     // Delay loading on slow connections
-    const delay = quality === 'slow' ? 1000 : 300;
+    const delay = quality === "slow" ? 1000 : 300;
     const timer = setTimeout(() => setShouldLoad(true), delay);
     return () => clearTimeout(timer);
   }, [priority, quality]);
@@ -62,7 +62,7 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
   }
 
   // Skip non-critical images on very slow connections
-  if (quality === 'slow' && !priority && !loaded) {
+  if (quality === "slow" && !priority && !loaded) {
     return placeholder || (
       <div 
         className={cn("bg-muted/50 rounded", className)}
@@ -85,7 +85,7 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
           alt={alt}
           width={width}
           height={height}
-          loading={priority ? 'eager' : 'lazy'}
+          loading={priority ? "eager" : "lazy"}
           decoding="async"
           onLoad={() => setLoaded(true)}
           onError={() => setError(true)}

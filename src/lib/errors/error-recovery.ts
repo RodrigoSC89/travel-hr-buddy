@@ -3,7 +3,7 @@
  * Sistema de recuperação automática de erros
  */
 
-import { ErrorLog } from './types';
+import { ErrorLog } from "./types";
 
 interface RecoveryStrategy {
   name: string;
@@ -79,22 +79,22 @@ export const errorRecoveryManager = new ErrorRecoveryManager();
 
 // Network error recovery
 errorRecoveryManager.registerStrategy({
-  name: 'network-recovery',
+  name: "network-recovery",
   canHandle: (error) => {
-    return error.message?.includes('network') || 
-           error.message?.includes('fetch') ||
-           error.name === 'NetworkError';
+    return error.message?.includes("network") || 
+           error.message?.includes("fetch") ||
+           error.name === "NetworkError";
   },
   recover: async () => {
     // Wait and check connection
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Optionally ping a health endpoint
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
-        await fetch('/health', { method: 'HEAD' });
+        await fetch("/health", { method: "HEAD" });
       } catch {
-        throw new Error('Network still unavailable');
+        throw new Error("Network still unavailable");
       }
     }
   },
@@ -102,17 +102,17 @@ errorRecoveryManager.registerStrategy({
 
 // Auth error recovery
 errorRecoveryManager.registerStrategy({
-  name: 'auth-recovery',
+  name: "auth-recovery",
   canHandle: (error) => {
-    return error.message?.includes('auth') ||
-           error.message?.includes('unauthorized') ||
-           error.name === 'AuthenticationError';
+    return error.message?.includes("auth") ||
+           error.message?.includes("unauthorized") ||
+           error.name === "AuthenticationError";
   },
   recover: async () => {
     // Try to refresh auth token
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Trigger auth refresh (implementation depends on your auth system)
-      const event = new CustomEvent('auth:refresh');
+      const event = new CustomEvent("auth:refresh");
       window.dispatchEvent(event);
       
       // Wait for refresh
@@ -123,13 +123,13 @@ errorRecoveryManager.registerStrategy({
 
 // Cache recovery
 errorRecoveryManager.registerStrategy({
-  name: 'cache-recovery',
+  name: "cache-recovery",
   canHandle: (error) => {
-    return error.message?.includes('cache');
+    return error.message?.includes("cache");
   },
   recover: async () => {
     // Clear problematic cache
-    if (typeof window !== 'undefined' && 'caches' in window) {
+    if (typeof window !== "undefined" && "caches" in window) {
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames.map(name => caches.delete(name))
@@ -142,21 +142,21 @@ errorRecoveryManager.registerStrategy({
  * Utility: Reset application state
  */
 export async function resetApplicationState(): Promise<void> {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   try {
     // Clear local storage (except auth)
-    const authData = localStorage.getItem('auth');
+    const authData = localStorage.getItem("auth");
     localStorage.clear();
     if (authData) {
-      localStorage.setItem('auth', authData);
+      localStorage.setItem("auth", authData);
     }
 
     // Clear session storage
     sessionStorage.clear();
 
     // Clear caches
-    if ('caches' in window) {
+    if ("caches" in window) {
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames.map(name => caches.delete(name))
@@ -164,10 +164,10 @@ export async function resetApplicationState(): Promise<void> {
     }
 
     // Clear React Query cache
-    const event = new CustomEvent('reactquery:clear');
+    const event = new CustomEvent("reactquery:clear");
     window.dispatchEvent(event);
   } catch (error) {
-    console.error('Failed to reset application state:', error);
+    console.error("Failed to reset application state:", error);
   }
 }
 
@@ -175,7 +175,7 @@ export async function resetApplicationState(): Promise<void> {
  * Utility: Reload page safely
  */
 export function reloadPageSafely(delay: number = 1000): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   setTimeout(() => {
     window.location.reload();
@@ -185,8 +185,8 @@ export function reloadPageSafely(delay: number = 1000): void {
 /**
  * Utility: Navigate to safe route
  */
-export function navigateToSafeRoute(route: string = '/'): void {
-  if (typeof window === 'undefined') return;
+export function navigateToSafeRoute(route: string = "/"): void {
+  if (typeof window === "undefined") return;
 
   window.location.href = route;
 }

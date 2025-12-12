@@ -8,7 +8,7 @@ export interface OPFSFile {
   path: string;
   size: number;
   type: string;
-  tier: 'hot' | 'warm' | 'cold';
+  tier: "hot" | "warm" | "cold";
   lastAccessed: number;
   accessCount: number;
   priority: number;
@@ -52,7 +52,7 @@ const DEFAULT_CONFIG: OPFSConfig = {
 };
 
 // File index stored in localStorage
-const INDEX_KEY = 'opfs_file_index';
+const INDEX_KEY = "opfs_file_index";
 
 class OPFSManager {
   private config: OPFSConfig;
@@ -73,7 +73,7 @@ class OPFSManager {
         this.fileIndex = new Map(Object.entries(parsed));
       }
     } catch (error) {
-      console.error('Failed to load OPFS index:', error);
+      console.error("Failed to load OPFS index:", error);
     }
   }
 
@@ -82,15 +82,15 @@ class OPFSManager {
       const obj = Object.fromEntries(this.fileIndex);
       localStorage.setItem(INDEX_KEY, JSON.stringify(obj));
     } catch (error) {
-      console.error('Failed to save OPFS index:', error);
+      console.error("Failed to save OPFS index:", error);
     }
   }
 
   async init(): Promise<boolean> {
     if (this.initialized) return true;
 
-    if (!('storage' in navigator) || !('getDirectory' in navigator.storage)) {
-      console.warn('OPFS not supported in this browser');
+    if (!("storage" in navigator) || !("getDirectory" in navigator.storage)) {
+      console.warn("OPFS not supported in this browser");
       return false;
     }
 
@@ -98,14 +98,14 @@ class OPFSManager {
       this.rootHandle = await navigator.storage.getDirectory();
 
       // Create tier directories
-      for (const tier of ['hot', 'warm', 'cold']) {
+      for (const tier of ["hot", "warm", "cold"]) {
         await this.rootHandle.getDirectoryHandle(tier, { create: true });
       }
 
       this.initialized = true;
       return true;
     } catch (error) {
-      console.error('Failed to initialize OPFS:', error);
+      console.error("Failed to initialize OPFS:", error);
       return false;
     }
   }
@@ -113,21 +113,21 @@ class OPFSManager {
   /**
    * Determine appropriate tier based on file characteristics
    */
-  determineTier(file: { size: number; type: string; priority?: number }): 'hot' | 'warm' | 'cold' {
+  determineTier(file: { size: number; type: string; priority?: number }): "hot" | "warm" | "cold" {
     const priority = file.priority ?? 1;
     
     // High priority or small files go to hot
     if (priority >= 3 || file.size < 1024 * 1024) {
-      return 'hot';
+      return "hot";
     }
     
     // Medium priority or medium files go to warm
     if (priority >= 2 || file.size < 10 * 1024 * 1024) {
-      return 'warm';
+      return "warm";
     }
     
     // Everything else goes to cold
-    return 'cold';
+    return "cold";
   }
 
   /**
@@ -138,7 +138,7 @@ class OPFSManager {
     data: ArrayBuffer | Blob | string,
     options: {
       type?: string;
-      tier?: 'hot' | 'warm' | 'cold';
+      tier?: "hot" | "warm" | "cold";
       priority?: number;
       metadata?: Record<string, unknown>;
     } = {}
@@ -153,7 +153,7 @@ class OPFSManager {
       let buffer: ArrayBuffer;
       if (data instanceof Blob) {
         buffer = await data.arrayBuffer();
-      } else if (typeof data === 'string') {
+      } else if (typeof data === "string") {
         buffer = new TextEncoder().encode(data).buffer;
       } else {
         buffer = data;
@@ -162,7 +162,7 @@ class OPFSManager {
       // Determine tier
       const tier = options.tier ?? this.determineTier({
         size: buffer.byteLength,
-        type: options.type ?? 'application/octet-stream',
+        type: options.type ?? "application/octet-stream",
         priority: options.priority,
       });
 
@@ -190,7 +190,7 @@ class OPFSManager {
         name: fileName,
         path,
         size: buffer.byteLength,
-        type: options.type ?? 'application/octet-stream',
+        type: options.type ?? "application/octet-stream",
         tier,
         lastAccessed: Date.now(),
         accessCount: 0,
@@ -203,7 +203,7 @@ class OPFSManager {
 
       return fileInfo;
     } catch (error) {
-      console.error('Failed to store file in OPFS:', error);
+      console.error("Failed to store file in OPFS:", error);
       return null;
     }
   }
@@ -236,7 +236,7 @@ class OPFSManager {
 
       return await file.arrayBuffer();
     } catch (error) {
-      console.error('Failed to retrieve file from OPFS:', error);
+      console.error("Failed to retrieve file from OPFS:", error);
       return null;
     }
   }
@@ -262,7 +262,7 @@ class OPFSManager {
       
       return true;
     } catch (error) {
-      console.error('Failed to delete file from OPFS:', error);
+      console.error("Failed to delete file from OPFS:", error);
       return false;
     }
   }
@@ -270,7 +270,7 @@ class OPFSManager {
   /**
    * Get total usage for a tier
    */
-  async getTierUsage(tier: 'hot' | 'warm' | 'cold'): Promise<number> {
+  async getTierUsage(tier: "hot" | "warm" | "cold"): Promise<number> {
     let total = 0;
     for (const file of this.fileIndex.values()) {
       if (file.tier === tier) {
@@ -294,7 +294,7 @@ class OPFSManager {
   /**
    * Evict old files from a tier to free space
    */
-  private async evictOldFiles(tier: 'hot' | 'warm' | 'cold', neededBytes: number): Promise<void> {
+  private async evictOldFiles(tier: "hot" | "warm" | "cold", neededBytes: number): Promise<void> {
     const tierFiles = Array.from(this.fileIndex.values())
       .filter(f => f.tier === tier)
       .sort((a, b) => a.lastAccessed - b.lastAccessed);
@@ -314,11 +314,11 @@ class OPFSManager {
    * Promote file to hotter tier if frequently accessed
    */
   private async maybePromoteTier(file: OPFSFile): Promise<void> {
-    if (file.tier === 'hot') return;
+    if (file.tier === "hot") return;
     
     // Promote if accessed more than 5 times recently
     if (file.accessCount > 5) {
-      const newTier = file.tier === 'cold' ? 'warm' : 'hot';
+      const newTier = file.tier === "cold" ? "warm" : "hot";
       await this.moveTier(file, newTier);
     }
   }
@@ -327,7 +327,7 @@ class OPFSManager {
    * Demote file to colder tier
    */
   private async demoteTier(file: OPFSFile): Promise<boolean> {
-    if (file.tier === 'cold') {
+    if (file.tier === "cold") {
       // Already coldest, delete if too old
       const age = Date.now() - file.lastAccessed;
       if (age > this.config.tiers.cold.maxAge) {
@@ -336,14 +336,14 @@ class OPFSManager {
       return false;
     }
 
-    const newTier = file.tier === 'hot' ? 'warm' : 'cold';
+    const newTier = file.tier === "hot" ? "warm" : "cold";
     return await this.moveTier(file, newTier);
   }
 
   /**
    * Move file between tiers
    */
-  private async moveTier(file: OPFSFile, newTier: 'hot' | 'warm' | 'cold'): Promise<boolean> {
+  private async moveTier(file: OPFSFile, newTier: "hot" | "warm" | "cold"): Promise<boolean> {
     try {
       const data = await this.getFile(file.path);
       if (!data) return false;
@@ -359,7 +359,7 @@ class OPFSManager {
 
       return result !== null;
     } catch (error) {
-      console.error('Failed to move file between tiers:', error);
+      console.error("Failed to move file between tiers:", error);
       return false;
     }
   }
@@ -367,7 +367,7 @@ class OPFSManager {
   /**
    * List all files in a tier
    */
-  listFiles(tier?: 'hot' | 'warm' | 'cold'): OPFSFile[] {
+  listFiles(tier?: "hot" | "warm" | "cold"): OPFSFile[] {
     const files = Array.from(this.fileIndex.values());
     if (tier) {
       return files.filter(f => f.tier === tier);
@@ -381,7 +381,7 @@ class OPFSManager {
   async getStats(): Promise<{
     totalUsed: number;
     quota: number;
-    tiers: Record<'hot' | 'warm' | 'cold', { used: number; max: number; count: number }>;
+    tiers: Record<"hot" | "warm" | "cold", { used: number; max: number; count: number }>;
     fileCount: number;
   }> {
     const totalUsed = await this.getTotalUsage();
@@ -409,14 +409,14 @@ class OPFSManager {
    * Sanitize file name for OPFS
    */
   private sanitizeFileName(path: string): string {
-    return path.replace(/[^a-zA-Z0-9.-]/g, '_');
+    return path.replace(/[^a-zA-Z0-9.-]/g, "_");
   }
 
   /**
    * Check if OPFS is supported
    */
   static isSupported(): boolean {
-    return 'storage' in navigator && 'getDirectory' in navigator.storage;
+    return "storage" in navigator && "getDirectory" in navigator.storage;
   }
 }
 

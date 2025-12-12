@@ -169,9 +169,9 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
       const msgLower = userMsg.toLowerCase();
       const key = msgLower.includes("incêndio") || msgLower.includes("fogo") || msgLower.includes("fire") ? "incendio" 
         : msgLower.includes("abandon") ? "abandono"
-        : msgLower.includes("isps") || msgLower.includes("security") || msgLower.includes("segurança") ? "isps"
-        : msgLower.includes("venc") || msgLower.includes("certificado") || msgLower.includes("stcw") ? "vencimentos"
-        : "default";
+          : msgLower.includes("isps") || msgLower.includes("security") || msgLower.includes("segurança") ? "isps"
+            : msgLower.includes("venc") || msgLower.includes("certificado") || msgLower.includes("stcw") ? "vencimentos"
+              : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
       setIsLoading(false);
@@ -203,21 +203,21 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
 
   const getDrillIcon = (type: string) => {
     switch (type) {
-      case "fire": return <Flame className="h-5 w-5" />;
-      case "abandon": return <LifeBuoy className="h-5 w-5" />;
-      case "mob": return <Anchor className="h-5 w-5" />;
-      case "isps": return <ShieldAlert className="h-5 w-5" />;
-      default: return <Siren className="h-5 w-5" />;
+    case "fire": return <Flame className="h-5 w-5" />;
+    case "abandon": return <LifeBuoy className="h-5 w-5" />;
+    case "mob": return <Anchor className="h-5 w-5" />;
+    case "isps": return <ShieldAlert className="h-5 w-5" />;
+    default: return <Siren className="h-5 w-5" />;
     }
   };
 
   const getDrillColor = (type: string) => {
     switch (type) {
-      case "fire": return "bg-red-500/10 text-red-600";
-      case "abandon": return "bg-blue-500/10 text-blue-600";
-      case "mob": return "bg-cyan-500/10 text-cyan-600";
-      case "isps": return "bg-purple-500/10 text-purple-600";
-      default: return "bg-amber-500/10 text-amber-600";
+    case "fire": return "bg-red-500/10 text-red-600";
+    case "abandon": return "bg-blue-500/10 text-blue-600";
+    case "mob": return "bg-cyan-500/10 text-cyan-600";
+    case "isps": return "bg-purple-500/10 text-purple-600";
+    default: return "bg-amber-500/10 text-amber-600";
     }
   };
 
@@ -394,8 +394,8 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
                 {filteredDrills.map((drill) => (
                   <div key={drill.id} className={`p-4 rounded-lg border transition-all hover:shadow-md ${
                     drill.status === "overdue" ? "bg-red-500/10 border-red-500/30" :
-                    drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
-                    "bg-muted/30 border-border"
+                      drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
+                        "bg-muted/30 border-border"
                   }`}>
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-3">

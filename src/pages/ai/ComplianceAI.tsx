@@ -196,27 +196,27 @@ Formate a resposta em markdown estruturado.`,
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "compliant":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "warning":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case "non-compliant":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Clock className="h-5 w-5 text-blue-500" />;
+    case "compliant":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "non-compliant":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Clock className="h-5 w-5 text-blue-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant":
-        return <Badge className="bg-green-500/10 text-green-500 border-green-500/30">Conforme</Badge>;
-      case "warning":
-        return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/30">Atenção</Badge>;
-      case "non-compliant":
-        return <Badge className="bg-red-500/10 text-red-500 border-red-500/30">Não Conforme</Badge>;
-      default:
-        return <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/30">Pendente</Badge>;
+    case "compliant":
+      return <Badge className="bg-green-500/10 text-green-500 border-green-500/30">Conforme</Badge>;
+    case "warning":
+      return <Badge className="bg-yellow-500/10 text-yellow-500 border-yellow-500/30">Atenção</Badge>;
+    case "non-compliant":
+      return <Badge className="bg-red-500/10 text-red-500 border-red-500/30">Não Conforme</Badge>;
+    default:
+      return <Badge className="bg-blue-500/10 text-blue-500 border-blue-500/30">Pendente</Badge>;
     }
   };
 

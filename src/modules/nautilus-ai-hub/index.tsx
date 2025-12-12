@@ -152,7 +152,7 @@ const NautilusAIHub: React.FC = () => {
       });
 
       if (response?.response) {
-        setChatMessages(prev => [...prev, { role: "assistant", content: typeof response.response === 'string' ? response.response : JSON.stringify(response.response) }]);
+        setChatMessages(prev => [...prev, { role: "assistant", content: typeof response.response === "string" ? response.response : JSON.stringify(response.response) }]);
       } else {
         setChatMessages(prev => [...prev, { 
           role: "assistant", 
@@ -172,20 +172,20 @@ const NautilusAIHub: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "operational": return <Activity className="h-4 w-4" />;
-      case "predictive": return <TrendingUp className="h-4 w-4" />;
-      case "optimization": return <Zap className="h-4 w-4" />;
-      case "risk": return <AlertTriangle className="h-4 w-4" />;
-      default: return <Brain className="h-4 w-4" />;
+    case "operational": return <Activity className="h-4 w-4" />;
+    case "predictive": return <TrendingUp className="h-4 w-4" />;
+    case "optimization": return <Zap className="h-4 w-4" />;
+    case "risk": return <AlertTriangle className="h-4 w-4" />;
+    default: return <Brain className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "low": return "bg-green-500/20 text-green-400 border-green-500/30";
-      default: return "bg-muted text-muted-foreground";
+    case "high": return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "medium": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    case "low": return "bg-green-500/20 text-green-400 border-green-500/30";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 

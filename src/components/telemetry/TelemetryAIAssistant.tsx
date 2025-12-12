@@ -222,9 +222,9 @@ export function TelemetryAIAssistant({
               <Badge 
                 variant={
                   response.riskAssessment === "critical" ? "destructive" :
-                  response.riskAssessment === "high" ? "default" :
-                  response.riskAssessment === "medium" ? "secondary" :
-                  "outline"
+                    response.riskAssessment === "high" ? "default" :
+                      response.riskAssessment === "medium" ? "secondary" :
+                        "outline"
                 }
               >
                 Risco: {response.riskAssessment.toUpperCase()}

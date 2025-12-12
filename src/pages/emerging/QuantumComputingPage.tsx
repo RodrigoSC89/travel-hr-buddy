@@ -126,27 +126,27 @@ const QuantumComputingPage: React.FC = () => {
 
   const getStatusBadge = (status: QuantumExperiment["status"]) => {
     switch (status) {
-      case "running":
-        return <Badge className="bg-blue-500/20 text-blue-400"><Activity className="h-3 w-3 mr-1 animate-pulse" />Executando</Badge>;
-      case "completed":
-        return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
-      case "queued":
-        return <Badge className="bg-yellow-500/20 text-yellow-400"><Clock className="h-3 w-3 mr-1" />Na Fila</Badge>;
-      case "failed":
-        return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Falhou</Badge>;
+    case "running":
+      return <Badge className="bg-blue-500/20 text-blue-400"><Activity className="h-3 w-3 mr-1 animate-pulse" />Executando</Badge>;
+    case "completed":
+      return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>;
+    case "queued":
+      return <Badge className="bg-yellow-500/20 text-yellow-400"><Clock className="h-3 w-3 mr-1" />Na Fila</Badge>;
+    case "failed":
+      return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Falhou</Badge>;
     }
   };
 
   const getTypeBadge = (type: QuantumExperiment["type"]) => {
     switch (type) {
-      case "optimization":
-        return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Otimização</Badge>;
-      case "simulation":
-        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Simulação</Badge>;
-      case "cryptography":
-        return <Badge variant="outline" className="border-green-500/30 text-green-400">Criptografia</Badge>;
-      case "ml":
-        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Machine Learning</Badge>;
+    case "optimization":
+      return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Otimização</Badge>;
+    case "simulation":
+      return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Simulação</Badge>;
+    case "cryptography":
+      return <Badge variant="outline" className="border-green-500/30 text-green-400">Criptografia</Badge>;
+    case "ml":
+      return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Machine Learning</Badge>;
     }
   };
 
@@ -384,7 +384,7 @@ const QuantumComputingPage: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
+                  <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
                   <Line type="monotone" dataKey="classical" stroke="#6b7280" strokeWidth={2} name="Clássico" />
                   <Line type="monotone" dataKey="quantum" stroke="hsl(var(--primary))" strokeWidth={2} name="Quântico" />
                 </LineChart>

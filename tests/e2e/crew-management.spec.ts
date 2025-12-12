@@ -14,12 +14,12 @@ test.describe("Crew Management", () => {
 
   test("should display crew list", async ({ page }) => {
     // Wait for content to load
-    await expect(page.locator('[data-testid="crew-list"]').or(page.getByText(/tripulação|crew/i).first())).toBeVisible({ timeout: 10000 });
+    await expect(page.locator("[data-testid=\"crew-list\"]").or(page.getByText(/tripulação|crew/i).first())).toBeVisible({ timeout: 10000 });
   });
 
   test("should filter crew by status", async ({ page }) => {
     // Look for filter controls
-    const filterButton = page.locator('[data-testid="filter-button"]').or(page.getByRole("button", { name: /filtrar|filter/i }));
+    const filterButton = page.locator("[data-testid=\"filter-button\"]").or(page.getByRole("button", { name: /filtrar|filter/i }));
     
     if (await filterButton.isVisible()) {
       await filterButton.click();
@@ -34,7 +34,7 @@ test.describe("Crew Management", () => {
 
   test("should navigate to crew member details", async ({ page }) => {
     // Click on first crew member
-    const crewCard = page.locator('[data-testid="crew-card"]').first().or(
+    const crewCard = page.locator("[data-testid=\"crew-card\"]").first().or(
       page.locator(".crew-member-card").first()
     ).or(
       page.getByRole("link", { name: /ver detalhes|view details/i }).first()

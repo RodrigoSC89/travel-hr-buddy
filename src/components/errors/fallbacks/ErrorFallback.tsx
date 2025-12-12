@@ -3,11 +3,11 @@
  * Componente de fallback UI elegante para erros genéricos
  */
 
-import React from 'react';
-import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React from "react";
+import { AlertTriangle, RefreshCw, Home, Bug } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export interface ErrorFallbackProps {
   error: Error;
@@ -22,14 +22,14 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetError,
   showDetails = false,
-  title = 'Algo deu errado',
-  message = 'Desculpe, ocorreu um erro inesperado. Nossa equipe foi notificada e está trabalhando para resolver.',
+  title = "Algo deu errado",
+  message = "Desculpe, ocorreu um erro inesperado. Nossa equipe foi notificada e está trabalhando para resolver.",
   onReport,
 }) => {
   const [detailsOpen, setDetailsOpen] = React.useState(false);
 
   const handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   const handleRefresh = () => {
@@ -59,7 +59,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           {/* Error ID */}
           <Alert>
             <AlertDescription className="text-sm font-mono">
-              ID do Erro: {error.name || 'UnknownError'}-{Date.now()}
+              ID do Erro: {error.name || "UnknownError"}-{Date.now()}
             </AlertDescription>
           </Alert>
 
@@ -71,7 +71,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
                 className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2"
               >
                 <Bug className="w-4 h-4" />
-                {detailsOpen ? 'Ocultar detalhes' : 'Mostrar detalhes técnicos'}
+                {detailsOpen ? "Ocultar detalhes" : "Mostrar detalhes técnicos"}
               </button>
               
               {detailsOpen && (

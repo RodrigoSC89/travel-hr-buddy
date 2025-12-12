@@ -3,7 +3,7 @@
  * Stores actions when offline and syncs when back online
  */
 
-import { openDB, IDBPDatabase } from 'idb';
+import { openDB, IDBPDatabase } from "idb";
 
 interface QueuedAction {
   id: string;
@@ -16,8 +16,8 @@ interface QueuedAction {
   maxRetries: number;
 }
 
-const DB_NAME = 'offline-queue';
-const STORE_NAME = 'actions';
+const DB_NAME = "offline-queue";
+const STORE_NAME = "actions";
 const DB_VERSION = 1;
 
 class OfflineQueueManager {
@@ -35,20 +35,20 @@ class OfflineQueueManager {
     this.db = await openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {
         if (!db.objectStoreNames.contains(STORE_NAME)) {
-          const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-          store.createIndex('timestamp', 'timestamp');
+          const store = db.createObjectStore(STORE_NAME, { keyPath: "id" });
+          store.createIndex("timestamp", "timestamp");
         }
       }
     });
   }
 
   private setupNetworkListeners() {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOnline = true;
       this.syncQueue();
     });
 
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOnline = false;
     });
   }
@@ -99,7 +99,7 @@ class OfflineQueueManager {
    */
   async getPendingActions(): Promise<QueuedAction[]> {
     if (!this.db) await this.initDB();
-    return this.db!.getAllFromIndex(STORE_NAME, 'timestamp');
+    return this.db!.getAllFromIndex(STORE_NAME, "timestamp");
   }
 
   /**
@@ -122,7 +122,7 @@ class OfflineQueueManager {
           const response = await fetch(action.url, {
             method: action.method,
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
               ...action.headers
             },
             body: action.body
@@ -190,10 +190,10 @@ class OfflineQueueManager {
    * Register for background sync
    */
   async registerBackgroundSync(): Promise<boolean> {
-    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    if ("serviceWorker" in navigator && "SyncManager" in window) {
       try {
         const registration = await navigator.serviceWorker.ready;
-        await (registration as any).sync.register('sync-data');
+        await (registration as any).sync.register("sync-data");
         return true;
       } catch {
         return false;
@@ -217,7 +217,7 @@ export async function fetchWithOfflineSupport(
     return response;
   } catch (error) {
     // If offline and method allows queuing
-    if (!navigator.onLine && options.method && ['POST', 'PUT', 'PATCH', 'DELETE'].includes(options.method)) {
+    if (!navigator.onLine && options.method && ["POST", "PUT", "PATCH", "DELETE"].includes(options.method)) {
       await offlineQueue.enqueue(
         url,
         options.method,
@@ -228,7 +228,7 @@ export async function fetchWithOfflineSupport(
       // Return a fake successful response
       return new Response(JSON.stringify({ queued: true }), {
         status: 202,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" }
       });
     }
     throw error;

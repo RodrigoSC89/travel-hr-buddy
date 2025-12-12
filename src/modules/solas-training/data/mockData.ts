@@ -1,4 +1,4 @@
-import { Drill, CrewMember, Certification, TrainingAlert, DrillExecution } from '../types';
+import { Drill, CrewMember, Certification, TrainingAlert, DrillExecution } from "../types";
 
 export const mockDrills: Drill[] = [
   { 

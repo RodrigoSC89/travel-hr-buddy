@@ -2,12 +2,12 @@
  * AI Predictive Panel - Análises Preditivas e Insights de IA
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Brain, 
   TrendingUp, 
@@ -20,16 +20,16 @@ import {
   RefreshCw,
   ChevronRight,
   Activity
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface PredictiveInsight {
   id: string;
-  type: 'risk' | 'pattern' | 'recommendation' | 'prediction';
+  type: "risk" | "pattern" | "recommendation" | "prediction";
   title: string;
   description: string;
   confidence: number;
-  impact: 'low' | 'medium' | 'high' | 'critical';
+  impact: "low" | "medium" | "high" | "critical";
   action?: string;
   data?: Record<string, any>;
 }
@@ -45,42 +45,42 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
   onGenerateInsights,
   loading
 }) => {
-  const [selectedTab, setSelectedTab] = useState('insights');
+  const [selectedTab, setSelectedTab] = useState("insights");
   const [generating, setGenerating] = useState(false);
 
   const handleGenerate = async () => {
     setGenerating(true);
     try {
       await onGenerateInsights();
-      toast.success('Análise preditiva gerada com sucesso!');
+      toast.success("Análise preditiva gerada com sucesso!");
     } catch (error) {
-      toast.error('Erro ao gerar análise');
+      toast.error("Erro ao gerar análise");
     } finally {
       setGenerating(false);
     }
   };
 
-  const riskInsights = insights.filter(i => i.type === 'risk');
-  const patternInsights = insights.filter(i => i.type === 'pattern');
-  const recommendations = insights.filter(i => i.type === 'recommendation');
-  const predictions = insights.filter(i => i.type === 'prediction');
+  const riskInsights = insights.filter(i => i.type === "risk");
+  const patternInsights = insights.filter(i => i.type === "pattern");
+  const recommendations = insights.filter(i => i.type === "recommendation");
+  const predictions = insights.filter(i => i.type === "prediction");
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case 'critical': return 'text-red-400 bg-red-500/20 border-red-500/30';
-      case 'high': return 'text-orange-400 bg-orange-500/20 border-orange-500/30';
-      case 'medium': return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
-      default: return 'text-green-400 bg-green-500/20 border-green-500/30';
+    case "critical": return "text-red-400 bg-red-500/20 border-red-500/30";
+    case "high": return "text-orange-400 bg-orange-500/20 border-orange-500/30";
+    case "medium": return "text-yellow-400 bg-yellow-500/20 border-yellow-500/30";
+    default: return "text-green-400 bg-green-500/20 border-green-500/30";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'risk': return <AlertTriangle className="h-5 w-5" />;
-      case 'pattern': return <BarChart3 className="h-5 w-5" />;
-      case 'recommendation': return <Lightbulb className="h-5 w-5" />;
-      case 'prediction': return <Target className="h-5 w-5" />;
-      default: return <Brain className="h-5 w-5" />;
+    case "risk": return <AlertTriangle className="h-5 w-5" />;
+    case "pattern": return <BarChart3 className="h-5 w-5" />;
+    case "recommendation": return <Lightbulb className="h-5 w-5" />;
+    case "prediction": return <Target className="h-5 w-5" />;
+    default: return <Brain className="h-5 w-5" />;
     }
   };
 
@@ -89,7 +89,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
     riskScore: 72,
     incidentProbability: 15,
     complianceForecast: 94,
-    safetyTrend: 'improving'
+    safetyTrend: "improving"
   };
 
   return (
@@ -150,7 +150,7 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Tendência</p>
                 <p className="text-2xl font-bold capitalize">
-                  {predictiveMetrics.safetyTrend === 'improving' ? '↗ Melhoria' : '↘ Declínio'}
+                  {predictiveMetrics.safetyTrend === "improving" ? "↗ Melhoria" : "↘ Declínio"}
                 </p>
               </div>
             </div>
@@ -222,18 +222,18 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
                         <div>
                           <CardTitle className="text-base">{insight.title}</CardTitle>
                           <Badge variant="outline" className="mt-1 text-xs">
-                            {insight.type === 'risk' && 'Risco'}
-                            {insight.type === 'pattern' && 'Padrão'}
-                            {insight.type === 'recommendation' && 'Recomendação'}
-                            {insight.type === 'prediction' && 'Previsão'}
+                            {insight.type === "risk" && "Risco"}
+                            {insight.type === "pattern" && "Padrão"}
+                            {insight.type === "recommendation" && "Recomendação"}
+                            {insight.type === "prediction" && "Previsão"}
                           </Badge>
                         </div>
                       </div>
                       <Badge className={getImpactColor(insight.impact)}>
-                        {insight.impact === 'critical' && 'Crítico'}
-                        {insight.impact === 'high' && 'Alto'}
-                        {insight.impact === 'medium' && 'Médio'}
-                        {insight.impact === 'low' && 'Baixo'}
+                        {insight.impact === "critical" && "Crítico"}
+                        {insight.impact === "high" && "Alto"}
+                        {insight.impact === "medium" && "Médio"}
+                        {insight.impact === "low" && "Baixo"}
                       </Badge>
                     </div>
                   </CardHeader>

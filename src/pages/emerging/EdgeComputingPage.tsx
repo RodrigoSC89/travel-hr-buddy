@@ -78,12 +78,12 @@ const EdgeComputingPage: React.FC = () => {
 
   const getStatusBadge = (status: EdgeNode["status"]) => {
     switch (status) {
-      case "online":
-        return <Badge className="bg-green-500/20 text-green-400"><Signal className="h-3 w-3 mr-1" />Online</Badge>;
-      case "offline":
-        return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Offline</Badge>;
-      case "maintenance":
-        return <Badge className="bg-yellow-500/20 text-yellow-400"><Settings className="h-3 w-3 mr-1" />Manutenção</Badge>;
+    case "online":
+      return <Badge className="bg-green-500/20 text-green-400"><Signal className="h-3 w-3 mr-1" />Online</Badge>;
+    case "offline":
+      return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Offline</Badge>;
+    case "maintenance":
+      return <Badge className="bg-yellow-500/20 text-yellow-400"><Settings className="h-3 w-3 mr-1" />Manutenção</Badge>;
     }
   };
 
@@ -246,7 +246,7 @@ const EdgeComputingPage: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="time" stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
+                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
                     <Line type="monotone" dataKey="latency" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="Latência (ms)" />
                   </LineChart>
                 </ResponsiveContainer>
@@ -266,7 +266,7 @@ const EdgeComputingPage: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="time" stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
+                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
                     <Area type="monotone" dataKey="throughput" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} name="Throughput (ops/s)" />
                   </AreaChart>
                 </ResponsiveContainer>

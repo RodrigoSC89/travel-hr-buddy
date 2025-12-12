@@ -3,71 +3,71 @@
  * Visual indicator for network quality with detailed tooltip
  */
 
-import React, { memo } from 'react';
-import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh, Zap, Battery } from 'lucide-react';
-import { useNetworkQuality, NetworkQuality } from '@/lib/performance/network-quality-monitor';
-import { cn } from '@/lib/utils';
+import React, { memo } from "react";
+import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh, Zap, Battery } from "lucide-react";
+import { useNetworkQuality, NetworkQuality } from "@/lib/performance/network-quality-monitor";
+import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface NetworkStatusBadgeProps {
-  variant?: 'minimal' | 'compact' | 'detailed';
+  variant?: "minimal" | "compact" | "detailed";
   showSpeed?: boolean;
   className?: string;
 }
 
-const QUALITY_CONFIG: Record<NetworkQuality['type'], {
+const QUALITY_CONFIG: Record<NetworkQuality["type"], {
   icon: typeof Wifi;
   color: string;
   label: string;
   description: string;
 }> = {
-  '4g': {
+  "4g": {
     icon: SignalHigh,
-    color: 'text-green-500',
-    label: 'Excelente',
-    description: 'Conexão rápida - todas as funcionalidades disponíveis',
+    color: "text-green-500",
+    label: "Excelente",
+    description: "Conexão rápida - todas as funcionalidades disponíveis",
   },
-  '3g': {
+  "3g": {
     icon: SignalMedium,
-    color: 'text-blue-500',
-    label: 'Boa',
-    description: 'Conexão estável - algumas funcionalidades podem ser limitadas',
+    color: "text-blue-500",
+    label: "Boa",
+    description: "Conexão estável - algumas funcionalidades podem ser limitadas",
   },
-  '2g': {
+  "2g": {
     icon: SignalLow,
-    color: 'text-yellow-500',
-    label: 'Lenta',
-    description: 'Conexão lenta - modo otimizado ativado',
+    color: "text-yellow-500",
+    label: "Lenta",
+    description: "Conexão lenta - modo otimizado ativado",
   },
-  'slow-2g': {
+  "slow-2g": {
     icon: Signal,
-    color: 'text-orange-500',
-    label: 'Muito Lenta',
-    description: 'Conexão muito lenta - modo ultra-leve ativado',
+    color: "text-orange-500",
+    label: "Muito Lenta",
+    description: "Conexão muito lenta - modo ultra-leve ativado",
   },
-  'unknown': {
+  "unknown": {
     icon: Wifi,
-    color: 'text-muted-foreground',
-    label: 'Desconhecida',
-    description: 'Qualidade da conexão não detectada',
+    color: "text-muted-foreground",
+    label: "Desconhecida",
+    description: "Qualidade da conexão não detectada",
   },
-  'offline': {
+  "offline": {
     icon: WifiOff,
-    color: 'text-destructive',
-    label: 'Offline',
-    description: 'Sem conexão - usando dados em cache',
+    color: "text-destructive",
+    label: "Offline",
+    description: "Sem conexão - usando dados em cache",
   },
 };
 
 export const NetworkStatusBadge = memo(function NetworkStatusBadge({
-  variant = 'compact',
+  variant = "compact",
   showSpeed = true,
   className,
 }: NetworkStatusBadgeProps) {
@@ -76,13 +76,13 @@ export const NetworkStatusBadge = memo(function NetworkStatusBadge({
   const Icon = config.icon;
 
   // Minimal variant - just icon
-  if (variant === 'minimal') {
+  if (variant === "minimal") {
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className={cn('flex items-center', className)}>
-              <Icon className={cn('h-4 w-4', config.color)} />
+            <div className={cn("flex items-center", className)}>
+              <Icon className={cn("h-4 w-4", config.color)} />
             </div>
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -95,7 +95,7 @@ export const NetworkStatusBadge = memo(function NetworkStatusBadge({
   }
 
   // Compact variant - icon + label
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <TooltipProvider>
         <Tooltip>
@@ -103,13 +103,13 @@ export const NetworkStatusBadge = memo(function NetworkStatusBadge({
             <Badge 
               variant="outline" 
               className={cn(
-                'gap-1.5 border-border/50',
-                quality.isLowBandwidth && 'animate-pulse',
+                "gap-1.5 border-border/50",
+                quality.isLowBandwidth && "animate-pulse",
                 className
               )}
             >
-              <Icon className={cn('h-3 w-3', config.color)} />
-              <span className={cn('text-xs', config.color)}>{config.label}</span>
+              <Icon className={cn("h-3 w-3", config.color)} />
+              <span className={cn("text-xs", config.color)}>{config.label}</span>
               {quality.saveData && (
                 <Battery className="h-3 w-3 text-yellow-500" />
               )}
@@ -126,13 +126,13 @@ export const NetworkStatusBadge = memo(function NetworkStatusBadge({
   // Detailed variant - full info
   return (
     <div className={cn(
-      'p-3 rounded-lg border bg-card',
-      quality.isLowBandwidth && 'border-yellow-500/50',
+      "p-3 rounded-lg border bg-card",
+      quality.isLowBandwidth && "border-yellow-500/50",
       className
     )}>
       <div className="flex items-center gap-2 mb-2">
-        <Icon className={cn('h-5 w-5', config.color)} />
-        <span className={cn('font-medium', config.color)}>{config.label}</span>
+        <Icon className={cn("h-5 w-5", config.color)} />
+        <span className={cn("font-medium", config.color)}>{config.label}</span>
         {quality.saveData && (
           <Badge variant="secondary" className="text-xs">
             <Battery className="h-3 w-3 mr-1" />
@@ -180,7 +180,7 @@ function NetworkTooltipContent({
   showSpeed,
 }: {
   quality: ReturnType<typeof useNetworkQuality>;
-  config: typeof QUALITY_CONFIG['4g'];
+  config: typeof QUALITY_CONFIG["4g"];
   showSpeed: boolean;
 }) {
   return (

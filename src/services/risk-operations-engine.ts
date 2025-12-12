@@ -23,9 +23,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-export type ModuleType = 'PSC' | 'MLC' | 'LSA_FFA' | 'OVID' | 'DRILL' | 'GENERAL';
-export type RiskType = 'compliance' | 'human' | 'technical' | 'operational' | 'environmental';
-export type RiskLevel = 'critical' | 'high' | 'medium' | 'low';
+export type ModuleType = "PSC" | "MLC" | "LSA_FFA" | "OVID" | "DRILL" | "GENERAL";
+export type RiskType = "compliance" | "human" | "technical" | "operational" | "environmental";
+export type RiskLevel = "critical" | "high" | "medium" | "low";
 
 export interface RiskAssessment {
   id?: string;
@@ -40,14 +40,14 @@ export interface RiskAssessment {
   mitigationActions: MitigationAction[];
   aiClassification: AIClassification;
   linkedFindings: string[];
-  status: 'active' | 'mitigating' | 'resolved' | 'accepted';
+  status: "active" | "mitigating" | "resolved" | "accepted";
 }
 
 export interface MitigationAction {
   action: string;
   deadline: string;
   responsible: string;
-  status: 'pending' | 'in_progress' | 'completed';
+  status: "pending" | "in_progress" | "completed";
 }
 
 export interface AIClassification {
@@ -60,7 +60,7 @@ export interface AIClassification {
 export interface RiskHeatmapPoint {
   vesselId?: string;
   region: string;
-  moduleType: ModuleType | 'OVERALL';
+  moduleType: ModuleType | "OVERALL";
   riskIntensity: number;
   riskCount: number;
   coordinates?: { lat: number; lng: number };
@@ -68,7 +68,7 @@ export interface RiskHeatmapPoint {
 
 export interface RiskTrend {
   vesselId: string;
-  moduleType: ModuleType | 'OVERALL';
+  moduleType: ModuleType | "OVERALL";
   periodStart: Date;
   periodEnd: Date;
   averageRiskScore: number;
@@ -76,7 +76,7 @@ export interface RiskTrend {
   highRisksCount: number;
   mediumRisksCount: number;
   lowRisksCount: number;
-  trendDirection: 'improving' | 'stable' | 'worsening';
+  trendDirection: "improving" | "stable" | "worsening";
   keyIssues: string[];
 }
 
@@ -180,7 +180,7 @@ Format as JSON:
  * Creates a risk assessment with AI classification
  */
 export async function createRiskAssessment(
-  assessment: Omit<RiskAssessment, 'id' | 'aiClassification'>,
+  assessment: Omit<RiskAssessment, "id" | "aiClassification">,
   findingData?: any
 ): Promise<string> {
   try {
@@ -188,11 +188,11 @@ export async function createRiskAssessment(
     const aiClassification = findingData 
       ? await classifyRiskWithAI(findingData)
       : {
-          confidence: 0,
-          factors: [],
-          predictedImpact: "",
-          recommendations: [],
-        };
+        confidence: 0,
+        factors: [],
+        predictedImpact: "",
+        recommendations: [],
+      };
 
     const { data, error } = await supabase
       .from("risk_assessments")
@@ -320,7 +320,7 @@ export async function generateRiskHeatmap(
         module_type: point.moduleType,
         risk_intensity: point.riskIntensity,
         risk_count: point.riskCount,
-        period_date: new Date().toISOString().split('T')[0],
+        period_date: new Date().toISOString().split("T")[0],
       });
     }
 
@@ -336,7 +336,7 @@ export async function generateRiskHeatmap(
  */
 export async function calculateRiskTrends(
   vesselId: string,
-  moduleType: ModuleType | 'OVERALL',
+  moduleType: ModuleType | "OVERALL",
   periodDays: number = 30
 ): Promise<RiskTrend> {
   try {
@@ -350,7 +350,7 @@ export async function calculateRiskTrends(
       .gte("assessed_at", startDate.toISOString())
       .lte("assessed_at", endDate.toISOString());
 
-    if (moduleType !== 'OVERALL') {
+    if (moduleType !== "OVERALL") {
       query = query.eq("module_type", moduleType);
     }
 
@@ -371,7 +371,7 @@ export async function calculateRiskTrends(
         highRisksCount: 0,
         mediumRisksCount: 0,
         lowRisksCount: 0,
-        trendDirection: 'stable',
+        trendDirection: "stable",
         keyIssues: [],
       };
     }
@@ -379,10 +379,10 @@ export async function calculateRiskTrends(
     const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
     const averageRiskScore = totalScore / data.length;
 
-    const criticalRisksCount = data.filter((r: any) => r.risk_level === 'critical').length;
-    const highRisksCount = data.filter((r: any) => r.risk_level === 'high').length;
-    const mediumRisksCount = data.filter((r: any) => r.risk_level === 'medium').length;
-    const lowRisksCount = data.filter((r: any) => r.risk_level === 'low').length;
+    const criticalRisksCount = data.filter((r: any) => r.risk_level === "critical").length;
+    const highRisksCount = data.filter((r: any) => r.risk_level === "high").length;
+    const mediumRisksCount = data.filter((r: any) => r.risk_level === "medium").length;
+    const lowRisksCount = data.filter((r: any) => r.risk_level === "low").length;
 
     // Calculate trend direction (simplified)
     const firstHalf = data.slice(0, Math.floor(data.length / 2));
@@ -391,13 +391,13 @@ export async function calculateRiskTrends(
     const firstHalfAvg = firstHalf.reduce((sum: number, r: any) => sum + r.risk_score, 0) / firstHalf.length;
     const secondHalfAvg = secondHalf.reduce((sum: number, r: any) => sum + r.risk_score, 0) / secondHalf.length;
     
-    let trendDirection: 'improving' | 'stable' | 'worsening' = 'stable';
-    if (secondHalfAvg < firstHalfAvg - 5) trendDirection = 'improving';
-    if (secondHalfAvg > firstHalfAvg + 5) trendDirection = 'worsening';
+    let trendDirection: "improving" | "stable" | "worsening" = "stable";
+    if (secondHalfAvg < firstHalfAvg - 5) trendDirection = "improving";
+    if (secondHalfAvg > firstHalfAvg + 5) trendDirection = "worsening";
 
     // Extract key issues
     const keyIssues = data
-      .filter((r: any) => r.risk_level === 'critical' || r.risk_level === 'high')
+      .filter((r: any) => r.risk_level === "critical" || r.risk_level === "high")
       .map((r: any) => r.risk_title)
       .slice(0, 5);
 
@@ -442,8 +442,8 @@ export async function calculateRiskTrends(
  */
 export async function createRiskAlert(
   vesselId: string,
-  alertType: 'threshold_exceeded' | 'pattern_detected' | 'anomaly' | 'deadline_approaching' | 'regulatory_change',
-  severity: 'critical' | 'high' | 'medium' | 'low',
+  alertType: "threshold_exceeded" | "pattern_detected" | "anomaly" | "deadline_approaching" | "regulatory_change",
+  severity: "critical" | "high" | "medium" | "low",
   title: string,
   message: string,
   riskAssessmentId?: string
@@ -458,7 +458,7 @@ export async function createRiskAlert(
         title,
         message,
         risk_assessment_id: riskAssessmentId,
-        action_required: severity === 'critical' || severity === 'high',
+        action_required: severity === "critical" || severity === "high",
       })
       .select()
       .single();
@@ -478,8 +478,8 @@ export async function createRiskAlert(
  * Exports risk data in various formats
  */
 export async function exportRiskData(
-  format: 'PDF' | 'CSV' | 'JSON' | 'EXCEL',
-  scope: 'vessel' | 'fleet' | 'module' | 'custom',
+  format: "PDF" | "CSV" | "JSON" | "EXCEL",
+  scope: "vessel" | "fleet" | "module" | "custom",
   filters: Record<string, any>,
   userId: string
 ): Promise<string> {

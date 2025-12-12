@@ -215,30 +215,30 @@ export default function LogisticsMultibase() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "port": return <Ship className="h-4 w-4" />;
-      case "terminal": return <Truck className="h-4 w-4" />;
-      case "warehouse": return <Package className="h-4 w-4" />;
-      case "offshore": return <Fuel className="h-4 w-4" />;
-      default: return <MapPin className="h-4 w-4" />;
+    case "port": return <Ship className="h-4 w-4" />;
+    case "terminal": return <Truck className="h-4 w-4" />;
+    case "warehouse": return <Package className="h-4 w-4" />;
+    case "offshore": return <Fuel className="h-4 w-4" />;
+    default: return <MapPin className="h-4 w-4" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "urgent": return "bg-red-500/20 text-red-600";
-      case "high": return "bg-orange-500/20 text-orange-600";
-      case "medium": return "bg-amber-500/20 text-amber-600";
-      default: return "bg-blue-500/20 text-blue-600";
+    case "urgent": return "bg-red-500/20 text-red-600";
+    case "high": return "bg-orange-500/20 text-orange-600";
+    case "medium": return "bg-amber-500/20 text-amber-600";
+    default: return "bg-blue-500/20 text-blue-600";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "delivered": return "bg-green-500/20 text-green-600";
-      case "in_transit": return "bg-blue-500/20 text-blue-600";
-      case "routed": return "bg-purple-500/20 text-purple-600";
-      case "optimizing": return "bg-amber-500/20 text-amber-600";
-      default: return "bg-muted text-muted-foreground";
+    case "delivered": return "bg-green-500/20 text-green-600";
+    case "in_transit": return "bg-blue-500/20 text-blue-600";
+    case "routed": return "bg-purple-500/20 text-purple-600";
+    case "optimizing": return "bg-amber-500/20 text-amber-600";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
@@ -333,14 +333,14 @@ export default function LogisticsMultibase() {
                       </CardTitle>
                       <CardDescription className="flex items-center gap-2 mt-1">
                         <Calendar className="h-3 w-3" />
-                        Prazo: {request.deadline.toLocaleDateString('pt-BR')}
+                        Prazo: {request.deadline.toLocaleDateString("pt-BR")}
                       </CardDescription>
                     </div>
                     <Badge className={getStatusColor(request.status)}>
                       {request.status === "pending" ? "Pendente" :
-                       request.status === "optimizing" ? "Otimizando..." :
-                       request.status === "routed" ? "Rota Definida" :
-                       request.status === "in_transit" ? "Em Trânsito" : "Entregue"}
+                        request.status === "optimizing" ? "Otimizando..." :
+                          request.status === "routed" ? "Rota Definida" :
+                            request.status === "in_transit" ? "Em Trânsito" : "Entregue"}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -430,7 +430,7 @@ export default function LogisticsMultibase() {
                       onClick={() => handleOptimizeRoute(request.id)}
                       disabled={isLoading}
                     >
-                      <Sparkles className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                      <Sparkles className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
                       Otimizar com IA
                     </Button>
                   )}

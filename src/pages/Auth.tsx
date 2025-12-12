@@ -339,24 +339,24 @@ const Auth: React.FC = () => {
                     </Button>
                   </form>
 
-                    <div className="text-center">
-                      <Button
-                        variant="link"
-                        className="text-sm text-muted-foreground"
-                        onClick={() => setActiveTab("reset")}
-                      >
+                  <div className="text-center">
+                    <Button
+                      variant="link"
+                      className="text-sm text-muted-foreground"
+                      onClick={() => setActiveTab("reset")}
+                    >
                         Esqueceu sua senha?
-                      </Button>
-                    </div>
+                    </Button>
+                  </div>
 
-                    <OAuthButtons />
-                  </TabsContent>
+                  <OAuthButtons />
+                </TabsContent>
 
-                  {/* Sign Up Form */}
-                  <TabsContent value="signup" className="space-y-4">
-                    <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="signup-name">Nome Completo</Label>
+                {/* Sign Up Form */}
+                <TabsContent value="signup" className="space-y-4">
+                  <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-name">Nome Completo</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -439,11 +439,11 @@ const Auth: React.FC = () => {
                     >
                       {isLoading ? "Criando conta..." : "Criar Conta"}
                       <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </form>
+                    </Button>
+                  </form>
 
-                    <OAuthButtons />
-                  </TabsContent>
+                  <OAuthButtons />
+                </TabsContent>
 
                 {/* Reset Password Tab */}
                 {activeTab === "reset" && (

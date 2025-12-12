@@ -3,14 +3,14 @@
  * Encourage users to install the app
  */
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Download, X, Smartphone, Zap, WifiOff, Bell } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Download, X, Smartphone, Zap, WifiOff, Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
 export function InstallPrompt() {
@@ -20,7 +20,7 @@ export function InstallPrompt() {
 
   React.useEffect(() => {
     // Check if already dismissed
-    const wasDismissed = localStorage.getItem('pwa-install-dismissed');
+    const wasDismissed = localStorage.getItem("pwa-install-dismissed");
     if (wasDismissed) {
       const dismissedAt = new Date(wasDismissed);
       const daysSinceDismissed = (Date.now() - dismissedAt.getTime()) / (1000 * 60 * 60 * 24);
@@ -37,9 +37,9 @@ export function InstallPrompt() {
       setTimeout(() => setShowPrompt(true), 3000);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener("beforeinstallprompt", handler);
 
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
   const handleInstall = async () => {
@@ -48,7 +48,7 @@ export function InstallPrompt() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     
-    if (outcome === 'accepted') {
+    if (outcome === "accepted") {
     }
     
     setDeferredPrompt(null);
@@ -56,7 +56,7 @@ export function InstallPrompt() {
   };
 
   const handleDismiss = () => {
-    localStorage.setItem('pwa-install-dismissed', new Date().toISOString());
+    localStorage.setItem("pwa-install-dismissed", new Date().toISOString());
     setDismissed(true);
     setShowPrompt(false);
   };

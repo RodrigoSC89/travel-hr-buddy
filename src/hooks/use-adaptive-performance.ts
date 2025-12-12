@@ -3,9 +3,9 @@
  * Unified hook that combines all performance optimizations
  */
 
-import { useMemo, useCallback, useEffect, useRef } from 'react';
-import { useNetworkStatus, useAdaptiveSettings, ConnectionQuality } from './use-network-status';
-import { memoryManager, getMemoryAwareSettings } from '@/lib/performance/memory-manager';
+import { useMemo, useCallback, useEffect, useRef } from "react";
+import { useNetworkStatus, useAdaptiveSettings, ConnectionQuality } from "./use-network-status";
+import { memoryManager, getMemoryAwareSettings } from "@/lib/performance/memory-manager";
 
 export interface PerformanceConfig {
   // Data fetching
@@ -49,8 +49,8 @@ export function useAdaptivePerformance(): PerformanceConfig {
 
   return useMemo(() => {
     const { quality, online, saveData } = networkStatus;
-    const isSlow = quality === 'slow' || quality === 'offline';
-    const isMedium = quality === 'medium';
+    const isSlow = quality === "slow" || quality === "offline";
+    const isMedium = quality === "medium";
 
     return {
       // Data fetching - adapt to network
@@ -189,19 +189,19 @@ export function useFeatureFlags() {
 
   return useMemo(() => ({
     // Heavy features disabled on slow connections
-    enable3DVisualization: config.quality === 'fast' && config.enableAnimations,
-    enableVideoPlayback: config.quality !== 'slow' && config.quality !== 'offline',
+    enable3DVisualization: config.quality === "fast" && config.enableAnimations,
+    enableVideoPlayback: config.quality !== "slow" && config.quality !== "offline",
     enableAutoRefresh: config.enableRealtime,
     enablePushNotifications: config.isOnline,
     enableBackgroundSync: config.isOnline,
     
     // UI features
-    enableRichAnimations: config.enableAnimations && config.quality === 'fast',
-    enableParallax: config.enableAnimations && config.quality === 'fast',
-    enableBlurEffects: config.quality !== 'slow',
+    enableRichAnimations: config.enableAnimations && config.quality === "fast",
+    enableParallax: config.enableAnimations && config.quality === "fast",
+    enableBlurEffects: config.quality !== "slow",
     
     // Data features  
-    enableInfiniteScroll: config.quality !== 'offline',
+    enableInfiniteScroll: config.quality !== "offline",
     enableOptimisticUpdates: config.isOnline,
     enableDataPrefetch: config.enablePrefetch,
   }), [config]);

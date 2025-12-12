@@ -3,9 +3,9 @@
  * Manages form state with validation and submission
  */
 
-import { useState, useCallback, useMemo } from 'react';
-import { z } from 'zod';
-import { toast } from 'sonner';
+import { useState, useCallback, useMemo } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
 
 interface FormState<T> {
   values: T;
@@ -32,8 +32,8 @@ export function useForm<T extends Record<string, unknown>>({
   onSubmit,
   onSuccess,
   onError,
-  successMessage = 'Salvo com sucesso!',
-  errorMessage = 'Erro ao salvar'
+  successMessage = "Salvo com sucesso!",
+  errorMessage = "Erro ao salvar"
 }: UseFormOptions<T>) {
   const [state, setState] = useState<FormState<T>>({
     values: initialValues,
@@ -136,7 +136,7 @@ export function useForm<T extends Record<string, unknown>>({
           {} as Partial<Record<keyof T, boolean>>
         )
       }));
-      toast.error('Por favor, corrija os erros no formulário');
+      toast.error("Por favor, corrija os erros no formulário");
       return;
     }
 
@@ -159,7 +159,7 @@ export function useForm<T extends Record<string, unknown>>({
   const getFieldProps = useCallback(<K extends keyof T>(field: K) => ({
     value: state.values[field],
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const value = e.target.type === 'checkbox' 
+      const value = e.target.type === "checkbox" 
         ? (e.target as HTMLInputElement).checked 
         : e.target.value;
       setValue(field, value as T[K]);
@@ -199,7 +199,7 @@ export function createChangeHandler<T extends Record<string, unknown>>(
   return <K extends keyof T>(field: K) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const value = e.target.type === 'checkbox'
+    const value = e.target.type === "checkbox"
       ? (e.target as HTMLInputElement).checked
       : e.target.value;
     setValue(field, value as T[K]);

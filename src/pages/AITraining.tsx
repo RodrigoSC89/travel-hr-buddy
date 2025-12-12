@@ -1,16 +1,16 @@
 // PATCH 598: AI Training Dashboard Page
-import React, { useState, useEffect } from 'react';
-import { Brain, BookOpen, Trophy, TrendingUp, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrainingAIService } from '@/services/training-ai.service';
-import type { AITrainingSession, TrainingStats } from '@/types/training-ai';
-import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
+import React, { useState, useEffect } from "react";
+import { Brain, BookOpen, Trophy, TrendingUp, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TrainingAIService } from "@/services/training-ai.service";
+import type { AITrainingSession, TrainingStats } from "@/types/training-ai";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 const AITraining: React.FC = () => {
   const [sessions, setSessions] = useState<AITrainingSession[]>([]);
@@ -30,8 +30,8 @@ const AITraining: React.FC = () => {
         await loadTrainingData(user.id);
       }
     } catch (error) {
-      logger.error('Error loading user', { error });
-      toast.error('Failed to load user data');
+      logger.error("Error loading user", { error });
+      toast.error("Failed to load user data");
     }
   };
 
@@ -45,8 +45,8 @@ const AITraining: React.FC = () => {
       setSessions(sessionsData);
       setStats(statsData);
     } catch (error) {
-      logger.error('Error loading training data', { error, crewMemberId });
-      toast.error('Failed to load training data');
+      logger.error("Error loading training data", { error, crewMemberId });
+      toast.error("Failed to load training data");
     } finally {
       setLoading(false);
     }
@@ -57,27 +57,27 @@ const AITraining: React.FC = () => {
     
     try {
       const csv = await TrainingAIService.exportTrainingHistory(userId);
-      const blob = new Blob([csv], { type: 'text/csv' });
+      const blob = new Blob([csv], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `training-history-${new Date().toISOString().split('T')[0]}.csv`;
+      a.download = `training-history-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      toast.success('Training history exported');
+      toast.success("Training history exported");
     } catch (error) {
-      logger.error('Error exporting history', { error, userId });
-      toast.error('Failed to export history');
+      logger.error("Error exporting history", { error, userId });
+      toast.error("Failed to export history");
     }
   };
 
   const getScoreColor = (score: number): string => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-blue-600';
-    if (score >= 50) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return "text-green-600";
+    if (score >= 70) return "text-blue-600";
+    if (score >= 50) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -132,10 +132,10 @@ const AITraining: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className={`text-2xl font-bold ${getScoreColor(stats?.average_score || 0)}`}>
-                  {stats?.average_score ? stats.average_score.toFixed(1) : '0'}%
+                  {stats?.average_score ? stats.average_score.toFixed(1) : "0"}%
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Pass rate: {stats?.pass_rate ? stats.pass_rate.toFixed(1) : '0'}%
+                  Pass rate: {stats?.pass_rate ? stats.pass_rate.toFixed(1) : "0"}%
                 </div>
               </CardContent>
             </Card>
@@ -200,8 +200,8 @@ const AITraining: React.FC = () => {
                               Module: {session.module}
                             </CardDescription>
                           </div>
-                          <Badge variant={session.passed ? 'default' : 'secondary'}>
-                            {session.completed_at ? (session.passed ? 'Passed' : 'Failed') : 'In Progress'}
+                          <Badge variant={session.passed ? "default" : "secondary"}>
+                            {session.completed_at ? (session.passed ? "Passed" : "Failed") : "In Progress"}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -257,8 +257,8 @@ const AITraining: React.FC = () => {
                             {session.score?.toFixed(1)}%
                           </span>
                         </div>
-                        <Badge variant={session.passed ? 'default' : 'destructive'}>
-                          {session.passed ? 'Passed' : 'Failed'}
+                        <Badge variant={session.passed ? "default" : "destructive"}>
+                          {session.passed ? "Passed" : "Failed"}
                         </Badge>
                       </div>
                     </CardContent>

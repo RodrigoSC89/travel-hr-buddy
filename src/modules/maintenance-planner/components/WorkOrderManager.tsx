@@ -229,9 +229,9 @@ export default function WorkOrderManager() {
             onClick={() => setFilter(status)}
           >
             {status === "all" ? "Todas" : 
-             status === "pending" ? "Pendentes" :
-             status === "approved" ? "Aprovadas" :
-             status === "in_progress" ? "Em Execução" : "Concluídas"}
+              status === "pending" ? "Pendentes" :
+                status === "approved" ? "Aprovadas" :
+                  status === "in_progress" ? "Em Execução" : "Concluídas"}
           </Button>
         ))}
       </div>

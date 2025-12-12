@@ -3,18 +3,18 @@
  * Versão funcional com todas as ações implementadas
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 import { 
   Search, 
   UserPlus, 
@@ -36,15 +36,15 @@ import {
   X,
   Check,
   Loader2
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { mockColaboradores, departamentos, unidades } from '../data/mockData';
-import type { Colaborador } from '../types';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { mockColaboradores, departamentos, unidades } from "../data/mockData";
+import type { Colaborador } from "../types";
 
 const CollaboratorRegistry: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('todos');
-  const [selectedStatus, setSelectedStatus] = useState('todos');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("todos");
+  const [selectedStatus, setSelectedStatus] = useState("todos");
   const [selectedColaborador, setSelectedColaborador] = useState<Colaborador | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isDocumentsDialogOpen, setIsDocumentsDialogOpen] = useState(false);
@@ -55,51 +55,51 @@ const CollaboratorRegistry: React.FC = () => {
   
   // Form state
   const [newColaborador, setNewColaborador] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    cpf: '',
-    cargo: '',
-    departamento: '',
-    unidade: '',
-    tipoContrato: 'CLT',
-    dataAdmissao: ''
+    nome: "",
+    email: "",
+    telefone: "",
+    cpf: "",
+    cargo: "",
+    departamento: "",
+    unidade: "",
+    tipoContrato: "CLT",
+    dataAdmissao: ""
   });
 
   const filteredColaboradores = colaboradores.filter(c => {
     const matchesSearch = c.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                           c.cargo.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDepartment = selectedDepartment === 'todos' || c.departamento === selectedDepartment;
-    const matchesStatus = selectedStatus === 'todos' || c.status === selectedStatus;
+    const matchesDepartment = selectedDepartment === "todos" || c.departamento === selectedDepartment;
+    const matchesStatus = selectedStatus === "todos" || c.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ativo': return 'bg-green-500';
-      case 'ferias': return 'bg-blue-500';
-      case 'licenca': return 'bg-yellow-500';
-      case 'afastado': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "ativo": return "bg-green-500";
+    case "ferias": return "bg-blue-500";
+    case "licenca": return "bg-yellow-500";
+    case "afastado": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'ativo': return 'Ativo';
-      case 'ferias': return 'Férias';
-      case 'licenca': return 'Licença';
-      case 'afastado': return 'Afastado';
-      default: return status;
+    case "ativo": return "Ativo";
+    case "ferias": return "Férias";
+    case "licenca": return "Licença";
+    case "afastado": return "Afastado";
+    default: return status;
     }
   };
 
   const handleImport = async () => {
     setIsLoading(true);
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.csv,.xlsx,.xls';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv,.xlsx,.xls";
     input.onchange = async (e: Event) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -117,26 +117,26 @@ const CollaboratorRegistry: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Gera CSV
-    const headers = ['Nome', 'Email', 'Telefone', 'Cargo', 'Departamento', 'Unidade', 'Status', 'Data Admissão'];
+    const headers = ["Nome", "Email", "Telefone", "Cargo", "Departamento", "Unidade", "Status", "Data Admissão"];
     const rows = colaboradores.map(c => [
       c.nome, c.email, c.telefone, c.cargo, c.departamento, c.unidade, c.status, c.dataAdmissao
     ]);
     
-    const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `colaboradores_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `colaboradores_${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
     
     setIsLoading(false);
-    toast.success('Arquivo CSV exportado com sucesso!');
+    toast.success("Arquivo CSV exportado com sucesso!");
   };
 
   const handleAddColaborador = async () => {
     if (!newColaborador.nome || !newColaborador.email || !newColaborador.cargo) {
-      toast.error('Preencha todos os campos obrigatórios');
+      toast.error("Preencha todos os campos obrigatórios");
       return;
     }
 
@@ -151,16 +151,16 @@ const CollaboratorRegistry: React.FC = () => {
       cargo: newColaborador.cargo,
       departamento: newColaborador.departamento,
       unidade: newColaborador.unidade,
-      dataAdmissao: newColaborador.dataAdmissao || new Date().toISOString().split('T')[0],
-      status: 'ativo',
-      tipoContrato: newColaborador.tipoContrato as 'CLT' | 'PJ' | 'Estágio' | 'Temporário'
+      dataAdmissao: newColaborador.dataAdmissao || new Date().toISOString().split("T")[0],
+      status: "ativo",
+      tipoContrato: newColaborador.tipoContrato as "CLT" | "PJ" | "Estágio" | "Temporário"
     };
 
     setColaboradores([novoColab, ...colaboradores]);
     setIsAddDialogOpen(false);
     setNewColaborador({
-      nome: '', email: '', telefone: '', cpf: '', cargo: '',
-      departamento: '', unidade: '', tipoContrato: 'CLT', dataAdmissao: ''
+      nome: "", email: "", telefone: "", cpf: "", cargo: "",
+      departamento: "", unidade: "", tipoContrato: "CLT", dataAdmissao: ""
     });
     
     setIsLoading(false);
@@ -178,10 +178,10 @@ const CollaboratorRegistry: React.FC = () => {
   };
 
   const clearFilters = () => {
-    setSelectedDepartment('todos');
-    setSelectedStatus('todos');
-    setSearchTerm('');
-    toast.info('Filtros limpos');
+    setSelectedDepartment("todos");
+    setSelectedStatus("todos");
+    setSearchTerm("");
+    toast.info("Filtros limpos");
   };
 
   return (
@@ -222,7 +222,7 @@ const CollaboratorRegistry: React.FC = () => {
               <SelectItem value="afastado">Afastado</SelectItem>
             </SelectContent>
           </Select>
-          {(selectedDepartment !== 'todos' || selectedStatus !== 'todos' || searchTerm) && (
+          {(selectedDepartment !== "todos" || selectedStatus !== "todos" || searchTerm) && (
             <Button variant="ghost" size="sm" onClick={clearFilters}>
               <X className="w-4 h-4 mr-1" />
               Limpar
@@ -361,7 +361,7 @@ const CollaboratorRegistry: React.FC = () => {
         <Card className="bg-green-500/10 border-green-500/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === 'ativo').length}</p>
+              <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === "ativo").length}</p>
               <p className="text-sm text-muted-foreground">Ativos</p>
             </div>
             <div className="w-3 h-3 rounded-full bg-green-500" />
@@ -370,7 +370,7 @@ const CollaboratorRegistry: React.FC = () => {
         <Card className="bg-blue-500/10 border-blue-500/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === 'ferias').length}</p>
+              <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === "ferias").length}</p>
               <p className="text-sm text-muted-foreground">Em Férias</p>
             </div>
             <div className="w-3 h-3 rounded-full bg-blue-500" />
@@ -379,7 +379,7 @@ const CollaboratorRegistry: React.FC = () => {
         <Card className="bg-yellow-500/10 border-yellow-500/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
-              <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === 'licenca').length}</p>
+              <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === "licenca").length}</p>
               <p className="text-sm text-muted-foreground">Em Licença</p>
             </div>
             <div className="w-3 h-3 rounded-full bg-yellow-500" />
@@ -415,7 +415,7 @@ const CollaboratorRegistry: React.FC = () => {
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ delay: index * 0.02 }}
                       className={`p-4 rounded-lg border cursor-pointer transition-all hover:border-primary/50 hover:bg-muted/50 ${
-                        selectedColaborador?.id === colaborador.id ? 'border-primary bg-primary/5' : ''
+                        selectedColaborador?.id === colaborador.id ? "border-primary bg-primary/5" : ""
                       }`}
                       onClick={() => setSelectedColaborador(colaborador)}
                     >
@@ -423,7 +423,7 @@ const CollaboratorRegistry: React.FC = () => {
                         <Avatar className="w-12 h-12">
                           <AvatarImage src={colaborador.avatar} />
                           <AvatarFallback className="bg-primary/10 text-primary">
-                            {colaborador.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            {colaborador.nome.split(" ").map(n => n[0]).join("").slice(0, 2)}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
@@ -465,7 +465,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Avatar className="w-20 h-20 mx-auto">
                     <AvatarImage src={selectedColaborador.avatar} />
                     <AvatarFallback className="bg-primary/10 text-primary text-xl">
-                      {selectedColaborador.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      {selectedColaborador.nome.split(" ").map(n => n[0]).join("").slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
                   <h3 className="mt-3 font-semibold">{selectedColaborador.nome}</h3>
@@ -494,7 +494,7 @@ const CollaboratorRegistry: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span>Admissão: {new Date(selectedColaborador.dataAdmissao).toLocaleDateString('pt-BR')}</span>
+                    <span>Admissão: {new Date(selectedColaborador.dataAdmissao).toLocaleDateString("pt-BR")}</span>
                   </div>
                   {selectedColaborador.gestorDireto && (
                     <div className="flex items-center gap-3 text-sm">
@@ -558,7 +558,7 @@ const CollaboratorRegistry: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant={doc.status === 'valido' ? 'default' : 'destructive'}>
+                    <Badge variant={doc.status === "valido" ? "default" : "destructive"}>
                       {doc.status}
                     </Badge>
                     <Button size="sm" variant="ghost" onClick={() => toast.success(`Download de ${doc.nome} iniciado`)}>
@@ -573,7 +573,7 @@ const CollaboratorRegistry: React.FC = () => {
                 <p>Nenhum documento cadastrado</p>
               </div>
             )}
-            <Button className="w-full" onClick={() => toast.success('Upload de documento iniciado')}>
+            <Button className="w-full" onClick={() => toast.success("Upload de documento iniciado")}>
               <Upload className="w-4 h-4 mr-2" />
               Adicionar Documento
             </Button>
@@ -598,11 +598,11 @@ const CollaboratorRegistry: React.FC = () => {
                       <p className="font-medium">{form.curso}</p>
                       <p className="text-sm text-muted-foreground">{form.instituicao}</p>
                       <p className="text-xs text-muted-foreground">
-                        {form.dataInicio} - {form.dataConclusao || 'Em andamento'}
+                        {form.dataInicio} - {form.dataConclusao || "Em andamento"}
                       </p>
                     </div>
                   </div>
-                  <Badge variant={form.status === 'concluido' ? 'default' : 'secondary'}>
+                  <Badge variant={form.status === "concluido" ? "default" : "secondary"}>
                     {form.status}
                   </Badge>
                 </div>
@@ -613,7 +613,7 @@ const CollaboratorRegistry: React.FC = () => {
                 <p>Nenhuma formação cadastrada</p>
               </div>
             )}
-            <Button className="w-full" onClick={() => toast.success('Adicionar formação')}>
+            <Button className="w-full" onClick={() => toast.success("Adicionar formação")}>
               <Award className="w-4 h-4 mr-2" />
               Adicionar Formação
             </Button>

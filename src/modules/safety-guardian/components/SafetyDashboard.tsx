@@ -122,7 +122,7 @@ export const SafetyDashboard: React.FC = () => {
         // Group by month for chart
         const grouped: Record<string, number> = {};
         data.forEach((inc: DPIncident) => {
-          const month = new Date(inc.incident_date).toLocaleString('pt-BR', { month: 'short' });
+          const month = new Date(inc.incident_date).toLocaleString("pt-BR", { month: "short" });
           grouped[month] = (grouped[month] || 0) + 1;
         });
       }
@@ -160,19 +160,19 @@ export const SafetyDashboard: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "high": return "bg-red-100 text-red-800 border-red-200";
-      case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "low": return "bg-green-100 text-green-800 border-green-200";
-      default: return "bg-gray-100 text-gray-800";
+    case "high": return "bg-red-100 text-red-800 border-red-200";
+    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
+    case "low": return "bg-green-100 text-green-800 border-green-200";
+    default: return "bg-gray-100 text-gray-800";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "investigating": return <Badge className="bg-yellow-500">Investigando</Badge>;
-      case "resolved": return <Badge className="bg-blue-500">Resolvido</Badge>;
-      case "closed": return <Badge className="bg-green-500">Fechado</Badge>;
-      default: return <Badge>{status}</Badge>;
+    case "investigating": return <Badge className="bg-yellow-500">Investigando</Badge>;
+    case "resolved": return <Badge className="bg-blue-500">Resolvido</Badge>;
+    case "closed": return <Badge className="bg-green-500">Fechado</Badge>;
+    default: return <Badge>{status}</Badge>;
     }
   };
 
@@ -359,8 +359,8 @@ export const SafetyDashboard: React.FC = () => {
                   <YAxis className="text-xs" />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'hsl(var(--background))', 
-                      border: '1px solid hsl(var(--border))' 
+                      backgroundColor: "hsl(var(--background))", 
+                      border: "1px solid hsl(var(--border))" 
                     }} 
                   />
                   <Line type="monotone" dataKey="incidents" stroke="#ef4444" strokeWidth={2} name="Incidentes" />
@@ -435,7 +435,7 @@ export const SafetyDashboard: React.FC = () => {
                 <div className="flex items-start gap-3">
                   <Sparkles className={`h-5 w-5 mt-0.5 ${
                     alert.severity === "high" ? "text-red-600" :
-                    alert.severity === "medium" ? "text-yellow-600" : "text-green-600"
+                      alert.severity === "medium" ? "text-yellow-600" : "text-green-600"
                   }`} />
                   <div>
                     <h4 className="font-semibold">{alert.title}</h4>
@@ -475,7 +475,7 @@ export const SafetyDashboard: React.FC = () => {
                 <div className="flex items-center gap-4">
                   <div className={`p-2 rounded-full ${
                     incident.type === "Incident" ? "bg-red-100" :
-                    incident.type === "Near Miss" ? "bg-yellow-100" : "bg-blue-100"
+                      incident.type === "Near Miss" ? "bg-yellow-100" : "bg-blue-100"
                   }`}>
                     {incident.type === "Incident" ? (
                       <AlertCircle className="h-5 w-5 text-red-600" />

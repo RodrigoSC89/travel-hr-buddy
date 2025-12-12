@@ -8,8 +8,8 @@
  * - Formato WebP
  */
 
-import { useState, useEffect, useRef } from 'react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface OptimizedImageProps {
   /** Path base da imagem (sem extensão) */
@@ -19,7 +19,7 @@ interface OptimizedImageProps {
   /** Classe CSS adicional */
   className?: string;
   /** Tipo de placeholder */
-  placeholder?: 'blur' | 'skeleton' | 'none';
+  placeholder?: "blur" | "skeleton" | "none";
   /** Prioridade de carregamento (disable lazy loading) */
   priority?: boolean;
   /** Tamanho padrão */
@@ -30,9 +30,9 @@ export function OptimizedImage({
   src,
   alt,
   className,
-  placeholder = 'blur',
+  placeholder = "blur",
   priority = false,
-  sizes = '(max-width: 640px) 400px, 800px',
+  sizes = "(max-width: 640px) 400px, 800px",
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -49,7 +49,7 @@ export function OptimizedImage({
         }
       },
       {
-        rootMargin: '50px', // Pré-carrega 50px antes de aparecer
+        rootMargin: "50px", // Pré-carrega 50px antes de aparecer
       }
     );
 
@@ -59,20 +59,20 @@ export function OptimizedImage({
   }, [priority]);
 
   // Determinar paths das imagens
-  const basePath = src.replace(/\.(png|jpg|jpeg)$/, '');
+  const basePath = src.replace(/\.(png|jpg|jpeg)$/, "");
   const smallWebP = `${basePath}-small.webp`;
   const mediumWebP = `${basePath}-medium.webp`;
 
   return (
     <div
       className={cn(
-        'relative overflow-hidden',
-        placeholder === 'skeleton' && !isLoaded && 'animate-pulse bg-muted',
+        "relative overflow-hidden",
+        placeholder === "skeleton" && !isLoaded && "animate-pulse bg-muted",
         className
       )}
     >
       {/* Placeholder blur (base64 tiny image) */}
-      {placeholder === 'blur' && !isLoaded && (
+      {placeholder === "blur" && !isLoaded && (
         <div
           className="absolute inset-0 bg-gradient-to-br from-muted to-muted-foreground/10 blur-xl"
           aria-hidden="true"
@@ -91,11 +91,11 @@ export function OptimizedImage({
             ref={imgRef}
             src={mediumWebP}
             alt={alt}
-            loading={priority ? 'eager' : 'lazy'}
+            loading={priority ? "eager" : "lazy"}
             decoding="async"
             className={cn(
-              'transition-opacity duration-300',
-              isLoaded ? 'opacity-100' : 'opacity-0',
+              "transition-opacity duration-300",
+              isLoaded ? "opacity-100" : "opacity-0",
               className
             )}
             onLoad={() => setIsLoaded(true)}
@@ -104,7 +104,7 @@ export function OptimizedImage({
       )}
 
       {/* Fallback skeleton */}
-      {!isInView && placeholder === 'skeleton' && (
+      {!isInView && placeholder === "skeleton" && (
         <div className="h-full w-full bg-muted" />
       )}
     </div>

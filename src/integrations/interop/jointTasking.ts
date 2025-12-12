@@ -80,7 +80,7 @@ export async function assignMissionTask(task: JointMissionTask) {
     throw taskError;
   }
   
-  logger.info(`Mission task assigned`, { task_id: taskData.id, entity_id: task.assigned_entity, mission_id: task.mission_id });
+  logger.info("Mission task assigned", { task_id: taskData.id, entity_id: task.assigned_entity, mission_id: task.mission_id });
 
   // Log mission event
   await logMissionEvent(task.mission_id, "task_assigned", {
@@ -123,7 +123,7 @@ export async function updateTaskStatus(
     throw error;
   }
   
-  logger.info(`Task status updated`, { task_id: taskId, new_status: status });
+  logger.info("Task status updated", { task_id: taskId, new_status: status });
 
   // Log status change
   await logMissionEvent(data.mission_id, "task_status_change", {

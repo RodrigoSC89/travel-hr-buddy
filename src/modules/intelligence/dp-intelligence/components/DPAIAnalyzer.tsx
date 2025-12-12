@@ -64,7 +64,7 @@ export default function DPAIAnalyzer() {
     try {
       
       const response = await fetch(
-        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai`,
+        "https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai",
         {
           method: "POST",
           headers: {
@@ -124,11 +124,11 @@ export default function DPAIAnalyzer() {
 
   const getAnalysisLabel = (type: string) => {
     switch (type) {
-      case "full": return "Completa";
-      case "predictive": return "Preditiva";
-      case "optimization": return "Otimização";
-      case "emergency": return "Emergência";
-      default: return type;
+    case "full": return "Completa";
+    case "predictive": return "Preditiva";
+    case "optimization": return "Otimização";
+    case "emergency": return "Emergência";
+    default: return type;
     }
   };
 

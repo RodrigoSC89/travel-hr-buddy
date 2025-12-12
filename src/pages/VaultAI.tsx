@@ -67,30 +67,30 @@ const VaultAI: React.FC = () => {
 
   const getItemIcon = (type: string) => {
     switch (type) {
-      case "document": return <FileText className="h-5 w-5 text-primary" />;
-      case "archive": return <Folder className="h-5 w-5 text-warning" />;
-      case "credentials": return <Key className="h-5 w-5 text-destructive" />;
-      case "backup": return <File className="h-5 w-5 text-success" />;
-      default: return <File className="h-5 w-5 text-muted-foreground" />;
+    case "document": return <FileText className="h-5 w-5 text-primary" />;
+    case "archive": return <Folder className="h-5 w-5 text-warning" />;
+    case "credentials": return <Key className="h-5 w-5 text-destructive" />;
+    case "backup": return <File className="h-5 w-5 text-success" />;
+    default: return <File className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getActionIcon = (action: string) => {
     switch (action) {
-      case "view": return <Eye className="h-4 w-4 text-primary" />;
-      case "download": return <Download className="h-4 w-4 text-success" />;
-      case "upload": return <Upload className="h-4 w-4 text-warning" />;
-      case "backup": return <Shield className="h-4 w-4 text-info" />;
-      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
+    case "view": return <Eye className="h-4 w-4 text-primary" />;
+    case "download": return <Download className="h-4 w-4 text-success" />;
+    case "upload": return <Upload className="h-4 w-4 text-warning" />;
+    case "backup": return <Shield className="h-4 w-4 text-info" />;
+    default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getInsightBadge = (type: string) => {
     switch (type) {
-      case "warning": return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
-      case "success": return <Badge className="bg-success text-success-foreground">OK</Badge>;
-      case "info": return <Badge variant="outline">Info</Badge>;
-      default: return <Badge variant="outline">{type}</Badge>;
+    case "warning": return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
+    case "success": return <Badge className="bg-success text-success-foreground">OK</Badge>;
+    case "info": return <Badge variant="outline">Info</Badge>;
+    default: return <Badge variant="outline">{type}</Badge>;
     }
   };
 
@@ -314,8 +314,8 @@ const VaultAI: React.FC = () => {
                     key={insight.id}
                     className={`p-4 rounded-lg border ${
                       insight.type === "warning" ? "border-warning/30 bg-warning/5" :
-                      insight.type === "success" ? "border-success/30 bg-success/5" :
-                      "border-border bg-muted/30"
+                        insight.type === "success" ? "border-success/30 bg-success/5" :
+                          "border-border bg-muted/30"
                     }`}
                   >
                     <div className="flex items-start justify-between">

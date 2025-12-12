@@ -8,8 +8,8 @@
  * - Data collection from multiple sources (reporting-engine.ts)
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { logger } from '@/lib/logger';
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { Json } from "@/integrations/supabase/types";
 
 // ============================================
@@ -135,13 +135,13 @@ export const ReportingEngine = {
   
   async getTemplates(): Promise<ReportTemplate[]> {
     const { data, error } = await (supabase as any)
-      .from('report_templates')
-      .select('*')
-      .eq('is_active', true)
-      .order('name', { ascending: true });
+      .from("report_templates")
+      .select("*")
+      .eq("is_active", true)
+      .order("name", { ascending: true });
 
     if (error) {
-      logger.error('Error fetching templates', error as Error);
+      logger.error("Error fetching templates", error as Error);
       throw error;
     }
 
@@ -150,13 +150,13 @@ export const ReportingEngine = {
 
   async getTemplate(id: string): Promise<ReportTemplate> {
     const { data, error } = await (supabase as any)
-      .from('report_templates')
-      .select('*')
-      .eq('id', id)
+      .from("report_templates")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
-      logger.error('Error fetching template', error as Error, { templateId: id });
+      logger.error("Error fetching template", error as Error, { templateId: id });
       throw error;
     }
 
@@ -165,13 +165,13 @@ export const ReportingEngine = {
 
   async createTemplate(template: Partial<ReportTemplate>): Promise<ReportTemplate> {
     const { data, error } = await (supabase as any)
-      .from('report_templates')
+      .from("report_templates")
       .insert(template)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error creating template', error as Error, { templateName: template.name });
+      logger.error("Error creating template", error as Error, { templateName: template.name });
       throw error;
     }
 
@@ -180,14 +180,14 @@ export const ReportingEngine = {
 
   async updateTemplate(id: string, updates: Partial<ReportTemplate>): Promise<ReportTemplate> {
     const { data, error } = await (supabase as any)
-      .from('report_templates')
+      .from("report_templates")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error updating template', error as Error, { templateId: id });
+      logger.error("Error updating template", error as Error, { templateId: id });
       throw error;
     }
 
@@ -196,12 +196,12 @@ export const ReportingEngine = {
 
   async deleteTemplate(id: string): Promise<void> {
     const { error } = await (supabase as any)
-      .from('report_templates')
+      .from("report_templates")
       .update({ is_active: false })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      logger.error('Error deleting template', error as Error, { templateId: id });
+      logger.error("Error deleting template", error as Error, { templateId: id });
       throw error;
     }
   },
@@ -212,13 +212,13 @@ export const ReportingEngine = {
 
   async getReports(limit: number = 50): Promise<GeneratedReport[]> {
     const { data, error } = await (supabase as any)
-      .from('generated_reports')
-      .select('*')
-      .order('generated_at', { ascending: false })
+      .from("generated_reports")
+      .select("*")
+      .order("generated_at", { ascending: false })
       .limit(limit);
 
     if (error) {
-      logger.error('Error fetching reports', error as Error);
+      logger.error("Error fetching reports", error as Error);
       throw error;
     }
 
@@ -227,13 +227,13 @@ export const ReportingEngine = {
 
   async getReport(id: string): Promise<GeneratedReport> {
     const { data, error } = await (supabase as any)
-      .from('generated_reports')
-      .select('*')
-      .eq('id', id)
+      .from("generated_reports")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
-      logger.error('Error fetching report', error as Error, { reportId: id });
+      logger.error("Error fetching report", error as Error, { reportId: id });
       throw error;
     }
 
@@ -241,12 +241,12 @@ export const ReportingEngine = {
   },
 
   async generateReport(request: ReportGenerationRequest): Promise<ReportGenerationResponse> {
-    const { data, error } = await supabase.functions.invoke('generate-report', {
+    const { data, error } = await supabase.functions.invoke("generate-report", {
       body: request,
     });
 
     if (error) {
-      logger.error('Error generating report', error as Error, { requestType: request.report_type });
+      logger.error("Error generating report", error as Error, { requestType: request.report_type });
       throw error;
     }
 
@@ -262,7 +262,7 @@ export const ReportingEngine = {
   ): Promise<string> {
     const response = await this.generateReport({
       template_id: templateId,
-      report_type: 'CUSTOM',
+      report_type: "CUSTOM",
       vessel_id: vesselId || undefined,
       period_start: periodStart.toISOString(),
       period_end: periodEnd.toISOString(),
@@ -278,12 +278,12 @@ export const ReportingEngine = {
 
   async getSchedules(): Promise<ReportSchedule[]> {
     const { data, error } = await (supabase as any)
-      .from('report_schedules')
-      .select('*')
-      .order('name', { ascending: true });
+      .from("report_schedules")
+      .select("*")
+      .order("name", { ascending: true });
 
     if (error) {
-      logger.error('Error fetching schedules', error as Error);
+      logger.error("Error fetching schedules", error as Error);
       throw error;
     }
 
@@ -292,13 +292,13 @@ export const ReportingEngine = {
 
   async getSchedule(id: string): Promise<ReportSchedule> {
     const { data, error } = await (supabase as any)
-      .from('report_schedules')
-      .select('*')
-      .eq('id', id)
+      .from("report_schedules")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) {
-      logger.error('Error fetching schedule', error as Error, { scheduleId: id });
+      logger.error("Error fetching schedule", error as Error, { scheduleId: id });
       throw error;
     }
 
@@ -307,13 +307,13 @@ export const ReportingEngine = {
 
   async createSchedule(schedule: Partial<ReportSchedule>): Promise<ReportSchedule> {
     const { data, error } = await (supabase as any)
-      .from('report_schedules')
+      .from("report_schedules")
       .insert(schedule)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error creating schedule', error as Error, { scheduleName: schedule.name });
+      logger.error("Error creating schedule", error as Error, { scheduleName: schedule.name });
       throw error;
     }
 
@@ -322,14 +322,14 @@ export const ReportingEngine = {
 
   async updateSchedule(id: string, updates: Partial<ReportSchedule>): Promise<ReportSchedule> {
     const { data, error } = await (supabase as any)
-      .from('report_schedules')
+      .from("report_schedules")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error updating schedule', error as Error, { scheduleId: id });
+      logger.error("Error updating schedule", error as Error, { scheduleId: id });
       throw error;
     }
 
@@ -338,12 +338,12 @@ export const ReportingEngine = {
 
   async deleteSchedule(id: string): Promise<void> {
     const { error } = await (supabase as any)
-      .from('report_schedules')
+      .from("report_schedules")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      logger.error('Error deleting schedule', error as Error, { scheduleId: id });
+      logger.error("Error deleting schedule", error as Error, { scheduleId: id });
       throw error;
     }
   },
@@ -353,16 +353,16 @@ export const ReportingEngine = {
   // ============================================
 
   async getStatistics(): Promise<ReportStatistics> {
-    const { data, error } = await (supabase as any).rpc('get_report_statistics');
+    const { data, error } = await (supabase as any).rpc("get_report_statistics");
 
     if (error) {
-      logger.error('Error fetching statistics', error as Error);
+      logger.error("Error fetching statistics", error as Error);
       // Return default stats instead of throwing
       return {
         total_reports: 0,
         reports_this_month: 0,
         average_generation_time: 0,
-        most_used_template: 'N/A'
+        most_used_template: "N/A"
       };
     }
 
@@ -379,16 +379,16 @@ export const ReportingEngine = {
     const content = report.content || report.report_data;
 
     switch (format) {
-      case 'JSON':
-        return new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
-      case 'CSV':
-        // Simple CSV conversion
-        const csvContent = Object.entries(content || {})
-          .map(([key, value]) => `"${key}","${JSON.stringify(value)}"`)
-          .join('\n');
-        return new Blob([csvContent], { type: 'text/csv' });
-      default:
-        return new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
+    case "JSON":
+      return new Blob([JSON.stringify(content, null, 2)], { type: "application/json" });
+    case "CSV":
+      // Simple CSV conversion
+      const csvContent = Object.entries(content || {})
+        .map(([key, value]) => `"${key}","${JSON.stringify(value)}"`)
+        .join("\n");
+      return new Blob([csvContent], { type: "text/csv" });
+    default:
+      return new Blob([JSON.stringify(content, null, 2)], { type: "application/json" });
     }
   }
 };

@@ -3,16 +3,16 @@
  * Visual indicator of system health
  */
 
-import { memo } from 'react';
-import { useSystemHealth, getHealthColor, formatBytes, formatMs } from '@/hooks/use-system-health';
+import { memo } from "react";
+import { useSystemHealth, getHealthColor, formatBytes, formatMs } from "@/hooks/use-system-health";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Activity, Wifi, WifiOff, AlertTriangle, CheckCircle } from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/tooltip";
+import { Activity, Wifi, WifiOff, AlertTriangle, CheckCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SystemStatusIndicatorProps {
   showDetails?: boolean;
@@ -26,16 +26,16 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
   const health = useSystemHealth();
 
   const StatusIcon = health.isHealthy ? CheckCircle : AlertTriangle;
-  const ConnectionIcon = health.connection.type === 'unknown' || !navigator.onLine ? WifiOff : Wifi;
+  const ConnectionIcon = health.connection.type === "unknown" || !navigator.onLine ? WifiOff : Wifi;
 
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className={cn('flex items-center gap-2', className)}>
+          <div className={cn("flex items-center gap-2", className)}>
             <div className="relative">
               <Activity className={cn(
-                'h-4 w-4 transition-colors',
+                "h-4 w-4 transition-colors",
                 getHealthColor(health.isHealthy, health.issues)
               )} />
               {!health.isHealthy && (
@@ -45,10 +45,10 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
             
             {showDetails && (
               <span className={cn(
-                'text-xs font-medium',
+                "text-xs font-medium",
                 getHealthColor(health.isHealthy, health.issues)
               )}>
-                {health.isHealthy ? 'Sistema OK' : `${health.issues.length} alertas`}
+                {health.isHealthy ? "Sistema OK" : `${health.issues.length} alertas`}
               </span>
             )}
           </div>
@@ -58,8 +58,8 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
             <div className="flex items-center justify-between">
               <span className="font-semibold">Status do Sistema</span>
               <StatusIcon className={cn(
-                'h-5 w-5',
-                health.isHealthy ? 'text-green-500' : 'text-yellow-500'
+                "h-5 w-5",
+                health.isHealthy ? "text-green-500" : "text-yellow-500"
               )} />
             </div>
 
@@ -71,7 +71,7 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
               </div>
               <span className="font-medium uppercase">
                 {health.connection.type}
-                {health.connection.saveData && ' (Eco)'}
+                {health.connection.saveData && " (Eco)"}
               </span>
             </div>
 
@@ -86,9 +86,9 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
               <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                 <div 
                   className={cn(
-                    'h-full transition-all rounded-full',
-                    health.memory.percentage > 80 ? 'bg-red-500' :
-                    health.memory.percentage > 60 ? 'bg-yellow-500' : 'bg-green-500'
+                    "h-full transition-all rounded-full",
+                    health.memory.percentage > 80 ? "bg-red-500" :
+                      health.memory.percentage > 60 ? "bg-yellow-500" : "bg-green-500"
                   )}
                   style={{ width: `${health.memory.percentage}%` }}
                 />
@@ -111,7 +111,7 @@ export const SystemStatusIndicator = memo(function SystemStatusIndicator({
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">CLS:</span>
-                <span>{health.performance.cls?.toFixed(3) || 'N/A'}</span>
+                <span>{health.performance.cls?.toFixed(3) || "N/A"}</span>
               </div>
             </div>
 

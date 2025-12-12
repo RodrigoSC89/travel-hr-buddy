@@ -309,17 +309,17 @@ const AnalyticsCommandCenter: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case "down": return <TrendingDown className="h-4 w-4 text-red-600" />;
-      default: return <Activity className="h-4 w-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-green-600" />;
+    case "down": return <TrendingDown className="h-4 w-4 text-red-600" />;
+    default: return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getImpactBadge = (impact: string) => {
     switch (impact) {
-      case "high": return <Badge variant="destructive">Alto Impacto</Badge>;
-      case "medium": return <Badge variant="secondary">Médio Impacto</Badge>;
-      default: return <Badge variant="outline">Baixo Impacto</Badge>;
+    case "high": return <Badge variant="destructive">Alto Impacto</Badge>;
+    case "medium": return <Badge variant="secondary">Médio Impacto</Badge>;
+    default: return <Badge variant="outline">Baixo Impacto</Badge>;
     }
   };
 
@@ -373,7 +373,7 @@ const AnalyticsCommandCenter: React.FC = () => {
         
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={refreshData} disabled={isRefreshing}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           <Button variant="outline" size="sm">
@@ -593,8 +593,8 @@ const AnalyticsCommandCenter: React.FC = () => {
                     <span className="text-2xl font-bold">{metric.value}</span>
                     <span className="text-sm text-muted-foreground">{metric.unit}</span>
                   </div>
-                  <div className={`text-xs mt-1 ${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {metric.change >= 0 ? '+' : ''}{metric.change}% vs período anterior
+                  <div className={`text-xs mt-1 ${metric.change >= 0 ? "text-green-600" : "text-red-600"}`}>
+                    {metric.change >= 0 ? "+" : ""}{metric.change}% vs período anterior
                   </div>
                   <Progress value={Math.min(metric.value, 100)} className="h-1 mt-2" />
                 </CardContent>
@@ -919,7 +919,7 @@ const AnalyticsCommandCenter: React.FC = () => {
             {insights.map((insight) => (
               <Card key={insight.id} className={`border-l-4 ${
                 insight.priority === "high" ? "border-l-destructive" :
-                insight.priority === "medium" ? "border-l-yellow-500" : "border-l-blue-500"
+                  insight.priority === "medium" ? "border-l-yellow-500" : "border-l-blue-500"
               }`}>
                 <CardHeader>
                   <div className="flex items-center justify-between">

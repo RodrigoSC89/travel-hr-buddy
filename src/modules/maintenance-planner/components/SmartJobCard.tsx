@@ -61,39 +61,39 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
 
   const getCriticalityColor = (criticidade: string) => {
     switch (criticidade) {
-      case "alta": return "bg-red-500 text-white";
-      case "media": return "bg-yellow-500 text-white";
-      case "baixa": return "bg-green-500 text-white";
-      default: return "bg-gray-500";
+    case "alta": return "bg-red-500 text-white";
+    case "media": return "bg-yellow-500 text-white";
+    case "baixa": return "bg-green-500 text-white";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pendente": return "border-l-yellow-500";
-      case "em_andamento": return "border-l-blue-500";
-      case "concluido": return "border-l-green-500";
-      case "postergado": return "border-l-orange-500";
-      default: return "border-l-gray-500";
+    case "pendente": return "border-l-yellow-500";
+    case "em_andamento": return "border-l-blue-500";
+    case "concluido": return "border-l-green-500";
+    case "postergado": return "border-l-orange-500";
+    default: return "border-l-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pendente": return "Pendente";
-      case "em_andamento": return "Em Andamento";
-      case "concluido": return "Concluído";
-      case "postergado": return "Postergado";
-      default: return status;
+    case "pendente": return "Pendente";
+    case "em_andamento": return "Em Andamento";
+    case "concluido": return "Concluído";
+    case "postergado": return "Postergado";
+    default: return status;
     }
   };
 
   const getTypeIcon = (tipo: string) => {
     switch (tipo) {
-      case "corretiva": return "🔴";
-      case "preventiva": return "🟡";
-      case "preditiva": return "🟢";
-      default: return "⚪";
+    case "corretiva": return "🔴";
+    case "preventiva": return "🟡";
+    case "preditiva": return "🟢";
+    default: return "⚪";
     }
   };
 

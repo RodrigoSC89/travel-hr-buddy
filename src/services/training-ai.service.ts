@@ -318,9 +318,9 @@ export class TrainingAIService {
       typeof content.passed === "boolean"
         ? content.passed
         : Boolean(
-            row.completed_at &&
+          row.completed_at &&
               (row.status === "completed" || (row.final_score ?? 0) >= PASSING_SCORE)
-          );
+        );
 
     return {
       id: row.id,

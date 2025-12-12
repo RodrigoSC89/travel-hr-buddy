@@ -4,42 +4,42 @@
  */
 
 export const emissionTypes = [
-  'CO2',
-  'NOx',
-  'SOx',
-  'PM',
-  'CH4'
+  "CO2",
+  "NOx",
+  "SOx",
+  "PM",
+  "CH4"
 ];
 
 export const emissionData = {
   valid: {
-    type: 'CO2',
+    type: "CO2",
     value: 1250.5,
-    unit: 'kg',
-    date: '2025-12-11',
-    source: 'Main Engine',
-    vessel: 'MV Nautilus One',
+    unit: "kg",
+    date: "2025-12-11",
+    source: "Main Engine",
+    vessel: "MV Nautilus One",
     location: {
       lat: -23.5505,
       lng: -46.6333
     }
   },
   high: {
-    type: 'NOx',
+    type: "NOx",
     value: 5000.0,
-    unit: 'kg',
-    date: '2025-12-11',
-    source: 'Auxiliary Engine',
-    vessel: 'MV Nautilus One',
+    unit: "kg",
+    date: "2025-12-11",
+    source: "Auxiliary Engine",
+    vessel: "MV Nautilus One",
     alert: true
   },
   invalid: {
-    type: '',
+    type: "",
     value: -100,
-    unit: '',
-    date: '',
-    source: '',
-    vessel: ''
+    unit: "",
+    date: "",
+    source: "",
+    vessel: ""
   }
 };
 
@@ -65,12 +65,12 @@ export const esgMetrics = {
 export const eexi = {
   current: 4.2,
   target: 3.8,
-  status: 'warning',
-  trend: 'improving'
+  status: "warning",
+  trend: "improving"
 };
 
 export const cii = {
-  rating: 'B',
+  rating: "B",
   score: 2.85,
   target: 2.50,
   year: 2025

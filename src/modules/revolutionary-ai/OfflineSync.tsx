@@ -3,23 +3,23 @@
  * Sincronização inteligente para operação offline
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Wifi, WifiOff, Cloud, CloudOff, 
   RefreshCw, Database, HardDrive,
   CheckCircle, AlertTriangle, Clock
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SyncItem {
   id: string;
   module: string;
-  type: 'pending' | 'syncing' | 'synced' | 'error';
-  priority: 'critical' | 'high' | 'normal';
+  type: "pending" | "syncing" | "synced" | "error";
+  priority: "critical" | "high" | "normal";
   timestamp: Date;
   size: number;
   description: string;
@@ -32,40 +32,40 @@ export function OfflineSync() {
   const [localStorageUsed, setLocalStorageUsed] = useState(0);
   const [syncQueue, setSyncQueue] = useState<SyncItem[]>([
     {
-      id: '1',
-      module: 'Manutenções',
-      type: 'pending',
-      priority: 'critical',
+      id: "1",
+      module: "Manutenções",
+      type: "pending",
+      priority: "critical",
       timestamp: new Date(Date.now() - 3600000),
       size: 2.4,
-      description: 'Ordem de serviço #4521 - Motor principal'
+      description: "Ordem de serviço #4521 - Motor principal"
     },
     {
-      id: '2',
-      module: 'Estoque',
-      type: 'pending',
-      priority: 'high',
+      id: "2",
+      module: "Estoque",
+      type: "pending",
+      priority: "high",
       timestamp: new Date(Date.now() - 7200000),
       size: 1.2,
-      description: 'Baixa de 15 itens - Navio Sirius'
+      description: "Baixa de 15 itens - Navio Sirius"
     },
     {
-      id: '3',
-      module: 'Certificados',
-      type: 'synced',
-      priority: 'normal',
+      id: "3",
+      module: "Certificados",
+      type: "synced",
+      priority: "normal",
       timestamp: new Date(Date.now() - 1800000),
       size: 0.8,
-      description: 'Upload certificado ANTAQ'
+      description: "Upload certificado ANTAQ"
     },
     {
-      id: '4',
-      module: 'Incidentes',
-      type: 'error',
-      priority: 'critical',
+      id: "4",
+      module: "Incidentes",
+      type: "error",
+      priority: "critical",
       timestamp: new Date(Date.now() - 900000),
       size: 3.1,
-      description: 'Relatório de incidente #892'
+      description: "Relatório de incidente #892"
     }
   ]);
 
@@ -73,8 +73,8 @@ export function OfflineSync() {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Simulate local storage usage
     try {
@@ -85,8 +85,8 @@ export function OfflineSync() {
     }
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -104,29 +104,29 @@ export function OfflineSync() {
 
     setSyncQueue(prev => prev.map(item => ({
       ...item,
-      type: item.type === 'pending' ? 'synced' : item.type
+      type: item.type === "pending" ? "synced" : item.type
     })));
 
     setIsSyncing(false);
   };
 
-  const pendingCount = syncQueue.filter(i => i.type === 'pending').length;
-  const errorCount = syncQueue.filter(i => i.type === 'error').length;
+  const pendingCount = syncQueue.filter(i => i.type === "pending").length;
+  const errorCount = syncQueue.filter(i => i.type === "error").length;
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-destructive text-destructive-foreground';
-      case 'high': return 'bg-warning text-warning-foreground';
-      default: return 'bg-muted text-muted-foreground';
+    case "critical": return "bg-destructive text-destructive-foreground";
+    case "high": return "bg-warning text-warning-foreground";
+    default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (type: string) => {
     switch (type) {
-      case 'synced': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error': return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case 'syncing': return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
-      default: return <Clock className="h-4 w-4 text-muted-foreground" />;
+    case "synced": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "error": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "syncing": return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
+    default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -167,8 +167,8 @@ export function OfflineSync() {
           disabled={!isOnline || isSyncing}
           className="gap-2"
         >
-          <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-          {isSyncing ? 'Sincronizando...' : 'Sincronizar Agora'}
+          <RefreshCw className={`h-4 w-4 ${isSyncing ? "animate-spin" : ""}`} />
+          {isSyncing ? "Sincronizando..." : "Sincronizar Agora"}
         </Button>
       </div>
 
@@ -177,7 +177,7 @@ export function OfflineSync() {
         {isSyncing && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
           >
             <Card>
@@ -271,7 +271,7 @@ export function OfflineSync() {
                   <Badge className={getPriorityColor(item.priority)}>
                     {item.priority}
                   </Badge>
-                  {item.type === 'error' && (
+                  {item.type === "error" && (
                     <Button size="sm" variant="outline">
                       Retry
                     </Button>

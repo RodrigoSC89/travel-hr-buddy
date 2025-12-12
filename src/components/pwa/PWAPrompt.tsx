@@ -3,12 +3,12 @@
  * PATCH 833: User-friendly PWA installation prompt
  */
 
-import React, { useState, useEffect } from 'react';
-import { X, Download, Smartphone, Wifi, WifiOff, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { usePWA } from '@/lib/pwa/service-worker-registration';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { X, Download, Smartphone, Wifi, WifiOff, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePWA } from "@/lib/pwa/service-worker-registration";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function PWAInstallPrompt() {
   const { isInstallable, isInstalled, install } = usePWA();
@@ -19,7 +19,7 @@ export function PWAInstallPrompt() {
     // Don't show if already installed or dismissed
     if (isInstalled) return;
     
-    const dismissedAt = localStorage.getItem('pwa_prompt_dismissed');
+    const dismissedAt = localStorage.getItem("pwa_prompt_dismissed");
     if (dismissedAt) {
       const daysSinceDismissed = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
       if (daysSinceDismissed < 7) {
@@ -41,7 +41,7 @@ export function PWAInstallPrompt() {
   const handleDismiss = () => {
     setShowPrompt(false);
     setDismissed(true);
-    localStorage.setItem('pwa_prompt_dismissed', Date.now().toString());
+    localStorage.setItem("pwa_prompt_dismissed", Date.now().toString());
   };
 
   const handleInstall = async () => {

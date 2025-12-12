@@ -3,7 +3,7 @@
  * Manages and prioritizes network requests for low-bandwidth scenarios
  */
 
-type RequestPriority = 'critical' | 'high' | 'normal' | 'low';
+type RequestPriority = "critical" | "high" | "normal" | "low";
 
 interface QueuedRequest {
   id: string;
@@ -28,8 +28,8 @@ class RequestQueueManager {
     // Adjust concurrency based on connection
     this.updateConcurrency();
     
-    if ('connection' in navigator) {
-      (navigator as any).connection?.addEventListener('change', () => {
+    if ("connection" in navigator) {
+      (navigator as any).connection?.addEventListener("change", () => {
         this.updateConcurrency();
       });
     }
@@ -41,23 +41,23 @@ class RequestQueueManager {
 
     const effectiveType = connection.effectiveType;
     switch (effectiveType) {
-      case 'slow-2g':
-      case '2g':
-        this.concurrentLimit = 1;
-        break;
-      case '3g':
-        this.concurrentLimit = 2;
-        break;
-      case '4g':
-      default:
-        this.concurrentLimit = 4;
+    case "slow-2g":
+    case "2g":
+      this.concurrentLimit = 1;
+      break;
+    case "3g":
+      this.concurrentLimit = 2;
+      break;
+    case "4g":
+    default:
+      this.concurrentLimit = 4;
     }
   }
 
   /**
    * Add request to queue with priority
    */
-  enqueue(url: string, options: RequestInit = {}, priority: RequestPriority = 'normal'): Promise<Response> {
+  enqueue(url: string, options: RequestInit = {}, priority: RequestPriority = "normal"): Promise<Response> {
     return new Promise((resolve, reject) => {
       const request: QueuedRequest = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -148,7 +148,7 @@ class RequestQueueManager {
    */
   cancelAll() {
     this.queue.forEach(request => {
-      request.reject(new Error('Request cancelled'));
+      request.reject(new Error("Request cancelled"));
     });
     this.queue = [];
   }
@@ -173,7 +173,7 @@ export const requestQueue = new RequestQueueManager();
 export function prioritizedFetch(
   url: string,
   options?: RequestInit,
-  priority: RequestPriority = 'normal'
+  priority: RequestPriority = "normal"
 ): Promise<Response> {
   return requestQueue.enqueue(url, options, priority);
 }

@@ -56,7 +56,7 @@ export default function CrewTraining({
   const getComplianceScore = (memberId: string) => {
     const memberCerts = getMemberCertifications(memberId);
     if (memberCerts.length === 0) return 0;
-    const validCerts = memberCerts.filter(c => c.status === 'valid').length;
+    const validCerts = memberCerts.filter(c => c.status === "valid").length;
     return Math.round((validCerts / memberCerts.length) * 100);
   };
 
@@ -82,9 +82,9 @@ export default function CrewTraining({
 
   const stats = {
     total: crewMembers.length,
-    compliant: crewMembers.filter(m => m.trainingStatus === 'compliant').length,
-    expiring: crewMembers.filter(m => m.trainingStatus === 'expiring').length,
-    nonCompliant: crewMembers.filter(m => m.trainingStatus === 'non-compliant').length,
+    compliant: crewMembers.filter(m => m.trainingStatus === "compliant").length,
+    expiring: crewMembers.filter(m => m.trainingStatus === "expiring").length,
+    nonCompliant: crewMembers.filter(m => m.trainingStatus === "non-compliant").length,
   };
 
   return (
@@ -212,7 +212,7 @@ export default function CrewTraining({
                         <div className="flex items-center gap-3">
                           <Avatar>
                             <AvatarImage src={member.photoUrl} />
-                            <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</AvatarFallback>
+                            <AvatarFallback>{member.name.split(" ").map(n => n[0]).join("").slice(0, 2)}</AvatarFallback>
                           </Avatar>
                           <div>
                             <p className="font-medium">{member.name}</p>
@@ -223,9 +223,9 @@ export default function CrewTraining({
                       <TableCell>{member.position}</TableCell>
                       <TableCell>
                         <Badge variant="outline">
-                          {member.department === 'deck' ? 'Convés' :
-                           member.department === 'engine' ? 'Máquinas' :
-                           member.department === 'catering' ? 'Cozinha' : 'Hotel'}
+                          {member.department === "deck" ? "Convés" :
+                            member.department === "engine" ? "Máquinas" :
+                              member.department === "catering" ? "Cozinha" : "Hotel"}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -236,11 +236,11 @@ export default function CrewTraining({
                       </TableCell>
                       <TableCell>
                         <Badge variant={
-                          member.trainingStatus === 'compliant' ? 'default' :
-                          member.trainingStatus === 'expiring' ? 'secondary' : 'destructive'
+                          member.trainingStatus === "compliant" ? "default" :
+                            member.trainingStatus === "expiring" ? "secondary" : "destructive"
                         }>
-                          {member.trainingStatus === 'compliant' ? 'Conforme' :
-                           member.trainingStatus === 'expiring' ? 'Expirando' : 'Não Conforme'}
+                          {member.trainingStatus === "compliant" ? "Conforme" :
+                            member.trainingStatus === "expiring" ? "Expirando" : "Não Conforme"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -265,30 +265,30 @@ export default function CrewTraining({
             <DialogTitle className="flex items-center gap-3">
               <Avatar>
                 <AvatarFallback>
-                  {selectedMember?.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  {selectedMember?.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
               {selectedMember?.name}
             </DialogTitle>
             <DialogDescription>
-              {selectedMember?.position} • {selectedMember?.department === 'deck' ? 'Convés' : 
-                selectedMember?.department === 'engine' ? 'Máquinas' : 'Outro'}
+              {selectedMember?.position} • {selectedMember?.department === "deck" ? "Convés" : 
+                selectedMember?.department === "engine" ? "Máquinas" : "Outro"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
               <div>
                 <p className="text-sm text-muted-foreground">Data de Admissão</p>
-                <p className="font-medium">{selectedMember?.joinDate ? format(parseISO(selectedMember.joinDate), "dd/MM/yyyy") : '-'}</p>
+                <p className="font-medium">{selectedMember?.joinDate ? format(parseISO(selectedMember.joinDate), "dd/MM/yyyy") : "-"}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Status de Treinamento</p>
                 <Badge variant={
-                  selectedMember?.trainingStatus === 'compliant' ? 'default' :
-                  selectedMember?.trainingStatus === 'expiring' ? 'secondary' : 'destructive'
+                  selectedMember?.trainingStatus === "compliant" ? "default" :
+                    selectedMember?.trainingStatus === "expiring" ? "secondary" : "destructive"
                 }>
-                  {selectedMember?.trainingStatus === 'compliant' ? 'Conforme' :
-                   selectedMember?.trainingStatus === 'expiring' ? 'Expirando' : 'Não Conforme'}
+                  {selectedMember?.trainingStatus === "compliant" ? "Conforme" :
+                    selectedMember?.trainingStatus === "expiring" ? "Expirando" : "Não Conforme"}
                 </Badge>
               </div>
             </div>
@@ -303,8 +303,8 @@ export default function CrewTraining({
                   const daysUntilExpiry = differenceInDays(parseISO(cert.expiryDate), new Date());
                   return (
                     <div key={cert.id} className={`p-3 rounded-lg border ${
-                      cert.status === 'expired' ? 'bg-destructive/5 border-destructive/30' :
-                      cert.status === 'expiring' ? 'bg-amber-500/5 border-amber-500/30' : ''
+                      cert.status === "expired" ? "bg-destructive/5 border-destructive/30" :
+                        cert.status === "expiring" ? "bg-amber-500/5 border-amber-500/30" : ""
                     }`}>
                       <div className="flex items-center justify-between">
                         <div>
@@ -313,11 +313,11 @@ export default function CrewTraining({
                         </div>
                         <div className="text-right">
                           <Badge variant={
-                            cert.status === 'valid' ? 'outline' :
-                            cert.status === 'expiring' ? 'secondary' : 'destructive'
+                            cert.status === "valid" ? "outline" :
+                              cert.status === "expiring" ? "secondary" : "destructive"
                           }>
-                            {cert.status === 'valid' ? 'Válido' :
-                             cert.status === 'expiring' ? `Expira em ${daysUntilExpiry} dias` : 'Expirado'}
+                            {cert.status === "valid" ? "Válido" :
+                              cert.status === "expiring" ? `Expira em ${daysUntilExpiry} dias` : "Expirado"}
                           </Badge>
                           <p className="text-xs text-muted-foreground mt-1">
                             Válido até: {format(parseISO(cert.expiryDate), "dd/MM/yyyy")}
@@ -329,7 +329,7 @@ export default function CrewTraining({
                           <Eye className="h-3 w-3 mr-1" />
                           Ver
                         </Button>
-                        {(cert.status === 'expiring' || cert.status === 'expired') && (
+                        {(cert.status === "expiring" || cert.status === "expired") && (
                           <Button variant="ghost" size="sm" onClick={() => onScheduleRenewal(cert)}>
                             <Calendar className="h-3 w-3 mr-1" />
                             Agendar Renovação
@@ -370,20 +370,20 @@ export default function CrewTraining({
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
                 <Badge variant={
-                  selectedCert?.status === 'valid' ? 'outline' :
-                  selectedCert?.status === 'expiring' ? 'secondary' : 'destructive'
+                  selectedCert?.status === "valid" ? "outline" :
+                    selectedCert?.status === "expiring" ? "secondary" : "destructive"
                 }>
-                  {selectedCert?.status === 'valid' ? 'Válido' :
-                   selectedCert?.status === 'expiring' ? 'Expirando' : 'Expirado'}
+                  {selectedCert?.status === "valid" ? "Válido" :
+                    selectedCert?.status === "expiring" ? "Expirando" : "Expirado"}
                 </Badge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Data de Emissão</p>
-                <p className="font-medium">{selectedCert?.issueDate ? format(parseISO(selectedCert.issueDate), "dd/MM/yyyy") : '-'}</p>
+                <p className="font-medium">{selectedCert?.issueDate ? format(parseISO(selectedCert.issueDate), "dd/MM/yyyy") : "-"}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Data de Validade</p>
-                <p className="font-medium">{selectedCert?.expiryDate ? format(parseISO(selectedCert.expiryDate), "dd/MM/yyyy") : '-'}</p>
+                <p className="font-medium">{selectedCert?.expiryDate ? format(parseISO(selectedCert.expiryDate), "dd/MM/yyyy") : "-"}</p>
               </div>
               <div className="col-span-2">
                 <p className="text-sm text-muted-foreground">Autoridade Emissora</p>

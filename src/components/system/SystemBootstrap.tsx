@@ -3,13 +3,13 @@
  * Initializes all system components and shows loading state
  */
 
-import React, { useEffect, useState } from 'react';
-import { systemInit } from '@/lib/system/unified-init';
-import { OfflineBanner } from '@/components/OfflineBanner';
-import { OfflineIndicator } from '@/components/pwa/OfflineIndicator';
-import { UpdatePrompt } from '@/components/pwa/UpdatePrompt';
-import { InstallPrompt } from '@/components/pwa/InstallPrompt';
-import { VoiceCommandButton } from '@/components/voice/VoiceCommandButton';
+import React, { useEffect, useState } from "react";
+import { systemInit } from "@/lib/system/unified-init";
+import { OfflineBanner } from "@/components/OfflineBanner";
+import { OfflineIndicator } from "@/components/pwa/OfflineIndicator";
+import { UpdatePrompt } from "@/components/pwa/UpdatePrompt";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+import { VoiceCommandButton } from "@/components/voice/VoiceCommandButton";
 import { NotificationBell } from "@/components/unified/NotificationCenter.unified";
 
 interface SystemBootstrapProps {

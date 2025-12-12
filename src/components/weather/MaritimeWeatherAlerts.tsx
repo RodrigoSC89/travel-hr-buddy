@@ -142,7 +142,7 @@ export const MaritimeWeatherAlerts: React.FC = () => {
                           <h4 className={`font-semibold ${style.text}`}>{alert.title}</h4>
                           <Badge variant={style.badge}>
                             {alert.severity === "critical" ? "Crítico" : 
-                             alert.severity === "warning" ? "Atenção" : "Informativo"}
+                              alert.severity === "warning" ? "Atenção" : "Informativo"}
                           </Badge>
                         </div>
                         <Button variant="ghost" size="sm">

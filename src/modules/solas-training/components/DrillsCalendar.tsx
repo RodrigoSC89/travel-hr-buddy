@@ -37,7 +37,7 @@ interface DrillsCalendarProps {
   onViewReport: (drill: Drill) => void;
 }
 
-const drillTypeIcons: Record<Drill['type'], React.ComponentType<any>> = {
+const drillTypeIcons: Record<Drill["type"], React.ComponentType<any>> = {
   fire: Flame,
   abandon: LifeBuoy,
   mob: Anchor,
@@ -48,7 +48,7 @@ const drillTypeIcons: Record<Drill['type'], React.ComponentType<any>> = {
   medical: Heart,
 };
 
-const drillTypeColors: Record<Drill['type'], string> = {
+const drillTypeColors: Record<Drill["type"], string> = {
   fire: "text-red-500 bg-red-500/10",
   abandon: "text-blue-500 bg-blue-500/10",
   mob: "text-cyan-500 bg-cyan-500/10",
@@ -172,9 +172,9 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                   const Icon = drillTypeIcons[drill.type];
                   return (
                     <div key={drill.id} className={`p-4 rounded-lg border ${
-                      drill.status === 'overdue' ? 'border-destructive/50 bg-destructive/5' :
-                      drill.status === 'completed' ? 'border-green-500/50 bg-green-500/5' :
-                      'border-border'
+                      drill.status === "overdue" ? "border-destructive/50 bg-destructive/5" :
+                        drill.status === "completed" ? "border-green-500/50 bg-green-500/5" :
+                          "border-border"
                     }`}>
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
@@ -196,17 +196,17 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                           </div>
                         </div>
                         <Badge variant={
-                          drill.status === 'completed' ? 'default' :
-                          drill.status === 'overdue' ? 'destructive' :
-                          drill.status === 'scheduled' ? 'secondary' : 'outline'
+                          drill.status === "completed" ? "default" :
+                            drill.status === "overdue" ? "destructive" :
+                              drill.status === "scheduled" ? "secondary" : "outline"
                         }>
-                          {drill.status === 'completed' ? 'Concluído' :
-                           drill.status === 'overdue' ? 'Atrasado' :
-                           drill.status === 'scheduled' ? 'Agendado' : 'Pendente'}
+                          {drill.status === "completed" ? "Concluído" :
+                            drill.status === "overdue" ? "Atrasado" :
+                              drill.status === "scheduled" ? "Agendado" : "Pendente"}
                         </Badge>
                       </div>
                       <div className="flex gap-2 mt-4">
-                        {drill.status !== 'completed' && (
+                        {drill.status !== "completed" && (
                           <>
                             <Button size="sm" onClick={() => handleStartDrill(drill)}>
                               <Play className="h-4 w-4 mr-2" />
@@ -246,9 +246,9 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                 const Icon = drillTypeIcons[drill.type];
                 return (
                   <div key={drill.id} className={`p-4 rounded-lg border ${
-                    drill.status === 'overdue' ? 'bg-destructive/5 border-destructive/30' :
-                    drill.status === 'due' ? 'bg-amber-500/5 border-amber-500/30' :
-                    drill.status === 'completed' ? 'bg-muted/30' : ''
+                    drill.status === "overdue" ? "bg-destructive/5 border-destructive/30" :
+                      drill.status === "due" ? "bg-amber-500/5 border-amber-500/30" :
+                        drill.status === "completed" ? "bg-muted/30" : ""
                   }`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -264,15 +264,15 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant={
-                          drill.status === 'completed' ? 'default' :
-                          drill.status === 'overdue' ? 'destructive' :
-                          drill.status === 'scheduled' ? 'secondary' : 'outline'
+                          drill.status === "completed" ? "default" :
+                            drill.status === "overdue" ? "destructive" :
+                              drill.status === "scheduled" ? "secondary" : "outline"
                         }>
-                          {drill.status === 'completed' ? 'Concluído' :
-                           drill.status === 'overdue' ? 'Atrasado' :
-                           drill.status === 'scheduled' ? 'Agendado' : 'Pendente'}
+                          {drill.status === "completed" ? "Concluído" :
+                            drill.status === "overdue" ? "Atrasado" :
+                              drill.status === "scheduled" ? "Agendado" : "Pendente"}
                         </Badge>
-                        {drill.status !== 'completed' && (
+                        {drill.status !== "completed" && (
                           <Button variant="outline" size="sm" onClick={() => handleSchedule(drill)}>
                             Agendar
                           </Button>
@@ -304,7 +304,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                   <SelectValue placeholder="Selecione o drill" />
                 </SelectTrigger>
                 <SelectContent>
-                  {drills.filter(d => d.status !== 'completed').map(drill => (
+                  {drills.filter(d => d.status !== "completed").map(drill => (
                     <SelectItem key={drill.id} value={drill.id}>{drill.name}</SelectItem>
                   ))}
                 </SelectContent>

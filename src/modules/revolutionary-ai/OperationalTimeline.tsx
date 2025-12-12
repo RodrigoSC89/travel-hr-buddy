@@ -3,112 +3,112 @@
  * Histórico vivo de eventos por embarcação
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Clock, Ship, Wrench, Users, AlertTriangle,
   FileCheck, Package, Fuel, Search, Filter,
   ChevronDown, ChevronUp
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TimelineEvent {
   id: string;
-  type: 'maintenance' | 'crew' | 'incident' | 'certificate' | 'supply' | 'fuel';
+  type: "maintenance" | "crew" | "incident" | "certificate" | "supply" | "fuel";
   title: string;
   description: string;
   timestamp: Date;
   vessel: string;
-  severity?: 'info' | 'warning' | 'critical';
+  severity?: "info" | "warning" | "critical";
   details?: Record<string, string | number>;
   user?: string;
 }
 
 const mockEvents: TimelineEvent[] = [
   {
-    id: '1',
-    type: 'maintenance',
-    title: 'Manutenção Preventiva Concluída',
-    description: 'Troca de óleo do motor principal realizada com sucesso',
+    id: "1",
+    type: "maintenance",
+    title: "Manutenção Preventiva Concluída",
+    description: "Troca de óleo do motor principal realizada com sucesso",
     timestamp: new Date(Date.now() - 1800000),
-    vessel: 'Navio Sirius',
-    severity: 'info',
-    details: { 'Técnico': 'João Silva', 'Horas': 4, 'Custo': 2500 },
-    user: 'Carlos Mendes'
+    vessel: "Navio Sirius",
+    severity: "info",
+    details: { "Técnico": "João Silva", "Horas": 4, "Custo": 2500 },
+    user: "Carlos Mendes"
   },
   {
-    id: '2',
-    type: 'crew',
-    title: 'Embarque de Tripulação',
-    description: '3 tripulantes embarcaram para turno de 28 dias',
+    id: "2",
+    type: "crew",
+    title: "Embarque de Tripulação",
+    description: "3 tripulantes embarcaram para turno de 28 dias",
     timestamp: new Date(Date.now() - 7200000),
-    vessel: 'Navio Vega',
-    severity: 'info',
-    user: 'RH Sistema'
+    vessel: "Navio Vega",
+    severity: "info",
+    user: "RH Sistema"
   },
   {
-    id: '3',
-    type: 'incident',
-    title: 'Alerta de Temperatura',
-    description: 'Temperatura do motor acima do normal detectada',
+    id: "3",
+    type: "incident",
+    title: "Alerta de Temperatura",
+    description: "Temperatura do motor acima do normal detectada",
     timestamp: new Date(Date.now() - 10800000),
-    vessel: 'Navio Sirius',
-    severity: 'warning',
-    details: { 'Temperatura': '95°C', 'Limite': '85°C' }
+    vessel: "Navio Sirius",
+    severity: "warning",
+    details: { "Temperatura": "95°C", "Limite": "85°C" }
   },
   {
-    id: '4',
-    type: 'certificate',
-    title: 'Certificado ANTAQ Renovado',
-    description: 'Certificado de navegação renovado até 2026',
+    id: "4",
+    type: "certificate",
+    title: "Certificado ANTAQ Renovado",
+    description: "Certificado de navegação renovado até 2026",
     timestamp: new Date(Date.now() - 86400000),
-    vessel: 'Navio Polaris',
-    severity: 'info',
-    user: 'Admin'
+    vessel: "Navio Polaris",
+    severity: "info",
+    user: "Admin"
   },
   {
-    id: '5',
-    type: 'supply',
-    title: 'Abastecimento de Suprimentos',
-    description: '45 itens recebidos a bordo',
+    id: "5",
+    type: "supply",
+    title: "Abastecimento de Suprimentos",
+    description: "45 itens recebidos a bordo",
     timestamp: new Date(Date.now() - 172800000),
-    vessel: 'Navio Vega',
-    details: { 'Itens': 45, 'Valor Total': 'R$ 12.500' }
+    vessel: "Navio Vega",
+    details: { "Itens": 45, "Valor Total": "R$ 12.500" }
   },
   {
-    id: '6',
-    type: 'fuel',
-    title: 'Abastecimento de Combustível',
-    description: '5.000 litros de diesel abastecidos',
+    id: "6",
+    type: "fuel",
+    title: "Abastecimento de Combustível",
+    description: "5.000 litros de diesel abastecidos",
     timestamp: new Date(Date.now() - 259200000),
-    vessel: 'Navio Sirius',
-    details: { 'Litros': 5000, 'Preço/L': 'R$ 4.85' }
+    vessel: "Navio Sirius",
+    details: { "Litros": 5000, "Preço/L": "R$ 4.85" }
   },
   {
-    id: '7',
-    type: 'incident',
-    title: 'Falha no Sistema de Navegação',
-    description: 'GPS apresentou falha temporária - resolvido',
+    id: "7",
+    type: "incident",
+    title: "Falha no Sistema de Navegação",
+    description: "GPS apresentou falha temporária - resolvido",
     timestamp: new Date(Date.now() - 345600000),
-    vessel: 'Navio Polaris',
-    severity: 'critical',
-    details: { 'Duração': '45 min', 'Impacto': 'Baixo' }
+    vessel: "Navio Polaris",
+    severity: "critical",
+    details: { "Duração": "45 min", "Impacto": "Baixo" }
   }
 ];
 
 export function OperationalTimeline() {
   const [events] = useState<TimelineEvent[]>(mockEvents);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
   const vessels = [...new Set(events.map(e => e.vessel))];
-  const eventTypes = ['maintenance', 'crew', 'incident', 'certificate', 'supply', 'fuel'];
+  const eventTypes = ["maintenance", "crew", "incident", "certificate", "supply", "fuel"];
 
   const filteredEvents = events.filter(event => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -120,27 +120,27 @@ export function OperationalTimeline() {
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case 'maintenance': return <Wrench className="h-4 w-4" />;
-      case 'crew': return <Users className="h-4 w-4" />;
-      case 'incident': return <AlertTriangle className="h-4 w-4" />;
-      case 'certificate': return <FileCheck className="h-4 w-4" />;
-      case 'supply': return <Package className="h-4 w-4" />;
-      case 'fuel': return <Fuel className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
+    case "maintenance": return <Wrench className="h-4 w-4" />;
+    case "crew": return <Users className="h-4 w-4" />;
+    case "incident": return <AlertTriangle className="h-4 w-4" />;
+    case "certificate": return <FileCheck className="h-4 w-4" />;
+    case "supply": return <Package className="h-4 w-4" />;
+    case "fuel": return <Fuel className="h-4 w-4" />;
+    default: return <Clock className="h-4 w-4" />;
     }
   };
 
   const getEventColor = (type: string, severity?: string) => {
-    if (severity === 'critical') return 'border-destructive bg-destructive/10';
-    if (severity === 'warning') return 'border-warning bg-warning/10';
+    if (severity === "critical") return "border-destructive bg-destructive/10";
+    if (severity === "warning") return "border-warning bg-warning/10";
     
     switch (type) {
-      case 'maintenance': return 'border-blue-500 bg-blue-500/10';
-      case 'crew': return 'border-green-500 bg-green-500/10';
-      case 'certificate': return 'border-purple-500 bg-purple-500/10';
-      case 'supply': return 'border-orange-500 bg-orange-500/10';
-      case 'fuel': return 'border-yellow-500 bg-yellow-500/10';
-      default: return 'border-muted bg-muted/10';
+    case "maintenance": return "border-blue-500 bg-blue-500/10";
+    case "crew": return "border-green-500 bg-green-500/10";
+    case "certificate": return "border-purple-500 bg-purple-500/10";
+    case "supply": return "border-orange-500 bg-orange-500/10";
+    case "fuel": return "border-yellow-500 bg-yellow-500/10";
+    default: return "border-muted bg-muted/10";
     }
   };
 
@@ -149,9 +149,9 @@ export function OperationalTimeline() {
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(hours / 24);
     
-    if (days > 0) return `Há ${days} dia${days > 1 ? 's' : ''}`;
-    if (hours > 0) return `Há ${hours} hora${hours > 1 ? 's' : ''}`;
-    return 'Agora';
+    if (days > 0) return `Há ${days} dia${days > 1 ? "s" : ""}`;
+    if (hours > 0) return `Há ${hours} hora${hours > 1 ? "s" : ""}`;
+    return "Agora";
   };
 
   const toggleType = (type: string) => {
@@ -283,7 +283,7 @@ export function OperationalTimeline() {
                           {expandedEvent === event.id && event.details && (
                             <motion.div
                               initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
+                              animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
                               className="mt-4 pt-4 border-t"
                             >

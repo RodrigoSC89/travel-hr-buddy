@@ -3,12 +3,12 @@
  * Centralized error monitoring and tracking
  */
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertTriangle,
   XCircle,
@@ -22,24 +22,24 @@ import {
   Lock,
   Terminal,
   HelpCircle
-} from 'lucide-react';
-import { useErrorTracker } from '@/hooks/use-error-tracker';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import type { ErrorCategory, ErrorSeverity } from '@/lib/error-tracker';
+} from "lucide-react";
+import { useErrorTracker } from "@/hooks/use-error-tracker";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { ErrorCategory, ErrorSeverity } from "@/lib/error-tracker";
 
 export const ErrorDashboard: React.FC = () => {
   const { stats, getErrors, getErrorsByCategory, getErrorsBySeverity, clear } = useErrorTracker();
 
   const getSeverityIcon = (severity: ErrorSeverity) => {
     switch (severity) {
-      case 'critical':
-        return <XCircle className="w-4 h-4 text-destructive" />;
-      case 'high':
-        return <AlertTriangle className="w-4 h-4 text-red-500" />;
-      case 'medium':
-        return <AlertCircle className="w-4 h-4 text-warning" />;
-      case 'low':
-        return <Info className="w-4 h-4 text-blue-500" />;
+    case "critical":
+      return <XCircle className="w-4 h-4 text-destructive" />;
+    case "high":
+      return <AlertTriangle className="w-4 h-4 text-red-500" />;
+    case "medium":
+      return <AlertCircle className="w-4 h-4 text-warning" />;
+    case "low":
+      return <Info className="w-4 h-4 text-blue-500" />;
     }
   };
 
@@ -55,37 +55,37 @@ export const ErrorDashboard: React.FC = () => {
 
   const getCategoryIcon = (category: ErrorCategory) => {
     switch (category) {
-      case 'network':
-        return <Wifi className="w-4 h-4" />;
-      case 'authentication':
-        return <Lock className="w-4 h-4" />;
-      case 'runtime':
-        return <Terminal className="w-4 h-4" />;
-      case 'validation':
-        return <AlertCircle className="w-4 h-4" />;
-      case 'unknown':
-        return <HelpCircle className="w-4 h-4" />;
+    case "network":
+      return <Wifi className="w-4 h-4" />;
+    case "authentication":
+      return <Lock className="w-4 h-4" />;
+    case "runtime":
+      return <Terminal className="w-4 h-4" />;
+    case "validation":
+      return <AlertCircle className="w-4 h-4" />;
+    case "unknown":
+      return <HelpCircle className="w-4 h-4" />;
     }
   };
 
   const getCategoryColor = (category: ErrorCategory): string => {
     switch (category) {
-      case 'network':
-        return 'text-blue-500';
-      case 'authentication':
-        return 'text-red-500';
-      case 'runtime':
-        return 'text-purple-500';
-      case 'validation':
-        return 'text-yellow-500';
-      case 'unknown':
-        return 'text-muted-foreground';
+    case "network":
+      return "text-blue-500";
+    case "authentication":
+      return "text-red-500";
+    case "runtime":
+      return "text-purple-500";
+    case "validation":
+      return "text-yellow-500";
+    case "unknown":
+      return "text-muted-foreground";
     }
   };
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleString('pt-BR');
+    return date.toLocaleString("pt-BR");
   };
 
   const hasErrors = stats.total > 0;
@@ -295,7 +295,7 @@ export const ErrorDashboard: React.FC = () => {
               </ScrollArea>
             </TabsContent>
 
-            {(['critical', 'high', 'medium', 'low'] as ErrorSeverity[]).map(severity => (
+            {(["critical", "high", "medium", "low"] as ErrorSeverity[]).map(severity => (
               <TabsContent key={severity} value={severity}>
                 <ScrollArea className="h-[500px]">
                   {getErrorsBySeverity(severity).length > 0 ? (
@@ -335,7 +335,7 @@ export const ErrorDashboard: React.FC = () => {
                     <div className="text-center py-12">
                       <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                       <h3 className="text-lg font-medium mb-2">
-                        Nenhum erro {severity === 'critical' ? 'crítico' : severity === 'high' ? 'alto' : severity === 'medium' ? 'médio' : 'baixo'}
+                        Nenhum erro {severity === "critical" ? "crítico" : severity === "high" ? "alto" : severity === "medium" ? "médio" : "baixo"}
                       </h3>
                       <p className="text-muted-foreground">
                         Nenhum erro desta severidade foi registrado

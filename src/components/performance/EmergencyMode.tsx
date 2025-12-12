@@ -3,21 +3,21 @@
  * Modo emergencial para operação offline crítica
  */
 
-import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, createContext, useContext, ReactNode } from "react";
 import { 
   AlertTriangle, WifiOff, Shield, Clock, RefreshCw, 
   CheckCircle, XCircle, Database, Zap, PhoneCall
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
-import { indexedDBSync } from '@/lib/offline/indexeddb-sync';
-import { offlineSyncManager } from '@/lib/offline/sync-manager';
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import { indexedDBSync } from "@/lib/offline/indexeddb-sync";
+import { offlineSyncManager } from "@/lib/offline/sync-manager";
 
 // Emergency Mode Context
 interface EmergencyModeContextType {
@@ -27,7 +27,7 @@ interface EmergencyModeContextType {
   lastOnline: Date | null;
   activateEmergencyMode: () => void;
   deactivateEmergencyMode: () => void;
-  syncStatus: 'idle' | 'syncing' | 'error';
+  syncStatus: "idle" | "syncing" | "error";
 }
 
 const EmergencyModeContext = createContext<EmergencyModeContextType | null>(null);
@@ -35,7 +35,7 @@ const EmergencyModeContext = createContext<EmergencyModeContextType | null>(null
 export function useEmergencyMode() {
   const context = useContext(EmergencyModeContext);
   if (!context) {
-    throw new Error('useEmergencyMode must be used within EmergencyModeProvider');
+    throw new Error("useEmergencyMode must be used within EmergencyModeProvider");
   }
   return context;
 }
@@ -49,7 +49,7 @@ export function EmergencyModeProvider({ children }: EmergencyModeProviderProps) 
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [pendingSyncCount, setPendingSyncCount] = useState(0);
   const [lastOnline, setLastOnline] = useState<Date | null>(navigator.onLine ? new Date() : null);
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error'>('idle');
+  const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "error">("idle");
 
   // Monitor network status
   useEffect(() => {
@@ -59,9 +59,9 @@ export function EmergencyModeProvider({ children }: EmergencyModeProviderProps) 
       
       // Auto-sync when back online
       offlineSyncManager.syncAll().then(() => {
-        setSyncStatus('idle');
+        setSyncStatus("idle");
       }).catch(() => {
-        setSyncStatus('error');
+        setSyncStatus("error");
       });
     };
 
@@ -76,12 +76,12 @@ export function EmergencyModeProvider({ children }: EmergencyModeProviderProps) 
       }, 30000);
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -129,22 +129,22 @@ function EmergencyModeOverlay() {
   const [showDetails, setShowDetails] = useState(false);
 
   const criticalFunctions = [
-    { name: 'Visualizar Frota', available: true, icon: CheckCircle },
-    { name: 'Registrar Ocorrência', available: true, icon: CheckCircle },
-    { name: 'Checklist de Segurança', available: true, icon: CheckCircle },
-    { name: 'Consultar Tripulação', available: true, icon: CheckCircle },
-    { name: 'Alertas Críticos', available: true, icon: CheckCircle },
-    { name: 'Sincronização API', available: !isOffline, icon: isOffline ? XCircle : CheckCircle },
-    { name: 'IA Avançada', available: !isOffline, icon: isOffline ? XCircle : CheckCircle },
-    { name: 'Relatórios Online', available: !isOffline, icon: isOffline ? XCircle : CheckCircle },
+    { name: "Visualizar Frota", available: true, icon: CheckCircle },
+    { name: "Registrar Ocorrência", available: true, icon: CheckCircle },
+    { name: "Checklist de Segurança", available: true, icon: CheckCircle },
+    { name: "Consultar Tripulação", available: true, icon: CheckCircle },
+    { name: "Alertas Críticos", available: true, icon: CheckCircle },
+    { name: "Sincronização API", available: !isOffline, icon: isOffline ? XCircle : CheckCircle },
+    { name: "IA Avançada", available: !isOffline, icon: isOffline ? XCircle : CheckCircle },
+    { name: "Relatórios Online", available: !isOffline, icon: isOffline ? XCircle : CheckCircle },
   ];
 
   const forceSync = async () => {
     if (isOffline) {
       toast({
-        title: 'Sem conexão',
-        description: 'Aguarde a conexão ser restabelecida para sincronizar',
-        variant: 'destructive',
+        title: "Sem conexão",
+        description: "Aguarde a conexão ser restabelecida para sincronizar",
+        variant: "destructive",
       });
       return;
     }
@@ -152,14 +152,14 @@ function EmergencyModeOverlay() {
     try {
       await offlineSyncManager.syncAll();
       toast({
-        title: 'Sincronização concluída',
-        description: 'Dados sincronizados com sucesso',
+        title: "Sincronização concluída",
+        description: "Dados sincronizados com sucesso",
       });
     } catch {
       toast({
-        title: 'Erro na sincronização',
-        description: 'Tente novamente em alguns instantes',
-        variant: 'destructive',
+        title: "Erro na sincronização",
+        description: "Tente novamente em alguns instantes",
+        variant: "destructive",
       });
     }
   };
@@ -220,12 +220,12 @@ function EmergencyModeOverlay() {
 
           <div className="space-y-6">
             {/* Status */}
-            <Alert variant={isOffline ? 'destructive' : 'default'}>
+            <Alert variant={isOffline ? "destructive" : "default"}>
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Status da Conexão</AlertTitle>
               <AlertDescription>
                 {isOffline ? (
-                  <>Sem conexão com a internet. Última conexão: {lastOnline?.toLocaleString('pt-BR') || 'Desconhecido'}</>
+                  <>Sem conexão com a internet. Última conexão: {lastOnline?.toLocaleString("pt-BR") || "Desconhecido"}</>
                 ) : (
                   <>Conexão restabelecida. Sincronização em andamento...</>
                 )}
@@ -270,17 +270,17 @@ function EmergencyModeOverlay() {
                     </div>
                     <Button 
                       onClick={forceSync} 
-                      disabled={isOffline || syncStatus === 'syncing'}
+                      disabled={isOffline || syncStatus === "syncing"}
                     >
                       <RefreshCw className={cn(
                         "h-4 w-4 mr-2",
-                        syncStatus === 'syncing' && "animate-spin"
+                        syncStatus === "syncing" && "animate-spin"
                       )} />
                       Sincronizar
                     </Button>
                   </div>
                   
-                  {syncStatus === 'syncing' && (
+                  {syncStatus === "syncing" && (
                     <Progress value={undefined} className="h-2" />
                   )}
                 </CardContent>

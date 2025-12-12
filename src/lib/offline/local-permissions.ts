@@ -3,14 +3,14 @@
  * Offline-first access control
  */
 
-import { localCrypto } from '@/lib/security/local-crypto';
+import { localCrypto } from "@/lib/security/local-crypto";
 
 export interface Permission {
   id: string;
   name: string;
   description: string;
   module: string;
-  actions: ('read' | 'write' | 'delete' | 'admin')[];
+  actions: ("read" | "write" | "delete" | "admin")[];
 }
 
 export interface Role {
@@ -35,81 +35,81 @@ export interface UserPermissions {
 // Built-in permissions
 const PERMISSIONS: Permission[] = [
   // Fleet Module
-  { id: 'fleet.read', name: 'Visualizar Frota', description: 'Ver embarcações e status', module: 'fleet', actions: ['read'] },
-  { id: 'fleet.write', name: 'Editar Frota', description: 'Modificar dados de embarcações', module: 'fleet', actions: ['write'] },
-  { id: 'fleet.admin', name: 'Administrar Frota', description: 'Gerenciamento completo', module: 'fleet', actions: ['read', 'write', 'delete', 'admin'] },
+  { id: "fleet.read", name: "Visualizar Frota", description: "Ver embarcações e status", module: "fleet", actions: ["read"] },
+  { id: "fleet.write", name: "Editar Frota", description: "Modificar dados de embarcações", module: "fleet", actions: ["write"] },
+  { id: "fleet.admin", name: "Administrar Frota", description: "Gerenciamento completo", module: "fleet", actions: ["read", "write", "delete", "admin"] },
   
   // Maintenance Module
-  { id: 'maintenance.read', name: 'Ver Manutenção', description: 'Visualizar tarefas e histórico', module: 'maintenance', actions: ['read'] },
-  { id: 'maintenance.write', name: 'Registrar Manutenção', description: 'Criar e editar tarefas', module: 'maintenance', actions: ['write'] },
-  { id: 'maintenance.approve', name: 'Aprovar Manutenção', description: 'Aprovar ordens de serviço', module: 'maintenance', actions: ['admin'] },
+  { id: "maintenance.read", name: "Ver Manutenção", description: "Visualizar tarefas e histórico", module: "maintenance", actions: ["read"] },
+  { id: "maintenance.write", name: "Registrar Manutenção", description: "Criar e editar tarefas", module: "maintenance", actions: ["write"] },
+  { id: "maintenance.approve", name: "Aprovar Manutenção", description: "Aprovar ordens de serviço", module: "maintenance", actions: ["admin"] },
   
   // Crew Module
-  { id: 'crew.read', name: 'Ver Tripulação', description: 'Visualizar dados da tripulação', module: 'crew', actions: ['read'] },
-  { id: 'crew.write', name: 'Editar Tripulação', description: 'Modificar dados e escalas', module: 'crew', actions: ['write'] },
-  { id: 'crew.admin', name: 'Administrar RH', description: 'Gerenciamento completo de RH', module: 'crew', actions: ['read', 'write', 'delete', 'admin'] },
+  { id: "crew.read", name: "Ver Tripulação", description: "Visualizar dados da tripulação", module: "crew", actions: ["read"] },
+  { id: "crew.write", name: "Editar Tripulação", description: "Modificar dados e escalas", module: "crew", actions: ["write"] },
+  { id: "crew.admin", name: "Administrar RH", description: "Gerenciamento completo de RH", module: "crew", actions: ["read", "write", "delete", "admin"] },
   
   // Reports Module
-  { id: 'reports.read', name: 'Ver Relatórios', description: 'Visualizar relatórios', module: 'reports', actions: ['read'] },
-  { id: 'reports.create', name: 'Criar Relatórios', description: 'Gerar novos relatórios', module: 'reports', actions: ['write'] },
-  { id: 'reports.export', name: 'Exportar Relatórios', description: 'Exportar em PDF/Excel', module: 'reports', actions: ['write'] },
+  { id: "reports.read", name: "Ver Relatórios", description: "Visualizar relatórios", module: "reports", actions: ["read"] },
+  { id: "reports.create", name: "Criar Relatórios", description: "Gerar novos relatórios", module: "reports", actions: ["write"] },
+  { id: "reports.export", name: "Exportar Relatórios", description: "Exportar em PDF/Excel", module: "reports", actions: ["write"] },
   
   // Settings Module
-  { id: 'settings.read', name: 'Ver Configurações', description: 'Visualizar configurações', module: 'settings', actions: ['read'] },
-  { id: 'settings.write', name: 'Alterar Configurações', description: 'Modificar configurações', module: 'settings', actions: ['write'] },
-  { id: 'settings.admin', name: 'Administrar Sistema', description: 'Acesso total ao sistema', module: 'settings', actions: ['read', 'write', 'delete', 'admin'] },
+  { id: "settings.read", name: "Ver Configurações", description: "Visualizar configurações", module: "settings", actions: ["read"] },
+  { id: "settings.write", name: "Alterar Configurações", description: "Modificar configurações", module: "settings", actions: ["write"] },
+  { id: "settings.admin", name: "Administrar Sistema", description: "Acesso total ao sistema", module: "settings", actions: ["read", "write", "delete", "admin"] },
   
   // AI Module
-  { id: 'ai.use', name: 'Usar IA', description: 'Interagir com assistente IA', module: 'ai', actions: ['read'] },
-  { id: 'ai.configure', name: 'Configurar IA', description: 'Personalizar comportamento da IA', module: 'ai', actions: ['write'] },
+  { id: "ai.use", name: "Usar IA", description: "Interagir com assistente IA", module: "ai", actions: ["read"] },
+  { id: "ai.configure", name: "Configurar IA", description: "Personalizar comportamento da IA", module: "ai", actions: ["write"] },
 ];
 
 // Built-in roles
 const ROLES: Role[] = [
   {
-    id: 'operator',
-    name: 'Operador',
-    description: 'Acesso básico para operações diárias',
+    id: "operator",
+    name: "Operador",
+    description: "Acesso básico para operações diárias",
     level: 20,
-    permissions: ['fleet.read', 'maintenance.read', 'maintenance.write', 'crew.read', 'reports.read', 'ai.use'],
+    permissions: ["fleet.read", "maintenance.read", "maintenance.write", "crew.read", "reports.read", "ai.use"],
     isSystem: true
   },
   {
-    id: 'technician',
-    name: 'Técnico',
-    description: 'Acesso para manutenção e suporte técnico',
+    id: "technician",
+    name: "Técnico",
+    description: "Acesso para manutenção e suporte técnico",
     level: 40,
-    permissions: ['fleet.read', 'fleet.write', 'maintenance.read', 'maintenance.write', 'crew.read', 'reports.read', 'reports.create', 'ai.use', 'settings.read'],
+    permissions: ["fleet.read", "fleet.write", "maintenance.read", "maintenance.write", "crew.read", "reports.read", "reports.create", "ai.use", "settings.read"],
     isSystem: true
   },
   {
-    id: 'supervisor',
-    name: 'Supervisor',
-    description: 'Supervisão de operações e equipe',
+    id: "supervisor",
+    name: "Supervisor",
+    description: "Supervisão de operações e equipe",
     level: 60,
-    permissions: ['fleet.read', 'fleet.write', 'maintenance.read', 'maintenance.write', 'maintenance.approve', 'crew.read', 'crew.write', 'reports.read', 'reports.create', 'reports.export', 'ai.use', 'settings.read'],
+    permissions: ["fleet.read", "fleet.write", "maintenance.read", "maintenance.write", "maintenance.approve", "crew.read", "crew.write", "reports.read", "reports.create", "reports.export", "ai.use", "settings.read"],
     isSystem: true
   },
   {
-    id: 'manager',
-    name: 'Gerente',
-    description: 'Gerenciamento completo de operações',
+    id: "manager",
+    name: "Gerente",
+    description: "Gerenciamento completo de operações",
     level: 80,
-    permissions: ['fleet.admin', 'maintenance.read', 'maintenance.write', 'maintenance.approve', 'crew.admin', 'reports.read', 'reports.create', 'reports.export', 'ai.use', 'ai.configure', 'settings.read', 'settings.write'],
+    permissions: ["fleet.admin", "maintenance.read", "maintenance.write", "maintenance.approve", "crew.admin", "reports.read", "reports.create", "reports.export", "ai.use", "ai.configure", "settings.read", "settings.write"],
     isSystem: true
   },
   {
-    id: 'admin',
-    name: 'Administrador',
-    description: 'Acesso total ao sistema',
+    id: "admin",
+    name: "Administrador",
+    description: "Acesso total ao sistema",
     level: 100,
     permissions: PERMISSIONS.map(p => p.id),
     isSystem: true
   }
 ];
 
-const STORAGE_KEY = 'nautilus_permissions';
-const USER_PERMS_KEY = 'nautilus_user_permissions';
+const STORAGE_KEY = "nautilus_permissions";
+const USER_PERMS_KEY = "nautilus_user_permissions";
 
 class LocalPermissionsSystem {
   private permissions: Permission[] = [...PERMISSIONS];
@@ -134,7 +134,7 @@ class LocalPermissionsSystem {
         });
       }
     } catch (error) {
-      console.warn('Failed to load permissions from storage:', error);
+      console.warn("Failed to load permissions from storage:", error);
     }
   }
 
@@ -149,7 +149,7 @@ class LocalPermissionsSystem {
       });
       localStorage.setItem(USER_PERMS_KEY, JSON.stringify(data));
     } catch (error) {
-      console.warn('Failed to save permissions to storage:', error);
+      console.warn("Failed to save permissions to storage:", error);
     }
   }
 
@@ -323,7 +323,7 @@ class LocalPermissionsSystem {
   /**
    * Create custom role
    */
-  createRole(role: Omit<Role, 'isSystem'>): void {
+  createRole(role: Omit<Role, "isSystem">): void {
     if (this.roles.find(r => r.id === role.id)) {
       throw new Error(`Role already exists: ${role.id}`);
     }
@@ -358,7 +358,7 @@ class LocalPermissionsSystem {
     permissions: Permission[];
     roles: Role[];
     userPermissions: UserPermissions[];
-  } {
+    } {
     return {
       permissions: this.permissions.filter(p => !PERMISSIONS.find(bp => bp.id === p.id)),
       roles: this.roles.filter(r => !r.isSystem),

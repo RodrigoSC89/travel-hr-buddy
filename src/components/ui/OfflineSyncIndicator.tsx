@@ -3,17 +3,17 @@
  * Shows pending offline actions and sync status
  */
 
-import React, { useState, useEffect } from 'react';
-import { Cloud, CloudOff, RefreshCw, Check, AlertCircle } from 'lucide-react';
-import { offlineQueue } from '@/lib/performance/offline-queue';
-import { Button } from './button';
-import { cn } from '@/lib/utils';
+import React, { useState, useEffect } from "react";
+import { Cloud, CloudOff, RefreshCw, Check, AlertCircle } from "lucide-react";
+import { offlineQueue } from "@/lib/performance/offline-queue";
+import { Button } from "./button";
+import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
-} from './tooltip';
+} from "./tooltip";
 
 interface OfflineSyncIndicatorProps {
   className?: string;
@@ -27,14 +27,14 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [pendingCount, setPendingCount] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);
-  const [lastSyncResult, setLastSyncResult] = useState<'success' | 'error' | null>(null);
+  const [lastSyncResult, setLastSyncResult] = useState<"success" | "error" | null>(null);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Subscribe to queue changes
     const unsubscribe = offlineQueue.onQueueChange(setPendingCount);
@@ -43,8 +43,8 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
     offlineQueue.getPendingCount().then(setPendingCount);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
       unsubscribe();
     };
   }, []);
@@ -57,9 +57,9 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
 
     try {
       const result = await offlineQueue.syncQueue();
-      setLastSyncResult(result.failed > 0 ? 'error' : 'success');
+      setLastSyncResult(result.failed > 0 ? "error" : "success");
     } catch {
-      setLastSyncResult('error');
+      setLastSyncResult("error");
     } finally {
       setIsSyncing(false);
       // Clear result after 3 seconds
@@ -97,12 +97,12 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
                 )}
                 <span className="text-xs font-medium">{pendingCount}</span>
               </Button>
-            ) : lastSyncResult === 'success' ? (
+            ) : lastSyncResult === "success" ? (
               <div className="flex items-center gap-1.5 text-green-500">
                 <Check className="h-4 w-4" />
                 {showLabel && <span className="text-xs">Sincronizado</span>}
               </div>
-            ) : lastSyncResult === 'error' ? (
+            ) : lastSyncResult === "error" ? (
               <div className="flex items-center gap-1.5 text-destructive">
                 <AlertCircle className="h-4 w-4" />
                 {showLabel && <span className="text-xs">Erro ao sincronizar</span>}
@@ -114,10 +114,10 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
           {!isOnline ? (
             <p>Você está offline. As alterações serão sincronizadas quando reconectar.</p>
           ) : pendingCount > 0 ? (
-            <p>{pendingCount} {pendingCount === 1 ? 'ação pendente' : 'ações pendentes'}. Clique para sincronizar.</p>
-          ) : lastSyncResult === 'success' ? (
+            <p>{pendingCount} {pendingCount === 1 ? "ação pendente" : "ações pendentes"}. Clique para sincronizar.</p>
+          ) : lastSyncResult === "success" ? (
             <p>Todas as alterações foram sincronizadas!</p>
-          ) : lastSyncResult === 'error' ? (
+          ) : lastSyncResult === "error" ? (
             <p>Algumas alterações não puderam ser sincronizadas.</p>
           ) : null}
         </TooltipContent>

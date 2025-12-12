@@ -12,8 +12,8 @@ export interface SystemMetric {
 
 export interface AnomalyAlert {
   id: string;
-  type: 'system' | 'operational' | 'security' | 'performance';
-  severity: 'info' | 'warning' | 'critical';
+  type: "system" | "operational" | "security" | "performance";
+  severity: "info" | "warning" | "critical";
   metric: string;
   currentValue: number;
   expectedRange: { min: number; max: number };
@@ -34,15 +34,15 @@ export interface OperationalBaseline {
 
 // System metrics to monitor
 const MONITORED_METRICS = {
-  cpu_usage: { min: 0, max: 80, unit: '%', warning: 70, critical: 90 },
-  memory_usage: { min: 0, max: 85, unit: '%', warning: 75, critical: 95 },
-  disk_usage: { min: 0, max: 90, unit: '%', warning: 80, critical: 95 },
-  sync_queue_size: { min: 0, max: 100, unit: 'items', warning: 50, critical: 100 },
-  response_time: { min: 0, max: 2000, unit: 'ms', warning: 1500, critical: 3000 },
-  error_rate: { min: 0, max: 5, unit: '%', warning: 3, critical: 10 },
-  llm_latency: { min: 0, max: 5000, unit: 'ms', warning: 3000, critical: 8000 },
-  battery_level: { min: 20, max: 100, unit: '%', warning: 30, critical: 15 },
-  network_latency: { min: 0, max: 500, unit: 'ms', warning: 300, critical: 1000 }
+  cpu_usage: { min: 0, max: 80, unit: "%", warning: 70, critical: 90 },
+  memory_usage: { min: 0, max: 85, unit: "%", warning: 75, critical: 95 },
+  disk_usage: { min: 0, max: 90, unit: "%", warning: 80, critical: 95 },
+  sync_queue_size: { min: 0, max: 100, unit: "items", warning: 50, critical: 100 },
+  response_time: { min: 0, max: 2000, unit: "ms", warning: 1500, critical: 3000 },
+  error_rate: { min: 0, max: 5, unit: "%", warning: 3, critical: 10 },
+  llm_latency: { min: 0, max: 5000, unit: "ms", warning: 3000, critical: 8000 },
+  battery_level: { min: 20, max: 100, unit: "%", warning: 30, critical: 15 },
+  network_latency: { min: 0, max: 500, unit: "ms", warning: 300, critical: 1000 }
 };
 
 class AnomalyDetectionEngine {
@@ -104,10 +104,10 @@ class AnomalyDetectionEngine {
     // Check against static thresholds
     if (config) {
       if (metric.value >= config.critical) {
-        return this.createAlert(metric, 'critical', config);
+        return this.createAlert(metric, "critical", config);
       }
       if (metric.value >= config.warning) {
-        return this.createAlert(metric, 'warning', config);
+        return this.createAlert(metric, "warning", config);
       }
     }
 
@@ -119,7 +119,7 @@ class AnomalyDetectionEngine {
         return {
           id: `anomaly_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           type: this.categorizeMetric(metric.name),
-          severity: Math.abs(zScore) > 4 ? 'critical' : 'warning',
+          severity: Math.abs(zScore) > 4 ? "critical" : "warning",
           metric: metric.name,
           currentValue: metric.value,
           expectedRange: {
@@ -142,10 +142,10 @@ class AnomalyDetectionEngine {
    */
   private createAlert(
     metric: SystemMetric, 
-    severity: 'warning' | 'critical',
+    severity: "warning" | "critical",
     config: typeof MONITORED_METRICS[keyof typeof MONITORED_METRICS]
   ): AnomalyAlert {
-    const threshold = severity === 'critical' ? config.critical : config.warning;
+    const threshold = severity === "critical" ? config.critical : config.warning;
     
     return {
       id: `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -164,11 +164,11 @@ class AnomalyDetectionEngine {
   /**
    * Categorize metric type
    */
-  private categorizeMetric(name: string): AnomalyAlert['type'] {
-    if (['cpu_usage', 'memory_usage', 'disk_usage'].includes(name)) return 'system';
-    if (['response_time', 'llm_latency', 'error_rate'].includes(name)) return 'performance';
-    if (['sync_queue_size', 'network_latency'].includes(name)) return 'operational';
-    return 'system';
+  private categorizeMetric(name: string): AnomalyAlert["type"] {
+    if (["cpu_usage", "memory_usage", "disk_usage"].includes(name)) return "system";
+    if (["response_time", "llm_latency", "error_rate"].includes(name)) return "performance";
+    if (["sync_queue_size", "network_latency"].includes(name)) return "operational";
+    return "system";
   }
 
   /**
@@ -176,15 +176,15 @@ class AnomalyDetectionEngine {
    */
   private getAlertMessage(metric: string, value: number, severity: string): string {
     const messages: Record<string, string> = {
-      cpu_usage: `Uso de CPU ${severity === 'critical' ? 'crítico' : 'elevado'}: ${value.toFixed(1)}%`,
-      memory_usage: `Uso de memória ${severity === 'critical' ? 'crítico' : 'elevado'}: ${value.toFixed(1)}%`,
-      disk_usage: `Espaço em disco ${severity === 'critical' ? 'crítico' : 'baixo'}: ${value.toFixed(1)}% usado`,
-      sync_queue_size: `Fila de sincronização ${severity === 'critical' ? 'cheia' : 'grande'}: ${value} itens pendentes`,
-      response_time: `Tempo de resposta ${severity === 'critical' ? 'muito lento' : 'lento'}: ${value}ms`,
-      error_rate: `Taxa de erro ${severity === 'critical' ? 'crítica' : 'elevada'}: ${value.toFixed(2)}%`,
-      llm_latency: `LLM respondendo ${severity === 'critical' ? 'muito lentamente' : 'lentamente'}: ${value}ms`,
-      battery_level: `Bateria ${severity === 'critical' ? 'crítica' : 'baixa'}: ${value.toFixed(0)}%`,
-      network_latency: `Latência de rede ${severity === 'critical' ? 'crítica' : 'alta'}: ${value}ms`
+      cpu_usage: `Uso de CPU ${severity === "critical" ? "crítico" : "elevado"}: ${value.toFixed(1)}%`,
+      memory_usage: `Uso de memória ${severity === "critical" ? "crítico" : "elevado"}: ${value.toFixed(1)}%`,
+      disk_usage: `Espaço em disco ${severity === "critical" ? "crítico" : "baixo"}: ${value.toFixed(1)}% usado`,
+      sync_queue_size: `Fila de sincronização ${severity === "critical" ? "cheia" : "grande"}: ${value} itens pendentes`,
+      response_time: `Tempo de resposta ${severity === "critical" ? "muito lento" : "lento"}: ${value}ms`,
+      error_rate: `Taxa de erro ${severity === "critical" ? "crítica" : "elevada"}: ${value.toFixed(2)}%`,
+      llm_latency: `LLM respondendo ${severity === "critical" ? "muito lentamente" : "lentamente"}: ${value}ms`,
+      battery_level: `Bateria ${severity === "critical" ? "crítica" : "baixa"}: ${value.toFixed(0)}%`,
+      network_latency: `Latência de rede ${severity === "critical" ? "crítica" : "alta"}: ${value}ms`
     };
     return messages[metric] || `Anomalia em ${metric}: ${value}`;
   }
@@ -195,45 +195,45 @@ class AnomalyDetectionEngine {
   private generateSuggestion(metric: string, direction: number): string {
     const suggestions: Record<string, { high: string; low: string }> = {
       cpu_usage: {
-        high: 'Feche aplicações desnecessárias ou reduza operações em paralelo',
-        low: 'Sistema operando normalmente'
+        high: "Feche aplicações desnecessárias ou reduza operações em paralelo",
+        low: "Sistema operando normalmente"
       },
       memory_usage: {
-        high: 'Limpe cache local ou reinicie o aplicativo',
-        low: 'Memória disponível adequada'
+        high: "Limpe cache local ou reinicie o aplicativo",
+        low: "Memória disponível adequada"
       },
       disk_usage: {
-        high: 'Execute limpeza de arquivos temporários e logs antigos',
-        low: 'Espaço em disco adequado'
+        high: "Execute limpeza de arquivos temporários e logs antigos",
+        low: "Espaço em disco adequado"
       },
       sync_queue_size: {
-        high: 'Verifique conexão de rede e force sincronização manual',
-        low: 'Sincronização funcionando normalmente'
+        high: "Verifique conexão de rede e force sincronização manual",
+        low: "Sincronização funcionando normalmente"
       },
       response_time: {
-        high: 'Verifique carga do sistema e otimize consultas',
-        low: 'Performance adequada'
+        high: "Verifique carga do sistema e otimize consultas",
+        low: "Performance adequada"
       },
       error_rate: {
-        high: 'Verifique logs de erro e conexões de rede',
-        low: 'Taxa de erro aceitável'
+        high: "Verifique logs de erro e conexões de rede",
+        low: "Taxa de erro aceitável"
       },
       llm_latency: {
-        high: 'Reduza complexidade dos prompts ou use modelo mais leve',
-        low: 'LLM respondendo adequadamente'
+        high: "Reduza complexidade dos prompts ou use modelo mais leve",
+        low: "LLM respondendo adequadamente"
       },
       battery_level: {
-        high: 'Bateria carregada',
-        low: 'Conecte o dispositivo à energia'
+        high: "Bateria carregada",
+        low: "Conecte o dispositivo à energia"
       },
       network_latency: {
-        high: 'Verifique conexão de rede ou use modo offline',
-        low: 'Conexão de rede adequada'
+        high: "Verifique conexão de rede ou use modo offline",
+        low: "Conexão de rede adequada"
       }
     };
 
     const suggestion = suggestions[metric];
-    if (!suggestion) return 'Monitore a métrica';
+    if (!suggestion) return "Monitore a métrica";
     return direction > 0 ? suggestion.high : suggestion.low;
   }
 
@@ -286,22 +286,22 @@ class AnomalyDetectionEngine {
    */
   getHealthScore(): {
     score: number;
-    status: 'healthy' | 'degraded' | 'critical';
+    status: "healthy" | "degraded" | "critical";
     issues: string[];
-  } {
+    } {
     const recentAlerts = this.alerts.filter(
       a => Date.now() - a.timestamp.getTime() < 15 * 60 * 1000 // Last 15 minutes
     );
 
-    const criticalCount = recentAlerts.filter(a => a.severity === 'critical').length;
-    const warningCount = recentAlerts.filter(a => a.severity === 'warning').length;
+    const criticalCount = recentAlerts.filter(a => a.severity === "critical").length;
+    const warningCount = recentAlerts.filter(a => a.severity === "warning").length;
 
     let score = 100 - (criticalCount * 20) - (warningCount * 5);
     score = Math.max(0, Math.min(100, score));
 
-    let status: 'healthy' | 'degraded' | 'critical' = 'healthy';
-    if (criticalCount > 0) status = 'critical';
-    else if (warningCount > 2) status = 'degraded';
+    let status: "healthy" | "degraded" | "critical" = "healthy";
+    if (criticalCount > 0) status = "critical";
+    else if (warningCount > 2) status = "degraded";
 
     return {
       score,
@@ -313,7 +313,7 @@ class AnomalyDetectionEngine {
   /**
    * Get alerts by severity
    */
-  getAlerts(severity?: AnomalyAlert['severity']): AnomalyAlert[] {
+  getAlerts(severity?: AnomalyAlert["severity"]): AnomalyAlert[] {
     if (!severity) return [...this.alerts];
     return this.alerts.filter(a => a.severity === severity);
   }
@@ -359,26 +359,26 @@ export function startMetricCollection(intervalMs: number = 30000): () => void {
     const now = new Date();
 
     // Memory usage (browser)
-    if ('memory' in performance) {
+    if ("memory" in performance) {
       const memory = (performance as any).memory;
       if (memory) {
         metrics.push({
-          name: 'memory_usage',
+          name: "memory_usage",
           value: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100,
           timestamp: now,
-          unit: '%'
+          unit: "%"
         });
       }
     }
 
     // Estimate response time from recent navigation
-    const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+    const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
     if (navEntries.length > 0) {
       metrics.push({
-        name: 'response_time',
+        name: "response_time",
         value: navEntries[0].responseEnd - navEntries[0].requestStart,
         timestamp: now,
-        unit: 'ms'
+        unit: "ms"
       });
     }
 

@@ -3,12 +3,12 @@
  * Real-time Core Web Vitals tracking with alerting
  */
 
-import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
+import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from "web-vitals";
 
 export interface VitalMetric {
   name: string;
   value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: "good" | "needs-improvement" | "poor";
   delta: number;
   id: string;
   navigationType: string;
@@ -86,7 +86,7 @@ class WebVitalsMonitor {
         rating: metric.rating,
         delta: metric.delta,
         id: metric.id,
-        navigationType: metric.navigationType || 'unknown',
+        navigationType: metric.navigationType || "unknown",
         timestamp: Date.now()
       };
       
@@ -140,8 +140,8 @@ class WebVitalsMonitor {
     
     try {
       await fetch(this.reportEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           metrics: batch,
           url: window.location.href,
@@ -152,8 +152,8 @@ class WebVitalsMonitor {
         keepalive: true
       });
     } catch (error) {
-      console.error('[WebVitals] Failed to report metrics:', error);
-      console.error('[WebVitals] Failed to report metrics:', error);
+      console.error("[WebVitals] Failed to report metrics:", error);
+      console.error("[WebVitals] Failed to report metrics:", error);
       // Re-queue failed metrics
       this.batchQueue.push(...batch);
     }
@@ -181,9 +181,9 @@ class WebVitalsMonitor {
   
   getScore(): {
     score: number;
-    rating: 'good' | 'needs-improvement' | 'poor';
+    rating: "good" | "needs-improvement" | "poor";
     details: Record<string, { value: number; rating: string }>;
-  } {
+    } {
     const details: Record<string, { value: number; rating: string }> = {};
     let goodCount = 0;
     let poorCount = 0;
@@ -196,17 +196,17 @@ class WebVitalsMonitor {
       };
       
       totalCount++;
-      if (metric.rating === 'good') goodCount++;
-      if (metric.rating === 'poor') poorCount++;
+      if (metric.rating === "good") goodCount++;
+      if (metric.rating === "poor") poorCount++;
     });
     
     const score = totalCount > 0 ? Math.round((goodCount / totalCount) * 100) : 0;
-    let rating: 'good' | 'needs-improvement' | 'poor' = 'needs-improvement';
+    let rating: "good" | "needs-improvement" | "poor" = "needs-improvement";
     
     if (poorCount === 0 && goodCount === totalCount) {
-      rating = 'good';
+      rating = "good";
     } else if (poorCount >= totalCount / 2) {
-      rating = 'poor';
+      rating = "poor";
     }
     
     return { score, rating, details };

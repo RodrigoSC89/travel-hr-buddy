@@ -118,7 +118,7 @@ export default function DPAlerts() {
 
   const sources = useMemo(() => 
     [...new Set(alerts.map(a => a.source))],
-    []
+  []
   );
 
   const hasActiveFilters = filters.severity.length > 0 || filters.source.length > 0 || filters.acknowledged !== null;
@@ -170,27 +170,27 @@ export default function DPAlerts() {
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      case "warning":
-        return <AlertTriangle className="h-5 w-5 text-amber-500" />;
-      case "info":
-        return <Bell className="h-5 w-5 text-blue-500" />;
-      default:
-        return <Bell className="h-5 w-5" />;
+    case "critical":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+    case "info":
+      return <Bell className="h-5 w-5 text-blue-500" />;
+    default:
+      return <Bell className="h-5 w-5" />;
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
-      case "warning":
-        return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
-      case "info":
-        return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
-      default:
-        return <Badge>{severity}</Badge>;
+    case "critical":
+      return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
+    case "warning":
+      return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+    case "info":
+      return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
+    default:
+      return <Badge>{severity}</Badge>;
     }
   };
 
@@ -355,8 +355,8 @@ export default function DPAlerts() {
             {pendingFilteredAlerts.map(alert => (
               <Card key={alert.id} className={`border-l-4 ${
                 alert.severity === "critical" ? "border-l-red-500" :
-                alert.severity === "warning" ? "border-l-amber-500" :
-                "border-l-blue-500"
+                  alert.severity === "warning" ? "border-l-amber-500" :
+                    "border-l-blue-500"
               }`}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">

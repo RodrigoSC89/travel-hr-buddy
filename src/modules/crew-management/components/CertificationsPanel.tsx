@@ -209,9 +209,9 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        status.variant === 'destructive' ? 'bg-rose-500/10' :
-                        status.variant === 'default' ? 'bg-amber-500/10' :
-                        'bg-muted'
+                        status.variant === "destructive" ? "bg-rose-500/10" :
+                          status.variant === "default" ? "bg-amber-500/10" :
+                            "bg-muted"
                       }`}>
                         <FileText className={`h-4 w-4 ${status.color}`} />
                       </div>

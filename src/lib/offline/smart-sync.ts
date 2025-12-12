@@ -3,10 +3,10 @@
  * Adaptive synchronization based on connection quality
  */
 
-import { logger } from '@/lib/logger';
-import { connectionResilience } from './connection-resilience';
-import { offlineSyncManager } from './sync-manager';
-import { getQueueStats } from './sync-queue';
+import { logger } from "@/lib/logger";
+import { connectionResilience } from "./connection-resilience";
+import { offlineSyncManager } from "./sync-manager";
+import { getQueueStats } from "./sync-queue";
 
 export interface SmartSyncConfig {
   // Minimum interval between syncs (ms)
@@ -33,7 +33,7 @@ class SmartSync {
   private config: SmartSyncConfig;
   private syncTimer: number | null = null;
   private lastSyncTime = 0;
-  private lastConnectionType: string = '';
+  private lastConnectionType: string = "";
   private isActive = false;
 
   constructor(config: Partial<SmartSyncConfig> = {}) {
@@ -50,7 +50,7 @@ class SmartSync {
     this.setupListeners();
     this.scheduleNextSync();
     
-    logger.info('[SmartSync] Started adaptive synchronization');
+    logger.info("[SmartSync] Started adaptive synchronization");
   }
 
   /**
@@ -64,7 +64,7 @@ class SmartSync {
       this.syncTimer = null;
     }
     
-    logger.info('[SmartSync] Stopped');
+    logger.info("[SmartSync] Stopped");
   }
 
   private setupListeners(): void {
@@ -79,7 +79,7 @@ class SmartSync {
         this.config.syncOnConnectionImprove &&
         this.isConnectionImproved(this.lastConnectionType, currentType)
       ) {
-        logger.info('[SmartSync] Connection improved, triggering sync');
+        logger.info("[SmartSync] Connection improved, triggering sync");
         this.triggerSync();
       }
       
@@ -90,8 +90,8 @@ class SmartSync {
     });
 
     // Listen for visibility changes
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && this.isActive) {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && this.isActive) {
         this.scheduleNextSync();
       }
     });
@@ -99,11 +99,11 @@ class SmartSync {
 
   private isConnectionImproved(oldType: string, newType: string): boolean {
     const quality: Record<string, number> = {
-      'slow-2g': 1,
-      '2g': 2,
-      '3g': 3,
-      '4g': 4,
-      'unknown': 2.5,
+      "slow-2g": 1,
+      "2g": 2,
+      "3g": 3,
+      "4g": 4,
+      "unknown": 2.5,
     };
     
     return (quality[newType] || 2.5) > (quality[oldType] || 2.5);
@@ -123,20 +123,20 @@ class SmartSync {
     }
     
     switch (state.effectiveType) {
-      case 'slow-2g':
-        interval = this.config.maxInterval;
-        break;
-      case '2g':
-        interval = this.config.maxInterval * 0.7;
-        break;
-      case '3g':
-        interval = this.config.minInterval * 3;
-        break;
-      case '4g':
-        interval = this.config.minInterval;
-        break;
-      default:
-        interval = this.config.minInterval * 2;
+    case "slow-2g":
+      interval = this.config.maxInterval;
+      break;
+    case "2g":
+      interval = this.config.maxInterval * 0.7;
+      break;
+    case "3g":
+      interval = this.config.minInterval * 3;
+      break;
+    case "4g":
+      interval = this.config.minInterval;
+      break;
+    default:
+      interval = this.config.minInterval * 2;
     }
     
     // Reduce interval if many items pending
@@ -150,7 +150,7 @@ class SmartSync {
     }
     
     // Increase interval if page is hidden
-    if (document.visibilityState === 'hidden') {
+    if (document.visibilityState === "hidden") {
       interval *= 2;
     }
     
@@ -196,7 +196,7 @@ class SmartSync {
     const state = connectionResilience.getState();
     
     if (!state.isOnline) {
-      logger.debug('[SmartSync] Skipping sync - offline');
+      logger.debug("[SmartSync] Skipping sync - offline");
       this.scheduleNextSync();
       return;
     }
@@ -213,10 +213,10 @@ class SmartSync {
     this.lastSyncTime = now;
     
     try {
-      logger.info('[SmartSync] Triggering sync');
+      logger.info("[SmartSync] Triggering sync");
       await offlineSyncManager.syncAll();
     } catch (error) {
-      logger.error('[SmartSync] Sync failed', { error });
+      logger.error("[SmartSync] Sync failed", { error });
     } finally {
       this.scheduleNextSync();
     }

@@ -3,9 +3,9 @@
  * Error boundary para rotas individuais
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { errorTrackingService } from '@/lib/errors';
-import { RouteErrorFallback } from './fallbacks';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { errorTrackingService } from "@/lib/errors";
+import { RouteErrorFallback } from "./fallbacks";
 
 interface Props {
   children: ReactNode;
@@ -35,9 +35,9 @@ export class RouteErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     errorTrackingService.trackRuntimeError(error, {
-      component: 'RouteErrorBoundary',
+      component: "RouteErrorBoundary",
       route: this.props.routePath || window.location.pathname,
-      action: 'componentDidCatch',
+      action: "componentDidCatch",
       metadata: {
         componentStack: errorInfo.componentStack,
       },

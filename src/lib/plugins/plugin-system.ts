@@ -3,8 +3,8 @@
  * Sistema modular para expansão futura
  */
 
-import { logger } from '@/lib/logger';
-import { ComponentType, lazy, LazyExoticComponent } from 'react';
+import { logger } from "@/lib/logger";
+import { ComponentType, lazy, LazyExoticComponent } from "react";
 
 // Plugin types
 export interface PluginManifest {
@@ -24,29 +24,29 @@ export interface PluginManifest {
 }
 
 export type PluginCategory = 
-  | 'fleet' 
-  | 'crew' 
-  | 'maintenance' 
-  | 'safety' 
-  | 'compliance' 
-  | 'analytics' 
-  | 'communication'
-  | 'integration'
-  | 'ai'
-  | 'utility';
+  | "fleet" 
+  | "crew" 
+  | "maintenance" 
+  | "safety" 
+  | "compliance" 
+  | "analytics" 
+  | "communication"
+  | "integration"
+  | "ai"
+  | "utility";
 
 export type PluginPermission = 
-  | 'read:fleet'
-  | 'write:fleet'
-  | 'read:crew'
-  | 'write:crew'
-  | 'read:documents'
-  | 'write:documents'
-  | 'read:reports'
-  | 'write:reports'
-  | 'admin'
-  | 'ai:query'
-  | 'offline:storage';
+  | "read:fleet"
+  | "write:fleet"
+  | "read:crew"
+  | "write:crew"
+  | "read:documents"
+  | "write:documents"
+  | "read:reports"
+  | "write:reports"
+  | "admin"
+  | "ai:query"
+  | "offline:storage";
 
 export interface PluginRoute {
   path: string;
@@ -62,7 +62,7 @@ export interface PluginMenuItem {
   icon?: string;
   route?: string;
   action?: string;
-  position: 'sidebar' | 'header' | 'tools';
+  position: "sidebar" | "header" | "tools";
   order?: number;
 }
 
@@ -75,7 +75,7 @@ export interface PluginAICapability {
 
 export interface PluginInstance {
   manifest: PluginManifest;
-  status: 'active' | 'inactive' | 'error' | 'loading';
+  status: "active" | "inactive" | "error" | "loading";
   loadedAt?: Date;
   error?: string;
   component?: LazyExoticComponent<ComponentType<any>>;
@@ -88,7 +88,7 @@ export interface PluginAPI {
   saveData: <T>(table: string, data: T) => Promise<void>;
   
   // UI
-  showNotification: (message: string, type: 'info' | 'success' | 'warning' | 'error') => void;
+  showNotification: (message: string, type: "info" | "success" | "warning" | "error") => void;
   showDialog: (config: { title: string; content: string; actions?: any[] }) => void;
   
   // AI
@@ -119,7 +119,7 @@ class PluginRegistry {
     try {
       // Validate manifest
       if (!this.validateManifest(manifest)) {
-        throw new Error('Invalid plugin manifest');
+        throw new Error("Invalid plugin manifest");
       }
 
       // Check dependencies
@@ -134,7 +134,7 @@ class PluginRegistry {
       // Create plugin instance
       const instance: PluginInstance = {
         manifest,
-        status: 'loading',
+        status: "loading",
         loadedAt: new Date(),
       };
 
@@ -143,15 +143,15 @@ class PluginRegistry {
       // Initialize plugin
       await this.initializePlugin(manifest.id);
 
-      logger.info('[PluginSystem] Plugin registered', { id: manifest.id, name: manifest.name });
+      logger.info("[PluginSystem] Plugin registered", { id: manifest.id, name: manifest.name });
       return true;
     } catch (error) {
-      logger.error('[PluginSystem] Failed to register plugin', { id: manifest.id, error });
+      logger.error("[PluginSystem] Failed to register plugin", { id: manifest.id, error });
       
       const instance = this.plugins.get(manifest.id);
       if (instance) {
-        instance.status = 'error';
-        instance.error = error instanceof Error ? error.message : 'Unknown error';
+        instance.status = "error";
+        instance.error = error instanceof Error ? error.message : "Unknown error";
       }
       
       return false;
@@ -171,7 +171,7 @@ class PluginRegistry {
     // Check if other plugins depend on this one
     for (const [id, p] of this.plugins) {
       if (p.manifest.dependencies?.includes(pluginId)) {
-        logger.warn('[PluginSystem] Cannot unregister: other plugins depend on it', { 
+        logger.warn("[PluginSystem] Cannot unregister: other plugins depend on it", { 
           pluginId, 
           dependent: id 
         });
@@ -180,7 +180,7 @@ class PluginRegistry {
     }
 
     this.plugins.delete(pluginId);
-    logger.info('[PluginSystem] Plugin unregistered', { id: pluginId });
+    logger.info("[PluginSystem] Plugin unregistered", { id: pluginId });
     return true;
   }
 
@@ -209,7 +209,7 @@ class PluginRegistry {
    * Get active plugins
    */
   getActive(): PluginInstance[] {
-    return this.getAll().filter(p => p.status === 'active');
+    return this.getAll().filter(p => p.status === "active");
   }
 
   /**
@@ -222,16 +222,16 @@ class PluginRegistry {
       return false;
     }
 
-    plugin.status = enabled ? 'active' : 'inactive';
+    plugin.status = enabled ? "active" : "inactive";
     
-    this.emit('plugin:statusChanged', { pluginId, enabled });
+    this.emit("plugin:statusChanged", { pluginId, enabled });
     return true;
   }
 
   /**
    * Get all menu items from active plugins
    */
-  getMenuItems(position: PluginMenuItem['position']): PluginMenuItem[] {
+  getMenuItems(position: PluginMenuItem["position"]): PluginMenuItem[] {
     const items: PluginMenuItem[] = [];
     
     for (const plugin of this.getActive()) {
@@ -291,7 +291,7 @@ class PluginRegistry {
         try {
           handler(data);
         } catch (error) {
-          logger.error('[PluginSystem] Event handler error', { event, error });
+          logger.error("[PluginSystem] Event handler error", { event, error });
         }
       });
     }
@@ -324,7 +324,7 @@ class PluginRegistry {
       try {
         result = await callback(result);
       } catch (error) {
-        logger.error('[PluginSystem] Hook execution error', { hookName, error });
+        logger.error("[PluginSystem] Hook execution error", { hookName, error });
       }
     }
     
@@ -332,18 +332,18 @@ class PluginRegistry {
   }
 
   private validateManifest(manifest: PluginManifest): boolean {
-    const requiredFields = ['id', 'name', 'version', 'category', 'offlineSupport', 'minSystemVersion'];
+    const requiredFields = ["id", "name", "version", "category", "offlineSupport", "minSystemVersion"];
     
     for (const field of requiredFields) {
       if (!(field in manifest)) {
-        logger.error('[PluginSystem] Missing required field in manifest', { field });
+        logger.error("[PluginSystem] Missing required field in manifest", { field });
         return false;
       }
     }
     
     // Validate version format
     if (!/^\d+\.\d+\.\d+$/.test(manifest.version)) {
-      logger.error('[PluginSystem] Invalid version format', { version: manifest.version });
+      logger.error("[PluginSystem] Invalid version format", { version: manifest.version });
       return false;
     }
     
@@ -354,14 +354,14 @@ class PluginRegistry {
     const plugin = this.plugins.get(pluginId);
     
     if (!plugin) {
-      throw new Error('Plugin not found');
+      throw new Error("Plugin not found");
     }
 
     // Mark as active
-    plugin.status = 'active';
+    plugin.status = "active";
     
     // Emit event
-    this.emit('plugin:loaded', { pluginId, manifest: plugin.manifest });
+    this.emit("plugin:loaded", { pluginId, manifest: plugin.manifest });
   }
 }
 
@@ -370,48 +370,48 @@ export const pluginRegistry = new PluginRegistry();
 // Built-in core plugins
 export const CORE_PLUGINS: PluginManifest[] = [
   {
-    id: 'core.fleet',
-    name: 'Gestão de Frota',
-    version: '1.0.0',
-    description: 'Módulo principal de gestão de embarcações',
-    author: 'Nautilus',
-    category: 'fleet',
+    id: "core.fleet",
+    name: "Gestão de Frota",
+    version: "1.0.0",
+    description: "Módulo principal de gestão de embarcações",
+    author: "Nautilus",
+    category: "fleet",
     offlineSupport: true,
-    minSystemVersion: '1.0.0',
-    permissions: ['read:fleet', 'write:fleet'],
+    minSystemVersion: "1.0.0",
+    permissions: ["read:fleet", "write:fleet"],
   },
   {
-    id: 'core.crew',
-    name: 'Gestão de Tripulação',
-    version: '1.0.0',
-    description: 'Módulo de gestão de tripulação e certificações',
-    author: 'Nautilus',
-    category: 'crew',
+    id: "core.crew",
+    name: "Gestão de Tripulação",
+    version: "1.0.0",
+    description: "Módulo de gestão de tripulação e certificações",
+    author: "Nautilus",
+    category: "crew",
     offlineSupport: true,
-    minSystemVersion: '1.0.0',
-    permissions: ['read:crew', 'write:crew'],
+    minSystemVersion: "1.0.0",
+    permissions: ["read:crew", "write:crew"],
   },
   {
-    id: 'core.maintenance',
-    name: 'Manutenção',
-    version: '1.0.0',
-    description: 'Módulo de manutenção preventiva e corretiva',
-    author: 'Nautilus',
-    category: 'maintenance',
+    id: "core.maintenance",
+    name: "Manutenção",
+    version: "1.0.0",
+    description: "Módulo de manutenção preventiva e corretiva",
+    author: "Nautilus",
+    category: "maintenance",
     offlineSupport: true,
-    minSystemVersion: '1.0.0',
-    permissions: ['read:fleet', 'write:fleet'],
+    minSystemVersion: "1.0.0",
+    permissions: ["read:fleet", "write:fleet"],
   },
   {
-    id: 'core.ai',
-    name: 'IA Assistente',
-    version: '1.0.0',
-    description: 'Módulo de inteligência artificial embarcada',
-    author: 'Nautilus',
-    category: 'ai',
+    id: "core.ai",
+    name: "IA Assistente",
+    version: "1.0.0",
+    description: "Módulo de inteligência artificial embarcada",
+    author: "Nautilus",
+    category: "ai",
     offlineSupport: true,
-    minSystemVersion: '1.0.0',
-    permissions: ['ai:query'],
+    minSystemVersion: "1.0.0",
+    permissions: ["ai:query"],
   },
 ];
 
@@ -421,5 +421,5 @@ export function initializePluginSystem(): void {
     pluginRegistry.register(manifest);
   }
   
-  logger.info('[PluginSystem] Core plugins initialized', { count: CORE_PLUGINS.length });
+  logger.info("[PluginSystem] Core plugins initialized", { count: CORE_PLUGINS.length });
 }

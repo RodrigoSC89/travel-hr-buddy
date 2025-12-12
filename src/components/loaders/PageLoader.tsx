@@ -4,19 +4,19 @@
  * Loading state para páginas inteiras
  */
 
-import { Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PageLoaderProps {
   message?: string;
   className?: string;
 }
 
-export function PageLoader({ message = 'Carregando...', className }: PageLoaderProps) {
+export function PageLoader({ message = "Carregando...", className }: PageLoaderProps) {
   return (
     <div
       className={cn(
-        'flex min-h-screen flex-col items-center justify-center gap-4',
+        "flex min-h-screen flex-col items-center justify-center gap-4",
         className
       )}
     >

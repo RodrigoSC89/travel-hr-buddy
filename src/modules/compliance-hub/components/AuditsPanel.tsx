@@ -3,27 +3,27 @@
  * Painel completo de auditorias com funcionalidades avançadas
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   FileCheck,
   Search,
@@ -39,8 +39,8 @@ import {
   Download,
   Sparkles,
   XCircle,
-} from 'lucide-react';
-import type { AuditSession, AuditFinding } from '../types';
+} from "lucide-react";
+import type { AuditSession, AuditFinding } from "../types";
 
 interface AuditsPanelProps {
   audits: AuditSession[];
@@ -61,17 +61,17 @@ export function AuditsPanel({
   onGenerateChecklist,
   onExportAudit,
 }: AuditsPanelProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
   const [generatingChecklist, setGeneratingChecklist] = useState<string | null>(null);
 
-  const getStatusBadge = (status: AuditSession['status']) => {
-    const variants: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string; icon: React.ReactNode }> = {
-      scheduled: { variant: 'secondary', label: 'Agendada', icon: <Calendar className="h-3 w-3" /> },
-      'in-progress': { variant: 'default', label: 'Em Andamento', icon: <Clock className="h-3 w-3" /> },
-      completed: { variant: 'outline', label: 'Concluída', icon: <CheckCircle2 className="h-3 w-3" /> },
-      cancelled: { variant: 'destructive', label: 'Cancelada', icon: <XCircle className="h-3 w-3" /> },
+  const getStatusBadge = (status: AuditSession["status"]) => {
+    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string; icon: React.ReactNode }> = {
+      scheduled: { variant: "secondary", label: "Agendada", icon: <Calendar className="h-3 w-3" /> },
+      "in-progress": { variant: "default", label: "Em Andamento", icon: <Clock className="h-3 w-3" /> },
+      completed: { variant: "outline", label: "Concluída", icon: <CheckCircle2 className="h-3 w-3" /> },
+      cancelled: { variant: "destructive", label: "Cancelada", icon: <XCircle className="h-3 w-3" /> },
     };
 
     const { variant, label, icon } = variants[status] || variants.scheduled;
@@ -83,22 +83,22 @@ export function AuditsPanel({
     );
   };
 
-  const getTypeBadge = (type: AuditSession['auditType']) => {
+  const getTypeBadge = (type: AuditSession["auditType"]) => {
     const labels: Record<string, string> = {
-      internal: 'Interna',
-      external: 'Externa',
-      'flag-state': 'Bandeira',
-      class: 'Classificadora',
-      psc: 'PSC',
+      internal: "Interna",
+      external: "Externa",
+      "flag-state": "Bandeira",
+      class: "Classificadora",
+      psc: "PSC",
     };
     return <Badge variant="outline">{labels[type] || type}</Badge>;
   };
 
   const getFindingsSummary = (findings: AuditFinding[]) => {
-    const critical = findings.filter((f) => f.severity === 'critical').length;
-    const major = findings.filter((f) => f.severity === 'major').length;
-    const minor = findings.filter((f) => f.severity === 'minor').length;
-    const obs = findings.filter((f) => f.severity === 'observation').length;
+    const critical = findings.filter((f) => f.severity === "critical").length;
+    const major = findings.filter((f) => f.severity === "major").length;
+    const minor = findings.filter((f) => f.severity === "minor").length;
+    const obs = findings.filter((f) => f.severity === "observation").length;
 
     return (
       <div className="flex items-center gap-2 text-sm">
@@ -134,14 +134,14 @@ export function AuditsPanel({
     const matchesSearch =
       audit.vesselName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       audit.auditorName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || audit.status === statusFilter;
-    const matchesType = typeFilter === 'all' || audit.auditType === typeFilter;
+    const matchesStatus = statusFilter === "all" || audit.status === statusFilter;
+    const matchesType = typeFilter === "all" || audit.auditType === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   });
 
-  const scheduledAudits = filteredAudits.filter((a) => a.status === 'scheduled');
-  const inProgressAudits = filteredAudits.filter((a) => a.status === 'in-progress');
-  const completedAudits = filteredAudits.filter((a) => a.status === 'completed');
+  const scheduledAudits = filteredAudits.filter((a) => a.status === "scheduled");
+  const inProgressAudits = filteredAudits.filter((a) => a.status === "in-progress");
+  const completedAudits = filteredAudits.filter((a) => a.status === "completed");
 
   const handleGenerateChecklist = async (auditId: string) => {
     setGeneratingChecklist(auditId);
@@ -222,7 +222,7 @@ export function AuditsPanel({
         {audit.score !== undefined && audit.score > 0 && (
           <div className="flex items-center justify-between pt-2">
             <span className="text-muted-foreground">Score:</span>
-            <Badge variant={audit.score >= 80 ? 'default' : audit.score >= 60 ? 'secondary' : 'destructive'}>
+            <Badge variant={audit.score >= 80 ? "default" : audit.score >= 60 ? "secondary" : "destructive"}>
               {audit.score}%
             </Badge>
           </div>

@@ -2,13 +2,13 @@
  * Training Panel - Gestão de Treinamentos de Segurança
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   GraduationCap, 
   Search, 
@@ -20,10 +20,10 @@ import {
   Award,
   Brain,
   TrendingUp
-} from 'lucide-react';
-import { format, differenceInDays } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import type { SafetyTraining, CrewTrainingDashboard } from '../types';
+} from "lucide-react";
+import { format, differenceInDays } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import type { SafetyTraining, CrewTrainingDashboard } from "../types";
 
 interface TrainingPanelProps {
   trainings: SafetyTraining[];
@@ -38,12 +38,12 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
   loading,
   onAssignTraining 
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedTab, setSelectedTab] = useState('overview');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTab, setSelectedTab] = useState("overview");
 
-  const pendingTrainings = trainings.filter(t => t.status === 'pending');
-  const expiredTrainings = trainings.filter(t => t.status === 'expired');
-  const completedTrainings = trainings.filter(t => t.status === 'completed');
+  const pendingTrainings = trainings.filter(t => t.status === "pending");
+  const expiredTrainings = trainings.filter(t => t.status === "expired");
+  const completedTrainings = trainings.filter(t => t.status === "completed");
   const aiRecommended = trainings.filter(t => t.ai_recommended);
 
   const filteredTrainings = trainings.filter(t =>
@@ -57,29 +57,29 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'completed':
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Concluído</Badge>;
-      case 'in_progress':
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Em Andamento</Badge>;
-      case 'pending':
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
-      case 'expired':
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Expirado</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "completed":
+      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Concluído</Badge>;
+    case "in_progress":
+      return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Em Andamento</Badge>;
+    case "pending":
+      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
+    case "expired":
+      return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Expirado</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'critical':
-        return <Badge className="bg-red-500 text-white">Crítico</Badge>;
-      case 'high':
-        return <Badge className="bg-orange-500 text-white">Alta</Badge>;
-      case 'medium':
-        return <Badge className="bg-yellow-500 text-black">Média</Badge>;
-      default:
-        return <Badge variant="outline">Baixa</Badge>;
+    case "critical":
+      return <Badge className="bg-red-500 text-white">Crítico</Badge>;
+    case "high":
+      return <Badge className="bg-orange-500 text-white">Alta</Badge>;
+    case "medium":
+      return <Badge className="bg-yellow-500 text-black">Média</Badge>;
+    default:
+      return <Badge variant="outline">Baixa</Badge>;
     }
   };
 
@@ -223,8 +223,8 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           <span className={
                             differenceInDays(new Date(training.expiry_date), new Date()) < 30
-                              ? 'text-red-400'
-                              : 'text-muted-foreground'
+                              ? "text-red-400"
+                              : "text-muted-foreground"
                           }>
                             Vence em: {format(new Date(training.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
                           </span>

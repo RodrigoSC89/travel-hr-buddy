@@ -170,10 +170,10 @@ export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: C
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full ${
-                        member.status === 'active' ? 'bg-emerald-500' :
-                        member.status === 'on_leave' ? 'bg-amber-500' :
-                        member.status === 'embarked' ? 'bg-blue-500' :
-                        'bg-muted-foreground'
+                        member.status === "active" ? "bg-emerald-500" :
+                          member.status === "on_leave" ? "bg-amber-500" :
+                            member.status === "embarked" ? "bg-blue-500" :
+                              "bg-muted-foreground"
                       }`} />
                       <div>
                         <div className="flex items-center gap-2">

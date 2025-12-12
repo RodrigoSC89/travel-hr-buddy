@@ -3,9 +3,9 @@
  * Validates that bundle sizes stay within budget for 2Mb connections
  */
 
-import { describe, it, expect } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import { describe, it, expect } from "vitest";
+import fs from "fs";
+import path from "path";
 
 // Budget limits (in bytes)
 const LIMITS = {
@@ -18,9 +18,9 @@ const LIMITS = {
 // Gzip compression ratio estimate
 const GZIP_RATIO = 0.35;
 
-describe('Bundle Size Limits', () => {
-  const distPath = path.resolve(process.cwd(), 'dist');
-  const assetsPath = path.join(distPath, 'assets');
+describe("Bundle Size Limits", () => {
+  const distPath = path.resolve(process.cwd(), "dist");
+  const assetsPath = path.join(distPath, "assets");
 
   const getFileSize = (filePath: string): number => {
     try {
@@ -41,26 +41,26 @@ describe('Bundle Size Limits', () => {
     }
   };
 
-  it('should have dist folder (requires build)', () => {
+  it("should have dist folder (requires build)", () => {
     const exists = fs.existsSync(distPath);
     if (!exists) {
-      console.warn('⚠️ dist/ not found. Run `npm run build` first.');
+      console.warn("⚠️ dist/ not found. Run `npm run build` first.");
     }
     // Skip test if dist doesn't exist
     expect(true).toBe(true);
   });
 
-  it('initial JS bundle should be under 250KB gzipped', () => {
+  it("initial JS bundle should be under 250KB gzipped", () => {
     if (!fs.existsSync(assetsPath)) {
-      console.warn('Skipping: dist/assets not found');
+      console.warn("Skipping: dist/assets not found");
       return;
     }
 
-    const coreFiles = getFilesWithExtension(assetsPath, '.js')
+    const coreFiles = getFilesWithExtension(assetsPath, ".js")
       .filter(f => 
-        f.includes('core-react') || 
-        f.includes('core-router') || 
-        f.includes('index-')
+        f.includes("core-react") || 
+        f.includes("core-router") || 
+        f.includes("index-")
       );
 
     const totalSize = coreFiles.reduce((sum, file) => sum + getFileSize(file), 0);
@@ -71,13 +71,13 @@ describe('Bundle Size Limits', () => {
     expect(estimatedGzip).toBeLessThan(LIMITS.INITIAL_JS_GZIP);
   });
 
-  it('no individual chunk should exceed 400KB', () => {
+  it("no individual chunk should exceed 400KB", () => {
     if (!fs.existsSync(assetsPath)) {
-      console.warn('Skipping: dist/assets not found');
+      console.warn("Skipping: dist/assets not found");
       return;
     }
 
-    const jsFiles = getFilesWithExtension(assetsPath, '.js');
+    const jsFiles = getFilesWithExtension(assetsPath, ".js");
     const oversizedChunks: string[] = [];
 
     jsFiles.forEach(file => {
@@ -88,19 +88,19 @@ describe('Bundle Size Limits', () => {
     });
 
     if (oversizedChunks.length > 0) {
-      console.warn('Oversized chunks:', oversizedChunks);
+      console.warn("Oversized chunks:", oversizedChunks);
     }
 
     expect(oversizedChunks.length).toBe(0);
   });
 
-  it('CSS should be under 40KB gzipped', () => {
+  it("CSS should be under 40KB gzipped", () => {
     if (!fs.existsSync(assetsPath)) {
-      console.warn('Skipping: dist/assets not found');
+      console.warn("Skipping: dist/assets not found");
       return;
     }
 
-    const cssFiles = getFilesWithExtension(assetsPath, '.css');
+    const cssFiles = getFilesWithExtension(assetsPath, ".css");
     const totalSize = cssFiles.reduce((sum, file) => sum + getFileSize(file), 0);
     const estimatedGzip = totalSize * GZIP_RATIO;
 
@@ -109,9 +109,9 @@ describe('Bundle Size Limits', () => {
     expect(estimatedGzip).toBeLessThan(LIMITS.CSS_GZIP);
   });
 
-  it('total assets should be under 2.5MB', () => {
+  it("total assets should be under 2.5MB", () => {
     if (!fs.existsSync(distPath)) {
-      console.warn('Skipping: dist/ not found');
+      console.warn("Skipping: dist/ not found");
       return;
     }
 
@@ -139,21 +139,21 @@ describe('Bundle Size Limits', () => {
   });
 });
 
-describe('Heavy Dependencies', () => {
-  const srcPath = path.resolve(process.cwd(), 'src');
+describe("Heavy Dependencies", () => {
+  const srcPath = path.resolve(process.cwd(), "src");
 
   const HEAVY_LIBS = [
-    'three',
-    '@react-three',
-    'mapbox-gl',
-    '@tensorflow',
-    'onnxruntime',
-    'firebase',
+    "three",
+    "@react-three",
+    "mapbox-gl",
+    "@tensorflow",
+    "onnxruntime",
+    "firebase",
   ];
 
-  it('heavy libraries should use dynamic imports', () => {
+  it("heavy libraries should use dynamic imports", () => {
     if (!fs.existsSync(srcPath)) {
-      console.warn('Skipping: src/ not found');
+      console.warn("Skipping: src/ not found");
       return;
     }
 
@@ -167,16 +167,16 @@ describe('Heavy Dependencies', () => {
             const fullPath = path.join(currentDir, item);
             const stat = fs.statSync(fullPath);
             
-            if (stat.isDirectory() && !item.includes('node_modules')) {
+            if (stat.isDirectory() && !item.includes("node_modules")) {
               scanDir(fullPath);
-            } else if (item.endsWith('.ts') || item.endsWith('.tsx')) {
-              const content = fs.readFileSync(fullPath, 'utf-8');
-              const lines = content.split('\n');
+            } else if (item.endsWith(".ts") || item.endsWith(".tsx")) {
+              const content = fs.readFileSync(fullPath, "utf-8");
+              const lines = content.split("\n");
               
               lines.forEach((line, idx) => {
                 // Check for static import (not lazy/dynamic)
                 if (line.includes(`from '${lib}`) || line.includes(`from "${lib}`)) {
-                  if (!line.includes('lazy') && !line.includes('dynamic') && line.startsWith('import ')) {
+                  if (!line.includes("lazy") && !line.includes("dynamic") && line.startsWith("import ")) {
                     results.push(`${fullPath}:${idx + 1}`);
                   }
                 }
@@ -200,7 +200,7 @@ describe('Heavy Dependencies', () => {
     });
 
     if (issues.length > 0) {
-      console.warn('⚠️ Heavy libraries with static imports:');
+      console.warn("⚠️ Heavy libraries with static imports:");
       issues.forEach(issue => console.warn(`  ${issue}`));
     }
 

@@ -175,10 +175,10 @@ export function CrewIntelligenceAI() {
 
   const getTurnoverColor = (risk: string) => {
     switch (risk) {
-      case "low": return "bg-green-500/10 text-green-500";
-      case "medium": return "bg-yellow-500/10 text-yellow-500";
-      case "high": return "bg-red-500/10 text-red-500";
-      default: return "";
+    case "low": return "bg-green-500/10 text-green-500";
+    case "medium": return "bg-yellow-500/10 text-yellow-500";
+    case "high": return "bg-red-500/10 text-red-500";
+    default: return "";
     }
   };
 

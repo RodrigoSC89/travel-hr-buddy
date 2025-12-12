@@ -3,10 +3,10 @@
  * Handles automated tasks like cache cleanup, sync monitoring, and memory optimization
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
-type TaskPriority = 'low' | 'normal' | 'high' | 'critical';
-type TaskSchedule = 'startup' | 'interval' | 'idle' | 'online';
+type TaskPriority = "low" | "normal" | "high" | "critical";
+type TaskSchedule = "startup" | "interval" | "idle" | "online";
 
 interface AutomatedTask {
   id: string;
@@ -43,11 +43,11 @@ class AutomationManager {
   private registerDefaultTasks() {
     // Cache cleanup task
     this.registerTask({
-      id: 'cache-cleanup',
-      name: 'Cache Cleanup',
-      description: 'Limpa cache expirado do IndexedDB e localStorage',
-      priority: 'low',
-      schedule: 'interval',
+      id: "cache-cleanup",
+      name: "Cache Cleanup",
+      description: "Limpa cache expirado do IndexedDB e localStorage",
+      priority: "low",
+      schedule: "interval",
       intervalMs: 5 * 60 * 1000, // 5 minutos
       enabled: true,
       runCount: 0,
@@ -58,11 +58,11 @@ class AutomationManager {
 
     // Memory optimization task
     this.registerTask({
-      id: 'memory-optimization',
-      name: 'Memory Optimization',
-      description: 'Otimiza uso de memória em idle',
-      priority: 'low',
-      schedule: 'idle',
+      id: "memory-optimization",
+      name: "Memory Optimization",
+      description: "Otimiza uso de memória em idle",
+      priority: "low",
+      schedule: "idle",
       enabled: true,
       runCount: 0,
       execute: async () => {
@@ -72,11 +72,11 @@ class AutomationManager {
 
     // Sync check task
     this.registerTask({
-      id: 'sync-check',
-      name: 'Sync Check',
-      description: 'Verifica fila de sincronização pendente',
-      priority: 'normal',
-      schedule: 'online',
+      id: "sync-check",
+      name: "Sync Check",
+      description: "Verifica fila de sincronização pendente",
+      priority: "normal",
+      schedule: "online",
       enabled: true,
       runCount: 0,
       execute: async () => {
@@ -86,11 +86,11 @@ class AutomationManager {
 
     // Health check task
     this.registerTask({
-      id: 'health-check',
-      name: 'Health Check',
-      description: 'Verifica saúde do sistema',
-      priority: 'normal',
-      schedule: 'interval',
+      id: "health-check",
+      name: "Health Check",
+      description: "Verifica saúde do sistema",
+      priority: "normal",
+      schedule: "interval",
       intervalMs: 30 * 1000, // 30 segundos
       enabled: true,
       runCount: 0,
@@ -106,9 +106,9 @@ class AutomationManager {
       const keysToRemove: string[] = [];
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key?.startsWith('cache_')) {
+        if (key?.startsWith("cache_")) {
           try {
-            const data = JSON.parse(localStorage.getItem(key) || '{}');
+            const data = JSON.parse(localStorage.getItem(key) || "{}");
             if (data.expiresAt && data.expiresAt < Date.now()) {
               keysToRemove.push(key);
             }
@@ -124,14 +124,14 @@ class AutomationManager {
         logger.info(`[AutomationManager] Cleaned ${keysToRemove.length} expired cache items`);
       }
     } catch (error) {
-      logger.warn('[AutomationManager] Cache cleanup error:', { error });
+      logger.warn("[AutomationManager] Cache cleanup error:", { error });
     }
   }
 
   private async optimizeMemory(): Promise<void> {
     try {
       // Clear any large in-memory caches
-      if (typeof window !== 'undefined' && 'gc' in window) {
+      if (typeof window !== "undefined" && "gc" in window) {
         // Force GC if available (Chrome with --expose-gc flag)
         (window as unknown as { gc: () => void }).gc();
       }
@@ -139,7 +139,7 @@ class AutomationManager {
       // Clear image cache if memory is low
       const memory = (performance as unknown as { memory?: { usedJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
       if (memory && memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.8) {
-        logger.warn('[AutomationManager] High memory usage detected');
+        logger.warn("[AutomationManager] High memory usage detected");
       }
     } catch (error) {
       // Memory optimization is optional
@@ -149,19 +149,19 @@ class AutomationManager {
   private async checkSyncQueue(): Promise<void> {
     try {
       // Check if there are pending sync items
-      const pendingSync = localStorage.getItem('nautilus_pending_sync');
+      const pendingSync = localStorage.getItem("nautilus_pending_sync");
       if (pendingSync) {
         const items = JSON.parse(pendingSync);
         if (Array.isArray(items) && items.length > 0) {
           logger.info(`[AutomationManager] ${items.length} pending sync items found`);
           // Trigger sync via custom event
-          window.dispatchEvent(new CustomEvent('automation-sync-pending', { 
+          window.dispatchEvent(new CustomEvent("automation-sync-pending", { 
             detail: { count: items.length } 
           }));
         }
       }
     } catch (error) {
-      logger.warn('[AutomationManager] Sync check error:', { error });
+      logger.warn("[AutomationManager] Sync check error:", { error });
     }
   }
 
@@ -169,13 +169,13 @@ class AutomationManager {
     const health = {
       online: navigator.onLine,
       memory: (performance as unknown as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize || 0,
-      serviceWorker: 'serviceWorker' in navigator,
-      indexedDB: 'indexedDB' in window,
-      localStorage: typeof localStorage !== 'undefined',
+      serviceWorker: "serviceWorker" in navigator,
+      indexedDB: "indexedDB" in window,
+      localStorage: typeof localStorage !== "undefined",
     };
 
     // Emit health status event
-    window.dispatchEvent(new CustomEvent('automation-health-check', { detail: health }));
+    window.dispatchEvent(new CustomEvent("automation-health-check", { detail: health }));
   }
 
   /**
@@ -193,14 +193,14 @@ class AutomationManager {
     if (this.isRunning) return;
     this.isRunning = true;
 
-    logger.info('[AutomationManager] Starting...');
+    logger.info("[AutomationManager] Starting...");
 
     // Run startup tasks
-    this.runTasksBySchedule('startup');
+    this.runTasksBySchedule("startup");
 
     // Setup interval tasks
     this.tasks.forEach((task) => {
-      if (task.schedule === 'interval' && task.intervalMs && task.enabled) {
+      if (task.schedule === "interval" && task.intervalMs && task.enabled) {
         const intervalId = window.setInterval(() => {
           this.runTask(task.id);
         }, task.intervalMs);
@@ -214,7 +214,7 @@ class AutomationManager {
     // Setup online tasks
     this.setupOnlineTasks();
 
-    logger.info('[AutomationManager] Started successfully');
+    logger.info("[AutomationManager] Started successfully");
   }
 
   /**
@@ -230,23 +230,23 @@ class AutomationManager {
     this.intervals.clear();
 
     // Cancel idle callback
-    if (this.idleCallbackId !== null && 'cancelIdleCallback' in window) {
+    if (this.idleCallbackId !== null && "cancelIdleCallback" in window) {
       cancelIdleCallback(this.idleCallbackId);
       this.idleCallbackId = null;
     }
 
     // Remove event listeners
-    window.removeEventListener('online', this.onlineHandler);
+    window.removeEventListener("online", this.onlineHandler);
 
     this.isRunning = false;
-    logger.info('[AutomationManager] Stopped');
+    logger.info("[AutomationManager] Stopped");
   }
 
   private setupIdleTasks(): void {
-    if (!('requestIdleCallback' in window)) return;
+    if (!("requestIdleCallback" in window)) return;
 
     const runIdleTasks = () => {
-      this.runTasksBySchedule('idle');
+      this.runTasksBySchedule("idle");
       this.idleCallbackId = requestIdleCallback(runIdleTasks, { timeout: 60000 });
     };
 
@@ -254,11 +254,11 @@ class AutomationManager {
   }
 
   private onlineHandler = () => {
-    this.runTasksBySchedule('online');
+    this.runTasksBySchedule("online");
   };
 
   private setupOnlineTasks(): void {
-    window.addEventListener('online', this.onlineHandler);
+    window.addEventListener("online", this.onlineHandler);
   }
 
   private runTasksBySchedule(schedule: TaskSchedule): void {
@@ -299,7 +299,7 @@ class AutomationManager {
         taskId,
         success: false,
         duration: performance.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
         timestamp: Date.now(),
       };
 
@@ -325,7 +325,7 @@ class AutomationManager {
     const task = this.tasks.get(taskId);
     if (task) {
       task.enabled = enabled;
-      logger.info(`[AutomationManager] Task ${taskId} ${enabled ? 'enabled' : 'disabled'}`);
+      logger.info(`[AutomationManager] Task ${taskId} ${enabled ? "enabled" : "disabled"}`);
     }
   }
 
@@ -351,7 +351,7 @@ class AutomationManager {
     taskCount: number;
     activeIntervals: number;
     totalRuns: number;
-  } {
+    } {
     return {
       isRunning: this.isRunning,
       taskCount: this.tasks.size,

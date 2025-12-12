@@ -119,12 +119,12 @@ export const DigitalTwinDP: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "thruster": return <Anchor className="h-4 w-4" />;
-      case "power": return <Power className="h-4 w-4" />;
-      case "sensor": return <Gauge className="h-4 w-4" />;
-      case "reference": return <Target className="h-4 w-4" />;
-      case "control": return <Cpu className="h-4 w-4" />;
-      default: return <Settings className="h-4 w-4" />;
+    case "thruster": return <Anchor className="h-4 w-4" />;
+    case "power": return <Power className="h-4 w-4" />;
+    case "sensor": return <Gauge className="h-4 w-4" />;
+    case "reference": return <Target className="h-4 w-4" />;
+    case "control": return <Cpu className="h-4 w-4" />;
+    default: return <Settings className="h-4 w-4" />;
     }
   };
 

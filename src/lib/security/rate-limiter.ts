@@ -88,50 +88,50 @@ export const RATE_LIMITS = {
   LOGIN: {
     maxRequests: 5,
     windowMs: 60 * 1000, // 1 minute
-    message: 'Too many login attempts. Please try again in 1 minute.'
+    message: "Too many login attempts. Please try again in 1 minute."
   },
   SIGNUP: {
     maxRequests: 3,
     windowMs: 60 * 60 * 1000, // 1 hour
-    message: 'Too many signup attempts. Please try again later.'
+    message: "Too many signup attempts. Please try again later."
   },
   PASSWORD_RESET: {
     maxRequests: 3,
     windowMs: 60 * 60 * 1000, // 1 hour
-    message: 'Too many password reset attempts. Please try again later.'
+    message: "Too many password reset attempts. Please try again later."
   },
 
   // API calls
   API_CALL: {
     maxRequests: 100,
     windowMs: 60 * 1000, // 1 minute
-    message: 'API rate limit exceeded. Please slow down.'
+    message: "API rate limit exceeded. Please slow down."
   },
 
   // File operations
   FILE_UPLOAD: {
     maxRequests: 10,
     windowMs: 60 * 60 * 1000, // 1 hour
-    message: 'File upload limit exceeded. Please try again later.'
+    message: "File upload limit exceeded. Please try again later."
   },
   FILE_DOWNLOAD: {
     maxRequests: 50,
     windowMs: 60 * 60 * 1000, // 1 hour
-    message: 'File download limit exceeded. Please try again later.'
+    message: "File download limit exceeded. Please try again later."
   },
 
   // Search and queries
   SEARCH: {
     maxRequests: 30,
     windowMs: 60 * 1000, // 1 minute
-    message: 'Search rate limit exceeded. Please slow down.'
+    message: "Search rate limit exceeded. Please slow down."
   },
 
   // Export operations
   EXPORT: {
     maxRequests: 5,
     windowMs: 60 * 60 * 1000, // 1 hour
-    message: 'Export limit exceeded. Please try again later.'
+    message: "Export limit exceeded. Please try again later."
   },
 } as const;
 
@@ -141,14 +141,14 @@ export const RATE_LIMITS = {
 export function withRateLimit<T extends (...args: any[]) => any>(
   fn: T,
   config: RateLimitConfig,
-  keyGenerator: (...args: Parameters<T>) => string = () => 'default'
+  keyGenerator: (...args: Parameters<T>) => string = () => "default"
 ): T {
   return ((...args: Parameters<T>) => {
     const key = keyGenerator(...args);
     const result = rateLimiter.check(key, config);
 
     if (!result.allowed) {
-      throw new Error(result.message || 'Rate limit exceeded');
+      throw new Error(result.message || "Rate limit exceeded");
     }
 
     return fn(...args);
@@ -167,6 +167,6 @@ export function useRateLimit(key: string, config: RateLimitConfig) {
 }
 
 // Export for debugging
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   (window as any).__NAUTILUS_RATE_LIMITER__ = rateLimiter;
 }

@@ -3,7 +3,7 @@
  * Local knowledge base with AI support
  */
 
-import { hybridLLMEngine } from '@/lib/llm/hybrid-engine';
+import { hybridLLMEngine } from "@/lib/llm/hybrid-engine";
 
 export interface WikiArticle {
   id: string;
@@ -36,8 +36,8 @@ export interface WikiSearchResult {
 // Built-in knowledge base
 const KNOWLEDGE_BASE: WikiArticle[] = [
   {
-    id: 'sync-data',
-    title: 'Como sincronizar dados',
+    id: "sync-data",
+    title: "Como sincronizar dados",
     content: `## Sincronização de Dados
 
 ### Sincronização Automática
@@ -53,16 +53,16 @@ Se houver conflitos, o sistema mostrará uma tela de resolução onde você pode
 
 ### Modo Offline
 Os dados são salvos localmente e sincronizados quando a conexão for restabelecida.`,
-    category: 'Sincronização',
-    tags: ['sync', 'dados', 'offline'],
-    keywords: ['sincronizar', 'sincronização', 'dados', 'offline', 'conflito', 'manual'],
-    relatedArticles: ['offline-mode', 'data-backup'],
+    category: "Sincronização",
+    tags: ["sync", "dados", "offline"],
+    keywords: ["sincronizar", "sincronização", "dados", "offline", "conflito", "manual"],
+    relatedArticles: ["offline-mode", "data-backup"],
     lastUpdated: new Date(),
     views: 0
   },
   {
-    id: 'register-failure',
-    title: 'Como registrar uma falha',
+    id: "register-failure",
+    title: "Como registrar uma falha",
     content: `## Registro de Falhas
 
 ### Passo a Passo
@@ -80,16 +80,16 @@ Para falhas críticas, use o botão vermelho "Emergência" que notifica imediata
 
 ### Acompanhamento
 Todas as falhas podem ser acompanhadas na aba "Meus Registros".`,
-    category: 'Manutenção',
-    tags: ['falha', 'manutenção', 'registro'],
-    keywords: ['falha', 'registrar', 'problema', 'equipamento', 'manutenção', 'emergência'],
-    relatedArticles: ['maintenance-types', 'emergency-procedures'],
+    category: "Manutenção",
+    tags: ["falha", "manutenção", "registro"],
+    keywords: ["falha", "registrar", "problema", "equipamento", "manutenção", "emergência"],
+    relatedArticles: ["maintenance-types", "emergency-procedures"],
     lastUpdated: new Date(),
     views: 0
   },
   {
-    id: 'generate-report',
-    title: 'Como gerar relatórios',
+    id: "generate-report",
+    title: "Como gerar relatórios",
     content: `## Geração de Relatórios
 
 ### Relatório Rápido
@@ -110,16 +110,16 @@ Relatórios podem ser exportados em PDF, Excel ou enviados por email.
 
 ### Relatórios Offline
 Relatórios básicos podem ser gerados offline. A versão completa requer sincronização.`,
-    category: 'Relatórios',
-    tags: ['relatório', 'exportar', 'pdf'],
-    keywords: ['relatório', 'gerar', 'exportar', 'pdf', 'excel', 'operacional', 'manutenção'],
-    relatedArticles: ['export-data', 'scheduled-reports'],
+    category: "Relatórios",
+    tags: ["relatório", "exportar", "pdf"],
+    keywords: ["relatório", "gerar", "exportar", "pdf", "excel", "operacional", "manutenção"],
+    relatedArticles: ["export-data", "scheduled-reports"],
     lastUpdated: new Date(),
     views: 0
   },
   {
-    id: 'error-codes',
-    title: 'Códigos de Erro',
+    id: "error-codes",
+    title: "Códigos de Erro",
     content: `## Códigos de Erro do Sistema
 
 ### Erros de Conexão
@@ -141,16 +141,16 @@ Relatórios básicos podem ser gerados offline. A versão completa requer sincro
 1. Tente novamente
 2. Reinicie o aplicativo
 3. Contate suporte se persistir`,
-    category: 'Suporte',
-    tags: ['erro', 'código', 'suporte'],
-    keywords: ['erro', 'e001', 'e101', 'e201', 'código', 'problema', 'solução'],
-    relatedArticles: ['troubleshooting', 'contact-support'],
+    category: "Suporte",
+    tags: ["erro", "código", "suporte"],
+    keywords: ["erro", "e001", "e101", "e201", "código", "problema", "solução"],
+    relatedArticles: ["troubleshooting", "contact-support"],
     lastUpdated: new Date(),
     views: 0
   },
   {
-    id: 'offline-mode',
-    title: 'Modo Offline',
+    id: "offline-mode",
+    title: "Modo Offline",
     content: `## Operação Offline
 
 ### O que funciona offline
@@ -170,10 +170,10 @@ Um banner amarelo aparece quando você está offline.
 
 ### Dados Pendentes
 Veja dados pendentes em Menu > Sincronização > Pendentes`,
-    category: 'Sincronização',
-    tags: ['offline', 'sem internet', 'local'],
-    keywords: ['offline', 'internet', 'local', 'pendente', 'sincronização'],
-    relatedArticles: ['sync-data', 'data-backup'],
+    category: "Sincronização",
+    tags: ["offline", "sem internet", "local"],
+    keywords: ["offline", "internet", "local", "pendente", "sincronização"],
+    relatedArticles: ["sync-data", "data-backup"],
     lastUpdated: new Date(),
     views: 0
   }
@@ -181,47 +181,47 @@ Veja dados pendentes em Menu > Sincronização > Pendentes`,
 
 const FAQ_ENTRIES: FAQEntry[] = [
   {
-    id: 'faq-1',
-    question: 'O que fazer quando o erro 103 aparece?',
-    answer: 'O erro 103 indica que a fila de sincronização está cheia. Tente: 1) Verificar sua conexão de internet, 2) Forçar sincronização manual em Menu > Sincronizar, 3) Se persistir, reinicie o aplicativo.',
-    category: 'Erros',
-    keywords: ['erro', '103', 'fila', 'sync'],
+    id: "faq-1",
+    question: "O que fazer quando o erro 103 aparece?",
+    answer: "O erro 103 indica que a fila de sincronização está cheia. Tente: 1) Verificar sua conexão de internet, 2) Forçar sincronização manual em Menu > Sincronizar, 3) Se persistir, reinicie o aplicativo.",
+    category: "Erros",
+    keywords: ["erro", "103", "fila", "sync"],
     helpful: 15,
     notHelpful: 2
   },
   {
-    id: 'faq-2',
-    question: 'Como funciona a IA do sistema?',
-    answer: 'A IA opera localmente no seu dispositivo, permitindo uso offline. Ela ajuda com: previsão de manutenção, análise de dados, sugestões operacionais e suporte técnico. Basta digitar sua pergunta no assistente.',
-    category: 'IA',
-    keywords: ['ia', 'inteligência', 'assistente', 'offline'],
+    id: "faq-2",
+    question: "Como funciona a IA do sistema?",
+    answer: "A IA opera localmente no seu dispositivo, permitindo uso offline. Ela ajuda com: previsão de manutenção, análise de dados, sugestões operacionais e suporte técnico. Basta digitar sua pergunta no assistente.",
+    category: "IA",
+    keywords: ["ia", "inteligência", "assistente", "offline"],
     helpful: 23,
     notHelpful: 1
   },
   {
-    id: 'faq-3',
-    question: 'Posso usar o sistema em tablets?',
-    answer: 'Sim! O sistema é otimizado para tablets e dispositivos móveis. A interface se adapta automaticamente. Recomendamos tablets com pelo menos 3GB de RAM para melhor performance.',
-    category: 'Dispositivos',
-    keywords: ['tablet', 'móvel', 'celular', 'dispositivo'],
+    id: "faq-3",
+    question: "Posso usar o sistema em tablets?",
+    answer: "Sim! O sistema é otimizado para tablets e dispositivos móveis. A interface se adapta automaticamente. Recomendamos tablets com pelo menos 3GB de RAM para melhor performance.",
+    category: "Dispositivos",
+    keywords: ["tablet", "móvel", "celular", "dispositivo"],
     helpful: 18,
     notHelpful: 0
   },
   {
-    id: 'faq-4',
-    question: 'Como fazer backup dos dados?',
-    answer: 'Os dados são automaticamente sincronizados com o servidor quando há internet. Para backup local: Menu > Configurações > Backup > Exportar. Os dados são criptografados.',
-    category: 'Dados',
-    keywords: ['backup', 'exportar', 'salvar', 'dados'],
+    id: "faq-4",
+    question: "Como fazer backup dos dados?",
+    answer: "Os dados são automaticamente sincronizados com o servidor quando há internet. Para backup local: Menu > Configurações > Backup > Exportar. Os dados são criptografados.",
+    category: "Dados",
+    keywords: ["backup", "exportar", "salvar", "dados"],
     helpful: 12,
     notHelpful: 1
   },
   {
-    id: 'faq-5',
-    question: 'Quanto espaço o sistema usa?',
-    answer: 'O app base usa ~100MB. Dados offline podem variar de 50MB a 500MB dependendo do uso. Você pode verificar em Menu > Configurações > Armazenamento.',
-    category: 'Sistema',
-    keywords: ['espaço', 'armazenamento', 'memória', 'tamanho'],
+    id: "faq-5",
+    question: "Quanto espaço o sistema usa?",
+    answer: "O app base usa ~100MB. Dados offline podem variar de 50MB a 500MB dependendo do uso. Você pode verificar em Menu > Configurações > Armazenamento.",
+    category: "Sistema",
+    keywords: ["espaço", "armazenamento", "memória", "tamanho"],
     helpful: 8,
     notHelpful: 0
   }
@@ -347,9 +347,9 @@ class MiniWikiEngine {
     const topResults = searchResults.slice(0, 3);
 
     // Build context from search results
-    let context = '';
+    let context = "";
     topResults.forEach(result => {
-      if ('content' in result.article) {
+      if ("content" in result.article) {
         context += `\n\n${result.article.title}:\n${result.article.content}`;
       } else {
         context += `\n\nPergunta: ${result.article.question}\nResposta: ${result.article.answer}`;
@@ -359,7 +359,7 @@ class MiniWikiEngine {
     // If we have good matches, use them
     if (topResults.length > 0 && topResults[0].relevance > 5) {
       const bestMatch = topResults[0].article;
-      if ('answer' in bestMatch) {
+      if ("answer" in bestMatch) {
         return bestMatch.answer;
       }
       // Use LLM to summarize article content based on question
@@ -370,7 +370,7 @@ class MiniWikiEngine {
         return result.response;
       } catch {
         // Fallback to article content
-        if ('content' in bestMatch) {
+        if ("content" in bestMatch) {
           return `📚 ${bestMatch.title}\n\n${bestMatch.content.slice(0, 500)}...`;
         }
       }
@@ -383,14 +383,14 @@ class MiniWikiEngine {
       );
       return result.response;
     } catch {
-      return 'Desculpe, não encontrei informações sobre essa pergunta. Tente reformular ou consulte o suporte técnico.';
+      return "Desculpe, não encontrei informações sobre essa pergunta. Tente reformular ou consulte o suporte técnico.";
     }
   }
 
   /**
    * Add custom article
    */
-  addArticle(article: Omit<WikiArticle, 'views' | 'lastUpdated'>): void {
+  addArticle(article: Omit<WikiArticle, "views" | "lastUpdated">): void {
     this.articles.push({
       ...article,
       views: 0,
@@ -401,7 +401,7 @@ class MiniWikiEngine {
   /**
    * Add custom FAQ
    */
-  addFAQ(faq: Omit<FAQEntry, 'helpful' | 'notHelpful'>): void {
+  addFAQ(faq: Omit<FAQEntry, "helpful" | "notHelpful">): void {
     this.faqs.push({
       ...faq,
       helpful: 0,

@@ -3,11 +3,11 @@
  * Optimized rendering for dashboards with virtual pagination and web workers
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 interface DashboardWidget {
   id: string;
-  priority: 'critical' | 'high' | 'medium' | 'low';
+  priority: "critical" | "high" | "medium" | "low";
   dataFn: () => Promise<any>;
   visible?: boolean;
 }
@@ -53,7 +53,7 @@ class WidgetLoadQueue {
     this.loading.delete(id);
   }
   
-  private getPriorityValue(priority: DashboardWidget['priority']): number {
+  private getPriorityValue(priority: DashboardWidget["priority"]): number {
     const values = { critical: 4, high: 3, medium: 2, low: 1 };
     return values[priority];
   }
@@ -173,7 +173,7 @@ class DashboardOptimizer {
       }
     `;
     
-    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    const blob = new Blob([workerCode], { type: "application/javascript" });
     this.worker = new Worker(URL.createObjectURL(blob));
   }
   
@@ -181,13 +181,13 @@ class DashboardOptimizer {
    * Execute heavy calculation in worker
    */
   async executeInWorker<T>(
-    type: 'aggregate' | 'sort' | 'filter' | 'calculate',
+    type: "aggregate" | "sort" | "filter" | "calculate",
     data: any
   ): Promise<T> {
     this.initWorker();
     const worker = this.worker;
     if (!worker) {
-      throw new Error('Worker not available');
+      throw new Error("Worker not available");
     }
     
     return new Promise((resolve, reject) => {
@@ -195,7 +195,7 @@ class DashboardOptimizer {
       
       const handler = (e: MessageEvent) => {
         if (e.data.id === id) {
-          worker.removeEventListener('message', handler);
+          worker.removeEventListener("message", handler);
           if (e.data.success) {
             resolve(e.data.result);
           } else {
@@ -204,7 +204,7 @@ class DashboardOptimizer {
         }
       };
       
-      worker.addEventListener('message', handler);
+      worker.addEventListener("message", handler);
       worker.postMessage({ type, data, id });
     });
   }
@@ -217,7 +217,7 @@ class DashboardOptimizer {
     onVisible: () => void,
     options: { threshold?: number; rootMargin?: string } = {}
   ): () => void {
-    const { threshold = 0.1, rootMargin = '100px' } = options;
+    const { threshold = 0.1, rootMargin = "100px" } = options;
     
     const observer = new IntersectionObserver(
       (entries) => {
@@ -302,12 +302,12 @@ export function useOptimizedWidget<T>(
   id: string,
   fetchData: () => Promise<T>,
   options: {
-    priority?: DashboardWidget['priority'];
+    priority?: DashboardWidget["priority"];
     refreshInterval?: number;
     cacheMs?: number;
   } = {}
 ) {
-  const { priority = 'medium', refreshInterval, cacheMs = 30000 } = options;
+  const { priority = "medium", refreshInterval, cacheMs = 30000 } = options;
   
   const [state, setState] = useState<WidgetState>({
     data: null,
@@ -335,7 +335,7 @@ export function useOptimizedWidget<T>(
       setState(s => ({
         ...s,
         loading: false,
-        error: e instanceof Error ? e.message : 'Unknown error'
+        error: e instanceof Error ? e.message : "Unknown error"
       }));
     }
   }, [fetchData, cacheMs]);
@@ -380,7 +380,7 @@ export function useVirtualDashboard<T>(
     if (Object.keys(filters).length > 0) {
       result = result.filter(item =>
         Object.entries(filters).every(([key, value]) => {
-          if (value === null || value === undefined || value === '') return true;
+          if (value === null || value === undefined || value === "") return true;
           const itemValue = (item as any)[key];
           return String(itemValue).toLowerCase().includes(String(value).toLowerCase());
         })
@@ -439,7 +439,7 @@ export function useVirtualDashboard<T>(
  * Execute calculation in web worker
  */
 export async function calculateInWorker<T>(
-  type: 'aggregate' | 'sort' | 'filter' | 'calculate',
+  type: "aggregate" | "sort" | "filter" | "calculate",
   data: any
 ): Promise<T> {
   return dashboardOptimizer.executeInWorker<T>(type, data);

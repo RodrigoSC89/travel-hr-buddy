@@ -3,8 +3,8 @@
  * React hook for error tracking
  */
 
-import { useEffect, useState } from 'react';
-import { errorTracker, type ErrorLog, type ErrorStats } from '@/lib/error-tracker';
+import { useEffect, useState } from "react";
+import { errorTracker, type ErrorLog, type ErrorStats } from "@/lib/error-tracker";
 
 export const useErrorTracker = () => {
   const [stats, setStats] = useState<ErrorStats>(errorTracker.getStats());

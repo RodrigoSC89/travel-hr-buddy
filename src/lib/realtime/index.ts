@@ -7,4 +7,4 @@ export {
   realtimeManager, 
   useRealtimeSubscription,
   useRealtimeConnectionStatus 
-} from './realtime-manager';
+} from "./realtime-manager";

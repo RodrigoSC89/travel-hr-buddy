@@ -3,7 +3,7 @@
  * Comprehensive accessibility features for inclusive UX
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 interface A11ySettings {
   highContrast: boolean;
@@ -13,8 +13,8 @@ interface A11ySettings {
   keyboardNavigation: boolean;
   focusIndicators: boolean;
   dyslexiaFont: boolean;
-  textSpacing: 'normal' | 'wide' | 'wider';
-  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+  textSpacing: "normal" | "wide" | "wider";
+  colorBlindMode: "none" | "protanopia" | "deuteranopia" | "tritanopia";
 }
 
 const DEFAULT_SETTINGS: A11ySettings = {
@@ -25,8 +25,8 @@ const DEFAULT_SETTINGS: A11ySettings = {
   keyboardNavigation: true,
   focusIndicators: true,
   dyslexiaFont: false,
-  textSpacing: 'normal',
-  colorBlindMode: 'none',
+  textSpacing: "normal",
+  colorBlindMode: "none",
 };
 
 class A11yManager {
@@ -40,7 +40,7 @@ class A11yManager {
   }
 
   private loadSettings(): A11ySettings {
-    const saved = localStorage.getItem('a11y-settings');
+    const saved = localStorage.getItem("a11y-settings");
     if (saved) {
       return { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
     }
@@ -48,27 +48,27 @@ class A11yManager {
   }
 
   private saveSettings(): void {
-    localStorage.setItem('a11y-settings', JSON.stringify(this.settings));
+    localStorage.setItem("a11y-settings", JSON.stringify(this.settings));
   }
 
   private detectSystemPreferences(): void {
     // Detect reduced motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       this.settings.reducedMotion = true;
     }
 
     // Detect high contrast preference
-    if (window.matchMedia('(prefers-contrast: more)').matches) {
+    if (window.matchMedia("(prefers-contrast: more)").matches) {
       this.settings.highContrast = true;
     }
 
     // Listen for changes
-    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
-      this.updateSetting('reducedMotion', e.matches);
+    window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => {
+      this.updateSetting("reducedMotion", e.matches);
     });
 
-    window.matchMedia('(prefers-contrast: more)').addEventListener('change', (e) => {
-      this.updateSetting('highContrast', e.matches);
+    window.matchMedia("(prefers-contrast: more)").addEventListener("change", (e) => {
+      this.updateSetting("highContrast", e.matches);
     });
   }
 
@@ -77,66 +77,66 @@ class A11yManager {
     const body = document.body;
 
     // High contrast
-    root.classList.toggle('high-contrast', this.settings.highContrast);
+    root.classList.toggle("high-contrast", this.settings.highContrast);
 
     // Large text
-    root.classList.toggle('large-text', this.settings.largeText);
+    root.classList.toggle("large-text", this.settings.largeText);
     if (this.settings.largeText) {
-      root.style.fontSize = '18px';
+      root.style.fontSize = "18px";
     } else {
-      root.style.fontSize = '';
+      root.style.fontSize = "";
     }
 
     // Reduced motion
-    root.classList.toggle('reduce-motion', this.settings.reducedMotion);
+    root.classList.toggle("reduce-motion", this.settings.reducedMotion);
     if (this.settings.reducedMotion) {
-      root.style.setProperty('--animation-duration', '0.01ms');
-      root.style.setProperty('--transition-duration', '0.01ms');
+      root.style.setProperty("--animation-duration", "0.01ms");
+      root.style.setProperty("--transition-duration", "0.01ms");
     } else {
-      root.style.removeProperty('--animation-duration');
-      root.style.removeProperty('--transition-duration');
+      root.style.removeProperty("--animation-duration");
+      root.style.removeProperty("--transition-duration");
     }
 
     // Focus indicators
-    root.classList.toggle('focus-visible-only', !this.settings.focusIndicators);
+    root.classList.toggle("focus-visible-only", !this.settings.focusIndicators);
 
     // Dyslexia font
-    root.classList.toggle('dyslexia-font', this.settings.dyslexiaFont);
+    root.classList.toggle("dyslexia-font", this.settings.dyslexiaFont);
     if (this.settings.dyslexiaFont) {
-      body.style.fontFamily = '"OpenDyslexic", "Comic Sans MS", sans-serif';
+      body.style.fontFamily = "\"OpenDyslexic\", \"Comic Sans MS\", sans-serif";
     } else {
-      body.style.fontFamily = '';
+      body.style.fontFamily = "";
     }
 
     // Text spacing
     switch (this.settings.textSpacing) {
-      case 'wide':
-        root.style.setProperty('--letter-spacing', '0.05em');
-        root.style.setProperty('--word-spacing', '0.1em');
-        root.style.setProperty('--line-height', '1.8');
-        break;
-      case 'wider':
-        root.style.setProperty('--letter-spacing', '0.1em');
-        root.style.setProperty('--word-spacing', '0.2em');
-        root.style.setProperty('--line-height', '2');
-        break;
-      default:
-        root.style.removeProperty('--letter-spacing');
-        root.style.removeProperty('--word-spacing');
-        root.style.removeProperty('--line-height');
+    case "wide":
+      root.style.setProperty("--letter-spacing", "0.05em");
+      root.style.setProperty("--word-spacing", "0.1em");
+      root.style.setProperty("--line-height", "1.8");
+      break;
+    case "wider":
+      root.style.setProperty("--letter-spacing", "0.1em");
+      root.style.setProperty("--word-spacing", "0.2em");
+      root.style.setProperty("--line-height", "2");
+      break;
+    default:
+      root.style.removeProperty("--letter-spacing");
+      root.style.removeProperty("--word-spacing");
+      root.style.removeProperty("--line-height");
     }
 
     // Color blind modes
-    root.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
-    if (this.settings.colorBlindMode !== 'none') {
+    root.classList.remove("protanopia", "deuteranopia", "tritanopia");
+    if (this.settings.colorBlindMode !== "none") {
       root.classList.add(this.settings.colorBlindMode);
     }
 
     // Screen reader optimizations
     if (this.settings.screenReaderMode) {
       // Add more semantic information
-      document.querySelectorAll('img:not([alt])').forEach(img => {
-        img.setAttribute('alt', 'Image');
+      document.querySelectorAll("img:not([alt])").forEach(img => {
+        img.setAttribute("alt", "Image");
       });
     }
   }
@@ -183,12 +183,12 @@ class A11yManager {
   }
 
   // Announce message to screen readers
-  announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('role', 'status');
-    announcement.setAttribute('aria-live', priority);
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
+  announce(message: string, priority: "polite" | "assertive" = "polite"): void {
+    const announcement = document.createElement("div");
+    announcement.setAttribute("role", "status");
+    announcement.setAttribute("aria-live", priority);
+    announcement.setAttribute("aria-atomic", "true");
+    announcement.className = "sr-only";
     announcement.textContent = message;
 
     document.body.appendChild(announcement);
@@ -201,14 +201,14 @@ class A11yManager {
   // Focus management
   trapFocus(container: HTMLElement): () => void {
     const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])"
     );
     
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
     const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -223,26 +223,26 @@ class A11yManager {
       }
     };
 
-    container.addEventListener('keydown', handleKeydown);
+    container.addEventListener("keydown", handleKeydown);
     firstElement?.focus();
 
     return () => {
-      container.removeEventListener('keydown', handleKeydown);
+      container.removeEventListener("keydown", handleKeydown);
     };
   }
 
   // Skip to main content
   setupSkipLinks(): void {
-    const skipLink = document.createElement('a');
-    skipLink.href = '#main-content';
-    skipLink.className = 'skip-link';
-    skipLink.textContent = 'Pular para o conteúdo principal';
+    const skipLink = document.createElement("a");
+    skipLink.href = "#main-content";
+    skipLink.className = "skip-link";
+    skipLink.textContent = "Pular para o conteúdo principal";
     
-    skipLink.addEventListener('click', (e) => {
+    skipLink.addEventListener("click", (e) => {
       e.preventDefault();
-      const main = document.getElementById('main-content') || document.querySelector('main');
+      const main = document.getElementById("main-content") || document.querySelector("main");
       if (main) {
-        main.setAttribute('tabindex', '-1');
+        main.setAttribute("tabindex", "-1");
         main.focus();
       }
     });
@@ -274,7 +274,7 @@ export function useA11y() {
     a11yManager.reset();
   }, []);
 
-  const announce = useCallback((message: string, priority?: 'polite' | 'assertive') => {
+  const announce = useCallback((message: string, priority?: "polite" | "assertive") => {
     a11yManager.announce(message, priority);
   }, []);
 
@@ -292,12 +292,12 @@ export function useReducedMotion(): boolean {
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
 
     const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   return reducedMotion;
@@ -307,12 +307,12 @@ export function useHighContrast(): boolean {
   const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-contrast: more)');
+    const mq = window.matchMedia("(prefers-contrast: more)");
     setHighContrast(mq.matches);
 
     const handler = (e: MediaQueryListEvent) => setHighContrast(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   return highContrast;

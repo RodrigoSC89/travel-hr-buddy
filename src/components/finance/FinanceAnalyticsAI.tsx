@@ -140,10 +140,10 @@ export function FinanceAnalyticsAI() {
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
-      case "easy": return "bg-green-500";
-      case "medium": return "bg-yellow-500";
-      case "hard": return "bg-red-500";
-      default: return "bg-gray-500";
+    case "easy": return "bg-green-500";
+    case "medium": return "bg-yellow-500";
+    case "hard": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -275,8 +275,8 @@ export function FinanceAnalyticsAI() {
                         <div
                           className={`h-full transition-all ${
                             cost.variance > 5 ? "bg-red-500" :
-                            cost.variance > 0 ? "bg-yellow-500" :
-                            "bg-green-500"
+                              cost.variance > 0 ? "bg-yellow-500" :
+                                "bg-green-500"
                           }`}
                           style={{ width: `${Math.min(100, (cost.actual / cost.budget) * 100)}%` }}
                         />
@@ -286,8 +286,8 @@ export function FinanceAnalyticsAI() {
                       variant="outline"
                       className={
                         cost.variance > 5 ? "text-red-500" :
-                        cost.variance > 0 ? "text-yellow-500" :
-                        "text-green-500"
+                          cost.variance > 0 ? "text-yellow-500" :
+                            "text-green-500"
                       }
                     >
                       {cost.variance > 0 ? "+" : ""}{cost.variance.toFixed(1)}%

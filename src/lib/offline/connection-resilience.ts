@@ -14,7 +14,7 @@ export interface RetryConfig {
 
 export interface ConnectionState {
   isOnline: boolean;
-  effectiveType: '4g' | '3g' | '2g' | 'slow-2g' | 'unknown';
+  effectiveType: "4g" | "3g" | "2g" | "slow-2g" | "unknown";
   downlink: number; // Mbps
   rtt: number; // ms
   saveData: boolean;
@@ -42,7 +42,7 @@ class ConnectionResilience {
     
     return {
       isOnline: navigator.onLine,
-      effectiveType: conn?.effectiveType || 'unknown',
+      effectiveType: conn?.effectiveType || "unknown",
       downlink: conn?.downlink || 10,
       rtt: conn?.rtt || 50,
       saveData: conn?.saveData || false,
@@ -50,14 +50,14 @@ class ConnectionResilience {
   }
 
   private setupListeners(): void {
-    window.addEventListener('online', () => this.updateState({ isOnline: true }));
-    window.addEventListener('offline', () => this.updateState({ isOnline: false }));
+    window.addEventListener("online", () => this.updateState({ isOnline: true }));
+    window.addEventListener("offline", () => this.updateState({ isOnline: false }));
 
-    if ('connection' in navigator) {
+    if ("connection" in navigator) {
       const conn = (navigator as any).connection;
-      conn?.addEventListener('change', () => {
+      conn?.addEventListener("change", () => {
         this.updateState({
-          effectiveType: conn.effectiveType || 'unknown',
+          effectiveType: conn.effectiveType || "unknown",
           downlink: conn.downlink || 10,
           rtt: conn.rtt || 50,
           saveData: conn.saveData || false,
@@ -71,7 +71,7 @@ class ConnectionResilience {
     this.listeners.forEach(fn => fn(this.state));
     
     if (!this.state.isOnline) {
-      logger.warn('[ConnectionResilience] Offline detected');
+      logger.warn("[ConnectionResilience] Offline detected");
     }
   }
 
@@ -81,8 +81,8 @@ class ConnectionResilience {
 
   isSlowConnection(): boolean {
     return (
-      this.state.effectiveType === '2g' ||
-      this.state.effectiveType === 'slow-2g' ||
+      this.state.effectiveType === "2g" ||
+      this.state.effectiveType === "slow-2g" ||
       this.state.downlink < 1
     );
   }
@@ -106,7 +106,7 @@ class ConnectionResilience {
     for (let attempt = 0; attempt <= cfg.maxRetries; attempt++) {
       // Skip if offline
       if (!this.state.isOnline) {
-        throw new Error('No network connection');
+        throw new Error("No network connection");
       }
 
       try {
@@ -134,7 +134,7 @@ class ConnectionResilience {
       } catch (error) {
         lastError = error as Error;
         
-        if ((error as Error).name === 'AbortError') {
+        if ((error as Error).name === "AbortError") {
           logger.warn(`[ConnectionResilience] Request timeout, attempt ${attempt + 1}`);
         }
 
@@ -149,16 +149,16 @@ class ConnectionResilience {
       }
     }
 
-    throw lastError || new Error('Request failed after retries');
+    throw lastError || new Error("Request failed after retries");
   }
 
   /**
    * Get adaptive timeout based on connection quality
    */
   private getAdaptiveTimeout(): number {
-    if (this.state.effectiveType === 'slow-2g') return 30000;
-    if (this.state.effectiveType === '2g') return 20000;
-    if (this.state.effectiveType === '3g') return 15000;
+    if (this.state.effectiveType === "slow-2g") return 30000;
+    if (this.state.effectiveType === "2g") return 20000;
+    if (this.state.effectiveType === "3g") return 15000;
     return 10000;
   }
 
@@ -189,7 +189,7 @@ class ConnectionResilience {
       prefetchEnabled: !slow && this.state.isOnline,
       batchSize: slow ? 5 : 20,
       compressionEnabled: slow || this.state.saveData,
-      lazyLoadThreshold: slow ? '500px' : '200px',
+      lazyLoadThreshold: slow ? "500px" : "200px",
     };
   }
 }

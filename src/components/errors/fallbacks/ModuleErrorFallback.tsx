@@ -3,11 +3,11 @@
  * Fallback UI para erros em módulos específicos
  */
 
-import React from 'react';
-import { AlertOctagon, RefreshCw, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { AlertOctagon, RefreshCw, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 export interface ModuleErrorFallbackProps {
   error: Error;
@@ -18,7 +18,7 @@ export interface ModuleErrorFallbackProps {
 
 export const ModuleErrorFallback: React.FC<ModuleErrorFallbackProps> = ({
   error,
-  moduleName = 'Módulo',
+  moduleName = "Módulo",
   resetError,
   allowBack = true,
 }) => {
@@ -28,7 +28,7 @@ export const ModuleErrorFallback: React.FC<ModuleErrorFallbackProps> = ({
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 
@@ -55,7 +55,7 @@ export const ModuleErrorFallback: React.FC<ModuleErrorFallbackProps> = ({
           {/* Error Message */}
           <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
             <p className="text-sm text-yellow-800 dark:text-yellow-400">
-              <strong>Mensagem:</strong> {error.message || 'Erro desconhecido'}
+              <strong>Mensagem:</strong> {error.message || "Erro desconhecido"}
             </p>
           </div>
 

@@ -7,13 +7,13 @@
  * Compress string data using native compression API
  */
 export async function compressString(data: string): Promise<Uint8Array> {
-  if (!('CompressionStream' in window)) {
+  if (!("CompressionStream" in window)) {
     // Fallback: return as-is
     return new TextEncoder().encode(data);
   }
 
   const stream = new Blob([data]).stream();
-  const compressedStream = stream.pipeThrough(new CompressionStream('gzip'));
+  const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
   const reader = compressedStream.getReader();
   
   const chunks: Uint8Array[] = [];
@@ -40,14 +40,14 @@ export async function compressString(data: string): Promise<Uint8Array> {
  * Decompress data
  */
 export async function decompressString(data: Uint8Array): Promise<string> {
-  if (!('DecompressionStream' in window)) {
+  if (!("DecompressionStream" in window)) {
     return new TextDecoder().decode(data);
   }
 
   const arrayBuffer = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
   const blob = new Blob([arrayBuffer]);
   const stream = blob.stream();
-  const decompressedStream = stream.pipeThrough(new DecompressionStream('gzip'));
+  const decompressedStream = stream.pipeThrough(new DecompressionStream("gzip"));
   const reader = decompressedStream.getReader();
   
   const chunks: Uint8Array[] = [];

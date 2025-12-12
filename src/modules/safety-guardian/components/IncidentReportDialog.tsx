@@ -3,30 +3,30 @@
  * Formulário completo para reportar ocorrências
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import {
   CalendarIcon,
   Upload,
@@ -37,9 +37,9 @@ import {
   MapPin,
   Ship,
   User,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import type { SafetyIncident } from '../types';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { SafetyIncident } from "../types";
 
 interface IncidentReportDialogProps {
   open: boolean;
@@ -48,25 +48,25 @@ interface IncidentReportDialogProps {
 }
 
 const incidentTypes = [
-  { value: 'incident', label: 'Incidente', icon: AlertCircle, color: 'text-destructive' },
-  { value: 'near_miss', label: 'Near Miss', icon: AlertTriangle, color: 'text-warning' },
-  { value: 'unsafe_condition', label: 'Condição Insegura', icon: Shield, color: 'text-blue-500' },
-  { value: 'unsafe_act', label: 'Ato Inseguro', icon: AlertTriangle, color: 'text-orange-500' },
+  { value: "incident", label: "Incidente", icon: AlertCircle, color: "text-destructive" },
+  { value: "near_miss", label: "Near Miss", icon: AlertTriangle, color: "text-warning" },
+  { value: "unsafe_condition", label: "Condição Insegura", icon: Shield, color: "text-blue-500" },
+  { value: "unsafe_act", label: "Ato Inseguro", icon: AlertTriangle, color: "text-orange-500" },
 ];
 
 const severityLevels = [
-  { value: 'low', label: 'Baixa', color: 'bg-success/10 text-success border-success/20' },
-  { value: 'medium', label: 'Média', color: 'bg-warning/10 text-warning border-warning/20' },
-  { value: 'high', label: 'Alta', color: 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400' },
-  { value: 'critical', label: 'Crítica', color: 'bg-destructive/10 text-destructive border-destructive/20' },
+  { value: "low", label: "Baixa", color: "bg-success/10 text-success border-success/20" },
+  { value: "medium", label: "Média", color: "bg-warning/10 text-warning border-warning/20" },
+  { value: "high", label: "Alta", color: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400" },
+  { value: "critical", label: "Crítica", color: "bg-destructive/10 text-destructive border-destructive/20" },
 ];
 
 const vessels = [
-  'PSV Atlantic Explorer',
-  'AHTS Pacific Star',
-  'OSV Ocean Pioneer',
-  'PLSV Nautilus One',
-  'FPSO Petrobras P-70',
+  "PSV Atlantic Explorer",
+  "AHTS Pacific Star",
+  "OSV Ocean Pioneer",
+  "PLSV Nautilus One",
+  "FPSO Petrobras P-70",
 ];
 
 export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
@@ -77,13 +77,13 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
   const [loading, setLoading] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
   const [formData, setFormData] = useState({
-    type: '',
-    title: '',
-    description: '',
-    vessel_name: '',
-    location: '',
-    severity: '',
-    witnesses: '',
+    type: "",
+    title: "",
+    description: "",
+    vessel_name: "",
+    location: "",
+    severity: "",
+    witnesses: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -97,21 +97,21 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
     try {
       await onSubmit({
         ...formData,
-        type: formData.type as SafetyIncident['type'],
-        severity: formData.severity as SafetyIncident['severity'],
-        incident_date: format(date, 'yyyy-MM-dd'),
-        witnesses: formData.witnesses ? formData.witnesses.split(',').map(w => w.trim()) : [],
+        type: formData.type as SafetyIncident["type"],
+        severity: formData.severity as SafetyIncident["severity"],
+        incident_date: format(date, "yyyy-MM-dd"),
+        witnesses: formData.witnesses ? formData.witnesses.split(",").map(w => w.trim()) : [],
       });
       
       // Reset form
       setFormData({
-        type: '',
-        title: '',
-        description: '',
-        vessel_name: '',
-        location: '',
-        severity: '',
-        witnesses: '',
+        type: "",
+        title: "",
+        description: "",
+        vessel_name: "",
+        location: "",
+        severity: "",
+        witnesses: "",
       });
       setDate(new Date());
       onOpenChange(false);
@@ -146,14 +146,14 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                 <Button
                   key={type.value}
                   type="button"
-                  variant={formData.type === type.value ? 'default' : 'outline'}
+                  variant={formData.type === type.value ? "default" : "outline"}
                   className={cn(
-                    'h-auto py-3 flex flex-col gap-1',
-                    formData.type === type.value && 'ring-2 ring-primary'
+                    "h-auto py-3 flex flex-col gap-1",
+                    formData.type === type.value && "ring-2 ring-primary"
                   )}
                   onClick={() => setFormData({ ...formData, type: type.value })}
                 >
-                  <type.icon className={cn('h-5 w-5', formData.type !== type.value && type.color)} />
+                  <type.icon className={cn("h-5 w-5", formData.type !== type.value && type.color)} />
                   <span className="text-xs">{type.label}</span>
                 </Button>
               ))}
@@ -194,12 +194,12 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                   <Button
                     variant="outline"
                     className={cn(
-                      'w-full justify-start text-left font-normal',
-                      !date && 'text-muted-foreground'
+                      "w-full justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "dd 'de' MMMM, yyyy", { locale: ptBR }) : 'Selecione a data'}
+                    {date ? format(date, "dd 'de' MMMM, yyyy", { locale: ptBR }) : "Selecione a data"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">

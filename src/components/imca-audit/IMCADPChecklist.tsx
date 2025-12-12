@@ -25,10 +25,10 @@ export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Pr
 
   const getStatusIcon = (status?: string) => {
     switch(status) {
-      case "C": return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-      case "NC": return <XCircle className="h-5 w-5 text-red-600" />;
-      case "NA": return <MinusCircle className="h-5 w-5 text-gray-400" />;
-      default: return <Clock className="h-5 w-5 text-amber-500" />;
+    case "C": return <CheckCircle2 className="h-5 w-5 text-green-600" />;
+    case "NC": return <XCircle className="h-5 w-5 text-red-600" />;
+    case "NA": return <MinusCircle className="h-5 w-5 text-gray-400" />;
+    default: return <Clock className="h-5 w-5 text-amber-500" />;
     }
   };
 
@@ -57,7 +57,7 @@ export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Pr
                   </AccordionTrigger>
                   <AccordionContent className="space-y-4 pt-2">
                     {items.map(item => (
-                      <div key={item.id} className={`p-4 rounded-lg border ${item.isImperative ? 'border-destructive/50 bg-destructive/5' : 'bg-muted/30'}`}>
+                      <div key={item.id} className={`p-4 rounded-lg border ${item.isImperative ? "border-destructive/50 bg-destructive/5" : "bg-muted/30"}`}>
                         <div className="flex items-start gap-3">
                           {getStatusIcon(auditData[item.id]?.status)}
                           <div className="flex-1 space-y-3">

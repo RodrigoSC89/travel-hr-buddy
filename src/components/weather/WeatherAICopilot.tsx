@@ -95,8 +95,8 @@ export const WeatherAICopilot: React.FC<WeatherAICopilotProps> = ({ weatherData 
 
 ### Avaliação para Operações:
 ${wind < 15 ? "✅ **Condições FAVORÁVEIS** para operações marítimas normais." : 
-  wind < 25 ? "⚠️ **Condições MODERADAS** - Monitorar evolução." :
-  "🚨 **Condições ADVERSAS** - Considere adiar operações."}
+    wind < 25 ? "⚠️ **Condições MODERADAS** - Monitorar evolução." :
+      "🚨 **Condições ADVERSAS** - Considere adiar operações."}
 
 ### Recomendações:
 1. ${wind < 15 ? "Janela favorável para operações" : "Aguardar melhora nas condições"}
@@ -113,10 +113,10 @@ ${wind < 15 ? "✅ **Condições FAVORÁVEIS** para operações marítimas norma
 
 ### Impacto na Navegação:
 ${wind < 10 ? 
-  "- Navegação tranquila\n- Operações de guindastes liberadas\n- Transferência de carga segura" :
-  wind < 20 ?
-  "- Navegação com atenção\n- Operações de guindastes com cautela\n- Monitorar rajadas" :
-  "- Navegação com restrições\n- Suspender operações de guindastes\n- Preparar para condições adversas"}
+    "- Navegação tranquila\n- Operações de guindastes liberadas\n- Transferência de carga segura" :
+    wind < 20 ?
+      "- Navegação com atenção\n- Operações de guindastes com cautela\n- Monitorar rajadas" :
+      "- Navegação com restrições\n- Suspender operações de guindastes\n- Preparar para condições adversas"}
 
 ### Previsão Próximas 24h:
 - Tendência: ${wind < 15 ? "Estável" : "Variável"}
@@ -139,10 +139,10 @@ ${wind < 10 ?
 
 ### Recomendação:
 ${wind < 12 ? 
-  "**Janela favorável** - Aproveitar período atual para operações críticas." :
-  wind < 20 ?
-  "**Janela moderada** - Priorizar operações essenciais no período matutino." :
-  "**Janela restrita** - Aguardar melhora nas condições antes de iniciar operações."}`;
+    "**Janela favorável** - Aproveitar período atual para operações críticas." :
+    wind < 20 ?
+      "**Janela moderada** - Priorizar operações essenciais no período matutino." :
+      "**Janela restrita** - Aguardar melhora nas condições antes de iniciar operações."}`;
     }
     
     if (lowerMessage.includes("alerta") || lowerMessage.includes("segurança")) {
@@ -150,8 +150,8 @@ ${wind < 12 ?
 
 ### Status de Alertas:
 ${wind > 25 ? "🚨 **ALERTA ATIVO** - Ventos fortes detectados" : 
-  wind > 15 ? "⚠️ **ATENÇÃO** - Monitorar condições" :
-  "✅ **SEM ALERTAS** - Condições normais"}
+    wind > 15 ? "⚠️ **ATENÇÃO** - Monitorar condições" :
+      "✅ **SEM ALERTAS** - Condições normais"}
 
 ### Checklist de Segurança:
 - [${wind < 20 ? "✓" : "!"}] Condições de vento adequadas
@@ -261,23 +261,23 @@ Dados meteorológicos atuais:
 
   // Simple markdown-like rendering
   const renderContent = (content: string) => {
-    return content.split('\n').map((line, i) => {
-      if (line.startsWith('## ')) {
-        return <h2 key={i} className="text-lg font-bold mt-4 mb-2">{line.replace('## ', '')}</h2>;
+    return content.split("\n").map((line, i) => {
+      if (line.startsWith("## ")) {
+        return <h2 key={i} className="text-lg font-bold mt-4 mb-2">{line.replace("## ", "")}</h2>;
       }
-      if (line.startsWith('### ')) {
-        return <h3 key={i} className="text-md font-semibold mt-3 mb-1">{line.replace('### ', '')}</h3>;
+      if (line.startsWith("### ")) {
+        return <h3 key={i} className="text-md font-semibold mt-3 mb-1">{line.replace("### ", "")}</h3>;
       }
-      if (line.startsWith('- ')) {
-        return <li key={i} className="ml-4">{line.replace('- ', '')}</li>;
+      if (line.startsWith("- ")) {
+        return <li key={i} className="ml-4">{line.replace("- ", "")}</li>;
       }
-      if (line.startsWith('**') && line.endsWith('**')) {
-        return <p key={i} className="font-bold">{line.replace(/\*\*/g, '')}</p>;
+      if (line.startsWith("**") && line.endsWith("**")) {
+        return <p key={i} className="font-bold">{line.replace(/\*\*/g, "")}</p>;
       }
-      if (line.includes('|')) {
+      if (line.includes("|")) {
         return <p key={i} className="font-mono text-xs">{line}</p>;
       }
-      if (line.trim() === '') return <br key={i} />;
+      if (line.trim() === "") return <br key={i} />;
       return <p key={i}>{line}</p>;
     });
   };

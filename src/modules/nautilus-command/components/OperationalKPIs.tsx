@@ -27,142 +27,142 @@ interface OperationalKPIsProps {
 export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
   const kpis = [
     {
-      category: 'Operacional',
+      category: "Operacional",
       icon: <Ship className="h-5 w-5" />,
-      color: 'blue',
+      color: "blue",
       items: [
         {
-          name: 'Disponibilidade da Frota',
+          name: "Disponibilidade da Frota",
           value: status.fleet.vessels > 0 ? Math.round((status.fleet.active / status.fleet.vessels) * 100) : 0,
           target: 95,
-          unit: '%',
-          trend: 'up'
+          unit: "%",
+          trend: "up"
         },
         {
-          name: 'Embarcações em Operação',
+          name: "Embarcações em Operação",
           value: status.fleet.active,
           target: status.fleet.vessels,
-          unit: 'un',
-          trend: 'stable'
+          unit: "un",
+          trend: "stable"
         },
         {
-          name: 'Alertas Ativos',
+          name: "Alertas Ativos",
           value: status.fleet.alerts,
           target: 0,
-          unit: 'un',
-          trend: status.fleet.alerts > 0 ? 'down' : 'up'
+          unit: "un",
+          trend: status.fleet.alerts > 0 ? "down" : "up"
         }
       ]
     },
     {
-      category: 'Manutenção',
+      category: "Manutenção",
       icon: <Wrench className="h-5 w-5" />,
-      color: 'orange',
+      color: "orange",
       items: [
         {
-          name: 'Eficiência de Manutenção',
+          name: "Eficiência de Manutenção",
           value: status.maintenance.efficiency,
           target: 95,
-          unit: '%',
-          trend: status.maintenance.efficiency >= 95 ? 'up' : 'down'
+          unit: "%",
+          trend: status.maintenance.efficiency >= 95 ? "up" : "down"
         },
         {
-          name: 'Manutenções Concluídas',
+          name: "Manutenções Concluídas",
           value: status.maintenance.completed,
           target: null,
-          unit: 'un',
-          trend: 'up'
+          unit: "un",
+          trend: "up"
         },
         {
-          name: 'Manutenções Vencidas',
+          name: "Manutenções Vencidas",
           value: status.maintenance.overdue,
           target: 0,
-          unit: 'un',
-          trend: status.maintenance.overdue > 0 ? 'down' : 'up'
+          unit: "un",
+          trend: status.maintenance.overdue > 0 ? "down" : "up"
         }
       ]
     },
     {
-      category: 'Tripulação',
+      category: "Tripulação",
       icon: <Users className="h-5 w-5" />,
-      color: 'green',
+      color: "green",
       items: [
         {
-          name: 'Taxa de Presença',
+          name: "Taxa de Presença",
           value: status.crew.total > 0 ? Math.round((status.crew.onboard / status.crew.total) * 100) : 0,
           target: 90,
-          unit: '%',
-          trend: 'up'
+          unit: "%",
+          trend: "up"
         },
         {
-          name: 'Tripulantes a Bordo',
+          name: "Tripulantes a Bordo",
           value: status.crew.onboard,
           target: status.crew.total,
-          unit: 'un',
-          trend: 'stable'
+          unit: "un",
+          trend: "stable"
         },
         {
-          name: 'Certificados Válidos',
+          name: "Certificados Válidos",
           value: status.crew.total > 0 ? Math.round(((status.crew.total - status.crew.expiringCerts) / status.crew.total) * 100) : 100,
           target: 100,
-          unit: '%',
-          trend: status.crew.expiringCerts > 0 ? 'down' : 'up'
+          unit: "%",
+          trend: status.crew.expiringCerts > 0 ? "down" : "up"
         }
       ]
     },
     {
-      category: 'Suprimentos',
+      category: "Suprimentos",
       icon: <Package className="h-5 w-5" />,
-      color: 'purple',
+      color: "purple",
       items: [
         {
-          name: 'Nível de Estoque',
+          name: "Nível de Estoque",
           value: status.inventory.lowStock === 0 ? 100 : Math.max(0, 100 - status.inventory.lowStock * 5),
           target: 95,
-          unit: '%',
-          trend: status.inventory.lowStock > 0 ? 'down' : 'up'
+          unit: "%",
+          trend: status.inventory.lowStock > 0 ? "down" : "up"
         },
         {
-          name: 'Valor Total em Estoque',
+          name: "Valor Total em Estoque",
           value: Math.round(status.inventory.value / 1000000 * 10) / 10,
           target: null,
-          unit: 'M',
-          trend: 'stable'
+          unit: "M",
+          trend: "stable"
         },
         {
-          name: 'Pedidos Pendentes',
+          name: "Pedidos Pendentes",
           value: status.inventory.pendingOrders,
           target: null,
-          unit: 'un',
-          trend: 'stable'
+          unit: "un",
+          trend: "stable"
         }
       ]
     },
     {
-      category: 'Compliance',
+      category: "Compliance",
       icon: <Shield className="h-5 w-5" />,
-      color: 'cyan',
+      color: "cyan",
       items: [
         {
-          name: 'Score de Compliance',
+          name: "Score de Compliance",
           value: status.compliance.score,
           target: 100,
-          unit: '%',
-          trend: status.compliance.score >= 95 ? 'up' : 'down'
+          unit: "%",
+          trend: status.compliance.score >= 95 ? "up" : "down"
         },
         {
-          name: 'Auditorias Pendentes',
+          name: "Auditorias Pendentes",
           value: status.compliance.pendingAudits,
           target: 0,
-          unit: 'un',
-          trend: status.compliance.pendingAudits > 0 ? 'down' : 'up'
+          unit: "un",
+          trend: status.compliance.pendingAudits > 0 ? "down" : "up"
         },
         {
-          name: 'Documentos Válidos',
+          name: "Documentos Válidos",
           value: 100 - (status.compliance.expiringDocs * 2),
           target: 100,
-          unit: '%',
-          trend: status.compliance.expiringDocs > 0 ? 'down' : 'up'
+          unit: "%",
+          trend: status.compliance.expiringDocs > 0 ? "down" : "up"
         }
       ]
     }
@@ -170,17 +170,17 @@ export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return <Gauge className="h-4 w-4 text-muted-foreground" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "down": return <TrendingDown className="h-4 w-4 text-red-500" />;
+    default: return <Gauge className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getValueColor = (value: number, target: number | null) => {
-    if (target === null) return 'text-foreground';
-    if (value >= target) return 'text-green-600';
-    if (value >= target * 0.8) return 'text-yellow-600';
-    return 'text-red-600';
+    if (target === null) return "text-foreground";
+    if (value >= target) return "text-green-600";
+    if (value >= target * 0.8) return "text-yellow-600";
+    return "text-red-600";
   };
 
   return (
@@ -230,10 +230,10 @@ export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
                         </div>
                         <div className="flex items-baseline gap-1">
                           <span className={`text-2xl font-bold ${getValueColor(kpi.value, kpi.target)}`}>
-                            {kpi.unit === 'M' ? `R$ ${kpi.value}` : kpi.value}
+                            {kpi.unit === "M" ? `R$ ${kpi.value}` : kpi.value}
                           </span>
                           <span className="text-sm text-muted-foreground">
-                            {kpi.unit === 'M' ? 'M' : kpi.unit}
+                            {kpi.unit === "M" ? "M" : kpi.unit}
                           </span>
                           {kpi.target !== null && (
                             <span className="text-xs text-muted-foreground">

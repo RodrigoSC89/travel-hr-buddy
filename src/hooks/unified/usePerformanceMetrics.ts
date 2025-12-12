@@ -41,7 +41,7 @@ export interface PerformanceMetrics {
 
 export interface PerformanceEvaluation {
   score: number;
-  rating: 'excellent' | 'good' | 'needs-improvement' | 'poor';
+  rating: "excellent" | "good" | "needs-improvement" | "poor";
   recommendations: string[];
 }
 
@@ -145,7 +145,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
 
     // Navigation Timing API
     try {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       if (navigation) {
         newMetrics.vitals.ttfb = navigation.responseStart - navigation.requestStart;
         newMetrics.vitals.fcp = navigation.responseEnd - navigation.fetchStart;
@@ -155,7 +155,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     }
 
     // Memory Usage (Chrome/Edge only)
-    if (monitorMemory && 'memory' in performance) {
+    if (monitorMemory && "memory" in performance) {
       const memory = (performance as any).memory;
       newMetrics.memory = {
         used: memory.usedJSHeapSize,
@@ -168,7 +168,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     onMetricsUpdate?.(newMetrics);
 
     // Store in window for debugging
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).__NAUTILUS_PERFORMANCE__ = newMetrics;
     }
 
@@ -191,7 +191,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
 
   // Web Vitals Monitoring
   useEffect(() => {
-    if (!monitorVitals || !('PerformanceObserver' in window)) return;
+    if (!monitorVitals || !("PerformanceObserver" in window)) return;
 
     const cleanupObservers = () => {
       observersRef.current.forEach(observer => observer.disconnect());
@@ -210,7 +210,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
           setMetrics(prev => ({ ...prev, vitals: { ...prev.vitals, lcp } }));
         }
       });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
+      lcpObserver.observe({ entryTypes: ["largest-contentful-paint"], buffered: true });
       observersRef.current.push(lcpObserver);
     } catch (e) {}
 
@@ -222,7 +222,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
           setMetrics(prev => ({ ...prev, vitals: { ...prev.vitals, fid } }));
         });
       });
-      fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
+      fidObserver.observe({ entryTypes: ["first-input"], buffered: true });
       observersRef.current.push(fidObserver);
     } catch (e) {}
 
@@ -237,13 +237,13 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
         });
         setMetrics(prev => ({ ...prev, vitals: { ...prev.vitals, cls: clsValue } }));
       });
-      clsObserver.observe({ entryTypes: ['layout-shift'], buffered: true });
+      clsObserver.observe({ entryTypes: ["layout-shift"], buffered: true });
       observersRef.current.push(clsObserver);
     } catch (e) {}
 
     // Long Tasks
     try {
-      if (PerformanceObserver.supportedEntryTypes?.includes('longtask')) {
+      if (PerformanceObserver.supportedEntryTypes?.includes("longtask")) {
         const longTaskObserver = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
             if (entry.duration > 50) {
@@ -251,7 +251,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
             }
           }
         });
-        longTaskObserver.observe({ entryTypes: ['longtask'] });
+        longTaskObserver.observe({ entryTypes: ["longtask"] });
         observersRef.current.push(longTaskObserver);
       }
     } catch (e) {}
@@ -274,10 +274,10 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     if (metrics.vitals.lcp) {
       if (metrics.vitals.lcp > 4000) {
         score -= 25;
-        recommendations.push('LCP muito alto - otimize o carregamento do conteúdo principal');
+        recommendations.push("LCP muito alto - otimize o carregamento do conteúdo principal");
       } else if (metrics.vitals.lcp > 2500) {
         score -= 10;
-        recommendations.push('LCP pode ser melhorado - considere lazy loading');
+        recommendations.push("LCP pode ser melhorado - considere lazy loading");
       }
     }
 
@@ -285,10 +285,10 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     if (metrics.vitals.fid) {
       if (metrics.vitals.fid > 300) {
         score -= 25;
-        recommendations.push('FID muito alto - reduza o tempo de execução do JavaScript');
+        recommendations.push("FID muito alto - reduza o tempo de execução do JavaScript");
       } else if (metrics.vitals.fid > 100) {
         score -= 10;
-        recommendations.push('FID pode ser melhorado - otimize event handlers');
+        recommendations.push("FID pode ser melhorado - otimize event handlers");
       }
     }
 
@@ -296,34 +296,34 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
     if (metrics.vitals.cls !== undefined) {
       if (metrics.vitals.cls > 0.25) {
         score -= 25;
-        recommendations.push('CLS muito alto - estabilize as mudanças de layout');
+        recommendations.push("CLS muito alto - estabilize as mudanças de layout");
       } else if (metrics.vitals.cls > 0.1) {
         score -= 10;
-        recommendations.push('CLS pode ser melhorado - adicione dimensões às imagens');
+        recommendations.push("CLS pode ser melhorado - adicione dimensões às imagens");
       }
     }
 
     // FPS scoring
     if (metrics.fps < 30) {
       score -= 20;
-      recommendations.push('FPS baixo - reduza animações complexas');
+      recommendations.push("FPS baixo - reduza animações complexas");
     } else if (metrics.fps < 50) {
       score -= 10;
-      recommendations.push('FPS abaixo do ideal - otimize renderizações');
+      recommendations.push("FPS abaixo do ideal - otimize renderizações");
     }
 
     // Memory scoring
     if (metrics.memory && metrics.memory.percentage > 85) {
       score -= 15;
-      recommendations.push('Alto uso de memória - verifique memory leaks');
+      recommendations.push("Alto uso de memória - verifique memory leaks");
     }
 
     // Determine rating
-    let rating: 'excellent' | 'good' | 'needs-improvement' | 'poor';
-    if (score >= 90) rating = 'excellent';
-    else if (score >= 75) rating = 'good';
-    else if (score >= 50) rating = 'needs-improvement';
-    else rating = 'poor';
+    let rating: "excellent" | "good" | "needs-improvement" | "poor";
+    if (score >= 90) rating = "excellent";
+    else if (score >= 75) rating = "good";
+    else if (score >= 50) rating = "needs-improvement";
+    else rating = "poor";
 
     return { score, rating, recommendations };
   }, [metrics]);
@@ -371,7 +371,7 @@ export function useRenderPerformance(componentName: string, enabled: boolean = t
  * Get current performance metrics snapshot
  */
 export function getPerformanceSnapshot(): PerformanceMetrics | null {
-  if (typeof window !== 'undefined' && (window as any).__NAUTILUS_PERFORMANCE__) {
+  if (typeof window !== "undefined" && (window as any).__NAUTILUS_PERFORMANCE__) {
     return (window as any).__NAUTILUS_PERFORMANCE__;
   }
   return null;

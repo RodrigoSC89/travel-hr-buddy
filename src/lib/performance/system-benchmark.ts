@@ -5,7 +5,7 @@
 
 export interface BenchmarkResult {
   score: number;
-  status: 'excellent' | 'good' | 'fair' | 'critical';
+  status: "excellent" | "good" | "fair" | "critical";
   details: {
     diskRead: { time: number; score: number };
     diskWrite: { time: number; score: number };
@@ -20,7 +20,7 @@ export interface BenchmarkResult {
 }
 
 class SystemBenchmark {
-  private readonly STORAGE_KEY = 'system_benchmark_history';
+  private readonly STORAGE_KEY = "system_benchmark_history";
   private readonly MAX_HISTORY = 10;
 
   async runFullBenchmark(): Promise<BenchmarkResult> {
@@ -67,8 +67,8 @@ class SystemBenchmark {
   }
 
   private async benchmarkDiskRead(): Promise<{ time: number; score: number }> {
-    const testData = 'x'.repeat(100000); // 100KB test
-    const key = 'benchmark_read_test';
+    const testData = "x".repeat(100000); // 100KB test
+    const key = "benchmark_read_test";
     
     try {
       localStorage.setItem(key, testData);
@@ -90,7 +90,7 @@ class SystemBenchmark {
   }
 
   private async benchmarkDiskWrite(): Promise<{ time: number; score: number }> {
-    const testData = 'x'.repeat(10000); // 10KB per write
+    const testData = "x".repeat(10000); // 10KB per write
     
     try {
       const start = performance.now();
@@ -153,7 +153,7 @@ class SystemBenchmark {
     
     try {
       const start = performance.now();
-      await fetch('/manifest.json', { method: 'HEAD', cache: 'no-store' });
+      await fetch("/manifest.json", { method: "HEAD", cache: "no-store" });
       const latency = performance.now() - start;
       
       // Score: <100ms = 100, >1000ms = 0
@@ -168,8 +168,8 @@ class SystemBenchmark {
     const start = performance.now();
     
     // Simulate AI processing (local context lookup)
-    const testPrompt = 'Teste de performance do sistema';
-    const tokens = testPrompt.split(' ');
+    const testPrompt = "Teste de performance do sistema";
+    const tokens = testPrompt.split(" ");
     
     // Simulate tokenization and basic processing
     for (let i = 0; i < 1000; i++) {
@@ -201,34 +201,34 @@ class SystemBenchmark {
     });
   }
 
-  private getStatusFromScore(score: number): BenchmarkResult['status'] {
-    if (score >= 80) return 'excellent';
-    if (score >= 60) return 'good';
-    if (score >= 40) return 'fair';
-    return 'critical';
+  private getStatusFromScore(score: number): BenchmarkResult["status"] {
+    if (score >= 80) return "excellent";
+    if (score >= 60) return "good";
+    if (score >= 40) return "fair";
+    return "critical";
   }
 
-  private generateRecommendations(details: BenchmarkResult['details']): string[] {
+  private generateRecommendations(details: BenchmarkResult["details"]): string[] {
     const recommendations: string[] = [];
     
     if (details.memory.score < 50) {
-      recommendations.push('Limpe o cache do navegador e feche abas não utilizadas');
+      recommendations.push("Limpe o cache do navegador e feche abas não utilizadas");
     }
     if (details.diskRead.score < 50 || details.diskWrite.score < 50) {
-      recommendations.push('Execute limpeza de dados antigos no sistema');
+      recommendations.push("Execute limpeza de dados antigos no sistema");
     }
     if (details.cpu.score < 50) {
-      recommendations.push('Feche aplicações em segundo plano para liberar CPU');
+      recommendations.push("Feche aplicações em segundo plano para liberar CPU");
     }
     if (details.network.score < 30) {
-      recommendations.push('Conexão lenta detectada - ative o modo offline');
+      recommendations.push("Conexão lenta detectada - ative o modo offline");
     }
     if (details.rendering.score < 50) {
-      recommendations.push('Desative animações para melhorar performance');
+      recommendations.push("Desative animações para melhorar performance");
     }
     
     if (recommendations.length === 0) {
-      recommendations.push('Sistema operando em condições ideais');
+      recommendations.push("Sistema operando em condições ideais");
     }
     
     return recommendations;
@@ -243,14 +243,14 @@ class SystemBenchmark {
       }
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(history));
     } catch (e) {
-      console.warn('[Benchmark] Failed to save result:', e);
-      console.warn('[Benchmark] Failed to save result:', e);
+      console.warn("[Benchmark] Failed to save result:", e);
+      console.warn("[Benchmark] Failed to save result:", e);
     }
   }
 
   getHistory(): BenchmarkResult[] {
     try {
-      return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+      return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || "[]");
     } catch {
       return [];
     }

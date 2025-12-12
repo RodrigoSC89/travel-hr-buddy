@@ -67,10 +67,10 @@ export default function Maritime() {
 
   // PATCH 960: Memoized compliance data to prevent re-renders
   const complianceData = useMemo(() => [
-    { name: 'PEOTRAM', value: 87, color: 'text-green-600' },
-    { name: 'ISM Code', value: 92, color: 'text-green-600' },
-    { name: 'ISPS Code', value: 78, color: 'text-yellow-600' },
-    { name: 'MARPOL', value: 95, color: 'text-green-600' },
+    { name: "PEOTRAM", value: 87, color: "text-green-600" },
+    { name: "ISM Code", value: 92, color: "text-green-600" },
+    { name: "ISPS Code", value: 78, color: "text-yellow-600" },
+    { name: "MARPOL", value: 95, color: "text-green-600" },
   ], []);
 
   const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (

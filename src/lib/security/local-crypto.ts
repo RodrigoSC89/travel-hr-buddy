@@ -4,9 +4,9 @@
  * Utiliza Web Crypto API (AES-GCM)
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
-const ALGORITHM = 'AES-GCM';
+const ALGORITHM = "AES-GCM";
 const KEY_LENGTH = 256;
 const IV_LENGTH = 12;
 const SALT_LENGTH = 16;
@@ -44,21 +44,21 @@ class LocalCrypto {
    * Initialize or retrieve device-bound ID
    */
   private initializeDeviceId(): void {
-    const stored = localStorage.getItem('nautilus_device_id');
+    const stored = localStorage.getItem("nautilus_device_id");
     
     if (stored) {
       this.deviceId = stored;
     } else {
       // Generate persistent device ID
       this.deviceId = this.generateDeviceId();
-      localStorage.setItem('nautilus_device_id', this.deviceId);
+      localStorage.setItem("nautilus_device_id", this.deviceId);
     }
   }
 
   private generateDeviceId(): string {
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
-    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+    return Array.from(array, b => b.toString(16).padStart(2, "0")).join("");
   }
 
   /**
@@ -75,25 +75,25 @@ class LocalCrypto {
 
     // Import password as key material
     const keyMaterial = await crypto.subtle.importKey(
-      'raw',
+      "raw",
       passwordBuffer,
-      'PBKDF2',
+      "PBKDF2",
       false,
-      ['deriveBits', 'deriveKey']
+      ["deriveBits", "deriveKey"]
     );
 
     // Derive actual encryption key
     return crypto.subtle.deriveKey(
       {
-        name: 'PBKDF2',
+        name: "PBKDF2",
         salt: salt.buffer as ArrayBuffer,
         iterations: this.config.iterations!,
-        hash: 'SHA-256',
+        hash: "SHA-256",
       },
       keyMaterial,
       { name: ALGORITHM, length: KEY_LENGTH },
       false,
-      ['encrypt', 'decrypt']
+      ["encrypt", "decrypt"]
     );
   }
 
@@ -122,8 +122,8 @@ class LocalCrypto {
         version: 1,
       };
     } catch (error) {
-      logger.error('[LocalCrypto] Encryption failed', { error });
-      throw new Error('Encryption failed');
+      logger.error("[LocalCrypto] Encryption failed", { error });
+      throw new Error("Encryption failed");
     }
   }
 
@@ -146,8 +146,8 @@ class LocalCrypto {
       const decoder = new TextDecoder();
       return decoder.decode(decrypted);
     } catch (error) {
-      logger.error('[LocalCrypto] Decryption failed', { error });
-      throw new Error('Decryption failed - invalid password or corrupted data');
+      logger.error("[LocalCrypto] Decryption failed", { error });
+      throw new Error("Decryption failed - invalid password or corrupted data");
     }
   }
 
@@ -175,7 +175,7 @@ class LocalCrypto {
       const decrypted = await this.decrypt(encrypted, password);
       return JSON.parse(decrypted) as T;
     } catch (error) {
-      logger.error('[LocalCrypto] Failed to retrieve and decrypt', { key, error });
+      logger.error("[LocalCrypto] Failed to retrieve and decrypt", { key, error });
       return null;
     }
   }
@@ -218,7 +218,7 @@ class LocalCrypto {
     const result = { ...obj };
 
     for (const field of fields) {
-      if (result[field] && typeof result[field] === 'object' && 'iv' in result[field]) {
+      if (result[field] && typeof result[field] === "object" && "iv" in result[field]) {
         try {
           const decrypted = await this.decrypt(result[field] as EncryptedData, password);
           (result as any)[field] = decrypted;
@@ -237,7 +237,7 @@ class LocalCrypto {
   generateToken(length: number = 32): string {
     const array = new Uint8Array(length);
     crypto.getRandomValues(array);
-    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
+    return Array.from(array, b => b.toString(16).padStart(2, "0")).join("");
   }
 
   /**
@@ -246,7 +246,7 @@ class LocalCrypto {
   async hash(data: string): Promise<string> {
     const encoder = new TextEncoder();
     const dataBuffer = encoder.encode(data);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
     return this.bufferToBase64(new Uint8Array(hashBuffer));
   }
 
@@ -272,9 +272,9 @@ class LocalCrypto {
    */
   static isSupported(): boolean {
     return !!(
-      typeof crypto !== 'undefined' &&
+      typeof crypto !== "undefined" &&
       crypto.subtle &&
-      typeof crypto.subtle.encrypt === 'function'
+      typeof crypto.subtle.encrypt === "function"
     );
   }
 
@@ -304,20 +304,20 @@ export const secureStorage = {
 
   async setWithPin(key: string, value: any, pin: string): Promise<void> {
     // PIN-based encryption (less secure, for convenience)
-    const deviceId = localCrypto.getDeviceId() || '';
+    const deviceId = localCrypto.getDeviceId() || "";
     const password = `${pin}:${deviceId}`;
     await localCrypto.encryptAndStore(key, value, password);
   },
 
   async getWithPin<T>(key: string, pin: string): Promise<T | null> {
-    const deviceId = localCrypto.getDeviceId() || '';
+    const deviceId = localCrypto.getDeviceId() || "";
     const password = `${pin}:${deviceId}`;
     return localCrypto.retrieveAndDecrypt<T>(key, password);
   },
 };
 
 // React hook for secure storage
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useSecureStorage<T>(key: string, password: string) {
   const [data, setData] = useState<T | null>(null);
@@ -332,7 +332,7 @@ export function useSecureStorage<T>(key: string, password: string) {
       const result = await secureStorage.get<T>(key, password);
       setData(result);
     } catch (err) {
-      setError('Falha ao carregar dados criptografados');
+      setError("Falha ao carregar dados criptografados");
     } finally {
       setLoading(false);
     }
@@ -346,7 +346,7 @@ export function useSecureStorage<T>(key: string, password: string) {
       await secureStorage.set(key, value, password);
       setData(value);
     } catch (err) {
-      setError('Falha ao salvar dados criptografados');
+      setError("Falha ao salvar dados criptografados");
     } finally {
       setLoading(false);
     }

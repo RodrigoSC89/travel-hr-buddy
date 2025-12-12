@@ -3,7 +3,7 @@
  * Consistent loading states for better UX on slow connections
  */
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface SkeletonProps {
   className?: string;
@@ -13,7 +13,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse rounded-md bg-muted',
+        "animate-pulse rounded-md bg-muted",
         className
       )}
     />
@@ -22,11 +22,11 @@ export function Skeleton({ className }: SkeletonProps) {
 
 export function SkeletonText({ lines = 3, className }: SkeletonProps & { lines?: number }) {
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn("space-y-2", className)}>
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
           key={i}
-          className={cn('h-4', i === lines - 1 ? 'w-3/4' : 'w-full')}
+          className={cn("h-4", i === lines - 1 ? "w-3/4" : "w-full")}
         />
       ))}
     </div>
@@ -35,7 +35,7 @@ export function SkeletonText({ lines = 3, className }: SkeletonProps & { lines?:
 
 export function SkeletonCard({ className }: SkeletonProps) {
   return (
-    <div className={cn('rounded-lg border bg-card p-4 space-y-3', className)}>
+    <div className={cn("rounded-lg border bg-card p-4 space-y-3", className)}>
       <Skeleton className="h-4 w-1/2" />
       <SkeletonText lines={2} />
       <div className="flex gap-2 pt-2">
@@ -48,7 +48,7 @@ export function SkeletonCard({ className }: SkeletonProps) {
 
 export function SkeletonTable({ rows = 5, cols = 4, className }: SkeletonProps & { rows?: number; cols?: number }) {
   return (
-    <div className={cn('rounded-lg border', className)}>
+    <div className={cn("rounded-lg border", className)}>
       {/* Header */}
       <div className="flex gap-4 p-4 border-b bg-muted/50">
         {Array.from({ length: cols }).map((_, i) => (
@@ -69,7 +69,7 @@ export function SkeletonTable({ rows = 5, cols = 4, className }: SkeletonProps &
 
 export function SkeletonList({ items = 5, className }: SkeletonProps & { items?: number }) {
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn("space-y-3", className)}>
       {Array.from({ length: items }).map((_, i) => (
         <div key={i} className="flex items-center gap-3 p-3 rounded-lg border">
           <Skeleton className="h-10 w-10 rounded-full shrink-0" />
@@ -86,7 +86,7 @@ export function SkeletonList({ items = 5, className }: SkeletonProps & { items?:
 
 export function SkeletonDashboard({ className }: SkeletonProps) {
   return (
-    <div className={cn('space-y-6', className)}>
+    <div className={cn("space-y-6", className)}>
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -107,19 +107,19 @@ export function SkeletonDashboard({ className }: SkeletonProps) {
   );
 }
 
-export function SkeletonAvatar({ size = 'md', className }: SkeletonProps & { size?: 'sm' | 'md' | 'lg' }) {
+export function SkeletonAvatar({ size = "md", className }: SkeletonProps & { size?: "sm" | "md" | "lg" }) {
   const sizeClasses = {
-    sm: 'h-8 w-8',
-    md: 'h-10 w-10',
-    lg: 'h-16 w-16',
+    sm: "h-8 w-8",
+    md: "h-10 w-10",
+    lg: "h-16 w-16",
   };
 
-  return <Skeleton className={cn('rounded-full', sizeClasses[size], className)} />;
+  return <Skeleton className={cn("rounded-full", sizeClasses[size], className)} />;
 }
 
-export function SkeletonImage({ aspectRatio = '16/9', className }: SkeletonProps & { aspectRatio?: string }) {
+export function SkeletonImage({ aspectRatio = "16/9", className }: SkeletonProps & { aspectRatio?: string }) {
   return (
-    <div className={cn('relative overflow-hidden rounded-lg', className)} style={{ aspectRatio }}>
+    <div className={cn("relative overflow-hidden rounded-lg", className)} style={{ aspectRatio }}>
       <Skeleton className="absolute inset-0" />
     </div>
   );
@@ -127,7 +127,7 @@ export function SkeletonImage({ aspectRatio = '16/9', className }: SkeletonProps
 
 export function SkeletonForm({ fields = 4, className }: SkeletonProps & { fields?: number }) {
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {Array.from({ length: fields }).map((_, i) => (
         <div key={i} className="space-y-2">
           <Skeleton className="h-4 w-24" />

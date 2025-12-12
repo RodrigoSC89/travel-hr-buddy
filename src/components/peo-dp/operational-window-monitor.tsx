@@ -219,9 +219,9 @@ export const OperationalWindowMonitor: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "increasing": return <ArrowUp className="h-4 w-4 text-red-500" />;
-      case "decreasing": return <ArrowDown className="h-4 w-4 text-green-500" />;
-      default: return <Minus className="h-4 w-4 text-muted-foreground" />;
+    case "increasing": return <ArrowUp className="h-4 w-4 text-red-500" />;
+    case "decreasing": return <ArrowDown className="h-4 w-4 text-green-500" />;
+    default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -271,8 +271,8 @@ export const OperationalWindowMonitor: React.FC = () => {
               <div>
                 <h3 className="text-xl font-bold">
                   {overallStatus === "normal" ? "Condições Operacionais Normais" :
-                   overallStatus === "warning" ? "Atenção: Condições Próximas ao Limite" :
-                   "ALERTA: Condições Fora do ASOG"}
+                    overallStatus === "warning" ? "Atenção: Condições Próximas ao Limite" :
+                      "ALERTA: Condições Fora do ASOG"}
                 </h3>
                 <p className="text-muted-foreground">
                   Perfil ASOG ativo: <span className="font-medium">{selectedProfile.name}</span> ({selectedProfile.operationType})
@@ -372,7 +372,7 @@ export const OperationalWindowMonitor: React.FC = () => {
                       <span className="font-medium">{condition.parameter}</span>
                       <span className="text-sm text-muted-foreground">
                         {condition.trend === "increasing" ? "📈 Tendência de aumento" :
-                         condition.trend === "decreasing" ? "📉 Tendência de queda" : "➡️ Estável"}
+                          condition.trend === "decreasing" ? "📉 Tendência de queda" : "➡️ Estável"}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">

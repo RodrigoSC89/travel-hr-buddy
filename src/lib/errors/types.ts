@@ -3,15 +3,15 @@
  * Tipos e interfaces para error handling
  */
 
-export type ErrorSeverity = 'info' | 'warning' | 'error' | 'critical';
+export type ErrorSeverity = "info" | "warning" | "error" | "critical";
 export type ErrorCategory = 
-  | 'network' 
-  | 'validation' 
-  | 'authentication' 
-  | 'authorization'
-  | 'runtime' 
-  | 'api'
-  | 'unknown';
+  | "network" 
+  | "validation" 
+  | "authentication" 
+  | "authorization"
+  | "runtime" 
+  | "api"
+  | "unknown";
 
 export interface ErrorContext {
   component?: string;
@@ -56,7 +56,7 @@ export interface RetryOptions {
 export interface ErrorTrackingConfig {
   enabled: boolean;
   sentryDsn?: string;
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
   sampleRate: number;
   maxErrors: number;
   enableConsoleLogging: boolean;
@@ -69,42 +69,42 @@ export interface ErrorTrackingConfig {
 export class AppError extends Error {
   constructor(
     message: string,
-    public severity: ErrorSeverity = 'error',
-    public category: ErrorCategory = 'unknown',
+    public severity: ErrorSeverity = "error",
+    public category: ErrorCategory = "unknown",
     public context?: ErrorContext,
     public isRetryable: boolean = false
   ) {
     super(message);
-    this.name = 'AppError';
+    this.name = "AppError";
     Object.setPrototypeOf(this, AppError.prototype);
   }
 }
 
 export class NetworkError extends AppError {
   constructor(message: string, context?: ErrorContext) {
-    super(message, 'error', 'network', context, true);
-    this.name = 'NetworkError';
+    super(message, "error", "network", context, true);
+    this.name = "NetworkError";
   }
 }
 
 export class ValidationError extends AppError {
   constructor(message: string, context?: ErrorContext) {
-    super(message, 'warning', 'validation', context, false);
-    this.name = 'ValidationError';
+    super(message, "warning", "validation", context, false);
+    this.name = "ValidationError";
   }
 }
 
 export class AuthenticationError extends AppError {
   constructor(message: string, context?: ErrorContext) {
-    super(message, 'error', 'authentication', context, false);
-    this.name = 'AuthenticationError';
+    super(message, "error", "authentication", context, false);
+    this.name = "AuthenticationError";
   }
 }
 
 export class AuthorizationError extends AppError {
   constructor(message: string, context?: ErrorContext) {
-    super(message, 'error', 'authorization', context, false);
-    this.name = 'AuthorizationError';
+    super(message, "error", "authorization", context, false);
+    this.name = "AuthorizationError";
   }
 }
 
@@ -115,7 +115,7 @@ export class APIError extends AppError {
     context?: ErrorContext
   ) {
     const isRetryable = statusCode ? [408, 429, 500, 502, 503, 504].includes(statusCode) : false;
-    super(message, 'error', 'api', context, isRetryable);
-    this.name = 'APIError';
+    super(message, "error", "api", context, isRetryable);
+    this.name = "APIError";
   }
 }

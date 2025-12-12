@@ -339,9 +339,9 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                       Gerado: {new Date(lastReport.generatedAt).toLocaleString("pt-BR")}
                     </span>
                   </div>
-                  <div className={`bg-background rounded-lg p-4 ${showFullReport ? 'max-h-[600px]' : 'max-h-60'} overflow-y-auto prose prose-sm dark:prose-invert max-w-none`}>
+                  <div className={`bg-background rounded-lg p-4 ${showFullReport ? "max-h-[600px]" : "max-h-60"} overflow-y-auto prose prose-sm dark:prose-invert max-w-none`}>
                     <ReactMarkdown>
-                      {showFullReport ? lastReport.content : lastReport.content.substring(0, 1000) + (lastReport.content.length > 1000 ? '...' : '')}
+                      {showFullReport ? lastReport.content : lastReport.content.substring(0, 1000) + (lastReport.content.length > 1000 ? "..." : "")}
                     </ReactMarkdown>
                   </div>
                 </div>

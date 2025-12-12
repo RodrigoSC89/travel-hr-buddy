@@ -3,18 +3,18 @@
  * Shows connection status and handles reconnection
  */
 
-import { useState, useEffect } from 'react';
-import { useNetworkStatus } from '@/hooks/use-network-status';
-import { offlineSyncManager } from '@/lib/offline/sync-manager';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { useState, useEffect } from "react";
+import { useNetworkStatus } from "@/hooks/use-network-status";
+import { offlineSyncManager } from "@/lib/offline/sync-manager";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { 
   Wifi, WifiOff, RefreshCw, CloudOff, 
   CheckCircle, Loader2 
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface ConnectionRecoveryProps {
   className?: string;
@@ -71,7 +71,7 @@ export function ConnectionRecovery({ className, showAlways = false }: Connection
       
       setStats({ pending: result.pending, failed: result.failed });
     } catch (error) {
-      toast.error('Erro ao sincronizar');
+      toast.error("Erro ao sincronizar");
     } finally {
       setIsSyncing(false);
     }
@@ -86,8 +86,8 @@ export function ConnectionRecovery({ className, showAlways = false }: Connection
 
   return (
     <Card className={cn(
-      'fixed bottom-4 right-4 z-50 w-80 shadow-lg transition-all',
-      !online && 'border-destructive',
+      "fixed bottom-4 right-4 z-50 w-80 shadow-lg transition-all",
+      !online && "border-destructive",
       className
     )}>
       <CardContent className="p-4">
@@ -96,16 +96,16 @@ export function ConnectionRecovery({ className, showAlways = false }: Connection
           <div className="flex items-center gap-2">
             {online ? (
               <Wifi className={cn(
-                'h-5 w-5',
-                quality === 'fast' && 'text-green-500',
-                quality === 'medium' && 'text-yellow-500',
-                quality === 'slow' && 'text-orange-500'
+                "h-5 w-5",
+                quality === "fast" && "text-green-500",
+                quality === "medium" && "text-yellow-500",
+                quality === "slow" && "text-orange-500"
               )} />
             ) : (
               <WifiOff className="h-5 w-5 text-destructive" />
             )}
             <span className="font-medium">
-              {online ? 'Online' : 'Offline'}
+              {online ? "Online" : "Offline"}
             </span>
           </div>
           

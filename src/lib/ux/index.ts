@@ -48,19 +48,19 @@ export {
   predictiveUI, 
   usePredictiveUI, 
   useSmartPrefetching 
-} from './predictive-ui';
+} from "./predictive-ui";
 
 // PATCH 836: Haptic Feedback
 export { 
   hapticFeedback, 
   useHapticFeedback 
-} from './haptic-feedback';
+} from "./haptic-feedback";
 
 // PATCH 836: Gesture Navigation
 export { 
   useGestureNavigation, 
   useSwipeNavigation 
-} from './gesture-navigation';
+} from "./gesture-navigation";
 
 // PATCH 836: Micro-interactions
 export {
@@ -71,11 +71,11 @@ export {
   useStaggeredList,
   usePulseOnChange,
   useShakeOnError,
-} from './micro-interactions';
+} from "./micro-interactions";
 
 // PATCH 836: Smart Suggestions
 export {
   smartSuggestions,
   useSmartSuggestions,
   useContextualHelp,
-} from './smart-suggestions';
+} from "./smart-suggestions";

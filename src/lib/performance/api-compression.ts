@@ -32,10 +32,10 @@ export function compressPayload<T extends Record<string, unknown>>(
       return removeNulls ? undefined : value;
     }
 
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       let processed = trimStrings ? value.trim() : value;
       if (maxStringLength && processed.length > maxStringLength) {
-        processed = processed.substring(0, maxStringLength) + '...';
+        processed = processed.substring(0, maxStringLength) + "...";
       }
       // Compact ISO dates to timestamps
       if (compactDates && /^\d{4}-\d{2}-\d{2}T/.test(processed)) {
@@ -48,7 +48,7 @@ export function compressPayload<T extends Record<string, unknown>>(
       return value.map(processValue).filter(v => v !== undefined);
     }
 
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       return compressPayload(value as Record<string, unknown>, options);
     }
 
@@ -116,12 +116,12 @@ export async function batchRequests<T>(
   );
 
   return results.map((result, index) => {
-    if (result.status === 'fulfilled') {
+    if (result.status === "fulfilled") {
       return result.value;
     }
     return {
       id: requests[index].id,
-      error: result.reason?.message || 'Request failed'
+      error: result.reason?.message || "Request failed"
     };
   });
 }
@@ -151,7 +151,7 @@ export function getDelta<T extends Record<string, unknown>>(
  * Adaptive page size based on network
  */
 export function getAdaptivePageSize(
-  networkQuality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline'
+  networkQuality: "excellent" | "good" | "fair" | "poor" | "offline"
 ): number {
   const sizes = {
     excellent: 50,
@@ -213,26 +213,26 @@ export async function* streamResponse<T>(
  */
 export function useAdaptiveApiSettings() {
   // Simple implementation without hook dependency for flexibility
-  const getQuality = (): 'excellent' | 'good' | 'fair' | 'poor' | 'offline' => {
-    if (!navigator.onLine) return 'offline';
+  const getQuality = (): "excellent" | "good" | "fair" | "poor" | "offline" => {
+    if (!navigator.onLine) return "offline";
     const connection = (navigator as Navigator & { connection?: { effectiveType?: string; rtt?: number } }).connection;
-    if (!connection) return 'good';
+    if (!connection) return "good";
     
     const type = connection.effectiveType;
-    if (type === '4g') return 'excellent';
-    if (type === '3g') return 'fair';
-    if (type === '2g' || type === 'slow-2g') return 'poor';
-    return 'good';
+    if (type === "4g") return "excellent";
+    if (type === "3g") return "fair";
+    if (type === "2g" || type === "slow-2g") return "poor";
+    return "good";
   };
   
   const quality = getQuality();
   
   return {
     pageSize: getAdaptivePageSize(quality),
-    enablePrefetch: quality === 'excellent' || quality === 'good',
-    enableRealtime: quality !== 'poor' && quality !== 'offline',
-    retryCount: quality === 'poor' ? 1 : 3,
-    timeout: quality === 'poor' ? 30000 : 10000,
+    enablePrefetch: quality === "excellent" || quality === "good",
+    enableRealtime: quality !== "poor" && quality !== "offline",
+    retryCount: quality === "poor" ? 1 : 3,
+    timeout: quality === "poor" ? 30000 : 10000,
     quality,
   };
 }

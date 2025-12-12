@@ -88,13 +88,13 @@ export function useNetworkQuality(): NetworkInfo {
  */
 export function getOptimalImageQuality(networkQuality: NetworkQuality): number {
   switch (networkQuality) {
-    case "slow":
-      return 40;
-    case "medium":
-      return 70;
-    case "fast":
-    default:
-      return 90;
+  case "slow":
+    return 40;
+  case "medium":
+    return 70;
+  case "fast":
+  default:
+    return 90;
   }
 }
 
@@ -103,13 +103,13 @@ export function getOptimalImageQuality(networkQuality: NetworkQuality): number {
  */
 export function getAdaptiveTimeout(networkQuality: NetworkQuality): number {
   switch (networkQuality) {
-    case "slow":
-      return 30000; // 30s
-    case "medium":
-      return 15000; // 15s
-    case "fast":
-    default:
-      return 8000; // 8s
+  case "slow":
+    return 30000; // 30s
+  case "medium":
+    return 15000; // 15s
+  case "fast":
+  default:
+    return 8000; // 8s
   }
 }
 

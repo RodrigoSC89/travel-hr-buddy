@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   FileText, 
   CheckCircle, 
@@ -23,7 +23,7 @@ import {
   Edit,
   Send,
   Download
-} from 'lucide-react';
+} from "lucide-react";
 import { 
   createDocument, 
   getDocuments, 
@@ -33,30 +33,30 @@ import {
   type Document,
   type ApprovalStep,
   type DocumentCategory
-} from '@/lib/documents';
-import { toast } from 'sonner';
+} from "@/lib/documents";
+import { toast } from "sonner";
 
 const statusColors: Record<string, string> = {
-  draft: 'bg-muted text-muted-foreground',
-  pending_review: 'bg-yellow-500/20 text-yellow-600',
-  pending_approval: 'bg-yellow-500/20 text-yellow-600',
-  approved: 'bg-green-500/20 text-green-600',
-  rejected: 'bg-red-500/20 text-red-600',
-  superseded: 'bg-gray-500/20 text-gray-600',
-  archived: 'bg-gray-500/20 text-gray-600'
+  draft: "bg-muted text-muted-foreground",
+  pending_review: "bg-yellow-500/20 text-yellow-600",
+  pending_approval: "bg-yellow-500/20 text-yellow-600",
+  approved: "bg-green-500/20 text-green-600",
+  rejected: "bg-red-500/20 text-red-600",
+  superseded: "bg-gray-500/20 text-gray-600",
+  archived: "bg-gray-500/20 text-gray-600"
 };
 
 const categoryLabels: Record<string, string> = {
-  ism_procedure: 'Procedimento ISM',
-  mlc_agreement: 'Acordo MLC',
-  psc_checklist: 'Checklist PSC',
-  audit_report: 'Relatório de Auditoria',
-  safety_manual: 'Manual de Segurança',
-  crew_certificate: 'Certificado de Tripulação',
-  vessel_certificate: 'Certificado de Embarcação',
-  emergency_procedure: 'Procedimento de Emergência',
-  training_record: 'Registro de Treinamento',
-  maintenance_procedure: 'Procedimento de Manutenção'
+  ism_procedure: "Procedimento ISM",
+  mlc_agreement: "Acordo MLC",
+  psc_checklist: "Checklist PSC",
+  audit_report: "Relatório de Auditoria",
+  safety_manual: "Manual de Segurança",
+  crew_certificate: "Certificado de Tripulação",
+  vessel_certificate: "Certificado de Embarcação",
+  emergency_procedure: "Procedimento de Emergência",
+  training_record: "Registro de Treinamento",
+  maintenance_procedure: "Procedimento de Manutenção"
 };
 
 export const DocumentWorkflowPanel: React.FC = () => {
@@ -65,9 +65,9 @@ export const DocumentWorkflowPanel: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newDoc, setNewDoc] = useState({
-    title: '',
-    category: 'ism_procedure' as DocumentCategory,
-    description: ''
+    title: "",
+    category: "ism_procedure" as DocumentCategory,
+    description: ""
   });
 
   useEffect(() => {
@@ -77,12 +77,12 @@ export const DocumentWorkflowPanel: React.FC = () => {
   const loadDocuments = async () => {
     setLoading(true);
     try {
-      const docs = await getDocuments('');
+      const docs = await getDocuments("");
       setDocuments(docs);
       setPendingApprovals([]);
     } catch (error) {
-      console.error('Error loading documents:', error);
-      toast.error('Erro ao carregar documentos');
+      console.error("Error loading documents:", error);
+      toast.error("Erro ao carregar documentos");
     } finally {
       setLoading(false);
     }
@@ -91,45 +91,45 @@ export const DocumentWorkflowPanel: React.FC = () => {
   const handleCreateDocument = async () => {
     try {
       const doc = await createDocument({
-        organization_id: '', // Will be set by RLS
+        organization_id: "", // Will be set by RLS
         document_number: `DOC-${Date.now()}`,
         title: newDoc.title,
         category: newDoc.category,
         description: newDoc.description,
-        status: 'draft'
+        status: "draft"
       });
       
       if (doc) {
-        toast.success('Documento criado com sucesso');
+        toast.success("Documento criado com sucesso");
         setIsCreateOpen(false);
-        setNewDoc({ title: '', category: 'ism_procedure', description: '' });
+        setNewDoc({ title: "", category: "ism_procedure", description: "" });
         loadDocuments();
       }
     } catch (error) {
-      toast.error('Erro ao criar documento');
+      toast.error("Erro ao criar documento");
     }
   };
 
   const handleSubmitForApproval = async (documentId: string) => {
     try {
       await submitForApproval(documentId, [
-        { step_name: 'Revisão Técnica', required_role: 'technical_reviewer' },
-        { step_name: 'Aprovação Final', required_role: 'manager' }
+        { step_name: "Revisão Técnica", required_role: "technical_reviewer" },
+        { step_name: "Aprovação Final", required_role: "manager" }
       ]);
-      toast.success('Documento enviado para aprovação');
+      toast.success("Documento enviado para aprovação");
       loadDocuments();
     } catch (error) {
-      toast.error('Erro ao enviar para aprovação');
+      toast.error("Erro ao enviar para aprovação");
     }
   };
 
-  const handleApprove = async (approvalId: string, decision: 'approved' | 'rejected', comments?: string) => {
+  const handleApprove = async (approvalId: string, decision: "approved" | "rejected", comments?: string) => {
     try {
-      await processApproval(approvalId, decision, '', '', '', comments);
-      toast.success(decision === 'approved' ? 'Documento aprovado' : 'Documento rejeitado');
+      await processApproval(approvalId, decision, "", "", "", comments);
+      toast.success(decision === "approved" ? "Documento aprovado" : "Documento rejeitado");
       loadDocuments();
     } catch (error) {
-      toast.error('Erro ao processar aprovação');
+      toast.error("Erro ao processar aprovação");
     }
   };
 
@@ -234,7 +234,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold">
-                  {documents.filter(d => d.status === 'approved').length}
+                  {documents.filter(d => d.status === "approved").length}
                 </p>
                 <p className="text-sm text-muted-foreground">Aprovados</p>
               </div>
@@ -305,7 +305,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                               <h4 className="font-medium">{doc.title}</h4>
                               <Badge variant="outline">{doc.document_number}</Badge>
                               <Badge className={statusColors[doc.status]}>
-                                {doc.status.replace('_', ' ')}
+                                {doc.status.replace("_", " ")}
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground">
@@ -324,7 +324,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                             <Button variant="ghost" size="sm">
                               <Edit className="h-4 w-4" />
                             </Button>
-                            {doc.status === 'draft' && (
+                            {doc.status === "draft" && (
                               <Button 
                                 variant="outline" 
                                 size="sm"
@@ -377,13 +377,13 @@ export const DocumentWorkflowPanel: React.FC = () => {
                               variant="outline" 
                               size="sm"
                               className="text-red-600"
-                              onClick={() => handleApprove(approval.id, 'rejected', 'Documento rejeitado')}
+                              onClick={() => handleApprove(approval.id, "rejected", "Documento rejeitado")}
                             >
                               Rejeitar
                             </Button>
                             <Button 
                               size="sm"
-                              onClick={() => handleApprove(approval.id, 'approved')}
+                              onClick={() => handleApprove(approval.id, "approved")}
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
                               Aprovar

@@ -3,24 +3,24 @@
  * Centralized handler for common actions across the system
  */
 
-import { toast } from '@/hooks/use-toast';
+import { toast } from "@/hooks/use-toast";
 
 export type ActionType = 
-  | 'navigate'
-  | 'copy'
-  | 'download'
-  | 'share'
-  | 'print'
-  | 'export'
-  | 'refresh'
-  | 'delete'
-  | 'edit'
-  | 'view'
-  | 'toggle'
-  | 'submit'
-  | 'cancel'
-  | 'confirm'
-  | 'custom';
+  | "navigate"
+  | "copy"
+  | "download"
+  | "share"
+  | "print"
+  | "export"
+  | "refresh"
+  | "delete"
+  | "edit"
+  | "view"
+  | "toggle"
+  | "submit"
+  | "cancel"
+  | "confirm"
+  | "custom";
 
 export interface ActionResult {
   success: boolean;
@@ -58,7 +58,7 @@ export async function executeAction(
     if (confirmMessage) {
       const confirmed = window.confirm(confirmMessage);
       if (!confirmed) {
-        return { success: false, message: 'Ação cancelada' };
+        return { success: false, message: "Ação cancelada" };
       }
     }
 
@@ -69,26 +69,26 @@ export async function executeAction(
     if (result.success) {
       if (successMessage || result.message) {
         toast({
-          title: 'Sucesso',
+          title: "Sucesso",
           description: successMessage || result.message || `${label} realizado com sucesso`,
         });
       }
     } else {
       toast({
-        title: 'Erro',
+        title: "Erro",
         description: errorMessage || result.message || `Erro ao ${label.toLowerCase()}`,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
 
     return result;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Erro desconhecido';
+    const message = error instanceof Error ? error.message : "Erro desconhecido";
     
     toast({
-      title: 'Erro',
+      title: "Erro",
       description: errorMessage || message,
-      variant: 'destructive',
+      variant: "destructive",
     });
 
     return { success: false, message };
@@ -107,18 +107,18 @@ export const commonActions = {
   copyToClipboard: async (text: string): Promise<ActionResult> => {
     try {
       await navigator.clipboard.writeText(text);
-      return { success: true, message: 'Copiado para a área de transferência' };
+      return { success: true, message: "Copiado para a área de transferência" };
     } catch {
       // Fallback for older browsers
-      const textarea = document.createElement('textarea');
+      const textarea = document.createElement("textarea");
       textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
       document.body.appendChild(textarea);
       textarea.select();
-      document.execCommand('copy');
+      document.execCommand("copy");
       document.body.removeChild(textarea);
-      return { success: true, message: 'Copiado para a área de transferência' };
+      return { success: true, message: "Copiado para a área de transferência" };
     }
   },
 
@@ -129,17 +129,17 @@ export const commonActions = {
     if (navigator.share) {
       try {
         await navigator.share(data);
-        return { success: true, message: 'Conteúdo compartilhado' };
+        return { success: true, message: "Conteúdo compartilhado" };
       } catch (error) {
-        if ((error as Error).name === 'AbortError') {
-          return { success: false, message: 'Compartilhamento cancelado' };
+        if ((error as Error).name === "AbortError") {
+          return { success: false, message: "Compartilhamento cancelado" };
         }
         throw error;
       }
     }
     
     // Fallback: copy to clipboard
-    const text = data.url || data.text || data.title || '';
+    const text = data.url || data.text || data.title || "";
     return commonActions.copyToClipboard(text);
   },
 
@@ -151,7 +151,7 @@ export const commonActions = {
       const response = await fetch(url);
       const blob = await response.blob();
       
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = filename;
       document.body.appendChild(link);
@@ -159,9 +159,9 @@ export const commonActions = {
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
       
-      return { success: true, message: 'Download iniciado' };
+      return { success: true, message: "Download iniciado" };
     } catch {
-      return { success: false, message: 'Erro ao baixar arquivo' };
+      return { success: false, message: "Erro ao baixar arquivo" };
     }
   },
 
@@ -172,7 +172,7 @@ export const commonActions = {
     if (elementId) {
       const element = document.getElementById(elementId);
       if (element) {
-        const printWindow = window.open('', '_blank');
+        const printWindow = window.open("", "_blank");
         if (printWindow) {
           printWindow.document.write(`
             <html>
@@ -209,7 +209,7 @@ export const commonActions = {
    */
   navigate: (url: string, newTab: boolean = false): ActionResult => {
     if (newTab) {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      window.open(url, "_blank", "noopener,noreferrer");
     } else {
       window.location.href = url;
     }
@@ -221,10 +221,10 @@ export const commonActions = {
    */
   exportJSON: (data: any, filename: string): ActionResult => {
     const json = JSON.stringify(data, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
+    const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `${filename}.json`;
     document.body.appendChild(link);
@@ -232,7 +232,7 @@ export const commonActions = {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     
-    return { success: true, message: 'Exportação concluída' };
+    return { success: true, message: "Exportação concluída" };
   },
 
   /**
@@ -240,27 +240,27 @@ export const commonActions = {
    */
   exportCSV: (data: Record<string, any>[], filename: string): ActionResult => {
     if (!data.length) {
-      return { success: false, message: 'Nenhum dado para exportar' };
+      return { success: false, message: "Nenhum dado para exportar" };
     }
 
     const headers = Object.keys(data[0]);
     const csv = [
-      headers.join(','),
+      headers.join(","),
       ...data.map(row => 
         headers.map(h => {
           const value = row[h];
-          if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
-            return `"${value.replace(/"/g, '""')}"`;
+          if (typeof value === "string" && (value.includes(",") || value.includes("\""))) {
+            return `"${value.replace(/"/g, "\"\"")}"`;
           }
           return value;
-        }).join(',')
+        }).join(",")
       )
-    ].join('\n');
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `${filename}.csv`;
     document.body.appendChild(link);
@@ -268,7 +268,7 @@ export const commonActions = {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     
-    return { success: true, message: 'Exportação CSV concluída' };
+    return { success: true, message: "Exportação CSV concluída" };
   }
 };
 

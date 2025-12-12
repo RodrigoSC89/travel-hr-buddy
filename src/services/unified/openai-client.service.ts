@@ -286,7 +286,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
         messages: [
           {
             role: "user",
-            content: 'Say "API test successful" if you can read this.',
+            content: "Say \"API test successful\" if you can read this.",
           },
         ],
         max_tokens: 20,
@@ -350,7 +350,7 @@ export async function generateReportSummary(
   conclusions: string[];
   recommendations: string[];
 } | null> {
-  const systemPrompt = `You are a maritime operations analyst. Generate comprehensive reports with insights.`;
+  const systemPrompt = "You are a maritime operations analyst. Generate comprehensive reports with insights.";
   
   const userPrompt = `
 Analyze the following ${reportType} data and generate:
@@ -385,7 +385,7 @@ export async function generateDrillScenario(
   difficulty: string,
   historicalFailures: string[] = []
 ): Promise<Record<string, unknown> | null> {
-  const systemPrompt = `You are a maritime safety expert who creates realistic emergency drill scenarios for vessel crew training.`;
+  const systemPrompt = "You are a maritime safety expert who creates realistic emergency drill scenarios for vessel crew training.";
   
   const failuresContext = historicalFailures.length > 0
     ? `\n\nPast failures to address:\n${historicalFailures.map(f => `- ${f}`).join("\n")}`
@@ -438,7 +438,7 @@ export async function generateComplianceExplanation(
   }>;
   learningPoints: string[];
 } | null> {
-  const systemPrompt = `You are a maritime compliance expert who explains regulations in both technical and simple terms.`;
+  const systemPrompt = "You are a maritime compliance expert who explains regulations in both technical and simple terms.";
   
   const userPrompt = `
 Explain this ${finding.type} compliance finding:

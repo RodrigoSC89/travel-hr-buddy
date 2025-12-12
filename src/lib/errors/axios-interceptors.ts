@@ -3,10 +3,10 @@
  * Interceptors para tracking e retry automático
  */
 
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { errorTrackingService } from './error-tracking-service';
-import { retryWithBackoff } from './retry-logic';
-import { APIError, NetworkError } from './types';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { errorTrackingService } from "./error-tracking-service";
+import { retryWithBackoff } from "./retry-logic";
+import { APIError, NetworkError } from "./types";
 
 /**
  * Setup axios interceptors for error handling
@@ -21,7 +21,7 @@ export function setupAxiosInterceptors(instance: AxiosInstance = axios): void {
     },
     (error) => {
       errorTrackingService.trackNetworkError(error, {
-        action: 'axios:request',
+        action: "axios:request",
       });
       return Promise.reject(error);
     }
@@ -53,9 +53,9 @@ function handleAxiosError(error: AxiosError): Promise<never> {
   // Network error (no response)
   if (!error.response) {
     const networkError = new NetworkError(
-      error.message || 'Network request failed',
+      error.message || "Network request failed",
       {
-        action: 'axios',
+        action: "axios",
         metadata: {
           url: error.config?.url,
           method: error.config?.method,
@@ -64,7 +64,7 @@ function handleAxiosError(error: AxiosError): Promise<never> {
     );
 
     errorTrackingService.trackNetworkError(networkError, {
-      action: 'axios',
+      action: "axios",
       metadata: {
         url: error.config?.url,
         method: error.config?.method,
@@ -80,7 +80,7 @@ function handleAxiosError(error: AxiosError): Promise<never> {
     getErrorMessage(error),
     status,
     {
-      action: 'axios',
+      action: "axios",
       metadata: {
         url: error.config?.url,
         method: error.config?.method,
@@ -90,7 +90,7 @@ function handleAxiosError(error: AxiosError): Promise<never> {
   );
 
   errorTrackingService.trackAPIError(apiError, status, {
-    action: 'axios',
+    action: "axios",
     metadata: {
       url: error.config?.url,
       method: error.config?.method,
@@ -118,23 +118,23 @@ function getErrorMessage(error: AxiosError): string {
 
   // Default messages by status code
   switch (status) {
-    case 400:
-      return 'Dados inválidos. Verifique os campos.';
-    case 401:
-      return 'Sessão expirada. Faça login novamente.';
-    case 403:
-      return 'Você não tem permissão para esta ação.';
-    case 404:
-      return 'Recurso não encontrado.';
-    case 429:
-      return 'Muitas requisições. Aguarde um momento.';
-    case 500:
-    case 502:
-    case 503:
-    case 504:
-      return 'Erro no servidor. Tente novamente em alguns minutos.';
-    default:
-      return error.message || 'Ocorreu um erro. Tente novamente.';
+  case 400:
+    return "Dados inválidos. Verifique os campos.";
+  case 401:
+    return "Sessão expirada. Faça login novamente.";
+  case 403:
+    return "Você não tem permissão para esta ação.";
+  case 404:
+    return "Recurso não encontrado.";
+  case 429:
+    return "Muitas requisições. Aguarde um momento.";
+  case 500:
+  case 502:
+  case 503:
+  case 504:
+    return "Erro no servidor. Tente novamente em alguns minutos.";
+  default:
+    return error.message || "Ocorreu um erro. Tente novamente.";
   }
 }
 

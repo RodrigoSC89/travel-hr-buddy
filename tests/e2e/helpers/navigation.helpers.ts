@@ -3,15 +3,15 @@
  * Funções auxiliares para navegação em testes
  */
 
-import { Page, expect } from '@playwright/test';
-import { mainRoutes, moduleRoutes } from '../fixtures/navigation.fixtures';
+import { Page, expect } from "@playwright/test";
+import { mainRoutes, moduleRoutes } from "../fixtures/navigation.fixtures";
 
 /**
  * Navega para uma rota e aguarda carregamento
  */
 export async function navigateTo(page: Page, route: string): Promise<void> {
   await page.goto(route);
-  await page.waitForLoadState('networkidle', { timeout: 15000 });
+  await page.waitForLoadState("networkidle", { timeout: 15000 });
 }
 
 /**
@@ -20,7 +20,7 @@ export async function navigateTo(page: Page, route: string): Promise<void> {
 export async function clickMenuItem(page: Page, menuText: string): Promise<void> {
   const menuItem = page.locator(`nav >> text=${menuText}`).first();
   await menuItem.click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState("networkidle");
 }
 
 /**
@@ -28,10 +28,10 @@ export async function clickMenuItem(page: Page, menuText: string): Promise<void>
  */
 export async function expectBreadcrumbs(page: Page, expectedCrumbs: string[]): Promise<void> {
   const breadcrumbSelectors = [
-    '[data-testid="breadcrumb"]',
-    'nav[aria-label="breadcrumb"]',
-    '.breadcrumb',
-    '[class*="breadcrumb"]'
+    "[data-testid=\"breadcrumb\"]",
+    "nav[aria-label=\"breadcrumb\"]",
+    ".breadcrumb",
+    "[class*=\"breadcrumb\"]"
   ];
   
   for (const selector of breadcrumbSelectors) {
@@ -50,7 +50,7 @@ export async function expectBreadcrumbs(page: Page, expectedCrumbs: string[]): P
  * Verifica se o menu principal está visível
  */
 export async function expectMainMenu(page: Page): Promise<void> {
-  const nav = page.locator('nav').first();
+  const nav = page.locator("nav").first();
   await expect(nav).toBeVisible();
 }
 
@@ -59,11 +59,11 @@ export async function expectMainMenu(page: Page): Promise<void> {
  */
 export async function openMobileMenu(page: Page): Promise<void> {
   const menuButtonSelectors = [
-    'button[aria-label="Menu"]',
-    'button:has-text("Menu")',
-    '[data-testid="mobile-menu-button"]',
-    '.mobile-menu-button',
-    'button.hamburger'
+    "button[aria-label=\"Menu\"]",
+    "button:has-text(\"Menu\")",
+    "[data-testid=\"mobile-menu-button\"]",
+    ".mobile-menu-button",
+    "button.hamburger"
   ];
   
   for (const selector of menuButtonSelectors) {
@@ -80,8 +80,8 @@ export async function openMobileMenu(page: Page): Promise<void> {
  * Verifica se a página não é 404
  */
 export async function expectNotFound(page: Page, shouldBeNotFound: boolean = false): Promise<void> {
-  const bodyText = await page.locator('body').textContent();
-  const isNotFound = bodyText?.includes('404') || bodyText?.includes('Not Found') || bodyText?.includes('Página não encontrada');
+  const bodyText = await page.locator("body").textContent();
+  const isNotFound = bodyText?.includes("404") || bodyText?.includes("Not Found") || bodyText?.includes("Página não encontrada");
   
   if (shouldBeNotFound) {
     expect(isNotFound).toBe(true);
@@ -94,11 +94,11 @@ export async function expectNotFound(page: Page, shouldBeNotFound: boolean = fal
  * Aguarda e verifica se a página carregou sem erros críticos
  */
 export async function expectPageLoaded(page: Page): Promise<void> {
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState("domcontentloaded");
   
   // Verificar se não há erro de página em branco
-  const bodyText = await page.locator('body').textContent();
-  expect(bodyText).not.toBe('');
+  const bodyText = await page.locator("body").textContent();
+  expect(bodyText).not.toBe("");
   
   // Verificar se não é 404
   await expectNotFound(page, false);
@@ -115,15 +115,15 @@ export async function expectElementVisible(page: Page, selector: string): Promis
  * Aguarda navegação completar
  */
 export async function waitForNavigation(page: Page, timeout: number = 10000): Promise<void> {
-  await page.waitForLoadState('networkidle', { timeout });
-  await page.waitForLoadState('domcontentloaded', { timeout });
+  await page.waitForLoadState("networkidle", { timeout });
+  await page.waitForLoadState("domcontentloaded", { timeout });
 }
 
 /**
  * Verifica se está na rota esperada
  */
 export async function expectCurrentRoute(page: Page, expectedRoute: string | RegExp): Promise<void> {
-  if (typeof expectedRoute === 'string') {
+  if (typeof expectedRoute === "string") {
     expect(page.url()).toContain(expectedRoute);
   } else {
     await expect(page).toHaveURL(expectedRoute);

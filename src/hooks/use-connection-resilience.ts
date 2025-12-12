@@ -3,8 +3,8 @@
  * React hook for connection state and adaptive settings
  */
 
-import { useState, useEffect } from 'react';
-import { connectionResilience, type ConnectionState } from '@/lib/offline/connection-resilience';
+import { useState, useEffect } from "react";
+import { connectionResilience, type ConnectionState } from "@/lib/offline/connection-resilience";
 
 export function useConnectionResilience() {
   const [state, setState] = useState<ConnectionState>(connectionResilience.getState());

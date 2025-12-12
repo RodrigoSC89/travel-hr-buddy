@@ -4,7 +4,7 @@
  * AI-powered flight recommendations using OpenAI
  */
 
-import { FlightOffer } from '@/services/skyscanner';
+import { FlightOffer } from "@/services/skyscanner";
 
 export interface FlightRecommendation {
   bestPrice: FlightOffer | null;
@@ -30,7 +30,7 @@ export async function analyzeFlightOffers(
       bestPrice: null,
       bestDuration: null,
       recommended: null,
-      reasoning: 'No flight offers available for analysis.',
+      reasoning: "No flight offers available for analysis.",
       insights: [],
     };
   }
@@ -49,16 +49,16 @@ export async function analyzeFlightOffers(
 
   // Basic rule-based recommendation
   let recommended = bestPrice;
-  let reasoning = 'Recommended based on best price.';
+  let reasoning = "Recommended based on best price.";
   const insights: string[] = [];
 
   // Apply user preferences
   if (userPreferences?.prioritySpeed) {
     recommended = bestDuration;
-    reasoning = 'Recommended for fastest travel time based on your preference.';
+    reasoning = "Recommended for fastest travel time based on your preference.";
   } else if (userPreferences?.priorityPrice) {
     recommended = bestPrice;
-    reasoning = 'Recommended for best price based on your preference.';
+    reasoning = "Recommended for best price based on your preference.";
   } else {
     // Balance between price and duration
     const priceScore = offers.map(o => o.price);
@@ -81,7 +81,7 @@ export async function analyzeFlightOffers(
         const currentScore = calculateScore(current, bestPrice.price, parseDuration(bestDuration.duration));
         return currentScore > bestScore ? current : best;
       });
-      reasoning = 'Recommended for optimal balance between price and travel time.';
+      reasoning = "Recommended for optimal balance between price and travel time.";
     }
   }
 
@@ -96,7 +96,7 @@ export async function analyzeFlightOffers(
 
   const avgPrice = offers.reduce((sum, o) => sum + o.price, 0) / offers.length;
   if (recommended.price < avgPrice * 0.8) {
-    insights.push('Excellent price - below average by 20%+');
+    insights.push("Excellent price - below average by 20%+");
   }
 
   // Check for stops filter
@@ -168,7 +168,7 @@ Option ${idx + 1}:
 - Stops: ${offer.stops}
 - Departure: ${offer.departureTime}
 - Arrival: ${offer.arrivalTime}
-`).join('\n')}
+`).join("\n")}
 
 Which option would you recommend and why? Consider price, duration, and convenience.`;
 }

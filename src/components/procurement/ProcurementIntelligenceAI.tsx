@@ -291,8 +291,8 @@ export function ProcurementIntelligenceAI() {
                             value={(item.currentStock / item.maxStock) * 100}
                             className={`h-2 ${
                               item.currentStock <= item.minStock ? "[&>div]:bg-red-500" :
-                              item.currentStock <= item.minStock * 1.5 ? "[&>div]:bg-yellow-500" :
-                              "[&>div]:bg-green-500"
+                                item.currentStock <= item.minStock * 1.5 ? "[&>div]:bg-yellow-500" :
+                                  "[&>div]:bg-green-500"
                             }`}
                           />
                         </div>

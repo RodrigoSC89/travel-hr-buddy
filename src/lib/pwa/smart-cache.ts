@@ -4,17 +4,17 @@
  */
 
 // Get connection type from navigator API
-function getConnectionType(): 'slow' | 'medium' | 'fast' {
-  if (typeof navigator !== 'undefined' && 'connection' in navigator) {
+function getConnectionType(): "slow" | "medium" | "fast" {
+  if (typeof navigator !== "undefined" && "connection" in navigator) {
     const conn = (navigator as any).connection;
-    if (conn?.saveData || conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g') {
-      return 'slow';
+    if (conn?.saveData || conn?.effectiveType === "2g" || conn?.effectiveType === "slow-2g") {
+      return "slow";
     }
-    if (conn?.effectiveType === '3g') {
-      return 'medium';
+    if (conn?.effectiveType === "3g") {
+      return "medium";
     }
   }
-  return 'fast';
+  return "fast";
 }
 
 interface CacheEntry {
@@ -57,18 +57,18 @@ class SmartCacheManager {
     const connectionType = getConnectionType();
     
     switch (connectionType) {
-      case 'slow':
-        this.config.maxSize = 100 * 1024 * 1024; // More cache for slow connections
-        this.config.defaultTTL = 30 * 60 * 1000; // Longer TTL
-        break;
-      case 'medium':
-        this.config.maxSize = 75 * 1024 * 1024;
-        this.config.defaultTTL = 15 * 60 * 1000;
-        break;
-      case 'fast':
-        this.config.maxSize = 50 * 1024 * 1024;
-        this.config.defaultTTL = 5 * 60 * 1000;
-        break;
+    case "slow":
+      this.config.maxSize = 100 * 1024 * 1024; // More cache for slow connections
+      this.config.defaultTTL = 30 * 60 * 1000; // Longer TTL
+      break;
+    case "medium":
+      this.config.maxSize = 75 * 1024 * 1024;
+      this.config.defaultTTL = 15 * 60 * 1000;
+      break;
+    case "fast":
+      this.config.maxSize = 50 * 1024 * 1024;
+      this.config.defaultTTL = 5 * 60 * 1000;
+      break;
     }
   }
 
@@ -172,7 +172,7 @@ class SmartCacheManager {
     totalSize: number;
     maxSize: number;
     hitRate: number;
-  } {
+    } {
     return {
       entries: this.cache.size,
       totalSize: this.totalSize,
@@ -281,7 +281,7 @@ class SmartCacheManager {
 export const smartCache = new SmartCacheManager();
 
 // React hook
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useSmartCache<T>(key: string, fetcher: () => Promise<T>, deps: any[] = []) {
   const [data, setData] = useState<T | null>(null);

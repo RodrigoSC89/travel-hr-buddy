@@ -11,7 +11,7 @@ export interface DPChecklistItem {
   isImperative: boolean;
   evidence: string;
   standards: string[];
-  applicableDPClass: ('DP1' | 'DP2' | 'DP3')[];
+  applicableDPClass: ("DP1" | "DP2" | "DP3")[];
 }
 
 export interface DPChecklistCategory {

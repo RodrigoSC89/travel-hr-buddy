@@ -3,14 +3,14 @@
  * Efficient compression for low-bandwidth sync
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 /**
  * LZ-String-like compression for JSON data
  * Optimized for text/JSON payloads
  */
 
-const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+const BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 const UINT6_TO_B64: string[] = [];
 const B64_TO_UINT6: Record<string, number> = {};
 
@@ -32,7 +32,7 @@ export interface CompressedPayload {
  * Compress a string using LZ-based compression
  */
 export function compressString(input: string): string {
-  if (!input || input.length === 0) return '';
+  if (!input || input.length === 0) return "";
   
   const dict: Map<string, number> = new Map();
   const result: number[] = [];
@@ -43,7 +43,7 @@ export function compressString(input: string): string {
     dict.set(String.fromCharCode(i), i);
   }
   
-  let current = '';
+  let current = "";
   
   for (const char of input) {
     const combined = current + char;
@@ -66,14 +66,14 @@ export function compressString(input: string): string {
     if (code < 64) return UINT6_TO_B64[code];
     if (code < 4096) return UINT6_TO_B64[code >> 6] + UINT6_TO_B64[code & 63];
     return UINT6_TO_B64[code >> 12] + UINT6_TO_B64[(code >> 6) & 63] + UINT6_TO_B64[code & 63];
-  }).join('');
+  }).join("");
 }
 
 /**
  * Decompress a string
  */
 export function decompressString(compressed: string): string {
-  if (!compressed || compressed.length === 0) return '';
+  if (!compressed || compressed.length === 0) return "";
   
   try {
     // Decode base64-like to codes
@@ -121,7 +121,7 @@ export function decompressString(compressed: string): string {
       } else if (code === dict.length) {
         entry = current + current[0];
       } else {
-        throw new Error('Invalid compressed data');
+        throw new Error("Invalid compressed data");
       }
       
       result += entry;
@@ -131,7 +131,7 @@ export function decompressString(compressed: string): string {
     
     return result;
   } catch (error) {
-    logger.error('[Compression] Decompression failed', { error });
+    logger.error("[Compression] Decompression failed", { error });
     return compressed; // Return original on failure
   }
 }
@@ -146,7 +146,7 @@ export function generateChecksum(data: string): string {
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
-  return Math.abs(hash).toString(16).padStart(8, '0');
+  return Math.abs(hash).toString(16).padStart(8, "0");
 }
 
 /**
@@ -190,10 +190,10 @@ export function compressPayload<T>(data: T): CompressedPayload {
     };
   }
   
-  logger.debug('[Compression] Payload compressed', {
+  logger.debug("[Compression] Payload compressed", {
     original: originalSize,
     compressed: compressedSize,
-    ratio: ((1 - compressedSize / originalSize) * 100).toFixed(1) + '%',
+    ratio: ((1 - compressedSize / originalSize) * 100).toFixed(1) + "%",
   });
   
   return {
@@ -215,13 +215,13 @@ export function decompressPayload<T>(payload: CompressedPayload): T | null {
     
     // Verify integrity
     if (!verifyChecksum(jsonString, payload.cs)) {
-      logger.error('[Compression] Checksum verification failed');
+      logger.error("[Compression] Checksum verification failed");
       return null;
     }
     
     return JSON.parse(jsonString) as T;
   } catch (error) {
-    logger.error('[Compression] Decompression failed', { error });
+    logger.error("[Compression] Decompression failed", { error });
     return null;
   }
 }
@@ -244,7 +244,7 @@ export function getCompressionStats(payload: CompressedPayload): {
     originalSize: payload.os,
     compressedSize: payload.ds,
     ratio,
-    savings: savings + '%',
+    savings: savings + "%",
   };
 }
 

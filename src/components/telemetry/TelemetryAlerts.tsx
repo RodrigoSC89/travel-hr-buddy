@@ -104,17 +104,17 @@ export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: Telem
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "destructive";
-      case "warning": return "default";
-      default: return "secondary";
+    case "critical": return "destructive";
+    case "warning": return "default";
+    default: return "secondary";
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case "critical": return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case "warning": return <Bell className="h-4 w-4 text-yellow-500" />;
-      default: return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "critical": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "warning": return <Bell className="h-4 w-4 text-yellow-500" />;
+    default: return <CheckCircle className="h-4 w-4 text-green-500" />;
     }
   };
 

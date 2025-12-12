@@ -3,8 +3,8 @@
  * User-friendly accessibility configuration
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import { 
   Accessibility, 
   Eye, 
@@ -14,10 +14,10 @@ import {
   MousePointer,
   Volume2,
   Check
-} from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { 
   Select,
   SelectContent,
@@ -25,8 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useA11y } from '@/lib/accessibility/a11y-manager';
-import { cn } from '@/lib/utils';
+import { useA11y } from "@/lib/accessibility/a11y-manager";
+import { cn } from "@/lib/utils";
 
 interface A11ySettingsProps {
   compact?: boolean;
@@ -37,50 +37,50 @@ export function A11ySettings({ compact = false }: A11ySettingsProps) {
 
   const settingsGroups = [
     {
-      title: 'Visão',
+      title: "Visão",
       icon: <Eye className="w-4 h-4" />,
       settings: [
         {
-          key: 'highContrast' as const,
-          label: 'Alto contraste',
-          description: 'Aumenta o contraste das cores',
+          key: "highContrast" as const,
+          label: "Alto contraste",
+          description: "Aumenta o contraste das cores",
         },
         {
-          key: 'largeText' as const,
-          label: 'Texto grande',
-          description: 'Aumenta o tamanho da fonte',
+          key: "largeText" as const,
+          label: "Texto grande",
+          description: "Aumenta o tamanho da fonte",
         },
         {
-          key: 'dyslexiaFont' as const,
-          label: 'Fonte para dislexia',
-          description: 'Usa fonte otimizada para dislexia',
+          key: "dyslexiaFont" as const,
+          label: "Fonte para dislexia",
+          description: "Usa fonte otimizada para dislexia",
         },
       ],
     },
     {
-      title: 'Movimento',
+      title: "Movimento",
       icon: <Zap className="w-4 h-4" />,
       settings: [
         {
-          key: 'reducedMotion' as const,
-          label: 'Reduzir movimento',
-          description: 'Minimiza animações e transições',
+          key: "reducedMotion" as const,
+          label: "Reduzir movimento",
+          description: "Minimiza animações e transições",
         },
       ],
     },
     {
-      title: 'Navegação',
+      title: "Navegação",
       icon: <MousePointer className="w-4 h-4" />,
       settings: [
         {
-          key: 'keyboardNavigation' as const,
-          label: 'Navegação por teclado',
-          description: 'Habilita atalhos de teclado',
+          key: "keyboardNavigation" as const,
+          label: "Navegação por teclado",
+          description: "Habilita atalhos de teclado",
         },
         {
-          key: 'focusIndicators' as const,
-          label: 'Indicadores de foco',
-          description: 'Mostra elementos focados',
+          key: "focusIndicators" as const,
+          label: "Indicadores de foco",
+          description: "Mostra elementos focados",
         },
       ],
     },
@@ -102,25 +102,25 @@ export function A11ySettings({ compact = false }: A11ySettingsProps) {
         <div className="grid grid-cols-2 gap-2">
           <QuickToggle
             active={settings.highContrast}
-            onClick={() => updateSetting('highContrast', !settings.highContrast)}
+            onClick={() => updateSetting("highContrast", !settings.highContrast)}
             icon={<Eye className="w-4 h-4" />}
             label="Contraste"
           />
           <QuickToggle
             active={settings.largeText}
-            onClick={() => updateSetting('largeText', !settings.largeText)}
+            onClick={() => updateSetting("largeText", !settings.largeText)}
             icon={<Type className="w-4 h-4" />}
             label="Texto grande"
           />
           <QuickToggle
             active={settings.reducedMotion}
-            onClick={() => updateSetting('reducedMotion', !settings.reducedMotion)}
+            onClick={() => updateSetting("reducedMotion", !settings.reducedMotion)}
             icon={<Zap className="w-4 h-4" />}
             label="Sem animação"
           />
           <QuickToggle
             active={settings.screenReaderMode}
-            onClick={() => updateSetting('screenReaderMode', !settings.screenReaderMode)}
+            onClick={() => updateSetting("screenReaderMode", !settings.screenReaderMode)}
             icon={<Volume2 className="w-4 h-4" />}
             label="Leitor de tela"
           />
@@ -180,8 +180,8 @@ export function A11ySettings({ compact = false }: A11ySettingsProps) {
         <div className="pl-6">
           <Select
             value={settings.textSpacing}
-            onValueChange={(value: 'normal' | 'wide' | 'wider') => 
-              updateSetting('textSpacing', value)
+            onValueChange={(value: "normal" | "wide" | "wider") => 
+              updateSetting("textSpacing", value)
             }
           >
             <SelectTrigger className="w-full">
@@ -206,7 +206,7 @@ export function A11ySettings({ compact = false }: A11ySettingsProps) {
         <div className="pl-6">
           <Select
             value={settings.colorBlindMode}
-            onValueChange={(value: any) => updateSetting('colorBlindMode', value)}
+            onValueChange={(value: any) => updateSetting("colorBlindMode", value)}
           >
             <SelectTrigger className="w-full">
               <SelectValue />

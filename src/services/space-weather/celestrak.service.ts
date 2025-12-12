@@ -25,9 +25,9 @@ import type {
   DOPMetrics,
   SkyplotPoint,
   SpaceWeatherAPIResponse,
-} from '@/types/space-weather.types';
+} from "@/types/space-weather.types";
 
-const CELESTRAK_BASE_URL = 'https://celestrak.org';
+const CELESTRAK_BASE_URL = "https://celestrak.org";
 
 // Cache para TLE (atualizar a cada 6 horas)
 const tleCache = new Map<CelesTrakGroup, {
@@ -154,7 +154,7 @@ function eciToAzElRange(
  * @param format - 'JSON' | 'XML' | 'CSV' | 'TLE'
  */
 export async function getGNSSElements(
-  group: CelesTrakGroup = 'GPS-OPS',
+  group: CelesTrakGroup = "GPS-OPS",
   useCache: boolean = true
 ): Promise<SpaceWeatherAPIResponse<CelesTrakGPElement[]>> {
   const now = Date.now();
@@ -168,7 +168,7 @@ export async function getGNSSElements(
         success: true,
         data: cached.data,
         timestamp: new Date().toISOString(),
-        source: 'celestrak',
+        source: "celestrak",
         cached: true,
         cache_expires_at: new Date(cached.expires_at).toISOString(),
       };
@@ -181,7 +181,7 @@ export async function getGNSSElements(
     
     const response = await fetch(url, {
       headers: {
-        'Accept': 'application/json',
+        "Accept": "application/json",
       },
     });
     
@@ -202,15 +202,15 @@ export async function getGNSSElements(
       success: true,
       data,
       timestamp: new Date().toISOString(),
-      source: 'celestrak',
+      source: "celestrak",
       cached: false,
     };
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
       timestamp: new Date().toISOString(),
-      source: 'celestrak',
+      source: "celestrak",
       cached: false,
     };
   }
@@ -226,10 +226,10 @@ export async function getAllGNSSConstellations(): Promise<{
   beidou: CelesTrakGPElement[];
 }> {
   const [gps, galileo, glonass, beidou] = await Promise.all([
-    getGNSSElements('GPS-OPS'),
-    getGNSSElements('GALILEO'),
-    getGNSSElements('GLONASS-OPS'),
-    getGNSSElements('BEIDOU'),
+    getGNSSElements("GPS-OPS"),
+    getGNSSElements("GALILEO"),
+    getGNSSElements("GLONASS-OPS"),
+    getGNSSElements("BEIDOU"),
   ]);
   
   return {
@@ -274,10 +274,10 @@ export function calculateVisibility(
     const aer = eciToAzElRange(state.position, lat, lon, alt, time);
     
     // Determine constellation from name
-    let constellation: 'GPS' | 'GALILEO' | 'GLONASS' | 'BEIDOU' = 'GPS';
-    if (element.OBJECT_NAME.includes('GALILEO')) constellation = 'GALILEO';
-    else if (element.OBJECT_NAME.includes('GLONASS')) constellation = 'GLONASS';
-    else if (element.OBJECT_NAME.includes('BEIDOU')) constellation = 'BEIDOU';
+    let constellation: "GPS" | "GALILEO" | "GLONASS" | "BEIDOU" = "GPS";
+    if (element.OBJECT_NAME.includes("GALILEO")) constellation = "GALILEO";
+    else if (element.OBJECT_NAME.includes("GLONASS")) constellation = "GLONASS";
+    else if (element.OBJECT_NAME.includes("BEIDOU")) constellation = "BEIDOU";
     
     visibility.push({
       satellite_id: element.NORAD_CAT_ID.toString(),
@@ -325,10 +325,10 @@ export function calculateDOP(
       gdop: 999,
       visible_satellites: visibleSats.length,
       constellations: {
-        gps: visibleSats.filter(s => s.constellation === 'GPS').length,
-        galileo: visibleSats.filter(s => s.constellation === 'GALILEO').length,
-        glonass: visibleSats.filter(s => s.constellation === 'GLONASS').length,
-        beidou: visibleSats.filter(s => s.constellation === 'BEIDOU').length,
+        gps: visibleSats.filter(s => s.constellation === "GPS").length,
+        galileo: visibleSats.filter(s => s.constellation === "GALILEO").length,
+        glonass: visibleSats.filter(s => s.constellation === "GLONASS").length,
+        beidou: visibleSats.filter(s => s.constellation === "BEIDOU").length,
       },
     };
   }
@@ -368,10 +368,10 @@ export function calculateDOP(
     gdop: parseFloat(gdop.toFixed(2)),
     visible_satellites: visibleSats.length,
     constellations: {
-      gps: visibleSats.filter(s => s.constellation === 'GPS').length,
-      galileo: visibleSats.filter(s => s.constellation === 'GALILEO').length,
-      glonass: visibleSats.filter(s => s.constellation === 'GLONASS').length,
-      beidou: visibleSats.filter(s => s.constellation === 'BEIDOU').length,
+      gps: visibleSats.filter(s => s.constellation === "GPS").length,
+      galileo: visibleSats.filter(s => s.constellation === "GALILEO").length,
+      glonass: visibleSats.filter(s => s.constellation === "GLONASS").length,
+      beidou: visibleSats.filter(s => s.constellation === "BEIDOU").length,
     },
   };
 }
@@ -406,7 +406,7 @@ export async function calculateDOPTimeline(
   startTime: Date,
   endTime: Date,
   intervalMinutes: number = 30,
-  constellations: CelesTrakGroup[] = ['GPS-OPS', 'GALILEO']
+  constellations: CelesTrakGroup[] = ["GPS-OPS", "GALILEO"]
 ): Promise<DOPMetrics[]> {
   // Fetch all constellation elements
   const elementsPromises = constellations.map(group => getGNSSElements(group));

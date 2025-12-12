@@ -23,9 +23,9 @@ import {
   ExternalLink
 } from "lucide-react";
 
-type EventType = 'incident' | 'undesired' | 'observation';
-type EventSeverity = 'high' | 'medium' | 'low';
-type EventStatus = 'open' | 'investigating' | 'closed' | 'submitted_imca';
+type EventType = "incident" | "undesired" | "observation";
+type EventSeverity = "high" | "medium" | "low";
+type EventStatus = "open" | "investigating" | "closed" | "submitted_imca";
 
 interface DPEvent {
   id: string;
@@ -37,7 +37,7 @@ interface DPEvent {
   dateOccurred: Date;
   location: string;
   vesselName: string;
-  dpClass: 'DP1' | 'DP2' | 'DP3';
+  dpClass: "DP1" | "DP2" | "DP3";
   systemsAffected: string[];
   rootCause?: string;
   correctiveAction?: string;
@@ -111,39 +111,39 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
   const [selectedEvent, setSelectedEvent] = useState<DPEvent | null>(null);
 
   const [newEvent, setNewEvent] = useState<Partial<DPEvent>>({
-    type: 'observation',
-    severity: 'low',
-    status: 'open',
+    type: "observation",
+    severity: "low",
+    status: "open",
     dpClass: selectedDPClass,
     systemsAffected: []
   });
 
-  const incidents = events.filter(e => e.type === 'incident');
-  const undesiredEvents = events.filter(e => e.type === 'undesired');
-  const observations = events.filter(e => e.type === 'observation');
+  const incidents = events.filter(e => e.type === "incident");
+  const undesiredEvents = events.filter(e => e.type === "undesired");
+  const observations = events.filter(e => e.type === "observation");
 
   const getEventIcon = (type: EventType) => {
     switch (type) {
-      case 'incident': return <AlertTriangle className="h-5 w-5 text-red-600" />;
-      case 'undesired': return <AlertCircle className="h-5 w-5 text-amber-600" />;
-      case 'observation': return <Eye className="h-5 w-5 text-blue-600" />;
+    case "incident": return <AlertTriangle className="h-5 w-5 text-red-600" />;
+    case "undesired": return <AlertCircle className="h-5 w-5 text-amber-600" />;
+    case "observation": return <Eye className="h-5 w-5 text-blue-600" />;
     }
   };
 
   const getSeverityBadge = (severity: EventSeverity) => {
     switch (severity) {
-      case 'high': return <Badge variant="destructive">Alta</Badge>;
-      case 'medium': return <Badge className="bg-amber-500">Média</Badge>;
-      case 'low': return <Badge variant="secondary">Baixa</Badge>;
+    case "high": return <Badge variant="destructive">Alta</Badge>;
+    case "medium": return <Badge className="bg-amber-500">Média</Badge>;
+    case "low": return <Badge variant="secondary">Baixa</Badge>;
     }
   };
 
   const getStatusBadge = (status: EventStatus) => {
     switch (status) {
-      case 'open': return <Badge variant="outline" className="border-amber-500 text-amber-600">Aberto</Badge>;
-      case 'investigating': return <Badge variant="outline" className="border-blue-500 text-blue-600">Investigando</Badge>;
-      case 'closed': return <Badge variant="outline" className="border-green-500 text-green-600">Fechado</Badge>;
-      case 'submitted_imca': return <Badge className="bg-purple-500">Enviado IMCA</Badge>;
+    case "open": return <Badge variant="outline" className="border-amber-500 text-amber-600">Aberto</Badge>;
+    case "investigating": return <Badge variant="outline" className="border-blue-500 text-blue-600">Investigando</Badge>;
+    case "closed": return <Badge variant="outline" className="border-green-500 text-green-600">Fechado</Badge>;
+    case "submitted_imca": return <Badge className="bg-purple-500">Enviado IMCA</Badge>;
     }
   };
 
@@ -154,15 +154,15 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
     }
 
     const event: DPEvent = {
-      id: `EVT-${String(events.length + 1).padStart(3, '0')}`,
-      type: newEvent.type || 'observation',
+      id: `EVT-${String(events.length + 1).padStart(3, "0")}`,
+      type: newEvent.type || "observation",
       title: newEvent.title!,
       description: newEvent.description!,
-      severity: newEvent.severity || 'low',
-      status: 'open',
+      severity: newEvent.severity || "low",
+      status: "open",
       dateOccurred: new Date(),
-      location: newEvent.location || '',
-      vesselName: newEvent.vesselName || '',
+      location: newEvent.location || "",
+      vesselName: newEvent.vesselName || "",
       dpClass: selectedDPClass,
       systemsAffected: newEvent.systemsAffected || [],
       imcaSubmitted: false,
@@ -170,7 +170,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
     };
 
     setEvents([event, ...events]);
-    setNewEvent({ type: 'observation', severity: 'low', status: 'open', dpClass: selectedDPClass, systemsAffected: [] });
+    setNewEvent({ type: "observation", severity: "low", status: "open", dpClass: selectedDPClass, systemsAffected: [] });
     setIsAddEventOpen(false);
 
     toast({ title: "Evento registrado", description: `${event.id} - ${event.title}` });
@@ -179,7 +179,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
   const handleSubmitToIMCA = (event: DPEvent) => {
     const updatedEvents = events.map(e => 
       e.id === event.id 
-        ? { ...e, imcaSubmitted: true, status: 'submitted_imca' as EventStatus, imcaReference: `IMCA-2024-BR-${Math.floor(Math.random() * 9000) + 1000}` }
+        ? { ...e, imcaSubmitted: true, status: "submitted_imca" as EventStatus, imcaReference: `IMCA-2024-BR-${Math.floor(Math.random() * 9000) + 1000}` }
         : e
     );
     setEvents(updatedEvents);
@@ -316,7 +316,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
               <div className="space-y-2">
                 <Label>Título *</Label>
                 <Input 
-                  value={newEvent.title || ''}
+                  value={newEvent.title || ""}
                   onChange={e => setNewEvent({ ...newEvent, title: e.target.value })}
                   placeholder="Resumo do evento..."
                 />
@@ -325,7 +325,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
               <div className="space-y-2">
                 <Label>Descrição Detalhada *</Label>
                 <Textarea 
-                  value={newEvent.description || ''}
+                  value={newEvent.description || ""}
                   onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
                   placeholder="O que aconteceu, quando, como, impacto..."
                   rows={4}
@@ -336,7 +336,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
                 <div className="space-y-2">
                   <Label>Embarcação</Label>
                   <Input 
-                    value={newEvent.vesselName || ''}
+                    value={newEvent.vesselName || ""}
                     onChange={e => setNewEvent({ ...newEvent, vesselName: e.target.value })}
                     placeholder="Nome da embarcação"
                   />
@@ -344,7 +344,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
                 <div className="space-y-2">
                   <Label>Localização</Label>
                   <Input 
-                    value={newEvent.location || ''}
+                    value={newEvent.location || ""}
                     onChange={e => setNewEvent({ ...newEvent, location: e.target.value })}
                     placeholder="Ex: Campos Basin"
                   />
@@ -370,9 +370,9 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
             <Card 
               key={event.id}
               className={`transition-colors ${
-                event.type === 'incident' ? 'border-red-500/30' :
-                event.type === 'undesired' ? 'border-amber-500/30' :
-                'border-blue-500/30'
+                event.type === "incident" ? "border-red-500/30" :
+                  event.type === "undesired" ? "border-amber-500/30" :
+                    "border-blue-500/30"
               }`}
             >
               <CardContent className="pt-4">
@@ -398,7 +398,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        {event.dateOccurred.toLocaleDateString('pt-BR')}
+                        {event.dateOccurred.toLocaleDateString("pt-BR")}
                       </span>
                       <span>{event.vesselName}</span>
                       <span>{event.location}</span>
@@ -425,7 +425,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
                     >
                       Detalhes
                     </Button>
-                    {!event.imcaSubmitted && event.type !== 'observation' && (
+                    {!event.imcaSubmitted && event.type !== "observation" && (
                       <Button 
                         variant="outline" 
                         size="sm"

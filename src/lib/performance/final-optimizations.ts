@@ -15,7 +15,7 @@ export function createLazyObserver(
       }
     });
   }, {
-    rootMargin: '100px',
+    rootMargin: "100px",
     threshold: 0.1,
     ...options
   });

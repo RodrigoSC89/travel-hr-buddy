@@ -177,21 +177,21 @@ export default function SmartChecklistsPage() {
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-      case "critical": return "bg-red-500 text-white";
-      case "high": return "bg-orange-500 text-white";
-      case "medium": return "bg-yellow-500 text-black";
-      case "low": return "bg-green-500 text-white";
-      default: return "bg-gray-500 text-white";
+    case "critical": return "bg-red-500 text-white";
+    case "high": return "bg-orange-500 text-white";
+    case "medium": return "bg-yellow-500 text-black";
+    case "low": return "bg-green-500 text-white";
+    default: return "bg-gray-500 text-white";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100";
-      case "active": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100";
-      case "draft": return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100";
-      case "archived": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100";
-      default: return "bg-gray-100 text-gray-800";
+    case "completed": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100";
+    case "active": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100";
+    case "draft": return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100";
+    case "archived": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100";
+    default: return "bg-gray-100 text-gray-800";
     }
   };
 

@@ -3,30 +3,30 @@
  * Dashboard principal com todas as abas funcionais
  */
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Settings, RefreshCw, Shield, FileText, GraduationCap, Brain, AlertTriangle } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Settings, RefreshCw, Shield, FileText, GraduationCap, Brain, AlertTriangle } from "lucide-react";
+import { toast } from "sonner";
 
-import { LTICounterBanner } from './LTICounterBanner';
-import { SafetyKPICards } from './SafetyKPICards';
-import { AIAlertsPanel } from './AIAlertsPanel';
-import { IncidentsList } from './IncidentsList';
-import { IncidentReportDialog } from './IncidentReportDialog';
-import { IncidentDetailsDialog } from './IncidentDetailsDialog';
-import { DDSPanel } from './DDSPanel';
-import { TrainingPanel } from './TrainingPanel';
-import { AIPredictivePanel } from './AIPredictivePanel';
-import { SettingsPanel } from './SettingsPanel';
-import { useSafetyData } from '../hooks/useSafetyData';
-import { useSafetyAI } from '../hooks/useSafetyAI';
-import type { SafetyIncident, SafetySettings, DDSRecord, SafetyTraining, CrewTrainingDashboard } from '../types';
+import { LTICounterBanner } from "./LTICounterBanner";
+import { SafetyKPICards } from "./SafetyKPICards";
+import { AIAlertsPanel } from "./AIAlertsPanel";
+import { IncidentsList } from "./IncidentsList";
+import { IncidentReportDialog } from "./IncidentReportDialog";
+import { IncidentDetailsDialog } from "./IncidentDetailsDialog";
+import { DDSPanel } from "./DDSPanel";
+import { TrainingPanel } from "./TrainingPanel";
+import { AIPredictivePanel } from "./AIPredictivePanel";
+import { SettingsPanel } from "./SettingsPanel";
+import { useSafetyData } from "../hooks/useSafetyData";
+import { useSafetyAI } from "../hooks/useSafetyAI";
+import type { SafetyIncident, SafetySettings, DDSRecord, SafetyTraining, CrewTrainingDashboard } from "../types";
 
 export const SafetyDashboardComplete: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('ytd');
-  const [selectedTab, setSelectedTab] = useState('incidents');
+  const [selectedPeriod, setSelectedPeriod] = useState("ytd");
+  const [selectedTab, setSelectedTab] = useState("incidents");
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState<SafetyIncident | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
@@ -56,25 +56,25 @@ export const SafetyDashboardComplete: React.FC = () => {
   // Mock data for DDS
   const [ddsRecords, setDdsRecords] = useState<DDSRecord[]>([
     {
-      id: '1',
+      id: "1",
       date: new Date().toISOString(),
-      topic: 'Uso correto de EPIs em operações de convés',
-      vessel_id: 'v1',
-      vessel_name: 'OSV Atlantic I',
-      conductor: 'João Silva',
+      topic: "Uso correto de EPIs em operações de convés",
+      vessel_id: "v1",
+      vessel_name: "OSV Atlantic I",
+      conductor: "João Silva",
       participants_count: 12,
       participants: [],
       duration_minutes: 15,
-      notes: 'Enfatizado uso de capacete e luvas',
+      notes: "Enfatizado uso de capacete e luvas",
       created_at: new Date().toISOString()
     },
     {
-      id: '2',
+      id: "2",
       date: new Date(Date.now() - 86400000).toISOString(),
-      topic: 'Procedimentos de emergência em caso de incêndio',
-      vessel_id: 'v2',
-      vessel_name: 'PSV Oceanic',
-      conductor: 'Maria Santos',
+      topic: "Procedimentos de emergência em caso de incêndio",
+      vessel_id: "v2",
+      vessel_name: "PSV Oceanic",
+      conductor: "Maria Santos",
       participants_count: 8,
       participants: [],
       duration_minutes: 20,
@@ -85,59 +85,59 @@ export const SafetyDashboardComplete: React.FC = () => {
   // Mock data for trainings
   const [trainings] = useState<SafetyTraining[]>([
     {
-      id: '1',
-      crew_member_id: 'c1',
-      crew_member_name: 'Carlos Oliveira',
-      training_type: 'Segurança',
-      course_name: 'HUET - Helicopter Underwater Escape Training',
-      status: 'expired',
+      id: "1",
+      crew_member_id: "c1",
+      crew_member_name: "Carlos Oliveira",
+      training_type: "Segurança",
+      course_name: "HUET - Helicopter Underwater Escape Training",
+      status: "expired",
       expiry_date: new Date(Date.now() - 30 * 86400000).toISOString(),
       ai_recommended: true,
-      priority: 'critical'
+      priority: "critical"
     },
     {
-      id: '2',
-      crew_member_id: 'c2',
-      crew_member_name: 'Ana Rodrigues',
-      training_type: 'Segurança',
-      course_name: 'BOSIET - Basic Offshore Safety Induction',
-      status: 'pending',
+      id: "2",
+      crew_member_id: "c2",
+      crew_member_name: "Ana Rodrigues",
+      training_type: "Segurança",
+      course_name: "BOSIET - Basic Offshore Safety Induction",
+      status: "pending",
       expiry_date: new Date(Date.now() + 15 * 86400000).toISOString(),
       ai_recommended: false,
-      priority: 'high'
+      priority: "high"
     },
     {
-      id: '3',
-      crew_member_id: 'c3',
-      crew_member_name: 'Pedro Costa',
-      training_type: 'Operacional',
-      course_name: 'Operação de Guindastes',
-      status: 'completed',
+      id: "3",
+      crew_member_id: "c3",
+      crew_member_name: "Pedro Costa",
+      training_type: "Operacional",
+      course_name: "Operação de Guindastes",
+      status: "completed",
       completion_date: new Date(Date.now() - 60 * 86400000).toISOString(),
       expiry_date: new Date(Date.now() + 305 * 86400000).toISOString(),
       score: 92,
       ai_recommended: false,
-      priority: 'low'
+      priority: "low"
     },
     {
-      id: '4',
-      crew_member_id: 'c1',
-      crew_member_name: 'Carlos Oliveira',
-      training_type: 'Segurança',
-      course_name: 'Combate a Incêndio Avançado',
-      status: 'in_progress',
+      id: "4",
+      crew_member_id: "c1",
+      crew_member_name: "Carlos Oliveira",
+      training_type: "Segurança",
+      course_name: "Combate a Incêndio Avançado",
+      status: "in_progress",
       ai_recommended: true,
-      priority: 'medium'
+      priority: "medium"
     }
   ]);
 
   // Mock crew dashboards
   const [crewDashboards] = useState<CrewTrainingDashboard[]>([
     {
-      crewMemberId: 'c1',
-      crewMemberName: 'Carlos Oliveira',
-      role: 'Marinheiro de Convés',
-      vessel: 'OSV Atlantic I',
+      crewMemberId: "c1",
+      crewMemberName: "Carlos Oliveira",
+      role: "Marinheiro de Convés",
+      vessel: "OSV Atlantic I",
       totalTrainings: 8,
       completedTrainings: 5,
       pendingTrainings: 2,
@@ -147,10 +147,10 @@ export const SafetyDashboardComplete: React.FC = () => {
       aiRecommendations: []
     },
     {
-      crewMemberId: 'c2',
-      crewMemberName: 'Ana Rodrigues',
-      role: 'Oficial de Náutica',
-      vessel: 'PSV Oceanic',
+      crewMemberId: "c2",
+      crewMemberName: "Ana Rodrigues",
+      role: "Oficial de Náutica",
+      vessel: "PSV Oceanic",
       totalTrainings: 10,
       completedTrainings: 9,
       pendingTrainings: 1,
@@ -160,10 +160,10 @@ export const SafetyDashboardComplete: React.FC = () => {
       aiRecommendations: []
     },
     {
-      crewMemberId: 'c3',
-      crewMemberName: 'Pedro Costa',
-      role: 'Chefe de Máquinas',
-      vessel: 'AHTS Navigator',
+      crewMemberId: "c3",
+      crewMemberName: "Pedro Costa",
+      role: "Chefe de Máquinas",
+      vessel: "AHTS Navigator",
       totalTrainings: 12,
       completedTrainings: 12,
       pendingTrainings: 0,
@@ -219,10 +219,10 @@ export const SafetyDashboardComplete: React.FC = () => {
     const newRecord: DDSRecord = {
       id: `dds-${Date.now()}`,
       date: record.date || new Date().toISOString(),
-      topic: record.topic || '',
-      vessel_id: '',
-      vessel_name: record.vessel_name || '',
-      conductor: record.conductor || '',
+      topic: record.topic || "",
+      vessel_id: "",
+      vessel_name: record.vessel_name || "",
+      conductor: record.conductor || "",
       participants_count: record.participants_count || 0,
       participants: record.participants || [],
       duration_minutes: record.duration_minutes || 15,
@@ -268,7 +268,7 @@ export const SafetyDashboardComplete: React.FC = () => {
           </Select>
 
           <Button variant="outline" size="icon" onClick={refresh} disabled={loading}>
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           </Button>
 
           <Button 
@@ -351,11 +351,11 @@ export const SafetyDashboardComplete: React.FC = () => {
           <AIPredictivePanel
             insights={predictiveInsights.map(i => ({
               id: i.id,
-              type: i.type as 'risk' | 'pattern' | 'recommendation' | 'prediction',
+              type: i.type as "risk" | "pattern" | "recommendation" | "prediction",
               title: i.title,
               description: i.description,
               confidence: 85,
-              impact: i.impact as 'low' | 'medium' | 'high' | 'critical',
+              impact: i.impact as "low" | "medium" | "high" | "critical",
               action: i.suggestedAction
             }))}
             onGenerateInsights={async () => { await generatePredictiveInsights(); }}

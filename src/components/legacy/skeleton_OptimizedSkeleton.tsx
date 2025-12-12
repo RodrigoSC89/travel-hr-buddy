@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 interface SkeletonProps {
   className?: string;
-  variant?: 'default' | 'text' | 'circular' | 'rectangular';
+  variant?: "default" | "text" | "circular" | "rectangular";
   width?: string | number;
   height?: string | number;
   lines?: number;
@@ -15,7 +15,7 @@ interface SkeletonProps {
 
 export function OptimizedSkeleton({
   className,
-  variant = 'default',
+  variant = "default",
   width,
   height,
   lines = 1,
@@ -30,8 +30,8 @@ export function OptimizedSkeleton({
   };
 
   const style: React.CSSProperties = {
-    width: typeof width === 'number' ? `${width}px` : width,
-    height: typeof height === 'number' ? `${height}px` : height,
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
   };
 
   if (lines > 1) {
@@ -43,7 +43,7 @@ export function OptimizedSkeleton({
             className={cn(baseStyles, variantStyles[variant], className)}
             style={{
               ...style,
-              width: i === lines - 1 ? '75%' : style.width, // Última linha menor
+              width: i === lines - 1 ? "75%" : style.width, // Última linha menor
             }}
           />
         ))}

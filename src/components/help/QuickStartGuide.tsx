@@ -3,19 +3,19 @@
  * Onboarding guide for new users
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Rocket,
   CheckCircle2,
@@ -34,8 +34,8 @@ import {
   Wifi,
   WifiOff,
   Smartphone,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Step {
   id: string;
@@ -55,83 +55,83 @@ interface Task {
 
 const ONBOARDING_STEPS: Step[] = [
   {
-    id: 'welcome',
-    title: 'Bem-vindo ao Nautilus One',
-    description: 'Sistema completo para gestão marítima e RH',
+    id: "welcome",
+    title: "Bem-vindo ao Nautilus One",
+    description: "Sistema completo para gestão marítima e RH",
     icon: Rocket,
     tasks: [
-      { id: 'profile', label: 'Completar seu perfil', path: '/profile' },
-      { id: 'theme', label: 'Escolher tema claro/escuro', action: 'toggle-theme' },
-      { id: 'notifications', label: 'Configurar notificações', path: '/settings' },
+      { id: "profile", label: "Completar seu perfil", path: "/profile" },
+      { id: "theme", label: "Escolher tema claro/escuro", action: "toggle-theme" },
+      { id: "notifications", label: "Configurar notificações", path: "/settings" },
     ],
     tips: [
-      'Use Ctrl+K para busca rápida em qualquer tela',
-      'O sistema funciona offline - seus dados são sincronizados automaticamente',
+      "Use Ctrl+K para busca rápida em qualquer tela",
+      "O sistema funciona offline - seus dados são sincronizados automaticamente",
     ],
   },
   {
-    id: 'maritime',
-    title: 'Módulo Marítimo',
-    description: 'Gerencie embarcações, tripulação e operações',
+    id: "maritime",
+    title: "Módulo Marítimo",
+    description: "Gerencie embarcações, tripulação e operações",
     icon: Ship,
     tasks: [
-      { id: 'vessel', label: 'Cadastrar primeira embarcação', path: '/fleet' },
-      { id: 'crew', label: 'Adicionar tripulantes', path: '/crew' },
-      { id: 'schedule', label: 'Criar escala de bordo', path: '/calendar' },
+      { id: "vessel", label: "Cadastrar primeira embarcação", path: "/fleet" },
+      { id: "crew", label: "Adicionar tripulantes", path: "/crew" },
+      { id: "schedule", label: "Criar escala de bordo", path: "/calendar" },
     ],
     tips: [
-      'Certificados com vencimento próximo aparecem em vermelho',
-      'Arraste e solte para reorganizar escalas',
+      "Certificados com vencimento próximo aparecem em vermelho",
+      "Arraste e solte para reorganizar escalas",
     ],
   },
   {
-    id: 'hr',
-    title: 'Recursos Humanos',
-    description: 'Gestão completa de colaboradores',
+    id: "hr",
+    title: "Recursos Humanos",
+    description: "Gestão completa de colaboradores",
     icon: Users,
     tasks: [
-      { id: 'employee', label: 'Cadastrar colaborador', path: '/employees' },
-      { id: 'documents', label: 'Upload de documentos', path: '/documents' },
-      { id: 'vacation', label: 'Configurar férias', path: '/vacations' },
+      { id: "employee", label: "Cadastrar colaborador", path: "/employees" },
+      { id: "documents", label: "Upload de documentos", path: "/documents" },
+      { id: "vacation", label: "Configurar férias", path: "/vacations" },
     ],
     tips: [
-      'Documentos são verificados automaticamente por IA',
-      'Alertas de vencimento são enviados com 30 dias de antecedência',
+      "Documentos são verificados automaticamente por IA",
+      "Alertas de vencimento são enviados com 30 dias de antecedência",
     ],
   },
   {
-    id: 'operations',
-    title: 'Operações Diárias',
-    description: 'Reservas, viagens e planejamento',
+    id: "operations",
+    title: "Operações Diárias",
+    description: "Reservas, viagens e planejamento",
     icon: Calendar,
     tasks: [
-      { id: 'reservation', label: 'Criar reserva', path: '/reservations' },
-      { id: 'travel', label: 'Planejar viagem', path: '/travel' },
-      { id: 'alerts', label: 'Configurar alertas de preço', path: '/price-alerts' },
+      { id: "reservation", label: "Criar reserva", path: "/reservations" },
+      { id: "travel", label: "Planejar viagem", path: "/travel" },
+      { id: "alerts", label: "Configurar alertas de preço", path: "/price-alerts" },
     ],
     tips: [
-      'Alertas de preço notificam automaticamente quando há oportunidades',
-      'Use filtros para encontrar melhores opções de viagem',
+      "Alertas de preço notificam automaticamente quando há oportunidades",
+      "Use filtros para encontrar melhores opções de viagem",
     ],
   },
   {
-    id: 'advanced',
-    title: 'Recursos Avançados',
-    description: 'IA, relatórios e automações',
+    id: "advanced",
+    title: "Recursos Avançados",
+    description: "IA, relatórios e automações",
     icon: Settings,
     tasks: [
-      { id: 'ai', label: 'Testar assistente IA', action: 'open-ai' },
-      { id: 'reports', label: 'Gerar primeiro relatório', path: '/reports' },
-      { id: 'automation', label: 'Criar automação', path: '/automations' },
+      { id: "ai", label: "Testar assistente IA", action: "open-ai" },
+      { id: "reports", label: "Gerar primeiro relatório", path: "/reports" },
+      { id: "automation", label: "Criar automação", path: "/automations" },
     ],
     tips: [
-      'A IA aprende com seu uso e melhora sugestões ao longo do tempo',
-      'Relatórios podem ser agendados para envio automático',
+      "A IA aprende com seu uso e melhora sugestões ao longo do tempo",
+      "Relatórios podem ser agendados para envio automático",
     ],
   },
 ];
 
-const STORAGE_KEY = 'nautilus_onboarding_progress';
+const STORAGE_KEY = "nautilus_onboarding_progress";
 
 export function QuickStartGuide() {
   const [isOpen, setIsOpen] = useState(false);
@@ -377,7 +377,7 @@ export function QuickStartGuide() {
                       }
                     }}
                   >
-                    {currentStep === ONBOARDING_STEPS.length - 1 ? 'Concluir' : 'Próximo'}
+                    {currentStep === ONBOARDING_STEPS.length - 1 ? "Concluir" : "Próximo"}
                     <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
@@ -396,11 +396,11 @@ export function QuickStartGuide() {
 export function FeatureHighlight({
   feature,
   children,
-  position = 'bottom',
+  position = "bottom",
 }: {
-  feature: 'offline' | 'ai' | 'notifications' | 'security';
+  feature: "offline" | "ai" | "notifications" | "security";
   children: React.ReactNode;
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
 }) {
   const [shown, setShown] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -416,7 +416,7 @@ export function FeatureHighlight({
   }, [feature]);
 
   const dismiss = () => {
-    localStorage.setItem(`feature_highlight_${feature}`, 'true');
+    localStorage.setItem(`feature_highlight_${feature}`, "true");
     setDismissed(true);
     setShown(false);
   };
@@ -424,23 +424,23 @@ export function FeatureHighlight({
   const features = {
     offline: {
       icon: WifiOff,
-      title: 'Modo Offline',
-      description: 'O sistema funciona sem internet. Seus dados são sincronizados automaticamente.',
+      title: "Modo Offline",
+      description: "O sistema funciona sem internet. Seus dados são sincronizados automaticamente.",
     },
     ai: {
       icon: Lightbulb,
-      title: 'Assistente IA',
-      description: 'Pergunte qualquer coisa! A IA entende contexto e ajuda em tarefas.',
+      title: "Assistente IA",
+      description: "Pergunte qualquer coisa! A IA entende contexto e ajuda em tarefas.",
     },
     notifications: {
       icon: Bell,
-      title: 'Notificações Inteligentes',
-      description: 'Receba alertas de certificados, deadlines e oportunidades.',
+      title: "Notificações Inteligentes",
+      description: "Receba alertas de certificados, deadlines e oportunidades.",
     },
     security: {
       icon: Shield,
-      title: 'Segurança Avançada',
-      description: 'Seus dados são criptografados e protegidos com RLS.',
+      title: "Segurança Avançada",
+      description: "Seus dados são criptografados e protegidos com RLS.",
     },
   };
 
@@ -456,10 +456,10 @@ export function FeatureHighlight({
         animate={{ opacity: 1, scale: 1 }}
         className={cn(
           "absolute z-50 w-64 p-3 bg-popover border rounded-lg shadow-lg",
-          position === 'bottom' && "top-full left-1/2 -translate-x-1/2 mt-2",
-          position === 'top' && "bottom-full left-1/2 -translate-x-1/2 mb-2",
-          position === 'left' && "right-full top-1/2 -translate-y-1/2 mr-2",
-          position === 'right' && "left-full top-1/2 -translate-y-1/2 ml-2"
+          position === "bottom" && "top-full left-1/2 -translate-x-1/2 mt-2",
+          position === "top" && "bottom-full left-1/2 -translate-x-1/2 mb-2",
+          position === "left" && "right-full top-1/2 -translate-y-1/2 mr-2",
+          position === "right" && "left-full top-1/2 -translate-y-1/2 ml-2"
         )}
       >
         <div className="flex items-start gap-2">

@@ -60,10 +60,10 @@ export interface SemanticSearchOptions {
  */
 export async function findSimilarJobsById(jobId: string): Promise<JobComparisonResponse> {
   // Use edge function invoke instead of protected properties
-  const { data, error } = await supabase.functions.invoke('mmi-jobs-similar', {
-    method: 'GET',
+  const { data, error } = await supabase.functions.invoke("mmi-jobs-similar", {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
 

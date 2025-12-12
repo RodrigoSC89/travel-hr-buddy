@@ -3,24 +3,24 @@
  * Funcionalidade 5 & 13: Assistente para auditorias e fiscalizações
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   FileSearch, Download, CheckCircle, AlertTriangle, Clock,
   Shield, FileText, Calendar, Building, Ship, Users,
   Brain, Sparkles, Loader2, ChevronRight, FileCheck
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface AuditPackage {
   id: string;
   name: string;
-  type: 'ANTAQ' | 'DPC' | 'IMO' | 'ISM' | 'ISPS' | 'MLC' | 'ESG' | 'ISO';
-  status: 'ready' | 'generating' | 'pending' | 'incomplete';
+  type: "ANTAQ" | "DPC" | "IMO" | "ISM" | "ISPS" | "MLC" | "ESG" | "ISO";
+  status: "ready" | "generating" | "pending" | "incomplete";
   completeness: number;
   documents: number;
   lastGenerated?: Date;
@@ -31,85 +31,85 @@ interface DocumentItem {
   id: string;
   name: string;
   category: string;
-  status: 'valid' | 'expiring' | 'expired' | 'missing';
+  status: "valid" | "expiring" | "expired" | "missing";
   expiryDate?: Date;
   vessel?: string;
 }
 
 const MOCK_PACKAGES: AuditPackage[] = [
   {
-    id: '1',
-    name: 'Dossiê ANTAQ 2024',
-    type: 'ANTAQ',
-    status: 'ready',
+    id: "1",
+    name: "Dossiê ANTAQ 2024",
+    type: "ANTAQ",
+    status: "ready",
     completeness: 100,
     documents: 45,
     lastGenerated: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     missingItems: []
   },
   {
-    id: '2',
-    name: 'Auditoria DPC',
-    type: 'DPC',
-    status: 'ready',
+    id: "2",
+    name: "Auditoria DPC",
+    type: "DPC",
+    status: "ready",
     completeness: 95,
     documents: 38,
     lastGenerated: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    missingItems: ['Certificado de arqueação atualizado']
+    missingItems: ["Certificado de arqueação atualizado"]
   },
   {
-    id: '3',
-    name: 'ISM Code Compliance',
-    type: 'ISM',
-    status: 'pending',
+    id: "3",
+    name: "ISM Code Compliance",
+    type: "ISM",
+    status: "pending",
     completeness: 78,
     documents: 52,
     missingItems: [
-      'Relatório de não conformidades Q4',
-      'Registros de drill de segurança',
-      'Atas de reunião COGESMS'
+      "Relatório de não conformidades Q4",
+      "Registros de drill de segurança",
+      "Atas de reunião COGESMS"
     ]
   },
   {
-    id: '4',
-    name: 'Relatório ESG',
-    type: 'ESG',
-    status: 'generating',
+    id: "4",
+    name: "Relatório ESG",
+    type: "ESG",
+    status: "generating",
     completeness: 60,
     documents: 28,
     missingItems: [
-      'Inventário de emissões CO2',
-      'Relatório de tratamento de resíduos'
+      "Inventário de emissões CO2",
+      "Relatório de tratamento de resíduos"
     ]
   },
   {
-    id: '5',
-    name: 'MLC 2006 Compliance',
-    type: 'MLC',
-    status: 'incomplete',
+    id: "5",
+    name: "MLC 2006 Compliance",
+    type: "MLC",
+    status: "incomplete",
     completeness: 45,
     documents: 35,
     missingItems: [
-      'Contratos de trabalho marítimo',
-      'Registros de horas de descanso',
-      'Declaração de conformidade trabalhista',
-      'Certificados STCW tripulação'
+      "Contratos de trabalho marítimo",
+      "Registros de horas de descanso",
+      "Declaração de conformidade trabalhista",
+      "Certificados STCW tripulação"
     ]
   }
 ];
 
 const MOCK_DOCUMENTS: DocumentItem[] = [
-  { id: '1', name: 'Certificado de Segurança', category: 'Segurança', status: 'valid', expiryDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000), vessel: 'Navio Atlas' },
-  { id: '2', name: 'Certificado STCW - Cap. Silva', category: 'Tripulação', status: 'expiring', expiryDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000) },
-  { id: '3', name: 'IOPP Certificate', category: 'Ambiental', status: 'valid', expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), vessel: 'Navio Vega' },
-  { id: '4', name: 'Certificado de Classe', category: 'Classificação', status: 'expired', expiryDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), vessel: 'Navio Sirius' },
-  { id: '5', name: 'Declaração MLC', category: 'Trabalhista', status: 'missing' }
+  { id: "1", name: "Certificado de Segurança", category: "Segurança", status: "valid", expiryDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000), vessel: "Navio Atlas" },
+  { id: "2", name: "Certificado STCW - Cap. Silva", category: "Tripulação", status: "expiring", expiryDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000) },
+  { id: "3", name: "IOPP Certificate", category: "Ambiental", status: "valid", expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), vessel: "Navio Vega" },
+  { id: "4", name: "Certificado de Classe", category: "Classificação", status: "expired", expiryDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), vessel: "Navio Sirius" },
+  { id: "5", name: "Declaração MLC", category: "Trabalhista", status: "missing" }
 ];
 
 export function AuditAssistant() {
   const [selectedPackage, setSelectedPackage] = useState<AuditPackage | null>(null);
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleGenerate = (pkg: AuditPackage) => {
     setIsGenerating(pkg.id);
@@ -120,46 +120,46 @@ export function AuditAssistant() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      ready: 'bg-green-500/20 text-green-400 border-green-500/30',
-      generating: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      incomplete: 'bg-red-500/20 text-red-400 border-red-500/30'
+      ready: "bg-green-500/20 text-green-400 border-green-500/30",
+      generating: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      incomplete: "bg-red-500/20 text-red-400 border-red-500/30"
     };
-    return colors[status as keyof typeof colors] || 'bg-muted';
+    return colors[status as keyof typeof colors] || "bg-muted";
   };
 
   const getStatusLabel = (status: string) => {
     const labels = {
-      ready: 'Pronto',
-      generating: 'Gerando...',
-      pending: 'Pendente',
-      incomplete: 'Incompleto'
+      ready: "Pronto",
+      generating: "Gerando...",
+      pending: "Pendente",
+      incomplete: "Incompleto"
     };
     return labels[status as keyof typeof labels] || status;
   };
 
   const getDocStatusColor = (status: string) => {
     const colors = {
-      valid: 'bg-green-500/20 text-green-400',
-      expiring: 'bg-amber-500/20 text-amber-400',
-      expired: 'bg-red-500/20 text-red-400',
-      missing: 'bg-purple-500/20 text-purple-400'
+      valid: "bg-green-500/20 text-green-400",
+      expiring: "bg-amber-500/20 text-amber-400",
+      expired: "bg-red-500/20 text-red-400",
+      missing: "bg-purple-500/20 text-purple-400"
     };
-    return colors[status as keyof typeof colors] || 'bg-muted';
+    return colors[status as keyof typeof colors] || "bg-muted";
   };
 
   const getTypeColor = (type: string) => {
     const colors: Record<string, string> = {
-      ANTAQ: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      DPC: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-      IMO: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-      ISM: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      ISPS: 'bg-red-500/20 text-red-400 border-red-500/30',
-      MLC: 'bg-green-500/20 text-green-400 border-green-500/30',
-      ESG: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-      ISO: 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30'
+      ANTAQ: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      DPC: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
+      IMO: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+      ISM: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      ISPS: "bg-red-500/20 text-red-400 border-red-500/30",
+      MLC: "bg-green-500/20 text-green-400 border-green-500/30",
+      ESG: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+      ISO: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30"
     };
-    return colors[type] || 'bg-muted';
+    return colors[type] || "bg-muted";
   };
 
   return (
@@ -215,7 +215,7 @@ export function AuditAssistant() {
                 >
                   <Card 
                     className={`cursor-pointer transition-all hover:border-primary/50 ${
-                      selectedPackage?.id === pkg.id ? 'border-primary ring-2 ring-primary/20' : ''
+                      selectedPackage?.id === pkg.id ? "border-primary ring-2 ring-primary/20" : ""
                     }`}
                     onClick={() => setSelectedPackage(pkg)}
                   >
@@ -271,12 +271,12 @@ export function AuditAssistant() {
                           {pkg.lastGenerated && (
                             <span className="flex items-center gap-1">
                               <Clock className="h-3 w-3" />
-                              Gerado: {pkg.lastGenerated.toLocaleDateString('pt-BR')}
+                              Gerado: {pkg.lastGenerated.toLocaleDateString("pt-BR")}
                             </span>
                           )}
                         </div>
                         <div className="flex gap-2">
-                          {pkg.status === 'ready' && (
+                          {pkg.status === "ready" && (
                             <Button size="sm" variant="outline">
                               <Download className="h-3 w-3 mr-1" />
                               Baixar
@@ -292,7 +292,7 @@ export function AuditAssistant() {
                             ) : (
                               <>
                                 <Brain className="h-3 w-3 mr-1" />
-                                {pkg.status === 'ready' ? 'Atualizar' : 'Gerar'}
+                                {pkg.status === "ready" ? "Atualizar" : "Gerar"}
                               </>
                             )}
                           </Button>
@@ -324,9 +324,9 @@ export function AuditAssistant() {
                   <div className="flex items-start justify-between mb-1">
                     <span className="font-medium text-sm">{doc.name}</span>
                     <Badge className={`text-xs ${getDocStatusColor(doc.status)}`}>
-                      {doc.status === 'valid' && <CheckCircle className="h-3 w-3 mr-1" />}
-                      {doc.status === 'expiring' && <Clock className="h-3 w-3 mr-1" />}
-                      {doc.status === 'expired' && <AlertTriangle className="h-3 w-3 mr-1" />}
+                      {doc.status === "valid" && <CheckCircle className="h-3 w-3 mr-1" />}
+                      {doc.status === "expiring" && <Clock className="h-3 w-3 mr-1" />}
+                      {doc.status === "expired" && <AlertTriangle className="h-3 w-3 mr-1" />}
                       {doc.status}
                     </Badge>
                   </div>
@@ -335,7 +335,7 @@ export function AuditAssistant() {
                     {doc.vessel && <span> • {doc.vessel}</span>}
                     {doc.expiryDate && (
                       <span className="block mt-1">
-                        Vence: {doc.expiryDate.toLocaleDateString('pt-BR')}
+                        Vence: {doc.expiryDate.toLocaleDateString("pt-BR")}
                       </span>
                     )}
                   </div>

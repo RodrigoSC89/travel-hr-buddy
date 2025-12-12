@@ -24,13 +24,13 @@ export interface StarFixInspection {
   inspection_date: string;
   port_name: string;
   port_country: string;
-  inspection_type: 'PSC' | 'FSI' | 'ISM' | 'ISPS';
+  inspection_type: "PSC" | "FSI" | "ISM" | "ISPS";
   authority: string;
   deficiencies_count: number;
   detentions: number;
-  inspection_result: 'CLEAR' | 'DEFICIENCY' | 'DETENTION';
+  inspection_result: "CLEAR" | "DEFICIENCY" | "DETENTION";
   deficiencies: StarFixDeficiency[];
-  starfix_sync_status: 'pending' | 'synced' | 'failed';
+  starfix_sync_status: "pending" | "synced" | "failed";
   last_sync_date?: string;
 }
 
@@ -38,7 +38,7 @@ export interface StarFixDeficiency {
   deficiency_code: string;
   deficiency_description: string;
   convention: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   action_taken: string;
   rectification_deadline?: string;
   rectified: boolean;
@@ -56,7 +56,7 @@ export interface StarFixPerformanceMetrics {
   nil_deficiency_rate: number;
   detention_rate: number;
   performance_score: number;
-  risk_level: 'low' | 'medium' | 'high' | 'critical';
+  risk_level: "low" | "medium" | "high" | "critical";
   flag_state_average_score: number;
   comparison_to_fleet: number;
 }
@@ -72,7 +72,7 @@ export interface StarFixAPIConfig {
  */
 function getStarFixConfig(): StarFixAPIConfig {
   const apiKey = (import.meta as any).env.VITE_STARFIX_API_KEY as string;
-  const apiUrl = (import.meta as any).env.VITE_STARFIX_API_URL as string || 'https://api.starfix.maritime.org/v1';
+  const apiUrl = (import.meta as any).env.VITE_STARFIX_API_URL as string || "https://api.starfix.maritime.org/v1";
   const organizationId = (import.meta as any).env.VITE_STARFIX_ORG_ID as string;
 
   if (!apiKey || !organizationId) {
@@ -90,11 +90,11 @@ export async function registerVesselInStarFix(vessel: StarFixVessel): Promise<{ 
     const config = getStarFixConfig();
 
     const response = await fetch(`${config.apiUrl}/vessels/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
-        'X-Organization-ID': config.organizationId,
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
+        "X-Organization-ID": config.organizationId,
       },
       body: JSON.stringify({
         imo_number: vessel.imo_number,
@@ -116,7 +116,7 @@ export async function registerVesselInStarFix(vessel: StarFixVessel): Promise<{ 
 
     // Store StarFix registration in local database
     await supabase
-      .from('starfix_vessels')
+      .from("starfix_vessels")
       .upsert({
         imo_number: vessel.imo_number,
         vessel_name: vessel.vessel_name,
@@ -125,10 +125,10 @@ export async function registerVesselInStarFix(vessel: StarFixVessel): Promise<{ 
 
     return { success: true, starfix_id: data.starfix_id };
   } catch (error) {
-    logger.error('Error registering vessel in StarFix', error as Error, { vessel: vessel.imo_number });
+    logger.error("Error registering vessel in StarFix", error as Error, { vessel: vessel.imo_number });
     return { 
       success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
+      error: error instanceof Error ? error.message : "Unknown error" 
     };
   }
 }
@@ -141,10 +141,10 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
     const config = getStarFixConfig();
 
     const response = await fetch(`${config.apiUrl}/inspections/vessel/${imoNumber}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'X-Organization-ID': config.organizationId,
+        "Authorization": `Bearer ${config.apiKey}`,
+        "X-Organization-ID": config.organizationId,
       },
     });
 
@@ -165,26 +165,26 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
       authority: inspection.authority,
       deficiencies_count: inspection.deficiencies?.length || 0,
       detentions: inspection.detention ? 1 : 0,
-      inspection_result: inspection.detention ? 'DETENTION' : inspection.deficiencies?.length > 0 ? 'DEFICIENCY' : 'CLEAR',
+      inspection_result: inspection.detention ? "DETENTION" : inspection.deficiencies?.length > 0 ? "DEFICIENCY" : "CLEAR",
       deficiencies: inspection.deficiencies || [],
-      starfix_sync_status: 'synced',
+      starfix_sync_status: "synced",
       last_sync_date: new Date().toISOString(),
     }));
 
     // Store in local database
     if (inspections.length > 0) {
       const { error } = await supabase
-        .from('starfix_inspections')
+        .from("starfix_inspections")
         .upsert(inspections as any);
 
       if (error) {
-        logger.error('Error storing StarFix inspections', error, { imoNumber, count: inspections.length });
+        logger.error("Error storing StarFix inspections", error, { imoNumber, count: inspections.length });
       }
     }
 
     return inspections;
   } catch (error) {
-    logger.error('Error fetching StarFix inspections', error as Error, { imoNumber });
+    logger.error("Error fetching StarFix inspections", error as Error, { imoNumber });
     throw error;
   }
 }
@@ -200,10 +200,10 @@ export async function getStarFixPerformanceMetrics(
     const config = getStarFixConfig();
 
     const response = await fetch(`${config.apiUrl}/performance/vessel/${imoNumber}?period_months=${periodMonths}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'X-Organization-ID': config.organizationId,
+        "Authorization": `Bearer ${config.apiKey}`,
+        "X-Organization-ID": config.organizationId,
       },
     });
 
@@ -231,12 +231,12 @@ export async function getStarFixPerformanceMetrics(
 
     // Store metrics
     await supabase
-      .from('starfix_performance_metrics')
+      .from("starfix_performance_metrics")
       .upsert(metrics as any);
 
     return metrics;
   } catch (error) {
-    logger.error('Error fetching StarFix performance metrics', error as Error, { imoNumber, periodMonths });
+    logger.error("Error fetching StarFix performance metrics", error as Error, { imoNumber, periodMonths });
     throw error;
   }
 }
@@ -244,11 +244,11 @@ export async function getStarFixPerformanceMetrics(
 /**
  * Calculate risk level based on performance score
  */
-function calculateRiskLevel(score: number): 'low' | 'medium' | 'high' | 'critical' {
-  if (score >= 85) return 'low';
-  if (score >= 70) return 'medium';
-  if (score >= 50) return 'high';
-  return 'critical';
+function calculateRiskLevel(score: number): "low" | "medium" | "high" | "critical" {
+  if (score >= 85) return "low";
+  if (score >= 70) return "medium";
+  if (score >= 50) return "high";
+  return "critical";
 }
 
 /**
@@ -259,11 +259,11 @@ export async function submitInspectionToStarFix(inspection: StarFixInspection): 
     const config = getStarFixConfig();
 
     const response = await fetch(`${config.apiUrl}/inspections/submit`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json',
-        'X-Organization-ID': config.organizationId,
+        "Authorization": `Bearer ${config.apiKey}`,
+        "Content-Type": "application/json",
+        "X-Organization-ID": config.organizationId,
       },
       body: JSON.stringify({
         imo_number: inspection.imo_number,
@@ -293,7 +293,7 @@ export async function submitInspectionToStarFix(inspection: StarFixInspection): 
 
     return { success: true };
   } catch (error) {
-    logger.error('Error submitting inspection to StarFix', error as Error, { inspectionId: inspection.id, imoNumber: inspection.imo_number });
+    logger.error("Error submitting inspection to StarFix", error as Error, { inspectionId: inspection.id, imoNumber: inspection.imo_number });
     
     // Update sync status to failed comment: Removed starfix_sync_status field (not in schema)
     // if (inspection.id) {
@@ -305,7 +305,7 @@ export async function submitInspectionToStarFix(inspection: StarFixInspection): 
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
@@ -316,12 +316,12 @@ export async function submitInspectionToStarFix(inspection: StarFixInspection): 
 export async function syncPendingInspections(): Promise<{ synced: number; failed: number }> {
   try {
     const { data: pendingInspections, error } = await supabase
-      .from('starfix_inspections')
-      .select('*')
-      .eq('starfix_sync_status', 'pending');
+      .from("starfix_inspections")
+      .select("*")
+      .eq("starfix_sync_status", "pending");
 
     if (error || !pendingInspections) {
-      throw error || new Error('No pending inspections found');
+      throw error || new Error("No pending inspections found");
     }
 
     let synced = 0;
@@ -338,7 +338,7 @@ export async function syncPendingInspections(): Promise<{ synced: number; failed
 
     return { synced, failed };
   } catch (error) {
-    logger.error('Error syncing pending inspections', error as Error);
+    logger.error("Error syncing pending inspections", error as Error);
     return { synced: 0, failed: 0 };
   }
 }
@@ -354,9 +354,9 @@ export async function getStarFixSyncStatus(vesselId: string): Promise<{
 }> {
   try {
     const { data, error } = await supabase
-      .from('starfix_inspections')
-      .select('inspection_id, created_at')
-      .eq('vessel_id', vesselId);
+      .from("starfix_inspections")
+      .select("inspection_id, created_at")
+      .eq("vessel_id", vesselId);
 
     if (error) throw error;
 
@@ -371,7 +371,7 @@ export async function getStarFixSyncStatus(vesselId: string): Promise<{
       failed_inspections: 0,
     };
   } catch (error) {
-    logger.error('Error getting StarFix sync status', error as Error, { vesselId });
+    logger.error("Error getting StarFix sync status", error as Error, { vesselId });
     return {
       last_sync: null,
       pending_inspections: 0,

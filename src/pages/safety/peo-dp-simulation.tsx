@@ -37,7 +37,7 @@ export default function PEODPSimulation() {
                 <div key={scenario.id} className="border rounded-lg p-4 hover:bg-accent/50 transition-colors">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-semibold">{scenario.name}</h3>
-                    <AlertCircle className={`h-5 w-5 ${scenario.severity === 'critical' ? 'text-red-600' : 'text-orange-600'}`} />
+                    <AlertCircle className={`h-5 w-5 ${scenario.severity === "critical" ? "text-red-600" : "text-orange-600"}`} />
                   </div>
                   <div className="text-sm text-muted-foreground mb-3">
                     Duração estimada: {scenario.duration}

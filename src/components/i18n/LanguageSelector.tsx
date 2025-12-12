@@ -3,33 +3,33 @@
  * Easy language switching for global users
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Globe, Check } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Globe, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { useTranslation, SupportedLanguage } from '@/lib/i18n/translation-manager';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useTranslation, SupportedLanguage } from "@/lib/i18n/translation-manager";
+import { cn } from "@/lib/utils";
 
 const languageFlags: Record<SupportedLanguage, string> = {
-  'pt-BR': '🇧🇷',
-  'en-US': '🇺🇸',
-  'es-ES': '🇪🇸',
-  'fr-FR': '🇫🇷',
-  'zh-CN': '🇨🇳',
+  "pt-BR": "🇧🇷",
+  "en-US": "🇺🇸",
+  "es-ES": "🇪🇸",
+  "fr-FR": "🇫🇷",
+  "zh-CN": "🇨🇳",
 };
 
 interface LanguageSelectorProps {
-  variant?: 'icon' | 'full';
+  variant?: "icon" | "full";
   className?: string;
 }
 
-export function LanguageSelector({ variant = 'icon', className }: LanguageSelectorProps) {
+export function LanguageSelector({ variant = "icon", className }: LanguageSelectorProps) {
   const { language, changeLanguage, languages } = useTranslation();
 
   const currentLang = languages.find(l => l.code === language);
@@ -39,15 +39,15 @@ export function LanguageSelector({ variant = 'icon', className }: LanguageSelect
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size={variant === 'icon' ? 'icon' : 'sm'}
+          size={variant === "icon" ? "icon" : "sm"}
           className={cn(
             "gap-2",
-            variant === 'full' && "min-w-[140px] justify-start",
+            variant === "full" && "min-w-[140px] justify-start",
             className
           )}
         >
           <Globe className="w-4 h-4" />
-          {variant === 'full' && (
+          {variant === "full" && (
             <>
               <span className="text-lg">{languageFlags[language]}</span>
               <span className="text-sm">{currentLang?.name}</span>

@@ -3,7 +3,7 @@
  * Utilities for testing offline functionality
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface OfflineTestResult {
   name: string;
@@ -43,26 +43,26 @@ class OfflineTester {
 
   private async testLocalStoragePersistence(): Promise<OfflineTestResult> {
     const start = performance.now();
-    const testData = { test: 'offline', timestamp: Date.now() };
+    const testData = { test: "offline", timestamp: Date.now() };
     
     try {
-      localStorage.setItem('__offline_test__', JSON.stringify(testData));
-      const retrieved = JSON.parse(localStorage.getItem('__offline_test__') || '{}');
-      localStorage.removeItem('__offline_test__');
+      localStorage.setItem("__offline_test__", JSON.stringify(testData));
+      const retrieved = JSON.parse(localStorage.getItem("__offline_test__") || "{}");
+      localStorage.removeItem("__offline_test__");
 
       const passed = retrieved.test === testData.test;
       
       return {
-        name: 'LocalStorage Persistence',
+        name: "LocalStorage Persistence",
         passed,
-        message: passed ? 'Dados persistidos corretamente' : 'Falha na persistência',
+        message: passed ? "Dados persistidos corretamente" : "Falha na persistência",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'LocalStorage Persistence',
+        name: "LocalStorage Persistence",
         passed: false,
-        message: `Erro: ${error instanceof Error ? error.message : 'Desconhecido'}`,
+        message: `Erro: ${error instanceof Error ? error.message : "Desconhecido"}`,
         duration: performance.now() - start,
       };
     }
@@ -72,29 +72,29 @@ class OfflineTester {
     const start = performance.now();
     
     try {
-      const dbName = '__offline_test_db__';
-      const storeName = 'testStore';
+      const dbName = "__offline_test_db__";
+      const storeName = "testStore";
       
       const db = await new Promise<IDBDatabase>((resolve, reject) => {
         const request = indexedDB.open(dbName, 1);
         request.onerror = () => reject(request.error);
         request.onsuccess = () => resolve(request.result);
         request.onupgradeneeded = () => {
-          request.result.createObjectStore(storeName, { keyPath: 'id' });
+          request.result.createObjectStore(storeName, { keyPath: "id" });
         };
       });
 
       // Write test
       await new Promise<void>((resolve, reject) => {
-        const tx = db.transaction(storeName, 'readwrite');
-        tx.objectStore(storeName).put({ id: 1, data: 'test' });
+        const tx = db.transaction(storeName, "readwrite");
+        tx.objectStore(storeName).put({ id: 1, data: "test" });
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
       });
 
       // Read test
       const result = await new Promise<any>((resolve, reject) => {
-        const tx = db.transaction(storeName, 'readonly');
+        const tx = db.transaction(storeName, "readonly");
         const request = tx.objectStore(storeName).get(1);
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
@@ -103,19 +103,19 @@ class OfflineTester {
       db.close();
       indexedDB.deleteDatabase(dbName);
 
-      const passed = result?.data === 'test';
+      const passed = result?.data === "test";
       
       return {
-        name: 'IndexedDB Operations',
+        name: "IndexedDB Operations",
         passed,
-        message: passed ? 'CRUD operations funcionando' : 'Falha nas operações',
+        message: passed ? "CRUD operations funcionando" : "Falha nas operações",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'IndexedDB Operations',
+        name: "IndexedDB Operations",
         passed: false,
-        message: `Erro: ${error instanceof Error ? error.message : 'Desconhecido'}`,
+        message: `Erro: ${error instanceof Error ? error.message : "Desconhecido"}`,
         duration: performance.now() - start,
       };
     }
@@ -125,18 +125,18 @@ class OfflineTester {
     const start = performance.now();
     
     try {
-      if (!('caches' in window)) {
+      if (!("caches" in window)) {
         return {
-          name: 'Cache API',
+          name: "Cache API",
           passed: false,
-          message: 'Cache API não disponível',
+          message: "Cache API não disponível",
           duration: performance.now() - start,
         };
       }
 
-      const cacheName = '__offline_test_cache__';
-      const testUrl = '/test-resource';
-      const testContent = 'cached content';
+      const cacheName = "__offline_test_cache__";
+      const testUrl = "/test-resource";
+      const testContent = "cached content";
 
       const cache = await caches.open(cacheName);
       await cache.put(testUrl, new Response(testContent));
@@ -149,16 +149,16 @@ class OfflineTester {
       const passed = content === testContent;
       
       return {
-        name: 'Cache API',
+        name: "Cache API",
         passed,
-        message: passed ? 'Cache funcionando corretamente' : 'Falha no cache',
+        message: passed ? "Cache funcionando corretamente" : "Falha no cache",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'Cache API',
+        name: "Cache API",
         passed: false,
-        message: `Erro: ${error instanceof Error ? error.message : 'Desconhecido'}`,
+        message: `Erro: ${error instanceof Error ? error.message : "Desconhecido"}`,
         duration: performance.now() - start,
       };
     }
@@ -170,14 +170,14 @@ class OfflineTester {
     try {
       const cacheNames = await caches.keys();
       const swCaches = cacheNames.filter(name => 
-        name.includes('nautilus') || name.includes('static') || name.includes('api')
+        name.includes("nautilus") || name.includes("static") || name.includes("api")
       );
 
       if (swCaches.length === 0) {
         return {
-          name: 'Service Worker Cache',
+          name: "Service Worker Cache",
           passed: false,
-          message: 'Nenhum cache do SW encontrado',
+          message: "Nenhum cache do SW encontrado",
           duration: performance.now() - start,
         };
       }
@@ -190,16 +190,16 @@ class OfflineTester {
       }
 
       return {
-        name: 'Service Worker Cache',
+        name: "Service Worker Cache",
         passed: totalItems > 0,
         message: `${swCaches.length} cache(s), ${totalItems} items em cache`,
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'Service Worker Cache',
+        name: "Service Worker Cache",
         passed: false,
-        message: `Erro: ${error instanceof Error ? error.message : 'Desconhecido'}`,
+        message: `Erro: ${error instanceof Error ? error.message : "Desconhecido"}`,
         duration: performance.now() - start,
       };
     }
@@ -215,7 +215,7 @@ class OfflineTester {
 
       for (const name of cacheNames) {
         const cache = await caches.open(name);
-        const response = await cache.match('/offline.html');
+        const response = await cache.match("/offline.html");
         if (response) {
           found = true;
           break;
@@ -223,16 +223,16 @@ class OfflineTester {
       }
 
       return {
-        name: 'Offline Page',
+        name: "Offline Page",
         passed: found,
-        message: found ? 'Página offline em cache' : 'Página offline não encontrada no cache',
+        message: found ? "Página offline em cache" : "Página offline não encontrada no cache",
         duration: performance.now() - start,
       };
     } catch (error) {
       return {
-        name: 'Offline Page',
+        name: "Offline Page",
         passed: false,
-        message: `Erro: ${error instanceof Error ? error.message : 'Desconhecido'}`,
+        message: `Erro: ${error instanceof Error ? error.message : "Desconhecido"}`,
         duration: performance.now() - start,
       };
     }
@@ -243,18 +243,18 @@ class OfflineTester {
    */
   simulateOffline(duration: number = 5000): Promise<void> {
     return new Promise((resolve) => {
-      logger.info('[OfflineTest] Simulating offline mode');
+      logger.info("[OfflineTest] Simulating offline mode");
       
       // Note: We can't actually disconnect, but we can test offline behaviors
       const originalOnline = navigator.onLine;
-      Object.defineProperty(navigator, 'onLine', { value: false, writable: true });
+      Object.defineProperty(navigator, "onLine", { value: false, writable: true });
       
-      window.dispatchEvent(new Event('offline'));
+      window.dispatchEvent(new Event("offline"));
 
       setTimeout(() => {
-        Object.defineProperty(navigator, 'onLine', { value: originalOnline, writable: true });
-        window.dispatchEvent(new Event('online'));
-        logger.info('[OfflineTest] Back online');
+        Object.defineProperty(navigator, "onLine", { value: originalOnline, writable: true });
+        window.dispatchEvent(new Event("online"));
+        logger.info("[OfflineTest] Back online");
         resolve();
       }, duration);
     });
@@ -264,7 +264,7 @@ class OfflineTester {
 export const offlineTester = new OfflineTester();
 
 // React hook
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useOfflineTester() {
   const [report, setReport] = useState<OfflineTestReport | null>(null);

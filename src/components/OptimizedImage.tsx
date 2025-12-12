@@ -3,14 +3,14 @@
  * Automatic lazy loading, responsive images, and network-aware quality
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { useNetworkAware } from '@/mobile/hooks/useNetworkAware';
+import React, { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useNetworkAware } from "@/mobile/hooks/useNetworkAware";
 import { 
   imageOptimizer, 
   generateSrcSet, 
   generateSizes 
-} from '@/lib/image-optimizer';
+} from "@/lib/image-optimizer";
 
 interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
@@ -19,7 +19,7 @@ interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> 
   responsive?: boolean;
   priority?: boolean;
   aspectRatio?: string;
-  objectFit?: 'cover' | 'contain' | 'fill' | 'none';
+  objectFit?: "cover" | "contain" | "fill" | "none";
   blurPlaceholder?: boolean;
   onLoadComplete?: () => void;
 }
@@ -27,11 +27,11 @@ interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
-  fallbackSrc = '/placeholder.svg',
+  fallbackSrc = "/placeholder.svg",
   responsive = true,
   priority = false,
   aspectRatio,
-  objectFit = 'cover',
+  objectFit = "cover",
   blurPlaceholder = true,
   className,
   onLoadComplete,
@@ -55,7 +55,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
           }
         });
       },
-      { rootMargin: '50px 0px', threshold: 0.1 }
+      { rootMargin: "50px 0px", threshold: 0.1 }
     );
 
     observer.observe(imgRef.current);
@@ -80,7 +80,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const quality = isSlowConnection ? 60 : 80;
   
   // Build optimized src with quality param if it's a dynamic URL
-  const optimizedSrc = src.includes('?') 
+  const optimizedSrc = src.includes("?") 
     ? `${src}&q=${quality}` 
     : `${src}?q=${quality}`;
 
@@ -89,7 +89,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   return (
     <div
       className={cn(
-        'relative overflow-hidden bg-muted',
+        "relative overflow-hidden bg-muted",
         aspectRatio && `aspect-[${aspectRatio}]`,
         className
       )}
@@ -108,19 +108,19 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         src={imageSrc}
         data-src={!priority ? optimizedSrc : undefined}
         alt={alt}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding={priority ? 'sync' : 'async'}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
         onLoad={handleLoad}
         onError={handleError}
         srcSet={responsive && isInView ? generateSrcSet(src) : undefined}
         sizes={responsive ? generateSizes() : undefined}
         className={cn(
-          'w-full h-full transition-opacity duration-300',
-          objectFit === 'cover' && 'object-cover',
-          objectFit === 'contain' && 'object-contain',
-          objectFit === 'fill' && 'object-fill',
-          objectFit === 'none' && 'object-none',
-          isLoaded ? 'opacity-100' : 'opacity-0'
+          "w-full h-full transition-opacity duration-300",
+          objectFit === "cover" && "object-cover",
+          objectFit === "contain" && "object-contain",
+          objectFit === "fill" && "object-fill",
+          objectFit === "none" && "object-none",
+          isLoaded ? "opacity-100" : "opacity-0"
         )}
         {...props}
       />

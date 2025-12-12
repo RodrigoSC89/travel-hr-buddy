@@ -156,26 +156,26 @@ const OperationsDashboard = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "normal": return "text-green-600";
-      case "warning": return "text-yellow-600";
-      case "critical": return "text-red-600";
-      default: return "text-muted-foreground";
+    case "normal": return "text-green-600";
+    case "warning": return "text-yellow-600";
+    case "critical": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const getOperationStatusBadge = (status: string) => {
     switch (status) {
-      case "active":
-      case "in_progress":
-        return <Badge className="bg-green-500">Em Andamento</Badge>;
-      case "scheduled":
-        return <Badge variant="outline">Agendado</Badge>;
-      case "completed":
-        return <Badge variant="secondary">Concluído</Badge>;
-      case "delayed":
-        return <Badge variant="destructive">Atrasado</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
+    case "active":
+    case "in_progress":
+      return <Badge className="bg-green-500">Em Andamento</Badge>;
+    case "scheduled":
+      return <Badge variant="outline">Agendado</Badge>;
+    case "completed":
+      return <Badge variant="secondary">Concluído</Badge>;
+    case "delayed":
+      return <Badge variant="destructive">Atrasado</Badge>;
+    default:
+      return <Badge variant="outline">{status}</Badge>;
     }
   };
 

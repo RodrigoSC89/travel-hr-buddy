@@ -3,7 +3,7 @@
  * Dialog para configurações do módulo de conformidade
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,13 +11,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { 
   Settings, 
   Bell, 
@@ -26,8 +26,8 @@ import {
   FileText, 
   Loader2,
   Check
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -48,7 +48,7 @@ export interface ComplianceSettings {
     autoAnalysis: boolean;
     predictiveAlerts: boolean;
     aiSuggestions: boolean;
-    analysisFrequency: 'daily' | 'weekly' | 'monthly';
+    analysisFrequency: "daily" | "weekly" | "monthly";
   };
   audit: {
     autoGenerateChecklist: boolean;
@@ -58,7 +58,7 @@ export interface ComplianceSettings {
   };
   reports: {
     autoGenerateReports: boolean;
-    reportFrequency: 'weekly' | 'monthly' | 'quarterly';
+    reportFrequency: "weekly" | "monthly" | "quarterly";
     includeAIAnalysis: boolean;
     emailReports: boolean;
   };
@@ -76,7 +76,7 @@ const defaultSettings: ComplianceSettings = {
     autoAnalysis: true,
     predictiveAlerts: true,
     aiSuggestions: true,
-    analysisFrequency: 'weekly',
+    analysisFrequency: "weekly",
   },
   audit: {
     autoGenerateChecklist: true,
@@ -86,7 +86,7 @@ const defaultSettings: ComplianceSettings = {
   },
   reports: {
     autoGenerateReports: true,
-    reportFrequency: 'monthly',
+    reportFrequency: "monthly",
     includeAIAnalysis: true,
     emailReports: true,
   },
@@ -105,38 +105,38 @@ export function SettingsDialog({
     setLoading(true);
     try {
       await onSaveSettings(currentSettings);
-      toast.success('Configurações salvas com sucesso');
+      toast.success("Configurações salvas com sucesso");
       onOpenChange(false);
     } catch (error) {
-      console.error('Error saving settings:', error);
-      toast.error('Erro ao salvar configurações');
+      console.error("Error saving settings:", error);
+      toast.error("Erro ao salvar configurações");
     } finally {
       setLoading(false);
     }
   };
 
-  const updateNotifications = (key: keyof ComplianceSettings['notifications'], value: any) => {
+  const updateNotifications = (key: keyof ComplianceSettings["notifications"], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       notifications: { ...currentSettings.notifications, [key]: value },
     });
   };
 
-  const updateAI = (key: keyof ComplianceSettings['ai'], value: any) => {
+  const updateAI = (key: keyof ComplianceSettings["ai"], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       ai: { ...currentSettings.ai, [key]: value },
     });
   };
 
-  const updateAudit = (key: keyof ComplianceSettings['audit'], value: any) => {
+  const updateAudit = (key: keyof ComplianceSettings["audit"], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       audit: { ...currentSettings.audit, [key]: value },
     });
   };
 
-  const updateReports = (key: keyof ComplianceSettings['reports'], value: any) => {
+  const updateReports = (key: keyof ComplianceSettings["reports"], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       reports: { ...currentSettings.reports, [key]: value },
@@ -187,7 +187,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.notifications.emailAlerts}
-                  onCheckedChange={(checked) => updateNotifications('emailAlerts', checked)}
+                  onCheckedChange={(checked) => updateNotifications("emailAlerts", checked)}
                 />
               </div>
 
@@ -200,7 +200,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.notifications.pushNotifications}
-                  onCheckedChange={(checked) => updateNotifications('pushNotifications', checked)}
+                  onCheckedChange={(checked) => updateNotifications("pushNotifications", checked)}
                 />
               </div>
 
@@ -212,7 +212,7 @@ export function SettingsDialog({
                   <Input
                     type="number"
                     value={currentSettings.notifications.certificateExpiryDays}
-                    onChange={(e) => updateNotifications('certificateExpiryDays', parseInt(e.target.value))}
+                    onChange={(e) => updateNotifications("certificateExpiryDays", parseInt(e.target.value))}
                     min={1}
                     max={90}
                   />
@@ -222,7 +222,7 @@ export function SettingsDialog({
                   <Input
                     type="number"
                     value={currentSettings.notifications.auditReminderDays}
-                    onChange={(e) => updateNotifications('auditReminderDays', parseInt(e.target.value))}
+                    onChange={(e) => updateNotifications("auditReminderDays", parseInt(e.target.value))}
                     min={1}
                     max={60}
                   />
@@ -232,7 +232,7 @@ export function SettingsDialog({
                   <Input
                     type="number"
                     value={currentSettings.notifications.findingOverdueDays}
-                    onChange={(e) => updateNotifications('findingOverdueDays', parseInt(e.target.value))}
+                    onChange={(e) => updateNotifications("findingOverdueDays", parseInt(e.target.value))}
                     min={1}
                     max={30}
                   />
@@ -252,7 +252,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.ai.autoAnalysis}
-                  onCheckedChange={(checked) => updateAI('autoAnalysis', checked)}
+                  onCheckedChange={(checked) => updateAI("autoAnalysis", checked)}
                 />
               </div>
 
@@ -265,7 +265,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.ai.predictiveAlerts}
-                  onCheckedChange={(checked) => updateAI('predictiveAlerts', checked)}
+                  onCheckedChange={(checked) => updateAI("predictiveAlerts", checked)}
                 />
               </div>
 
@@ -278,7 +278,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.ai.aiSuggestions}
-                  onCheckedChange={(checked) => updateAI('aiSuggestions', checked)}
+                  onCheckedChange={(checked) => updateAI("aiSuggestions", checked)}
                 />
               </div>
 
@@ -287,15 +287,15 @@ export function SettingsDialog({
               <div className="space-y-2">
                 <Label>Frequência de Análise</Label>
                 <div className="flex gap-2">
-                  {(['daily', 'weekly', 'monthly'] as const).map((freq) => (
+                  {(["daily", "weekly", "monthly"] as const).map((freq) => (
                     <Button
                       key={freq}
                       type="button"
-                      variant={currentSettings.ai.analysisFrequency === freq ? 'default' : 'outline'}
+                      variant={currentSettings.ai.analysisFrequency === freq ? "default" : "outline"}
                       size="sm"
-                      onClick={() => updateAI('analysisFrequency', freq)}
+                      onClick={() => updateAI("analysisFrequency", freq)}
                     >
-                      {freq === 'daily' ? 'Diária' : freq === 'weekly' ? 'Semanal' : 'Mensal'}
+                      {freq === "daily" ? "Diária" : freq === "weekly" ? "Semanal" : "Mensal"}
                     </Button>
                   ))}
                 </div>
@@ -314,7 +314,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.audit.autoGenerateChecklist}
-                  onCheckedChange={(checked) => updateAudit('autoGenerateChecklist', checked)}
+                  onCheckedChange={(checked) => updateAudit("autoGenerateChecklist", checked)}
                 />
               </div>
 
@@ -327,7 +327,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.audit.requireEvidence}
-                  onCheckedChange={(checked) => updateAudit('requireEvidence', checked)}
+                  onCheckedChange={(checked) => updateAudit("requireEvidence", checked)}
                 />
               </div>
 
@@ -340,7 +340,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.audit.autoCloseFindings}
-                  onCheckedChange={(checked) => updateAudit('autoCloseFindings', checked)}
+                  onCheckedChange={(checked) => updateAudit("autoCloseFindings", checked)}
                 />
               </div>
 
@@ -353,7 +353,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.audit.findingAutoEscalation}
-                  onCheckedChange={(checked) => updateAudit('findingAutoEscalation', checked)}
+                  onCheckedChange={(checked) => updateAudit("findingAutoEscalation", checked)}
                 />
               </div>
             </div>
@@ -370,7 +370,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.reports.autoGenerateReports}
-                  onCheckedChange={(checked) => updateReports('autoGenerateReports', checked)}
+                  onCheckedChange={(checked) => updateReports("autoGenerateReports", checked)}
                 />
               </div>
 
@@ -383,7 +383,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.reports.includeAIAnalysis}
-                  onCheckedChange={(checked) => updateReports('includeAIAnalysis', checked)}
+                  onCheckedChange={(checked) => updateReports("includeAIAnalysis", checked)}
                 />
               </div>
 
@@ -396,7 +396,7 @@ export function SettingsDialog({
                 </div>
                 <Switch
                   checked={currentSettings.reports.emailReports}
-                  onCheckedChange={(checked) => updateReports('emailReports', checked)}
+                  onCheckedChange={(checked) => updateReports("emailReports", checked)}
                 />
               </div>
 
@@ -405,15 +405,15 @@ export function SettingsDialog({
               <div className="space-y-2">
                 <Label>Frequência de Relatórios</Label>
                 <div className="flex gap-2">
-                  {(['weekly', 'monthly', 'quarterly'] as const).map((freq) => (
+                  {(["weekly", "monthly", "quarterly"] as const).map((freq) => (
                     <Button
                       key={freq}
                       type="button"
-                      variant={currentSettings.reports.reportFrequency === freq ? 'default' : 'outline'}
+                      variant={currentSettings.reports.reportFrequency === freq ? "default" : "outline"}
                       size="sm"
-                      onClick={() => updateReports('reportFrequency', freq)}
+                      onClick={() => updateReports("reportFrequency", freq)}
                     >
-                      {freq === 'weekly' ? 'Semanal' : freq === 'monthly' ? 'Mensal' : 'Trimestral'}
+                      {freq === "weekly" ? "Semanal" : freq === "monthly" ? "Mensal" : "Trimestral"}
                     </Button>
                   ))}
                 </div>

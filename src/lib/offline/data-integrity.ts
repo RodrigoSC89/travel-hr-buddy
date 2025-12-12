@@ -3,7 +3,7 @@
  * Ensures data consistency and validates sync operations
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 export interface IntegrityCheck {
   id: string;
@@ -11,26 +11,26 @@ export interface IntegrityCheck {
   operation: string;
   checksum: string;
   timestamp: string;
-  status: 'pending' | 'verified' | 'failed';
+  status: "pending" | "verified" | "failed";
   retries: number;
 }
 
 interface IntegrityConfig {
   enableChecksums: boolean;
   maxRetries: number;
-  checksumAlgorithm: 'crc32' | 'simple';
+  checksumAlgorithm: "crc32" | "simple";
 }
 
 const DEFAULT_CONFIG: IntegrityConfig = {
   enableChecksums: true,
   maxRetries: 3,
-  checksumAlgorithm: 'simple',
+  checksumAlgorithm: "simple",
 };
 
 class DataIntegrity {
   private config: IntegrityConfig;
   private checks: Map<string, IntegrityCheck> = new Map();
-  private readonly STORAGE_KEY = 'nautilus_integrity_checks';
+  private readonly STORAGE_KEY = "nautilus_integrity_checks";
 
   constructor(config: Partial<IntegrityConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -43,7 +43,7 @@ class DataIntegrity {
   generateChecksum(data: any): string {
     const str = JSON.stringify(data);
     
-    if (this.config.checksumAlgorithm === 'simple') {
+    if (this.config.checksumAlgorithm === "simple") {
       return this.simpleChecksum(str);
     }
     
@@ -57,7 +57,7 @@ class DataIntegrity {
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash;
     }
-    return Math.abs(hash).toString(16).padStart(8, '0');
+    return Math.abs(hash).toString(16).padStart(8, "0");
   }
 
   private crc32Checksum(str: string): string {
@@ -70,7 +70,7 @@ class DataIntegrity {
       }
     }
     
-    return ((crc ^ 0xFFFFFFFF) >>> 0).toString(16).padStart(8, '0');
+    return ((crc ^ 0xFFFFFFFF) >>> 0).toString(16).padStart(8, "0");
   }
 
   /**
@@ -81,9 +81,9 @@ class DataIntegrity {
       id: `check-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
       table,
       operation,
-      checksum: this.config.enableChecksums ? this.generateChecksum(data) : '',
+      checksum: this.config.enableChecksums ? this.generateChecksum(data) : "",
       timestamp: new Date().toISOString(),
-      status: 'pending',
+      status: "pending",
       retries: 0,
     };
 
@@ -100,12 +100,12 @@ class DataIntegrity {
     const check = this.checks.get(checkId);
     
     if (!check) {
-      logger.warn('[DataIntegrity] Check not found', { checkId });
+      logger.warn("[DataIntegrity] Check not found", { checkId });
       return false;
     }
 
     if (!this.config.enableChecksums || !check.checksum) {
-      check.status = 'verified';
+      check.status = "verified";
       this.saveToStorage();
       return true;
     }
@@ -114,12 +114,12 @@ class DataIntegrity {
     const isValid = newChecksum === check.checksum;
 
     if (isValid) {
-      check.status = 'verified';
-      logger.debug('[DataIntegrity] Checksum verified', { checkId });
+      check.status = "verified";
+      logger.debug("[DataIntegrity] Checksum verified", { checkId });
     } else {
-      check.status = 'failed';
+      check.status = "failed";
       check.retries++;
-      logger.error('[DataIntegrity] Checksum mismatch', {
+      logger.error("[DataIntegrity] Checksum mismatch", {
         checkId,
         expected: check.checksum,
         actual: newChecksum,
@@ -136,7 +136,7 @@ class DataIntegrity {
   markVerified(checkId: string): void {
     const check = this.checks.get(checkId);
     if (check) {
-      check.status = 'verified';
+      check.status = "verified";
       this.saveToStorage();
     }
   }
@@ -146,7 +146,7 @@ class DataIntegrity {
    */
   getPendingChecks(): IntegrityCheck[] {
     return Array.from(this.checks.values()).filter(
-      c => c.status === 'pending' || (c.status === 'failed' && c.retries < this.config.maxRetries)
+      c => c.status === "pending" || (c.status === "failed" && c.retries < this.config.maxRetries)
     );
   }
 
@@ -155,7 +155,7 @@ class DataIntegrity {
    */
   getFailedChecks(): IntegrityCheck[] {
     return Array.from(this.checks.values()).filter(
-      c => c.status === 'failed' && c.retries >= this.config.maxRetries
+      c => c.status === "failed" && c.retries >= this.config.maxRetries
     );
   }
 
@@ -166,7 +166,7 @@ class DataIntegrity {
     let cleared = 0;
     
     for (const [id, check] of this.checks) {
-      if (check.status === 'verified') {
+      if (check.status === "verified") {
         this.checks.delete(id);
         cleared++;
       }
@@ -184,9 +184,9 @@ class DataIntegrity {
     
     return {
       total: checks.length,
-      pending: checks.filter(c => c.status === 'pending').length,
-      verified: checks.filter(c => c.status === 'verified').length,
-      failed: checks.filter(c => c.status === 'failed').length,
+      pending: checks.filter(c => c.status === "pending").length,
+      verified: checks.filter(c => c.status === "verified").length,
+      failed: checks.filter(c => c.status === "failed").length,
     };
   }
 
@@ -195,7 +195,7 @@ class DataIntegrity {
       const data = Array.from(this.checks.entries());
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      logger.error('[DataIntegrity] Failed to save', { error });
+      logger.error("[DataIntegrity] Failed to save", { error });
     }
   }
 
@@ -207,7 +207,7 @@ class DataIntegrity {
         this.checks = new Map(data);
       }
     } catch (error) {
-      logger.error('[DataIntegrity] Failed to load', { error });
+      logger.error("[DataIntegrity] Failed to load", { error });
     }
   }
 }
@@ -222,11 +222,11 @@ export function validateDataStructure(data: any, schema: Record<string, string>)
 
   for (const [field, type] of Object.entries(schema)) {
     const value = data[field];
-    const actualType = Array.isArray(value) ? 'array' : typeof value;
+    const actualType = Array.isArray(value) ? "array" : typeof value;
 
-    if (value === undefined && !type.endsWith('?')) {
+    if (value === undefined && !type.endsWith("?")) {
       errors.push(`Missing required field: ${field}`);
-    } else if (value !== undefined && !type.startsWith(actualType) && !type.endsWith('?')) {
+    } else if (value !== undefined && !type.startsWith(actualType) && !type.endsWith("?")) {
       errors.push(`Invalid type for ${field}: expected ${type}, got ${actualType}`);
     }
   }
@@ -244,12 +244,12 @@ export function sanitizeForSync(data: any): any {
     return data.map(sanitizeForSync);
   }
   
-  if (typeof data === 'object') {
+  if (typeof data === "object") {
     const sanitized: Record<string, any> = {};
     
     for (const [key, value] of Object.entries(data)) {
       // Remove internal fields
-      if (key.startsWith('_') || key.startsWith('$')) continue;
+      if (key.startsWith("_") || key.startsWith("$")) continue;
       
       // Sanitize nested objects
       sanitized[key] = sanitizeForSync(value);
@@ -259,7 +259,7 @@ export function sanitizeForSync(data: any): any {
   }
   
   // Handle special types
-  if (typeof data === 'string') {
+  if (typeof data === "string") {
     // Trim and limit length
     return data.trim().slice(0, 10000);
   }

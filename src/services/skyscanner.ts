@@ -79,9 +79,9 @@ interface SkyscannerSearchResponse {
  * Helper function to parse date string into components
  */
 function parseDateToComponents(dateString: string): { year: number; month: number; day: number } | null {
-  const parts = dateString.split('-');
+  const parts = dateString.split("-");
   if (parts.length !== 3) {
-    logger.error('Invalid date format. Expected YYYY-MM-DD', new Error('Invalid date format'), { dateString });
+    logger.error("Invalid date format. Expected YYYY-MM-DD", new Error("Invalid date format"), { dateString });
     return null;
   }
   
@@ -90,7 +90,7 @@ function parseDateToComponents(dateString: string): { year: number; month: numbe
   const day = parseInt(parts[2]);
   
   if (isNaN(year) || isNaN(month) || isNaN(day)) {
-    logger.error('Invalid date components', new Error('Invalid date components'), { year, month, day });
+    logger.error("Invalid date components", new Error("Invalid date components"), { year, month, day });
     return null;
   }
   
@@ -206,17 +206,17 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
       returnDate,
       adults = 1,
       children = 0,
-      cabinClass = 'economy',
+      cabinClass = "economy",
     } = params;
 
     // Using Skyscanner API v3 search endpoint
-    const searchUrl = 'https://skyscanner-api.p.rapidapi.com/v3/flights/live/search/create';
+    const searchUrl = "https://skyscanner-api.p.rapidapi.com/v3/flights/live/search/create";
     
     const requestBody = {
       query: {
-        market: 'BR',
-        locale: 'pt-BR',
-        currency: 'BRL',
+        market: "BR",
+        locale: "pt-BR",
+        currency: "BRL",
         queryLegs: [] as Array<{
           originPlaceId: { iata: string };
           destinationPlaceId: { iata: string };
@@ -233,7 +233,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
       return {
         success: false,
         offers: [],
-        error: 'Invalid departure date format. Use YYYY-MM-DD.',
+        error: "Invalid departure date format. Use YYYY-MM-DD.",
       };
     }
 
@@ -249,7 +249,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
         return {
           success: false,
           offers: [],
-          error: 'Invalid return date format. Use YYYY-MM-DD.',
+          error: "Invalid return date format. Use YYYY-MM-DD.",
         };
       }
       
@@ -261,11 +261,11 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
     }
 
     const response = await fetch(searchUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': 'skyscanner-api.p.rapidapi.com',
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "skyscanner-api.p.rapidapi.com",
       },
       body: JSON.stringify(requestBody),
     });
@@ -289,13 +289,13 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
           const pricing = itinerary.pricingOptions[0];
           offers.push({
             id: itinerary.id,
-            airline: itinerary.legs?.[0]?.carriers?.marketing?.[0]?.name || 'Unknown',
+            airline: itinerary.legs?.[0]?.carriers?.marketing?.[0]?.name || "Unknown",
             price: pricing.price.amount,
             currency: pricing.price.unit,
-            duration: itinerary.legs?.[0]?.durationInMinutes ? `${Math.floor(itinerary.legs[0].durationInMinutes / 60)}h ${itinerary.legs[0].durationInMinutes % 60}m` : 'N/A',
+            duration: itinerary.legs?.[0]?.durationInMinutes ? `${Math.floor(itinerary.legs[0].durationInMinutes / 60)}h ${itinerary.legs[0].durationInMinutes % 60}m` : "N/A",
             stops: itinerary.legs?.[0]?.stopCount || 0,
-            departureTime: itinerary.legs?.[0]?.departure || '',
-            arrivalTime: itinerary.legs?.[0]?.arrival || '',
+            departureTime: itinerary.legs?.[0]?.departure || "",
+            arrivalTime: itinerary.legs?.[0]?.arrival || "",
             deepLink: pricing.items?.[0]?.deepLink,
           });
         }
@@ -317,7 +317,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
     return {
       success: false,
       offers: [],
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }

@@ -3,8 +3,8 @@
  * PATCH 834: Optimized skeleton components for perceived performance
  */
 
-import React from 'react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { cn } from "@/lib/utils";
 
 interface SkeletonProps {
   className?: string;
@@ -16,8 +16,8 @@ export function Skeleton({ className, animate = true, style }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'bg-muted rounded-md',
-        animate && 'animate-pulse',
+        "bg-muted rounded-md",
+        animate && "animate-pulse",
         className
       )}
       style={style}
@@ -28,7 +28,7 @@ export function Skeleton({ className, animate = true, style }: SkeletonProps) {
 // Card Skeleton
 export function CardSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn('p-4 space-y-3 border rounded-lg bg-card', className)}>
+    <div className={cn("p-4 space-y-3 border rounded-lg bg-card", className)}>
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-3 w-full" />
       <Skeleton className="h-3 w-5/6" />
@@ -179,8 +179,8 @@ export function NavSkeleton() {
 }
 
 // Chart Skeleton
-export function ChartSkeleton({ type = 'bar' }: { type?: 'bar' | 'line' | 'pie' }) {
-  if (type === 'pie') {
+export function ChartSkeleton({ type = "bar" }: { type?: "bar" | "line" | "pie" }) {
+  if (type === "pie") {
     return (
       <div className="flex items-center justify-center p-8">
         <Skeleton className="h-48 w-48 rounded-full" />
@@ -210,7 +210,7 @@ export function ChartSkeleton({ type = 'bar' }: { type?: 'bar' | 'line' | 'pie' 
 
 // Image Skeleton with aspect ratio
 export function ImageSkeleton({ 
-  aspectRatio = '16/9',
+  aspectRatio = "16/9",
   className 
 }: { 
   aspectRatio?: string;
@@ -218,7 +218,7 @@ export function ImageSkeleton({
 }) {
   return (
     <div 
-      className={cn('relative overflow-hidden rounded-lg bg-muted', className)}
+      className={cn("relative overflow-hidden rounded-lg bg-muted", className)}
       style={{ aspectRatio }}
     >
       <Skeleton className="absolute inset-0" />
@@ -234,7 +234,7 @@ export function TextBlockSkeleton({ lines = 3 }: { lines?: number }) {
         <Skeleton 
           key={i} 
           className="h-4" 
-          style={{ width: i === lines - 1 ? '60%' : '100%' }}
+          style={{ width: i === lines - 1 ? "60%" : "100%" }}
         />
       ))}
     </div>

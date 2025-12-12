@@ -28,7 +28,7 @@
  * ```
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from "react";
 
 // ============================================================================
 // Types
@@ -36,18 +36,18 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 export interface SpaceWeatherStatus {
   // Summary
-  status: 'GREEN' | 'AMBER' | 'RED';
-  dp_gate: 'PROCEED' | 'CAUTION' | 'HOLD';
+  status: "GREEN" | "AMBER" | "RED";
+  dp_gate: "PROCEED" | "CAUTION" | "HOLD";
   timestamp: string;
   
   // Space weather
   kp: number;
-  kp_risk: 'LOW' | 'MODERATE' | 'HIGH';
+  kp_risk: "LOW" | "MODERATE" | "HIGH";
   
   // GNSS
   worst_pdop: number;
   avg_pdop: number;
-  pdop_quality: 'EXCELLENT' | 'GOOD' | 'MODERATE' | 'POOR';
+  pdop_quality: "EXCELLENT" | "GOOD" | "MODERATE" | "POOR";
   
   // Details
   reasons: string[];
@@ -63,7 +63,7 @@ export interface SpaceWeatherStatus {
   }>;
   
   // Metadata
-  data_source: 'DP_ASOG' | 'TYPESCRIPT' | 'ERROR';
+  data_source: "DP_ASOG" | "TYPESCRIPT" | "ERROR";
   location: {
     latitude: number;
     longitude: number;
@@ -92,7 +92,7 @@ export interface UseSpaceWeatherOptions {
   endpoint?: string;
   
   /** Modo (default: 'status') */
-  mode?: 'status' | 'kp' | 'pdop';
+  mode?: "status" | "kp" | "pdop";
   
   /** Habilitar auto-refresh (default: true) */
   enabled?: boolean;
@@ -144,8 +144,8 @@ export function useSpaceWeather(options: UseSpaceWeatherOptions): UseSpaceWeathe
     altitude = 0,
     hours = 6,
     refreshInterval = 5 * 60 * 1000, // 5 min default
-    endpoint = '/functions/v1/space-weather-status',
-    mode = 'status',
+    endpoint = "/functions/v1/space-weather-status",
+    mode = "status",
     enabled = true,
     onStatusChange,
     onError,
@@ -209,18 +209,18 @@ export function useSpaceWeather(options: UseSpaceWeatherOptions): UseSpaceWeathe
       }
     } catch (err) {
       // Ignore abort errors
-      if (err instanceof Error && err.name === 'AbortError') {
+      if (err instanceof Error && err.name === "AbortError") {
         return;
       }
 
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
 
       if (onError && err instanceof Error) {
         onError(err);
       }
 
-      console.error('[useSpaceWeather] Error fetching status:', err);
+      console.error("[useSpaceWeather] Error fetching status:", err);
     } finally {
       setLoading(false);
     }
@@ -268,9 +268,9 @@ export function useSpaceWeather(options: UseSpaceWeatherOptions): UseSpaceWeathe
   }, [enabled, refreshInterval, fetchStatus, clear]);
 
   // Computed properties
-  const isCritical = status?.status === 'RED';
-  const needsAttention = status?.status === 'AMBER';
-  const isOk = status?.status === 'GREEN';
+  const isCritical = status?.status === "RED";
+  const needsAttention = status?.status === "AMBER";
+  const isOk = status?.status === "GREEN";
 
   return {
     status,
@@ -301,10 +301,10 @@ export function useDPGateStatus(latitude: number, longitude: number, hours = 6) 
   });
 
   return {
-    canProceed: status?.dp_gate === 'PROCEED',
-    needsCaution: status?.dp_gate === 'CAUTION',
-    mustHold: status?.dp_gate === 'HOLD',
-    status: status?.dp_gate || 'UNKNOWN',
+    canProceed: status?.dp_gate === "PROCEED",
+    needsCaution: status?.dp_gate === "CAUTION",
+    mustHold: status?.dp_gate === "HOLD",
+    status: status?.dp_gate || "UNKNOWN",
     loading,
     error,
   };
@@ -317,7 +317,7 @@ export function useKpIndex(refreshInterval = 10 * 60 * 1000) {
   const { status, loading, error, lastUpdate } = useSpaceWeather({
     latitude: 0,
     longitude: 0,
-    mode: 'kp',
+    mode: "kp",
     refreshInterval,
   });
 
@@ -343,7 +343,7 @@ export function usePDOPTimeline(
     latitude,
     longitude,
     hours,
-    mode: 'pdop',
+    mode: "pdop",
     refreshInterval,
   });
 
