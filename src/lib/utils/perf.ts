@@ -7,7 +7,9 @@ export const optimizeEventLoop = () => {
   const t0 = performance.now();
   requestIdleCallback(() => {
     const duration = performance.now() - t0;
-    if (duration > 16) }ms`);
+    if (duration > 16) {
+      logger.warn(`⚠️ Event loop blocked for ${duration.toFixed(2)}ms`);
+    }
   });
 };
 

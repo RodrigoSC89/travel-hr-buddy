@@ -65,7 +65,7 @@ function getQueryClient(): ReturnType<typeof createOptimizedQueryClient> {
 const RouterComponent = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : BrowserRouter;
 
 // Simple loader
-function Loader(): JSX.Element {
+function Loader(): React.ReactElement {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-4">
@@ -77,14 +77,7 @@ function Loader(): JSX.Element {
 }
 
 // Routes component (uses hooks safely inside providers)
-function AppRoutes(): JSX.Element {
-  // FASE 2.5: Lazy preload hook para otimizar carregamento
-  const { useLazyPreload } = React.useMemo(() => {
-    return { useLazyPreload: () => {
-      // Preload será feito dentro do RouterComponent
-    }};
-  }, []);
-
+function AppRoutes(): React.ReactElement {
   // Get module routes with memoization
   const moduleRoutes = useMemo(() => {
     try {
@@ -260,7 +253,7 @@ function AppRoutes(): JSX.Element {
 }
 
 // Main App component - FASE 3.3: Now with GlobalErrorBoundary
-function App(): JSX.Element {
+function App(): React.ReactElement {
   // CRITICAL FIX: Get QueryClient instance lazily to ensure React is fully initialized
   // This prevents "Cannot read properties of null (reading 'useEffect')" error
   // Context providers are NOT lazy loaded - they must be imported directly and rendered synchronously
