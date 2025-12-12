@@ -268,7 +268,7 @@ Como posso ajudar?`;
             maintenance: { pending: systemData?.maintenance?.pending || 0 }
           }
         })
-      };
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
