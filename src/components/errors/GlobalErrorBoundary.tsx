@@ -70,7 +70,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
         url: window.location.href,
-      });
+      };
 
       // Copy to clipboard
       navigator.clipboard.writeText(JSON.stringify(errorReport, null, 2));
