@@ -379,7 +379,7 @@ export default function UserProfilePage() {
                 <select
                   id="language"
                   value={preferences.language}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   className="w-full p-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="pt-BR">Português (Brasil)</option>
