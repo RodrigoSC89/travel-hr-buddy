@@ -444,7 +444,7 @@ export default function ChannelManagerProfessional() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, [selectedChannel]);
 
   // Filtered channels

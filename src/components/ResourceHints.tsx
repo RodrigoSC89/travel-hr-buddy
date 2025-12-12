@@ -58,8 +58,8 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
         if (link.parentNode) {
           link.parentNode.removeChild(link);
         }
-      });
-    });
+      };
+    };
   }, [preconnectDomains]);
 
   return (

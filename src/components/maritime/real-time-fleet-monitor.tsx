@@ -59,7 +59,7 @@ export const RealTimeFleetMonitor = memo(() => {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadFleetData = async () => {

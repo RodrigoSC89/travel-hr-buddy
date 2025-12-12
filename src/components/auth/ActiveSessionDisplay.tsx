@@ -55,7 +55,7 @@ export const ActiveSessionDisplay = memo(function() {
 
     return () => {
       clearInterval(interval);
-    });
+    };
   }, []);
 
   const loadSessionInfo = async () => {

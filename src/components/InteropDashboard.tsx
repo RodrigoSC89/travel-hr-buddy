@@ -107,7 +107,7 @@ export default function InteropDashboard() {
       missionsSubscription.unsubscribe();
       agentsSubscription.unsubscribe();
       trustSubscription.unsubscribe();
-    });
+    };
   }, []);
 
   const loadDashboardData = async () => {

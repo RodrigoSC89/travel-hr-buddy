@@ -118,7 +118,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, [toast]);
 
   const loadVessels = async () => {

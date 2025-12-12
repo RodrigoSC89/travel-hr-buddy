@@ -24,7 +24,7 @@ export const OfflineIndicator = memo(function() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   const isSyncing = status?.type === "syncing";

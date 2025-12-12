@@ -56,7 +56,7 @@ export const CognitiveDashboard: React.FC = () => {
     return () => {
       isMounted = false;
       clearInterval(interval);
-    });
+    };
   }, []);
 
   const loadDashboardData = async () => {

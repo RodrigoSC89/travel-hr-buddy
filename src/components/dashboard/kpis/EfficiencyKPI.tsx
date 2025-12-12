@@ -40,7 +40,7 @@ export const EfficiencyKPI = memo(function() {
 
     return () => {
       mounted = false;
-    });
+    };
   }, []);
 
   if (loading) {

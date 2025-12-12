@@ -133,7 +133,7 @@ export default function AdminWallPage() {
 
     return () => {
       supabase.removeChannel(subscription);
-    });
+    };
   }, [lastAlert, muted]);
 
   const getStatusIcon = (status: string) => {

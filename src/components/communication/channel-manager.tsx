@@ -242,7 +242,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     
     return () => {
       mounted = false;
-    });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

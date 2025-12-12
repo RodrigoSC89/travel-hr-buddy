@@ -92,7 +92,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
       markers.current.forEach(m => m.remove());
       if (map.current) map.current.remove();
       map.current = null;
-    });
+    };
   }, [mapboxToken]);
 
   const updateMarkers = async (mapboxgl: unknown: unknown: unknown) => {

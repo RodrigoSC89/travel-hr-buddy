@@ -174,8 +174,8 @@ const SmartTooltipSystem: React.FC = () => {
         clearTimeout(idleTimer);
         document.removeEventListener("mousemove", resetTimer);
         document.removeEventListener("keypress", resetTimer);
-      });
-    });
+      };
+    };
 
     checkContext();
   }, []);

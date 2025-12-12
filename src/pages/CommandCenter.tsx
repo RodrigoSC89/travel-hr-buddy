@@ -211,7 +211,7 @@ export default function CommandCenter() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
   
   const loadingRef = useRef(false);

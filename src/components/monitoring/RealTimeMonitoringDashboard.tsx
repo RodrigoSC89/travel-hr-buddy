@@ -53,7 +53,7 @@ export default function RealTimeMonitoringDashboard() {
       unsubscribe();
       unsubscribeErrors();
       clearInterval(interval);
-    });
+    };
   }, []);
 
   const getRatingColor = (rating: string) => {

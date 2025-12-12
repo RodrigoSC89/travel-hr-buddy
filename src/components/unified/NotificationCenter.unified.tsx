@@ -487,7 +487,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
     return () => {
       subscription.unsubscribe();
       if (intervalId) clearInterval(intervalId);
-    });
+    };
   }, [effectiveUserId, autoRefresh, refreshInterval, loadNotifications]);
 
   const unreadCount = notifications.filter((n) => !n.read && !n.isRead && !n.is_read).length;

@@ -75,7 +75,7 @@ export const PerformanceMonitor: React.FC = () => {
 
     return () => {
       clearInterval(interval);
-    });
+    };
   }, []);
 
   const measurePerformance = useCallback(async () => {

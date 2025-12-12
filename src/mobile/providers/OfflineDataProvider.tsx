@@ -69,7 +69,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
     return () => {
       unsubNetwork();
       unsubSync();
-    });
+    };
   }, []);
 
   /**

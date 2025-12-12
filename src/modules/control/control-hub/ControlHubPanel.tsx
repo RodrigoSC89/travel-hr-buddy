@@ -70,7 +70,7 @@ export default function ControlHubPanel() {
       clearInterval(mqttStatusInterval);
       unsubscribe();
       MQTTClient.disconnect();
-    });
+    };
   }, []);
 
   const updateState = () => {

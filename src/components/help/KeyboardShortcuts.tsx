@@ -105,11 +105,11 @@ export const useKeyboardShortcuts = memo(() => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       clearTimeout(sequenceTimeout);
-    });
+    };
   }, [navigate, shortcuts]);
 
   return { shortcuts, helpOpen, setHelpOpen };
-});
+};
 
 export const KeyboardShortcutsHelp: React.FC = () => {
   const { shortcuts, helpOpen, setHelpOpen } = useKeyboardShortcuts();

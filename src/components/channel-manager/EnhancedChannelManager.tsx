@@ -84,7 +84,7 @@ export const EnhancedChannelManager: React.FC = () => {
 
     return () => {
       unsubscribeFromChannel();
-    });
+    };
   }, [selectedChannel]);
 
   const loadChannels = async () => {

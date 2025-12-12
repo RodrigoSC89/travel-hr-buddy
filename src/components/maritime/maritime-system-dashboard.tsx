@@ -35,7 +35,7 @@ export const MaritimeSystemDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadMaritimeData = async () => {

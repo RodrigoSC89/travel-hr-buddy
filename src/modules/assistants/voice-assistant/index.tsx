@@ -118,7 +118,7 @@ const VoiceAssistant: React.FC = () => {
       recognitionRef.current?.stop();
       synthRef.current?.cancel();
       audioRef.current?.pause();
-    });
+    };
   }, [isListening]);
 
   useEffect(() => {

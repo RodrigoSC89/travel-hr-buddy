@@ -79,7 +79,7 @@ const AIAssistantEnhanced: React.FC = () => {
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    });
+    };
   }, []);
 
   const aiCapabilities: AICapability[] = [

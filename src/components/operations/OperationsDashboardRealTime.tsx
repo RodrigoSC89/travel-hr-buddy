@@ -107,7 +107,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     return () => {
       cleanup();
       if (refreshInterval) clearInterval(refreshInterval);
-    });
+    };
   }, [filter]);
 
   const initializeConnections = async () => {

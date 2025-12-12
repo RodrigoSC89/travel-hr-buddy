@@ -81,7 +81,7 @@ export default function TrainingAcademyEnhanced() {
 
     return () => {
       supabase.removeChannel(progressChannel);
-    });
+    };
   }, []);
 
   const loadData = async () => {

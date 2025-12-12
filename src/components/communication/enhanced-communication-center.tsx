@@ -88,7 +88,7 @@ export const EnhancedCommunicationCenter = memo(() => {
     
     return () => {
       mounted = false;
-    });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

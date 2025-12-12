@@ -75,11 +75,11 @@ const useSystemMetrics = () => {
       clearTimeout(timer);
       window.removeEventListener("online", updateMetrics);
       window.removeEventListener("offline", updateMetrics);
-    });
+    };
   }, [updateMetrics]);
 
   return { metrics, updateMetrics };
-});
+};
 
 // Componente de Métricas de Performance
 const PerformanceMetrics = memo(() => {
@@ -242,7 +242,7 @@ const PWAControls = () => {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   return (

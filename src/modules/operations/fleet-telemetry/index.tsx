@@ -167,8 +167,8 @@ export default function FleetTelemetryModule() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
-  });
+    };
+  };
 
   const determineStatus = (value: number, min?: number, max?: number): "normal" | "warning" | "critical" => {
     if (!min && !max) return "normal";

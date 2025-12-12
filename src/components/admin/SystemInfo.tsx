@@ -35,12 +35,12 @@ export const SystemInfo: React.FC = () => {
     return () => {
       clearInterval(clockInterval);
       clearInterval(uptimeInterval);
-    });
+    };
   }, []);
 
   const handleRefresh = () => {
     setLastRefresh(new Date());
-  });
+  };
 
   const systemHealth = {
     status: "healthy",

@@ -100,7 +100,7 @@ export default function IncidentReportsComplete() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadIncidents = async () => {

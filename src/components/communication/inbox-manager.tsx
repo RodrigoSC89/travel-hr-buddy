@@ -90,7 +90,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     
     return () => {
       mounted = false;
-    });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

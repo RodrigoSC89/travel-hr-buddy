@@ -86,7 +86,7 @@ export const IntelligentAlertSystem = memo(() => {
     const cleanup = setupRealTimeUpdates();
     return () => {
       cleanup();
-    });
+    };
   }, []);
 
   const loadIntelligentData = async () => {

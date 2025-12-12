@@ -54,7 +54,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const handleDelete = async (id: string) => {

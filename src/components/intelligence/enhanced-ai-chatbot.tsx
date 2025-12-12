@@ -102,7 +102,7 @@ const EnhancedAIChatbot: React.FC = () => {
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    });
+    };
   }, []);
 
   // PATCH 549: Memoized handleSendMessage to prevent re-creation

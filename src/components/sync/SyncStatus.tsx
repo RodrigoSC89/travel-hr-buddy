@@ -45,7 +45,7 @@ export const SyncStatus = memo(function() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   const loadPendingCount = async () => {

@@ -133,8 +133,8 @@ export default function CrewRotationModule() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
-  });
+    };
+  };
 
   const detectConflicts = (rotation: unknown: unknown: unknown): RotationConflict[] => {
     const conflicts: RotationConflict[] = [];

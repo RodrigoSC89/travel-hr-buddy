@@ -144,7 +144,7 @@ export const RealTimeMissionDashboard = memo(() => {
       clearInterval(interval);
       supabase.removeChannel(missionsChannel);
       supabase.removeChannel(logsChannel);
-    });
+    };
   }, [loadMissions, loadRecentLogs, toast]);
 
   const getStatusIcon = (status: Mission["status"]) => {

@@ -152,7 +152,7 @@ export const VesselProvider: React.FC<VesselProviderProps> = ({
 
     return () => {
       channel.unsubscribe();
-    });
+    };
   }, []);
 
   const value: VesselContextType = {

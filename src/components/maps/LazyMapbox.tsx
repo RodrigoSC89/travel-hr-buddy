@@ -107,7 +107,7 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
       mounted = false;
       map.current?.remove();
       map.current = null;
-    });
+    };
   }, [token, style, projection]);
 
   if (error) {

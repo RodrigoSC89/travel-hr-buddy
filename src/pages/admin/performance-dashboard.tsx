@@ -78,7 +78,7 @@ export default function PerformanceDashboard() {
     return () => {
       supabase.removeChannel(metricsChannel);
       supabase.removeChannel(alertsChannel);
-    });
+    };
   }, [timeRange]);
 
   const loadDashboardData = async () => {

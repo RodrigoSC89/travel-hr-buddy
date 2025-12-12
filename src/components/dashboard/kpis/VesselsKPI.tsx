@@ -40,7 +40,7 @@ export const VesselsKPI = memo(function() {
 
     return () => {
       mounted = false;
-    });
+    };
   }, []);
 
   if (loading) {

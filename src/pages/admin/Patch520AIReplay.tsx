@@ -160,12 +160,12 @@ export default function Patch520AIReplay() {
 
     return () => {
       if (interval) clearInterval(interval);
-    });
+    };
   }, [isPlaying, playbackSpeed, selectedMission.duration]);
 
   const togglePlayback = () => {
     setIsPlaying(!isPlaying);
-  });
+  };
 
   const handleSeek = (value: number[]) => {
     setCurrentTime(value[0]);

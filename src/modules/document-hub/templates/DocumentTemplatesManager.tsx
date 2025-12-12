@@ -101,7 +101,7 @@ const DocumentTemplatesManager = () => {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadTemplates = async () => {

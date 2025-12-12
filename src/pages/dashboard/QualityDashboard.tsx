@@ -95,7 +95,7 @@ export default function QualityDashboard() {
     return () => {
       channel.unsubscribe();
       clearInterval(interval);
-    });
+    };
   }, []);
 
   async function loadMetrics() {

@@ -95,7 +95,7 @@ const NautilusCommandCenter = () => {
       supabase.removeChannel(channel);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   const loadSystemData = async () => {

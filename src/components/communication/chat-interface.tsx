@@ -372,8 +372,8 @@ export const ChatInterface = memo(() => {
 
     return () => {
       supabase.removeChannel(channel);
-    });
-  });
+    };
+  };
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !currentUser?.id) return;

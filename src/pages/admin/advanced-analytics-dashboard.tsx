@@ -102,7 +102,7 @@ export default function AdvancedAnalyticsDashboard() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, [filters]);
 
   const fetchDashboardData = async () => {

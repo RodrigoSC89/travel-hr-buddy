@@ -46,7 +46,7 @@ export const OperationsDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadOperationalData = async () => {

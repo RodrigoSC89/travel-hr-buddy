@@ -206,7 +206,7 @@ export const AdvancedFleetAnalytics = memo(() => {
 
     return () => {
       subscription.unsubscribe();
-    });
+    };
   }, []);
 
   const getStatusText = (status: VesselPerformance["status"]) => {

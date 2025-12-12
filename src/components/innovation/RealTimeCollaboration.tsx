@@ -175,8 +175,8 @@ export const RealTimeCollaboration = memo(() => {
 
     return () => {
       supabase.removeChannel(messagesSubscription);
-    });
-  });
+    };
+  };
 
   const sendMessage = async () => {
     if (newMessage.trim() && currentConversation && user) {

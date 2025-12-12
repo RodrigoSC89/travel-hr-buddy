@@ -43,7 +43,7 @@ export default function IncidentsPage() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadIncidents = async () => {

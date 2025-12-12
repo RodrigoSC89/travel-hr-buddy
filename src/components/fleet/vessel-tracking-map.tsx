@@ -97,7 +97,7 @@ const VesselTrackingMap = () => {
     return () => {
       mounted = false;
       map.current?.remove();
-    });
+    };
   }, [mapboxToken]);
 
   const loadVesselData = async () => {

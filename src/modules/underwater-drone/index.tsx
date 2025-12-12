@@ -121,7 +121,7 @@ const UnderwaterDrone: React.FC = () => {
     return () => {
       clearInterval(updateInterval);
       droneCore.stopSimulation();
-    });
+    };
   }, [droneCore, telemetry, missionManager]);
 
   // Command handlers

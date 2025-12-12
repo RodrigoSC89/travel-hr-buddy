@@ -41,7 +41,7 @@ export default function IncidentAiModal() {
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
-    });
+    };
   }, []);
 
   const handleAnalyze = async () => {

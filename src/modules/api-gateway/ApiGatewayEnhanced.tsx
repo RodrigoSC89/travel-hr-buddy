@@ -129,13 +129,13 @@ const ApiGatewayEnhanced = () => {
     return () => {
       supabase.removeChannel(routesChannel);
       supabase.removeChannel(keysChannel);
-    });
+    };
   }, []);
 
   const loadData = async () => {
     await Promise.all([loadRoutes(), loadKeys(), loadRateLimits()]);
     setLoading(false);
-  });
+  };
 
   const loadRoutes = async () => {
     try {

@@ -54,7 +54,7 @@ export const MobileHome: React.FC = () => {
     return () => {
       unsubscribe();
       unsubscribeNetwork();
-    });
+    };
   }, []);
 
   const handleQuickSync = async () => {

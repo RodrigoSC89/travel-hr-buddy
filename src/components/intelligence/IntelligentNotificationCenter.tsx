@@ -66,7 +66,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
       return () => {
         supabase.removeChannel(channel);
-      });
+      };
     }
   }, [user]);
 

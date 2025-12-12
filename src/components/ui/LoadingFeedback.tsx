@@ -209,7 +209,7 @@ export const OfflineMessage = memo(function({ onRetry, className }: OfflineMessa
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   if (isOnline) return null;

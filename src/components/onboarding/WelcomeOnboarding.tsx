@@ -222,7 +222,7 @@ export const useResetOnboarding = memo(() => {
   return () => {
     localStorage.removeItem(STORAGE_KEY);
     window.location.reload();
-  });
-});
+  };
+};
 
 export default WelcomeOnboarding;

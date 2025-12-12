@@ -70,7 +70,7 @@ export const PerformanceWrapper = memo(function({
 
         return () => {
           lcpObserver.disconnect();
-        });
+        };
       } catch (e) {
         // Performance Observer not supported
       }

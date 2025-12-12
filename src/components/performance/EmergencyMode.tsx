@@ -83,7 +83,7 @@ export const EmergencyModeProvider = memo(function({ children }: EmergencyModePr
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   // Monitor pending sync count

@@ -91,7 +91,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
       if (marker.current) marker.current.remove();
       if (map.current) map.current.remove();
       map.current = null;
-    });
+    };
   }, [mapboxToken]);
 
   useEffect(() => {

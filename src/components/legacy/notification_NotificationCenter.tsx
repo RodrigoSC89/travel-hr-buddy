@@ -126,7 +126,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       if (alertsChannel) supabase.removeChannel(alertsChannel);
       if (maintenanceChannel) supabase.removeChannel(maintenanceChannel);
       if (intervalId) clearInterval(intervalId);
-    });
+    };
   }, [userId, variant, autoRefresh, refreshInterval]);
 
   const loadNotifications = async () => {

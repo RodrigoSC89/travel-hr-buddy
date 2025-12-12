@@ -75,7 +75,7 @@ export const FleetManagementDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, [loadFleetData]);
 
   const getStatusBadge = (status: string) => {

@@ -17,7 +17,7 @@ export default function BridgeLinkStatus() {
   });
     return () => {
       client.end();
-    });
+    };
   }, []);
 
   return (

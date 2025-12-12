@@ -93,7 +93,7 @@ const SatelliteTracker = () => {
     return () => {
       clearInterval(vesselInterval);
       clearInterval(satelliteInterval);
-    });
+    };
   }, []);
 
   // PATCH 495: Filter state

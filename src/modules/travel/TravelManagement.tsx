@@ -134,7 +134,7 @@ const TravelManagement = () => {
     return () => {
       supabase.removeChannel(itinerariesChannel);
       supabase.removeChannel(conflictsChannel);
-    });
+    };
   }, []);
 
   const loadItineraries = async () => {

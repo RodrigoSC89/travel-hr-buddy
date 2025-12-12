@@ -88,7 +88,7 @@ export const OfflineSync = memo(function() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   const handleSync = async () => {

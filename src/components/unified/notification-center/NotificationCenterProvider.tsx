@@ -159,7 +159,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, [effectiveUserId, toast]);
 
   // Mark as read

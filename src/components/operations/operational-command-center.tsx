@@ -164,8 +164,8 @@ export const OperationalCommandCenter: React.FC = () => {
     return () => {
       supabase.removeChannel(alertsChannel);
       supabase.removeChannel(metricsChannel);
-    });
-  });
+    };
+  };
 
   const acknowledgeAlert = async (alertId: string) => {
     try {
