@@ -1,33 +1,21 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import {
   Cloud,
-  Wind,
-  Waves,
-  Navigation,
   AlertTriangle,
   CheckCircle,
   Clock,
   TrendingUp,
-  TrendingDown,
   Activity,
-  Thermometer,
-  Eye,
-  Ship,
-  Target,
   Bell,
-  FileText,
   RefreshCw,
   Calendar,
-  MapPin,
-  Gauge,
   ArrowUp,
   ArrowDown,
   Minus

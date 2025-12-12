@@ -13,7 +13,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { 
   Activity, 
-  Globe, 
   Bell, 
   Accessibility, 
   Wifi, 
@@ -32,8 +31,6 @@ import {
   AlertTriangle,
   Clock,
   Languages,
-  Eye,
-  Volume2,
   Smartphone
 } from "lucide-react";
 import { cn } from "@/lib/utils";

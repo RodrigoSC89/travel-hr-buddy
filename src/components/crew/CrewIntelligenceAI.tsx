@@ -23,7 +23,6 @@ import {
   UserCheck,
   AlertTriangle,
   TrendingUp,
-  Clock,
   Target,
   Heart,
   Award,

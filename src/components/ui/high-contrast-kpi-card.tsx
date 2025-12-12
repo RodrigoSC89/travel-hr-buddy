@@ -4,13 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   TrendingUp,
-  TrendingDown,
-  Target,
-  Activity,
-  Users,
-  DollarSign,
-  Clock,
-  CheckCircle
+  TrendingDown
 } from "lucide-react";
 
 interface KPICardProps {

@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
-import React, { useState, useEffect } from "react";
+import { useState } from "react";;
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -11,18 +11,15 @@ import {
   AlertTriangle, 
   CheckCircle,
   Ship,
-  Building,
   Award,
   Clock,
   Users,
   Target,
   BarChart3,
   Download,
-  Upload,
   Eye,
   Edit,
   Calendar,
-  MapPin,
   Shield,
   Zap,
   Leaf,
@@ -31,7 +28,7 @@ import {
   Search,
   Filter
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PeotramMetrics {

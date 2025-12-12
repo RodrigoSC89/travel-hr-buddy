@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,9 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Ship, 
   Shield, 
-  Users, 
   BarChart3, 
-  Settings, 
   CheckCircle2,
   ArrowRight,
   Sparkles,

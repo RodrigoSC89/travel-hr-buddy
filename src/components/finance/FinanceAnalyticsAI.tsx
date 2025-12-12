@@ -15,8 +15,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
-  Brain, DollarSign, TrendingUp, TrendingDown, PieChart,
-  BarChart3, AlertTriangle, Sparkles, Zap, Target, Calendar
+  Brain, DollarSign, TrendingUp, TrendingDown,
+  BarChart3, Sparkles, Zap, Target, Calendar
 } from "lucide-react";
 import { toast } from "sonner";
 

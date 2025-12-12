@@ -1,11 +1,11 @@
-import { useState, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   BookOpen,
   Users,
@@ -19,8 +19,7 @@ import {
   Target,
   TrendingUp,
   FileText,
-  Video,
-  Headphones
+  Video
 } from "lucide-react";
 
 interface TrainingModule {

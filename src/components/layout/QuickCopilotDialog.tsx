@@ -3,7 +3,7 @@
  * Assistente IA rápido no header
  */
 
-import { memo, memo, useCallback, useEffect, useRef, useState, useMemo } from "react";;;
+import { memo, memo, useCallback, useEffect, useRef, useState } from "react";;;
 import {
   Dialog,
   DialogContent,

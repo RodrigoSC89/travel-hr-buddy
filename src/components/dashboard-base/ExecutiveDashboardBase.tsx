@@ -5,10 +5,10 @@
  */
 
 import { useState } from "react";;;
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RefreshCw, Download, Settings } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { ExecutiveDashboardConfig } from "@/types/dashboard-config";
 import { KPICard } from "./widgets/KPICard";
 import { ChartWidget } from "./widgets/ChartWidget";

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { toast } from "sonner";
 import {
   Shield,
   AlertTriangle,
@@ -15,16 +14,12 @@ import {
   TrendingDown,
   Target,
   Activity,
-  FileText,
   Clock,
-  Users,
-  Ship,
   Gauge,
   Brain,
   Download,
   RefreshCw,
-  BarChart3,
-  PieChart
+  BarChart3
 } from "lucide-react";
 
 interface RiskIndicator {

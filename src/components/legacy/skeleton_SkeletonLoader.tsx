@@ -58,7 +58,7 @@ export const SkeletonTable = memo(function SkeletonTable({ rows = 5 }: { rows?: 
       ))}
     </div>
   );
-  });
+});
 
 export const SkeletonDashboard = memo(function SkeletonDashboard() {
   return (

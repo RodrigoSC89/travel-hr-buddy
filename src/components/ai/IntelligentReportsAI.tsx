@@ -8,15 +8,12 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Brain, FileText, Send, Loader2, Download, Sparkles,
-  BarChart3, PieChart, LineChart, TrendingUp, Calendar,
-  Ship, Users, Wrench, DollarSign, Shield, Clock, RefreshCw
+  Brain, FileText, Loader2, Download, Sparkles,
+  BarChart3, TrendingUp,
+  Ship, Users, Wrench, DollarSign, Shield, Clock
 } from "lucide-react";
 
 interface ReportTemplate {

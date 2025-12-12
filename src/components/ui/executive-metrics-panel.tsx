@@ -2,26 +2,18 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  TrendingUp,
-  TrendingDown,
+import {
   DollarSign,
   Target,
-  Calendar,
-  Users,
-  Ship,
-  Award,
   AlertTriangle,
   CheckCircle,
   ArrowUpRight,
   ArrowDownRight,
   BarChart3,
-  Activity,
-  Clock
+  Activity
 } from "lucide-react";
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
+import { ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 
 const ExecutiveMetricsPanel = () => {
   const executiveMetrics = [

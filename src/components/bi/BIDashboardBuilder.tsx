@@ -14,18 +14,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { 
   BarChart3, 
-  LineChart, 
-  PieChart, 
   TrendingUp, 
   Send,
   Sparkles,
-  Plus,
   Loader2,
   Ship,
   Fuel,
   Users,
   Wrench,
-  AlertTriangle,
   CheckCircle,
   Download
 } from "lucide-react";

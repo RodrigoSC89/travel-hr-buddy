@@ -5,7 +5,7 @@
 
 import React, { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RefreshCw, Wifi, WifiOff } from "lucide-react";
+import { Loader2, RefreshCw, WifiOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Spinner Component

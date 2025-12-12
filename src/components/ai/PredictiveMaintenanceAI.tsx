@@ -9,12 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Brain, AlertTriangle, TrendingUp, Wrench, Clock,
-  CheckCircle, XCircle, RefreshCw, Sparkles, Ship,
-  Gauge, Zap, ThermometerSun, Settings
+  Brain, AlertTriangle, Wrench, Clock,
+  CheckCircle, XCircle, RefreshCw, Sparkles, Ship, Zap, Settings
 } from "lucide-react";
 
 interface PredictionResult {

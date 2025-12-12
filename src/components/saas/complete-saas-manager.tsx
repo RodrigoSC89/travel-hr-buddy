@@ -1,10 +1,9 @@
-import { useEffect, useState, useCallback } from "react";;
-import React, { useState, useEffect } from "react";
+import { useState } from "react";;
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { 
@@ -14,15 +13,11 @@ import {
   Settings, 
   BarChart,
   DollarSign,
-  Globe,
-  Shield,
   Zap,
   Database,
-  Clock,
   AlertTriangle,
   CheckCircle,
-  UserPlus,
-  Trash2
+  UserPlus
 } from "lucide-react";
 
 interface Tenant {

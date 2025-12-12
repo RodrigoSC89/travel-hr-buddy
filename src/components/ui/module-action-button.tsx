@@ -1,20 +1,11 @@
-import { useState, useCallback } from "react";;
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   ChevronDown,
-  ChevronUp,
-  Zap,
-  Settings,
-  Search,
-  Download,
-  RefreshCw,
-  Plus,
-  FileText,
-  Users,
-  TrendingUp
+  Zap
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";

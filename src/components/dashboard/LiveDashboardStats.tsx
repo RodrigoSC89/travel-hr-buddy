@@ -14,10 +14,9 @@ import {
   AlertTriangle, 
   TrendingUp, 
   TrendingDown,
-  CheckCircle,
   Shield
 } from "lucide-react";
-import { useDashboardData, DashboardMetrics } from "./index/DashboardDataProvider";
+import { useDashboardData } from "./index/DashboardDataProvider";
 
 interface StatCardProps {
   title: string;
@@ -175,7 +174,7 @@ export const LiveDashboardStats: React.FC = memo(() => {
       </div>
     </div>
   );
-  });
+});
 
 LiveDashboardStats.displayName = "LiveDashboardStats";
 

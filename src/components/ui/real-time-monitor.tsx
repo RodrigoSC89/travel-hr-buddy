@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -9,7 +9,6 @@ import {
   Zap,
   Thermometer,
   Droplets,
-  Wind,
   Compass,
   Gauge
 } from "lucide-react";

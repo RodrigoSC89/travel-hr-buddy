@@ -8,7 +8,7 @@ import { useState, useMemo, useCallback } from "react";;
  */
 
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -16,8 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
-  Brain, Shield, AlertTriangle, CheckCircle, FileText,
-  Activity, Sparkles, Zap, Target, Settings, AlertCircle
+  Brain, Shield, FileText,
+  Activity, Sparkles, Zap, Settings, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 
