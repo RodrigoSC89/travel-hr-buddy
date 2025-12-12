@@ -60,7 +60,7 @@ export const CriticalRouteErrorBoundary: React.FC<CriticalRouteErrorBoundaryProp
       componentStack: errorInfo.componentStack,
       routeName,
       routeId,
-    };
+    });
   };
 
   const FallbackComponent = CustomFallback || ((props: FallbackProps) => (
