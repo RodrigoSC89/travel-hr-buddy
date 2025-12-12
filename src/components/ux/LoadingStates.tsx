@@ -25,7 +25,7 @@ export const Spinner = memo(({
   return (
     <Loader2 className={cn("animate-spin", sizeClasses[size], className)} />
   );
-}));
+});
 
 // Full Screen Loader
 export const FullScreenLoader = memo(({ message = "Carregando..." }: { message?: string }) => (
