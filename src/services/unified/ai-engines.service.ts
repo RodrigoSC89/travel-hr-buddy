@@ -99,7 +99,7 @@ class UnifiedAIEngineService {
         interaction_count: 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      };
+      });
       
       this.contextCache.set(vesselId, context);
       logger.info("[AIEngine] Context created", { vesselId, contextId: context.context_id });
@@ -128,7 +128,7 @@ class UnifiedAIEngineService {
         ...existing,
         ...updates,
         updated_at: new Date().toISOString(),
-      };
+      });
       
       this.contextCache.set(vesselId, updated);
       logger.info("[AIEngine] Context updated", { vesselId });
@@ -195,7 +195,7 @@ class UnifiedAIEngineService {
         status: "planned",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      };
+      });
       
       this.missions.set(mission.id, mission);
       logger.info("[AIEngine] Mission created", { missionId: mission.id, name: mission.name });
@@ -281,7 +281,7 @@ class UnifiedAIEngineService {
         assigned_at: new Date().toISOString(),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      };
+      });
       
       const existingVessels = this.missionVessels.get(missionId) || [];
       this.missionVessels.set(missionId, [...existingVessels, assignment]);
@@ -325,7 +325,7 @@ class UnifiedAIEngineService {
         message,
         metadata: metadata || {},
         created_at: new Date().toISOString(),
-      };
+      });
       
       const existingLogs = this.missionLogs.get(missionId) || [];
       this.missionLogs.set(missionId, [...existingLogs, log]);
@@ -379,7 +379,7 @@ class UnifiedAIEngineService {
       errorRate: 0,
       cacheHitRate: 0,
       lastUpdated: new Date().toISOString(),
-    };
+    });
   }
 }
 

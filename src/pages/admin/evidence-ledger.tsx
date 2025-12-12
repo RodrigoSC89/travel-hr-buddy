@@ -137,7 +137,7 @@ export default function EvidenceLedgerPage() {
       checklist: "bg-green-100 text-green-800",
       incident: "bg-red-100 text-red-800",
       training: "bg-indigo-100 text-indigo-800"
-    };
+    });
     return colors[type] || "bg-gray-100 text-gray-800";
   };
 

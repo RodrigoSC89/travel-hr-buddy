@@ -254,7 +254,7 @@ export async function route(
         routedTo: "none",
         latencyMs: Date.now() - startTime,
         error: `Message rejected: ${validationResult.errors.join(", ")}`,
-      };
+      });
     }
 
     // Determine routing destination based on protocol
@@ -273,7 +273,7 @@ export async function route(
       routedTo: destination,
       latencyMs,
       response,
-    };
+    });
   } catch (error) {
     const latencyMs = Date.now() - startTime;
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -286,7 +286,7 @@ export async function route(
       routedTo: "error",
       latencyMs,
       error: errorMessage,
-    };
+    });
   }
 }
 

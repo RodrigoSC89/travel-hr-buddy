@@ -205,7 +205,7 @@ Respond in JSON format with:
       urgency,
       actionRequired: false,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     // Generate content based on intent
     switch (intent.intent) {
@@ -247,7 +247,7 @@ Respond in JSON format with:
           objects: context.visual.detectedObjects,
           scene: context.visual.sceneClassification,
         },
-      };
+      });
     }
 
     return response;

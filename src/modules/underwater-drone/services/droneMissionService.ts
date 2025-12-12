@@ -330,7 +330,7 @@ class DroneMissionService {
       sonarStatus: data.sonar_status,
       systemHealth: data.system_health,
       alerts: data.alerts,
-    };
+    });
   }
 }
 

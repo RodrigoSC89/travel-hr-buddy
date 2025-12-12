@@ -141,7 +141,7 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
         recommendations,
         keyMetrics,
         generatedAt: new Date()
-      };
+      });
 
       setSummaryData(summaryData);
 

@@ -169,7 +169,7 @@ export class SmartSchedulerService {
           in_progress: 0,
           completed: 0,
           overdue: 0,
-        };
+        });
       }
       
       acc[task.module].total++;

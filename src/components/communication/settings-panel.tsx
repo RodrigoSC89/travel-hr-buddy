@@ -246,11 +246,11 @@ export const SettingsPanel = memo(() => {
         settings,
         messages: [], // Would include user messages
         export_date: new Date().toISOString()
-      };
+      });
       
       const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
         type: "application/json"
-      };
+      });
       
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -484,7 +484,7 @@ export const SettingsPanel = memo(() => {
                     {settings.notifications.sound_enabled ? 
                       <Volume2 className="h-4 w-4" /> : 
                       <VolumeX className="h-4 w-4" />
-                    };
+                    });
                     <Label>Som</Label>
                   </div>
                   <Switch 

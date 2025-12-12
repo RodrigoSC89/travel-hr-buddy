@@ -248,7 +248,7 @@ class AutomationManager {
     const runIdleTasks = () => {
       this.runTasksBySchedule("idle");
       this.idleCallbackId = requestIdleCallback(runIdleTasks, { timeout: 60000 });
-    };
+    });
 
     this.idleCallbackId = requestIdleCallback(runIdleTasks, { timeout: 60000 });
   }
@@ -288,7 +288,7 @@ class AutomationManager {
         success: true,
         duration: performance.now() - startTime,
         timestamp: Date.now(),
-      };
+      });
 
       this.taskResults.push(result);
       this.trimResults();
@@ -301,7 +301,7 @@ class AutomationManager {
         duration: performance.now() - startTime,
         error: error instanceof Error ? error.message : "Unknown error",
         timestamp: Date.now(),
-      };
+      });
 
       this.taskResults.push(result);
       this.trimResults();
@@ -357,7 +357,7 @@ class AutomationManager {
       taskCount: this.tasks.size,
       activeIntervals: this.intervals.size,
       totalRuns: this.taskResults.filter(r => r.success).length,
-    };
+    });
   }
 }
 

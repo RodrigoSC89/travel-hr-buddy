@@ -138,7 +138,7 @@ export class AutoReconfigurationEngine {
         cost: 6,
       },
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.currentConfig = defaultConfig;
     this.configHistory.push(defaultConfig);
@@ -242,7 +242,7 @@ export class AutoReconfigurationEngine {
       changes: this.calculateChanges(beforeState, afterState),
       timestamp: new Date().toISOString(),
       status: "pending",
-    };
+    });
 
     try {
       // Apply the new configuration
@@ -444,7 +444,7 @@ export class AutoReconfigurationEngine {
       verdict,
       recommendation,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.validations.push(validation);
     await this.storeValidation(validation);
@@ -524,7 +524,7 @@ export class AutoReconfigurationEngine {
       validations: this.validations,
       currentConfig: this.currentConfig,
       configHistory: this.configHistory,
-    };
+    });
   }
 
   /**

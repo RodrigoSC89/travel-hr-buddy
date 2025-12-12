@@ -111,7 +111,7 @@ class UnderwaterMissionService {
           createdAt: new Date().toISOString(),
           waypointCount: mission.waypoints.length,
         },
-      };
+      });
 
       const { data, error } = await supabase
         .from("underwater_missions")
@@ -165,7 +165,7 @@ class UnderwaterMissionService {
         pressure: environmentalData?.pressure,
         visibility: environmentalData?.visibility,
         timestamp: new Date().toISOString(),
-      };
+      });
 
       const { data, error } = await supabase
         .from("drone_telemetry")
@@ -210,7 +210,7 @@ class UnderwaterMissionService {
         message,
         location,
         timestamp: new Date().toISOString(),
-      };
+      });
 
       const { data, error } = await supabase
         .from("mission_events")
@@ -303,7 +303,7 @@ class UnderwaterMissionService {
           : 0,
         totalDistance: missions.reduce((sum, m) => sum + (m.distance_covered_m || 0), 0),
         maxDepth: Math.max(...missions.map(m => m.max_depth_reached || 0), 0),
-      };
+      });
     } catch (error) {
       logger.error("Error fetching mission stats:", error);
       return null;

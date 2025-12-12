@@ -67,7 +67,7 @@ export default function DocumentHistoryPage() {
           created_at: version.created_at,
           updated_by: version.updated_by,
           author_email: profiles?.email || "Desconhecido",
-        };
+        });
   };
 
       setVersions(transformedData);

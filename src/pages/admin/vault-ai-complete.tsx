@@ -178,7 +178,7 @@ export default function VaultAIComplete() {
           category: doc.category,
           similarity_score: score,
           highlighted_excerpt: excerpt
-        };
+        });
       })
       .filter(result => result.similarity_score >= similarityThreshold)
       .sort((a, b) => b.similarity_score - a.similarity_score);

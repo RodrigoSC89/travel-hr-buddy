@@ -66,7 +66,7 @@ export default function DocumentViewPage() {
       if (realtimeChannel) {
         supabase.removeChannel(realtimeChannel);
       }
-    };
+    });
   }, [realtimeChannel]);
 
   const loadCurrentUser = async () => {
@@ -126,7 +126,7 @@ export default function DocumentViewPage() {
         generated_by: data.generated_by,
         author_email: profiles?.email,
         author_name: profiles?.full_name,
-      };
+      });
 
       setDoc(transformedData);
     } catch (error) {

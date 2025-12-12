@@ -242,7 +242,7 @@ class MultiAgentScanner {
       reason: "Performance degradation detected",
       timestamp: new Date().toISOString(),
       success: true
-    };
+    });
 
     await this.logFailoverEvent(event);
   }

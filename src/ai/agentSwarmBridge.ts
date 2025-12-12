@@ -248,7 +248,7 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
       agentType: "coordinator",
       success: false,
       error: errorMsg,
-    };
+    });
   }
 }
 

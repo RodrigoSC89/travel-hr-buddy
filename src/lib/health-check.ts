@@ -45,7 +45,7 @@ export async function checkSupabaseHealth(): Promise<HealthCheckResult> {
         responseTime,
         timestamp: new Date(),
         error: error.message,
-      };
+      });
     }
 
     return {
@@ -54,7 +54,7 @@ export async function checkSupabaseHealth(): Promise<HealthCheckResult> {
       responseTime,
       timestamp: new Date(),
       details: { connected: true },
-    };
+    });
   } catch (error) {
     return {
       service: "supabase",
@@ -62,7 +62,7 @@ export async function checkSupabaseHealth(): Promise<HealthCheckResult> {
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 
@@ -85,7 +85,7 @@ export async function checkAPIHealth(): Promise<HealthCheckResult> {
         responseTime,
         timestamp: new Date(),
         details: { message: "Some endpoints may be unavailable" },
-      };
+      });
     }
 
     return {
@@ -94,7 +94,7 @@ export async function checkAPIHealth(): Promise<HealthCheckResult> {
       responseTime,
       timestamp: new Date(),
       details: { status: data },
-    };
+    });
   } catch (error) {
     return {
       service: "api",
@@ -102,7 +102,7 @@ export async function checkAPIHealth(): Promise<HealthCheckResult> {
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 
@@ -124,7 +124,7 @@ export async function checkAuthHealth(): Promise<HealthCheckResult> {
         responseTime,
         timestamp: new Date(),
         error: error.message,
-      };
+      });
     }
 
     return {
@@ -136,7 +136,7 @@ export async function checkAuthHealth(): Promise<HealthCheckResult> {
         authenticated: !!session,
         userId: session?.user?.id,
       },
-    };
+    });
   } catch (error) {
     return {
       service: "auth",
@@ -144,7 +144,7 @@ export async function checkAuthHealth(): Promise<HealthCheckResult> {
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 
@@ -172,7 +172,7 @@ export async function checkStorageHealth(): Promise<HealthCheckResult> {
         responseTime,
         timestamp: new Date(),
         error: "localStorage read/write inconsistency",
-      };
+      });
     }
 
     return {
@@ -181,7 +181,7 @@ export async function checkStorageHealth(): Promise<HealthCheckResult> {
       responseTime,
       timestamp: new Date(),
       details: { localStorage: true },
-    };
+    });
   } catch (error) {
     return {
       service: "storage",
@@ -189,7 +189,7 @@ export async function checkStorageHealth(): Promise<HealthCheckResult> {
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
       error: error instanceof Error ? error.message : "Storage not available",
-    };
+    });
   }
 }
 
@@ -210,7 +210,7 @@ export async function checkNetworkHealth(): Promise<HealthCheckResult> {
         responseTime,
         timestamp: new Date(),
         error: "Network offline",
-      };
+      });
     }
 
     return {
@@ -223,7 +223,7 @@ export async function checkNetworkHealth(): Promise<HealthCheckResult> {
         effectiveType: (navigator as any).connection?.effectiveType,
         downlink: (navigator as any).connection?.downlink,
       },
-    };
+    });
   } catch (error) {
     return {
       service: "network",
@@ -231,7 +231,7 @@ export async function checkNetworkHealth(): Promise<HealthCheckResult> {
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
       error: error instanceof Error ? error.message : "Cannot determine network status",
-    };
+    });
   }
 }
 

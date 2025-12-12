@@ -27,14 +27,14 @@ export class ErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    };
+    });
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
-    };
+    });
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({
       error,
       errorInfo,
-    };
+    });
     
     // Call custom error handler if provided
     if (this.props.onError) {
@@ -60,7 +60,7 @@ export class ErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    };
+    });
   });
 
   render(): ReactNode {
@@ -170,7 +170,7 @@ export function handleApiError(error: SupabaseError | null, context?: ErrorConte
     return {
       message: "Erro de conexão. Verifique sua internet.",
       code: "NETWORK_ERROR",
-    };
+    });
   }
   
   // HTTP error

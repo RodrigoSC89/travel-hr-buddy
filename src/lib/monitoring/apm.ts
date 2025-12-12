@@ -71,7 +71,7 @@ class APMService {
       startTime: performance.now(),
       status: "in-progress",
       spans: [],
-    };
+    });
     
     this.transactions.set(id, transaction);
     logger.debug(`[APM] Transaction started: ${name}`, { id, type });
@@ -181,7 +181,7 @@ class APMService {
       timestamp: Date.now(),
       transactionId,
       metadata,
-    };
+    });
 
     this.errors.push(apmError);
     logger.error(`[APM] Error recorded: ${apmError.message}`, { type, transactionId });
@@ -214,7 +214,7 @@ class APMService {
         min: Math.min(...values),
         max: Math.max(...values),
         count: values.length,
-      };
+      });
     }
 
     return result;
@@ -245,7 +245,7 @@ class APMService {
       errorRate: number;
       avgResponseTime: number;
       transactionCount: number;
-    };
+    });
     } {
     const recentTransactions = this.getRecentTransactions(50);
     const errorCount = recentTransactions.filter(t => t.status === "error").length;
@@ -271,7 +271,7 @@ class APMService {
         avgResponseTime,
         transactionCount: recentTransactions.length,
       },
-    };
+    });
   }
 
   /**

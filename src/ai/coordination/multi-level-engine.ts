@@ -88,7 +88,7 @@ export class MultiLevelCoordinationEngine {
       timestamp: new Date().toISOString(),
       confidence: this.assessConfidence(context, "strategic"),
       dependencies: [],
-    };
+    });
 
     this.decisions.set(decision.id, decision);
     await this.logDecision(decision, "Strategic decision made");
@@ -114,7 +114,7 @@ export class MultiLevelCoordinationEngine {
       timestamp: new Date().toISOString(),
       confidence: this.assessConfidence(context, "operational"),
       dependencies: strategicDecision ? [strategicDecision.id] : [],
-    };
+    });
 
     // Check for conflicts with strategic level
     if (strategicDecision) {
@@ -149,7 +149,7 @@ export class MultiLevelCoordinationEngine {
       timestamp: new Date().toISOString(),
       confidence: this.assessConfidence(context, "tactical"),
       dependencies: operationalDecision ? [operationalDecision.id] : [],
-    };
+    });
 
     // Check for conflicts with operational level
     if (operationalDecision) {
@@ -211,7 +211,7 @@ export class MultiLevelCoordinationEngine {
         operational: operationalDecision,
         tactical: tacticalDecision,
         conflicts: this.conflicts,
-      };
+      });
     } catch (error) {
       // Fallback to tactical-only decision in case of coordination failure
       await this.logEvent("fallback", "tactical", {
@@ -226,7 +226,7 @@ export class MultiLevelCoordinationEngine {
         operational: fallbackDecision,
         tactical: fallbackDecision,
         conflicts: [],
-      };
+      });
     }
   }
 
@@ -277,7 +277,7 @@ export class MultiLevelCoordinationEngine {
       rationale: `${winner.level} level decision takes precedence due to hierarchy. ${overridden.level} level decision conflicts with ${winner.level} objectives.`,
       overriddenLevel: overridden.level,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.conflicts.push(resolution);
     await this.logConflictResolution(resolution);
@@ -307,7 +307,7 @@ export class MultiLevelCoordinationEngine {
       strategic: 7,
       operational: 5,
       tactical: 8, // Higher for immediate response
-    };
+    });
 
     let priority = basePriority[level];
 
@@ -433,7 +433,7 @@ export class MultiLevelCoordinationEngine {
         confidence: decision.confidence,
       },
       outcome,
-    };
+    });
 
     this.logs.push(log);
 

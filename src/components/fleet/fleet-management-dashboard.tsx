@@ -75,7 +75,7 @@ export const FleetManagementDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [loadFleetData]);
 
   const getStatusBadge = (status: string) => {
@@ -87,7 +87,7 @@ export const FleetManagementDashboard = memo(function() {
       maintenance: "destructive",
       emergency: "destructive",
       offline: "secondary"
-    };
+    });
 
     return (
       <Badge variant={variants[status] || "default"}>
@@ -102,7 +102,7 @@ export const FleetManagementDashboard = memo(function() {
       medium: "secondary",
       high: "default",
       critical: "destructive"
-    };
+    });
 
     return (
       <Badge variant={variants[severity] || "default"}>

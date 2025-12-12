@@ -172,7 +172,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         message_type: "text" as const,
         is_urgent: false,
         conversation_id: conversationId
-      };
+      });
 
       const { data, error } = await supabase
         .from("crew_communications")
@@ -232,7 +232,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         file_url: publicUrl,
         is_urgent: false,
         conversation_id: conversationId
-      };
+      });
 
       const { data, error } = await supabase
         .from("crew_communications")

@@ -195,7 +195,7 @@ class PollingManager {
       active: this.shouldPoll() ? this.polls.size : 0,
       paused: !this.shouldPoll() ? this.polls.size : 0,
       polls: stats,
-    };
+    });
   }
 
   /**

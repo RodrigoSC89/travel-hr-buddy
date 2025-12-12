@@ -105,7 +105,7 @@ class NeuralCopilotEngine {
         role: "system",
         content: "You are a Naval AI Copilot assistant. Provide tactical recommendations and explain decisions clearly.",
         timestamp: new Date(),
-      };
+      });
 
       const { data, error } = await supabase
         .from("copilot_sessions")
@@ -164,7 +164,7 @@ class NeuralCopilotEngine {
         content: command,
         input_type: "text",
         timestamp: new Date(),
-      };
+      });
 
       session.messages.push(userMessage);
 
@@ -177,7 +177,7 @@ class NeuralCopilotEngine {
         role: "assistant",
         content: response,
         timestamp: new Date(),
-      };
+      });
 
       session.messages.push(assistantMessage);
 
@@ -267,7 +267,7 @@ class NeuralCopilotEngine {
         reasoning: this.getRecommendationReasoning(type, session.context),
         suggested_actions: this.getSuggestedActions(type),
         confidence: 0.75,
-      };
+      });
 
       session.recommendations.push(recommendation);
       await this.updateSession(session);
@@ -294,7 +294,7 @@ class NeuralCopilotEngine {
       crew_alert: "Alert crew members about upcoming situation",
       resource_allocation: "Optimize resource distribution",
       emergency_protocol: "Review emergency protocols",
-    };
+    });
     return descriptions[type];
   }
 
@@ -341,7 +341,7 @@ class NeuralCopilotEngine {
         "Ensure equipment readiness",
         "Conduct safety drill",
       ],
-    };
+    });
     return actions[type];
   }
 
@@ -366,12 +366,12 @@ class NeuralCopilotEngine {
       const transcript = speechEvent.results[speechEvent.results.length - 1][0].transcript;
       logger.info("[NeuralCopilot] Voice input received", { transcript });
       onResult(transcript);
-    };
+    });
 
     this.speechRecognition.onerror = (event: unknown) => {
       const errorEvent = event as { error: string };
       logger.error("[NeuralCopilot] Speech recognition error", { error: errorEvent.error });
-    };
+    });
 
     this.speechRecognition.start();
     this.isListening = true;
@@ -435,7 +435,7 @@ class NeuralCopilotEngine {
         status: (data.status as string || "active") as "active" | "paused" | "completed",
         created_at: new Date(data.created_at as string),
         updated_at: new Date(data.updated_at as string),
-      };
+      });
 
       this.activeSessions.set(sessionId, session);
       return session;

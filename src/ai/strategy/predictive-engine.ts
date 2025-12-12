@@ -358,7 +358,7 @@ class PredictiveStrategyEngine {
         signalCount: signals.length,
         avgPriority: signals.reduce((sum, s) => sum + s.priority, 0) / signals.length
       }
-    };
+    });
 
     this.strategyHistory.set(strategyId, strategy);
     return strategy;
@@ -412,7 +412,7 @@ class PredictiveStrategyEngine {
       metadata: {
         signalCount: signals.length
       }
-    };
+    });
 
     this.strategyHistory.set(strategyId, strategy);
     return strategy;
@@ -475,7 +475,7 @@ class PredictiveStrategyEngine {
         signalCount: signals.length,
         riskLevel: "high"
       }
-    };
+    });
 
     this.strategyHistory.set(strategyId, strategy);
     return strategy;

@@ -52,7 +52,7 @@ export async function getContextSnapshot(contextId: string = "global"): Promise<
         activeModules: [],
         recentEvents: [],
         performanceMetrics: {}
-      };
+      });
     }
 
     return {
@@ -62,7 +62,7 @@ export async function getContextSnapshot(contextId: string = "global"): Promise<
       activeModules: data.active_modules as string[],
       recentEvents: data.recent_events as any[],
       performanceMetrics: data.performance_metrics as any
-    };
+    });
 
   } catch (error) {
     logger.error("Error fetching context snapshot", error as Error, { contextId });

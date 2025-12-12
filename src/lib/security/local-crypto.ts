@@ -35,7 +35,7 @@ class LocalCrypto {
     this.config = {
       iterations: config.iterations || ITERATIONS,
       useDeviceKey: config.useDeviceKey ?? true,
-    };
+    });
     
     this.initializeDeviceId();
   }
@@ -120,7 +120,7 @@ class LocalCrypto {
         salt: this.bufferToBase64(salt),
         data: this.bufferToBase64(new Uint8Array(encrypted)),
         version: 1,
-      };
+      });
     } catch (error) {
       logger.error("[LocalCrypto] Encryption failed", { error });
       throw new Error("Encryption failed");

@@ -171,7 +171,7 @@ export default function PeoDpWizardComplete() {
         compliance_score: calculateComplianceScore(data),
         recommendations: generateRecommendations(data),
         critical_findings: identifyCriticalFindings(data)
-      };
+      });
 
       setInferenceResults(results);
       performCrossValidation(data, results);
@@ -216,7 +216,7 @@ export default function PeoDpWizardComplete() {
       if (!data[field] || data[field].length < 10) {
         score -= 15;
       }
-    };
+    });
 
     // Bonus for comprehensive documentation
     if (data.fmea && data.fmea.length > 500) score += 5;

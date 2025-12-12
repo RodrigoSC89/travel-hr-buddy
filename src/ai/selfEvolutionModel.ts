@@ -94,7 +94,7 @@ class SelfEvolutionModel {
       context: failure.context || {},
       first_seen: new Date().toISOString(),
       last_seen: new Date().toISOString()
-    };
+    });
 
     // Check if similar failure exists
     const existing = Array.from(this.failures.values()).find(

@@ -23,7 +23,7 @@ export interface Job {
     asset: {
       name: string;
       vessel: string;
-    };
+    });
   };
   suggestion_ia?: string;
   can_postpone?: boolean;
@@ -313,7 +313,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
   if (!job.can_postpone) {
     return {
       message: "Este job não pode ser postergado devido à prioridade crítica.",
-    };
+    });
   }
   
   const currentDate = new Date(job.due_date);

@@ -39,7 +39,7 @@ class ManualOverrideSystem {
       expiresAt: durationMinutes 
         ? new Date(Date.now() + durationMinutes * 60 * 1000)
         : undefined,
-    };
+    });
 
     // Apply override to tactical AI
     tacticalAI.setManualOverride(moduleName, true);

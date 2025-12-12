@@ -68,7 +68,7 @@ class SensorsHubService {
           simulation: true,
           timestamp: new Date().toISOString(),
         },
-      };
+      });
     });
 
     await supabase.from("sensor_logs").insert(logs);
@@ -97,7 +97,7 @@ class SensorsHubService {
       wave: 2.5,
       current: 1.5,
       other: 50,
-    };
+    });
     return baseValues[type] || 50;
   }
 
@@ -118,7 +118,7 @@ class SensorsHubService {
       wave: { warning: 4, critical: 6 },
       current: { warning: 3, critical: 4 },
       other: { warning: 80, critical: 95 },
-    };
+    });
 
     const threshold = thresholds[type];
     if (value >= threshold.critical) return "critical";

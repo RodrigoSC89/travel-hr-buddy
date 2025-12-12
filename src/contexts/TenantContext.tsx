@@ -354,7 +354,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
       } finally {
         setIsLoading(false);
       }
-    };
+    });
 
     initializeTenant();
   }, [user?.id]);

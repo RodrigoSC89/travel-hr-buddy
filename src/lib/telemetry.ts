@@ -51,7 +51,7 @@ class TelemetryTracker {
         lastClickTime = now;
         this.handleClick(event);
       }
-    };
+    });
     
     document.addEventListener("click", throttledClick, true);
 

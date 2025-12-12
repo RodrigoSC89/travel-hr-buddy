@@ -60,7 +60,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const fetchSystemStatus = async () => {

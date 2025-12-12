@@ -223,7 +223,7 @@ export default function DocumentTemplates() {
         p_name: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
         p_variable_values: variableValues,
         p_format: "html"
-      };
+      });
 
       if (error) throw error;
 
@@ -250,7 +250,7 @@ export default function DocumentTemplates() {
       const { error } = await (supabase as unknown).rpc("rollback_template_version", {
         p_template_id: selectedTemplate.id,
         p_version: version
-      };
+      });
 
       if (error) throw error;
 

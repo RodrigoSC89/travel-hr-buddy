@@ -74,7 +74,7 @@ export const useNotifications = () => {
             extra: {}
           }
         ]
-      };
+      });
 
       await LocalNotifications.schedule(notificationOptions);
     } catch (error) {

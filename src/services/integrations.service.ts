@@ -240,7 +240,7 @@ export class IntegrationsService {
       success_rate: successRate,
       recent_events: events.slice(0, 10),
       recent_logs: logs.slice(0, 10),
-    };
+    });
   }
 
   // OAuth Flow Helpers
@@ -259,7 +259,7 @@ export class IntegrationsService {
       zapier: `https://zapier.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`,
       slack: `https://slack.com/oauth/v2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopeStr}&state=${state}`,
       custom: redirectUri,
-    };
+    });
 
     return urls[provider] || "";
   }
@@ -535,7 +535,7 @@ export class IntegrationsService {
       plugins: pluginStatus,
       recent_activity: stats.recent_logs.slice(0, 5),
       health_status: this.calculateHealthStatus(stats),
-    };
+    });
   }
 
   static calculateHealthStatus(stats: IntegrationDashboardStats): string {
@@ -591,6 +591,6 @@ export class IntegrationsService {
         integration_id: id,
         event_count: count,
       })),
-    };
+    });
   }
 }

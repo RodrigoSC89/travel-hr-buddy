@@ -245,7 +245,7 @@ export class PEOdpCore {
       },
       insights,
       generatedAt: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -269,7 +269,7 @@ export class PEOdpCore {
         keyFindings: ["Nenhuma sessão de monitoramento disponível"],
         recommendations: ["Iniciar monitoramento em tempo real"],
         generatedAt: new Date().toISOString(),
-      };
+      });
     }
 
     const vesselName = sessions[0].vesselName;
@@ -324,7 +324,7 @@ export class PEOdpCore {
       keyFindings,
       recommendations,
       generatedAt: new Date().toISOString(),
-    };
+    });
   }
 
   /**

@@ -175,7 +175,7 @@ export class RiskOpsService {
       risks,
       statistics,
       generated_at: new Date().toISOString(),
-    };
+    });
 
     return JSON.stringify(exportData, null, 2);
   }

@@ -45,7 +45,7 @@ export async function getWorkflowAISummary(): Promise<WorkflowAISummary> {
       total,
       aceitas,
       taxa,
-    };
+    });
   } catch (error) {
     logger.error("Error in getWorkflowAISummary", error as Error);
     return { total: 0, aceitas: 0, taxa: "0.0" };

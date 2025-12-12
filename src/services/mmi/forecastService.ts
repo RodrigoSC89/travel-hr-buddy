@@ -129,7 +129,7 @@ Formate sua resposta como JSON com esta estrutura:
           date: h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A",
           action: h.task_description,
         })),
-      };
+      });
     }
 
     return forecast;
@@ -148,7 +148,7 @@ Formate sua resposta como JSON com esta estrutura:
         date: h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A",
         action: h.task_description,
       })),
-    };
+    });
   }
 }
 

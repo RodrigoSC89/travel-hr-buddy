@@ -38,7 +38,7 @@ export function useFPSMonitor(enabled: boolean = true): number {
 
     return () => {
       monitorRef.current?.stop();
-    };
+    });
   }, [enabled]);
 
   return fps;
@@ -248,7 +248,7 @@ export function useOptimizedEventListener<K extends keyof WindowEventMap>(
 
     return () => {
       window.removeEventListener(eventName, optimizedHandler as any);
-    };
+    });
   }, [eventName, throttleMs, debounceMs, enabled]);
 }
 
@@ -266,7 +266,7 @@ export function useVisibilityTracking(componentName: string): void {
         const visibilityDuration = performance.now() - startTimeRef.current;
         logger.info(`${componentName} visibility duration: ${visibilityDuration.toFixed(2)}ms`);
       }
-    };
+    });
   }, [componentName]);
 }
 
@@ -283,7 +283,7 @@ export function useTimeToInteractive(callback?: (time: number) => void): void {
         logger.info(`Time to Interactive: ${tti.toFixed(2)}ms`);
         callback?.(tti);
       });
-    };
+    });
 
     if (document.readyState === "complete") {
       checkInteractive();

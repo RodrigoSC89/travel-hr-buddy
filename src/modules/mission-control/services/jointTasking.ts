@@ -118,7 +118,7 @@ export async function createMission(
       completionPercentage: 0,
       syncStatus: "pending",
       syncErrors: [],
-    };
+    });
 
     // Store in database
     const { error } = await supabase.from("joint_mission_log").insert({
@@ -305,7 +305,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
             })),
             timestamp: new Date().toISOString(),
           },
-        };
+        });
 
         // Send via protocol adapter
         const result = await protocolAdapter.processMessage(message);
@@ -360,7 +360,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
       failedTasks: mission.tasks.length,
       errors: [...errors, errorMsg],
       latencyMs,
-    };
+    });
   }
 }
 

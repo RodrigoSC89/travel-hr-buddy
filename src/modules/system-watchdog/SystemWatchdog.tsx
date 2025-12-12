@@ -51,7 +51,7 @@ export default function SystemWatchdog() {
 
     return () => {
       if (interval) clearInterval(interval);
-    };
+    });
   }, [isAutoRefresh]);
 
   const loadHealthStatus = async () => {

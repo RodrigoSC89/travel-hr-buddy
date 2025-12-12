@@ -169,7 +169,7 @@ export default function SGSOAudits() {
       medium: "text-yellow-600",
       high: "text-orange-600",
       critical: "text-red-600",
-    };
+    });
     return colors[level as keyof typeof colors] || "text-gray-600";
   };
 

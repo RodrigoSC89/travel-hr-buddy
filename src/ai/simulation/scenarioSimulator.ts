@@ -406,7 +406,7 @@ class ScenarioSimulator {
       description: `Simulated event at ${new Date().toLocaleTimeString()}`,
       timestamp: new Date().toISOString(),
       impact: Math.random()
-    };
+    });
 
     // Get AI response if enabled
     if (this.currentScenario?.aiEnabled) {

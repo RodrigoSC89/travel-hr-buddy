@@ -252,7 +252,7 @@ export async function getWeatherForecast(
           icon: midday.weather[0].icon,
           wind_speed: midday.wind.speed,
           humidity: midday.main.humidity,
-        };
+        });
       });
 
     logger.info("Forecast data fetched successfully", { days: forecast.length });

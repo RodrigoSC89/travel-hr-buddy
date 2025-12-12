@@ -127,7 +127,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
       pending: "text-yellow-600",
       in_progress: "text-blue-600",
       completed: "text-green-600",
-    };
+    });
     return colors[status as keyof typeof colors] || "text-gray-600";
   };
 

@@ -46,7 +46,7 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
       content: "AI engine não configurado. Configure VITE_OPENAI_API_KEY para habilitar respostas da IA.",
       model: "mock",
       timestamp: new Date()
-    };
+    });
   }
 
   try {
@@ -98,7 +98,7 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
         messageCount: request.messages.length,
         hasSystemMessage: request.messages.some(m => m.role === "system")
       }
-    };
+    });
     
     // Store in Supabase ai_memory_events table for persistent learning and analytics
     const { error } = await supabase

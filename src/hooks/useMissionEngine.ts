@@ -70,7 +70,7 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
       } catch (error) {
         logger.error("Error in loadMissionsFromSupabase:", error);
       }
-    };
+    });
 
     loadMissionsFromSupabase();
   }, [enableSupabase]);
@@ -121,7 +121,7 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
         completedSteps: [],
         failedSteps: [],
         message: "Another mission is already executing"
-      };
+      });
     }
 
     setIsExecuting(true);

@@ -68,7 +68,7 @@ function getConnectionType(): string {
       effectiveType?: string;
       downlink?: number;
       rtt?: number;
-    };
+    });
   };
   
   return nav.connection?.effectiveType || "unknown";
@@ -163,7 +163,7 @@ export async function resilientFetch<T = unknown>(
         fromCache: true,
         attempts: 0,
         duration: Date.now() - startTime,
-      };
+      });
     }
   }
 
@@ -212,7 +212,7 @@ export async function resilientFetch<T = unknown>(
         fromCache: false,
         attempts,
         duration: Date.now() - startTime,
-      };
+      });
 
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
@@ -257,7 +257,7 @@ export async function resilientFetch<T = unknown>(
       fromCache: false,
       attempts,
       duration: Date.now() - startTime,
-    };
+    });
   }
 
   return {

@@ -34,7 +34,7 @@ export function getCurrentTenantContext(): TenantContext | null {
         return {
           tenantId: subdomain,
           tenantName: subdomain,
-        };
+        });
       }
     }
 
@@ -45,7 +45,7 @@ export function getCurrentTenantContext(): TenantContext | null {
       if (tenantId) {
         return {
           tenantId,
-        };
+        });
       }
     }
 
@@ -54,7 +54,7 @@ export function getCurrentTenantContext(): TenantContext | null {
     if (storedTenantId) {
       return {
         tenantId: storedTenantId,
-      };
+      });
     }
 
     return null;
@@ -149,7 +149,7 @@ export function createTenantClient() {
           
           return baseQuery.upsert(dataWithTenant);
         },
-      };
+      });
     },
   };
 }

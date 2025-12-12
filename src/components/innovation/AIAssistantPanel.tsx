@@ -165,7 +165,7 @@ export const AIAssistantPanel = memo(() => {
             query: query,
             context: "ai_assistant_query"
           }
-        };
+        });
         
         if (error) throw error;
         

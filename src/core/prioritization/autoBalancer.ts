@@ -89,7 +89,7 @@ export class AutoPriorityBalancer {
       timeOfDay,
       dayOfWeek: (dayOfWeek === 0 || dayOfWeek === 6) ? "weekend" : "weekday",
       emergencyMode: incidents.hasEmergency || systemMetrics.load > 90,
-    };
+    });
   }
 
   /**
@@ -176,7 +176,7 @@ export class AutoPriorityBalancer {
           return p;
         });
       },
-    };
+    });
   }
 
   /**
@@ -201,7 +201,7 @@ export class AutoPriorityBalancer {
           return p;
         });
       },
-    };
+    });
   }
 
   /**
@@ -226,7 +226,7 @@ export class AutoPriorityBalancer {
           return p;
         });
       },
-    };
+    });
   }
 
   /**
@@ -253,7 +253,7 @@ export class AutoPriorityBalancer {
           return p;
         });
       },
-    };
+    });
   }
 
   /**
@@ -279,7 +279,7 @@ export class AutoPriorityBalancer {
           return p;
         });
       },
-    };
+    });
   }
 
   /**
@@ -318,7 +318,7 @@ export class AutoPriorityBalancer {
       return {
         count: data?.length || 0,
         hasEmergency: data?.some(i => i.severity === "critical") || false,
-      };
+      });
     } catch (error) {
       logger.error("Failed to fetch incidents:", error);
       return { count: 0, hasEmergency: false };
@@ -345,7 +345,7 @@ export class AutoPriorityBalancer {
     return {
       load: peakHours ? 65 : 35,
       activeUsers: peakHours ? 50 : 10,
-    };
+    });
   }
 
   private async countCriticalDeadlines(): Promise<number> {

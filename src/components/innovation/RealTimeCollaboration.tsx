@@ -55,7 +55,7 @@ export const RealTimeCollaboration = memo(() => {
     
     return () => {
       // Cleanup subscriptions
-    };
+    });
   }, [user]);
 
   const initializeCollaboration = async () => {
@@ -175,7 +175,7 @@ export const RealTimeCollaboration = memo(() => {
 
     return () => {
       supabase.removeChannel(messagesSubscription);
-    };
+    });
   };
 
   const sendMessage = async () => {
@@ -223,7 +223,7 @@ export const RealTimeCollaboration = memo(() => {
     case "alert": return <Bell className="w-4 h-4 text-orange-500" />;
     case "achievement": return <Zap className="w-4 h-4 text-green-500" />;
     default: return <MessageCircle className="w-4 h-4 text-muted-foreground" />;
-    };
+    });
   };
 
   return (

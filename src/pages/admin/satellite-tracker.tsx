@@ -84,7 +84,7 @@ export default function SatelliteTracker() {
     return () => {
       supabase.removeChannel(channel);
       cleanupVisualization();
-    };
+    });
   }, []);
 
   const fetchSatellites = async () => {
@@ -202,12 +202,12 @@ export default function SatelliteTracker() {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       rendererRef.current.setSize(width, height);
-    };
+    });
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-    };
+    });
   };
 
   const cleanupVisualization = () => {

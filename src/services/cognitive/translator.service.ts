@@ -51,7 +51,7 @@ export class TranslatorService {
           source: cached.source,
           cached: true,
           confidence: 1.0,
-        };
+        });
       }
 
       // Load from JSON
@@ -81,7 +81,7 @@ export class TranslatorService {
         source: "fallback",
         cached: false,
         confidence: 0.0,
-      };
+      });
     } catch (error) {
       logger.error("[Translator] Translation failed", error as Error, { key, targetLang });
       return {
@@ -89,7 +89,7 @@ export class TranslatorService {
         source: "fallback",
         cached: false,
         confidence: 0.0,
-      };
+      });
     }
   }
 
@@ -123,7 +123,7 @@ export class TranslatorService {
         ai: 0,
         fallback: 0,
       },
-    };
+    });
 
     for (const cache of this.cache.values()) {
       stats.byLanguage[cache.lang] = (stats.byLanguage[cache.lang] || 0) + 1;

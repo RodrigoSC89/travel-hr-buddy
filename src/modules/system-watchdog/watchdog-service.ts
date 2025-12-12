@@ -119,7 +119,7 @@ class WatchdogService {
           status: "online",
           latency: fallbackLatency,
           timestamp: new Date()
-        };
+        });
       }
 
       return {
@@ -127,7 +127,7 @@ class WatchdogService {
         status: "online",
         latency,
         timestamp: new Date()
-      };
+      });
     } catch (err) {
       return {
         service: "supabase",
@@ -135,7 +135,7 @@ class WatchdogService {
         latency: Date.now() - startTime,
         message: err instanceof Error ? err.message : "Unknown error",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -166,7 +166,7 @@ class WatchdogService {
         latency: Date.now() - startTime,
         message: err instanceof Error ? err.message : "AI service unreachable",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -194,7 +194,7 @@ class WatchdogService {
           latency,
           message: `Route ${currentPath} may be invalid or not fully loaded`,
           timestamp: new Date()
-        };
+        });
       }
 
       return {
@@ -202,7 +202,7 @@ class WatchdogService {
         status: "online",
         latency,
         timestamp: new Date()
-      };
+      });
     } catch (err) {
       return {
         service: "routing",
@@ -210,7 +210,7 @@ class WatchdogService {
         latency: Date.now() - startTime,
         message: err instanceof Error ? err.message : "Routing check failed",
         timestamp: new Date()
-      };
+      });
     }
   }
 

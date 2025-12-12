@@ -50,7 +50,7 @@ interface SkyscannerItinerary {
   legs?: Array<{
     carriers?: {
       marketing?: Array<{ name: string }>;
-    };
+    });
     durationInMinutes?: number;
     stopCount?: number;
     departure?: string;
@@ -60,7 +60,7 @@ interface SkyscannerItinerary {
     price: {
       amount: number;
       unit: string;
-    };
+    });
     items?: Array<{
       deepLink?: string;
     }>;
@@ -71,7 +71,7 @@ interface SkyscannerSearchResponse {
   content?: {
     results?: {
       itineraries?: Record<string, SkyscannerItinerary>;
-    };
+    });
   };
 }
 
@@ -110,7 +110,7 @@ export async function testSkyscannerConnection(): Promise<SkyscannerTestResult> 
       success: false,
       message: "Skyscanner API key not configured",
       error: "Missing VITE_RAPIDAPI_KEY or VITE_SKYSCANNER_API_KEY. Note: Skyscanner typically requires RapidAPI subscription.",
-    };
+    });
   }
 
   try {
@@ -131,7 +131,7 @@ export async function testSkyscannerConnection(): Promise<SkyscannerTestResult> 
         message: `Skyscanner API error: ${response.status} ${response.statusText}`,
         responseTime,
         error: `HTTP ${response.status} - Check if RapidAPI subscription is active`,
-      };
+      });
     }
 
     const data = await response.json();
@@ -144,7 +144,7 @@ export async function testSkyscannerConnection(): Promise<SkyscannerTestResult> 
         data: {
           marketsCount: Array.isArray(data) ? data.length : "N/A",
         },
-      };
+      });
     }
 
     return {
@@ -152,14 +152,14 @@ export async function testSkyscannerConnection(): Promise<SkyscannerTestResult> 
       message: "Skyscanner API returned unexpected data",
       responseTime,
       error: "Invalid response format",
-    };
+    });
   } catch (error) {
     return {
       success: false,
       message: "Failed to connect to Skyscanner API",
       responseTime: Date.now() - startTime,
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 
@@ -175,7 +175,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
       success: false,
       offers: [],
       error: "API key not configured. Set VITE_RAPIDAPI_KEY or VITE_SKYSCANNER_API_KEY.",
-    };
+    });
   }
 
   // Check cache first
@@ -191,7 +191,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
           success: true,
           offers: cachedData.offers,
           cached: true,
-        };
+        });
       }
     } catch {
       // Invalid cache, continue with API call
@@ -226,7 +226,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
         adults,
         children,
       },
-    };
+    });
 
     const departureComponents = parseDateToComponents(departureDate);
     if (!departureComponents) {
@@ -234,7 +234,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
         success: false,
         offers: [],
         error: "Invalid departure date format. Use YYYY-MM-DD.",
-      };
+      });
     }
 
     requestBody.query.queryLegs.push({

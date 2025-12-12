@@ -104,7 +104,7 @@ const analyzeLogsData = async (allLogs: (SystemLogRow | any)[]): Promise<LogAnal
       recommendations: [],
       overallHealth: "healthy",
       analyzedAt: new Date().toISOString()
-    };
+    });
   }
 
   // Detect patterns

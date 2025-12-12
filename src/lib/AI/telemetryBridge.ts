@@ -103,7 +103,7 @@ Format your response as JSON with keys: summary, recommendations (array), severi
         recommendations: ["Review the detailed analysis above"],
         severity: "medium",
         timestamp: new Date().toISOString(),
-      };
+      });
     }
   } catch (error) {
     logger.error("Failed to analyze performance metrics", error as Error, { 
@@ -116,7 +116,7 @@ Format your response as JSON with keys: summary, recommendations (array), severi
       recommendations: ["Check API configuration", "Review console logs"],
       severity: "low",
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 }
 

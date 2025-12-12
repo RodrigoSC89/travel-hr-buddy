@@ -81,7 +81,7 @@ class IoTConnectorService {
     
     return () => {
       this.listeners.get(vesselId)?.delete(listener);
-    };
+    });
   }
 
   /**
@@ -99,7 +99,7 @@ class IoTConnectorService {
       engineRPM: 1800 + Math.floor(Math.random() * 400),
       temperature: 75 + Math.random() * 15,
       lastUpdate: new Date()
-    };
+    });
   }
 
   /**
@@ -152,7 +152,7 @@ class IoTConnectorService {
       speed: { value: 12 + Math.random() * 5, unit: "knots" },
       heading: { value: Math.floor(Math.random() * 360), unit: "degrees" },
       pressure: { value: 1013 + Math.random() * 20, unit: "hPa" }
-    };
+    });
 
     const { value, unit } = baseValues[type] || { value: 0, unit: "" };
 
@@ -163,7 +163,7 @@ class IoTConnectorService {
       value,
       unit,
       timestamp: new Date()
-    };
+    });
   }
 
   /**

@@ -128,7 +128,7 @@ class RequestQueueManager {
       maxRetries,
       createdAt: Date.now(),
       callback,
-    };
+    });
 
     this.queue.set(request.id, request);
     this.saveToStorage();
@@ -259,7 +259,7 @@ class RequestQueueManager {
       processing: requests.filter((r) => r.status === "processing").length,
       failed: requests.filter((r) => r.status === "failed").length,
       isOnline: navigator.onLine,
-    };
+    });
   }
 
   getPendingCount(): number {

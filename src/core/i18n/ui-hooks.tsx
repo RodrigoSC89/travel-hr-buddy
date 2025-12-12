@@ -74,7 +74,7 @@ export function useTranslation(
         logger.error("[useTranslation] Failed to initialize translator", error);
         setIsLoading(false);
       }
-    };
+    });
 
     init();
   }, []);
@@ -163,7 +163,7 @@ export function useStaticTranslation(
       }
       
       setTranslations(newTranslations);
-    };
+    });
 
     loadTranslations();
   }, [keys, targetLang]);

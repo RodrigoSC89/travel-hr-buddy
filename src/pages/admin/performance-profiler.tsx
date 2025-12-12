@@ -127,7 +127,7 @@ export default function PerformanceProfiler() {
       cpu: cpuUsage,
       memory: memoryUsage,
       fps: Math.min(fps, 60), // Cap at 60 FPS
-    };
+    });
 
     // Update metrics array (keep last 20 points)
     metricsRef.current = [...metricsRef.current.slice(-19), metric];
@@ -187,7 +187,7 @@ export default function PerformanceProfiler() {
           // Keep only recent ones (last 5 minutes)
           const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
           return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
-        };
+        });
       }
     } catch (error) {
       logger.error("Error detecting slow components in performance profiler", { error });
@@ -226,7 +226,7 @@ export default function PerformanceProfiler() {
         memory_usage: metric.memory,
         fps: metric.fps,
         slow_components: slowComponents,
-      };
+      });
 
       await supabase.from("performance_metrics").insert(snapshot);
     } catch (error) {

@@ -43,7 +43,7 @@ export async function createAutoPR(
     return {
       success: false,
       error: "GITHUB_TOKEN environment variable is required"
-    };
+    });
   }
 
   try {
@@ -81,7 +81,7 @@ export async function createAutoPR(
       success: true,
       prNumber: response.data.number,
       prUrl: response.data.html_url
-    };
+    });
   } catch (error: any) {
     logger.error("Failed to create PR", { error: error.message });
     
@@ -90,18 +90,18 @@ export async function createAutoPR(
       return {
         success: false,
         error: "Repository not found or insufficient permissions"
-      };
+      });
     } else if (error.status === 422) {
       return {
         success: false,
         error: "Branch does not exist or PR already exists"
-      };
+      });
     }
 
     return {
       success: false,
       error: error.message || "Unknown error occurred"
-    };
+    });
   }
 }
 

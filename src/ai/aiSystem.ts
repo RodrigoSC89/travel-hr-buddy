@@ -140,7 +140,7 @@ class AISystem {
     try {
       const health: any = {
         timestamp: new Date().toISOString(),
-      };
+      });
 
       // Only get stats for enabled engines
       if (this.config.enableWatchdog) {
@@ -182,7 +182,7 @@ class AISystem {
       tactical: this.config.enableTactical ? tacticalAI.getStats() : null,
       adaptive: this.config.enableAdaptive ? adaptiveMetricsEngine.getStats() : null,
       evolution: this.config.enableEvolution ? evoAIConnector.getStats() : null,
-    };
+    });
   }
 
   /**

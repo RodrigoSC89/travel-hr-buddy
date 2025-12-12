@@ -90,7 +90,7 @@ export const BusinessIntelligence = memo(() => {
           period: selectedPeriod,
           department: selectedDepartment 
         }
-      };
+      });
       
       if (error) throw error;
       
@@ -277,7 +277,7 @@ export const BusinessIntelligence = memo(() => {
     case "below": return "text-danger";
     case "equal": return "text-warning";
     default: return "text-muted-foreground";
-    };
+    });
   };
 
   return (

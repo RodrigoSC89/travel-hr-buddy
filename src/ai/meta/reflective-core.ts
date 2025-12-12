@@ -76,7 +76,7 @@ export class ReflectiveCore {
       ...decision,
       id: `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.decisionHistory.push(record);
 
@@ -324,7 +324,7 @@ export class ReflectiveCore {
       ],
       confidenceAdjustment: 0.1 * (pattern.frequency / 10), // Increase confidence
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -352,7 +352,7 @@ export class ReflectiveCore {
       ],
       confidenceAdjustment: -0.1,
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   /**

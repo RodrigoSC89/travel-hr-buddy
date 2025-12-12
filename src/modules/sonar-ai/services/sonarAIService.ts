@@ -212,7 +212,7 @@ class SonarAIService {
       waveform,
       frequencySpectrum,
       polarPlot,
-    };
+    });
   }
 
   /**
@@ -252,7 +252,7 @@ class SonarAIService {
         severity,
         resolved: false,
         userId,
-      };
+      });
 
       detections.push(detection);
     });

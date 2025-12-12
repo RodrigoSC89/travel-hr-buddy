@@ -148,17 +148,17 @@ export class RealtimeChat {
           this.reconnectDelay = 2000;
           this.isReconnecting = false;
         }
-      };
+      });
 
       this.pc.onicecandidateerror = (event) => {
         logger.error("ICE candidate error:", event);
-      };
+      });
 
       // Set up remote audio
       this.pc.ontrack = (e) => {
         logger.info("Received remote audio track");
         this.audioEl.srcObject = e.streams[0];
-      };
+      });
 
       // Add local audio track
       const ms = await navigator.mediaDevices.getUserMedia({ 
@@ -359,7 +359,7 @@ export class RealtimeChat {
       "estratégico": "strategic",
       "strategic": "strategic",
       "estratégia": "strategic"
-    };
+    });
     
     // Procurar correspondência
     for (const [command, module] of Object.entries(navigationMap)) {

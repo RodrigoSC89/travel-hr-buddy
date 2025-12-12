@@ -56,7 +56,7 @@ export const localStorageCache = {
         data,
         timestamp: Date.now(),
         expiresAt: Date.now() + ttl
-      };
+      });
 
       localStorage.setItem(cacheKey, JSON.stringify(entry));
       logger.debug("Stored in localStorage cache", { key, ttl: ttl / 1000 });
@@ -176,7 +176,7 @@ class IndexedDBCacheService {
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
-      };
+      });
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
@@ -201,7 +201,7 @@ class IndexedDBCacheService {
         if (!db.objectStoreNames.contains(STORES.CONFIG)) {
           db.createObjectStore(STORES.CONFIG, { keyPath: "key" });
         }
-      };
+      });
     });
   }
 
@@ -382,7 +382,7 @@ export const unifiedOfflineCache = {
     return {
       localStorage: localStorageCache.getStats(),
       indexedDB: await indexedDBCache.getOfflineStatus()
-    };
+    });
   }
 };
 

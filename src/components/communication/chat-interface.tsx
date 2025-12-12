@@ -65,7 +65,7 @@ interface Conversation {
     user: {
       full_name: string;
       email: string;
-    };
+    });
   }>;
   last_message?: Message;
   unread_count?: number;
@@ -95,12 +95,12 @@ export const ChatInterface = memo(() => {
           full_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
-        };
+        });
         setCurrentUser(userProfile as unknown);
         await loadConversations();
         await loadAllUsers();
       }
-    };
+    });
 
     getCurrentUser();
   }, []);
@@ -209,7 +209,7 @@ export const ChatInterface = memo(() => {
               sender: lastMessage.profiles
             } : undefined,
             unread_count: count || 0
-          };
+          });
         })
       );
 
@@ -275,12 +275,12 @@ export const ChatInterface = memo(() => {
           full_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
-        };
+        });
         setCurrentUser(userProfile as unknown);
         await loadConversations();
         await loadAllUsers();
       }
-    };
+    });
 
     getCurrentUser();
   }, [loadConversations, loadAllUsers]);
@@ -363,7 +363,7 @@ export const ChatInterface = memo(() => {
                 full_name: profiles.full_name || profiles.email?.split("@")[0] || "User",
                 email: profiles.email || ""
               } : undefined
-            };
+            });
             setMessages(prev => [...prev, messageWithSender as unknown]);
           }
         }
@@ -372,7 +372,7 @@ export const ChatInterface = memo(() => {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   };
 
   const sendMessage = async () => {
@@ -634,7 +634,7 @@ export const ChatInterface = memo(() => {
                       ?.type === "group"
                       ? `${conversations.find(c => c.id === selectedConversation)?.participants.length} membros`
                       : "Online"
-                    };
+                    });
                   </p>
                 </div>
               </div>

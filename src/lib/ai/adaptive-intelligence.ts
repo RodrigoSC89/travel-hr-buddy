@@ -255,7 +255,7 @@ Sua função é verificar equipamentos de salvamento, incluindo:
 - Sistemas de comunicação de emergência
 
 Assegure conformidade com SOLAS e identificque deficiências críticas.`,
-    };
+    });
   }
 
   private static generateAdjustments(

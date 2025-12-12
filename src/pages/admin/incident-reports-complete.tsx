@@ -195,7 +195,7 @@ export default function IncidentReportsComplete() {
       environmental: "operations",
       equipment: "maintenance",
       personnel: "hr"
-    };
+    });
     
     const assignedTeam = teamMapping[incident.category] || "operations";
     

@@ -456,7 +456,7 @@ class AdaptiveMetricsEngine {
       totalAdjustments,
       avgDeltaFromDefault: avgDeltaFromDefault * 100, // as percentage
       lastAdjustment: Math.max(...params.map(p => p.lastAdjusted.getTime())),
-    };
+    });
   }
 }
 

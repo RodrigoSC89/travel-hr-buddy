@@ -92,7 +92,7 @@ export class NLPService {
         summary,
         language,
         confidence
-      };
+      });
     } catch (error) {
       logger.error("Error in NLP analysis:", error);
       throw error;

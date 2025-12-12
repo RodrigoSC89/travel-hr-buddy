@@ -159,14 +159,14 @@ const ModulesStatusDashboard: React.FC = () => {
       beta: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
       inactive: "bg-gray-500/10 text-gray-500 border-gray-500/20",
       deprecated: "bg-red-500/10 text-red-500 border-red-500/20"
-    };
+    });
 
     const icons = {
       active: <CheckCircle className="h-3 w-3" />,
       beta: <AlertCircle className="h-3 w-3" />,
       inactive: <XCircle className="h-3 w-3" />,
       deprecated: <XCircle className="h-3 w-3" />
-    };
+    });
 
     return (
       <Badge

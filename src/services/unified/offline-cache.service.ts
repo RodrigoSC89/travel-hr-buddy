@@ -48,7 +48,7 @@ class IndexedDBCache {
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
-      };
+      });
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
@@ -66,7 +66,7 @@ class IndexedDBCache {
             }
           }
         });
-      };
+      });
     });
   }
 
@@ -86,7 +86,7 @@ class IndexedDBCache {
       data,
       timestamp: Date.now(),
       expiresAt: Date.now() + ttlMs,
-    };
+    });
     store.put(entry);
   }
 
@@ -106,7 +106,7 @@ class IndexedDBCache {
           return;
         }
         resolve(entry.data);
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -276,7 +276,7 @@ class LocalStorageCache {
         data,
         timestamp: Date.now(),
         expiresAt: Date.now() + ttl,
-      };
+      });
 
       localStorage.setItem(this.PREFIX + key, JSON.stringify(entry));
       logger.debug("Stored in cache", { key, ttl: ttl / 1000 });

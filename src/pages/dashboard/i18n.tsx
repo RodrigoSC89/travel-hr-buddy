@@ -153,11 +153,11 @@ export default function I18nDashboard() {
       logs,
       feedback,
       exportedAt: new Date().toISOString(),
-    };
+    });
 
     const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
       type: "application/json",
-    };
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

@@ -84,13 +84,13 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       if (mounted) {
         await loadMessages();
       }
-    };
+    });
     
     init();
     
     return () => {
       mounted = false;
-    };
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

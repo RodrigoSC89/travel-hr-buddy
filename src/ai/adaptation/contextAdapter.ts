@@ -104,7 +104,7 @@ class ContextualResponseAdapter {
         mode: context.mode,
         reasoning,
         timestamp: new Date().toISOString()
-      };
+      });
 
       this.adaptationHistory.push(adaptedResponse);
       await this.logAdaptation(adaptedResponse, adaptations);
@@ -121,7 +121,7 @@ class ContextualResponseAdapter {
         mode: context.mode,
         reasoning: "Fallback: adaptation failed",
         timestamp: new Date().toISOString()
-      };
+      });
     }
   }
 
@@ -303,7 +303,7 @@ class ContextualResponseAdapter {
       "ship": "🚢",
       "alert": "🚨",
       "check": "✔️"
-    };
+    });
 
     let result = text;
     for (const [keyword, emoji] of Object.entries(emojiMap)) {
@@ -384,7 +384,7 @@ class ContextualResponseAdapter {
       averageAdaptedLength: this.adaptationHistory.reduce(
         (sum, a) => sum + a.adapted.length, 0
       ) / this.adaptationHistory.length || 0
-    };
+    });
   }
 }
 

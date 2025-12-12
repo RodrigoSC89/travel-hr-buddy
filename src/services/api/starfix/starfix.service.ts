@@ -227,7 +227,7 @@ export async function getStarFixPerformanceMetrics(
       risk_level: calculateRiskLevel(data.metrics.performance_score),
       flag_state_average_score: data.benchmarks.flag_state_average,
       comparison_to_fleet: data.benchmarks.fleet_percentile,
-    };
+    });
 
     // Store metrics
     await supabase
@@ -306,7 +306,7 @@ export async function submitInspectionToStarFix(inspection: StarFixInspection): 
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 
@@ -369,7 +369,7 @@ export async function getStarFixSyncStatus(vesselId: string): Promise<{
       pending_inspections: 0,
       synced_inspections: synced,
       failed_inspections: 0,
-    };
+    });
   } catch (error) {
     logger.error("Error getting StarFix sync status", error as Error, { vesselId });
     return {
@@ -377,6 +377,6 @@ export async function getStarFixSyncStatus(vesselId: string): Promise<{
       pending_inspections: 0,
       synced_inspections: 0,
       failed_inspections: 0,
-    };
+    });
   }
 }

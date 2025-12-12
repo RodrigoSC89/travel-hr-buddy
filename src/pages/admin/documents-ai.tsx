@@ -57,7 +57,7 @@ export default function DocumentsAIPage() {
     try {
       const { data, error } = await supabase.functions.invoke("generate-document", {
         body: { prompt },
-      };
+      });
 
       if (error) throw error;
 

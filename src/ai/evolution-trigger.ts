@@ -94,7 +94,7 @@ class EvolutionTrigger {
         performance_score: performanceScore,
         anomalies,
         recommendations,
-      };
+      });
 
       // Check if performance is degrading
       if (performanceScore < this.performanceThreshold) {

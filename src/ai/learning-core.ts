@@ -105,7 +105,7 @@ class LearningCore {
         url: window.location.href,
       },
       timestamp: new Date().toISOString(),
-    };
+    });
 
     await this.logEvent(event);
   }
@@ -133,7 +133,7 @@ class LearningCore {
       },
       outcome: outcome || null,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     await this.logEvent(event);
   }
@@ -163,7 +163,7 @@ class LearningCore {
       },
       outcome: "failure",
       timestamp: new Date().toISOString(),
-    };
+    });
 
     await this.logEvent(event);
     
@@ -198,7 +198,7 @@ class LearningCore {
         timestamp: new Date().toISOString(),
       },
       timestamp: new Date().toISOString(),
-    };
+    });
 
     await this.logEvent(event);
   }
@@ -295,7 +295,7 @@ class LearningCore {
         event_types: eventTypeCounts,
         patterns,
         events: events as LearningEvent[],
-      };
+      });
 
       logger.info("[LearningCore] Training data generated", {
         total_events: events.length,

@@ -225,7 +225,7 @@ export class DroneCommandService {
     return {
       valid: errors.length === 0,
       errors
-    };
+    });
   }
 
   /**
@@ -257,7 +257,7 @@ export class DroneCommandService {
         command,
         message: validation.errors.join("; "),
         timestamp: new Date().toISOString()
-      };
+      });
     }
 
     if (!this.connected || !this.client) {
@@ -268,7 +268,7 @@ export class DroneCommandService {
         command,
         message: "Not connected to MQTT broker",
         timestamp: new Date().toISOString()
-      };
+      });
     }
 
     const payload: CommandPayload = {
@@ -276,7 +276,7 @@ export class DroneCommandService {
       command,
       params,
       timestamp: new Date().toISOString()
-    };
+    });
 
     return new Promise((resolve) => {
       const topic = `${DRONE_TOPIC_PREFIX}/${droneId}/command`;

@@ -389,7 +389,7 @@ class LinkFallbackManager {
     this.policy = {
       ...this.policy,
       ...updates
-    };
+    });
 
     logger.info("[Fallback Manager] Policy updated", updates);
   }
@@ -405,7 +405,7 @@ class LinkFallbackManager {
       fallbackConnectionId: null,
       activeSince: null,
       reason: null
-    };
+    });
 
     this.stabilityTimers.forEach(timer => clearTimeout(timer));
     this.stabilityTimers.clear();

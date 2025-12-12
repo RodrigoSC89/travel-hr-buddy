@@ -108,7 +108,7 @@ class RequestQueue {
         timeout: timeout || this.config.defaultTimeout,
         resolve,
         reject,
-      };
+      });
 
       // Insert in priority order
       const insertIndex = this.queue.findIndex(r => r.priority > priority);
@@ -273,7 +273,7 @@ class RequestQueue {
       active: this.activeRequests,
       isOnline: this.isOnline,
       isPaused: this.isPaused,
-    };
+    });
   }
 
   /**

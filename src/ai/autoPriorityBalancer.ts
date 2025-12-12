@@ -88,7 +88,7 @@ class AutoPriorityBalancer {
       available_resources: Math.random() * 100,
       critical_threshold: 75,
       time_pressure: Math.random() * 100
-    };
+    });
 
     logger.debug("Rebalancing priorities", { context: ctx });
 
@@ -111,7 +111,7 @@ class AutoPriorityBalancer {
             time_pressure: ctx.time_pressure
           },
           timestamp: new Date().toISOString()
-        };
+        });
 
         // Update task
         task.current_priority = newPriority;

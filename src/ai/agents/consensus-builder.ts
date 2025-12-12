@@ -205,7 +205,7 @@ class StrategicConsensusBuilder {
         voteCount: votes.length,
         disagreementCount: disagreements.length
       }
-    };
+    });
 
     // Store consensus result
     this.activeConsensus.set(consensusId, result);
@@ -605,7 +605,7 @@ class StrategicConsensusBuilder {
       concerns: concerns.length > 0 ? concerns : undefined,
       recommendations: recommendations.length > 0 ? recommendations : undefined,
       timestamp: new Date()
-    };
+    });
   }
 
   private analyzeDisagreements(votes: AgentVote[], consensusId: string): Disagreement[] {
@@ -736,7 +736,7 @@ class StrategicConsensusBuilder {
       return { 
         decision: "escalate", 
         rule: "Critical Disagreement Escalation" 
-      };
+      });
     }
 
     // Check low confidence
@@ -745,7 +745,7 @@ class StrategicConsensusBuilder {
       return { 
         decision: "reject", 
         rule: "Low Confidence Rejection" 
-      };
+      });
     }
 
     // Apply majority wins
@@ -756,12 +756,12 @@ class StrategicConsensusBuilder {
       return { 
         decision: "proceed", 
         rule: "Majority Wins" 
-      };
+      });
     } else if (opposers.length > supporters.length) {
       return { 
         decision: "reject", 
         rule: "Majority Opposition" 
-      };
+      });
     }
 
     // Tie breaker - use weighted voting
@@ -769,7 +769,7 @@ class StrategicConsensusBuilder {
     return { 
       decision: supportLevel >= 0 ? "proceed" : "reject", 
       rule: "Weighted Tie Breaker" 
-    };
+    });
   }
 
   private generateConsensusRecommendations(

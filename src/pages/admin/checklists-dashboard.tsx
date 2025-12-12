@@ -69,7 +69,7 @@ export default function ChecklistDashboard() {
             items: [],
             created_at: checklist.created_at,
             created_by: checklist.created_by,
-          };
+          });
         }
 
         return {
@@ -83,7 +83,7 @@ export default function ChecklistDashboard() {
             })) || [],
           created_at: checklist.created_at,
           created_by: checklist.created_by,
-        };
+        });
       })
     );
 

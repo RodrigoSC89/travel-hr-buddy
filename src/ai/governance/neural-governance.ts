@@ -162,7 +162,7 @@ class NeuralGovernance {
         policyCount: this.policies.size,
         violationCount: violations.length
       }
-    };
+    });
 
     // Cache evaluation
     this.evaluationCache.set(evaluationId, evaluation);

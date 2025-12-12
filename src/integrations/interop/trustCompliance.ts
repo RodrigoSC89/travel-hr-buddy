@@ -49,7 +49,7 @@ export async function validateEntityTrust(
       blocked: true,
       reason: "Entity not found",
       warnings: ["Entity does not exist in registry"]
-    };
+    });
   }
 
   const warnings: string[] = [];

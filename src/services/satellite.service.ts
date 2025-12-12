@@ -423,7 +423,7 @@ export class SatelliteService {
       positions,
       active_alerts: alerts,
       coverage_maps: [], // Would be populated from satellite_coverage_maps
-    };
+    });
   }
 
   // Coverage Maps

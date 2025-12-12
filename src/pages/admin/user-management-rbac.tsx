@@ -110,7 +110,7 @@ export default function UserManagementRBAC() {
       const { error } = await (supabase as unknown).rpc("add_user_to_group", {
         p_user_id: userId,
         p_group_id: groupId,
-      };
+      });
 
       if (error) throw error;
 

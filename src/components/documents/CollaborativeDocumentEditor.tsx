@@ -135,7 +135,7 @@ export const CollaborativeDocumentEditor = memo(function({
       if (ydoc.current) {
         ydoc.current.destroy();
       }
-    };
+    });
   }, [documentId, debouncedSave]);
 
   const handleClear = () => {

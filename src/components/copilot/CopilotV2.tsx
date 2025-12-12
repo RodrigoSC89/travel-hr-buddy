@@ -50,7 +50,7 @@ export default function CopilotV2() {
         e.preventDefault();
         setOpen(prev => !prev);
       }
-    };
+    });
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -109,7 +109,7 @@ export default function CopilotV2() {
       documentation: FileText,
       operations: Lightbulb,
       safety: GraduationCap
-    };
+    });
     return icons[category] || Sparkles;
   };
 

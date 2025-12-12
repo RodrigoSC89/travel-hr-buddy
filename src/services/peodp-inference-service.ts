@@ -157,7 +157,7 @@ export class PEODPInferenceService {
       avg_positioning_accuracy: avgAccuracy,
       fuel_efficiency: avgFuelEfficiency,
       maintenance_status: (vessel as any)?.maintenance_status || "good"
-    };
+    });
   }
 
   /**
@@ -198,7 +198,7 @@ export class PEODPInferenceService {
       avg_experience_years: avgExperience,
       recent_training_completion: 0, // Would need training records table
       certification_expiry_soon: expiringCerts
-    };
+    });
   }
 
   /**

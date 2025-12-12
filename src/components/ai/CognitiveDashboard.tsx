@@ -44,7 +44,7 @@ export const CognitiveDashboard: React.FC = () => {
       if (isMounted) {
         await loadDashboardData();
       }
-    };
+    });
     
     loadData();
     const interval = setInterval(() => {
@@ -56,7 +56,7 @@ export const CognitiveDashboard: React.FC = () => {
     return () => {
       isMounted = false;
       clearInterval(interval);
-    };
+    });
   }, []);
 
   const loadDashboardData = async () => {
@@ -125,7 +125,7 @@ export const CognitiveDashboard: React.FC = () => {
       "24h": 24 * 60 * 60 * 1000,
       "7d": 7 * 24 * 60 * 60 * 1000,
       "30d": 30 * 24 * 60 * 60 * 1000,
-    };
+    });
     return now - predTime <= ranges[filterTimeRange];
   };
 
@@ -138,7 +138,7 @@ export const CognitiveDashboard: React.FC = () => {
       "24h": 24 * 60 * 60 * 1000,
       "7d": 7 * 24 * 60 * 60 * 1000,
       "30d": 30 * 24 * 60 * 60 * 1000,
-    };
+    });
     return now - decTime <= ranges[filterTimeRange];
   };
 

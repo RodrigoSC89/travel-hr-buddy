@@ -138,7 +138,7 @@ class MessageService {
       created_at: msg.created_at,
       updated_at: msg.updated_at || msg.edited_at,
       user: msg.user,
-    };
+    });
   }
 
   /**
@@ -158,7 +158,7 @@ class MessageService {
         user_id: user.id,
         content,
         message_type: "text",
-      };
+      });
 
       if (metadata) {
         messageData.metadata = metadata;
@@ -176,7 +176,7 @@ class MessageService {
           ...messageData,
           message_content: content,
           message_text: content,
-        };
+        });
         delete altMessageData.content;
 
         const retry = await supabase
@@ -315,7 +315,7 @@ class MessageService {
       return {
         messages: (messagesResult.data || []).map(msg => this.normalizeMessage(msg)),
         totalCount: countResult.count || 0,
-      };
+      });
     } catch (error) {
       logger.error("Error fetching message history", error as Error, { channelId, page });
       return { messages: [], totalCount: 0 };
@@ -353,7 +353,7 @@ class MessageService {
       event: "INSERT",
       schema: "public",
       table: "channel_messages",
-    };
+    });
 
     if (channelId) {
       messageFilter.filter = `channel_id=eq.${channelId}`;

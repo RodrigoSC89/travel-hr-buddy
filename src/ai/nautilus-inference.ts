@@ -155,7 +155,7 @@ class NautilusInferenceEngine {
       dpEvents,
       fmeaPatterns,
       risks
-    };
+    });
   }
 
   /**
@@ -168,7 +168,7 @@ class NautilusInferenceEngine {
       confidence,
       category: "general",
       timestamp: Date.now()
-    };
+    });
   }
 
   /**
@@ -209,7 +209,7 @@ class NautilusInferenceEngine {
       "Operations": /\b(operation|maintenance|inspection|repair)\b/i,
       "Weather": /\b(weather|wind|wave|current|forecast)\b/i,
       "Compliance": /\b(compliance|audit|regulation|standard|imca)\b/i,
-    };
+    });
 
     Object.entries(categoryPatterns).forEach(([category, pattern]) => {
       if (pattern.test(lowerText)) {
@@ -373,7 +373,7 @@ class NautilusInferenceEngine {
       url: this.modelUrl,
       inputs: this.session?.inputNames || [],
       outputs: this.session?.outputNames || []
-    };
+    });
   }
 
   /**

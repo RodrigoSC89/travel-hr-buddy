@@ -167,7 +167,7 @@ export default function RestoreReportLogsPage() {
       if (observerTarget.current) {
         observer.unobserve(observerTarget.current);
       }
-    };
+    });
   }, [hasMore, loadingMore, loading, fetchLogs]);
 
   function handleClearFilters() {

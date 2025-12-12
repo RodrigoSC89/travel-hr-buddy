@@ -161,7 +161,7 @@ const CoordinationAIEnginePage: React.FC = () => {
       completed: "bg-green-500",
       failed: "bg-red-500",
       timeout: "bg-orange-500",
-    };
+    });
     return colors[status] || "bg-gray-500";
   };
 

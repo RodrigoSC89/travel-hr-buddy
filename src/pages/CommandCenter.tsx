@@ -211,7 +211,7 @@ export default function CommandCenter() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, []);
   
   const loadingRef = useRef(false);
@@ -224,7 +224,7 @@ export default function CommandCenter() {
       reports: FileText,
       calendar: Calendar,
       settings: CheckCircle
-    };
+    });
     return iconMap[moduleName || ""] || Activity;
   };
 
@@ -315,7 +315,7 @@ export default function CommandCenter() {
         setIsLoading(false);
         loadingRef.current = false;
       }
-    };
+    });
 
     loadData();
   }, [currentOrganization?.id]);

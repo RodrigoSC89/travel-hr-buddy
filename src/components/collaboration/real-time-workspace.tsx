@@ -112,7 +112,7 @@ const RealTimeWorkspace: React.FC = () => {
               key: user.id,
             },
           },
-        };
+        });
 
         channelRef.current = channel;
 
@@ -175,10 +175,10 @@ const RealTimeWorkspace: React.FC = () => {
             timestamp: payload.payload.timestamp,
             type: payload.payload.type || "text",
             metadata: payload.payload.metadata
-          };
+          });
           
           setChatMessages(prev => [...prev, message]);
-        };
+        });
 
         // Configurar atualizações do workspace
         channel.on("broadcast", { event: "workspace_update" }, (payload) => {
@@ -192,7 +192,7 @@ const RealTimeWorkspace: React.FC = () => {
             priority: payload.priority || "low",
             vessel_id: payload.vessel_id,
             related_data: payload.related_data
-          };
+          });
           
           setWorkspaceUpdates(prev => [update, ...prev.slice(0, 49)]);
         });
@@ -226,7 +226,7 @@ const RealTimeWorkspace: React.FC = () => {
       } finally {
         setIsLoading(false);
       }
-    };
+    });
 
     setupRealtime();
 
@@ -235,7 +235,7 @@ const RealTimeWorkspace: React.FC = () => {
       if (channelRef.current) {
         channelRef.current.unsubscribe();
       }
-    };
+    });
   }, [user, myStatus, toast]);
 
   // Carregar dados iniciais

@@ -151,7 +151,7 @@ export const CollectiveDashboard: React.FC = () => {
         accuracy: successRate,
         decisionCount: stats.total,
         successRate
-      };
+      });
     });
   });
 
@@ -183,7 +183,7 @@ export const CollectiveDashboard: React.FC = () => {
       warning: "secondary",
       error: "destructive",
       critical: "destructive"
-    };
+    });
     return <Badge variant={variants[severity] || "default"}>{severity}</Badge>;
   };
 
@@ -193,7 +193,7 @@ export const CollectiveDashboard: React.FC = () => {
       escalated: "bg-orange-500",
       delegated: "bg-purple-500",
       collaborative: "bg-green-500"
-    };
+    });
     return (
       <Badge className={colors[level] || "bg-gray-500"}>
         {level}

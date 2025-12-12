@@ -155,7 +155,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
           { month: "Dez", internal: 312, external: 61, emergency: 8 },
           { month: "Jan", internal: 345, external: 58, emergency: 5 }
         ]
-      };
+      });
 
       setAnalyticsData(mockData);
     } catch (error) {
@@ -181,11 +181,11 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
       stats,
       analyticsData,
       generatedAt: new Date().toISOString()
-    };
+    });
     
     const blob = new Blob([JSON.stringify(reportData, null, 2)], {
       type: "application/json"
-    };
+    });
     
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

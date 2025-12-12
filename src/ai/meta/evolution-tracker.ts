@@ -453,7 +453,7 @@ export class EvolutionTracker {
         currentVersion: sortedVersions[sortedVersions.length - 1]?.versionNumber || "N/A",
         overallImprovement,
       },
-    };
+    });
   }
 
   /**

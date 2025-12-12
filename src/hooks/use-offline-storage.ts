@@ -52,7 +52,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           offlineStore.createIndex("timestamp", "timestamp", { unique: false });
           offlineStore.createIndex("synced", "synced", { unique: false });
         }
-      };
+      });
     });
   }, []);
 
@@ -85,7 +85,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         request.onsuccess = () => {
           const result = request.result;
           resolve(result ? result.data : null);
-        };
+        });
         request.onerror = () => reject(request.error);
       });
     } catch (error) {
@@ -106,7 +106,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
         data,
         timestamp: Date.now(),
         synced: false
-      };
+      });
       
       await store.add(offlineData);
     } catch (error) {
@@ -207,7 +207,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
           cursor.delete();
           cursor.continue();
         }
-      };
+      });
       
       updateCacheSize();
     } catch (error) {
@@ -223,7 +223,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       setTimeout(() => {
         syncPendingChanges();
       }, 1000);
-    };
+    });
     
     const handleOffline = () => setIsOnline(false);
 
@@ -236,7 +236,7 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, [syncPendingChanges, updateCacheSize]);
 
   // Listen for service worker messages
@@ -245,13 +245,13 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
       if (event.data.type === "OFFLINE_SYNC_COMPLETE") {
         updateCacheSize();
       }
-    };
+    });
 
     navigator.serviceWorker?.addEventListener("message", handleMessage);
     
     return () => {
       navigator.serviceWorker?.removeEventListener("message", handleMessage);
-    };
+    });
   }, [updateCacheSize]);
 
   return {

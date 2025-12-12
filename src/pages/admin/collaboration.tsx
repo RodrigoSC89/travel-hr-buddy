@@ -87,7 +87,7 @@ export default function CollaborationPage() {
       if (repliesChannel) {
         supabase.removeChannel(repliesChannel);
       }
-    };
+    });
   }, []);
 
   const fetchComments = async () => {
@@ -121,7 +121,7 @@ export default function CollaborationPage() {
             ...comment,
             author_email: profile?.email || "Usuário desconhecido",
             reactions: comment.reactions || {}
-          };
+          });
         })
       );
 
@@ -220,7 +220,7 @@ export default function CollaborationPage() {
           return {
             ...reply,
             author_email: profile?.email || "Usuário desconhecido"
-          };
+          });
         })
       );
 
@@ -241,7 +241,7 @@ export default function CollaborationPage() {
       const newReactions = {
         ...currentReactions,
         [emoji]: (currentReactions[emoji] || 0) + 1
-      };
+      });
 
       const { error } = await (supabase as unknown)
         .from("colab_comments")

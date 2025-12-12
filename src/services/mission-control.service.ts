@@ -528,7 +528,7 @@ export class MissionControlService {
       resources_allocated: mission.resources?.length || 0,
       resources_in_use: mission.resources?.filter(r => r.status === "in_use").length || 0,
       resource_types: [...new Set(mission.resources?.map(r => r.resource_type) || [])],
-    };
+    });
 
     return {
       mission,
@@ -538,7 +538,7 @@ export class MissionControlService {
       performance_metrics: performanceMetrics,
       resource_utilization: resourceUtilization,
       generated_at: new Date().toISOString(),
-    };
+    });
   }
 
   static async exportMissionReportToCSV(missionId: string): Promise<string> {

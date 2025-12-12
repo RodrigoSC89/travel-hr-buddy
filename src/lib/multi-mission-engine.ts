@@ -239,7 +239,7 @@ Format the response as structured data.`;
         primary: ["Lead mission operations", "Coordinate activities", "Monitor progress"],
         support: ["Assist primary vessel", "Follow mission plan", "Provide support"]
       }
-    };
+    });
 
     return responsibilities[missionType]?.[role] || responsibilities.custom[role];
   }
@@ -403,7 +403,7 @@ Format the response as structured data.`;
         "Have backup vessels on standby",
         "Follow established protocols strictly"
       ]
-    };
+    });
   }
 
   /**

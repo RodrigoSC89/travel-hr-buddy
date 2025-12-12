@@ -84,7 +84,7 @@ export class CollectiveMemoryHub {
       confidence: options.confidence ?? 1.0,
       tags: options.tags ?? [],
       metadata: options.metadata ?? {},
-    };
+    });
 
     try {
       const { data, error } = await (supabase as any)
@@ -268,7 +268,7 @@ export class CollectiveMemoryHub {
       return {
         rolledBackCount,
         affectedCategories: Array.from(affectedCategories),
-      };
+      });
     } catch (error) {
       logger.error("Rollback failed", error);
       throw error;

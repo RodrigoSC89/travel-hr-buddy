@@ -106,12 +106,12 @@ export const loadScript = (
     script.onload = () => {
       logger.debug(`[CriticalPath] Script loaded: ${url}`);
       resolve();
-    };
+    });
     
     script.onerror = () => {
       logger.error(`[CriticalPath] Script failed: ${url}`);
       reject(new Error(`Failed to load script: ${url}`));
-    };
+    });
     
     document.body.appendChild(script);
   });

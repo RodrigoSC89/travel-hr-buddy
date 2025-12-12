@@ -297,7 +297,7 @@ type OpenAiResponse = {
   choices?: Array<{
     message?: {
       content?: string;
-    };
+    });
   }>;
 };
 
@@ -443,7 +443,7 @@ export async function generateDrillScenario(
       vessel_id: vesselId,
       generated_from_failures: toJson(historicalFailures),
       ai_generated: true,
-    };
+    });
 
     const { data: savedScenario, error } = await smartDrillsClient
       .from("drill_scenarios")
@@ -543,7 +543,7 @@ export async function scheduleDrill(
       participants: toJson(participants),
       status: "scheduled",
       conducted_by: conductedBy,
-    };
+    });
 
     const { data, error } = await smartDrillsClient
       .from("drill_executions")
@@ -578,7 +578,7 @@ export async function recordDrillResponse(
       actions_taken: toJson(response.actionsTaken),
       mistakes: toJson(response.mistakes),
       strengths: toJson(response.strengths),
-    };
+    });
 
     const { error } = await smartDrillsClient.from("drill_responses").insert(payload as any);
 

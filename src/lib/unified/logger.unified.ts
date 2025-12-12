@@ -82,7 +82,7 @@ class UnifiedLogger {
       sendToMonitoring: isProduction,
       includeStack: isDevelopment,
       maxBufferSize: 100,
-    };
+    });
   }
 
   private generateSessionId(): string {
@@ -108,7 +108,7 @@ class UnifiedLogger {
       message,
       environment: isDevelopment ? "development" : "production",
       session: this.sessionId,
-    };
+    });
 
     if (context && Object.keys(context).length > 0) {
       entry.context = context;
@@ -122,7 +122,7 @@ class UnifiedLogger {
       entry.error = {
         message: error.message,
         name: error.name,
-      };
+      });
       if (this.config.includeStack && error.stack) {
         entry.error.stack = error.stack;
       }
@@ -271,7 +271,7 @@ class UnifiedLogger {
       const duration = performance.now() - start;
       this.debug(`Timer: ${label}`, { duration_ms: parseFloat(duration.toFixed(2)) });
       return duration;
-    };
+    });
   }
 
   getRecentLogs(limit: number = 50): LogEntry[] {

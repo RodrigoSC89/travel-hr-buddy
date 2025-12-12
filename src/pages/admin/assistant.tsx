@@ -56,7 +56,7 @@ export default function AssistantPage() {
       // Try Supabase function first
       const { data, error } = await supabase.functions.invoke("assistant-query", {
         body: { question },
-      };
+      });
 
       if (error) {
         logger.warn("Supabase function error, falling back to API route:", error);
@@ -65,7 +65,7 @@ export default function AssistantPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question }),
-        };
+        });
         const apiData = await res.json();
         if (!res.ok) throw new Error(apiData.error);
         setMessages((prev) => [...prev, { role: "assistant", content: apiData.answer || "" }]);

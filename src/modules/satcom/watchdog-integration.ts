@@ -117,7 +117,7 @@ class SatcomWatchdogIntegration {
         latency,
         message,
         timestamp: new Date()
-      };
+      });
 
       // Report to system watchdog if enabled
       if (this.config.reportToWatchdog) {
@@ -139,7 +139,7 @@ class SatcomWatchdogIntegration {
         latency,
         message: error instanceof Error ? error.message : "Health check failed",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -212,7 +212,7 @@ class SatcomWatchdogIntegration {
       fallbackActive: fallbackState.isActive,
       activeConnections,
       totalConnections: this.connections.length
-    };
+    });
   }
 
   /**
@@ -222,7 +222,7 @@ class SatcomWatchdogIntegration {
     this.config = {
       ...this.config,
       ...updates
-    };
+    });
 
     // Restart monitoring if interval changed
     if (updates.checkIntervalMs && this.monitoringInterval) {

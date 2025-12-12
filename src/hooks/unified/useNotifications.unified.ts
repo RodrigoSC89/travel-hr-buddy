@@ -169,7 +169,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
       } catch (err) {
         logger.error("Failed to initialize push notifications", err);
       }
-    };
+    });
 
     initPushNotifications();
   }, [enablePush]);
@@ -300,7 +300,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
             createdAt: n.created_at,
             actionUrl: n.action_url,
             actionLabel: n.action_label,
-          };
+          });
 
           setNotifications(prev => [newNotification, ...prev].slice(0, maxNotifications));
         }
@@ -309,7 +309,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [user, maxNotifications]);
 
   // Auto-refresh
@@ -326,7 +326,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
-    };
+    });
   }, []);
 
   // ==================== ACTIONS ====================
@@ -422,7 +422,7 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
       timestamp: new Date(),
       createdAt: new Date().toISOString(),
       read: false,
-    };
+    });
 
     setNotifications(prev => [newNotification, ...prev].slice(0, maxNotifications));
   }, [maxNotifications]);

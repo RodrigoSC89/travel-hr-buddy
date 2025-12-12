@@ -101,7 +101,7 @@ export class SituationalAwarenessCore {
       timestamp: Date.now(),
       data,
       metadata,
-    };
+    });
 
     this.contextBuffer.push(context);
 
@@ -477,7 +477,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
       category,
       message,
       context,
-    };
+    });
 
     this.logs.push(entry);
 
@@ -514,7 +514,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
         medium: 0.5,
         low: 0.3,
       },
-    };
+    });
   }
 
   /**
@@ -529,7 +529,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
       sensors: { status: "unknown", lastUpdate: 0, metrics: {} },
       mission: { status: "unknown", lastUpdate: 0, metrics: {} },
       system: { status: "unknown", lastUpdate: 0, metrics: {} },
-    };
+    });
 
     return {
       timestamp: Date.now(),
@@ -538,7 +538,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
       activeAlerts: [],
       recentInsights: [],
       systemHealth: 1.0,
-    };
+    });
   }
 
   /**

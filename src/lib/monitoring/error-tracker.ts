@@ -99,7 +99,7 @@ class ErrorTracker {
         context,
         timestamp: Date.now(),
         count: 1,
-      };
+      });
 
       this.errors.set(errorId, trackedError);
       
@@ -227,7 +227,7 @@ class ErrorTracker {
       medium: "warning",
       high: "error",
       critical: "fatal",
-    };
+    });
     return map[severity];
   }
 
@@ -258,7 +258,7 @@ class ErrorTracker {
       bySeverity: this.groupBy(errors, "severity"),
       errorRate: this.errorRate.length, // Errors per hour
       recent: errors.slice(-10).reverse(),
-    };
+    });
   }
 
   /**
@@ -275,7 +275,7 @@ class ErrorTracker {
     this.listeners.push(callback);
     return () => {
       this.listeners = this.listeners.filter(l => l !== callback);
-    };
+    });
   }
 
   /**

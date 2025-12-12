@@ -56,7 +56,7 @@ export default function AdminWallPage() {
             apikey: supabaseKey,
             Authorization: `Bearer ${supabaseKey}`,
           },
-        };
+        });
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -74,7 +74,7 @@ export default function AdminWallPage() {
           setOffline(true);
         }
       }
-    };
+    });
 
     fetchInitialData();
 
@@ -133,7 +133,7 @@ export default function AdminWallPage() {
 
     return () => {
       supabase.removeChannel(subscription);
-    };
+    });
   }, [lastAlert, muted]);
 
   const getStatusIcon = (status: string) => {

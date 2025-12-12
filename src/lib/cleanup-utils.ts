@@ -101,7 +101,7 @@ export class CleanupManager {
       timers: this.timers.size,
       intervals: this.intervals.size,
       cleanupFunctions: this.cleanupFunctions.length,
-    };
+    });
   }
 }
 
@@ -132,7 +132,7 @@ export function useCleanup(componentName: string = "Component"): CleanupManager 
     const manager = managerRef.current;
     return () => {
       manager?.cleanup();
-    };
+    });
   }, []);
 
   return managerRef.current;
@@ -163,7 +163,7 @@ export function useSafeTimeout(
 
     return () => {
       clearTimeout(timer);
-    };
+    });
   }, [delay, ...deps]);
 }
 
@@ -192,7 +192,7 @@ export function useSafeInterval(
 
     return () => {
       clearInterval(interval);
-    };
+    });
   }, [delay, ...deps]);
 }
 
@@ -218,13 +218,13 @@ export function useEventListener<K extends keyof WindowEventMap>(
 
     const eventListener = (event: Event) => {
       savedHandler.current(event as WindowEventMap[K]);
-    };
+    });
 
     element.addEventListener(eventName, eventListener, options);
 
     return () => {
       element.removeEventListener(eventName, eventListener, options);
-    };
+    });
   }, [eventName, element, options]);
 }
 
@@ -251,7 +251,7 @@ export function useSubscription<T>(
       if (typeof unsubscribe === "function") {
         unsubscribe();
       }
-    };
+    });
   }, deps);
 }
 
@@ -274,7 +274,7 @@ export function useDebouncedCallback<T extends (...args: any[]) => void>(
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-    };
+    });
   }, []);
 
   return useCallback(
@@ -311,12 +311,12 @@ export function useAbortableEffect(
         }
         logger.error("[useAbortableEffect] Error in effect:", error);
       }
-    };
+    });
 
     runEffect();
 
     return () => {
       controller.abort();
-    };
+    });
   }, deps);
 }

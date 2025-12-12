@@ -219,7 +219,7 @@ export default function ExecutionLogsPage() {
           last7Days[6 - daysDiff].failed++;
         }
       }
-    };
+    });
 
     // Count by workflow
     const workflowCounts = filteredExecutions.reduce((acc, exec) => {
@@ -248,7 +248,7 @@ export default function ExecutionLogsPage() {
       failed,
       trendData: last7Days,
       workflowDistribution: topWorkflows,
-    };
+    });
   }, [filteredExecutions]);
 
   // CSV Export

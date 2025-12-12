@@ -76,7 +76,7 @@ export default function AssistantReportLogsPage() {
       const date = new Date(log.sent_at).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "2-digit",
-      };
+      });
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -99,7 +99,7 @@ export default function AssistantReportLogsPage() {
           borderWidth: 1,
         },
       ],
-    };
+    });
   }, [logs]);
 
   const chartOptions: ChartOptions<"bar"> = {

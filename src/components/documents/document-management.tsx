@@ -193,7 +193,7 @@ export const DocumentManagement: React.FC = () => {
         version: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      };
+      });
       
       setDocuments([...documents, document]);
       setNewDocument({
@@ -225,7 +225,7 @@ export const DocumentManagement: React.FC = () => {
         id: Math.random().toString(),
         ...newCategory,
         count: 0
-      };
+      });
       
       setCategories([...categories, category]);
       setNewCategory({

@@ -75,7 +75,7 @@ export const getAIRecommendation = async (jobDescription: string): Promise<AIRec
       requires_work_order: true,
       reasoning: `Com base em ${similarCases.length} casos similares no histórico, recomenda-se ação preventiva. Casos similares tiveram sucesso com manutenção programada.`,
       similar_cases: similarCases,
-    };
+    });
   }
 
   try {
@@ -131,7 +131,7 @@ Responda APENAS com JSON válido, sem texto adicional.`;
       requires_work_order: true,
       reasoning: "Recomendação baseada em boas práticas de manutenção industrial.",
       similar_cases: similarCases,
-    };
+    });
   }
 };
 

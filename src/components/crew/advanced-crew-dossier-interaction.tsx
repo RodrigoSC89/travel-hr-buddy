@@ -125,7 +125,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           analysis_type: "comprehensive"
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -170,7 +170,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           action_type: "get_profile"
         }
-      };
+      });
 
       if (error) throw error;
       setGamificationProfile(data.profile);
@@ -188,7 +188,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           action: "get_goals"
         }
-      };
+      });
 
       if (error) throw error;
       setGoals(data.result?.goals || []);
@@ -204,7 +204,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           action: "suggest_goals"
         }
-      };
+      });
 
       if (error) throw error;
 

@@ -469,7 +469,7 @@ export class FinanceHubService {
         income: 0,
         expenses: 0,
         net: 0,
-      };
+      });
 
       if (txn.type === "income") {
         existing.income += txn.amount;
@@ -515,7 +515,7 @@ export class FinanceHubService {
       top_expenses: topExpenses,
       budget_utilization: budgetUtilization,
       generated_at: new Date().toISOString(),
-    };
+    });
   }
 
   // PATCH 384: CSV Export
@@ -587,7 +587,7 @@ export class FinanceHubService {
         budget_utilization: report.budget_utilization,
       },
       generated_at: report.generated_at,
-    };
+    });
   }
 
   // PATCH 384: Role-Based Access Control Integration
@@ -646,6 +646,6 @@ export class FinanceHubService {
       avg_transaction_value: transactions.length > 0
         ? Math.round((expenses / transactions.length) * 100) / 100
         : 0,
-    };
+    });
   }
 }

@@ -164,7 +164,7 @@ class CollectiveLoopEngine {
       processed: false,
       learningApplied: false,
       timestamp: new Date()
-    };
+    });
 
     await this.recordFeedback(feedback);
     logger.debug(`[CollectiveLoop] AI feedback submitted for ${sourceModule}`);
@@ -185,7 +185,7 @@ class CollectiveLoopEngine {
       processed: false,
       learningApplied: false,
       timestamp: new Date()
-    };
+    });
 
     await this.recordFeedback(feedback);
     logger.debug(`[CollectiveLoop] Operational feedback submitted for ${sourceModule}`);
@@ -531,7 +531,7 @@ class CollectiveLoopEngine {
       ai: 0,
       operational: 0,
       system: 0
-    };
+    });
 
     const byCategory: Record<FeedbackCategory, number> = {
       accuracy: 0,
@@ -540,7 +540,7 @@ class CollectiveLoopEngine {
       correction: 0,
       rating: 0,
       telemetry: 0
-    };
+    });
 
     let totalRating = 0;
     let ratingCount = 0;
@@ -575,7 +575,7 @@ class CollectiveLoopEngine {
       averageImpactScore: impactCount > 0 ? totalImpact / impactCount : 0,
       processedCount,
       learningAppliedCount
-    };
+    });
   }
 
   private getEmptySummary(): FeedbackSummary {
@@ -587,7 +587,7 @@ class CollectiveLoopEngine {
       averageImpactScore: 0,
       processedCount: 0,
       learningAppliedCount: 0
-    };
+    });
   }
 
   private handleContextUpdate(contextData: Record<string, any>): void {
@@ -610,7 +610,7 @@ class CollectiveLoopEngine {
       learningApplied: row.learning_applied,
       learningResults: row.learning_results,
       timestamp: new Date(row.timestamp)
-    };
+    });
   }
 }
 

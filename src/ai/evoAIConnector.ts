@@ -117,7 +117,7 @@ class EvoAIConnector {
         insights,
         evolutionScore: this.calculateEvolutionScore(performanceScore, insights),
         generatedAt: new Date(),
-      };
+      });
 
       // Save report
       await this.saveEvolutionReport(report);
@@ -335,7 +335,7 @@ class EvoAIConnector {
       tactical: 0.85, // Would calculate from tactical decision success rate
       timestamp: new Date(),
       trend,
-    };
+    });
   }
 
   /**
@@ -519,7 +519,7 @@ class EvoAIConnector {
         insights,
         evolutionScore: this.calculateEvolutionScore(performanceScore, insights),
         generatedAt: new Date(performanceData.timestamp ?? new Date().toISOString()),
-      };
+      });
     } catch (error) {
       logger.error("[EvoAI] Failed to fetch latest report:", error);
       return null;
@@ -534,7 +534,7 @@ class EvoAIConnector {
       isActive: this.isActive,
       batchIntervalHours: this.batchIntervalHours,
       patternDeviationThreshold: this.patternDeviationThreshold * 100,
-    };
+    });
   }
 }
 

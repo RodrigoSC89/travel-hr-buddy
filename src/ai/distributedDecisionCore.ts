@@ -358,7 +358,7 @@ class DistributedDecisionCore {
       simulationResults: simulations,
       escalationReason: `${conflictingRules.length} conflicting rules found`,
       timestamp: new Date()
-    };
+    });
 
     // Publish escalation to context mesh
     await contextMesh.publish({
@@ -445,7 +445,7 @@ class DistributedDecisionCore {
       confidence,
       risks: [`Risk A for ${scenario}`, `Risk B for ${scenario}`],
       benefits: [`Benefit A for ${scenario}`, `Benefit B for ${scenario}`]
-    };
+    });
   }
 
   private handleContextUpdate(contextData: Record<string, any>): void {
@@ -471,7 +471,7 @@ class DistributedDecisionCore {
       escalationReason: row.escalation_reason,
       timestamp: new Date(row.timestamp),
       executedAt: row.executed_at ? new Date(row.executed_at) : undefined
-    };
+    });
   }
 }
 

@@ -83,7 +83,7 @@ export async function initializeEvidenceLedger(reset = false): Promise<void> {
       hash: await generateHash("genesis"),
       previousHash: "0000000000000000000000000000000000000000000000000000000000000000",
       signature: "genesis-signature"
-    };
+    });
     
     evidenceLedger.push(genesisBlock);
     blockCounter = 1;

@@ -425,7 +425,7 @@ export const SmartDrills = {
         average_score: 0,
         completion_rate: 0,
         by_type: {} as Record<DrillType, number>
-      };
+      });
     }
 
     return data || {
@@ -434,7 +434,7 @@ export const SmartDrills = {
       average_score: 0,
       completion_rate: 0,
       by_type: {} as Record<DrillType, number>
-    };
+    });
   }
 };
 

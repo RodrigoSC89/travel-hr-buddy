@@ -507,6 +507,6 @@ export class IntervesselSync {
       mqttConnected: MQTTClient.isConnected(),
       httpFallbackEnabled: this.httpFallbackEnabled,
       queueSize: this.messageQueue.length
-    };
+    });
   }
 }

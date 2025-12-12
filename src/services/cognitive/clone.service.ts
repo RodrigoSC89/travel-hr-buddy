@@ -71,7 +71,7 @@ export class CognitiveCloneService {
           environment: import.meta.env.MODE || "production",
           parentInstance: this.getInstanceId(),
         },
-      };
+      });
 
       await this.saveSnapshot(snapshot);
       return snapshot;
@@ -116,7 +116,7 @@ export class CognitiveCloneService {
         restrictions: options.restrictions || [],
         createdAt: new Date(),
         parentInstanceId: sourceSnapshot.metadata.parentInstance,
-      };
+      });
 
       await this.registerClone(cloneConfig);
       await this.persistCloneData(cloneConfig);
@@ -179,7 +179,7 @@ export class CognitiveCloneService {
       learnings: config.aiContext.learnings,
       preferences: config.aiContext.preferences,
       llmConfig: config.llmConfig,
-    };
+    });
 
     localStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
   }

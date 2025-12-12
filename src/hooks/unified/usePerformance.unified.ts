@@ -67,7 +67,7 @@ class FPSMonitor {
       }
       
       this.animationId = requestAnimationFrame(measure);
-    };
+    });
     
     this.lastTime = performance.now();
     this.animationId = requestAnimationFrame(measure);
@@ -141,7 +141,7 @@ export function getPerformanceMetrics(): PerformanceMetrics {
         used: memory.usedJSHeapSize,
         total: memory.totalJSHeapSize,
         percentage: (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100
-      };
+      });
     }
   } catch (error) {
     logger.error("Error collecting performance metrics:", error);
@@ -227,7 +227,7 @@ export function useFPSMonitor(enabled: boolean = true): number {
 
     return () => {
       monitorRef.current?.stop();
-    };
+    });
   }, [enabled]);
 
   return fps;
@@ -304,7 +304,7 @@ export function useWebVitals(): WebVitals {
 
     return () => {
       observers.forEach(o => o.disconnect());
-    };
+    });
   }, []);
 
   return vitals;

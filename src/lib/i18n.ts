@@ -166,7 +166,7 @@ class I18nSystem {
     this.listeners.add(listener);
     return () => {
       this.listeners.delete(listener);
-    };
+    });
   }
 
   /**

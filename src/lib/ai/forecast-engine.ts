@@ -49,14 +49,14 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
       return { 
         status: "error", 
         message: `Database error: ${error.message}` 
-      };
+      });
     }
 
     if (!data || data.length === 0) {
       return { 
         status: "no-data",
         message: "No telemetry data available" 
-      };
+      });
     }
 
     // Prepare input tensor from telemetry values
@@ -81,13 +81,13 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
     return {
       status: "success",
       ...risk
-    };
+    });
   } catch (error) {
     logger.error("Forecast analysis error", error as Error);
     return {
       status: "error",
       message: error instanceof Error ? error.message : "Unknown error"
-    };
+    });
   }
 }
 
@@ -102,14 +102,14 @@ function classifyRisk(value: number): RiskClassification {
       level: "OK", 
       value,
       message: "Operação dentro do esperado"
-    };
+    });
   }
   if (value < 0.7) {
     return { 
       level: "Risco", 
       value,
       message: "Risco moderado - verificar procedimentos ASOG"
-    };
+    });
   }
   return { 
     level: "Crítico", 
@@ -132,7 +132,7 @@ function publishForecastAlert(risk: RiskClassification): void {
         value: risk.value,
         message: risk.message,
         timestamp: new Date().toISOString()
-      };
+      });
       
       client.publish("nautilus/forecast/alert", JSON.stringify(alertData), { qos: 1 }, (err) => {
         if (err) {

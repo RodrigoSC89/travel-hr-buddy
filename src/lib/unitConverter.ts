@@ -53,7 +53,7 @@ class UnitConverter {
       mi: 1609.344,
       nm: 1852, // Nautical mile
       ft: 0.3048,
-    };
+    });
     return value * conversions[unit];
   }
 
@@ -64,7 +64,7 @@ class UnitConverter {
       mi: 1609.344,
       nm: 1852,
       ft: 0.3048,
-    };
+    });
     return meters / conversions[unit];
   }
 
@@ -145,7 +145,7 @@ class UnitConverter {
       m3: 1000,
       gal_us: 3.78541, // US gallon
       gal_uk: 4.54609, // UK/Imperial gallon
-    };
+    });
     return value * conversions[unit];
   }
 
@@ -156,7 +156,7 @@ class UnitConverter {
       m3: 1000,
       gal_us: 3.78541,
       gal_uk: 4.54609,
-    };
+    });
     return liters / conversions[unit];
   }
 
@@ -188,7 +188,7 @@ class UnitConverter {
       kmh: 1 / 3.6,
       mph: 0.44704,
       knots: 0.514444, // Nautical miles per hour
-    };
+    });
     return value * conversions[unit];
   }
 
@@ -198,7 +198,7 @@ class UnitConverter {
       kmh: 1 / 3.6,
       mph: 0.44704,
       knots: 0.514444,
-    };
+    });
     return ms / conversions[unit];
   }
 
@@ -230,7 +230,7 @@ class UnitConverter {
       bar: 100000,
       psi: 6894.76,
       atm: 101325,
-    };
+    });
     return value * conversions[unit];
   }
 
@@ -240,7 +240,7 @@ class UnitConverter {
       bar: 100000,
       psi: 6894.76,
       atm: 101325,
-    };
+    });
     return pascals / conversions[unit];
   }
 
@@ -272,7 +272,7 @@ class UnitConverter {
       g: 0.001,
       lb: 0.453592,
       ton: 1000,
-    };
+    });
     return value * conversions[unit];
   }
 
@@ -282,7 +282,7 @@ class UnitConverter {
       g: 0.001,
       lb: 0.453592,
       ton: 1000,
-    };
+    });
     return kg / conversions[unit];
   }
 
@@ -340,7 +340,7 @@ class UnitConverter {
       lb: "lb",
       ton: "t",
       g: "g",
-    };
+    });
     
     return `${value} ${unitLabels[unit] || unit}`;
   }
@@ -375,7 +375,7 @@ class UnitConverter {
         value: convertedValue,
         unit: targetUnit,
         formatted: this.formatWithUnit(convertedValue, targetUnit),
-      };
+      });
     } catch (error) {
       logger.error("Error in autoConvert:", error);
       return { value, unit, formatted: this.formatWithUnit(value, unit) };

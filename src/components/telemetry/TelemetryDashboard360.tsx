@@ -156,13 +156,13 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
       setIsAutoSyncEnabled(false);
       toast.success("Auto-sync desativado", {
         description: "A sincronização automática foi pausada",
-      };
+      });
     } else {
       satelliteSyncEngine.startAutoSync();
       setIsAutoSyncEnabled(true);
       toast.success("Auto-sync ativado", {
         description: "Os dados serão atualizados automaticamente a cada minuto",
-      };
+      });
       // Trigger immediate refresh
       loadDashboardData();
     }

@@ -39,7 +39,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
       errorInfo: null,
       retryCount: 0,
       isRetrying: false,
-    };
+    });
   }
 
   static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
@@ -52,7 +52,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
     // Log the error
     logger.error("React Error Boundary caught error", error, {
       componentStack: errorInfo.componentStack,
-    };
+    });
 
     // Call custom error handler
     this.props.onError?.(error, errorInfo);
