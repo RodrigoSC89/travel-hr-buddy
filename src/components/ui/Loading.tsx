@@ -239,7 +239,7 @@ export const LoadingDashboard: React.FC = () => {
       </div>
     </div>
   );
-});
+};
 
 // Export legacy names for backward compatibility
 export const LoadingState = Loading;
