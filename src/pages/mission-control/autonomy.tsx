@@ -10,9 +10,9 @@ import { Activity, Brain, CheckCircle, AlertTriangle, Zap, TrendingUp, Shield } 
 
 export default function AutonomyConsole() {
   const [actions, setActions] = useState<AutonomousAction[]>([]);
-  const [stats, setStats] = useState<any>(null);
-  const [patternStats, setPatternStats] = useState<any>(null);
-  const [hotfixStats, setHotfixStats] = useState<any>(null);
+  const [stats, setStats] = useState<unknown>(null);
+  const [patternStats, setPatternStats] = useState<unknown>(null);
+  const [hotfixStats, setHotfixStats] = useState<unknown>(null);
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {

@@ -109,12 +109,12 @@ const PeopleAnalytics: React.FC = () => {
     }
   ];
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: unknown: unknown: unknown) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-card p-3 rounded-lg border shadow-lg">
           <p className="font-medium">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: unknown, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}%
             </p>

@@ -38,7 +38,7 @@ interface MaintenanceItem {
 
 interface MaintenancePanelProps {
   maintenance: MaintenanceItem[];
-  vessels: any[];
+  vessels: unknown[];
   onRefresh: () => void;
 }
 
@@ -92,7 +92,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
 
     try {
       const { error } = await supabase
-        .from("maintenance_schedules" as any)
+        .from("maintenance_schedules" as unknown)
         .insert([{
           vessel_id: newMaintenance.vessel_id,
           maintenance_type: newMaintenance.type,

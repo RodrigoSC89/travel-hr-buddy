@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { MapPin } from "lucide-react";
 
 // Lazy load mapbox-gl - use any type to avoid complex mapbox types
-let mapboxgl: any = null;
+let mapboxgl: unknown = null;
 
 export const loadMapbox = async (): Promise<any> => {
   if (!mapboxgl) {
@@ -26,7 +26,7 @@ interface LazyMapboxProps {
   style?: string;
   projection?: string;
   pitch?: number;
-  onMapLoad?: (map: any) => void;
+  onMapLoad?: (map: unknown: unknown: unknown) => void;
   className?: string;
   children?: React.ReactNode;
 }
@@ -85,7 +85,7 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
           }
         });
 
-        mapInstance.on("error", (e: any) => {
+        mapInstance.on("error", (e: unknown: unknown: unknown) => {
           if (mounted) {
             setError("Failed to load map");
             setIsLoading(false);

@@ -66,7 +66,7 @@ export function NaturalLanguageCommand() {
     }
 
     try {
-      const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SpeechRecognition = window.SpeechRecognition || (window as unknown).webkitSpeechRecognition;
       if (!SpeechRecognition) {
         toast.error("Reconhecimento de voz não suportado neste navegador");
         return;
@@ -82,7 +82,7 @@ export function NaturalLanguageCommand() {
         toast.info("Ouvindo... Fale seu comando");
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: Event) => {
         const transcript = event.results[0][0].transcript;
         setCommand(transcript);
       };

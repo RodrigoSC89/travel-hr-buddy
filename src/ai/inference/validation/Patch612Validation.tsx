@@ -203,7 +203,7 @@ export function Patch612Validation() {
               <li>Conexões: {graphData.edges.length}</li>
               <li>Cenários Validados: {graphData.scenarios.length}</li>
               <li>Logs de Decisão: {graphData.logs.length}</li>
-              <li>Confidence Média: {(graphData.scenarios.reduce((sum: number, s: any) => sum + s.confidence, 0) / graphData.scenarios.length * 100).toFixed(1)}%</li>
+              <li>Confidence Média: {(graphData.scenarios.reduce((sum: number, s: unknown) => sum + s.confidence, 0) / graphData.scenarios.length * 100).toFixed(1)}%</li>
             </ul>
           </div>
         )}

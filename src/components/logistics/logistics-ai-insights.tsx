@@ -23,7 +23,7 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
   const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
   const [delayPredictions, setDelayPredictions] = useState<any[]>([]);
   const [inventoryOptimizations, setInventoryOptimizations] = useState<any[]>([]);
-  const [insights, setInsights] = useState<any>(null);
+  const [insights, setInsights] = useState<unknown>(null);
 
   const handleOptimizeRoutes = async () => {
     const opts = await optimizeRoutes(operations);

@@ -137,7 +137,7 @@ export default function TrainingSimulation() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [completedSimulations, setCompletedSimulations] = useState<string[]>([]);
-  const [aiEvaluation, setAiEvaluation] = useState<any>(null);
+  const [aiEvaluation, setAiEvaluation] = useState<unknown>(null);
 
   const startSimulation = (sim: Simulation) => {
     setActiveSimulation(sim);

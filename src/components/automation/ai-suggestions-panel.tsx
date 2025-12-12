@@ -165,7 +165,7 @@ export const AISuggestionsPanel: React.FC = () => {
         try {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
-            const newSuggestions = parsed.suggestions.map((s: any, idx: number) => ({
+            const newSuggestions = parsed.suggestions.map((s: unknown, idx: number) => ({
               ...s,
               id: s.id || `ai-${Date.now()}-${idx}`,
               is_read: false,
@@ -448,22 +448,22 @@ export const AISuggestionsPanel: React.FC = () => {
                       
                       {suggestion.action_data && Object.keys(suggestion.action_data).length > 0 && (
                         <div className="flex gap-2 text-xs text-muted-foreground">
-                          {(suggestion.action_data as any)?.savings && (
+                          {(suggestion.action_data as unknown)?.savings && (
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-3 h-3" />
-                              Economia: {(suggestion.action_data as any).savings}
+                              Economia: {(suggestion.action_data as unknown).savings}
                             </div>
                           )}
-                          {(suggestion.action_data as any)?.vessel && (
+                          {(suggestion.action_data as unknown)?.vessel && (
                             <div className="flex items-center gap-1">
                               <Ship className="w-3 h-3" />
-                              {(suggestion.action_data as any).vessel}
+                              {(suggestion.action_data as unknown).vessel}
                             </div>
                           )}
-                          {(suggestion.action_data as any)?.days_overdue && (
+                          {(suggestion.action_data as unknown)?.days_overdue && (
                             <div className="flex items-center gap-1">
                               <AlertTriangle className="w-3 h-3" />
-                              {(suggestion.action_data as any).days_overdue} dias em atraso
+                              {(suggestion.action_data as unknown).days_overdue} dias em atraso
                             </div>
                           )}
                         </div>

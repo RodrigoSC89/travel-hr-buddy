@@ -72,7 +72,7 @@ export default function IntegrationsHub() {
 
   const fetchProviders = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("integration_providers")
         .select("*")
         .eq("is_active", true)
@@ -87,7 +87,7 @@ export default function IntegrationsHub() {
 
   const fetchUserIntegrations = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("user_integrations")
         .select(`
           *,
@@ -104,7 +104,7 @@ export default function IntegrationsHub() {
 
   const fetchLogs = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("integration_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -119,7 +119,7 @@ export default function IntegrationsHub() {
 
   const fetchPlugins = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("plugins")
         .select("*")
         .eq("is_active", true)
@@ -135,7 +135,7 @@ export default function IntegrationsHub() {
   const toggleIntegration = async (integrationId: string, isActive: boolean) => {
     try {
       if (isActive) {
-        const { error } = await (supabase as any).rpc("deactivate_integration", {
+        const { error } = await (supabase as unknown).rpc("deactivate_integration", {
           p_integration_id: integrationId
         });
         if (error) throw error;
@@ -166,7 +166,7 @@ export default function IntegrationsHub() {
 
   const initiateOAuth = async (providerId: string) => {
     try {
-      const { data, error } = await (supabase as any).rpc("create_oauth_state", {
+      const { data, error } = await (supabase as unknown).rpc("create_oauth_state", {
         p_provider_id: providerId
       });
 
@@ -191,7 +191,7 @@ export default function IntegrationsHub() {
 
   const installPlugin = async (pluginId: string) => {
     try {
-      const { error } = await (supabase as any).rpc("install_plugin", {
+      const { error } = await (supabase as unknown).rpc("install_plugin", {
         p_plugin_id: pluginId,
         p_configuration: {}
       });

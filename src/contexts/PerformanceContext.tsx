@@ -63,9 +63,9 @@ function useSimpleNetworkState() {
     setIsOnline(navigator.onLine);
 
     // Check connection quality
-    const connection = (navigator as any).connection || 
-                      (navigator as any).mozConnection || 
-                      (navigator as any).webkitConnection;
+    const connection = (navigator as unknown).connection || 
+                      (navigator as unknown).mozConnection || 
+                      (navigator as unknown).webkitConnection;
 
     const updateNetworkState = () => {
       const online = navigator.onLine;

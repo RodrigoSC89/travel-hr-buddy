@@ -32,7 +32,7 @@ interface PredictiveInsight {
   confidence: number;
   impact: "low" | "medium" | "high" | "critical";
   action?: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 interface AIPredictivePanelProps {

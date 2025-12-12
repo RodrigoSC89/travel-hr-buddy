@@ -216,14 +216,14 @@ export function NautilusCommandCenter() {
                 <TabsTrigger key={tab.id} value={tab.id} className="flex flex-col items-center gap-1 py-2 relative">
                   <Icon className={`h-4 w-4 ${activeTab === tab.id ? "text-primary" : "text-muted-foreground"}`} />
                   <span className="text-[10px]">{tab.label}</span>
-                  {(tab as any).isNew && (
+                  {(tab as unknown).isNew && (
                     <Badge className="absolute -top-1 -right-1 h-4 px-1 text-[8px] bg-gradient-to-r from-purple-500 to-pink-500">
                       <Sparkles className="h-2 w-2" />
                     </Badge>
                   )}
-                  {(tab as any).count > 0 && (
+                  {(tab as unknown).count > 0 && (
                     <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 text-[9px]">
-                      {(tab as any).count}
+                      {(tab as unknown).count}
                     </Badge>
                   )}
                 </TabsTrigger>

@@ -141,14 +141,14 @@ export const suppressConsoleError = () => {
 /**
  * Mock fetch for API tests
  */
-export const mockFetch = (response: any, options = {}) => {
+export const mockFetch = (response: SupabaseResponse<unknown>, options = {}) => {
   global.fetch = vi.fn(() =>
     Promise.resolve({
       ok: true,
       json: () => Promise.resolve(response),
       ...options,
     })
-  ) as any;
+  ) as unknown;
 };
 
 /**

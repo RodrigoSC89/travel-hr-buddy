@@ -62,7 +62,7 @@ export interface ExecutiveSummaryData {
   };
   insights: string[];
   recommendations: string[];
-  keyMetrics: Record<string, any>;
+  keyMetrics: Record<string, unknown>;
   generatedAt: Date;
 }
 
@@ -908,7 +908,7 @@ function calculateKeyMetrics(
   strategies: Strategy[],
   simulations: SimulationResult[],
   consensusResults: ConsensusResult[]
-): Record<string, any> {
+): Record<string, unknown> {
   return {
     total_strategies: strategies.length,
     avg_confidence_score:

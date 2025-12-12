@@ -35,8 +35,8 @@ const RechartsLoader = lazy(() =>
 
 interface LazyChartProps {
   type?: "line" | "bar" | "pie" | "area" | "radar";
-  data?: any;
-  config?: any;
+  data?: unknown;
+  config?: unknown;
   height?: number;
   className?: string;
   children?: React.ReactNode;
@@ -68,23 +68,23 @@ export function LazyChart({
 }
 
 // Export individual lazy chart components for convenience
-export const LazyLineChart = (props: any) => (
+export const LazyLineChart = (props: unknown) => (
   <LazyChart type="line" {...props} />
 );
 
-export const LazyBarChart = (props: any) => (
+export const LazyBarChart = (props: unknown) => (
   <LazyChart type="bar" {...props} />
 );
 
-export const LazyPieChart = (props: any) => (
+export const LazyPieChart = (props: unknown) => (
   <LazyChart type="pie" {...props} />
 );
 
-export const LazyAreaChart = (props: any) => (
+export const LazyAreaChart = (props: unknown) => (
   <LazyChart type="area" {...props} />
 );
 
-export const LazyRadarChart = (props: any) => (
+export const LazyRadarChart = (props: unknown) => (
   <LazyChart type="radar" {...props} />
 );
 

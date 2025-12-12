@@ -15,7 +15,7 @@ export default function CronMonitorPage() {
   const { data: stats } = useQuery<CronJobStats>({
     queryKey: ["cron-stats"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .rpc("get_cron_stats");
       
       if (error) throw error;
@@ -27,7 +27,7 @@ export default function CronMonitorPage() {
   const { data: jobs = [], isLoading, refetch } = useQuery<CronJob[]>({
     queryKey: ["cron-jobs"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("cron_jobs")
         .select("*")
         .order("name", { ascending: true });
@@ -43,7 +43,7 @@ export default function CronMonitorPage() {
     queryFn: async () => {
       if (!selectedJob) return [];
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("cron_job_executions")
         .select("*")
         .eq("job_id", selectedJob)

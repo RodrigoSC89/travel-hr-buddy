@@ -108,7 +108,7 @@ interface ValidationResult {
 export default function PeoDpWizardComplete() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, any>>({
+  const [formData, setFormData] = useState<Record<string, unknown>>({
     vessel_name: "",
     vessel_type: "",
     dp_class: "DP2",
@@ -134,7 +134,7 @@ export default function PeoDpWizardComplete() {
   });
   const [historicalData, setHistoricalData] = useState<any[]>([]);
   const [validationResults, setValidationResults] = useState<ValidationResult[]>([]);
-  const [inferenceResults, setInferenceResults] = useState<any>(null);
+  const [inferenceResults, setInferenceResults] = useState<unknown>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -163,7 +163,7 @@ export default function PeoDpWizardComplete() {
     }
   };
 
-  const runInference = async (data: any) => {
+  const runInference = async (data: unknown) => {
     try {
       // Inference rules based on historical data
       const results = {
@@ -180,7 +180,7 @@ export default function PeoDpWizardComplete() {
     }
   };
 
-  const calculateRiskLevel = (data: any): string => {
+  const calculateRiskLevel = (data: unknown): string => {
     let riskScore = 0;
 
     // Check DP class requirements
@@ -208,7 +208,7 @@ export default function PeoDpWizardComplete() {
     return "CRITICAL";
   };
 
-  const calculateComplianceScore = (data: any): number => {
+  const calculateComplianceScore = (data: unknown): number => {
     let score = 100;
     const requiredFields = ["vessel_name", "dp_class", "dp_master", "fmea", "asog", "training_plan"];
     
@@ -226,7 +226,7 @@ export default function PeoDpWizardComplete() {
     return Math.max(0, Math.min(100, score));
   };
 
-  const generateRecommendations = (data: any): string[] => {
+  const generateRecommendations = (data: unknown): string[] => {
     const recommendations: string[] = [];
 
     if (!data.fmea || data.fmea.length < 200) {
@@ -257,7 +257,7 @@ export default function PeoDpWizardComplete() {
     return recommendations;
   };
 
-  const identifyCriticalFindings = (data: any): string[] => {
+  const identifyCriticalFindings = (data: unknown): string[] => {
     const findings: string[] = [];
 
     if (!data.dp_master) {
@@ -279,12 +279,12 @@ export default function PeoDpWizardComplete() {
     return findings;
   };
 
-  const performCrossValidation = (data: any, inference: any) => {
+  const performCrossValidation = (data: unknown, inference: unknown: unknown: unknown) => {
     const validations: ValidationResult[] = [];
 
     // Validate against historical training records
     if (historicalData?.training) {
-      const recentTraining = historicalData.training.filter((t: any) => 
+      const recentTraining = historicalData.training.filter((t: unknown) => 
         new Date(t.training_date) > new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
       );
       
@@ -305,7 +305,7 @@ export default function PeoDpWizardComplete() {
 
     // Validate against incident history
     if (historicalData?.incidents) {
-      const criticalIncidents = historicalData.incidents.filter((i: any) => 
+      const criticalIncidents = historicalData.incidents.filter((i: unknown) => 
         i.severity === "critical" || i.severity === "high"
       );
       
@@ -453,7 +453,7 @@ export default function PeoDpWizardComplete() {
     });
   };
 
-  const handleFieldChange = (field: string, value: any) => {
+  const handleFieldChange = (field: string, value: unknown: unknown: unknown) => {
     const newData = { ...formData, [field]: value };
     setFormData(newData);
     

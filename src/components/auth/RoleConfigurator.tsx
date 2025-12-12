@@ -142,7 +142,7 @@ export const RoleConfigurator: React.FC = () => {
         .from("module_permissions")
         .insert({
           module_name: moduleName,
-          role: role as any,
+          role: role as unknown,
           can_read: true,
           can_write: false,
           can_delete: false,

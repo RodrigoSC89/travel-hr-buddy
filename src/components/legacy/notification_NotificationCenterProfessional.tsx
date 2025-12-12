@@ -109,7 +109,7 @@ interface Notification {
     label: string;
     url: string;
   };
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 // Mock data

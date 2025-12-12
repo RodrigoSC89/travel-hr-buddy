@@ -295,13 +295,13 @@ export default function ProcurementCommandCenter() {
     try {
       setInventoryLoading(true);
       const { data, error } = await supabase
-        .from("inventory_items" as any)
+        .from("inventory_items" as unknown)
         .select("*")
         .order("name");
 
       if (error) throw error;
       setInventoryItems((data as unknown as InventoryItem[]) || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Erro ao carregar inventário",
         description: error.message,

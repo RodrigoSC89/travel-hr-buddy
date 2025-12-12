@@ -24,7 +24,7 @@ import { logger } from "@/lib/logger";
 
 export default function ComplianceDashboard() {
   const [risks, setRisks] = useState<RiskScore[]>([]);
-  const [summary, setSummary] = useState<any>(null);
+  const [summary, setSummary] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 

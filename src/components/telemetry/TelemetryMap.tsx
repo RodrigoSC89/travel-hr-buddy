@@ -25,13 +25,13 @@ interface MapMarker {
   name: string;
   latitude: number;
   longitude: number;
-  data?: any;
+  data?: unknown;
 }
 
 interface TelemetryMapProps {
-  satellites?: any[];
-  vessels?: any[];
-  weatherPoints?: any[];
+  satellites?: unknown[];
+  vessels?: unknown[];
+  weatherPoints?: unknown[];
   onRefresh?: () => void;
 }
 

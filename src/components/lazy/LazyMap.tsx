@@ -13,7 +13,7 @@ interface LazyMapProps {
   height?: string | number;
   width?: string | number;
   className?: string;
-  onMapLoad?: (map: any) => void;
+  onMapLoad?: (map: unknown: unknown: unknown) => void;
   style?: string;
 }
 

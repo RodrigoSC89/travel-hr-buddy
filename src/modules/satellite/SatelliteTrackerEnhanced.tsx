@@ -108,7 +108,7 @@ export const SatelliteTrackerEnhanced = () => {
       }
 
       setSatellites(data);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading satellite data:", error);
       toast({
         title: "Error loading satellites",
@@ -130,7 +130,7 @@ export const SatelliteTrackerEnhanced = () => {
 
       if (error) throw error;
       setCoverageEvents(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading coverage events:", error);
     }
   };
@@ -187,7 +187,7 @@ export const SatelliteTrackerEnhanced = () => {
       }
 
       await loadSatelliteData();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error creating mock satellites:", error);
     }
   };
@@ -224,7 +224,7 @@ export const SatelliteTrackerEnhanced = () => {
 
       // Check for coverage events
       checkCoverageEvents(updates);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error updating satellites:", error);
     }
   };

@@ -17,7 +17,7 @@ export interface Vessel {
   imo_number?: string;
   flag?: string;
   status: "active" | "inactive" | "maintenance";
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_at?: string;
   updated_at?: string;
 }
@@ -72,7 +72,7 @@ export const VesselProvider: React.FC<VesselProviderProps> = ({
         imo_number: v.imo_number || undefined,
         flag: v.flag || undefined,
         status: (v.status as "active" | "inactive" | "maintenance") || "active",
-        metadata: (v.metadata as Record<string, any>) || {},
+        metadata: (v.metadata as Record<string, unknown>) || {},
         created_at: v.created_at || undefined,
         updated_at: v.updated_at || undefined,
       }));

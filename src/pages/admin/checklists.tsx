@@ -832,7 +832,7 @@ export default function SmartChecklistsPage() {
                   placeholder="Adicionar item..."
                   onKeyDown={(e) => e.key === "Enter" && handleAddItem()}
                 />
-                <Select value={newItemCriticality} onValueChange={(v: any) => setNewItemCriticality(v)}>
+                <Select value={newItemCriticality} onValueChange={(v: unknown: unknown: unknown) => setNewItemCriticality(v)}>
                   <SelectTrigger className="w-[120px]">
                     <SelectValue />
                   </SelectTrigger>

@@ -86,7 +86,7 @@ export default function ChannelManagerHub() {
         .insert({
           name: channelName,
           created_by: user.id,
-        } as any)
+        } as unknown)
         .select()
         .single();
 
@@ -115,7 +115,7 @@ export default function ChannelManagerHub() {
           channel_id: selectedChannel!,
           sender_id: user.id,
           message_content: messageContent,
-        } as any)
+        } as unknown)
         .select()
         .single();
 
@@ -145,7 +145,7 @@ export default function ChannelManagerHub() {
       //   status: !isActive ? "online" : "offline",
       //   message: `Canal ${!isActive ? "ativado" : "desativado"} manualmente`,
       //   timestamp: new Date().toISOString(),
-      // } as any);
+      // } as unknown);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["communication-channels"] });
@@ -210,7 +210,7 @@ export default function ChannelManagerHub() {
                     onClick={() => setSelectedChannel(channel.id)}
                   >
                     <MessageSquare className="mr-2 h-4 w-4" />
-                    {(channel as any).channel_name || (channel as any).name}
+                    {(channel as unknown).channel_name || (channel as unknown).name}
                     {channel.is_active ? (
                       <Badge variant="default" className="ml-auto">Online</Badge>
                     ) : (

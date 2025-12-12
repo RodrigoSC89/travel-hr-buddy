@@ -136,7 +136,7 @@ export default function CrewRotationModule() {
     };
   };
 
-  const detectConflicts = (rotation: any): RotationConflict[] => {
+  const detectConflicts = (rotation: unknown: unknown: unknown): RotationConflict[] => {
     const conflicts: RotationConflict[] = [];
 
     // Check for overlapping rotations
@@ -233,7 +233,7 @@ export default function CrewRotationModule() {
     }
   };
 
-  const sendRotationNotification = async (type: string, rotation: any) => {
+  const sendRotationNotification = async (type: string, rotation: unknown: unknown: unknown) => {
     try {
       await supabase.from("notifications").insert({
         user_id: rotation.crew_member_id,

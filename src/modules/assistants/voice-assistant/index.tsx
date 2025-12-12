@@ -66,7 +66,7 @@ const VoiceAssistant: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as unknown).SpeechRecognition || (window as unknown).webkitSpeechRecognition;
     
     if (!SpeechRecognition || !window.speechSynthesis) {
       setIsSupported(false);
@@ -78,7 +78,7 @@ const VoiceAssistant: React.FC = () => {
     recognitionRef.current.interimResults = true;
     recognitionRef.current.lang = "pt-BR";
 
-    recognitionRef.current.onresult = (event: any) => {
+    recognitionRef.current.onresult = (event: Event) => {
       const current = event.resultIndex;
       const transcriptText = event.results[current][0].transcript;
       setTranscript(transcriptText);
@@ -89,7 +89,7 @@ const VoiceAssistant: React.FC = () => {
       }
     };
 
-    recognitionRef.current.onerror = (event: any) => {
+    recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
       logger.error("Speech recognition error", { error: event.error });
       if (event.error !== "no-speech") {
         toast({

@@ -27,7 +27,7 @@ interface DocumentTemplate {
   description: string;
   category: string;
   content: string;
-  variables: any[];
+  variables: unknown[];
   version: number;
   is_active: boolean;
   created_at: string;
@@ -92,7 +92,7 @@ export default function DocumentTemplates() {
   const fetchTemplates = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("document_templates")
         .select("*")
         .eq("is_active", true)
@@ -114,7 +114,7 @@ export default function DocumentTemplates() {
 
   const fetchGeneratedDocuments = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("generated_documents")
         .select("*")
         .order("generated_at", { ascending: false })
@@ -129,7 +129,7 @@ export default function DocumentTemplates() {
 
   const fetchTemplateVersions = async (templateId: string) => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("template_versions")
         .select("*")
         .eq("template_id", templateId)
@@ -158,7 +158,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) {
       // Create new template
       try {
-        const { error } = await (supabase as any)
+        const { error } = await (supabase as unknown)
           .from("document_templates")
           .insert({
             name: templateName,
@@ -187,7 +187,7 @@ export default function DocumentTemplates() {
     } else {
       // Update existing template (create new version)
       try {
-        const { error } = await (supabase as any).rpc("create_template_version", {
+        const { error } = await (supabase as unknown).rpc("create_template_version", {
           p_template_id: selectedTemplate.id,
           p_content: templateContent,
           p_variables: extractVariables(templateContent),
@@ -218,7 +218,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) return;
 
     try {
-      const { data, error } = await (supabase as any).rpc("generate_document_from_template", {
+      const { data, error } = await (supabase as unknown).rpc("generate_document_from_template", {
         p_template_id: selectedTemplate.id,
         p_name: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
         p_variable_values: variableValues,
@@ -247,7 +247,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) return;
 
     try {
-      const { error } = await (supabase as any).rpc("rollback_template_version", {
+      const { error } = await (supabase as unknown).rpc("rollback_template_version", {
         p_template_id: selectedTemplate.id,
         p_version: version
       });
@@ -271,7 +271,7 @@ export default function DocumentTemplates() {
     }
   };
 
-  const extractVariables = (content: string): any[] => {
+  const extractVariables = (content: string): unknown[] => {
     const matches = content.match(/\{\{([a-zA-Z0-9_]+)\}\}/g) || [];
     const uniqueVars = [...new Set(matches.map(m => m.slice(2, -2)))];
     
@@ -291,7 +291,7 @@ export default function DocumentTemplates() {
     // In production, this would trigger actual export
     // For now, just mark as exported
     try {
-      const { error } = await (supabase as any).rpc("export_document", {
+      const { error } = await (supabase as unknown).rpc("export_document", {
         p_document_id: documentId,
         p_file_url: `/exports/${documentId}.${format}`
       });

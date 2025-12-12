@@ -336,7 +336,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
             if (userTenants && userTenants.length > 0) {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const tenants = userTenants
-                .map((ut: any) => ut.saas_tenants as SaasTenant)
+                .map((ut: unknown) => ut.saas_tenants as SaasTenant)
                 .filter(Boolean);
               
               if (tenants.length > 0) {
@@ -374,7 +374,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error: updateError } = await supabase
         .from("tenant_branding")
-        .update(branding as any)
+        .update(branding as unknown)
         .eq("tenant_id", currentTenant.id)
         .select()
         .single();
@@ -397,7 +397,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error: updateError } = await supabase
         .from("saas_tenants")
-        .update(settings as any)
+        .update(settings as unknown)
         .eq("id", currentTenant.id)
         .select()
         .single();

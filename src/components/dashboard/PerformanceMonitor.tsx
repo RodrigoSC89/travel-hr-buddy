@@ -49,12 +49,12 @@ function PerformanceMonitorComponent() {
     const perfEntries = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
     const resources = performance.getEntriesByType("resource");
     
-    const totalTransfer = resources.reduce((acc, r: any) => acc + (r.transferSize || 0), 0);
+    const totalTransfer = resources.reduce((acc, r: unknown: unknown: unknown) => acc + (r.transferSize || 0), 0);
     
     setMetrics({
       fps: 60,
-      memory: (performance as any).memory?.usedJSHeapSize / 1048576 || 0,
-      latency: Math.round((navigator as any).connection?.rtt || 50),
+      memory: (performance as unknown).memory?.usedJSHeapSize / 1048576 || 0,
+      latency: Math.round((navigator as unknown).connection?.rtt || 50),
       ttfb: perfEntries?.responseStart - perfEntries?.requestStart || 0,
       domLoad: perfEntries?.domContentLoadedEventEnd - perfEntries?.startTime || 0,
       resourceCount: resources.length,
@@ -68,7 +68,7 @@ function PerformanceMonitorComponent() {
 
     // Detectar tipo de conexão
     if ("connection" in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as unknown).connection;
       setConnectionType(conn?.effectiveType || "unknown");
     }
 

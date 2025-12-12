@@ -56,7 +56,7 @@ const OperationsDashboard = () => {
         setVessels(vesselsData);
         
         // Map vessels to operations
-        const mappedOperations: VesselOperation[] = vesselsData.map((v: any) => ({
+        const mappedOperations: VesselOperation[] = vesselsData.map((v: unknown) => ({
           id: v.id,
           vessel_name: v.name,
           operation_type: mapStatusToOperationType(v.status),

@@ -66,7 +66,7 @@ export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfac
         category: item.category,
         description: item.description,
         compliance,
-        severity: severity as any,
+        severity: severity as unknown,
         corrective_action,
         evidence_attached: false,
       });

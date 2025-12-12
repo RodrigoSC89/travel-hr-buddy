@@ -42,7 +42,7 @@ export default function DocumentHistoryPage() {
     try {
       setLoading(true);
       // Use explicit foreign key relationship for author email
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("document_versions")
         .select(`
           id,
@@ -58,7 +58,7 @@ export default function DocumentHistoryPage() {
       if (error) throw error;
 
       // Transform data with author email
-      const transformedData = (data || []).map((version: any) => {
+      const transformedData = (data || []).map((version: unknown) => {
         const profiles = version.profiles as unknown as { email: string } | null;
         return {
           id: version.id,
@@ -107,7 +107,7 @@ export default function DocumentHistoryPage() {
     setRestoring(versionId);
     try {
       // Update the document with the version content
-      const { error: updateError } = await (supabase as any)
+      const { error: updateError } = await (supabase as unknown)
         .from("ai_generated_documents")
         .update({ content: versionContent })
         .eq("id", id);

@@ -72,7 +72,7 @@ export default function SGSOWorkflow() {
       };
 
       setStats({ ...auditStats, ...findingsStats });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading stats",
         description: error.message,

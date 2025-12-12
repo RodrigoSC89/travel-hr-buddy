@@ -69,7 +69,7 @@ export default function ComplianceStatusPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; className: string }> = {
+    const variants: Record<string, { variant: unknown: unknown: unknown; className: string }> = {
       pass: { variant: "default", className: "bg-green-100 text-green-800" },
       fail: { variant: "destructive", className: "bg-red-100 text-red-800" },
       warning: { variant: "default", className: "bg-yellow-100 text-yellow-800" },
@@ -252,8 +252,8 @@ function ChecksList({
   checks, 
   getStatusBadge 
 }: { 
-  checks: any[];
-  getStatusBadge: (status: string) => { variant: any; className: string };
+  checks: unknown[];
+  getStatusBadge: (status: string) => { variant: unknown: unknown: unknown; className: string };
 }) {
   return (
     <Card>

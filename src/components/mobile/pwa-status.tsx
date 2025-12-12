@@ -42,7 +42,7 @@ export const PWAStatus: React.FC = () => {
 
   // Check if app is installable
   React.useEffect(() => {
-    const handler = (e: any) => {
+    const handler = (e: unknown) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);

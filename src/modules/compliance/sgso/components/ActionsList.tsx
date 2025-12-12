@@ -35,7 +35,7 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
       const { data, error } = await query;
       if (error) throw error;
       setActions(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading actions",
         description: error.message,

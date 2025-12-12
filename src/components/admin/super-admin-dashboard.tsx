@@ -91,7 +91,7 @@ export const SuperAdminDashboard: React.FC = () => {
       if (error) throw error;
 
       // Processar dados das organizações
-      const processedOrgs = orgs?.map((org: any) => ({
+      const processedOrgs = orgs?.map((org: unknown) => ({
         ...org,
         max_users: org.max_users ?? 0,
         max_vessels: org.max_vessels ?? 0,

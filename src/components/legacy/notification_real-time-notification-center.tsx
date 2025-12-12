@@ -29,7 +29,7 @@ interface Notification {
   priority: "low" | "medium" | "high" | "urgent";
   read: boolean;
   created_at: string;
-  action_data?: any;
+  action_data?: unknown;
   expires_at?: string;
 }
 
@@ -41,9 +41,9 @@ interface IntelligentNotification {
   priority: string;
   is_read: boolean;
   created_at: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
   action_type?: string;
-  action_data?: any;
+  action_data?: unknown;
   action_text?: string;
 }
 
@@ -253,7 +253,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
   }, [user]);
 
   // Filtrar notificações
-  const getFilteredNotifications = (notifs: any[], isIntelligent = false) => {
+  const getFilteredNotifications = (notifs: unknown[], isIntelligent = false) => {
     const filtered = notifs.filter(n => {
       const isRead = isIntelligent ? n.is_read : n.read;
       const matchesSearch = n.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

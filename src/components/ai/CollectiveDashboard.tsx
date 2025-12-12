@@ -178,7 +178,7 @@ export const CollectiveDashboard: React.FC = () => {
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, any> = {
+    const variants: Record<string, unknown> = {
       info: "default",
       warning: "secondary",
       error: "destructive",

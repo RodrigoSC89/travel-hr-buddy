@@ -15,7 +15,7 @@ interface Template {
 
 interface CreateFromTemplateProps {
   template: Template;
-  onSaved?: (doc: any) => void;
+  onSaved?: (doc: unknown: unknown: unknown) => void;
 }
 
 /**

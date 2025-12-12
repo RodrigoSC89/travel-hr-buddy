@@ -40,7 +40,7 @@ export default function DocumentListPage() {
   const loadDocuments = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("ai_generated_documents")
         .select("id, title, content, created_at, generated_by")
         .order("created_at", { ascending: false });

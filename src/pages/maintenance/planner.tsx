@@ -185,7 +185,7 @@ export default function MaintenancePlanner() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-semibold">{job.equipment}</h3>
-                      <Badge variant={getPriorityColor(job.priority as any)}>
+                      <Badge variant={getPriorityColor(job.priority as unknown)}>
                         {job.priority.toUpperCase()}
                       </Badge>
                       <Badge variant="outline">{job.type}</Badge>

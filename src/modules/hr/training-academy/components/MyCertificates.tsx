@@ -32,7 +32,7 @@ export const MyCertificates: React.FC = () => {
 
       if (error) throw error;
       setCertificates(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading certificates",
         description: error.message,
@@ -43,7 +43,7 @@ export const MyCertificates: React.FC = () => {
     }
   };
 
-  const handleDownload = async (cert: any) => {
+  const handleDownload = async (cert: unknown: unknown: unknown) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
@@ -74,7 +74,7 @@ export const MyCertificates: React.FC = () => {
         title: "Certificate downloaded",
         description: "Your certificate has been downloaded.",
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error downloading certificate",
         description: error.message,

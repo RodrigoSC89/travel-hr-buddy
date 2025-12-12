@@ -50,8 +50,8 @@ interface ComplianceRecord {
   days_since_completion?: number;
   findings_count?: number;
   recommendations_count?: number;
-  findings?: any[];
-  recommendations?: any[];
+  findings?: unknown[];
+  recommendations?: unknown[];
 }
 
 const ComplianceChecklist = () => {
@@ -68,32 +68,32 @@ const ComplianceChecklist = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from("compliance_dashboard" as any)
+        .from("compliance_dashboard" as unknown)
         .select("*");
 
       if (error) throw error;
 
       // Also fetch full details for records with findings/recommendations
       const recordsWithDetails = await Promise.all(
-        (data || []).map(async (record: any) => {
+        (data || []).map(async (record: unknown) => {
           const { data: fullRecord } = await supabase
-            .from("compliance_records" as any)
+            .from("compliance_records" as unknown)
             .select("findings, recommendations")
             .eq("id", record.id)
             .single();
           
           return {
             ...record,
-            findings: (fullRecord as any)?.findings || [],
-            recommendations: (fullRecord as any)?.recommendations || []
+            findings: (fullRecord as unknown)?.findings || [],
+            recommendations: (fullRecord as unknown)?.recommendations || []
           };
         })
       );
 
-      setRecords(recordsWithDetails as any);
+      setRecords(recordsWithDetails as unknown);
       
       // PATCH 549: Call loadAIInsights after records are loaded
-      await loadAIInsightsInternal(recordsWithDetails as any);
+      await loadAIInsightsInternal(recordsWithDetails as unknown);
     } catch (error) {
       console.error("Error loading compliance records:", error);
       toast({
@@ -119,7 +119,7 @@ const ComplianceChecklist = () => {
     await loadAIInsightsInternal(records);
   };
 
-  const loadAIInsightsInternal = async (currentRecords: any[]) => {
+  const loadAIInsightsInternal = async (currentRecords: unknown[]) => {
     try {
       const nonCompliantCount = currentRecords.filter(r => r.risk_level === "non_compliant").length;
       const riskCount = currentRecords.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
@@ -431,7 +431,7 @@ const ComplianceChecklist = () => {
                           Findings ({record.findings.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.findings.slice(0, 3).map((finding: any, idx: number) => (
+                          {record.findings.slice(0, 3).map((finding: unknown, idx: number) => (
                             <div key={idx} className="text-sm pl-6 text-muted-foreground">
                               <span className="font-medium">{finding.item}:</span> {finding.issue}
                               {finding.severity && (
@@ -458,7 +458,7 @@ const ComplianceChecklist = () => {
                           Recommendations ({record.recommendations.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.recommendations.slice(0, 2).map((rec: any, idx: number) => (
+                          {record.recommendations.slice(0, 2).map((rec: unknown, idx: number) => (
                             <div key={idx} className="text-sm pl-6 text-muted-foreground">
                               • {rec.recommendation}
                               {rec.priority && (

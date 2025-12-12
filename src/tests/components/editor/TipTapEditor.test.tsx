@@ -14,7 +14,7 @@ vi.mock("@tiptap/react", () => ({
       },
     };
   }),
-  EditorContent: ({ editor }: any) => <div data-testid="editor-content">Editor</div>,
+  EditorContent: ({ editor }: unknown: unknown: unknown) => <div data-testid="editor-content">Editor</div>,
 }));
 
 vi.mock("@tiptap/starter-kit", () => ({

@@ -317,7 +317,7 @@ export function EnhancedHistoryStats() {
     });
 
     // History table
-    const finalY = (doc as any).lastAutoTable?.finalY || 100;
+    const finalY = (doc as unknown).lastAutoTable?.finalY || 100;
     doc.setFontSize(14);
     doc.text("Histórico Detalhado", 14, finalY + 10);
     autoTable(doc, {

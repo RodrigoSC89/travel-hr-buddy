@@ -51,7 +51,7 @@ interface TemplateVersion {
   template_name: string;
   template_content: string;
   version_number: number;
-  variables: any;
+  variables: unknown: unknown: unknown;
   is_current: boolean;
   created_at: string;
   change_description?: string;
@@ -117,7 +117,7 @@ export const TemplatesDynamic = () => {
 
       if (error) throw error;
       setTemplates(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading templates",
         description: error.message,
@@ -136,7 +136,7 @@ export const TemplatesDynamic = () => {
 
       if (error) throw error;
       setVersions(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading versions:", error);
     }
   };
@@ -151,7 +151,7 @@ export const TemplatesDynamic = () => {
 
       if (error) throw error;
       setGenerationHistory(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading history:", error);
     }
   };
@@ -209,7 +209,7 @@ export const TemplatesDynamic = () => {
       }
 
       setVariableValues(values);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error fetching variables:", error);
       // Set default values
       DYNAMIC_VARIABLES.forEach((v) => {
@@ -290,7 +290,7 @@ export const TemplatesDynamic = () => {
       setChangeDescription("");
       await loadTemplates();
       await loadVersions(templateId);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error saving template",
         description: error.message,
@@ -331,7 +331,7 @@ export const TemplatesDynamic = () => {
 
       loadTemplate(version);
       await loadTemplates();
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error restoring version",
         description: error.message,
@@ -376,7 +376,7 @@ export const TemplatesDynamic = () => {
         title: "PDF exported",
         description: "Document has been exported successfully",
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Export failed",
         description: error.message,
@@ -419,7 +419,7 @@ export const TemplatesDynamic = () => {
         title: "Document exported",
         description: "Document has been exported as HTML",
       });
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Export failed",
         description: error.message,

@@ -45,7 +45,7 @@ export default function ControlHubPanel() {
     MQTTClient.connect();
 
     // Subscribe to BridgeLink events for telemetry
-    const unsubscribe = BridgeLink.on("nautilus:event" as any, (event) => {
+    const unsubscribe = BridgeLink.on("nautilus:event" as unknown, (event) => {
       const data = event.data as { message: string; timestamp: string };
       setTelemetryLogs((prev) => {
         const newLogs = [...prev, { 

@@ -146,7 +146,7 @@ export default function SGSOManager() {
               <div>
                 <h3 className="font-semibold text-lg">{plan.plan_name}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Versão {(plan.plan_version as any) || "1.0"}
+                  Versão {(plan.plan_version as unknown) || "1.0"}
                 </p>
               </div>
               <div className="flex gap-2">

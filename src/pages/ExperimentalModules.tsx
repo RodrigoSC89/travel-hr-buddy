@@ -416,7 +416,7 @@ const ExperimentalModules = () => {
                       <Icon className="w-5 h-5" />
                       <CardTitle className="text-lg">{module.name}</CardTitle>
                     </div>
-                    <Badge variant={getStatusColor(module.status) as any}>{module.status}</Badge>
+                    <Badge variant={getStatusColor(module.status) as unknown}>{module.status}</Badge>
                   </div>
                   <CardDescription className="line-clamp-2">{module.description}</CardDescription>
                 </CardHeader>

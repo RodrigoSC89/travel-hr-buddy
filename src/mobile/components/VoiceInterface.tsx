@@ -21,8 +21,8 @@ interface VoiceSpeechRecognition {
   start(): void;
   stop(): void;
   onstart: (() => void) | null;
-  onresult: ((event: any) => void) | null;
-  onerror: ((event: any) => void) | null;
+  onresult: ((event: unknown: unknown: unknown) => void) | null;
+  onerror: ((event: unknown: unknown: unknown) => void) | null;
   onend: (() => void) | null;
 }
 
@@ -51,8 +51,8 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   useEffect(() => {
     // Check if speech recognition is supported
-    const SpeechRecognitionClass = (window as any).SpeechRecognition || 
-                                   (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionClass = (window as unknown).SpeechRecognition || 
+                                   (window as unknown).webkitSpeechRecognition;
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
@@ -68,7 +68,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       setIsListening(true);
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: Event) => {
       const current = event.resultIndex;
       const transcriptResult = event.results[current][0].transcript;
       
@@ -81,7 +81,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       }
     };
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: unknown: unknown: unknown) => {
       setIsListening(false);
       
       if (event.error === "no-speech") {

@@ -358,7 +358,7 @@ function PDOPChart({ data }: PDOPChartProps) {
 function playAlert(type: "warning" | "critical") {
   // Browser Web Audio API
   try {
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 

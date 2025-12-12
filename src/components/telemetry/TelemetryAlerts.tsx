@@ -41,7 +41,7 @@ export interface TelemetryAlert {
   timestamp: Date;
   read: boolean;
   source: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface TelemetryAlertsProps {

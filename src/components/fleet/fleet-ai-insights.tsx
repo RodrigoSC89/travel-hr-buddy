@@ -23,7 +23,7 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
   const [maintenancePredictions, setMaintenancePredictions] = useState<any[]>([]);
   const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
   const [fuelPredictions, setFuelPredictions] = useState<any[]>([]);
-  const [recommendations, setRecommendations] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<unknown>(null);
 
   const handlePredictMaintenance = async () => {
     const predictions = await predictMaintenance(vessels);

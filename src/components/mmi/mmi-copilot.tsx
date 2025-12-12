@@ -29,7 +29,7 @@ interface MMICopilotProps {
   context?: {
     vessel?: string;
     component?: string;
-    job?: any;
+    job?: unknown;
   };
 }
 

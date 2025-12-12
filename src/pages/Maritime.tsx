@@ -74,7 +74,7 @@ export default function Maritime() {
     { name: "MARPOL", value: 95, color: "text-green-600" },
   ], []);
 
-  const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
+  const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: unknown: unknown: unknown) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">

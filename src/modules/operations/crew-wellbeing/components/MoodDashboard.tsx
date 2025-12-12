@@ -51,7 +51,7 @@ export const MoodDashboard = () => {
     const saved = localStorage.getItem("crew_mood_history");
     if (saved) {
       const parsed = JSON.parse(saved);
-      setMoodHistory(parsed.map((item: any) => ({
+      setMoodHistory(parsed.map((item: unknown) => ({
         ...item,
         date: new Date(item.date),
       })));

@@ -40,7 +40,7 @@ export default function UserManagementRBAC() {
   const fetchGroups = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("user_groups")
         .select("*")
         .order("name");
@@ -62,7 +62,7 @@ export default function UserManagementRBAC() {
   const fetchAuditLogs = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("role_audit_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -84,7 +84,7 @@ export default function UserManagementRBAC() {
 
   const createGroup = async (name: string, description: string) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("user_groups")
         .insert({ name, description });
 
@@ -107,7 +107,7 @@ export default function UserManagementRBAC() {
 
   const addUserToGroup = async (userId: string, groupId: string) => {
     try {
-      const { error } = await (supabase as any).rpc("add_user_to_group", {
+      const { error } = await (supabase as unknown).rpc("add_user_to_group", {
         p_user_id: userId,
         p_group_id: groupId,
       });

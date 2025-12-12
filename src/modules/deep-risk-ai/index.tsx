@@ -49,7 +49,7 @@ const DeepRiskAI: React.FC = () => {
   const [riskScore, setRiskScore] = useState<RiskScore | null>(null);
   const [recommendations, setRecommendations] = useState<RiskRecommendation[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [prediction, setPrediction] = useState<any>(null);
+  const [prediction, setPrediction] = useState<unknown>(null);
   const [eventHistory, setEventHistory] = useState<any[]>([]);
 
   // Load event history on mount

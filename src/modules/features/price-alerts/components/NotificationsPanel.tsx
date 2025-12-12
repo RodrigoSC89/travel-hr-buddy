@@ -47,7 +47,7 @@ export const NotificationsPanel: React.FC = () => {
           // Show toast for new notifications
           if (payload.eventType === "INSERT") {
             toast.info("Nova notificação de alerta de preço!", {
-              description: (payload.new as any).message
+              description: (payload.new as unknown).message
             });
           }
         }

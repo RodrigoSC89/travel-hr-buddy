@@ -59,8 +59,8 @@ interface CrewRotation {
   departure_port?: string;
   arrival_port?: string;
   transportation_method?: string;
-  flight_details?: any;
-  accommodation_details?: any;
+  flight_details?: unknown;
+  accommodation_details?: unknown;
   documentation_status: "pending" | "verified" | "incomplete" | "expired";
   medical_clearance: boolean;
   visa_status?: string;

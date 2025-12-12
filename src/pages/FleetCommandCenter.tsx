@@ -32,7 +32,7 @@ import {
 // ============ COMPONENTES INTEGRADOS ============
 
 // KPI Card Component
-const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, delay = 0 }: any) => (
+const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, delay = 0 }: unknown: unknown: unknown) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -66,7 +66,7 @@ const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, 
 );
 
 // Vessel Card Component (do Fleet Dashboard)
-const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) => {
+const VesselCard = ({ vessel, onClick }: { vessel: unknown: unknown: unknown; onClick: () => void }) => {
   const statusConfig: Record<string, { color: string; label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
     operational: { color: "bg-green-500", label: "Operacional", variant: "default" },
     active: { color: "bg-green-500", label: "Ativa", variant: "default" },
@@ -150,7 +150,7 @@ const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) =
 };
 
 // Tracking Map Component (simplificado do vessel-tracking-map)
-const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
+const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: unknown: unknown: unknown) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[600px]">
       {/* Vessel List */}
@@ -163,7 +163,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 p-2">
-            {vessels.map((vessel: any) => (
+            {vessels.map((vessel: unknown) => (
               <div
                 key={vessel.id}
                 className={`p-3 rounded-lg cursor-pointer transition-all hover:bg-muted/50 ${
@@ -207,7 +207,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
                   </p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2 mt-4">
-                  {vessels.slice(0, 4).map((v: any) => (
+                  {vessels.slice(0, 4).map((v: unknown) => (
                     <Badge key={v.id} variant="outline" className="gap-1">
                       <div className="h-2 w-2 rounded-full bg-green-500" />
                       {v.name}
@@ -235,7 +235,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
 };
 
 // AI Copilot Component
-const FleetAICopilot = ({ vessels }: { vessels: any[] }) => {
+const FleetAICopilot = ({ vessels }: { vessels: unknown[] }) => {
   const [query, setQuery] = useState("");
   const [thinking, setThinking] = useState(false);
 
@@ -343,7 +343,7 @@ export default function FleetCommandCenter() {
   const [maintenance, setMaintenance] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedVessel, setSelectedVessel] = useState<any>(null);
+  const [selectedVessel, setSelectedVessel] = useState<unknown>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
 
@@ -368,7 +368,7 @@ export default function FleetCommandCenter() {
       setVessels(enrichedVessels);
 
       const { data: maintenanceData } = await supabase
-        .from("maintenance_schedules" as any)
+        .from("maintenance_schedules" as unknown)
         .select("*")
         .order("scheduled_date", { ascending: false })
         .limit(50);
@@ -536,7 +536,7 @@ export default function FleetCommandCenter() {
             <CardContent>
               {maintenance.length > 0 ? (
                 <div className="space-y-3">
-                  {maintenance.slice(0, 10).map((m: any) => (
+                  {maintenance.slice(0, 10).map((m: unknown) => (
                     <div key={m.id} className="flex items-center justify-between p-3 border rounded-lg">
                       <div>
                         <p className="font-medium">{m.description || "Manutenção Programada"}</p>

@@ -157,7 +157,7 @@ export const MLCInspectionDashboard: React.FC = () => {
             <Card key={cat.id} className="mb-4"><CardHeader><CardTitle className="text-lg">{cat.regulation} - {cat.title}</CardTitle><CardDescription>{cat.description}</CardDescription></CardHeader>
               <CardContent className="space-y-3">{cat.items.map(item => (
                 <div key={item.id} className="p-3 rounded-lg border"><div className="flex justify-between items-start mb-2"><div><span className="font-medium">{item.id} - {item.title}</span>{item.critical && <Badge variant="destructive" className="ml-2">Crítico</Badge>}</div>
-                  <div className="flex gap-1">{["compliant","non-compliant","na"].map(a => <Button key={a} size="sm" variant={answers[item.id]?.answer === a ? (a === "compliant" ? "default" : a === "non-compliant" ? "destructive" : "secondary") : "outline"} onClick={() => handleAnswerChange(item.id, a as any)}>{a === "compliant" ? <CheckCircle className="w-4 h-4" /> : a === "non-compliant" ? <XCircle className="w-4 h-4" /> : "N/A"}</Button>)}</div>
+                  <div className="flex gap-1">{["compliant","non-compliant","na"].map(a => <Button key={a} size="sm" variant={answers[item.id]?.answer === a ? (a === "compliant" ? "default" : a === "non-compliant" ? "destructive" : "secondary") : "outline"} onClick={() => handleAnswerChange(item.id, a as unknown)}>{a === "compliant" ? <CheckCircle className="w-4 h-4" /> : a === "non-compliant" ? <XCircle className="w-4 h-4" /> : "N/A"}</Button>)}</div>
                 </div><p className="text-sm text-muted-foreground">{item.description}</p></div>
               ))}</CardContent></Card>
           ))}</ScrollArea>

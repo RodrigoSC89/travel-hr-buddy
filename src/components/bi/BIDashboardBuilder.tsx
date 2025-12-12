@@ -48,7 +48,7 @@ import {
 interface AIQueryResult {
   query: string;
   answer: string;
-  data?: any[];
+  data?: unknown[];
   chartType?: "bar" | "line" | "pie";
   confidence: number;
 }

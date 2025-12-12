@@ -57,7 +57,7 @@ interface WorkflowNode {
   type: "trigger" | "action" | "condition" | "delay" | "end";
   label: string;
   status: "pending" | "running" | "completed" | "error";
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }
 
 // Mock visual workflow data
@@ -128,7 +128,7 @@ export default function WorkflowCommandCenter() {
   const [showNewWorkflow, setShowNewWorkflow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<unknown>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
   // Visual workflow state
@@ -164,8 +164,8 @@ export default function WorkflowCommandCenter() {
     await createWorkflow({
       name: newWorkflowData.name,
       description: newWorkflowData.description,
-      category: newWorkflowData.category as any,
-      priority: newWorkflowData.priority as any,
+      category: newWorkflowData.category as unknown,
+      priority: newWorkflowData.priority as unknown,
       status: "draft",
       steps: [],
     });
@@ -177,7 +177,7 @@ export default function WorkflowCommandCenter() {
     await createWorkflow({
       name: template.name,
       description: template.description,
-      category: template.category as any,
+      category: template.category as unknown,
       priority: "medium",
       status: "draft",
       steps: template.steps,
@@ -811,7 +811,7 @@ export default function WorkflowCommandCenter() {
                 <Progress value={selectedWorkflow.progress} className="h-3" />
                 <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
                 <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                  {selectedWorkflow.steps?.map((step: any, i: number) => (
+                  {selectedWorkflow.steps?.map((step: unknown, i: number) => (
                     <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                       <span>{step.name}</span>
                       <Badge variant="outline">{step.status}</Badge>

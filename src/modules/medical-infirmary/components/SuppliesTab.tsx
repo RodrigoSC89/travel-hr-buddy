@@ -30,7 +30,7 @@ export default function SuppliesTab() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
-  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<unknown>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newItem, setNewItem] = useState({
     name: "",

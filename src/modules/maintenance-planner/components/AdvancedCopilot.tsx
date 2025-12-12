@@ -247,10 +247,10 @@ export default function AdvancedCopilot() {
     recognitionRef.current.onend = () => setIsListening(false);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognitionRef.current.onresult = (event: any) => {
+    recognitionRef.current.onresult = (event: Event) => {
       const transcript = Array.from(event.results)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((result: any) => result[0].transcript)
+        .map((result: unknown) => result[0].transcript)
         .join("");
       setInput(transcript);
 
@@ -260,7 +260,7 @@ export default function AdvancedCopilot() {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognitionRef.current.onerror = (event: any) => {
+    recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
       setIsListening(false);
     };
 

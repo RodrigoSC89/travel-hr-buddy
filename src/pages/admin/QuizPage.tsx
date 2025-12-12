@@ -70,7 +70,7 @@ export default function QuizPage() {
       setLoading(true);
 
       // Try to fetch from templates first
-      const { data: templates, error } = await (supabase as any)
+      const { data: templates, error } = await (supabase as unknown)
         .from("quiz_templates")
         .select("*")
         .eq("standard", quizConfig.standard)
@@ -82,7 +82,7 @@ export default function QuizPage() {
 
       if (templates && templates.length >= QUESTIONS_PER_QUIZ) {
         // Use template questions
-        const quizQuestions: Question[] = (templates as any[]).map((t: any) => ({
+        const quizQuestions: Question[] = (templates as any[]).map((t: unknown) => ({
           question: t.question,
           options: t.options as string[],
           correct_answer: t.correct_answer,
@@ -204,7 +204,7 @@ export default function QuizPage() {
         .single();
 
       // Save quiz result
-      const { data: result, error } = await (supabase as any)
+      const { data: result, error } = await (supabase as unknown)
         .from("quiz_results")
         .insert({
           user_id: user.id,
@@ -225,8 +225,8 @@ export default function QuizPage() {
 
       // Generate certificate if passed
       if (score >= PASSING_SCORE && result) {
-        const { data: certData } = await (supabase as any).rpc("generate_certificate_id", {
-          p_result_id: (result as any).id
+        const { data: certData } = await (supabase as unknown).rpc("generate_certificate_id", {
+          p_result_id: (result as unknown).id
         });
         
         if (certData && typeof certData === "string") {

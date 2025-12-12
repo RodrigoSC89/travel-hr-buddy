@@ -52,7 +52,7 @@ export const ExecutiveDashboardBase = ({
   const { isExporting, exportData } = useDashboardExport();
 
   // Render widget based on type
-  const renderWidget = (widget: any) => {
+  const renderWidget = (widget: unknown) => {
     if (!widget.visible && widget.visible !== undefined) return null;
 
     const gridClasses = cn(

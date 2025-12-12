@@ -79,7 +79,7 @@ export default function ForecastHistoryPage() {
       .then(res => res.json())
       .then((forecasts) => {
         // Transform the data to match expected format
-        const transformed = forecasts.map((f: any) => ({
+        const transformed = forecasts.map((f: unknown) => ({
           ...f,
           last_maintenance: Array.isArray(f.last_maintenance) 
             ? f.last_maintenance 

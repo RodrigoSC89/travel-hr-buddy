@@ -20,7 +20,7 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
     try {
       setAccepted((prev) => [...prev, etapa]);
 
-      const payload: any = {
+      const payload: unknown = {
         etapa: s.etapa,
         tipo_sugestao: s.tipo_sugestao,
         conteudo: s.conteudo,
@@ -29,7 +29,7 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
         origem: "Copilot",
       };
 
-      const { error } = await (supabase as any).from("workflow_ai_suggestions").insert(payload);
+      const { error } = await (supabase as unknown).from("workflow_ai_suggestions").insert(payload);
 
       if (error) {
         toast({

@@ -59,7 +59,7 @@ describe("MMI Orders Admin Page", () => {
           error: null,
         }),
       }),
-    } as any);
+    } as unknown);
 
     render(<MMIOrdersPage />);
 

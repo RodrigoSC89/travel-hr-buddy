@@ -41,7 +41,7 @@ ChartJS.register(
 
 export const AIEvolutionDashboard: React.FC = () => {
   const [snapshots, setSnapshots] = useState<ModelSnapshot[]>([]);
-  const [currentMetrics, setCurrentMetrics] = useState<any>(null);
+  const [currentMetrics, setCurrentMetrics] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

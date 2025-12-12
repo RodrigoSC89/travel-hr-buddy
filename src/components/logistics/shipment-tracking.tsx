@@ -58,7 +58,7 @@ export const ShipmentTracking = () => {
 
       if (error) throw error;
       setShipments(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading shipments",
         description: error.message,

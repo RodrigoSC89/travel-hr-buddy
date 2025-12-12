@@ -78,7 +78,7 @@ export default function Dashboard() {
       ]);
 
       const vessels = vesselsResult.data || [];
-      const activeVessels = vessels.filter((v: any) => v.status === "active").length;
+      const activeVessels = vessels.filter((v: unknown) => v.status === "active").length;
 
       setStats({
         totalVessels: vesselsResult.count || vessels.length,

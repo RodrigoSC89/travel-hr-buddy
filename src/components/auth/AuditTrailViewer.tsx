@@ -49,7 +49,7 @@ interface AccessLog {
   created_at: string;
 }
 
-const RESULT_CONFIG: Record<string, { label: string; icon: any; color: string }> = {
+const RESULT_CONFIG: Record<string, { label: string; icon: React.ComponentType<any>; color: string }> = {
   success: { label: "Sucesso", icon: CheckCircle, color: "text-green-500" },
   failure: { label: "Falha", icon: XCircle, color: "text-red-500" },
   denied: { label: "Negado", icon: XCircle, color: "text-orange-500" },

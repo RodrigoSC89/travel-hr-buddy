@@ -96,7 +96,7 @@ export const ChatInterface = () => {
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
         };
-        setCurrentUser(userProfile as any);
+        setCurrentUser(userProfile as unknown);
         await loadConversations();
         await loadAllUsers();
       }
@@ -165,8 +165,8 @@ export const ChatInterface = () => {
       if (error) throw error;
 
       const conversationsWithDetails = await Promise.all(
-        (data || []).map(async (conv: any) => {
-          const typedConv = conv as { id: string; type: string; title?: string | null; last_message_at: string | null; conversation_participants: Array<{ user_id: string; profiles: any }> };
+        (data || []).map(async (conv: unknown) => {
+          const typedConv = conv as { id: string; type: string; title?: string | null; last_message_at: string | null; conversation_participants: Array<{ user_id: string; profiles: unknown }> };
           // Carregar última mensagem
           const { data: lastMessage } = await supabase
             .from("messages")
@@ -244,7 +244,7 @@ export const ChatInterface = () => {
 
       if (error) throw error;
 
-      const messagesWithSender = (data || []).map((msg: any) => ({
+      const messagesWithSender = (data || []).map((msg: unknown) => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
@@ -256,7 +256,7 @@ export const ChatInterface = () => {
         } : undefined
       }));
 
-      setMessages(messagesWithSender as any);
+      setMessages(messagesWithSender as unknown);
 
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
@@ -276,7 +276,7 @@ export const ChatInterface = () => {
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
         };
-        setCurrentUser(userProfile as any);
+        setCurrentUser(userProfile as unknown);
         await loadConversations();
         await loadAllUsers();
       }
@@ -353,7 +353,7 @@ export const ChatInterface = () => {
             .single();
 
           if (newMessage) {
-            const profiles = (newMessage as any).profiles;
+            const profiles = (newMessage as unknown).profiles;
             const messageWithSender = {
               id: newMessage.id,
               content: newMessage.content,
@@ -364,7 +364,7 @@ export const ChatInterface = () => {
                 email: profiles.email || ""
               } : undefined
             };
-            setMessages(prev => [...prev, messageWithSender as any]);
+            setMessages(prev => [...prev, messageWithSender as unknown]);
           }
         }
       )
@@ -385,7 +385,7 @@ export const ChatInterface = () => {
           sender_id: currentUser.id,
           content: newMessage.trim(),
           conversation_id: selectedConversation
-        } as any);
+        } as unknown);
 
       if (error) throw error;
 
@@ -447,7 +447,7 @@ export const ChatInterface = () => {
       const { error: participantsError } = await supabase
         .from("conversation_participants")
         .insert([
-          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as any,
+          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as unknown,
           { conversation_id: newConv.id, user_id: userId } as any
         ]);
 

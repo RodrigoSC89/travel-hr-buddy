@@ -56,7 +56,7 @@ export default function DocumentHub() {
       }
 
       if (data) {
-        const mappedDocs = data.map((doc: any) => ({
+        const mappedDocs = data.map((doc: unknown) => ({
           id: doc.id,
           name: doc.name || "Unnamed Document",
           type: doc.type || "unknown",

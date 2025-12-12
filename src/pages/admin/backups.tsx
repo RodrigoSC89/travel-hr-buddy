@@ -51,7 +51,7 @@ export default function BackupsPage() {
   const loadBackups = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("backup_snapshots")
         .select("*")
         .is("deleted_at", null)
@@ -60,7 +60,7 @@ export default function BackupsPage() {
 
       if (error) throw error;
 
-      setBackups((data || []) as any);
+      setBackups((data || []) as unknown);
     } catch (error) {
       toast({
         title: "Error",
@@ -74,12 +74,12 @@ export default function BackupsPage() {
 
   const loadStats = async () => {
     try {
-      const { data, error } = await (supabase as any).rpc("get_backup_stats");
+      const { data, error } = await (supabase as unknown).rpc("get_backup_stats");
 
       if (error) throw error;
 
       if (data && data.length > 0) {
-        setStats(data[0] as any);
+        setStats(data[0] as unknown);
       }
     } catch (error) {
       // Silent fail for stats

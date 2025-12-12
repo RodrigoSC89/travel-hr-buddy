@@ -5,16 +5,16 @@ import DPIntelligenceDashboard from "@/modules/intelligence/dp-intelligence/comp
 
 // Mock recharts to avoid rendering issues in tests
 vi.mock("recharts", () => ({
-  BarChart: ({ children }: any) => <div data-testid="bar-chart">{children}</div>,
+  BarChart: ({ children }: unknown: unknown: unknown) => <div data-testid="bar-chart">{children}</div>,
   Bar: () => <div data-testid="bar" />,
   XAxis: () => <div data-testid="x-axis" />,
   YAxis: () => <div data-testid="y-axis" />,
   Tooltip: () => <div data-testid="tooltip" />,
-  PieChart: ({ children }: any) => <div data-testid="pie-chart">{children}</div>,
+  PieChart: ({ children }: unknown: unknown: unknown) => <div data-testid="pie-chart">{children}</div>,
   Pie: () => <div data-testid="pie" />,
   Cell: () => <div data-testid="cell" />,
   Legend: () => <div data-testid="legend" />,
-  ResponsiveContainer: ({ children }: any) => <div data-testid="responsive-container">{children}</div>,
+  ResponsiveContainer: ({ children }: unknown: unknown: unknown) => <div data-testid="responsive-container">{children}</div>,
 }));
 
 describe("DPIntelligenceDashboard Component", () => {

@@ -25,7 +25,7 @@ import {
   Users,
   FileText
 } from "lucide-react";
-let XLSX: any = null;
+let XLSX: unknown = null;
 const loadXLSX = async () => {
   if (!XLSX) {
     XLSX = await import("xlsx");
@@ -105,10 +105,10 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       const { data, error } = await supabase
         .from("project_tasks")
         .select("*")
-        .order("start_date", { ascending: true }) as any;
+        .order("start_date", { ascending: true }) as unknown;
 
       if (error) throw error;
-      setTasks((data || []) as any);
+      setTasks((data || []) as unknown);
     } catch (error) {
       console.error("Error fetching tasks:", error);
       toast({
@@ -125,10 +125,10 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     try {
       const { data, error } = await supabase
         .from("project_dependencies")
-        .select("*") as any;
+        .select("*") as unknown;
 
       if (error) throw error;
-      setDependencies((data || []) as any);
+      setDependencies((data || []) as unknown);
     } catch (error) {
       console.error("Error fetching dependencies:", error);
     }
@@ -610,7 +610,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
+                <Select value={formData.status} onValueChange={(value: unknown) => setFormData({ ...formData, status: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -625,7 +625,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               </div>
               <div>
                 <Label htmlFor="priority">Priority</Label>
-                <Select value={formData.priority} onValueChange={(value: any) => setFormData({ ...formData, priority: value })}>
+                <Select value={formData.priority} onValueChange={(value: unknown) => setFormData({ ...formData, priority: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

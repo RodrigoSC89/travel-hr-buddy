@@ -102,7 +102,7 @@ export function NaturalLanguageInterface() {
 
     try {
       const response = await analyze(
-        module as any,
+        module as unknown,
         command,
         { command, module, timestamp: new Date().toISOString() }
       );
@@ -140,10 +140,10 @@ export function NaturalLanguageInterface() {
   const toggleVoice = () => {
     if (!isListening) {
       if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+        const SpeechRecognition = (window as unknown).webkitSpeechRecognition || (window as unknown).SpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = "pt-BR";
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: Event) => {
           const transcript = event.results[0][0].transcript;
           setInput(transcript);
           setIsListening(false);

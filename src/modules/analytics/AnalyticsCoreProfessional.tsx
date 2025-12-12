@@ -242,7 +242,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(10);
 
-      const insightNotifications: Notification[] = (aiInsightsData || []).map((insight: any) => ({
+      const insightNotifications: Notification[] = (aiInsightsData || []).map((insight: unknown) => ({
         id: insight.id as string,
         title: (insight.title || "Insight de IA") as string,
         message: (insight.description || "") as string,
@@ -253,7 +253,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         metadata: insight.metadata as Record<string, unknown> | undefined
       }));
 
-      const alertNotifications: Notification[] = (alertsData || []).map((alert: any) => ({
+      const alertNotifications: Notification[] = (alertsData || []).map((alert: unknown) => ({
         id: alert.id as string,
         title: `Alerta: ${alert.alert_name}` as string,
         message: `Preço alvo: ${alert.target_price} (${alert.condition})` as string,
@@ -335,7 +335,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .limit(10);
 
       if (analyticsMetrics && analyticsMetrics.length > 0) {
-        setMetrics(analyticsMetrics.map((m: any) => ({
+        setMetrics(analyticsMetrics.map((m: unknown) => ({
           id: m.id,
           name: m.metric_name,
           value: m.metric_value,
@@ -373,7 +373,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         .limit(100);
 
       if (events && events.length > 0) {
-        const monthlyData = events.reduce((acc: Record<string, any>, event: any) => {
+        const monthlyData = events.reduce((acc: Record<string, unknown>, event: unknown: unknown: unknown) => {
           const month = new Date(event.created_at).toLocaleString("pt-BR", { month: "short" });
           if (!acc[month]) {
             acc[month] = { month, receita: 0, custos: 0, lucro: 0 };
@@ -655,7 +655,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         m.category
       ]);
       
-      (doc as any).autoTable({
+      (doc as unknown).autoTable({
         startY: yPosition,
         head: [["Métrica", "Valor", "Tendência", "Variação", "Categoria"]],
         body: metricsTableData,
@@ -665,7 +665,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         alternateRowStyles: { fillColor: [245, 247, 250] }
       });
       
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = (doc as unknown).lastAutoTable.finalY + 15;
       
       // Revenue Data Section
       if (yPosition > 220) {
@@ -684,7 +684,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         `R$ ${r.lucro.toLocaleString("pt-BR")}`
       ]);
       
-      (doc as any).autoTable({
+      (doc as unknown).autoTable({
         startY: yPosition,
         head: [["Mês", "Receita", "Custos", "Lucro"]],
         body: revenueTableData,
@@ -693,7 +693,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         headStyles: { fillColor: [16, 185, 129], textColor: 255 }
       });
       
-      yPosition = (doc as any).lastAutoTable.finalY + 15;
+      yPosition = (doc as unknown).lastAutoTable.finalY + 15;
       
       // AI Insights Section
       if (insights.length > 0) {
@@ -715,7 +715,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           i.priority === "high" ? "Alta" : i.priority === "medium" ? "Média" : "Baixa"
         ]);
         
-        (doc as any).autoTable({
+        (doc as unknown).autoTable({
           startY: yPosition,
           head: [["Insight", "Tipo", "Confiança", "Prioridade"]],
           body: insightsTableData,
@@ -1080,7 +1080,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                       <Label className="text-sm font-medium">Período de Análise</Label>
                       <Select 
                         value={filters.dateRange} 
-                        onValueChange={(v: any) => setFilters(f => ({ ...f, dateRange: v }))}
+                        onValueChange={(v: unknown: unknown: unknown) => setFilters(f => ({ ...f, dateRange: v }))}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -1176,7 +1176,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         <Label>Ordenar por</Label>
                         <Select 
                           value={filters.sortBy}
-                          onValueChange={(v: any) => setFilters(f => ({ ...f, sortBy: v }))}
+                          onValueChange={(v: unknown: unknown: unknown) => setFilters(f => ({ ...f, sortBy: v }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -1192,7 +1192,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         <Label>Ordem</Label>
                         <Select 
                           value={filters.sortOrder}
-                          onValueChange={(v: any) => setFilters(f => ({ ...f, sortOrder: v }))}
+                          onValueChange={(v: unknown: unknown: unknown) => setFilters(f => ({ ...f, sortOrder: v }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -1949,7 +1949,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     <Label>Tipo de Relatório</Label>
                     <Select 
                       value={reportConfig.type}
-                      onValueChange={(v: any) => setReportConfig(c => ({ ...c, type: v }))}
+                      onValueChange={(v: unknown: unknown: unknown) => setReportConfig(c => ({ ...c, type: v }))}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -1968,7 +1968,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     <Label>Formato</Label>
                     <Select 
                       value={reportConfig.format}
-                      onValueChange={(v: any) => setReportConfig(c => ({ ...c, format: v }))}
+                      onValueChange={(v: unknown: unknown: unknown) => setReportConfig(c => ({ ...c, format: v }))}
                     >
                       <SelectTrigger>
                         <SelectValue />

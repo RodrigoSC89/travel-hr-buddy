@@ -42,7 +42,7 @@ interface WorkflowDefinition {
 const WorkflowEngine = () => {
   const { toast } = useToast();
   const [workflows, setWorkflows] = useState<WorkflowDefinition[]>([]);
-  const [activeExecution, setActiveExecution] = useState<any>(null);
+  const [activeExecution, setActiveExecution] = useState<unknown>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newWorkflow, setNewWorkflow] = useState<WorkflowDefinition>({
     name: "",
@@ -56,13 +56,13 @@ const WorkflowEngine = () => {
 
   const loadWorkflows = async () => {
     const { data, error } = await supabase
-      .from("nautilus_workflows" as any)
+      .from("nautilus_workflows" as unknown)
       .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
     } else {
-      setWorkflows((data || []) as any);
+      setWorkflows((data || []) as unknown);
     }
   };
 
@@ -78,7 +78,7 @@ const WorkflowEngine = () => {
 
     const { data: { user } } = await supabase.auth.getUser();
     
-    const { error } = await supabase.from("nautilus_workflows" as any).insert({
+    const { error } = await supabase.from("nautilus_workflows" as unknown).insert({
       name: newWorkflow.name,
       description: newWorkflow.description,
       steps: newWorkflow.steps,
@@ -103,7 +103,7 @@ const WorkflowEngine = () => {
   };
 
   const executeWorkflow = async (workflowId: string) => {
-    const { data, error } = await supabase.functions.invoke("workflow-execute" as any, {
+    const { data, error } = await supabase.functions.invoke("workflow-execute" as unknown, {
       body: {
         workflow_id: workflowId,
         action: "execute",
@@ -147,7 +147,7 @@ const WorkflowEngine = () => {
     });
   };
 
-  const updateStep = (index: number, field: string, value: any) => {
+  const updateStep = (index: number, field: string, value: unknown: unknown: unknown) => {
     const updatedSteps = [...newWorkflow.steps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
     setNewWorkflow({ ...newWorkflow, steps: updatedSteps });

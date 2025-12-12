@@ -73,7 +73,7 @@ export const HealthMetricsDashboard: React.FC = () => {
 
       if (anomaliesError) throw anomaliesError;
       setAnomalies(anomaliesData || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading health data",
         description: error.message,

@@ -44,7 +44,7 @@ interface AuditEntry {
   details: string;
   severity: "info" | "warning" | "critical";
   ipAddress: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface AIInsight {
@@ -191,7 +191,7 @@ export default function AuditTrail() {
       };
       
       // Add anomaly insights if present
-      const anomalyInsights: AIInsight[] = (aiResponse.anomalies || []).map((a: any, idx: number) => ({
+      const anomalyInsights: AIInsight[] = (aiResponse.anomalies || []).map((a: unknown, idx: number) => ({
         id: `anomaly-${Date.now()}-${idx}`,
         type: "anomaly" as const,
         title: a.title || "Anomalia detectada",

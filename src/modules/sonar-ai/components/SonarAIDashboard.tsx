@@ -32,7 +32,7 @@ import { toast } from "sonner";
 export const SonarAIDashboard: React.FC = () => {
   const [events, setEvents] = useState<SonarEvent[]>([]);
   const [risks, setRisks] = useState<SonarRisk[]>([]);
-  const [statistics, setStatistics] = useState<any>(null);
+  const [statistics, setStatistics] = useState<unknown>(null);
   const [spectrogramData, setSpectrogramData] = useState<SpectrogramData | null>(null);
   const [scanning, setScanning] = useState(false);
   const [selectedRisk, setSelectedRisk] = useState<SonarRisk | null>(null);
@@ -279,7 +279,7 @@ export const SonarAIDashboard: React.FC = () => {
                           <div className="flex items-center gap-3">
                             <div className={`w-3 h-3 rounded-full ${getRiskLevelColor(risk.risk_level)}`} />
                             <div>
-                              <Badge variant={getRiskLevelBadge(risk.risk_level) as any}>
+                              <Badge variant={getRiskLevelBadge(risk.risk_level) as unknown}>
                                 {risk.risk_level.toUpperCase()}
                               </Badge>
                               <Badge variant="outline" className="ml-2">

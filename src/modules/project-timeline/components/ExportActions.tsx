@@ -92,7 +92,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
     const inProgressTasks = tasks.filter(t => t.status === "in_progress").length;
     const pendingTasks = tasks.filter(t => t.status === "pending").length;
 
-    const finalY = (doc as any).lastAutoTable.finalY || 50;
+    const finalY = (doc as unknown).lastAutoTable.finalY || 50;
     doc.setFontSize(10);
     doc.text("Summary:", 14, finalY + 10);
     doc.text(`Total Tasks: ${tasks.length}`, 14, finalY + 16);

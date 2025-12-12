@@ -72,7 +72,7 @@ describe("Integration: Incident Lifecycle", () => {
   it("should track incident timeline events", async () => {
     // Arrange
     const incident = mockIncident();
-    const timeline: any[] = [];
+    const timeline: unknown[] = [];
 
     // Act - Add timeline events
     timeline.push({

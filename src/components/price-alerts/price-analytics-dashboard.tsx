@@ -25,7 +25,7 @@ import { travelPriceService } from "@/services/travel-price-service";
 
 interface AnalyticsData {
   categoryDistribution: { name: string; value: number; color: string }[];
-  priceHistory: { date: string; [key: string]: any }[];
+  priceHistory: { date: string; [key: string]: unknown: unknown: unknown }[];
   savingsOverTime: { month: string; savings: number; alerts: number }[];
   topProducts: { name: string; savings: number; frequency: number }[];
   trends: {
@@ -89,25 +89,25 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       setHotelHistory(hotels);
 
       // Calculate real statistics
-      const activeAlerts = alerts.filter((a: any) => a.is_active).length;
-      const triggeredAlerts = alerts.filter((a: any) => 
+      const activeAlerts = alerts.filter((a: unknown) => a.is_active).length;
+      const triggeredAlerts = alerts.filter((a: unknown) => 
         a.current_price && a.current_price <= a.target_price
       ).length;
 
       const totalSavings = alerts
-        .filter((a: any) => a.current_price && a.current_price < a.target_price)
-        .reduce((sum: number, a: any) => sum + (a.target_price - a.current_price), 0);
+        .filter((a: unknown) => a.current_price && a.current_price < a.target_price)
+        .reduce((sum: number, a: unknown) => sum + (a.target_price - a.current_price), 0);
 
       // Group price history by date
       const pricesByDate: Record<string, { flights: number[]; hotels: number[] }> = {};
       
-      flights.forEach((f: any) => {
+      flights.forEach((f: unknown) => {
         const date = new Date(f.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].flights.push(f.price || 0);
       });
 
-      hotels.forEach((h: any) => {
+      hotels.forEach((h: unknown) => {
         const date = new Date(h.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].hotels.push(h.total_price || 0);
@@ -134,13 +134,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       // Top routes/products
       const routeCounts: Record<string, { count: number; totalSavings: number }> = {};
       
-      flights.forEach((f: any) => {
+      flights.forEach((f: unknown) => {
         const route = f.route_code || "Unknown";
         if (!routeCounts[route]) routeCounts[route] = { count: 0, totalSavings: 0 };
         routeCounts[route].count++;
       });
 
-      hotels.forEach((h: any) => {
+      hotels.forEach((h: unknown) => {
         const name = h.hotel_name || "Unknown";
         if (!routeCounts[name]) routeCounts[name] = { count: 0, totalSavings: 0 };
         routeCounts[name].count++;
@@ -159,7 +159,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       const monthlyData: Record<string, { savings: number; alerts: number }> = {};
       const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
       
-      alerts.forEach((a: any) => {
+      alerts.forEach((a: unknown) => {
         const month = months[new Date(a.created_at).getMonth()];
         if (!monthlyData[month]) monthlyData[month] = { savings: 0, alerts: 0 };
         monthlyData[month].alerts++;

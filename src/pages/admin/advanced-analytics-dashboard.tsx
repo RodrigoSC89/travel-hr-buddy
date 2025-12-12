@@ -60,8 +60,8 @@ interface DashboardWidget {
   widget_type: string;
   title: string;
   chart_type?: string;
-  config: any;
-  position: any;
+  config: Record<string, unknown>;
+  position: unknown: unknown: unknown;
 }
 
 interface DashboardFilter {
@@ -109,7 +109,7 @@ export default function AdvancedAnalyticsDashboard() {
     setLoading(true);
     try {
       // Fetch widgets
-      const { data: widgetsData, error: widgetsError } = await (supabase as any)
+      const { data: widgetsData, error: widgetsError } = await (supabase as unknown)
         .from("dashboard_widgets")
         .select("*")
         .eq("is_active", true)
@@ -118,7 +118,7 @@ export default function AdvancedAnalyticsDashboard() {
       if (widgetsError) throw widgetsError;
 
       // Fetch KPI values
-      const { data: kpisData, error: kpisError } = await (supabase as any)
+      const { data: kpisData, error: kpisError } = await (supabase as unknown)
         .from("kpi_definitions")
         .select(`
           id,
@@ -135,10 +135,10 @@ export default function AdvancedAnalyticsDashboard() {
 
       if (kpisError) throw kpisError;
 
-      setWidgets((widgetsData || []) as any);
+      setWidgets((widgetsData || []) as unknown);
       
       // Transform KPI data
-      const transformedKpis: KPIWidget[] = (kpisData || []).map((kpi: any) => ({
+      const transformedKpis: KPIWidget[] = (kpisData || []).map((kpi: unknown) => ({
         id: kpi.id,
         title: kpi.name,
         value: kpi.kpi_values?.[0]?.value || 0,
@@ -161,7 +161,7 @@ export default function AdvancedAnalyticsDashboard() {
 
   const addWidget = async (widgetType: string, chartType?: string) => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await (supabase as unknown)
         .from("dashboard_widgets")
         .insert({
           widget_type: widgetType,

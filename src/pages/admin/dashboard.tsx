@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     const fetchTrendData = async () => {
       setLoadingTrend(true);
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await (supabase as unknown)
           .rpc("get_restore_count_by_day_with_email", { 
             email_input: user?.email || "" 
           });
@@ -121,13 +121,13 @@ export default function AdminDashboard() {
     const fetchMonthlySummary = async () => {
       setLoadingMonthlySummary(true);
       try {
-        const { data, error } = await (supabase as any)
+        const { data, error } = await (supabase as unknown)
           .rpc("get_monthly_restore_summary_by_department");
 
         if (error) {
           logger.error("Error fetching monthly summary", { error });
         } else if (data) {
-          setMonthlySummary((data as any) || []);
+          setMonthlySummary((data as unknown) || []);
         }
       } catch (error) {
         logger.error("Error fetching monthly summary:", error);

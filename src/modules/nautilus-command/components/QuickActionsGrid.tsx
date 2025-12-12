@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 interface QuickActionsGridProps {
-  context?: any;
+  context?: unknown;
   onContactClick?: () => void;
   onReorderClick?: () => void;
   onCreateOrderClick?: () => void;

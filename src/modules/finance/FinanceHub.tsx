@@ -54,7 +54,7 @@ export default function FinanceHub() {
       if (error) throw error;
 
       if (transactionsData && transactionsData.length > 0) {
-        const transactions: Transaction[] = transactionsData.map((t: any) => ({
+        const transactions: Transaction[] = transactionsData.map((t: unknown) => ({
           id: t.id,
           type: t.transaction_type === "income" || t.amount > 0 ? "income" : "expense",
           amount: Math.abs(t.amount),

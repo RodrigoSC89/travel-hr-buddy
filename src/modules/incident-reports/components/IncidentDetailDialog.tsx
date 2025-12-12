@@ -277,7 +277,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           styles: { fontSize: 8 }
         });
         
-        yPos = (doc as any).lastAutoTable.finalY + 10;
+        yPos = (doc as unknown).lastAutoTable.finalY + 10;
       }
       
       // Signatures

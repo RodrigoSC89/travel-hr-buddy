@@ -109,7 +109,7 @@ export default function SGSOFindings() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-mono text-sm font-semibold">{finding.number}</span>
-                      <Badge variant={getCategoryColor(finding.category as any)}>
+                      <Badge variant={getCategoryColor(finding.category as unknown)}>
                         {finding.category.toUpperCase()}
                       </Badge>
                       <span className={`text-sm ${getStatusColor(finding.status)}`}>

@@ -60,7 +60,7 @@ export const InventoryManagement = () => {
 
       if (error) throw error;
       setItems(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading inventory",
         description: error.message,

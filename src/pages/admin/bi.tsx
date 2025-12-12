@@ -22,7 +22,7 @@ export default function AdminBI() {
   useEffect(() => {
     async function fetchTrendData() {
       try {
-        const { data, error } = await (supabase as any).rpc("jobs_trend_by_month");
+        const { data, error } = await (supabase as unknown).rpc("jobs_trend_by_month");
         
         if (error) {
           logger.error("Error fetching jobs trend", { error });

@@ -123,7 +123,7 @@ export function PEODPAuditForm({
 
   // Count items by status per section
   const sectionStats = useMemo(() => {
-    const stats: Record<PEODPSection, { total: number; completed: number; conformes: number; naoConformes: number }> = {} as any;
+    const stats: Record<PEODPSection, { total: number; completed: number; conformes: number; naoConformes: number }> = {} as unknown;
     
     PEODP_SECTIONS.forEach(section => {
       const sectionReqs = requirementsBySection[section.id];

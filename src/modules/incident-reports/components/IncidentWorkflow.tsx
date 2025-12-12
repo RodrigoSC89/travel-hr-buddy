@@ -21,7 +21,7 @@ const loadJsPDF = async () => {
 };
 
 interface IncidentWorkflowProps {
-  incident: any;
+  incident: unknown: unknown: unknown;
   onUpdate: () => void;
 }
 
@@ -41,7 +41,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
   const updateIncidentStatus = async () => {
     try {
       const { error } = await supabase
-        .from("incident_reports" as any)
+        .from("incident_reports" as unknown)
         .update({
           status,
           updated_at: new Date().toISOString(),
@@ -52,7 +52,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       // Log workflow step (optional table)
       try {
-        await supabase.from("incident_workflow_logs" as any).insert({
+        await supabase.from("incident_workflow_logs" as unknown).insert({
           incident_id: incident.id,
           action: `Status changed to ${status}`,
           notes,
@@ -96,7 +96,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       // Save file reference to database (optional table)
       try {
-        await supabase.from("incident_attachments" as any).insert({
+        await supabase.from("incident_attachments" as unknown).insert({
           incident_id: incident.id,
           file_name: file.name,
           file_path: filePath,

@@ -46,7 +46,7 @@ export default function VirtualizedLogsCenter() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("logs")
         .select("*")
         .order("timestamp", { ascending: false })

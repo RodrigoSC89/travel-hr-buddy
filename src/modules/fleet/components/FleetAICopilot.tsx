@@ -31,8 +31,8 @@ interface Message {
 }
 
 interface FleetAICopilotProps {
-  vessels: any[];
-  onInsightGenerated?: (insight: any) => void;
+  vessels: unknown[];
+  onInsightGenerated?: (insight: unknown: unknown: unknown) => void;
   className?: string;
 }
 
@@ -146,17 +146,17 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
     return labels[action] || action;
   };
 
-  const formatActionResponse = (action: string, data: any): string => {
+  const formatActionResponse = (action: string, data: unknown): string => {
     if (!data) return "Análise não disponível.";
 
     switch (action) {
     case "maintenance_prediction":
       if (data.predictions?.length > 0) {
-        const critical = data.predictions.filter((p: any) => p.priority === "critical" || p.priority === "high").length;
+        const critical = data.predictions.filter((p: unknown) => p.priority === "critical" || p.priority === "high").length;
         return `📊 **Análise de Manutenção Preditiva**\n\n${data.summary || ""}\n\n` +
             `🔴 ${critical} embarcações requerem atenção prioritária\n` +
             `📋 ${data.predictions.length} previsões geradas\n\n` +
-            data.predictions.slice(0, 3).map((p: any) => 
+            data.predictions.slice(0, 3).map((p: unknown) => 
               `• **${p.vessel_name}**: ${p.priority.toUpperCase()} - ${p.reasoning || "Verificar componentes"}`
             ).join("\n") +
             (data.alerts?.length > 0 ? `\n\n⚠️ Alertas: ${data.alerts.join(", ")}` : "");
@@ -169,7 +169,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
             `💰 Economia potencial: R$ ${data.total_savings?.cost?.toLocaleString() || "N/A"}\n` +
             `⛽ Redução de combustível: ${data.total_savings?.fuel_percent || 0}%\n` +
             `⏱️ Tempo economizado: ${data.total_savings?.time_hours || 0}h\n\n` +
-            (data.optimizations?.slice(0, 3).map((o: any) => 
+            (data.optimizations?.slice(0, 3).map((o: unknown) => 
               `• **${o.vessel_name}**: ${o.current_route} → ${o.optimized_route}`
             ).join("\n") || "Rotas já otimizadas.");
       }
@@ -181,7 +181,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
             `📊 Eficiência média: ${data.fleet_summary?.average_efficiency || 85}%\n` +
             `🔋 Consumo diário total: ${data.fleet_summary?.total_daily_consumption || "N/A"} L\n` +
             `⚠️ Embarcações necessitando reabastecimento: ${data.fleet_summary?.vessels_needing_refuel || 0}\n\n` +
-            (data.analysis?.slice(0, 3).map((a: any) => 
+            (data.analysis?.slice(0, 3).map((a: unknown) => 
               `• **${a.vessel_name}**: ${a.current_level_percent || 0}% - ${a.recommendations?.[0] || "Nível adequado"}`
             ).join("\n") || "");
       }
@@ -194,7 +194,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
             `⚡ Eficiência Operacional: ${data.kpis?.operational_efficiency || 90}%\n` +
             `🔧 Compliance de Manutenção: ${data.kpis?.maintenance_compliance || 95}%\n\n` +
             "**Top Insights:**\n" +
-            (data.insights?.slice(0, 3).map((i: any) => 
+            (data.insights?.slice(0, 3).map((i: unknown) => 
               `• [${i.type?.toUpperCase()}] ${i.title}: ${i.description}`
             ).join("\n") || data.recommendations?.join("\n• ") || "");
       }

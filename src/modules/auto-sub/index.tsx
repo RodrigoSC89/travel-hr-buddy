@@ -286,7 +286,7 @@ const AutoSub: React.FC = () => {
                 <label className="text-xs text-zinc-400 mb-2 block">Scan Pattern</label>
                 <select
                   value={scanPattern}
-                  onChange={(e) => setScanPattern(e.target.value as any)}
+                  onChange={(e) => setScanPattern(e.target.value as unknown)}
                   className="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-md p-2"
                 >
                   <option value="grid">Grid (Lawnmower)</option>

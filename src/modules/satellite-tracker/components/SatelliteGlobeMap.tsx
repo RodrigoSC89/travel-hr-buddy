@@ -95,7 +95,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
     };
   }, [mapboxToken]);
 
-  const updateMarkers = async (mapboxgl: any) => {
+  const updateMarkers = async (mapboxgl: unknown: unknown: unknown) => {
     if (!map.current) return;
 
     // Clear existing markers

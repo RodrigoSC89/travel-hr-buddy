@@ -16,7 +16,7 @@ export default function TrainingPage() {
   const { data: stats } = useQuery<CrewTrainingStats>({
     queryKey: ["training-stats"],
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .rpc("get_crew_training_stats");
       
       if (error) throw error;
@@ -28,7 +28,7 @@ export default function TrainingPage() {
   const { data: modules = [], isLoading: modulesLoading } = useQuery<TrainingModuleExtended[]>({
     queryKey: ["training-modules", selectedCategory],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = (supabase as unknown)
         .from("training_modules")
         .select("*")
         .eq("status", "active")
@@ -48,7 +48,7 @@ export default function TrainingPage() {
   const { data: records = [], isLoading: recordsLoading } = useQuery<CrewTrainingRecord[]>({
     queryKey: ["training-records", selectedCategory],
     queryFn: async () => {
-      let query = (supabase as any)
+      let query = (supabase as unknown)
         .from("crew_training_records")
         .select("*")
         .order("date_completed", { ascending: false })

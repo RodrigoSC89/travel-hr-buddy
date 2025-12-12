@@ -31,7 +31,7 @@ export const CognitiveDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("predictions");
   const [predictions, setPredictions] = useState<ModuleRiskScore[]>([]);
   const [decisions, setDecisions] = useState<TacticalDecision[]>([]);
-  const [parameters, setParameters] = useState<any>(null);
+  const [parameters, setParameters] = useState<unknown>(null);
   const [evolutionReport, setEvolutionReport] = useState<EvolutionReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [filterModule, setFilterModule] = useState<string>("all");
@@ -65,7 +65,7 @@ export const CognitiveDashboard: React.FC = () => {
 
       // Load predictions
       const recentPredictions = await predictiveEngine.getRecentPredictions(50);
-      setPredictions(recentPredictions as any);
+      setPredictions(recentPredictions as unknown);
 
       // Load tactical decisions
       const decisionHistory = await tacticalAI.getDecisionHistory(undefined, 50);
@@ -191,7 +191,7 @@ export const CognitiveDashboard: React.FC = () => {
             <select
               className="w-full p-2 border rounded-md"
               value={filterTimeRange}
-              onChange={(e) => setFilterTimeRange(e.target.value as any)}
+              onChange={(e) => setFilterTimeRange(e.target.value as unknown)}
             >
               <option value="1h">Last Hour</option>
               <option value="24h">Last 24 Hours</option>
@@ -320,7 +320,7 @@ export const CognitiveDashboard: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="font-semibold">{decision.moduleName}</h3>
-                            <Badge variant={getPriorityColor(decision.priority) as any}>
+                            <Badge variant={getPriorityColor(decision.priority) as unknown}>
                               {decision.priority}
                             </Badge>
                             {decision.executed && (

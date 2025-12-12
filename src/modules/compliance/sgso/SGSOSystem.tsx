@@ -14,7 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 export default function SGSOSystem() {
   const [activeTab, setActiveTab] = useState("plans");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState<unknown>(null);
   const [stats, setStats] = useState({
     totalPlans: 0,
     activePlans: 0,

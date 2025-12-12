@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Satellite, AlertTriangle, Play, Square, Globe, Orbit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-let THREE: any = null;
+let THREE: unknown = null;
 const loadTHREE = async () => {
   if (!THREE) {
     THREE = await import("three");

@@ -62,7 +62,7 @@ export default function VaultAIComplete() {
 
   const loadDocuments = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("vault_documents")
         .select("*")
         .eq("status", "active")
@@ -78,7 +78,7 @@ export default function VaultAIComplete() {
 
   const loadSearchLogs = async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await (supabase as unknown)
         .from("vault_search_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -116,7 +116,7 @@ export default function VaultAIComplete() {
       setSearchResults(results);
 
       // Log the search
-      await (supabase as any)
+      await (supabase as unknown)
         .from("vault_search_logs")
         .insert({
           query: searchQuery,

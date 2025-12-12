@@ -106,7 +106,7 @@ export function BehavioralEvolutionDashboard() {
     }
   };
 
-  const calculateAverageAlignment = (data: any[]): number => {
+  const calculateAverageAlignment = (data: unknown[]): number => {
     if (data.length === 0) return 0;
     const sum = data.reduce((acc, d) => {
       const precision = d.precision_score || 0;
@@ -116,7 +116,7 @@ export function BehavioralEvolutionDashboard() {
     return (sum / data.length) * 100;
   };
 
-  const determineEvolutionTrend = (data: any[]): "improving" | "stable" | "degrading" => {
+  const determineEvolutionTrend = (data: unknown[]): "improving" | "stable" | "degrading" => {
     if (data.length < 10) return "stable";
     
     const recent = data.slice(0, 5);
@@ -133,7 +133,7 @@ export function BehavioralEvolutionDashboard() {
     return "stable";
   };
 
-  const generateEvolutionData = (data: any[]): BehaviorEvolution[] => {
+  const generateEvolutionData = (data: unknown[]): BehaviorEvolution[] => {
     const moduleData = new Map<string, any[]>();
     
     data.forEach(d => {

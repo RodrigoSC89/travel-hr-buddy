@@ -35,7 +35,7 @@ export default function CopilotV2() {
   const [input, setInput] = useState("");
   const [commands, setCommands] = useState<CopilotCommand[]>([]);
   const [suggestions, setSuggestions] = useState<CopilotSuggestion[]>([]);
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<unknown>(null);
   const [isListening, setIsListening] = useState(false);
 
   // Load commands and suggestions
@@ -66,7 +66,7 @@ export default function CopilotV2() {
     }
   };
 
-  const handleCommand = async (commandId: string, context?: any) => {
+  const handleCommand = async (commandId: string, context?: unknown) => {
     try {
       const result = await executeCopilotCommand(commandId, context);
       setResponse(result);
@@ -105,7 +105,7 @@ export default function CopilotV2() {
   };
 
   const getCategoryIcon = (category: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, unknown> = {
       compliance: Shield,
       documentation: FileText,
       operations: Lightbulb,
@@ -180,7 +180,7 @@ export default function CopilotV2() {
                   </p>
                   {response.actions && (
                     <div className="flex gap-2 mt-3">
-                      {response.actions.map((action: any, idx: number) => (
+                      {response.actions.map((action: unknown, idx: number) => (
                         <Button key={idx} size="sm" variant="outline">
                           {action.label}
                         </Button>
@@ -278,7 +278,7 @@ export default function CopilotV2() {
 
               {response?.length > 0 && Array.isArray(response) && (
                 <div className="space-y-2">
-                  {response.map((module: any) => (
+                  {response.map((module: unknown) => (
                     <Card key={module.id}>
                       <CardHeader className="py-3">
                         <CardTitle className="text-sm">{module.title}</CardTitle>

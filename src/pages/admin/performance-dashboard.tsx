@@ -25,7 +25,7 @@ interface PerformanceMetric {
   metric_value: number;
   metric_unit: string;
   status: "normal" | "warning" | "critical";
-  metadata: any;
+  metadata: unknown;
   created_at: string;
 }
 

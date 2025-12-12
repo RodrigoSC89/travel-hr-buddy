@@ -30,8 +30,8 @@ interface Message {
 
 interface NautilusBrainChatProps {
   onClose: () => void;
-  systemStatus: any;
-  alerts: any[];
+  systemStatus: unknown: unknown: unknown;
+  alerts: unknown[];
 }
 
 export const NautilusBrainChat: React.FC<NautilusBrainChatProps> = ({
@@ -145,7 +145,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join("\n")}
     }
   };
 
-  const generateFallbackResponse = (query: string, status: any, alerts: any[]): string => {
+  const generateFallbackResponse = (query: string, status: unknown: unknown: unknown, alerts: unknown[]): string => {
     const q = query.toLowerCase();
     
     if (q.includes("manutenção") || q.includes("manutencao")) {

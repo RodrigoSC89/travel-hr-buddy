@@ -38,7 +38,7 @@ interface PayrollRecord {
   currency: string;
   status: string;
   payslip_url?: string;
-  breakdown: any;
+  breakdown: unknown: unknown: unknown;
   notes?: string;
   created_at: string;
 }
@@ -68,7 +68,7 @@ export const EmployeePayroll: React.FC = () => {
 
       if (error) throw error;
       setPayrollRecords(data || []);
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error loading payroll:", error);
       toast({
         title: "Error loading payroll",
@@ -98,7 +98,7 @@ export const EmployeePayroll: React.FC = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { label: string; className: string; icon: any }> = {
+    const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {
       paid: { label: "Paid", className: "bg-green-500", icon: CheckCircle },
       processed: { label: "Processed", className: "bg-blue-500", icon: CheckCircle },
       pending: { label: "Pending", className: "bg-yellow-500", icon: Clock },

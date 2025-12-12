@@ -52,11 +52,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     }
   };
 
-  const updateSettings = (path: string, value: any) => {
+  const updateSettings = (path: string, value: unknown: unknown: unknown) => {
     setSettings(prev => {
       const parts = path.split(".");
       const newSettings = { ...prev };
-      let current: any = newSettings;
+      let current: unknown = newSettings;
       
       for (let i = 0; i < parts.length - 1; i++) {
         current[parts[i]] = { ...current[parts[i]] };

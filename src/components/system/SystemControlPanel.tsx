@@ -51,12 +51,12 @@ const useSystemMetrics = () => {
   });
 
   const updateMetrics = useCallback(() => {
-    const memory = (performance as any).memory;
+    const memory = (performance as unknown).memory;
     setMetrics({
       cpu: Math.random() * 30 + 10,
       memory: memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 45,
       network: navigator.onLine ? "online" : "offline",
-      latency: Math.round((navigator as any).connection?.rtt || 50),
+      latency: Math.round((navigator as unknown).connection?.rtt || 50),
       fps: 60,
       cacheHit: 92,
       loadTime: performance.now() / 1000
@@ -120,7 +120,7 @@ const PerformanceMetrics = memo(() => {
 });
 
 const MetricCard = ({ icon: Icon, label, value, color, progress }: {
-  icon: any;
+  icon: React.ComponentType<any>;
   label: string;
   value: string;
   color: string;

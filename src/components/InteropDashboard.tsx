@@ -437,7 +437,7 @@ function MissionCard({ mission }: { mission: Mission }) {
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <p className="font-medium text-sm">{mission.mission_name}</p>
-          <Badge variant={statusColors[mission.mission_status as keyof typeof statusColors] as any} className="text-xs">
+          <Badge variant={statusColors[mission.mission_status as keyof typeof statusColors] as unknown} className="text-xs">
             {mission.mission_status}
           </Badge>
         </div>
@@ -446,7 +446,7 @@ function MissionCard({ mission }: { mission: Mission }) {
             <MapPin className="h-3 w-3" />
             {mission.mission_type}
           </span>
-          <Badge variant={priorityColors[mission.priority as keyof typeof priorityColors] as any} className="text-xs">
+          <Badge variant={priorityColors[mission.priority as keyof typeof priorityColors] as unknown} className="text-xs">
             {mission.priority}
           </Badge>
         </div>

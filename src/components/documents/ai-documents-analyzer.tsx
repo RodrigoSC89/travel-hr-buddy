@@ -396,7 +396,7 @@ export function AIDocumentsAnalyzer() {
       setSelectedFile(null);
       setProgress(0);
       
-    } catch (error: any) {
+    } catch (error: SupabaseError | null) {
       console.error("Error processing document:", error);
       toast({
         title: "Erro ao processar documento",

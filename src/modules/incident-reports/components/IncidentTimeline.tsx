@@ -99,7 +99,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         return;
       }
 
-      const formattedIncidents: Incident[] = (data || []).map((item: any) => ({
+      const formattedIncidents: Incident[] = (data || []).map((item: unknown) => ({
         id: item.id,
         title: item.title || item.incident_type || "Untitled Incident",
         description: item.description || "",
