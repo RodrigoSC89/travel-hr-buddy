@@ -162,7 +162,7 @@ export default function UserProfilePage() {
       .slice(0, 2)
       .join("")
       .toUpperCase();
-  });
+  };
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
