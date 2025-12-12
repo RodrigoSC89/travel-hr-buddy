@@ -142,7 +142,7 @@ export const SimpleGlobalSearch: React.FC = () => {
         if (!allResults.some(r => r.id === dynResult.id)) {
           allResults.push(dynResult);
         }
-      };
+      });
       
       setSearchResults(allResults);
     } catch (error) {
