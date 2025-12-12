@@ -394,6 +394,6 @@ export const FinanceAnalyticsAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default FinanceAnalyticsAI;
