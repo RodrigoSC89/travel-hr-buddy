@@ -22,14 +22,14 @@ export class DashboardErrorBoundary extends Component<Props, State> {
     this.state = {
       hasError: false,
       error: null,
-    });
+    };
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
-    });
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {

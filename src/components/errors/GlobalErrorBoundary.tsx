@@ -25,14 +25,14 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    });
+    };
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
-    });
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
