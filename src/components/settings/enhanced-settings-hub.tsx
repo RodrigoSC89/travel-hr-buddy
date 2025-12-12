@@ -441,9 +441,9 @@ export const EnhancedSettingsHub: React.FC = () => {
     link.click();
     
     toast({
-      title: "📥 Configurações Exportadas",
+      title: "📊 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
-    };
+    });
   };
 
   const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
