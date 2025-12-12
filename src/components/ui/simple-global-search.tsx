@@ -174,7 +174,7 @@ export const SimpleGlobalSearch: React.FC = () => {
       result.description.toLowerCase().includes(searchLower) ||
       result.keywords.some(keyword => keyword.toLowerCase().includes(searchLower))
     );
-  };
+  });
 
   const handleSelect = (path: string) => {
     setOpen(false);
