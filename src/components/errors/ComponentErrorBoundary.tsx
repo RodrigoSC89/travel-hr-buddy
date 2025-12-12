@@ -52,7 +52,7 @@ export class ComponentErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
     });
-  });
+  };
 
   render(): ReactNode {
     if (this.state.hasError) {
