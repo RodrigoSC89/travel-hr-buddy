@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 584 - Strategic Consensus Builder
  * Mechanism for consensus between multiple AI agents

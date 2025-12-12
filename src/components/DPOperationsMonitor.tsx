@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * DP Operations Monitor Component
  * 

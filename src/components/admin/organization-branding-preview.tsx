@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import React from "react";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PATCH 589 - Network Aware Image Component
  * Optimized image loading based on network conditions
  */

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Connection Indicator Component
  * PATCH 834: Visual feedback for network status
  */

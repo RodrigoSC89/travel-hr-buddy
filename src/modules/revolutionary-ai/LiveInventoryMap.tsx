@@ -1,4 +1,5 @@
 /**
+import { useMemo, useState } from "react";;
  * REVOLUTIONARY AI - Live Inventory Map
  * Funcionalidade 4: Visualização Inteligente de Estoque Marítimo
  */

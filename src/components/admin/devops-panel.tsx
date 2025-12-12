@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useCallback, useEffect, useState } from "react";;
+
 /**
  * DevOps Panel - PATCH 960
  * Painel técnico local para monitoramento e controle em campo

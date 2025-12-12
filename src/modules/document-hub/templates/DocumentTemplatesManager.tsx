@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 299: Document Templates Manager
  * Enhanced with database integration, variable substitution, and PDF/Word export

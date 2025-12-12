@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Operational Timeline
  * Histórico vivo de eventos por embarcação
  */

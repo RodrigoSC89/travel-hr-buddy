@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI Insights Panel - Painel de Insights com IA
  */
 

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 529 - Alertas de Preço (UI + Notificações)
  */
 

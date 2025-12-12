@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 586: Multi-Level Coordination Engine
  * 

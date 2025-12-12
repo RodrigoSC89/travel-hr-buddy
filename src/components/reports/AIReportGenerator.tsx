@@ -1,3 +1,4 @@
+import { useState } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -86,7 +87,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           customPrompt: customPrompt || undefined
         })
       });
-
 
       if (!response.ok) {
         const errorText = await response.text();

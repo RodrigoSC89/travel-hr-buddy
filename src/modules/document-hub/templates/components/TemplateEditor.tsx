@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 417: Document Templates WYSIWYG Editor
  * TipTap-based rich text editor with dynamic placeholders

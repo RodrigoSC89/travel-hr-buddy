@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI-powered incident classification modal
  * Integrates GPT-4 to automatically classify incidents based on description
  */

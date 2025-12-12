@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 593 - Neuro-Human Interface Adapter
  * 

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 433 - Deep Sea Risk Analysis AI
  * Comprehensive AI-powered risk assessment for deep sea operations
  * Integrated with analytics-core, incident logs, and forecast data
@@ -34,7 +35,6 @@ import {
 } from "lucide-react";
 import { deepRiskAIService, type RiskFactors, type RiskScore, type RiskRecommendation } from "./services/deepRiskAIService";
 import { toast } from "sonner";
-
 
 const DeepRiskAI: React.FC = () => {
   const [depth, setDepth] = useState(100);

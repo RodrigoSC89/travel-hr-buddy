@@ -3,7 +3,7 @@
  * Automatically serves WebP/AVIF with fallbacks and lazy loading
  */
 
-import { useState, useRef, useEffect, memo } from "react";
+import { memo, useEffect, useRef, useState } from "react";;;
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { cn } from "@/lib/utils";
 

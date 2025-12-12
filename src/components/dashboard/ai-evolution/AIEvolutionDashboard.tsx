@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 568 - AI Evolution Dashboard Component
  * Visualizes AI learning progress and performance metrics

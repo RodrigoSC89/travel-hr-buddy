@@ -1,4 +1,5 @@
 /**
+import { useMemo } from "react";;
  * PATCH 189.0 - Virtualized List Component
  * 
  * High-performance virtualized list for mobile

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Compliance Automation - PHASE 6
  * Gestão automatizada de conformidade regulamentar (ISM, MLC, MARPOL, SOLAS)
  */

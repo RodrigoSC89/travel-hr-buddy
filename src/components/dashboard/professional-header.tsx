@@ -3,7 +3,7 @@
  * Header profissional com indicador de conexão
  */
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";;;
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw, Loader2 } from "lucide-react";

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * AI Compliance - Compliance Marítimo com IA
  * Verificação automatizada de conformidade regulatória
  */

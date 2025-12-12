@@ -1,4 +1,5 @@
 /**
+import { useEffect } from "react";;
  * PATCH 186.0 - Authentication Guard
  * 
  * Protects routes and components from unauthorized access

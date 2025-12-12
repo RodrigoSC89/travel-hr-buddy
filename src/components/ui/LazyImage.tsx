@@ -3,7 +3,7 @@
  * PATCH 624 - Carregamento otimizado de imagens
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";;;
 import { cn } from "@/lib/utils";
 
 interface LazyImageProps {

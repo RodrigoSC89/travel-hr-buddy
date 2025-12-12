@@ -35,7 +35,6 @@ class SyncEngine {
       stats.total = records.length;
       stats.pending = records.length;
 
-
       // Process each record
       for (const record of records) {
         try {

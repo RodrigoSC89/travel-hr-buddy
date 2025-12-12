@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useRef, useState } from "react";;
+
 // PATCH 393 - Digital Signature Component using react-signature-canvas
 import React, { useRef, useState } from "react";
 import {

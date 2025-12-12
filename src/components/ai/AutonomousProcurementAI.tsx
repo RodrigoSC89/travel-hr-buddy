@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * AUTONOMOUS PROCUREMENT AI - Automação de Compras Inteligente
  * Compras automáticas, sugestões de fornecedores, ordens de compra inteligentes
  */

@@ -1,3 +1,4 @@
+import { useState } from "react";;
 import React, { useState } from "react";
 import { QrCode, Scan, Plus, Edit, Trash2, MapPin, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Emergency Report Dialog
  * Generate and view emergency response reports
  */

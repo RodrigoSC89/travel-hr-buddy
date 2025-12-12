@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 452 - Mission Control Service
  * Consolidates all mission-related operations

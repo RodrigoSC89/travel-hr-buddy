@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";;
  * Virtualized List Component - PATCH 831
  * Efficient rendering for large datasets
  */

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useCallback, useEffect, useState } from "react";;
+
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { VesselStatus, MaintenanceAlert, FuelUsage } from "@/types/modules";

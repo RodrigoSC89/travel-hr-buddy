@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Telemetry AI Assistant Component
  * Interactive LLM-powered assistant for telemetry analysis
  */

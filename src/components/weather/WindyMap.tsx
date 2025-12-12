@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Weather Map Component
  * Interactive weather map with OpenWeatherMap tiles as primary source
  * Falls back to static visualization if APIs unavailable

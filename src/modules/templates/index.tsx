@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 463 - Complete Template Editor
  * Enhanced drag-and-drop editor with dynamic placeholders and PDF export

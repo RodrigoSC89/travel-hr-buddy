@@ -1,7 +1,7 @@
 // Example Usage of JobsForecastReport Component
 // This file demonstrates how to integrate the JobsForecastReport component into your application
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

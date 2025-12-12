@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 536 - Coordination AI Engine v1.0
  * Multi-agent coordination system with priority-based task distribution
  */

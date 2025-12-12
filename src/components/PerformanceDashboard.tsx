@@ -1,5 +1,5 @@
-// @ts-nocheck
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";

@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * PATCH 350: Satellite Tracker v2 - Service Layer

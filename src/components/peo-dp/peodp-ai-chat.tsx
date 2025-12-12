@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PEO-DP AI Chat Component
  * LLM integrada para geração de evidências e consultas sobre:
  * - Auditoria PEO-DP Petrobras

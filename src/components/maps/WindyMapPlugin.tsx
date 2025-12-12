@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Windy Map Plugin Component
  * Embeds interactive Windy weather map with full plugin features
  */

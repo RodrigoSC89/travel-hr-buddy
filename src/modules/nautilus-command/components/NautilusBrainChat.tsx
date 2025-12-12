@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * NAUTILUS BRAIN - IA Central do Sistema
  * Assistente inteligente com LLM para toda operação marítima
  */

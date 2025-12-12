@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Onboarding Overlay - PATCH 836
  * Interactive onboarding spotlight and tooltips
  */

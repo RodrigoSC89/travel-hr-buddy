@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 200.0 - Mission AI Core (IA Autônoma de Missão)
  * 

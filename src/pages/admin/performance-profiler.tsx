@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useRef, useState } from "react";;
+
 /**
  * PATCH 617 - Live Performance Profiler
  * Real-time monitoring of CPU, Memory, FPS and component performance

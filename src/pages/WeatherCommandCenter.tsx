@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH UNIFY-10.0: Weather Command Center
  * Fusão de: Dashboard Meteorológico + Previsão Global
  * 

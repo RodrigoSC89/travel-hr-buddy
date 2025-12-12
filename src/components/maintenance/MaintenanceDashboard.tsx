@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * MaintenanceDashboard - Real-Time Predictive Maintenance Monitoring
  * 
  * Provides color-coded visual indicators, auto-refresh, and dark theme design

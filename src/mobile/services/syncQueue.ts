@@ -90,7 +90,6 @@ class SyncQueue {
       const records = await sqliteStorage.getUnsyncedRecords();
       const totalCount = records.length;
 
-
       // Process in batches
       for (let i = 0; i < records.length; i += opts.batchSize!) {
         const batch = records.slice(i, i + opts.batchSize!);

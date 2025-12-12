@@ -128,7 +128,7 @@ export function withPerformance<P extends object>(
 }
 
 // Performance context for children
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";;;
 
 interface PerformanceContextValue {
   connectionType: string;

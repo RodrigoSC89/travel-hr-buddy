@@ -2,7 +2,7 @@
  * Nautilus Command Center - Centro de Comando Unificado com IA
  */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

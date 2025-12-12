@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * PATCH 538 - Sensors Hub Service

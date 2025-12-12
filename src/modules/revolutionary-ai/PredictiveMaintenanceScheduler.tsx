@@ -1,4 +1,5 @@
 /**
+import { useMemo, useState } from "react";;
  * REVOLUTIONARY AI - Predictive Maintenance Scheduler
  * Funcionalidade 3: Roteirizador de Manutenção Preditiva + Inventário
  */

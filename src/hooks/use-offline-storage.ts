@@ -215,7 +215,6 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
     }
   }, [initDB, updateCacheSize]);
 
-
   // Listen for online/offline events
   useEffect(() => {
     const handleOnline = () => {

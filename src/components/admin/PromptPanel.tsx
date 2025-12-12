@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useState } from "react";;
+
 /**
  * Painel web para envio de prompts ao Lovable Dev
  * PATCH 850 - Ferramenta administrativa

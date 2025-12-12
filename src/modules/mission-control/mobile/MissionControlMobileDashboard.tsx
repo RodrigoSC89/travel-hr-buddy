@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 548 - Mission Control Mobile Dashboard
  * Mobile-optimized dashboard with offline support
  */

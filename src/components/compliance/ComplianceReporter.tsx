@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * Compliance Reporter Component
  * Real-time incident tracking with Supabase Realtime subscriptions

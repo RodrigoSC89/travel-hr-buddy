@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 394 - Complete Incident Workflow
  * Full lifecycle management: Report → Investigation → Resolution → Closure
  */

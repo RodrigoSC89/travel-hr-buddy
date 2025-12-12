@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Safety Guardian Dashboard
  * Monitoramento de segurança, incidentes e análise preditiva
  * Integrado com Supabase para dados reais

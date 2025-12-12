@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 582 - Decision Simulator Visualization UI
  * Visual representation of simulation results

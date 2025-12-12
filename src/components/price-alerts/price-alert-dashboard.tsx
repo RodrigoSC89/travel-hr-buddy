@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EnhancedAlertManagement } from "./enhanced-alert-management";
@@ -13,7 +14,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase as supabaseClient } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 const supabase: unknown = supabaseClient;
-
 
 interface PriceAlert {
   id: string;
@@ -271,7 +271,6 @@ export const PriceAlertDashboardLegacy = () => {
   const getPriceChange = (alert: PriceAlert) => {
     return Math.random() * 200 - 100; // Random change for demo
   };
-
 
   if (isLoading) {
     return (

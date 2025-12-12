@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 499: Telemetry Consent Banner
  * GDPR-compliant consent banner for telemetry

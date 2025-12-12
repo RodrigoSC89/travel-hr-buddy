@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * FASE 3.3 - Network Error Fallback
  * Fallback UI específico para erros de rede
  */

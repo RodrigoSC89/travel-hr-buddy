@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Nautilus People Hub - Módulo Revolucionário de RH com LLM Integrada
  * Superando SAP SuccessFactors, Workday, BambooHR e OrangeHRM
  * Version: 1.0.0

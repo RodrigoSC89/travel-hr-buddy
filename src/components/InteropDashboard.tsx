@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 230 - Interop Dashboard
  * Unified dashboard for joint operations, external status, and intelligence coordination

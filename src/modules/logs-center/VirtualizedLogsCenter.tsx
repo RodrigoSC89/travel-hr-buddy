@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PATCH 541 - Virtualized Logs Center
  * High-performance logs rendering with @tanstack/react-virtual
  */

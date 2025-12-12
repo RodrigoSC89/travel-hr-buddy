@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Complete crew rotation system with conflict detection and notifications

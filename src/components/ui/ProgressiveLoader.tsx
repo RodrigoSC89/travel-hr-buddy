@@ -3,7 +3,7 @@
  * PATCH 624 - Loading progressivo com feedback visual melhorado
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";;;
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 

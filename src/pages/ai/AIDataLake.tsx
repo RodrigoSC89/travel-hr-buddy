@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI Data Lake - Lago de Dados para IA
  * Repositório centralizado de dados para treinamento de modelos
  */

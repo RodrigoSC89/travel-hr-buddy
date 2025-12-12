@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 379: Analytics Query Builder
  * Advanced query builder with filters, aggregations, and custom dashboards

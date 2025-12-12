@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useState } from "react";;
+
 /**
  * Web Vitals Overlay Component
  * Development tool to visualize real-time performance metrics

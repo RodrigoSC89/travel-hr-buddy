@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Training Panel - Gestão de Treinamentos de Segurança
  */
 

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * ALERTS COMMAND CENTER - Unified Alert Management System
  * Fusion of: Price Alerts + Intelligent Alerts
  * 

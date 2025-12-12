@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time
  * Complete WebSocket integration, permissions management, and communication logs

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useCallback, useEffect, useRef, useState } from "react";;
+
 /**
  * PATCH 370 - Operations Dashboard - Real Data Integration
  * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket

@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";;
 import React, { useState, useMemo } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
@@ -765,7 +766,6 @@ function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
 
   return items.map(dedupeItem).filter(Boolean) as NavigationItem[];
 }
-
 
 interface AppSidebarProps {
   activeItem?: string;

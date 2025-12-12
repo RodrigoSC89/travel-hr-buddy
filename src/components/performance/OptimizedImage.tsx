@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Optimized Image Component
  * Lazy loading with adaptive quality for low bandwidth
  */

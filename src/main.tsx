@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * main.tsx - PATCH 853.0 - Definitive React Hook Fix
  * 
  * CRITICAL: This file ensures a single React instance is used throughout the app.

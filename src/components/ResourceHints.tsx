@@ -1,4 +1,5 @@
 /**
+import { useEffect } from "react";;
  * Resource Hints Component
  * Preconnect, prefetch, and preload critical resources
  */

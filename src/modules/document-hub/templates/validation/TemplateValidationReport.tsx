@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * VALIDAÇÃO COMPLETA - Editor de Templates
  * Relatório de validação de todas as funcionalidades

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useMemo, useState } from "react";;
+
 /**
  * PATCH 416: Consolidated Crew Management Page
  * Unified crew management with performance, certifications, and mobile support

@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * Emergency Mode Component
  * PATCH 850 - Modo de Emergência Marítima
  * 

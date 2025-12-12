@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 840: System Bootstrap Component
  * Initializes all system components and shows loading state
  */

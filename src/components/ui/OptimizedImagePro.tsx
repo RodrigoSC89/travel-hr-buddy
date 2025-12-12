@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * OptimizedImagePro Component
  * PATCH 753 - Imagem otimizada com lazy loading e placeholder blur
  */

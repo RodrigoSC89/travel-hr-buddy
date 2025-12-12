@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI Navigation Assistant - Assistente de Navegação
  * Rotas otimizadas e assistência de navegação com IA
  */

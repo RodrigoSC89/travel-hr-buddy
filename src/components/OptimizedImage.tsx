@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useRef, useState } from "react";;
+
 /**
  * OptimizedImage Component
  * Automatic lazy loading, responsive images, and network-aware quality

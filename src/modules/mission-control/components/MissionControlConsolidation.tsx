@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 505: Mission Control Consolidation Dashboard
  * Unified dashboard integrating all mission control sub-modules

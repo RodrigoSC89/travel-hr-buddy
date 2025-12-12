@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * Loading States - Design Profissional para Conexões Lentas
  * PATCH 753 - Otimizado para conexões lentas com detecção de velocidade

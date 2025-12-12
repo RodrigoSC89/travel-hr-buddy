@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 226 - Protocol Adapter
  * TODO PATCH 659: TypeScript fixes deferred (interop_log table schema missing)

@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * PATCH 653.1 - Workflow AI Suggestions Component
  * Complete AI-powered workflow suggestions with LLM integration
  */

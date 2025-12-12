@@ -4,7 +4,7 @@
  * Gestão completa de compras, fornecedores, inventário e automação de procurement
  */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";

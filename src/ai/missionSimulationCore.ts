@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 211.1 - Mission Simulation Core (Simulação Autônoma)
  * 

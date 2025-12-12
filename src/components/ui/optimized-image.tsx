@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PATCH 542 - Enhanced Optimized Image Component
  * Advanced lazy loading, blur placeholder, WebP/AVIF support, and CDN integration
  */

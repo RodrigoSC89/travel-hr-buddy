@@ -1,4 +1,5 @@
 /**
+import { useCallback, useState } from "react";;
  * Smart Automation Page - Automação Inteligente
  * Workflows automatizados com decisões baseadas em IA
  */

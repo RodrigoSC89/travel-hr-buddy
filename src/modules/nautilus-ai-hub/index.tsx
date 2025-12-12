@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Nautilus AI Hub - Módulo Unificado de Inteligência Artificial
  * PATCH UNIFY-2.0 - Fusão dos módulos de IA e Analytics
  * 

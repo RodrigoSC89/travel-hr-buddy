@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Predictive Insights - Insights e previsões da IA
  */
 

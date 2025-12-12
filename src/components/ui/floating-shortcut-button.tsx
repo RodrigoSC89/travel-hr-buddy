@@ -39,7 +39,6 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
     lg: "w-16 h-16"
   } as const;
 
-
   const iconSizes = {
     sm: "w-5 h-5",
     md: "w-6 h-6",

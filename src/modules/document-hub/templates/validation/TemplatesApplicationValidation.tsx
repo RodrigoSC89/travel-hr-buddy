@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, FileText, Download, Link2, Variable } from "lucide-react";
-import { useState } from "react";
+import { useState } from "react";;;
 
 export default function TemplatesApplicationValidation() {
   const [checks, setChecks] = useState({

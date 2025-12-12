@@ -1,4 +1,5 @@
 /**
+import { useCallback, useState } from "react";;
  * Generative AI Page
  * Geração automática de documentos e conteúdo com IA
  */

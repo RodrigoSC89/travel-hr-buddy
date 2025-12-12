@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 837: Offline Status Indicator
  * Visual feedback for offline/sync status
  */

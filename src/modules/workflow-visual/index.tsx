@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useCallback, useEffect, useState } from "react";;
+
 /**
  * WORKFLOW VISUAL DINÂMICO COM IA INTEGRADA
  * Visualização interativa de fluxos com sugestões IA em tempo real

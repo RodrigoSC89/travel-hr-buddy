@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 353: Employee Benefits Management Component
  * View and manage employee benefits

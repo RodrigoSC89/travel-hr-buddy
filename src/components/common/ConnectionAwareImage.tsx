@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Connection-Aware Image Component
  * Optimizes image loading based on network conditions
  */

@@ -3,7 +3,7 @@
  * Automatically activates reduced features for slow connections
  */
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";;;
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { toast } from "@/hooks/use-toast";
 

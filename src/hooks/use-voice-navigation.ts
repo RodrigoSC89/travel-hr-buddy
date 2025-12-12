@@ -196,7 +196,6 @@ export const useVoiceNavigation = () => {
       return { success: false };
     }
 
-
     // Analisar comando
     const intent = parseVoiceCommand(command);
     

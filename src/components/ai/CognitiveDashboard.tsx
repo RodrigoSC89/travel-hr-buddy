@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 210.0 - Cognitive Dashboard
  * Visualizes AI engine evolution, decisions, and predictions

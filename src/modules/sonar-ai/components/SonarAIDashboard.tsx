@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 479: Enhanced Sonar AI Dashboard
  * Real-time dashboard with AI classification and risk alerts
  */

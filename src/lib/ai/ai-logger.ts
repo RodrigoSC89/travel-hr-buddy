@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * AI Logger - Tracks all AI interactions across the system
  * Logs prompts, responses, performance metrics, and user context

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Voyage Intelligence AI - Planejamento Integrado de Viagens
  * - Otimização multi-objetivo (crew, manutenção, bunker)
  * - Weather routing inteligente

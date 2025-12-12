@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Audit Center - Main Component
  * PATCH 62.0 - Complete Implementation with Supabase Integration
  */

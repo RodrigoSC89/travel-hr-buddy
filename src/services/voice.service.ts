@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * PATCH 349: Voice Assistant v2 - Service Layer

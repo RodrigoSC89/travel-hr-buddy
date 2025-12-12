@@ -1,4 +1,5 @@
 /**
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";;
  * AuthContext - PATCH 853.0 - Definitive React Hook Fix
  * 
  * Uses default React import to match vite's expected import pattern.

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Satellite AI Copilot Component
  * AI assistant for satellite tracking analysis
  */

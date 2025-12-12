@@ -1,4 +1,5 @@
 /**
+import { useEffect } from "react";;
  * Production Health Dashboard Component - PATCH 850
  * Visual component for system health monitoring
  */

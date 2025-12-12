@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import { describe, it, expect } from "vitest";
 
 describe("Assistant Logs API Route", () => {

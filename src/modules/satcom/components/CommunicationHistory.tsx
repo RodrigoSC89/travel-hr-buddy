@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 420: Satcom Communication History
  * Visualizes transmission history over time

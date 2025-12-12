@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PEO-DP Panel
  * Interface completa para Sistema Inteligente de Auditoria DP
  * Baseado em NORMAM-101 e IMCA M 117

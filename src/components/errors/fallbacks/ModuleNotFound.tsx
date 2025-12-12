@@ -1,4 +1,5 @@
 /**
+import { useEffect } from "react";;
  * FASE A2 - Module Not Found Fallback
  * Fallback elegante para módulos não encontrados
  */

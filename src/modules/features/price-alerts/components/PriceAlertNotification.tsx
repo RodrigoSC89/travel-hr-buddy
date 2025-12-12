@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 418: Price Alerts Notification Integration
  * Integrates price alerts with the notifications center

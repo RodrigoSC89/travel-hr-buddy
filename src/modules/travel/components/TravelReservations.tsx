@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 377: Travel Reservations & Group Management
  * Reservations synchronization, group travel, and enhanced exports

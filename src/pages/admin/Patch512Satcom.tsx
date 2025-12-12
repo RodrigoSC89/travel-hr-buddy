@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Satellite, Radio, Activity, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import { Button } from "@/components/ui/button";
 
 export default function Patch512Satcom() {

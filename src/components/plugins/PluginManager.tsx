@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Plugin Manager - PHASE 7
  * Sistema modular de plugins e extensões
  */

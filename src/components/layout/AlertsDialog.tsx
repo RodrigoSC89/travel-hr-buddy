@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Alerts Dialog Component
  * Exibe notificações e alertas do sistema
  */

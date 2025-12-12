@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 393 - MMI Integration for Predictive Maintenance
  * Integration with MMI (Machine Maintenance Intelligence) for failure prediction
  */

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useMemo, useState } from "react";;
+
 /**
  * CALENDÁRIO OPERACIONAL UNIFICADO
  * Eventos integrados por embarcação/unidade com IA para reorganização

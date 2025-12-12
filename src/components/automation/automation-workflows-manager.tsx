@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { useState } from "react";
+import { useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

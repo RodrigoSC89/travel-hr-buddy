@@ -1,5 +1,5 @@
 // PATCH UNIFY-9.0: Redirected to Maritime Command Center
-import { useEffect } from "react";
+import { useEffect } from "react";;;
 import { useNavigate } from "react-router-dom";
 
 export default function MaritimeCertifications() {

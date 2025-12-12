@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 575 - LLM Fine-tuning for Multilingual Support
  * Treinamento de IA com dados multilíngues

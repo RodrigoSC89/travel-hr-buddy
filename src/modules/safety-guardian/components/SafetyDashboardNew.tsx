@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Safety Guardian Dashboard - Refactored
  * Dashboard principal com todas as funcionalidades integradas
  */

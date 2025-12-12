@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 464 - Complete Price Alerts UI
  * Full-featured price alert system with history charts, configurable thresholds, and notifications

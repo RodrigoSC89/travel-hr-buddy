@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef } from "react";;
  * MapComponent - Componente interno de mapa
  * Carregado apenas quando necessário
  */

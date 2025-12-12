@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Compliance Settings Dialog Component
  * Dialog para configurações do módulo de conformidade
  */

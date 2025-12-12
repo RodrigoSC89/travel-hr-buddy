@@ -1,4 +1,5 @@
 /**
+import { useCallback, useContext, useEffect, useState } from "react";;
  * Performance Provider
  * Centralizes all performance optimizations and provides context
  * PATCH: Fixed to avoid hook initialization issues

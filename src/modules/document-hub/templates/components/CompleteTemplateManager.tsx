@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 417: Complete Template Management Page
  * Integrates WYSIWYG editor, preview, and template management

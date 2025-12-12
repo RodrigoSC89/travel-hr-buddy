@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 547 - Trust Score Display Component
  * UI component to display trust scores with color-coded levels and historical tracking

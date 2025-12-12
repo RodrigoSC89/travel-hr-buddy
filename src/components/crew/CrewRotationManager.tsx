@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useCallback, useEffect, useState } from "react";;
+
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration

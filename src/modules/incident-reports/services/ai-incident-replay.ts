@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 481 - AI Incident Replay Service
  * Provides AI-powered incident analysis, root cause identification, and recommendations

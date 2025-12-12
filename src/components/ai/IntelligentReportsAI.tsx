@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * INTELLIGENT REPORTS AI - Relatórios Inteligentes por Linguagem Natural
  * Geração de relatórios com IA, análises executivas, dashboards dinâmicos
  */

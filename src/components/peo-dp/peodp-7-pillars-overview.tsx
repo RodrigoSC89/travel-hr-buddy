@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PEO-DP 7 Pillars Overview Component
  * Visão geral dos 7 pilares estratégicos do Programa de Excelência em Operações DP
  * Baseado no documento Petrobras DC&L/LOEP/LOFF/EO - 15/09/2021

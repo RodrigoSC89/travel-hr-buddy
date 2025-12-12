@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 520 – AI Replay de Missões
  * Replay temporal de missões com análise de decisões e desvios
  */

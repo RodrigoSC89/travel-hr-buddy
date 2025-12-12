@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Nautilus Assistant - Módulo Unificado de Assistentes
  * PATCH UNIFY-3.0 - Fusão dos módulos de Assistentes
  * 

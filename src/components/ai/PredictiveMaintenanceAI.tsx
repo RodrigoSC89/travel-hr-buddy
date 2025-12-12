@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PREDICTIVE MAINTENANCE AI - Manutenção Preditiva com ML
  * Previsão de falhas, alertas automáticos, integração com manutenção
  */

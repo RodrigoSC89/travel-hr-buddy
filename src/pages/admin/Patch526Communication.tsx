@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 526 - Comunicação (consolidação)
  */
 

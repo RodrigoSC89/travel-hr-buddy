@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 537 - Deep Risk AI with ONNX Runtime
  * Browser-based AI risk analysis with real-time scoring
  */

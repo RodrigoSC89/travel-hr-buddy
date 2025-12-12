@@ -1,6 +1,6 @@
 // ✅ Grid de Módulos — Interface Inteligente para Nautilus One
 
-import { useState } from "react";
+import { useState } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";

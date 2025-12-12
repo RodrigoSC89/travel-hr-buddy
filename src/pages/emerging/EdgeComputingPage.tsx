@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Edge Computing Dashboard
  * Processamento distribuído na borda da rede
  */

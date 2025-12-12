@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 417: Template Preview and PDF Generator
  * Preview templates with variable substitution and export to PDF
  */

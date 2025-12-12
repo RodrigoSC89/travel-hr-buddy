@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI Module Enhancer - Componente reutilizável para adicionar IA a qualquer módulo
  */
 

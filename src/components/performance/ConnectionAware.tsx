@@ -1,4 +1,5 @@
 /**
+import { useCallback, useContext, useEffect, useState } from "react";;
  * Connection-Aware Components - PATCH 831
  * Adaptive UI based on network conditions
  */

@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // PATCH 226 - Protocol Adapter
 import { supabase } from "@/integrations/supabase/client";
 

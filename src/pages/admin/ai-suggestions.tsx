@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 648 - AI Suggestions Dashboard
  * Proactive AI insights and automation recommendations
  */

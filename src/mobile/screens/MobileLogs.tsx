@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 187.0 - Mobile Logs Screen
  * 
  * Real-time system logs and activity tracking for mobile app

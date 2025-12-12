@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * LazyPDFGenerator - FASE 2.5 Lazy Loading
  * Wrapper lazy para jsPDF (1.04MB)
  */

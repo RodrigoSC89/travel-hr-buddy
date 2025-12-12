@@ -47,7 +47,6 @@ class DataCompressionService {
       timeMs: performance.now() - startTime,
     };
 
-
     return { compressed: compressedBytes, stats };
   }
 

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Fuel Manager Module - PATCH 838
  * Módulo de gestão de combustível com IA
  */

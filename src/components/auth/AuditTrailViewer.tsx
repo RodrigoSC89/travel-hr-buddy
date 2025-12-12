@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Audit Trail Viewer Component
  * PATCH 123.0 - Audit Trail por Role
  * 

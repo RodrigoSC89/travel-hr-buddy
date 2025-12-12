@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Advanced Error Boundary - PATCH 832
  * Error recovery, retry logic, and graceful degradation
  */

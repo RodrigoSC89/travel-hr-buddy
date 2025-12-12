@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 548 - Mission Control Mobile Sync Service
  * Auto-sync with Supabase when online with network state monitoring

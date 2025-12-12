@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 135.0 - AI Self-Healing + Logs Analyzer
  * PATCH 659 - TypeScript fixes applied

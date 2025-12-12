@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 95.0 - Performance Dashboard Module
  * Dashboard with operational KPIs and AI-powered performance analysis
  */
@@ -140,7 +141,6 @@ const PerformanceDashboard: React.FC = () => {
       const status = getPerformanceStatus(simulatedMetrics);
       setPerformanceStatus(status);
 
-
       toast({
         title: "Dashboard Atualizado",
         description: "Dados de performance carregados com sucesso",
@@ -184,7 +184,6 @@ const PerformanceDashboard: React.FC = () => {
         title: "PDF Gerado",
         description: "Relatório de performance exportado com sucesso",
       });
-
 
     } catch (error) {
       console.error("[Performance Dashboard] PDF export error:", error);

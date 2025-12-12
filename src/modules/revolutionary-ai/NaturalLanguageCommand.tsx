@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useRef, useState } from "react";;
  * REVOLUTIONARY AI - Natural Language Command Interface
  * Funcionalidade 1: Comando Universal por Linguagem Natural
  */

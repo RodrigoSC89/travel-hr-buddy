@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 519 – Deep Risk AI
  * Motor de análise de risco com IA para avaliação contextual
  */

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Telemetry Map Component
  * Interactive map visualization for satellite and vessel positions
  */

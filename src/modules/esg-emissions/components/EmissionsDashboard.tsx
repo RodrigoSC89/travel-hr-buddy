@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * ESG Emissions Dashboard
  * Monitoramento de emissões, carbon footprint e compliance ambiental
  * Integrado com Supabase para dados de embarcações

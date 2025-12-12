@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * HR Chatbot - Assistente Virtual de RH com LLM
  */
 

@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 590: Self-Diagnosis + Recovery Loop
  * 

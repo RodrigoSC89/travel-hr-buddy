@@ -1,4 +1,5 @@
 /**
+import { useMemo } from "react";;
  * System Readiness Indicator
  * Shows overall system health and readiness status
  */

@@ -1,4 +1,5 @@
 /**
+import { useContext, useEffect, useState } from "react";;
  * Emergency Mode - PATCH 960
  * Modo emergencial para operação offline crítica
  */

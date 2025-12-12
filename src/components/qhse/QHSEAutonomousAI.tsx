@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * QHSE Autônomo com IA - Compliance ISM/ISPS/TMSA
  * - Monitoramento contínuo de compliance
  * - Geração automática de evidências

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useRef, useState } from "react";;
+
 /**
  * PATCH 420: Satcom Interactive Terminal
  * Terminal interface for sending and receiving satellite communications

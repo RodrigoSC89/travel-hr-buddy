@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useEffect, useState } from "react";;
+
 /**
  * PATCH 491 - Consolidated Incident Reports Module
  * Consolidates incident-reports/ and incidents/ into one unified system

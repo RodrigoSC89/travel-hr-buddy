@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * REVOLUTIONARY AI - Audit Assistant
  * Funcionalidade 5 & 13: Assistente para auditorias e fiscalizações
  */

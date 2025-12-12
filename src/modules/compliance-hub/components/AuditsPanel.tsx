@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Audits Panel Component
  * Painel completo de auditorias com funcionalidades avançadas
  */

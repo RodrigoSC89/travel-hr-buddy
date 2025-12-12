@@ -3,7 +3,7 @@
  * PATCH 623 - Monitor component render times
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";;;
 
 interface PerformanceLogOptions {
   componentName: string;

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { useCallback, useEffect, useState } from "react";;
+
 /**
  * PATCH 419: Real-Time Mission Dashboard
  * Displays mission execution status with live updates

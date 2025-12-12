@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Compliance Hub Dashboard Complete
  * Dashboard principal do módulo de conformidade com IA integrada
  */

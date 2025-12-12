@@ -1,4 +1,5 @@
 /**
+import { useCallback, useState } from "react";;
  * AI Document Analysis - Análise de Documentos com IA
  * OCR e extração inteligente de dados de documentos
  */

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 838: Quick Start Guide
  * Onboarding guide for new users
  */

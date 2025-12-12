@@ -341,7 +341,6 @@ export async function runFullE2ETestSuite(): Promise<TestSuite> {
   const runner = new E2ETestRunner();
   runner.reset("Nautilus One E2E Test Suite");
 
-
   // Authentication tests
   await runner.runTest("Auth: Login Flow", async () => { await authTests.testLoginFlow(); });
   await runner.runTest("Auth: Session Persistence", async () => { await authTests.testSessionPersistence(); });
@@ -388,7 +387,6 @@ export async function runFullE2ETestSuite(): Promise<TestSuite> {
   });
 
   const summary = runner.getSummary();
-
 
   return summary;
 }

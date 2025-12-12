@@ -33,7 +33,6 @@ class ServiceWorkerManager {
         scope: this.config.scope,
       });
 
-
       // Setup update checking
       this.setupUpdateChecking();
 

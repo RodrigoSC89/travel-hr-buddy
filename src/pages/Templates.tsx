@@ -1,4 +1,5 @@
 /**
+import { useMemo, useState } from "react";;
  * Templates Module - Complete Professional Version
  * PATCH 1100: Full functionality with dialogs, AI integration, and all buttons working
  */
