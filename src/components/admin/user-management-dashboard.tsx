@@ -123,7 +123,7 @@ const UserManagementDashboard = () => {
     toast({
       title: "Ação Executada",
       description: `${action} aplicada ao usuário ID: ${userId}`,
-    };
+    });
   };
 
   return (
