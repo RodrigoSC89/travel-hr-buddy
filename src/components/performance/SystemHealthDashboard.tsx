@@ -39,7 +39,7 @@ const StatusBadge = memo(({ status }: { status: string }) => {
   
   const config = variants[status] || variants.fair;
   return <Badge variant={config.variant}>{config.label}</Badge>;
-});
+};
 
 StatusBadge.displayName = "StatusBadge";
 

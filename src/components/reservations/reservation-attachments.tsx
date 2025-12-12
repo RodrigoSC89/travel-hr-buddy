@@ -337,4 +337,4 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

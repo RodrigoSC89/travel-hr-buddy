@@ -247,4 +247,4 @@ export const APIStatus: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

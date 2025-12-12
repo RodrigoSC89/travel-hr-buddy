@@ -56,4 +56,4 @@ describe("DPAIAnalyzer Component", () => {
     const card = container.querySelector("[class*=\"border-\\[var\\(--nautilus-accent\\)\\]\"]");
     expect(card).toBeTruthy();
   });
-});
+};

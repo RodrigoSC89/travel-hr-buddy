@@ -108,7 +108,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: dpChecklistItems
-  });
+};
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -472,4 +472,4 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
       </div>
     </div>
   );
-});
+};

@@ -598,4 +598,4 @@ export const DocumentManagementCenter = memo(() => {
       </div>
     </RoleBasedAccess>
   );
-});
+};

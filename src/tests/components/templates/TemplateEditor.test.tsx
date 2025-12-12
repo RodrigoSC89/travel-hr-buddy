@@ -93,4 +93,4 @@ describe("TemplateEditor Component", () => {
     renderComponent();
     expect(screen.getByText(/Clique em "Gerar com IA"/i)).toBeInTheDocument();
   });
-});
+};

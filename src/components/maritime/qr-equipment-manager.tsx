@@ -290,4 +290,4 @@ export const QREquipmentManager = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

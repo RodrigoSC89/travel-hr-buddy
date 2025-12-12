@@ -264,4 +264,4 @@ export const HistoricalWeatherChart: React.FC<HistoricalWeatherChartProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

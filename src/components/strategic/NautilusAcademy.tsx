@@ -421,4 +421,4 @@ export const NautilusAcademy: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

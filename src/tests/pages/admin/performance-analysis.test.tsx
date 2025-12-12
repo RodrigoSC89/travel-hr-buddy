@@ -279,4 +279,4 @@ describe("PerformanceAnalysis", () => {
       }).not.toThrow();
     });
   });
-});
+};

@@ -115,4 +115,4 @@ describe("AdminBI Page", () => {
 
     consoleSpy.mockRestore();
   });
-});
+};

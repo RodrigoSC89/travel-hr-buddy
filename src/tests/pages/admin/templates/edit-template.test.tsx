@@ -10,4 +10,4 @@ describe("EditTemplatePage", () => {
     const EditTemplatePage = vi.fn();
     expect(EditTemplatePage).toBeDefined();
   });
-});
+};

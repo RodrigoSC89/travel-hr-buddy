@@ -315,4 +315,4 @@ export const PriceAlertsValidationReport: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

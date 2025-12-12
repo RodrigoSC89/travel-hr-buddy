@@ -350,4 +350,4 @@ describe("AITemplatesPage", () => {
 
     expect(mockNavigate).toHaveBeenCalledWith("/admin/documents/ai");
   });
-});
+};

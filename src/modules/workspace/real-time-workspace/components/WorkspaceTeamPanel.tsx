@@ -61,7 +61,7 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
   const sortedMembers = [...members].sort((a, b) => {
     const statusOrder = { online: 0, away: 1, busy: 2, offline: 3 };
     return statusOrder[a.status] - statusOrder[b.status];
-  });
+};
 
   return (
     <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">

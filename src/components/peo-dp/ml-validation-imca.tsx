@@ -551,4 +551,4 @@ export const MLValidationIMCA: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

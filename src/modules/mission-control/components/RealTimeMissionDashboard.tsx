@@ -387,4 +387,4 @@ export const RealTimeMissionDashboard = memo(() => {
       </div>
     </div>
   );
-});
+};

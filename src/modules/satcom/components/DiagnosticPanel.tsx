@@ -345,4 +345,4 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

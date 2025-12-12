@@ -180,4 +180,4 @@ export const QuickActionsPanel: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

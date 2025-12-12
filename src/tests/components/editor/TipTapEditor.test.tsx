@@ -58,4 +58,4 @@ describe("TipTapEditor", () => {
     );
     expect(container).toBeInTheDocument();
   });
-});
+};

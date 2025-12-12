@@ -553,4 +553,4 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

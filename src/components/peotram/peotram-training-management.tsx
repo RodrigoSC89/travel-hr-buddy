@@ -546,4 +546,4 @@ export const PeotramTrainingManagement: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

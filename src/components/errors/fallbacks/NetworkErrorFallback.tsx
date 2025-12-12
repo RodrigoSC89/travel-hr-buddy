@@ -141,4 +141,4 @@ export const NetworkErrorFallback: React.FC<NetworkErrorFallbackProps> = ({
       </Card>
     </div>
   );
-});
+};

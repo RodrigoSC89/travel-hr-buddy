@@ -811,4 +811,4 @@ export const HRDashboard = memo(() => {
       )}
     </div>
   );
-});
+};

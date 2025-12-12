@@ -187,4 +187,4 @@ describe("RestoreDashboard - New Features", () => {
       expect(screen.queryByText(/Comparativo Mensal por Departamento/i)).not.toBeInTheDocument();
     });
   });
-});
+};

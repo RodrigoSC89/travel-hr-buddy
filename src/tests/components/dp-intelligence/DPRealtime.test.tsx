@@ -79,4 +79,4 @@ describe("DPRealtime Component", () => {
     const grid = container.querySelector("[class*=\"grid-cols-3\"]");
     expect(grid).toBeTruthy();
   });
-});
+};

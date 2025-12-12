@@ -461,4 +461,4 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

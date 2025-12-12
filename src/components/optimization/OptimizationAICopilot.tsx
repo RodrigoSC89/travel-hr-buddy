@@ -458,4 +458,4 @@ Métricas de Sistema:
       </CardContent>
     </Card>
   );
-});
+};

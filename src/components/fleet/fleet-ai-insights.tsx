@@ -332,4 +332,4 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
       </Tabs>
     </div>
   );
-});
+};

@@ -410,4 +410,4 @@ export const NotificationSettings = memo(() => {
       </Card>
     </div>
   );
-});
+};

@@ -191,4 +191,4 @@ export const useHasMinRole = (minRole: UserRole): boolean => {
   const minRoleLevel = ROLE_HIERARCHY[minRole] || 0;
   
   return userRoleLevel >= minRoleLevel;
-});
+};

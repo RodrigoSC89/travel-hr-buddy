@@ -163,4 +163,4 @@ export const SystemInfo: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

@@ -170,7 +170,7 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso atualizado",
         description: "O curso foi atualizado com sucesso.",
-      });
+};
       setEditingCourse(null);
     },
     onError: (error: SupabaseError | null) => {

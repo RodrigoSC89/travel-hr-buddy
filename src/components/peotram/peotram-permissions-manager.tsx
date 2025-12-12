@@ -662,4 +662,4 @@ export const PeotramPermissionsManager: React.FC = () => {
       </div>
     </div>
   );
-});
+};

@@ -193,4 +193,4 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     expect(screen.getByPlaceholderText(/E-mail do usuário/i)).toBeDefined();
     expect(screen.getByText(/🔍 Buscar/i)).toBeDefined();
   });
-});
+};

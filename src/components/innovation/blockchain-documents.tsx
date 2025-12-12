@@ -591,4 +591,4 @@ export const BlockchainDocuments: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

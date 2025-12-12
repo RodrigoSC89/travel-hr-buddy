@@ -93,4 +93,4 @@ describe("MMI Forecast Page", () => {
       expect(screen.getByText(/➕ Gerar OS/i)).toBeDefined();
     });
   });
-});
+};

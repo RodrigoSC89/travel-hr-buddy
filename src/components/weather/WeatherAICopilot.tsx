@@ -388,4 +388,4 @@ Dados meteorológicos atuais:
       </CardContent>
     </Card>
   );
-});
+};

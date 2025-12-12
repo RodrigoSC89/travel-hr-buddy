@@ -729,4 +729,4 @@ export const TemplatesDynamic = memo(() => {
       </Card>
     </div>
   );
-});
+};

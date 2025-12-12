@@ -138,4 +138,4 @@ describe("SGSOAuditReviewPage", () => {
 
     expect(screen.getAllByText("Parcialmente Conforme").length).toBeGreaterThan(0);
   });
-});
+};

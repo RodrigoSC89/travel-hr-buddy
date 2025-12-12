@@ -361,4 +361,4 @@ describe("DocumentHistoryPage Component", () => {
       expect(screen.getByText(/13/)).toBeInTheDocument(); // "Short content" has 13 characters
     });
   });
-});
+};

@@ -300,4 +300,4 @@ export const InventoryManagement = memo(() => {
       </Card>
     </div>
   );
-});
+};

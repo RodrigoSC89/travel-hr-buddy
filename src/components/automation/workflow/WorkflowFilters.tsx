@@ -162,4 +162,4 @@ export const WorkflowFilters: React.FC<WorkflowFiltersProps> = ({
       </div>
     </div>
   );
-});
+};

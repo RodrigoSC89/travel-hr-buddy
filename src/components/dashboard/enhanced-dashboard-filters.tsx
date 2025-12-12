@@ -52,7 +52,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
     toast({
       title: "📊 Layout Alterado",
       description: `Dashboard exibindo em modo ${layout}`
-    });
+};
   };
 
   return (
@@ -205,4 +205,4 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
       )}
     </div>
   );
-});
+};

@@ -83,4 +83,4 @@ describe("ComplianceByVesselChart", () => {
       expect(screen.getByText(/Status dos planos de ação de incidentes DP por embarcação/i)).toBeDefined();
     });
   });
-});
+};

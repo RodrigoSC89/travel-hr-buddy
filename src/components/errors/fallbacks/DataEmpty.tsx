@@ -146,4 +146,4 @@ export const DataEmpty: React.FC<DataEmptyProps> = ({
       </div>
     </div>
   );
-});
+};

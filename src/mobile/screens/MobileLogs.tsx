@@ -241,4 +241,4 @@ export const MobileLogs: React.FC = () => {
       </ScrollArea>
     </div>
   );
-});
+};

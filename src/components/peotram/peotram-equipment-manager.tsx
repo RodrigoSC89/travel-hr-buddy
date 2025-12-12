@@ -480,4 +480,4 @@ export const PeotramEquipmentManager: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

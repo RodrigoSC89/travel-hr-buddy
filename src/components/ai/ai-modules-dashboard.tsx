@@ -200,4 +200,4 @@ export const AIModulesDashboard = memo(() => {
       </Card>
     </div>
   );
-});
+};

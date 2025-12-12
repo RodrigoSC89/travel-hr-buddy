@@ -214,4 +214,4 @@ export const MobileHome: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

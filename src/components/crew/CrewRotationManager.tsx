@@ -80,7 +80,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: member.id,
     data: member,
-  });
+};
 
   const style = transform
     ? {
@@ -120,7 +120,7 @@ const DroppableScheduleSlot: React.FC<{
 }> = ({ date, rotationType, rotations, onDrop }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: `${date}-${rotationType}`,
-  });
+};
 
   const slotRotations = rotations.filter(
     (r) => r.scheduled_date === date && r.rotation_type === rotationType

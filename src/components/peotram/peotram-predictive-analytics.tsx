@@ -344,4 +344,4 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

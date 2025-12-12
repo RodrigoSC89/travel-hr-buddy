@@ -35,4 +35,4 @@ describe("DPOverview Component", () => {
     const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
   });
-});
+};

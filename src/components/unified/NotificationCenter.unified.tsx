@@ -680,7 +680,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
     default:
       return true;
     }
-  });
+};
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -844,7 +844,7 @@ const PageVariant: React.FC<PageVariantProps> = ({
     if (filter === "unread") return !n.read && !n.isRead && !n.is_read;
     if (filter === "high") return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
     return true;
-  });
+};
 
   if (loading) {
     return (

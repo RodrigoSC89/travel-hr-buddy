@@ -752,4 +752,4 @@ export const MobileOptimizationCenter: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

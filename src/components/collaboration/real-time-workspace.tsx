@@ -155,14 +155,14 @@ const RealTimeWorkspace: React.FC = () => {
             toast({
               title: `${newUser.name} entrou no workspace`,
               description: "Usuário conectado",
-            });
+};
           })
           .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
             const leftUser = leftPresences[0];
             toast({
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
-            });
+};
           });
 
         // Configurar mensagens de chat

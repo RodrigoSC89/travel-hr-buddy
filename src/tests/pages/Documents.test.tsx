@@ -38,4 +38,4 @@ describe("DocumentsPage Component", () => {
     
     expect(screen.getByText(/Advanced Document Center/i)).toBeInTheDocument();
   });
-});
+};

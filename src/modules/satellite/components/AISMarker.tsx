@@ -171,4 +171,4 @@ export const AISMapOverlay: React.FC<AISMapOverlayProps> = ({ vessel, onClose })
       </Card>
     </div>
   );
-});
+};

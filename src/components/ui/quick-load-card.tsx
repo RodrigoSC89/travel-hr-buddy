@@ -61,4 +61,4 @@ export const QuickLoadCard: React.FC<QuickLoadCardProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

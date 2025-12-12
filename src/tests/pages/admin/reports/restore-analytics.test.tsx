@@ -142,4 +142,4 @@ describe("RestoreAnalyticsPage", () => {
       expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
     });
   });
-});
+};

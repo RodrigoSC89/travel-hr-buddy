@@ -72,4 +72,4 @@ describe("ExportBIReport Component", () => {
     const { container } = render(<ExportBIReport trend={mockTrendData} forecast="" />);
     expect(container).toBeDefined();
   });
-});
+};

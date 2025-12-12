@@ -419,4 +419,4 @@ export const AdvancedAIAssistant = memo(() => {
       </div>
     </div>
   );
-});
+};

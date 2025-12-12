@@ -277,4 +277,4 @@ export const MoodDashboard = memo(() => {
       </Card>
     </div>
   );
-});
+};

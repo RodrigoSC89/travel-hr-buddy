@@ -476,4 +476,4 @@ export const CompleteSaaSManager: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

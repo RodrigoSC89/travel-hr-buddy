@@ -415,4 +415,4 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
       </Card>
     </div>
   );
-});
+};

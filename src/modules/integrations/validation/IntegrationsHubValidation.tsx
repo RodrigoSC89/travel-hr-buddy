@@ -130,4 +130,4 @@ export const IntegrationsHubValidation = memo(() => {
       </Card>
     </div>
   );
-});
+};

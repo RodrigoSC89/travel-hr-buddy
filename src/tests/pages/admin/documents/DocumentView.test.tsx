@@ -319,4 +319,4 @@ describe("DocumentViewPage Component", () => {
     // Check that author email is NOT displayed for non-admin
     expect(screen.queryByText(/author@example.com/i)).not.toBeInTheDocument();
   });
-});
+};

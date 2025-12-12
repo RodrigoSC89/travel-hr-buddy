@@ -29,4 +29,4 @@ export const BackToDashboard: React.FC<BackToDashboardProps> = ({
       <span>Dashboard Principal</span>
     </Button>
   );
-});
+};

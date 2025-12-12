@@ -52,4 +52,4 @@ describe("IncidentReports", () => {
     expect(screen.getByText("Overview")).toBeInTheDocument();
     expect(screen.getByText("All Incidents")).toBeInTheDocument();
   });
-});
+};

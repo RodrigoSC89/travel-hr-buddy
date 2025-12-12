@@ -61,4 +61,4 @@ export const IncidentClosure: React.FC<Props> = ({ incidents, onRefresh }) => {
       </CardContent>
     </Card>
   );
-});
+};

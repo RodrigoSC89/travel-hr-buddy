@@ -232,4 +232,4 @@ describe("MMI History Admin Page", () => {
       expect(toast.error).toHaveBeenCalledWith("Erro ao carregar dados");
     });
   });
-});
+};

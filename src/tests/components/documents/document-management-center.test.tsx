@@ -110,4 +110,4 @@ describe("DocumentManagementCenter Component", () => {
     const expiredTabs = screen.getAllByText(/Expirados/i);
     expect(expiredTabs.length).toBeGreaterThan(0);
   });
-});
+};

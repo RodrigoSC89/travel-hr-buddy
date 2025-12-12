@@ -232,4 +232,4 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
       </div>
     </div>
   );
-});
+};

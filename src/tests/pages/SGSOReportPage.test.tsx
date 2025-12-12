@@ -64,7 +64,7 @@ describe("SGSOReportPage", () => {
   it("should render the page title", () => {
     renderComponent();
     expect(screen.getByText(/Relatório SGSO - Gestão de Segurança Operacional/i)).toBeDefined();
-  });
+};
 
   it("should render the export PDF button", () => {
     renderComponent();
@@ -196,4 +196,4 @@ describe("SGSOReportPage", () => {
     expect(screen.getAllByText("Médio").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Baixo").length).toBeGreaterThan(0);
   });
-});
+};

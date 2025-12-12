@@ -67,4 +67,4 @@ export const OrbitVisualization: React.FC<OrbitVisualizationProps> = ({ satellit
       )}
     </div>
   );
-});
+};

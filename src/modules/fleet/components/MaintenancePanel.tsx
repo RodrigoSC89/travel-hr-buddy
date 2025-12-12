@@ -71,7 +71,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
     description: "",
     scheduled_date: "",
     priority: "medium",
-  });
+};
 
   const filteredMaintenance = maintenance.filter(item => {
     const matchesSearch = item.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -361,4 +361,4 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
       </Card>
     </div>
   );
-});
+};

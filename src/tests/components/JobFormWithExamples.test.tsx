@@ -222,4 +222,4 @@ describe("JobFormWithExamples Component", () => {
     expect(componentInput).toBeInTheDocument();
     expect(descriptionInput).toBeInTheDocument();
   });
-});
+};

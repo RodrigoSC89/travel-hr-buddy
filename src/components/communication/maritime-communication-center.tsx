@@ -733,4 +733,4 @@ export const MaritimeCommunicationCenter = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

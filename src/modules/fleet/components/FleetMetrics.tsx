@@ -169,4 +169,4 @@ export const FleetMetrics: React.FC<FleetMetricsProps> = ({
       />
     </div>
   );
-});
+};

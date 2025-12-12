@@ -576,4 +576,4 @@ export const FMEADPTrialsIntegration: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

@@ -49,4 +49,4 @@ describe("Unauthorized Component", () => {
     expect(mainDiv).toBeInTheDocument();
     expect(mainDiv).toHaveClass("text-red-600");
   });
-});
+};

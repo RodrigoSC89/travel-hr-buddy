@@ -162,4 +162,4 @@ export const AIInsights = memo(() => {
       </CardContent>
     </Card>
   );
-});
+};

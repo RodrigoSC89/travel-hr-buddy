@@ -594,4 +594,4 @@ export const EnhancedDocumentScanner: React.FC = () => {
       )}
     </div>
   );
-});
+};

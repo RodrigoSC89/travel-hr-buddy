@@ -25,4 +25,4 @@ describe("PainelMetricasRisco", () => {
     const card = container.querySelector("[class*=\"space-y-4\"]");
     expect(card).toBeInTheDocument();
   });
-});
+};

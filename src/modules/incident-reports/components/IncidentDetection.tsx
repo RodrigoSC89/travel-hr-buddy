@@ -51,4 +51,4 @@ export const IncidentDetection: React.FC<Props> = ({ incidents }) => {
       </CardContent>
     </Card>
   );
-});
+};

@@ -748,4 +748,4 @@ export const ChatInterface = memo(() => {
       </div>
     </div>
   );
-});
+};

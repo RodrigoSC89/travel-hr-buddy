@@ -362,4 +362,4 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
       </Tabs>
     </div>
   );
-});
+};

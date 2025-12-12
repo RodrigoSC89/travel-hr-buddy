@@ -29,7 +29,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
         title: "Erro",
         description: "Preencha todos os campos",
         variant: "destructive",
-      });
+};
       return;
     }
 
@@ -166,4 +166,4 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
       </CardContent>
     </Card>
   );
-});
+};

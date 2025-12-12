@@ -518,4 +518,4 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

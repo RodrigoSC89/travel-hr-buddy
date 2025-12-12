@@ -204,4 +204,4 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

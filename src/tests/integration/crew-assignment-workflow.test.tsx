@@ -144,4 +144,4 @@ describe("Integration: Crew Assignment Workflow", () => {
     expect(assignments).toHaveLength(20);
     expect(assignments.every(a => a.vessel_id === vessel.id)).toBe(true);
   });
-});
+};

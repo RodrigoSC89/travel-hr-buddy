@@ -121,4 +121,4 @@ export const ReservationStats: React.FC<ReservationStatsProps> = ({ reservations
       ))}
     </div>
   );
-});
+};

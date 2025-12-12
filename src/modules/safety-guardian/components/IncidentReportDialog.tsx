@@ -85,7 +85,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
     location: "",
     severity: "",
     witnesses: "",
-  });
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -337,4 +337,4 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

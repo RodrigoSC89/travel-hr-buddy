@@ -158,4 +158,4 @@ describe("CollaborativeDocumentEditor", () => {
     // Component should render without errors
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
   });
-});
+};

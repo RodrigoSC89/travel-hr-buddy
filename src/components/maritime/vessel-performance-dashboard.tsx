@@ -372,4 +372,4 @@ export const VesselPerformanceDashboard = memo(() => {
       </div>
     </div>
   );
-});
+};

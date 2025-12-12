@@ -121,4 +121,4 @@ export const SatcomStatus: React.FC<SatcomStatusProps> = ({ connections }) => {
       </CardContent>
     </Card>
   );
-});
+};

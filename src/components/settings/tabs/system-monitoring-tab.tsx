@@ -51,7 +51,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
     activeUsers: 24,
     errors: 3,
     uptime: 99.8
-  });
+};
 
   const metrics = [
     {
@@ -351,4 +351,4 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
       </Card>
     </div>
   );
-});
+};

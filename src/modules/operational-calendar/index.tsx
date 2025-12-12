@@ -232,7 +232,7 @@ const OperationalCalendar = () => {
     try {
       const response = await supabase.functions.invoke("ai-calendar-optimizer", {
         body: { events }
-      });
+};
 
       if (response.data?.optimizedEvents) {
         setEvents(response.data.optimizedEvents);

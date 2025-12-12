@@ -571,4 +571,4 @@ export const PeotramPerformanceIndicators: React.FC = () => {
       </div>
     </TooltipProvider>
   );
-});
+};

@@ -179,4 +179,4 @@ describe("ExecutionLogsPage Component", () => {
     const dateInputs = screen.getAllByPlaceholderText(/Data/);
     expect(dateInputs.length).toBeGreaterThan(0);
   });
-});
+};

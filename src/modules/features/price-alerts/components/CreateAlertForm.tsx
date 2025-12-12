@@ -27,7 +27,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
     route: editingAlert?.route || "",
     notification_email: editingAlert?.notification_email ?? true,
     notification_push: editingAlert?.notification_push ?? true,
-  });
+};
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -169,4 +169,4 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

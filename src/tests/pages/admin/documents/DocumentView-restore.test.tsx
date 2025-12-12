@@ -225,4 +225,4 @@ describe("DocumentViewPage - Version Restoration", () => {
       expect(screen.getByTestId("version-history")).toBeInTheDocument();
     });
   });
-});
+};

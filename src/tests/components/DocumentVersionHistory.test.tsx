@@ -148,4 +148,4 @@ describe("DocumentVersionHistory Component", () => {
       expect(screen.getByText(/2 versão\(ões\) anterior\(es\) disponível\(is\)/i)).toBeInTheDocument();
     });
   });
-});
+};

@@ -485,4 +485,4 @@ export const IntegrationMarketplace: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

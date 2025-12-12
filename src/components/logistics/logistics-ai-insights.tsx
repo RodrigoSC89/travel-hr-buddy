@@ -361,4 +361,4 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
       </Tabs>
     </div>
   );
-});
+};

@@ -327,4 +327,4 @@ export const PriceHistoryChart = memo(() => {
       </CardContent>
     </Card>
   );
-});
+};

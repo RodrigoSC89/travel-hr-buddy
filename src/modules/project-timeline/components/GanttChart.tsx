@@ -497,4 +497,4 @@ export const GanttChart = memo(() => {
       </Dialog>
     </div>
   );
-});
+};

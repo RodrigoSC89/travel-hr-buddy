@@ -243,4 +243,4 @@ export default {
   PulseDot,
   Shimmer,
   TypingIndicator,
-});
+};

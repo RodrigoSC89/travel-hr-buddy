@@ -421,4 +421,4 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
       </div>
     </div>
   );
-});
+};

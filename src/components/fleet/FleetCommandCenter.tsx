@@ -446,4 +446,4 @@ export const FleetCommandCenter: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

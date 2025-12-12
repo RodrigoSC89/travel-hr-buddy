@@ -191,4 +191,4 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
       </CardContent>
     </Card>
   );
-});
+};

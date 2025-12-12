@@ -81,4 +81,4 @@ describe("Wellbeing Score Calculator", () => {
     expect(normalizeScore(-5)).toBe(0);
     expect(normalizeScore(7.5)).toBe(7.5);
   });
-});
+};

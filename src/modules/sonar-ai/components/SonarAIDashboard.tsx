@@ -414,4 +414,4 @@ export const SonarAIDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

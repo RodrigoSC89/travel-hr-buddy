@@ -58,4 +58,4 @@ export const SEOWrapper: React.FC<SEOWrapperProps> = ({ children }) => {
       {children}
     </>
   );
-});
+};

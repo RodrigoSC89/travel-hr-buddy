@@ -474,4 +474,4 @@ export const PeotramAdvancedReporting: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

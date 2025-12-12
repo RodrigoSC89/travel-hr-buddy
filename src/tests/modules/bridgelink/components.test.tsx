@@ -226,4 +226,4 @@ describe("BridgeLink Components", () => {
       expect(screen.getByText("Crítico")).toBeInTheDocument();
     });
   });
-});
+};

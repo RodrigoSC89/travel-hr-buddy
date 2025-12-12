@@ -179,4 +179,4 @@ export const FallbackStatus: React.FC<FallbackStatusProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

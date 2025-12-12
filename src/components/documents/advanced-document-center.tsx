@@ -1343,4 +1343,4 @@ Este é um documento de demonstração do Centro de Documentos.
       </Dialog>
     </div>
   );
-});
+};

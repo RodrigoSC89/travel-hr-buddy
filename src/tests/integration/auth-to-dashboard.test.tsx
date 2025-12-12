@@ -133,4 +133,4 @@ describe("Integration: Auth to Dashboard Flow", () => {
     expect(isExpired).toBe(true);
     expect(mockNavigate).toHaveBeenCalledWith("/login");
   });
-});
+};

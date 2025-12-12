@@ -104,4 +104,4 @@ describe("SGSOAuditHistoryPage", () => {
     );
     expect(screen.getByText("Voltar")).toBeInTheDocument();
   });
-});
+};

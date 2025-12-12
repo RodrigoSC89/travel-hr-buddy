@@ -149,7 +149,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: safetyChecklistItems
-  });
+};
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -551,4 +551,4 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       </div>
     </div>
   );
-});
+};

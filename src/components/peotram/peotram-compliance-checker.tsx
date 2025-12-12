@@ -562,4 +562,4 @@ export const PeotramComplianceChecker: React.FC = () => {
       </div>
     </TooltipProvider>
   );
-});
+};

@@ -948,4 +948,4 @@ export const ModernEmployeePortal: React.FC = () => {
       </div>
     </div>
   );
-});
+};

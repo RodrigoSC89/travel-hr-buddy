@@ -74,7 +74,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     assigned_to: "",
     due_date: "",
     status: "pending"
-  });
+};
   const [showActionForm, setShowActionForm] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(incident?.status || "new");
   const { toast } = useToast();
@@ -617,4 +617,4 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

@@ -161,4 +161,4 @@ export const FleetAnalytics: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

@@ -531,4 +531,4 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

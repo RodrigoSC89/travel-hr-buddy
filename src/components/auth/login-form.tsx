@@ -147,4 +147,4 @@ export const LoginForm: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

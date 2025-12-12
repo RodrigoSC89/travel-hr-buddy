@@ -224,7 +224,7 @@ const DashboardFilters: React.FC<{
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     end: new Date().toISOString().split("T")[0]
-  });
+};
 
   const [selectedModules, setSelectedModules] = useState<string[]>(["all"]);
   const [selectedVessels, setSelectedVessels] = useState<string[]>(["all"]);

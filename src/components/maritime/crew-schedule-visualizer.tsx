@@ -339,4 +339,4 @@ export const CrewScheduleVisualizer: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

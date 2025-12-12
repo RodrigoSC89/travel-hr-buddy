@@ -120,4 +120,4 @@ export const OrganizationStatsCards: React.FC = () => {
       ))}
     </div>
   );
-});
+};

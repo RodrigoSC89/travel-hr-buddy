@@ -72,4 +72,4 @@ export const KPIDashboard: React.FC<KPIDashboardProps> = ({ modules }) => {
       ))}
     </div>
   );
-});
+};

@@ -488,4 +488,4 @@ export const AIPricePredictor: React.FC = () => {
       )}
     </div>
   );
-});
+};

@@ -145,4 +145,4 @@ describe("Integration: Incident Lifecycle", () => {
     expect(multiCrewIncident.assignedCrew).toContain(crew2.id);
     expect(multiCrewIncident.assignedCrew).toContain(crew3.id);
   });
-});
+};

@@ -505,4 +505,4 @@ export const CognitiveDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

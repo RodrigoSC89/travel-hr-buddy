@@ -69,4 +69,4 @@ describe("Threshold alerts", () => {
     const mockToast = vi.fn();
     expect(mockToast).toBeDefined();
   });
-});
+};

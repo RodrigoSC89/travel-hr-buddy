@@ -318,4 +318,4 @@ Dados atuais do sistema:
       </CardContent>
     </Card>
   );
-});
+};

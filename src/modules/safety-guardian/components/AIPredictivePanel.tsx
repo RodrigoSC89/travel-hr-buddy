@@ -382,4 +382,4 @@ export const AIPredictivePanel: React.FC<AIPredictivePanelProps> = ({
       </Tabs>
     </div>
   );
-});
+};

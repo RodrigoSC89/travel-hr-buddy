@@ -705,4 +705,4 @@ export const CertificationManager: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

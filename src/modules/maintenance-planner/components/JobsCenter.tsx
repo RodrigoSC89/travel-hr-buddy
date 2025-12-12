@@ -113,7 +113,7 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       (activeFilter === "andamento" && job.status === "em_andamento");
 
     return matchesSearch && matchesFilter;
-  });
+};
 
   const handleStatusChange = (jobId: string, newStatus: string) => {
     toast({
@@ -250,4 +250,4 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       </CardContent>
     </Card>
   );
-});
+};

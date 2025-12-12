@@ -228,4 +228,4 @@ export const NativeAppManager: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

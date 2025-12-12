@@ -42,7 +42,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
   const [sort, setSortState] = useState<DocumentSort>({
     field: "updatedAt",
     order: "desc",
-  });
+};
   const [viewMode, setViewModeState] = useState<DocumentViewMode>(
     config.defaultViewMode || "grid"
   );
@@ -571,4 +571,4 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
       {children}
     </DocumentCenterContext.Provider>
   );
-});
+};

@@ -176,7 +176,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     observations: "",
     auditors: [],
     auditees: []
-  });
+};
   const [elements, setElements] = useState<AuditElement[]>(PEOTRAM_ELEMENTS);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
@@ -868,4 +868,4 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       </div>
     </TooltipProvider>
   );
-});
+};

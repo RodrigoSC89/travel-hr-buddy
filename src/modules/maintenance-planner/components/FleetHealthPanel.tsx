@@ -217,4 +217,4 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
       </Card>
     </div>
   );
-});
+};

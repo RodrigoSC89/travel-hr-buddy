@@ -282,4 +282,4 @@ export const ChecklistScheduler = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

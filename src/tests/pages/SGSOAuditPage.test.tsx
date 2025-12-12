@@ -349,4 +349,4 @@ describe("SGSOAuditPage", () => {
       expect(screen.queryByText(/🤖 Carregando\.\.\./)).not.toBeInTheDocument();
     });
   });
-});
+};

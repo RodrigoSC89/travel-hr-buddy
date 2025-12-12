@@ -1031,4 +1031,4 @@ export const AdvancedPriceAlerts: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

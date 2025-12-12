@@ -82,4 +82,4 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
       </div>
     </>
   );
-});
+};

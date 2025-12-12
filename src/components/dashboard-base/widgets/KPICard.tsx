@@ -104,4 +104,4 @@ export const KPICard = ({ config, className, animated = true }: KPICardProps) =>
   }
 
   return cardContent;
-});
+};

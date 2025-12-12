@@ -500,4 +500,4 @@ export const PredictiveMaintenanceSystem = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

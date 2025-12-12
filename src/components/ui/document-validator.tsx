@@ -41,7 +41,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     expiryDate: "",
     issuer: "",
     notes: ""
-  });
+};
   const { toast } = useToast();
 
   const documentTypeLabels = {
@@ -360,4 +360,4 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       )}
     </div>
   );
-});
+};

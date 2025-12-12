@@ -162,4 +162,4 @@ describe("ApplyTemplate", () => {
     const nameInputs = screen.getAllByPlaceholderText("Preencher: name");
     expect(nameInputs).toHaveLength(1);
   });
-});
+};

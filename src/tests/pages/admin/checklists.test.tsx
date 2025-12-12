@@ -180,4 +180,4 @@ describe("ChecklistsPage Component", () => {
       expect(button).toBeDisabled();
     });
   });
-});
+};

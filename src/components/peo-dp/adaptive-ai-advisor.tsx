@@ -366,4 +366,4 @@ export const AdaptiveAIAdvisor: React.FC = () => {
       </div>
     </div>
   );
-});
+};

@@ -250,4 +250,4 @@ describe("DPIntelligenceDashboard Component", () => {
       });
     });
   });
-});
+};

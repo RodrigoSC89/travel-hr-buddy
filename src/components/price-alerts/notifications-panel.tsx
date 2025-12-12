@@ -93,4 +93,4 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

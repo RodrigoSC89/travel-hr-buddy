@@ -563,4 +563,4 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

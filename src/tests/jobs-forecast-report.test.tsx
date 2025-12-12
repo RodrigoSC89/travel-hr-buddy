@@ -165,4 +165,4 @@ describe("JobsForecastReport Component", () => {
       expect(mockCallback).toHaveBeenCalledWith("Erro ao buscar previsão. Tente novamente.");
     });
   });
-});
+};

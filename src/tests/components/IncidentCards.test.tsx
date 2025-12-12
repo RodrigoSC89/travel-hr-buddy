@@ -77,4 +77,4 @@ describe("IncidentCards Component", () => {
       expect(aiButtons.length).toBeGreaterThan(0);
     });
   });
-});
+};

@@ -34,7 +34,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
       dateRange: null,
       searchTerm: "",
       crewMember: "all"
-    });
+};
   };
 
   const uniqueCrewMembers = Array.from(
@@ -157,4 +157,4 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

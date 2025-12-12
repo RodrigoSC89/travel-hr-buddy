@@ -365,4 +365,4 @@ export const PeotramWorkflowManager: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

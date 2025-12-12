@@ -174,4 +174,4 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
       </Card>
     </div>
   );
-});
+};

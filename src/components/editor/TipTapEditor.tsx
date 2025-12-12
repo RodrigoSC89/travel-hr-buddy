@@ -43,7 +43,7 @@ export default function TipTapEditor({
         }
       }
     },
-  });
+};
 
   // Update editor content when prop changes
   useEffect(() => {

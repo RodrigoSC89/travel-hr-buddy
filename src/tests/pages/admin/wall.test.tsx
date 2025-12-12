@@ -157,4 +157,4 @@ describe("AdminWallPage Component", () => {
     
     expect(screen.getByText(/Nenhum resultado de teste disponível/i)).toBeInTheDocument();
   });
-});
+};

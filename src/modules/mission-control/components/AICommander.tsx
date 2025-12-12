@@ -126,4 +126,4 @@ export const AICommander: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

@@ -211,7 +211,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           if (onAction) {
             onAction(action.action, action.data);
           }
-        });
+};
       }
 
     } catch (error) {
@@ -379,4 +379,4 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

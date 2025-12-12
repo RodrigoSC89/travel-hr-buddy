@@ -165,4 +165,4 @@ describe("SGSOTrendChart", () => {
       expect(container.querySelector("[class*=\"card\"]")).toBeDefined();
     });
   });
-});
+};

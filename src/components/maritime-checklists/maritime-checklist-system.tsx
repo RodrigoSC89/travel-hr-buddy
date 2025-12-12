@@ -132,4 +132,4 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
       onTemplateSelect={handleTemplateSelect}
     />
   );
-});
+};

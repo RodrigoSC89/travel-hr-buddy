@@ -91,4 +91,4 @@ export const ChainVisualizer: React.FC<ChainVisualizerProps> = ({ steps, classNa
       ))}
     </div>
   );
-});
+};

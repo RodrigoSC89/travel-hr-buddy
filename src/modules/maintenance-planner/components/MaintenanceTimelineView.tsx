@@ -161,4 +161,4 @@ export const MaintenanceTimelineView: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

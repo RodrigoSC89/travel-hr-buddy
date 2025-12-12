@@ -197,4 +197,4 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

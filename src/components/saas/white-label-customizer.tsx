@@ -560,4 +560,4 @@ export const WhiteLabelCustomizer: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

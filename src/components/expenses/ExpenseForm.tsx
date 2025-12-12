@@ -56,7 +56,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
     defaultValues: defaultValues || {
       date: new Date().toISOString().split("T")[0],
     },
-  });
+};
 
   const category = watch("category");
 
@@ -180,4 +180,4 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
       </div>
     </form>
   );
-});
+};

@@ -397,4 +397,4 @@ export const AIAssistantPanel = memo(() => {
       </Card>
     </div>
   );
-});
+};

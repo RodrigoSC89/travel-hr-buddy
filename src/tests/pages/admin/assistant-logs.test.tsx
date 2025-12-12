@@ -129,4 +129,4 @@ describe("AssistantLogsPage Component", () => {
       expect(mockSupabaseFunctions).toHaveBeenCalledWith("assistant-logs");
     });
   });
-});
+};

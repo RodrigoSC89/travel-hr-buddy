@@ -99,4 +99,4 @@ export const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

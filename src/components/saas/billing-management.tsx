@@ -399,4 +399,4 @@ export const BillingManagement: React.FC = () => {
       </Dialog>
     </div>
   );
-});
+};

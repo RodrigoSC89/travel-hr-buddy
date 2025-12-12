@@ -310,4 +310,4 @@ describe("DPIntelligencePage", () => {
       expect(screen.getByText("Analisando...")).toBeInTheDocument();
     });
   });
-});
+};

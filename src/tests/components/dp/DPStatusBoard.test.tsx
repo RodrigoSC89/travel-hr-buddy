@@ -57,4 +57,4 @@ describe("DPStatusBoard Component", () => {
     const gridContainer = container.querySelector(".grid.grid-cols-3");
     expect(gridContainer).toBeTruthy();
   });
-});
+};

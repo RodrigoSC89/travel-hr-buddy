@@ -399,4 +399,4 @@ export const PeotramRiskAssessment: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

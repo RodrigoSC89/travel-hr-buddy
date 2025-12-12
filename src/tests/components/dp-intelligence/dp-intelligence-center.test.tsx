@@ -425,4 +425,4 @@ describe("DPIntelligenceCenter Component", () => {
       }, { timeout: 3000 });
     });
   });
-});
+};

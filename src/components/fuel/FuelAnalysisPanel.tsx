@@ -176,4 +176,4 @@ export const FuelAnalysisPanel: React.FC<FuelAnalysisPanelProps> = ({
       </Card>
     </div>
   );
-});
+};

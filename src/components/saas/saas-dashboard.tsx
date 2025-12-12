@@ -510,4 +510,4 @@ export const SaaSDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

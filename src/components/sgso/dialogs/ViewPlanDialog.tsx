@@ -186,7 +186,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
     toast({
       title: "Download iniciado",
       description: `Baixando ${plan.title} em PDF...`,
-    });
+};
   };
 
   const handlePrint = () => {
@@ -351,4 +351,4 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

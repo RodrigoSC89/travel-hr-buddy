@@ -137,7 +137,7 @@ export const RealTimeFleetMonitor = memo(() => {
     try {
       const { data, error } = await supabase.functions.invoke("maritime-weather", {
         body: { location, vesselId }
-      });
+};
 
       if (error) throw error;
 
@@ -414,4 +414,4 @@ export const RealTimeFleetMonitor = memo(() => {
       )}
     </div>
   );
-});
+};

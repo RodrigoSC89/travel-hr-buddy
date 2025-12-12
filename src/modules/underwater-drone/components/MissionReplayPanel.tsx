@@ -317,4 +317,4 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
       )}
     </div>
   );
-});
+};

@@ -224,4 +224,4 @@ export const FuelSimulator: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

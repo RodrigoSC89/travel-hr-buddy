@@ -402,4 +402,4 @@ export const IntegrationMonitoring: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

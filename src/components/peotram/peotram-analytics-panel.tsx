@@ -522,4 +522,4 @@ export const PeotramAnalyticsPanel: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

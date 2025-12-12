@@ -271,4 +271,4 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       </Dialog>
     </div>
   );
-});
+};

@@ -88,4 +88,4 @@ describe("DPSyncDashboard Component", () => {
       screen.getByText(/Sincronizando.../) || screen.getByText(/Última sync:/)
     ).toBeInTheDocument();
   });
-});
+};

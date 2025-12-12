@@ -152,4 +152,4 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

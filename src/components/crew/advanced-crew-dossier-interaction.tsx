@@ -459,4 +459,4 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       {activeTab === "goals" && renderGoalsTab()}
     </div>
   );
-});
+};

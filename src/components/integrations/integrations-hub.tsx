@@ -423,4 +423,4 @@ export const IntegrationsHub: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

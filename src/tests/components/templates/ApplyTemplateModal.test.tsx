@@ -298,4 +298,4 @@ describe("ApplyTemplateModal Component", () => {
 
 afterEach(() => {
   window.prompt = originalPrompt;
-});
+};

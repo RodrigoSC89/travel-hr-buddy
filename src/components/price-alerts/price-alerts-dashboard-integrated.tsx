@@ -223,4 +223,4 @@ export const PriceAlertsDashboard: React.FC = () => {
       />
     </div>
   );
-});
+};

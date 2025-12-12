@@ -130,7 +130,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       
       // Enable picker for point forecast
       picker.on("pickerOpened", (latLon: { lat: number; lon: number }) => {
-      });
+};
 
       // Log current overlay changes
       store.on("overlay", (overlayName: string) => {

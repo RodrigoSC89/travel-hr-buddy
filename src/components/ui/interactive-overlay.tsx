@@ -258,4 +258,4 @@ export const InteractiveOverlay = memo(() => {
       <StatusWidget />
     </>
   );
-});
+};

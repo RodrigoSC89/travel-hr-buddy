@@ -26,7 +26,7 @@ export const LazyComponent: React.FC<LazyComponentProps> = memo(({
       <Component {...props} />
     </React.Suspense>
   );
-});
+};
 
 LazyComponent.displayName = "LazyComponent";
 

@@ -154,4 +154,4 @@ export const MaintenanceCalendarView: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

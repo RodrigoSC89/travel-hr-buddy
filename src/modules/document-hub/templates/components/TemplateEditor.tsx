@@ -57,7 +57,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       setCharCount({
         characters: text.length,
         words: text.split(/\s+/).filter(word => word.length > 0).length
-      });
+};
     },
     editorProps: {
       attributes: {
@@ -240,4 +240,4 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

@@ -380,4 +380,4 @@ export const IntegrationSecurity: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

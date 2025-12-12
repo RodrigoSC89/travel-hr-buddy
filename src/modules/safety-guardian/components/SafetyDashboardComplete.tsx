@@ -389,4 +389,4 @@ export const SafetyDashboardComplete: React.FC = () => {
       />
     </div>
   );
-});
+};

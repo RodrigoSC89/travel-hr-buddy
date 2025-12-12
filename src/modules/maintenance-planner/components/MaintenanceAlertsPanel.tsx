@@ -334,4 +334,4 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
       </SheetContent>
     </Sheet>
   );
-});
+};

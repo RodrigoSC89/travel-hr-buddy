@@ -413,4 +413,4 @@ function getBadgeConfig(quality: ConnectionQuality) {
 export {
   getBannerConfig,
   getBadgeConfig,
-});
+};

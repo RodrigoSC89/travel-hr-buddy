@@ -365,4 +365,4 @@ export const MetricasPanel = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

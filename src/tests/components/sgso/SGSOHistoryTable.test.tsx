@@ -353,4 +353,4 @@ describe("SGSOHistoryTable", () => {
       expect(correctionHeaders).toHaveLength(2);
     });
   });
-});
+};

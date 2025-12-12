@@ -227,4 +227,4 @@ describe("safeLazyImport", () => {
 
     consoleErrorSpy.mockRestore();
   });
-});
+};

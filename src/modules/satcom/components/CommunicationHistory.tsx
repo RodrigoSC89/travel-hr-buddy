@@ -248,4 +248,4 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

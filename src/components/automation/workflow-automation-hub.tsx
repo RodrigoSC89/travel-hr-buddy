@@ -349,4 +349,4 @@ export const WorkflowAutomationHub: React.FC = () => {
       </Dialog>
     </div>
   );
-});
+};

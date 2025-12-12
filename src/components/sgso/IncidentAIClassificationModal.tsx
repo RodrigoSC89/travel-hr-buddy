@@ -43,7 +43,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
         title: "⚠️ Descrição necessária",
         description: "Por favor, insira uma descrição do incidente para classificação.",
         variant: "destructive",
-      });
+};
       return;
     }
 
@@ -220,4 +220,4 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
       </DialogContent>
     </Dialog>
   );
-});
+};

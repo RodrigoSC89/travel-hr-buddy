@@ -392,4 +392,4 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

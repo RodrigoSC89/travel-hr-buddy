@@ -117,4 +117,4 @@ describe("PainelSGSO", () => {
     const pdfButton = Array.from(buttons).find(btn => btn.textContent?.includes("Exportar PDF"));
     expect(pdfButton?.className).toContain("bg-zinc-800");
   });
-});
+};

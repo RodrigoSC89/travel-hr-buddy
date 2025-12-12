@@ -111,4 +111,4 @@ describe("DocumentListPage Component", () => {
 
     expect(mockNavigate).toHaveBeenCalledWith("/admin/documents/ai");
   });
-});
+};

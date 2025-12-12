@@ -142,4 +142,4 @@ describe("Performance: Data Table", () => {
     expect(updatedRows[499].value).toBe(rows[499].value); // Others unchanged
     expect(updateTime).toBeLessThan(10); // Should be instant
   });
-});
+};

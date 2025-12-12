@@ -308,4 +308,4 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
       {children}
     </NotificationCenterContext.Provider>
   );
-});
+};

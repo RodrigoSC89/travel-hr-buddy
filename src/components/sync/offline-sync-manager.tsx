@@ -381,4 +381,4 @@ export const OfflineSyncManager: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

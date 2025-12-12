@@ -674,4 +674,4 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
       </Tabs>
     </div>
   );
-});
+};

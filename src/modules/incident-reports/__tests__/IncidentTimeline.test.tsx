@@ -107,4 +107,4 @@ describe("IncidentTimeline", () => {
       expect(screen.getByText("Total Incidents")).toBeInTheDocument();
     });
   });
-});
+};

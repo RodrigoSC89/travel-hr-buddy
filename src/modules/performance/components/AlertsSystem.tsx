@@ -214,4 +214,4 @@ export const AlertsSystem: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

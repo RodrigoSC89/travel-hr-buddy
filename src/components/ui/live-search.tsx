@@ -193,4 +193,4 @@ export const LiveSearch = ({
       )}
     </div>
   );
-});
+};

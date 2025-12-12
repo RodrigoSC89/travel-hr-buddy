@@ -144,4 +144,4 @@ describe("Performance: Map Component", () => {
     expect(avgFrameTime).toBeLessThan(FRAME_TIME); // Should maintain 60fps
     expect(Math.max(...frameTimes)).toBeLessThan(FRAME_TIME * 2); // No frame should spike too much
   });
-});
+};

@@ -512,4 +512,4 @@ export const SmartOptimization: React.FC = () => {
       </div>
     </div>
   );
-});
+};

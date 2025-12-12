@@ -315,4 +315,4 @@ describe("AdminDashboard - Navigation", () => {
 
     expect(screen.getByText("⚡ Atalhos Rápidos")).toBeInTheDocument();
   });
-});
+};

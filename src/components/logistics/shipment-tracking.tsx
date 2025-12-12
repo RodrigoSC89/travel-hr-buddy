@@ -342,4 +342,4 @@ export const ShipmentTracking = memo(() => {
       </Card>
     </div>
   );
-});
+};

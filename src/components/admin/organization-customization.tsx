@@ -639,4 +639,4 @@ export const OrganizationCustomization: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

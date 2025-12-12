@@ -324,4 +324,4 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

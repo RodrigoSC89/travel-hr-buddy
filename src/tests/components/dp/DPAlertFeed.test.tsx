@@ -76,4 +76,4 @@ describe("DPAlertFeed Component", () => {
       expect(timeElement).toBeInTheDocument();
     });
   });
-});
+};

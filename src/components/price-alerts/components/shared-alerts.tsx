@@ -655,4 +655,4 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

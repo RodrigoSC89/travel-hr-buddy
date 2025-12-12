@@ -40,7 +40,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
     status: "draft",
     start_date: "",
     end_date: "",
-  });
+};
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -177,4 +177,4 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

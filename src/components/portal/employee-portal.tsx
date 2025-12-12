@@ -493,4 +493,4 @@ export const EmployeePortal: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

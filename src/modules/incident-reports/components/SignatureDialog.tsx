@@ -51,7 +51,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
         title: "Assinatura vazia",
         description: "Por favor, assine no campo acima",
         variant: "destructive",
-      });
+};
       return;
     }
 
@@ -146,4 +146,4 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

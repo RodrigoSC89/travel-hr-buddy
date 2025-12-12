@@ -345,4 +345,4 @@ export default {
   StatGrid,
   Divider,
   ChartContainer
-});
+};

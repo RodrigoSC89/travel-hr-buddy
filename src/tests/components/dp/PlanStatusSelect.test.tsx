@@ -130,4 +130,4 @@ describe("PlanStatusSelect Component", () => {
       expect(select.disabled).toBe(true);
     });
   });
-});
+};

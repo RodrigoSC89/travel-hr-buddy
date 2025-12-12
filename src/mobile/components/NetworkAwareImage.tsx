@@ -205,7 +205,7 @@ export const NetworkAwareAvatar = memo<
       />
     </div>
   );
-});
+};
 
 NetworkAwareAvatar.displayName = "NetworkAwareAvatar";
 
@@ -224,6 +224,6 @@ export const NetworkAwareBackground = memo<
       {children}
     </div>
   );
-});
+};
 
 NetworkAwareBackground.displayName = "NetworkAwareBackground";

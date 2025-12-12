@@ -312,4 +312,4 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       )}
     </div>
   );
-});
+};

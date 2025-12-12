@@ -430,4 +430,4 @@ export const CommunicationModule = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

@@ -43,4 +43,4 @@ describe("MMI Jobs Forecast Panel", () => {
       expect(title).toBeDefined();
     });
   });
-});
+};

@@ -51,7 +51,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       try {
         const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
           body: { action: "get_keys" }
-        });
+};
 
         if (error) {
           setMapError(true);

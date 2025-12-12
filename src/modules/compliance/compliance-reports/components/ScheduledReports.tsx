@@ -366,4 +366,4 @@ export const ScheduledReports: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

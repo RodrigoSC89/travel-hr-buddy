@@ -108,4 +108,4 @@ export const TableWidget = ({
       </CardContent>
     </Card>
   );
-});
+};

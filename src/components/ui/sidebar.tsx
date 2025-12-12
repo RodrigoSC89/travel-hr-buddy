@@ -635,4 +635,4 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-});
+};

@@ -617,4 +617,4 @@ export const SmartNotifications: React.FC = () => {
       </div>
     </div>
   );
-});
+};

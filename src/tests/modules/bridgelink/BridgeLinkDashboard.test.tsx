@@ -153,4 +153,4 @@ describe("BridgeLinkDashboard", () => {
       expect(screen.getAllByText(/SGSO Logs/i).length).toBeGreaterThan(0);
     });
   });
-});
+};

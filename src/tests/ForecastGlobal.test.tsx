@@ -291,4 +291,4 @@ describe("Forecast Data Validation", () => {
       expect(typeof value).toBe("number");
     });
   });
-});
+};

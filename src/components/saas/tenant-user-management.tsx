@@ -524,4 +524,4 @@ export const TenantUserManagement: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

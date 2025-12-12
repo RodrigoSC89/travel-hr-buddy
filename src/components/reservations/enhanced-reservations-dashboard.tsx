@@ -421,4 +421,4 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       />
     </div>
   );
-});
+};

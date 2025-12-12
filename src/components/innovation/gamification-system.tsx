@@ -437,4 +437,4 @@ export const GamificationSystem: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

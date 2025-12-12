@@ -542,4 +542,4 @@ export const PriceAlertDashboardLegacy = memo(() => {
       </div>
     </div>
   );
-});
+};

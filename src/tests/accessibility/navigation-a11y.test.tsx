@@ -109,4 +109,4 @@ describe("Accessibility: Navigation", () => {
     expect(focusStyles.outline).toBeDefined();
     expect(focusStyles.outlineOffset).toBeDefined();
   });
-});
+};

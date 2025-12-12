@@ -182,4 +182,4 @@ export const MaritimeWeatherAlerts: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

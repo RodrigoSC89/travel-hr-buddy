@@ -36,7 +36,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
     overdueChecklists: 0,
     complianceScore: 0,
     avgCompletionTime: 0
-  });
+};
 
   useEffect(() => {
     if (checklists.length > 0) {
@@ -261,4 +261,4 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       </Card>
     </div>
   );
-});
+};

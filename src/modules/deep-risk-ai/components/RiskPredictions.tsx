@@ -58,4 +58,4 @@ export const RiskPredictions: React.FC<Props> = ({ predictions }) => {
       </CardContent>
     </Card>
   );
-});
+};

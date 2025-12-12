@@ -43,7 +43,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       const escapedKey = escapeRegexSpecialChars(key);
       const regex = new RegExp(`{{${escapedKey}}}`, "g");
       content = content.replace(regex, value || `<span style="color: red;">{{${key}}}</span>`);
-    });
+};
     
     setPreviewContent(content);
   };
@@ -174,4 +174,4 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

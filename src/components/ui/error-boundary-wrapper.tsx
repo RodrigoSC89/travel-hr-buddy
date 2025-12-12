@@ -119,4 +119,4 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
       </Card>
     </div>
   );
-});
+};

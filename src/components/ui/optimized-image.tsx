@@ -48,7 +48,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
             setIsInView(true);
             observer.disconnect();
           }
-        });
+};
       },
       {
         rootMargin: "50px",
@@ -122,4 +122,4 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
     </div>
   );
-});
+};

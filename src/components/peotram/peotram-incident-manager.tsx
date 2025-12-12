@@ -554,4 +554,4 @@ export const PeotramIncidentManager: React.FC = () => {
       <IncidentAiModal />
     </div>
   );
-});
+};

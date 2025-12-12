@@ -143,4 +143,4 @@ describe("CollaborationPage", () => {
     
     expect(screen.getByText(/Enviar Comentário/i)).toBeInTheDocument();
   });
-});
+};

@@ -473,4 +473,4 @@ export const ReservationsDashboard: React.FC = () => {
       )}
     </div>
   );
-});
+};

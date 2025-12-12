@@ -844,4 +844,4 @@ export default {
   LoadingDashboard,
   LoadingState,
   LoadingSpinner,
-});
+};

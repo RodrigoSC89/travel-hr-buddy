@@ -115,4 +115,4 @@ describe("ComplianceByVesselTable", () => {
       expect(screen.getByText(/Vermelho = Planos pendentes/i)).toBeDefined();
     });
   });
-});
+};

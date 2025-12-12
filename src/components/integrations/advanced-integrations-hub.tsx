@@ -971,7 +971,7 @@ const IntegrationWizard: React.FC<{
     method: "GET",
     headers: {},
     auth: ""
-  });
+};
 
   const steps = [
     { title: "Tipo de Integração", description: "Selecione o tipo de integração" },
@@ -1127,4 +1127,4 @@ const IntegrationWizard: React.FC<{
       </div>
     </div>
   );
-});
+};

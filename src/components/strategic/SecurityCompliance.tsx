@@ -329,4 +329,4 @@ export const SecurityCompliance = memo(() => {
       </Card>
     </div>
   );
-});
+};

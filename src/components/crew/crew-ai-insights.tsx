@@ -387,4 +387,4 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
       </Tabs>
     </div>
   );
-});
+};

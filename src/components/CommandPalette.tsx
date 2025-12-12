@@ -87,4 +87,4 @@ export const CommandPalette = memo(() => {
       </CommandList>
     </CommandDialog>
   );
-});
+};

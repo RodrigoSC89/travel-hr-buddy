@@ -583,4 +583,4 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       </div>
     </div>
   );
-});
+};

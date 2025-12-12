@@ -63,7 +63,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     logs: [],
     simulationMode: false,
     simulationSpeed: 1,
-  });
+};
 
   const [selectedNode, setSelectedNode] = useState<DecisionNode | null>(null);
   const [metrics, setMetrics] = useState<ReactionMetrics | null>(null);

@@ -477,4 +477,4 @@ export const OperationalCommandCenter: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

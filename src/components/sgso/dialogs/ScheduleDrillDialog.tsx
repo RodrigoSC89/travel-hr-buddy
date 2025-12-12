@@ -68,7 +68,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
     participants: "",
     objectives: "",
     notes: "",
-  });
+};
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: string, value: string) => {
@@ -286,4 +286,4 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

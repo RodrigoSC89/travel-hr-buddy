@@ -696,4 +696,4 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       </Dialog>
     </div>
   );
-});
+};

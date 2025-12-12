@@ -509,4 +509,4 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
       </div>
     </div>
   );
-});
+};

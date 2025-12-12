@@ -342,4 +342,4 @@ export const RealTimeSystemMonitor: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

@@ -115,4 +115,4 @@ export const OVIDChecklist: React.FC<OVIDChecklistProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

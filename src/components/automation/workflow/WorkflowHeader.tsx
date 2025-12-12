@@ -107,4 +107,4 @@ export const WorkflowHeader: React.FC<WorkflowHeaderProps> = ({
       </div>
     </div>
   );
-});
+};

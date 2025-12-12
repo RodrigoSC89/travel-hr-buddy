@@ -219,4 +219,4 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
       )}
     </div>
   );
-});
+};

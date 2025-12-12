@@ -19,4 +19,4 @@ describe("Badge Component", () => {
     const badge = screen.getByText("Success Badge");
     expect(badge).toBeInTheDocument();
   });
-});
+};

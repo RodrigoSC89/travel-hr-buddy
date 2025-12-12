@@ -223,4 +223,4 @@ const DocumentListRow: React.FC<DocumentListRowProps> = ({
       </TableCell>
     </TableRow>
   );
-});
+};

@@ -255,4 +255,4 @@ export const SimpleGlobalSearch: React.FC = () => {
       </CommandDialog>
     </>
   );
-});
+};

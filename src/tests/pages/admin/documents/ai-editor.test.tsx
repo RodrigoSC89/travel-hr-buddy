@@ -238,4 +238,4 @@ describe("DocumentAIEditorPage", () => {
     // Verify that supabase.from was NOT called (validation failed)
     expect(supaMod.supabase.from).not.toHaveBeenCalled();
   });
-});
+};

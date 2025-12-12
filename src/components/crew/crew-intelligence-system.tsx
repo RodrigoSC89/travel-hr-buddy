@@ -562,4 +562,4 @@ export const CrewIntelligenceSystem: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

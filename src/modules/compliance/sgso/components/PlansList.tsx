@@ -126,4 +126,4 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
       )}
     </div>
   );
-});
+};

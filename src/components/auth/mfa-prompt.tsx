@@ -42,7 +42,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
           title: "2FA não configurado",
           description: "Configure a autenticação de dois fatores primeiro",
           variant: "destructive"
-        });
+};
         onCancel();
         return;
       }
@@ -227,4 +227,4 @@ export const useMFA = memo(() => {
     requireMFA,
     MFAPromptComponent
   };
-});
+};

@@ -332,4 +332,4 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
       </div>
     </div>
   );
-});
+};

@@ -108,4 +108,4 @@ export const OrganizationBrandingPreview: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

@@ -211,4 +211,4 @@ export function withAuditLog<Props extends Record<string, unknown>>(
   };
 
   return AuditLogWrapper;
-});
+};

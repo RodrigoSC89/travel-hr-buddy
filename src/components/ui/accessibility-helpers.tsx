@@ -126,4 +126,4 @@ export const SkipLink: React.FC<SkipLinkProps> = ({ href, children }) => {
       {children}
     </a>
   );
-});
+};

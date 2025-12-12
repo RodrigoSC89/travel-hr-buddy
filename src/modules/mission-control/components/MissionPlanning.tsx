@@ -32,7 +32,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
     description: "",
     startDate: "",
     endDate: ""
-  });
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -229,4 +229,4 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
       </CardContent>
     </Card>
   );
-});
+};

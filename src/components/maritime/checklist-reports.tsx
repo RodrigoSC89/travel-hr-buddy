@@ -337,4 +337,4 @@ export const ChecklistReports = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

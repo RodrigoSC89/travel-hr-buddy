@@ -80,7 +80,7 @@ describe("MMI Orders Admin Page", () => {
       expect(status).toBeDefined();
       expect(label).toBeDefined();
       expect(emoji).toBeDefined();
-    });
+};
   });
 
   it("should disable editing for completed orders", () => {
@@ -127,4 +127,4 @@ describe("MMI Orders Admin Page", () => {
     expect(validInputs.technicianComment).toBeTruthy();
     expect(["open", "in_progress", "completed", "cancelled"]).toContain(validInputs.status);
   });
-});
+};

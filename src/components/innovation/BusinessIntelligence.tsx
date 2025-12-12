@@ -492,4 +492,4 @@ export const BusinessIntelligence = memo(() => {
       </Card>
     </div>
   );
-});
+};

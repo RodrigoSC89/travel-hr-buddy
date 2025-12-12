@@ -265,4 +265,4 @@ export const InteractiveDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
