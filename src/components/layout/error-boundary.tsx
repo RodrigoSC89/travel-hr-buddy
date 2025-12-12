@@ -47,11 +47,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   handleRetry = () => {
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
-  };
+  });
 
   handleGoHome = () => {
     window.location.href = "/";
-  };
+  });
 
   render() {
     if (this.state.hasError) {

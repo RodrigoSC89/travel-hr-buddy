@@ -89,7 +89,7 @@ vi.mock("jspdf", () => ({
 describe("ChecklistsPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the page title", async () => {
     render(
@@ -103,8 +103,8 @@ describe("ChecklistsPage Component", () => {
     await waitFor(() => {
       const title = screen.getByText(/Checklists Inteligentes/i);
       expect(title).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render input field for new checklist", async () => {
     render(
@@ -118,8 +118,8 @@ describe("ChecklistsPage Component", () => {
     await waitFor(() => {
       const input = screen.getByPlaceholderText(/Descreva seu checklist/i);
       expect(input).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render create button", async () => {
     render(
@@ -133,8 +133,8 @@ describe("ChecklistsPage Component", () => {
     await waitFor(() => {
       const button = screen.getByText(/Criar Manual/i);
       expect(button).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("create button should be disabled when input is empty", async () => {
     render(
@@ -148,8 +148,8 @@ describe("ChecklistsPage Component", () => {
     await waitFor(() => {
       const button = screen.getByRole("button", { name: /Criar Manual/i });
       expect(button).toBeDisabled();
-  };
-  };
+  });
+  });
 
   it("should render 'Gerar com IA' button", async () => {
     render(
@@ -163,8 +163,8 @@ describe("ChecklistsPage Component", () => {
     await waitFor(() => {
       const button = screen.getByText(/Gerar com IA/i);
       expect(button).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("'Gerar com IA' button should be disabled when input is empty", async () => {
     render(
@@ -178,6 +178,6 @@ describe("ChecklistsPage Component", () => {
     await waitFor(() => {
       const button = screen.getByRole("button", { name: /Gerar com IA/i });
       expect(button).toBeDisabled();
-  };
-  };
-};
+  });
+  });
+});

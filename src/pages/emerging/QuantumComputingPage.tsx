@@ -156,7 +156,7 @@ const QuantumComputingPage: React.FC = () => {
       title: "Experimento Iniciado",
       description: "O experimento quântico foi adicionado à fila de execução.",
     });
-  };
+  });
 
   return (
     <ModulePageWrapper gradient="purple">

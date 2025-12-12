@@ -23,7 +23,7 @@ import { FileText, Plus, Download, Edit, Trash2, History, Copy } from "lucide-re
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface Template {
   id: string;
@@ -122,7 +122,7 @@ export const TemplateLibrary: React.FC = () => {
     }
 
     setFilteredTemplates(filtered);
-  };
+  });
 
   const extractPlaceholders = (content: string): string[] => {
     const regex = /\{\{([^}]+)\}\}/g;
@@ -136,7 +136,7 @@ export const TemplateLibrary: React.FC = () => {
     }
 
     return placeholders;
-  };
+  });
 
   const handleCreate = async () => {
     try {
@@ -220,10 +220,10 @@ export const TemplateLibrary: React.FC = () => {
     const initialData: Record<string, string> = {};
     placeholders.forEach(p => {
       initialData[p] = "";
-  };
+  });
     setGenerateData(initialData);
     setIsGenerateOpen(true);
-  };
+  });
 
   const generatePDF = () => {
     if (!selectedTemplate) return;
@@ -235,7 +235,7 @@ export const TemplateLibrary: React.FC = () => {
       Object.keys(generateData).forEach(key => {
         const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g");
         content = content.replace(regex, generateData[key] || `[${key}]`);
-  };
+  });
 
       // Generate PDF
       const doc = new jsPDF();
@@ -289,7 +289,7 @@ export const TemplateLibrary: React.FC = () => {
       content: "",
       is_public: false
     });
-  };
+  });
 
   const getCategoryBadge = (category: string) => {
     const variants: Record<string, string> = {
@@ -300,7 +300,7 @@ export const TemplateLibrary: React.FC = () => {
     };
 
     return <Badge className={variants[category] || "bg-gray-100"}>{category}</Badge>;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

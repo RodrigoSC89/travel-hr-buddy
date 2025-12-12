@@ -187,7 +187,7 @@ const formatTimeAgo = (timestamp: string) => {
   if (diffHours < 24) return `${diffHours}h`;
   if (diffDays === 1) return "Ontem";
   return `${diffDays}d`;
-};
+});
 
 const getPriorityColor = (priority: Message["priority"]) => {
   switch (priority) {

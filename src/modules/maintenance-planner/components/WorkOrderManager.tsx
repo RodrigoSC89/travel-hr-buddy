@@ -120,7 +120,7 @@ export default function WorkOrderManager() {
         {label}
       </Badge>
     );
-  };
+  });
 
   const getPriorityBadge = (priority: WorkOrder["priority"]) => {
     const config = {
@@ -131,7 +131,7 @@ export default function WorkOrderManager() {
     };
     const { label, className } = config[priority];
     return <Badge className={className}>{label}</Badge>;
-  };
+  });
 
   const handleCreateOS = () => {
     if (!newOS.title || !newOS.equipment) {
@@ -171,12 +171,12 @@ export default function WorkOrderManager() {
       prev.map((os) => (os.id === id ? { ...os, status: "approved" as const } : os))
     );
     toast({ title: "OS Aprovada", description: "Ordem de serviço aprovada com sucesso" });
-  };
+  });
 
   const filteredOrders = workOrders.filter((os) => {
     if (filter === "all") return true;
     return os.status === filter;
-  };
+  });
 
   return (
     <div className="space-y-4">

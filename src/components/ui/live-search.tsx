@@ -90,12 +90,12 @@ export const LiveSearch = ({
     onChange(displayValue);
     setIsOpen(false);
     onSelect?.(suggestion);
-  };
+  });
 
   const handleClear = () => {
     onChange("");
     setIsOpen(false);
-  };
+  });
 
   return (
     <div className="relative">

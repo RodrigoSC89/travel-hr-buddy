@@ -147,7 +147,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         const reader = new FileReader();
         reader.onload = (e) => {
           setCapturedImage(e.target?.result as string);
-        };
+        });
         reader.readAsDataURL(file);
       }
     }
@@ -295,7 +295,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
     const diffTime = expiry.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
-  };
+  });
 
   return (
     <Dialog open={true} onOpenChange={onClose}>

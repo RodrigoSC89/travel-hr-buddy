@@ -299,7 +299,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
+  });
 
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -309,11 +309,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     
     return matchesSearch && matchesCategory && matchesStatus;
-  };
+  });
 
   const handleUpload = () => {
     setIsUploadDialogOpen(true);
-  };
+  });
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -377,7 +377,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
 
   const handleNewDocument = () => {
     setIsNewDocDialogOpen(true);
-  };
+  });
 
   const handleNewDocSubmit = async () => {
     if (!newDocForm.title.trim()) {
@@ -474,7 +474,7 @@ Este é um documento de demonstração do Centro de Documentos.
     
     setSelectedDocument(document);
     setIsViewDialogOpen(true);
-  };
+  });
 
   const handleStatusChange = (documentId: string, newStatus: Document["status"]) => {
     setDocuments(prev => prev.map(doc => 
@@ -487,17 +487,17 @@ Este é um documento de demonstração do Centro de Documentos.
       title: "Status atualizado",
       description: `Documento marcado como ${newStatus}.`,
     });
-  };
+  });
 
   const handleUseTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
     const initialData: Record<string, string> = {};
     template.fields.forEach(field => {
       initialData[field.name] = "";
-  };
+  });
     setTemplateFormData(initialData);
     setIsTemplateDialogOpen(true);
-  };
+  });
 
   const handleTemplateSubmit = () => {
     if (!selectedTemplate) return;

@@ -134,7 +134,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
                     const updated = [...prev];
                     updated[updated.length - 1] = { role: "assistant", content: assistantContent };
                     return updated;
-  };
+  });
                 }
               } catch {
                 // Skip invalid JSON
@@ -158,7 +158,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
 
   const handleQuickAction = (prompt: string) => {
     sendMessage(prompt);
-  };
+  });
 
   return (
     <Card className="h-full flex flex-col border-primary/20">

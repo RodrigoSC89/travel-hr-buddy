@@ -142,7 +142,7 @@ export const ScheduledReports: React.FC = () => {
       break;
     }
     return now.toISOString();
-  };
+  });
 
   const runReportNow = async (reportId: string) => {
     toast({
@@ -225,7 +225,7 @@ export const ScheduledReports: React.FC = () => {
       quarterly: "bg-orange-500",
     };
     return colors[frequency] || "bg-gray-500";
-  };
+  });
 
   return (
     <Card>
@@ -366,4 +366,4 @@ export const ScheduledReports: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

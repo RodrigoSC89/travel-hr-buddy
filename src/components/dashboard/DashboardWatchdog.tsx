@@ -178,7 +178,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
     // Track user interactions
     const updateInteractionTime = () => {
       (window as unknown).__lastInteractionTime = Date.now();
-    };
+    });
 
     window.addEventListener("click", updateInteractionTime);
     window.addEventListener("keydown", updateInteractionTime);
@@ -195,7 +195,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
       window.removeEventListener("click", updateInteractionTime);
       window.removeEventListener("keydown", updateInteractionTime);
       window.removeEventListener("scroll", updateInteractionTime);
-    };
+    });
   }, [runWatchdogChecks]);
 
   // Show alert if issues detected

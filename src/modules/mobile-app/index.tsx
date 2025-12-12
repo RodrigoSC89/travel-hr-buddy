@@ -181,12 +181,12 @@ export default function MobileApp() {
   const handleQuickAction = (action: string) => {
     toast.success(`Abrindo: ${action}`);
     setActiveView(action);
-  };
+  });
 
   const markAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     toast.success("Todas notificações marcadas como lidas");
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
 

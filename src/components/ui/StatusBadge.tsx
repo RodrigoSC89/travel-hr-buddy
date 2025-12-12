@@ -39,7 +39,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {status}
     </Badge>
   );
-};
+});
 
 export interface StatusIndicatorProps {
   status: string;

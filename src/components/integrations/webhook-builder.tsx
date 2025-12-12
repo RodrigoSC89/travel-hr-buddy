@@ -244,7 +244,7 @@ export const WebhookBuilder: React.FC = () => {
         description: "Webhook testado com sucesso. Status: 200 OK",
       });
     }, 2000);
-  };
+  });
 
   const copyWebhookUrl = (url: string) => {
     navigator.clipboard.writeText(url);
@@ -252,7 +252,7 @@ export const WebhookBuilder: React.FC = () => {
       title: "URL Copiada",
       description: "URL do webhook foi copiada para a área de transferência.",
     });
-  };
+  });
 
   const loadTemplate = (template: string) => {
     setWebhookConfig({
@@ -264,7 +264,7 @@ export const WebhookBuilder: React.FC = () => {
       title: "Template Carregado",
       description: `Template ${template} foi aplicado ao payload.`,
     });
-  };
+  });
 
   const getStatusColor = (status: WebhookEvent["status"]) => {
     switch (status) {
@@ -717,4 +717,4 @@ export const WebhookBuilder: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

@@ -81,7 +81,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             return 90;
           }
           return prev + 10;
-  };
+  });
       }, 200);
 
       // Converter arquivo para base64
@@ -157,21 +157,21 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
-  };
-  };
+  });
+  });
 
   // Get validation status color
   const getStatusColor = (isValid: boolean, confidence: number) => {
     if (isValid && confidence >= 80) return "text-green-600 bg-green-50";
     if (isValid && confidence >= 60) return "text-yellow-600 bg-yellow-50";
     return "text-red-600 bg-red-50";
-  };
+  });
 
   // Clear results
   const clearResults = () => {
     setValidationResults([]);
     setSelectedFile(null);
-  };
+  });
 
   return (
     <div className="space-y-6">

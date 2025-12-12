@@ -83,7 +83,7 @@ export const EmployeePayroll: React.FC = () => {
   const viewRecord = (record: PayrollRecord) => {
     setSelectedRecord(record);
     setIsViewOpen(true);
-  };
+  });
 
   const downloadPayslip = async (record: PayrollRecord) => {
     if (record.payslip_url) {
@@ -114,7 +114,7 @@ export const EmployeePayroll: React.FC = () => {
         {statusConfig.label}
       </Badge>
     );
-  };
+  });
 
   const calculateYearToDate = () => {
     const currentYear = new Date().getFullYear();
@@ -129,7 +129,7 @@ export const EmployeePayroll: React.FC = () => {
       deductionsTotal: ytdRecords.reduce((sum, r) => sum + r.deductions, 0),
       bonusesTotal: ytdRecords.reduce((sum, r) => sum + r.bonuses, 0),
     };
-  };
+  });
 
   const ytd = calculateYearToDate();
 
@@ -341,4 +341,4 @@ export const EmployeePayroll: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});

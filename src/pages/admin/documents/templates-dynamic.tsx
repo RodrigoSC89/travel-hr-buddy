@@ -43,7 +43,7 @@ import html2canvas from "html2canvas";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface TemplateVersion {
   id: string;
@@ -214,7 +214,7 @@ export const TemplatesDynamic = memo(() => {
       // Set default values
       DYNAMIC_VARIABLES.forEach((v) => {
         values[v.key] = `{{${v.key}}}`;
-  };
+  });
       setVariableValues(values);
     }
   };
@@ -226,10 +226,10 @@ export const TemplatesDynamic = memo(() => {
     Object.keys(variableValues).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       html = html.replace(regex, variableValues[key] || `{{${key}}}`);
-  };
+  });
 
     setPreviewHtml(html);
-  };
+  });
 
   const saveTemplate = async () => {
     if (!templateName || !templateContent) {
@@ -306,7 +306,7 @@ export const TemplatesDynamic = memo(() => {
     setTemplateName(template.template_name);
     setTemplateContent(template.template_content);
     loadVersions(template.template_id);
-  };
+  });
 
   const restoreVersion = async (version: TemplateVersion) => {
     try {
@@ -433,7 +433,7 @@ export const TemplatesDynamic = memo(() => {
   const insertVariable = (variableKey: string) => {
     const newContent = templateContent + `{{${variableKey}}}`;
     setTemplateContent(newContent);
-  };
+  });
 
   const newTemplate = () => {
     setSelectedTemplate(null);
@@ -441,7 +441,7 @@ export const TemplatesDynamic = memo(() => {
     setTemplateContent("");
     setVersions([]);
     setPreviewHtml("");
-  };
+  });
 
   return (
     <div className="space-y-6">

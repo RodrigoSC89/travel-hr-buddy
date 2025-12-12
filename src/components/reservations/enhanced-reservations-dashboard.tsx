@@ -172,7 +172,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         ] : []
       };
     });
-  };
+  });
 
   const filteredReservations = reservations.filter(reservation => {
     if (filters.type !== "all" && reservation.reservation_type !== filters.type) return false;
@@ -192,12 +192,12 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     setIsFormOpen(false);
     setSelectedReservation(null);
     fetchReservations();
-  };
+  });
 
   const handleEdit = (reservation: EnhancedReservation) => {
     setSelectedReservation(reservation);
     setIsFormOpen(true);
-  };
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir esta reserva?")) return;
@@ -421,4 +421,4 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       />
     </div>
   );
-};
+});

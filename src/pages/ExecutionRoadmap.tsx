@@ -75,7 +75,7 @@ export default function ExecutionRoadmap() {
     setTasks(prev => prev.map(t => 
       t.id === id ? { ...t, completed: !t.completed } : t
     ));
-  };
+  });
 
   const getPhaseStats = (startDay: number, endDay: number) => {
     const phaseTasks = tasks.filter(t => t.day >= startDay && t.day <= endDay);
@@ -85,7 +85,7 @@ export default function ExecutionRoadmap() {
       completed,
       percentage: Math.round((completed / phaseTasks.length) * 100) || 0
     };
-  };
+  });
 
   const week1Stats = getPhaseStats(1, 7);
   const week2Stats = getPhaseStats(8, 15);
@@ -110,8 +110,8 @@ export default function ExecutionRoadmap() {
         content += `- [${t.completed ? "x" : " "}] **Dia ${t.day}**: ${t.title}\n`;
         content += `  - Módulo: ${t.module} | Prioridade: ${t.priority} | Esforço: ${t.effort}\n`;
         content += `  - ${t.description}\n\n`;
-  };
-  };
+  });
+  });
     
     const blob = new Blob([content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
@@ -121,7 +121,7 @@ export default function ExecutionRoadmap() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Roteiro exportado!");
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

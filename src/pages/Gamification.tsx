@@ -28,6 +28,6 @@ const Gamification: React.FC = () => {
       <GamificationSystem />
     </ModulePageWrapper>
   );
-};
+});
 
 export default Gamification;

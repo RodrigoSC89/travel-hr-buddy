@@ -136,7 +136,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
           : item
       )
     }));
-  };
+  });
 
   const handleSave = async () => {
     try {

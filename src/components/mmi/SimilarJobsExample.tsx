@@ -29,7 +29,7 @@ export const SimilarJobsByIdExample = memo(function() {
 
   const handleSearch = () => {
     setActiveJobId(jobId);
-  };
+  });
 
   return (
     <Card>
@@ -81,7 +81,7 @@ export const SemanticSearchExample = memo(function() {
 
   const handleSearch = () => {
     setActiveQuery(query);
-  };
+  });
 
   return (
     <Card>

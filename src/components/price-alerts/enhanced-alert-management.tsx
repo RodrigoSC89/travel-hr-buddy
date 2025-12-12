@@ -161,14 +161,14 @@ export const EnhancedAlertManagement: React.FC = () => {
       title: "Alerta Atualizado",
       description: "Configuração do alerta foi modificada com sucesso.",
     });
-  };
+  });
 
   const createAlertGroup = () => {
     toast({
       title: "Grupo Criado",
       description: "Novo grupo de alertas criado. Configure as regras personalizadas.",
     });
-  };
+  });
 
   const getThresholdLabel = (alert: PriceAlert) => {
     switch (alert.thresholdType) {
@@ -185,7 +185,7 @@ export const EnhancedAlertManagement: React.FC = () => {
 
   const getStatusColor = (isActive: boolean) => {
     return isActive ? "bg-success text-azure-50" : "bg-muted text-muted-foreground";
-  };
+  });
 
   const getActionColor = (action: string) => {
     switch (action) {

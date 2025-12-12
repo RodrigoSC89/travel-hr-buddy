@@ -60,7 +60,7 @@ const AutoSub: React.FC = () => {
   useEffect(() => {
     planner.onFeedback((fb) => {
       setFeedback(prev => [fb, ...prev].slice(0, 20));
-  };
+  });
   }, [planner]);
 
   const handleGeneratePlan = () => {
@@ -130,7 +130,7 @@ const AutoSub: React.FC = () => {
       high: "bg-red-500",
     };
     return colors[risk as keyof typeof colors] || "bg-gray-500";
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const colors = {
@@ -141,7 +141,7 @@ const AutoSub: React.FC = () => {
       aborted: "bg-red-500",
     };
     return colors[status as keyof typeof colors] || "bg-gray-500";
-  };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-black text-white p-6">

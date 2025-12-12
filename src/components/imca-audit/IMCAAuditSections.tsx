@@ -125,19 +125,19 @@ export const IMCAAuditSections = memo(function({ selectedDPClass, sectionScores 
     });
 
     return totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
-  };
+  });
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600";
     if (score >= 70) return "text-amber-600";
     return "text-red-600";
-  };
+  });
 
   const getScoreBadge = (score: number) => {
     if (score >= 90) return <Badge className="bg-green-500">Conforme</Badge>;
     if (score >= 70) return <Badge className="bg-amber-500">Atenção</Badge>;
     return <Badge variant="destructive">Não Conforme</Badge>;
-  };
+  });
 
   const overallScore = calculateOverallScore();
 

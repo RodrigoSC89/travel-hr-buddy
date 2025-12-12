@@ -69,7 +69,7 @@ export const SupplyOrdersManagement = memo(() => {
     }
 
     setOrders(data || []);
-  };
+  });
 
   const fetchInventoryItems = async () => {
     const { data } = await supabase
@@ -78,7 +78,7 @@ export const SupplyOrdersManagement = memo(() => {
       .order("item_name");
     
     setInventoryItems(data || []);
-  };
+  });
 
   const createOrder = async () => {
     const orgId = await getCurrentOrgId();
@@ -148,7 +148,7 @@ export const SupplyOrdersManagement = memo(() => {
       .single();
 
     return data?.organization_id;
-  };
+  });
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -160,14 +160,14 @@ export const SupplyOrdersManagement = memo(() => {
       cancelled: "bg-gray-500"
     };
     return colors[status] || "bg-gray-500";
-  };
+  });
 
   const getPriorityIcon = (priority: string) => {
     if (priority === "urgent" || priority === "high") {
       return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    };
+    });
     return <Package className="h-4 w-4 text-blue-500" />;
-  };
+  });
 
   return (
     <div className="space-y-4">
@@ -339,4 +339,4 @@ export const SupplyOrdersManagement = memo(() => {
       </div>
     </div>
   );
-};
+});

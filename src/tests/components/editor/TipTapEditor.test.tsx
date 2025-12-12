@@ -25,18 +25,18 @@ describe("TipTapEditor", () => {
   it("should render the editor", () => {
     render(<TipTapEditor content="<p>Test</p>" />);
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  };
+  });
 
   it("should accept string content", () => {
     const { container } = render(<TipTapEditor content="<p>String content</p>" />);
     expect(container).toBeInTheDocument();
-  };
+  });
 
   it("should accept object content", () => {
     const content = { type: "doc", content: [] };
     const { container } = render(<TipTapEditor content={content} />);
     expect(container).toBeInTheDocument();
-  };
+  });
 
   it("should handle onChange callback", () => {
     const onChange = vi.fn();
@@ -50,12 +50,12 @@ describe("TipTapEditor", () => {
     );
     const editorWrapper = container.querySelector(".border");
     expect(editorWrapper).toHaveClass("custom-class");
-  };
+  });
 
   it("should support editable prop", () => {
     const { container } = render(
       <TipTapEditor content="<p>Test</p>" editable={false} />
     );
     expect(container).toBeInTheDocument();
-  };
-};
+  });
+});

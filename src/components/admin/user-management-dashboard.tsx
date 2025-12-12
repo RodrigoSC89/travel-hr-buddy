@@ -94,7 +94,7 @@ const UserManagementDashboard = () => {
         {role}
       </Badge>
     );
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     return status === "Ativo" ? (
@@ -108,7 +108,7 @@ const UserManagementDashboard = () => {
         Inativo
       </Badge>
     );
-  };
+  });
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,14 +117,14 @@ const UserManagementDashboard = () => {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   const handleUserAction = (action: string, userId: number) => {
     toast({
       title: "Ação Executada",
       description: `${action} aplicada ao usuário ID: ${userId}`,
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

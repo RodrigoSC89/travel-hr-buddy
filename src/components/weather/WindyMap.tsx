@@ -112,13 +112,13 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   const handleIframeLoad = () => {
     setIsLoading(false);
     setMapError(false);
-  };
+  });
 
   const handleIframeError = () => {
     setIsLoading(false);
     setMapError(true);
     setUseAlternative(true);
-  };
+  });
 
   const handleRefresh = () => {
     setIsLoading(true);
@@ -131,14 +131,14 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       description: "Carregando dados meteorológicos...",
       duration: 2000,
     });
-  };
+  });
 
   // Get tile URL with API key
   const getOWMTileUrl = (z: number, x: number, y: number) => {
     if (!apiKey) return "";
     const layer = layers.find(l => l.id === selectedLayer);
     return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${apiKey}`;
-  };
+  });
 
   // Alternative embedded weather visualization
   const renderAlternativeMap = () => {

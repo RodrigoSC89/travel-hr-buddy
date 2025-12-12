@@ -77,7 +77,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-  };
+  });
 
 // Mock logger
 vi.mock("@/lib/logger", () => ({
@@ -97,7 +97,7 @@ describe("AITemplatesPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
-  };
+  });
 
   it("should render the templates page", async () => {
     render(
@@ -108,8 +108,8 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("📋 Templates de Documentos IA")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should load and display templates", async () => {
     render(
@@ -121,8 +121,8 @@ describe("AITemplatesPage", () => {
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
       expect(screen.getByText("Template 2")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should filter templates by search term", async () => {
     render(
@@ -133,7 +133,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
 
     const searchInput = screen.getByPlaceholderText("Digite para buscar...");
     fireEvent.change(searchInput, { target: { value: "Template 1" } });
@@ -141,8 +141,8 @@ describe("AITemplatesPage", () => {
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
       expect(screen.queryByText("Template 2")).not.toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should apply template and navigate to editor", async () => {
     render(
@@ -153,7 +153,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
 
     const applyButtons = screen.getAllByText("Aplicar");
     fireEvent.click(applyButtons[0]);
@@ -168,7 +168,7 @@ describe("AITemplatesPage", () => {
         title: "Template aplicado",
       })
     );
-  };
+  });
 
   it("should copy template to clipboard", async () => {
     render(
@@ -179,7 +179,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
 
     const copyButtons = screen.getAllByText("Copiar");
     fireEvent.click(copyButtons[0]);
@@ -193,8 +193,8 @@ describe("AITemplatesPage", () => {
           title: "Template copiado",
         })
       );
-  };
-  };
+  });
+  });
 
   it("should toggle favorite status", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -207,7 +207,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
 
     // Find star buttons (favorite toggle)
     const starButtons = screen.getAllByRole("button").filter(
@@ -221,8 +221,8 @@ describe("AITemplatesPage", () => {
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
       expect(toast).toHaveBeenCalled();
-  };
-  };
+  });
+  });
 
   it("should open create dialog", async () => {
     render(
@@ -237,8 +237,8 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("Título *")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should create new template", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -255,7 +255,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("Título *")).toBeInTheDocument();
-  };
+  });
 
     // Fill in form
     const titleInput = screen.getByLabelText("Título *");
@@ -277,8 +277,8 @@ describe("AITemplatesPage", () => {
           title: "Template criado",
         })
       );
-  };
-  };
+  });
+  });
 
   it("should show validation error when creating template without required fields", async () => {
     render(
@@ -293,7 +293,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("Título *")).toBeInTheDocument();
-  };
+  });
 
     // Try to submit without filling fields
     const submitButton = screen.getByText("Criar Template");
@@ -308,8 +308,8 @@ describe("AITemplatesPage", () => {
           variant: "destructive",
         })
       );
-  };
-  };
+  });
+  });
 
   it("should add and remove tags", async () => {
     render(
@@ -324,7 +324,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("Tags")).toBeInTheDocument();
-  };
+  });
 
     // Add tag
     const tagInput = screen.getByLabelText("Tags");
@@ -335,8 +335,8 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("test-tag")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should navigate to editor", () => {
     render(
@@ -350,4 +350,4 @@ describe("AITemplatesPage", () => {
 
     expect(mockNavigate).toHaveBeenCalledWith("/admin/documents/ai");
   });
-};
+});

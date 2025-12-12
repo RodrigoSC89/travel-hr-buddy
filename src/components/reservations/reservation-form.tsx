@@ -104,7 +104,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       status: "confirmed",
       notes: ""
     });
-  };
+  });
 
   const handleTemplateUse = (templateData: unknown) => {
     setFormData({
@@ -120,7 +120,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       currency: templateData.currency || "BRL",
       notes: templateData.notes || ""
     });
-  };
+  });
 
   const validateForm = () => {
     if (!formData.title.trim()) {
@@ -533,4 +533,4 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       />
     </>
   );
-};
+});

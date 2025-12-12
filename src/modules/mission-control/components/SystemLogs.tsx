@@ -91,7 +91,7 @@ export const SystemLogs: React.FC = () => {
       minute: "2-digit",
       second: "2-digit"
     });
-  };
+  });
 
   return (
     <Card className="bg-zinc-800/50 border-zinc-700">

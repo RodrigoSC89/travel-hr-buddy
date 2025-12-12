@@ -200,7 +200,7 @@ export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
       {action && <div className="flex items-center gap-3">{action}</div>}
     </div>
   );
-};
+});
 
 // ============================================
 // EMPTY STATE - Estado vazio profissional
@@ -231,7 +231,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {action && <div className="mt-4">{action}</div>}
     </div>
   );
-};
+});
 
 // ============================================
 // STAT GRID - Grid de estatísticas
@@ -263,7 +263,7 @@ export const StatGrid: React.FC<StatGridProps> = ({
       {children}
     </div>
   );
-};
+});
 
 // ============================================
 // DIVIDER - Divisor profissional
@@ -299,7 +299,7 @@ export const Divider: React.FC<DividerProps> = ({
       className
     )} />
   );
-};
+});
 
 // ============================================
 // CHART CONTAINER - Container para gráficos
@@ -334,7 +334,7 @@ export const ChartContainer: React.FC<ChartContainerProps> = ({
       {children}
     </div>
   );
-};
+});
 
 export default {
   MetricCard,

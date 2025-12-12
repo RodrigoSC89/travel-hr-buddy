@@ -126,7 +126,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       if (alertsChannel) supabase.removeChannel(alertsChannel);
       if (maintenanceChannel) supabase.removeChannel(maintenanceChannel);
       if (intervalId) clearInterval(intervalId);
-    };
+    });
   }, [userId, variant, autoRefresh, refreshInterval]);
 
   const loadNotifications = async () => {
@@ -210,7 +210,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
     setNotifications(prev => [notification, ...prev]);
     setUnreadCount(prev => prev + 1);
-  };
+  });
 
   const createNotificationFromMaintenance = (maintenance: unknown) => {
     const notification: Notification = {
@@ -226,7 +226,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
     setNotifications(prev => [notification, ...prev]);
     setUnreadCount(prev => prev + 1);
-  };
+  });
 
   const markAsRead = async (notificationId: string) => {
     try {
@@ -327,7 +327,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     if (filter === "unread") return !n.isRead;
     if (filter === "high") return n.priority === "high" || n.priority === "critical";
     return true;
-  };
+  });
 
   if (loading) {
     return (
@@ -449,6 +449,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       </CardContent>
     </Card>
   );
-};
+});
 
 export default NotificationCenter;

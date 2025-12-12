@@ -193,7 +193,7 @@ const RealTimeTracking: React.FC = () => {
       speed: vessel.status === "sailing" ? vessel.speed + (Math.random() - 0.5) * 2 : 0,
       lastUpdate: new Date().toISOString()
     })));
-  };
+  });
 
   // Real-time updates with optimized polling
   useOptimizedPolling({
@@ -234,7 +234,7 @@ const RealTimeTracking: React.FC = () => {
 
   const formatCoordinates = (lat: number, lng: number) => {
     return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
-  };
+  });
 
   const filteredVessels = vessels.filter(vessel =>
     vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

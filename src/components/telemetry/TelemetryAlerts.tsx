@@ -70,7 +70,7 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
         alert.message.toLowerCase().includes(searchQuery.toLowerCase());
       
       return matchesType && matchesSeverity && matchesSearch;
-  };
+  });
   }, [alerts, filter, severityFilter, searchQuery]);
 
   const unreadCount = alerts.filter(a => !a.read).length;
@@ -81,27 +81,27 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
     );
     setAlerts(updated);
     onAlertsChange?.(updated);
-  };
+  });
 
   const markAllAsRead = () => {
     const updated = alerts.map(a => ({ ...a, read: true }));
     setAlerts(updated);
     onAlertsChange?.(updated);
     toast.success("Todos os alertas marcados como lidos");
-  };
+  });
 
   const deleteAlert = (id: string) => {
     const updated = alerts.filter(a => a.id !== id);
     setAlerts(updated);
     onAlertsChange?.(updated);
     toast.success("Alerta removido");
-  };
+  });
 
   const clearAllAlerts = () => {
     setAlerts([]);
     onAlertsChange?.([]);
     toast.success("Todos os alertas foram limpos");
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -128,7 +128,7 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
       security: "Segurança",
     };
     return labels[type] || type;
-  };
+  });
 
   return (
     <Card className="h-full flex flex-col">

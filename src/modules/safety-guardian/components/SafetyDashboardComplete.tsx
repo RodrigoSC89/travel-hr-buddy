@@ -203,18 +203,18 @@ export const SafetyDashboardComplete: React.FC = () => {
 
   const handleSubmitReport = async (incident: Partial<SafetyIncident>) => {
     await createIncident(incident);
-  };
+  });
 
   const handleViewDetails = (incident: SafetyIncident) => {
     setSelectedIncident(incident);
     setDetailsDialogOpen(true);
-  };
+  });
 
   const handleAnalyzeIncident = async (incident: SafetyIncident) => {
     setSelectedIncident(incident);
     setDetailsDialogOpen(true);
     return analyzeIncident(incident);
-  };
+  });
 
   const handleCreateDDS = async (record: Partial<DDSRecord>) => {
     const newRecord: DDSRecord = {
@@ -231,7 +231,7 @@ export const SafetyDashboardComplete: React.FC = () => {
       created_at: new Date().toISOString()
     };
     setDdsRecords(prev => [newRecord, ...prev]);
-  };
+  });
 
   const handleSaveSettings = async (newSettings: SafetySettings) => {
     setSettings(newSettings);

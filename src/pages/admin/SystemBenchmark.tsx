@@ -32,7 +32,7 @@ export default function SystemBenchmark() {
     if (score >= 80) return "text-green-600";
     if (score >= 60) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants = {
@@ -42,7 +42,7 @@ export default function SystemBenchmark() {
       poor: "destructive"
     } as const;
     return variants[status as keyof typeof variants] || "outline";
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

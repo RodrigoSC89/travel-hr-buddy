@@ -21,7 +21,7 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
         if (question) break;
       }
       return { questionId, ...value, question };
-};
+});
 
   if (nonConformities.length === 0) {
     return (
@@ -77,4 +77,4 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
       </CardContent>
     </Card>
   );
-};
+});

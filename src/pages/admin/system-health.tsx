@@ -116,11 +116,11 @@ export default function SystemHealthPage() {
     ) : (
       <XCircle className="h-5 w-5 text-red-500" />
     );
-  };
+  });
 
   const getStatusText = (success: boolean) => {
     return success ? "OK ✅" : "Erro ❌";
-  };
+  });
 
   if (loading && !status) {
     return (

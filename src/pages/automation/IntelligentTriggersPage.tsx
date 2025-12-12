@@ -134,7 +134,7 @@ export default function IntelligentTriggersPage() {
 
   const toggleTrigger = (id: number) => {
     setTriggerStates((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  });
 
   return (
     <ModulePageWrapper gradient="orange">

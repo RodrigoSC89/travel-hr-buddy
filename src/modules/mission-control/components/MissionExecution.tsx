@@ -120,4 +120,4 @@ export const MissionExecution: React.FC<MissionExecutionProps> = ({ missions, ta
       </CardContent>
     </Card>
   );
-};
+});

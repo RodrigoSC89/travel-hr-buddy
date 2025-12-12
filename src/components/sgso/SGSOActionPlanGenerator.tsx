@@ -52,7 +52,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
       title: "Exemplo carregado",
       description: "Dados de exemplo foram carregados no formulário.",
     });
-  };
+  });
 
   const handleClear = () => {
     setDescription("");
@@ -65,7 +65,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
       title: "Formulário limpo",
       description: "Todos os campos foram resetados.",
     });
-  };
+  });
 
   const handleGenerate = async () => {
     // Validation

@@ -133,7 +133,7 @@ export default function UserManagement() {
         {role.toUpperCase()}
       </Badge>
     );
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     return status === "active" ? (
@@ -143,7 +143,7 @@ export default function UserManagement() {
         Inactive
       </Badge>
     );
-  };
+  });
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -153,7 +153,7 @@ export default function UserManagement() {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
 
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   if (loading) {
     return (

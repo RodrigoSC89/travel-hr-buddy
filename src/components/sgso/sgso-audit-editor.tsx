@@ -25,7 +25,7 @@ const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
   return { jsPDF, autoTable };
-};
+});
 
 interface AuditArea {
   id: string;
@@ -106,13 +106,13 @@ export default function SGSOAuditEditor() {
       comments: "",
       evidence: []
     }]);
-  };
+  });
 
   const handleUpdateResult = (index: number, updates: Partial<AuditResult>) => {
     const updated = [...auditResults];
     updated[index] = { ...updated[index], ...updates };
     setAuditResults(updated);
-  };
+  });
 
   const handleSaveAudit = async () => {
     if (!vesselId) {
@@ -187,7 +187,7 @@ export default function SGSOAuditEditor() {
     if (ratio > 0.3) return "high";
     if (ratio > 0.1) return "medium";
     return "low";
-  };
+  });
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -252,7 +252,7 @@ export default function SGSOAuditEditor() {
         {status}
       </Badge>
     );
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -146,7 +146,7 @@ export const DevOpsPanel = memo(function() {
     circuitBreakerRegistry.resetAll();
     addLog("info", "Circuit", "Todos os circuit breakers resetados");
     collectMetrics();
-  };
+  });
 
   // Clear all caches
   const clearAllCaches = async () => {
@@ -179,7 +179,7 @@ export const DevOpsPanel = memo(function() {
     URL.revokeObjectURL(url);
     
     addLog("info", "DevOps", "Logs exportados");
-  };
+  });
 
   // Auto refresh
   useEffect(() => {
@@ -197,13 +197,13 @@ export const DevOpsPanel = memo(function() {
     const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
-  };
+  });
 
   const formatUptime = (ms: number) => {
     const hours = Math.floor(ms / 3600000);
     const minutes = Math.floor((ms % 3600000) / 60000);
     return `${hours}h ${minutes}m`;
-  };
+  });
 
   return (
     <div className="p-4 space-y-4">

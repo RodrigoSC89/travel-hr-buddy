@@ -38,7 +38,7 @@ const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   await import("jspdf-autotable");
   return jsPDF;
-};
+});
 
 interface TravelItinerary {
   id: string;
@@ -134,7 +134,7 @@ const TravelManagement = () => {
     return () => {
       supabase.removeChannel(itinerariesChannel);
       supabase.removeChannel(conflictsChannel);
-    };
+    });
   }, []);
 
   const loadItineraries = async () => {
@@ -613,6 +613,6 @@ const TravelManagement = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default TravelManagement;

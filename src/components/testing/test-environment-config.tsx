@@ -36,7 +36,7 @@ export const TestEnvironmentConfig: React.FC = () => {
 
   const handleConfigChange = (key: keyof TestConfig, value: boolean | string) => {
     setConfig(prev => ({ ...prev, [key]: value }));
-  };
+  });
 
   const applyConfiguration = () => {
     // Simulate applying configuration
@@ -46,7 +46,7 @@ export const TestEnvironmentConfig: React.FC = () => {
       title: "Configuração Aplicada",
       description: `Ambiente configurado para ${config.environment}`,
     });
-  };
+  });
 
   const resetToDefaults = () => {
     setConfig({
@@ -64,7 +64,7 @@ export const TestEnvironmentConfig: React.FC = () => {
       title: "Configuração Resetada",
       description: "Voltou às configurações padrão",
     });
-  };
+  });
 
   const exportConfig = () => {
     const dataStr = JSON.stringify(config, null, 2);
@@ -81,7 +81,7 @@ export const TestEnvironmentConfig: React.FC = () => {
       title: "Configuração Exportada",
       description: "Arquivo de configuração baixado",
     });
-  };
+  });
 
   const getEnvironmentBadge = (env: string) => {
     switch (env) {
@@ -307,4 +307,4 @@ export const TestEnvironmentConfig: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

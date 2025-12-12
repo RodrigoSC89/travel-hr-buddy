@@ -196,11 +196,11 @@ export const CrewRotationPlanner: React.FC = () => {
         description: "Economia potencial de R$ 15.500 identificada!",
       });
     }, 2000);
-  };
+  });
 
   const handleCreateRotation = () => {
     setIsDialogOpen(true);
-  };
+  });
 
   const totalCosts = rotations.reduce((sum, rotation) => sum + rotation.costs.total, 0);
   const potentialSavings = optimizations.reduce((sum, opt) => sum + opt.potential_savings, 0);
@@ -649,4 +649,4 @@ export const CrewRotationPlanner: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});

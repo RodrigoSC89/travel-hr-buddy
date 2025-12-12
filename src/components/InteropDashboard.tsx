@@ -107,7 +107,7 @@ export default function InteropDashboard() {
       missionsSubscription.unsubscribe();
       agentsSubscription.unsubscribe();
       trustSubscription.unsubscribe();
-    };
+    });
   }, []);
 
   const loadDashboardData = async () => {
@@ -526,7 +526,7 @@ function ProtocolStatusMap({ logs }: { logs: InteropLog[] }) {
   Object.keys(protocolStats).forEach(protocol => {
     protocolStats[protocol].avgLatency = 
       protocolStats[protocol].avgLatency / protocolStats[protocol].total;
-  };
+  });
 
   return (
     <div className="space-y-3">

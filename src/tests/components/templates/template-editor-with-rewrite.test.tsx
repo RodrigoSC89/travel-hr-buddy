@@ -41,19 +41,19 @@ vi.mock("@tiptap/react", () => ({
 describe("TemplateEditorWithRewrite Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the editor", () => {
     render(<TemplateEditorWithRewrite />);
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  };
+  });
 
   it("should render the rewrite button", () => {
     render(<TemplateEditorWithRewrite />);
     expect(
       screen.getByRole("button", { name: /Reescrever seleção com IA/i })
     ).toBeInTheDocument();
-  };
+  });
 
   it("should show loading state when rewriting", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -73,8 +73,8 @@ describe("TemplateEditorWithRewrite Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Reescrevendo.../i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should call supabase function on button click", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -94,8 +94,8 @@ describe("TemplateEditorWithRewrite Component", () => {
       expect(supabase.functions.invoke).toHaveBeenCalledWith("rewrite-selection", {
         body: { input: "Test text to rewrite" },
       });
-  };
-  };
+  });
+  });
 
   it("should show success toast on successful rewrite", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -118,8 +118,8 @@ describe("TemplateEditorWithRewrite Component", () => {
         title: "Texto reescrito com sucesso",
         description: "A seleção foi reformulada com IA.",
       });
-  };
-  };
+  });
+  });
 
   it("should show error toast on failure", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -143,6 +143,6 @@ describe("TemplateEditorWithRewrite Component", () => {
         description: "Não foi possível reescrever o texto. Tente novamente.",
         variant: "destructive",
       });
-  };
-  };
-};
+  });
+  });
+});

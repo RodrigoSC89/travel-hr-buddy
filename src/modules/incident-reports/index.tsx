@@ -428,6 +428,6 @@ const IncidentReports = () => {
       )}
     </div>
   );
-};
+});
 
 export default IncidentReports;

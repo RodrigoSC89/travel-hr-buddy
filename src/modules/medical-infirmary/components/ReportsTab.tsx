@@ -16,11 +16,11 @@ export default function ReportsTab() {
 
   const handleGenerate = (type: string) => {
     toast.success(`Gerando relatório: ${type}`);
-  };
+  });
 
   const handleDownload = (id: string) => {
     toast.success("Baixando relatório...");
-  };
+  });
 
   return (
     <div className="space-y-6">

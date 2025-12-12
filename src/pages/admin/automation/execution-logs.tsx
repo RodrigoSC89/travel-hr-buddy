@@ -15,7 +15,7 @@ import { logger } from "@/lib/logger";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 import {
   BarChart, 
   Bar, 
@@ -207,7 +207,7 @@ export default function ExecutionLogsPage() {
         success: 0,
         failed: 0,
       };
-  };
+  });
 
     filteredExecutions.forEach(exec => {
       const execDate = new Date(exec.started_at);

@@ -18,7 +18,7 @@ export default function Patch512Satcom() {
       message: `Fallback ativado: mudança para modo ${newMode === "satellite" ? "satélite" : "terrestre"}`,
       type: "warning"
     }]);
-  };
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {

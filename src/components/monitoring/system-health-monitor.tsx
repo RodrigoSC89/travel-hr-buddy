@@ -126,13 +126,13 @@ export const SystemHealthMonitor: React.FC = () => {
     if (value < 50) return "text-green-600";
     if (value < 80) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getProgressColor = (value: number) => {
     if (value < 50) return "bg-green-500";
     if (value < 80) return "bg-yellow-500";
     return "bg-red-500";
-  };
+  });
 
   const getAlertIcon = (type: string) => {
     switch (type) {

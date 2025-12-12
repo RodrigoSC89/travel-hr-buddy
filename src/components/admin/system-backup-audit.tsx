@@ -110,7 +110,7 @@ const SystemBackupAudit = () => {
         return prev + 10;
       });
     }, 500);
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

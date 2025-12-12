@@ -28,7 +28,7 @@ export default function MMICopilot() {
     try {
       await streamCopilotSuggestions(prompt, (chunk) => {
         setSuggestion((prev) => prev + chunk);
-  };
+  });
     } catch (error) {
       toast({
         title: "Erro",
@@ -44,7 +44,7 @@ export default function MMICopilot() {
   const handleExamplePrompt = (example: string) => {
     setPrompt(example);
     setSuggestion("");
-  };
+  });
 
   return (
     <Card className="w-full">

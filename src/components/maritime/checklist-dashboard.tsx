@@ -73,7 +73,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       complianceScore,
       avgCompletionTime: 45 // Mock data - would calculate from actual completion times
     });
-  };
+  });
 
   const MetricCard = ({ title, value, icon: Icon, variant = "default", subtitle }: unknown: unknown: unknown) => (
     <Card>

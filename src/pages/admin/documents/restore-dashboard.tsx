@@ -34,7 +34,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-};
+});
 
 // Register Chart.js components
 ChartJS.register(

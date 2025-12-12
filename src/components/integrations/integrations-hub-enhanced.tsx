@@ -327,7 +327,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         {status}
       </Badge>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -671,4 +671,4 @@ export const IntegrationsHubEnhanced = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

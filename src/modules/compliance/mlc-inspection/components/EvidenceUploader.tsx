@@ -60,7 +60,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
 
   const handleRemove = () => {
     setSelectedFile(null);
-  };
+  });
 
   return (
     <Card className="w-full max-w-md mx-auto">

@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         logger.error("Error fetching cron status:", error);
         setCronStatus("warning");
         setCronMessage("Erro ao carregar status do cron");
-  };
+  });
   }, []);
 
   // Fetch restore activity trend data
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
           }
           pdf.text(`${item.day}: ${item.count} restaurações`, margin, yPosition);
           yPosition += 6;
-  };
+  });
       }
 
       // Save PDF

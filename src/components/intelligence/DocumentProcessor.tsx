@@ -87,7 +87,7 @@ export const DocumentProcessor: React.FC = () => {
             return 90;
           }
           return prev + 10;
-  };
+  });
       }, 200);
 
       // Convert file to base64 for processing
@@ -166,8 +166,8 @@ export const DocumentProcessor: React.FC = () => {
         }
       };
       reader.onerror = error => reject(error);
-  };
-  };
+  });
+  });
 
   const exportAnalysis = (doc: ProcessedDocument) => {
     const analysis = {
@@ -187,7 +187,7 @@ export const DocumentProcessor: React.FC = () => {
     a.download = `analise-${doc.fileName.replace(/\.[^/.]+$/, "")}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  };
+  });
 
   const deleteDocument = (docId: string) => {
     setProcessedDocs(prev => prev.filter(doc => doc.id !== docId));
@@ -199,7 +199,7 @@ export const DocumentProcessor: React.FC = () => {
       title: "Documento Removido",
       description: "Análise foi removida da lista",
     });
-  };
+  });
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {

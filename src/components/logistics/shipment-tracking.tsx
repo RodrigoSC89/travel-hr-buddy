@@ -112,7 +112,7 @@ export const ShipmentTracking = memo(() => {
         {status.replace("_", " ")}
       </Badge>
     );
-  };
+  });
 
   const filteredShipments = shipments.filter(shipment =>
     shipment.shipment_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -124,11 +124,11 @@ export const ShipmentTracking = memo(() => {
     return shipments.filter(s => 
       !["delivered", "cancelled", "lost"].includes(s.status)
     );
-  };
+  });
 
   const getDelayedShipments = () => {
     return shipments.filter(s => s.status === "delayed");
-  };
+  });
 
   return (
     <div className="space-y-6">

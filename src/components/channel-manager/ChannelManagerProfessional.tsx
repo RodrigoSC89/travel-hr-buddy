@@ -279,7 +279,7 @@ const formatTime = (date: string | undefined) => {
   if (diff < 3600000) return `${Math.floor(diff / 60000)}min`;
   if (diff < 86400000) return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-};
+});
 
 const getChannelTypeIcon = (type?: string) => {
   switch (type) {
@@ -444,7 +444,7 @@ export default function ChannelManagerProfessional() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [selectedChannel]);
 
   // Filtered channels
@@ -458,7 +458,7 @@ export default function ChannelManagerProfessional() {
       const matchesFavorites = !showFavoritesOnly || ch.is_favorite;
       
       return matchesSearch && matchesType && matchesStatus && matchesFavorites;
-  };
+  });
   }, [channels, searchQuery, filterType, filterStatus, showFavoritesOnly]);
 
   // Channel messages

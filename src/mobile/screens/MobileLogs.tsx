@@ -47,7 +47,7 @@ export const MobileLogs: React.FC = () => {
     const matchesSearch = searchTerm === "" || 
       log.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
-  };
+  });
 
   const getLogIcon = (level: LogLevel) => {
     switch (level) {
@@ -75,7 +75,7 @@ export const MobileLogs: React.FC = () => {
         {level.toUpperCase()}
       </Badge>
     );
-  };
+  });
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -84,7 +84,7 @@ export const MobileLogs: React.FC = () => {
       minute: "2-digit",
       second: "2-digit",
     });
-  };
+  });
 
   const getLevelStats = () => {
     return {
@@ -93,7 +93,7 @@ export const MobileLogs: React.FC = () => {
       info: logs.filter(l => l.level === "info").length,
       debug: logs.filter(l => l.level === "debug").length,
     };
-  };
+  });
 
   const stats = getLevelStats();
 

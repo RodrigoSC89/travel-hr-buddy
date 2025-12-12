@@ -194,7 +194,7 @@ export default function SystemHub() {
     
     setIsRefreshing(false);
     toast.success("Dados atualizados!");
-  };
+  });
 
   // Export handler
   const handleExport = () => {
@@ -214,7 +214,7 @@ export default function SystemHub() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Relatório exportado!");
-  };
+  });
 
   // Helper functions
   const getStatusIcon = (status: string) => {

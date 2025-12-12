@@ -140,15 +140,15 @@ const EnhancedMetricsDashboard = () => {
       title: "Métricas atualizadas",
       description: "Dados atualizados com sucesso",
     });
-  };
+  });
 
   const getTrendIcon = (trend: string) => {
     return trend === "up" ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />;
-  };
+  });
 
   const getTrendColor = (trend: string) => {
     return trend === "up" ? "text-green-600" : "text-red-600";
-  };
+  });
 
   return (
     <div className="space-y-6 p-6">

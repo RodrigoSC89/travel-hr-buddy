@@ -129,7 +129,7 @@ export const AutomationWorkflowsManager = memo(() => {
     setIsCreating(false);
     setNewWorkflow({ name: "", description: "", trigger: "schedule", aiOptimized: true });
     toast.success("Workflow criado com sucesso!");
-  };
+  });
 
   const toggleWorkflow = (id: string) => {
     setWorkflows(workflows.map(w => 
@@ -137,12 +137,12 @@ export const AutomationWorkflowsManager = memo(() => {
     ));
     const workflow = workflows.find(w => w.id === id);
     toast.success(workflow?.isActive ? "Workflow pausado" : "Workflow ativado");
-  };
+  });
 
   const confirmDeleteWorkflow = (id: string) => {
     setWorkflowToDelete(id);
     setDeleteDialogOpen(true);
-  };
+  });
 
   const deleteWorkflow = () => {
     if (workflowToDelete) {

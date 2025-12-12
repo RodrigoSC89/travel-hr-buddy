@@ -239,7 +239,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
     // Simular delay de refresh
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsRefreshing(false);
-  };
+  });
 
   const formatTimeAgo = (date: Date) => {
     const diff = Date.now() - date.getTime();
@@ -248,12 +248,12 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
     
     if (minutes > 0) return `${minutes}m atrás`;
     return `${seconds}s atrás`;
-  };
+  });
 
   const getSensorProgress = (sensor: SensorData) => {
     if (!sensor.min || !sensor.max) return 0;
     return ((sensor.value - sensor.min) / (sensor.max - sensor.min)) * 100;
-  };
+  });
 
   const onlineVessels = vessels.filter(v => v.isOnline).length;
   const criticalAlerts = vessels.reduce((count, vessel) => 

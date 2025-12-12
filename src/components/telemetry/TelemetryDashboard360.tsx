@@ -142,7 +142,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
     });
 
     setAlerts(prev => [...newAlerts, ...prev.slice(0, 50)]);
-  };
+  });
 
   useEffect(() => {
     loadDashboardData();

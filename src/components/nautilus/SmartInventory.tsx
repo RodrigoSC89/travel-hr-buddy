@@ -80,7 +80,7 @@ export const SmartInventory = memo(function() {
     const stock = item.quantity || item.current_stock || 50;
     const dailyUsage = 2; // Estimated
     return Math.floor(stock / dailyUsage);
-  };
+  });
 
   const calculateTrend = (item: unknown: unknown: unknown): "up" | "down" | "stable" => {
     const stock = item.quantity || item.current_stock || 50;
@@ -88,7 +88,7 @@ export const SmartInventory = memo(function() {
     if (stock < min) return "down";
     if (stock > min * 3) return "up";
     return "stable";
-  };
+  });
 
   const getDemoItems = (): InventoryItem[] => [
     { id: "1", name: "Óleo Lubrificante 15W40", category: "Lubrificantes", currentStock: 45, minStock: 20, maxStock: 100, unit: "L", lastRestocked: "2024-11-15", predictedDaysLeft: 30, trend: "stable" },
@@ -103,7 +103,7 @@ export const SmartInventory = memo(function() {
 
   const handleRequestRestock = (itemId: string, itemName: string) => {
     toast.success(`Solicitação de reposição enviada para: ${itemName}`);
-  };
+  });
 
   const categories = ["all", ...new Set(items.map(i => i.category))];
   
@@ -118,13 +118,13 @@ export const SmartInventory = memo(function() {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const getStockStatus = (item: InventoryItem) => {
     if (item.currentStock < item.minStock) return { color: "text-red-500", bg: "bg-red-500/10", label: "Crítico" };
     if (item.currentStock > item.maxStock) return { color: "text-amber-500", bg: "bg-amber-500/10", label: "Excesso" };
     return { color: "text-emerald-500", bg: "bg-emerald-500/10", label: "OK" };
-  };
+  });
 
   if (isLoading) {
     return (

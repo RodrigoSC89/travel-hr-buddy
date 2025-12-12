@@ -261,7 +261,7 @@ const MaintenanceManagement: React.FC = () => {
     const matchesPriority = priorityFilter === "all" || record.priority === priorityFilter;
     
     return matchesSearch && matchesStatus && matchesPriority;
-  };
+  });
 
   // Calculate stats
   const stats = {

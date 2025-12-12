@@ -69,8 +69,8 @@ export const QREquipmentManager = memo(() => {
     case "maintenance": return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
     case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
     default: return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
-    };
-  };
+    });
+  });
 
   const handleCreateEquipment = () => {
     toast({
@@ -78,20 +78,20 @@ export const QREquipmentManager = memo(() => {
       description: "Novo equipamento foi cadastrado com QR code gerado.",
     });
     setIsCreateOpen(false);
-  };
+  });
 
   const handleScanQR = () => {
     toast({
       title: "Scanner QR",
       description: "Abra a câmera para escanear o código QR do equipamento.",
     });
-  };
+  });
 
   const generateQRCode = (equipment: QREquipment) => {
     // Simulate QR code generation
     const qrData = `${window.location.origin}/equipment/${equipment.id}`;
     return qrData;
-  };
+  });
 
   return (
     <div className="space-y-6">

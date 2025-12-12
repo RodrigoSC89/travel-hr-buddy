@@ -280,7 +280,7 @@ export const IoTSensorDashboard = memo(() => {
         </div>
       </div>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">

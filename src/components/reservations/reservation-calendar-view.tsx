@@ -43,7 +43,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
       newDate.setMonth(newDate.getMonth() + 1);
     }
     setCurrentDate(newDate);
-  };
+  });
 
   const getDaysInMonth = (): CalendarDay[] => {
     const year = currentDate.getFullYear();
@@ -85,8 +85,8 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
       
       // Check if reservation spans this day
       return startDate <= dayEnd && endDate >= dayStart;
-  };
-  };
+  });
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

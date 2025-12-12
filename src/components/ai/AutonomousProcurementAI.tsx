@@ -487,6 +487,6 @@ export const AutonomousProcurementAI: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AutonomousProcurementAI;

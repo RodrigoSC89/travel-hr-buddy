@@ -114,12 +114,12 @@ export const Patch608Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  };
+  });
     }
 
     setResults(testResults);
     setLoading(false);
-  };
+  });
 
   const allPassed = Object.values(results).every(v => v === true);
   const hasResults = Object.keys(results).length > 0;

@@ -79,7 +79,7 @@ const AITraining: React.FC = () => {
     if (score >= 70) return "text-blue-600";
     if (score >= 50) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -288,6 +288,6 @@ const AITraining: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default AITraining;

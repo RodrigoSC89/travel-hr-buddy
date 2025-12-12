@@ -148,7 +148,7 @@ export default function DPAlerts() {
         ? prev.severity.filter(s => s !== severity)
         : [...prev.severity, severity],
     }));
-  };
+  });
 
   const toggleSourceFilter = (source: string) => {
     setFilters(prev => ({
@@ -157,17 +157,17 @@ export default function DPAlerts() {
         ? prev.source.filter(s => s !== source)
         : [...prev.source, source],
     }));
-  };
+  });
 
   const applyFilters = () => {
     setFilterOpen(false);
     toast.success("Filtros aplicados");
-  };
+  });
 
   const clearFilters = () => {
     setFilters({ severity: [], source: [], acknowledged: null });
     toast.info("Filtros limpos");
-  };
+  });
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -201,7 +201,7 @@ export default function DPAlerts() {
         alert.id === id ? { ...alert, acknowledged: true } : alert
       )
     );
-  };
+  });
 
   const toggleConfig = (index: number, field: "enabled" | "sound") => {
     setConfig(prev =>
@@ -209,7 +209,7 @@ export default function DPAlerts() {
         i === index ? { ...item, [field]: !item[field] } : item
       )
     );
-  };
+  });
 
   const unacknowledgedCount = activeAlerts.filter(a => !a.acknowledged).length;
   const criticalCount = activeAlerts.filter(a => a.severity === "critical" && !a.acknowledged).length;

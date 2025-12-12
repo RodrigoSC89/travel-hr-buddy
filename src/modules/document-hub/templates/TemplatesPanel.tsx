@@ -136,12 +136,12 @@ export default function TemplatesPanel() {
     setTemplates(templates.map(t => t.id === updatedTemplate.id ? updatedTemplate : t));
     toast.success("Template atualizado com sucesso!");
     setEditingTemplate(null);
-  };
+  });
 
   const handleDeleteTemplate = (id: string) => {
     setTemplates(templates.filter(t => t.id !== id));
     toast.info("Template removido");
-  };
+  });
 
   const handlePreview = (template: Template) => {
     setPreviewTemplate(template);
@@ -149,9 +149,9 @@ export default function TemplatesPanel() {
     template.variables.forEach(v => {
       const varName = v.replace(/\{\{|\}\}/g, "");
       initialVariables[varName] = "";
-  };
+  });
     setPreviewVariables(initialVariables);
-  };
+  });
 
   const renderPreview = (): string => {
     if (!previewTemplate) return "";
@@ -182,7 +182,7 @@ export default function TemplatesPanel() {
     });
     
     return content;
-  };
+  });
 
   const handleExportPDF = async (template: Template) => {
     try {
@@ -219,7 +219,7 @@ export default function TemplatesPanel() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toast.success("HTML exportado com sucesso!");
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

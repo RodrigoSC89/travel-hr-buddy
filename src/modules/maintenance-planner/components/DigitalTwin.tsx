@@ -399,13 +399,13 @@ export default function DigitalTwin() {
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-    };
+    });
   }, [isLive]);
 
   const getOverallHealth = () => {
     const avg = telemetry.systems.reduce((acc, sys) => acc + sys.health, 0) / telemetry.systems.length;
     return avg;
-  };
+  });
 
   const criticalSystems = telemetry.systems.filter(s => s.status === "critical" || s.status === "warning");
 

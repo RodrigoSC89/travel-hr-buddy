@@ -56,7 +56,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
 
   const insertVariable = (variable: string) => {
     editor.chain().focus().insertContent(`{{${variable}}}`).run();
-  };
+  });
 
   // Common document variables
   const commonVariables = [
@@ -178,4 +178,4 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
       <EditorContent editor={editor} />
     </div>
   );
-};
+});

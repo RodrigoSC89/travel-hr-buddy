@@ -55,11 +55,11 @@ export default function ProcurementInventory() {
 
   const handleMarkAllAsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  };
+  });
 
   const handleNotificationClick = (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
 

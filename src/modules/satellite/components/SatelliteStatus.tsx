@@ -31,7 +31,7 @@ export const SatelliteStatus = memo(function({ satellites }: SatelliteStatusProp
     if (strength >= 80) return "text-success";
     if (strength >= 50) return "text-warning";
     return "text-destructive";
-  };
+  });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

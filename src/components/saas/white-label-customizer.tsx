@@ -63,7 +63,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       [field]: value
     }));
     setHasChanges(true);
-  };
+  });
 
   const handleNestedChange = (parent: string, field: string, value: unknown) => {
     setFormData(prev => {
@@ -80,7 +80,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       return prev;
     });
     setHasChanges(true);
-  };
+  });
 
   const handleSave = async () => {
     if (!currentBranding) return;
@@ -122,7 +122,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       business_rules: currentBranding?.business_rules || {}
     });
     setHasChanges(false);
-  };
+  });
 
   const languages = [
     { value: "pt-BR", label: "Português (Brasil)" },

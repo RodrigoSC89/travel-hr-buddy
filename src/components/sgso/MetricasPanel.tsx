@@ -159,7 +159,7 @@ export const MetricasPanel = memo(() => {
     link.href = url;
     link.download = `metricas-sgso-${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
-  };
+  });
 
   // Get unique vessel names for filter
   const uniqueVessels = Array.from(new Set(metricsEmbarcacao.map(item => item.nome_navio)));
@@ -365,4 +365,4 @@ export const MetricasPanel = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

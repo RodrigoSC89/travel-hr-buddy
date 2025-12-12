@@ -74,7 +74,7 @@ const CollaboratorRegistry: React.FC = () => {
     const matchesDepartment = selectedDepartment === "todos" || c.departamento === selectedDepartment;
     const matchesStatus = selectedStatus === "todos" || c.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -109,9 +109,9 @@ const CollaboratorRegistry: React.FC = () => {
         toast.success(`Arquivo "${file.name}" importado com sucesso! 15 colaboradores adicionados.`);
       }
       setIsLoading(false);
-    };
+    });
     input.click();
-  };
+  });
 
   const handleExport = async () => {
     setIsLoading(true);
@@ -133,7 +133,7 @@ const CollaboratorRegistry: React.FC = () => {
     
     setIsLoading(false);
     toast.success("Arquivo CSV exportado com sucesso!");
-  };
+  });
 
   const handleAddColaborador = async () => {
     if (!newColaborador.nome || !newColaborador.email || !newColaborador.cargo) {
@@ -171,19 +171,19 @@ const CollaboratorRegistry: React.FC = () => {
   const handleViewDocuments = (colaborador: Colaborador) => {
     setSelectedColaborador(colaborador);
     setIsDocumentsDialogOpen(true);
-  };
+  });
 
   const handleViewTraining = (colaborador: Colaborador) => {
     setSelectedColaborador(colaborador);
     setIsTrainingDialogOpen(true);
-  };
+  });
 
   const clearFilters = () => {
     setSelectedDepartment("todos");
     setSelectedStatus("todos");
     setSearchTerm("");
     toast.info("Filtros limpos");
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -623,6 +623,6 @@ const CollaboratorRegistry: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default CollaboratorRegistry;

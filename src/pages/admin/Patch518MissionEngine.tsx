@@ -124,7 +124,7 @@ export default function Patch518MissionEngine() {
       prev.map((m) => (m.id === missionId ? { ...m, status: newStatus } : m))
     );
     toast.success(`Status atualizado para: ${newStatus}`);
-  };
+  });
 
   const updateTaskStatus = (taskId: string, newStatus: MissionTask["status"]) => {
     if (!selectedMission) return;
@@ -144,7 +144,7 @@ export default function Patch518MissionEngine() {
 
     setSelectedMission({ ...selectedMission, tasks: updatedTasks, progress });
     toast.success("Status da tarefa atualizado");
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

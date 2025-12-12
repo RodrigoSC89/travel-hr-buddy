@@ -19,7 +19,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-};
+});
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -86,7 +86,7 @@ export default function AssistantReportLogsPage() {
       const [dayA, monthA] = a.split("/");
       const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
-  };
+  });
 
     return {
       labels: sortedDates,

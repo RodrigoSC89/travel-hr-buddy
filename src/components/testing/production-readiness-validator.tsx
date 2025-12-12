@@ -97,7 +97,7 @@ export const ProductionReadinessValidator: React.FC = () => {
     }
 
     setIsRunning(false);
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

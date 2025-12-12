@@ -105,7 +105,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
-      };
+      });
 
       recognition.onerror = () => {
         setIsListening(false);
@@ -114,11 +114,11 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           description: "Não foi possível capturar o áudio",
           variant: "destructive"
         });
-      };
+      });
 
       recognition.onend = () => {
         setIsListening(false);
-      };
+      });
 
       setRecognition(recognition);
     }
@@ -146,7 +146,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  });
 
   const toggleListening = () => {
     if (!recognition) {
@@ -235,7 +235,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
-  };
+  });
 
   const handleActionClick = (action: string, data?: Record<string, unknown>) => {
     if (onAction) {
@@ -246,7 +246,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       title: "Ação executada",
       description: `${action} foi executado com sucesso`,
     });
-  };
+  });
 
   const renderMessage = (message: Message) => {
     const isUser = message.type === "user";
@@ -314,7 +314,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         </div>
       </div>
     );
-  };
+  });
 
   return (
     <Card className="h-[600px] flex flex-col">

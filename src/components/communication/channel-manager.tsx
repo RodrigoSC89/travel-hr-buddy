@@ -242,7 +242,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     
     return () => {
       mounted = false;
-    };
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -353,7 +353,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
-  };
+  });
 
   if (loading) {
     return (

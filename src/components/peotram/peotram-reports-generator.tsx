@@ -151,7 +151,7 @@ export const PeotramReportsGenerator: React.FC = () => {
         ? [...prev.sections, sectionId]
         : prev.sections.filter(id => id !== sectionId)
     }));
-  };
+  });
 
   const generateReport = async () => {
     setIsGenerating(true);
@@ -186,11 +186,11 @@ export const PeotramReportsGenerator: React.FC = () => {
 
   const scheduleReport = () => {
     alert("Funcionalidade de agendamento de relatórios será implementada em breve.");
-  };
+  });
 
   const previewReport = () => {
     alert("Visualização do relatório será implementada em breve.");
-  };
+  });
 
   return (
     <div className="space-y-6">

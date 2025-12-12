@@ -109,7 +109,7 @@ export const APIStatus: React.FC = () => {
     })));
     
     setIsRefreshing(false);
-  };
+  });
 
   const getStatusIcon = (status: APIService["status"]) => {
     switch (status) {
@@ -145,7 +145,7 @@ export const APIStatus: React.FC = () => {
     else if (responseTime > 500) className = "bg-warning/20 text-warning";
     
     return <Badge variant="outline" className={className}>{responseTime}ms</Badge>;
-  };
+  });
 
   const getRelativeTime = (date?: Date) => {
     if (!date) return "Nunca testado";
@@ -156,7 +156,7 @@ export const APIStatus: React.FC = () => {
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m atrás`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}h atrás`;
     return `${Math.floor(seconds / 86400)}d atrás`;
-  };
+  });
 
   const connectedCount = services.filter(s => s.status === "connected").length;
   const disconnectedCount = services.filter(s => s.status === "disconnected").length;

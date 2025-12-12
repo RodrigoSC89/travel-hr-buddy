@@ -104,7 +104,7 @@ const getSeverityColor = (severity: string) => {
     negligible: "bg-gray-600 text-white border-gray-700"
   };
   return colors[severity as keyof typeof colors] || "bg-gray-600";
-};
+});
 
 const getStatusColor = (status: string) => {
   const colors = {
@@ -114,7 +114,7 @@ const getStatusColor = (status: string) => {
     closed: "bg-secondary text-secondary-foreground border-border"
   };
   return colors[status as keyof typeof colors] || "bg-gray-100";
-};
+});
 
 const getTypeLabel = (type: string) => {
   const labels = {
@@ -126,7 +126,7 @@ const getTypeLabel = (type: string) => {
     other: "Outro"
   };
   return labels[type as keyof typeof labels] || type;
-};
+});
 
 const getStatusLabel = (status: string) => {
   const labels = {
@@ -136,7 +136,7 @@ const getStatusLabel = (status: string) => {
     closed: "Fechado"
   };
   return labels[status as keyof typeof labels] || status;
-};
+});
 
 const getSeverityLabel = (severity: string) => {
   const labels = {
@@ -147,7 +147,7 @@ const getSeverityLabel = (severity: string) => {
     negligible: "Negligível"
   };
   return labels[severity as keyof typeof labels] || severity;
-};
+});
 
 export const IncidentReporting: React.FC = () => {
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
@@ -192,11 +192,11 @@ export const IncidentReporting: React.FC = () => {
       title: "🔍 Busca de Incidentes",
       description: "Digite o número do incidente, título ou palavra-chave"
     });
-  };
+  });
 
   const handleOpenAIClassification = () => {
     setShowAIModal(true);
-  };
+  });
 
   const handleClassificationComplete = (classification: IncidentClassification) => {
     setAIClassification(classification);
@@ -205,7 +205,7 @@ export const IncidentReporting: React.FC = () => {
       description: `Categoria: ${classification.sgso_category}, Risco: ${classification.sgso_risk_level}`,
     });
     logger.info("AI Classification applied:", classification);
-  };
+  });
 
   const handleSubmitIncident = () => {
     if (!incidentForm.title || !incidentForm.type || !incidentForm.severity) {
@@ -222,7 +222,7 @@ export const IncidentReporting: React.FC = () => {
     });
     setNewIncidentDialogOpen(false);
     setIncidentForm({ title: "", type: "", severity: "", description: "", vessel: "", location: "", reportedBy: "" });
-  };
+  });
 
   const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {
     const matchesSearch = searchQuery === "" || 
@@ -234,7 +234,7 @@ export const IncidentReporting: React.FC = () => {
     const matchesType = filterType[incident.type];
     
     return matchesSearch && matchesSeverity && matchesType;
-  };
+  });
 
   return (
     <div className="space-y-6">

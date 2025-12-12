@@ -164,19 +164,19 @@ export const DPCompetenceHub: React.FC = () => {
       member.vessel.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === "all" || member.role === filterRole;
     return matchesSearch && matchesRole;
-  };
+  });
 
   const getExpiringCerts = () => {
     return crewMembers.flatMap(m => m.certifications.filter(c => c.status === "expiring" || c.status === "expired").map(c => ({ ...c, crewName: m.name, crewRole: m.role })));
-  };
+  });
 
   const getOverdueTrainings = () => {
     return crewMembers.flatMap(m => m.trainings.filter(t => t.status === "overdue").map(t => ({ ...t, crewName: m.name, crewRole: m.role })));
-  };
+  });
 
   const handleStartAssessment = (assessment: Assessment) => {
     toast.success(`Iniciando avaliação: ${assessment.name}`);
-  };
+  });
 
   const getCertStatusBadge = (status: string) => {
     switch (status) {

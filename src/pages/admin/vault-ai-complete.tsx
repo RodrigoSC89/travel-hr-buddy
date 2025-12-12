@@ -157,7 +157,7 @@ export default function VaultAIComplete() {
         queryTerms.forEach(term => {
           const occurrences = (contentLower.match(new RegExp(term, "g")) || []).length;
           score += occurrences * 0.1;
-  };
+  });
 
         // Boost score for title matches
         if (doc.title.toLowerCase().includes(queryLower)) {
@@ -211,7 +211,7 @@ export default function VaultAIComplete() {
       let score = 0;
       queryTerms.forEach(term => {
         if (excerptLower.includes(term)) score++;
-  };
+  });
 
       if (score > bestScore) {
         bestScore = score;
@@ -224,12 +224,12 @@ export default function VaultAIComplete() {
     queryTerms.forEach(term => {
       const regex = new RegExp(`(${term})`, "gi");
       highlighted = highlighted.replace(regex, "<mark>$1</mark>");
-  };
+  });
 
     return highlighted.length > maxLength 
       ? highlighted.substring(0, maxLength) + "..."
       : highlighted;
-  };
+  });
 
   const getDocumentTypeIcon = (type: string) => {
     switch (type) {
@@ -247,7 +247,7 @@ export default function VaultAIComplete() {
     if (score >= 0.6) return "text-blue-600";
     if (score >= 0.4) return "text-yellow-600";
     return "text-gray-600";
-  };
+  });
 
   const uniqueTypes = Array.from(new Set(documents.map(d => d.document_type).filter(Boolean)));
   const uniqueCategories = Array.from(new Set(documents.map(d => d.category).filter(Boolean)));

@@ -62,7 +62,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
     
     const response = await onAskAI(userQuestion);
     setConversation(prev => [...prev, { role: "ai", content: response }]);
-  };
+  });
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {

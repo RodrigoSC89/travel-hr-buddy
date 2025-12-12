@@ -514,6 +514,6 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default PredictiveAnalyticsEnhanced;

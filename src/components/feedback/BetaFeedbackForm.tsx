@@ -82,7 +82,7 @@ export const BetaFeedbackForm = memo(function() {
         const feedbacks = JSON.parse(existing);
         feedbacks.push(feedbackData);
         localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
-  };
+  });
 
       toast({
         title: "Feedback Enviado!",

@@ -114,7 +114,7 @@ export const VesselPerformanceDashboard = memo(() => {
     if (score >= 90) return "text-green-600";
     if (score >= 75) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -123,8 +123,8 @@ export const VesselPerformanceDashboard = memo(() => {
     case "docked": return "bg-green-100 text-green-800";
     case "maintenance": return "bg-red-100 text-red-800";
     default: return "bg-secondary text-secondary-foreground";
-    };
-  };
+    });
+  });
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
 
@@ -372,4 +372,4 @@ export const VesselPerformanceDashboard = memo(() => {
       </div>
     </div>
   );
-};
+});

@@ -149,7 +149,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_label: "Email",
         confidence_score: 95,
       });
-  };
+  });
 
     // Extract dates (DD/MM/YYYY or DD-MM-YYYY)
     const dateRegex = /\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/g;
@@ -162,7 +162,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_label: "Data",
         confidence_score: 90,
       });
-  };
+  });
 
     // Extract amounts (currency values)
     const amountRegex = /(?:R\$|USD|\$|€)\s*[\d.,]+/g;
@@ -175,7 +175,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_label: "Valor",
         confidence_score: 85,
       });
-  };
+  });
 
     // Extract phone numbers
     const phoneRegex = /\b\d{2,3}[-.\s]?\d{4,5}[-.\s]?\d{4}\b/g;
@@ -188,7 +188,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_label: "Telefone",
         confidence_score: 88,
       });
-  };
+  });
 
     // Extract IMO numbers (vessel identification)
     const imoRegex = /IMO\s*\d{7}/gi;
@@ -201,10 +201,10 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_label: "IMO Number",
         confidence_score: 98,
       });
-  };
+  });
 
     return entities;
-  };
+  });
 
   // Generate automatic summary (first 200 chars or extractive summary)
   const generateSummary = (text: string): string => {
@@ -241,7 +241,7 @@ export const AIDocumentsAnalyzer = memo(function() {
     const frequency: Record<string, number> = {};
     words.forEach(word => {
       frequency[word] = (frequency[word] || 0) + 1;
-  };
+  });
 
     // Get top 10 most frequent words as topics
     const sorted = Object.entries(frequency)
@@ -250,7 +250,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       .map(([word]) => word);
 
     return sorted;
-  };
+  });
 
   // Generate tags based on content
   const generateTags = (text: string, entities: DocumentEntity[]): string[] => {
@@ -507,7 +507,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       name: "bg-indigo-100 text-indigo-800",
     };
     return colors[entityType] || "bg-gray-100 text-gray-800";
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

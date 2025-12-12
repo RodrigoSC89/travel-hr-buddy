@@ -135,8 +135,8 @@ export const CopilotAI = memo(() => {
     if (query.trim()) {
       // Aqui implementaria o processamento da query
       setQuery("");
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

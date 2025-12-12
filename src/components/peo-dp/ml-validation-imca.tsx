@@ -210,14 +210,14 @@ export const MLValidationIMCA: React.FC = () => {
         description: "12 recomendações IMCA geradas"
       });
     }, 3000);
-  };
+  });
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600";
     if (score >= 75) return "text-blue-600";
     if (score >= 60) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getStatusBadge = (status: SectionScore["status"]) => {
     const styles = {
@@ -235,7 +235,7 @@ export const MLValidationIMCA: React.FC = () => {
       critical: "Crítico"
     };
     return <Badge className={styles[status]}>{labels[status]}</Badge>;
-  };
+  });
 
   const getSeverityBadge = (severity: string) => {
     const styles = {
@@ -244,7 +244,7 @@ export const MLValidationIMCA: React.FC = () => {
       low: "bg-blue-100 text-blue-800"
     };
     return styles[severity as keyof typeof styles] || styles.low;
-  };
+  });
 
   const totalFindings = sectionScores.reduce((sum, s) => sum + s.findings.length, 0);
   const totalRecommendations = sectionScores.reduce((sum, s) => sum + s.recommendations.length, 0);

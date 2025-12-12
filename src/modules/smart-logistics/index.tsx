@@ -189,7 +189,7 @@ export default function SmartLogistics() {
       setIsAnalyzing(false);
       toast.success("Análise concluída!");
     }, 2000);
-  };
+  });
 
   const generateOrder = (itemId: string) => {
     const item = supplies.find(s => s.id === itemId);
@@ -199,7 +199,7 @@ export default function SmartLogistics() {
       s.id === itemId ? { ...s, status: "ordered" as const } : s
     ));
     toast.success(`Pedido gerado para ${item.name}`);
-  };
+  });
 
   const getCategoryIcon = (category: string) => {
     switch (category) {

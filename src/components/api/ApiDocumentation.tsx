@@ -214,7 +214,7 @@ export const ApiDocumentation: React.FC = () => {
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
-  };
+  });
 
   const getMethodColor = (method: string) => {
     switch (method) {
@@ -229,7 +229,7 @@ export const ApiDocumentation: React.FC = () => {
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code);
     toast.success("Código copiado!");
-  };
+  });
 
   const generateCurlExample = (endpoint: Endpoint) => {
     const baseUrl = "https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/public-api";
@@ -243,7 +243,7 @@ export const ApiDocumentation: React.FC = () => {
     }
     
     return curl;
-  };
+  });
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -433,6 +433,6 @@ export const ApiDocumentation: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default ApiDocumentation;

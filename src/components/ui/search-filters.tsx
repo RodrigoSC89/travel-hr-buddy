@@ -44,18 +44,18 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
     const newFilters = { ...localFilters, [key]: value };
     setLocalFilters(newFilters);
     onFiltersChange?.(newFilters);
-  };
+  });
 
   const clearFilters = () => {
     const clearedFilters = {};
     setLocalFilters(clearedFilters);
     onFiltersChange?.(clearedFilters);
-  };
+  });
 
   const toggleSort = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     onSortChange?.(sortBy, newOrder);
-  };
+  });
 
   return (
     <div className="flex items-center gap-2 p-4 bg-background border rounded-lg">
@@ -205,4 +205,4 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
       )}
     </div>
   );
-};
+});

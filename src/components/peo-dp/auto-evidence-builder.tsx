@@ -152,20 +152,20 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const handleCreatePackage = () => {
     toast.success("Assistente de criação de pacote iniciado");
-  };
+  });
 
   const handleGeneratePDF = (pkg: EvidencePackage) => {
     toast.success(`Gerando PDF: ${pkg.name}`);
-  };
+  });
 
   const handleSubmitPackage = (pkg: EvidencePackage) => {
     setPackages(packages.map(p => p.id === pkg.id ? { ...p, status: "submitted" } : p));
     toast.success(`Pacote ${pkg.name} enviado para validação`);
-  };
+  });
 
   const handleAutoCollect = () => {
     toast.success("Coletando evidências automaticamente dos módulos...");
-  };
+  });
 
   const handleGenerateAISummary = async (pkg: EvidencePackage) => {
     setGeneratingSummary(pkg.id);

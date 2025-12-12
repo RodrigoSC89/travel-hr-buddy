@@ -132,7 +132,7 @@ export const VesselTracking = memo(() => {
 
   const formatCoordinate = (lat: number, lng: number) => {
     return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-  };
+  });
 
   if (loading) {
     return (
@@ -140,7 +140,7 @@ export const VesselTracking = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -146,7 +146,7 @@ export default function CollaborationPage() {
       title: "Atualizado",
       description: "Comentários atualizados com sucesso.",
     });
-  };
+  });
 
   const handleSubmit = async () => {
     if (!newComment.trim()) {

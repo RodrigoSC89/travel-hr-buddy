@@ -165,6 +165,6 @@ const FleetModule = () => {
       </div>
     </div>
   );
-};
+});
 
 export default FleetModule;

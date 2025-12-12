@@ -236,7 +236,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
     if (level < 30) return "bg-green-500";
     if (level < 60) return "bg-yellow-500";
     return "bg-red-500";
-  };
+  });
 
   const getAlertBadgeColor = (alert: CrewMember["alertLevel"]) => {
     switch (alert) {

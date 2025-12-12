@@ -174,7 +174,7 @@ export default function SmartChecklistsPage() {
     const matchesType = selectedType === "all" || c.type === selectedType;
     const matchesStatus = selectedStatus === "all" || c.status === selectedStatus;
     return matchesSearch && matchesType && matchesStatus;
-  };
+  });
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
@@ -199,7 +199,7 @@ export default function SmartChecklistsPage() {
   const calculateProgress = (items: ChecklistItem[]) => {
     if (items.length === 0) return 0;
     return Math.round((items.filter(i => i.completed).length / items.length) * 100);
-  };
+  });
 
   const handleToggleItem = (checklistId: string, itemId: string) => {
     setChecklists(prev => prev.map(c => {
@@ -218,7 +218,7 @@ export default function SmartChecklistsPage() {
       return c;
     }));
     toast.success("Item atualizado!");
-  };
+  });
 
   const handleAddItem = () => {
     if (!newItemTitle.trim()) return;
@@ -236,14 +236,14 @@ export default function SmartChecklistsPage() {
     }));
     setNewItemTitle("");
     setNewItemCriticality("medium");
-  };
+  });
 
   const handleRemoveItem = (itemId: string) => {
     setNewChecklist(prev => ({
       ...prev,
       items: prev.items.filter(i => i.id !== itemId)
     }));
-  };
+  });
 
   const handleCreateChecklist = () => {
     if (!newChecklist.title.trim()) {
@@ -328,12 +328,12 @@ export default function SmartChecklistsPage() {
     
     setIsSummarizing(false);
     toast.success("Resumo gerado com IA!");
-  };
+  });
 
   const handleDeleteChecklist = (id: string) => {
     setChecklists(prev => prev.filter(c => c.id !== id));
     toast.success("Checklist removido!");
-  };
+  });
 
   const handleExportPDF = (checklist: Checklist) => {
     // Simple text export for now
@@ -346,7 +346,7 @@ export default function SmartChecklistsPage() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Exportado com sucesso!");
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -62,7 +62,7 @@ export const FindingsManager = memo(function() {
         {type}
       </Badge>
     );
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { variant: unknown: unknown: unknown }> = {
@@ -80,7 +80,7 @@ export const FindingsManager = memo(function() {
         {status.replace("_", " ")}
       </Badge>
     );
-  };
+  });
 
   if (loading) {
     return (

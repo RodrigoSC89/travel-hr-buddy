@@ -94,7 +94,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
 
   const toggleTemplateStatus = async (template: PeotramTemplate) => {
     await updateTemplate(template.id, { is_active: !template.is_active });
-  };
+  });
 
   const currentYear = new Date().getFullYear();
   const vesselTemplates = templates.filter(t => t.checklist_type === "vessel");
@@ -271,4 +271,4 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       </Dialog>
     </div>
   );
-};
+});

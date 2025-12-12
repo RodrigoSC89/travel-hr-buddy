@@ -56,13 +56,13 @@ export const WeeklyFeedbackReportComponent: React.FC<WeeklyFeedbackReportProps> 
     if (confidence >= 0.8) return "text-green-600";
     if (confidence >= 0.5) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getConfidenceBadgeVariant = (confidence: number): "default" | "secondary" | "destructive" | "outline" => {
     if (confidence >= 0.8) return "default";
     if (confidence >= 0.5) return "secondary";
     return "destructive";
-  };
+  });
 
   if (loading) {
     return (

@@ -29,7 +29,7 @@ const AICommandCenter = () => {
       systemHealth: 87,
       alerts: [],
     };
-  };
+  });
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -57,8 +57,8 @@ const AICommandCenter = () => {
           );
         }
         return [...prev, { role: "assistant", content: assistantContent, timestamp: new Date().toISOString() }];
-  };
-    };
+  });
+    });
 
     try {
       await streamCommandChat({
@@ -88,7 +88,7 @@ const AICommandCenter = () => {
       title: "Chat limpo",
       description: "Histórico de conversação removido",
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

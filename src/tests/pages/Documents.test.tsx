@@ -27,7 +27,7 @@ describe("DocumentsPage Component", () => {
     );
     
     expect(screen.getByText(/Centro de Documentos/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render AdvancedDocumentCenter component", () => {
     render(
@@ -37,5 +37,5 @@ describe("DocumentsPage Component", () => {
     );
     
     expect(screen.getByText(/Advanced Document Center/i)).toBeInTheDocument();
-  };
-};
+  });
+});

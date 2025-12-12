@@ -18,7 +18,7 @@ vi.mock("@/modules/control/bridgelink/services/bridge-link-api", () => ({
 describe("BridgeLinkDashboard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the dashboard title", async () => {
     vi.mocked(bridgeLinkApi.getBridgeLinkData).mockResolvedValue({
@@ -30,7 +30,7 @@ describe("BridgeLinkDashboard", () => {
     render(<BridgeLinkDashboard />);
 
     expect(screen.getByText(/🧭 BridgeLink — Painel Integrado/i)).toBeInTheDocument();
-  };
+  });
 
   it("should display loading state initially", async () => {
     vi.mocked(bridgeLinkApi.getBridgeLinkData).mockImplementation(
@@ -41,8 +41,8 @@ describe("BridgeLinkDashboard", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Carregando dados do BridgeLink/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render dashboard components when data is loaded", async () => {
     const mockData = {
@@ -77,8 +77,8 @@ describe("BridgeLinkDashboard", () => {
       expect(screen.getAllByText(/Status do Sistema DP/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Alertas de Risco/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/Mapa de Decisão Contextual/i).length).toBeGreaterThan(0);
-  };
-  };
+  });
+  });
 
   it("should display event and alert counts", async () => {
     const mockData = {
@@ -123,8 +123,8 @@ describe("BridgeLinkDashboard", () => {
       const alertCount = screen.getAllByText("1");
       expect(eventCount.length).toBeGreaterThan(0);
       expect(alertCount.length).toBeGreaterThan(0);
-  };
-  };
+  });
+  });
 
   it("should handle errors gracefully", async () => {
     vi.mocked(bridgeLinkApi.getBridgeLinkData).mockRejectedValue(
@@ -135,8 +135,8 @@ describe("BridgeLinkDashboard", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Erro ao carregar dados/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render integration information", async () => {
     vi.mocked(bridgeLinkApi.getBridgeLinkData).mockResolvedValue({
@@ -151,6 +151,6 @@ describe("BridgeLinkDashboard", () => {
       expect(screen.getAllByText(/Integrações Ativas/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/DP Intelligence Center/i).length).toBeGreaterThan(0);
       expect(screen.getAllByText(/SGSO Logs/i).length).toBeGreaterThan(0);
-  };
-  };
-};
+  });
+  });
+});

@@ -25,7 +25,7 @@ export const SyncStatus = memo(function() {
         description: "Connection restored. Syncing pending data...",
       });
       syncPendingData();
-    };
+    });
 
     const handleOffline = () => {
       setIsOnline(false);
@@ -34,7 +34,7 @@ export const SyncStatus = memo(function() {
         description: "Changes will be saved locally and synced when reconnected",
         variant: "destructive",
       });
-    };
+    });
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
@@ -45,7 +45,7 @@ export const SyncStatus = memo(function() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, []);
 
   const loadPendingCount = async () => {

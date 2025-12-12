@@ -104,7 +104,7 @@ export default function UsageSimulation() {
   const addLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString("pt-BR");
     setLogs(prev => [...prev, `[${timestamp}] ${message}`]);
-  };
+  });
 
   const runStep = async (step: SimulationStep, index: number) => {
     setSteps(prev => prev.map((s, i) => 
@@ -190,7 +190,7 @@ export default function UsageSimulation() {
 
   const pauseSimulation = () => {
     setIsPaused(!isPaused);
-  };
+  });
 
   const resetSimulation = () => {
     setIsRunning(false);
@@ -199,7 +199,7 @@ export default function UsageSimulation() {
     setSteps(selectedScenario?.steps.map(s => ({ ...s, status: "pending", logs: [] })) || []);
     setLogs([]);
     setStats({ success: 0, error: 0, totalTime: 0 });
-  };
+  });
 
   const exportLogs = () => {
     const content = logs.join("\n");
@@ -211,7 +211,7 @@ export default function UsageSimulation() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Logs exportados!");
-  };
+  });
 
   useEffect(() => {
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });

@@ -37,8 +37,8 @@ export const CommandPalette = memo(() => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
-      };
-    };
+      });
+    });
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
@@ -47,7 +47,7 @@ export const CommandPalette = memo(() => {
   const handleSelect = (callback: () => void) => {
     setOpen(false);
     callback();
-  };
+  });
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
@@ -87,4 +87,4 @@ export const CommandPalette = memo(() => {
       </CommandList>
     </CommandDialog>
   );
-};
+});

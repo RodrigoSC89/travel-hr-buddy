@@ -72,7 +72,7 @@ export const SignalHistory: React.FC<SignalHistoryProps> = ({ events }) => {
     if (hours > 0) return `${hours}h atrás`;
     if (minutes > 0) return `${minutes}m atrás`;
     return "agora mesmo";
-  };
+  });
 
   // Sort events by most recent first
   const sortedEvents = [...events].sort((a, b) => 

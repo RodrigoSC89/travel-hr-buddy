@@ -69,7 +69,7 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
     if (saude >= 80) return "bg-green-500";
     if (saude >= 60) return "bg-yellow-500";
     return "bg-red-500";
-  };
+  });
 
   const operacionais = equipamentos.filter(e => e.status === "operacional").length;
   const atencao = equipamentos.filter(e => e.status === "atencao").length;

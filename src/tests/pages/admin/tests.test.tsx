@@ -63,7 +63,7 @@ global.fetch = vi.fn();
 describe("TestDashboard Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the dashboard title", async () => {
     (global.fetch as unknown).mockRejectedValueOnce(new Error("Not found"));
@@ -78,8 +78,8 @@ describe("TestDashboard Component", () => {
     await waitFor(() => {
       const title = screen.getByRole("heading", { name: /Painel de Testes Automatizados/i });
       expect(title).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should display fallback message when coverage report is not available", async () => {
     (global.fetch as unknown).mockRejectedValueOnce(new Error("Not found"));
@@ -94,8 +94,8 @@ describe("TestDashboard Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/Relatório de cobertura não disponível/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should display coverage percentage when report is available", async () => {
     const mockHtml = "<span class='strong'>85%</span>";
@@ -113,8 +113,8 @@ describe("TestDashboard Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/Cobertura total atual: 85%/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render link to full coverage report", async () => {
     (global.fetch as unknown).mockRejectedValueOnce(new Error("Not found"));
@@ -133,6 +133,6 @@ describe("TestDashboard Component", () => {
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute("href", "/coverage/index.html");
       expect(link).toHaveAttribute("target", "_blank");
-  };
-  };
-};
+  });
+  });
+});

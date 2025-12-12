@@ -144,8 +144,8 @@ export const SystemHealthDashboard = memo(() => {
     case "active sessions": return <Activity className="h-4 w-4" />;
     case "response time": return <Clock className="h-4 w-4" />;
     default: return <Server className="h-4 w-4" />;
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

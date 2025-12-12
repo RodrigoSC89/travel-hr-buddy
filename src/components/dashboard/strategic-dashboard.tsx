@@ -233,7 +233,7 @@ const StrategicDashboard: React.FC = () => {
       title: "Dashboard Atualizado",
       description: "Dados atualizados com sucesso!",
     });
-  };
+  });
 
   // Export dashboard data
   const handleExport = async (format: string, options?: unknown: unknown: unknown) => {
@@ -275,7 +275,7 @@ const StrategicDashboard: React.FC = () => {
     });
     // Navigate to settings or open customization modal
     navigate("/settings?tab=dashboard");
-  };
+  });
 
   // Open alerts center
   const handleAlertsCenter = () => {
@@ -285,7 +285,7 @@ const StrategicDashboard: React.FC = () => {
     });
     // Navigate to alerts page or open alerts panel
     setActiveTab("alerts");
-  };
+  });
 
   // Global search handler
   const handleGlobalSearch = () => {
@@ -308,7 +308,7 @@ const StrategicDashboard: React.FC = () => {
     });
     // Navigate to AI insights or open insights panel
     setActiveTab("ai-insights");
-  };
+  });
 
   // Initialize dashboard
   useEffect(() => {

@@ -172,7 +172,7 @@ export const ComplianceAutomation: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsRefreshing(false);
     toast.success("Verificação de conformidade atualizada");
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

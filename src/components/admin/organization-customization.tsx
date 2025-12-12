@@ -137,7 +137,7 @@ export const OrganizationCustomization: React.FC = () => {
     root.style.setProperty("--primary", hexToHsl(customization.primary_color));
     root.style.setProperty("--secondary", hexToHsl(customization.secondary_color));
     root.style.setProperty("--accent", hexToHsl(customization.accent_color));
-  };
+  });
 
   const resetPreviewTheme = () => {
     if (!originalTheme) return;
@@ -147,7 +147,7 @@ export const OrganizationCustomization: React.FC = () => {
     root.style.setProperty("--secondary", originalTheme.secondary);
     root.style.setProperty("--accent", originalTheme.accent);
     setOriginalTheme(null);
-  };
+  });
 
   const togglePreview = () => {
     if (!preview) {

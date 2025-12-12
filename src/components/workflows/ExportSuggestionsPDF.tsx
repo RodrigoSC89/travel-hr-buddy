@@ -5,7 +5,7 @@ import { Suggestion } from "./index";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 /**
  * Export workflow AI suggestions to PDF format
@@ -47,10 +47,10 @@ export async function exportSuggestionsToPDF(suggestions: Suggestion[]): Promise
       }
       doc.text(line, x, currentY);
       currentY += fontSize * 0.5;
-  };
+  });
     
     return currentY;
-  };
+  });
 
   // Process each suggestion
   suggestions.forEach((suggestion, index) => {

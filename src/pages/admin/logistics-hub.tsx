@@ -81,7 +81,7 @@ export default function LogisticsHub() {
     if (error) throw error;
     setRequests(data || []);
     logger.info("Material requests loaded", { count: data?.length });
-  };
+  });
 
   const loadInventory = async () => {
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ export default function LogisticsHub() {
     if (error) throw error;
     setInventory(data || []);
     logger.info("Inventory items loaded", { count: data?.length });
-  };
+  });
 
   const handleRequestSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,7 +171,7 @@ export default function LogisticsHub() {
       urgent: "bg-red-500",
     };
     return colors[priority as keyof typeof colors] || "bg-gray-500";
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -195,7 +195,7 @@ export default function LogisticsHub() {
       out_of_stock: "bg-red-500",
     };
     return colors[status as keyof typeof colors] || "bg-gray-500";
-  };
+  });
 
   const calculateETA = (createdAt: string): number => {
     const created = new Date(createdAt);
@@ -205,7 +205,7 @@ export default function LogisticsHub() {
     const now = new Date();
     const daysLeft = Math.ceil((delivery.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return Math.max(0, daysLeft);
-  };
+  });
 
   if (loading) {
     return (

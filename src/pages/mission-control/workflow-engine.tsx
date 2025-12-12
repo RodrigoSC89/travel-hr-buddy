@@ -138,20 +138,20 @@ const WorkflowEngine = () => {
         },
       ],
     });
-  };
+  });
 
   const removeStep = (index: number) => {
     setNewWorkflow({
       ...newWorkflow,
       steps: newWorkflow.steps.filter((_, i) => i !== index),
     });
-  };
+  });
 
   const updateStep = (index: number, field: string, value: unknown: unknown: unknown) => {
     const updatedSteps = [...newWorkflow.steps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
     setNewWorkflow({ ...newWorkflow, steps: updatedSteps });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -347,6 +347,6 @@ const WorkflowEngine = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default WorkflowEngine;

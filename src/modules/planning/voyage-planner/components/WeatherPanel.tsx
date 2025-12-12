@@ -16,12 +16,12 @@ const WeatherPanel: React.FC<WeatherPanelProps> = ({ conditions }) => {
       high: "bg-red-500/10 text-red-500 border-red-500/20",
     };
     return styles[risk];
-  };
+  });
 
   const getRiskLabel = (risk: WeatherCondition["risk"]) => {
     const labels = { low: "Baixo Risco", medium: "Médio Risco", high: "Alto Risco" };
     return labels[risk];
-  };
+  });
 
   return (
     <Card>

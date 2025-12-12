@@ -148,7 +148,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
         return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
       }
       return 0;
-  };
+  });
 
   const handleSort = (field: keyof InventoryItem) => {
     if (sortField === field) {

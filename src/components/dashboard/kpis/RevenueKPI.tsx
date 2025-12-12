@@ -40,7 +40,7 @@ export const RevenueKPI = memo(function() {
 
     return () => {
       mounted = false;
-    };
+    });
   }, []);
 
   if (loading) {

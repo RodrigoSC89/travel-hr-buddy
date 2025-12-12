@@ -24,7 +24,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-};
+});
 
 interface IncidentReport {
   id: string;
@@ -100,7 +100,7 @@ export default function IncidentReportsComplete() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const loadIncidents = async () => {
@@ -325,8 +325,8 @@ export default function IncidentReportsComplete() {
       const statusMatch = filterStatus === "all" || inc.status === filterStatus;
       const severityMatch = filterSeverity === "all" || inc.severity === filterSeverity;
       return statusMatch && severityMatch;
-  };
-  };
+  });
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -352,7 +352,7 @@ export default function IncidentReportsComplete() {
     setSelectedIncident(incident);
     await loadFollowups(incident.id);
     setIsDetailDialogOpen(true);
-  };
+  });
 
   const activeIncidents = incidents.filter(i => ["pending", "under_analysis"].includes(i.status));
   const resolvedIncidents = incidents.filter(i => ["resolved", "closed"].includes(i.status));

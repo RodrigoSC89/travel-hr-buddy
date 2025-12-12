@@ -105,7 +105,7 @@ export const DPIntelCenter: React.FC = () => {
     const matchesClass = filterClass === "all" || incident.dp_class?.includes(filterClass);
     
     return matchesSearch && matchesClass;
-  };
+  });
 
   return (
     <div className="space-y-6">

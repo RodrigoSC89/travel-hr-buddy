@@ -29,17 +29,17 @@ vi.mock("@/hooks/use-toast", () => ({
 describe("MMI Orders Admin Page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render page title", () => {
     render(<MMIOrdersPage />);
     expect(screen.getByText(/Gerenciamento de Ordens de Serviço/i)).toBeInTheDocument();
-  };
+  });
 
   it("should show loading state initially", () => {
     render(<MMIOrdersPage />);
     expect(screen.getByText(/Carregando ordens de serviço/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render work order cards", async () => {
     const mockOrders = [
@@ -65,8 +65,8 @@ describe("MMI Orders Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.queryByText(/Carregando/i)).not.toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should display status badges", () => {
     const statuses = [
@@ -80,8 +80,8 @@ describe("MMI Orders Admin Page", () => {
       expect(status).toBeDefined();
       expect(label).toBeDefined();
       expect(emoji).toBeDefined();
-};
-  };
+});
+  });
 
   it("should disable editing for completed orders", () => {
     const completedOrder = {
@@ -91,7 +91,7 @@ describe("MMI Orders Admin Page", () => {
     };
 
     expect(completedOrder.status).toBe("completed");
-  };
+  });
 
   it("should handle save button click", async () => {
     const mockOrder = {
@@ -102,7 +102,7 @@ describe("MMI Orders Admin Page", () => {
 
     // Verify save button behavior
     expect(mockOrder.id).toBeDefined();
-  };
+  });
 
   it("should update work order via API", async () => {
     const updateData = {
@@ -114,7 +114,7 @@ describe("MMI Orders Admin Page", () => {
 
     expect(updateData.id).toBeDefined();
     expect(updateData.status).toBe("completed");
-  };
+  });
 
   it("should validate form inputs", () => {
     const validInputs = {
@@ -126,5 +126,5 @@ describe("MMI Orders Admin Page", () => {
     expect(validInputs.executedAt).toMatch(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/);
     expect(validInputs.technicianComment).toBeTruthy();
     expect(["open", "in_progress", "completed", "cancelled"]).toContain(validInputs.status);
-  };
-};
+  });
+});

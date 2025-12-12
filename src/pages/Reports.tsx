@@ -6,6 +6,6 @@ import { Navigate } from "react-router-dom";
 
 const Reports = () => {
   return <Navigate to="/reports-command" replace />;
-};
+});
 
 export default Reports;

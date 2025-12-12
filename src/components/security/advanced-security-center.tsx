@@ -199,7 +199,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
     if (score >= 90) return "text-green-600";
     if (score >= 70) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const handleResolveAlert = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -210,7 +210,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
       title: "Alerta resolvido",
       description: "O alerta de segurança foi marcado como resolvido.",
     });
-  };
+  });
 
   const handleRunScan = () => {
     setIsLoading(true);
@@ -222,7 +222,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
         description: "Nova análise de segurança foi executada com sucesso.",
       });
     }, 3000);
-  };
+  });
 
   if (isLoading) {
     return (

@@ -208,7 +208,7 @@ const MaritimeIdentitySystem: React.FC = () => {
       title: "Tema Aplicado",
       description: `${preset.name} foi selecionado com sucesso`,
     });
-  };
+  });
 
   const saveOriginalTheme = () => {
     const root = document.documentElement;
@@ -219,7 +219,7 @@ const MaritimeIdentitySystem: React.FC = () => {
       secondary: computedStyle.getPropertyValue("--secondary").trim() || "210 40% 96.1%",
       accent: computedStyle.getPropertyValue("--accent").trim() || "210 40% 96.1%"
     });
-  };
+  });
 
   const applyThemePreview = () => {
     const root = document.documentElement;
@@ -233,7 +233,7 @@ const MaritimeIdentitySystem: React.FC = () => {
       title: "Preview Aplicado",
       description: "Visualização em tempo real ativada",
     });
-  };
+  });
 
   const resetThemePreview = () => {
     if (!originalTheme) return;
@@ -247,7 +247,7 @@ const MaritimeIdentitySystem: React.FC = () => {
       title: "Preview Desativado",
       description: "Tema original restaurado",
     });
-  };
+  });
 
   const togglePreviewMode = () => {
     if (!previewMode) {
@@ -296,7 +296,7 @@ const MaritimeIdentitySystem: React.FC = () => {
       title: "Configuração Salva",
       description: "Personalização aplicada permanentemente",
     });
-  };
+  });
 
   const exportConfiguration = () => {
     const dataStr = JSON.stringify(settings, null, 2);
@@ -306,7 +306,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     link.href = url;
     link.download = "nautilus-theme-config.json";
     link.click();
-  };
+  });
 
   return (
     <div className="space-y-6">

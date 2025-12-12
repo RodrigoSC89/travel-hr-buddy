@@ -93,7 +93,7 @@ const EdgeComputingPage: React.FC = () => {
       title: "Reiniciando Nó",
       description: "O nó está sendo reiniciado. Isso pode levar alguns minutos.",
     });
-  };
+  });
 
   const onlineNodes = nodes.filter(n => n.status === "online").length;
   const avgLatency = nodes.filter(n => n.status === "online").reduce((a, b) => a + b.latency, 0) / onlineNodes;
@@ -303,6 +303,6 @@ const EdgeComputingPage: React.FC = () => {
       </Tabs>
     </ModulePageWrapper>
   );
-};
+});
 
 export default EdgeComputingPage;

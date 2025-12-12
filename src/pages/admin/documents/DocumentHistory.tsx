@@ -68,7 +68,7 @@ export default function DocumentHistoryPage() {
           updated_by: version.updated_by,
           author_email: profiles?.email || "Desconhecido",
         };
-  };
+  });
 
       setVersions(transformedData);
     } catch (error) {
@@ -91,7 +91,7 @@ export default function DocumentHistoryPage() {
       const matchesDate = dateFilter === "" ||
         new Date(version.created_at) >= new Date(dateFilter);
       return matchesEmail && matchesDate;
-  };
+  });
   }, [versions, emailFilter, dateFilter]);
 
   const hasActiveFilters = emailFilter.trim() !== "" || dateFilter !== "";
@@ -99,7 +99,7 @@ export default function DocumentHistoryPage() {
   const clearFilters = () => {
     setEmailFilter("");
     setDateFilter("");
-  };
+  });
 
   const handleRestore = async (versionId: string, versionContent: string) => {
     if (!id) return;

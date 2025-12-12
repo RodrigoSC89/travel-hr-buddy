@@ -119,7 +119,7 @@ const AuditCenter = () => {
       "atrasado": "overdue"
     };
     return statusMap[status?.toLowerCase()] || "scheduled";
-  };
+  });
 
   const handleStartAudit = (audit: AuditItem) => {
     setSelectedAudit(audit);
@@ -130,18 +130,18 @@ const AuditCenter = () => {
     const initialChecklist: Record<string, ChecklistStatus> = {};
     items.forEach(item => {
       initialChecklist[item.id] = "not_checked";
-  };
+  });
     setChecklistData(audit.checklist_data || initialChecklist);
     
     Logger.module("audit-center", "Started audit", { auditId: audit.id, type: audit.type });
-  };
+  });
 
   const handleChecklistChange = (itemId: string, status: ChecklistStatus) => {
     setChecklistData(prev => ({
       ...prev,
       [itemId]: status
     }));
-  };
+  });
 
   const handleAIEvaluation = async () => {
     if (!selectedAudit) return;
@@ -190,7 +190,7 @@ const AuditCenter = () => {
         Logger.error("Evidence upload failed", error, "audit-center");
       }
     );
-  };
+  });
 
   const getStatusBadge = (status: AuditItem["status"]) => {
     const variants = {
@@ -209,7 +209,7 @@ const AuditCenter = () => {
         {config.label}
       </Badge>
     );
-  };
+  });
 
   const currentScore = calculateComplianceScore(checklistData);
   const stats = {

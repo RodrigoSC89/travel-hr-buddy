@@ -145,7 +145,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
               onKeyDown={(e) => {
                 if (e.key === "Enter" && code.length === 6) {
                   verifyMFA();
-                };
+                });
               }}
             />
           </div>
@@ -201,20 +201,20 @@ export const useMFA = memo(() => {
     return new Promise((resolve) => {
       setMfaResolver({ resolve });
       setShowMFAPrompt(true);
-  };
-  };
+  });
+  });
 
   const handleMFASuccess = () => {
     setShowMFAPrompt(false);
     mfaResolver?.resolve(true);
     setMfaResolver(null);
-  };
+  });
 
   const handleMFACancel = () => {
     setShowMFAPrompt(false);
     mfaResolver?.resolve(false);
     setMfaResolver(null);
-  };
+  });
 
   const MFAPromptComponent = showMFAPrompt ? (
     <MFAPrompt 
@@ -227,4 +227,4 @@ export const useMFA = memo(() => {
     requireMFA,
     MFAPromptComponent
   };
-};
+});

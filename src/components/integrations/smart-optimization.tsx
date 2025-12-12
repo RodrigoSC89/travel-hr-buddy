@@ -252,7 +252,7 @@ export const SmartOptimization: React.FC = () => {
         description: "A melhoria foi implementada com sucesso.",
       });
     }, 2000);
-  };
+  });
 
   return (
     <div className="space-y-6">

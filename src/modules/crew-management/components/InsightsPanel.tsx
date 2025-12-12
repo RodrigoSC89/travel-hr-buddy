@@ -171,7 +171,7 @@ export const InsightsPanel = memo(function() {
     setCrewData(crew);
     setInsights(generateInsights(crew));
     setIsAnalyzing(false);
-  };
+  });
 
   const avgFatigue = crewData.reduce((acc, c) => acc + c.fatigueScore, 0) / crewData.length || 0;
   const criticalCount = crewData.filter(c => c.fatigueRisk === "critical" || c.fatigueRisk === "high").length;

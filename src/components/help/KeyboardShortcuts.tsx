@@ -105,11 +105,11 @@ export const useKeyboardShortcuts = memo(() => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       clearTimeout(sequenceTimeout);
-    };
+    });
   }, [navigate, shortcuts]);
 
   return { shortcuts, helpOpen, setHelpOpen };
-};
+});
 
 export const KeyboardShortcutsHelp: React.FC = () => {
   const { shortcuts, helpOpen, setHelpOpen } = useKeyboardShortcuts();
@@ -117,7 +117,7 @@ export const KeyboardShortcutsHelp: React.FC = () => {
   const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
     if (!acc[shortcut.category]) {
       acc[shortcut.category] = [];
-    };
+    });
     acc[shortcut.category].push(shortcut);
     return acc;
   }, {} as Record<string, Shortcut[]>);

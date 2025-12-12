@@ -209,7 +209,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
     );
 
     return Math.round((totalWeight / sensors.length) * 100);
-  };
+  });
 
   const checkAndGenerateAlerts = async (readings: SensorReading[]) => {
     const newAlerts: MaintenanceAlert[] = [];
@@ -336,7 +336,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
     };
     const Icon = icons[type] || Activity;
     return <Icon className="h-4 w-4" />;
-  };
+  });
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -346,7 +346,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       offline: "text-gray-500",
     };
     return colors[status] || "text-gray-500";
-  };
+  });
 
   const exportTelemetryData = () => {
     const csvData = sensorData.map((s) => ({

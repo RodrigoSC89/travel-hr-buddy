@@ -24,12 +24,12 @@ export const TelemetryConsentBanner = memo(function() {
     ConsentManager.grantConsent();
     initTelemetry();
     setShowBanner(false);
-  };
+  });
 
   const handleDecline = () => {
     ConsentManager.revokeConsent();
     setShowBanner(false);
-  };
+  });
 
   if (!showBanner) {
     return null;

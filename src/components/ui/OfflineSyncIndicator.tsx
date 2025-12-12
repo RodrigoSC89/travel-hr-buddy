@@ -47,7 +47,7 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
       unsubscribe();
-    };
+    });
   }, []);
 
   const handleSync = async () => {

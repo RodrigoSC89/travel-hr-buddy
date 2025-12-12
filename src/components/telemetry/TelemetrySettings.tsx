@@ -75,19 +75,19 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
     onSave?.(settings);
     toast.success("Configurações salvas com sucesso!");
     setOpen(false);
-  };
+  });
 
   const handleReset = () => {
     setSettings(defaultConfig);
     toast.info("Configurações restauradas para padrão");
-  };
+  });
 
   const updateSetting = <K extends keyof TelemetryConfig>(
     key: K,
     value: TelemetryConfig[K]
   ) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

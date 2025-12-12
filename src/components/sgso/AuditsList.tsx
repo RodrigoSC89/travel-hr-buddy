@@ -75,7 +75,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
         {status.replace("_", " ")}
       </Badge>
     );
-  };
+  });
 
   const handleStatusChange = async (auditId: string, newStatus: string) => {
     try {

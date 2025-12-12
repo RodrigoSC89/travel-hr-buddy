@@ -83,7 +83,7 @@ describe("DocumentViewPage - Version Restoration", () => {
     // Import the component fresh for each test
     const module = await React.lazy(() => import(import("@/pages/admin/documents/DocumentView")));
     DocumentViewPage = module.default;
-  };
+  });
 
   it("should render document with version history component", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
@@ -129,8 +129,8 @@ describe("DocumentViewPage - Version Restoration", () => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
       expect(screen.getByText("Test Content")).toBeInTheDocument();
       expect(screen.getByTestId("version-history")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render DocumentVersionHistory component with correct documentId", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
@@ -177,8 +177,8 @@ describe("DocumentViewPage - Version Restoration", () => {
       const versionHistory = screen.getByTestId("version-history");
       expect(versionHistory).toBeInTheDocument();
       expect(versionHistory).toHaveTextContent("documentId: doc-123");
-  };
-  };
+  });
+  });
 
   it("should pass onRestore callback to DocumentVersionHistory", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
@@ -223,6 +223,6 @@ describe("DocumentViewPage - Version Restoration", () => {
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
       expect(screen.getByTestId("version-history")).toBeInTheDocument();
-  };
-  };
-};
+  });
+  });
+});

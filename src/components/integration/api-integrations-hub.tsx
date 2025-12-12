@@ -173,7 +173,7 @@ export const APIIntegrationsHub: React.FC = () => {
       title: "Integração conectada",
       description: `${integration.name} foi conectado com sucesso.`,
     });
-  };
+  });
 
   const handleDisconnect = (integration: Integration) => {
     setIntegrations(prev => prev.map(int => 
@@ -186,7 +186,7 @@ export const APIIntegrationsHub: React.FC = () => {
       title: "Integração desconectada",
       description: `${integration.name} foi desconectado.`,
     });
-  };
+  });
 
   const handleSync = (integration: Integration) => {
     setIntegrations(prev => prev.map(int => 
@@ -199,7 +199,7 @@ export const APIIntegrationsHub: React.FC = () => {
       title: "Sincronização concluída",
       description: `Dados do ${integration.name} foram sincronizados.`,
     });
-  };
+  });
 
   const createAPIKey = () => {
     if (!newKeyName.trim()) return;
@@ -220,7 +220,7 @@ export const APIIntegrationsHub: React.FC = () => {
       title: "Chave API criada",
       description: "Nova chave API foi gerada com sucesso.",
     });
-  };
+  });
 
   const revokeAPIKey = (keyId: string) => {
     setApiKeys(prev => prev.map(key => 
@@ -231,7 +231,7 @@ export const APIIntegrationsHub: React.FC = () => {
       title: "Chave revogada",
       description: "A chave API foi revogada com sucesso.",
     });
-  };
+  });
 
   const createWebhook = () => {
     if (!newWebhookUrl.trim()) return;
@@ -251,7 +251,7 @@ export const APIIntegrationsHub: React.FC = () => {
       title: "Webhook criado",
       description: "Novo webhook foi configurado com sucesso.",
     });
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -493,4 +493,4 @@ export const APIIntegrationsHub: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

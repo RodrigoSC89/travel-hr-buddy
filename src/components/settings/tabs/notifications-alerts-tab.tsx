@@ -47,7 +47,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
         [module]: enabled
       }
 };
-  };
+  });
 
   const notificationTypes = [
     {

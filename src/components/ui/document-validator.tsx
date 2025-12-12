@@ -190,7 +190,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     if (score >= 80) return "text-green-600";
     if (score >= 60) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getIssueIcon = (type: ValidationIssue["type"]) => {
     switch (type) {
@@ -360,4 +360,4 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       )}
     </div>
   );
-};
+});

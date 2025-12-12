@@ -19,28 +19,28 @@ vi.mock("@supabase/supabase-js", () => ({
 describe("MMI Jobs Forecast Panel", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the panel title", async () => {
     render(<MMIJobsPanel />);
     await waitFor(() => {
       expect(screen.getByText(/Painel de Forecast MMI/i)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should render the search input", async () => {
     render(<MMIJobsPanel />);
     await waitFor(() => {
       const searchInput = screen.getByPlaceholderText(/Buscar por sistema, componente/i);
       expect(searchInput).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should have the correct title with emoji", async () => {
     render(<MMIJobsPanel />);
     await waitFor(() => {
       const title = screen.getByText(/🛠 Painel de Forecast MMI/i);
       expect(title).toBeDefined();
-  };
-  };
-};
+  });
+  });
+});

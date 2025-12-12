@@ -272,7 +272,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
           : notification
       )
     );
-  };
+  });
 
   const markAllAsRead = () => {
     setNotifications(prev => 
@@ -282,11 +282,11 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
       title: "Notificações",
       description: "Todas as notificações foram marcadas como lidas"
     });
-  };
+  });
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(notification => notification.id !== id));
-  };
+  });
 
   const filteredNotifications = notifications.filter(notification => {
     switch (filter) {

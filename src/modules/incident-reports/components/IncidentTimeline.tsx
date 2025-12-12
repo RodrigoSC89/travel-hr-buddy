@@ -152,10 +152,10 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
       if (severityDiff !== 0) return severityDiff;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-  };
+  });
 
     setFilteredIncidents(filtered);
-  };
+  });
 
   const groupByMonth = (incidents: Incident[]) => {
     const groups: { [key: string]: Incident[] } = {};
@@ -168,16 +168,16 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         groups[monthKey] = [];
       }
       groups[monthKey].push(incident);
-  };
+  });
 
     return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
-  };
+  });
 
   const formatMonthYear = (monthKey: string) => {
     const [year, month] = monthKey.split("-");
     const date = new Date(parseInt(year), parseInt(month) - 1);
     return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-  };
+  });
 
   const exportToPNG = async () => {
     if (!timelineRef.current) return;
@@ -206,7 +206,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
     setModuleFilter("");
     setDateFrom("");
     setDateTo("");
-  };
+  });
 
   const groupedIncidents = groupByMonth(filteredIncidents);
 
@@ -386,4 +386,4 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       </Card>
     </div>
   );
-};
+});

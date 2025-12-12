@@ -238,7 +238,7 @@ export const PeotramPerformanceIndicators: React.FC = () => {
     if (unit === "%") return `${value.toFixed(1)}%`;
     if (unit === "pontos") return `${value.toFixed(1)} pts`;
     return `${value.toFixed(2)} ${unit}`;
-  };
+  });
 
   return (
     <TooltipProvider>

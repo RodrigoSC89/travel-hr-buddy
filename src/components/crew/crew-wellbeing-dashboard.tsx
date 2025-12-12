@@ -60,7 +60,7 @@ export const CrewWellbeingDashboard = memo(function() {
         {severity.toUpperCase()}
       </Badge>
     );
-  };
+  });
 
   const getHealthStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -72,7 +72,7 @@ export const CrewWellbeingDashboard = memo(function() {
     };
 
     return colors[status] || "text-gray-500";
-  };
+  });
 
   if (loading) {
     return (

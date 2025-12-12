@@ -21,15 +21,15 @@ export const UserMenu: React.FC = () => {
 
   const getInitials = (email: string) => {
     return email.split("@")[0].substring(0, 2).toUpperCase();
-  };
+  });
 
   const handleSignOut = async () => {
     await signOut();
-  };
+  });
 
   const handleNavigate = (path: string) => {
     navigate(path);
-  };
+  });
 
   return (
     <DropdownMenu>
@@ -96,4 +96,4 @@ export const UserMenu: React.FC = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+});

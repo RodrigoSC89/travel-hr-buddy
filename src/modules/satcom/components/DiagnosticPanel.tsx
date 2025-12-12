@@ -149,7 +149,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       activeConn.provider,
       fallbackConn.provider
     );
-  };
+  });
 
   const testRecovery = async () => {
     const disconnectedConn = connections.find((c) => c.status === "disconnected");
@@ -194,7 +194,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
     await testFailover();
     await new Promise((resolve) => setTimeout(resolve, 1000));
     await testRecovery();
-  };
+  });
 
   const testStress = async () => {
     // Rapid connection switching

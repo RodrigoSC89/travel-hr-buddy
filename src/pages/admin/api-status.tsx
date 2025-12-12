@@ -125,7 +125,7 @@ export default function ApiStatusPage() {
     a.download = "api-status-log.json";
     a.click();
     URL.revokeObjectURL(url);
-  };
+  });
 
   // Prepare chart data
   const labels = history.map((h) => new Date(h.timestamp).toLocaleTimeString());

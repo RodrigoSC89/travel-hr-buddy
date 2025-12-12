@@ -121,7 +121,7 @@ const WelcomeStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => 
       </Card>
     </div>
   );
-};
+});
 
 const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ data, onNext }) => {
   const [profile, setProfile] = useState<{
@@ -238,7 +238,7 @@ const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepDa
       </Button>
     </div>
   );
-};
+});
 
 const ModuleRecommendationStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ data, onNext }) => {
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
@@ -351,7 +351,7 @@ const ModuleRecommendationStep: React.FC<{ data: OnboardingData; onNext: (data: 
       </Button>
     </div>
   );
-};
+});
 
 export const SmartOnboardingWizard: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);

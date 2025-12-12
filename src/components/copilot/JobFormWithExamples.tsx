@@ -50,7 +50,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
       title: "Exemplo aplicado",
       description: "A descrição foi preenchida com o exemplo selecionado.",
     });
-  };
+  });
 
   return (
     <div className="space-y-6">

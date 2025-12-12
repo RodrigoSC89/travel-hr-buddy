@@ -61,13 +61,13 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
 
   const getSimilarityPercentage = (similarity: number): string => {
     return `${Math.round(similarity * 100)}%`;
-  };
+  });
 
   const getSimilarityColor = (similarity: number): string => {
     if (similarity >= 0.85) return "bg-green-500";
     if (similarity >= 0.75) return "bg-blue-500";
     return "bg-orange-500";
-  };
+  });
 
   return (
     <div className="space-y-4">

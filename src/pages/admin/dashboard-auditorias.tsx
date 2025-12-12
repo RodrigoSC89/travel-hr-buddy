@@ -24,7 +24,7 @@ import html2canvas from "html2canvas";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface DadosNavio {
   nome_navio: string;

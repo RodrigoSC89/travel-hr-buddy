@@ -12,7 +12,7 @@ describe("Unauthorized Component", () => {
     );
 
     expect(screen.getByText(/⛔ Acesso Negado/)).toBeInTheDocument();
-  };
+  });
 
   it("should display permission denied message", () => {
     render(
@@ -24,7 +24,7 @@ describe("Unauthorized Component", () => {
     expect(
       screen.getByText(/Você não tem permissão para visualizar esta página/)
     ).toBeInTheDocument();
-  };
+  });
 
   it("should display token error message", () => {
     render(
@@ -36,7 +36,7 @@ describe("Unauthorized Component", () => {
     expect(
       screen.getByText(/Token de acesso inválido ou ausente/)
     ).toBeInTheDocument();
-  };
+  });
 
   it("should have white background and red text color classes", () => {
     const { container } = render(
@@ -48,5 +48,5 @@ describe("Unauthorized Component", () => {
     const mainDiv = container.querySelector(".bg-white");
     expect(mainDiv).toBeInTheDocument();
     expect(mainDiv).toHaveClass("text-red-600");
-  };
-};
+  });
+});

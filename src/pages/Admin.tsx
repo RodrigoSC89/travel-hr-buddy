@@ -24,6 +24,6 @@ const Admin = () => {
       </ModulePageWrapper>
     </MultiTenantWrapper>
   );
-};
+});
 
 export default Admin;

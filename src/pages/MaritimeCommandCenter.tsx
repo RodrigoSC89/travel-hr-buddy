@@ -241,7 +241,7 @@ export default function MaritimeCommandCenter() {
   const getVesselName = (vesselId: string) => {
     const vessel = vessels.find(v => v.id === vesselId);
     return vessel ? vessel.name : "Não atribuído";
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -269,7 +269,7 @@ export default function MaritimeCommandCenter() {
                          member.employee_id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   if (loading) {
     return (

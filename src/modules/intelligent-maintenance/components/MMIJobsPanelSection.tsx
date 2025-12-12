@@ -85,7 +85,7 @@ export default function MMIJobsPanelSection() {
 
   const handleExport = (job: MMIJobForecast) => {
     toast.success(`Exportando PDF de: ${job.title}`);
-  };
+  });
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {

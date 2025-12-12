@@ -65,7 +65,7 @@ export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
       return; // Don't allow toggling deprecated modules
     }
     onToggle(id, checked);
-  };
+  });
 
   return (
     <Card className="relative">

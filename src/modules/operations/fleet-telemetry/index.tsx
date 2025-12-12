@@ -167,8 +167,8 @@ export default function FleetTelemetryModule() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
-  };
+    });
+  });
 
   const determineStatus = (value: number, min?: number, max?: number): "normal" | "warning" | "critical" => {
     if (!min && !max) return "normal";
@@ -182,7 +182,7 @@ export default function FleetTelemetryModule() {
     }
     
     return "normal";
-  };
+  });
 
   const generateMockSensorData = async () => {
     // Generate realistic sensor data for demo

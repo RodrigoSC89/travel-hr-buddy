@@ -296,7 +296,7 @@ const EnhancedUnifiedDashboard = () => {
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
     });
-  };
+  });
 
   const handleKPIToggle = (kpi: string) => {
     setSelectedKPIs(prev => 
@@ -304,7 +304,7 @@ const EnhancedUnifiedDashboard = () => {
         ? prev.filter(k => k !== kpi)
         : [...prev, kpi]
     );
-  };
+  });
 
   useOptimizedPolling({
     id: "enhanced-unified-dashboard-refresh",

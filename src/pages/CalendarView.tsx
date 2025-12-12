@@ -71,16 +71,16 @@ const CalendarView: React.FC = () => {
         taskDate.getMonth() === date.getMonth() &&
         taskDate.getFullYear() === date.getFullYear()
       );
-  };
-  };
+  });
+  });
 
   const previousMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  };
+  });
 
   const nextMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-  };
+  });
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",

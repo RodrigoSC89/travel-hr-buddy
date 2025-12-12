@@ -81,7 +81,7 @@ export default function SGSOManager() {
       completed: "secondary",
     };
     return <Badge variant={variants[status] || "outline"}>{status}</Badge>;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

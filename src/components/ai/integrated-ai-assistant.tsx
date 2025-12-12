@@ -391,7 +391,7 @@ Como posso ajudá-lo especificamente hoje?`,
   const handleQuickAction = (action: QuickAction) => {
     setCurrentMessage(action.prompt);
     inputRef.current?.focus();
-  };
+  });
 
   const toggleListening = () => {
     setIsListening(!isListening);
@@ -428,7 +428,7 @@ Como posso ajudá-lo especificamente hoje?`,
       title: "Conversa exportada",
       description: "Arquivo baixado com sucesso"
     });
-  };
+  });
 
   const handleSettingsClick = () => {
     toast({

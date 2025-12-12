@@ -307,7 +307,7 @@ const EmergencyMode = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
+  });
 
   const activateEmergency = (type: EmergencyType) => {
     const selectedProtocol = emergencyProtocols[type];
@@ -408,7 +408,7 @@ const EmergencyMode = () => {
     }
     
     return `Para emergências de ${protocol?.title}, mantenha a calma e siga o protocolo estabelecido. Posso ajudar com:\n• "próxima etapa" - ver próxima ação\n• "contatos" - listar números de emergência\n• "status" - resumo da situação`;
-  };
+  });
 
   const deactivateEmergency = () => {
     setIsEmergencyActive(false);
@@ -419,12 +419,12 @@ const EmergencyMode = () => {
     setEmergencyStartTime(null);
     setElapsedTime(0);
     toast({ title: "Emergência Encerrada", description: "Modo normal restaurado" });
-  };
+  });
 
   const getProgressPercentage = () => {
     if (steps.length === 0) return 0;
     return (steps.filter(s => s.completed).length / steps.length) * 100;
-  };
+  });
 
   const getEmergencyIcon = (type: EmergencyType) => {
     switch (type) {
@@ -691,6 +691,6 @@ const EmergencyMode = () => {
       </div>
     </div>
   );
-};
+});
 
 export default EmergencyMode;

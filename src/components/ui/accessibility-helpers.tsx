@@ -25,7 +25,7 @@ export const AccessibleText: React.FC<AccessibleTextProps> = ({
       {children}
     </span>
   );
-};
+});
 
 // Helper para fundos contrastados
 interface ContrastBackgroundProps {
@@ -53,7 +53,7 @@ export const ContrastBackground: React.FC<ContrastBackgroundProps> = ({
       {children}
     </div>
   );
-};
+});
 
 // Helper para indicadores visuais
 interface VisualIndicatorProps {
@@ -109,7 +109,7 @@ export const ScreenReaderText: React.FC<ScreenReaderTextProps> = ({ children }) 
       {children}
     </span>
   );
-};
+});
 
 // Helper para skips de navegação
 interface SkipLinkProps {
@@ -126,4 +126,4 @@ export const SkipLink: React.FC<SkipLinkProps> = ({ href, children }) => {
       {children}
     </a>
   );
-};
+});

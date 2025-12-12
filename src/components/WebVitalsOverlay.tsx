@@ -39,7 +39,7 @@ const MetricBadge: React.FC<{
       <span className="font-mono">{value}</span>
     </div>
   );
-};
+});
 
 export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
   position = "bottom-right",

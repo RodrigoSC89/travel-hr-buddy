@@ -29,7 +29,7 @@ const FormField = <
       <Controller {...props} />
     </FormFieldContext.Provider>
   );
-};
+});
 
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext);
@@ -80,7 +80,7 @@ const FormLabel = React.forwardRef<
   const { error, formItemId } = useFormField();
 
   return <Label ref={ref} className={cn(error && "text-destructive", className)} htmlFor={formItemId} {...props} />;
-  };
+  });
 FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<React.ElementRef<typeof Slot>, React.ComponentPropsWithoutRef<typeof Slot>>(

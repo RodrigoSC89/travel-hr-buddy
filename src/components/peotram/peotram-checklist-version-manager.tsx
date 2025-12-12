@@ -99,7 +99,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     setSelectedTemplate(newTemplate);
     setIsEditing(true);
     toast.success("Novo template criado!");
-  };
+  });
 
   const duplicateTemplate = (template: ChecklistTemplate) => {
     const newTemplate: ChecklistTemplate = {
@@ -113,7 +113,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
 
     setTemplates([...templates, newTemplate]);
     toast.success("Template duplicado!");
-  };
+  });
 
   const deleteTemplate = (templateId: string) => {
     setTemplates(templates.filter(t => t.id !== templateId));
@@ -121,7 +121,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       setSelectedTemplate(null);
     }
     toast.success("Template removido!");
-  };
+  });
 
   const activateTemplate = (templateId: string) => {
     setTemplates(templates.map(t => ({
@@ -129,7 +129,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       isActive: t.id === templateId,
     })));
     toast.success("Template ativado!");
-  };
+  });
 
   const addElement = () => {
     if (!selectedTemplate) return;
@@ -149,7 +149,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     });
 
     setEditingElement(newElement);
-  };
+  });
 
   const addRequirement = (elementId: string) => {
     if (!selectedTemplate) return;
@@ -197,7 +197,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ),
       updatedAt: new Date(),
     });
-  };
+  });
 
   const deleteRequirement = (elementId: string, reqId: string) => {
     if (!selectedTemplate) return;
@@ -217,7 +217,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ),
       updatedAt: new Date(),
     });
-  };
+  });
 
   const saveTemplate = () => {
     if (!selectedTemplate) return;
@@ -228,7 +228,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
 
     setIsEditing(false);
     toast.success("Template salvo com sucesso!");
-  };
+  });
 
   const exportTemplate = (format: "json" | "excel" | "pdf") => {
     if (!selectedTemplate) return;
@@ -258,11 +258,11 @@ export const PeotramChecklistVersionManager: React.FC = () => {
 
   const handleDragStart = (itemId: string) => {
     setDraggedItem(itemId);
-  };
+  });
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-  };
+  });
 
   const handleDrop = (targetId: string) => {
     if (!selectedTemplate || !draggedItem) return;
@@ -283,7 +283,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     }
 
     setDraggedItem(null);
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -22,7 +22,7 @@ export default function BridgeLinkSync() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [supabase]);
 
   return (

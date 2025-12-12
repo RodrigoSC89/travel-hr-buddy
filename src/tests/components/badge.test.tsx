@@ -7,16 +7,16 @@ describe("Badge Component", () => {
     render(<Badge>Test Badge</Badge>);
     const badge = screen.getByText("Test Badge");
     expect(badge).toBeInTheDocument();
-  };
+  });
 
   it("should render with custom text", () => {
     render(<Badge>Custom Text</Badge>);
     expect(screen.getByText("Custom Text")).toBeInTheDocument();
-  };
+  });
 
   it("should apply variant classes", () => {
     render(<Badge variant="success">Success Badge</Badge>);
     const badge = screen.getByText("Success Badge");
     expect(badge).toBeInTheDocument();
-  };
-};
+  });
+});

@@ -51,7 +51,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     const message = input;
     setInput("");
     await sendMessage(message, context);
-  };
+  });
 
   const handleVoiceInput = () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -74,16 +74,16 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     recognition.onerror = () => {
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");
-    };
+    });
     recognition.onresult = (event: Event) => {
       const transcript = Array.from(event.results)
         .map((result: unknown) => result[0].transcript)
         .join("");
       setInput(transcript);
-    };
+    });
 
     recognition.start();
-  };
+  });
 
   const speakMessage = (content: string) => {
     if (!("speechSynthesis" in window)) {
@@ -102,20 +102,20 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
-  };
+  });
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Mensagem copiada!");
-  };
+  });
 
   const exportChat = () => {
     exportConversation();
-  };
+  });
 
   const handleFeedback = (messageId: string, type: "positive" | "negative") => {
     setFeedback(messageId, type);
-  };
+  });
 
   const suggestions = [
     "Qual o status atual da frota?",

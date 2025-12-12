@@ -58,12 +58,12 @@ export const ChecklistScheduler = memo(() => {
     case "quarterly": return "bg-purple-100 text-purple-800";
     case "annually": return "bg-green-100 text-green-800";
     default: return "bg-secondary text-secondary-foreground";
-    };
-  };
+    });
+  });
 
   const getStatusColor = (isActive: boolean) => {
     return isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground";
-  };
+  });
 
   const handleCreateSchedule = () => {
     toast({
@@ -71,7 +71,7 @@ export const ChecklistScheduler = memo(() => {
       description: "Nova agenda de checklist foi criada com sucesso.",
     });
     setIsCreateOpen(false);
-  };
+  });
 
   const toggleSchedule = (id: string) => {
     setSchedules(prev => prev.map(schedule => 
@@ -79,7 +79,7 @@ export const ChecklistScheduler = memo(() => {
         ? { ...schedule, isActive: !schedule.isActive }
         : schedule
     ));
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -282,4 +282,4 @@ export const ChecklistScheduler = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

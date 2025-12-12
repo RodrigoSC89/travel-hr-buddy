@@ -134,7 +134,7 @@ const VesselPerformanceMonitor = () => {
     }
     
     return points;
-  };
+  });
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
 
@@ -153,7 +153,7 @@ const VesselPerformanceMonitor = () => {
     if (value >= threshold) return "text-green-600";
     if (value >= threshold - 20) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   return (
     <div className="space-y-6">

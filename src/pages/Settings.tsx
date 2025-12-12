@@ -21,6 +21,6 @@ const Settings = () => {
       <EnhancedSettingsHub />
     </ModulePageWrapper>
   );
-};
+});
 
 export default Settings;

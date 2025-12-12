@@ -259,7 +259,7 @@ const IntelligentAlerts: React.FC = () => {
       title: "Alerta Reconhecido",
       description: "O alerta foi marcado como reconhecido",
     });
-  };
+  });
 
   const resolveAlert = (alertId: string, notes: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -279,7 +279,7 @@ const IntelligentAlerts: React.FC = () => {
       title: "Alerta Resolvido",
       description: "O alerta foi marcado como resolvido",
     });
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -318,7 +318,7 @@ const IntelligentAlerts: React.FC = () => {
     if (confidence >= 90) return "text-success";
     if (confidence >= 75) return "text-warning";
     return "text-destructive";
-  };
+  });
 
   const filteredAlerts = alerts.filter(alert => {
     const matchesSearch = alert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -330,7 +330,7 @@ const IntelligentAlerts: React.FC = () => {
     const matchesStatus = statusFilter === "all" || alert.status === statusFilter;
     
     return matchesSearch && matchesSeverity && matchesType && matchesStatus;
-  };
+  });
 
   const stats = {
     total: alerts.length,

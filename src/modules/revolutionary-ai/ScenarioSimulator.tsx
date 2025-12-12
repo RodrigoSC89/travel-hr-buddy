@@ -121,12 +121,12 @@ export const ScenarioSimulator = memo(function() {
       setIsSimulating(false);
       setShowResults(true);
     }, 1500);
-  };
+  });
 
   const resetScenario = () => {
     setScenario(INITIAL_SCENARIO);
     setShowResults(false);
-  };
+  });
 
   const getScoreColor = (score: number, inverse: boolean = false) => {
     if (inverse) {
@@ -137,7 +137,7 @@ export const ScenarioSimulator = memo(function() {
     if (score >= 80) return "text-green-400";
     if (score >= 60) return "text-amber-400";
     return "text-red-400";
-  };
+  });
 
   return (
     <div className="space-y-6">

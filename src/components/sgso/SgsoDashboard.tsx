@@ -133,7 +133,7 @@ export const SgsoDashboard: React.FC = () => {
     });
     setIncidentDialogOpen(false);
     setIncidentForm({ title: "", type: "", severity: "", description: "", vessel: "", location: "" });
-  };
+  });
 
   const handleSubmitRisk = () => {
     if (!riskForm.title || !riskForm.probability || !riskForm.impact) {
@@ -175,7 +175,7 @@ export const SgsoDashboard: React.FC = () => {
     });
     setAuditDialogOpen(false);
     setAuditForm({ title: "", type: "", scope: "", auditor: "", scheduledDate: "", practices: "" });
-  };
+  });
 
   const handleGenerateANPReport = () => {
     toast({
@@ -183,11 +183,11 @@ export const SgsoDashboard: React.FC = () => {
       description: "O relatório está sendo preparado. Você será notificado quando estiver pronto."
     });
     setActiveTab("dossie");
-  };
+  });
 
   const navigateToTab = (tab: string) => {
     setActiveTab(tab);
-  };
+  });
 
   return (
     <div className="space-y-6">

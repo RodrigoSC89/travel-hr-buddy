@@ -276,7 +276,7 @@ const SmartWorkflowAutomation = () => {
       title: "Status atualizado",
       description: "Workflow foi ativado/desativado com sucesso"
     });
-  };
+  });
 
   const executeWorkflow = (id: string) => {
     const newExecution: WorkflowExecution = {
@@ -297,7 +297,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow iniciado",
       description: "Execução em andamento..."
     });
-  };
+  });
 
   const createWorkflow = () => {
     if (!newWorkflow.name.trim()) return;
@@ -343,7 +343,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow duplicado",
       description: "Cópia criada como rascunho"
     });
-  };
+  });
 
   const deleteWorkflow = (id: string) => {
     setWorkflows(prev => prev.filter(w => w.id !== id));
@@ -351,7 +351,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow excluído",
       description: "Workflow removido permanentemente"
     });
-  };
+  });
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {

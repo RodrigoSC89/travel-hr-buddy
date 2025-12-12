@@ -286,7 +286,7 @@ export default function TravelCommandCenter() {
         ] : []
       };
     });
-  };
+  });
 
   const handleSendMessage = () => {
     if (!chatMessage.trim()) return;
@@ -310,12 +310,12 @@ export default function TravelCommandCenter() {
     }, 1000);
     
     setChatMessage("");
-  };
+  });
 
   const handleEdit = (reservation: EnhancedReservation) => {
     setSelectedReservation(reservation);
     setIsFormOpen(true);
-  };
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir esta reserva?")) return;
@@ -371,7 +371,7 @@ export default function TravelCommandCenter() {
     if (filters.status !== "all" && reservation.status !== filters.status) return false;
     if (filters.searchTerm && !reservation.title.toLowerCase().includes(filters.searchTerm.toLowerCase())) return false;
     return true;
-  };
+  });
 
   const quickStats = [
     { icon: Plane, label: "Viagens Ativas", value: mockTrips.length.toString(), color: "primary" },

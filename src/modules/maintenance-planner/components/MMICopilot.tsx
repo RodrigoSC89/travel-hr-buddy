@@ -154,7 +154,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       return "diagnostico";
     }
     return undefined;
-  };
+  });
 
   const getCriticalityColor = (criticidade: string) => {
     switch (criticidade) {

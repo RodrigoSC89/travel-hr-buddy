@@ -146,7 +146,7 @@ export const ClientCustomization = memo(() => {
   useState(() => {
     setOrganizations(mockOrganizations);
     setCustomFields(defaultCustomFields);
-  };
+  });
 
   const addCustomField = () => {
     const newField: CustomField = {
@@ -157,7 +157,7 @@ export const ClientCustomization = memo(() => {
       module: "crew"
     };
     setCustomFields([...customFields, newField]);
-  };
+  });
 
   const updateCustomField = (id: string, updates: Partial<CustomField>) => {
     setCustomFields(fields => 
@@ -165,18 +165,18 @@ export const ClientCustomization = memo(() => {
         field.id === id ? { ...field, ...updates } : field
       )
     );
-  };
+  });
 
   const removeCustomField = (id: string) => {
     setCustomFields(fields => fields.filter(field => field.id !== id));
-  };
+  });
 
   const saveTheme = () => {
     toast({
       title: "Tema Salvo",
       description: "As configurações de tema foram aplicadas com sucesso.",
     });
-  };
+  });
 
   const cloneOrganization = (orgId: string) => {
     const org = organizations.find(o => o.id === orgId);
@@ -209,7 +209,7 @@ export const ClientCustomization = memo(() => {
     return status === "active" 
       ? "bg-success text-success-foreground" 
       : "bg-muted text-muted-foreground";
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -626,4 +626,4 @@ export const ClientCustomization = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

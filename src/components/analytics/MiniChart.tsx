@@ -50,7 +50,7 @@ export const MiniChart = memo(function MiniChart({
         const x = padding + (index / (data.length - 1)) * effectiveWidth;
         const y = padding + effectiveHeight - ((value - min) / range) * effectiveHeight;
         return `${x},${y}`;
-  };
+  });
       return { 
         path: `M${points.join(" L")}`, 
         trend, 
@@ -66,7 +66,7 @@ export const MiniChart = memo(function MiniChart({
       const barHeight = ((value - min) / range) * effectiveHeight;
       const y = padding + effectiveHeight - barHeight;
       return `M${x},${padding + effectiveHeight} L${x},${y} L${x + barWidth},${y} L${x + barWidth},${padding + effectiveHeight}`;
-  };
+  });
     return { 
       path: bars.join(" "), 
       trend, 

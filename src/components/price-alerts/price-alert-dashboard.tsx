@@ -48,7 +48,7 @@ export const PriceAlertDashboard = memo(() => {
       <EnhancedAlertManagement />
     </div>
   );
-};
+});
 
 export const PriceAlertDashboardLegacy = memo(() => {
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
@@ -542,4 +542,4 @@ export const PriceAlertDashboardLegacy = memo(() => {
       </div>
     </div>
   );
-};
+});

@@ -78,7 +78,7 @@ export const MaritimeCommunicationCenter = memo(() => {
     const cleanup = setupRealTimeUpdates();
     return () => {
       cleanup();
-    };
+    });
   }, []);
 
   const loadCommunications = async () => {
@@ -733,4 +733,4 @@ export const MaritimeCommunicationCenter = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

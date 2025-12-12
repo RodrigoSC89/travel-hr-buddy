@@ -35,7 +35,7 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
         setTimeout(() => setRippleStyle(prev => ({ ...prev, show: false })), 600);
       }
       onClick?.(e);
-    };
+    });
 
     return (
       <motion.div

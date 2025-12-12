@@ -310,7 +310,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       )}
     </motion.div>
   );
-};
+});
 
 // ============================================
 // MAIN HOOK
@@ -487,7 +487,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
     return () => {
       subscription.unsubscribe();
       if (intervalId) clearInterval(intervalId);
-    };
+    });
   }, [effectiveUserId, autoRefresh, refreshInterval, loadNotifications]);
 
   const unreadCount = notifications.filter((n) => !n.read && !n.isRead && !n.is_read).length;
@@ -844,7 +844,7 @@ const PageVariant: React.FC<PageVariantProps> = ({
     if (filter === "unread") return !n.read && !n.isRead && !n.is_read;
     if (filter === "high") return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
     return true;
-};
+});
 
   if (loading) {
     return (
@@ -1065,7 +1065,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
       />
     </>
   );
-  };
+  });
 
 // ============================================
 // REAL-TIME NOTIFICATION CENTER (Alias)

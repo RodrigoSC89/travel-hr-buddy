@@ -84,7 +84,7 @@ export const ApplyTemplateDialog = memo(function({
       extractedVariables.forEach(varName => {
         // Try to use auto-fill suggestions
         initialVars[varName] = autoFillSuggestions[varName] || "";
-  };
+  });
       setVariables(initialVars);
     }
   }, [open, extractedVariables, autoFillSuggestions]);
@@ -98,14 +98,14 @@ export const ApplyTemplateDialog = memo(function({
       title: "Auto-fill applied",
       description: "Common variables have been filled automatically",
     });
-  };
+  });
 
   const handleVariableChange = (varName: string, value: string) => {
     setVariables(prev => ({
       ...prev,
       [varName]: value,
     }));
-  };
+  });
 
   const handleExport = async (format: ExportOptions["format"]) => {
     const result = await TemplateApplicationService.exportDocument(
@@ -147,7 +147,7 @@ export const ApplyTemplateDialog = memo(function({
 
   const getVariableLabel = (varName: string): string => {
     return TemplateApplicationService.COMMON_VARIABLES[varName as keyof typeof TemplateApplicationService.COMMON_VARIABLES] || varName;
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

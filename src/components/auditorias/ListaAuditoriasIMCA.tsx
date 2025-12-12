@@ -78,7 +78,7 @@ export default function ListaAuditoriasIMCA() {
       a.item_auditado?.toLowerCase().includes(searchTerm) ||
       a.resultado?.toLowerCase().includes(searchTerm)
     );
-  };
+  });
 
   const exportarCSV = () => {
     const headers = ["Navio", "Data", "Norma", "Item Auditado", "Resultado", "Comentários"];
@@ -98,7 +98,7 @@ export default function ListaAuditoriasIMCA() {
     link.download = `auditorias-imca-${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
     toast.success("CSV exportado com sucesso!");
-  };
+  });
 
   const exportarPDF = async () => {
     if (!pdfRef.current) return;

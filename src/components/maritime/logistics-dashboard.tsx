@@ -265,7 +265,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
       title: "IA Ativada",
       description: "Otimização de rota iniciada com algoritmos de Machine Learning",
     });
-  };
+  });
 
   const handlePredictiveAlert = () => {
     toast({
@@ -273,7 +273,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
       description: "Sistema detectou possível atraso de 2h devido a condições meteorológicas",
       variant: "destructive"
     });
-  };
+  });
 
   return (
     <div className="space-y-6">

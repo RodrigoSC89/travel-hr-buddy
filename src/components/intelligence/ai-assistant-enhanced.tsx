@@ -79,7 +79,7 @@ const AIAssistantEnhanced: React.FC = () => {
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    };
+    });
   }, []);
 
   const aiCapabilities: AICapability[] = [
@@ -156,7 +156,7 @@ const AIAssistantEnhanced: React.FC = () => {
       setIsProcessing(false);
     }, 1500);
     timeoutsRef.current.push(timeout);
-  };
+  });
 
   const generateAIResponse = (input: string, capability: string): string => {
     const responses = {
@@ -201,7 +201,7 @@ const AIAssistantEnhanced: React.FC = () => {
   const handleQuickAction = (action: string, category: string) => {
     setInputMessage(action);
     setSelectedCapability(category);
-  };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">

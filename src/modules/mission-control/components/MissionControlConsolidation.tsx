@@ -30,7 +30,7 @@ const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   await import("jspdf-autotable");
   return jsPDF;
-};
+});
 
 interface MissionStats {
   total: number;
@@ -60,7 +60,7 @@ export const MissionControlConsolidation: React.FC = () => {
       completed: 35,
       failed: 2
     });
-  };
+  });
 
   const exportMissionReport = async () => {
     try {

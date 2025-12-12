@@ -57,8 +57,8 @@ export const AIModulesDashboard = memo(() => {
       return "text-red-500";
     default:
       return "text-gray-500";
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">
@@ -200,4 +200,4 @@ export const AIModulesDashboard = memo(() => {
       </Card>
     </div>
   );
-};
+});

@@ -54,14 +54,14 @@ const AlertasPrecosModule = () => {
   const handleEdit = (alert: PriceAlert) => {
     setEditingAlert(alert);
     setShowCreateForm(true);
-  };
+  });
 
   const handleFormSuccess = () => {
     setRefreshTrigger(prev => prev + 1);
     setShowCreateForm(false);
     setEditingAlert(null);
     loadStats();
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -147,6 +147,6 @@ const AlertasPrecosModule = () => {
       </div>
     </div>
   );
-};
+});
 
 export default AlertasPrecosModule;

@@ -295,21 +295,21 @@ export const MaritimeHRDashboard: React.FC = () => {
       description: "IA detectou sinais de estresse elevado em 2 tripulantes. Consulta com psicólogo recomendada.",
       variant: "destructive"
     });
-  };
+  });
 
   const handleTelemedicine = () => {
     toast({
       title: "Telemedicina Ativada",
       description: "Conectando com Dr. Anderson - Especialista em Medicina Marítima",
     });
-  };
+  });
 
   const handleComplianceCheck = () => {
     toast({
       title: "Verificação de Compliance",
       description: "Sistema detectou 3 certificações vencendo nos próximos 30 dias. Renovação automática iniciada.",
     });
-  };
+  });
 
   const handlePlanRotation = () => {
     toast({

@@ -48,7 +48,7 @@ vi.mock("jspdf", () => ({
 describe("DocumentsAIPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the page title", () => {
     render(
@@ -58,7 +58,7 @@ describe("DocumentsAIPage Component", () => {
     );
     
     expect(screen.getByText(/📄 Documentos com IA/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render title input and prompt textarea", () => {
     render(
@@ -69,7 +69,7 @@ describe("DocumentsAIPage Component", () => {
     
     expect(screen.getByPlaceholderText(/Título do Documento/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Descreva o que você quer gerar com a IA.../i)).toBeInTheDocument();
-  };
+  });
 
   it("should render generate button", () => {
     render(
@@ -79,7 +79,7 @@ describe("DocumentsAIPage Component", () => {
     );
     
     expect(screen.getByRole("button", { name: /Gerar com IA/i })).toBeInTheDocument();
-  };
+  });
 
   it("should disable generate button when prompt is empty", () => {
     render(
@@ -90,7 +90,7 @@ describe("DocumentsAIPage Component", () => {
     
     const generateButton = screen.getByRole("button", { name: /Gerar com IA/i });
     expect(generateButton).toBeDisabled();
-  };
+  });
 
   it("should enable generate button when prompt is filled", async () => {
     render(
@@ -105,8 +105,8 @@ describe("DocumentsAIPage Component", () => {
     await waitFor(() => {
       const generateButton = screen.getByRole("button", { name: /Gerar com IA/i });
       expect(generateButton).not.toBeDisabled();
-  };
-  };
+  });
+  });
 
   it("should not show save and export buttons initially", () => {
     render(
@@ -117,7 +117,7 @@ describe("DocumentsAIPage Component", () => {
     
     expect(screen.queryByText(/Salvar no Supabase/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Exportar em PDF/i)).not.toBeInTheDocument();
-  };
+  });
 
   it("should not show summarize and rewrite buttons initially", () => {
     render(
@@ -128,5 +128,5 @@ describe("DocumentsAIPage Component", () => {
     
     expect(screen.queryByText(/Resumir com IA/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Reformular IA/i)).not.toBeInTheDocument();
-  };
-};
+  });
+});

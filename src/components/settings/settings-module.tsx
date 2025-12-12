@@ -53,7 +53,7 @@ export const SettingsModule: React.FC = () => {
       title: "Configurações salvas",
       description: "Suas preferências foram atualizadas com sucesso.",
     });
-  };
+  });
 
   const handleReset = () => {
     setSettings({

@@ -162,17 +162,17 @@ export const SIMOPSManager: React.FC = () => {
   const handleToggleZone = (zoneId: string) => {
     setZones(zones.map(z => z.id === zoneId ? { ...z, active: !z.active } : z));
     toast.success("Zona atualizada");
-  };
+  });
 
   const handleStartOperation = (opId: string) => {
     setOperations(operations.map(op => op.id === opId ? { ...op, status: "active" } : op));
     toast.success("Operação iniciada");
-  };
+  });
 
   const handlePauseOperation = (opId: string) => {
     setOperations(operations.map(op => op.id === opId ? { ...op, status: "paused" } : op));
     toast.warning("Operação pausada");
-  };
+  });
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
@@ -529,6 +529,6 @@ export const SIMOPSManager: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default SIMOPSManager;

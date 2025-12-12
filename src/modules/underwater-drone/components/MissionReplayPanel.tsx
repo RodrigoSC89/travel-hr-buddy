@@ -42,7 +42,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
   const getCurrentTrajectory = (): RecordedTrajectory | null => {
     if (trajectory.length === 0) return null;
     return trajectory[currentFrame] || trajectory[trajectory.length - 1];
-  };
+  });
 
   // Get attention points near current time
   const getNearbyAttentionPoints = (): AttentionPoint[] => {
@@ -54,7 +54,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
     return recording.analysis.attentionPoints.filter(point => 
       Math.abs(point.timestamp - currentTimestamp) < timeWindow
     );
-  };
+  });
 
   // Play/Pause control
   useEffect(() => {
@@ -67,7 +67,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
             return totalDuration;
           }
           return next;
-  };
+  });
       }, 100);
     } else {
       if (playbackInterval.current) {
@@ -94,31 +94,31 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
-  };
+  });
 
   const handleRestart = () => {
     setCurrentTime(0);
     setCurrentFrame(0);
     setIsPlaying(false);
-  };
+  });
 
   const handleSkipBack = () => {
     setCurrentTime(Math.max(0, currentTime - 5));
-  };
+  });
 
   const handleSkipForward = () => {
     setCurrentTime(Math.min(totalDuration, currentTime + 5));
-  };
+  });
 
   const handleTimelineChange = (value: number[]) => {
     setCurrentTime(value[0]);
-  };
+  });
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
+  });
 
   const currentTrajectory = getCurrentTrajectory();
   const nearbyAlerts = getNearbyAttentionPoints();

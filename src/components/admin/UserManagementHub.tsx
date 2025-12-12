@@ -118,7 +118,7 @@ export const UserManagementHub: React.FC = () => {
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
       const matchesStatus = statusFilter === "all" || user.status === statusFilter;
       return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
   }, [users, searchTerm, roleFilter, statusFilter]);
 
   // Handlers
@@ -189,7 +189,7 @@ export const UserManagementHub: React.FC = () => {
       viewer: "Visualizador",
     };
     return <Badge variant="outline" className={styles[role]}>{labels[role]}</Badge>;
-  };
+  });
 
   // Status badge
   const getStatusBadge = (status: string) => {
@@ -206,11 +206,11 @@ export const UserManagementHub: React.FC = () => {
       suspended: "Suspenso",
     };
     return <Badge variant="outline" className={styles[status]}>{labels[status]}</Badge>;
-  };
+  });
 
   const getInitials = (name: string) => {
     return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
-  };
+  });
 
   const formatDate = (date: string | undefined) => {
     if (!date) return "Nunca";
@@ -219,7 +219,7 @@ export const UserManagementHub: React.FC = () => {
       month: "2-digit",
       year: "numeric",
     });
-  };
+  });
 
   const hasActiveFilters = searchTerm || roleFilter !== "all" || statusFilter !== "all";
 

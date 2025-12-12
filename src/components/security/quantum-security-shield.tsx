@@ -174,7 +174,7 @@ export const QuantumSecurityShield: React.FC = () => {
         description: `Sistema seguro. ${threats.filter(t => t.status === "blocked").length} ameaças bloqueadas automaticamente.`,
       });
     }, 3000);
-  };
+  });
 
   const getSeverityColor = (severity: ThreatDetection["severity"]) => {
     switch (severity) {

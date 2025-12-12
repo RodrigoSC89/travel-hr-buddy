@@ -49,7 +49,7 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockNavigate,
     useSearchParams: () => [mockSearchParams, vi.fn()],
   };
-  };
+  });
 
 describe("AdminDashboard - Public Mode", () => {
   beforeEach(() => {
@@ -78,7 +78,7 @@ describe("AdminDashboard - Public Mode", () => {
       headers: new Headers({ "content-type": "application/json" }),
       json: () => Promise.resolve({ status: "ok", message: "Test" }),
     });
-  };
+  });
 
   it("should display eye icon in public mode", async () => {
     mockSearchParams = new URLSearchParams("?public=1");
@@ -91,8 +91,8 @@ describe("AdminDashboard - Public Mode", () => {
 
     await waitFor(() => {
       expect(screen.getByText("🚀 Painel Administrativo")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should display public mode indicator badge", async () => {
     mockSearchParams = new URLSearchParams("?public=1");
@@ -107,8 +107,8 @@ describe("AdminDashboard - Public Mode", () => {
       expect(
         screen.getByText(/🔒 Modo público somente leitura/i)
       ).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should NOT display public mode indicator in normal mode", () => {
     mockSearchParams = new URLSearchParams();
@@ -137,8 +137,8 @@ describe("AdminDashboard - Public Mode", () => {
       expect(
         screen.queryByText("📱 Compartilhar Dashboard Público")
       ).not.toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should display QR code section in normal mode", async () => {
     mockSearchParams = new URLSearchParams();
@@ -153,9 +153,9 @@ describe("AdminDashboard - Public Mode", () => {
       expect(
         screen.getByText("📱 Compartilhar Dashboard Público")
       ).toBeInTheDocument();
-  };
-  };
-  };
+  });
+  });
+  });
 
 describe("AdminDashboard - Role-Based Access", () => {
   beforeEach(() => {
@@ -175,7 +175,7 @@ describe("AdminDashboard - Role-Based Access", () => {
       headers: new Headers({ "content-type": "application/json" }),
       json: () => Promise.resolve({ status: "ok", message: "Test" }),
     });
-  };
+  });
 
   it("should show all 3 cards for admin role", () => {
     vi.mocked(usePermissions).mockReturnValue({
@@ -258,9 +258,9 @@ describe("AdminDashboard - Role-Based Access", () => {
       expect(screen.getByText("Checklists")).toBeInTheDocument();
       expect(screen.getByText("Restaurações Pessoais")).toBeInTheDocument();
       expect(screen.getByText("Histórico de IA")).toBeInTheDocument();
-  };
-  };
-  };
+  });
+  });
+  });
 
 describe("AdminDashboard - Navigation", () => {
   beforeEach(() => {
@@ -288,7 +288,7 @@ describe("AdminDashboard - Navigation", () => {
       headers: new Headers({ "content-type": "application/json" }),
       json: () => Promise.resolve({ status: "ok", message: "Test" }),
     });
-  };
+  });
 
   it("should append ?public=1 to card links in public mode", async () => {
     mockSearchParams = new URLSearchParams("?public=1");
@@ -303,8 +303,8 @@ describe("AdminDashboard - Navigation", () => {
       const cards = screen.getAllByRole("generic");
       // Verify cards are rendered
       expect(cards.length).toBeGreaterThan(0);
-  };
-  };
+  });
+  });
 
   it("should display quick links section", () => {
     render(
@@ -314,5 +314,5 @@ describe("AdminDashboard - Navigation", () => {
     );
 
     expect(screen.getByText("⚡ Atalhos Rápidos")).toBeInTheDocument();
-  };
-};
+  });
+});

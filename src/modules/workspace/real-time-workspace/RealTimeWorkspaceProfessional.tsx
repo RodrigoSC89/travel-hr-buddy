@@ -329,7 +329,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       priority: "medium",
     };
     setActivities(prev => [activity, ...prev]);
-  };
+  });
 
   const handleCopyMeetingLink = async () => {
     try {
@@ -355,14 +355,14 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       title: "Entrando na reunião",
       description: "Abrindo em nova aba...",
     });
-  };
+  });
 
   const handleMemberClick = (member: TeamMember) => {
     toast({
       title: member.name,
       description: `${member.role} - ${member.status === "online" ? "Online" : member.status === "away" ? "Ausente" : member.status === "busy" ? "Ocupado" : "Offline"}`,
     });
-  };
+  });
 
   const handleDocumentUpload = (file: File) => {
     const newDoc: SharedDocument = {
@@ -400,7 +400,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
-    };
+    });
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
@@ -747,6 +747,6 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       </Dialog>
     </ModulePageWrapper>
   );
-};
+});
 
 export default RealTimeWorkspaceProfessional;

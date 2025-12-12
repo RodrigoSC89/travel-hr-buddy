@@ -59,7 +59,7 @@ export const ProgressiveContent: React.FC<ProgressiveContentProps> = ({
       {shouldRender ? children : (placeholder || <ContentPlaceholder />)}
     </div>
   );
-};
+});
 
 const ContentPlaceholder: React.FC = () => (
   <div className="space-y-3">
@@ -105,7 +105,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
       img.onload = () => {
         setCurrentSrc(src);
         setIsLoaded(true);
-      };
+      });
     } else if (inView && shouldReduceData) {
       // On slow connections, load directly without preloading
       setCurrentSrc(src);

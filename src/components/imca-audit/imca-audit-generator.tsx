@@ -109,7 +109,7 @@ export const IMCAAuditGenerator = memo(function() {
     setOperationalData({});
     setReport(null);
     setActiveTab("basic");
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

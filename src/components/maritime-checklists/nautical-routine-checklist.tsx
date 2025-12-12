@@ -156,7 +156,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
           : item
       )
     }));
-  };
+  });
 
   const handleSave = async () => {
     try {

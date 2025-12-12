@@ -97,8 +97,8 @@ export const CrewRealtimeWorkspace = memo(() => {
     case "away": return "bg-warning";
     case "busy": return "bg-destructive";
     case "offline": return "bg-muted-foreground/50";
-    };
-  };
+    });
+  });
 
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;
@@ -115,7 +115,7 @@ export const CrewRealtimeWorkspace = memo(() => {
     
     setMessages(prev => [...prev, newMessage]);
     setMessageInput("");
-  };
+  });
 
   const onlineCount = teamMembers.filter(m => m.status === "online" || m.status === "away").length;
 

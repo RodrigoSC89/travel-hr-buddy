@@ -279,12 +279,12 @@ export const PeotramSimulationTool: React.FC = () => {
         simulatedValue: value
       }
     }));
-  };
+  });
 
   const resetToDefaults = () => {
     setParameters(SIMULATION_PARAMETERS);
     setCurrentScenario(null);
-  };
+  });
 
   const saveScenario = () => {
     if (currentScenario) {
@@ -297,7 +297,7 @@ export const PeotramSimulationTool: React.FC = () => {
     if (improvement > 0) return "text-info";
     if (improvement > -5) return "text-warning";
     return "text-destructive";
-  };
+  });
 
   const getRiskColor = (level: string) => {
     switch (level) {

@@ -88,7 +88,7 @@ export const AdvancedSettings: React.FC = () => {
       }
     }));
     setHasChanges(true);
-  };
+  });
 
   const saveSettings = async () => {
     setIsSaving(true);
@@ -438,6 +438,6 @@ export const AdvancedSettings: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AdvancedSettings;

@@ -6,6 +6,6 @@ import { Navigate } from "react-router-dom";
 
 const WorkflowPage = () => {
   return <Navigate to="/workflow-command" replace />;
-};
+});
 
 export default WorkflowPage;

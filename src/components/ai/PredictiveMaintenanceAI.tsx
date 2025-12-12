@@ -445,6 +445,6 @@ export const PredictiveMaintenanceAI: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default PredictiveMaintenanceAI;

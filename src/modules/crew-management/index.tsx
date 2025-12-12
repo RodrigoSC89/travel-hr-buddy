@@ -94,7 +94,7 @@ const CrewManagement = () => {
 
   const handleExport = () => {
     toast({ title: "Exportando...", description: "Gerando relatório da tripulação" });
-  };
+  });
 
   if (loading) {
     return (

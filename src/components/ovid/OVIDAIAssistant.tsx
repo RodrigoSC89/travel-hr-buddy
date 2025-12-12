@@ -71,7 +71,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
                   const updated = [...prev];
                   updated[updated.length - 1] = { role: "assistant", content: assistantContent };
                   return updated;
-  };
+  });
               }
             } catch {}
           }
@@ -145,4 +145,4 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
       </CardContent>
     </Card>
   );
-};
+});

@@ -115,7 +115,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
         l.nodeId === path.fromNodeId || l.nodeId === path.toNodeId
       ).length;
       pathExecutionRate[path.id] = executions;
-  };
+  });
 
     // Calculate critical path time
     const criticalPathTime = nodes.reduce((max, node) => {
@@ -402,7 +402,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
         </div>
       </div>
     );
-  };
+  });
 
   return (
     <Card className="w-full">

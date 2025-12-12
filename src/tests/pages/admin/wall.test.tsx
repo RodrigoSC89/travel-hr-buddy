@@ -55,7 +55,7 @@ describe("AdminWallPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
-  };
+  });
 
   it("should render the wall title", () => {
     (global.fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Not found"));
@@ -157,4 +157,4 @@ describe("AdminWallPage Component", () => {
     
     expect(screen.getByText(/Nenhum resultado de teste disponível/i)).toBeInTheDocument();
   });
-};
+});

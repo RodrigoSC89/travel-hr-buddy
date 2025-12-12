@@ -190,12 +190,12 @@ export const PeoDpManager: React.FC = () => {
 
   const createNewPlan = () => {
     setIsWizardOpen(true);
-  };
+  });
 
   const handleWizardComplete = async (data: unknown) => {
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");
-  };
+  });
 
   const handleStartAudit = () => {
     if (!newAuditVessel.trim()) {
@@ -205,11 +205,11 @@ export const PeoDpManager: React.FC = () => {
     setActiveAudit({ vesselName: newAuditVessel, dpClass: newAuditDpClass });
     setIsAuditDialogOpen(false);
     setActiveView("audits");
-  };
+  });
 
   const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
     toast.success("Auditoria salva como rascunho");
-  };
+  });
 
   const handleAuditComplete = (items: PEODPAuditItem[], score: number) => {
     const newAudit: PEODPAudit = {
@@ -236,7 +236,7 @@ export const PeoDpManager: React.FC = () => {
 
   const handleChecklistSave = (version: PEODPChecklistVersion) => {
     setIsChecklistEditorOpen(false);
-  };
+  });
 
   const getStatusBadge = (status: DPPlan["status"]) => {
     const variants = {
@@ -247,17 +247,17 @@ export const PeoDpManager: React.FC = () => {
     };
     const variant = variants[status];
     return <Badge className={variant.color}>{variant.label}</Badge>;
-  };
+  });
 
   const getComplianceColor = (compliance: number) => {
     if (compliance >= 90) return "text-green-600";
     if (compliance >= 70) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getSectionProgress = (section: SectionStatus) => {
     return (section.completed / section.total) * 100;
-  };
+  });
 
   // ASOG Status State
   const [asogStatus, setAsogStatus] = useState<"green" | "blue" | "yellow" | "red">("green");
@@ -271,11 +271,11 @@ export const PeoDpManager: React.FC = () => {
       red: "Emergência"
     };
     toast.success(`ASOG Status alterado para ${statusLabels[status]}`);
-  };
+  });
 
   const handleAcknowledgeAlert = () => {
     toast.success("Alerta reconhecido e registrado no logbook");
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -910,4 +910,4 @@ export const PeoDpManager: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});

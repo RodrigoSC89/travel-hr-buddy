@@ -78,14 +78,14 @@ export default function PerformanceProfiler() {
     const measureFPS = () => {
       frameCountRef.current++;
       animationFrameRef.current = requestAnimationFrame(measureFPS);
-    };
+    });
     measureFPS();
 
     // Collect metrics every 3 seconds
     intervalRef.current = setInterval(() => {
       collectMetrics();
     }, 3000);
-  };
+  });
 
   const stopMonitoring = () => {
     setIsMonitoring(false);
@@ -238,7 +238,7 @@ export default function PerformanceProfiler() {
     if (value >= thresholds.critical) return "text-red-500";
     if (value >= thresholds.warning) return "text-yellow-500";
     return "text-green-500";
-  };
+  });
 
   return (
     <div className="space-y-6 p-6">

@@ -76,15 +76,15 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
 
   const handleView = () => {
     onView?.(document);
-  };
+  });
 
   const handleEdit = () => {
     onEdit?.(document);
-  };
+  });
 
   const handleDownload = async () => {
     await actions.download();
-  };
+  });
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this document?")) {
@@ -97,7 +97,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
     const mb = size / (1024 * 1024);
     if (mb < 1) return `${(size / 1024).toFixed(1)} KB`;
     return `${mb.toFixed(1)} MB`;
-  };
+  });
 
   return (
     <Card

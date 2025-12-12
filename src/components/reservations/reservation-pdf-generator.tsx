@@ -48,7 +48,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
       // Trigger print after content loads
       printWindow.onload = () => {
         printWindow.print();
-      };
+      });
     } catch (error) {
     } finally {
       setGenerating(false);
@@ -82,7 +82,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         style: "currency",
         currency: currency
       }).format(amount);
-    };
+    });
 
     return `
 <!DOCTYPE html>

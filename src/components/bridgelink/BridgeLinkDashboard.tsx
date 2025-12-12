@@ -23,7 +23,7 @@ export default function BridgeLinkDashboard() {
       setIsSyncing(false);
       setLogs((prev) => [...prev, `[${timestamp}] Sync completed`]);
     }, 2000);
-  };
+  });
 
   return (
     <Card>

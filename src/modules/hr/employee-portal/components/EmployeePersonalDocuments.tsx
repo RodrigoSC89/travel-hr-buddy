@@ -205,7 +205,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       issuing_authority: "",
       file: null
     });
-  };
+  });
 
   const getStatusBadge = (status: string, expiryDate?: string) => {
     const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {
@@ -244,7 +244,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       other: "Other"
     };
     return labels[type] || type;
-  };
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -439,4 +439,4 @@ export const EmployeePersonalDocuments: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

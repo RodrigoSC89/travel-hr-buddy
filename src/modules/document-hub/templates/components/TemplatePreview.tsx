@@ -18,7 +18,7 @@ import { escapeRegexSpecialChars } from "../services/template-utils";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface TemplatePreviewProps {
   templateContent: string;
@@ -43,10 +43,10 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       const escapedKey = escapeRegexSpecialChars(key);
       const regex = new RegExp(`{{${escapedKey}}}`, "g");
       content = content.replace(regex, value || `<span style="color: red;">{{${key}}}</span>`);
-};
+});
     
     setPreviewContent(content);
-  };
+  });
 
   const generatePDF = async () => {
     try {
@@ -95,7 +95,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       title: "HTML Downloaded",
       description: "Your template has been exported to HTML",
     });
-  };
+  });
 
   return (
     <Card>

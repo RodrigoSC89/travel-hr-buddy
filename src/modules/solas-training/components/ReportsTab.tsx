@@ -50,7 +50,7 @@ export default function ReportsTab({ drills, certifications, crewMembers }: Repo
     a.download = `relatorio-solas-${format(new Date(), "yyyy-MM-dd")}.md`;
     a.click();
     toast({ title: "Download Iniciado", description: "O relatório está sendo baixado." });
-  };
+  });
 
   const reportTypes = [
     { id: "compliance", name: "Relatório de Conformidade ISM", description: "Status geral de conformidade SOLAS/ISM", icon: FileCheck },

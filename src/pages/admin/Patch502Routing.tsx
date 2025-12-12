@@ -57,7 +57,7 @@ export default function Patch502Routing() {
     setResponsive(true);
     
     setValidationStatus("complete");
-  };
+  });
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;
   const totalCount = validationChecks.length;

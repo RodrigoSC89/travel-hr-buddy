@@ -121,7 +121,7 @@ const ClimateEngagement: React.FC = () => {
     if (score >= 70) return "text-blue-500";
     if (score >= 50) return "text-yellow-500";
     return "text-red-500";
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -148,7 +148,7 @@ const ClimateEngagement: React.FC = () => {
     
     toast.success("Respostas enviadas com sucesso! Obrigado pela participação.");
     setSurveyResponses({});
-  };
+  });
 
   const handleRegisterMood = async () => {
     if (!selectedMood) {
@@ -170,7 +170,7 @@ const ClimateEngagement: React.FC = () => {
     toast.success(`Humor "${moodLabels[selectedMood]}" registrado com sucesso!`);
     setSelectedMood(null);
     setMoodComment("");
-  };
+  });
 
   const handleSendFeedback = async () => {
     if (!feedbackText.trim()) {
@@ -189,7 +189,7 @@ const ClimateEngagement: React.FC = () => {
     }
     
     setFeedbackText("");
-  };
+  });
 
   const handleGenerateInsights = async () => {
     toast.info("Gerando insights com IA...");

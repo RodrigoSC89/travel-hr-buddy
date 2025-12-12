@@ -38,7 +38,7 @@ const getRiskColor = (level: string) => {
     negligible: "bg-green-500 text-white border-green-700"
   };
   return colors[level as keyof typeof colors] || "bg-gray-500";
-};
+});
 
 const getRiskLevelLabel = (level: string) => {
   const labels = {
@@ -49,7 +49,7 @@ const getRiskLevelLabel = (level: string) => {
     negligible: "Negligível"
   };
   return labels[level as keyof typeof labels] || level;
-};
+});
 
 const calculateRiskLevel = (probability: number, impact: number): string => {
   const score = probability * impact;
@@ -58,7 +58,7 @@ const calculateRiskLevel = (probability: number, impact: number): string => {
   if (score >= 8) return "medium";
   if (score >= 4) return "low";
   return "negligible";
-};
+});
 
 export const RiskAssessmentMatrix: React.FC = () => {
   const [selectedCell, setSelectedCell] = useState<{ probability: number; impact: number } | null>(null);
@@ -273,6 +273,6 @@ export const RiskAssessmentMatrix: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default RiskAssessmentMatrix;

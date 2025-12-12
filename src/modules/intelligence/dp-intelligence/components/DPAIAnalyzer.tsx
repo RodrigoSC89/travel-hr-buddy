@@ -137,7 +137,7 @@ export default function DPAIAnalyzer() {
     if (confidence >= 95) return "text-emerald-500";
     if (confidence >= 80) return "text-amber-500";
     return "text-red-500";
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     if (status === "OK") {
@@ -147,7 +147,7 @@ export default function DPAIAnalyzer() {
       return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
     }
     return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
-  };
+  });
 
   return (
     <Card className="border border-primary/20 shadow-lg">

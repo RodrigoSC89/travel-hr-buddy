@@ -24,13 +24,13 @@ export const AIStatusIndicator: React.FC<AIStatusIndicatorProps> = ({
     if (score >= 0.9) return "text-success";
     if (score >= 0.75) return "text-warning";
     return "text-destructive";
-  };
+  });
 
   const getModelIcon = (modelName: string) => {
     if (modelName === "cache") return Database;
     if (modelName.includes("gpt")) return Brain;
     return Zap;
-  };
+  });
 
   const Icon = getModelIcon(model);
 

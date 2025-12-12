@@ -95,7 +95,7 @@ export const ConnectionTestPanel: React.FC = () => {
         
         if (error) throw error;
         return data;
-  };
+  });
       
       const result: TestResult = {
         name: "Supabase com Retry",
@@ -120,7 +120,7 @@ export const ConnectionTestPanel: React.FC = () => {
 
   const clearResults = () => {
     setResults([]);
-  };
+  });
 
   return (
     <div className="space-y-6">

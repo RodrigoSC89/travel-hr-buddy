@@ -159,7 +159,7 @@ const SystemPerformanceMonitor = () => {
     })));
 
     setIsRefreshing(false);
-  };
+  });
 
   const exportReport = async () => {
     setIsExporting(true);
@@ -634,6 +634,6 @@ const SystemPerformanceMonitor = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default SystemPerformanceMonitor;

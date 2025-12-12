@@ -54,6 +54,6 @@ export const AppLayout: React.FC = () => {
       </SEOWrapper>
     </ThemeProvider>
   );
-};
+});
 
 export default AppLayout;

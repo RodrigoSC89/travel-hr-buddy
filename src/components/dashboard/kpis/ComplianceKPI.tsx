@@ -40,7 +40,7 @@ export const ComplianceKPI = memo(function() {
 
     return () => {
       mounted = false;
-    };
+    });
   }, []);
 
   if (loading) {

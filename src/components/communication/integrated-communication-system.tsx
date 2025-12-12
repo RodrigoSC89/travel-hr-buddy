@@ -89,7 +89,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  });
 
   const loadContacts = async () => {
     try {
@@ -269,7 +269,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       title: "Gravação de voz",
       description: "Funcionalidade de voz será implementada em breve",
     });
-  };
+  });
 
   const stopVoiceRecording = () => {
     setIsRecording(false);

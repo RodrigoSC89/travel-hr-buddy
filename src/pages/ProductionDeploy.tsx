@@ -19,6 +19,6 @@ const ProductionDeployPage = () => {
       <ProductionDeployCenter />
     </div>
   );
-};
+});
 
 export default ProductionDeployPage;

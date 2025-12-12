@@ -154,51 +154,51 @@ export default function Patch520AIReplay() {
             return selectedMission.duration;
           }
           return next;
-  };
+  });
       }, 100);
     }
 
     return () => {
       if (interval) clearInterval(interval);
-    };
+    });
   }, [isPlaying, playbackSpeed, selectedMission.duration]);
 
   const togglePlayback = () => {
     setIsPlaying(!isPlaying);
-  };
+  });
 
   const handleSeek = (value: number[]) => {
     setCurrentTime(value[0]);
-  };
+  });
 
   const skipToStart = () => {
     setCurrentTime(0);
     setIsPlaying(false);
-  };
+  });
 
   const skipToEnd = () => {
     setCurrentTime(selectedMission.duration);
     setIsPlaying(false);
-  };
+  });
 
   const rewind = () => {
     setCurrentTime(Math.max(0, currentTime - 60000));
-  };
+  });
 
   const fastForward = () => {
     setCurrentTime(Math.min(selectedMission.duration, currentTime + 60000));
-  };
+  });
 
   const getVisibleEvents = () => {
     return selectedMission.events.filter(
       (event) => event.timestamp - selectedMission.startTime <= currentTime
     );
-  };
+  });
 
   const getCurrentEvent = () => {
     const visible = getVisibleEvents();
     return visible[visible.length - 1];
-  };
+  });
 
   const formatTime = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
@@ -206,7 +206,7 @@ export default function Patch520AIReplay() {
     const hours = Math.floor(minutes / 60);
     
     return `${String(hours).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
-  };
+  });
 
   const getEventIcon = (type: string) => {
     switch (type) {

@@ -18,7 +18,7 @@ const Innovation = () => {
 
   const handleModuleAccess = (path: string) => {
     navigate(path);
-  };
+  });
 
   return (
     <ModulePageWrapper gradient="purple">

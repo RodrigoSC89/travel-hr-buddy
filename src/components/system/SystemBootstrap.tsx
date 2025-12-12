@@ -33,7 +33,7 @@ export const SystemBootstrap = memo(function({
   useEffect(() => {
     systemInit.initialize().then(() => {
       setInitialized(true);
-  };
+  });
   }, []);
 
   return (

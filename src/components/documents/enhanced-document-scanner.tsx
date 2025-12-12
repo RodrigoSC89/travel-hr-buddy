@@ -245,7 +245,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     setCapturedImage(null);
     setCurrentStep("capture");
     startCamera();
-  };
+  });
 
   const shareResult = (result: DocumentScanResult) => {
     if (navigator.share) {
@@ -273,7 +273,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
       title: "Download iniciado",
       description: "Documento sendo baixado"
     });
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -594,4 +594,4 @@ export const EnhancedDocumentScanner: React.FC = () => {
       )}
     </div>
   );
-};
+});

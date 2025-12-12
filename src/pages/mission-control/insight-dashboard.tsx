@@ -48,7 +48,7 @@ export default function InsightDashboard() {
 
     // Build time series data
     updateTimeSeriesData(currentMetrics);
-  };
+  });
 
   const updateTimeSeriesData = (newMetrics: unknown) => {
     setTimeSeriesData(prev => {
@@ -61,7 +61,7 @@ export default function InsightDashboard() {
       }];
       return updated.slice(-20); // Keep last 20 data points
     });
-  };
+  });
 
   const generateAIReport = async () => {
     setIsGenerating(true);
@@ -133,14 +133,14 @@ ${logs.slice(0, 10).map(log =>
       title: "Relatório Baixado",
       description: "Arquivo salvo com sucesso",
     });
-  };
+  });
 
   const sendReportByEmail = async () => {
     toast({
       title: "Enviando Relatório",
       description: "Funcionalidade em desenvolvimento (Supabase Edge Function)",
     });
-  };
+  });
 
   // Chart colors
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];

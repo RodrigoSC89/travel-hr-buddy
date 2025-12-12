@@ -11,7 +11,7 @@ const ReportsDashboard = () => {
 
   const handleReportGenerated = (report: unknown) => {
     setActiveReport(report);
-  };
+  });
 
   return (
     <div className="space-y-6">

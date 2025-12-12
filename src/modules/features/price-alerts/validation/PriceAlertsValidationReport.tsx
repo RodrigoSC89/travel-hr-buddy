@@ -29,7 +29,7 @@ export const PriceAlertsValidationReport: React.FC = () => {
 
   const updateTest = (id: string, updates: Partial<ValidationTest>) => {
     setTests(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t));
-  };
+  });
 
   const runValidation = async () => {
     setRunning(true);

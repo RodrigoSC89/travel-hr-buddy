@@ -84,7 +84,7 @@ export default function InfirmaryDashboard() {
     }, 1000);
     
     setChatMessage("");
-  };
+  });
 
   const expiringItems = mockSupplies.filter(s => s.status === "expiring" || s.status === "critical").length;
   const lowStockItems = mockSupplies.filter(s => s.status === "low" || s.status === "critical").length;

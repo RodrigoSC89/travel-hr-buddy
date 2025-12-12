@@ -168,7 +168,7 @@ const IntelligentNotificationSystem = () => {
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          notification.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesType && matchesPriority && matchesSearch;
-  };
+  });
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 
@@ -176,7 +176,7 @@ const IntelligentNotificationSystem = () => {
         notif.id === id ? { ...notif, read: true } : notif
       )
     );
-  };
+  });
 
   const markAllAsRead = () => {
     setNotifications(prev => 
@@ -186,7 +186,7 @@ const IntelligentNotificationSystem = () => {
       title: "Sucesso",
       description: "Todas as notificações foram marcadas como lidas",
     });
-  };
+  });
 
   const deleteNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
@@ -194,12 +194,12 @@ const IntelligentNotificationSystem = () => {
       title: "Notificação removida",
       description: "A notificação foi removida com sucesso",
     });
-  };
+  });
 
   const archiveNotification = (id: string) => {
     // Implementar lógica de arquivo
     deleteNotification(id);
-  };
+  });
 
   const updateSettings = (key: string, value: unknown) => {
     setSettings(prev => ({
@@ -210,7 +210,7 @@ const IntelligentNotificationSystem = () => {
       title: "Configurações atualizadas",
       description: "Suas preferências foram salvas",
     });
-  };
+  });
 
   const getRelativeTime = (timestamp: Date) => {
     const now = new Date();
@@ -220,7 +220,7 @@ const IntelligentNotificationSystem = () => {
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`;
     if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h atrás`;
     return `${Math.floor(diffInMinutes / 1440)}d atrás`;
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const urgentCount = notifications.filter(n => n.priority === "urgent" && !n.read).length;

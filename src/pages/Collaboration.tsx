@@ -23,6 +23,6 @@ const Collaboration = () => {
       </div>
     </ModulePageWrapper>
   );
-};
+});
 
 export default Collaboration;

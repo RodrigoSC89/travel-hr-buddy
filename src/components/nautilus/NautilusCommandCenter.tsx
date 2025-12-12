@@ -135,15 +135,15 @@ export const NautilusCommandCenter = memo(function() {
     if (isOnline && pendingCount > 0) await forceSync();
     setIsRefreshing(false);
     toast.success("Dados atualizados!");
-  };
+  });
 
   const handleMarkAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  };
+  });
 
   const handleDismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
 

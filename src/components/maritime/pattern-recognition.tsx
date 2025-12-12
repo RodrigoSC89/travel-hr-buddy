@@ -130,7 +130,7 @@ export const PatternRecognition: React.FC = () => {
     if (trend === "up") return "↗";
     if (trend === "down") return "↘";
     return "→";
-  };
+  });
 
   const averageAccuracy = Math.round(
     patterns.reduce((sum, p) => sum + p.accuracy, 0) / patterns.length

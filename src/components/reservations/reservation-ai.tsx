@@ -78,7 +78,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       const now = new Date();
       const daysDiff = (startDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
       return daysDiff <= 7 && daysDiff > 0 && r.status === "confirmed";
-  };
+  });
 
     upcomingReservations.forEach(reservation => {
       const startDate = new Date(reservation.start_date);
@@ -344,4 +344,4 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       </div>
     </div>
   );
-};
+});

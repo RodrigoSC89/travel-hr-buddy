@@ -175,7 +175,7 @@ Como posso ajudá-lo hoje?`,
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);
     }, 1500);
-  };
+  });
 
   const generateMaritimeResponse = (query: string): Message => {
     const lowerQuery = query.toLowerCase();
@@ -401,14 +401,14 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
       title: "📄 OCR Ativado",
       description: "Sistema de análise de documentos pronto. Selecione um arquivo para processar.",
     });
-  };
+  });
 
   const generateReport = () => {
     toast({
       title: "📊 Gerando Relatório",
       description: "Relatório especializado sendo gerado em " + languages.find(l => l.code === selectedLanguage)?.name,
     });
-  };
+  });
 
   return (
     <div className="space-y-6">

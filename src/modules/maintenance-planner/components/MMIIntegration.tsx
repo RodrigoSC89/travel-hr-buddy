@@ -124,13 +124,13 @@ export const MMIIntegration: React.FC = () => {
     if (probability >= 0.7) return "text-red-600";
     if (probability >= 0.5) return "text-orange-600";
     return "text-yellow-600";
-  };
+  });
 
   const getProbabilityBadge = (probability: number) => {
     if (probability >= 0.7) return "destructive";
     if (probability >= 0.5) return "secondary";
     return "default";
-  };
+  });
 
   if (loading) {
     return (
@@ -221,4 +221,4 @@ export const MMIIntegration: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

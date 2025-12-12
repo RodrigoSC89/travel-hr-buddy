@@ -28,7 +28,7 @@ const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDel
       cancelled: "Cancelada",
     };
     return <Badge variant="outline" className={styles[status]}>{labels[status]}</Badge>;
-  };
+  });
 
   const getRiskBadge = (risk: VoyageRoute["weatherRisk"]) => {
     const styles = {
@@ -43,7 +43,7 @@ const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDel
         {labels[risk]}
       </Badge>
     );
-  };
+  });
 
   if (voyages.length === 0) {
     return (
@@ -126,6 +126,6 @@ const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDel
       ))}
     </div>
   );
-};
+});
 
 export default VoyagesList;

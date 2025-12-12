@@ -127,12 +127,12 @@ export const AutomatedReportsManager = memo(() => {
     ));
     const report = reports.find(r => r.id === id);
     toast.success(report?.isActive ? "Relatório pausado" : "Relatório ativado");
-  };
+  });
 
   const confirmDeleteReport = (id: string) => {
     setReportToDelete(id);
     setDeleteDialogOpen(true);
-  };
+  });
 
   const deleteReport = () => {
     if (reportToDelete) {
@@ -244,7 +244,7 @@ export const AutomatedReportsManager = memo(() => {
       toast.success("Sugestões carregadas");
     } finally {
       setIsLoadingAI(false);
-    };
+    });
   };
 
   return (
@@ -510,4 +510,4 @@ const ReportCard = ({
       </CardContent>
     </Card>
   );
-};
+});

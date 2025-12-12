@@ -117,7 +117,7 @@ export const AccessibilityAuditor: React.FC = () => {
     setIssues(mockIssues);
     setScanComplete(true);
     setIsScanning(false);
-  };
+  });
 
   const getIssueIcon = (type: AccessibilityIssue["type"]) => {
     switch (type) {
@@ -145,7 +145,7 @@ export const AccessibilityAuditor: React.FC = () => {
     if (score >= 95) return "text-success";
     if (score >= 80) return "text-warning";
     return "text-danger";
-  };
+  });
 
   return (
     <div className="space-y-6">

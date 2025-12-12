@@ -120,14 +120,14 @@ export default function Patch517CoordinationAI() {
       prev.map((d) => (d.id === id ? { ...d, status: "approved" as const } : d))
     );
     toast.success("Decisão aprovada");
-  };
+  });
 
   const executeDecision = (id: string) => {
     setAiDecisions((prev) =>
       prev.map((d) => (d.id === id ? { ...d, status: "executed" as const } : d))
     );
     toast.success("Decisão executada");
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

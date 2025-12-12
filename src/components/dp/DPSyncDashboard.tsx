@@ -11,7 +11,7 @@ const loadORT = async () => {
     ort = await import("onnxruntime-web");
   }
   return ort;
-};
+});
 
 export default function DPSyncDashboard() {
   const [sync, setSync] = useState("Sincronizando...");
@@ -37,7 +37,7 @@ export default function DPSyncDashboard() {
         publishEvent("nautilus/dp/alert", { type: "Alerta Crítico", risk, timestamp: Date.now() });
       }
       setSync("Última sync: " + new Date().toLocaleTimeString());
-  };
+  });
     return () => client.end();
   }, []);
 

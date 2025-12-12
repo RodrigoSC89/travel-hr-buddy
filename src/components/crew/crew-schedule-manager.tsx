@@ -133,15 +133,15 @@ export const CrewScheduleManager = memo(() => {
       return <Badge variant="destructive">Emergência</Badge>;
     case "transfer":
       return <Badge variant="secondary">Transferência</Badge>;
-    };
-  };
+    });
+  });
 
   const filteredSchedules = schedules.filter(schedule => {
     const matchesSearch = schedule.crewMemberName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       schedule.vesselName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || schedule.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const activeCount = schedules.filter(s => s.status === "active").length;
   const scheduledCount = schedules.filter(s => s.status === "scheduled").length;

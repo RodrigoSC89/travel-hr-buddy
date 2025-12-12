@@ -28,7 +28,7 @@ export default function AutonomyConsole() {
 
     return () => {
       clearInterval(interval);
-    };
+    });
   }, []);
 
   const loadData = () => {
@@ -36,7 +36,7 @@ export default function AutonomyConsole() {
     setStats(autonomyEngine.getStatistics());
     setPatternStats(patternRecognition.getStatistics());
     setHotfixStats(hotfixManager.getStatistics());
-  };
+  });
 
   const toggleAutonomy = () => {
     if (isActive) {

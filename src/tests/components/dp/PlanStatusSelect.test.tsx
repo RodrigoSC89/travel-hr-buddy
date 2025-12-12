@@ -16,7 +16,7 @@ vi.mock("sonner", () => ({
 describe("PlanStatusSelect Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render with initial status", () => {
     const incident = {
@@ -56,7 +56,7 @@ describe("PlanStatusSelect Component", () => {
     render(<PlanStatusSelect incident={incident} />);
     
     expect(screen.getByText(/Atualizado em/i)).toBeDefined();
-  };
+  });
 
   it("should call API when status changes", async () => {
     const mockFetch = global.fetch as ReturnType<typeof vi.fn>;
@@ -109,8 +109,8 @@ describe("PlanStatusSelect Component", () => {
 
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith("concluído");
-  };
-  };
+  });
+  });
 
   it("should disable select while loading", async () => {
     const mockFetch = global.fetch as ReturnType<typeof vi.fn>;
@@ -128,6 +128,6 @@ describe("PlanStatusSelect Component", () => {
 
     await waitFor(() => {
       expect(select.disabled).toBe(true);
-  };
-  };
-};
+  });
+  });
+});

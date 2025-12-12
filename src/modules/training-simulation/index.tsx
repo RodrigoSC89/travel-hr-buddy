@@ -147,7 +147,7 @@ export default function TrainingSimulation() {
     setSelectedAnswer(null);
     setShowFeedback(false);
     toast.info(`Iniciando simulação: ${sim.title}`);
-  };
+  });
 
   const handleAnswer = (optionIndex: number) => {
     if (showFeedback) return;
@@ -197,7 +197,7 @@ export default function TrainingSimulation() {
     setSelectedAnswer(null);
     setShowFeedback(false);
     toast.info("Simulação reiniciada");
-  };
+  });
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {

@@ -87,18 +87,18 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       ...prev,
       [elementNumber]: [...(prev[elementNumber] || []), response]
     }));
-  };
+  });
 
   const updateResponse = (elementNumber: string, index: number, response: AuditResponse) => {
     setAuditResponses(prev => ({
       ...prev,
       [elementNumber]: prev[elementNumber].map((r, i) => i === index ? response : r)
     }));
-  };
+  });
 
   const addNonConformity = (nc: NonConformity) => {
     setNonConformities(prev => [...prev, nc]);
-  };
+  });
 
   const runElementAnalysis = async (elementNumber: string) => {
     setIsAnalyzing(true);
@@ -206,7 +206,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     const allResponses = Object.values(auditResponses).flat();
     const compliantResponses = allResponses.filter(r => r.score === "compliant").length;
     return allResponses.length > 0 ? Math.round((compliantResponses / allResponses.length) * 100) : 0;
-  };
+  });
 
   const getScoreColor = (score: string) => {
     switch (score) {

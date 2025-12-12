@@ -142,7 +142,7 @@ export default function WorkflowCommandCenter() {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  };
+  });
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -154,7 +154,7 @@ export default function WorkflowCommandCenter() {
   const handleMarkAllRead = () => {
     setUnreadCount(0);
     toast({ title: "Notificações", description: "Todas marcadas como lidas" });
-  };
+  });
 
   const handleNewWorkflow = async () => {
     if (!newWorkflowData.name) {
@@ -171,7 +171,7 @@ export default function WorkflowCommandCenter() {
     });
     setShowNewWorkflow(false);
     setNewWorkflowData({ name: "", description: "", category: "custom", priority: "medium" });
-  };
+  });
 
   const handleUseTemplate = async (template: typeof workflowTemplates[0]) => {
     await createWorkflow({
@@ -185,7 +185,7 @@ export default function WorkflowCommandCenter() {
       tags: template.tags,
     });
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
-  };
+  });
 
   const getNodeStatusColor = (status: string) => {
     switch (status) {

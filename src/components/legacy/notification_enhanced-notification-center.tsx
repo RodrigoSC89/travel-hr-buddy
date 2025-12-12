@@ -208,7 +208,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
 
     return () => {
       subscription.unsubscribe();
-    };
+    });
   }, []);
 
   if (isLoading) {
@@ -366,4 +366,4 @@ export const EnhancedNotificationCenter: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

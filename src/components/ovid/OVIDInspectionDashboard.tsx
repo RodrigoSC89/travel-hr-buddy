@@ -68,7 +68,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
     setInspectionStarted(true);
     setActiveTab("checklist");
     toast.success("Inspeção OVID iniciada");
-  };
+  });
 
   const handleAnswerChange = (questionId: string, answer: "yes" | "no" | "na", observation?: string) => {
     const prevAnswer = checklistAnswers[questionId]?.answer;
@@ -100,7 +100,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
       
       return newStatus;
     });
-  };
+  });
 
   const handleExport = () => {
     toast.success("Exportando relatório OVID...");
@@ -109,7 +109,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
   const handleFilter = () => {
     toast.info("Filtros aplicados");
-  };
+  });
 
   return (
     <div className="space-y-6">

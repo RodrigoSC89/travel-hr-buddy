@@ -199,7 +199,7 @@ const SmartIntegrationHub: React.FC = () => {
       }
       return integration;
     }));
-  };
+  });
 
   const syncIntegration = (id: string) => {
     setIntegrations(prev => prev.map(integration => {
@@ -212,7 +212,7 @@ const SmartIntegrationHub: React.FC = () => {
       }
       return integration;
     }));
-  };
+  });
 
   const toggleAutomationRule = (id: string) => {
     setAutomationRules(prev => prev.map(rule => {
@@ -226,7 +226,7 @@ const SmartIntegrationHub: React.FC = () => {
       }
       return rule;
     }));
-  };
+  });
 
   const getStatusIcon = (status: Integration["status"]) => {
     switch (status) {

@@ -43,8 +43,8 @@ type TemplateQueryResponse = Promise<{
 type TemplateQueryBuilder = {
   select: () => {
     order: () => TemplateQueryResponse;
-  };
-};
+  });
+});
 
 const createTemplateQueryBuilder = (
   response?: Partial<{ data: TemplateRecord[] | null; error: Error | null }>
@@ -57,7 +57,7 @@ const createTemplateQueryBuilder = (
       order: orderFn,
     })),
   };
-};
+});
 
 // Mock Supabase client
 vi.mock("@/integrations/supabase/client", () => ({
@@ -81,7 +81,7 @@ const originalPrompt = window.prompt;
 beforeEach(() => {
   window.prompt = vi.fn();
   vi.clearAllMocks();
-  };
+  });
 
 describe("ApplyTemplateModal Component", () => {
   it("should render the trigger button", () => {
@@ -89,7 +89,7 @@ describe("ApplyTemplateModal Component", () => {
     render(<ApplyTemplateModal onApply={onApply} />);
     
     expect(screen.getByRole("button", { name: /Aplicar Template/i })).toBeInTheDocument();
-  };
+  });
 
   it("should open modal when trigger button is clicked", async () => {
     const onApply = vi.fn();
@@ -101,8 +101,8 @@ describe("ApplyTemplateModal Component", () => {
     await waitFor(() => {
       expect(screen.getByText("Aplicar Template")).toBeInTheDocument();
       expect(screen.getByText(/Selecione um template para aplicar/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should fetch templates when modal opens", async () => {
     const onApply = vi.fn();
@@ -113,8 +113,8 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
-  };
-  };
+  });
+  });
 
   it("should display templates in the list", async () => {
     const onApply = vi.fn();
@@ -127,8 +127,8 @@ describe("ApplyTemplateModal Component", () => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
       expect(screen.getByText("Template 2")).toBeInTheDocument();
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should filter templates based on search input", async () => {
     const onApply = vi.fn();
@@ -139,7 +139,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
     
     const searchInput = screen.getByPlaceholderText(/Buscar template/i);
     fireEvent.change(searchInput, { target: { value: "Simple" } });
@@ -148,8 +148,8 @@ describe("ApplyTemplateModal Component", () => {
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
       expect(screen.queryByText("Template 1")).not.toBeInTheDocument();
       expect(screen.queryByText("Template 2")).not.toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should show message when no templates match search", async () => {
     const onApply = vi.fn();
@@ -160,15 +160,15 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
     
     const searchInput = screen.getByPlaceholderText(/Buscar template/i);
     fireEvent.change(searchInput, { target: { value: "NonExistent" } });
     
     await waitFor(() => {
       expect(screen.getByText("Nenhum template encontrado")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should apply template without variables directly", async () => {
     const onApply = vi.fn();
@@ -179,7 +179,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-  };
+  });
     
     const templateButton = screen.getByText("Simple Template").closest("button");
     fireEvent.click(templateButton!);
@@ -202,14 +202,14 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
     
     const templateButton = screen.getByText("Template 1").closest("button");
     fireEvent.click(templateButton!);
     
     expect(window.prompt).toHaveBeenCalledWith("Preencha o campo: name");
     expect(onApply).toHaveBeenCalledWith("Hello John");
-  };
+  });
 
   it("should detect and replace multiple variables in template", async () => {
     const promptMock = vi.fn();
@@ -225,7 +225,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 2")).toBeInTheDocument();
-  };
+  });
     
     const templateButton = screen.getByText("Template 2").closest("button");
     fireEvent.click(templateButton!);
@@ -233,7 +233,7 @@ describe("ApplyTemplateModal Component", () => {
     expect(window.prompt).toHaveBeenCalledWith("Preencha o campo: recipient");
     expect(window.prompt).toHaveBeenCalledWith("Preencha o campo: subject");
     expect(onApply).toHaveBeenCalledWith("Dear Jane, this is about Meeting");
-  };
+  });
 
   it("should handle user canceling variable input", async () => {
     window.prompt = vi.fn().mockReturnValue(null);
@@ -246,14 +246,14 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  };
+  });
     
     const templateButton = screen.getByText("Template 1").closest("button");
     fireEvent.click(templateButton!);
     
     // Variable should remain unchanged when user cancels
     expect(onApply).toHaveBeenCalledWith("Hello {{name}}");
-  };
+  });
 
   it("should handle fetch error gracefully", async () => {
     // Override the mock for this test
@@ -273,8 +273,8 @@ describe("ApplyTemplateModal Component", () => {
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
       });
-  };
-  };
+  });
+  });
 
   it("should close modal after applying template", async () => {
     const onApply = vi.fn();
@@ -285,17 +285,17 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-  };
+  });
     
     const templateButton = screen.getByText("Simple Template").closest("button");
     fireEvent.click(templateButton!);
     
     await waitFor(() => {
       expect(screen.queryByText("Aplicar Template")).not.toBeInTheDocument();
-  };
-  };
-  };
+  });
+  });
+  });
 
 afterEach(() => {
   window.prompt = originalPrompt;
-};
+});

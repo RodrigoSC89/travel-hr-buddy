@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface IncidentWorkflowProps {
   incident: unknown: unknown: unknown;

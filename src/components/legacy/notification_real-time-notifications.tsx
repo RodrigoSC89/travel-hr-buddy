@@ -126,17 +126,17 @@ export const NotificationCenter: React.FC = () => {
     setNotifications(prev => 
       prev.map(n => n.id === id ? { ...n, isRead: true } : n)
     );
-  };
+  });
 
   const markAllAsRead = () => {
     setNotifications(prev => 
       prev.map(n => ({ ...n, isRead: true }))
     );
-  };
+  });
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  };
+  });
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
@@ -150,7 +150,7 @@ export const NotificationCenter: React.FC = () => {
     
     const diffInDays = Math.floor(diffInHours / 24);
     return `${diffInDays}d atrás`;
-  };
+  });
 
   // Simular notificações em tempo real
   useEffect(() => {

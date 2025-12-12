@@ -56,7 +56,7 @@ export const NotificationsPanel: React.FC = () => {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [showUnreadOnly]);
 
   const handleMarkAsRead = async (id: string) => {
@@ -150,4 +150,4 @@ export const NotificationsPanel: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

@@ -189,7 +189,7 @@ export default function TemplateEditor() {
       title: "Placeholder inserido!",
       description: `A variável {{${placeholderName.trim()}}} foi adicionada ao template.`,
     });
-  };
+  });
 
   const handleGenerateWithAI = async () => {
     if (!title.trim()) {

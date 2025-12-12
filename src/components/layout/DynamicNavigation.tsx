@@ -57,8 +57,8 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       if (filterMode === "partial") return module.completeness === "partial";
       if (filterMode === "incomplete") return module.status === "incomplete" || module.completeness === "broken";
       return true;
-  };
-  };
+  });
+  });
 
   const toggleSection = (category: string) => {
     const newSections = new Set(openSections);
@@ -68,11 +68,11 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       newSections.add(category);
     }
     setOpenSections(newSections);
-  };
+  });
 
   const isActive = (path: string) => {
     return location.pathname === path;
-  };
+  });
 
   const getStatusIcon = (module: ModuleDefinition) => {
     if (module.completeness === "100%") {
@@ -83,7 +83,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       return <XCircle className="w-3 h-3 text-red-400" />;
     }
     return null;
-  };
+  });
 
   const getCategoryLabel = (category: string) => {
     const labels: Record<string, string> = {
@@ -105,11 +105,11 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       features: "✨ Features"
     };
     return labels[category] || category.toUpperCase();
-  };
+  });
 
   const closeMobileMenu = () => {
     setIsMobileOpen(false);
-  };
+  });
 
   const getFilterLabel = (mode: FilterMode) => {
     const labels: Record<FilterMode, string> = {
@@ -119,7 +119,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       incomplete: "❌ Incomplete"
     };
     return labels[mode];
-  };
+  });
 
   return (
     <>

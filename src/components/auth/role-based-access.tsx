@@ -50,7 +50,7 @@ export const RoleBasedAccess: React.FC<RoleBasedAccessProps> = ({
   }
 
   return <>{children}</>;
-};
+});
 
 const AccessDeniedFallback: React.FC = () => (
   <Card className="border-destructive/20">

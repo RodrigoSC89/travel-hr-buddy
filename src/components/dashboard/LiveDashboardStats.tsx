@@ -175,7 +175,7 @@ export const LiveDashboardStats: React.FC = memo(() => {
       </div>
     </div>
   );
-  };
+  });
 
 LiveDashboardStats.displayName = "LiveDashboardStats";
 

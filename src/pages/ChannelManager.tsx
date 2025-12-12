@@ -6,6 +6,6 @@ import { Navigate } from "react-router-dom";
 
 const ChannelManager = () => {
   return <Navigate to="/communication-command" replace />;
-};
+});
 
 export default ChannelManager;

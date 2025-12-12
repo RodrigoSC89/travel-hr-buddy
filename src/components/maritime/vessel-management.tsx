@@ -177,7 +177,7 @@ export const VesselManagement = memo(function() {
       crew_capacity: vessel.crew_capacity || 0
     });
     setDialogOpen(true);
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -134,7 +134,7 @@ export const RegulatorPortal: React.FC = () => {
     const matchesStatus = filterStatus === "all" || pkg.status === filterStatus;
     const matchesRegulator = filterRegulator === "all" || pkg.regulator === filterRegulator;
     return matchesSearch && matchesStatus && matchesRegulator;
-  };
+  });
 
   const stats = {
     total: packages.length,
@@ -172,12 +172,12 @@ export const RegulatorPortal: React.FC = () => {
 
   const handleCreatePackage = () => {
     toast.info("Abrindo wizard de criação de pacote...");
-  };
+  });
 
   const handleSubmitToRegulator = (pkgId: string) => {
     setPackages(packages.map(p => p.id === pkgId ? { ...p, status: "submitted", submittedDate: new Date().toISOString() } : p));
     toast.success("Pacote enviado ao regulador");
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -138,7 +138,7 @@ const OceanSonar: React.FC = () => {
   const handleExportGeoJSON = () => {
     if (!bathymetricData) return;
     exporter.downloadGeoJSON(bathymetricData, `bathymetry-${Date.now()}.geojson`);
-  };
+  });
 
   const handleExportPNG = async () => {
     if (!bathymetricData) return;
@@ -161,7 +161,7 @@ const OceanSonar: React.FC = () => {
   const handleClearCache = () => {
     exporter.clearCache();
     setHasCachedData(false);
-  };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-black text-white p-6">

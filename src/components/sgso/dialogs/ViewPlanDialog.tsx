@@ -187,7 +187,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
       title: "Download iniciado",
       description: `Baixando ${plan.title} em PDF...`,
 };
-  };
+  });
 
   const handlePrint = () => {
     window.print();
@@ -195,7 +195,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
       title: "Preparando impressão",
       description: "Documento enviado para impressão",
     });
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -351,4 +351,4 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

@@ -411,7 +411,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     }
     
     toast({ title: "Notificação marcada como lida" });
-  };
+  });
 
   const markAllAsRead = async () => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
@@ -434,12 +434,12 @@ const AnalyticsCoreProfessional: React.FC = () => {
       title: "Todas as notificações marcadas como lidas",
       description: `${unreadCount} notificações atualizadas`
     });
-  };
+  });
 
   const deleteNotification = (notificationId: string) => {
     setNotifications(prev => prev.filter(n => n.id !== notificationId));
     toast({ title: "Notificação removida" });
-  };
+  });
 
   const clearAllNotifications = () => {
     const count = notifications.length;
@@ -448,7 +448,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       title: "Todas as notificações foram removidas",
       description: `${count} notificações excluídas`
     });
-  };
+  });
 
   // AI Insights Generation
   const generateAIInsights = async () => {
@@ -883,7 +883,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       title: "Ação aplicada",
       description: "A recomendação foi marcada como implementada"
     });
-  };
+  });
 
   // Filter Functions
   const getFilteredNotifications = useCallback(() => {
@@ -892,7 +892,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       if (filters.categories.length > 0 && !filters.categories.includes(n.category)) return false;
       if (filters.notificationTypes.length > 0 && !filters.notificationTypes.includes(n.type)) return false;
       return true;
-  };
+  });
 
     // Sort
     filtered.sort((a, b) => {
@@ -920,7 +920,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       description: "Suas preferências foram atualizadas"
     });
     setSettingsOpen(false);
-  };
+  });
 
   // Reset Settings
   const resetSettings = () => {
@@ -939,7 +939,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     setSettings(defaultSettings);
     localStorage.removeItem("analyticsSettings");
     toast({ title: "Configurações restauradas para o padrão" });
-  };
+  });
 
   // Apply Filters
   const applyFilters = () => {
@@ -948,7 +948,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       title: "Filtros Aplicados",
       description: `${getFilteredNotifications().length} itens encontrados`
     });
-  };
+  });
 
   // Clear Filters
   const clearFilters = () => {
@@ -961,7 +961,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       sortOrder: "desc"
     });
     toast({ title: "Filtros limpos" });
-  };
+  });
 
   // UI Components
   const unreadCount = notifications.filter(n => !n.isRead).length;
@@ -996,7 +996,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       low: "Baixa"
     };
     return <Badge variant={variants[priority] || "default"}>{labels[priority] || priority}</Badge>;
-  };
+  });
 
   const getInsightTypeBadge = (type: string) => {
     const config: Record<string, { label: string; color: string }> = {
@@ -1007,7 +1007,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     };
     const { label, color } = config[type] || { label: type, color: "bg-gray-500/10 text-gray-500" };
     return <Badge className={`${color} border-0`}>{label}</Badge>;
-  };
+  });
 
   if (isLoading) {
     return (

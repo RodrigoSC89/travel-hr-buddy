@@ -145,7 +145,7 @@ export const ModuleCard = memo(function({ moduleKey, module }: ModuleCardProps) 
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     return `${hours}h ${minutes}m`;
-  };
+  });
 
   return (
     <Card>
@@ -194,7 +194,7 @@ export const CacheStats = memo(function({ size, capacity, pending, total }: Cach
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i];
-  };
+  });
 
   return (
     <Card>

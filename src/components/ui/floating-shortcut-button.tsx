@@ -63,7 +63,7 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
     }
     const IconComp = icon as LucideIcon;
     return <IconComp className={cn(iconSizes[size], spinning && "animate-spin")} />;
-  };
+  });
 
   const mergedButtonStyle: React.CSSProperties = {
     ...style,

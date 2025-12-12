@@ -198,7 +198,7 @@ export const PublicAPI = memo(() => {
       description: "A chave da API foi copiada para a área de transferência.",
     });
     setTimeout(() => setCopiedKey(false), 2000);
-  };
+  });
 
   const generateNewKey = () => {
     const newKey = `naut_live_sk_${Math.random().toString(36).substring(2, 15)}`;
@@ -207,7 +207,7 @@ export const PublicAPI = memo(() => {
       title: "Nova chave gerada",
       description: "Uma nova chave da API foi gerada com sucesso.",
     });
-  };
+  });
 
   const getMethodColor = (method: string) => {
     switch (method) {
@@ -225,8 +225,8 @@ export const PublicAPI = memo(() => {
     case "beta": return "bg-warning text-warning-foreground";
     case "deprecated": return "bg-danger text-danger-foreground";
     default: return "bg-muted text-muted-foreground";
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

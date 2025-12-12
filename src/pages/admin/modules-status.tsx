@@ -138,7 +138,7 @@ const ModulesStatusDashboard: React.FC = () => {
           : m
       )
     );
-  };
+  });
 
   const toggleModuleVisibility = (moduleId: string) => {
     setModules((prev) =>
@@ -151,7 +151,7 @@ const ModulesStatusDashboard: React.FC = () => {
           : m
       )
     );
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const styles = {

@@ -36,7 +36,7 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 import { saveAs } from "file-saver";
 
 interface Template {
@@ -101,7 +101,7 @@ const DocumentTemplatesManager = () => {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const loadTemplates = async () => {
@@ -157,15 +157,15 @@ const DocumentTemplatesManager = () => {
     }
     
     return [...new Set(matches)];
-  };
+  });
 
   const substituteVariables = (content: string, variables: Record<string, string>): string => {
     let result = content;
     Object.entries(variables).forEach(([key, value]) => {
       result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
-  };
+  });
     return result;
-  };
+  });
 
   const createTemplate = async () => {
     try {
@@ -536,7 +536,7 @@ const DocumentTemplatesManager = () => {
                             const vars: Record<string, string> = {};
                             template.variables?.forEach(v => {
                               vars[v] = "";
-  };
+  });
                             setPreviewVariables(vars);
                           }}
                         >
@@ -621,6 +621,6 @@ const DocumentTemplatesManager = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default DocumentTemplatesManager;

@@ -141,7 +141,7 @@ export const SettingsPanel = memo(() => {
       }
     }));
     setHasChanges(true);
-  };
+  });
 
   const saveSettings = async () => {
     try {

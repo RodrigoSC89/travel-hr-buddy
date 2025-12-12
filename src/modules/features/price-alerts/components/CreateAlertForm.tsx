@@ -169,4 +169,4 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

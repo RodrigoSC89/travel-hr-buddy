@@ -46,7 +46,7 @@ vi.mock("@/hooks/use-toast", () => ({
 describe("DocumentManagementCenter Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render Centro de Documentos title", async () => {
     render(
@@ -57,7 +57,7 @@ describe("DocumentManagementCenter Component", () => {
 
     // Wait for the component to render
     expect(await screen.findByText(/Centro de Documentos/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render document management description", async () => {
     render(
@@ -68,7 +68,7 @@ describe("DocumentManagementCenter Component", () => {
 
     // Check for description text
     expect(await screen.findByText(/Gerencie documentos, contratos e certificações da organização/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render upload and export buttons", async () => {
     render(
@@ -80,7 +80,7 @@ describe("DocumentManagementCenter Component", () => {
     // Check for buttons
     expect(await screen.findByText(/Upload Documento/i)).toBeInTheDocument();
     expect(screen.getByText(/Exportar Lista/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render document statistics cards", async () => {
     render(
@@ -92,7 +92,7 @@ describe("DocumentManagementCenter Component", () => {
     // Check for stats cards
     expect(await screen.findByText(/Total de Documentos/i)).toBeInTheDocument();
     expect(screen.getByText(/Uploads Recentes/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render document listing tabs", async () => {
     render(
@@ -110,4 +110,4 @@ describe("DocumentManagementCenter Component", () => {
     const expiredTabs = screen.getAllByText(/Expirados/i);
     expect(expiredTabs.length).toBeGreaterThan(0);
   });
-};
+});

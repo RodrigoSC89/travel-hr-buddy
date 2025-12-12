@@ -82,7 +82,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
 
   const handleEnable2FA = () => {
     setIsEnabled2FA(!isEnabled2FA);
-  };
+  });
 
   const handleEnableBiometric = async () => {
     if ("credentials" in navigator) {
@@ -98,7 +98,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-  };
+  });
 
   const revokeSession = (sessionId: string) => {
     // Revoking session

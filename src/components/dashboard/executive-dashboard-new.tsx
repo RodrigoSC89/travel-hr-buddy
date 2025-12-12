@@ -20,7 +20,7 @@ export const ExecutiveDashboardNew = memo(() => {
       description: error.message,
       variant: "destructive",
     });
-  };
+  });
 
   return (
     <ExecutiveDashboardBase
@@ -28,6 +28,6 @@ export const ExecutiveDashboardNew = memo(() => {
       onError={handleError}
     />
   );
-};
+});
 
 export default ExecutiveDashboardNew;

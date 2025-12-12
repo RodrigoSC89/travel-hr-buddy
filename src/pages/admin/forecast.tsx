@@ -79,13 +79,13 @@ export default function ForecastPage() {
     if (trend === "up") return <TrendingUp className="h-4 w-4 text-green-500" />;
     if (trend === "down") return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
     return <Activity className="h-4 w-4 text-yellow-500" />;
-  };
+  });
 
   const getTrendColor = (trend: string) => {
     if (trend === "up") return "text-green-600";
     if (trend === "down") return "text-red-600";
     return "text-yellow-600";
-  };
+  });
 
   return (
     <div className="container mx-auto py-8 space-y-8">

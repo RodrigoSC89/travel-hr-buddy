@@ -82,12 +82,12 @@ export const CrewPayrollManager = memo(function() {
   const getCrewName = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
     return crew?.full_name || "N/A";
-  };
+  });
 
   const getCrewRank = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
     return crew?.rank || "";
-  };
+  });
 
   // Filter payrolls
   const filteredPayrolls = payrolls.filter(p => {
@@ -95,7 +95,7 @@ export const CrewPayrollManager = memo(function() {
     const matchesSearch = crewName.includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || p.payment_status === filterStatus;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   // Stats
   const stats = {
@@ -114,7 +114,7 @@ export const CrewPayrollManager = memo(function() {
       currency,
       minimumFractionDigits: 2,
     }).format(amount);
-  };
+  });
 
   return (
     <div className="space-y-6">

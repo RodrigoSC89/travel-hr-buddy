@@ -35,13 +35,13 @@ export default function IncidentAiModal() {
     // Listen for storage events (triggered by other windows/tabs or manual dispatch)
     const handleStorageChange = () => {
       checkForIncident();
-    };
+    });
 
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
-    };
+    });
   }, []);
 
   const handleAnalyze = async () => {

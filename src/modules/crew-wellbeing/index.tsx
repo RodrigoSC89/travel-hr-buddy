@@ -121,14 +121,14 @@ export default function CrewWellbeing() {
       description: "2 alertas críticos identificados" 
     });
     setIsAnalyzing(false);
-  };
+  });
 
   const handleRecommendRealocation = (crewId: string) => {
     toast({ 
       title: "Realocação sugerida", 
       description: "Notificação enviada para gestão de tripulação" 
     });
-  };
+  });
 
   const getFatigueColor = (level: string) => {
     const colors: Record<string, string> = {
@@ -138,7 +138,7 @@ export default function CrewWellbeing() {
       critical: "bg-red-500/10 text-red-600"
     };
     return colors[level] || colors.low;
-  };
+  });
 
   const getFatigueLabel = (level: string) => {
     const labels: Record<string, string> = {
@@ -148,13 +148,13 @@ export default function CrewWellbeing() {
       critical: "Crítico"
     };
     return labels[level] || "Desconhecido";
-  };
+  });
 
   const getHealthColor = (score: number) => {
     if (score >= 80) return "text-green-600";
     if (score >= 60) return "text-amber-600";
     return "text-red-600";
-  };
+  });
 
   const criticalCount = crew.filter(c => c.fatigueLevel === "critical").length;
   const highCount = crew.filter(c => c.fatigueLevel === "high").length;

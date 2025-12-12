@@ -55,18 +55,18 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         { field: "event_type", operator: "equals", value: "" }
       ]
     });
-  };
+  });
 
   const removeFilter = (index: number) => {
     const newFilters = queryConfig.filters.filter((_, i) => i !== index);
     setQueryConfig({ ...queryConfig, filters: newFilters });
-  };
+  });
 
   const updateFilter = (index: number, field: keyof QueryFilter, value: string) => {
     const newFilters = [...queryConfig.filters];
     newFilters[index] = { ...newFilters[index], [field]: value };
     setQueryConfig({ ...queryConfig, filters: newFilters });
-  };
+  });
 
   const executeQuery = async () => {
     try {

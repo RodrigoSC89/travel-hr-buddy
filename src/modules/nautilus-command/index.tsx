@@ -95,7 +95,7 @@ const NautilusCommandCenter = () => {
       supabase.removeChannel(channel);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, []);
 
   const loadSystemData = async () => {
@@ -479,7 +479,7 @@ const NautilusCommandCenter = () => {
       </div>
     </div>
   );
-};
+});
 
 // Status Card Component
 interface StatusCardProps {
@@ -560,6 +560,6 @@ const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title
       <span className="text-xs opacity-70">{subtitle}</span>
     </button>
   );
-};
+});
 
 export default NautilusCommandCenter;

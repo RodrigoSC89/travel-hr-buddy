@@ -64,7 +64,7 @@ export const TenantSetupWizard: React.FC = () => {
 
   const updateFormData = (field: keyof TenantSetupData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  });
 
   const validateStep = (step: number): boolean => {
     switch (step) {

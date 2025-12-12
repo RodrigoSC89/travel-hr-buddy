@@ -107,7 +107,7 @@ export const CrewManagement = memo(function() {
     if (filter === "expiring") return c.certifications.some(cert => cert.status === "expiring");
     if (filter === "resting") return c.restHours >= 10;
     return true;
-  };
+  });
 
   if (isLoading) {
     return (

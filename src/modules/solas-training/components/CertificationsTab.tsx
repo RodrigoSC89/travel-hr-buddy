@@ -69,7 +69,7 @@ export default function CertificationsTab({
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || cert.code.includes(categoryFilter);
     return matchesSearch && matchesStatus && matchesCategory;
-  };
+  });
 
   const stats = {
     total: certifications.length,
@@ -81,7 +81,7 @@ export default function CertificationsTab({
   const handleRenew = (cert: Certification) => {
     setSelectedCert(cert);
     setShowRenewDialog(true);
-  };
+  });
 
   const handleConfirmRenew = () => {
     if (selectedCert) {
@@ -98,12 +98,12 @@ export default function CertificationsTab({
   const handleView = (cert: Certification) => {
     setSelectedCert(cert);
     onViewCertificate(cert);
-  };
+  });
 
   const handleUpload = (cert: Certification) => {
     setSelectedCert(cert);
     setShowUploadDialog(true);
-  };
+  });
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

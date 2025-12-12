@@ -508,7 +508,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
     return checklist.items
       .filter(item => item.category === currentSectionId)
       .sort((a, b) => a.order - b.order);
-  };
+  });
 
   const getCompletionProgress = () => {
     const totalItems = checklist.items.length;
@@ -516,7 +516,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       item.status === "completed" || item.status === "failed" || item.status === "na"
     ).length;
     return totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
-  };
+  });
 
   const getSectionProgress = (sectionId: string) => {
     const sectionItems = checklist.items.filter(item => item.category === sectionId);
@@ -524,7 +524,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       item.status === "completed" || item.status === "failed" || item.status === "na"
     ).length;
     return sectionItems.length > 0 ? (completedItems / sectionItems.length) * 100 : 0;
-  };
+  });
 
   const handleItemValueChange = (itemId: string, value: string | number | boolean | string[] | undefined) => {
     setChecklist(prev => ({
@@ -542,7 +542,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       ),
       updatedAt: new Date().toISOString()
     }));
-  };
+  });
 
   const handleAutoSave = async () => {
     try {

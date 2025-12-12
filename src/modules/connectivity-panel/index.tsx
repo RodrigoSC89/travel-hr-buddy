@@ -117,7 +117,7 @@ export default function ConnectivityPanel() {
     
     setIsRefreshing(false);
     toast({ title: "Atualizado", description: "Status de conectividade atualizado" });
-  };
+  });
 
   const handleForceSync = async (vesselId: string) => {
     const vessel = vessels.find(v => v.id === vesselId);
@@ -177,7 +177,7 @@ export default function ConnectivityPanel() {
     if (strength >= 40) return <SignalMedium className="h-5 w-5 text-amber-500" />;
     if (strength > 0) return <SignalLow className="h-5 w-5 text-red-500" />;
     return <WifiOff className="h-5 w-5 text-muted-foreground" />;
-  };
+  });
 
   const onlineCount = vessels.filter(v => v.status === "online").length;
   const offlineCount = vessels.filter(v => v.status === "offline").length;

@@ -10,7 +10,7 @@ export const SrOnly: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       {children}
     </span>
   );
-};
+});
 
 /**
  * Loading State with Accessibility
@@ -32,7 +32,7 @@ export const AccessibleLoading: React.FC<{
       <SrOnly>{message}</SrOnly>
     </div>
   );
-};
+});
 
 /**
  * Accessible Button with proper ARIA labels
@@ -70,7 +70,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
       {children}
     </button>
   );
-};
+});
 
 /**
  * Skip to Main Content Link (WCAG 2.1 requirement)
@@ -81,7 +81,7 @@ export const SkipToMain: React.FC = () => {
       Pular para o conteúdo principal
     </a>
   );
-};
+});
 
 /**
  * Live Region for Dynamic Content Announcements
@@ -101,7 +101,7 @@ export const LiveRegion: React.FC<{
       {children}
     </div>
   );
-};
+});
 
 export default {
   SrOnly,

@@ -31,13 +31,13 @@ const loadXLSX = async () => {
     XLSX = await import("xlsx");
   }
   return XLSX;
-};
+});
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface ProjectTask {
   id: string;
@@ -150,7 +150,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     }
 
     setFilteredTasks(filtered);
-  };
+  });
 
   const createTask = async () => {
     try {
@@ -238,7 +238,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       progress: 0
     });
-  };
+  });
 
   const openEditDialog = (task: ProjectTask) => {
     setSelectedTask(task);
@@ -254,7 +254,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       progress: task.progress
     });
     setIsEditOpen(true);
-  };
+  });
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredTasks.map(task => ({
@@ -273,7 +273,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     XLSX.writeFile(workbook, "project_timeline.xlsx");
 
     toast({ title: "Success", description: "Timeline exported to Excel" });
-  };
+  });
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -302,7 +302,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     
     doc.save("project_timeline.pdf");
     toast({ title: "Success", description: "Timeline exported to PDF" });
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -341,7 +341,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       left: `${(start / total) * 100}%`,
       width: `${(duration / total) * 100}%`
     };
-  };
+  });
 
   const minDate = filteredTasks.length > 0 
     ? filteredTasks.reduce((min, task) => task.start_date < min ? task.start_date : min, filteredTasks[0].start_date)
@@ -696,4 +696,4 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       </Dialog>
     </div>
   );
-};
+});

@@ -389,7 +389,7 @@ export default function MentorDPProfessional() {
     setQuizHistory(prev => prev.map((q, i) => i === 0 ? { ...q, score, completedAt: new Date() } : q));
     setActiveQuiz(null);
     setQuizAnswers({});
-  };
+  });
 
   // Create new module
   const createNewModule = () => {
@@ -478,12 +478,12 @@ export default function MentorDPProfessional() {
     setShowNewQuestionDialog(false);
     setNewQuestion("");
     toast({ title: "Pergunta Adicionada", description: "Sua pergunta foi adicionada ao repositório!" });
-  };
+  });
 
   // Vote on question
   const voteQuestion = (id: string) => {
     setRepositoryQuestions(prev => prev.map(q => q.id === id ? { ...q, votes: q.votes + 1 } : q));
-  };
+  });
 
   // Export logbook
   const exportLogbook = () => {
@@ -505,7 +505,7 @@ export default function MentorDPProfessional() {
     URL.revokeObjectURL(url);
 
     toast({ title: "Exportado", description: "Diário exportado com sucesso!" });
-  };
+  });
 
   // Filter modules by difficulty
   const filteredModules = academyModules.filter(m => 

@@ -230,7 +230,7 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       fiscalYearStart: "01",
     };
-  };
+  });
 
   const [newExpense, setNewExpense] = useState({
     description: "",
@@ -246,7 +246,7 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       minimumFractionDigits: 0,
     }).format(value);
-  };
+  });
 
   // Fetch data
   const fetchData = useCallback(async (showToast = false) => {
@@ -320,12 +320,12 @@ const FinanceCommandCenter: React.FC = () => {
       setTransactions(prev => [{ ...approved, status: "approved" }, ...prev]);
     }
     toast({ title: "Aprovado", description: "A solicitação foi aprovada com sucesso." });
-  };
+  });
 
   const handleReject = (id: string) => {
     setPendingApprovals(prev => prev.filter(p => p.id !== id));
     toast({ title: "Rejeitado", description: "A solicitação foi rejeitada.", variant: "destructive" });
-  };
+  });
 
   // Create expense
   const handleCreateExpense = () => {
@@ -372,7 +372,7 @@ const FinanceCommandCenter: React.FC = () => {
       const csvRows = ["Descrição,Valor,Data,Categoria,Status"];
       transactions.forEach(tx => {
         csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category}","${tx.status}"`);
-  };
+  });
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -382,7 +382,7 @@ const FinanceCommandCenter: React.FC = () => {
     }
 
     toast({ title: "Exportado", description: `Dados exportados em formato ${format.toUpperCase()}.` });
-  };
+  });
 
   // Generate PDF Report
   const generatePDFReport = async () => {
@@ -430,7 +430,7 @@ const FinanceCommandCenter: React.FC = () => {
         const percentage = ((cat.spent / cat.allocated) * 100).toFixed(1);
         doc.text(`${cat.name}: ${formatCurrency(cat.spent)} / ${formatCurrency(cat.allocated)} (${percentage}%)`, 25, yPos);
         yPos += 7;
-  };
+  });
 
       yPos += 10;
 
@@ -444,7 +444,7 @@ const FinanceCommandCenter: React.FC = () => {
       routeCosts.forEach(cost => {
         doc.text(`${cost.route} (${cost.vessel}): ${formatCurrency(cost.totalCost)} - Eficiência: ${cost.efficiency}%`, 25, yPos);
         yPos += 6;
-  };
+  });
 
       doc.setFontSize(8);
       doc.setTextColor(128, 128, 128);
@@ -548,13 +548,13 @@ const FinanceCommandCenter: React.FC = () => {
     if (variance <= 0) return "text-green-600";
     if (variance <= 5) return "text-amber-600";
     return "text-red-600";
-  };
+  });
 
   const getEfficiencyColor = (efficiency: number) => {
     if (efficiency >= 90) return "bg-green-500";
     if (efficiency >= 80) return "bg-amber-500";
     return "bg-red-500";
-  };
+  });
 
   if (isLoading) {
     return (
@@ -1328,6 +1328,6 @@ const FinanceCommandCenter: React.FC = () => {
       </Sheet>
     </div>
   );
-};
+});
 
 export default FinanceCommandCenter;

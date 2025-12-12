@@ -112,7 +112,7 @@ export default function AcademyDashboard() {
     const matchesCategory = categoryFilter === "all" || c.category === categoryFilter;
     const matchesLevel = levelFilter === "all" || c.level === levelFilter;
     return matchesSearch && matchesCategory && matchesLevel;
-  };
+  });
 
   // Handlers
   const handleCreateCourse = async () => {
@@ -124,7 +124,7 @@ export default function AcademyDashboard() {
     setShowNewCourse(false);
     setNewCourseData({ course_name: "", course_description: "", duration_hours: 8, category: "Geral", level: "intermediate" });
     toast({ title: "Sucesso", description: "Curso criado com sucesso!" });
-  };
+  });
 
   const handleCreateCrew = async () => {
     if (!newCrewData.name || !newCrewData.position) {
@@ -135,46 +135,46 @@ export default function AcademyDashboard() {
     setShowNewCrew(false);
     setNewCrewData({ name: "", position: "", department: "", email: "", phone: "" });
     await refetch();
-  };
+  });
 
   const handleEnrollInCourse = async (courseId: string) => {
     await enrollInCourse(courseId);
     toast({ title: "Inscrito!", description: "Você foi inscrito no curso. Bom aprendizado!" });
-  };
+  });
 
   const handleContinueCourse = (course: Course, progress: CourseProgress) => {
     setSelectedCourse(course);
     setSelectedProgress(progress);
     setShowCoursePlayer(true);
-  };
+  });
 
   const handleViewCourseDetails = (course: Course) => {
     setSelectedCourse(course);
     setShowCourseDetails(true);
-  };
+  });
 
   const handleViewCrewDetails = (crew: CrewMember) => {
     setSelectedCrew(crew);
     setShowCrewDetails(true);
-  };
+  });
 
   const handleMarkAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     toast({ title: "Notificações", description: "Todas as notificações foram marcadas como lidas" });
-  };
+  });
 
   const handleMarkAsRead = (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-  };
+  });
 
   const handleDeleteNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  };
+  });
 
   const handleSaveSettings = () => {
     toast({ title: "Configurações salvas", description: "Suas preferências foram atualizadas" });
     setShowSettings(false);
-  };
+  });
 
   const handleGenerateAI = useCallback(async () => {
     toast({ title: "Gerando insights...", description: "Analisando dados com IA" });
@@ -316,12 +316,12 @@ export default function AcademyDashboard() {
       advanced: "bg-purple-500/10 text-purple-600"
     };
     return colors[level] || colors.intermediate;
-  };
+  });
 
   const getLevelLabel = (level: string) => {
     const labels: Record<string, string> = { beginner: "Iniciante", intermediate: "Intermediário", advanced: "Avançado" };
     return labels[level] || level;
-  };
+  });
 
   if (isLoading) {
     return (

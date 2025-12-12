@@ -69,8 +69,8 @@ export const AIInsights = memo(() => {
     case "high": return "text-orange-500";
     case "critical": return "text-red-500";
     default: return "text-gray-500";
-    };
-  };
+    });
+  });
 
   return (
     <Card>
@@ -162,4 +162,4 @@ export const AIInsights = memo(() => {
       </CardContent>
     </Card>
   );
-};
+});

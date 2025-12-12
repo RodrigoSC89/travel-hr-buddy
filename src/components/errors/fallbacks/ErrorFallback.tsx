@@ -31,11 +31,11 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
   const handleGoHome = () => {
     window.location.href = "/";
-  };
+  });
 
   const handleRefresh = () => {
     window.location.reload();
-  };
+  });
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4">

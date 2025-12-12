@@ -154,7 +154,7 @@ const getStatusConfig = (status: CAPA["status"]) => {
     aguardando_validacao: { color: "bg-yellow-600 text-white", label: "Aguardando Validação", icon: AlertTriangle }
   };
   return configs[status];
-};
+});
 
 const getEficaciaConfig = (eficacia?: CAPA["eficacia"]) => {
   if (!eficacia) return null;
@@ -164,7 +164,7 @@ const getEficaciaConfig = (eficacia?: CAPA["eficacia"]) => {
     ineficaz: { color: "bg-red-600 text-white", label: "Ineficaz" }
   };
   return configs[eficacia];
-};
+});
 
 export const CAPAManager: React.FC = () => {
   const { toast } = useToast();
@@ -184,7 +184,7 @@ export const CAPAManager: React.FC = () => {
       description: "Nova ação corretiva/preventiva registrada com sucesso."
     });
     setShowNewCAPADialog(false);
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -544,6 +544,6 @@ export const CAPAManager: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default CAPAManager;

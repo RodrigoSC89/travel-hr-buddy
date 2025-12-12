@@ -116,7 +116,7 @@ export default function SGSOAuditReviewPage() {
     setItems(items.map(item => 
       item.id === itemId ? { ...item, [field]: value } : item
     ));
-  };
+  });
 
   const handleSave = async () => {
     setSaving(true);

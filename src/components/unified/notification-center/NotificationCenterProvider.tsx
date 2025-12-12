@@ -55,7 +55,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
         if (isRead !== readFilter) return false;
       }
       return true;
-  };
+  });
   }, [notifications, categoryFilter, priorityFilter, readFilter]);
 
   // Unread count
@@ -159,7 +159,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [effectiveUserId, toast]);
 
   // Mark as read

@@ -106,7 +106,7 @@ export const HealthStatusDashboard: React.FC = () => {
         {status === "healthy" ? "Saudável" : status === "degraded" ? "Degradado" : "Fora do Ar"}
       </Badge>
     );
-  };
+  });
 
   const healthStatusArray = Array.from(healthStatus.entries());
   const overallHealthy = healthStatusArray.every(([, status]) => status.status === "healthy");

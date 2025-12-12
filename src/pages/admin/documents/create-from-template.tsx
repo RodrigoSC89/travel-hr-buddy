@@ -48,14 +48,14 @@ export default function CreateFromTemplate({
     return Array.from(
       new Set(matches.map((m) => m.replace(/[{}]/g, "").trim()))
     );
-  };
+  });
 
   /**
    * Handle variable input change
    */
   const handleChangeVar = (key: string, value: string) => {
     setVariables((prev) => ({ ...prev, [key]: value }));
-  };
+  });
 
   /**
    * Apply variable substitution to template content
@@ -132,7 +132,7 @@ export default function CreateFromTemplate({
    */
   const handleExportPDF = () => {
     window.print();
-  };
+  });
 
   const rawContent =
     typeof template.content === "string"

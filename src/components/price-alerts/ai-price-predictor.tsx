@@ -70,7 +70,7 @@ export const AIPricePredictor: React.FC = () => {
       setPredictions(JSON.parse(stored));
     }
     generateAIInsights();
-  };
+  });
 
   const generatePricePrediction = async () => {
     if (!selectedProduct || !productUrl) {
@@ -488,4 +488,4 @@ export const AIPricePredictor: React.FC = () => {
       )}
     </div>
   );
-};
+});

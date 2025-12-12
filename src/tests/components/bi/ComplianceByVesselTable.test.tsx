@@ -8,7 +8,7 @@ global.fetch = vi.fn();
 describe("ComplianceByVesselTable", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render loading state initially", () => {
     vi.mocked(fetch).mockImplementation(() => 
@@ -18,7 +18,7 @@ describe("ComplianceByVesselTable", () => {
     render(<ComplianceByVesselTable />);
     
     expect(screen.getByText("Carregando dados...")).toBeDefined();
-  };
+  });
 
   it("should render table with data after successful fetch", async () => {
     const mockData = [
@@ -49,8 +49,8 @@ describe("ComplianceByVesselTable", () => {
       expect(screen.getByText(/Detalhamento por Embarcação/i)).toBeDefined();
       expect(screen.getByText("Ocean Star")).toBeDefined();
       expect(screen.getByText("Sea Pioneer")).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should render table headers", async () => {
     const mockData = [
@@ -76,8 +76,8 @@ describe("ComplianceByVesselTable", () => {
       expect(screen.getByText("Concluído")).toBeDefined();
       expect(screen.getByText("Em Andamento")).toBeDefined();
       expect(screen.getByText("Pendente")).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should render error state and sample data on fetch failure", async () => {
     vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
@@ -87,8 +87,8 @@ describe("ComplianceByVesselTable", () => {
     await waitFor(() => {
       expect(screen.getByText(/Erro ao carregar dados de conformidade por navio/i)).toBeDefined();
       expect(screen.getByText(/exibindo dados de exemplo/i)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should display legend information", async () => {
     const mockData = [
@@ -113,6 +113,6 @@ describe("ComplianceByVesselTable", () => {
       expect(screen.getByText(/Verde = Planos concluídos/i)).toBeDefined();
       expect(screen.getByText(/Amarelo = Planos em andamento/i)).toBeDefined();
       expect(screen.getByText(/Vermelho = Planos pendentes/i)).toBeDefined();
-  };
-  };
-};
+  });
+  });
+});

@@ -158,7 +158,7 @@ const OnboardingFlow: React.FC = () => {
     if (progresso >= 50) return "text-blue-500";
     if (progresso >= 25) return "text-yellow-500";
     return "text-orange-500";
-  };
+  });
 
   return (
     <div className="space-y-6">

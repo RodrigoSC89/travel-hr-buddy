@@ -137,7 +137,7 @@ export const IntegrationSecurity: React.FC = () => {
       title: "Política Atualizada",
       description: `${policy?.name} foi ${policy?.enabled ? "desativada" : "ativada"}`,
     });
-  };
+  });
 
   const runSecurityScan = () => {
     toast({
@@ -152,7 +152,7 @@ export const IntegrationSecurity: React.FC = () => {
         description: "Nenhuma vulnerabilidade crítica encontrada",
       });
     }, 3000);
-  };
+  });
 
   return (
     <div className="space-y-6">

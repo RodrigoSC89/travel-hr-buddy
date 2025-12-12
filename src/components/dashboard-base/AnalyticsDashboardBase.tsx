@@ -71,7 +71,7 @@ export const AnalyticsDashboardBase = ({
       format,
       filename: `${config.id}-${timeRange}-${Date.now()}`,
     });
-  };
+  });
 
   // Render widget
   const renderWidget = (widget: unknown) => {

@@ -122,7 +122,7 @@ const AdvancedSystemMonitor: React.FC = () => {
     }
     
     return data;
-  };
+  });
 
   const loadSystemMetrics = async () => {
     try {
@@ -203,7 +203,7 @@ const AdvancedSystemMonitor: React.FC = () => {
       return `${value.toFixed(1)}${unit}`;
     }
     return `${Math.floor(value)} ${unit}`;
-  };
+  });
 
   useEffect(() => {
     loadSystemMetrics();
@@ -388,6 +388,6 @@ const AdvancedSystemMonitor: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AdvancedSystemMonitor;

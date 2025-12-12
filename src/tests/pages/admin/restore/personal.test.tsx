@@ -82,8 +82,8 @@ describe("PersonalRestoreDashboard", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Seu Painel de Restaurações/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("displays loading state initially", () => {
     render(
@@ -93,7 +93,7 @@ describe("PersonalRestoreDashboard", () => {
     );
 
     expect(screen.getByText(/Carregando/i)).toBeInTheDocument();
-  };
+  });
 
   it("renders summary cards with data", async () => {
     render(
@@ -109,8 +109,8 @@ describe("PersonalRestoreDashboard", () => {
       expect(screen.getByText("15")).toBeInTheDocument();
       expect(screen.getByText(/Média por dia/i)).toBeInTheDocument();
       expect(screen.getByText("5")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("renders the bar chart when data is available", async () => {
     render(
@@ -122,8 +122,8 @@ describe("PersonalRestoreDashboard", () => {
     await waitFor(() => {
       expect(screen.getByText(/Restaurações por Dia/i)).toBeInTheDocument();
       expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("calls the correct RPC functions with user email", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -141,6 +141,6 @@ describe("PersonalRestoreDashboard", () => {
       expect(supabase.rpc).toHaveBeenCalledWith("get_restore_summary", {
         email_input: "test@example.com",
       });
-  };
-  };
-};
+  });
+  });
+});

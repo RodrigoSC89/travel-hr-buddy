@@ -143,7 +143,7 @@ const DroppableScheduleSlot: React.FC<{
       ))}
     </div>
   );
-};
+});
 
 export const CrewRotationManager: React.FC = () => {
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
@@ -392,7 +392,7 @@ END:VCALENDAR`;
       delayed: "bg-yellow-500",
     };
     return colors[status] || "bg-gray-500";
-  };
+  });
 
   if (loading) {
     return (

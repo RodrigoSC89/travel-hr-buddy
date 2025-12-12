@@ -97,14 +97,14 @@ const VaultAI: React.FC = () => {
 
   const handleToggleVisibility = (id: number) => {
     setShowContent(prev => ({ ...prev, [id]: !prev[id] }));
-  };
+  });
 
   const handleDownload = (item: typeof vaultItems[0]) => {
     toast({
       title: "Download iniciado",
       description: `Baixando ${item.name}...`,
     });
-  };
+  });
 
   const handleDelete = (item: typeof vaultItems[0]) => {
     toast({
@@ -112,7 +112,7 @@ const VaultAI: React.FC = () => {
       description: `Deseja realmente excluir ${item.name}?`,
       variant: "destructive",
     });
-  };
+  });
 
   return (
     <ModulePageWrapper gradient="purple">

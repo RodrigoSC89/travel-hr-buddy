@@ -86,12 +86,12 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
 
       script.onload = () => {
         initializeWindy();
-      };
+      });
 
       script.onerror = () => {
         setError("Falha ao carregar Windy API");
         setIsLoading(false);
-      };
+      });
 
       document.head.appendChild(script);
     } catch (err) {
@@ -135,8 +135,8 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       // Log current overlay changes
       store.on("overlay", (overlayName: string) => {
       });
-  };
-  };
+  });
+  });
 
   const handleRefresh = () => {
     if (windyAPI) {
@@ -153,12 +153,12 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       document.exitFullscreen?.();
     }
     setIsFullscreen(!isFullscreen);
-  };
+  });
 
   const getOverlayIcon = (overlayValue: string) => {
     const option = OVERLAY_OPTIONS.find(o => o.value === overlayValue);
     return option?.icon || Wind;
-  };
+  });
 
   const CurrentIcon = getOverlayIcon(currentOverlay);
 

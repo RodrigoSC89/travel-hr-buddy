@@ -103,20 +103,20 @@ export const DigitalTwinDP: React.FC = () => {
           return 100;
         }
         return prev + 5;
-  };
+  });
     }, 500);
-  };
+  });
 
   const handleStopSimulation = () => {
     setIsSimulating(false);
     toast.info("Simulação pausada");
-  };
+  });
 
   const getHealthColor = (score: number) => {
     if (score >= 90) return "text-green-500";
     if (score >= 70) return "text-yellow-500";
     return "text-red-500";
-  };
+  });
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -457,6 +457,6 @@ export const DigitalTwinDP: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default DigitalTwinDP;

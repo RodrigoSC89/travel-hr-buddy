@@ -104,7 +104,7 @@ export const TravelReservations: React.FC = () => {
     }
 
     setFilteredReservations(filtered);
-  };
+  });
 
   const handleCreate = async () => {
     try {
@@ -147,7 +147,7 @@ export const TravelReservations: React.FC = () => {
       payment_status: "pending",
       notes: ""
     });
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -159,7 +159,7 @@ export const TravelReservations: React.FC = () => {
     };
 
     return <Badge className={variants[status] || "bg-gray-100"}>{status}</Badge>;
-  };
+  });
 
   const getPaymentBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -170,7 +170,7 @@ export const TravelReservations: React.FC = () => {
     };
 
     return <Badge className={variants[status] || "bg-gray-100"}>{status}</Badge>;
-  };
+  });
 
   return (
     <Card>

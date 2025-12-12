@@ -191,7 +191,7 @@ export const AnalyticsDashboard = memo(() => {
         description: "O relatório foi enviado para os destinatários configurados.",
       });
     }, 2000);
-  };
+  });
 
   const exportDashboard = async (format: string) => {
     toast({
@@ -205,7 +205,7 @@ export const AnalyticsDashboard = memo(() => {
         description: `Dashboard exportado com sucesso em ${format.toUpperCase()}.`,
       });
     }, 1500);
-  };
+  });
 
   return (
     <div className="space-y-6">

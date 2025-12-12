@@ -109,7 +109,7 @@ export default function AITemplatesPage() {
         template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     );
     setFilteredTemplates(filtered);
-  };
+  });
 
   const handleApplyTemplate = (template: AIDocumentTemplate) => {
     // Save template to localStorage
@@ -123,7 +123,7 @@ export default function AITemplatesPage() {
     
     // Navigate to editor
     navigate("/admin/documents/ai");
-  };
+  });
 
   const handleCopyTemplate = async (template: AIDocumentTemplate) => {
     try {
@@ -298,7 +298,7 @@ export default function AITemplatesPage() {
       tags: template.tags || [],
     });
     setShowCreateDialog(true);
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -309,7 +309,7 @@ export default function AITemplatesPage() {
       tags: [],
     });
     setTagInput("");
-  };
+  });
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
@@ -326,7 +326,7 @@ export default function AITemplatesPage() {
       ...formData,
       tags: formData.tags.filter(t => t !== tag),
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

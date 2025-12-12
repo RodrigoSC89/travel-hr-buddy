@@ -52,7 +52,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
       </Button>
     </div>
   );
-};
+});
 
 /**
  * Componente para indicar que dados são do cache
@@ -75,4 +75,4 @@ export const CacheIndicator: React.FC<{ isFromCache: boolean; className?: string
       Dados em cache
     </span>
   );
-};
+});

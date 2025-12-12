@@ -68,7 +68,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
   const handleRestoreClick = (version: DocumentVersion) => {
     setSelectedVersion(version);
     setShowRestoreDialog(true);
-  };
+  });
 
   const handleRestoreConfirm = async () => {
     if (!selectedVersion) return;

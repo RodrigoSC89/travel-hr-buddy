@@ -143,7 +143,7 @@ export const ScenarioSimulatorPanel = memo(function() {
     });
     setResults(null);
     setAiAnalysis("");
-  };
+  });
 
   const loadPreset = (scenarioId: string) => {
     setActiveScenario(scenarioId);

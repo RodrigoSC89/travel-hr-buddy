@@ -44,17 +44,17 @@ const VoyagePlanner = () => {
   const handleCreateVoyage = (voyage: VoyageRoute) => {
     setVoyages((prev) => [voyage, ...prev]);
     toast.success(`Viagem ${voyage.name} criada com sucesso!`);
-  };
+  });
 
   const handleViewDetails = (voyage: VoyageRoute) => {
     setSelectedVoyage(voyage);
     setDetailsDialogOpen(true);
-  };
+  });
 
   const handleDeleteVoyage = (id: string) => {
     setVoyages((prev) => prev.filter((v) => v.id !== id));
     toast.success("Viagem removida");
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

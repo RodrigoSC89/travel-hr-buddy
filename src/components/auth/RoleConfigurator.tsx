@@ -174,7 +174,7 @@ export const RoleConfigurator: React.FC = () => {
 
   const getPermissionForModuleAndRole = (moduleName: string, role: string) => {
     return permissions.find(p => p.module_name === moduleName && p.role === role);
-  };
+  });
 
   if (loading) {
     return (

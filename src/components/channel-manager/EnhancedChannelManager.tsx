@@ -84,7 +84,7 @@ export const EnhancedChannelManager: React.FC = () => {
 
     return () => {
       unsubscribeFromChannel();
-    };
+    });
   }, [selectedChannel]);
 
   const loadChannels = async () => {
@@ -168,7 +168,7 @@ export const EnhancedChannelManager: React.FC = () => {
           });
         }
       });
-  };
+  });
 
   const unsubscribeFromChannel = () => {
     if (channelSubscription) {
@@ -247,7 +247,7 @@ export const EnhancedChannelManager: React.FC = () => {
       channel_type: "general",
       max_members: 50
     });
-  };
+  });
 
   const getChannelTypeBadge = (type: string) => {
     const variants: Record<string, string> = {
@@ -258,7 +258,7 @@ export const EnhancedChannelManager: React.FC = () => {
     };
 
     return <Badge className={variants[type] || "bg-gray-100"}>{type}</Badge>;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

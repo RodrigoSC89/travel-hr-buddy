@@ -59,7 +59,7 @@ export default function ComplianceReporter() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   async function fetchIncidents() {

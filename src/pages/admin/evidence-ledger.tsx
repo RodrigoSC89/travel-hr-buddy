@@ -106,7 +106,7 @@ export default function EvidenceLedgerPage() {
     a.download = `evidence-ledger-${new Date().toISOString()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  };
+  });
 
   const applyFilters = async () => {
     const filters: unknown = {};
@@ -116,14 +116,14 @@ export default function EvidenceLedgerPage() {
 
     const filtered = await queryLedger(filters);
     setEntries(filtered);
-  };
+  });
 
   const clearFilters = async () => {
     setFilterEventType("");
     setFilterModule("");
     const allEntries = await queryLedger({ limit: 100 });
     setEntries(allEntries);
-  };
+  });
 
   useEffect(() => {
     loadData();
@@ -139,7 +139,7 @@ export default function EvidenceLedgerPage() {
       training: "bg-indigo-100 text-indigo-800"
     };
     return colors[type] || "bg-gray-100 text-gray-800";
-  };
+  });
 
   if (loading) {
     return (

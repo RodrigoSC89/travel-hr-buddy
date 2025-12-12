@@ -61,7 +61,7 @@ export const GanttChart = memo(() => {
     }
 
     setTasks(data || []);
-  };
+  });
 
   const createTask = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -109,7 +109,7 @@ export const GanttChart = memo(() => {
     }
 
     fetchTasks();
-  };
+  });
 
   const getTaskBarColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -120,7 +120,7 @@ export const GanttChart = memo(() => {
       cancelled: "bg-gray-300"
     };
     return colors[status] || "bg-gray-400";
-  };
+  });
 
   const calculatePosition = (startDate: string) => {
     const earliest = tasks.length > 0 
@@ -128,23 +128,23 @@ export const GanttChart = memo(() => {
       : new Date();
     const days = differenceInDays(new Date(startDate), earliest);
     return (days * 40);
-  };
+  });
 
   const calculateWidth = (startDate: string, endDate: string) => {
     const days = Math.max(1, differenceInDays(new Date(endDate), new Date(startDate)));
     return (days * 40);
-  };
+  });
 
   // Enhanced drag & drop functionality
   const handleDragStart = (task: Task) => {
     setIsDragging(true);
     setDraggedTask(task);
-  };
+  });
 
   const handleDragEnd = () => {
     setIsDragging(false);
     setDraggedTask(null);
-  };
+  });
 
   const handleDrop = async (newStartDate: Date) => {
     if (!draggedTask) return;
@@ -182,7 +182,7 @@ export const GanttChart = memo(() => {
     }
 
     fetchTasks();
-  };
+  });
 
   // Dependencies management
   const handleDependencyClick = (task: Task) => {
@@ -213,7 +213,7 @@ export const GanttChart = memo(() => {
 
     toast({ title: "Dependência criada com sucesso!" });
     fetchTasks();
-  };
+  });
 
   const deleteDependency = async (sourceId: string, targetId: string) => {
     const { error } = await supabase
@@ -229,7 +229,7 @@ export const GanttChart = memo(() => {
 
     toast({ title: "Dependência removida!" });
     fetchTasks();
-  };
+  });
 
   const deleteTask = async (taskId: string) => {
     const { error } = await supabase
@@ -244,7 +244,7 @@ export const GanttChart = memo(() => {
 
     toast({ title: "Tarefa deletada com sucesso!" });
     fetchTasks();
-  };
+  });
 
   // Organize tasks in hierarchy (up to 3 levels)
   const organizeTaskHierarchy = (allTasks: Task[]): Task[] => {
@@ -254,7 +254,7 @@ export const GanttChart = memo(() => {
     // First pass: create map
     allTasks.forEach(task => {
       taskMap.set(task.id, { ...task, subtasks: [] });
-  };
+  });
 
     // Second pass: build hierarchy
     allTasks.forEach(task => {
@@ -267,11 +267,11 @@ export const GanttChart = memo(() => {
         }
       } else {
         rootTasks.push(taskWithSubtasks);
-      };
+      });
     });
 
     return rootTasks;
-  };
+  });
 
   const renderTaskRow = (task: Task, level: number = 0) => {
     const indent = level * 20;
@@ -376,7 +376,7 @@ export const GanttChart = memo(() => {
         )}
       </div>
     );
-  };
+  });
 
   return (
     <div className="space-y-4">
@@ -497,4 +497,4 @@ export const GanttChart = memo(() => {
       </Dialog>
     </div>
   );
-};
+});

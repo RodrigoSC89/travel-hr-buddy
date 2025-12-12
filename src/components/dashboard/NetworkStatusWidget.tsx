@@ -69,20 +69,20 @@ const NetworkStatusWidgetComponent: React.FC = () => {
     if (stats.downlink < 1) return SignalLow;
     if (stats.downlink < 5) return SignalMedium;
     return SignalHigh;
-  };
+  });
 
   const getSignalColor = () => {
     if (!stats.isOnline) return "text-red-500";
     if (stats.downlink < 2) return "text-amber-500";
     return "text-green-500";
-  };
+  });
 
   const getSpeedLabel = () => {
     if (!stats.isOnline) return "Offline";
     if (stats.downlink < 2) return "Lenta";
     if (stats.downlink < 5) return "Média";
     return "Boa";
-  };
+  });
 
   const SignalIcon = getSignalIcon();
 

@@ -26,7 +26,7 @@ interface LogActionParams {
 
 const isJsonObject = (value: Json | undefined): value is JsonObject => {
   return typeof value === "object" && value !== null && !Array.isArray(value);
-};
+});
 
 const normalizeDetails = (details?: Json): JsonObject => {
   if (!details) {
@@ -40,7 +40,7 @@ const normalizeDetails = (details?: Json): JsonObject => {
   }
 
   return { value: details };
-};
+});
 
 /**
  * Hook to log user actions with audit trail
@@ -155,7 +155,7 @@ export const useAuditLog = memo(() => {
     logFailure,
     logError,
   };
-};
+});
 
 /**
  * HOC to wrap components with automatic audit logging

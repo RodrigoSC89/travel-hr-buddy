@@ -170,7 +170,7 @@ export const KnowledgeManagement: React.FC = () => {
     const matchesType = selectedType === "all" || item.type === selectedType;
     
     return matchesSearch && matchesModule && matchesType;
-  };
+  });
 
   const handleCreateNew = () => {
     setEditingItem({
@@ -192,12 +192,12 @@ export const KnowledgeManagement: React.FC = () => {
       metadata: {}
     });
     setIsEditDialogOpen(true);
-  };
+  });
 
   const handleEdit = (item: KnowledgeItem) => {
     setEditingItem({ ...item });
     setIsEditDialogOpen(true);
-  };
+  });
 
   const handleSave = async () => {
     if (!editingItem) return;
@@ -304,11 +304,11 @@ export const KnowledgeManagement: React.FC = () => {
       title: "Exportação iniciada",
       description: "Base de conhecimento exportada com sucesso",
     });
-  };
+  });
 
   const getModuleName = (moduleId: string) => {
     return modules.find(m => m.id === moduleId)?.name || moduleId;
-  };
+  });
 
   const getTypeIcon = (type: string) => {
     switch (type) {

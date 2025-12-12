@@ -44,7 +44,7 @@ export const PainelMetricasRisco = memo(function() {
       .catch((error) => {
         console.error("Erro ao buscar métricas:", error);
         setLoading(false);
-  };
+  });
   }, []);
 
   // Get unique vessel names for filter

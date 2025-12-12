@@ -37,7 +37,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-};
+});
 
 interface WizardStep {
   id: string;
@@ -224,7 +224,7 @@ export default function PeoDpWizardComplete() {
     if (data.contingency_plan && data.contingency_plan.length > 300) score += 5;
 
     return Math.max(0, Math.min(100, score));
-  };
+  });
 
   const generateRecommendations = (data: unknown): string[] => {
     const recommendations: string[] = [];
@@ -277,7 +277,7 @@ export default function PeoDpWizardComplete() {
     }
 
     return findings;
-  };
+  });
 
   const performCrossValidation = (data: unknown, inference: unknown: unknown: unknown) => {
     const validations: ValidationResult[] = [];
@@ -393,8 +393,8 @@ export default function PeoDpWizardComplete() {
             }
             doc.text(line, 25, yPos);
             yPos += 6;
-  };
-  };
+  });
+  });
         yPos += 5;
       }
 
@@ -418,8 +418,8 @@ export default function PeoDpWizardComplete() {
             }
             doc.text(line, 25, yPos);
             yPos += 6;
-  };
-  };
+  });
+  });
         doc.setTextColor(0, 0, 0);
       }
     }
@@ -442,7 +442,7 @@ export default function PeoDpWizardComplete() {
         const statusIcon = result.status === "pass" ? "✓" : result.status === "warning" ? "⚠" : "✗";
         doc.text(`${statusIcon} ${result.field}: ${result.message}`, 25, yPos);
         yPos += 6;
-  };
+  });
     }
 
     doc.save(`peodp-audit-${Date.now()}.pdf`);
@@ -451,7 +451,7 @@ export default function PeoDpWizardComplete() {
       title: "PDF Exportado",
       description: "Relatório de auditoria PEO-DP salvo com sucesso"
     });
-  };
+  });
 
   const handleFieldChange = (field: string, value: unknown: unknown: unknown) => {
     const newData = { ...formData, [field]: value };

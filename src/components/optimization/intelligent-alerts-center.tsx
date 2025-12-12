@@ -231,7 +231,7 @@ export const IntelligentAlertsCenter = memo(() => {
         ? { ...alert, isRead: true }
         : alert
     ));
-  };
+  });
 
   const toggleRule = (ruleId: string) => {
     setAlertRules(prev => prev.map(rule => 
@@ -245,7 +245,7 @@ export const IntelligentAlertsCenter = memo(() => {
       description: "Configuração de alerta foi atualizada",
       duration: 2000
     });
-  };
+  });
 
   const updateThreshold = (ruleId: string, newThreshold: number) => {
     setAlertRules(prev => prev.map(rule => 
@@ -253,7 +253,7 @@ export const IntelligentAlertsCenter = memo(() => {
         ? { ...rule, threshold: newThreshold }
         : rule
     ));
-  };
+  });
 
   const getAlertIcon = (type: string) => {
     switch (type) {
@@ -579,4 +579,4 @@ export const IntelligentAlertsCenter = memo(() => {
       </Card>
     </div>
   );
-};
+});

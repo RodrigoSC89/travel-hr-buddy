@@ -4,7 +4,7 @@ import { performance } from "perf_hooks";
 describe("Performance: Map Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render map with 100 markers in under 500ms", async () => {
     // Arrange
@@ -105,7 +105,7 @@ describe("Performance: Map Component", () => {
         clusters.set(key, []);
       }
       clusters.get(key)!.push(marker);
-  };
+  });
     
     const endTime = performance.now();
     const clusterTime = endTime - startTime;
@@ -144,4 +144,4 @@ describe("Performance: Map Component", () => {
     expect(avgFrameTime).toBeLessThan(FRAME_TIME); // Should maintain 60fps
     expect(Math.max(...frameTimes)).toBeLessThan(FRAME_TIME * 2); // No frame should spike too much
   });
-};
+});

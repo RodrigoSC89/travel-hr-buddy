@@ -21,6 +21,6 @@ const DocumentWorkflowPage: React.FC = () => {
       <DocumentWorkflowPanel />
     </ModulePageWrapper>
   );
-};
+});
 
 export default DocumentWorkflowPage;

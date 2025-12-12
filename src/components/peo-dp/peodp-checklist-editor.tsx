@@ -102,7 +102,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
 
     setIsAddDialogOpen(false);
     toast.success("Requisito adicionado");
-  };
+  });
 
   const handleUpdateRequirement = () => {
     if (!editingReq) return;
@@ -116,7 +116,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
 
     setEditingReq(null);
     toast.success("Requisito atualizado");
-  };
+  });
 
   const handleDeleteRequirement = (reqId: string) => {
     setVersion(prev => ({
@@ -124,7 +124,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       requirements: prev.requirements?.filter(r => r.id !== reqId)
     }));
     toast.success("Requisito removido");
-  };
+  });
 
   const handleSave = () => {
     const fullVersion: PEODPChecklistVersion = {
@@ -140,7 +140,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
 
     onSave?.(fullVersion);
     toast.success(`Checklist PEO-DP ${version.year} salvo`);
-  };
+  });
 
   const handleExport = () => {
     const data = JSON.stringify(version, null, 2);
@@ -152,7 +152,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Checklist exportado");
-  };
+  });
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -169,7 +169,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       }
     };
     reader.readAsText(file);
-  };
+  });
 
   const handleCopyFromPrevious = () => {
     setVersion(prev => ({
@@ -177,7 +177,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       requirements: [...PEODP_DEFAULT_REQUIREMENTS]
     }));
     toast.success("Requisitos do ano anterior copiados");
-  };
+  });
 
   const filteredRequirements = version.requirements?.filter(r => r.section === selectedSection) || [];
 

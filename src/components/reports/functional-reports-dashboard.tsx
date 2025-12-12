@@ -105,14 +105,14 @@ export const FunctionalReportsDashboard: React.FC = () => {
         description: "Seu relatório foi gerado com sucesso!",
       });
     }, 3000);
-  };
+  });
 
   const downloadReport = (reportId: string) => {
     toast({
       title: "Download Iniciado",
       description: "O download do seu relatório foi iniciado.",
     });
-  };
+  });
 
   const getStatusIcon = (status: Report["status"]) => {
     switch (status) {

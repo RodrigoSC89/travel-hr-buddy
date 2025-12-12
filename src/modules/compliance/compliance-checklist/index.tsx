@@ -111,13 +111,13 @@ const ComplianceChecklist = () => {
   useEffect(() => {
     const loadData = async () => {
       await loadComplianceRecords();
-    };
+    });
     loadData();
   }, []);
 
   const loadAIInsights = async () => {
     await loadAIInsightsInternal(records);
-  };
+  });
 
   const loadAIInsightsInternal = async (currentRecords: unknown[]) => {
     try {
@@ -195,7 +195,7 @@ const ComplianceChecklist = () => {
       record.vessel_name?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesType && matchesStatus && matchesRisk && matchesSearch;
-  };
+  });
 
   const types = Array.from(new Set(records.map(r => r.checklist_type)));
 

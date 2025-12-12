@@ -112,7 +112,7 @@ export default function CopilotV2() {
       safety: GraduationCap
     };
     return icons[category] || Sparkles;
-  };
+  });
 
   return (
     <>

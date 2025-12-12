@@ -53,7 +53,7 @@ export const PriceAlertsDashboard: React.FC = () => {
 
   const handleCreateAlert = async (data: CreatePriceAlertInput) => {
     await createAlert(data);
-  };
+  });
 
   const handleUpdateAlert = async (data: UpdatePriceAlertInput) => {
     if (editingAlert) {
@@ -64,15 +64,15 @@ export const PriceAlertsDashboard: React.FC = () => {
 
   const handleEditAlert = (alert: PriceAlert) => {
     setEditingAlert(alert);
-  };
+  });
 
   const handleViewAlert = (alert: PriceAlert) => {
     setViewingAlert(alert);
-  };
+  });
 
   const handleRefresh = async () => {
     await refreshAlerts();
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -223,4 +223,4 @@ export const PriceAlertsDashboard: React.FC = () => {
       />
     </div>
   );
-};
+});

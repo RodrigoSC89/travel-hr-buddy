@@ -131,7 +131,7 @@ const AICopilot: React.FC = () => {
       title: "Copiado!",
       description: "Texto copiado para a área de transferência.",
     });
-  };
+  });
 
   const clearChat = () => {
     setMessages([]);
@@ -139,7 +139,7 @@ const AICopilot: React.FC = () => {
       title: "Chat limpo",
       description: "Histórico de mensagens removido.",
     });
-  };
+  });
 
   return (
     <div className="p-6 space-y-6 min-h-screen">
@@ -335,6 +335,6 @@ const AICopilot: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default AICopilot;

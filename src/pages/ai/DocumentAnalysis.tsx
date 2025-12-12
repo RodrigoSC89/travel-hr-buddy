@@ -133,7 +133,7 @@ Responda em formato estruturado usando markdown.`,
     setDocumentText("");
     setAnalysisResult(null);
     setProgress(0);
-  };
+  });
 
   const sampleDocuments = [
     {

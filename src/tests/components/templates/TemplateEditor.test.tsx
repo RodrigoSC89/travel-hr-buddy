@@ -62,18 +62,18 @@ describe("TemplateEditor Component", () => {
         <TemplateEditor />
       </QueryClientProvider>
     );
-  };
+  });
 
   it("should render the component successfully", () => {
     renderComponent();
     expect(screen.getByText(/Editor de Templates/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render the title input field", () => {
     renderComponent();
     const titleInput = screen.getByPlaceholderText(/Digite o título do template/i);
     expect(titleInput).toBeInTheDocument();
-  };
+  });
 
   it("should render all action buttons", () => {
     renderComponent();
@@ -82,15 +82,15 @@ describe("TemplateEditor Component", () => {
     expect(screen.getByRole("button", { name: /Gerar com IA/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Salvar/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Exportar PDF/i })).toBeInTheDocument();
-  };
+  });
 
   it("should render the editor content area", () => {
     renderComponent();
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  };
+  });
 
   it("should display helpful tips", () => {
     renderComponent();
     expect(screen.getByText(/Clique em "Gerar com IA"/i)).toBeInTheDocument();
-  };
-};
+  });
+});

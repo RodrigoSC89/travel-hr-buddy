@@ -112,7 +112,7 @@ export const IncidentsSGSOPanel = memo(function() {
     setCategoryFilter("all");
     setRiskFilter("all");
     setVesselFilter("all");
-  };
+  });
 
   const activeFilterCount = [categoryFilter, riskFilter, vesselFilter].filter(f => f !== "all").length;
 
@@ -152,12 +152,12 @@ export const IncidentsSGSOPanel = memo(function() {
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, `incidentes-sgso-${new Date().toISOString().split("T")[0]}.csv`);
-  };
+  });
 
   // Export to PDF (placeholder - requires html2pdf.js)
   const exportToPDF = () => {
     alert("Funcionalidade de exportação PDF será implementada em breve!");
-  };
+  });
 
   return (
     <div className="space-y-6">

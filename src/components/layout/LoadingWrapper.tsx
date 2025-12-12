@@ -50,7 +50,7 @@ export const LoadingWrapper: React.FC<LoadingWrapperProps> = ({
       {children}
     </Suspense>
   );
-};
+});
 
 /**
  * HOC for lazy loading components with connection-aware fallback
@@ -67,7 +67,7 @@ export function withLoadingWrapper<T extends ComponentType<any>>(
         <LazyComponent {...props} />
       </LoadingWrapper>
     );
-  };
+  });
 }
 
 /**
@@ -82,6 +82,6 @@ export const PageLoadingIndicator: React.FC<{ isLoading: boolean }> = ({ isLoadi
         style={{ animation: "loading-bar 1.5s ease-in-out infinite" }} />
     </div>
   );
-};
+});
 
 export default LoadingWrapper;

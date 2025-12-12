@@ -163,7 +163,7 @@ export default function Patch519DeepRiskAI() {
     a.click();
     
     toast.success("Análise exportada");
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

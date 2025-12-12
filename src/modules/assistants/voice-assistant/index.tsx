@@ -99,7 +99,7 @@ const VoiceAssistant: React.FC = () => {
         });
       }
       setIsListening(false);
-    };
+    });
 
     recognitionRef.current.onend = () => {
       if (isListening) {
@@ -118,7 +118,7 @@ const VoiceAssistant: React.FC = () => {
       recognitionRef.current?.stop();
       synthRef.current?.cancel();
       audioRef.current?.pause();
-    };
+    });
   }, [isListening]);
 
   useEffect(() => {
@@ -273,7 +273,7 @@ const VoiceAssistant: React.FC = () => {
             audioRef.current.onerror = () => {
               setIsSpeaking(false);
               fallbackSpeak(text);
-            };
+            });
             await audioRef.current.play();
             return;
           }
@@ -303,7 +303,7 @@ const VoiceAssistant: React.FC = () => {
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     synthRef.current.speak(utterance);
-  };
+  });
 
   const handleTextSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -319,13 +319,13 @@ const VoiceAssistant: React.FC = () => {
     toast({
       title: newVolume > 0 ? "🔊 Som ativado" : "🔇 Som desativado",
     });
-  };
+  });
 
   const clearHistory = () => {
     setMessages([]);
     setConversationHistory([]);
     toast({ title: "Histórico limpo" });
-  };
+  });
 
   const quickCommands = [
     { label: "Dashboard", command: "Ir para o dashboard" },

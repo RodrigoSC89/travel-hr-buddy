@@ -71,7 +71,7 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [vesselId, limit]);
 
   const loadHistory = async () => {

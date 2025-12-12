@@ -163,7 +163,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
       newTypes.add(type);
     }
     setSelectedTypes(newTypes);
-  };
+  });
 
   const togglePriority = (priority: PriorityType) => {
     const newPriorities = new Set(selectedPriorities);
@@ -173,7 +173,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
       newPriorities.add(priority);
     }
     setSelectedPriorities(newPriorities);
-  };
+  });
 
   const clearFilters = () => {
     setSelectedTypes(new Set());
@@ -183,7 +183,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
       title: "Filtros limpos",
       description: "Mostrando todas as atividades",
     });
-  };
+  });
 
   const formatTime = (timestamp: string) => {
     try {

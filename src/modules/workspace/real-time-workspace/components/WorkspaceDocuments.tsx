@@ -144,7 +144,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-  };
+  });
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -180,17 +180,17 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     setSelectedDoc(doc);
     setIsViewOpen(true);
     onView?.(doc);
-  };
+  });
 
   const handleShareDoc = (doc: SharedDocument) => {
     setSelectedDoc(doc);
     setIsShareOpen(true);
-  };
+  });
 
   const handleDeleteDoc = (doc: SharedDocument) => {
     setSelectedDoc(doc);
     setIsDeleteOpen(true);
-  };
+  });
 
   const confirmDelete = () => {
     if (selectedDoc) {
@@ -203,7 +203,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     }
     setIsDeleteOpen(false);
     setSelectedDoc(null);
-  };
+  });
 
   const handleCopyLink = async () => {
     try {
@@ -233,7 +233,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     }
     setIsShareOpen(false);
     setSelectedDoc(null);
-  };
+  });
 
   return (
     <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">

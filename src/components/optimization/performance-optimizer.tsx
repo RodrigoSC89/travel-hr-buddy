@@ -122,7 +122,7 @@ const PerformanceOptimizer = () => {
       title: "Otimização concluída",
       description: `${optimization.title} aplicada com sucesso`,
     });
-  };
+  });
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
@@ -398,6 +398,6 @@ const PerformanceOptimizer = () => {
       </div>
     </div>
   );
-};
+});
 
 export default PerformanceOptimizer;

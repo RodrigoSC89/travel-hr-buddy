@@ -35,7 +35,7 @@ export const MaritimeSystemDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const loadMaritimeData = async () => {
@@ -75,7 +75,7 @@ export const MaritimeSystemDashboard = memo(function() {
     };
 
     return icons[type] || <Activity className="h-4 w-4" />;
-  };
+  });
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -86,7 +86,7 @@ export const MaritimeSystemDashboard = memo(function() {
     };
 
     return colors[status] || "text-gray-500";
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -102,7 +102,7 @@ export const MaritimeSystemDashboard = memo(function() {
         {status.replace("_", " ").toUpperCase()}
       </Badge>
     );
-  };
+  });
 
   const groupSensorsByType = (sensors: IoTSensorData[]) => {
     const grouped: Record<string, IoTSensorData[]> = {};
@@ -111,9 +111,9 @@ export const MaritimeSystemDashboard = memo(function() {
         grouped[sensor.sensor_type] = [];
       }
       grouped[sensor.sensor_type].push(sensor);
-  };
+  });
     return grouped;
-  };
+  });
 
   if (loading) {
     return (

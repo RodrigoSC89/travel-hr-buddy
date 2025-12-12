@@ -123,7 +123,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
 
   const updateFormData = (field: string, value: unknown) => {
     setFormData({ ...formData, [field]: value });
-  };
+  });
 
   const renderStepContent = () => {
     const StepIcon = currentWizardStep.icon;

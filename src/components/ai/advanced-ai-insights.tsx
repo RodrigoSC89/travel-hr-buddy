@@ -511,6 +511,6 @@ const AdvancedAIInsights = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AdvancedAIInsights;

@@ -17,6 +17,6 @@ const ComplianceAutomationPage: React.FC = () => {
       </div>
     </>
   );
-};
+});
 
 export default ComplianceAutomationPage;

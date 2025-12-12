@@ -49,7 +49,7 @@ export default function PrePSCDashboard() {
     setSelectedInspection(null);
     setShowNewInspection(true);
     setActiveTab("form");
-  };
+  });
 
   const handleInspectionComplete = () => {
     setShowNewInspection(false);
@@ -59,7 +59,7 @@ export default function PrePSCDashboard() {
       title: "Success",
       description: "Inspection completed successfully",
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

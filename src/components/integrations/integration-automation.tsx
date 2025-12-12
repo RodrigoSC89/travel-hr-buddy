@@ -189,14 +189,14 @@ export const IntegrationAutomation: React.FC = () => {
       title: "Configuração Salva",
       description: "As configurações da integração foram salvas com sucesso.",
     });
-  };
+  });
 
   const handleToggleRule = (ruleId: string) => {
     toast({
       title: "Regra Atualizada",
       description: "Status da regra de automação foi alterado.",
     });
-  };
+  });
 
   return (
     <div className="space-y-6">

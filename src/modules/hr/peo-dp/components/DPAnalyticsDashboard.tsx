@@ -187,7 +187,7 @@ export default function DPAnalyticsDashboard() {
     setCompliance(generateComplianceMetrics());
     setInsights(generateAIInsights());
     setIsLoading(false);
-  };
+  });
 
   const overallHealth = systemHealth.length > 0
     ? systemHealth.reduce((acc, s) => acc + s.health, 0) / systemHealth.length

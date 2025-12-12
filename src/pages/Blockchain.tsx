@@ -28,6 +28,6 @@ const Blockchain: React.FC = () => {
       <BlockchainDocuments />
     </ModulePageWrapper>
   );
-};
+});
 
 export default Blockchain;

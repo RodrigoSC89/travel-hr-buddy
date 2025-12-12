@@ -169,7 +169,7 @@ export const PeotramEquipmentManager: React.FC = () => {
     if (condition >= 90) return "text-success";
     if (condition >= 70) return "text-warning";
     return "text-destructive";
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -131,13 +131,13 @@ export const HRDashboard = memo(() => {
         ? prev.filter(id => id !== employeeId)
         : [...prev, employeeId]
     );
-  };
+  });
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
     setEmployees(prev => prev.map(emp => 
       emp.id === employeeId ? { ...emp, status: newStatus } : emp
     ));
-  };
+  });
 
   const handleCreateEmployee = () => {
     if (!newEmployee.name || !newEmployee.position || !newEmployee.department || !newEmployee.email) {
@@ -186,12 +186,12 @@ export const HRDashboard = memo(() => {
   const handleOpenCertificates = (employee: Employee) => {
     setSelectedEmployeeForCertificates(employee);
     setCertificateManagerOpen(true);
-  };
+  });
 
   const handleViewProfile = (employee: Employee) => {
     setSelectedEmployee(employee);
     setEmployeeProfileOpen(true);
-  };
+  });
 
   const handleRemoveEmployee = (employee: Employee) => {
     setEmployees(prev => prev.filter(emp => emp.id !== employee.id));
@@ -200,7 +200,7 @@ export const HRDashboard = memo(() => {
       title: "Funcionário removido",
       description: `${employee.name} foi removido do sistema`,
     });
-  };
+  });
 
   // Colunas para a tabela de funcionários
   const employeeColumns: Column[] = [
@@ -306,7 +306,7 @@ export const HRDashboard = memo(() => {
                          employee.department.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     return matchesSearch && matchesDepartment;
-  };
+  });
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
@@ -764,7 +764,7 @@ export const HRDashboard = memo(() => {
                       if (selectedEmployee) {
                         handleRemoveEmployee(selectedEmployee);
                         setEmployeeProfileOpen(false);
-                      };
+                      });
                     }}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
@@ -811,4 +811,4 @@ export const HRDashboard = memo(() => {
       )}
     </div>
   );
-};
+});

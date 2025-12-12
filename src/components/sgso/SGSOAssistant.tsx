@@ -447,6 +447,6 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
       </div>
     </div>
   );
-};
+});
 
 export default SGSOAssistant;

@@ -104,7 +104,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
       }
     };
     return configs[priority as keyof typeof configs] || configs.medium;
-  };
+  });
 
   const filteredAndSortedData = data
     .filter(row => {
@@ -139,7 +139,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
 
   const handleRowAction = (action: string, row: DataRow) => {
     onRowAction?.(action, row);
-  };
+  });
 
   return (
     <Card className="w-full border-border/50 shadow-lg">

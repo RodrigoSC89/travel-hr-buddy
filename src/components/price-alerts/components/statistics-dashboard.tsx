@@ -124,7 +124,7 @@ export const StatisticsDashboard = memo(() => {
   const getEfficiencyPercentage = () => {
     if (statistics.total_alerts === 0) return 0;
     return Math.round((statistics.alerts_triggered / statistics.total_alerts) * 100);
-  };
+  });
 
   if (loading) {
     return (
@@ -139,7 +139,7 @@ export const StatisticsDashboard = memo(() => {
         ))}
       </div>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">

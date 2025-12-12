@@ -129,11 +129,11 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
       completed: "text-green-600",
     };
     return colors[status as keyof typeof colors] || "text-gray-600";
-  };
+  });
 
   const isOverdue = (deadline: string) => {
     return new Date(deadline) < new Date();
-  };
+  });
 
   if (loading) {
     return <p>Loading action plans...</p>;

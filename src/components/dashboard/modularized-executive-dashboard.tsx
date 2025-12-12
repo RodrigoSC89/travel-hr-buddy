@@ -88,7 +88,7 @@ export const ModularizedExecutiveDashboard = memo(function() {
    */
   const handleAutoHeal = () => {
     setRefreshKey(prev => prev + 1);
-  };
+  });
 
   return (
     <div className="space-y-6 p-6" data-dashboard-content key={refreshKey}>

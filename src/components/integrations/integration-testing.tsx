@@ -118,7 +118,7 @@ export const IntegrationTesting: React.FC = () => {
     setTestResults(prev => [newResult, ...prev]);
     setIsRunningTest(false);
     setTestProgress(0);
-  };
+  });
 
   const getStatusIcon = (status: TestResult["status"]) => {
     switch (status) {
@@ -138,7 +138,7 @@ export const IntegrationTesting: React.FC = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-  };
+  });
 
   return (
     <div className="space-y-6">

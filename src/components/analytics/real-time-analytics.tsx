@@ -151,21 +151,21 @@ const RealTimeAnalytics = () => {
   const generateRandomChange = (): string => {
     const change = (Math.random() * 20 - 10).toFixed(1);
     return `${Number(change) > 0 ? "+" : ""}${change}%`;
-  };
+  });
 
   const exportData = () => {
     toast({
       title: "Exportando dados",
       description: "Relatório será enviado por email"
     });
-  };
+  });
 
   const shareReport = () => {
     toast({
       title: "Compartilhando relatório",
       description: "Link compartilhado copiado"
     });
-  };
+  });
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

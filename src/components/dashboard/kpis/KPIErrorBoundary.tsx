@@ -38,7 +38,7 @@ export class KPIErrorBoundary extends Component<Props, State> {
 
   handleReset = () => {
     this.setState({ hasError: false, error: undefined });
-  };
+  });
 
   render() {
     if (this.state.hasError) {

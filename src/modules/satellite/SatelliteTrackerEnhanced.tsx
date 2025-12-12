@@ -267,7 +267,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
       title: "Data refreshed",
       description: "Satellite data has been updated",
     });
-  };
+  });
 
   const getVisibilityColor = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -290,8 +290,8 @@ export const SatelliteTrackerEnhanced = memo(() => {
       return <AlertCircle className="h-4 w-4 text-gray-600" />;
     default:
       return <Radio className="h-4 w-4 text-blue-600" />;
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

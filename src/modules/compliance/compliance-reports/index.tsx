@@ -18,7 +18,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-};
+});
 
 let XLSX: unknown = null;
 const loadXLSX = async () => {
@@ -26,7 +26,7 @@ const loadXLSX = async () => {
     XLSX = await import("xlsx");
   }
   return XLSX;
-};
+});
 import { format } from "date-fns";
 
 // PATCH 392 - Compliance Reports: Advanced Filtering & Multi-Format Export
@@ -359,7 +359,7 @@ const ComplianceReports = () => {
         description: "Disponível para download"
       });
     }, 2000);
-  };
+  });
 
   const handleDownload = (report: unknown) => {
     // Export based on format
@@ -376,7 +376,7 @@ const ComplianceReports = () => {
 
   const handleGenerateNow = (reportId: string) => {
     handleGenerateReport(reportId);
-  };
+  });
 
   const toggleCategory = (category: string) => {
     setReportConfig(prev => ({
@@ -385,7 +385,7 @@ const ComplianceReports = () => {
         ? prev.categories.filter(c => c !== category)
         : [...prev.categories, category]
     }));
-  };
+  });
 
   const toggleSeverity = (severity: string) => {
     setReportConfig(prev => ({
@@ -394,7 +394,7 @@ const ComplianceReports = () => {
         ? prev.severities.filter(s => s !== severity)
         : [...prev.severities, severity]
     }));
-  };
+  });
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -405,7 +405,7 @@ const ComplianceReports = () => {
       error: "bg-destructive"
     };
     return colors[status] || "bg-muted";
-  };
+  });
 
   const getStatusText = (status: string) => {
     const texts: Record<string, string> = {
@@ -416,7 +416,7 @@ const ComplianceReports = () => {
       error: "Erro"
     };
     return texts[status] || status;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -703,6 +703,6 @@ const ComplianceReports = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default ComplianceReports;

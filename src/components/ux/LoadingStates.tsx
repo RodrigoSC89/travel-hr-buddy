@@ -25,7 +25,7 @@ export const Spinner = ({
   return (
     <Loader2 className={cn("animate-spin", sizeClasses[size], className)} />
   );
-};
+});
 
 // Full Screen Loader
 export const FullScreenLoader = ({ message = "Carregando..." }: { message?: string }) => (

@@ -279,17 +279,17 @@ Por favor, tente novamente ou consulte diretamente:
 
   const handleQuickAction = (action: QuickAction) => {
     handleSend(action.prompt);
-  };
+  });
 
   const handleRating = (messageId: string, rating: "positive" | "negative") => {
     setMessages(prev => prev.map(m => m.id === messageId ? { ...m, rating } : m));
     toast.success(rating === "positive" ? "Feedback positivo registrado!" : "Feedback registrado. Vamos melhorar!");
-  };
+  });
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Copiado para a área de transferência");
-  };
+  });
 
   const handleExportChat = () => {
     const chatContent = messages
@@ -305,7 +305,7 @@ Por favor, tente novamente ou consulte diretamente:
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Chat exportado com sucesso!");
-  };
+  });
 
   const filteredActions = QUICK_ACTIONS.filter(a => a.category === activeCategory);
 

@@ -79,15 +79,15 @@ export const ModuleControl: React.FC = () => {
         updated.delete(id);
       }
       return updated;
-  };
+  });
 
     // Log activation change
     logger.info("Module activation state changed", { moduleId: id, newState });
-  };
+  });
 
   const handleNavigate = (path: string) => {
     navigate(path);
-  };
+  });
 
   const handleViewHistory = (id: string) => {
     logger.info("Viewing module history", { moduleId: id });
@@ -124,7 +124,7 @@ export const ModuleControl: React.FC = () => {
         ))}
       </div>
     );
-  };
+  });
 
   return (
     <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module Control Center">

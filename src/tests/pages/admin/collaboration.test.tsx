@@ -55,7 +55,7 @@ vi.mock("date-fns/locale", () => ({
 describe("CollaborationPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("renders the collaboration page with header", () => {
     render(
@@ -65,7 +65,7 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Colaboração/i)).toBeInTheDocument();
-  };
+  });
 
   it("shows refresh button", () => {
     render(
@@ -75,7 +75,7 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Atualizar/i)).toBeInTheDocument();
-  };
+  });
 
   it("shows comment input area", () => {
     render(
@@ -86,7 +86,7 @@ describe("CollaborationPage", () => {
     
     const textarea = screen.getByPlaceholderText(/Deixe seu comentário/i);
     expect(textarea).toBeInTheDocument();
-  };
+  });
 
   it("shows comments section title", () => {
     render(
@@ -96,7 +96,7 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Comentários da Equipe/i)).toBeInTheDocument();
-  };
+  });
 
   it("sets up real-time subscription on mount", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -109,8 +109,8 @@ describe("CollaborationPage", () => {
 
     await waitFor(() => {
       expect(supabase.channel).toHaveBeenCalledWith("colab-comments-changes");
-  };
-  };
+  });
+  });
 
   it("shows back button", () => {
     render(
@@ -120,7 +120,7 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Voltar/i)).toBeInTheDocument();
-  };
+  });
 
   it("shows empty state when no comments", async () => {
     render(
@@ -131,8 +131,8 @@ describe("CollaborationPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhum comentário ainda/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("shows submit button", () => {
     render(
@@ -142,5 +142,5 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Enviar Comentário/i)).toBeInTheDocument();
-  };
-};
+  });
+});

@@ -153,7 +153,7 @@ export const PeotramCNPJHistory: React.FC = () => {
     if (trend === "improving") return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (trend === "declining") return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <Target className="h-4 w-4 text-gray-500" />;
-  };
+  });
 
   const getRiskBadge = (risk: string) => {
     const colors = {
@@ -162,13 +162,13 @@ export const PeotramCNPJHistory: React.FC = () => {
       high: "bg-red-100 text-red-800"
     };
     return colors[risk as keyof typeof colors];
-  };
+  });
 
   const getScoreColor = (score: number) => {
     if (score >= 85) return "text-green-600";
     if (score >= 70) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const filteredAudits = selectedCompany?.audits.filter(a => 
     selectedCycle === "all" || a.cycle === selectedCycle

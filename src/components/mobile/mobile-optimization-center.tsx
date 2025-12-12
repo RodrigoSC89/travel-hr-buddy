@@ -151,7 +151,7 @@ export const MobileOptimizationCenter: React.FC = () => {
       tablet: Math.round((sessions.filter(s => s.device === "tablet").length / total) * 100),
       desktop: Math.round((sessions.filter(s => s.device === "desktop").length / total) * 100)
     };
-  };
+  });
 
   const getPerformanceScore = () => {
     if (performance.length === 0) return 0;
@@ -164,7 +164,7 @@ export const MobileOptimizationCenter: React.FC = () => {
     const fidScore = latest.firstInputDelay < 100 ? 100 : (latest.firstInputDelay < 300 ? 50 : 0);
     
     return Math.round((fcpScore + lcpScore + clsScore + fidScore) / 4);
-  };
+  });
 
   const filteredSessions = sessions.filter(session => 
     deviceFilter === "all" || session.device === deviceFilter
@@ -197,21 +197,21 @@ export const MobileOptimizationCenter: React.FC = () => {
       title: "Otimização iniciada",
       description: "Compressão de imagens para dispositivos móveis em andamento.",
     });
-  };
+  });
 
   const handleEnablePWA = () => {
     toast({
       title: "PWA habilitado",
       description: "Recursos de Progressive Web App foram ativados.",
     });
-  };
+  });
 
   const handleLazyLoad = () => {
     toast({
       title: "Lazy loading ativado",
       description: "Carregamento sob demanda configurado para componentes.",
     });
-  };
+  });
 
   if (isLoading) {
     return (

@@ -151,7 +151,7 @@ export const NotificationSettings = memo(() => {
 
   const updateSetting = (key: keyof NotificationSettings, value: unknown) => {
     setSettings(prev => ({ ...prev, [key]: value }));
-  };
+  });
 
   if (loading) {
     return (
@@ -171,7 +171,7 @@ export const NotificationSettings = memo(() => {
         </CardContent>
       </Card>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">

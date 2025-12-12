@@ -118,13 +118,13 @@ export const AutonomousAgent = memo(function() {
     setActions(prev => prev.map(a => 
       a.id === actionId ? { ...a, status: "executing" as const } : a
     ));
-  };
+  });
 
   const handleReject = (actionId: string) => {
     setActions(prev => prev.map(a => 
       a.id === actionId ? { ...a, status: "cancelled" as const } : a
     ));
-  };
+  });
 
   const getActionIcon = (type: string) => {
     switch (type) {
@@ -146,7 +146,7 @@ export const AutonomousAgent = memo(function() {
       cancelled: "bg-muted text-muted-foreground border-muted"
     };
     return colors[status as keyof typeof colors] || "bg-muted";
-  };
+  });
 
   const getImpactColor = (impact: string) => {
     const colors = {
@@ -155,7 +155,7 @@ export const AutonomousAgent = memo(function() {
       low: "text-green-400"
     };
     return colors[impact as keyof typeof colors] || "text-muted-foreground";
-  };
+  });
 
   return (
     <div className="space-y-6">

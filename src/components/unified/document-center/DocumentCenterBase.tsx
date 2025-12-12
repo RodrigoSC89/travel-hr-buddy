@@ -76,7 +76,7 @@ export const DocumentCenterBase: React.FC<DocumentCenterBaseProps> = ({
       <DocumentCenterContent className={className} />
     </DocumentCenterProvider>
   );
-};
+});
 
 // ============================================
 // CONTENT COMPONENT (uses context)
@@ -111,11 +111,11 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
 
   const handleBulkArchive = async () => {
     await bulkArchive(selectedDocuments);
-  };
+  });
 
   const handleBulkDownload = async () => {
     await bulkDownload(selectedDocuments);
-  };
+  });
 
   return (
     <div className={cn("space-y-4", className)}>
@@ -340,7 +340,7 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
       {/* TODO: Add DocumentViewer/DocumentEditor components */}
     </div>
   );
-};
+});
 
 // ============================================
 // EXPORTS

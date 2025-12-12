@@ -227,12 +227,12 @@ export default function WeatherCommandCenter() {
     if (desc.includes("snow") || desc.includes("neve")) return <CloudSnow className={size} />;
     if (desc.includes("cloud") || desc.includes("nubl")) return <Cloud className={size} />;
     return <Sun className={size} />;
-  };
+  });
 
   const getWindDirection = (deg: number) => {
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     return directions[Math.round(deg / 45) % 8];
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

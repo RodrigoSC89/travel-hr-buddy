@@ -33,7 +33,7 @@ export const NetworkErrorFallback: React.FC<NetworkErrorFallbackProps> = ({
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, []);
 
   const handleRetry = async () => {

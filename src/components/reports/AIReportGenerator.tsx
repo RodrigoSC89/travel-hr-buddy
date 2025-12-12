@@ -141,7 +141,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       title: "Download Iniciado",
       description: "Relatório salvo como arquivo Markdown",
     });
-  };
+  });
 
   const handleModuleChange = (moduleId: string, checked: boolean) => {
     if (checked) {
@@ -154,7 +154,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   const getTypeIcon = (typeValue: string) => {
     const type = reportTypes.find(t => t.value === typeValue);
     return type?.icon || FileText;
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -352,6 +352,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       </Card>
     </div>
   );
-};
+});
 
 export default AIReportGenerator;

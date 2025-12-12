@@ -45,7 +45,7 @@ export default function PreviewValidationDashboard() {
       low: "secondary"
     };
     return <Badge variant={variants[priority] || "default"}>{priority}</Badge>;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

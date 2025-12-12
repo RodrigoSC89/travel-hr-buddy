@@ -112,15 +112,15 @@ export default function DPCopilot() {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
-      };
+      });
 
       recognitionRef.current.onerror = () => {
         setIsListening(false);
-      };
+      });
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
-      };
+      });
     }
   }, []);
 
@@ -205,7 +205,7 @@ export default function DPCopilot() {
     if (lower.includes("alerta") || lower.includes("alarme")) return "alert";
     if (lower.includes("recomend") || lower.includes("sugest")) return "recommendation";
     return "text";
-  };
+  });
 
   const generateLocalResponse = (query: string): string => {
     const lower = query.toLowerCase();

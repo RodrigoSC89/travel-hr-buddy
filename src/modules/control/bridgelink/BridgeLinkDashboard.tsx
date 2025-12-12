@@ -33,7 +33,7 @@ export default function BridgeLinkDashboard() {
         description: event.description || "Evento do DP Intelligence Center",
         duration: 3000,
       });
-  };
+  });
 
     return cleanup;
   }, [isLiveMode]);
@@ -59,7 +59,7 @@ export default function BridgeLinkDashboard() {
     toast.info("Atualizando dados...");
     await refetch();
     toast.success("Dados atualizados!");
-  };
+  });
 
   const toggleLiveMode = () => {
     setIsLiveMode((prev) => !prev);

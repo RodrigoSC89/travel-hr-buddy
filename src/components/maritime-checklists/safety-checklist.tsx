@@ -177,7 +177,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
           : item
       )
     }));
-  };
+  });
 
   const handleSave = async () => {
     try {

@@ -367,7 +367,7 @@ export default function ProcurementCommandCenter() {
       title: "Compra Iniciada",
       description: `Pedido de ${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} enviado para ${rec.suggestedSupplier.name}`,
     });
-  };
+  });
 
   // ============================================
   // RENDER

@@ -43,7 +43,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
     }
     
     throw lastError;
-  };
+  });
 
   return lazy(retryImport);
 }

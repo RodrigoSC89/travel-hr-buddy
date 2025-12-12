@@ -130,7 +130,7 @@ export const MaintenanceHub = memo(function() {
     if (daysUntil < 7) return "high";
     if (daysUntil < 30) return "medium";
     return "low";
-  };
+  });
 
   const mapScheduleStatus = (status: string, scheduledDate: string): MaintenanceTask["status"] => {
     if (status === "completed") return "completed";
@@ -138,7 +138,7 @@ export const MaintenanceHub = memo(function() {
     const daysUntil = Math.ceil((new Date(scheduledDate).getTime() - Date.now()) / 86400000);
     if (daysUntil < 0) return "overdue";
     return "pending";
-  };
+  });
 
   const generateAIRecommendation = (schedule: unknown: unknown: unknown): string | undefined => {
     const daysUntil = Math.ceil((new Date(schedule.scheduled_date).getTime() - Date.now()) / 86400000);
@@ -149,7 +149,7 @@ export const MaintenanceHub = memo(function() {
       return `Manutenção atrasada em ${Math.abs(daysUntil)} dias. Prioridade crítica - agende imediatamente.`;
     }
     return undefined;
-  };
+  });
 
   const getDemoTasks = (): MaintenanceTask[] => [
     { id: "1", title: "Troca de Óleo Motor Principal", description: "Manutenção preventiva programada", vessel: "Atlântico Sul", component: "Motor Principal", priority: "high", status: "pending", dueDate: new Date(Date.now() + 5 * 86400000).toISOString().split("T")[0], cost: 15000, predictedFailure: 12, aiRecommendation: "Baseado em padrões de uso, recomendamos antecipar esta manutenção em 5 dias." },
@@ -167,7 +167,7 @@ export const MaintenanceHub = memo(function() {
 
   const handleScheduleMaintenance = async (componentId: string, componentName: string) => {
     toast.success(`Manutenção agendada para ${componentName}`);
-  };
+  });
 
   const getPriorityColor = (priority: MaintenanceTask["priority"]) => {
     const colors = {
@@ -177,7 +177,7 @@ export const MaintenanceHub = memo(function() {
       low: "bg-blue-500",
     };
     return colors[priority];
-  };
+  });
 
   const getStatusBadge = (status: MaintenanceTask["status"]) => {
     const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
@@ -187,13 +187,13 @@ export const MaintenanceHub = memo(function() {
       overdue: { variant: "destructive", label: "Atrasado" },
     };
     return variants[status];
-  };
+  });
 
   const getHealthColor = (health: number) => {
     if (health >= 80) return "text-emerald-500";
     if (health >= 60) return "text-amber-500";
     return "text-red-500";
-  };
+  });
 
   const stats = {
     pending: tasks.filter(t => t.status === "pending").length,

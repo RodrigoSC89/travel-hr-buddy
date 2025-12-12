@@ -52,7 +52,7 @@ export const UsageAnalytics: React.FC = () => {
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
-  };
+  });
 
   const formatTime = (timeStr: string) => {
     return new Date(timeStr).toLocaleString("pt-BR", { 
@@ -61,7 +61,7 @@ export const UsageAnalytics: React.FC = () => {
       hour: "2-digit", 
       minute: "2-digit" 
     });
-  };
+  });
 
   return (
     <div className="space-y-6">

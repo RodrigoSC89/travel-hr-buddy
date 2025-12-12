@@ -17,6 +17,6 @@ const DiagnosticAssistantPage: React.FC = () => {
       </div>
     </>
   );
-};
+});
 
 export default DiagnosticAssistantPage;

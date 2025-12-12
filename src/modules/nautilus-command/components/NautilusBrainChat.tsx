@@ -230,17 +230,17 @@ Qual área você gostaria de explorar em detalhes?`;
       return ["Certificados expirando", "Escala de tripulação", "Avaliar desempenho"];
     }
     return ["Relatório geral", "Alertas críticos", "Previsões da IA"];
-  };
+  });
 
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
     inputRef.current?.focus();
-  };
+  });
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
     toast({ title: "Copiado!", description: "Mensagem copiada para a área de transferência" });
-  };
+  });
 
   return (
     <motion.div
@@ -412,4 +412,4 @@ Qual área você gostaria de explorar em detalhes?`;
       </motion.div>
     </motion.div>
   );
-};
+});

@@ -139,7 +139,7 @@ const getStatusConfig = (status: string) => {
     }
   };
   return configs[status as keyof typeof configs] || configs.open;
-};
+});
 
 export const NonConformityManager: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");
@@ -156,11 +156,11 @@ export const NonConformityManager: React.FC = () => {
 
   const handleViewNC = (ncId: string, ncNumber: string) => {
     handleViewDetails(`não conformidade ${ncNumber}`, ncId);
-  };
+  });
 
   const handleUpdateNC = (ncId: string, ncNumber: string) => {
     handleUpdate(`não conformidade ${ncNumber}`);
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -407,6 +407,6 @@ export const NonConformityManager: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default NonConformityManager;

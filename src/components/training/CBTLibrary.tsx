@@ -97,7 +97,7 @@ export const CBTLibrary = memo(function() {
 
   const getCourseProgress = (courseId: string) => {
     return progress.find(p => p.course_id === courseId);
-  };
+  });
 
   const filteredCourses = useMemo(() => {
     return courses.filter(course => {
@@ -107,7 +107,7 @@ export const CBTLibrary = memo(function() {
       const matchesMandatory = filterMandatory === "all" || 
         (filterMandatory === "mandatory" ? course.is_mandatory : !course.is_mandatory);
       return matchesSearch && matchesCategory && matchesMandatory;
-  };
+  });
   }, [courses, searchQuery, filterCategory, filterMandatory]);
 
   // Stats
@@ -123,7 +123,7 @@ export const CBTLibrary = memo(function() {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
-  };
+  });
 
   return (
     <div className="space-y-6">

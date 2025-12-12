@@ -42,4 +42,4 @@ export const IncidentDocumentation: React.FC<Props> = ({ incidents, onExportPDF 
       </CardContent>
     </Card>
   );
-};
+});

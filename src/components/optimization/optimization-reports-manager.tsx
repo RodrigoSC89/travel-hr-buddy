@@ -167,7 +167,7 @@ export const OptimizationReportsManager = memo(() => {
         duration: 3000
       });
     }, 3000);
-  };
+  });
 
   const exportReport = (reportId: string) => {
     setReports(prev => prev.map(report => 
@@ -181,7 +181,7 @@ export const OptimizationReportsManager = memo(() => {
       description: "Relatório exportado em PDF com sucesso!",
       duration: 2000
     });
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -207,8 +207,8 @@ export const OptimizationReportsManager = memo(() => {
     case "monthly": return "bg-info/10 text-info border-info/20";
     case "quarterly": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

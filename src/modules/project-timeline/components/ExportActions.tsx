@@ -15,7 +15,7 @@ const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
   return { jsPDF, autoTable };
-};
+});
 
 interface Task {
   id: string;
@@ -138,7 +138,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       // Format dates as YYYYMMDD
       const formatICSDate = (date: Date) => {
         return format(date, "yyyyMMdd");
-      };
+      });
 
       const event = [
         "BEGIN:VEVENT",

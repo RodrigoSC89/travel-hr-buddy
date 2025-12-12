@@ -101,7 +101,7 @@ export function DataTable<T extends Record<string, unknown>>({
           const rowValue = row[key];
           return rowValue && 
             rowValue.toString().toLowerCase().includes(value.toLowerCase());
-  };
+  });
       }
     });
 
@@ -115,7 +115,7 @@ export function DataTable<T extends Record<string, unknown>>({
         
         const comparison = aValue > bValue ? 1 : -1;
         return sortDirection === "asc" ? comparison : -comparison;
-  };
+  });
     }
 
     return result;
@@ -169,7 +169,7 @@ export function DataTable<T extends Record<string, unknown>>({
     a.download = `data-export-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  };
+  });
 
   return (
     <div className={cn("bg-card rounded-xl border border-border overflow-hidden", className)}>

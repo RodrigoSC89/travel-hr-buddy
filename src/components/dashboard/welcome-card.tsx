@@ -23,7 +23,7 @@ export const WelcomeCard: React.FC = () => {
     else if (hour < 18) greeting = "Boa tarde";
     
     return `${greeting}, ${displayName}!`;
-  };
+  });
 
   const getQuickActions = () => {
     const actions = [];

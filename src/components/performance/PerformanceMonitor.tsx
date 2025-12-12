@@ -45,7 +45,7 @@ export const PerformanceMonitor = memo(function({
     if (score >= 90) return "text-green-500";
     if (score >= 50) return "text-yellow-500";
     return "text-red-500";
-  };
+  });
 
   const getRatingBadge = (rating: string) => {
     const variants = {
@@ -54,12 +54,12 @@ export const PerformanceMonitor = memo(function({
       poor: "bg-red-500/10 text-red-500 border-red-500/20",
     };
     return variants[rating as keyof typeof variants] || variants.poor;
-  };
+  });
 
   const formatValue = (name: string, value: number) => {
     if (name === "CLS") return value.toFixed(3);
     return `${Math.round(value)}ms`;
-  };
+  });
 
   const metricIcons: Record<string, React.ReactNode> = {
     LCP: <Timer className="h-4 w-4" />,

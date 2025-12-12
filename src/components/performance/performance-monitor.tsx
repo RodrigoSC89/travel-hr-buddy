@@ -17,7 +17,7 @@ const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   await import("jspdf-autotable");
   return jsPDF;
-};
+});
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -75,7 +75,7 @@ export const PerformanceMonitor: React.FC = () => {
 
     return () => {
       clearInterval(interval);
-    };
+    });
   }, []);
 
   const measurePerformance = useCallback(async () => {
@@ -172,7 +172,7 @@ export const PerformanceMonitor: React.FC = () => {
         });
       }
     });
-  };
+  });
 
   const toggleThreshold = (metric: string) => {
     setThresholds(prev =>
@@ -180,7 +180,7 @@ export const PerformanceMonitor: React.FC = () => {
         t.metric === metric ? { ...t, enabled: !t.enabled } : t
       )
     );
-  };
+  });
 
   const exportToCSV = () => {
     if (historicalData.length === 0) {
@@ -315,13 +315,13 @@ export const PerformanceMonitor: React.FC = () => {
     if (score >= 90) return "text-green-500";
     if (score >= 70) return "text-yellow-500";
     return "text-red-500";
-  };
+  });
 
   const getScoreBadge = (score: number) => {
     if (score >= 90) return { variant: "default" as const, text: "Excelente" };
     if (score >= 70) return { variant: "secondary" as const, text: "Bom" };
     return { variant: "destructive" as const, text: "Precisa Melhorar" };
-  };
+  });
 
   return (
     <div className="space-y-6">

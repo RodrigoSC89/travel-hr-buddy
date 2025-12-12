@@ -190,8 +190,8 @@ export const CrewDossierManager = memo(() => {
     case "professional": return <Briefcase className="h-4 w-4" />;
     case "medical": return <Heart className="h-4 w-4" />;
     case "training": return <GraduationCap className="h-4 w-4" />;
-    };
-  };
+    });
+  });
 
   const filteredMembers = crewMembers.filter(member =>
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -202,7 +202,7 @@ export const CrewDossierManager = memo(() => {
   const openDossier = (member: CrewMember) => {
     setSelectedMember(member);
     setIsDetailOpen(true);
-  };
+  });
 
   return (
     <div className="space-y-6">

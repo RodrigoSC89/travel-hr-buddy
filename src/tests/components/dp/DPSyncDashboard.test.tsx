@@ -39,31 +39,31 @@ vi.mock("onnxruntime-web", () => ({
 describe("DPSyncDashboard Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the synchronization title", () => {
     render(<DPSyncDashboard />);
     expect(screen.getByText(/Sincronização DP ↔ Forecast/)).toBeInTheDocument();
-  };
+  });
 
   it("should display the force sync button", () => {
     render(<DPSyncDashboard />);
     expect(screen.getByText(/Forçar Sincronização/)).toBeInTheDocument();
-  };
+  });
 
   it("should render the Brain icon", () => {
     const { container } = render(<DPSyncDashboard />);
     
     const svg = container.querySelector("svg");
     expect(svg).toBeTruthy();
-  };
+  });
 
   it("should render within a card component", () => {
     const { container } = render(<DPSyncDashboard />);
     
     const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
-  };
+  });
 
   it("should handle force sync button click", async () => {
     const { publishEvent } = await React.lazy(() => import(import("@/lib/mqtt/publisher")));
@@ -87,5 +87,5 @@ describe("DPSyncDashboard Component", () => {
     expect(
       screen.getByText(/Sincronizando.../) || screen.getByText(/Última sync:/)
     ).toBeInTheDocument();
-  };
-};
+  });
+});

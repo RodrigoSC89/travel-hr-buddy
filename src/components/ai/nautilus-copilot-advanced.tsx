@@ -217,7 +217,7 @@ What would you like assistance with today?`,
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);
     }, 2000);
-  };
+  });
 
   const generateAIResponse = (input: string): string => {
     const responses = [
@@ -231,11 +231,11 @@ What would you like assistance with today?`,
     ];
     
     return responses[Math.floor(Math.random() * responses.length)];
-  };
+  });
 
   const handleSuggestionClick = (suggestion: string) => {
     setInputValue(suggestion);
-  };
+  });
 
   const handleVoiceToggle = () => {
     setIsListening(!isListening);
@@ -243,7 +243,7 @@ What would you like assistance with today?`,
       title: isListening ? "Voice input stopped" : "Voice input started",
       description: isListening ? "Click again to start listening" : "Speak your question"
     });
-  };
+  });
 
   const getCategoryColor = (category: CopilotCapability["category"]) => {
     switch (category) {

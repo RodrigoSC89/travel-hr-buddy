@@ -43,7 +43,7 @@ export const AccessibleButton = forwardRef<HTMLButtonElement, AccessibleButtonPr
         announceToScreenReader(announceOnClick);
       }
       onClick?.(e);
-    };
+    });
 
     const isDisabled = disabled || isLoading;
 
@@ -165,8 +165,8 @@ export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HT
 
     return () => {
       container.removeEventListener("keydown", handleKeyDown);
-    };
+    });
   }, [isActive, containerRef]);
-};
+});
 
 export { announceToScreenReader };

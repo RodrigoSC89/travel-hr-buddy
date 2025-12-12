@@ -78,22 +78,22 @@ export const ChecklistReports = memo(() => {
     case "audit": return <AlertTriangle className="h-4 w-4" />;
     case "trend": return <TrendingUp className="h-4 w-4" />;
     default: return <FileText className="h-4 w-4" />;
-    };
-  };
+    });
+  });
 
   const handleGenerateReport = () => {
     toast({
       title: "Relatório em Geração",
       description: "Seu relatório está sendo gerado e estará disponível em breve.",
     });
-  };
+  });
 
   const handleDownloadReport = (reportId: string) => {
     toast({
       title: "Download Iniciado",
       description: "O download do relatório foi iniciado.",
     });
-  };
+  });
 
   const filteredReports = reports.filter(report => 
     filterType === "all" || report.type === filterType

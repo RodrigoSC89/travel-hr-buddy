@@ -84,7 +84,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
       style: "currency",
       currency: currency
     }).format(amount);
-  };
+  });
 
   return (
     <Card className={`hover:shadow-lg transition-all duration-200 ${
@@ -271,4 +271,4 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
       />
     </Card>
   );
-};
+});

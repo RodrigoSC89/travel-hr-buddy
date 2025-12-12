@@ -23,7 +23,7 @@ export default function SimilarExamplesDemo() {
   const handleSelectSuggestion = (suggestion: string) => {
     // Populate the description field with the selected suggestion
     setJobDescription(suggestion);
-  };
+  });
 
   const handleSaveJob = () => {
     logger.info("Saving job:", {
@@ -38,7 +38,7 @@ export default function SimilarExamplesDemo() {
     setJobTitle("");
     setJobDescription("");
     setComponent("");
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">

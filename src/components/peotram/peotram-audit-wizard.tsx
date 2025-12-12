@@ -214,7 +214,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       
       return newElements;
     });
-  };
+  });
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -739,7 +739,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
         </div>
       </div>
     );
-  };
+  });
 
   const renderReviewStep = () => (
     <div className="space-y-6">

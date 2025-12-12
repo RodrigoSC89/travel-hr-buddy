@@ -22,7 +22,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
       ...prev,
       [id]: { ...prev[id], [field]: value }
     }));
-  };
+  });
 
   const getStatusIcon = (status?: string) => {
     switch(status) {

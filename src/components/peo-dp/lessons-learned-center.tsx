@@ -219,7 +219,7 @@ export const LessonsLearnedCenter: React.FC = () => {
     const matchesFailure = filterFailureType === "all" || lesson.failureType === filterFailureType;
     const matchesSeverity = filterSeverity === "all" || lesson.severity === filterSeverity;
     return matchesSearch && matchesSource && matchesFailure && matchesSeverity;
-  };
+  });
 
   const stats = {
     total: lessons.length,
@@ -235,12 +235,12 @@ export const LessonsLearnedCenter: React.FC = () => {
 
   const handleDownloadPDF = (lesson: LessonLearned) => {
     toast.success(`Baixando PDF: ${lesson.id}`);
-  };
+  });
 
   const handleLinkToTraining = (lesson: LessonLearned) => {
     setLessons(lessons.map(l => l.id === lesson.id ? { ...l, usedInTraining: true } : l));
     toast.success("Lição vinculada ao treinamento CPD");
-  };
+  });
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
@@ -614,6 +614,6 @@ export const LessonsLearnedCenter: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default LessonsLearnedCenter;

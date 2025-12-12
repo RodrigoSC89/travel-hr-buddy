@@ -75,11 +75,11 @@ const useSystemMetrics = () => {
       clearTimeout(timer);
       window.removeEventListener("online", updateMetrics);
       window.removeEventListener("offline", updateMetrics);
-    };
+    });
   }, [updateMetrics]);
 
   return { metrics, updateMetrics };
-};
+});
 
 // Componente de Métricas de Performance
 const PerformanceMetrics = memo(() => {
@@ -175,7 +175,7 @@ const LanguageControls = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 // Controles de Acessibilidade
 const AccessibilityControls = () => {
@@ -190,7 +190,7 @@ const AccessibilityControls = () => {
 
   const toggle = (key: keyof typeof settings) => {
     setSettings(prev => ({ ...prev, [key]: !prev[key] }));
-  };
+  });
 
   return (
     <Card className="bg-card/50 border-border/50">
@@ -220,7 +220,7 @@ const AccessibilityControls = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 // PWA Controls
 const PWAControls = () => {
@@ -242,7 +242,7 @@ const PWAControls = () => {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, []);
 
   return (
@@ -298,7 +298,7 @@ const NotificationControls = () => {
   const requestPermission = async () => {
     const result = await Notification.requestPermission();
     setPermission(result);
-  };
+  });
 
   return (
     <Card className="bg-card/50 border-border/50">
@@ -394,7 +394,7 @@ const SystemStatus = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 // Painel Principal
 export const SystemControlPanel = () => {

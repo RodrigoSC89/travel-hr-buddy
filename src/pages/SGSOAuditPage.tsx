@@ -81,7 +81,7 @@ export default function SGSOAuditPage() {
               evidence: match?.evidence || "",
               comment: match?.comment || ""
             };
-  };
+  });
 
           setAuditData(updatedData);
           toast.success("✅ Última auditoria carregada.");
@@ -99,7 +99,7 @@ export default function SGSOAuditPage() {
     const updated = [...auditData];
     (updated[index] as unknown)[field] = value;
     setAuditData(updated);
-  };
+  });
 
   const handleSubmit = async () => {
     if (!user) {
@@ -149,7 +149,7 @@ export default function SGSOAuditPage() {
       })
       .from(element)
       .save();
-  };
+  });
 
   const handleExplainWithAI = async (index: number) => {
     const item = auditData[index];

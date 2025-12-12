@@ -147,7 +147,7 @@ const AISuggestionsDashboard: React.FC = () => {
   const filteredSuggestions = suggestions.filter(s => {
     if (filter === "all") return true;
     return s.status === filter;
-  };
+  });
 
   const stats = {
     total: suggestions.length,
@@ -166,13 +166,13 @@ const AISuggestionsDashboard: React.FC = () => {
           : s
       )
     );
-  };
+  });
 
   const rejectSuggestion = (id: string) => {
     setSuggestions(prev =>
       prev.map(s => (s.id === id ? { ...s, status: "rejected" as const } : s))
     );
-  };
+  });
 
   const getPriorityBadge = (priority: string) => {
     const styles = {
@@ -187,7 +187,7 @@ const AISuggestionsDashboard: React.FC = () => {
         {priority}
       </Badge>
     );
-  };
+  });
 
   const getCategoryIcon = (category: string) => {
     const icons = {
@@ -200,7 +200,7 @@ const AISuggestionsDashboard: React.FC = () => {
 
     const Icon = icons[category as keyof typeof icons] || Lightbulb;
     return <Icon className="h-4 w-4" />;
-  };
+  });
 
   if (loading) {
     return (

@@ -28,7 +28,7 @@ vi.mock("@/hooks/use-toast", () => ({
 describe("ExecutionLogsPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the page title", () => {
     render(
@@ -38,7 +38,7 @@ describe("ExecutionLogsPage Component", () => {
     );
 
     expect(screen.getByText("Auditoria de Execuções de Automação")).toBeInTheDocument();
-  };
+  });
 
   it("should render metrics cards", () => {
     render(
@@ -64,8 +64,8 @@ describe("ExecutionLogsPage Component", () => {
       // Check for date input placeholders
       const dateInputs = screen.getAllByPlaceholderText(/Data/);
       expect(dateInputs.length).toBeGreaterThan(0);
-  };
-  };
+  });
+  });
 
   it("should render export buttons", async () => {
     render(
@@ -80,8 +80,8 @@ describe("ExecutionLogsPage Component", () => {
       
       const pdfButtons = screen.getAllByText("PDF");
       expect(pdfButtons.length).toBeGreaterThan(0);
-  };
-  };
+  });
+  });
 
   it("should display loading state initially", () => {
     render(
@@ -91,7 +91,7 @@ describe("ExecutionLogsPage Component", () => {
     );
 
     expect(screen.getByText("Carregando registros...")).toBeInTheDocument();
-  };
+  });
 
   it("should fetch execution logs on mount", async () => {
     const mockExecutions = [
@@ -145,8 +145,8 @@ describe("ExecutionLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Test Workflow")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should display empty state when no executions exist", async () => {
     vi.mocked(supabase.from).mockImplementation(() => ({
@@ -166,8 +166,8 @@ describe("ExecutionLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Nenhuma execução encontrada")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should render date filter inputs", () => {
     render(
@@ -178,5 +178,5 @@ describe("ExecutionLogsPage Component", () => {
 
     const dateInputs = screen.getAllByPlaceholderText(/Data/);
     expect(dateInputs.length).toBeGreaterThan(0);
-  };
-};
+  });
+});

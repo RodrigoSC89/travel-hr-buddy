@@ -92,7 +92,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
       markers.current.forEach(m => m.remove());
       if (map.current) map.current.remove();
       map.current = null;
-    };
+    });
   }, [mapboxToken]);
 
   const updateMarkers = async (mapboxgl: unknown: unknown: unknown) => {
@@ -140,7 +140,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
 
       el.addEventListener("click", () => {
         onSelectSatellite?.(sat);
-  };
+  });
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([sat.longitude, sat.latitude])
@@ -148,8 +148,8 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
         .addTo(map.current);
 
       markers.current.push(marker);
-  };
-  };
+  });
+  });
 
   // Update markers when satellites or selection changes
   useEffect(() => {
@@ -158,7 +158,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
     const initMarkers = async () => {
       const mapboxgl = await loadMapboxGL();
       updateMarkers(mapboxgl);
-    };
+    });
     
     initMarkers();
   }, [satellites, selectedSatellite, isLoading]);

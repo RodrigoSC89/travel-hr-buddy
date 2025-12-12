@@ -185,7 +185,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
           : item
       )
     }));
-  };
+  });
 
   const handleSave = async () => {
     try {

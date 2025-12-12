@@ -21,6 +21,6 @@ const PSCPackagePage: React.FC = () => {
       <PSCPackagePanel />
     </ModulePageWrapper>
   );
-};
+});
 
 export default PSCPackagePage;

@@ -28,13 +28,13 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
   const extractVariables = (content: string) => {
     const matches = content.match(/{{(.*?)}}/g) || [];
     return Array.from(new Set(matches.map((m) => m.replace(/[{}]/g, "").trim())));
-  };
+  });
 
   const vars = extractVariables(template.content);
 
   const handleChange = (key: string, value: string) => {
     setVariables((prev) => ({ ...prev, [key]: value }));
-  };
+  });
 
   const generatePreview = () => {
     let content = template.content;
@@ -44,7 +44,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
       content = content.split(placeholder).join(variables[key] || "");
     }
     setPreview(content);
-  };
+  });
   const handleSave = async () => {
     if (!preview) {
       toast({

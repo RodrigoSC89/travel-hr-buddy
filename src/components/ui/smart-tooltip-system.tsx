@@ -174,8 +174,8 @@ const SmartTooltipSystem: React.FC = () => {
         clearTimeout(idleTimer);
         document.removeEventListener("mousemove", resetTimer);
         document.removeEventListener("keypress", resetTimer);
-      };
-    };
+      });
+    });
 
     checkContext();
   }, []);
@@ -189,7 +189,7 @@ const SmartTooltipSystem: React.FC = () => {
 
   const dismissAssistant = (id: string) => {
     setAssistantMessages(prev => prev.filter(m => m.id !== id));
-  };
+  });
 
   const startGuidedTour = () => {
     setCurrentTour(0);
@@ -199,7 +199,7 @@ const SmartTooltipSystem: React.FC = () => {
       title: "Tour Iniciado",
       description: "Siga as instruções para conhecer o sistema",
     });
-  };
+  });
 
   const nextTourStep = () => {
     if (currentTour !== null && currentTour < tooltipDatabase.length - 1) {
@@ -216,7 +216,7 @@ const SmartTooltipSystem: React.FC = () => {
       title: "Tour Concluído",
       description: "Agora você conhece as principais funcionalidades!",
     });
-  };
+  });
 
   const openOptimizationPanel = () => {
     toast({
@@ -224,7 +224,7 @@ const SmartTooltipSystem: React.FC = () => {
       description: "Redirecionando para sugestões de melhoria...",
     });
     dismissAssistant("low-efficiency");
-  };
+  });
 
   const openIdentitySystem = () => {
     toast({
@@ -232,7 +232,7 @@ const SmartTooltipSystem: React.FC = () => {
       description: "Abrindo painel de customização...",
     });
     dismissAssistant("new-feature");
-  };
+  });
 
   const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {
@@ -394,6 +394,6 @@ const SmartTooltipSystem: React.FC = () => {
       )}
     </>
   );
-};
+});
 
 export default SmartTooltipSystem;

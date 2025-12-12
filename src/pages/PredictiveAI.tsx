@@ -20,6 +20,6 @@ const PredictiveAI: React.FC = () => {
       </div>
     </>
   );
-};
+});
 
 export default PredictiveAI;

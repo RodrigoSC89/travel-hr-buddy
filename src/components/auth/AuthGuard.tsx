@@ -134,7 +134,7 @@ export const useAuthGuard = memo(() => {
     if (!user) return false;
     const userRole = (user as unknown).user_metadata?.role || "user";
     return roles.includes(userRole);
-  };
+  });
 
   const requireAuth = (callback: () => void): void => {
     if (isAuthenticated) {
@@ -153,7 +153,7 @@ export const useAuthGuard = memo(() => {
     hasRole,
     requireAuth,
   };
-};
+});
 
 /**
  * Higher-order component for protecting routes

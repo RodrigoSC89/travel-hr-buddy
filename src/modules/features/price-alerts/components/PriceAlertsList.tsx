@@ -54,7 +54,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -89,7 +89,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
 
   const isPriceDropped = (alert: PriceAlert) => {
     return alert.current_price && alert.current_price <= alert.target_price;
-  };
+  });
 
   if (loading) {
     return <div className="text-center py-8">Carregando alertas...</div>;
@@ -219,4 +219,4 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
       )}
     </div>
   );
-};
+});

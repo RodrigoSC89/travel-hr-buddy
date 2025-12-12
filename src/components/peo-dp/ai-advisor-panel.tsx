@@ -134,12 +134,12 @@ export const AIAdvisorPanel: React.FC = () => {
 
   const handleQuickAction = (action: string) => {
     setInput(action);
-  };
+  });
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Copiado para a área de transferência");
-  };
+  });
 
   const exportChat = () => {
     const content = messages
@@ -152,12 +152,12 @@ export const AIAdvisorPanel: React.FC = () => {
     a.download = `ai-advisor-chat-${Date.now()}.txt`;
     a.click();
     toast.success("Chat exportado");
-  };
+  });
 
   const clearChat = () => {
     setMessages([]);
     toast.info("Chat limpo");
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -380,4 +380,4 @@ export const AIAdvisorPanel: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

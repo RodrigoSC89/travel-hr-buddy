@@ -50,7 +50,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  };
+  });
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -62,7 +62,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const handleMarkAllRead = () => {
     setUnreadCount(0);
     toast({ title: "Notificações", description: "Todas marcadas como lidas" });
-  };
+  });
 
   const handleNewWorkflow = async () => {
     if (!newWorkflowData.name) {
@@ -79,7 +79,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     });
     setShowNewWorkflow(false);
     setNewWorkflowData({ name: "", description: "", category: "custom", priority: "medium" });
-  };
+  });
 
   const handleUseTemplate = async (template: typeof workflowTemplates[0]) => {
     await createWorkflow({
@@ -93,7 +93,7 @@ export const WorkflowAutomationHub: React.FC = () => {
       tags: template.tags,
     });
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
-  };
+  });
 
   if (isLoading) {
     return (

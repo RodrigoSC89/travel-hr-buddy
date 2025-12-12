@@ -139,7 +139,7 @@ export const CollectiveDashboard: React.FC = () => {
       stats.total++;
       if (d.success) stats.successes++;
       else stats.failures++;
-  };
+  });
 
     return Array.from(moduleMap.entries()).map(([moduleName, stats]) => {
       const successRate = stats.total > 0 ? stats.successes / stats.total : 0;
@@ -153,7 +153,7 @@ export const CollectiveDashboard: React.FC = () => {
         successRate
       };
     });
-  };
+  });
 
   // Optimized polling for dashboard refresh
   useOptimizedPolling({
@@ -166,7 +166,7 @@ export const CollectiveDashboard: React.FC = () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");
     // In real implementation, this would generate a PDF
     alert("PDF export feature - would generate comprehensive report");
-  };
+  });
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -185,7 +185,7 @@ export const CollectiveDashboard: React.FC = () => {
       critical: "destructive"
     };
     return <Badge variant={variants[severity] || "default"}>{severity}</Badge>;
-  };
+  });
 
   const getDecisionLevelBadge = (level: string) => {
     const colors: Record<string, string> = {
@@ -199,7 +199,7 @@ export const CollectiveDashboard: React.FC = () => {
         {level}
       </Badge>
     );
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -566,4 +566,4 @@ export const CollectiveDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

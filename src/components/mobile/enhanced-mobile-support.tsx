@@ -157,7 +157,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       e.preventDefault();
       setInstallPrompt(e);
       setPwaStatus(prev => ({ ...prev, canInstall: true }));
-  };
+  });
 
     // Verificar se está rodando como PWA
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
@@ -190,7 +190,7 @@ export const EnhancedMobileSupport: React.FC = () => {
     const updated = { ...mobileSettings, ...newSettings };
     setMobileSettings(updated);
     localStorage.setItem("mobileSettings", JSON.stringify(updated));
-  };
+  });
 
   const installPWA = async () => {
     if (installPrompt) {
@@ -316,7 +316,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           title: "Atualizando app",
           description: "A nova versão será carregada em breve"
         });
-  };
+  });
     }
   };
 
@@ -340,7 +340,7 @@ export const EnhancedMobileSupport: React.FC = () => {
     if (level > 50) return "text-green-500";
     if (level > 20) return "text-yellow-500";
     return "text-red-500";
-  };
+  });
 
   if (isLoading) {
     return (

@@ -163,7 +163,7 @@ export const IntegrationMarketplace: React.FC = () => {
                          integration.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const sortedIntegrations = [...filteredIntegrations].sort((a, b) => {
     switch (selectedFilter) {
@@ -189,19 +189,19 @@ export const IntegrationMarketplace: React.FC = () => {
         description: `${integration.name} foi instalado com sucesso!`,
       });
     }, 2000);
-  };
+  });
 
   const getCategoryIcon = (category: IntegrationListing["category"]) => {
     const categoryData = categories.find(c => c.id === category);
     const Icon = categoryData?.icon || Globe;
     return <Icon className="w-4 h-4" />;
-  };
+  });
 
   const getPriceColor = (price: IntegrationListing["price"]) => {
     return price === "free" 
       ? "bg-success/20 text-success border-success/30"
       : "bg-warning/20 text-warning border-warning/30";
-  };
+  });
 
   const getSupportColor = (level: IntegrationListing["supportLevel"]) => {
     switch (level) {

@@ -157,7 +157,7 @@ export const EmployeePortal: React.FC = () => {
     });
     
     setLeaveRequest({ startDate: "", endDate: "", type: "vacation", reason: "" });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

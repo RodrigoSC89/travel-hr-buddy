@@ -90,7 +90,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
 
   const getFindingForItem = (regulation: string) => {
     return findings.find(f => f.mlc_regulation === regulation);
-  };
+  });
 
   return (
     <div className="space-y-4">

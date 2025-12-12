@@ -36,7 +36,7 @@ export const InstallPrompt = memo(function() {
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       // Show prompt after a delay
       setTimeout(() => setShowPrompt(true), 3000);
-    };
+    });
 
     window.addEventListener("beforeinstallprompt", handler);
 
@@ -54,13 +54,13 @@ export const InstallPrompt = memo(function() {
     
     setDeferredPrompt(null);
     setShowPrompt(false);
-  };
+  });
 
   const handleDismiss = () => {
     localStorage.setItem("pwa-install-dismissed", new Date().toISOString());
     setDismissed(true);
     setShowPrompt(false);
-  };
+  });
 
   if (!showPrompt || dismissed || !deferredPrompt) return null;
 

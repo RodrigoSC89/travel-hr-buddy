@@ -32,7 +32,7 @@ const AnalyticsCore = () => {
     const sources = dataCollector.getAllSources();
     setMetrics(kpiMetrics);
     setDataSources(sources);
-  };
+  });
 
   const handleGenerateInsights = async () => {
     setIsLoadingInsights(true);
@@ -135,7 +135,7 @@ const AnalyticsCore = () => {
       alert: "destructive"
     };
     return <Badge variant={variants[type] || "default"}>{type}</Badge>;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -77,7 +77,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-  };
+  });
 
 // Mock jsPDF
 vi.mock("jspdf", () => ({
@@ -108,7 +108,7 @@ describe("DocumentAIEditorPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
-  };
+  });
 
   it("should render the editor page", () => {
     render(
@@ -120,7 +120,7 @@ describe("DocumentAIEditorPage", () => {
     expect(screen.getByText("📝 Editor de Documentos com IA")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Título do Documento")).toBeInTheDocument();
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  };
+  });
 
   it("should apply template from localStorage on mount", async () => {
     const mockSetContent = vi.fn();
@@ -142,7 +142,7 @@ describe("DocumentAIEditorPage", () => {
 
     await waitFor(() => {
       expect(mockSetContent).toHaveBeenCalledWith("<p>Template content</p>");
-  };
+  });
 
     const toastMod: unknown = await import("@/hooks/use-toast");
     expect(toastMod.toast).toHaveBeenCalledWith(
@@ -150,7 +150,7 @@ describe("DocumentAIEditorPage", () => {
         title: "Template aplicado",
       })
     );
-  };
+  });
 
   it("should navigate to templates page", () => {
     render(
@@ -188,8 +188,8 @@ describe("DocumentAIEditorPage", () => {
           title: "Documento salvo com sucesso",
         })
       );
-  };
-  };
+  });
+  });
 
   it("should export document as PDF", async () => {
     const toastMod: unknown = await import("@/hooks/use-toast");
@@ -212,8 +212,8 @@ describe("DocumentAIEditorPage", () => {
           title: "PDF exportado com sucesso",
         })
       );
-  };
-  };
+  });
+  });
 
   it("should show validation error when saving without title", async () => {
     const supaMod: unknown = await import("@/integrations/supabase/client");
@@ -227,7 +227,7 @@ describe("DocumentAIEditorPage", () => {
     // Wait for component to be ready
     await waitFor(() => {
       expect(screen.getByPlaceholderText("Título do Documento")).toBeInTheDocument();
-  };
+  });
 
     const saveButton = screen.getByText("Salvar no Supabase");
     fireEvent.click(saveButton);
@@ -238,4 +238,4 @@ describe("DocumentAIEditorPage", () => {
     // Verify that supabase.from was NOT called (validation failed)
     expect(supaMod.supabase.from).not.toHaveBeenCalled();
   });
-};
+});

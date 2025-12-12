@@ -17,7 +17,7 @@ export const UpdatePrompt = memo(function() {
   const handleUpdate = () => {
     skipWaiting();
     window.location.reload();
-  };
+  });
 
   if (!updateAvailable || dismissed) return null;
 

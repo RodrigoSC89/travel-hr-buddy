@@ -148,7 +148,7 @@ export const AIModuleEnhancer = memo(function({
 
   const handleSend = () => {
     handleQuery({ id: "custom", label: "Custom", prompt: input, action: "chat", icon: null });
-  };
+  });
 
   const copyResponse = () => {
     if (response) {

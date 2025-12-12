@@ -30,17 +30,17 @@ vi.mock("@/integrations/supabase/client", () => ({
 describe("JobsForecastReport Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the component title", () => {
     render(<JobsForecastReport trend={[]} />);
     expect(screen.getByText(/🔮 Previsão IA de Jobs/i)).toBeDefined();
-  };
+  });
 
   it("should show generate button when no trend data is provided", () => {
     render(<JobsForecastReport trend={[]} />);
     expect(screen.getByText(/Gerar Previsão/i)).toBeDefined();
-  };
+  });
 
   it("should show loading skeleton when fetching forecast", async () => {
     const mockInvoke = vi.fn(() => 
@@ -54,8 +54,8 @@ describe("JobsForecastReport Component", () => {
     await waitFor(() => {
       const skeletons = document.querySelectorAll(".animate-pulse");
       expect(skeletons.length).toBeGreaterThan(0);
-  };
-  };
+  });
+  });
 
   it("should display forecast when data is loaded", async () => {
     const mockForecast = "Previsão: Esperamos um aumento de 15% nos próximos 2 meses";
@@ -68,8 +68,8 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(mockForecast)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should handle error when forecast fetch fails", async () => {
     invokeMock.mockResolvedValue({
@@ -81,8 +81,8 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Erro ao buscar previsão/i)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should call generate forecast when button is clicked", async () => {
     const mockForecast = "Previsão gerada manualmente";
@@ -98,8 +98,8 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(mockForecast)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should automatically fetch forecast when trend data is provided", async () => {
     const mockInvoke = vi.fn().mockResolvedValue({
@@ -119,8 +119,8 @@ describe("JobsForecastReport Component", () => {
       expect(mockInvoke).toHaveBeenCalledWith("bi-jobs-forecast", {
         body: { trend: trendData }
       });
-  };
-  };
+  });
+  });
 
   it("should not fetch when trend array is empty", () => {
     const mockInvoke = vi.fn();
@@ -129,13 +129,13 @@ describe("JobsForecastReport Component", () => {
     render(<JobsForecastReport trend={[]} />);
 
     expect(mockInvoke).not.toHaveBeenCalled();
-  };
+  });
 
   it("should render the component without errors", () => {
     const { container } = render(<JobsForecastReport trend={[]} />);
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
-  };
+  });
 
   it("should call onForecastUpdate callback when forecast is loaded", async () => {
     const mockForecast = "Previsão de teste";
@@ -149,8 +149,8 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(mockCallback).toHaveBeenCalledWith(mockForecast);
-  };
-  };
+  });
+  });
 
   it("should call onForecastUpdate callback with error message on error", async () => {
     const mockCallback = vi.fn();
@@ -163,6 +163,6 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(mockCallback).toHaveBeenCalledWith("Erro ao buscar previsão. Tente novamente.");
-  };
-  };
-};
+  });
+  });
+});

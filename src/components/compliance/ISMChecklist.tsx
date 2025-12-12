@@ -50,7 +50,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, requirem
       </CollapsibleContent>
     </Collapsible>
   );
-};
+});
 
 export default function ISMChecklist() {
   const ismRequirements: RequirementItem[] = [

@@ -117,7 +117,7 @@ export const OperationalTimeline = memo(function() {
     const matchesVessel = !selectedVessel || event.vessel === selectedVessel;
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(event.type);
     return matchesSearch && matchesVessel && matchesType;
-  };
+  });
 
   const getEventIcon = (type: string) => {
     switch (type) {
@@ -153,7 +153,7 @@ export const OperationalTimeline = memo(function() {
     if (days > 0) return `Há ${days} dia${days > 1 ? "s" : ""}`;
     if (hours > 0) return `Há ${hours} hora${hours > 1 ? "s" : ""}`;
     return "Agora";
-  };
+  });
 
   const toggleType = (type: string) => {
     setSelectedTypes(prev => 
@@ -161,7 +161,7 @@ export const OperationalTimeline = memo(function() {
         ? prev.filter(t => t !== type)
         : [...prev, type]
     );
-  };
+  });
 
   return (
     <div className="space-y-6">

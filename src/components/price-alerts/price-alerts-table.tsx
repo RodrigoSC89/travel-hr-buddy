@@ -115,7 +115,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
     if (diff > 0) return "above";
     if (diff < 0) return "below";
     return "equal";
-  };
+  });
 
   const renderPriceTrendIcon = (alert: PriceAlert) => {
     const trend = getPriceTrend(alert);
@@ -127,7 +127,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
       return <TrendingDown className="w-4 h-4 text-green-500" />;
     }
     return <Minus className="w-4 h-4 text-gray-400" />;
-  };
+  });
 
   return (
     <div className="space-y-4">

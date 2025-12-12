@@ -162,7 +162,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
         return prev + 10;
       });
     }, 200);
-  };
+  });
 
   const getRecommendationColor = (rec: RouteOptimization["recommendation"]) => {
     switch (rec) {

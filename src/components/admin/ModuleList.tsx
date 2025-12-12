@@ -25,7 +25,7 @@ export const ModuleList: React.FC = () => {
                          module.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === "all" || module.status === filterStatus;
     return matchesSearch && matchesFilter;
-  };
+  });
 
   const getStatusIcon = (status: Module["status"]) => {
     switch (status) {

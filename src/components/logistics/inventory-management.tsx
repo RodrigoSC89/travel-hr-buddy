@@ -68,19 +68,19 @@ export const InventoryManagement = memo(() => {
       });
     } finally {
       setLoading(false);
-    };
-  };
+    });
+  });
 
   const getLowStockItems = () => {
     return items.filter(item => 
       item.current_stock <= item.minimum_stock && 
       item.status !== "discontinued"
     );
-  };
+  });
 
   const getTotalValue = () => {
     return items.reduce((sum, item) => sum + (item.total_value || 0), 0);
-  };
+  });
 
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,7 +88,7 @@ export const InventoryManagement = memo(() => {
     const matchesCategory = filterCategory === "all" || item.category === filterCategory;
     const matchesStatus = filterStatus === "all" || item.status === filterStatus;
     return matchesSearch && matchesCategory && matchesStatus;
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "destructive" | "secondary" | "outline"> = {
@@ -99,14 +99,14 @@ export const InventoryManagement = memo(() => {
       expired: "destructive"
     };
     return <Badge variant={variants[status] || "default"}>{status.replace("_", " ")}</Badge>;
-  };
+  });
 
   const getStockIndicator = (item: InventoryItem) => {
     const percentage = (item.current_stock / item.maximum_stock) * 100;
     if (percentage <= 25) return <TrendingDown className="h-4 w-4 text-red-500" />;
     if (percentage <= 50) return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
     return <TrendingUp className="h-4 w-4 text-green-500" />;
-  };
+  });
 
   return (
     <div className="space-y-6">

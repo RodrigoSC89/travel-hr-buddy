@@ -8,6 +8,6 @@ const Integrations = () => {
       <AdvancedIntegrationsHub />
     </ModulePageWrapper>
   );
-};
+});
 
 export default Integrations;

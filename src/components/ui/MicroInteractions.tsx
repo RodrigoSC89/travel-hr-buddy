@@ -86,7 +86,7 @@ export const Ripple: React.FC<RippleProps> = ({ children, className, disabled })
     setTimeout(() => {
       setRipples(prev => prev.filter(r => r.id !== id));
     }, 600);
-  };
+  });
 
   return (
     <div 
@@ -107,7 +107,7 @@ export const Ripple: React.FC<RippleProps> = ({ children, className, disabled })
       ))}
     </div>
   );
-};
+});
 
 /**
  * Pulse Dot - Activity indicator
@@ -222,7 +222,7 @@ export const NotificationBadge: React.FC<NotificationBadgeProps> = ({
       {displayCount}
     </motion.span>
   );
-};
+});
 
 /**
  * Loading Dots Animation

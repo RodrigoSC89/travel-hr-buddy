@@ -141,7 +141,7 @@ const UnifiedDashboard = () => {
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
     });
-  };
+  });
 
   const handleKPIToggle = (kpi: string) => {
     setSelectedKPIs(prev => 
@@ -149,7 +149,7 @@ const UnifiedDashboard = () => {
         ? prev.filter(k => k !== kpi)
         : [...prev, kpi]
     );
-  };
+  });
 
   // Auto-update effect
   React.useEffect(() => {
@@ -434,6 +434,6 @@ const UnifiedDashboard = () => {
       </div>
     </div>
   );
-};
+});
 
 export default UnifiedDashboard;

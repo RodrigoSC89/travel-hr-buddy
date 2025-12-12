@@ -118,25 +118,25 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
       error: "bg-red-500/10 text-red-500 border-red-500/20"
     };
     return variants[type];
-  };
+  });
 
   const markAsRead = (id: string) => {
     setAlerts(prev => prev.map(a => a.id === id ? { ...a, isRead: true } : a));
-  };
+  });
 
   const markAllAsRead = () => {
     setAlerts(prev => prev.map(a => ({ ...a, isRead: true })));
-  };
+  });
 
   const deleteAlert = (id: string) => {
     setAlerts(prev => prev.filter(a => a.id !== id));
-  };
+  });
 
   const filteredAlerts = alerts.filter(a => {
     if (activeTab === "unread") return !a.isRead;
     if (activeTab === "warnings") return a.type === "warning" || a.type === "error";
     return true;
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -250,6 +250,6 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
       </DialogContent>
     </Dialog>
   );
-};
+});
 
 export { AlertsDialog };

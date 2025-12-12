@@ -144,20 +144,20 @@ export const POPsLibrary: React.FC = () => {
                          pop.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || pop.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const favorites = pops.filter(p => p.isFavorite);
 
   const toggleFavorite = (id: string) => {
     setPOPs(pops.map(p => p.id === id ? { ...p, isFavorite: !p.isFavorite } : p));
     toast.success("Favoritos atualizados");
-  };
+  });
 
   const handleViewPOP = (pop: POP) => {
     setSelectedPOP(pop);
     setShowPOPDialog(true);
     setAISummary("");
-  };
+  });
 
   const handleGenerateSummary = async () => {
     if (!selectedPOP) return;

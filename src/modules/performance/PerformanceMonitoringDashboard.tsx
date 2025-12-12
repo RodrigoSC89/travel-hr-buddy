@@ -144,7 +144,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
       warning: systemData.filter((m) => m.status === "warning").length,
       critical: systemData.filter((m) => m.status === "critical").length,
     };
-  };
+  });
 
   const stats = {
     totalMetrics: metrics.length,

@@ -56,7 +56,7 @@ export const CognitiveDashboard: React.FC = () => {
     return () => {
       isMounted = false;
       clearInterval(interval);
-    };
+    });
   }, []);
 
   const loadDashboardData = async () => {
@@ -88,7 +88,7 @@ export const CognitiveDashboard: React.FC = () => {
 
   const handleRefresh = () => {
     loadDashboardData();
-  };
+  });
 
   const getRiskColor = (level: string) => {
     switch (level) {
@@ -113,7 +113,7 @@ export const CognitiveDashboard: React.FC = () => {
   const formatTimestamp = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
     return d.toLocaleString();
-  };
+  });
 
   const filteredPredictions = predictions.filter(p => {
     if (filterModule !== "all" && p.module_name !== filterModule) return false;

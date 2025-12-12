@@ -163,7 +163,7 @@ export const ReservationsDashboard: React.FC = () => {
       status: "confirmed" as "pending" | "confirmed" | "cancelled"
     });
     setSelectedReservation(null);
-  };
+  });
 
   const openEditDialog = (reservation: Reservation) => {
     setSelectedReservation(reservation);
@@ -177,12 +177,12 @@ export const ReservationsDashboard: React.FC = () => {
       status: reservation.status
     });
     setIsDialogOpen(true);
-  };
+  });
 
   const openNewDialog = () => {
     resetForm();
     setIsDialogOpen(true);
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

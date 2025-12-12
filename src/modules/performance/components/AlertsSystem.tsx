@@ -82,7 +82,7 @@ export const AlertsSystem: React.FC = () => {
     return () => {
       clearInterval(interval);
       supabase.removeChannel(channel);
-    };
+    });
   }, [toast]);
 
   const fetchAlerts = async () => {
@@ -214,4 +214,4 @@ export const AlertsSystem: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

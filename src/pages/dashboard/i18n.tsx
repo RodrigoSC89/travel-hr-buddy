@@ -145,7 +145,7 @@ export default function I18nDashboard() {
       break;
     }
     return date.toISOString();
-  };
+  });
 
   const exportData = () => {
     const dataToExport = {
@@ -164,7 +164,7 @@ export default function I18nDashboard() {
     a.download = `i18n-dashboard-${new Date().toISOString()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  };
+  });
 
   // Agregar dados para gráficos
   const aggregateByLanguage = stats.reduce((acc, stat) => {

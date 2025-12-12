@@ -61,7 +61,7 @@ export const MissionControlMobileDashboard: React.FC = () => {
 
     return () => {
       unsubscribe();
-    };
+    });
   }, []);
 
   const loadMissions = async () => {

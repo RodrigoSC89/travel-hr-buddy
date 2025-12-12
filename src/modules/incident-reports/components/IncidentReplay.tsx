@@ -34,7 +34,7 @@ import { toast } from "sonner";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface IncidentReplayProps {
   incidentId: string;
@@ -101,9 +101,9 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
           return prev;
         }
         return prev + 1;
-  };
+  });
     }, 2000);
-  };
+  });
 
   const exportToPDF = async () => {
     if (!incident || !analysis) return;
@@ -443,6 +443,6 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
       </div>
     </div>
   );
-};
+});
 
 export default IncidentReplay;

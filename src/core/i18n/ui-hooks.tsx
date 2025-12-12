@@ -56,7 +56,7 @@ export function useTranslation(
 
     // 3. Usar default
     return defaultLanguage;
-  };
+  });
 
   const [language, setLanguageState] = useState<SupportedLanguage>(
     getInitialLanguage()
@@ -125,7 +125,7 @@ export function useTranslation(
         .catch((error) => {
           logger.error(`[useTranslation] Translation failed for ${key}`, error);
           translationCache.set(cacheKey, key);
-  };
+  });
 
       // Retornar chave enquanto traduz (evita flickering)
       return cached || key;
@@ -163,7 +163,7 @@ export function useStaticTranslation(
       }
       
       setTranslations(newTranslations);
-    };
+    });
 
     loadTranslations();
   }, [keys, targetLang]);

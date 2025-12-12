@@ -22,17 +22,17 @@ vi.mock("@/lib/mqtt/publisher", () => ({
 describe("DPAIAnalyzer Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render the AI Analyzer title", () => {
     render(<DPAIAnalyzer />);
     expect(screen.getByText("DP AI Analyzer")).toBeInTheDocument();
-  };
+  });
 
   it("should show initialization message", () => {
     render(<DPAIAnalyzer />);
     expect(screen.getByText("Inicializando IA...")).toBeInTheDocument();
-  };
+  });
 
   it("should show stable system when no fault detected", async () => {
     render(<DPAIAnalyzer />);
@@ -40,7 +40,7 @@ describe("DPAIAnalyzer Component", () => {
     await waitFor(() => {
       expect(screen.getByText("Sistema estável")).toBeInTheDocument();
     }, { timeout: 3000 });
-  };
+  });
 
   it("should show analysis complete status", async () => {
     render(<DPAIAnalyzer />);
@@ -48,12 +48,12 @@ describe("DPAIAnalyzer Component", () => {
     await waitFor(() => {
       expect(screen.getByText("Análise concluída")).toBeInTheDocument();
     }, { timeout: 3000 });
-  };
+  });
 
   it("should render within a card with accent border", () => {
     const { container } = render(<DPAIAnalyzer />);
     
     const card = container.querySelector("[class*=\"border-\\[var\\(--nautilus-accent\\)\\]\"]");
     expect(card).toBeTruthy();
-  };
-};
+  });
+});

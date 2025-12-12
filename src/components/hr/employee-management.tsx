@@ -176,7 +176,7 @@ export const EmployeeManagement = memo(() => {
       title: "Funcionário removido",
       description: `${employee?.name} foi removido do sistema`,
     });
-  };
+  });
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
     setEmployees(prev => prev.map(emp => 
@@ -186,7 +186,7 @@ export const EmployeeManagement = memo(() => {
       title: "Status atualizado",
       description: "Status do funcionário foi alterado com sucesso"
     });
-  };
+  });
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -195,7 +195,7 @@ export const EmployeeManagement = memo(() => {
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  };
+  });
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
@@ -216,8 +216,8 @@ export const EmployeeManagement = memo(() => {
     case "travel": return "Viagem";
     case "inactive": return "Inativo";
     default: return "N/A";
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

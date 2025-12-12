@@ -238,12 +238,12 @@ export const IntelligentHelpCenter: React.FC = () => {
         description: "O arquivo será baixado em breve",
       });
     }, 2000);
-  };
+  });
 
   const filteredContent = <T extends { module: string }>(content: T[]): T[] => {
     if (activeModule === "all") return content;
     return content.filter(item => item.module === activeModule);
-  };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-6">

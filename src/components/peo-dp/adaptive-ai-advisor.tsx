@@ -121,7 +121,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
 
   const handleSuggestedQuestion = (question: string) => {
     setInputMessage(question);
-  };
+  });
 
   const ProfileIcon = profileConfig[selectedProfile].icon;
 
@@ -366,4 +366,4 @@ export const AdaptiveAIAdvisor: React.FC = () => {
       </div>
     </div>
   );
-};
+});

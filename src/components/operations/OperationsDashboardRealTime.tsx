@@ -107,7 +107,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     return () => {
       cleanup();
       if (refreshInterval) clearInterval(refreshInterval);
-    };
+    });
   }, [filter]);
 
   const initializeConnections = async () => {
@@ -119,7 +119,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
     // Initialize WebSocket connection (if configured)
     setupWebSocketConnection();
-  };
+  });
 
   const setupSupabaseRealtime = () => {
     // Subscribe to multiple tables for real-time updates
@@ -151,7 +151,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           toast.success("Real-time data connected");
         }
       });
-  };
+  });
 
   const setupMQTTConnection = () => {
     try {
@@ -206,7 +206,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       
       handleMQTTMessage(mqttData);
     }, 5000);
-  };
+  });
 
   const simulateWebSocketMessages = () => {
     // Clear existing interval if any
@@ -225,7 +225,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       
       handleWebSocketMessage(wsData);
     }, 15000);
-  };
+  });
 
   const handleSupabaseUpdate = (payload: unknown, type: string) => {
     const newAlert: RealTimeAlert = {
@@ -240,7 +240,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
     loadRealTimeData();
-  };
+  });
 
   const handleMQTTMessage = (data: unknown) => {
     const newAlert: RealTimeAlert = {
@@ -254,7 +254,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     };
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
-  };
+  });
 
   const handleWebSocketMessage = (data: unknown) => {
     const newAlert: RealTimeAlert = {
@@ -268,7 +268,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     };
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
-  };
+  });
 
   const loadRealTimeData = async () => {
     try {
@@ -375,7 +375,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     const alertPenalty = Math.min(criticalAlerts * 5, 30);
 
     return Math.max(0, Math.round(healthScore - alertPenalty));
-  };
+  });
 
   const cleanup = () => {
     if (realtimeChannelRef.current) {
@@ -413,7 +413,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     a.click();
 
     toast.success("Dashboard data exported");
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     const colors = {
@@ -423,7 +423,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       critical: "text-red-500",
     };
     return colors[severity] || "text-gray-500";
-  };
+  });
 
   const getSeverityBadge = (severity: string) => {
     const variants = {
@@ -433,7 +433,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       critical: "destructive",
     };
     return <Badge variant={variants[severity] || "secondary"}>{severity.toUpperCase()}</Badge>;
-  };
+  });
 
   if (loading) {
     return (

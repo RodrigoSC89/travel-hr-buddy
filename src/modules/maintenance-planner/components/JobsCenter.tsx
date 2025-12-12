@@ -113,28 +113,28 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       (activeFilter === "andamento" && job.status === "em_andamento");
 
     return matchesSearch && matchesFilter;
-};
+});
 
   const handleStatusChange = (jobId: string, newStatus: string) => {
     toast({
       title: "Status Atualizado",
       description: `Job atualizado para: ${newStatus}`,
     });
-  };
+  });
 
   const handlePostpone = (jobId: string, justificativa: string) => {
     toast({
       title: "Job Postergado",
       description: "A IA está analisando o risco da postergação...",
     });
-  };
+  });
 
   const handleOpenOS = (jobId: string) => {
     toast({
       title: "Abrindo OS",
       description: "Ordem de serviço será criada para este job.",
     });
-  };
+  });
 
   const counts = {
     all: mockJobs.length,
@@ -250,4 +250,4 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       </CardContent>
     </Card>
   );
-};
+});

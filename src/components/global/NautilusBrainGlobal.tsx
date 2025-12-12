@@ -349,12 +349,12 @@ Como posso ajudar?`;
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
     inputRef.current?.focus();
-  };
+  });
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Mensagem copiada!");
-  };
+  });
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {

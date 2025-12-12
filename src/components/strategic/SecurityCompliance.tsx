@@ -173,8 +173,8 @@ export const SecurityCompliance = memo(() => {
       return <AlertTriangle className="h-4 w-4 text-danger" />;
     default:
       return <Shield className="h-4 w-4" />;
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

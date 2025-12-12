@@ -397,6 +397,6 @@ export const TrainingCompliance: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default TrainingCompliance;

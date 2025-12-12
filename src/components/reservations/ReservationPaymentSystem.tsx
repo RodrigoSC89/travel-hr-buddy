@@ -117,7 +117,7 @@ export const ReservationPaymentSystem: React.FC = () => {
       reservation_id: reservation.id,
     });
     setIsPaymentDialogOpen(true);
-  };
+  });
 
   const processPayment = async () => {
     if (!paymentIntent || !selectedReservation) return;
@@ -364,7 +364,7 @@ END:VCALENDAR`;
         {status?.toUpperCase() || "PENDING"}
       </Badge>
     );
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants = {
@@ -377,7 +377,7 @@ END:VCALENDAR`;
         {status.toUpperCase()}
       </Badge>
     );
-  };
+  });
 
   if (loading) {
     return (
@@ -764,6 +764,6 @@ END:VCALENDAR`;
       </Dialog>
     </div>
   );
-};
+});
 
 export default ReservationPaymentSystem;

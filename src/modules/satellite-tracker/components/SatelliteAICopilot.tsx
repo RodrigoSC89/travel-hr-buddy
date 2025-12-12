@@ -266,7 +266,7 @@ Para informações mais específicas, pergunte sobre:
 
   const handleQuickAction = (prompt: string) => {
     sendMessage(prompt);
-  };
+  });
 
   return (
     <Card className="h-full flex flex-col">
@@ -374,4 +374,4 @@ Para informações mais específicas, pergunte sobre:
       </CardContent>
     </Card>
   );
-};
+});

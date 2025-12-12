@@ -6,6 +6,6 @@ import { Navigate } from "react-router-dom";
 
 const Communication = () => {
   return <Navigate to="/communication-command" replace />;
-};
+});
 
 export default Communication;

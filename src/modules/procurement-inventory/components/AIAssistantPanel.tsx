@@ -52,7 +52,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  });
 
   useEffect(() => {
     scrollToBottom();
@@ -158,11 +158,11 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
       return ["Ver oportunidades de economia", "Relatório de gastos", "Análise por categoria"];
     }
     return ["Consultar estoque", "Pedidos atrasados", "Gerar relatório"];
-  };
+  });
 
   const handleSuggestionClick = (suggestion: string) => {
     setInputMessage(suggestion);
-  };
+  });
 
   const quickActions = [
     { icon: Package, label: "Estoque crítico", color: "text-amber-500" },

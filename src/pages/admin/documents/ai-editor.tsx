@@ -23,7 +23,7 @@ import { logger } from "@/lib/logger";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
@@ -181,7 +181,7 @@ export default function DocumentAIEditorPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-  };
+  });
       
       pdf.save(`${title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       

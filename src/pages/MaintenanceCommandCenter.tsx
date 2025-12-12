@@ -113,7 +113,7 @@ const MaintenanceCommandCenter = () => {
       title: "Exportação",
       description: "Gerando relatório semanal de manutenção...",
     });
-  };
+  });
 
   if (loading) {
     return (

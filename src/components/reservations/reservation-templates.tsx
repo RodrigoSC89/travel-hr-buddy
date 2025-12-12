@@ -217,7 +217,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       title: "Template aplicado",
       description: "Os dados do template foram preenchidos no formulário"
     });
-  };
+  });
 
   const handleEditTemplate = (template: ReservationTemplate) => {
     setEditingTemplate(template);
@@ -237,7 +237,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       is_public: template.is_public
     });
     setShowCreateDialog(true);
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -255,7 +255,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       notes: "",
       is_public: false
     });
-  };
+  });
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -566,4 +566,4 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       </Dialog>
     </>
   );
-};
+});

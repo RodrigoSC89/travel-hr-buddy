@@ -102,18 +102,18 @@ export const DPReplaySystem: React.FC = () => {
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  };
+  });
 
   const getCurrentEvents = () => {
     if (!selectedSession) return [];
     return selectedSession.events.filter(e => e.timestamp <= currentTime);
-  };
+  });
 
   const getEventAtTime = () => {
     if (!selectedSession) return null;
     const events = selectedSession.events.filter(e => e.timestamp <= currentTime);
     return events[events.length - 1];
-  };
+  });
 
   const handlePlay = () => {
     if (!selectedSession) {
@@ -121,15 +121,15 @@ export const DPReplaySystem: React.FC = () => {
       return;
     }
     setIsPlaying(!isPlaying);
-  };
+  });
 
   const handleSkipToEvent = (eventTimestamp: number) => {
     setCurrentTime(eventTimestamp);
-  };
+  });
 
   const handleExport = () => {
     toast.success("Exportando replay para análise...");
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -156,7 +156,7 @@ export const DPReplaySystem: React.FC = () => {
       current: 0.8 + Math.abs(variation) * 0.4,
       dpMode: currentTime > 14400 && currentTime < 21600 ? "TAM" : "Auto DP"
     };
-  };
+  });
 
   const vesselState = getVesselState();
 

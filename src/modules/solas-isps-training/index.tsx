@@ -59,7 +59,7 @@ export default function SolasIspsTraining() {
   const handleMarkAllAsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     toast.success("Todas as notificações marcadas como lidas");
-  };
+  });
 
   return (
     <div className="min-h-screen bg-background">

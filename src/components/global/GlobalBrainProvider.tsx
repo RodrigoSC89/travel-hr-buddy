@@ -25,7 +25,7 @@ export const useBrain = memo(() => {
 interface GlobalBrainProviderProps {
   children: ReactNode;
   showTrigger?: boolean;
-};
+});
 
 export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({ 
   children, 
@@ -37,11 +37,11 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
   const openBrain = (ctx?: string) => {
     setContext(ctx || "");
     setIsOpen(true);
-  };
+  });
 
   const closeBrain = () => {
     setIsOpen(false);
-  };
+  });
 
   return (
     <BrainContext.Provider value={{ openBrain, closeBrain, isOpen }}>
@@ -58,4 +58,4 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
       />
     </BrainContext.Provider>
   );
-};
+});

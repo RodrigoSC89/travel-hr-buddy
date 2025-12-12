@@ -43,7 +43,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
 
   const handleClear = () => {
     signatureRef.current?.clear();
-  };
+  });
 
   const handleSave = () => {
     if (signatureRef.current?.isEmpty()) {
@@ -146,4 +146,4 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

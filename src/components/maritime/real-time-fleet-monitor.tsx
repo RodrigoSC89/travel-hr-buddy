@@ -59,7 +59,7 @@ export const RealTimeFleetMonitor = memo(() => {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const loadFleetData = async () => {
@@ -124,7 +124,7 @@ export const RealTimeFleetMonitor = memo(() => {
         lon: vessel.location.lon + (Math.random() - 0.5) * 0.01
       }
     })));
-  };
+  });
 
   // Periodic vessel position updates with optimized polling
   useOptimizedPolling({
@@ -160,7 +160,7 @@ export const RealTimeFleetMonitor = memo(() => {
     if (level > 50) return "text-green-600";
     if (level > 25) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
 
@@ -181,7 +181,7 @@ export const RealTimeFleetMonitor = memo(() => {
         </div>
       </div>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -414,4 +414,4 @@ export const RealTimeFleetMonitor = memo(() => {
       )}
     </div>
   );
-};
+});

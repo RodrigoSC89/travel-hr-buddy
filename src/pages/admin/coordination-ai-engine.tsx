@@ -163,7 +163,7 @@ const CoordinationAIEnginePage: React.FC = () => {
       timeout: "bg-orange-500",
     };
     return colors[status] || "bg-gray-500";
-  };
+  });
 
   const getStatusIcon = (status: TaskStatus) => {
     switch (status) {

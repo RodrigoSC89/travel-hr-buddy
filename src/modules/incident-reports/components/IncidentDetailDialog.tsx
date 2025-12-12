@@ -27,7 +27,7 @@ const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
   return { jsPDF, autoTable };
-};
+});
 
 interface Incident {
   id: string;
@@ -617,4 +617,4 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

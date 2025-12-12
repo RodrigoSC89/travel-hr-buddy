@@ -138,7 +138,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     if (score >= 80) return "text-blue-600";
     if (score >= 70) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getSeverityBadge = (severity: Alert["severity"]) => {
     const variants = {
@@ -147,19 +147,19 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
       low: "bg-blue-100 text-blue-800"
     };
     return variants[severity];
-  };
+  });
 
   const getTrendIcon = (trend: "up" | "down" | "stable") => {
     if (trend === "up") return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (trend === "down") return <TrendingDown className="h-4 w-4 text-red-600" />;
     return <Activity className="h-4 w-4 text-muted-foreground" />;
-  };
+  });
 
   const markAlertAsRead = (alertId: string) => {
     setAlerts(alerts.map(alert => 
       alert.id === alertId ? { ...alert, isRead: true } : alert
     ));
-  };
+  });
 
   const exportAnalytics = () => {
     const data = {
@@ -177,7 +177,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Relatório exportado com sucesso!");
-  };
+  });
 
   return (
     <div className="space-y-6">

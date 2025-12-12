@@ -131,17 +131,17 @@ export const PriceHistoryChart = memo(() => {
       isPositive: change > 0,
       value: Math.abs(lastPrice - firstPrice),
     };
-  };
+  });
 
   const getLowestPrice = () => {
     if (chartData.length === 0) return null;
     return Math.min(...chartData.map(d => d.price));
-  };
+  });
 
   const getHighestPrice = () => {
     if (chartData.length === 0) return null;
     return Math.max(...chartData.map(d => d.price));
-  };
+  });
 
   const priceChange = getPriceChange();
   const lowestPrice = getLowestPrice();

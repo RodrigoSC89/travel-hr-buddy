@@ -130,13 +130,13 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
+  });
 
   const handleSend = () => {
     if (!newMessage.trim()) return;
     onSendMessage(newMessage, "text");
     setNewMessage("");
-  };
+  });
 
   const handleAIAssist = async () => {
     if (!newMessage.trim()) {
@@ -147,7 +147,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       return;
     }
     onAIAssist?.(newMessage);
-  };
+  });
 
   const handleVoiceRecord = async () => {
     if (isRecording) {
@@ -181,7 +181,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
   const handleEmojiSelect = (emoji: string) => {
     setNewMessage(prev => prev + emoji);
     setShowEmojiPicker(false);
-  };
+  });
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: "file" | "image") => {
     const file = e.target.files?.[0];
@@ -235,7 +235,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
           enableHighAccuracy: true,
           timeout: 10000,
         });
-  };
+  });
       
       setUserLocation({
         lat: position.coords.latitude,

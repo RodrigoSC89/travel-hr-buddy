@@ -168,7 +168,7 @@ export default function ResourceAvailability() {
     if (percentage <= 20) return "bg-red-500";
     if (percentage <= 50) return "bg-amber-500";
     return "bg-green-500";
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

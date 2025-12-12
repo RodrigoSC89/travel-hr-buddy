@@ -104,7 +104,7 @@ export const AIAuditPanel: React.FC = () => {
     if (confidence >= 0.8) return <Badge className="bg-green-500/20 text-green-600">{(confidence * 100).toFixed(0)}%</Badge>;
     if (confidence >= 0.5) return <Badge className="bg-yellow-500/20 text-yellow-600">{(confidence * 100).toFixed(0)}%</Badge>;
     return <Badge className="bg-red-500/20 text-red-600">{(confidence * 100).toFixed(0)}%</Badge>;
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -17,7 +17,7 @@ export const loadMapbox = async (): Promise<any> => {
     mapboxgl = module.default || module;
   }
   return mapboxgl;
-};
+});
 
 interface LazyMapboxProps {
   token: string;
@@ -107,7 +107,7 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
       mounted = false;
       map.current?.remove();
       map.current = null;
-    };
+    });
   }, [token, style, projection]);
 
   if (error) {

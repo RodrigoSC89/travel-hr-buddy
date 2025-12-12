@@ -102,7 +102,7 @@ const EnhancedAIChatbot: React.FC = () => {
   useEffect(() => {
     return () => {
       timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    };
+    });
   }, []);
 
   // PATCH 549: Memoized handleSendMessage to prevent re-creation
@@ -242,7 +242,7 @@ const EnhancedAIChatbot: React.FC = () => {
       setIsProcessing(false);
     }, Math.random() * 1000 + 1500); // Variação realística no tempo de resposta
     timeoutsRef.current.push(timeout);
-  };
+  });
 
   const generateEnhancedAIResponse = (input: string, capability: string) => {
     const responses = {
@@ -320,7 +320,7 @@ const EnhancedAIChatbot: React.FC = () => {
       handleSendMessage();
     }, 100);
     timeoutsRef.current.push(timeout);
-  };
+  });
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -336,7 +336,7 @@ const EnhancedAIChatbot: React.FC = () => {
 
   const getCapabilityColor = (capability: AICapability) => {
     return selectedCapability === capability.id ? capability.color : "muted";
-  };
+  });
 
   return (
     <TooltipProvider>

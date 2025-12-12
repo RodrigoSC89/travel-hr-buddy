@@ -92,7 +92,7 @@ export default function DashboardLogs() {
     toast.success("CSV exportado com sucesso!", {
       description: `${logs.length} registros exportados`
     });
-  };
+  });
 
   return (
     <div className="min-h-screen p-6 bg-gray-50">

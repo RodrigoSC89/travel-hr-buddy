@@ -108,7 +108,7 @@ export default function WorkflowsPage() {
 
   const toggleWorkflow = (id: number) => {
     setWorkflowStates((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  });
 
   return (
     <ModulePageWrapper gradient="purple">

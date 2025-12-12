@@ -213,18 +213,18 @@ export const PEODP7PillarsOverview = memo(function() {
     };
     const variant = variants[status];
     return <Badge className={variant.className}>{variant.label}</Badge>;
-  };
+  });
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600";
     if (score >= 70) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const handleViewDetails = (pillar: PillarData) => {
     setSelectedPillar(pillar);
     setIsDialogOpen(true);
-  };
+  });
 
   const overallScore = Math.round(PILLARS.reduce((sum, p) => sum + (p.complianceScore || 0), 0) / PILLARS.length);
 

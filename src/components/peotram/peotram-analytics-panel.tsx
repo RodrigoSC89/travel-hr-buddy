@@ -148,13 +148,13 @@ export const PeotramAnalyticsPanel: React.FC = () => {
     if (trend > 0) return <TrendingUp className="w-4 h-4 text-success" />;
     if (trend < 0) return <TrendingDown className="w-4 h-4 text-destructive" />;
     return <Activity className="w-4 h-4 text-muted-foreground" />;
-  };
+  });
 
   const getTrendColor = (trend: number) => {
     if (trend > 0) return "text-success";
     if (trend < 0) return "text-destructive";
     return "text-muted-foreground";
-  };
+  });
 
   return (
     <div className="space-y-6">

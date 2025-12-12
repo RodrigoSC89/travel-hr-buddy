@@ -62,7 +62,7 @@ const ApiGateway = () => {
       DELETE: "destructive"
     };
     return <Badge variant={variants[method] || "default"}>{method}</Badge>;
-  };
+  });
 
   const handleTestEndpoint = async (route: unknown: unknown: unknown) => {
     toast({
@@ -91,7 +91,7 @@ const ApiGateway = () => {
       title: "Endpoint Status",
       description: `Status: ${status.status}, Latency: ${status.latency}ms`
     });
-  };
+  });
 
   const handleCreateKey = () => {
     if (!newKeyName.trim()) {
@@ -112,7 +112,7 @@ const ApiGateway = () => {
       title: "API Key Created",
       description: `Key "${key.name}" has been created successfully`
     });
-  };
+  });
 
   const handleRevokeKey = (keyId: string) => {
     apiKeyManager.revokeKey(keyId);
@@ -121,7 +121,7 @@ const ApiGateway = () => {
       title: "Key Revoked",
       description: "API key has been revoked"
     });
-  };
+  });
 
   const handleCopyKey = (key: string) => {
     navigator.clipboard.writeText(key);
@@ -129,7 +129,7 @@ const ApiGateway = () => {
       title: "Copied",
       description: "API key copied to clipboard"
     });
-  };
+  });
 
   const handleCreateWebhook = () => {
     if (!newWebhookName.trim() || !newWebhookUrl.trim()) {
@@ -151,7 +151,7 @@ const ApiGateway = () => {
       title: "Webhook Created",
       description: `Webhook "${newWebhookName}" has been created`
     });
-  };
+  });
 
   const handleDeleteWebhook = (webhookId: string) => {
     webhookManager.deleteWebhook(webhookId);
@@ -160,7 +160,7 @@ const ApiGateway = () => {
       title: "Webhook Deleted",
       description: "Webhook has been removed"
     });
-  };
+  });
 
   const handleTestWebhook = async (webhookId: string) => {
     toast({
@@ -174,7 +174,7 @@ const ApiGateway = () => {
       title: "Test Complete",
       description: "Check webhook logs for details"
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

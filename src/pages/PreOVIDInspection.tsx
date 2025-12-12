@@ -21,6 +21,6 @@ const PreOVIDInspection: React.FC = () => {
       <OVIDInspectionDashboard />
     </ModulePageWrapper>
   );
-};
+});
 
 export default PreOVIDInspection;

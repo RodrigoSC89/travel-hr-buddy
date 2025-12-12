@@ -138,7 +138,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
         item.category.toLowerCase().includes(searchText) ||
         (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchText)))
       );
-  };
+  });
 
     // Apply filter
     const filteredByType = activeFilter === "all" 
@@ -177,11 +177,11 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
       recent: recentSearches,
       favorites: newFavorites
     });
-  };
+  });
 
   const handleRecentSearch = (searchTerm: string) => {
     setQuery(searchTerm);
-  };
+  });
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && results.length > 0) {

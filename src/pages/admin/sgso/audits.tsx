@@ -161,7 +161,7 @@ export default function SGSOAudits() {
   const handleEdit = (audit: Audit) => {
     setFormData(audit);
     setEditMode(true);
-  };
+  });
 
   const getRiskColor = (level: string) => {
     const colors = {
@@ -171,7 +171,7 @@ export default function SGSOAudits() {
       critical: "text-red-600",
     };
     return colors[level as keyof typeof colors] || "text-gray-600";
-  };
+  });
 
   if (loading) {
     return (

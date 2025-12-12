@@ -21,6 +21,6 @@ const AIAuditPage: React.FC = () => {
       <AIAuditPanel />
     </ModulePageWrapper>
   );
-};
+});
 
 export default AIAuditPage;

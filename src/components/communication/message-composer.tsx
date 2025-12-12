@@ -184,7 +184,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         ? prev.filter(id => id !== recipientId)
         : [...prev, recipientId]
     );
-  };
+  });
 
   const handleTemplateSelect = (templateId: string) => {
     const template = templates.find(t => t.id === templateId);
@@ -203,11 +203,11 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     setAttachments(prev => [...prev, ...files]);
-  };
+  });
 
   const removeAttachment = (index: number) => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
-  };
+  });
 
   const handleImageUpload = () => {
     const input = document.createElement("input");
@@ -234,7 +234,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Sucesso",
         description: `${files.length} imagem(ns) adicionada(s)`
       });
-    };
+    });
     input.click();
   };
 
@@ -263,7 +263,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Sucesso",
         description: `${files.length} áudio(s) adicionado(s)`
       });
-    };
+    });
     input.click();
   };
 
@@ -272,7 +272,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       title: "Emoji Picker",
       description: "Funcionalidade de emojis em breve!"
     });
-  };
+  });
 
   const saveDraft = async () => {
     try {

@@ -105,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     return () => {
       mounted = false;
       authSubscription?.unsubscribe();
-    };
+    });
   }, []);
 
   const signUp = useCallback(async (email: string, password: string, fullName: string) => {

@@ -148,7 +148,7 @@ export const CrewManagementDashboard = memo(() => {
                          member.position.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const crewStats = {
     total: crewMembers.length,

@@ -33,7 +33,7 @@ vi.mock("mqtt", () => {
 const getMockMqttClient = () => {
   const mqttModule = vi.mocked(mqtt);
   return mqttModule.connect() as unknown;
-};
+});
 
 // Mock onnxruntime-web
 vi.mock("onnxruntime-web", () => ({
@@ -52,7 +52,7 @@ vi.mock("onnxruntime-web", () => ({
 describe("ForecastGlobal Page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("renders the page with correct title", async () => {
     render(
@@ -63,8 +63,8 @@ describe("ForecastGlobal Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Forecast Global Intelligence")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("renders all three main components", async () => {
     render(
@@ -77,9 +77,9 @@ describe("ForecastGlobal Page", () => {
     await waitFor(() => {
       const element = document.querySelector("body");
       expect(element).toBeTruthy();
-  };
-  };
-  };
+  });
+  });
+  });
 
 describe("ForecastPanel Component", () => {
   beforeEach(() => {
@@ -103,16 +103,16 @@ describe("ForecastPanel Component", () => {
     });
     mockMqttClient.subscribe.mockImplementation((topic, callback) => {
       setTimeout(() => callback(null), 0);
-  };
-  };
+  });
+  });
 
   it("renders weather metrics panel", async () => {
     render(<ForecastPanel />);
 
     await waitFor(() => {
       expect(screen.getByText("Condições Atuais")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("displays all four weather metrics", async () => {
     render(<ForecastPanel />);
@@ -122,8 +122,8 @@ describe("ForecastPanel Component", () => {
       expect(screen.getByText("Ondas")).toBeInTheDocument();
       expect(screen.getByText("Temperatura")).toBeInTheDocument();
       expect(screen.getByText("Visibilidade")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("subscribes to MQTT forecast channel on mount", async () => {
     render(<ForecastPanel />);
@@ -134,8 +134,8 @@ describe("ForecastPanel Component", () => {
         "nautilus/forecast",
         expect.any(Function)
       );
-  };
-  };
+  });
+  });
 
   it("cleans up MQTT connection on unmount", async () => {
     const { unmount } = render(<ForecastPanel />);
@@ -145,16 +145,16 @@ describe("ForecastPanel Component", () => {
     const mockMqttClient = getMockMqttClient();
     await waitFor(() => {
       expect(mockMqttClient.end).toHaveBeenCalled();
-  };
-  };
-  };
+  });
+  });
+  });
 
 describe("ForecastMap Component", () => {
   it("renders map card with title", () => {
     render(<ForecastMap />);
 
     expect(screen.getByText("Mapa Global de Previsão")).toBeInTheDocument();
-  };
+  });
 
   it("renders iframe with correct source", () => {
     render(<ForecastMap />);
@@ -162,21 +162,21 @@ describe("ForecastMap Component", () => {
     const iframe = screen.getByTitle("Mapa Oceânico");
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute("src", expect.stringContaining("earth.nullschool.net"));
-  };
-  };
+  });
+  });
 
 describe("ForecastAIInsights Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("renders AI insights card", async () => {
     render(<ForecastAIInsights />);
 
     await waitFor(() => {
       expect(screen.getByText("Previsão IA")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("loads ONNX model and displays prediction", async () => {
     render(<ForecastAIInsights />);
@@ -184,13 +184,13 @@ describe("ForecastAIInsights Component", () => {
     // Wait for loading state to change
     await waitFor(() => {
       expect(screen.queryByText("Carregando modelo...")).not.toBeInTheDocument();
-  };
+  });
 
     // Check for prediction display
     await waitFor(() => {
       expect(screen.getByText("Probabilidade de instabilidade")).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("handles model loading errors gracefully", async () => {
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -203,11 +203,11 @@ describe("ForecastAIInsights Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Erro na previsão IA")).toBeInTheDocument();
-  };
+  });
 
     consoleError.mockRestore();
-  };
-  };
+  });
+  });
 
 describe("MQTT Publisher Functions", () => {
   it("publishForecast sends data to correct topic", async () => {
@@ -236,8 +236,8 @@ describe("MQTT Publisher Functions", () => {
         { qos: 1 },
         expect.any(Function)
       );
-  };
-  };
+  });
+  });
 
   it("subscribeForecast returns mqtt client", async () => {
     const { subscribeForecast } = await React.lazy(() => import(import("@/lib/mqtt/publisher")));
@@ -247,8 +247,8 @@ describe("MQTT Publisher Functions", () => {
 
     const mockMqttClient = getMockMqttClient();
     expect(client).toBe(mockMqttClient);
-  };
-  };
+  });
+  });
 
 describe("Forecast Data Validation", () => {
   it("validates forecast data structure", () => {
@@ -275,8 +275,8 @@ describe("Forecast Data Validation", () => {
     riskPredictions.forEach((risk) => {
       expect(risk).toBeGreaterThanOrEqual(0);
       expect(risk).toBeLessThanOrEqual(1);
-  };
-  };
+  });
+  });
 
   it("validates weather metrics are positive numbers", () => {
     const metrics = {
@@ -289,6 +289,6 @@ describe("Forecast Data Validation", () => {
     Object.values(metrics).forEach((value) => {
       expect(value).toBeGreaterThan(0);
       expect(typeof value).toBe("number");
-  };
-  };
-};
+  });
+  });
+});

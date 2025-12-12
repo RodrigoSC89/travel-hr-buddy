@@ -28,22 +28,22 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
   const handleOptimizeRoutes = async () => {
     const opts = await optimizeRoutes(operations);
     setRouteOptimizations(opts);
-  };
+  });
 
   const handlePredictDelays = async () => {
     const preds = await predictDelays(operations);
     setDelayPredictions(preds);
-  };
+  });
 
   const handleOptimizeInventory = async () => {
     const opts = await optimizeInventory();
     setInventoryOptimizations(opts);
-  };
+  });
 
   const handleGenerateInsights = async () => {
     const ins = await generateLogisticsInsights(operations);
     setInsights(ins);
-  };
+  });
 
   useEffect(() => {
     if (operations.length > 0) {

@@ -243,7 +243,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       toast.success("Prices checked and updated");
       loadAlerts();
     }, 2000);
-  };
+  });
 
   const sendTestEmail = async (alertId: string) => {
     toast.info("Sending test email notification...");
@@ -251,7 +251,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
     setTimeout(() => {
       toast.success("Test email sent successfully");
     }, 1500);
-  };
+  });
 
   // Prepare chart data
   const getChartData = () => {
@@ -607,6 +607,6 @@ export const CompletePriceAlertsUI: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default CompletePriceAlertsUI;

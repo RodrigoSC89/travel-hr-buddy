@@ -127,13 +127,13 @@ export const AutonomousAgentPanel = memo(function() {
     setActions(prev =>
       prev.map(a => (a.id === id ? { ...a, status: "approved" } : a))
     );
-  };
+  });
 
   const handleReject = (id: string) => {
     setActions(prev =>
       prev.map(a => (a.id === id ? { ...a, status: "rejected" } : a))
     );
-  };
+  });
 
   return (
     <Card className="bg-card/50 backdrop-blur border-primary/20">

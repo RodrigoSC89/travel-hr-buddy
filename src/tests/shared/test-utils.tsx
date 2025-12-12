@@ -45,7 +45,7 @@ export const AllTheProviders = memo(({ children }: AllTheProvidersProps) => {
       </BrowserRouter>
     </QueryClientProvider>
   );
-};
+});
 
 /**
  * Custom render function that includes all providers
@@ -55,7 +55,7 @@ export const renderWithProviders = memo((
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
-};
+});
 
 /**
  * Wait for all loading states to finish
@@ -73,11 +73,11 @@ export const waitForLoadingToFinish = async () => {
         resolve();
       } else {
         setTimeout(checkLoading, 50);
-      };
-    };
+      });
+    });
     checkLoading();
-  };
-};
+  });
+});
 
 /**
  * Mock Supabase client for testing
@@ -136,7 +136,7 @@ export const suppressConsoleError = memo(() => {
   });
   afterEach(() => {
   });
-};
+});
 
 /**
  * Mock fetch for API tests
@@ -149,7 +149,7 @@ export const mockFetch = memo((response: SupabaseResponse<unknown>, options = {}
       ...options,
     })
   ) as unknown;
-};
+});
 
 /**
  * Reset all mocks between tests
@@ -157,7 +157,7 @@ export const mockFetch = memo((response: SupabaseResponse<unknown>, options = {}
 export const resetAllMocks = memo(() => {
   vi.clearAllMocks();
   vi.resetAllMocks();
-};
+});
 
 // Re-export testing library utilities
 export * from "@testing-library/react";

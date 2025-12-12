@@ -110,7 +110,7 @@ export const PSCPackagePanel: React.FC = () => {
     if (score <= 60) return { label: "Médio", color: "text-yellow-500" };
     if (score <= 80) return { label: "Alto", color: "text-orange-500" };
     return { label: "Crítico", color: "text-red-500" };
-  };
+  });
 
   const risk = getRiskLevel(riskScore);
   const openDeficiencies = deficiencies.filter(d => d.status === "open" || d.status === "in_progress");

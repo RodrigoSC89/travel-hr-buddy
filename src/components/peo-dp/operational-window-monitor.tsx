@@ -194,29 +194,29 @@ export const OperationalWindowMonitor: React.FC = () => {
     if (value <= limits.green) return "green";
     if (value <= limits.yellow) return "yellow";
     return "red";
-  };
+  });
 
   const getConditionStatus = (condition: EnvironmentalCondition) => {
     const isInverse = condition.parameter === "Visibilidade";
     return getStatusColor(condition.value, condition.asogLimit, isInverse);
-  };
+  });
 
   const handleAcknowledgeAlert = (id: string) => {
     setAlerts(prev => prev.map(a => a.id === id ? { ...a, acknowledged: true } : a));
     toast.success("Alerta reconhecido e registrado no logbook");
-  };
+  });
 
   const handleRefresh = () => {
     toast.success("Atualizando dados meteorológicos...");
     setLastUpdate(new Date());
-  };
+  });
 
   const getOverallStatus = () => {
     const statuses = conditions.map(c => getConditionStatus(c));
     if (statuses.includes("red")) return "critical";
     if (statuses.includes("yellow")) return "warning";
     return "normal";
-  };
+  });
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

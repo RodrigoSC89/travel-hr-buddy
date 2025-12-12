@@ -281,7 +281,7 @@ const ExperimentalModules = () => {
     if (tags.includes("underwater")) return Droplet;
     if (tags.includes("xr")) return Glasses;
     return Package;
-  };
+  });
 
   const handleModuleClick = (module: ExperimentalModule) => {
     if (module.route) {

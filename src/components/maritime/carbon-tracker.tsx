@@ -127,13 +127,13 @@ export const CarbonFootprintTracker: React.FC = () => {
     if (trend === "down") return <TrendingDown className="h-4 w-4 text-green-600" />;
     if (trend === "up") return <TrendingUp className="h-4 w-4 text-red-600" />;
     return <BarChart3 className="h-4 w-4 text-yellow-600" />;
-  };
+  });
 
   const getPerformanceColor = (percentage: number) => {
     if (percentage <= 90) return "text-green-600";
     if (percentage <= 100) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   return (
     <div className="space-y-6">

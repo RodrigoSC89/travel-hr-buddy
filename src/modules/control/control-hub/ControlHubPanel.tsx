@@ -37,7 +37,7 @@ export default function ControlHubPanel() {
         await controlHub.iniciar();
       }
       updateState();
-    };
+    });
 
     init();
 
@@ -54,8 +54,8 @@ export default function ControlHubPanel() {
         }];
         // Keep only last 50 events
         return newLogs.slice(-50);
-  };
-  };
+  });
+  });
 
     // Check MQTT connection status
     const mqttStatusInterval = setInterval(() => {
@@ -70,14 +70,14 @@ export default function ControlHubPanel() {
       clearInterval(mqttStatusInterval);
       unsubscribe();
       MQTTClient.disconnect();
-    };
+    });
   }, []);
 
   const updateState = () => {
     const newState = controlHub.getState();
     setState(newState);
     setLastCheck(hubBridge.getLastCheck());
-  };
+  });
 
   const handleSync = async () => {
     setIsSyncing(true);

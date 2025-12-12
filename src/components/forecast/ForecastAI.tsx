@@ -8,7 +8,7 @@ const loadORT = async () => {
     ort = await import("onnxruntime-web");
   }
   return ort;
-};
+});
 import { publishEvent } from "@/lib/mqtt/publisher";
 
 type PredictionStatus = "loading" | "success" | "error" | "offline";
@@ -82,13 +82,13 @@ export default function ForecastAI() {
     if (confidence >= 0.8) return "text-success";
     if (confidence >= 0.5) return "text-warning";
     return "text-destructive";
-  };
+  });
 
   const getConfidenceLabel = (confidence: number) => {
     if (confidence >= 0.8) return "Alta";
     if (confidence >= 0.5) return "Média";
     return "Baixa";
-  };
+  });
 
   const getStatusIcon = () => {
     switch (status) {

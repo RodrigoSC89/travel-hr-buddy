@@ -380,7 +380,7 @@ export default function TemplatesPage() {
   // Load template for editing
   const editTemplate = (id: string) => {
     navigate(`/admin/templates/edit/${id}`);
-  };
+  });
 
   // Duplicate template
   const duplicateTemplate = async (template: Template) => {
@@ -389,7 +389,7 @@ export default function TemplatesPage() {
     setCurrentTemplateId(null);
     setIsEditing(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  });
 
   // Apply template to documents-ai
   const applyTemplate = (template: Template) => {
@@ -400,7 +400,7 @@ export default function TemplatesPage() {
     }));
     
     navigate("/admin/documents/ai");
-  };
+  });
 
   // Export template as PDF
   const exportToPDF = async (template: Template) => {
@@ -431,7 +431,7 @@ export default function TemplatesPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-  };
+  });
       
       pdf.save(`${template.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       
@@ -458,7 +458,7 @@ export default function TemplatesPage() {
     setPrompt("");
     setCurrentTemplateId(null);
     setIsEditing(false);
-  };
+  });
 
   // Filter templates
   const filteredTemplates = templates.filter((template) => {
@@ -468,7 +468,7 @@ export default function TemplatesPage() {
     const matchesPrivate = !filterPrivate || template.is_private;
     
     return matchesSearch && matchesFavorites && matchesPrivate;
-  };
+  });
 
   return (
     <div className="space-y-6 p-8">

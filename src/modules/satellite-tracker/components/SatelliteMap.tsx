@@ -74,7 +74,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
 
         map.current.on("load", () => {
           if (mounted) setIsLoading(false);
-  };
+  });
       } catch (err) {
         console.error("Failed to load Mapbox:", err);
         if (mounted) {
@@ -91,7 +91,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
       if (marker.current) marker.current.remove();
       if (map.current) map.current.remove();
       map.current = null;
-    };
+    });
   }, [mapboxToken]);
 
   useEffect(() => {

@@ -88,7 +88,7 @@ export const ModuleLLMHelper: React.FC = () => {
     const promptTemplate = generateModulePrompt(module);
     setGeneratedPrompt(promptTemplate.prompt);
     setSelectedModule(moduleId);
-  };
+  });
 
   const handleCopyToClipboard = async () => {
     try {
@@ -135,7 +135,7 @@ export const ModuleLLMHelper: React.FC = () => {
       title: "Enviado para IA",
       description: "Prompt enviado para processamento",
     });
-  };
+  });
 
   return (
     <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module LLM Prompt Helper"

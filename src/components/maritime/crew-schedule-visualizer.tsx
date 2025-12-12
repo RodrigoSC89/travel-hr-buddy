@@ -101,14 +101,14 @@ export const CrewScheduleVisualizer: React.FC = () => {
 
   const getRotationColor = (type: string) => {
     return type === "on" ? "bg-blue-500" : "bg-green-500";
-  };
+  });
 
   const optimizeRotations = () => {
     toast({
       title: "Otimização de Escalas",
       description: "IA analisou e sugeriu otimizações para reduzir custos em 15% e melhorar bem-estar da tripulação.",
     });
-  };
+  });
 
   const generateGanttView = () => {
     const months: Date[] = [];

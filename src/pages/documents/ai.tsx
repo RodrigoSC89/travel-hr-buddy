@@ -154,7 +154,7 @@ export default function AIDocuments() {
       
       const { data: { text, confidence } } = await worker.recognize(file, {}, (progress) => {
         setOcrProgress(30 + (progress.progress * 50));
-  };
+  });
       
       await worker.terminate();
       
@@ -228,7 +228,7 @@ export default function AIDocuments() {
         text,
         score: (count / words.length) * 100
       }));
-  };
+  });
 
   const highlightKeywords = (text: string, keywords: unknown[]) => {
     if (!keywords || keywords.length === 0) return text;
@@ -237,10 +237,10 @@ export default function AIDocuments() {
     keywords.slice(0, 10).forEach(kw => {
       const regex = new RegExp(`\\b${kw.text || kw}\\b`, "gi");
       highlighted = highlighted.replace(regex, "<mark class=\"bg-yellow-200 dark:bg-yellow-800\">$&</mark>");
-  };
+  });
     
     return highlighted;
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

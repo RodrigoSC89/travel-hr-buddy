@@ -149,7 +149,7 @@ const NauticalCopilot: React.FC = () => {
       setMessages(prev => [...prev, assistantMessage]);
       setIsTyping(false);
     }, 1500);
-  };
+  });
 
   const generateIntelligentResponse = (message: string): { content: string; category: CopilotMessage["category"] } => {
     const lowerMessage = message.toLowerCase();
@@ -213,7 +213,7 @@ const NauticalCopilot: React.FC = () => {
       title: isListening ? "Microfone Desligado" : "Microfone Ligado",
       description: isListening ? "Comando de voz desativado" : "Fale agora para enviar comando",
     });
-  };
+  });
 
   const getCategoryIcon = (category?: CopilotMessage["category"]) => {
     switch (category) {

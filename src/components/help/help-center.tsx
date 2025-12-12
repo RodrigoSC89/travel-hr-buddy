@@ -157,13 +157,13 @@ const HelpCenter = () => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  };
+  });
 
   const filteredVideos = videoTutorials.filter(video => {
     const matchesCategory = selectedCategory === "all" || video.category === selectedCategory;
     const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  };
+  });
 
   const getLevelColor = (level: string) => {
     switch (level) {

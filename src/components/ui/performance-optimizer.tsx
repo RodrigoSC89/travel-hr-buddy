@@ -26,7 +26,7 @@ export const LazyComponent: React.FC<LazyComponentProps> = memo(({
       <Component {...props} />
     </React.Suspense>
   );
-};
+});
 
 LazyComponent.displayName = "LazyComponent";
 
@@ -44,7 +44,7 @@ export const usePerformanceMonitor = (componentName: string) => {
       }
     };
   }, [componentName]);
-};
+});
 
 // Componente otimizado para cards
 export const OptimizedCard = memo(({ children, className, ...props }: unknown: unknown: unknown) => {
@@ -53,6 +53,6 @@ export const OptimizedCard = memo(({ children, className, ...props }: unknown: u
       {children}
     </div>
   );
-  };
+  });
 
 OptimizedCard.displayName = "OptimizedCard";

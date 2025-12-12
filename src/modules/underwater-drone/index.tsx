@@ -74,12 +74,12 @@ const UnderwaterDrone: React.FC = () => {
     // Setup telemetry alert callback
     telemetry.onAlert((alert) => {
       setAlerts(prev => [alert, ...prev].slice(0, 10));
-  };
+  });
 
     // Setup mission event callback
     missionManager.onEvent((event) => {
       setMissionEvents(prev => [event, ...prev].slice(0, 20));
-  };
+  });
 
     // Start drone simulation
     droneCore.startSimulation(100);
@@ -121,7 +121,7 @@ const UnderwaterDrone: React.FC = () => {
     return () => {
       clearInterval(updateInterval);
       droneCore.stopSimulation();
-    };
+    });
   }, [droneCore, telemetry, missionManager]);
 
   // Command handlers
@@ -132,24 +132,24 @@ const UnderwaterDrone: React.FC = () => {
       speed: 3,
     };
     droneCore.executeCommand(command);
-  };
+  });
 
   const handleChangeDepth = () => {
     droneCore.executeCommand({ type: "depth", target: { depth: targetDepth, lat: 0, lon: 0, altitude: 0 } });
-  };
+  });
 
   const handleHover = () => {
     droneCore.executeCommand({ type: "hover" });
-  };
+  });
 
   const handleSurface = () => {
     droneCore.executeCommand({ type: "surface" });
-  };
+  });
 
   const handleEmergencyStop = () => {
     droneCore.executeCommand({ type: "emergency_stop" });
     missionManager.abortMission("Emergency stop activated");
-  };
+  });
 
   const handleUploadMission = () => {
     setUploadError("");
@@ -182,7 +182,7 @@ const UnderwaterDrone: React.FC = () => {
 
   const handleLoadTemplate = () => {
     setMissionJson(missionManager.exportTemplate());
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -557,6 +557,6 @@ const UnderwaterDrone: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default UnderwaterDrone;

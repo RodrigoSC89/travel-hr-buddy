@@ -149,7 +149,7 @@ export const FinalHomologationReport: React.FC = () => {
     
     setReportGenerated(true);
     setIsGenerating(false);
-  };
+  });
 
   const downloadReport = () => {
     const reportData = {

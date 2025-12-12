@@ -238,7 +238,7 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
     const matchesLocation = selectedLocation === "all" || sensor.location === selectedLocation;
     const matchesType = selectedType === "all" || sensor.type === selectedType;
     return matchesLocation && matchesType;
-  };
+  });
 
   const activeAlerts = alerts.filter(alert => !alert.acknowledged);
   const criticalSensors = sensors.filter(sensor => sensor.status === "critical").length;

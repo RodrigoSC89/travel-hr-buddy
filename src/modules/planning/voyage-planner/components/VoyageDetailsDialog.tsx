@@ -40,7 +40,7 @@ const VoyageDetailsDialog: React.FC<VoyageDetailsDialogProps> = ({
       cancelled: "Cancelada",
     };
     return <Badge className={styles[status]}>{labels[status]}</Badge>;
-  };
+  });
 
   const getRiskBadge = (risk: VoyageRoute["weatherRisk"]) => {
     const styles = {
@@ -55,7 +55,7 @@ const VoyageDetailsDialog: React.FC<VoyageDetailsDialogProps> = ({
         {labels[risk]}
       </Badge>
     );
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

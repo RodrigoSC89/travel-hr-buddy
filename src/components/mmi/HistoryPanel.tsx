@@ -159,7 +159,7 @@ export default function HistoryPanel() {
       newSelection.add(id);
     }
     setSelectedHistories(newSelection);
-  };
+  });
 
   if (loading) {
     return (

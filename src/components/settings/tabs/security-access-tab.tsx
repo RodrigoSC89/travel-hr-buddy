@@ -49,7 +49,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
         [rule]: value
       }
 };
-  };
+  });
 
   const getPasswordStrength = () => {
     const { passwordRules } = settings;
@@ -63,7 +63,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
     if (score <= 2) return { level: "Baixa", color: "text-red-600", bg: "bg-red-100" };
     if (score <= 3) return { level: "Média", color: "text-yellow-600", bg: "bg-yellow-100" };
     return { level: "Alta", color: "text-green-600", bg: "bg-green-100" };
-  };
+  });
 
   const strength = getPasswordStrength();
 

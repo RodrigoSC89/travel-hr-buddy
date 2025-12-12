@@ -20,7 +20,7 @@ export const AnalyticsDashboardNew = memo(() => {
       description: error.message,
       variant: "destructive",
     });
-  };
+  });
 
   return (
     <AnalyticsDashboardBase
@@ -28,6 +28,6 @@ export const AnalyticsDashboardNew = memo(() => {
       onError={handleError}
     />
   );
-};
+});
 
 export default AnalyticsDashboardNew;

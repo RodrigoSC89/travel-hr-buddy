@@ -46,12 +46,12 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
     return array.includes(item)
       ? array.filter(i => i !== item)
       : [...array, item];
-  };
+  });
 
   const handleApply = () => {
     toast.success("Filtros aplicados!");
     onOpenChange(false);
-  };
+  });
 
   const handleClear = () => {
     setFilters({
@@ -65,7 +65,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
       priority: [],
     });
     toast.info("Filtros limpos");
-  };
+  });
 
   const activeFiltersCount = [
     filters.dateFrom || filters.dateTo ? 1 : 0,

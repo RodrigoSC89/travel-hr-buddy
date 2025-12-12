@@ -56,7 +56,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 10000).toString().padStart(4, "0");
     return `INC-${timestamp}-${random}`;
-  };
+  });
 
   // GPS capture via browser Geolocation API
   const captureGPS = () => {
@@ -90,7 +90,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  };
+  });
 
   // Photo upload handler (max 5 photos, 5MB each)
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,7 +139,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     URL.revokeObjectURL(photoPreviews[index]); // Clean up object URL
     setPhotos(newPhotos);
     setPhotoPreviews(newPreviews);
-  };
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -402,4 +402,4 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

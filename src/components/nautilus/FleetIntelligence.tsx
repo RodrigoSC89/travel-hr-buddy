@@ -90,7 +90,7 @@ export const FleetIntelligence = memo(function() {
       "inactive": "anchored"
     };
     return statusMap[dbStatus || ""] || "anchored";
-  };
+  });
 
   const getDemoVessels = (): VesselStatus[] => [
     {
@@ -151,7 +151,7 @@ export const FleetIntelligence = memo(function() {
       emergency: "bg-red-500",
     };
     return colors[status];
-  };
+  });
 
   const getStatusIcon = (status: VesselStatus["status"]) => {
     const icons = {
@@ -161,7 +161,7 @@ export const FleetIntelligence = memo(function() {
       emergency: AlertTriangle,
     };
     return icons[status];
-  };
+  });
 
   if (isLoading) {
     return (

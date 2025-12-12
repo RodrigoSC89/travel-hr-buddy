@@ -310,7 +310,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       title: "Status Atualizado",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
-  };
+  });
 
   const handleTestConnection = (id: string) => {
     const integration = integrations.find(i => i.id === id);
@@ -326,14 +326,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
         description: `Conexão com ${integration?.name} está funcionando corretamente`,
       });
     }, 2000);
-  };
+  });
 
   const filteredIntegrations = integrations.filter(integration => {
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  };
+  });
 
   const connectedCount = integrations.filter(i => i.status === "connected").length;
   const errorCount = integrations.filter(i => i.status === "error").length;
@@ -659,7 +659,7 @@ const IntegrationCard: React.FC<{
       </CardContent>
     </Card>
   );
-};
+});
 
 // Componente de Status do Sistema com IA
 const AISystemStatus: React.FC<{
@@ -831,7 +831,7 @@ const IntegrationTemplates: React.FC<{
       </div>
     </div>
   );
-};
+});
 
 // Componente de Logs
 const LogsViewer: React.FC<{
@@ -1127,4 +1127,4 @@ const IntegrationWizard: React.FC<{
       </div>
     </div>
   );
-};
+});

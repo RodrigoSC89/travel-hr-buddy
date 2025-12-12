@@ -8,7 +8,7 @@ global.fetch = vi.fn();
 describe("ComplianceByVesselChart", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   it("should render loading state initially", () => {
     vi.mocked(fetch).mockImplementation(() => 
@@ -18,7 +18,7 @@ describe("ComplianceByVesselChart", () => {
     render(<ComplianceByVesselChart />);
     
     expect(screen.getByText("Carregando dados...")).toBeDefined();
-  };
+  });
 
   it("should render chart with data after successful fetch", async () => {
     const mockData = [
@@ -47,8 +47,8 @@ describe("ComplianceByVesselChart", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Conformidade de Planos de Ação por Navio/i)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should render error state and sample data on fetch failure", async () => {
     vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
@@ -58,8 +58,8 @@ describe("ComplianceByVesselChart", () => {
     await waitFor(() => {
       expect(screen.getByText(/Erro ao carregar dados de conformidade por navio/i)).toBeDefined();
       expect(screen.getByText(/exibindo dados de exemplo/i)).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should display description text", async () => {
     const mockData = [
@@ -81,6 +81,6 @@ describe("ComplianceByVesselChart", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Status dos planos de ação de incidentes DP por embarcação/i)).toBeDefined();
-  };
-  };
-};
+  });
+  });
+});

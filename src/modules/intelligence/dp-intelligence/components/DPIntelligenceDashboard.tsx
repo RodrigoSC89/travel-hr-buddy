@@ -43,7 +43,7 @@ export default function DPIntelligenceDashboard() {
         console.error("Error fetching stats:", err);
         setError(err.message);
         setLoading(false);
-  };
+  });
   }, []);
 
   if (loading) {

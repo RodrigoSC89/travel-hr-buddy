@@ -132,7 +132,7 @@ export const OrganizationSetupWizard: React.FC = () => {
         ? prev.modules.filter(m => m !== moduleId)
         : [...prev.modules, moduleId]
     }));
-  };
+  });
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {

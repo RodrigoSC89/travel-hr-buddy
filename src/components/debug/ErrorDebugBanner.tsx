@@ -52,7 +52,7 @@ export const ErrorDebugBanner: React.FC = () => {
     localStorage.removeItem("safeLazyImport:lastError");
     setErrorInfo(null);
     setIsDismissed(true);
-  };
+  });
 
   if (!errorInfo || isDismissed) {
     return null;
@@ -149,4 +149,4 @@ export const ErrorDebugBanner: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

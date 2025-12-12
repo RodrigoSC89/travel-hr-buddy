@@ -93,7 +93,7 @@ const SatelliteTracker = () => {
     return () => {
       clearInterval(vesselInterval);
       clearInterval(satelliteInterval);
-    };
+    });
   }, []);
 
   // PATCH 495: Filter state
@@ -361,6 +361,6 @@ const SatelliteTracker = () => {
       <CoverageMap coverageData={coverageData} />
     </div>
   );
-};
+});
 
 export default SatelliteTracker;

@@ -46,7 +46,7 @@ export const PWAStatus: React.FC = () => {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);
-    };
+    });
 
     window.addEventListener("beforeinstallprompt", handler);
     
@@ -63,7 +63,7 @@ export const PWAStatus: React.FC = () => {
     const updatePendingCount = async () => {
       const pending = await getPendingChanges();
       setPendingCount(pending.length);
-    };
+    });
     
     updatePendingCount();
     const interval = setInterval(updatePendingCount, 5000);
@@ -86,7 +86,7 @@ export const PWAStatus: React.FC = () => {
     
     setDeferredPrompt(null);
     setIsInstallable(false);
-  };
+  });
 
   const handleSync = async () => {
     toast({
@@ -100,7 +100,7 @@ export const PWAStatus: React.FC = () => {
       title: "Sincronização Concluída",
       description: "Dados sincronizados com sucesso!",
     });
-  };
+  });
 
   const handleClearCache = async () => {
     await clearCache();
@@ -108,14 +108,14 @@ export const PWAStatus: React.FC = () => {
       title: "Cache Limpo",
       description: "Cache local foi limpo com sucesso!",
     });
-  };
+  });
 
   const getDeviceType = () => {
     const userAgent = navigator.userAgent;
     if (/tablet|ipad/i.test(userAgent)) return "tablet";
     if (/mobile|phone/i.test(userAgent)) return "mobile";
     return "desktop";
-  };
+  });
 
   const deviceType = getDeviceType();
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches;

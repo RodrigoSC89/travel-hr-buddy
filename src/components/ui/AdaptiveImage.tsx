@@ -45,12 +45,12 @@ export const AdaptiveImage = memo(function({
   const handleLoad = () => {
     setLoaded(true);
     onLoad?.();
-  };
+  });
 
   const handleError = () => {
     setError(true);
     onError?.();
-  };
+  });
 
   // Calcular dimensões adaptativas
   const adaptiveWidth = width 

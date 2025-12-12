@@ -13,7 +13,7 @@ vi.mock("html2pdf.js", () => {
   return {
     default: mockHtml2pdf,
   };
-  };
+  });
 
 // Mock SGSOTrendChart
 vi.mock("@/components/sgso/SGSOTrendChart", () => ({
@@ -51,7 +51,7 @@ const mockIncidents = [
 describe("SGSOReportPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  };
+  });
 
   const renderComponent = (props = {}) => {
     return render(
@@ -59,33 +59,33 @@ describe("SGSOReportPage", () => {
         <SGSOReportPage {...props} />
       </BrowserRouter>
     );
-  };
+  });
 
   it("should render the page title", () => {
     renderComponent();
     expect(screen.getByText(/Relatório SGSO - Gestão de Segurança Operacional/i)).toBeDefined();
-};
+});
 
   it("should render the export PDF button", () => {
     renderComponent();
     const button = screen.getByText(/Exportar PDF/i);
     expect(button).toBeDefined();
-  };
+  });
 
   it("should render vessel name", () => {
     renderComponent({ vesselName: "Test Vessel" });
     expect(screen.getAllByText("Test Vessel").length).toBeGreaterThan(0);
-  };
+  });
 
   it("should render report header with title", () => {
     renderComponent();
     expect(screen.getByText(/📄 Relatório SGSO/i)).toBeDefined();
-  };
+  });
 
   it("should render compliance information", () => {
     renderComponent();
     expect(screen.getByText(/Conformidade ANP Resolução 43\/2007/i)).toBeDefined();
-  };
+  });
 
   it("should render statistics summary", () => {
     renderComponent();
@@ -95,43 +95,43 @@ describe("SGSOReportPage", () => {
     expect(screen.getAllByText(/Alto/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Médio/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Baixo/i).length).toBeGreaterThan(0);
-  };
+  });
 
   it("should render incidents section", () => {
     renderComponent();
     expect(screen.getByText(/📋 Incidentes Classificados/i)).toBeDefined();
-  };
+  });
 
   it("should render incidents with provided data", () => {
     renderComponent({ incidents: mockIncidents });
     expect(screen.getByText(/Test incident description/i)).toBeDefined();
     expect(screen.getByText(/Another test incident/i)).toBeDefined();
-  };
+  });
 
   it("should render incident details", () => {
     renderComponent({ incidents: mockIncidents });
     expect(screen.getByText(/Test root cause/i)).toBeDefined();
     expect(screen.getByText(/Test action plan/i)).toBeDefined();
     expect(screen.getByText(/Navegação/i)).toBeDefined();
-  };
+  });
 
   it("should render trend chart section", () => {
     renderComponent();
     expect(screen.getByText(/📈 Tendência de Riscos/i)).toBeDefined();
     expect(screen.getByTestId("sgso-trend-chart")).toBeDefined();
-  };
+  });
 
   it("should render signature section", () => {
     renderComponent();
     expect(screen.getByText(/Responsável pela Emissão/i)).toBeDefined();
     expect(screen.getByText(/Aprovado por/i)).toBeDefined();
-  };
+  });
 
   it("should render footer information", () => {
     renderComponent();
     expect(screen.getByText(/Gerado automaticamente por Nautilus One/i)).toBeDefined();
     expect(screen.getByText(/Documento confidencial/i)).toBeDefined();
-  };
+  });
 
   it("should handle PDF export click", async () => {
     renderComponent();
@@ -142,8 +142,8 @@ describe("SGSOReportPage", () => {
     // Just verify the button was clicked, html2pdf is mocked
     await waitFor(() => {
       expect(button).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should display loading state during export", async () => {
     renderComponent();
@@ -154,8 +154,8 @@ describe("SGSOReportPage", () => {
     // Verify button exists after click
     await waitFor(() => {
       expect(button).toBeDefined();
-  };
-  };
+  });
+  });
 
   it("should display statistics correctly", () => {
     const incidents = [
@@ -179,7 +179,7 @@ describe("SGSOReportPage", () => {
       year: "numeric"
     });
     expect(screen.getByText(currentDate)).toBeDefined();
-  };
+  });
 
   it("should render badge colors for different risk levels", () => {
     const incidents = [
@@ -196,4 +196,4 @@ describe("SGSOReportPage", () => {
     expect(screen.getAllByText("Médio").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Baixo").length).toBeGreaterThan(0);
   });
-};
+});

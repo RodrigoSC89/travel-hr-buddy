@@ -73,7 +73,7 @@ export default function ChannelManagerHub() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [selectedChannel, queryClient]);
 
   const createChannelMutation = useMutation({

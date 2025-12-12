@@ -83,7 +83,7 @@ export const ConnectionProvider = memo(function({ children }: { children: ReactN
   useEffect(() => {
     const updateConnection = () => {
       setConnectionInfo(getConnectionInfo());
-    };
+    });
 
     // Listen for online/offline events
     window.addEventListener("online", updateConnection);
@@ -94,8 +94,8 @@ export const ConnectionProvider = memo(function({ children }: { children: ReactN
       connection?: {
         addEventListener: (event: string, handler: () => void) => void;
         removeEventListener: (event: string, handler: () => void) => void;
-      };
-    };
+      });
+    });
 
     if (nav.connection) {
       nav.connection.addEventListener("change", updateConnection);

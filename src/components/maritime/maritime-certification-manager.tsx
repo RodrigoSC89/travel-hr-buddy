@@ -204,7 +204,7 @@ export const MaritimeCertificationManager = memo(() => {
                          cert.certification_type.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const stats = {
     total: certificates.length,

@@ -129,13 +129,13 @@ const ApiGatewayEnhanced = () => {
     return () => {
       supabase.removeChannel(routesChannel);
       supabase.removeChannel(keysChannel);
-    };
+    });
   }, []);
 
   const loadData = async () => {
     await Promise.all([loadRoutes(), loadKeys(), loadRateLimits()]);
     setLoading(false);
-  };
+  });
 
   const loadRoutes = async () => {
     try {
@@ -338,7 +338,7 @@ const ApiGatewayEnhanced = () => {
       title: "Copied!",
       description: "API key copied to clipboard",
     });
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -364,7 +364,7 @@ const ApiGatewayEnhanced = () => {
       OPTIONS: "bg-gray-500"
     };
     return <Badge className={colors[method] || "bg-gray-500"}>{method}</Badge>;
-  };
+  });
 
   const getTierBadge = (tier: string) => {
     const colors: Record<string, string> = {
@@ -374,7 +374,7 @@ const ApiGatewayEnhanced = () => {
       unlimited: "bg-green-500"
     };
     return <Badge className={colors[tier] || "bg-gray-500"}>{tier}</Badge>;
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -771,6 +771,6 @@ const ApiGatewayEnhanced = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default ApiGatewayEnhanced;

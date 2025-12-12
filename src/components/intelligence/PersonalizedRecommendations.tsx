@@ -190,7 +190,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
       title: "Recomendação Dispensada",
       description: "Você pode atualizá-las a qualquer momento",
     });
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

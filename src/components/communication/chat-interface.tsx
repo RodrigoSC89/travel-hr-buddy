@@ -118,7 +118,7 @@ export const ChatInterface = memo(() => {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  });
 
   const loadAllUsers = useCallback(async () => {
     try {
@@ -372,8 +372,8 @@ export const ChatInterface = memo(() => {
 
     return () => {
       supabase.removeChannel(channel);
-    };
-  };
+    });
+  });
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !currentUser?.id) return;
@@ -479,7 +479,7 @@ export const ChatInterface = memo(() => {
     }
     
     return `Grupo (${conversation.participants.length} membros)`;
-  };
+  });
 
   const filteredConversations = conversations.filter(conv =>
     getConversationTitle(conv).toLowerCase().includes(searchQuery.toLowerCase())

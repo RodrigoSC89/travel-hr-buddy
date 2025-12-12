@@ -125,14 +125,14 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
     if (score >= 80) return "text-green-500";
     if (score >= 60) return "text-yellow-500";
     return "text-red-500";
-  };
+  });
 
   const getScoreBadge = (score: number) => {
     if (score >= 80) return { label: "Excelente", variant: "default" as const };
     if (score >= 60) return { label: "Bom", variant: "secondary" as const };
     if (score >= 40) return { label: "Regular", variant: "outline" as const };
     return { label: "Baixo", variant: "destructive" as const };
-  };
+  });
 
   const scoreBadge = getScoreBadge(metrics?.adoptionScore || 0);
 

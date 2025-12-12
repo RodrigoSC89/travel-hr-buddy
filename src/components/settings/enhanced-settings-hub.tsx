@@ -251,7 +251,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       if (!settings.monitoring.enableHealthChecks) score -= 5;
       
       setSettingsHealth(Math.max(score, 0));
-    };
+    });
 
     calculateHealth();
   }, [settings]);
@@ -332,7 +332,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     }
     
     return errors;
-  };
+  });
 
   const resetToDefaults = async () => {
     const defaultSettings: SettingsData = {
@@ -517,7 +517,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         ? prev.filter(id => id !== tabId)
         : [...prev, tabId]
     );
-  };
+  });
 
   const shareSettings = async () => {
     try {
@@ -562,7 +562,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         ? "Voltando ao modo produção. Alterações afetarão o sistema."
         : "Modo teste ativado. Alterações não afetarão outros usuários.",
     });
-  };
+  });
 
   const togglePreviewMode = () => {
     const newPreviewMode = !previewMode;
@@ -573,19 +573,19 @@ export const EnhancedSettingsHub: React.FC = () => {
         ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
         : "Voltando ao modo normal.",
     });
-  };
+  });
 
   const getHealthColor = (score: number) => {
     if (score >= 90) return "text-green-600";
     if (score >= 70) return "text-yellow-600";
     return "text-red-600";
-  };
+  });
 
   const getHealthBadge = (score: number) => {
     if (score >= 90) return { text: "Excelente", className: "bg-green-100 text-green-800" };
     if (score >= 70) return { text: "Bom", className: "bg-yellow-100 text-yellow-800" };
     return { text: "Precisa Atenção", className: "bg-red-100 text-red-800" };
-  };
+  });
 
   const tabsData = [
     { id: "general", label: "Geral", icon: Building2, description: "Configurações básicas" },
@@ -902,6 +902,6 @@ export const EnhancedSettingsHub: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default EnhancedSettingsHub;

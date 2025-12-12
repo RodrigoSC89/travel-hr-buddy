@@ -105,13 +105,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         const date = new Date(f.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].flights.push(f.price || 0);
-  };
+  });
 
       hotels.forEach((h: unknown) => {
         const date = new Date(h.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].hotels.push(h.total_price || 0);
-  };
+  });
 
       const priceHistory = Object.entries(pricesByDate)
         .slice(-30)
@@ -138,13 +138,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         const route = f.route_code || "Unknown";
         if (!routeCounts[route]) routeCounts[route] = { count: 0, totalSavings: 0 };
         routeCounts[route].count++;
-  };
+  });
 
       hotels.forEach((h: unknown) => {
         const name = h.hotel_name || "Unknown";
         if (!routeCounts[name]) routeCounts[name] = { count: 0, totalSavings: 0 };
         routeCounts[name].count++;
-  };
+  });
 
       const topProducts = Object.entries(routeCounts)
         .sort(([, a], [, b]) => b.count - a.count)
@@ -212,7 +212,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       });
     }
     return data;
-  };
+  });
 
   const generateMockSavings = () => {
     const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
@@ -221,7 +221,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       savings: Math.floor(1000 + Math.random() * 3000),
       alerts: Math.floor(5 + Math.random() * 15),
     }));
-  };
+  });
 
   const generateMockTopProducts = () => [
     { name: "GRU-GIG", savings: 850, frequency: 12 },

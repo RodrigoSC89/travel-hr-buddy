@@ -255,7 +255,7 @@ export const UserExperienceEnhancer: React.FC = () => {
     });
 
     setIsApplying(false);
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -480,4 +480,4 @@ export const UserExperienceEnhancer: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

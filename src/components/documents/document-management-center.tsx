@@ -205,7 +205,7 @@ export const DocumentManagementCenter = memo(() => {
       recent_uploads: recentUploads,
       expiring_soon: expiringSoon
     });
-  };
+  });
 
   useEffect(() => {
     calculateStats();
@@ -264,7 +264,7 @@ export const DocumentManagementCenter = memo(() => {
     const matchesType = typeFilter === "all" || doc.type === typeFilter;
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     return matchesSearch && matchesType && matchesStatus;
-  };
+  });
 
   if (loading) {
     return (
@@ -272,7 +272,7 @@ export const DocumentManagementCenter = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  });
 
   return (
     <RoleBasedAccess roles={["admin", "hr_manager"]}>

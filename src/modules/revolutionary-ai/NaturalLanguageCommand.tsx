@@ -80,21 +80,21 @@ export const NaturalLanguageCommand = memo(function() {
       recognition.onstart = () => {
         setIsListening(true);
         toast.info("Ouvindo... Fale seu comando");
-      };
+      });
 
       recognition.onresult = (event: Event) => {
         const transcript = event.results[0][0].transcript;
         setCommand(transcript);
-      };
+      });
 
       recognition.onerror = () => {
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");
-      };
+      });
 
       recognition.onend = () => {
         setIsListening(false);
-      };
+      });
 
       recognition.start();
     } catch (error) {
@@ -129,7 +129,7 @@ export const NaturalLanguageCommand = memo(function() {
   const handleSuggestionClick = (suggestion: CommandSuggestion) => {
     setCommand(suggestion.text);
     textareaRef.current?.focus();
-  };
+  });
 
   const getCategoryColor = (category: string) => {
     const colors = {
@@ -140,7 +140,7 @@ export const NaturalLanguageCommand = memo(function() {
       analytics: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
     };
     return colors[category as keyof typeof colors] || "bg-muted text-muted-foreground";
-  };
+  });
 
   return (
     <div className="space-y-6">

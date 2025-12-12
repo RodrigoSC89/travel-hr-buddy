@@ -93,7 +93,7 @@ export default function MMIOrdersPage() {
     const workbook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(workbook, worksheet, "Ordens de Serviço");
     xlsx.writeFile(workbook, "ordens-de-servico.xlsx");
-  };
+  });
 
   const exportToPDF = () => {
     const element = document.getElementById("os-table");
@@ -230,7 +230,7 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
 
   const handleSave = () => {
     onUpdate(order.id, executedAt, technicianComment, status);
-  };
+  });
 
   return (
     <Card>

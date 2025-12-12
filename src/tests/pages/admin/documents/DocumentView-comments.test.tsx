@@ -101,7 +101,7 @@ describe("DocumentViewPage - Comments Feature", () => {
     // Import the component fresh for each test
     const module = await React.lazy(() => import(import("@/pages/admin/documents/DocumentView")));
     DocumentViewPage = module.default;
-  };
+  });
 
   it("should load and display comments when 'Ver Comentários' is clicked", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
@@ -173,7 +173,7 @@ describe("DocumentViewPage - Comments Feature", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-  };
+  });
 
     const commentsButton = screen.getByRole("button", { name: /Ver Comentários/i });
     fireEvent.click(commentsButton);
@@ -181,8 +181,8 @@ describe("DocumentViewPage - Comments Feature", () => {
     await waitFor(() => {
       expect(screen.getByText(/This is a test comment/i)).toBeInTheDocument();
       expect(screen.getByText(/Another comment/i)).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should show empty state when no comments exist", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
@@ -239,7 +239,7 @@ describe("DocumentViewPage - Comments Feature", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-  };
+  });
 
     const commentsButton = screen.getByRole("button", { name: /Ver Comentários/i });
     fireEvent.click(commentsButton);
@@ -248,8 +248,8 @@ describe("DocumentViewPage - Comments Feature", () => {
       expect(
         screen.getByText(/Nenhum comentário ainda. Seja o primeiro a comentar!/i)
       ).toBeInTheDocument();
-  };
-  };
+  });
+  });
 
   it("should allow adding a new comment", async () => {
     let insertCalled = false;
@@ -315,7 +315,7 @@ describe("DocumentViewPage - Comments Feature", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-  };
+  });
 
     const commentsButton = screen.getByRole("button", { name: /Ver Comentários/i });
     fireEvent.click(commentsButton);
@@ -324,7 +324,7 @@ describe("DocumentViewPage - Comments Feature", () => {
       expect(
         screen.getByPlaceholderText(/Adicione um comentário.../i)
       ).toBeInTheDocument();
-  };
+  });
 
     const textarea = screen.getByPlaceholderText(/Adicione um comentário.../i);
     fireEvent.change(textarea, { target: { value: "My new comment" } });
@@ -339,8 +339,8 @@ describe("DocumentViewPage - Comments Feature", () => {
           title: "Comentário adicionado",
         })
       );
-  };
-  };
+  });
+  });
 
   it("should allow deleting own comment", async () => {
     let deleteCalled = false;
@@ -418,21 +418,21 @@ describe("DocumentViewPage - Comments Feature", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-  };
+  });
 
     const commentsButton = screen.getByRole("button", { name: /Ver Comentários/i });
     fireEvent.click(commentsButton);
 
     await waitFor(() => {
       expect(screen.getByText(/This is a test comment/i)).toBeInTheDocument();
-  };
+  });
 
     // Find and click the delete button (trash icon)
     const deleteButtons = screen.getAllByRole("button");
     const deleteButton = deleteButtons.find((btn) => {
       const svg = btn.querySelector("svg");
       return svg && svg.classList.contains("lucide-trash-2");
-  };
+  });
 
     if (deleteButton) {
       fireEvent.click(deleteButton);
@@ -444,7 +444,7 @@ describe("DocumentViewPage - Comments Feature", () => {
             title: "Comentário excluído",
           })
         );
-  };
+  });
     }
   });
 
@@ -503,7 +503,7 @@ describe("DocumentViewPage - Comments Feature", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-  };
+  });
 
     const commentsButton = screen.getByRole("button", { name: /Ver Comentários/i });
     fireEvent.click(commentsButton);
@@ -515,6 +515,6 @@ describe("DocumentViewPage - Comments Feature", () => {
           variant: "destructive",
         })
       );
-  };
-  };
-};
+  });
+  });
+});

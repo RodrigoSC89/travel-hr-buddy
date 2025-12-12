@@ -156,7 +156,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     if (score >= 85) return { level: "Bom", color: "hsl(var(--info))" };
     if (score >= 70) return { level: "Regular", color: "hsl(var(--warning))" };
     return { level: "Insuficiente", color: "hsl(var(--destructive))" };
-  };
+  });
 
   return (
     <TooltipProvider>

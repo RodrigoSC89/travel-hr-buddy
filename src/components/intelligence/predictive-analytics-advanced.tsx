@@ -168,7 +168,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
       title: "Análise Concluída",
       description: "Nova análise preditiva gerada com sucesso",
     });
-  };
+  });
 
   const getImpactColor = (impact: string) => {
     switch (impact) {

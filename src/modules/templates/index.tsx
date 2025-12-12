@@ -58,7 +58,7 @@ import { saveAs } from "file-saver"; // PATCH 493: For downloading files
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-};
+});
 
 interface Template {
   id: string;
@@ -129,7 +129,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       const initialValues: PlaceholderValue = {};
       selectedTemplate.placeholders?.forEach(ph => {
         initialValues[ph] = "";
-  };
+  });
       setPlaceholderValues(initialValues);
     }
   }, [selectedTemplate, editor]);
@@ -158,7 +158,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     const regex = /\{\{([^}]+)\}\}/g;
     const matches = content.match(regex) || [];
     return [...new Set(matches)];
-  };
+  });
 
   const saveTemplate = async () => {
     if (!editor) return;
@@ -246,12 +246,12 @@ export const CompleteTemplateEditor: React.FC = () => {
     Object.entries(placeholderValues).forEach(([key, value]) => {
       const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || key);
-  };
+  });
 
     editor.commands.setContent(content);
     setShowFillDialog(false);
     toast.success("Template filled with values");
-  };
+  });
 
   const exportToPDF = async () => {
     if (!editor) return;
@@ -346,11 +346,11 @@ export const CompleteTemplateEditor: React.FC = () => {
     Object.entries(placeholderValues).forEach(([key, value]) => {
       const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || `<span class="text-orange-500">${key}</span>`);
-  };
+  });
     
     setPreviewContent(content);
     setShowPreviewDialog(true);
-  };
+  });
 
   // PATCH 493: Save export history to Supabase
   const saveExportHistory = async (format: string, filename: string) => {
@@ -382,7 +382,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     setTemplateTitle("");
     setPlaceholderValues({});
     editor?.commands.setContent("<p>Start typing your new template...</p>");
-  };
+  });
 
   if (isLoading) {
     return (

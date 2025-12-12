@@ -137,7 +137,7 @@ const MarineAROverlay = () => {
       videoRef.current.srcObject = null;
     }
     setIsStreamActive(false);
-  };
+  });
 
   const drawOverlay = () => {
     const canvas = canvasRef.current;
@@ -237,7 +237,7 @@ const MarineAROverlay = () => {
 
   const handleMarkerClick = (marker: MarkerData) => {
     setSelectedMarker(marker);
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

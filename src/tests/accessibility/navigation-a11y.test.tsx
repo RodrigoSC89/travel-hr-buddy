@@ -14,22 +14,22 @@ describe("Accessibility: Navigation", () => {
     navItems.forEach(item => {
       expect(item.ariaLabel).toBeDefined();
       expect(item.ariaLabel).toContain(item.label);
-  };
-  };
+  });
+  });
 
   it("should support keyboard navigation", () => {
     // Arrange
     const handleKeyDown = (key: string) => {
       const supportedKeys = ["Enter", "Space", "ArrowUp", "ArrowDown", "Tab"];
       return supportedKeys.includes(key);
-    };
+    });
 
     // Act & Assert
     expect(handleKeyDown("Enter")).toBe(true);
     expect(handleKeyDown("Space")).toBe(true);
     expect(handleKeyDown("ArrowUp")).toBe(true);
     expect(handleKeyDown("Tab")).toBe(true);
-  };
+  });
 
   it("should have skip to main content link", () => {
     // Arrange
@@ -79,7 +79,7 @@ describe("Accessibility: Navigation", () => {
         expect(heading.level - prevHeading.level).toBeLessThanOrEqual(1);
       }
     });
-  };
+  });
 
   it("should have descriptive link text", () => {
     // Arrange
@@ -95,8 +95,8 @@ describe("Accessibility: Navigation", () => {
       expect(link.text).not.toBe("Click here");
       expect(link.text).not.toBe("Read more");
       expect(link.text.length).toBeGreaterThan(10);
-  };
-  };
+  });
+  });
 
   it("should provide focus indicators", () => {
     // Arrange
@@ -108,5 +108,5 @@ describe("Accessibility: Navigation", () => {
     // Assert
     expect(focusStyles.outline).toBeDefined();
     expect(focusStyles.outlineOffset).toBeDefined();
-  };
-};
+  });
+});

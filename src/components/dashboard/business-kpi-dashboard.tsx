@@ -188,15 +188,15 @@ export const BusinessKPIDashboard: React.FC = () => {
     ) : (
       <ArrowDownRight className="w-4 h-4 text-destructive" />
     );
-  };
+  });
 
   const getChangeColor = (type: "increase" | "decrease") => {
     return type === "increase" ? "text-success" : "text-destructive";
-  };
+  });
 
   const getCategoryKPIs = (category: string) => {
     return kpis.filter(kpi => kpi.category === category);
-  };
+  });
 
   if (!metrics) {
     return (

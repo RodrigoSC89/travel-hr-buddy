@@ -108,7 +108,7 @@ const OperationsDashboard = () => {
       "inactive": "inspection"
     };
     return typeMap[status] || "navigation";
-  };
+  });
 
   const mapVesselStatus = (status: string): string => {
     const statusMap: Record<string, string> = {
@@ -119,7 +119,7 @@ const OperationsDashboard = () => {
       "inactive": "completed"
     };
     return statusMap[status] || "active";
-  };
+  });
 
   useEffect(() => {
     loadOperationsData();
@@ -190,7 +190,7 @@ const OperationsDashboard = () => {
       inspection: "Inspeção"
     };
     return labels[type] || type;
-  };
+  });
 
   if (loading) {
     return (
@@ -373,6 +373,6 @@ const OperationsDashboard = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default OperationsDashboard;

@@ -249,7 +249,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
     return () => {
       regularSubscription.unsubscribe();
       intelligentSubscription.unsubscribe();
-    };
+    });
   }, [user]);
 
   // Filtrar notificações
@@ -272,7 +272,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
     });
 
     return filtered;
-  };
+  });
 
   const getNotificationIcon = (type: string) => {
     switch (type) {

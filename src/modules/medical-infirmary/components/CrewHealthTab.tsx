@@ -34,7 +34,7 @@ export default function CrewHealthTab() {
       member.position.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = !statusFilter || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const statusCounts = {
     fit: mockCrewMembers.filter(m => m.status === "fit").length,
@@ -72,7 +72,7 @@ export default function CrewHealthTab() {
 
   const handleExport = () => {
     toast.success("Exportando fichas médicas...");
-  };
+  });
 
   return (
     <div className="space-y-6">

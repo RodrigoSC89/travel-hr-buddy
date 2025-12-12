@@ -66,7 +66,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
 
       return () => {
         supabase.removeChannel(channel);
-      };
+      });
     }
   }, [user]);
 
@@ -154,7 +154,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       title: "Nova Notificação",
       description: payload.new.title,
     });
-  };
+  });
 
   const generateIntelligentNotification = async (type: string) => {
     if (!user) return;
@@ -196,7 +196,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         notif.id === id ? { ...notif, isRead: true } : notif
       )
     );
-  };
+  });
 
   const markAllAsRead = () => {
     setNotifications(prev => 
@@ -206,7 +206,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       title: "Todas Marcadas como Lidas",
       description: "Todas as notificações foram marcadas como lidas",
     });
-  };
+  });
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
@@ -214,7 +214,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       title: "Notificação Dispensada",
       description: "A notificação foi removida",
     });
-  };
+  });
 
   const handleNotificationAction = (notification: IntelligentNotification) => {
     if (notification.actionType === "navigate" && notification.actionData?.module) {
@@ -434,6 +434,6 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       </CardContent>
     </Card>
   );
-};
+});
 
 export default IntelligentNotificationCenter;

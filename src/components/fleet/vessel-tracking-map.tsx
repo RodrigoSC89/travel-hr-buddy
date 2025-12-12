@@ -97,7 +97,7 @@ const VesselTrackingMap = () => {
     return () => {
       mounted = false;
       map.current?.remove();
-    };
+    });
   }, [mapboxToken]);
 
   const loadVesselData = async () => {
@@ -210,13 +210,13 @@ const VesselTrackingMap = () => {
           zoom: 10,
           duration: 2000
         });
-  };
+  });
 
       new mapboxgl.Marker(el)
         .setLngLat([vessel.longitude, vessel.latitude])
         .addTo(map.current!);
     });
-  };
+  });
 
   // Real-time updates with optimized polling
   useOptimizedPolling({
@@ -250,7 +250,7 @@ const VesselTrackingMap = () => {
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
     return <Badge variant={config.variant}>{config.label}</Badge>;
-  };
+  });
 
   const centerOnVessel = (vessel: VesselLocation) => {
     if (map.current) {

@@ -236,7 +236,7 @@ export const OptimizationGeneralHub = memo(() => {
         duration: 3000
       });
     }, 3000);
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -275,8 +275,8 @@ export const OptimizationGeneralHub = memo(() => {
     case "medium": return "bg-warning/10 text-warning border-warning/20";
     case "low": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    };
-  };
+    });
+  });
 
   const filteredOptimizations = selectedCategory === "all" 
     ? optimizations 

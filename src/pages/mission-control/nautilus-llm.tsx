@@ -61,7 +61,7 @@ const NautilusLLM: React.FC = () => {
   const loadStats = async () => {
     const iaStats = await getIAStats();
     setStats(iaStats);
-  };
+  });
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
@@ -326,6 +326,6 @@ const NautilusLLM: React.FC = () => {
       </div>
     </ModulePageWrapper>
   );
-};
+});
 
 export default NautilusLLM;

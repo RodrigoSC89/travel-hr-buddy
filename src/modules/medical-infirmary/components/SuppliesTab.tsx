@@ -49,7 +49,7 @@ export default function SuppliesTab() {
     const matchesCategory = categoryFilter === "all" || supply.category === categoryFilter;
     const matchesStatus = statusFilter === "all" || supply.status === statusFilter;
     return matchesSearch && matchesCategory && matchesStatus;
-  };
+  });
 
   const statusCounts = {
     ok: supplies.filter(s => s.status === "ok").length,
@@ -108,15 +108,15 @@ export default function SuppliesTab() {
       location: ""
     });
     toast.success("Item adicionado ao estoque");
-  };
+  });
 
   const handleRequestRestock = (supply: MedicalSupply) => {
     toast.success(`Solicitação de reposição enviada: ${supply.name}`);
-  };
+  });
 
   const handleExport = () => {
     toast.success("Exportando inventário...");
-  };
+  });
 
   return (
     <div className="space-y-6">

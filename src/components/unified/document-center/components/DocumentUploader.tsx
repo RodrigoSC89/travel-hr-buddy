@@ -100,7 +100,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           return 90;
         }
         return prev + 10;
-  };
+  });
     }, 200);
 
     try {
@@ -127,7 +127,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     });
     setProgress(0);
     onClose();
-  };
+  });
 
   const maxSize = config.maxFileSize || 10;
   const acceptedTypes = config.acceptedFileTypes?.join(",") || "*";

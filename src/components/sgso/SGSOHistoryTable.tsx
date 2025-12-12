@@ -56,8 +56,8 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
         newSet.add(planId);
       }
       return newSet;
-};
-  };
+});
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

@@ -262,17 +262,17 @@ export default function AdvancedCopilot() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
       setIsListening(false);
-    };
+    });
 
     recognitionRef.current.start();
-  };
+  });
 
   const stopListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
     }
     setIsListening(false);
-  };
+  });
 
   const handleSuggestionAction = async (suggestion: ProactiveSuggestion) => {
     const actionMessages: Record<string, string> = {
@@ -283,7 +283,7 @@ export default function AdvancedCopilot() {
 
     setInput(actionMessages[suggestion.action || "view_details"] || suggestion.description);
     setSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

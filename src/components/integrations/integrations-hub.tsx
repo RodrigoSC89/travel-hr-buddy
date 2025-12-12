@@ -131,7 +131,7 @@ export const IntegrationsHub: React.FC = () => {
       title: "Integração Atualizada",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
-  };
+  });
 
   const handleTestConnection = (id: string) => {
     const integration = integrations.find(i => i.id === id);
@@ -139,11 +139,11 @@ export const IntegrationsHub: React.FC = () => {
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
     });
-  };
+  });
 
   const getIntegrationsByCategory = (category: string) => {
     return integrations.filter(integration => integration.category === category);
-  };
+  });
 
   const connectedCount = integrations.filter(i => i.status === "connected").length;
   const errorCount = integrations.filter(i => i.status === "error").length;

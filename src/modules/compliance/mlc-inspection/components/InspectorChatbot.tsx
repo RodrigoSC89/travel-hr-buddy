@@ -49,7 +49,7 @@ export const InspectorChatbot = memo(function() {
       setMessages(prev => [...prev, assistantMessage]);
       setLoading(false);
     }, 1000);
-  };
+  });
 
   const findRelevantResponse = (query: string): string => {
     const lowerQuery = query.toLowerCase();
@@ -62,7 +62,7 @@ export const InspectorChatbot = memo(function() {
 
     // Default response if no match found
     return "I can help you with questions about MLC 2006 regulations. Try asking about minimum age, medical certificates, hours of work, accommodation, food and catering, medical care, or certificate renewal.";
-  };
+  });
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {

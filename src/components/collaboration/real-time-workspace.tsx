@@ -91,7 +91,7 @@ const RealTimeWorkspace: React.FC = () => {
   // Scroll para última mensagem
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  });
 
   useEffect(() => {
     scrollToBottom();
@@ -133,7 +133,7 @@ const RealTimeWorkspace: React.FC = () => {
                   last_seen?: string;
                   current_page?: string;
                   vessel_id?: string;
-                };
+                });
                 const status = presence.status as "online" | "busy" | "away" | "offline" | undefined;
                 users.push({
                   user_id: userId,
@@ -163,7 +163,7 @@ const RealTimeWorkspace: React.FC = () => {
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
 };
-  };
+  });
 
         // Configurar mensagens de chat
         channel.on("broadcast", { event: "chat_message" }, (payload) => {

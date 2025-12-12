@@ -201,7 +201,7 @@ const OperationalCalendar = () => {
       if (filterType !== "all" && event.type !== filterType) return false;
       if (filterVessel !== "all" && event.vessel !== filterVessel) return false;
       return true;
-  };
+  });
   }, [events, filterType, filterVessel]);
 
   const eventStyleGetter = (event: CalendarEvent) => {
@@ -215,17 +215,17 @@ const OperationalCalendar = () => {
       boxShadow: event.aiSuggested ? "0 0 10px rgba(139, 92, 246, 0.5)" : "none",
     };
     return { style };
-  };
+  });
 
   const handleSelectEvent = (event: CalendarEvent) => {
     setSelectedEvent(event);
     setShowEventDialog(true);
-  };
+  });
 
   const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
     setNewEvent(prev => ({ ...prev, start, end }));
     setShowNewEventDialog(true);
-  };
+  });
 
   const optimizeScheduleWithAI = async () => {
     setIsOptimizing(true);
@@ -276,7 +276,7 @@ const OperationalCalendar = () => {
       end: addHours(new Date(), 2),
     });
     toast({ title: "Evento Criado", description: event.title });
-  };
+  });
 
   const getConflictCount = () => events.filter(e => e.conflict).length;
   const getUpcomingHighPriority = () => events.filter(e => e.priority === "high" && e.status === "scheduled").length;

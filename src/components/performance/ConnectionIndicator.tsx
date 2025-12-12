@@ -32,7 +32,7 @@ export const ConnectionIndicator = memo(function({
       
       const handleChange = () => {
         setDownlink(connection.downlink);
-      };
+      });
       
       connection.addEventListener("change", handleChange);
       return () => connection.removeEventListener("change", handleChange);

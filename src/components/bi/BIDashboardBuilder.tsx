@@ -121,7 +121,7 @@ export const BIDashboardBuilder: React.FC = () => {
       return "A frota conta com 156 tripulantes ativos. Taxa de certificados válidos: 94.2%. Há 9 certificados expirando nos próximos 30 dias.";
     }
     return "Com base nos dados analisados, identifiquei padrões relevantes para sua operação. Os indicadores principais estão dentro dos parâmetros esperados, com algumas oportunidades de otimização identificadas.";
-  };
+  });
 
   const renderChart = (result: AIQueryResult) => {
     if (!result.data) return null;

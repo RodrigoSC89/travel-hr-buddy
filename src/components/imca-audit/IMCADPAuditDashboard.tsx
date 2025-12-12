@@ -99,7 +99,7 @@ export const IMCADPAuditDashboard = memo(function() {
     });
 
     return sections;
-  };
+  });
 
   // Calculate audit statistics
   const getAuditStatus = (): AuditStatus => {
@@ -126,7 +126,7 @@ export const IMCADPAuditDashboard = memo(function() {
       notApplicable,
       imperativeNCs
     };
-  };
+  });
 
   const status = getAuditStatus();
   const complianceScore = status.totalItems > 0 
@@ -144,7 +144,7 @@ export const IMCADPAuditDashboard = memo(function() {
     const total = items.length;
     
     return { compliant, nonCompliant, total, score: total > 0 ? Math.round((compliant / total) * 100) : 0 };
-  };
+  });
 
   const handleExportAudit = () => {
     toast({
@@ -159,7 +159,7 @@ export const IMCADPAuditDashboard = memo(function() {
       title: "Filtros",
       description: "Configurações de filtro abertas"
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-4 space-y-6">

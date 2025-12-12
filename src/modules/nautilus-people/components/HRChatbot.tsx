@@ -89,7 +89,7 @@ const HRChatbot: React.FC = () => {
     }
 
     return `Entendi sua pergunta sobre "${userMessage}". \n\nPara informações mais detalhadas, recomendo:\n1. Consultar o Portal do Colaborador\n2. Falar com o RH pelo e-mail rh@nautilus.com\n3. Agendar uma reunião com seu gestor\n\nPosso ajudar com algo mais específico?`;
-  };
+  });
 
   const handleSend = async (message?: string) => {
     const msgToSend = message || input;

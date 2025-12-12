@@ -58,7 +58,7 @@ export default function MLCInspectionDashboard() {
       title: "Success",
       description: "Inspection created successfully",
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

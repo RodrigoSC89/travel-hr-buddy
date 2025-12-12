@@ -141,7 +141,7 @@ const getTypeLabel = (type: string) => {
     maintenance: "Manutenção",
   };
   return labels[type] || type;
-};
+});
 
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
@@ -151,7 +151,7 @@ const getStatusLabel = (status: string) => {
     info: "Info",
   };
   return labels[status] || status;
-};
+});
 
 export default function DPHistory() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -208,7 +208,7 @@ export default function DPHistory() {
     toast.success("Filtros aplicados", {
       description: `${filteredData.length} eventos encontrados.`,
     });
-  };
+  });
 
   const handleClearFilters = () => {
     const cleared = {
@@ -221,7 +221,7 @@ export default function DPHistory() {
     setFilters(cleared);
     setActiveFilters(cleared);
     toast.success("Filtros limpos");
-  };
+  });
 
   const handleToggleType = (type: string) => {
     setFilters((prev) => ({
@@ -230,7 +230,7 @@ export default function DPHistory() {
         ? prev.types.filter((t) => t !== type)
         : [...prev.types, type],
     }));
-  };
+  });
 
   const handleToggleStatus = (status: string) => {
     setFilters((prev) => ({
@@ -239,7 +239,7 @@ export default function DPHistory() {
         ? prev.statuses.filter((s) => s !== status)
         : [...prev.statuses, status],
     }));
-  };
+  });
 
   const handleExport = (format: "csv" | "json" | "pdf") => {
     const dataToExport = filteredData;
@@ -283,7 +283,7 @@ export default function DPHistory() {
     }
 
     setIsExportOpen(false);
-  };
+  });
 
   const hasActiveFilters =
     activeFilters.types.length > 0 ||

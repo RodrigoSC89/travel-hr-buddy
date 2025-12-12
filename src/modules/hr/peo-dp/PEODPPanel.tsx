@@ -131,7 +131,7 @@ export default function PEODPPanel() {
     if (score >= 75) return "text-yellow-500";
     if (score >= 60) return "text-orange-500";
     return "text-red-500";
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

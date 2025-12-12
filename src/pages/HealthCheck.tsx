@@ -24,7 +24,7 @@ export default function HealthCheckPage() {
       setHealth(result);
       setLoading(false);
     }, 500);
-  };
+  });
 
   useEffect(() => {
     runCheck();
@@ -57,7 +57,7 @@ export default function HealthCheckPage() {
         {status.toUpperCase()}
       </Badge>
     );
-  };
+  });
 
   if (!health) {
     return (

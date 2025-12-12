@@ -149,10 +149,10 @@ export default function DocumentTemplates() {
     Object.entries(variableValues).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       preview = preview.replace(regex, value || `[${key}]`);
-  };
+  });
     
     setPreviewContent(preview);
-  };
+  });
 
   const saveTemplate = async () => {
     if (!selectedTemplate) {
@@ -280,7 +280,7 @@ export default function DocumentTemplates() {
       type: "text",
       required: true
     }));
-  };
+  });
 
   const exportDocument = async (documentId: string, format: string) => {
     toast({

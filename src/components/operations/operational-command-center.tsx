@@ -107,7 +107,7 @@ export const OperationalCommandCenter: React.FC = () => {
       ...metric,
       trend: metric.trend as "increasing" | "decreasing" | "stable"
     })));
-  };
+  });
 
   const loadAlerts = async () => {
     const { data, error } = await supabase
@@ -123,7 +123,7 @@ export const OperationalCommandCenter: React.FC = () => {
       severity: alert.severity as "low" | "medium" | "high" | "critical",
       status: alert.status as "active" | "acknowledged" | "resolved"
     })));
-  };
+  });
 
   const loadStats = async () => {
     // Simulated stats - in real implementation, these would come from aggregated queries
@@ -135,7 +135,7 @@ export const OperationalCommandCenter: React.FC = () => {
       pending_alerts: alerts.filter(a => a.status === "active").length
     };
     setStats(mockStats);
-  };
+  });
 
   const setupRealTimeSubscriptions = () => {
     // Setup real-time subscriptions for alerts and metrics
@@ -164,8 +164,8 @@ export const OperationalCommandCenter: React.FC = () => {
     return () => {
       supabase.removeChannel(alertsChannel);
       supabase.removeChannel(metricsChannel);
-    };
-  };
+    });
+  });
 
   const acknowledgeAlert = async (alertId: string) => {
     try {

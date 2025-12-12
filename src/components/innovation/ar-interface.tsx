@@ -197,7 +197,7 @@ export const ARInterface: React.FC = () => {
       title: "AR Desativado",
       description: "Sessão AR finalizada",
     });
-  };
+  });
 
   const simulateObjectDetection = (objectId: string) => {
     const object = arObjects.find(obj => obj.id === objectId);

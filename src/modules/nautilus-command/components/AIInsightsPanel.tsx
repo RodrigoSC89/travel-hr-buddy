@@ -60,7 +60,7 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Insight exportado!");
-  };
+  });
 
   const quickActions = [
     {

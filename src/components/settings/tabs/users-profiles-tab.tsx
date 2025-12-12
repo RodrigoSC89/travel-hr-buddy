@@ -102,13 +102,13 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
 
   const getRoleInfo = (role: string) => {
     return roles.find(r => r.value === role) || roles[2];
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     return status === "active" 
       ? <Badge className="bg-green-100 text-green-800">Ativo</Badge>
       : <Badge variant="outline" className="text-muted-foreground">Inativo</Badge>;
-  };
+  });
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,7 +117,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
     const matchesStatus = selectedStatus === "all" || user.status === selectedStatus;
     
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   return (
     <div className="space-y-6">

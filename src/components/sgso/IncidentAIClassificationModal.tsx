@@ -90,7 +90,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
     setDescription("");
     setClassification(null);
     onOpenChange(false);
-  };
+  });
 
   const getRiskLevelColor = (level: string) => {
     const colors: Record<string, string> = {
@@ -100,7 +100,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
       baixo: "bg-blue-600 text-white border-blue-700",
     };
     return colors[level.toLowerCase()] || "bg-gray-600 text-white";
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

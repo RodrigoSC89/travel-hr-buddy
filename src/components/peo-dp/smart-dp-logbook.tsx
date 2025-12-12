@@ -145,7 +145,7 @@ export const SmartDPLogbook: React.FC = () => {
     const matchesType = filterType === "all" || entry.eventType === filterType;
     const matchesSeverity = filterSeverity === "all" || entry.severity === filterSeverity;
     return matchesSearch && matchesType && matchesSeverity;
-  };
+  });
 
   const handleAddEntry = () => {
     if (!newEntry.description || !newEntry.operator) {
@@ -175,11 +175,11 @@ export const SmartDPLogbook: React.FC = () => {
   const handleAcknowledge = (id: string) => {
     setEntries(entries.map(e => e.id === id ? { ...e, acknowledged: true } : e));
     toast.success("Entrada reconhecida");
-  };
+  });
 
   const handleExportPDF = () => {
     toast.success("Exportando logbook para PDF...");
-  };
+  });
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
@@ -422,6 +422,6 @@ export const SmartDPLogbook: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default SmartDPLogbook;

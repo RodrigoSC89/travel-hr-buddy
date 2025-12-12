@@ -173,15 +173,15 @@ export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
 
   const toggleSection = (title: string) => {
     setOpenSection(openSection === title ? null : title);
-  };
+  });
 
   const isActive = (path: string) => {
     return location.pathname === path;
-  };
+  });
 
   const closeMobileMenu = () => {
     setIsMobileOpen(false);
-  };
+  });
 
   // Auto-open section containing current route
   useEffect(() => {

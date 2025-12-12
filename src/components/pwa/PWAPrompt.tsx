@@ -43,7 +43,7 @@ export const PWAInstallPrompt = memo(function() {
     setShowPrompt(false);
     setDismissed(true);
     localStorage.setItem("pwa_prompt_dismissed", Date.now().toString());
-  };
+  });
 
   const handleInstall = async () => {
     const success = await install();

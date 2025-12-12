@@ -167,7 +167,7 @@ export const AISSimopsIntegration: React.FC = () => {
   const handleAcknowledgeAlert = (alertId: string) => {
     setAlerts(alerts.map(a => a.id === alertId ? { ...a, acknowledged: true } : a));
     toast.success("Alerta reconhecido");
-  };
+  });
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
