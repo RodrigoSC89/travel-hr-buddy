@@ -5,7 +5,6 @@
  * Suporte: pt, en, es, fr, de
  */
 
-// @ts-nocheck
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 

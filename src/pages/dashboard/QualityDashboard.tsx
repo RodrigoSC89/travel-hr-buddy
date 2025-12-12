@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 565 - Dashboard Final de Qualidade
  * 

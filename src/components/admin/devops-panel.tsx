@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * DevOps Panel - PATCH 960
  * Painel técnico local para monitoramento e controle em campo

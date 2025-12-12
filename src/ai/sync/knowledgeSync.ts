@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 199.0 - Knowledge Sync (IA Local + Global)
  * 

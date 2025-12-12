@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * Web Vitals Overlay Component
  * Development tool to visualize real-time performance metrics

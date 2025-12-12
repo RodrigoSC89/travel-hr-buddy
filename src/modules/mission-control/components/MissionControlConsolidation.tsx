@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 505: Mission Control Consolidation Dashboard
  * Unified dashboard integrating all mission control sub-modules

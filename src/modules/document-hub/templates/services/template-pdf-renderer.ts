@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 482 - Template PDF Renderer Service
  * Renders templates to PDF with placeholder substitution and workspace_files storage

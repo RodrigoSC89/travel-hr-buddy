@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * Centralized API module for template operations
  * Provides abstraction layer over Supabase calls for template management

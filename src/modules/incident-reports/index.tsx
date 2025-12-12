@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 491 - Consolidated Incident Reports Module
  * Consolidates incident-reports/ and incidents/ into one unified system

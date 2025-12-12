@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 633: AI Plugin System Interface
  * Standardized interface for dynamically loadable AI plugins

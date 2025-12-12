@@ -218,7 +218,6 @@ export default function MentorDPProfessional() {
         body: JSON.stringify({ action, ...params }),
       });
 
-
       if (!response.ok) {
         const errorText = await response.text();
         

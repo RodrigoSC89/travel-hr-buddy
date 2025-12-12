@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 583 - Neural Governance Module
  * Governance layer for autonomous AI decisions

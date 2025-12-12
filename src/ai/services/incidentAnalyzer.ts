@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 133.0 - AI-based Incident Analyzer
  * PATCH 659 - TypeScript fixes applied

@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 417: Document Templates WYSIWYG Editor
  * TipTap-based rich text editor with dynamic placeholders

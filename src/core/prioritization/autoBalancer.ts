@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 232: Auto Priority Balancer
  * TODO PATCH 659: TypeScript fixes deferred (priority_shifts table schema missing)

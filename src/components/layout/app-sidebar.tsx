@@ -766,7 +766,6 @@ function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
   return items.map(dedupeItem).filter(Boolean) as NavigationItem[];
 }
 
-
 interface AppSidebarProps {
   activeItem?: string;
   onItemChange?: (item: string) => void;

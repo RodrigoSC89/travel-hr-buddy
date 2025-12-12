@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 419: Real-Time Mission Dashboard
  * Displays mission execution status with live updates

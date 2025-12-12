@@ -19,7 +19,6 @@
  * npx supabase gen types typescript --project-id vnbptmixvwropvanyhdb > src/integrations/supabase/types.ts
  */
 
-// @ts-nocheck - Tabelas risk_* não aplicadas no Supabase ainda
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 

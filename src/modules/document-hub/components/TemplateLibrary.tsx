@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 380: Document Template Library with PDF Generation
  * Template management with dynamic placeholders and PDF export

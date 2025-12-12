@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * MODO EMERGÊNCIA COM IA DE CRISE
  * Interface especial ativada em incidentes com protocolos assistidos por IA

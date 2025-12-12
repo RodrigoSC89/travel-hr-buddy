@@ -3,7 +3,6 @@
  * Provides AI-powered sonar data analysis and risk assessment
  */
 
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 
 export interface SonarEvent {

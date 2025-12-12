@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 472 - Incident Replay AI Main Panel
  * Lists incidents and allows replay with AI analysis

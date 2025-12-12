@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 379: Analytics Query Builder
  * Advanced query builder with filters, aggregations, and custom dashboards

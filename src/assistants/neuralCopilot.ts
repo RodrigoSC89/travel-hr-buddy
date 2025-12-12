@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 213.0 - Neural Copilot Engine (Co-Piloto Neural IA)
  * TODO PATCH 659: TypeScript fixes deferred (copilot_sessions table schema missing from database)

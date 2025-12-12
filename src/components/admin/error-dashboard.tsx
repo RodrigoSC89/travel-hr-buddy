@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 652 - Error Dashboard
  * Centralized error monitoring and tracking

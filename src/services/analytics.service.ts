@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 347: Analytics Core v2 - Real-Time Service Layer
  * PATCH-601: Re-applied @ts-nocheck for build stability

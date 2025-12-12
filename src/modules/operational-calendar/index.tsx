@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * CALENDÁRIO OPERACIONAL UNIFICADO
  * Eventos integrados por embarcação/unidade com IA para reorganização

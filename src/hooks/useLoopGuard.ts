@@ -62,7 +62,6 @@ export const useLoopGuard = (
         stackTrace: new Error().stack || "No stack trace available",
       };
 
-
       // Call custom handler if provided
       if (onLoopDetected) {
         onLoopDetected(loopInfo);

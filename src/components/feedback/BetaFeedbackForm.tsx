@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 562 - Beta Feedback System
  * 

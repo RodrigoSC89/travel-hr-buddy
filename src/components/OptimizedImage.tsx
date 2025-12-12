@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * OptimizedImage Component
  * Automatic lazy loading, responsive images, and network-aware quality

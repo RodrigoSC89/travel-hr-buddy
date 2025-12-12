@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 298: Travel Management Component
  * Multi-leg itinerary display with conflict detection and PDF export

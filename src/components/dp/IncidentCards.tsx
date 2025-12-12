@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 1200 - DP Incident Cards with Full AI Integration
  * - Ver relatório: opens detail dialog instead of broken external link

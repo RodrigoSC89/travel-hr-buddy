@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 353: Employee Benefits Management Component
  * View and manage employee benefits

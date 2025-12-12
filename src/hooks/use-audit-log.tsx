@@ -5,7 +5,6 @@
  * Hook for automatically logging user actions with role context
  */
 
-// @ts-nocheck
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { ComponentType } from "react";
 import { supabase } from "@/integrations/supabase/client";

@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 225.0 - Mirror Instance Controller
  * TODO PATCH 659: TypeScript fixes deferred (mirror_instances, clone_sync_log tables missing)

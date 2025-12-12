@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 // PATCH 393 - Incident Reports: Enhanced with photo upload, GPS, and unique IDs
 import React, { useState, useRef } from "react";
 import {

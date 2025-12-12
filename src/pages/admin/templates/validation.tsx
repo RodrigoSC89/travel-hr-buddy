@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * Página de Validação do Editor de Templates
  */

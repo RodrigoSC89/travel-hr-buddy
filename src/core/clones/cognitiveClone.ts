@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 221.0 - Cognitive Clone Core
  * TODO PATCH 659: TypeScript fixes deferred (clone_registry table schema missing from database)

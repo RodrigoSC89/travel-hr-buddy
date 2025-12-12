@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 74.0 - Full AI Embedding
  * AI Kernel - Embedded AI Context for All Modules
@@ -869,7 +869,6 @@ export function getAIContextLogs(module?: string): any[] {
 export function clearAIContextLogs() {
   localStorage.removeItem("ai_context_logs");
 }
-
 
 /**
  * Get AI context statistics

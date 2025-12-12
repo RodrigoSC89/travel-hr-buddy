@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 418: Price Alerts Notification Integration
  * Integrates price alerts with the notifications center

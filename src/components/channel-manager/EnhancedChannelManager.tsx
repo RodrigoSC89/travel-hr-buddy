@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time
  * Complete WebSocket integration, permissions management, and communication logs

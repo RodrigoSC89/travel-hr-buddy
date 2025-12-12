@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 649 - REST API Gateway for External Integrations
  * TODO PATCH 659: TypeScript fixes deferred (missions/inspections schema needs validation)

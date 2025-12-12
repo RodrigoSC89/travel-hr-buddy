@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH-601: Health Check Validation System
  * Comprehensive system health monitoring and validation

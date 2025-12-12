@@ -381,7 +381,6 @@ export async function generateIntelligentReport(
   }
 }
 
-
 /**
  * Collects data from various sources for the report
  */

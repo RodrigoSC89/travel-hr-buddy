@@ -346,7 +346,6 @@ const SmartTooltipSystem: React.FC = () => {
         </div>
       )}
 
-
       {/* Painel de Ajuda */}
       {isHelpMode && currentTour === null && (
         <Card className="fixed bottom-20 left-4 z-30 w-80 glass-maritime shadow-navigation">

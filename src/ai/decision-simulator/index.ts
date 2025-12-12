@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 582 - Decision Simulator Core
  * Simulate impact of strategies before execution

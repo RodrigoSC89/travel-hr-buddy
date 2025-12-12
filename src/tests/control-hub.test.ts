@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * Control Hub Tests
  */

@@ -35,7 +35,6 @@ import {
 import { deepRiskAIService, type RiskFactors, type RiskScore, type RiskRecommendation } from "./services/deepRiskAIService";
 import { toast } from "sonner";
 
-
 const DeepRiskAI: React.FC = () => {
   const [depth, setDepth] = useState(100);
   const [pressure, setPressure] = useState(11);

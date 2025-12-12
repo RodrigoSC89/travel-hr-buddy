@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 481 - Incident Service (Consolidated)
  * Updated to use unified incident_reports table with AI analysis fields

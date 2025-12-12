@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * VALIDAÇÃO COMPLETA - Editor de Templates
  * Relatório de validação de todas as funcionalidades

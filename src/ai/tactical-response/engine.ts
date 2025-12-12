@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 577 - Tactical Response Engine
  * Automated tactical response system based on situational intelligence

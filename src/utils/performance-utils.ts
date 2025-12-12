@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * Performance Utilities - PATCH 597
  * 

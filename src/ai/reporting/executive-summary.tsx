@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 585 - Executive Summary Generator AI
  * PATCH 547 - Removed @ts-nocheck directive (now restored for build stability)

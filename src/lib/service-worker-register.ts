@@ -13,7 +13,6 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
       scope: "/"
     });
 
-
     // Verificar atualizações periodicamente
     setInterval(() => {
       registration.update();

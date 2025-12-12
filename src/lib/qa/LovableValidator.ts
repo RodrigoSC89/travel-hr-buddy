@@ -84,7 +84,6 @@ class LovableValidatorClass {
       }
     };
 
-
     return result;
   }
 

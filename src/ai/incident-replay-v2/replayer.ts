@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 580 - AI Incident Replayer v2
  * Enhanced incident replay with full contextual reconstruction

@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 /**
  * PATCH 420: Satcom Communication History
  * Visualizes transmission history over time

@@ -87,7 +87,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         })
       });
 
-
       if (!response.ok) {
         const errorText = await response.text();
         
