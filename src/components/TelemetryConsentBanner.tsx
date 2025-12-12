@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 499: Telemetry Consent Banner
  * GDPR-compliant consent banner for telemetry

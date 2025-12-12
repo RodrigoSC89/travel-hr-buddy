@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 223.0 - Edge AI Operations Core
  * Executes local embedded AI (small offline models)

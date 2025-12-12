@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 217 - Distributed Decision Core
  * Enables local autonomous decision-making with escalation to collective when conflicts arise

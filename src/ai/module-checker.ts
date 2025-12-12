@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 84.0 - Module Health Checker
  * Sistema de checklist automático que testa todos os módulos

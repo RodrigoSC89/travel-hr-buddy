@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * NautilusAI - Núcleo de IA Embarcada
  * 

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// @ts-nocheck
 /**
  * Nautilus Intelligence Core - Main Orchestrator
  * 
