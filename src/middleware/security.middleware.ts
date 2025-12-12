@@ -124,7 +124,6 @@ function handleCORS(request: NextRequest): Response | null {
       },
       timestamp: new Date().toISOString(),
     }).catch(console.error);
-    }).catch(console.error);
     
     return new Response(
       JSON.stringify({ error: 'CORS policy violation' }),
@@ -256,8 +255,6 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
           }
         }
       );
-      
-      return response;
       response.headers.set('Retry-After', String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)));
       
       return response;
@@ -298,6 +295,7 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
       
       // Log apenas se demorar mais de 1 segundo ou for erro
       if (duration > 1000) {
+        console.warn(`⚠️ Slow request: ${method} ${endpoint} took ${duration}ms`);
       }
     }
     
@@ -305,7 +303,6 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
     
   } catch (error) {
     // Log error
-    console.error('Security middleware error:', error);
     console.error('Security middleware error:', error);
     
     // Retornar erro genérico (não expor detalhes)
@@ -365,12 +362,12 @@ export function withSecurity<T>(
       // 7. Log performance
       const duration = Date.now() - startTime;
       if (duration > 2000) {
+        console.warn(`⚠️ Slow edge function: took ${duration}ms`);
       }
       
       return response;
       
     } catch (error) {
-      console.error(`Error in edge function (${requestId}):`, error);
       console.error(`Error in edge function (${requestId}):`, error);
       
       return new Response(
@@ -417,7 +414,6 @@ export async function validateAuth(req: Request): Promise<{ valid: boolean; user
     return { valid: true, userId: 'user-id-placeholder' };
     
   } catch (error) {
-    console.error('Auth validation error:', error);
     console.error('Auth validation error:', error);
     return { valid: false, error: 'Authentication failed' };
   }

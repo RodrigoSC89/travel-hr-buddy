@@ -183,17 +183,21 @@ export function getCriticalDependencies(): string[] {
  * Log bundle analysis to console
  */
 export function logBundleAnalysis(): void {
+  console.log('=== Bundle Analysis ===');
   
+  console.log('\n🔴 Heavy Dependencies:');
   HEAVY_DEPENDENCIES
     .filter(d => d.category === "heavy")
-    .forEach(d => );
+    .forEach(d => console.log(`  - ${d.name}: ${d.estimatedSize} (${d.recommendation})`));
   
+  console.log('\n🟡 Medium Dependencies:');
   HEAVY_DEPENDENCIES
     .filter(d => d.category === "medium")
-    .forEach(d => );
+    .forEach(d => console.log(`  - ${d.name}: ${d.estimatedSize}`));
   
-  getBundleOptimizationRecommendations().forEach(r => );
+  console.log('\n📋 Recommendations:');
+  getBundleOptimizationRecommendations().forEach(r => console.log(`  ${r}`));
   
   const savings = calculatePotentialSavings();
-  
+  console.log(`\n💰 Potential Savings: ${savings.total}`);
 }

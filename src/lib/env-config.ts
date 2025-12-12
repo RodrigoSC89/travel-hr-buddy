@@ -165,15 +165,15 @@ export function loadEnvConfig(): EnvConfig {
   // === PRINT RESULTS ===
   
   if (errors.length > 0) {
-    errors.forEach(error => );
+    errors.forEach(error => console.error(`❌ ENV ERROR: ${error}`));
     throw new Error('Invalid environment configuration. Please check .env file.');
   }
   
   if (warnings.length > 0) {
-    warnings.forEach(warning => );
+    warnings.forEach(warning => console.warn(`⚠️ ENV WARNING: ${warning}`));
   }
   
-  
+  console.log('✅ Environment configuration validated successfully');
   return {
     supabaseUrl,
     supabaseAnonKey,
@@ -232,6 +232,13 @@ export function isFeatureEnabled(feature: 'starfix' | 'terrastar' | 'ai'): boole
 export function printConfigSummary(): void {
   const config = getConfig();
   
+  console.log('=== Environment Config Summary ===');
+  console.log(`Supabase URL: ${config.supabaseUrl ? '✅ Set' : '❌ Missing'}`);
+  console.log(`OpenAI API Key: ${config.openaiApiKey ? '✅ Set' : '❌ Missing'}`);
+  console.log(`StarFix: ${config.starfixApiKey ? '✅ Enabled' : '⚪ Disabled'}`);
+  console.log(`Terrastar: ${config.terrastarApiKey ? '✅ Enabled' : '⚪ Disabled'}`);
+  console.log(`Environment: ${config.nodeEnv}`);
+  console.log('==================================');
 }
 
 // Auto-validate on import (apenas em produção ou quando explicitamente configurado)
