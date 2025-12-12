@@ -142,14 +142,14 @@ export default function UserProfilePage() {
       toast({
         title: "Sucesso",
         description: "Perfil atualizado com sucesso"
-      };
+      });
     } catch (error) {
       console.error("Error saving profile:", error);
       toast({
         title: "Erro",
         description: "Não foi possível salvar o perfil",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsSaving(false);
     }
