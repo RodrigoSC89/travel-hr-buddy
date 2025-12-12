@@ -58,4 +58,4 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
       />
     </BrainContext.Provider>
   );
-});
+};
