@@ -171,7 +171,7 @@ export const DocumentationLogsTab: React.FC = () => {
                          log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          log.details.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
-  };
+  });
 
   return (
     <div className="space-y-6">
