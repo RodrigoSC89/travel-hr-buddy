@@ -39,14 +39,14 @@ export class DashboardErrorBoundary extends Component<Props, State> {
       metadata: {
         componentStack: errorInfo.componentStack,
       },
-    });
+    };
   }
 
   handleReset = (): void => {
     this.setState({
       hasError: false,
       error: null,
-    });
+    };
   });
 
   render(): ReactNode {
