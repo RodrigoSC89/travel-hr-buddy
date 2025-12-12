@@ -295,7 +295,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       id="webhookName"
                       placeholder="Nome descritivo do webhook"
                       value={newWebhook.name}
-                      onChange={handleChange}))}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -304,7 +304,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       id="webhookUrl"
                       placeholder="https://api.exemplo.com/webhook"
                       value={newWebhook.url}
-                      onChange={handleChange}))}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
