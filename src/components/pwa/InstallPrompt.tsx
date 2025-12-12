@@ -153,4 +153,4 @@ export const InstallPrompt = memo(function() {
       </motion.div>
     </AnimatePresence>
   );
-}
+});
