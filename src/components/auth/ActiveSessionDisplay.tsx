@@ -69,7 +69,7 @@ export const ActiveSessionDisplay = memo(function() {
         title: "Error",
         description: "Failed to load session information",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
