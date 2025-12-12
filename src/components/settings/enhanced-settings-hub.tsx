@@ -304,13 +304,13 @@ export const EnhancedSettingsHub: React.FC = () => {
       toast({
         title: "✅ Configurações Salvas",
         description: "Todas as alterações foram aplicadas com sucesso.",
-      };
+      });
     } catch (error) {
       toast({
         title: "❌ Erro ao Salvar",
         description: "Não foi possível salvar as configurações. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsSaving(false);
     }
