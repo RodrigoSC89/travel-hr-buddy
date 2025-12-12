@@ -87,7 +87,7 @@ export const ActiveSessionDisplay = memo(function() {
       toast({
         title: "Success",
         description: "Logged out successfully",
-      };
+      });
 
       navigate("/auth/login");
     } catch (error) {
