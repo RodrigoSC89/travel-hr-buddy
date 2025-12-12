@@ -79,7 +79,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
       error: null,
       retryCount: prevState.retryCount + 1,
     }));
-  });
+  };
 
   render(): ReactNode {
     if (this.state.hasError && this.state.error) {
