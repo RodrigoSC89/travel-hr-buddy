@@ -453,6 +453,6 @@ export const ProcurementIntelligenceAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default ProcurementIntelligenceAI;
