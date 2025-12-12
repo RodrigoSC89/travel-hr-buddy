@@ -492,6 +492,6 @@ export const CrewIntelligenceAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default CrewIntelligenceAI;
