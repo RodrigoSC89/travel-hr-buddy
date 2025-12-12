@@ -77,7 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           } else if (event === "SIGNED_OUT") {
             setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
           }
-        };
+        });
         
         authSubscription = data.subscription;
 
