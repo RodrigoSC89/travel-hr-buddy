@@ -482,7 +482,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     toast({
       title: "🧠 Analisando Configurações",
       description: "IA está gerando recomendações baseadas no uso do sistema...",
-    };
+    });
 
     // Simulate AI analysis
     setTimeout(() => {
