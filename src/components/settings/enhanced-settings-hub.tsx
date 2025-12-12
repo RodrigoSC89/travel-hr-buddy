@@ -418,7 +418,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     toast({
       title: "🔄 Configurações Restauradas",
       description: "Todas as configurações foram restauradas aos valores padrão.",
-    };
+    });
   };
 
   const exportSettings = () => {
