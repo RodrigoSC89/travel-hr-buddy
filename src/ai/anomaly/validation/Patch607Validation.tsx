@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { memo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -182,7 +182,7 @@ export const Patch607Validation = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});
 
 function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
   return (

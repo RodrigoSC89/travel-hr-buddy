@@ -65,7 +65,7 @@ class AutoTuningEngine {
         learning_rate: 0.1,
         rollback_on_degradation: true,
       },
-    });
+    };
   }
 
   /**
@@ -128,7 +128,7 @@ class AutoTuningEngine {
         accuracy_rate: feedbackMetrics.total > 0 
           ? feedbackMetrics.accepted / feedbackMetrics.total 
           : 0.5,
-      });
+      };
 
       // Create snapshot before adjustments
       await this.createSnapshot(metrics);
@@ -183,7 +183,7 @@ class AutoTuningEngine {
         rejected,
         avg_confidence,
         avg_time: 1000, // Default
-      });
+      };
     } catch (error) {
       logger.error("[AutoTuning] Error analyzing feedback:", error);
       return { total: 0, accepted: 0, rejected: 0, avg_confidence: 0.7, avg_time: 1000 };
@@ -223,7 +223,7 @@ class AutoTuningEngine {
         rejected,
         avg_confidence: 0.75,
         avg_time: 1200,
-      });
+      };
     } catch (error) {
       logger.error("[AutoTuning] Error analyzing actions:", error);
       return { total: 0, accepted: 0, rejected: 0, avg_confidence: 0.7, avg_time: 1000 };
@@ -296,7 +296,7 @@ class AutoTuningEngine {
       metrics: { ...metrics },
       timestamp: new Date(),
       performance_score: performanceScore,
-    });
+    };
 
     this.snapshots.push(snapshot);
 
@@ -396,7 +396,7 @@ class AutoTuningEngine {
       accuracy_rate: feedbackMetrics.total > 0 
         ? feedbackMetrics.accepted / feedbackMetrics.total 
         : 0.5,
-    });
+    };
   }
 }
 
