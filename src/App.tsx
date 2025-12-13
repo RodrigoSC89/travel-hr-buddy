@@ -1,5 +1,4 @@
 /**
-import { useEffect, useMemo } from "react";;
  * App.tsx - PATCH 853.0 - Definitive React Hook Fix + FASE 3.3 Error Boundaries
  * 
  * Uses standard React import pattern and loads context providers synchronously.
