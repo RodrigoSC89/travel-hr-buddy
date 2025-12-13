@@ -140,7 +140,7 @@ class ConsciousCore {
       activeObservations,
       criticalIssues,
       lastUpdate: new Date()
-    });
+    };
   }
 
   /**
@@ -406,7 +406,7 @@ class ConsciousCore {
       observation.autoCorrectionResult = {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error"
-      });
+      };
       logger.error("[ConsciousCore] Auto-correction failed", error);
     }
   }
@@ -421,7 +421,7 @@ class ConsciousCore {
       action: "clear_loop_detector",
       modulesCleared: observation.modulesAffected,
       success: true
-    });
+    };
   }
 
   private async correctFailurePattern(observation: SystemObservation): Promise<Record<string, any>> {
@@ -430,7 +430,7 @@ class ConsciousCore {
       action: "escalate",
       reason: "Repeated failures require manual intervention",
       success: true
-    });
+    };
   }
 
   private async correctAnomaly(observation: SystemObservation): Promise<Record<string, any>> {
@@ -439,7 +439,7 @@ class ConsciousCore {
       action: "log_for_investigation",
       modulesAffected: observation.modulesAffected,
       success: true
-    });
+    };
   }
 
   private analyzeContextMessage(message: any): void {

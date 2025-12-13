@@ -46,7 +46,7 @@ class RulesManager {
           success: true,
           action: params.action || "notify",
           description: `Error threshold exceeded: ${event.data.error_count} errors`,
-        });
+        };
       },
     });
 
@@ -71,7 +71,7 @@ class RulesManager {
           success: true,
           action: params.action || "notify",
           description: `Latency threshold exceeded: ${event.data.latency}ms`,
-        });
+        };
       },
     });
 
@@ -97,7 +97,7 @@ class RulesManager {
           success: true,
           action: params.action || "cleanup",
           description: `Memory threshold exceeded: ${event.data.usage}MB`,
-        });
+        };
       },
     });
 
@@ -123,7 +123,7 @@ class RulesManager {
           success: true,
           action: params.action || "throttle",
           description: `Rate limit exceeded: ${event.data.rate} req/min`,
-        });
+        };
       },
     });
   }
@@ -152,7 +152,7 @@ class RulesManager {
       action: template.actionBuilder(params),
       priority,
       enabled: true,
-    });
+    };
 
     logger.info("[RulesManager] Rule created from template", {
       templateId,

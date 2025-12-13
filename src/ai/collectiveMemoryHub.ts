@@ -78,7 +78,7 @@ class CollectiveMemoryHub {
       tags,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
-    });
+    };
 
     // Store locally
     this.knowledge.set(key, entry);
@@ -124,7 +124,7 @@ class CollectiveMemoryHub {
           tags: data.tags || [],
           created_at: data.created_at,
           updated_at: data.updated_at
-        });
+        };
         
         this.knowledge.set(key, entry);
         return entry;
@@ -261,7 +261,7 @@ class CollectiveMemoryHub {
         last_sync: new Date().toISOString(),
         entries_synced: entriesSynced,
         status: "synced"
-      });
+      };
 
       if (entriesSynced > 0) {
         logger.debug("CollectiveMemory sync completed", { entriesSynced });
@@ -275,7 +275,7 @@ class CollectiveMemoryHub {
         last_sync: new Date().toISOString(),
         entries_synced: 0,
         status: "error"
-      });
+      };
     }
   }
 
@@ -310,7 +310,7 @@ class CollectiveMemoryHub {
           tags: [...(data.tags || []), "rollback"],
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        });
+        };
 
         this.knowledge.set(key, newEntry);
         await this.syncEntryToDB(newEntry);
@@ -320,7 +320,7 @@ class CollectiveMemoryHub {
           rolled_back_to_version: targetVersion,
           entries_affected: 1,
           timestamp: new Date().toISOString()
-        });
+        };
       }
 
       throw new Error("Target version not found");
@@ -331,7 +331,7 @@ class CollectiveMemoryHub {
         rolled_back_to_version: targetVersion,
         entries_affected: 0,
         timestamp: new Date().toISOString()
-      });
+      };
     }
   }
 
