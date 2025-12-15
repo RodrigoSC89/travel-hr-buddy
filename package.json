@@ -171,7 +171,7 @@
     "octokit": "^5.0.4",
     "onnxruntime-web": "^1.23.0",
     "openai": "^6.3.0",
-    "posthog-js": "^1.281.0",
+    "posthog-js": "^1.306.1",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.1",
