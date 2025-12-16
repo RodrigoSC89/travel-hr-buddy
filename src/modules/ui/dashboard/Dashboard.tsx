@@ -1,6 +1,10 @@
-import { Navigate } from "react-router-dom";
+import React from "react";
 
-// Redirect para o Command Center unificado
 export default function Dashboard() {
-  return <Navigate to="/command-center" replace />;
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+      <p className="text-muted-foreground">Painel de Controle Principal</p>
+    </div>
+  );
 }

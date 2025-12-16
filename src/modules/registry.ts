@@ -49,19 +49,17 @@ export interface ModuleDefinition {
 }
 
 export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
-  // PATCH UNIFY-DASHBOARD: Dashboard + Executive Dashboard fundidos em Command Center
-  "core.command-center": {
-    id: "core.command-center",
-    name: "Command Center",
+  "core.dashboard": {
+    id: "core.dashboard",
+    name: "Dashboard",
     category: "core",
-    path: "pages/CommandCenter",
-    description: "Dashboard unificado com visão executiva e operacional - KPIs, métricas de frota, compliance e atividades",
+    path: "pages/Dashboard",
+    description: "Main application dashboard - Route handled directly by App.tsx",
     status: "active",
     completeness: "100%",
-    route: "/command-center",
+    // route removed - defined directly in App.tsx to avoid conflict
     icon: "LayoutDashboard",
     lazy: true,
-    version: "2.0.0",
   },
 
   // REMOVED: core.shared - Deprecated (PATCH 176.2)
@@ -259,8 +257,18 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // DEPRECATED: core.executive-dashboard - Fundido em core.command-center (PATCH UNIFY-DASHBOARD)
-  // Redirect automático para /command-center
+  "core.executive-dashboard": {
+    id: "core.executive-dashboard",
+    name: "Executive Dashboard",
+    category: "core",
+    path: "pages/ExecutiveDashboard",
+    description: "Dashboard executivo com KPIs, métricas de frota e compliance",
+    status: "active",
+    completeness: "100%",
+    route: "/executive-dashboard",
+    icon: "BarChart3",
+    lazy: true,
+  },
 
   // REMOVED: intelligence.analytics - Use operations.dashboard (PATCH 176.2)
 
@@ -763,29 +771,15 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "core.system-hub": {
-    id: "core.system-hub",
-    name: "Centro de Operações",
-    category: "core",
-    path: "pages/SystemHub",
-    description: "Unified system operations: monitoring, diagnostics, and roadmap",
-    status: "active",
-    completeness: "100%",
-    route: "/system-hub",
-    icon: "Server",
-    lazy: true,
-  },
-
-  // DEPRECATED: Merged into system-hub
   "core.system-monitor": {
     id: "core.system-monitor",
-    name: "System Monitor (Merged)",
+    name: "System Monitor",
     category: "core",
-    path: "pages/SystemHub",
-    description: "Merged into Centro de Operações",
-    status: "deprecated",
+    path: "pages/SystemMonitor",
+    description: "Real-time system performance monitoring",
+    status: "active",
     completeness: "100%",
-    route: "/system-hub",
+    route: "/system-monitor",
     icon: "Monitor",
     lazy: true,
   },
@@ -2066,16 +2060,15 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "177.0",
   },
 
-  // DEPRECATED: Merged into system-hub
   "core.product-roadmap": {
     id: "core.product-roadmap",
-    name: "Product Roadmap (Merged)",
+    name: "Product Roadmap",
     category: "core",
-    path: "pages/SystemHub",
-    description: "Merged into Centro de Operações",
-    status: "deprecated",
+    path: "pages/ProductRoadmap",
+    description: "Product development roadmap and feature planning",
+    status: "active",
     completeness: "100%",
-    route: "/system-hub",
+    route: "/product-roadmap",
     icon: "Map",
     lazy: true,
     version: "177.0",
