@@ -1,11 +1,13 @@
-/**
- * DEPRECATED: This module has been merged into Communication Command Center
- * Redirects to /communication-command
- */
-import { Navigate } from "react-router-dom";
+import React from "react";
+import { CommunicationCenterProfessional } from "@/components/communication/CommunicationCenterProfessional";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 
 const Communication = () => {
-  return <Navigate to="/communication-command" replace />;
+  return (
+    <ModulePageWrapper gradient="blue">
+      <CommunicationCenterProfessional />
+    </ModulePageWrapper>
+  );
 };
 
 export default Communication;

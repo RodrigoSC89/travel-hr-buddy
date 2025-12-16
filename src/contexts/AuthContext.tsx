@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
-import type { ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -42,10 +41,10 @@ export const useAuth = (): AuthContextType => {
 };
 
 interface AuthProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -257,7 +256,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const value: AuthContextType = useMemo(() => ({
+  const value: AuthContextType = React.useMemo(() => ({
     user,
     session,
     isLoading,

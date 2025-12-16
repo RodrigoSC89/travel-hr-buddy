@@ -24,7 +24,7 @@ export const QuickActionsPanel: React.FC = () => {
     {
       icon: <Wrench className="h-4 w-4" />,
       label: "Agendar Manutenção",
-      onClick: () => navigate("/maintenance-command"),
+      onClick: () => navigate("/intelligent-maintenance"),
       color: "bg-orange-500 hover:bg-orange-600"
     },
     {

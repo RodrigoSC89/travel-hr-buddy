@@ -1,11 +1,8 @@
-/**
- * DEPRECATED: Redirecionado para AI Command Center
- * PATCH UNIFY-11.0
- */
-import { Navigate } from "react-router-dom";
+import React from "react";
+import AdvancedAIInsights from "@/components/ai/advanced-ai-insights";
 
 const AIInsights = () => {
-  return <Navigate to="/ai-command" replace />;
+  return <AdvancedAIInsights />;
 };
 
 export default AIInsights;

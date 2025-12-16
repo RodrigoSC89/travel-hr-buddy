@@ -1,9 +1,11 @@
-/**
- * DEPRECATED: Intelligent Alerts module
- * Redirects to unified Alerts Command Center
- */
-import { Navigate } from "react-router-dom";
+import React from "react";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
+import { IntelligentAlertSystem } from "@/components/intelligence/intelligent-alert-system";
 
 export default function IntelligentAlerts() {
-  return <Navigate to="/alerts-command" replace />;
+  return (
+    <OrganizationLayout title="Alertas Inteligentes">
+      <IntelligentAlertSystem />
+    </OrganizationLayout>
+  );
 }

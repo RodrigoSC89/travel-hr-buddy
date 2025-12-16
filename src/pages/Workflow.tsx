@@ -1,11 +1,12 @@
-/**
- * REDIRECT: Workflow → Workflow Command Center
- * PATCH UNIFY-12.0 - Este módulo foi fundido no Workflow Command Center
- */
-import { Navigate } from "react-router-dom";
+import React from "react";
+import { WorkflowAutomationHub } from "@/components/automation/workflow-automation-hub";
 
 const WorkflowPage = () => {
-  return <Navigate to="/workflow-command" replace />;
+  return (
+    <div className="min-h-screen bg-background">
+      <WorkflowAutomationHub />
+    </div>
+  );
 };
 
 export default WorkflowPage;

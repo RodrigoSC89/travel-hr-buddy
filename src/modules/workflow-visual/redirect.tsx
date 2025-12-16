@@ -1,9 +1,8 @@
 /**
- * REDIRECT: workflow-visual → Workflow Command Center
- * PATCH UNIFY-12.0 - Este módulo foi fundido no Workflow Command Center
+ * REDIRECT: workflow-visual → nautilus-automation
+ * Este módulo foi fundido no Nautilus Automation
  */
 import { Navigate } from "react-router-dom";
-
 export default function WorkflowVisualRedirect() {
-  return <Navigate to="/workflow-command" replace />;
+  return <Navigate to="/nautilus-automation" replace />;
 }

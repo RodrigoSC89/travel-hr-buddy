@@ -1,19 +1,11 @@
-// PATCH UNIFY-9.0: Redirected to Maritime Command Center
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { OrganizationLayout } from "@/components/layout/organization-layout";
+import { MaritimeCertificationManager } from "@/components/maritime/maritime-certification-manager";
 
 export default function MaritimeCertifications() {
-  const navigate = useNavigate();
-  
-  useEffect(() => {
-    navigate("/maritime-command", { replace: true });
-  }, [navigate]);
-  
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="text-center">
-        <p className="text-muted-foreground">Redirecionando para Maritime Command Center...</p>
-      </div>
-    </div>
+    <OrganizationLayout title="Certificações Marítimas">
+      <MaritimeCertificationManager />
+    </OrganizationLayout>
   );
 }

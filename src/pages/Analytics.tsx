@@ -1,11 +1,8 @@
-/**
- * DEPRECATED: Analytics Core module
- * Redirects to unified Analytics Command Center
- */
-import { Navigate } from "react-router-dom";
+import React from "react";
+import AnalyticsCoreProfessional from "@/modules/analytics/AnalyticsCoreProfessional";
 
 const Analytics = () => {
-  return <Navigate to="/analytics-command" replace />;
+  return <AnalyticsCoreProfessional />;
 };
 
 export default Analytics;
