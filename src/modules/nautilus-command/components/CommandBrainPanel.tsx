@@ -27,9 +27,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
     messages, 
     isLoading, 
     sendMessage, 
-    clearMessages,
-    setFeedback,
-    exportConversation
+    clearMessages 
   } = useNautilusCommandAI();
   
   const [input, setInput] = useState("");
@@ -109,20 +107,25 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
   };
 
   const exportChat = () => {
-    exportConversation();
-  };
-
-  const handleFeedback = (messageId: string, type: "positive" | "negative") => {
-    setFeedback(messageId, type);
+    const content = messages
+      .map(m => `[${m.role.toUpperCase()}] ${m.content}`)
+      .join("\n\n");
+    
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `nautilus-chat-${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Chat exportado!");
   };
 
   const suggestions = [
     "Qual o status atual da frota?",
     "Mostre certificados expirando",
     "Previsão de manutenção",
-    "Alertas críticos ativos",
-    "Gere um briefing executivo",
-    "Analise riscos operacionais"
+    "Alertas críticos ativos"
   ];
 
   return (
@@ -236,20 +239,10 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                           >
                             {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className={`h-6 px-2 ${message.feedback === "positive" ? "text-green-500 bg-green-50" : ""}`}
-                            onClick={() => handleFeedback(message.id, "positive")}
-                          >
+                          <Button variant="ghost" size="sm" className="h-6 px-2">
                             <ThumbsUp className="h-3 w-3" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className={`h-6 px-2 ${message.feedback === "negative" ? "text-red-500 bg-red-50" : ""}`}
-                            onClick={() => handleFeedback(message.id, "negative")}
-                          >
+                          <Button variant="ghost" size="sm" className="h-6 px-2">
                             <ThumbsDown className="h-3 w-3" />
                           </Button>
                         </div>
