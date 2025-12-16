@@ -88,10 +88,10 @@ const UnifiedDashboard = () => {
       color: "bg-purple-500"
     },
     { 
-      title: "Monitor Sistema", 
-      description: "Performance em tempo real", 
+      title: "Centro de Operações", 
+      description: "Monitor, diagnóstico e roadmap", 
       icon: Activity, 
-      path: "/system-monitor",
+      path: "/system-hub",
       color: "bg-green-500"
     },
     { 

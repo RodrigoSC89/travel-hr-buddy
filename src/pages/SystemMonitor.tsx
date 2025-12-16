@@ -1,13 +1,9 @@
-import React from "react";
-import SystemPerformanceMonitor from "@/components/monitoring/system-performance-monitor";
-import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+/**
+ * SystemMonitor Redirect  
+ * PATCH 990: Module merged into SystemHub
+ */
+import { Navigate } from "react-router-dom";
 
-const SystemMonitor = () => {
-  return (
-    <ModulePageWrapper gradient="blue">
-      <SystemPerformanceMonitor />
-    </ModulePageWrapper>
-  );
-};
-
-export default SystemMonitor;
+export default function SystemMonitor() {
+  return <Navigate to="/system-hub" replace />;
+}

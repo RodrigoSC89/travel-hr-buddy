@@ -1,27 +1,57 @@
 import React, { useEffect, Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
-import { TenantProvider } from "./contexts/TenantContext";
-import { OrganizationProvider } from "./contexts/OrganizationContext";
-import { SmartLayout } from "./components/layout/SmartLayout";
-import { initializeMonitoring } from "@/lib/monitoring/init";
-import { initializePerformance } from "@/lib/performance/init";
-import { logger } from "@/lib/logger";
-import { CommandPalette } from "@/components/CommandPalette";
-import { KeyboardShortcutsHelp } from "@/components/help/KeyboardShortcuts";
-import { QuickStartGuide } from "@/components/help/QuickStartGuide";
-import { OfflineBanner } from "@/components/OfflineBanner";
-import { OffshoreLoader } from "@/components/LoadingStates";
-import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 import { Toaster } from "@/components/ui/toaster";
-import { SmartPrefetchProvider } from "@/components/performance/SmartPrefetchProvider";
-import { BandwidthIndicator } from "@/components/performance/BandwidthIndicator";
-import { SlowNetworkProvider, NetworkStatusBadge } from "@/components/performance/SlowNetworkOptimizer";
-import { GlobalBrainProvider } from "@/components/global/GlobalBrainProvider";
-// PATCH 700: Web Vitals Overlay for development
-const WebVitalsOverlay = React.lazy(() => import("@/components/WebVitalsOverlay"));
+
+// Simple inline error boundary for maximum reliability
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error?: Error }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("App Error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-background p-4">
+          <div className="text-center space-y-4 max-w-md">
+            <h1 className="text-2xl font-bold text-destructive">Erro ao carregar</h1>
+            <p className="text-muted-foreground">{this.state.error?.message}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+            >
+              Recarregar página
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Simple loader component
+const OffshoreLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-background">
+    <div className="text-center space-y-4">
+      <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+      <p className="text-muted-foreground">Carregando...</p>
+    </div>
+  </div>
+);
 
 // PATCH 68.2 - Module Loader System
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -29,8 +59,6 @@ import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 
 // Core pages - Lazy loading for better performance
 const Index = React.lazy(() => import("@/pages/Index"));
-
-// Essential pages - Lazy loading
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Admin = React.lazy(() => import("@/pages/Admin"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
@@ -45,6 +73,17 @@ const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
 // Protected Route wrappers - PATCH 68.5
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
+// Lazy load heavy components
+const SmartLayout = React.lazy(() => 
+  import("./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
+);
+const TenantProvider = React.lazy(() => 
+  import("./contexts/TenantContext").then(m => ({ default: m.TenantProvider }))
+);
+const OrganizationProvider = React.lazy(() => 
+  import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
+);
+
 // Initialize monitoring & services with optimized query client
 const queryClient = createOptimizedQueryClient();
 
@@ -52,205 +91,161 @@ const queryClient = createOptimizedQueryClient();
 const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : Router;
 
 function App() {
-  useEffect(() => {
-    // Initialize performance first (critical for slow networks)
-    initializePerformance();
-    
-    // Then monitoring (light mode by default)
-    initializeMonitoring();
-    
-    logger.info("Nautilus One initialized", {
-      version: "68.3",
-      moduleLoader: "active",
-      performanceOptimized: true,
-      timestamp: new Date().toISOString(),
-    });
-  }, []);
-
   // PATCH 68.2/68.7 - Get module routes automatically from MODULE_REGISTRY (memoized)
   const moduleRoutes = useMemo(() => {
-    const routes = getModuleRoutes();
-    logger.info(`Loaded ${routes.length} module routes from registry`);
-    return routes;
+    try {
+      return getModuleRoutes();
+    } catch (e) {
+      console.warn("Failed to load module routes:", e);
+      return [];
+    }
   }, []);
 
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TenantProvider>
-            <OrganizationProvider>
-              <RouterType>
-                <SlowNetworkProvider>
-                <SmartPrefetchProvider>
-                <GlobalBrainProvider showTrigger={true}>
-                <CommandPalette />
-                <KeyboardShortcutsHelp />
-                <OfflineBanner />
-                <ErrorDebugBanner />
-                
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/auth" element={
-                    <Suspense fallback={<OffshoreLoader />}>
-                      <Auth />
-                    </Suspense>
-                  } />
-                  <Route path="/unauthorized" element={
-                    <Suspense fallback={<OffshoreLoader />}>
-                      <Unauthorized />
-                    </Suspense>
-                  } />
-                  
-                  {/* Protected Routes */}
-                  <Route path="/" element={
-                    <ProtectedRoute>
-                      <SmartLayout />
-                    </ProtectedRoute>
-                  }>
-                    <Route index element={
+          <Suspense fallback={<OffshoreLoader />}>
+            <TenantProvider>
+              <OrganizationProvider>
+                <RouterType>
+                  <Routes>
+                    {/* Public Routes */}
+                    <Route path="/auth" element={
                       <Suspense fallback={<OffshoreLoader />}>
-                        <Index />
+                        <Auth />
                       </Suspense>
                     } />
-                    <Route path="dashboard" element={
+                    <Route path="/unauthorized" element={
                       <Suspense fallback={<OffshoreLoader />}>
-                        <Dashboard />
+                        <Unauthorized />
                       </Suspense>
                     } />
                     
-                    {/* PATCH 68.2 - Module Routes from Registry */}
-                    {moduleRoutes.map((route) => (
-                      <Route
-                        key={route.id}
-                        path={route.path}
-                        element={
-                          <Suspense fallback={<OffshoreLoader />}>
-                            <route.component />
-                          </Suspense>
-                        }
-                      />
-                    ))}
-                    
-                    {/* Admin Routes - PATCH 68.5: Role-protected */}
-                    <Route path="admin/*" element={
-                      <AdminRoute>
+                    {/* Protected Routes */}
+                    <Route path="/" element={
+                      <ProtectedRoute>
                         <Suspense fallback={<OffshoreLoader />}>
-                          <Admin />
+                          <SmartLayout />
                         </Suspense>
-                      </AdminRoute>
-                    } />
-                    
-                    {/* Settings */}
-                    <Route path="settings" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <Settings />
-                      </Suspense>
-                    } />
-                    
-                    {/* Profile */}
-                    <Route path="profile" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <UserProfilePage />
-                      </Suspense>
-                    } />
-                    
-                    {/* Health Check */}
-                    <Route path="health" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <HealthCheck />
-                      </Suspense>
-                    } />
-                    
-                    {/* Revolutionary AI Hub */}
-                    <Route path="revolutionary-ai/*" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <RevolutionaryAI />
-                      </Suspense>
-                    } />
-                    
-                    {/* AI Enhanced Modules */}
-                    <Route path="ai-modules" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <AIEnhancedModules />
-                      </Suspense>
-                    } />
-                    
-                    {/* Route Redirects - Duplicate/Legacy Routes */}
-                    <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
-                    <Route path="document-ai" element={<Navigate to="/documents" replace />} />
-                    <Route path="ai-assistant" element={<Navigate to="/assistant/voice" replace />} />
-                    <Route path="voice" element={<Navigate to="/assistant/voice" replace />} />
-                    <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
-                    <Route path="task-automation" element={<Navigate to="/automation" replace />} />
-                    <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
-                    <Route path="communication-center" element={<Navigate to="/communication" replace />} />
-                    <Route path="notification-center" element={<Navigate to="/notifications-center" replace />} />
-                    <Route path="documentos" element={<Navigate to="/documents" replace />} />
-                    <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
-                    <Route path="checklists-inteligentes" element={<Navigate to="/admin/checklists" replace />} />
-                    <Route path="finance-hub" element={<Navigate to="/finance" replace />} />
-                    <Route path="reports-module" element={<Navigate to="/reports" replace />} />
-                    <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
-                    <Route path="user-management" element={<Navigate to="/users" replace />} />
-                    <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
-                    <Route path="analytics-core" element={<Navigate to="/analytics" replace />} />
-                    <Route path="portal" element={<Navigate to="/nautilus-academy" replace />} />
-                    <Route path="portal-funcionario" element={<Navigate to="/nautilus-academy" replace />} />
-                    <Route path="training-academy" element={<Navigate to="/nautilus-academy" replace />} />
-                    <Route path="mobile-optimization" element={<Navigate to="/optimization" replace />} />
-                    <Route path="alertas-precos" element={<Navigate to="/price-alerts" replace />} />
-                    <Route path="help" element={<Navigate to="/notifications-center" replace />} />
-                    <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
-                    
-                    {/* PATCH 951: Fix missing navigation routes */}
-                    <Route path="crew-management" element={<Navigate to="/crew" replace />} />
-                    <Route path="vessels" element={<Navigate to="/fleet" replace />} />
-                    <Route path="schedule" element={<Navigate to="/calendar" replace />} />
-                    <Route path="schedules" element={<Navigate to="/calendar" replace />} />
-                    
-                    {/* PATCH 960: Fix missing missions route */}
-                    <Route path="missions/new" element={<Navigate to="/mission-logs" replace />} />
-                    <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
-                    
-                    {/* PATCH 981: Fix maintenance/planner route */}
-                    <Route path="maintenance/planner" element={<Navigate to="/maintenance-planner" replace />} />
-                    
-                    {/* 404 Route */}
-                    <Route path="*" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <NotFound />
-                      </Suspense>
-                    } />
-                  </Route>
-                </Routes>
-                
-                {/* PATCH 700: Toast notifications */}
-                <Toaster />
-                
-                {/* PATCH 180: Network status for slow connections */}
-                <NetworkStatusBadge />
-                
-                {/* PATCH 835: Bandwidth indicator for slow connections */}
-                <BandwidthIndicator />
-                
-                {/* PATCH 838: Quick Start Guide for new users */}
-                <Suspense fallback={null}>
-                  <QuickStartGuide />
-                </Suspense>
-                
-                {/* PATCH 700: Web Vitals Overlay (dev only) */}
-                {import.meta.env.DEV && (
-                  <Suspense fallback={null}>
-                    <WebVitalsOverlay position="bottom-right" />
-                  </Suspense>
-                )}
-                </GlobalBrainProvider>
-                </SmartPrefetchProvider>
-                </SlowNetworkProvider>
-              </RouterType>
-            </OrganizationProvider>
-          </TenantProvider>
+                      </ProtectedRoute>
+                    }>
+                      <Route index element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <Index />
+                        </Suspense>
+                      } />
+                      <Route path="dashboard" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <Dashboard />
+                        </Suspense>
+                      } />
+                      
+                      {/* PATCH 68.2 - Module Routes from Registry */}
+                      {moduleRoutes.map((route) => (
+                        <Route
+                          key={route.id}
+                          path={route.path}
+                          element={
+                            <Suspense fallback={<OffshoreLoader />}>
+                              <route.component />
+                            </Suspense>
+                          }
+                        />
+                      ))}
+                      
+                      {/* Admin Routes */}
+                      <Route path="admin/*" element={
+                        <AdminRoute>
+                          <Suspense fallback={<OffshoreLoader />}>
+                            <Admin />
+                          </Suspense>
+                        </AdminRoute>
+                      } />
+                      
+                      {/* Settings */}
+                      <Route path="settings" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <Settings />
+                        </Suspense>
+                      } />
+                      
+                      {/* Profile */}
+                      <Route path="profile" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <UserProfilePage />
+                        </Suspense>
+                      } />
+                      
+                      {/* Health Check */}
+                      <Route path="health" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <HealthCheck />
+                        </Suspense>
+                      } />
+                      
+                      {/* Revolutionary AI Hub */}
+                      <Route path="revolutionary-ai/*" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <RevolutionaryAI />
+                        </Suspense>
+                      } />
+                      
+                      {/* AI Enhanced Modules */}
+                      <Route path="ai-modules" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <AIEnhancedModules />
+                        </Suspense>
+                      } />
+                      
+                      {/* Route Redirects - Legacy Routes */}
+                      <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
+                      <Route path="document-ai" element={<Navigate to="/documents" replace />} />
+                      <Route path="ai-assistant" element={<Navigate to="/assistant/voice" replace />} />
+                      <Route path="voice" element={<Navigate to="/assistant/voice" replace />} />
+                      <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
+                      <Route path="task-automation" element={<Navigate to="/automation" replace />} />
+                      <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
+                      <Route path="communication-center" element={<Navigate to="/communication" replace />} />
+                      <Route path="notification-center" element={<Navigate to="/notifications-center" replace />} />
+                      <Route path="documentos" element={<Navigate to="/documents" replace />} />
+                      <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
+                      <Route path="checklists-inteligentes" element={<Navigate to="/admin/checklists" replace />} />
+                      <Route path="finance-hub" element={<Navigate to="/finance" replace />} />
+                      <Route path="reports-module" element={<Navigate to="/reports" replace />} />
+                      <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
+                      <Route path="user-management" element={<Navigate to="/users" replace />} />
+                      <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
+                      <Route path="analytics-core" element={<Navigate to="/analytics" replace />} />
+                      <Route path="portal" element={<Navigate to="/nautilus-academy" replace />} />
+                      <Route path="portal-funcionario" element={<Navigate to="/nautilus-academy" replace />} />
+                      <Route path="training-academy" element={<Navigate to="/nautilus-academy" replace />} />
+                      <Route path="mobile-optimization" element={<Navigate to="/optimization" replace />} />
+                      <Route path="alertas-precos" element={<Navigate to="/price-alerts" replace />} />
+                      <Route path="help" element={<Navigate to="/notifications-center" replace />} />
+                      <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
+                      <Route path="crew-management" element={<Navigate to="/crew" replace />} />
+                      <Route path="vessels" element={<Navigate to="/fleet" replace />} />
+                      <Route path="schedule" element={<Navigate to="/calendar" replace />} />
+                      <Route path="schedules" element={<Navigate to="/calendar" replace />} />
+                      <Route path="missions/new" element={<Navigate to="/mission-logs" replace />} />
+                      <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
+                      <Route path="maintenance/planner" element={<Navigate to="/maintenance-planner" replace />} />
+                      
+                      {/* 404 Route */}
+                      <Route path="*" element={
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <NotFound />
+                        </Suspense>
+                      } />
+                    </Route>
+                  </Routes>
+                  
+                  <Toaster />
+                </RouterType>
+              </OrganizationProvider>
+            </TenantProvider>
+          </Suspense>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
