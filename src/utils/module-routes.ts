@@ -1,19 +1,11 @@
+// PATCH 850.2 - Module Routes Loader (Simplified)
 import React from "react";
 import { getRoutableModules } from "@/modules/registry";
-
-/**
- * PATCH 68.2/68.4/68.6 - Module Routes Loader
- *
- * Gera automaticamente as rotas a partir do MODULE_REGISTRY,
- * usando glob imports para compatibilidade com Vite.
- * 
- * PATCH 68.6: Fixed dynamic imports using Vite glob pattern
- */
 
 export type ModuleRoute = {
   id: string;
   path: string;
-  component: React.LazyExoticComponent<React.ComponentType<any>>;
+  component: React.LazyExoticComponent<React.ComponentType<unknown>>;
 };
 
 // Glob import all pages - Vite handles this correctly
@@ -24,8 +16,6 @@ const moduleComponents = import.meta.glob("../modules/**/*.tsx");
 const allModules = { ...pageModules, ...moduleComponents };
 
 function resolveModulePath(registryPath: string): string {
-  // Convert registry path to actual file path
-  // e.g., "pages/Maritime" -> "../pages/Maritime.tsx"
   const possiblePaths = [
     `../${registryPath}.tsx`,
     `../${registryPath}/index.tsx`,
@@ -40,13 +30,30 @@ function resolveModulePath(registryPath: string): string {
   return "";
 }
 
+// Fallback component for failed module loads
+const ModuleLoadError: React.FC<{ moduleId: string }> = ({ moduleId }) => {
+  return React.createElement(
+    'div',
+    { className: 'p-8 text-center' },
+    React.createElement('h2', { className: 'text-xl font-bold text-destructive mb-2' }, 'Erro ao carregar módulo'),
+    React.createElement('p', { className: 'text-muted-foreground' }, `Módulo: ${moduleId}`),
+    React.createElement(
+      'button',
+      { 
+        className: 'mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md',
+        onClick: () => window.location.reload()
+      },
+      'Recarregar'
+    )
+  );
+};
+
 export function getModuleRoutes(): ModuleRoute[] {
   const modules = getRoutableModules();
 
   return modules
-    // Apenas módulos com rota definida e marcados como ativos
-    .filter((m: any) => m.route && m.status === "active" && m.path)
-    .map((m: any) => {
+    .filter((m) => m.route && m.status === "active" && m.path)
+    .map((m) => {
       const resolvedPath = resolveModulePath(m.path);
       
       if (!resolvedPath || !allModules[resolvedPath]) {
@@ -54,16 +61,21 @@ export function getModuleRoutes(): ModuleRoute[] {
         return null;
       }
 
-      const Component = React.lazy(() =>
-        (allModules[resolvedPath]() as Promise<any>).then((mod): { default: React.ComponentType<any> } => {
+      const Component = React.lazy(async () => {
+        try {
+          const mod = await (allModules[resolvedPath]() as Promise<Record<string, unknown>>);
           const exported = mod.default ?? Object.values(mod)[0];
-          const Resolved = (exported ?? (() => null)) as React.ComponentType<any>;
-          return { default: Resolved };
-        }).catch((err) => {
+          if (typeof exported === 'function') {
+            return { default: exported as React.ComponentType<unknown> };
+          }
+          throw new Error('Invalid module export');
+        } catch (err) {
           console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
-          return { default: () => React.createElement('div', null, `Failed to load: ${m.id}`) };
-        })
-      );
+          return { 
+            default: () => React.createElement(ModuleLoadError, { moduleId: m.id })
+          };
+        }
+      });
 
       return {
         id: m.id,

@@ -661,6 +661,9 @@ const navigationItems = [
       { title: "IMCA Audit", url: "/imca-audit", icon: CheckCircle },
       { title: "Pre-OVID Inspection", url: "/pre-ovid-inspection", icon: Scan },
       { title: "MLC Inspection", url: "/mlc-inspection", icon: Shield },
+      { title: "Workflow Documentos ISM/MLC", url: "/document-workflow", icon: FileText },
+      { title: "Gerador Pacotes PSC", url: "/psc-package", icon: Shield },
+      { title: "Auditoria de IA", url: "/ai-audit", icon: Brain },
     ],
   },
   {

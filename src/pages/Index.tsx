@@ -117,11 +117,11 @@ const AIModulesPanel = memo(() => {
       color: "from-purple-500 to-indigo-600"
     },
     { 
-      name: "MMI Inteligente", 
+      name: "Maintenance Command", 
       description: "Manutenção com IA, Digital Twin",
-      route: "/intelligent-maintenance",
+      route: "/maintenance-command",
       icon: Wrench,
-      badge: "Digital Twin",
+      badge: "Unificado",
       color: "from-blue-500 to-cyan-500"
     },
     { 

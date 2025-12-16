@@ -46,6 +46,7 @@ export interface ModuleDefinition {
   icon?: string;
   permissions?: string[];
   version?: string;
+  redirectTo?: string; // For deprecated modules that redirect to a unified module
 }
 
 export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
@@ -94,60 +95,134 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "94.0",
   },
 
+  // PATCH UNIFY-9.0: Maritime Command Center (fusão de 4 módulos marítimos)
+  "operations.maritime-command": {
+    id: "operations.maritime-command",
+    name: "Maritime Command Center",
+    category: "operations",
+    path: "pages/MaritimeCommandCenter",
+    description: "PATCH UNIFY-9.0 - Centro Unificado de Operações Marítimas: Tripulação, Certificações, Checklists, IoT Sensors, Crew Intelligence AI. Fusão de: operations.crew, operations.maritime-system, operations.maritime-checklists, operations.maritime-certifications",
+    status: "active",
+    completeness: "100%",
+    route: "/maritime-command",
+    icon: "Ship",
+    lazy: true,
+    version: "900.0",
+  },
+
+  // DEPRECATED: Módulos fundidos no Maritime Command Center
   "operations.crew": {
     id: "operations.crew",
     name: "Crew Management",
     category: "operations",
     path: "pages/CrewManagement",
-    description: "Manage crew members and assignments - Active with Supabase integration and demo data",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/crew",
+    redirectTo: "/maritime-command",
     icon: "Users",
     lazy: true,
   },
-
-  "operations.fleet": {
-    id: "operations.fleet",
-    name: "Fleet Management",
-    category: "operations",
-    path: "modules/fleet",
-    description: "PATCH 191.0 - Unified fleet management with vessel tracking, maintenance scheduling, crew assignments, and route management. Integrated with Supabase tables: vessels, maintenance, routes, crew_assignments",
-    status: "active", // PATCH 191.0 – Consolidated from operations/fleet and operations/maritime-system
-    completeness: "100%",
-    route: "/fleet",
-    icon: "Ship",
-    lazy: true,
-    version: "191.0",
-  },
-
-  // REMOVED: operations.performance - Use operations.dashboard (PATCH 176.2)
-  // REMOVED: operations.crew-wellbeing - Integrated into operations.crew (PATCH 176.2)
 
   "operations.maritime-system": {
     id: "operations.maritime-system",
     name: "Maritime Operations",
     category: "operations",
-    path: "pages/Maritime",
-    description: "PATCH 191.0 - Maritime-specific operations: checklists, certifications, IoT sensors, predictive maintenance, and crew rotation. Built on top of unified fleet management (operations.fleet)",
-    status: "active", // PATCH 191.0 – Specialized maritime operations using fleet as base
+    path: "pages/MaritimeCommandCenter",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/maritime",
+    redirectTo: "/maritime-command",
     icon: "Anchor",
     lazy: true,
-    version: "191.0",
-    dependencies: ["operations.fleet"],
   },
 
+  "operations.maritime-checklists": {
+    id: "operations.maritime-checklists",
+    name: "Maritime Checklists",
+    category: "operations",
+    path: "pages/MaritimeChecklists",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/maritime-checklists",
+    redirectTo: "/maritime-command",
+    icon: "ClipboardList",
+    lazy: true,
+  },
+
+  "operations.maritime-certifications": {
+    id: "operations.maritime-certifications",
+    name: "Maritime Certifications",
+    category: "operations",
+    path: "pages/MaritimeCertifications",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/maritime-certifications",
+    redirectTo: "/maritime-command",
+    icon: "Award",
+    lazy: true,
+  },
+
+  // PATCH 192.0: Unified Fleet Command Center (fusão de 3 módulos: Fleet, Fleet Dashboard, Fleet Tracking)
+  "operations.fleet-command": {
+    id: "operations.fleet-command",
+    name: "Fleet Command Center",
+    category: "operations",
+    path: "pages/FleetCommandCenter",
+    description: "PATCH 192.0 - Centro unificado de operações de frota: gestão de embarcações, rastreamento em tempo real, métricas operacionais, manutenção e analytics. Fusão de: operations.fleet, operations.fleet-dashboard, operations.fleet-tracking",
+    status: "active",
+    completeness: "100%",
+    route: "/fleet-command",
+    icon: "Ship",
+    lazy: true,
+    version: "192.0",
+  },
+
+  // DEPRECATED: Módulos antigos redirecionam para fleet-command
+  "operations.fleet": {
+    id: "operations.fleet",
+    name: "Fleet Management",
+    category: "operations",
+    path: "pages/FleetCommandCenter",
+    description: "DEPRECATED - Use operations.fleet-command. Redirects to Fleet Command Center.",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/fleet",
+    icon: "Ship",
+    lazy: true,
+    version: "192.0",
+  },
+
+  // PATCH UNIFY-OPS: Operations Command Center (fusão de Business Insights + Operations Dashboard)
+  "operations.command": {
+    id: "operations.command",
+    name: "Operations Command Center",
+    category: "operations",
+    path: "pages/OperationsCommandCenter",
+    description: "PATCH UNIFY-OPS - Centro Unificado de Operações e Business Intelligence: Dashboard operacional, insights de negócio, tendências, previsões e análise IA. Fusão de: operations.dashboard, business-insights",
+    status: "active",
+    completeness: "100%",
+    route: "/operations-command",
+    icon: "Activity",
+    lazy: true,
+    version: "1600.0",
+  },
+
+  // DEPRECATED: Operations Dashboard - Merged into Operations Command Center
   "operations.dashboard": {
     id: "operations.dashboard",
     name: "Operations Dashboard",
     category: "operations",
     path: "modules/operations/operations-dashboard",
-    description: "Consolidated operations dashboard - Fleet, crew, performance, and operational metrics with real-time monitoring",
-    status: "active", // PATCH 96.0 – Verified: Has Supabase integration
+    description: "DEPRECATED: Redirecionado para Operations Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/operations-dashboard",
+    redirectTo: "/operations-command",
     icon: "Ship",
     lazy: true,
   },
@@ -168,15 +243,31 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-11.0: AI Command Center (fusão de 4 módulos de IA)
+  "intelligence.ai-command": {
+    id: "intelligence.ai-command",
+    name: "AI Command Center",
+    category: "intelligence",
+    path: "pages/AICommandCenter",
+    description: "PATCH UNIFY-11.0 - Centro Unificado de IA: IA Revolucionária, Dashboard IA, Insights IA, Automação IA. Comando Universal, Agente Autônomo, Simulador, Manutenção Preditiva, Workflows.",
+    status: "active",
+    completeness: "100%",
+    route: "/ai-command",
+    icon: "Brain",
+    lazy: true,
+    version: "1100.0",
+  },
+
   "intelligence.ai-insights": {
     id: "intelligence.ai-insights",
     name: "AI Insights Dashboard",
     category: "intelligence",
     path: "pages/AIInsights",
-    description: "AI-powered insights, analytics, logs, alerts, and failure analysis",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/ai-insights",
+    redirectTo: "/ai-command",
     icon: "Brain",
     lazy: true,
   },
@@ -268,11 +359,12 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "intelligence.automation",
     name: "Automation Hub",
     category: "intelligence",
-    path: "pages/AutomationHub",
-    description: "Intelligent automation workflows and process optimization",
-    status: "active",
+    path: "pages/Automation",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/automation",
+    redirectTo: "/ai-command",
     icon: "Zap",
     lazy: true,
   },
@@ -282,9 +374,23 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   // REMOVED: emergency.mission-logs - Use core.logs-center (PATCH 176.2)
   // REMOVED: emergency.risk-management - Use compliance-hub (PATCH 176.2)
   // REMOVED: logistics.hub - Merged into operations.fleet (PATCH 176.2)
-  // REMOVED: logistics.fuel-optimizer - Integrated into operations.fleet (PATCH 176.2)
   // REMOVED: logistics.satellite-tracker - Use operations.fleet tracking (PATCH 176.2)
   // REMOVED: planning.voyage - Merged into operations.fleet (PATCH 176.2)
+
+  // PATCH 838: Fuel Manager Module
+  "logistics.fuel-manager": {
+    id: "logistics.fuel-manager",
+    name: "Fuel Manager",
+    category: "logistics",
+    path: "pages/FuelManagerPage",
+    description: "Gestão inteligente de combustível com análise preditiva IA - Registro de consumo, cálculo de média, previsão de reabastecimento",
+    status: "active",
+    completeness: "100%",
+    route: "/fuel-manager",
+    icon: "Fuel",
+    lazy: true,
+    version: "838.0",
+  },
 
   // REMOVED: hr.training - Merged into nautilus-academy (PATCH UNIFY-ACADEMY)
 
@@ -318,15 +424,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
   // REMOVED: hr.employee-portal - Integrated into operations.crew (PATCH 176.2)
 
+  // PATCH UNIFY-3.0: Unified Maintenance Command Center
+  "maintenance.command": {
+    id: "maintenance.command",
+    name: "Maintenance Command Center",
+    category: "maintenance",
+    path: "pages/MaintenanceCommandCenter",
+    description: "Centro de Comando Unificado de Manutenção Naval - Fusão de 8 módulos: Manutenção Inteligente, MMI, Tarefas, Forecast IA, Histórico, Painel de Jobs, Dashboard BI, e Maintenance Planner",
+    status: "active",
+    completeness: "100%",
+    route: "/maintenance-command",
+    icon: "Wrench",
+    lazy: true,
+    version: "600.0",
+  },
+
+  // DEPRECATED: Módulos fundidos no Maintenance Command Center
   "maintenance.intelligent": {
     id: "maintenance.intelligent",
     name: "Manutenção Inteligente",
     category: "maintenance",
     path: "modules/intelligent-maintenance",
-    description: "Sistema Premium de Gestão de Manutenção Naval com IA - Inclui Saúde da Frota, Copilot IA, Forecast GPT-4, Central de Jobs, Ordens de Serviço, Digital Twin 3D e Dashboard BI",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/intelligent-maintenance",
+    redirectTo: "/maintenance-command",
     icon: "Wrench",
     lazy: true,
     version: "501.0",
@@ -337,12 +460,28 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Maintenance Planner",
     category: "maintenance",
     path: "modules/maintenance-planner",
-    description: "Plan and track maintenance",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/maintenance-planner",
+    redirectTo: "/maintenance-command",
     icon: "Wrench",
     lazy: true,
+  },
+
+  // PATCH UNIFY-8.0: Unified Mission Command Center
+  "operations.mission-command": {
+    id: "operations.mission-command",
+    name: "Mission Command Center",
+    category: "operations",
+    path: "pages/MissionCommandCenter",
+    description: "Centro de Comando Unificado de Missão - Fusão de Mission Logs e Mission Control com AI Commander, KPIs, e execução em tempo real",
+    status: "active",
+    completeness: "100%",
+    route: "/mission-command",
+    icon: "Radio",
+    lazy: true,
+    version: "800.0",
   },
 
   "operations.mission-logs": {
@@ -350,10 +489,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Mission Logs",
     category: "operations",
     path: "pages/MissionLogsPage",
-    description: "Track and manage mission operations logs",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Mission Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mission-logs",
+    redirectTo: "/mission-command",
     icon: "FileText",
     lazy: true,
   },
@@ -363,10 +503,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "MMI - Manutenção Industrial",
     category: "maintenance",
     path: "pages/MMI",
-    description: "Sistema completo de gestão de manutenção com IA para forecasts e ordens de serviço",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mmi",
+    redirectTo: "/maintenance-command",
     icon: "Wrench",
     lazy: true,
   },
@@ -376,10 +517,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "MMI - Tarefas",
     category: "maintenance",
     path: "pages/MMITasks",
-    description: "Tarefas de manutenção geradas pelos forecasts de IA",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mmi-tasks",
+    redirectTo: "/maintenance-command",
     icon: "ClipboardList",
     lazy: true,
   },
@@ -389,10 +531,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "MMI - Forecast",
     category: "maintenance",
     path: "pages/MMIForecastPage",
-    description: "Gerador de forecasts de manutenção com IA",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mmi-forecast",
+    redirectTo: "/maintenance-command",
     icon: "Sparkles",
     lazy: true,
   },
@@ -402,10 +545,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "MMI - Histórico",
     category: "maintenance",
     path: "pages/MMIHistory",
-    description: "Histórico de manutenções realizadas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mmi-history",
+    redirectTo: "/maintenance-command",
     icon: "History",
     lazy: true,
   },
@@ -415,10 +559,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "MMI - Painel de Jobs",
     category: "maintenance",
     path: "pages/MMIJobsPanel",
-    description: "Painel de visualização e exportação de forecasts",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mmi-jobs-panel",
+    redirectTo: "/maintenance-command",
     icon: "BarChart3",
     lazy: true,
   },
@@ -428,23 +573,41 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "MMI - Dashboard BI",
     category: "maintenance",
     path: "pages/MMIDashboard",
-    description: "Dashboard de Business Intelligence para manutenção",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maintenance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mmi-dashboard",
+    redirectTo: "/maintenance-command",
     icon: "LayoutDashboard",
     lazy: true,
   },
 
+  // PATCH UNIFY-14.0: Communication Command Center (fusão de Communication + Channel Manager + Notifications)
+  "connectivity.communication-command": {
+    id: "connectivity.communication-command",
+    name: "Communication Command Center",
+    category: "connectivity",
+    path: "pages/CommunicationCommandCenter",
+    description: "PATCH UNIFY-14.0 - Centro Unificado de Comunicação: Mensagens, Gerenciador de Canais, Centro de Notificações. Fusão de: communication, channel-manager, notifications",
+    status: "active",
+    completeness: "100%",
+    route: "/communication-command",
+    icon: "Radio",
+    lazy: true,
+    version: "1400.0",
+  },
+
+  // DEPRECATED: Channel Manager - Merged into Communication Command Center
   "connectivity.channel-manager": {
     id: "connectivity.channel-manager",
     name: "Channel Manager",
     category: "connectivity",
     path: "pages/ChannelManager",
-    description: "Manage communication channels and connectivity status",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Communication Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/channel-manager",
+    redirectTo: "/communication-command",
     icon: "Radio",
     lazy: true,
   },
@@ -462,15 +625,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Notifications Center - Merged into Communication Command Center
   "connectivity.notifications": {
     id: "connectivity.notifications",
     name: "Notifications Center",
     category: "connectivity",
     path: "pages/NotificationsCenter",
-    description: "Centralized notification management and alerts",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Communication Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/notifications-center",
+    redirectTo: "/communication-command",
     icon: "Bell",
     lazy: true,
   },
@@ -529,15 +694,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-FINANCE: Finance Command Center (fusão de Finance Hub + Route Cost Analysis)
+  "finance.command": {
+    id: "finance.command",
+    name: "Finance Command Center",
+    category: "finance",
+    path: "pages/FinanceCommandCenter",
+    description: "PATCH UNIFY-FINANCE - Centro Unificado Financeiro: Finanças, Orçamentos, Transações, Aprovações, Análise de Custos por Rota com IA. Fusão de: finance.hub, route-cost-analysis",
+    status: "active",
+    completeness: "100%",
+    route: "/finance-command",
+    icon: "DollarSign",
+    lazy: true,
+    version: "1500.0",
+  },
+
+  // DEPRECATED: Finance Hub - Merged into Finance Command Center
   "finance.hub": {
     id: "finance.hub",
     name: "Finance Hub",
     category: "finance",
     path: "pages/FinanceHub",
-    description: "Financial management hub with budgets, expenses and approvals",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Finance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/finance",
+    redirectTo: "/finance-command",
     icon: "DollarSign",
     lazy: true,
   },
@@ -555,15 +737,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Incident Reports - Merged into Reports Command Center
   "documents.incident-reports": {
     id: "documents.incident-reports",
     name: "Incident Reports",
     category: "documents",
     path: "pages/DPIncidents",
-    description: "DP Incident reporting and intelligence system",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Reports Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/incident-reports",
+    redirectTo: "/reports-command",
     icon: "AlertOctagon",
     lazy: true,
   },
@@ -611,30 +795,64 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-ALERTS: Alerts Command Center (fusão de price-alerts + intelligent-alerts)
+  "features.alerts-command": {
+    id: "features.alerts-command",
+    name: "Alerts Command Center",
+    category: "features",
+    path: "pages/AlertsCommandCenter",
+    description: "PATCH UNIFY-ALERTS - Centro Unificado de Alertas: Price Alerts + Intelligent Alerts. Monitoramento de preços, alertas inteligentes com IA e insights preditivos.",
+    status: "active",
+    completeness: "100%",
+    route: "/alerts-command",
+    icon: "Bell",
+    lazy: true,
+    version: "1000.0",
+  },
+
+  // DEPRECATED: Módulos fundidos no Alerts Command Center
   "features.price-alerts": {
     id: "features.price-alerts",
     name: "Price Alerts",
     category: "features",
     path: "pages/PriceAlerts",
-    description: "Price monitoring and alerts with AI predictions",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Alerts Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/price-alerts",
+    redirectTo: "/alerts-command",
     icon: "Bell",
     lazy: true,
   },
 
   // REMOVED: features.checklists - Use compliance-hub (PATCH 176.2)
 
+  // Travel Command Center - UNIFIED (PATCH UNIFY-TRAVEL)
+  "logistics.travel-command": {
+    id: "logistics.travel-command",
+    name: "Travel Command Center",
+    category: "logistics",
+    path: "pages/TravelCommandCenter",
+    description: "Central unificada de viagens: mobilidade, reservas, voos, hotéis e transfers com IA",
+    status: "active",
+    completeness: "100%",
+    route: "/travel-command",
+    icon: "Plane",
+    lazy: true,
+    version: "2.0.0",
+  },
+
+  // DEPRECATED: Reservations - Fusão no Travel Command Center
   "features.reservations": {
     id: "features.reservations",
     name: "Reservations",
     category: "features",
     path: "pages/Reservations",
-    description: "Reservation management with calendar and status tracking",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Travel Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/reservations",
+    redirectTo: "/travel-command",
     icon: "Calendar",
     lazy: true,
   },
@@ -667,15 +885,31 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-10.0: Weather Command Center (fusão de 2 módulos meteorológicos)
+  "features.weather-command": {
+    id: "features.weather-command",
+    name: "Weather Command Center",
+    category: "features",
+    path: "pages/WeatherCommandCenter",
+    description: "PATCH UNIFY-10.0 - Centro Unificado de Meteorologia: Dashboard, Previsão Global, Alertas Marítimos, Copiloto IA. Fusão de: features.weather, operations.forecast-global",
+    status: "active",
+    completeness: "100%",
+    route: "/weather-command",
+    icon: "Globe",
+    lazy: true,
+    version: "1000.0",
+  },
+
   "features.weather": {
     id: "features.weather",
     name: "Weather Dashboard",
     category: "features",
     path: "pages/WeatherDashboard",
-    description: "Weather monitoring, forecasting, climate and environmental risk analysis",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Weather Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/weather-dashboard",
+    redirectTo: "/weather-command",
     icon: "Cloud",
     lazy: true,
   },
@@ -706,15 +940,31 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-12.0: Voyage Command Center (fusão de módulos de viagem)
+  "planning.voyage-command": {
+    id: "planning.voyage-command",
+    name: "Voyage Command Center",
+    category: "planning",
+    path: "pages/VoyageCommandCenter",
+    description: "PATCH UNIFY-12.0 - Centro Unificado de Viagens: Planejamento IA, Copiloto, Meteorologia, Analytics, Rotas. Fusão de: voyage-planner, planning/voyage-planner",
+    status: "active",
+    completeness: "100%",
+    route: "/voyage-command",
+    icon: "Compass",
+    lazy: true,
+    version: "1200.0",
+  },
+
   "planning.voyage": {
     id: "planning.voyage",
     name: "Voyage Planner",
     category: "planning",
     path: "modules/planning/voyage-planner",
-    description: "Plan and optimize voyage routes",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Voyage Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/voyage-planner",
+    redirectTo: "/voyage-command",
     icon: "Navigation",
     lazy: true,
   },
@@ -750,15 +1000,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH FINAL: Module deprecated - redirects to /optimization
   "features.mobile-optimization": {
     id: "features.mobile-optimization",
     name: "Mobile Optimization",
     category: "features",
-    path: "pages/MobileOptimization",
-    description: "Mobile performance optimization center",
-    status: "active",
+    path: "pages/Optimization",
+    description: "DEPRECATED: Redirecionado para Optimization Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mobile-optimization",
+    redirectTo: "/optimization",
     icon: "Smartphone",
     lazy: true,
   },
@@ -842,15 +1094,31 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-12.0: Workflow Command Center (fusão de 4 módulos de workflow)
+  "intelligence.workflow-command": {
+    id: "intelligence.workflow-command",
+    name: "Workflow Command Center",
+    category: "intelligence",
+    path: "pages/WorkflowCommandCenter",
+    description: "PATCH UNIFY-12.0 - Centro Unificado de Workflows: Workflow Visual IA, Sugestões Workflow, Workflow, Smart Workflow. Builder visual, automações, sugestões de IA, templates e analytics.",
+    status: "active",
+    completeness: "100%",
+    route: "/workflow-command",
+    icon: "Workflow",
+    lazy: true,
+    version: "1200.0",
+  },
+
   "intelligence.smart-workflow": {
     id: "intelligence.smart-workflow",
     name: "Smart Workflow",
     category: "intelligence",
     path: "pages/Workflow",
-    description: "Intelligent workflow automation",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Workflow Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/workflow",
+    redirectTo: "/workflow-command",
     icon: "GitBranch",
     lazy: true,
   },
@@ -860,10 +1128,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Mission Control Center",
     category: "operations",
     path: "modules/mission-control",
-    description: "PATCH 177.0 - Unified tactical operations hub consolidating Fleet, Emergency, Satellite, and Weather monitoring with AI Commander",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Mission Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/mission-control",
+    redirectTo: "/mission-command",
     icon: "Radio",
     lazy: true,
     version: "177.0",
@@ -1080,46 +1349,79 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "651.0",
   },
 
-  // Communications
+  // DEPRECATED: Communication Hub - Merged into Communication Command Center
   "communication": {
     id: "communication",
     name: "Communication Hub",
     category: "operations",
     path: "pages/Communication",
-    description: "Central de comunicação e mensagens",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Communication Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/communication",
+    redirectTo: "/communication-command",
     icon: "MessageSquare",
     lazy: true,
     version: "651.0",
   },
 
-  // Analytics
+  // PATCH UNIFY-ANALYTICS: Analytics Command Center (fusão de Analytics Core + Advanced Analytics + Predictive Analytics)
+  "intelligence.analytics-command": {
+    id: "intelligence.analytics-command",
+    name: "Analytics Command Center",
+    category: "intelligence",
+    path: "pages/AnalyticsCommandCenter",
+    description: "PATCH UNIFY-ANALYTICS - Centro Unificado de Analytics: Core Analytics, Advanced Fleet Analytics, Predictive Analytics, AI Insights. Fusão de: analytics, advanced-analytics, predictive-analytics",
+    status: "active",
+    completeness: "100%",
+    route: "/analytics-command",
+    icon: "BarChart3",
+    lazy: true,
+    version: "1100.0",
+  },
+
+  // DEPRECATED: Analytics Core fundido no Analytics Command Center
   "analytics": {
     id: "analytics",
     name: "Analytics Dashboard",
     category: "features",
     path: "pages/Analytics",
-    description: "Dashboard de análise de dados e métricas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Analytics Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/analytics",
+    redirectTo: "/analytics-command",
     icon: "BarChart3",
     lazy: true,
     version: "651.0",
   },
 
-  // Reports
+  // PATCH UNIFY-13.0: Reports Command Center (fusão de Reports + Incident Reports)
+  "documents.reports-command": {
+    id: "documents.reports-command",
+    name: "Reports Command Center",
+    category: "documents",
+    path: "pages/ReportsCommandCenter",
+    description: "PATCH UNIFY-13.0 - Centro Unificado de Relatórios: Gerador IA, Dashboard, Incidentes DP, Analytics. Fusão de: reports, documents.incident-reports",
+    status: "active",
+    completeness: "100%",
+    route: "/reports-command",
+    icon: "FileText",
+    lazy: true,
+    version: "1300.0",
+  },
+
+  // DEPRECATED: Reports - Merged into Reports Command Center
   "reports": {
     id: "reports",
     name: "Reports Center",
     category: "operations",
     path: "pages/Reports",
-    description: "Central de geração e gestão de relatórios",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Reports Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/reports",
+    redirectTo: "/reports-command",
     icon: "FileText",
     lazy: true,
     version: "651.0",
@@ -1350,19 +1652,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // Smart Mobility Module
+  // DEPRECATED: Smart Mobility - Fusão no Travel Command Center
   "logistics.smart-mobility": {
     id: "logistics.smart-mobility",
     name: "Smart Mobility",
     category: "logistics",
     path: "modules/smart-mobility/index",
-    description: "Gestão inteligente de viagens, hospedagens e logística de tripulação com IA",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Travel Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/smart-mobility",
+    redirectTo: "/travel-command",
     icon: "Plane",
     lazy: true,
-    version: "1.0.0",
   },
 
   // Autonomous Procurement Module
@@ -1413,64 +1715,79 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   // DEPRECATED: compliance.solas-training - Replaced by training.solas-isps-training
   // See training.solas-isps-training for the unified module
 
-  // Procurement & Inventory AI-Driven Module
+  // Procurement Command Center - UNIFIED (PATCH UNIFY-PROCUREMENT)
+  "logistics.procurement-command": {
+    id: "logistics.procurement-command",
+    name: "Procurement Command Center",
+    category: "logistics",
+    path: "pages/ProcurementCommandCenter",
+    description: "Central unificada de procurement: compras com IA, inventário, fornecedores, RFQs e automação",
+    status: "active",
+    completeness: "100%",
+    route: "/procurement-command",
+    icon: "ShoppingCart",
+    lazy: true,
+    version: "2.0.0",
+  },
+
+  // DEPRECATED: Procurement & Inventory AI - Fusão no Procurement Command Center
   "logistics.procurement-inventory": {
     id: "logistics.procurement-inventory",
     name: "Procurement & Inventory AI",
     category: "logistics",
-    path: "modules/procurement-inventory/index",
-    description: "Módulo completo de compras e controle de estoque com IA integrada: requisições, POs, fornecedores, previsão de demanda e chatbot inteligente",
-    status: "active",
+    path: "pages/ProcurementInventory",
+    description: "DEPRECATED: Redirecionado para Procurement Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/procurement-inventory",
+    redirectTo: "/procurement-command",
     icon: "ShoppingCart",
     lazy: true,
-    version: "1.0.0",
   },
 
-  // AI Dashboard Module - PATCH 653
+  // DEPRECATED: AI Dashboard - Fusão no AI Command Center (PATCH UNIFY-11.0)
   "intelligence.ai-dashboard": {
     id: "intelligence.ai-dashboard",
     name: "Dashboard IA",
     category: "intelligence",
     path: "pages/ai/AIDashboard",
-    description: "Central de monitoramento de IA com métricas de adoção, sugestões de workflow e alertas do sistema",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/ai-dashboard",
+    redirectTo: "/ai-command",
     icon: "Brain",
     lazy: true,
-    version: "653.0",
   },
 
-  // AI Workflow Suggestions Module - PATCH 653
+  // DEPRECATED: Workflow Suggestions - Fusão no Workflow Command Center (PATCH UNIFY-12.0)
   "intelligence.workflow-suggestions": {
     id: "intelligence.workflow-suggestions",
     name: "Sugestões IA Workflow",
     category: "intelligence",
     path: "pages/ai/WorkflowSuggestions",
-    description: "Sugestões inteligentes geradas por IA para otimização de workflows",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Workflow Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/workflow-suggestions",
+    redirectTo: "/workflow-command",
     icon: "Lightbulb",
     lazy: true,
-    version: "653.0",
   },
 
-  // AI Adoption Metrics Module - PATCH 653
+  // DEPRECATED: AI Adoption - Fusão no AI Command Center (PATCH UNIFY-11.1)
   "intelligence.ai-adoption": {
     id: "intelligence.ai-adoption",
     name: "Métricas de Adoção IA",
     category: "intelligence",
     path: "pages/ai/AIAdoption",
-    description: "Scorecard e métricas de adoção do sistema de IA por módulo",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/ai-adoption",
+    redirectTo: "/ai-command",
     icon: "TrendingUp",
     lazy: true,
-    version: "653.0",
   },
 
   // PATCH 980: System Diagnostic and Delivery Tools
@@ -1516,19 +1833,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "980.0",
   },
 
-  // PATCH 981: Maritime System Missing Routes
+  // PATCH 192.0: Deprecated - Merged into Fleet Command Center
   "operations.fleet-dashboard": {
     id: "operations.fleet-dashboard",
     name: "Fleet Dashboard",
     category: "operations",
     path: "pages/FleetDashboard",
-    description: "Professional fleet dashboard with vessel monitoring and operational metrics",
-    status: "active",
+    description: "DEPRECATED - Use operations.fleet-command. Redirects to Fleet Command Center.",
+    status: "deprecated",
     completeness: "100%",
     route: "/fleet-dashboard",
     icon: "Ship",
     lazy: true,
-    version: "981.0",
+    version: "192.0",
   },
 
   "operations.fleet-tracking": {
@@ -1536,38 +1853,26 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Fleet Tracking",
     category: "operations",
     path: "pages/FleetTracking",
-    description: "Real-time vessel tracking and monitoring",
-    status: "active",
+    description: "DEPRECATED - Use operations.fleet-command. Redirects to Fleet Command Center.",
+    status: "deprecated",
     completeness: "100%",
     route: "/fleet-tracking",
     icon: "MapPin",
     lazy: true,
-    version: "981.0",
+    version: "192.0",
   },
 
-  "operations.maritime-certifications": {
-    id: "operations.maritime-certifications",
-    name: "Maritime Certifications",
-    category: "operations",
-    path: "pages/MaritimeCertifications",
-    description: "Maritime certification management and compliance tracking",
-    status: "active",
-    completeness: "100%",
-    route: "/maritime-certifications",
-    icon: "Shield",
-    lazy: true,
-    version: "981.0",
-  },
-
+  // DEPRECATED: Intelligent Alerts fundido no Alerts Command Center
   "intelligence.intelligent-alerts": {
     id: "intelligence.intelligent-alerts",
     name: "Intelligent Alerts",
     category: "intelligence",
     path: "pages/IntelligentAlerts",
-    description: "AI-powered intelligent alert system with real-time monitoring",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Alerts Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/intelligent-alerts",
+    redirectTo: "/alerts-command",
     icon: "Zap",
     lazy: true,
     version: "981.0",
@@ -1600,15 +1905,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Predictive Analytics fundido no Analytics Command Center
   "intelligence.predictive-analytics": {
     id: "intelligence.predictive-analytics",
     name: "Predictive Analytics",
     category: "intelligence",
     path: "pages/PredictiveAnalytics",
-    description: "Análise preditiva avançada com machine learning",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Analytics Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/predictive-analytics",
+    redirectTo: "/analytics-command",
     icon: "Brain",
     lazy: true,
   },
@@ -1769,15 +2076,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Advanced Analytics fundido no Analytics Command Center
   "intelligence.advanced-analytics": {
     id: "intelligence.advanced-analytics",
     name: "Analytics Avançado",
     category: "intelligence",
     path: "pages/AdvancedAnalytics",
-    description: "Dashboards interativos e análises avançadas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Analytics Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/advanced-analytics",
+    redirectTo: "/analytics-command",
     icon: "BarChart3",
     lazy: true,
   },
@@ -1862,19 +2171,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // PATCH: New AI & Innovation Modules
+  // DEPRECATED: Workflow Visual - Fusão no Workflow Command Center (PATCH UNIFY-12.0)
   "intelligence.workflow-visual": {
     id: "intelligence.workflow-visual",
     name: "Workflow Visual IA",
     category: "intelligence",
     path: "modules/workflow-visual",
-    description: "Workflow visual dinâmico com IA integrada - React Flow com sugestões em tempo real, execução de ações automáticas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Workflow Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/workflow-visual",
+    redirectTo: "/workflow-command",
     icon: "GitBranch",
     lazy: true,
-    version: "1.0.0",
   },
 
   "operations.operational-calendar": {
@@ -1911,10 +2220,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Planejamento de Viagens IA",
     category: "operations",
     path: "modules/voyage-planner",
-    description: "Planejamento de viagens marítimas assistido por IA - Otimização de rotas, carga, tripulação e combustível",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Voyage Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/voyage-planner",
+    redirectTo: "/voyage-command",
     icon: "Map",
     lazy: true,
     version: "1.0.0",
@@ -2024,32 +2334,18 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "177.0",
   },
 
-  "operations.maritime-checklists": {
-    id: "operations.maritime-checklists",
-    name: "Maritime Checklists",
-    category: "operations",
-    path: "pages/MaritimeChecklists",
-    description: "Comprehensive maritime checklists for vessel operations and safety",
-    status: "active",
-    completeness: "100%",
-    route: "/maritime-checklists",
-    icon: "CheckSquare",
-    lazy: true,
-    version: "177.0",
-  },
-
   "operations.forecast-global": {
     id: "operations.forecast-global",
     name: "Global Forecast",
     category: "operations",
-    path: "pages/ForecastGlobal",
-    description: "Global forecasting dashboard with weather and operational predictions",
-    status: "active",
+    path: "modules/control/forecast-global/ForecastConsole",
+    description: "DEPRECATED: Redirecionado para Weather Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/forecast-global",
+    redirectTo: "/weather-command",
     icon: "Globe",
     lazy: true,
-    version: "177.0",
   },
 
   "features.bridge-link": {
@@ -2093,6 +2389,169 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Rocket",
     lazy: true,
     version: "177.0",
+  },
+
+  // PATCH 850 - Document Workflow, PSC Package Generator, AI Audit
+  "compliance.document-workflow": {
+    id: "compliance.document-workflow",
+    name: "Workflow de Documentos",
+    category: "compliance",
+    path: "pages/DocumentWorkflow",
+    description: "Controle de versão, aprovação e distribuição de documentos ISM/MLC",
+    status: "active",
+    completeness: "100%",
+    route: "/document-workflow",
+    icon: "FileText",
+    lazy: true,
+    version: "850.0",
+  },
+
+  "compliance.psc-package": {
+    id: "compliance.psc-package",
+    name: "Gerador de Pacotes PSC",
+    category: "compliance",
+    path: "pages/PSCPackage",
+    description: "Documentação e rastreamento de deficiências para inspeção Port State Control",
+    status: "active",
+    completeness: "100%",
+    route: "/psc-package",
+    icon: "Shield",
+    lazy: true,
+    version: "850.0",
+  },
+
+  "intelligence.ai-audit": {
+    id: "intelligence.ai-audit",
+    name: "Auditoria de IA",
+    category: "intelligence",
+    path: "pages/AIAudit",
+    description: "Logging completo de interações com IA para conformidade regulamentar",
+    status: "active",
+    completeness: "100%",
+    route: "/ai-audit",
+    icon: "Brain",
+    lazy: true,
+    version: "850.0",
+  },
+
+  // PHASE 1 - Sistema de Recomendações Preditivas
+  "intelligence.predictive-ai": {
+    id: "intelligence.predictive-ai",
+    name: "IA Preditiva",
+    category: "intelligence",
+    path: "pages/PredictiveAI",
+    description: "Sistema de recomendações preditivas baseado em IA - manutenção, treinamento, compliance e otimização operacional",
+    status: "active",
+    completeness: "100%",
+    route: "/predictive-ai",
+    icon: "Brain",
+    lazy: true,
+    version: "851.0",
+  },
+
+  // PHASE 2 - API Pública para Integrações
+  "core.public-api": {
+    id: "core.public-api",
+    name: "API Pública",
+    category: "core",
+    path: "pages/PublicAPI",
+    description: "Gerenciamento de API Keys e documentação para integrações externas - OAuth 2.0, rate limiting, Swagger",
+    status: "active",
+    completeness: "100%",
+    route: "/public-api",
+    icon: "Globe",
+    lazy: true,
+    version: "852.0",
+  },
+
+  // PHASE 3 - BI com Dashboards + IA
+  "intelligence.bi-dashboard": {
+    id: "intelligence.bi-dashboard",
+    name: "BI Dashboard",
+    category: "intelligence",
+    path: "pages/BIDashboard",
+    description: "Business Intelligence com dashboards customizáveis e consultas assistidas por IA",
+    status: "active",
+    completeness: "100%",
+    route: "/bi-dashboard",
+    icon: "BarChart3",
+    lazy: true,
+    version: "853.0",
+  },
+
+  // PHASE 4 - Assistente de Diagnóstico
+  "maintenance.diagnostic-assistant": {
+    id: "maintenance.diagnostic-assistant",
+    name: "Assistente de Diagnóstico",
+    category: "maintenance",
+    path: "pages/DiagnosticAssistantPage",
+    description: "IA para diagnóstico técnico de falhas com acesso a manuais e histórico",
+    status: "active",
+    completeness: "100%",
+    route: "/diagnostic-assistant",
+    icon: "Wrench",
+    lazy: true,
+    version: "854.0",
+  },
+
+  // PHASE 5 - Simulador de Viagem
+  "operations.voyage-simulator": {
+    id: "operations.voyage-simulator",
+    name: "Simulador de Viagem",
+    category: "operations",
+    path: "pages/VoyageSimulatorPage",
+    description: "Simulação de rotas com clima, consumo e otimização por IA",
+    status: "active",
+    completeness: "100%",
+    route: "/voyage-simulator",
+    icon: "Navigation",
+    lazy: true,
+    version: "855.0",
+  },
+
+  // PHASE 6 - Conformidade Automatizada
+  "compliance.automation": {
+    id: "compliance.automation",
+    name: "Conformidade Automatizada",
+    category: "compliance",
+    path: "pages/ComplianceAutomationPage",
+    description: "Gestão automatizada de ISM, MLC, MARPOL e SOLAS",
+    status: "active",
+    completeness: "100%",
+    route: "/compliance-automation",
+    icon: "Shield",
+    lazy: true,
+    version: "856.0",
+  },
+
+  // PHASE 7 - Sistema de Plugins
+  "core.plugin-manager": {
+    id: "core.plugin-manager",
+    name: "Gerenciador de Plugins",
+    category: "core",
+    path: "pages/PluginManagerPage",
+    description: "Sistema modular de plugins e extensões customizáveis",
+    status: "active",
+    completeness: "100%",
+    route: "/plugins",
+    icon: "Puzzle",
+    lazy: true,
+    version: "857.0",
+  },
+
+  // PHASE 8 - Reconhecimento de Imagem
+  "inspection.image-recognition": {
+    id: "inspection.image-recognition",
+    name: "Reconhecimento de Imagem",
+    category: "operations",
+    path: "pages/ImageRecognitionPage",
+    description: "IA para análise de fotos de inspeção - corrosão, danos e EPIs",
+    status: "active",
+    completeness: "100%",
+    route: "/image-recognition",
+    icon: "Camera",
+    lazy: true,
+    version: "858.0",
   },
 };
 

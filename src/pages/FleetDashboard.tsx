@@ -1,6 +1,6 @@
-import React from "react";
-import { ProfessionalFleetDashboard } from "@/components/dashboard/professional-fleet-dashboard";
+import { Navigate } from "react-router-dom";
 
+// Redirect to unified Fleet Command Center
 export default function FleetDashboard() {
-  return <ProfessionalFleetDashboard />;
+  return <Navigate to="/fleet-command" replace />;
 }

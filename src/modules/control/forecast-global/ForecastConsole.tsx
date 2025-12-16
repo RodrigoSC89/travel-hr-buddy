@@ -1,10 +1,9 @@
-import React from "react";
+/**
+ * DEPRECATED: Redirecionado para Weather Command Center
+ * PATCH UNIFY-10.0
+ */
+import { Navigate } from "react-router-dom";
 
 export default function ForecastConsole() {
-  return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">Forecast Global Console</h1>
-      <p className="text-muted-foreground">Console de Previsões Globais</p>
-    </div>
-  );
+  return <Navigate to="/weather-command" replace />;
 }

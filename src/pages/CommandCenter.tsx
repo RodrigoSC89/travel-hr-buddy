@@ -390,7 +390,7 @@ export default function CommandCenter() {
               </Button>
               
               <Button 
-                onClick={() => openBrain("Command Center")}
+                onClick={() => openBrain("Command Center - Dashboard Executivo e Operacional")}
                 className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
               >
                 <Brain className="h-4 w-4 mr-2" />
