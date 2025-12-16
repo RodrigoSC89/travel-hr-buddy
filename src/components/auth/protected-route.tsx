@@ -9,7 +9,7 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";
-import { OffshoreLoader } from "@/components/ux/LoadingStates";
+import { OffshoreLoader } from "@/components/LoadingStates";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

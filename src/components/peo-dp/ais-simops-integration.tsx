@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -171,20 +170,20 @@ export const AISSimopsIntegration: React.FC = () => {
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-    case "critical": return <Badge variant="destructive">Crítico</Badge>;
-    case "high": return <Badge className="bg-orange-500">Alto</Badge>;
-    case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
-    case "low": return <Badge className="bg-green-500">Baixo</Badge>;
-    default: return <Badge variant="secondary">Nenhum</Badge>;
+      case "critical": return <Badge variant="destructive">Crítico</Badge>;
+      case "high": return <Badge className="bg-orange-500">Alto</Badge>;
+      case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      case "low": return <Badge className="bg-green-500">Baixo</Badge>;
+      default: return <Badge variant="secondary">Nenhum</Badge>;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "underway": return <Navigation className="h-4 w-4 text-green-500" />;
-    case "anchored": return <Anchor className="h-4 w-4 text-yellow-500" />;
-    case "moored": return <CircleDot className="h-4 w-4 text-blue-500" />;
-    default: return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "underway": return <Navigation className="h-4 w-4 text-green-500" />;
+      case "anchored": return <Anchor className="h-4 w-4 text-yellow-500" />;
+      case "moored": return <CircleDot className="h-4 w-4 text-blue-500" />;
+      default: return <AlertTriangle className="h-4 w-4 text-red-500" />;
     }
   };
 
@@ -209,7 +208,7 @@ export const AISSimopsIntegration: React.FC = () => {
             <span className="text-sm text-muted-foreground">AIS Feed</span>
             <Switch checked={isAISEnabled} onCheckedChange={setIsAISEnabled} />
           </div>
-          <Button variant="outline" onClick={() => toast.info("Atualizando dados AIS..."}>
+          <Button variant="outline" onClick={() => toast.info("Atualizando dados AIS...")}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>
@@ -231,7 +230,7 @@ export const AISSimopsIntegration: React.FC = () => {
                         <p className="text-sm font-medium">{alert.vesselName}</p>
                         <p className="text-xs text-muted-foreground">{alert.message}</p>
                       </div>
-                      <Button size="sm" variant="outline" onClick={() => handlehandleAcknowledgeAlert}>
+                      <Button size="sm" variant="outline" onClick={() => handleAcknowledgeAlert(alert.id)}>
                         Reconhecer
                       </Button>
                     </div>
@@ -354,7 +353,7 @@ export const AISSimopsIntegration: React.FC = () => {
                       left: `calc(50% + ${x}px)`,
                       transform: "translate(-50%, -50%)"
                     }}
-                    onClick={handleSetSelectedVessel}
+                    onClick={() => setSelectedVessel(vessel)}
                   >
                     {getStatusIcon(vessel.status)}
                     {/* Course indicator */}
@@ -409,7 +408,7 @@ export const AISSimopsIntegration: React.FC = () => {
                 </div>
                 <Slider
                   value={[guardZone]}
-                  onValueChange={([v]) => setGuardZone(v}
+                  onValueChange={([v]) => setGuardZone(v)}
                   min={100}
                   max={2000}
                   step={50}
@@ -437,7 +436,7 @@ export const AISSimopsIntegration: React.FC = () => {
                     <div
                       key={vessel.mmsi}
                       className={`p-2 rounded-lg border cursor-pointer transition-all hover:shadow-md ${selectedVessel?.mmsi === vessel.mmsi ? "border-primary bg-primary/5" : ""}`}
-                      onClick={handleSetSelectedVessel}
+                      onClick={() => setSelectedVessel(vessel)}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">

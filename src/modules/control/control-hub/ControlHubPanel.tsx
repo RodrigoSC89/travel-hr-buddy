@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * Control Hub Panel
  * Main dashboard for Nautilus One Control Hub
  */
@@ -45,7 +44,7 @@ export default function ControlHubPanel() {
     MQTTClient.connect();
 
     // Subscribe to BridgeLink events for telemetry
-    const unsubscribe = BridgeLink.on("nautilus:event" as unknown, (event) => {
+    const unsubscribe = BridgeLink.on("nautilus:event" as any, (event) => {
       const data = event.data as { message: string; timestamp: string };
       setTelemetryLogs((prev) => {
         const newLogs = [...prev, { 
@@ -54,8 +53,8 @@ export default function ControlHubPanel() {
         }];
         // Keep only last 50 events
         return newLogs.slice(-50);
-  };
-  };
+      });
+    });
 
     // Check MQTT connection status
     const mqttStatusInterval = setInterval(() => {

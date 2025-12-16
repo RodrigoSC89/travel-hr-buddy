@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,7 @@ interface Notification {
   read: boolean;
   actionRequired: boolean;
   source: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 const IntelligentNotificationSystem = () => {
@@ -129,7 +128,7 @@ const IntelligentNotificationSystem = () => {
         actionRequired: false,
         source: "Strategic AI"
       }
-    ]);
+    ];
     setNotifications(mockNotifications);
   }, []);
 
@@ -168,7 +167,7 @@ const IntelligentNotificationSystem = () => {
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          notification.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesType && matchesPriority && matchesSearch;
-  };
+  });
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 
@@ -186,7 +185,7 @@ const IntelligentNotificationSystem = () => {
       title: "Sucesso",
       description: "Todas as notificações foram marcadas como lidas",
     });
-  });
+  };
 
   const deleteNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
@@ -194,7 +193,7 @@ const IntelligentNotificationSystem = () => {
       title: "Notificação removida",
       description: "A notificação foi removida com sucesso",
     });
-  });
+  };
 
   const archiveNotification = (id: string) => {
     // Implementar lógica de arquivo
@@ -210,7 +209,7 @@ const IntelligentNotificationSystem = () => {
       title: "Configurações atualizadas",
       description: "Suas preferências foram salvas",
     });
-  });
+  };
 
   const getRelativeTime = (timestamp: Date) => {
     const now = new Date();
@@ -283,7 +282,7 @@ const IntelligentNotificationSystem = () => {
             <Input
               placeholder="Buscar notificações..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="md:max-w-xs"
             />
             <Select value={filterType} onValueChange={setFilterType}>
@@ -360,7 +359,7 @@ const IntelligentNotificationSystem = () => {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => handlemarkAsRead}
+                            onClick={() => markAsRead(notification.id)}
                           >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
@@ -368,14 +367,14 @@ const IntelligentNotificationSystem = () => {
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => handlearchiveNotification}
+                          onClick={() => archiveNotification(notification.id)}
                         >
                           <Archive className="w-4 h-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => handledeleteNotification}
+                          onClick={() => deleteNotification(notification.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -444,7 +443,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.emailEnabled}
-                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked}
+                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -454,7 +453,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.pushEnabled}
-                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked}
+                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -464,7 +463,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.smsEnabled}
-                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked}
+                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -474,7 +473,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.aiInsights}
-                    onCheckedChange={(checked) => updateSettings("aiInsights", checked}
+                    onCheckedChange={(checked) => updateSettings("aiInsights", checked)}
                   />
                 </div>
               </CardContent>
@@ -513,7 +512,8 @@ const IntelligentNotificationSystem = () => {
                   <Input 
                     type="time" 
                     value={settings.quietHours.start}
-                    onChange={handleChange})
+                    onChange={(e) => 
+                      updateSettings("quietHours", { ...settings.quietHours, start: e.target.value })
                     }
                   />
                 </div>
@@ -522,7 +522,8 @@ const IntelligentNotificationSystem = () => {
                   <Input 
                     type="time" 
                     value={settings.quietHours.end}
-                    onChange={handleChange})
+                    onChange={(e) => 
+                      updateSettings("quietHours", { ...settings.quietHours, end: e.target.value })
                     }
                   />
                 </div>

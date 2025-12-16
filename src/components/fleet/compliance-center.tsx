@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -232,7 +231,7 @@ const ComplianceCenter: React.FC = () => {
     const matchesType = typeFilter === "all" || cert.type === typeFilter;
     
     return matchesSearch && matchesStatus && matchesType;
-  };
+  });
 
   // Calculate compliance stats
   const stats = {
@@ -460,7 +459,7 @@ const ComplianceCenter: React.FC = () => {
                     <Upload className="h-4 w-4 mr-2" />
                     Salvar Certificado
                   </Button>
-                  <Button variant="outline" onClick={handleSetShowUploadDialog}>
+                  <Button variant="outline" onClick={() => setShowUploadDialog(false)}>
                     Cancelar
                   </Button>
                 </div>
@@ -479,14 +478,14 @@ const ComplianceCenter: React.FC = () => {
               <Input
                 placeholder="Buscar certificados..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
             
             <select 
               value={statusFilter} 
-              onChange={handleChange}
+              onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todos os Status</option>
@@ -498,7 +497,7 @@ const ComplianceCenter: React.FC = () => {
             
             <select 
               value={typeFilter} 
-              onChange={handleChange}
+              onChange={(e) => setTypeFilter(e.target.value)}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todos os Tipos</option>
@@ -601,7 +600,7 @@ const ComplianceCenter: React.FC = () => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={handleSetSelectedCertificate}
+                          onClick={() => setSelectedCertificate(cert)}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Ver Detalhes

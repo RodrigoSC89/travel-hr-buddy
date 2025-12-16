@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   FileText, 
   BarChart3, 
@@ -111,7 +111,7 @@ const ReportsCommandCenter = () => {
 
       // Group insights by category
       const insightsByCategory = (insights || []).reduce((acc: Record<string, number>, insight: { category: string }) => {
-        const cat = insight.category || "general";
+        const cat = insight.category || 'general';
         acc[cat] = (acc[cat] || 0) + 1;
         return acc;
       }, {});
@@ -127,7 +127,7 @@ const ReportsCommandCenter = () => {
         reportsThisMonth: reportsThisMonth || 0,
         reportsLastMonth: reportsLastMonth || 0,
         incidentsThisMonth: incidentsThisMonth || 0
-});
+      });
     } catch (error) {
       console.error("Error loading analytics:", error);
       toast({
@@ -214,7 +214,7 @@ const ReportsCommandCenter = () => {
                 </>
               ) : (
                 <>
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("ai-reports")}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -224,14 +224,14 @@ const ReportsCommandCenter = () => {
                         <FileText className="h-8 w-8 text-primary opacity-50" />
                       </div>
                       {getGrowthPercentage() && (
-                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? "text-green-500" : "text-red-500"}`}>
-                          {Number(getGrowthPercentage()) >= 0 ? "+" : ""}{getGrowthPercentage()}% vs mês anterior
+                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                          {Number(getGrowthPercentage()) >= 0 ? '+' : ''}{getGrowthPercentage()}% vs mês anterior
                         </p>
                       )}
                     </CardContent>
                   </Card>
 
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("incidents")}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -304,7 +304,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={handleSetActiveTab}
+                    onClick={() => setActiveTab("ai-reports")}
                   >
                     <Brain className="h-6 w-6 text-primary" />
                     <span className="font-medium">Gerar Relatório IA</span>
@@ -314,7 +314,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={handleSetActiveTab}
+                    onClick={() => setActiveTab("incidents")}
                   >
                     <AlertTriangle className="h-6 w-6 text-orange-500" />
                     <span className="font-medium">Ver Incidentes DP</span>
@@ -324,7 +324,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={handleSetActiveTab}
+                    onClick={() => setActiveTab("dashboard")}
                   >
                     <BarChart3 className="h-6 w-6 text-blue-500" />
                     <span className="font-medium">Dashboard</span>
@@ -334,7 +334,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={handleSetActiveTab}
+                    onClick={() => setActiveTab("analytics")}
                   >
                     <TrendingUp className="h-6 w-6 text-green-500" />
                     <span className="font-medium">Analytics</span>
@@ -371,7 +371,7 @@ const ReportsCommandCenter = () => {
                       <Button 
                         variant="link" 
                         className="mt-2"
-                        onClick={handleSetActiveTab}
+                        onClick={() => setActiveTab("ai-reports")}
                       >
                         Gerar primeiro relatório
                       </Button>
@@ -560,8 +560,8 @@ const ReportsCommandCenter = () => {
                         <FileText className="h-8 w-8 text-primary opacity-50" />
                       </div>
                       {getGrowthPercentage() && (
-                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? "text-green-500" : "text-red-500"}`}>
-                          {Number(getGrowthPercentage()) >= 0 ? "+" : ""}{getGrowthPercentage()}% vs mês anterior
+                        <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                          {Number(getGrowthPercentage()) >= 0 ? '+' : ''}{getGrowthPercentage()}% vs mês anterior
                         </p>
                       )}
                     </CardContent>

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +38,7 @@ interface VesselSensors {
   connectionStatus: "online" | "offline" | "unstable";
 }
 
-export const IoTSensorDashboard = memo(() => {
+export const IoTSensorDashboard = () => {
   const [vessels, setVessels] = useState<VesselSensors[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<any[]>([]);
@@ -59,7 +58,7 @@ export const IoTSensorDashboard = memo(() => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-    });
+    };
   }, []);
 
   const loadSensorData = () => {
@@ -197,12 +196,12 @@ export const IoTSensorDashboard = memo(() => {
           value: Number(newValue.toFixed(1)),
           status: newStatus,
           timestamp: new Date()
-        });
+        };
       })
     })));
   };
 
-  const processSensorData = async (vesselId: string, sensorData: unknown: unknown: unknown) => {
+  const processSensorData = async (vesselId: string, sensorData: any) => {
     try {
       const { data, error } = await supabase.functions.invoke("iot-sensor-processing", {
         body: {
@@ -280,7 +279,7 @@ export const IoTSensorDashboard = memo(() => {
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -300,7 +299,7 @@ export const IoTSensorDashboard = memo(() => {
             className={`cursor-pointer transition-all hover:shadow-md ${
               selectedVessel === vessel.vesselId ? "ring-2 ring-primary" : ""
             }`}
-            onClick={handleSetSelectedVessel}
+            onClick={() => setSelectedVessel(vessel.vesselId)}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">

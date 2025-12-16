@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 export default function SGSOSystem() {
   const [activeTab, setActiveTab] = useState("plans");
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<unknown>(null);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [stats, setStats] = useState({
     totalPlans: 0,
     activePlans: 0,
@@ -57,7 +56,7 @@ export default function SGSOSystem() {
             Sistema de Gestão de Segurança e Saúde Operacional
           </p>
         </div>
-        <Button onClick={handleSetShowCreateDialog}>
+        <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="h-4 w-4 mr-2" />
           New Safety Plan
         </Button>

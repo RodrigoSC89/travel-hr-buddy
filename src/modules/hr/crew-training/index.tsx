@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 112.0 - Crew Training & Certification System
  * Crew Training - Training records, certifications, and compliance tracking
  */
@@ -70,12 +69,12 @@ const CrewTraining = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from("training_expiry_status" as unknown)
+        .from("training_expiry_status" as any)
         .select("*");
 
       if (error) throw error;
 
-      setRecords((data || []) as unknown);
+      setRecords((data || []) as any);
     } catch (error) {
       console.error("Error loading training records:", error);
       toast({
@@ -143,7 +142,7 @@ const CrewTraining = () => {
       record.crew_position?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesStatus && matchesType && matchesSearch;
-  };
+  });
 
   const types = Array.from(new Set(records.map(r => r.training_type).filter(Boolean)));
 
@@ -243,7 +242,7 @@ const CrewTraining = () => {
               <Input
                 placeholder="Search by course or crew..."
                 value={searchQuery}
-                onChange={handleChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
               />
             </div>

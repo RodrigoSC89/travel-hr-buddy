@@ -10,7 +10,7 @@ interface DPStatusCardProps {
 /**
  * Display DP system status with visual indicators
  */
-export const DPStatusCard = memo(function({ status }: DPStatusCardProps) {
+export function DPStatusCard({ status }: DPStatusCardProps) {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
     case "normal":
@@ -26,7 +26,7 @@ export const DPStatusCard = memo(function({ status }: DPStatusCardProps) {
     default:
       return "bg-gray-400";
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
@@ -43,7 +43,7 @@ export const DPStatusCard = memo(function({ status }: DPStatusCardProps) {
     default:
       return <Activity className="h-6 w-6 text-gray-400" />;
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
@@ -97,4 +97,4 @@ export const DPStatusCard = memo(function({ status }: DPStatusCardProps) {
       </CardContent>
     </Card>
   );
-});
+}

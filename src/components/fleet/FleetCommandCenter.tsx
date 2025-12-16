@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 168.0: Nautilus Fleet Command Center (FCC)
  * Central dashboard for fleet-wide vessel monitoring and mission control
  * 
@@ -97,7 +96,7 @@ export const FleetCommandCenter: React.FC = () => {
       return await MissionEngine.getMissions({ status: "active" });
     },
     refetchInterval: autoRefresh ? 30000 : false,
-  };
+  });
 
   // Fetch logs for selected vessel
   const { data: vesselLogs } = useQuery({
@@ -142,7 +141,7 @@ export const FleetCommandCenter: React.FC = () => {
     default:
       return { color: "bg-gray-500", icon: Ship, label: "Unknown" };
     }
-  });
+  };
 
   // Calculate fleet statistics
   const fleetStats = {
@@ -178,7 +177,7 @@ export const FleetCommandCenter: React.FC = () => {
           </Button>
           <Button
             variant={autoRefresh ? "default" : "outline"}
-            onClick={handleSetAutoRefresh}
+            onClick={() => setAutoRefresh(!autoRefresh)}
           >
             Auto Refresh: {autoRefresh ? "ON" : "OFF"}
           </Button>
@@ -252,11 +251,11 @@ export const FleetCommandCenter: React.FC = () => {
                     <Input
                       placeholder="Search vessels..."
                       value={searchQuery}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-8 w-64"
                     />
                   </div>
-                  <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as FilterStatus}>
+                  <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as FilterStatus)}>
                     <SelectTrigger className="w-40">
                       <Filter className="h-4 w-4 mr-2" />
                       <SelectValue />
@@ -287,7 +286,7 @@ export const FleetCommandCenter: React.FC = () => {
                         className={`cursor-pointer transition-all hover:shadow-lg ${
                           selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
                         }`}
-                        onClick={handleSetSelectedVessel}
+                        onClick={() => setSelectedVessel(vessel.id)}
                       >
                         <CardHeader className="pb-3">
                           <div className="flex items-start justify-between">

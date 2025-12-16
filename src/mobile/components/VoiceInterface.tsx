@@ -1,5 +1,4 @@
 /**
-import { useCallback, useEffect, useRef, useState } from "react";;
  * PATCH 165.0 - Voice Interface Component
  * Speech recognition and synthesis for mobile AI assistant
  */
@@ -21,8 +20,8 @@ interface VoiceSpeechRecognition {
   start(): void;
   stop(): void;
   onstart: (() => void) | null;
-  onresult: ((event: unknown: unknown: unknown) => void) | null;
-  onerror: ((event: unknown: unknown: unknown) => void) | null;
+  onresult: ((event: any) => void) | null;
+  onerror: ((event: any) => void) | null;
   onend: (() => void) | null;
 }
 
@@ -51,11 +50,12 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   useEffect(() => {
     // Check if speech recognition is supported
-    const SpeechRecognitionClass = (window as unknown).SpeechRecognition || 
-                                   (window as unknown).webkitSpeechRecognition;
+    const SpeechRecognitionClass = (window as any).SpeechRecognition || 
+                                   (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
+      console.warn("Speech recognition not supported in this browser");
       return;
     }
 
@@ -66,9 +66,10 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onstart = () => {
       setIsListening(true);
-    });
+      console.log("Voice recognition started");
+    };
 
-    recognition.onresult = (event: Event) => {
+    recognition.onresult = (event: any) => {
       const current = event.resultIndex;
       const transcriptResult = event.results[current][0].transcript;
       
@@ -81,7 +82,8 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       }
     };
 
-    recognition.onerror = (event: unknown: unknown: unknown) => {
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error:", event.error);
       setIsListening(false);
       
       if (event.error === "no-speech") {
@@ -93,7 +95,8 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onend = () => {
       setIsListening(false);
-    });
+      console.log("Voice recognition ended");
+    };
 
     recognitionRef.current = recognition;
 
@@ -187,6 +190,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   const speak = useCallback(async (text: string) => {
     if (!("speechSynthesis" in window)) {
+      console.warn("Speech synthesis not supported");
       return;
     }
 
@@ -207,8 +211,9 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     utterance.onerror = (event) => {
+      console.error("Speech synthesis error:", event);
       setIsSpeaking(false);
-    });
+    };
 
     synthesisRef.current = utterance;
     window.speechSynthesis.speak(utterance);
@@ -226,7 +231,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       recognitionRef.current.start();
     } catch (error) {
       console.error("Error starting recognition:", error);
-      console.error("Error starting recognition:", error);
       toast.error("Failed to start voice recognition");
     }
   }, []);
@@ -240,7 +244,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     try {
       recognitionRef.current.stop();
     } catch (error) {
-      console.error("Error stopping recognition:", error);
       console.error("Error stopping recognition:", error);
     }
   }, []);

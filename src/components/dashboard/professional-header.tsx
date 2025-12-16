@@ -3,7 +3,7 @@
  * Header profissional com indicador de conexão
  */
 
-import { memo, memo, useCallback, useState } from "react";;;
+import { useState, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw, Loader2 } from "lucide-react";
@@ -22,7 +22,7 @@ interface ProfessionalHeaderProps {
   onExport?: () => void | Promise<void>;
 }
 
-export const ProfessionalHeader = memo(function({ 
+export function ProfessionalHeader({ 
   title, 
   subtitle, 
   showLogo = true,
@@ -67,7 +67,7 @@ export const ProfessionalHeader = memo(function({
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${title.toLowerCase().replace(/\s+/g, "-")}-${new Date().toISOString().split("T")[0]}.json`;
+        a.download = `${title.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -172,4 +172,4 @@ export const ProfessionalHeader = memo(function({
       </div>
     </motion.div>
   );
-});
+}

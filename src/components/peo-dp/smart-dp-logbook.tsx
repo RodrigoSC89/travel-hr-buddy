@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -137,7 +136,7 @@ export const SmartDPLogbook: React.FC = () => {
     eventType: "operation",
     severity: "info",
     dpMode: "Auto DP"
-  };
+  });
 
   const filteredEntries = entries.filter(entry => {
     const matchesSearch = entry.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -145,7 +144,7 @@ export const SmartDPLogbook: React.FC = () => {
     const matchesType = filterType === "all" || entry.eventType === filterType;
     const matchesSeverity = filterSeverity === "all" || entry.severity === filterSeverity;
     return matchesSearch && matchesType && matchesSeverity;
-  };
+  });
 
   const handleAddEntry = () => {
     if (!newEntry.description || !newEntry.operator) {
@@ -183,9 +182,9 @@ export const SmartDPLogbook: React.FC = () => {
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-    case "critical": return <Badge variant="destructive">Crítico</Badge>;
-    case "warning": return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
-    default: return <Badge variant="secondary">Info</Badge>;
+      case "critical": return <Badge variant="destructive">Crítico</Badge>;
+      case "warning": return <Badge className="bg-warning text-warning-foreground">Atenção</Badge>;
+      default: return <Badge variant="secondary">Info</Badge>;
     }
   };
 
@@ -246,7 +245,7 @@ export const SmartDPLogbook: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Operador</label>
-                    <Input placeholder="Nome - Função" value={newEntry.operator || ""} onChange={handleChange} />
+                    <Input placeholder="Nome - Função" value={newEntry.operator || ""} onChange={(e) => setNewEntry({ ...newEntry, operator: e.target.value })} />
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Modo DP</label>
@@ -264,14 +263,14 @@ export const SmartDPLogbook: React.FC = () => {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Descrição do Evento *</label>
-                  <Textarea placeholder="Descreva o evento detalhadamente..." value={newEntry.description || ""} onChange={handleChange} rows={3} />
+                  <Textarea placeholder="Descreva o evento detalhadamente..." value={newEntry.description || ""} onChange={(e) => setNewEntry({ ...newEntry, description: e.target.value })} rows={3} />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Observações</label>
-                  <Textarea placeholder="Notas adicionais..." value={newEntry.notes || ""} onChange={handleChange} rows={2} />
+                  <Textarea placeholder="Notas adicionais..." value={newEntry.notes || ""} onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })} rows={2} />
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
-                  <Button variant="outline" onClick={handleSetIsNewEntryOpen}>Cancelar</Button>
+                  <Button variant="outline" onClick={() => setIsNewEntryOpen(false)}>Cancelar</Button>
                   <Button onClick={handleAddEntry}>Registrar Entrada</Button>
                 </div>
               </div>
@@ -337,7 +336,7 @@ export const SmartDPLogbook: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Buscar por descrição ou operador..." value={searchTerm} onChange={handleChange} className="pl-10" />
+              <Input placeholder="Buscar por descrição ou operador..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
             </div>
             <Select value={filterType} onValueChange={setFilterType}>
               <SelectTrigger className="w-48"><Filter className="w-4 h-4 mr-2" /><SelectValue placeholder="Tipo" /></SelectTrigger>
@@ -408,7 +407,7 @@ export const SmartDPLogbook: React.FC = () => {
                         </div>
                       </div>
                       {!entry.acknowledged && (
-                        <Button size="sm" variant="outline" onClick={() => handlehandleAcknowledge}>
+                        <Button size="sm" variant="outline" onClick={() => handleAcknowledge(entry.id)}>
                           <CheckCircle className="w-4 h-4 mr-1" />Reconhecer
                         </Button>
                       )}

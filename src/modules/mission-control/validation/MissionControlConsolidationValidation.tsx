@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 452 - Mission Control Consolidation Validation
  */
 
@@ -19,7 +18,7 @@ export default function MissionControlConsolidationValidation() {
 
   const toggleCheck = (key: keyof typeof checks) => {
     setChecks(prev => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   const allChecked = Object.values(checks).every(Boolean);
   const progress = Object.values(checks).filter(Boolean).length;
@@ -40,7 +39,7 @@ export default function MissionControlConsolidationValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.singleModule}
-              onCheckedChange={() => toggleCheck("singleModule"}
+              onCheckedChange={() => toggleCheck("singleModule")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -57,7 +56,7 @@ export default function MissionControlConsolidationValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.submodulesRemoved}
-              onCheckedChange={() => toggleCheck("submodulesRemoved"}
+              onCheckedChange={() => toggleCheck("submodulesRemoved")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -74,7 +73,7 @@ export default function MissionControlConsolidationValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.integrated}
-              onCheckedChange={() => toggleCheck("integrated"}
+              onCheckedChange={() => toggleCheck("integrated")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -91,7 +90,7 @@ export default function MissionControlConsolidationValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.dataStructure}
-              onCheckedChange={() => toggleCheck("dataStructure"}
+              onCheckedChange={() => toggleCheck("dataStructure")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

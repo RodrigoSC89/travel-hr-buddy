@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * Project Timeline Module - PATCH 389 Complete
  * Gantt chart with drag-and-drop, dependencies, and export capabilities
  */

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +56,7 @@ const AICommandCenter = () => {
           );
         }
         return [...prev, { role: "assistant", content: assistantContent, timestamp: new Date().toISOString() }];
-  };
+      });
     };
 
     try {
@@ -67,6 +66,7 @@ const AICommandCenter = () => {
         onDelta: updateAssistant,
         onDone: () => setIsLoading(false),
         onError: (error) => {
+          console.error(error);
           toast({
             title: "Erro",
             description: "Não foi possível processar o comando",
@@ -76,7 +76,6 @@ const AICommandCenter = () => {
         },
       });
     } catch (error) {
-      console.error("Error sending message:", error);
       console.error("Error sending message:", error);
       setIsLoading(false);
     }
@@ -88,7 +87,7 @@ const AICommandCenter = () => {
       title: "Chat limpo",
       description: "Histórico de conversação removido",
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -187,28 +186,28 @@ const AICommandCenter = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetInput}
+                    onClick={() => setInput("Qual o status geral do sistema?")}
                   >
                     Status do sistema
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetInput}
+                    onClick={() => setInput("Há algum alerta ativo?")}
                   >
                     Verificar alertas
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetInput}
+                    onClick={() => setInput("Mostre as últimas decisões autônomas")}
                   >
                     Decisões recentes
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetInput}
+                    onClick={() => setInput("Analise a performance dos módulos")}
                   >
                     Performance
                   </Button>
@@ -246,12 +245,15 @@ const AICommandCenter = () => {
 
           <div className="p-4 border-t">
             <form
-              onSubmit={handleSubmit}
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMessage();
+              }}
               className="flex gap-2"
             >
               <Input
                 value={input}
-                onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Digite um comando ou pergunta..."
                 disabled={isLoading}
                 className="flex-1"

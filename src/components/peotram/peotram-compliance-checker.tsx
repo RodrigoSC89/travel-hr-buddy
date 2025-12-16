@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { 
+  Shield, 
   AlertTriangle, 
   CheckCircle, 
   XCircle,
@@ -20,7 +20,10 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  Star
+  Info,
+  Star,
+  Award,
+  Zap
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 

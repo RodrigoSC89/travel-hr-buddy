@@ -1,5 +1,4 @@
 // PATCH 488.0 - Template Library Page
-import { useState, useCallback } from "react";;
 // Gallery UI with type filtering, preview, copy-to-clipboard
 
 import React, { useState } from "react";
@@ -29,7 +28,7 @@ export default function TemplateLibraryPage() {
   const [selectedType, setSelectedType] = useState<string>("all");
   const { toast } = useToast();
 
-  const typeIcons: Record<string, unknown> = {
+  const typeIcons: Record<string, any> = {
     document: FileText,
     incident: AlertCircle,
     fmea: Activity,
@@ -43,7 +42,7 @@ export default function TemplateLibraryPage() {
       template.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = selectedType === "all" || template.type === selectedType;
     return matchesSearch && matchesType;
-  };
+  });
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);
@@ -51,7 +50,7 @@ export default function TemplateLibraryPage() {
       title: "Copied!",
       description: "Template content copied to clipboard",
     });
-  });
+  };
 
   const useTemplate = async (template: TemplateDefinition) => {
     // In a real implementation, this would save to Supabase ai_document_templates
@@ -84,7 +83,7 @@ export default function TemplateLibraryPage() {
           <Input
             placeholder="Search templates..."
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -141,7 +140,7 @@ export default function TemplateLibraryPage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={handleSetSelectedTemplate}
+                          onClick={() => setSelectedTemplate(template)}
                           className="flex-1"
                         >
                           <Eye className="h-4 w-4 mr-2" />
@@ -149,7 +148,7 @@ export default function TemplateLibraryPage() {
                         </Button>
                         <Button
                           size="sm"
-                          onClick={() => handleuseTemplate}
+                          onClick={() => useTemplate(template)}
                           className="flex-1"
                         >
                           Use Template
@@ -172,7 +171,7 @@ export default function TemplateLibraryPage() {
       </Tabs>
 
       {/* Preview Dialog */}
-      <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null}>
+      <Dialog open={!!selectedTemplate} onOpenChange={() => setSelectedTemplate(null)}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -206,7 +205,7 @@ export default function TemplateLibraryPage() {
 
               <div className="flex gap-2">
                 <Button
-                  onClick={() => handlecopyToClipboard}
+                  onClick={() => copyToClipboard(selectedTemplate.content)}
                   variant="outline"
                   className="flex-1"
                 >

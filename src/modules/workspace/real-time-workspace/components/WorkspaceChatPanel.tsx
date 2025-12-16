@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -129,7 +128,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
   const formatRecordingTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
   const handleSend = () => {
@@ -234,8 +233,8 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
           timeout: 10000,
-        };
-  };
+        });
+      });
       
       setUserLocation({
         lat: position.coords.latitude,
@@ -270,14 +269,14 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
         description: "Sua localização foi enviada para o canal",
       });
     }
-  });
+  };
 
   const formatTime = (timestamp: string) => {
     try {
       return new Date(timestamp).toLocaleTimeString("pt-BR", { 
         hour: "2-digit", 
         minute: "2-digit" 
-      };
+      });
     } catch {
       return timestamp;
     }
@@ -410,7 +409,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
           <div className="flex items-center gap-3 mb-3 p-2 bg-destructive/10 rounded-lg">
             <div className="w-3 h-3 rounded-full bg-destructive animate-pulse" />
             <span className="text-sm font-medium text-destructive">Gravando: {formatRecordingTime(recordingTime)}</span>
-            <Button variant="ghost" size="sm" className="ml-auto" onClick={handleSetIsRecording}>
+            <Button variant="ghost" size="sm" className="ml-auto" onClick={() => setIsRecording(false)}>
               <X className="h-4 w-4 mr-1" />
               Cancelar
             </Button>
@@ -434,7 +433,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
                 <ImageIcon className="h-4 w-4 mr-2" />
                 Enviar imagem
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleSetShowLocationShare}>
+              <DropdownMenuItem onClick={() => setShowLocationShare(true)}>
                 <MapPin className="h-4 w-4 mr-2" />
                 Compartilhar localização
               </DropdownMenuItem>
@@ -445,21 +444,21 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
             ref={fileInputRef}
             type="file" 
             className="hidden" 
-            onChange={handleChange}
+            onChange={(e) => handleFileSelect(e, "file")}
           />
           <input 
             ref={imageInputRef}
             type="file" 
             accept="image/*"
             className="hidden" 
-            onChange={handleChange}
+            onChange={(e) => handleFileSelect(e, "image")}
           />
           
           <div className="flex-1 relative">
             <Input
               placeholder="Digite sua mensagem..."
               value={newMessage}
-              onChange={handleChange}
+              onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
               className="pr-10 bg-muted/50 border-border/50"
               disabled={isRecording}
@@ -484,7 +483,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
                       variant="ghost"
                       size="sm"
                       className="h-8 w-8 p-0 text-lg hover:bg-accent"
-                      onClick={() => handlehandleEmojiSelect}
+                      onClick={() => handleEmojiSelect(emoji)}
                     >
                       {emoji}
                     </Button>

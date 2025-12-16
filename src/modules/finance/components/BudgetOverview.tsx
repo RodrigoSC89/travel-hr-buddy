@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
@@ -6,7 +5,7 @@ interface BudgetOverviewProps {
   period: "month" | "quarter" | "year";
 }
 
-export const BudgetOverview = memo(function({ period }: BudgetOverviewProps) {
+export function BudgetOverview({ period }: BudgetOverviewProps) {
   const budgets = [
     { category: "Combustível", allocated: 50000, spent: 32000, color: "bg-blue-500" },
     { category: "Manutenção", allocated: 30000, spent: 28000, color: "bg-orange-500" },
@@ -46,4 +45,4 @@ export const BudgetOverview = memo(function({ period }: BudgetOverviewProps) {
       </CardContent>
     </Card>
   );
-});
+}

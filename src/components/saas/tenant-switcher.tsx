@@ -100,7 +100,7 @@ export const TenantSwitcher: React.FC = () => {
           return (
             <DropdownMenuItem
               key={tenant.id}
-              onClick={() => handleswitchTenant}
+              onClick={() => switchTenant(tenant.id)}
               className="p-3 cursor-pointer"
             >
               <div className="flex items-center justify-between w-full">

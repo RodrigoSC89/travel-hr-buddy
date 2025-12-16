@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -174,7 +173,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
       order.supplier.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || order.status === filterStatus;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const handleReceiveItems = (orderId: string, items: POItem[]) => {
     const totalReceived = items.reduce((sum, item) => sum + item.receivedQty, 0);
@@ -277,7 +276,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={handleSetShowNewOrder}>
+          <Button onClick={() => setShowNewOrder(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Pedido
           </Button>
@@ -343,7 +342,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                         value={order.totalItems ? (order.receivedItems! / order.totalItems) * 100 : 0}
                         className={`h-2 ${
                           order.status === "delivered" ? "[&>div]:bg-green-500" :
-                            order.status === "delayed" ? "[&>div]:bg-destructive" : "[&>div]:bg-primary"
+                          order.status === "delayed" ? "[&>div]:bg-destructive" : "[&>div]:bg-primary"
                         }`}
                       />
                       <p className="text-xs text-muted-foreground mt-1 text-center">
@@ -368,21 +367,21 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                   <TableCell>
                     <Badge variant={
                       order.status === "delivered" ? "default" :
-                        order.status === "delayed" ? "destructive" :
-                          order.status === "shipped" || order.status === "confirmed" ? "secondary" :
-                            order.status === "partial" ? "outline" : "outline"
+                      order.status === "delayed" ? "destructive" :
+                      order.status === "shipped" || order.status === "confirmed" ? "secondary" :
+                      order.status === "partial" ? "outline" : "outline"
                     }>
                       {order.status === "shipped" && <Truck className="h-3 w-3 mr-1" />}
                       {order.status === "delivered" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                       {order.status === "delayed" && <AlertTriangle className="h-3 w-3 mr-1" />}
                       {order.status === "confirmed" && <Clock className="h-3 w-3 mr-1" />}
                       {order.status === "draft" ? "Rascunho" :
-                        order.status === "sent" ? "Enviado" :
-                          order.status === "confirmed" ? "Confirmado" :
-                            order.status === "shipped" ? "Em Trânsito" :
-                              order.status === "partial" ? "Parcial" :
-                                order.status === "delivered" ? "Entregue" :
-                                  order.status === "delayed" ? "Atrasado" : "Cancelado"}
+                       order.status === "sent" ? "Enviado" :
+                       order.status === "confirmed" ? "Confirmado" :
+                       order.status === "shipped" ? "Em Trânsito" :
+                       order.status === "partial" ? "Parcial" :
+                       order.status === "delivered" ? "Entregue" :
+                       order.status === "delayed" ? "Atrasado" : "Cancelado"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -441,13 +440,13 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                 </div>
                 <Badge variant={
                   selectedOrder.status === "delivered" ? "default" :
-                    selectedOrder.status === "delayed" ? "destructive" : "secondary"
+                  selectedOrder.status === "delayed" ? "destructive" : "secondary"
                 } className="text-sm">
                   {selectedOrder.status === "delivered" ? "Entregue" :
-                    selectedOrder.status === "delayed" ? "Atrasado" :
-                      selectedOrder.status === "confirmed" ? "Confirmado" :
-                        selectedOrder.status === "shipped" ? "Em Trânsito" :
-                          selectedOrder.status === "partial" ? "Parcial" : selectedOrder.status}
+                   selectedOrder.status === "delayed" ? "Atrasado" :
+                   selectedOrder.status === "confirmed" ? "Confirmado" :
+                   selectedOrder.status === "shipped" ? "Em Trânsito" :
+                   selectedOrder.status === "partial" ? "Parcial" : selectedOrder.status}
                 </Badge>
               </div>
 
@@ -558,8 +557,8 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
           {selectedOrder && (
             <ReceiveItemsForm
               order={selectedOrder}
-              onConfirm={(items) => handleReceiveItems(selectedOrder.id, items}
-              onCancel={() => setShowReceive(false}
+              onConfirm={(items) => handleReceiveItems(selectedOrder.id, items)}
+              onCancel={() => setShowReceive(false)}
             />
           )}
         </DialogContent>
@@ -577,7 +576,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
             <p className="text-sm mt-2">
               Assim você garante o fluxo de aprovação e rastreabilidade completa.
             </p>
-            <Button className="mt-4" onClick={handleSetShowNewOrder}>
+            <Button className="mt-4" onClick={() => setShowNewOrder(false)}>
               Ir para Requisições
             </Button>
           </div>
@@ -606,7 +605,7 @@ function ReceiveItemsForm({
     setItems(prev => prev.map(item => 
       item.id === id ? { ...item, receivingQty: qty } : item
     ));
-  });
+  };
 
   const handleConfirm = () => {
     const updatedItems = items.map(item => ({
@@ -640,7 +639,7 @@ function ReceiveItemsForm({
                 min={0}
                 max={item.quantity - item.receivedQty}
                 value={item.receivingQty}
-                onChange={handleChange}
+                onChange={(e) => updateQty(item.id, Number(e.target.value))}
               />
               <span className="text-sm text-muted-foreground">{item.unit}</span>
             </div>

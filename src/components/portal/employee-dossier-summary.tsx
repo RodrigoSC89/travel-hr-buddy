@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -106,7 +105,7 @@ export const EmployeeDossierSummary: React.FC = () => {
           rank: nullToUndefined(newMember.rank) || "Ordinary Seaman",
           status: newMember.status || "available",
           experience_years: newMember.experience_years || 0
-        });
+        };
         setCrewMember(mappedNewMember);
       } else {
         const mappedMember: CrewMember = {
@@ -385,7 +384,7 @@ export const EmployeeDossierSummary: React.FC = () => {
       {/* Ações */}
       <div className="flex gap-4">
         <Button 
-          onClick={() => window.open("/crew-dossier", "_blank"} 
+          onClick={() => window.open("/crew-dossier", "_blank")} 
           className="flex-1"
         >
           <ExternalLink className="h-4 w-4 mr-2" />
@@ -400,4 +399,4 @@ export const EmployeeDossierSummary: React.FC = () => {
       </div>
     </div>
   );
-});
+};

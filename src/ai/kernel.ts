@@ -1,4 +1,3 @@
-
 /**
  * PATCH 74.0 - Full AI Embedding
  * AI Kernel - Embedded AI Context for All Modules
@@ -35,6 +34,7 @@ export interface AIContextResponse {
 const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<AIContextResponse>> = {
   // Operations modules
   "operations.fleet": async (ctx) => {
+    // Simulated fleet intelligence
     return {
       type: "recommendation",
       message: "Esta embarcação excedeu o intervalo de manutenção média em 12 dias. Agendar manutenção preventiva.",
@@ -529,6 +529,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
     const warnCount = ctx.context?.warnCount || 0;
     const recentErrors = ctx.context?.recentErrors || [];
     
+    // Analyze error patterns
     const errorRate = totalLogs > 0 ? (errorCount / totalLogs) * 100 : 0;
     const warnRate = totalLogs > 0 ? (warnCount / totalLogs) * 100 : 0;
     
@@ -556,6 +557,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message = `Sistema operando normalmente. ${errorCount} erros e ${warnCount} warnings em ${totalLogs} registros.`;
     }
     
+    // Add insights about recent errors
     if (recentErrors.length > 0) {
       const origins = new Set(recentErrors.map((e: any) => e.origin));
       if (origins.size === 1) {
@@ -800,26 +802,40 @@ async function logAIContext(request: AIContextRequest, response: AIContextRespon
       timestamp: new Date().toISOString()
     };
     
+    // Store in localStorage for quick access
     const logs = JSON.parse(localStorage.getItem("ai_context_logs") || "[]");
     logs.push(log);
+    // Keep only last 100 logs
     if (logs.length > 100) logs.shift();
     localStorage.setItem("ai_context_logs", JSON.stringify(logs));
-  } catch (error) {
+    } catch (error) {
     logger.warn("Failed to log AI context", { error });
   }
 }
 
 /**
  * Main AI Context Runner
+ * Interprets user profile, history, module state, and logs to provide adaptive responses
+ * 
+ * @param request - AI context request with module and user information
+ * @returns Promise with AI-generated response
  */
 export async function runAIContext(request: AIContextRequest): Promise<AIContextResponse> {
   try {
+    // Get module-specific AI pattern or use default
     const aiPattern = MODULE_AI_PATTERNS[request.module] || getDefaultResponse;
+    
+    // Generate AI response
     const response = await aiPattern(request);
+    
+    // Log for audit
     await logAIContext(request, response);
+    
     return response;
   } catch (error) {
     logger.error("AI Context error", { error });
+    
+    // Return fallback response
     return {
       type: "diagnosis",
       message: "Sistema de IA temporariamente indisponível. Operações continuam normalmente.",
@@ -835,9 +851,11 @@ export async function runAIContext(request: AIContextRequest): Promise<AIContext
 export function getAIContextLogs(module?: string): any[] {
   try {
     const logs = JSON.parse(localStorage.getItem("ai_context_logs") || "[]");
+    
     if (module) {
       return logs.filter((log: any) => log.module === module);
     }
+    
     return logs;
   } catch (error) {
     return [];
@@ -850,6 +868,7 @@ export function getAIContextLogs(module?: string): any[] {
 export function clearAIContextLogs() {
   localStorage.removeItem("ai_context_logs");
 }
+
 
 /**
  * Get AI context statistics

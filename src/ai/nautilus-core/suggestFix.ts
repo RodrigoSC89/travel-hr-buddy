@@ -28,6 +28,7 @@ export async function suggestFix(analysis: AnalysisResult): Promise<FixSuggestio
   // Check if OpenAI API key is available
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
+    console.warn("⚠️ OPENAI_API_KEY not found. Using fallback fix suggestions.");
     return generateFallbackSuggestion(findings);
   }
 
@@ -59,7 +60,6 @@ export async function suggestFix(analysis: AnalysisResult): Promise<FixSuggestio
 
     return parseAIResponse(content, findings);
   } catch (error) {
-    console.error("❌ Error calling OpenAI API:", error);
     console.error("❌ Error calling OpenAI API:", error);
     return generateFallbackSuggestion(findings);
   }
@@ -148,7 +148,7 @@ function parseAIResponse(content: string, findings: Finding[]): FixSuggestion {
     suggestedChanges: suggestedChanges.trim() || "See findings for details",
     priority,
     estimatedImpact: impact.trim() || "Should resolve detected CI/CD issues"
-  });
+  };
 }
 
 /**

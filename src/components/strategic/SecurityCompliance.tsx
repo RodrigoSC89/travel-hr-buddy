@@ -35,7 +35,7 @@ interface ComplianceStandard {
   status: "compliant" | "in-progress" | "non-compliant";
 }
 
-export const SecurityCompliance = memo(() => {
+export const SecurityCompliance = () => {
   const securityFeatures: SecurityFeature[] = [
     {
       id: "1",
@@ -173,7 +173,7 @@ export const SecurityCompliance = memo(() => {
       return <AlertTriangle className="h-4 w-4 text-danger" />;
     default:
       return <Shield className="h-4 w-4" />;
-    };
+    }
   };
 
   return (

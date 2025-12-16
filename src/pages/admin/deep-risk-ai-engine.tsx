@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 537 - Deep Risk AI with ONNX Runtime
  * Browser-based AI risk analysis with real-time scoring
  */
@@ -167,7 +166,7 @@ const DeepRiskAIPage: React.FC = () => {
       medium: "text-yellow-600 bg-yellow-100 border-yellow-300",
       high: "text-orange-600 bg-orange-100 border-orange-300",
       critical: "text-red-600 bg-red-100 border-red-300",
-    });
+    };
     return colors[level] || "text-gray-600 bg-gray-100 border-gray-300";
   };
 
@@ -319,7 +318,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Weather Risk: {(weatherRisk * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[weatherRisk * 100]}
-                    onValueChange={([v]) => setWeatherRisk(v / 100}
+                    onValueChange={([v]) => setWeatherRisk(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -329,7 +328,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Mechanical Risk: {(mechanicalRisk * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[mechanicalRisk * 100]}
-                    onValueChange={([v]) => setMechanicalRisk(v / 100}
+                    onValueChange={([v]) => setMechanicalRisk(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -339,7 +338,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Crew Fatigue: {(crewFatigue * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[crewFatigue * 100]}
-                    onValueChange={([v]) => setCrewFatigue(v / 100}
+                    onValueChange={([v]) => setCrewFatigue(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -349,7 +348,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Sea State: {(seaState * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[seaState * 100]}
-                    onValueChange={([v]) => setSeaState(v / 100}
+                    onValueChange={([v]) => setSeaState(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -359,7 +358,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Navigation Complexity: {(navigationComplexity * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[navigationComplexity * 100]}
-                    onValueChange={([v]) => setNavigationComplexity(v / 100}
+                    onValueChange={([v]) => setNavigationComplexity(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -369,7 +368,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Fuel Status: {(fuelStatus * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[fuelStatus * 100]}
-                    onValueChange={([v]) => setFuelStatus(v / 100}
+                    onValueChange={([v]) => setFuelStatus(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -379,7 +378,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Equipment Status: {(equipmentStatus * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[equipmentStatus * 100]}
-                    onValueChange={([v]) => setEquipmentStatus(v / 100}
+                    onValueChange={([v]) => setEquipmentStatus(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -389,7 +388,7 @@ const DeepRiskAIPage: React.FC = () => {
                   <Label>Communication Quality: {(communicationQuality * 100).toFixed(0)}%</Label>
                   <Slider
                     value={[communicationQuality * 100]}
-                    onValueChange={([v]) => setCommunicationQuality(v / 100}
+                    onValueChange={([v]) => setCommunicationQuality(v / 100)}
                     max={100}
                     step={1}
                   />
@@ -463,7 +462,7 @@ const DeepRiskAIPage: React.FC = () => {
                         <Input
                           id="forecast-name"
                           value={forecastName}
-                          onChange={handleChange}
+                          onChange={(e) => setForecastName(e.target.value)}
                           placeholder="e.g., North Atlantic Route Analysis"
                         />
                       </div>

@@ -139,7 +139,7 @@ const Innovation = () => {
         <TabsContent value="ai" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer" 
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/ai-assistant")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-blue-500" />
@@ -160,7 +160,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer" 
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/predictive-analytics")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-purple-500" />
@@ -181,7 +181,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/smart-automation")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Workflow className="h-5 w-5 text-green-500" />
@@ -202,7 +202,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/models-lab")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TestTube className="h-5 w-5 text-orange-500" />
@@ -223,7 +223,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/ai-processing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Cpu className="h-5 w-5 text-red-500" />
@@ -244,7 +244,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/data-lake")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Database className="h-5 w-5 text-cyan-500" />
@@ -269,7 +269,7 @@ const Innovation = () => {
         <TabsContent value="emerging" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/ar")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Eye className="h-5 w-5 text-indigo-500" />
@@ -290,7 +290,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/blockchain")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-emerald-500" />
@@ -311,7 +311,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/iot")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Smartphone className="h-5 w-5 text-blue-500" />
@@ -332,7 +332,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/edge-computing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Network className="h-5 w-5 text-purple-500" />
@@ -353,7 +353,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/quantum-computing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Activity className="h-5 w-5 text-pink-500" />
@@ -374,7 +374,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/generative-ai")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-yellow-500" />
@@ -399,7 +399,7 @@ const Innovation = () => {
         <TabsContent value="optimization" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/performance-optimizer")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-yellow-500" />
@@ -420,7 +420,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/gamification")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="h-5 w-5 text-orange-500" />
@@ -445,7 +445,7 @@ const Innovation = () => {
         <TabsContent value="analytics" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/advanced-analytics")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-blue-500" />
@@ -466,7 +466,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/business-insights")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-green-500" />
@@ -491,7 +491,7 @@ const Innovation = () => {
         <TabsContent value="automation" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/automation/workflows")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Workflow className="h-5 w-5 text-purple-500" />
@@ -512,7 +512,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/automation/rpa")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-red-500" />
@@ -533,7 +533,7 @@ const Innovation = () => {
             </Card>
 
             <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
-              onClick={() => handlehandleModuleAccess}>
+              onClick={() => handleModuleAccess("/automation/triggers")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-yellow-500" />

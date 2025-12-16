@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +32,7 @@ import { CreatePriceAlertInput, PriceAlert, UpdatePriceAlertInput } from "@/serv
 interface AlertFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: unknown: unknown: unknown) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
   alert?: PriceAlert | null;
   mode: "create" | "edit";
 }
@@ -56,7 +55,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
     notification_email: alert?.notification_email ?? true,
     notification_push: alert?.notification_push ?? true,
     notification_frequency: alert?.notification_frequency || "immediate",
-});
+  });
   const [travelDate, setTravelDate] = useState<Date | undefined>(
     alert?.travel_date ? new Date(alert.travel_date) : undefined
   );
@@ -115,7 +114,8 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Input
               id="product_name"
               value={formData.product_name}
-              onChange={handleChange})
+              onChange={(e) =>
+                setFormData({ ...formData, product_name: e.target.value })
               }
               placeholder="e.g., Flight to New York"
               required
@@ -128,7 +128,8 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Input
               id="route"
               value={formData.route || ""}
-              onChange={handleChange})
+              onChange={(e) =>
+                setFormData({ ...formData, route: e.target.value })
               }
               placeholder="e.g., São Paulo - Rio de Janeiro"
             />
@@ -172,7 +173,11 @@ export const AlertForm: React.FC<AlertFormProps> = ({
                 step="0.01"
                 min="0"
                 value={formData.target_price}
-                onChange={handleChange})
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    target_price: parseFloat(e.target.value) || 0,
+                  })
                 }
                 placeholder="0.00"
                 required
@@ -187,7 +192,11 @@ export const AlertForm: React.FC<AlertFormProps> = ({
                 step="0.01"
                 min="0"
                 value={formData.current_price || ""}
-                onChange={handleChange})
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    current_price: e.target.value ? parseFloat(e.target.value) : undefined,
+                  })
                 }
                 placeholder="0.00"
               />
@@ -201,7 +210,8 @@ export const AlertForm: React.FC<AlertFormProps> = ({
               id="product_url"
               type="url"
               value={formData.product_url}
-              onChange={handleChange})
+              onChange={(e) =>
+                setFormData({ ...formData, product_url: e.target.value })
               }
               placeholder="https://example.com/product"
               required
@@ -238,7 +248,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
               <Label htmlFor="notification_frequency">Notification Frequency</Label>
               <Select
                 value={formData.notification_frequency}
-                onValueChange={(value: unknown) =>
+                onValueChange={(value: any) =>
                   setFormData({ ...formData, notification_frequency: value })
                 }
               >
@@ -258,7 +268,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Button
               type="button"
               variant="outline"
-              onClick={() => handleonOpenChange}
+              onClick={() => onOpenChange(false)}
               disabled={loading}
             >
               Cancel
@@ -272,4 +282,4 @@ export const AlertForm: React.FC<AlertFormProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

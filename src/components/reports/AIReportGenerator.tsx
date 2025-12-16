@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -31,7 +30,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     end: new Date().toISOString().split("T")[0]
-});
+  });
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState("");
   const [lastReport, setLastReport] = useState<GeneratedReport | null>(null);
@@ -72,6 +71,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     setIsGenerating(true);
 
     try {
+      console.log("[AIReportGenerator] Starting report generation:", { reportType, format, dateRange });
       
       const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-ai-report", {
         method: "POST",
@@ -88,8 +88,11 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         })
       });
 
+      console.log("[AIReportGenerator] Response status:", response.status);
+
       if (!response.ok) {
         const errorText = await response.text();
+        console.error("[AIReportGenerator] Error response:", errorText);
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -101,6 +104,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       }
 
       const data = await response.json();
+      console.log("[AIReportGenerator] Response data:", { success: data.success, hasReport: !!data.report });
 
       if (data.success && data.report) {
         setLastReport(data.report);
@@ -114,7 +118,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         throw new Error(data.error || "Erro ao gerar relatório");
       }
     } catch (error) {
-      console.error("[AIReportGenerator] Error:", error);
       console.error("[AIReportGenerator] Error:", error);
       toast({
         title: "Erro",
@@ -141,7 +144,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       title: "Download Iniciado",
       description: "Relatório salvo como arquivo Markdown",
     });
-  });
+  };
 
   const handleModuleChange = (moduleId: string, checked: boolean) => {
     if (checked) {
@@ -228,7 +231,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <input
                 type="date"
                 value={dateRange.start}
-                onChange={handleChange}))}
+                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
@@ -237,7 +240,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <input
                 type="date"
                 value={dateRange.end}
-                onChange={handleChange}))}
+                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
@@ -255,7 +258,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                   <Checkbox
                     id={module.id}
                     checked={selectedModules.includes(module.id)}
-                    onCheckedChange={(checked) => handleModuleChange(module.id, !!checked}
+                    onCheckedChange={(checked) => handleModuleChange(module.id, !!checked)}
                   />
                   <Label htmlFor={module.id} className="text-sm font-normal cursor-pointer">
                     {module.label}
@@ -271,7 +274,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
               <Label>Instruções Personalizadas</Label>
               <Textarea
                 value={customPrompt}
-                onChange={handleChange}
+                onChange={(e) => setCustomPrompt(e.target.value)}
                 placeholder="Descreva que tipo de análise ou insights específicos você gostaria no relatório. Ex: 'Foque em certificações vencendo nos próximos 60 dias e sugira ações preventivas'..."
                 rows={4}
               />
@@ -309,7 +312,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                   </div>
                   <div className="flex gap-2">
                     <Button
-                      onClick={handleSetShowFullReport}
+                      onClick={() => setShowFullReport(!showFullReport)}
                       variant="outline"
                       size="sm"
                     >
@@ -339,9 +342,9 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
                       Gerado: {new Date(lastReport.generatedAt).toLocaleString("pt-BR")}
                     </span>
                   </div>
-                  <div className={`bg-background rounded-lg p-4 ${showFullReport ? "max-h-[600px]" : "max-h-60"} overflow-y-auto prose prose-sm dark:prose-invert max-w-none`}>
+                  <div className={`bg-background rounded-lg p-4 ${showFullReport ? 'max-h-[600px]' : 'max-h-60'} overflow-y-auto prose prose-sm dark:prose-invert max-w-none`}>
                     <ReactMarkdown>
-                      {showFullReport ? lastReport.content : lastReport.content.substring(0, 1000) + (lastReport.content.length > 1000 ? "..." : "")}
+                      {showFullReport ? lastReport.content : lastReport.content.substring(0, 1000) + (lastReport.content.length > 1000 ? '...' : '')}
                     </ReactMarkdown>
                   </div>
                 </div>
@@ -352,6 +355,6 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
       </Card>
     </div>
   );
-});
+};
 
 export default AIReportGenerator;

@@ -1,5 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
-
 /**
  * PATCH 547 - Trust Score Display Component
  * UI component to display trust scores with color-coded levels and historical tracking
@@ -123,7 +121,7 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleSetShowHistoryView}
+                onClick={() => setShowHistoryView(!showHistoryView)}
               >
                 <History className="h-4 w-4 mr-2" />
                 {showHistoryView ? "Hide" : "Show"} History

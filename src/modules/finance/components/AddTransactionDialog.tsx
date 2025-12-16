@@ -2,7 +2,7 @@
  * Add Transaction Dialog - Dialog para adicionar novas transações
  */
 
-import { memo, memo, useState, useCallback, useMemo } from "react";;;
+import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ const categories = [
   { value: "outros", label: "Outros" },
 ];
 
-export const AddTransactionDialog = memo(function({ open, onOpenChange, onSuccess }: AddTransactionDialogProps) {
+export function AddTransactionDialog({ open, onOpenChange, onSuccess }: AddTransactionDialogProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -117,7 +117,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               type="button"
               variant={formData.type === "income" ? "default" : "outline"}
               className={`flex-1 ${formData.type === "income" ? "bg-green-600 hover:bg-green-700" : ""}`}
-              onClick={handleSetFormData}
+              onClick={() => setFormData({ ...formData, type: "income" })}
             >
               <TrendingUp className="h-4 w-4 mr-2" />
               Receita
@@ -126,7 +126,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               type="button"
               variant={formData.type === "expense" ? "default" : "outline"}
               className={`flex-1 ${formData.type === "expense" ? "bg-red-600 hover:bg-red-700" : ""}`}
-              onClick={handleSetFormData}
+              onClick={() => setFormData({ ...formData, type: "expense" })}
             >
               <TrendingDown className="h-4 w-4 mr-2" />
               Despesa
@@ -143,7 +143,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               min="0"
               placeholder="0,00"
               value={formData.amount}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               required
             />
           </div>
@@ -155,7 +155,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               id="description"
               placeholder="Ex: Pagamento de frete internacional"
               value={formData.description}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
             />
           </div>
@@ -187,7 +187,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               id="date"
               type="date"
               value={formData.transaction_date}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, transaction_date: e.target.value })}
             />
           </div>
 
@@ -198,13 +198,13 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
               id="notes"
               placeholder="Observações adicionais..."
               value={formData.notes}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows={2}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
             <Button type="submit" disabled={isLoading}>
@@ -225,4 +225,4 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
       </DialogContent>
     </Dialog>
   );
-});
+}

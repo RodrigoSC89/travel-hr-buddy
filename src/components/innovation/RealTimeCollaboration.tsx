@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +38,7 @@ interface RealtimeMessage {
   type: string;
 }
 
-export const RealTimeCollaboration = memo(() => {
+export const RealTimeCollaboration = () => {
   const [activeUsers, setActiveUsers] = useState<ActiveUser[]>([]);
   const [realtimeMessages, setRealtimeMessages] = useState<RealtimeMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -55,7 +54,7 @@ export const RealTimeCollaboration = memo(() => {
     
     return () => {
       // Cleanup subscriptions
-    });
+    };
   }, [user]);
 
   const initializeCollaboration = async () => {
@@ -175,7 +174,7 @@ export const RealTimeCollaboration = memo(() => {
 
     return () => {
       supabase.removeChannel(messagesSubscription);
-    });
+    };
   };
 
   const sendMessage = async () => {
@@ -223,7 +222,7 @@ export const RealTimeCollaboration = memo(() => {
     case "alert": return <Bell className="w-4 h-4 text-orange-500" />;
     case "achievement": return <Zap className="w-4 h-4 text-green-500" />;
     default: return <MessageCircle className="w-4 h-4 text-muted-foreground" />;
-    });
+    }
   };
 
   return (
@@ -294,7 +293,7 @@ export const RealTimeCollaboration = memo(() => {
               <Input
                 placeholder="Compartilhe uma atualização..."
                 value={newMessage}
-                onChange={handleChange}
+                onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                 className="flex-1"
               />
@@ -327,4 +326,4 @@ export const RealTimeCollaboration = memo(() => {
       </Card>
     </div>
   );
-});
+};

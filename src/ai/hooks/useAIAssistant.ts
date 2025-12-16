@@ -8,7 +8,8 @@
  * 
  * const handleQuestion = async () => {
  *   const answer = await ask('What is the current mission status?');
- *    * };
+ *   console.log(answer);
+ * };
  * ```
  */
 

@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -233,7 +232,7 @@ const EnhancedAIChatbot: React.FC = () => {
         type: "ai",
         content: aiResponse.content,
         timestamp: new Date(),
-        category: selectedCapability as unknown,
+        category: selectedCapability as any,
         confidence: aiResponse.confidence,
         sources: aiResponse.sources
       };
@@ -404,7 +403,7 @@ const EnhancedAIChatbot: React.FC = () => {
                       ${selectedCapability === capability.id ? "ring-2 ring-primary shadow-primary/25 bg-primary/5" : ""}
                       ${capability.active ? "opacity-100" : "opacity-50 cursor-not-allowed"}
                       bg-gradient-to-br from-card via-card/95 to-${capability.color}/5 border-${capability.color}/20 hover:border-${capability.color}/40`}
-                    onClick={() => capability.active && setSelectedCapability(capability.id}
+                    onClick={() => capability.active && setSelectedCapability(capability.id)}
                   >
                     <CardContent className="p-4 flex flex-col items-center gap-2 text-center">
                       <div className={`p-3 rounded-xl bg-${capability.color}/20 group-hover:scale-110 transition-transform duration-300`}>
@@ -542,7 +541,7 @@ const EnhancedAIChatbot: React.FC = () => {
                         <Input
                           ref={inputRef}
                           value={inputMessage}
-                          onChange={handleChange}
+                          onChange={(e) => setInputMessage(e.target.value)}
                           placeholder="Digite sua pergunta... (Ctrl+K para focar, Ctrl+Enter para enviar)"
                           onKeyPress={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
@@ -665,7 +664,7 @@ const EnhancedAIChatbot: React.FC = () => {
                             variant="ghost"
                             size="sm"
                             className="w-full text-left justify-start h-auto py-3 px-3 hover:bg-primary/5 group transition-all duration-300"
-                            onClick={() => handlehandleQuickCommand}
+                            onClick={() => handleQuickCommand(command.text, command.category)}
                           >
                             <command.icon className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                             <span className="text-xs leading-relaxed">{command.text}</span>

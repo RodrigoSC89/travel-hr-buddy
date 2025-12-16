@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 410: Mission Autonomy Submodule
  * AI optimization settings, insights, risk mitigation
  */
@@ -11,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Shield, TrendingUp, Zap } from "lucide-react";
 
-export const MissionAutonomy = memo(function() {
+export function MissionAutonomy() {
   const [settings, setSettings] = useState({
     autoOptimization: true,
     riskMitigation: true,
@@ -45,7 +44,7 @@ export const MissionAutonomy = memo(function() {
 
   const handleToggle = (key: keyof typeof settings) => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
@@ -95,7 +94,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="auto-opt"
               checked={settings.autoOptimization}
-              onCheckedChange={() => handleToggle("autoOptimization"}
+              onCheckedChange={() => handleToggle("autoOptimization")}
             />
           </div>
 
@@ -109,7 +108,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="risk-mit"
               checked={settings.riskMitigation}
-              onCheckedChange={() => handleToggle("riskMitigation"}
+              onCheckedChange={() => handleToggle("riskMitigation")}
             />
           </div>
 
@@ -123,7 +122,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="ai-insights"
               checked={settings.aiInsights}
-              onCheckedChange={() => handleToggle("aiInsights"}
+              onCheckedChange={() => handleToggle("aiInsights")}
             />
           </div>
 
@@ -137,7 +136,7 @@ export const MissionAutonomy = memo(function() {
             <Switch
               id="pred-analytics"
               checked={settings.predictiveAnalytics}
-              onCheckedChange={() => handleToggle("predictiveAnalytics"}
+              onCheckedChange={() => handleToggle("predictiveAnalytics")}
             />
           </div>
         </CardContent>
@@ -158,7 +157,7 @@ export const MissionAutonomy = memo(function() {
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{insight.title}</p>
-                    <Badge variant={getImpactColor(insight.impact) as unknown}>
+                    <Badge variant={getImpactColor(insight.impact) as any}>
                       {insight.impact} impact
                     </Badge>
                   </div>
@@ -171,4 +170,4 @@ export const MissionAutonomy = memo(function() {
       </Card>
     </div>
   );
-});
+}

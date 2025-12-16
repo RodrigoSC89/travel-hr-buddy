@@ -1,5 +1,4 @@
 /**
-import { useCallback, useState } from "react";;
  * Smart Automation Page - Automação Inteligente
  * Workflows automatizados com decisões baseadas em IA
  */
@@ -146,12 +145,12 @@ const SmartAutomationPage: React.FC = () => {
 
   const getStatusBadge = (status: AutomationWorkflow["status"]) => {
     switch (status) {
-    case "active":
-      return <Badge className="bg-green-500/20 text-green-400"><Activity className="h-3 w-3 mr-1 animate-pulse" />Ativo</Badge>;
-    case "paused":
-      return <Badge className="bg-yellow-500/20 text-yellow-400"><Pause className="h-3 w-3 mr-1" />Pausado</Badge>;
-    case "error":
-      return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Erro</Badge>;
+      case "active":
+        return <Badge className="bg-green-500/20 text-green-400"><Activity className="h-3 w-3 mr-1 animate-pulse" />Ativo</Badge>;
+      case "paused":
+        return <Badge className="bg-yellow-500/20 text-yellow-400"><Pause className="h-3 w-3 mr-1" />Pausado</Badge>;
+      case "error":
+        return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Erro</Badge>;
     }
   };
 
@@ -297,7 +296,7 @@ const SmartAutomationPage: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 mt-4 pt-4 border-t">
-                    <Button size="sm" variant="outline" onClick={() => handlehandleRunWorkflow}>
+                    <Button size="sm" variant="outline" onClick={() => handleRunWorkflow(workflow.id)}>
                       <Play className="h-4 w-4 mr-1" />
                       Executar
                     </Button>
@@ -318,7 +317,7 @@ const SmartAutomationPage: React.FC = () => {
                       <span className="text-sm text-muted-foreground">Ativo</span>
                       <Switch 
                         checked={workflow.status === "active"}
-                        onCheckedChange={() => handleToggleWorkflow(workflow.id, workflow.status}
+                        onCheckedChange={() => handleToggleWorkflow(workflow.id, workflow.status)}
                       />
                     </div>
                   </div>
@@ -343,7 +342,7 @@ const SmartAutomationPage: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                     <Bar dataKey="executions" fill="hsl(var(--primary))" name="Total" />
                     <Bar dataKey="success" fill="#22c55e" name="Sucesso" />
                   </BarChart>
@@ -405,7 +404,7 @@ const SmartAutomationPage: React.FC = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                   <YAxis stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                   <Line type="monotone" dataKey="manual" stroke="#ef4444" strokeWidth={2} name="Horas Manuais" />
                   <Line type="monotone" dataKey="automated" stroke="#22c55e" strokeWidth={2} name="Horas Automatizadas" />
                 </LineChart>

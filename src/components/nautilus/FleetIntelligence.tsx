@@ -2,7 +2,7 @@
  * Fleet Intelligence - Real-time fleet monitoring with AI insights
  */
 
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ interface VesselStatus {
   efficiency: number;
 }
 
-export const FleetIntelligence = memo(function() {
+export function FleetIntelligence() {
   const [vessels, setVessels] = useState<VesselStatus[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,6 +46,7 @@ export const FleetIntelligence = memo(function() {
         .limit(10);
 
       if (error) {
+        console.error("Error loading vessels:", error);
         // Use demo data if no access
         setVessels(getDemoVessels());
         return;
@@ -72,7 +73,6 @@ export const FleetIntelligence = memo(function() {
         setVessels(getDemoVessels());
       }
     } catch (error) {
-      console.error("Error loading fleet:", error);
       console.error("Error loading fleet:", error);
       setVessels(getDemoVessels());
     } finally {
@@ -287,12 +287,12 @@ export const FleetIntelligence = memo(function() {
                     className={`p-4 rounded-lg border bg-card/50 hover:bg-card/80 transition-all cursor-pointer ${
                       selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
                     }`}
-                    onClick={handleSetSelectedVessel}
+                    onClick={() => setSelectedVessel(vessel.id === selectedVessel ? null : vessel.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`p-2 rounded-lg ${getStatusColor(vessel.status)}/20`}>
-                          <StatusIcon className={`h-5 w-5 ${getStatusColor(vessel.status).replace("bg-", "text-")}`} />
+                          <StatusIcon className={`h-5 w-5 ${getStatusColor(vessel.status).replace('bg-', 'text-')}`} />
                         </div>
                         <div>
                           <h4 className="font-semibold">{vessel.name}</h4>
@@ -388,4 +388,4 @@ export const FleetIntelligence = memo(function() {
       </Card>
     </div>
   );
-});
+}

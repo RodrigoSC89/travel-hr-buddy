@@ -3,7 +3,7 @@
  * Provides live metrics and stats for the dashboard
  */
 
-import { memo, memo, useCallback, useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,7 +46,7 @@ const defaultMetrics: DashboardMetrics = {
   isLoading: true
 };
 
-export const useDashboardData = memo(function() {
+export function useDashboardData() {
   const [metrics, setMetrics] = useState<DashboardMetrics>(defaultMetrics);
   const [notifications, setNotifications] = useState<RealtimeNotification[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -59,7 +59,7 @@ export const useDashboardData = memo(function() {
         .from("vessels")
         .select("*", { count: "exact" });
       
-      const activeVessels = vessels?.filter((v: unknown) => v.status === "active" || v.status === "operational")?.length || 0;
+      const activeVessels = vessels?.filter((v: any) => v.status === "active" || v.status === "operational")?.length || 0;
 
       // Fetch crew members
       const { count: crewCount } = await supabase
@@ -102,7 +102,7 @@ export const useDashboardData = memo(function() {
         : 95;
 
       // Map AI insights to notifications
-      const mappedNotifications: RealtimeNotification[] = (aiInsights || []).map((insight: unknown) => ({
+      const mappedNotifications: RealtimeNotification[] = (aiInsights || []).map((insight: any) => ({
         id: insight.id,
         title: insight.title || "Insight",
         message: insight.description || "",
@@ -199,4 +199,4 @@ export const useDashboardData = memo(function() {
     markAllNotificationsAsRead,
     unreadCount: notifications.filter(n => !n.isRead).length
   };
-});
+}

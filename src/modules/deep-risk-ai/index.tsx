@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 433 - Deep Sea Risk Analysis AI
  * Comprehensive AI-powered risk assessment for deep sea operations
  * Integrated with analytics-core, incident logs, and forecast data
@@ -36,6 +35,7 @@ import {
 import { deepRiskAIService, type RiskFactors, type RiskScore, type RiskRecommendation } from "./services/deepRiskAIService";
 import { toast } from "sonner";
 
+
 const DeepRiskAI: React.FC = () => {
   const [depth, setDepth] = useState(100);
   const [pressure, setPressure] = useState(11);
@@ -49,7 +49,7 @@ const DeepRiskAI: React.FC = () => {
   const [riskScore, setRiskScore] = useState<RiskScore | null>(null);
   const [recommendations, setRecommendations] = useState<RiskRecommendation[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [prediction, setPrediction] = useState<unknown>(null);
+  const [prediction, setPrediction] = useState<any>(null);
   const [eventHistory, setEventHistory] = useState<any[]>([]);
 
   // Load event history on mount
@@ -202,7 +202,7 @@ const DeepRiskAI: React.FC = () => {
                   <Input
                     type="number"
                     value={depth}
-                    onChange={handleChange}
+                    onChange={(e) => setDepth(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -212,7 +212,7 @@ const DeepRiskAI: React.FC = () => {
                     type="number"
                     step="0.1"
                     value={pressure}
-                    onChange={handleChange}
+                    onChange={(e) => setPressure(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -224,7 +224,7 @@ const DeepRiskAI: React.FC = () => {
                     type="number"
                     step="0.1"
                     value={temperature}
-                    onChange={handleChange}
+                    onChange={(e) => setTemperature(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -234,7 +234,7 @@ const DeepRiskAI: React.FC = () => {
                     type="number"
                     step="0.1"
                     value={current}
-                    onChange={handleChange}
+                    onChange={(e) => setCurrent(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -243,7 +243,7 @@ const DeepRiskAI: React.FC = () => {
                   <Input
                     type="number"
                     value={visibility}
-                    onChange={handleChange}
+                    onChange={(e) => setVisibility(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -252,7 +252,7 @@ const DeepRiskAI: React.FC = () => {
                   <Input
                     type="number"
                     value={sonarQuality}
-                    onChange={handleChange}
+                    onChange={(e) => setSonarQuality(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -262,7 +262,7 @@ const DeepRiskAI: React.FC = () => {
                     type="number"
                     step="0.1"
                     value={windSpeed}
-                    onChange={handleChange}
+                    onChange={(e) => setWindSpeed(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -272,7 +272,7 @@ const DeepRiskAI: React.FC = () => {
                     type="number"
                     step="0.1"
                     value={waveHeight}
-                    onChange={handleChange}
+                    onChange={(e) => setWaveHeight(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>

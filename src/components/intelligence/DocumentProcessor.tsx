@@ -1,4 +1,3 @@
-import { useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -87,7 +86,7 @@ export const DocumentProcessor: React.FC = () => {
             return 90;
           }
           return prev + 10;
-  });
+        });
       }, 200);
 
       // Convert file to base64 for processing
@@ -166,7 +165,7 @@ export const DocumentProcessor: React.FC = () => {
         }
       };
       reader.onerror = error => reject(error);
-  };
+    });
   };
 
   const exportAnalysis = (doc: ProcessedDocument) => {
@@ -199,7 +198,7 @@ export const DocumentProcessor: React.FC = () => {
       title: "Documento Removido",
       description: "Análise foi removida da lista",
     });
-  });
+  };
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
@@ -276,7 +275,7 @@ export const DocumentProcessor: React.FC = () => {
               type="file"
               className="hidden"
               accept=".pdf,.doc,.docx,.txt,.csv"
-              onChange={handleChange}
+              onChange={(e) => handleFileUpload(e.target.files)}
             />
           </div>
         </CardContent>
@@ -301,7 +300,7 @@ export const DocumentProcessor: React.FC = () => {
                           ? "border-primary bg-primary/5" 
                           : "border-border hover:border-primary/50"
                       }`}
-                      onClick={handleSetSelectedDoc}
+                      onClick={() => setSelectedDoc(doc)}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">

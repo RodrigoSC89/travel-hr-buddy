@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { Button } from "@/components/ui/button";
@@ -161,7 +160,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         description: "Workspace sincronizado com sucesso",
         user: "Sistema",
         timestamp: new Date().toISOString(),
-      });
+      };
       setActivities(prev => [refreshActivity, ...prev]);
       
       toast({
@@ -209,13 +208,13 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     
     try {
       // Try to call the edge function for real AI response
-      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
+      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
         body: { 
           message,
           context: "workspace_chat",
           systemPrompt: "Você é um assistente de IA para um workspace marítimo. Ajude com operações, documentação, e comunicação da equipe. Responda de forma concisa e profissional em português."
         }
-      };
+      });
       
       let aiContent: string;
       
@@ -223,8 +222,8 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         // Fallback to mock responses
         const aiResponses = [
           `Analisando sua mensagem sobre "${message.substring(0, 30)}...":\n\n1. Verifique os protocolos de segurança\n2. Consulte a documentação técnica\n3. Agende uma reunião com a equipe se necessário`,
-          "Com base na sua solicitação, recomendo:\n\n• Revisar o checklist de operações\n• Confirmar com o comandante\n• Atualizar o log de atividades",
-          "Análise do contexto marítimo:\n\n✓ Condições meteorológicas: Favoráveis\n✓ Status da embarcação: Operacional\n✓ Próxima parada: Conforme programação\n\nSugestão: Mantenha a equipe informada sobre atualizações.",
+          `Com base na sua solicitação, recomendo:\n\n• Revisar o checklist de operações\n• Confirmar com o comandante\n• Atualizar o log de atividades`,
+          `Análise do contexto marítimo:\n\n✓ Condições meteorológicas: Favoráveis\n✓ Status da embarcação: Operacional\n✓ Próxima parada: Conforme programação\n\nSugestão: Mantenha a equipe informada sobre atualizações.`,
         ];
         aiContent = aiResponses[Math.floor(Math.random() * aiResponses.length)];
       } else {
@@ -244,7 +243,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       setMessages(prev => [...prev, aiMessage]);
       
     } catch (error) {
-      console.error("AI assist error:", error);
+      console.error('AI assist error:', error);
       toast({
         title: "Erro",
         description: "Falha ao obter resposta da IA. Usando modo offline.",
@@ -260,7 +259,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         timestamp: new Date().toISOString(),
         isOwn: false,
         isAI: true,
-      });
+      };
       setMessages(prev => [...prev, fallbackMessage]);
     } finally {
       setIsLoadingAI(false);
@@ -282,7 +281,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       // Simulate channel creation
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setCurrentChannel(newChannelName.toLowerCase().replace(/\s+/g, "-"));
+      setCurrentChannel(newChannelName.toLowerCase().replace(/\s+/g, '-'));
       
       const activity: WorkspaceActivity = {
         id: String(Date.now()),
@@ -291,7 +290,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         description: `Novo canal #${newChannelName} foi criado`,
         user: "Você",
         timestamp: new Date().toISOString(),
-      });
+      };
       setActivities(prev => [activity, ...prev]);
       
       toast({
@@ -350,25 +349,25 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
   };
 
   const handleJoinMeeting = () => {
-    window.open(meetingLink, "_blank");
+    window.open(meetingLink, '_blank');
     toast({
       title: "Entrando na reunião",
       description: "Abrindo em nova aba...",
     });
-  });
+  };
 
   const handleMemberClick = (member: TeamMember) => {
     toast({
       title: member.name,
-      description: `${member.role} - ${member.status === "online" ? "Online" : member.status === "away" ? "Ausente" : member.status === "busy" ? "Ocupado" : "Offline"}`,
+      description: `${member.role} - ${member.status === 'online' ? 'Online' : member.status === 'away' ? 'Ausente' : member.status === 'busy' ? 'Ocupado' : 'Offline'}`,
     });
-  });
+  };
 
   const handleDocumentUpload = (file: File) => {
     const newDoc: SharedDocument = {
       id: String(Date.now()),
       name: file.name,
-      type: file.name.split(".").pop()?.toUpperCase() as any || "OTHER",
+      type: file.name.split('.').pop()?.toUpperCase() as any || "OTHER",
       size: `${(file.size / 1024).toFixed(1)} KB`,
       lastModified: "Agora",
       modifiedBy: "Você",
@@ -401,8 +400,8 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
   return (
@@ -442,7 +441,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
               variant="outline" 
               size="sm" 
               className="gap-2" 
-              onClick={handleSetShowNewChannelDialog}
+              onClick={() => setShowNewChannelDialog(true)}
             >
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Novo Canal</span>
@@ -495,7 +494,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                     variant="ghost" 
                     size="icon" 
                     className="h-8 w-8"
-                    onClick={handleSetShowSettingsDialog}
+                    onClick={() => setShowSettingsDialog(true)}
                   >
                     <Settings className="h-4 w-4" />
                   </Button>
@@ -573,12 +572,12 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                 id="channel-name"
                 placeholder="ex: operações-diárias"
                 value={newChannelName}
-                onChange={handleChange}
+                onChange={(e) => setNewChannelName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
               <Label>Tipo de Canal</Label>
-              <Select value={newChannelType} onValueChange={(v: "public" | "private") => setNewChannelType(v}>
+              <Select value={newChannelType} onValueChange={(v: "public" | "private") => setNewChannelType(v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -600,7 +599,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowNewChannelDialog}>
+            <Button variant="outline" onClick={() => setShowNewChannelDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateChannel} disabled={isCreatingChannel}>
@@ -653,7 +652,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowMeetingDialog}>
+            <Button variant="outline" onClick={() => setShowMeetingDialog(false)}>
               Fechar
             </Button>
             <Button onClick={handleJoinMeeting}>
@@ -733,7 +732,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowSettingsDialog}>
+            <Button variant="outline" onClick={() => setShowSettingsDialog(false)}>
               Fechar
             </Button>
             <Button onClick={() => {

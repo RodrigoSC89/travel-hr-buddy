@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +23,7 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [rotations, setRotations] = useState<any[]>([]);
   const [skillGaps, setSkillGaps] = useState<any[]>([]);
-  const [insights, setInsights] = useState<unknown>(null);
+  const [insights, setInsights] = useState<any>(null);
 
   const handleGenerateRecommendations = async () => {
     const recs = await generateCrewRecommendations(crew);
@@ -274,9 +274,9 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                       <p className="font-medium">{rot.currentVessel}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Embarcação Sugerida:</span>
-                      <p className="font-medium text-success">{rot.suggestedVessel}</p>
-                    </div>
+                        <span className="text-muted-foreground">Embarcação Sugerida:</span>
+                        <p className="font-medium text-success">{rot.suggestedVessel}</p>
+                      </div>
                     <div>
                       <span className="text-muted-foreground">Data de Rotação:</span>
                       <p className="font-medium">{new Date(rot.rotationDate).toLocaleDateString()}</p>
@@ -387,4 +387,4 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
       </Tabs>
     </div>
   );
-});
+};

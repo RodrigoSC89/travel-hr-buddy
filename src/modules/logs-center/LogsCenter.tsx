@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 94.0 - Logs Center
  * Centralized technical logs with filtering, AI audit, and PDF export
  */
@@ -40,7 +39,7 @@ export default function LogsCenter() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("logs")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -173,7 +172,7 @@ export default function LogsCenter() {
               <Input
                 placeholder="Buscar logs..."
                 value={filters.search || ""}
-                onChange={handleChange}
+                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
               />
             </div>
 
@@ -198,13 +197,13 @@ export default function LogsCenter() {
               placeholder="Origem..."
               className="w-[200px]"
               value={filters.origin || ""}
-              onChange={handleChange}
+              onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
             />
 
             <Button
               variant="outline"
               size="icon"
-              onClick={handleSetFilters}
+              onClick={() => setFilters({})}
               title="Limpar filtros"
             >
               <Filter className="h-4 w-4" />
@@ -279,7 +278,9 @@ export default function LogsCenter() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={handleSetExpandedLog}
+                                onClick={() =>
+                                  setExpandedLog(expandedLog === log.id ? null : log.id)
+                                }
                               >
                                 <ChevronDown
                                   className={`h-4 w-4 transition-transform ${

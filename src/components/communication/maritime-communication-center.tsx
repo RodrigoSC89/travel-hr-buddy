@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +55,7 @@ interface CommunicationChannel {
   last_activity: string;
 }
 
-export const MaritimeCommunicationCenter = memo(() => {
+export const MaritimeCommunicationCenter = () => {
   const [communications, setCommunications] = useState<MaritimeCommunication[]>([]);
   const [channels, setChannels] = useState<CommunicationChannel[]>([]);
   const [activeTab, setActiveTab] = useState("messages");
@@ -78,7 +77,7 @@ export const MaritimeCommunicationCenter = memo(() => {
     const cleanup = setupRealTimeUpdates();
     return () => {
       cleanup();
-    });
+    };
   }, []);
 
   const loadCommunications = async () => {
@@ -337,7 +336,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -428,7 +427,7 @@ export const MaritimeCommunicationCenter = memo(() => {
                   <Textarea 
                     placeholder="Digite sua mensagem..."
                     value={newMessage.content}
-                    onChange={handleChange}))}
+                    onChange={(e) => setNewMessage(prev => ({ ...prev, content: e.target.value }))}
                     className="min-h-20"
                   />
                 </div>
@@ -440,7 +439,9 @@ export const MaritimeCommunicationCenter = memo(() => {
                       type="number"
                       step="any"
                       value={newMessage.coordinates.latitude}
-                      onChange={handleChange}
+                      onChange={(e) => setNewMessage(prev => ({ 
+                        ...prev, 
+                        coordinates: { ...prev.coordinates, latitude: parseFloat(e.target.value) }
                       }))}
                     />
                   </div>
@@ -450,7 +451,9 @@ export const MaritimeCommunicationCenter = memo(() => {
                       type="number"
                       step="any"
                       value={newMessage.coordinates.longitude}
-                      onChange={handleChange}
+                      onChange={(e) => setNewMessage(prev => ({ 
+                        ...prev, 
+                        coordinates: { ...prev.coordinates, longitude: parseFloat(e.target.value) }
                       }))}
                     />
                   </div>
@@ -458,7 +461,7 @@ export const MaritimeCommunicationCenter = memo(() => {
               </div>
               
               <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={handleSetIsNewMessageOpen}>
+                <Button variant="outline" onClick={() => setIsNewMessageOpen(false)}>
                   Cancelar
                 </Button>
                 <Button onClick={sendMessage}>
@@ -531,35 +534,35 @@ export const MaritimeCommunicationCenter = memo(() => {
                 <Button 
                   variant={selectedChannel === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetSelectedChannel}
+                  onClick={() => setSelectedChannel("all")}
                 >
                   Todas
                 </Button>
                 <Button 
                   variant={selectedChannel === "emergency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetSelectedChannel}
+                  onClick={() => setSelectedChannel("emergency")}
                 >
                   Emergências
                 </Button>
                 <Button 
                   variant={selectedChannel === "navigation" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetSelectedChannel}
+                  onClick={() => setSelectedChannel("navigation")}
                 >
                   Navegação
                 </Button>
                 <Button 
                   variant={selectedChannel === "weather_alert" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetSelectedChannel}
+                  onClick={() => setSelectedChannel("weather_alert")}
                 >
                   Meteorológico
                 </Button>
                 <Button 
                   variant={selectedChannel === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetSelectedChannel}
+                  onClick={() => setSelectedChannel("maintenance")}
                 >
                   Manutenção
                 </Button>
@@ -733,4 +736,4 @@ export const MaritimeCommunicationCenter = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

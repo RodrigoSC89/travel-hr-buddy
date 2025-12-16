@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,7 @@ interface Organization {
   status: "active" | "inactive";
 }
 
-export const ClientCustomization = memo(() => {
+export const ClientCustomization = () => {
   const [selectedTheme, setSelectedTheme] = useState("default");
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -176,7 +175,7 @@ export const ClientCustomization = memo(() => {
       title: "Tema Salvo",
       description: "As configurações de tema foram aplicadas com sucesso.",
     });
-  });
+  };
 
   const cloneOrganization = (orgId: string) => {
     const org = organizations.find(o => o.id === orgId);
@@ -194,7 +193,7 @@ export const ClientCustomization = memo(() => {
         description: "Uma cópia da organização foi criada com sucesso.",
       });
     }
-  });
+  };
 
   const getPlanColor = (plan: string) => {
     switch (plan) {
@@ -259,7 +258,7 @@ export const ClientCustomization = memo(() => {
                             ? "border-primary bg-primary/5" 
                             : "border-muted hover:border-border"
                         }`}
-                        onClick={handleSetSelectedTheme}
+                        onClick={() => setSelectedTheme(theme.id)}
                       >
                         <div className="flex items-center gap-2 mb-2">
                           <div 
@@ -365,7 +364,7 @@ export const ClientCustomization = memo(() => {
                         <Label>Nome do Campo</Label>
                         <Input 
                           value={field.name}
-                          onChange={handleChange}
+                          onChange={(e) => updateCustomField(field.id, { name: e.target.value })}
                           className="mt-1"
                         />
                       </div>
@@ -374,7 +373,7 @@ export const ClientCustomization = memo(() => {
                         <Label>Tipo</Label>
                         <Select 
                           value={field.type}
-                          onValueChange={(value) => updateCustomField(field.id, { type: value as CustomField["type"] })}
+                          onValueChange={(value) => updateCustomField(field.id, { type: value as CustomField['type'] })}
                         >
                           <SelectTrigger className="mt-1">
                             <SelectValue />
@@ -422,7 +421,7 @@ export const ClientCustomization = memo(() => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => handleremoveCustomField}
+                          onClick={() => removeCustomField(field.id)}
                         >
                           ✕
                         </Button>
@@ -435,7 +434,9 @@ export const ClientCustomization = memo(() => {
                         <Input 
                           placeholder="Opção 1, Opção 2, Opção 3"
                           value={field.options?.join(", ") || ""}
-                          onChange={handleChange}
+                          onChange={(e) => updateCustomField(field.id, { 
+                            options: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
+                          })}
                           className="mt-1"
                         />
                       </div>
@@ -503,7 +504,7 @@ export const ClientCustomization = memo(() => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => handlecloneOrganization}
+                          onClick={() => cloneOrganization(org.id)}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
@@ -597,7 +598,7 @@ export const ClientCustomization = memo(() => {
                     name: "Turismo Náutico",
                     description: "Configuração para turismo e embarcações de recreio",
                     modules: ["Dashboard", "Reservas", "Clientes", "Rotas"]
-                  };
+                  }
                 ].map((template, index) => (
                   <div key={index} className="border rounded-lg p-4 hover-lift">
                     <h4 className="font-semibold mb-2">{template.name}</h4>
@@ -626,4 +627,4 @@ export const ClientCustomization = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

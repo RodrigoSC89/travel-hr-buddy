@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy, ComponentType } from "react";
-import { DashboardSkeleton, KPICardSkeleton, ChartSkeleton, TableSkeleton } from "@/components/unified/Skeletons.unified";
+import { DashboardSkeleton, KPICardSkeleton, ChartSkeleton, TableSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { useLightMode } from "@/hooks/useConnectionAdaptive";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +50,7 @@ export const LoadingWrapper: React.FC<LoadingWrapperProps> = ({
       {children}
     </Suspense>
   );
-});
+};
 
 /**
  * HOC for lazy loading components with connection-aware fallback
@@ -67,7 +67,7 @@ export function withLoadingWrapper<T extends ComponentType<any>>(
         <LazyComponent {...props} />
       </LoadingWrapper>
     );
-  });
+  };
 }
 
 /**
@@ -79,7 +79,7 @@ export const PageLoadingIndicator: React.FC<{ isLoading: boolean }> = ({ isLoadi
   return (
     <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-muted overflow-hidden">
       <div className="h-full bg-primary animate-pulse w-1/3" 
-        style={{ animation: "loading-bar 1.5s ease-in-out infinite" }} />
+           style={{ animation: 'loading-bar 1.5s ease-in-out infinite' }} />
     </div>
   );
 };

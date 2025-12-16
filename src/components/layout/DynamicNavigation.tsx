@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
@@ -31,7 +30,7 @@ interface DynamicNavigationProps {
 
 type FilterMode = "all" | "complete" | "partial" | "incomplete";
 
-export const DynamicNavigation = memo(function({ className }: DynamicNavigationProps) {
+export function DynamicNavigation({ className }: DynamicNavigationProps) {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(["core", "operations"]));
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [filterMode, setFilterMode] = useState<FilterMode>("all");
@@ -57,8 +56,8 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       if (filterMode === "partial") return module.completeness === "partial";
       if (filterMode === "incomplete") return module.status === "incomplete" || module.completeness === "broken";
       return true;
-  });
-  });
+    });
+  };
 
   const toggleSection = (category: string) => {
     const newSections = new Set(openSections);
@@ -68,7 +67,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       newSections.add(category);
     }
     setOpenSections(newSections);
-  });
+  };
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -126,7 +125,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       {/* Mobile menu button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-zinc-900 text-white shadow-lg"
-        onClick={handleSetIsMobileOpen}
+        onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
@@ -160,7 +159,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
           <label className="text-xs text-zinc-400 mb-2 block">Filter by Status:</label>
           <select
             value={filterMode}
-            onChange={handleChange}
+            onChange={(e) => setFilterMode(e.target.value as FilterMode)}
             className="w-full p-2 text-sm bg-zinc-800 border border-zinc-700 rounded-md text-white"
           >
             <option value="all">All Modules</option>
@@ -180,7 +179,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
             return (
               <div key={category} className="mb-2">
                 <button
-                  onClick={() => handletoggleSection}
+                  onClick={() => toggleSection(category)}
                   className="w-full flex items-center justify-between p-2 rounded-md hover:bg-zinc-800 transition-colors text-sm font-semibold"
                 >
                   <span>{getCategoryLabel(category)}</span>
@@ -240,4 +239,4 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       </aside>
     </>
   );
-});
+}

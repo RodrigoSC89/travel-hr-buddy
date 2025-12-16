@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Weather Map Component
  * Interactive weather map with OpenWeatherMap tiles as primary source
  * Falls back to static visualization if APIs unavailable
@@ -41,7 +40,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   const [mapError, setMapError] = useState(false);
   const [useAlternative, setUseAlternative] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
-  const [weatherData, setWeatherData] = useState<unknown>(null);
+  const [weatherData, setWeatherData] = useState<any>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
 
@@ -49,11 +48,12 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
-          body: { action: "get_keys" }
-};
+        const { data, error } = await supabase.functions.invoke('weather-map-proxy', {
+          body: { action: 'get_keys' }
+        });
 
         if (error) {
+          console.error("Error fetching API keys:", error);
           setMapError(true);
           setUseAlternative(true);
           return;
@@ -67,7 +67,6 @@ export const WindyMap: React.FC<WindyMapProps> = ({
         }
       } catch (err) {
         console.error("Failed to fetch API keys:", err);
-        console.error("Failed to fetch API keys:", err);
         setMapError(true);
         setUseAlternative(true);
       }
@@ -80,15 +79,14 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
-          body: { action: "weather_data", lat, lon }
-        };
+        const { data, error } = await supabase.functions.invoke('weather-map-proxy', {
+          body: { action: 'weather_data', lat, lon }
+        });
 
         if (!error && data?.data) {
           setWeatherData(data.data);
         }
       } catch (err) {
-        console.error("Failed to fetch weather data:", err);
         console.error("Failed to fetch weather data:", err);
       }
     };
@@ -131,11 +129,11 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       description: "Carregando dados meteorológicos...",
       duration: 2000,
     });
-  });
+  };
 
   // Get tile URL with API key
   const getOWMTileUrl = (z: number, x: number, y: number) => {
-    if (!apiKey) return "";
+    if (!apiKey) return '';
     const layer = layers.find(l => l.id === selectedLayer);
     return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${apiKey}`;
   };
@@ -154,7 +152,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
               linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
             `,
-            backgroundSize: "50px 50px"
+            backgroundSize: '50px 50px'
           }} />
           
           {/* Simulated weather cells */}
@@ -167,13 +165,13 @@ export const WindyMap: React.FC<WindyMapProps> = ({
                 top: `${Math.random() * 100}%`,
                 width: `${30 + Math.random() * 60}px`,
                 height: `${30 + Math.random() * 60}px`,
-                background: selectedLayer === "temp" 
+                background: selectedLayer === 'temp' 
                   ? `radial-gradient(circle, rgba(255,${100 + Math.random() * 155},0,0.4) 0%, transparent 70%)`
-                  : selectedLayer === "precipitation"
-                    ? "radial-gradient(circle, rgba(0,100,255,0.4) 0%, transparent 70%)"
-                    : selectedLayer === "clouds"
-                      ? "radial-gradient(circle, rgba(200,200,200,0.3) 0%, transparent 70%)"
-                      : "radial-gradient(circle, rgba(0,255,200,0.3) 0%, transparent 70%)",
+                  : selectedLayer === 'precipitation'
+                  ? `radial-gradient(circle, rgba(0,100,255,0.4) 0%, transparent 70%)`
+                  : selectedLayer === 'clouds'
+                  ? `radial-gradient(circle, rgba(200,200,200,0.3) 0%, transparent 70%)`
+                  : `radial-gradient(circle, rgba(0,255,200,0.3) 0%, transparent 70%)`,
                 animationDelay: `${Math.random() * 2}s`,
                 animationDuration: `${2 + Math.random() * 2}s`
               }}
@@ -181,12 +179,12 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           ))}
           
           {/* Wind lines animation */}
-          {selectedLayer === "wind" && [...Array(15)].map((_, i) => (
+          {selectedLayer === 'wind' && [...Array(15)].map((_, i) => (
             <div
               key={`wind-${i}`}
               className="absolute h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse"
               style={{
-                left: "-10%",
+                left: `-10%`,
                 top: `${10 + i * 6}%`,
                 width: `${60 + Math.random() * 40}%`,
                 opacity: 0.3 + Math.random() * 0.4,
@@ -248,7 +246,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       height: "450",
       zoom: zoom.toString(),
       level: "surface",
-      overlay: selectedLayer === "precipitation" ? "rain" : selectedLayer,
+      overlay: selectedLayer === 'precipitation' ? 'rain' : selectedLayer,
       product: "ecmwf",
       menu: "",
       message: "true",
@@ -263,7 +261,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       radarRange: "-1",
     });
     return `https://embed.windy.com/embed2.html?${params.toString()}`;
-  });
+  };
 
   return (
     <Card className="overflow-hidden">
@@ -301,7 +299,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
                   key={layer.id}
                   variant={selectedLayer === layer.id ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetSelectedLayer}
+                  onClick={() => setSelectedLayer(layer.id)}
                   className="h-8"
                 >
                   <layer.icon className="h-3 w-3 mr-1" />
@@ -313,7 +311,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Zoom:</span>
-            <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v}>
+            <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v))}>
               <SelectTrigger className="w-24 h-8">
                 <SelectValue />
               </SelectTrigger>

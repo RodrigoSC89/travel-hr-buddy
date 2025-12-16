@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Nautilus Automation - Módulo Unificado de Automação
  * PATCH UNIFY-2.0 - Fusão dos módulos de automação
  * 
@@ -203,16 +202,16 @@ const NautilusAutomation: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "active":
-    case "running":
-      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Ativo</Badge>;
-    case "paused":
-    case "idle":
-      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pausado</Badge>;
-    case "error":
-      return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Erro</Badge>;
-    default:
-      return <Badge variant="secondary">{status}</Badge>;
+      case "active":
+      case "running":
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Ativo</Badge>;
+      case "paused":
+      case "idle":
+        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pausado</Badge>;
+      case "error":
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Erro</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
@@ -342,7 +341,7 @@ const NautilusAutomation: React.FC = () => {
                       {workflow.lastRun && (
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          Última: {workflow.lastRun.toLocaleTimeString("pt-BR")}
+                          Última: {workflow.lastRun.toLocaleTimeString('pt-BR')}
                         </span>
                       )}
                     </div>
@@ -352,7 +351,7 @@ const NautilusAutomation: React.FC = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handlerunWorkflow}
+                      onClick={() => runWorkflow(workflow.id)}
                       disabled={workflow.status !== "active"}
                     >
                       <Play className="h-4 w-4" />
@@ -360,7 +359,7 @@ const NautilusAutomation: React.FC = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handletoggleWorkflow}
+                      onClick={() => toggleWorkflow(workflow.id)}
                     >
                       {workflow.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                     </Button>
@@ -401,7 +400,7 @@ const NautilusAutomation: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Última atividade:</span>
-                      <span className="text-foreground">{bot.lastActivity.toLocaleTimeString("pt-BR")}</span>
+                      <span className="text-foreground">{bot.lastActivity.toLocaleTimeString('pt-BR')}</span>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-4">
@@ -452,7 +451,7 @@ const NautilusAutomation: React.FC = () => {
                   <div className="flex items-center gap-4">
                     <Switch
                       checked={trigger.isActive}
-                      onCheckedChange={() => toggleTrigger(trigger.id}
+                      onCheckedChange={() => toggleTrigger(trigger.id)}
                     />
                     <Button variant="ghost" size="sm">
                       <Trash2 className="h-4 w-4 text-destructive" />

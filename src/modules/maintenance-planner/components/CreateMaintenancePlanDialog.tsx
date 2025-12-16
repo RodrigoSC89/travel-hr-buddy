@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -62,7 +61,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
     estimatedHours: "",
     assignee: "",
     notes: "",
-});
+  });
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -138,7 +137,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 id="title"
                 placeholder="Ex: Manutenção preventiva do Thruster"
                 value={formData.title}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               />
             </div>
 
@@ -256,7 +255,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                   placeholder="Ex: 4"
                   className="pl-10"
                   value={formData.estimatedHours}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, estimatedHours: e.target.value })}
                 />
               </div>
             </div>
@@ -268,7 +267,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 id="assignee"
                 placeholder="Nome do técnico responsável"
                 value={formData.assignee}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, assignee: e.target.value })}
               />
             </div>
 
@@ -280,7 +279,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 placeholder="Descreva os detalhes do plano de manutenção..."
                 rows={3}
                 value={formData.description}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </div>
 
@@ -292,13 +291,13 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
                 placeholder="Observações adicionais, peças necessárias, etc..."
                 rows={2}
                 value={formData.notes}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               />
             </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-4 border-t">
-            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
             <Button type="submit" disabled={isSubmitting}>

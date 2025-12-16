@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -245,21 +244,21 @@ export default function MaritimeCommandCenter() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-500";
-    case "shore_leave": return "bg-yellow-500";
-    case "medical_leave": return "bg-orange-500";
-    case "inactive": return "bg-gray-500";
-    default: return "bg-gray-500";
+      case "active": return "bg-green-500";
+      case "shore_leave": return "bg-yellow-500";
+      case "medical_leave": return "bg-orange-500";
+      case "inactive": return "bg-gray-500";
+      default: return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "active": return "Ativo";
-    case "shore_leave": return "Licença Terra";
-    case "medical_leave": return "Licença Médica";
-    case "inactive": return "Inativo";
-    default: return status;
+      case "active": return "Ativo";
+      case "shore_leave": return "Licença Terra";
+      case "medical_leave": return "Licença Médica";
+      case "inactive": return "Inativo";
+      default: return status;
     }
   };
 
@@ -269,7 +268,7 @@ export default function MaritimeCommandCenter() {
                          member.employee_id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   if (loading) {
     return (
@@ -437,7 +436,7 @@ export default function MaritimeCommandCenter() {
                   </div>
                   <Progress value={(stats.activeCrew / stats.totalCrew) * 100} className="h-2" />
                 </div>
-                <Button className="w-full" variant="outline" onClick={handleSetActiveTab}>
+                <Button className="w-full" variant="outline" onClick={() => setActiveTab("crew-list")}>
                   <Users className="h-4 w-4 mr-2" />
                   Ver Tripulação Completa
                 </Button>
@@ -471,7 +470,7 @@ export default function MaritimeCommandCenter() {
                     <div className="text-xs text-muted-foreground">Vencidas</div>
                   </div>
                 </div>
-                <Button className="w-full" variant="outline" onClick={handleSetActiveTab}>
+                <Button className="w-full" variant="outline" onClick={() => setActiveTab("certifications")}>
                   <Award className="h-4 w-4 mr-2" />
                   Gerenciar Certificações
                 </Button>
@@ -510,7 +509,7 @@ export default function MaritimeCommandCenter() {
                     className="h-2" 
                   />
                 </div>
-                <Button className="w-full" variant="outline" onClick={handleSetActiveTab}>
+                <Button className="w-full" variant="outline" onClick={() => setActiveTab("checklists")}>
                   <ClipboardList className="h-4 w-4 mr-2" />
                   Ver Checklists
                 </Button>
@@ -534,7 +533,7 @@ export default function MaritimeCommandCenter() {
                       <p className="font-medium text-sm">{stats.certExpiring} Certificações Vencendo</p>
                       <p className="text-xs text-muted-foreground">Próximos 30 dias</p>
                     </div>
-                    <Button size="sm" variant="outline" onClick={handleSetActiveTab}>
+                    <Button size="sm" variant="outline" onClick={() => setActiveTab("certifications")}>
                       Ver
                     </Button>
                   </div>
@@ -558,7 +557,7 @@ export default function MaritimeCommandCenter() {
                       <p className="font-medium text-sm">{stats.pendingChecklists} Checklists Pendentes</p>
                       <p className="text-xs text-muted-foreground">Aguardando conclusão</p>
                     </div>
-                    <Button size="sm" variant="outline" onClick={handleSetActiveTab}>
+                    <Button size="sm" variant="outline" onClick={() => setActiveTab("checklists")}>
                       Ver
                     </Button>
                   </div>
@@ -583,7 +582,7 @@ export default function MaritimeCommandCenter() {
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => handlehandleExport}>
+                  <Button variant="outline" onClick={() => handleExport("Tripulação")}>
                     <Download className="h-4 w-4 mr-2" />
                     Exportar
                   </Button>
@@ -639,7 +638,7 @@ export default function MaritimeCommandCenter() {
                         </div>
                       </div>
                       <div className="flex justify-end gap-2">
-                        <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
+                        <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                           Cancelar
                         </Button>
                         <Button onClick={() => {
@@ -664,7 +663,7 @@ export default function MaritimeCommandCenter() {
                       placeholder="Buscar por nome, posição ou ID..."
                       className="pl-8"
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                 </div>

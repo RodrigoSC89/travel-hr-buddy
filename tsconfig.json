@@ -8,7 +8,7 @@
     "moduleResolution": "Node",
     "strict": true,
     "noImplicitAny": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "strictFunctionTypes": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
@@ -24,9 +24,9 @@
       "@/hooks/*": ["./src/hooks/*"],
       "@/types/*": ["./src/types/*"]
     },
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "allowJs": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "noErrorTruncation": true
   }

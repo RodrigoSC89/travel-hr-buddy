@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,7 @@ export const ArrowNavigationExample: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <Button 
-                onClick={handleSetIsMenuOpen}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
                 variant="outline"
               >
                 {isMenuOpen ? "Close Menu" : "Open Menu"}

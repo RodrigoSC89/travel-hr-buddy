@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createDocument } from "@/lib/documents/api";
@@ -58,7 +58,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
     const doc = {
       title: `Doc: ${template.title}`,
       content: preview,
-    });
+    };
     
     const result = await createDocument(doc);
     
@@ -85,7 +85,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
         <Input
           key={key}
           placeholder={`Preencher: ${key}`}
-          onChange={handleChange}
+          onChange={(e) => handleChange(key, e.target.value)}
         />
       ))}
 

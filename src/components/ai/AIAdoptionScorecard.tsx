@@ -3,11 +3,11 @@
  * Displays AI adoption metrics and trends
  */
 
-import { memo, memo, useEffect, useState, useMemo } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { 
@@ -33,7 +33,7 @@ interface AIAdoptionScorecardProps {
   className?: string;
 }
 
-export const AIAdoptionScorecard = memo(function({ organizationId, className }: AIAdoptionScorecardProps) {
+export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionScorecardProps) {
   const [metrics, setMetrics] = useState<AdoptionMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -49,7 +49,7 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
       const { data: adoptionData, error: adoptionError } = await supabase
         .from("ia_adoption_metrics")
         .select("*")
-        .gte("period_end", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0])
+        .gte("period_end", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0])
         .order("created_at", { ascending: false });
 
       if (adoptionError) throw adoptionError;
@@ -220,4 +220,4 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
       </CardContent>
     </Card>
   );
-});
+}

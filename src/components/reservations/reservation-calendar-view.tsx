@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
     }
     
     return days;
-  });
+  };
 
   const getReservationsForDay = (date: Date): EnhancedReservation[] => {
     const dayStart = new Date(date);
@@ -85,7 +84,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
       
       // Check if reservation spans this day
       return startDate <= dayEnd && endDate >= dayStart;
-  };
+    });
   };
 
   const getStatusColor = (status: string) => {
@@ -118,7 +117,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handlenavigateMonth}
+              onClick={() => navigateMonth("prev")}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -128,7 +127,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handlenavigateMonth}
+              onClick={() => navigateMonth("next")}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -136,7 +135,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
           <Button
             variant="outline"
             size="sm"
-            onClick={handleSetCurrentDate}
+            onClick={() => setCurrentDate(new Date())}
           >
             Hoje
           </Button>
@@ -182,7 +181,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                               ${getStatusColor(reservation.status)} text-white
                               hover:opacity-80 transition-opacity
                             `}
-                            onClick={handleSetSelectedReservation}
+                            onClick={() => setSelectedReservation(reservation)}
                           >
                             <div className="flex items-center gap-1">
                               {reservation.conflict_detected && (
@@ -270,7 +269,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                   <div className="flex flex-col gap-2">
                     <Button
                       size="sm"
-                      onClick={() => handleonEdit}
+                      onClick={() => onEdit(selectedReservation)}
                       className="w-full"
                     >
                       <Edit className="h-4 w-4 mr-2" />
@@ -279,7 +278,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleonDelete}
+                      onClick={() => onDelete(selectedReservation.id)}
                       className="w-full text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="h-4 w-4 mr-2" />

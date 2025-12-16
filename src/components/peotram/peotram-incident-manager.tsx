@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -94,7 +93,7 @@ export const PeotramIncidentManager: React.FC = () => {
     
     // Trigger a custom event to notify the modal
     window.dispatchEvent(new Event("storage"));
-  });
+  };
 
   function getDemoIncidents(): Incident[] {
     return [
@@ -192,7 +191,7 @@ export const PeotramIncidentManager: React.FC = () => {
     case "low": return "bg-info/20 text-info border-info/30";
     default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -294,10 +293,10 @@ export const PeotramIncidentManager: React.FC = () => {
                   <Input id="incident-witnesses" placeholder="Nomes das testemunhas (separados por vírgula)" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsNewIncidentOpen}>
+                  <Button variant="outline" onClick={() => setIsNewIncidentOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSetIsNewIncidentOpen}>
+                  <Button onClick={() => setIsNewIncidentOpen(false)}>
                     Reportar Incidente
                   </Button>
                 </div>
@@ -418,7 +417,7 @@ export const PeotramIncidentManager: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handlehandleAnalyzeWithAI}
+                      onClick={() => handleAnalyzeWithAI(incident)}
                     >
                       <Brain className="w-3 h-3 mr-1" />
                       Analisar com IA

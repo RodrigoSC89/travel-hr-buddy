@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -256,7 +255,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     setDocuments(mockDocuments);
     setTemplates(mockTemplates);
     setIsLoading(false);
-  });
+  };
 
   useEffect(() => {
     generateMockData();
@@ -309,7 +308,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     
     return matchesSearch && matchesCategory && matchesStatus;
-  };
+  });
 
   const handleUpload = () => {
     setIsUploadDialogOpen(true);
@@ -338,11 +337,11 @@ export const AdvancedDocumentCenter: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const newDocuments: Document[] = uploadedFiles.map((file, index) => {
-      const fileType = file.name.split(".").pop()?.toLowerCase() || "other";
+      const fileType = file.name.split('.').pop()?.toLowerCase() || 'other';
       return {
         id: `new-${Date.now()}-${index}`,
         title: file.name.replace(/\.[^/.]+$/, ""),
-        description: "Documento enviado via upload",
+        description: `Documento enviado via upload`,
         type: (["pdf", "docx", "xlsx", "pptx"].includes(fileType) ? fileType : "other") as Document["type"],
         category: "manuais",
         size: file.size,
@@ -357,7 +356,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         viewCount: 0,
         collaborators: [user?.email || "Usuário"],
         approvals: []
-      });
+      };
     });
 
     setDocuments(prev => [...newDocuments, ...prev]);
@@ -408,7 +407,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
       collaborators: [user?.email || "Usuário"],
       content: "",
       approvals: []
-    });
+    };
 
     setDocuments(prev => [newDoc, ...prev]);
     setNewDocForm({
@@ -449,9 +448,9 @@ Status: ${doc.status}
 Este é um documento de demonstração do Centro de Documentos.
     `.trim();
 
-    const blob = new Blob([content], { type: "text/plain" });
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `${doc.title}.txt`;
     document.body.appendChild(a);
@@ -463,7 +462,7 @@ Este é um documento de demonstração do Centro de Documentos.
       title: "Download iniciado",
       description: `Baixando "${doc.title}"...`,
     });
-  });
+  };
 
   const handleView = (document: Document) => {
     setDocuments(prev => prev.map(doc => 
@@ -487,14 +486,14 @@ Este é um documento de demonstração do Centro de Documentos.
       title: "Status atualizado",
       description: `Documento marcado como ${newStatus}.`,
     });
-  });
+  };
 
   const handleUseTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
     const initialData: Record<string, string> = {};
     template.fields.forEach(field => {
       initialData[field.name] = "";
-  };
+    });
     setTemplateFormData(initialData);
     setIsTemplateDialogOpen(true);
   };
@@ -540,7 +539,7 @@ Este é um documento de demonstração do Centro de Documentos.
       collaborators: [user?.email || "Usuário"],
       content: content,
       approvals: []
-    });
+    };
 
     setDocuments(prev => [newDoc, ...prev]);
     
@@ -559,7 +558,7 @@ Este é um documento de demonstração do Centro de Documentos.
       title: "Documento criado",
       description: `Documento criado a partir do template "${selectedTemplate.name}".`,
     });
-  });
+  };
 
   if (isLoading) {
     return (
@@ -676,7 +675,7 @@ Este é um documento de demonstração do Centro de Documentos.
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
               />
             </div>
@@ -711,14 +710,14 @@ Este é um documento de demonstração do Centro de Documentos.
               <Button 
                 variant={viewMode === "grid" ? "default" : "outline"} 
                 size="sm"
-                onClick={handleSetViewMode}
+                onClick={() => setViewMode("grid")}
               >
                 Grid
               </Button>
               <Button 
                 variant={viewMode === "list" ? "default" : "outline"} 
                 size="sm"
-                onClick={handleSetViewMode}
+                onClick={() => setViewMode("list")}
               >
                 Lista
               </Button>
@@ -789,7 +788,7 @@ Este é um documento de demonstração do Centro de Documentos.
                           size="sm" 
                           variant="outline" 
                           className="flex-1"
-                          onClick={() => handlehandleView}
+                          onClick={() => handleView(doc)}
                         >
                           <Eye className="h-3 w-3 mr-1" />
                           Ver
@@ -797,7 +796,7 @@ Este é um documento de demonstração do Centro de Documentos.
                         <Button 
                           size="sm" 
                           className="flex-1"
-                          onClick={() => handlehandleDownload}
+                          onClick={() => handleDownload(doc)}
                         >
                           <Download className="h-3 w-3 mr-1" />
                           Baixar
@@ -831,10 +830,10 @@ Este é um documento de demonstração do Centro de Documentos.
                         <Badge className={getStatusColor(doc.status)}>
                           {doc.status}
                         </Badge>
-                        <Button size="sm" variant="outline" onClick={() => handlehandleView}>
+                        <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
                           <Eye className="h-3 w-3" />
                         </Button>
-                        <Button size="sm" onClick={() => handlehandleDownload}>
+                        <Button size="sm" onClick={() => handleDownload(doc)}>
                           <Download className="h-3 w-3" />
                         </Button>
                       </div>
@@ -875,7 +874,7 @@ Este é um documento de demonstração do Centro de Documentos.
                           Usado {template.usageCount} vezes
                         </div>
                         
-                        <Button className="w-full" size="sm" onClick={() => handlehandleUseTemplate}>
+                        <Button className="w-full" size="sm" onClick={() => handleUseTemplate(template)}>
                           Usar Template
                         </Button>
                       </div>
@@ -910,20 +909,20 @@ Este é um documento de demonstração do Centro de Documentos.
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <Button size="sm" variant="outline" onClick={() => handlehandleView}>
+                      <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
                         <Eye className="h-3 w-3 mr-1" />
                         Revisar
                       </Button>
                       <Button 
                         size="sm" 
                         variant="destructive"
-                        onClick={() => handlehandleStatusChange}
+                        onClick={() => handleStatusChange(doc.id, "draft")}
                       >
                         Rejeitar
                       </Button>
                       <Button 
                         size="sm"
-                        onClick={() => handlehandleStatusChange}
+                        onClick={() => handleStatusChange(doc.id, "approved")}
                       >
                         Aprovar
                       </Button>
@@ -1032,7 +1031,7 @@ Este é um documento de demonstração do Centro de Documentos.
                       <Button 
                         size="sm" 
                         variant="ghost" 
-                        onClick={handleSetUploadedFiles}
+                        onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -1044,7 +1043,7 @@ Este é um documento de demonstração do Centro de Documentos.
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsUploadDialogOpen}>
+            <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleUploadSubmit} disabled={isUploading || uploadedFiles.length === 0}>
@@ -1081,7 +1080,7 @@ Este é um documento de demonstração do Centro de Documentos.
                 id="doc-title"
                 placeholder="Título do documento"
                 value={newDocForm.title}
-                onChange={handleChange}))}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, title: e.target.value }))}
               />
             </div>
             
@@ -1091,7 +1090,7 @@ Este é um documento de demonstração do Centro de Documentos.
                 id="doc-description"
                 placeholder="Descrição do documento"
                 value={newDocForm.description}
-                onChange={handleChange}))}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, description: e.target.value }))}
               />
             </div>
             
@@ -1119,13 +1118,13 @@ Este é um documento de demonstração do Centro de Documentos.
                 id="doc-tags"
                 placeholder="tag1, tag2, tag3"
                 value={newDocForm.tags}
-                onChange={handleChange}))}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, tags: e.target.value }))}
               />
             </div>
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsNewDocDialogOpen}>
+            <Button variant="outline" onClick={() => setIsNewDocDialogOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleNewDocSubmit}>
@@ -1232,7 +1231,7 @@ Este é um documento de demonstração do Centro de Documentos.
           )}
           
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsViewDialogOpen}>
+            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
               Fechar
             </Button>
             {selectedDocument && (
@@ -1272,7 +1271,10 @@ Este é um documento de demonstração do Centro de Documentos.
                         id={`field-${index}`}
                         placeholder={`Digite ${field.name.toLowerCase()}`}
                         value={templateFormData[field.name] || ""}
-                        onChange={handleChange}))}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
                       />
                     )}
                     
@@ -1282,7 +1284,10 @@ Este é um documento de demonstração do Centro de Documentos.
                         type="number"
                         placeholder={`Digite ${field.name.toLowerCase()}`}
                         value={templateFormData[field.name] || ""}
-                        onChange={handleChange}))}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
                       />
                     )}
                     
@@ -1291,7 +1296,10 @@ Este é um documento de demonstração do Centro de Documentos.
                         id={`field-${index}`}
                         type="date"
                         value={templateFormData[field.name] || ""}
-                        onChange={handleChange}))}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
                       />
                     )}
                     
@@ -1300,7 +1308,10 @@ Este é um documento de demonstração do Centro de Documentos.
                         id={`field-${index}`}
                         placeholder={`Digite ${field.name.toLowerCase()}`}
                         value={templateFormData[field.name] || ""}
-                        onChange={handleChange}))}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
                       />
                     )}
                     
@@ -1331,7 +1342,7 @@ Este é um documento de demonstração do Centro de Documentos.
           )}
           
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsTemplateDialogOpen}>
+            <Button variant="outline" onClick={() => setIsTemplateDialogOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleTemplateSubmit}>

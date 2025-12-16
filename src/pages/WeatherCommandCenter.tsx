@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH UNIFY-10.0: Weather Command Center
  * Fusão de: Dashboard Meteorológico + Previsão Global
  * 
@@ -178,8 +177,8 @@ export default function WeatherCommandCenter() {
         swell_height: 0.3 + Math.random() * 2,
         sea_temperature: 18 + Math.random() * 10
       }
-    });
-  });
+    };
+  };
 
   const fetchWeatherData = async (lat: number, lon: number, locationName: string) => {
     setLoading(true);
@@ -197,7 +196,7 @@ export default function WeatherCommandCenter() {
         title: "Dados atualizados",
         description: `Meteorologia carregada para ${locationName}`,
       });
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({
         title: "Erro ao carregar dados",
         description: error.message,
@@ -236,9 +235,9 @@ export default function WeatherCommandCenter() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "high": return "destructive";
-    case "moderate": return "warning";
-    default: return "secondary";
+      case "high": return "destructive";
+      case "moderate": return "warning";
+      default: return "secondary";
     }
   };
 
@@ -256,7 +255,7 @@ export default function WeatherCommandCenter() {
         });
       }
     }
-  });
+  };
 
   const weatherDataForCopilot = weatherData ? {
     location: weatherData.location.name,
@@ -301,7 +300,7 @@ export default function WeatherCommandCenter() {
             <Input
               placeholder="Buscar localização..."
               value={searchQuery}
-              onChange={handleChange}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="w-64"
             />
@@ -382,7 +381,7 @@ export default function WeatherCommandCenter() {
             key={location.id}
             variant={selectedLocation === location.name ? "default" : "outline"}
             size="sm"
-            onClick={() => handlefetchWeatherData}
+            onClick={() => fetchWeatherData(location.lat, location.lon, location.name)}
           >
             <MapPin className="h-4 w-4 mr-2" />
             {location.name}
@@ -402,7 +401,7 @@ export default function WeatherCommandCenter() {
           <CardContent>
             {weatherData.alerts.map((alert, i) => (
               <div key={i} className="flex items-center gap-3">
-                <Badge variant={getSeverityColor(alert.severity) as unknown}>{alert.severity}</Badge>
+                <Badge variant={getSeverityColor(alert.severity) as any}>{alert.severity}</Badge>
                 <span className="font-semibold">{alert.event}</span>
                 <span className="text-sm text-muted-foreground">- {alert.description}</span>
               </div>
@@ -644,9 +643,9 @@ export default function WeatherCommandCenter() {
                     <Card 
                       key={location.id} 
                       className={`cursor-pointer hover:shadow-lg transition-all ${
-                        selectedLocation === location.name ? "ring-2 ring-primary" : ""
+                        selectedLocation === location.name ? 'ring-2 ring-primary' : ''
                       }`}
-                      onClick={() => handlefetchWeatherData}
+                      onClick={() => fetchWeatherData(location.lat, location.lon, location.name)}
                     >
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">

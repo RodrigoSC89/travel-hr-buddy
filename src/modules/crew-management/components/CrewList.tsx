@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback, useMemo } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,7 +58,7 @@ const statusStyles: Record<string, { label: string; className: string }> = {
   embarked: { label: "Embarcado", className: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
 };
 
-export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
+export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [positionFilter, setPositionFilter] = useState<string>("all");
@@ -77,11 +77,11 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
 
   const getPositionInfo = (position: string) => {
     return positionLabels[position] || { label: position, badge: "" };
-  });
+  };
 
   const getStatusInfo = (status: string | null) => {
     return statusStyles[status || "inactive"] || statusStyles.inactive;
-  });
+  };
 
   return (
     <Card>
@@ -111,7 +111,7 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
             <Input
               placeholder="Buscar por nome, posição ou ID..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -170,10 +170,10 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full ${
-                        member.status === "active" ? "bg-emerald-500" :
-                          member.status === "on_leave" ? "bg-amber-500" :
-                            member.status === "embarked" ? "bg-blue-500" :
-                              "bg-muted-foreground"
+                        member.status === 'active' ? 'bg-emerald-500' :
+                        member.status === 'on_leave' ? 'bg-amber-500' :
+                        member.status === 'embarked' ? 'bg-blue-500' :
+                        'bg-muted-foreground'
                       }`} />
                       <div>
                         <div className="flex items-center gap-2">
@@ -203,7 +203,7 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
                         <Button 
                           variant="ghost" 
                           size="icon"
-                          onClick={() => handleonViewMember}
+                          onClick={() => onViewMember(member)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -214,7 +214,7 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleonViewMember}>
+                            <DropdownMenuItem onClick={() => onViewMember(member)}>
                               <Eye className="h-4 w-4 mr-2" />
                               Ver Detalhes
                             </DropdownMenuItem>
@@ -235,4 +235,4 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
       </CardContent>
     </Card>
   );
-});
+}

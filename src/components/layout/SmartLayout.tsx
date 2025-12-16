@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
-import { PreloadManager } from "@/components/lazy/PreloadManager";
 
 // Simple loading fallback component
 const LoadingFallback = () => (
@@ -19,45 +18,30 @@ const LoadingFallback = () => (
   </div>
 );
 
-export const SmartLayout = memo(function() {
+export function SmartLayout() {
   // Restaurar posição do scroll entre navegações
   useScrollRestoration();
   
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
-      {/* FASE 2.5: Preload Manager para lazy loading inteligente */}
-      <PreloadManager />
-      
-      {/* FASE 3.2: Skip to content link for accessibility (WCAG 2.4.1) */}
+      {/* Skip to content link for accessibility */}
       <SkipToContent targetId="main-content" />
       
-      <div 
-        className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}
-        role="application"
-        aria-label="Nautilus One - Sistema de Gestão Marítima"
-      >
-        {/* FASE 3.2: Navigation Landmark - Smart Sidebar (WCAG 2.4.1) */}
-        <aside 
-          className={mobileClasses.hideOnMobile}
-          role="navigation"
-          aria-label="Navegação principal"
-        >
+      <div className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}>
+        {/* Smart Sidebar - hidden on mobile by default */}
+        <div className={mobileClasses.hideOnMobile}>
           <SmartSidebar />
-        </aside>
+        </div>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* FASE 3.2: Banner Landmark - Smart Header (WCAG 2.4.1) */}
-          <header role="banner" aria-label="Cabeçalho principal">
-            <SmartHeader />
-          </header>
+          {/* Smart Header - responsive */}
+          <SmartHeader />
 
-          {/* FASE 3.2: Main Landmark - Page Content (WCAG 2.4.1) */}
+          {/* Page Content - responsive padding */}
           <main 
             id="main-content"
-            role="main"
             tabIndex={-1}
-            aria-label="Conteúdo principal"
             className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding} focus:outline-none`}
           >
             <Suspense fallback={<LoadingFallback />}>
@@ -66,11 +50,11 @@ export const SmartLayout = memo(function() {
           </main>
         </div>
 
-        {/* Toast Notifications - Live Region (WCAG 4.1.3) */}
+        {/* Toast Notifications */}
         <Toaster />
       </div>
     </ThemeProvider>
   );
-});
+}
 
 export default SmartLayout;

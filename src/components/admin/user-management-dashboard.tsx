@@ -1,5 +1,3 @@
-import { useState, useCallback } from "react";;
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -124,7 +122,7 @@ const UserManagementDashboard = () => {
       title: "Ação Executada",
       description: `${action} aplicada ao usuário ID: ${userId}`,
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -253,7 +251,7 @@ const UserManagementDashboard = () => {
                       id="search"
                       placeholder="Nome ou email..."
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>
@@ -340,21 +338,21 @@ const UserManagementDashboard = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handlehandleUserAction}
+                            onClick={() => handleUserAction("Editar", user.id)}
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handlehandleUserAction}
+                            onClick={() => handleUserAction("Configurar", user.id)}
                           >
                             <Settings className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handlehandleUserAction}
+                            onClick={() => handleUserAction("Desativar", user.id)}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

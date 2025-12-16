@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
 // PATCH 549: Lazy load components to prevent bundle bloat and freezing
@@ -100,7 +99,7 @@ interface PeotramTemplate {
   id: string;
   year: number;
   version: string;
-  template_data: unknown;
+  template_data: any;
   is_active: boolean;
   checklist_type: "vessel" | "shore";
   created_at: string;
@@ -226,20 +225,20 @@ export const EnhancedPeotramManager: React.FC = () => {
     }
   ];
 
-  const handleSaveAudit = async (auditData: unknown: unknown: unknown) => {
+  const handleSaveAudit = async (auditData: any) => {
     // Implementar salvamento na API Supabase
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
     await loadData(); // Recarregar dados
   };
 
-  const handleCompleteAudit = async (auditData: unknown: unknown: unknown) => {
+  const handleCompleteAudit = async (auditData: any) => {
     setIsNewAuditOpen(false);
     setSelectedAudit(null);
     // Implementar finalização na API
     await loadData();
   };
 
-  const handleUpdateNonConformity = async (id: string, updates: Record<string, unknown>) => {
+  const handleUpdateNonConformity = async (id: string, updates: any) => {
     // Implementar atualização na API
     await loadData();
   };
@@ -277,7 +276,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           auditId={selectedAudit.id}
           onSave={handleSaveAudit}
           onComplete={handleCompleteAudit}
-          onCancel={() => setSelectedAudit(null}
+          onCancel={() => setSelectedAudit(null)}
         />
       </Suspense>
     );
@@ -310,7 +309,7 @@ export const EnhancedPeotramManager: React.FC = () => {
                 <PeotramAuditWizard
                   onSave={handleSaveAudit}
                   onComplete={handleCompleteAudit}
-                  onCancel={() => setIsNewAuditOpen(false}
+                  onCancel={() => setIsNewAuditOpen(false)}
                 />
               </Suspense>
             </DialogContent>
@@ -372,7 +371,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "emergency" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("emergency")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -381,7 +380,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "equipment" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("equipment")}
                 className="flex items-center gap-2"
               >
                 <Settings className="w-4 h-4" />
@@ -390,7 +389,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "incidents" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("incidents")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -399,7 +398,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "communication" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("communication")}
                 className="flex items-center gap-2"
               >
                 <Activity className="w-4 h-4" />
@@ -408,7 +407,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "workflows" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("workflows")}
                 className="flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
@@ -417,7 +416,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "integrations" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("integrations")}
                 className="flex items-center gap-2"
               >
                 <Leaf className="w-4 h-4" />
@@ -428,7 +427,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "non-conformities" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("non-conformities")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -437,7 +436,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "reports" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("reports")}
                 className="flex items-center gap-2"
               >
                 <TrendingUp className="w-4 h-4" />
@@ -446,7 +445,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "templates" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("templates")}
                 className="flex items-center gap-2"
               >
                 <Settings className="w-4 h-4" />
@@ -455,7 +454,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "analytics" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("analytics")}
                 className="flex items-center gap-2"
               >
                 <BarChart3 className="w-4 h-4" />
@@ -464,7 +463,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "compliance" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("compliance")}
                 className="flex items-center gap-2"
               >
                 <Shield className="w-4 h-4" />
@@ -473,7 +472,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "risk-assessment" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("risk-assessment")}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -482,7 +481,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "training" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("training")}
                 className="flex items-center gap-2"
               >
                 <Users className="w-4 h-4" />
@@ -491,7 +490,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "workflows" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("workflows")}
                 className="flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
@@ -500,7 +499,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "integrations" ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetManagementSubView}
+                onClick={() => setManagementSubView("integrations")}
                 className="flex items-center gap-2"
               >
                 <Leaf className="w-4 h-4" />
@@ -536,7 +535,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Card
                 key={audit.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
-                onClick={handleSetSelectedAudit}
+                onClick={() => setSelectedAudit(audit)}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -620,7 +619,7 @@ export const EnhancedPeotramManager: React.FC = () => {
             {/* Card para nova auditoria */}
             <Card 
               className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-dashed border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10"
-              onClick={handleSetIsNewAuditOpen}
+              onClick={() => setIsNewAuditOpen(true)}
             >
               <CardContent className="flex flex-col items-center justify-center h-48 text-primary">
                 <Plus className="w-12 h-12 mb-4" />
@@ -650,7 +649,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramNonConformities 
               nonConformities={nonConformities}
-              onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates}
+              onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
             />
           </Suspense>
         </TabsContent>
@@ -665,7 +664,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramTemplateManager 
               templates={templates}
-              onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template}
+              onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
             />
           </Suspense>
         </TabsContent>
@@ -693,14 +692,14 @@ export const EnhancedPeotramManager: React.FC = () => {
             {managementSubView === "non-conformities" && (
               <PeotramNonConformities 
                 nonConformities={nonConformities}
-                onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates}
+                onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
               />
             )}
             {managementSubView === "reports" && <PeotramReportsGenerator />}
             {managementSubView === "templates" && (
               <PeotramTemplateManager 
                 templates={templates}
-                onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template}
+                onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
               />
             )}
             {managementSubView === "analytics" && (
@@ -725,7 +724,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="non-conformities">
           <PeotramNonConformities 
             nonConformities={nonConformities}
-            onUpdate={(id: string, updates: Record<string, unknown>) => handleUpdateNonConformity(id, updates}
+            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
           />
         </TabsContent>
 
@@ -736,7 +735,7 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="templates">
           <PeotramTemplateManager 
             templates={templates}
-            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template}
+            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
           />
         </TabsContent>
 

@@ -49,7 +49,7 @@ export async function validateEntityTrust(
       blocked: true,
       reason: "Entity not found",
       warnings: ["Entity does not exist in registry"]
-    });
+    };
   }
 
   const warnings: string[] = [];
@@ -123,7 +123,7 @@ export async function recordTrustEvent(event: TrustEvent): Promise<void> {
     throw insertError;
   }
   
-  logger.info("Trust event recorded", { 
+  logger.info(`Trust event recorded`, { 
     entity_id: event.entity_id, 
     event_type: event.event_type, 
     old_score: oldScore, 
@@ -185,7 +185,7 @@ export function validateTrustInput(input: any): { valid: boolean; errors: string
   return {
     valid: errors.length === 0,
     errors: errors
-  });
+  };
 }
 
 // Check if entity should trigger alert

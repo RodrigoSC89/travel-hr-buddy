@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState, useCallback } from "react";;
 import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,14 +51,14 @@ interface Message {
   is_broadcast: boolean;
   created_at: string;
   read_at?: string;
-  attachments?: unknown[];
-  metadata?: Record<string, unknown>;
+  attachments?: any[];
+  metadata?: any;
 }
 
 interface InboxManagerProps {
   unreadCount: number;
   urgentCount: number;
-  onStatsUpdate: (stats: unknown) => void;
+  onStatsUpdate: (stats: any) => void;
 }
 
 export const InboxManager: React.FC<InboxManagerProps> = ({
@@ -84,13 +83,13 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       if (mounted) {
         await loadMessages();
       }
-    });
+    };
     
     init();
     
     return () => {
       mounted = false;
-    });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -189,7 +188,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedMessages = useMemo(() => {
-    let filtered = [...messages]);
+    let filtered = [...messages];
 
     // Filter by tab
     switch (activeInboxTab) {
@@ -340,7 +339,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                 <Input
                   placeholder="Buscar mensagens..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -421,7 +420,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   isUnread ? "border-primary/50 bg-primary/5" : ""
                 } ${message.is_urgent ? "border-l-4 border-l-destructive" : ""}`}
-                onClick={handleSetSelectedMessage}
+                onClick={() => setSelectedMessage(message)}
               >
                 <CardContent className="p-4">
                   <div className="flex items-start gap-4">
@@ -550,10 +549,10 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                 onSelect={(e) => {
                                   e.preventDefault();
                                   // Create and download message as text file
-                                  const content = `De: ${message.sender_name} (${message.sender_role})\nData: ${new Date(message.created_at).toLocaleString("pt-BR")}\nPrioridade: ${message.priority}\n\n${message.content}`;
-                                  const blob = new Blob([content], { type: "text/plain" });
+                                  const content = `De: ${message.sender_name} (${message.sender_role})\nData: ${new Date(message.created_at).toLocaleString('pt-BR')}\nPrioridade: ${message.priority}\n\n${message.content}`;
+                                  const blob = new Blob([content], { type: 'text/plain' });
                                   const url = URL.createObjectURL(blob);
-                                  const a = document.createElement("a");
+                                  const a = document.createElement('a');
                                   a.href = url;
                                   a.download = `mensagem-${message.id}.txt`;
                                   document.body.appendChild(a);

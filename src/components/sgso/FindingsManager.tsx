@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;
-
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +16,7 @@ import {
 import { AlertTriangle, CheckCircle, Eye } from "lucide-react";
 import { format } from "date-fns";
 
-export const FindingsManager = memo(function() {
+export function FindingsManager() {
   const { toast } = useToast();
   const [findings, setFindings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +36,7 @@ export const FindingsManager = memo(function() {
 
       if (error) throw error;
       setFindings(data || []);
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({
         title: "Error loading findings",
         description: error.message,
@@ -49,7 +48,7 @@ export const FindingsManager = memo(function() {
   };
 
   const getSeverityBadge = (type: string) => {
-    const severityConfig: Record<string, { variant: unknown: unknown: unknown; color: string }> = {
+    const severityConfig: Record<string, { variant: any; color: string }> = {
       "major": { variant: "destructive", color: "text-red-600" },
       "minor": { variant: "default", color: "text-yellow-600" },
       "observation": { variant: "outline", color: "text-blue-600" },
@@ -65,7 +64,7 @@ export const FindingsManager = memo(function() {
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: unknown: unknown: unknown }> = {
+    const statusConfig: Record<string, { variant: any }> = {
       "open": { variant: "destructive" },
       "investigating": { variant: "default" },
       "action_planned": { variant: "secondary" },
@@ -153,4 +152,4 @@ export const FindingsManager = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

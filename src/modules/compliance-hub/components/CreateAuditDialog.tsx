@@ -1,10 +1,9 @@
 /**
-import { useState, useCallback } from "react";;
  * Create Audit Dialog Component
  * Dialog para criar nova auditoria com formulário completo
  */
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,25 +11,25 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CalendarIcon, FileCheck, Loader2 } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon, FileCheck, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface CreateAuditDialogProps {
   open: boolean;
@@ -40,7 +39,7 @@ interface CreateAuditDialogProps {
 }
 
 interface AuditFormData {
-  auditType: "internal" | "external" | "flag-state" | "class" | "psc";
+  auditType: 'internal' | 'external' | 'flag-state' | 'class' | 'psc';
   vesselId: string;
   vesselName: string;
   auditorName: string;
@@ -49,7 +48,7 @@ interface AuditFormData {
   objectives: string;
 }
 
-export const CreateAuditDialog = memo(function({
+export function CreateAuditDialog({
   open,
   onOpenChange,
   onCreateAudit,
@@ -57,23 +56,23 @@ export const CreateAuditDialog = memo(function({
 }: CreateAuditDialogProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<AuditFormData>>({
-    auditType: "internal",
+    auditType: 'internal',
   });
   const [scheduledDate, setScheduledDate] = useState<Date>();
 
   const auditTypes = [
-    { value: "internal", label: "Auditoria Interna" },
-    { value: "external", label: "Auditoria Externa" },
-    { value: "flag-state", label: "Auditoria de Bandeira" },
-    { value: "class", label: "Auditoria de Classificadora" },
-    { value: "psc", label: "Port State Control (PSC)" },
+    { value: 'internal', label: 'Auditoria Interna' },
+    { value: 'external', label: 'Auditoria Externa' },
+    { value: 'flag-state', label: 'Auditoria de Bandeira' },
+    { value: 'class', label: 'Auditoria de Classificadora' },
+    { value: 'psc', label: 'Port State Control (PSC)' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.auditType || !formData.vesselId || !formData.auditorName || !scheduledDate) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error('Preencha todos os campos obrigatórios');
       return;
     }
 
@@ -83,22 +82,22 @@ export const CreateAuditDialog = memo(function({
       const selectedVessel = vessels.find(v => v.id === formData.vesselId);
       
       await onCreateAudit({
-        auditType: formData.auditType as AuditFormData["auditType"],
+        auditType: formData.auditType as AuditFormData['auditType'],
         vesselId: formData.vesselId,
-        vesselName: selectedVessel?.name || "",
+        vesselName: selectedVessel?.name || '',
         auditorName: formData.auditorName,
-        scheduledDate: format(scheduledDate, "yyyy-MM-dd"),
-        scope: formData.scope || "",
-        objectives: formData.objectives || "",
+        scheduledDate: format(scheduledDate, 'yyyy-MM-dd'),
+        scope: formData.scope || '',
+        objectives: formData.objectives || '',
       });
       
-      toast.success("Auditoria criada com sucesso");
+      toast.success('Auditoria criada com sucesso');
       onOpenChange(false);
-      setFormData({ auditType: "internal" });
+      setFormData({ auditType: 'internal' });
       setScheduledDate(undefined);
     } catch (error) {
-      console.error("Error creating audit:", error);
-      toast.error("Erro ao criar auditoria");
+      console.error('Error creating audit:', error);
+      toast.error('Erro ao criar auditoria');
     } finally {
       setLoading(false);
     }
@@ -123,7 +122,7 @@ export const CreateAuditDialog = memo(function({
               <Label htmlFor="auditType">Tipo de Auditoria *</Label>
               <Select
                 value={formData.auditType}
-                onValueChange={(value) => setFormData({ ...formData, auditType: value as AuditFormData["auditType"] })}
+                onValueChange={(value) => setFormData({ ...formData, auditType: value as AuditFormData['auditType'] })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
@@ -164,8 +163,8 @@ export const CreateAuditDialog = memo(function({
               <Input
                 id="auditor"
                 placeholder="Nome do auditor"
-                value={formData.auditorName || ""}
-                onChange={handleChange}
+                value={formData.auditorName || ''}
+                onChange={(e) => setFormData({ ...formData, auditorName: e.target.value })}
               />
             </div>
 
@@ -202,8 +201,8 @@ export const CreateAuditDialog = memo(function({
             <Textarea
               id="scope"
               placeholder="Descreva o escopo da auditoria..."
-              value={formData.scope || ""}
-              onChange={handleChange}
+              value={formData.scope || ''}
+              onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
               rows={3}
             />
           </div>
@@ -213,14 +212,14 @@ export const CreateAuditDialog = memo(function({
             <Textarea
               id="objectives"
               placeholder="Liste os objetivos principais..."
-              value={formData.objectives || ""}
-              onChange={handleChange}
+              value={formData.objectives || ''}
+              onChange={(e) => setFormData({ ...formData, objectives: e.target.value })}
               rows={3}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
             <Button type="submit" disabled={loading}>

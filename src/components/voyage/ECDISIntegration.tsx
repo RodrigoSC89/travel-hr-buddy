@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +23,7 @@ interface ECDISData {
   enc_cells_installed: number;
   last_update_date: string;
   next_update_due: string;
-  routes: unknown[];
+  routes: any[];
   chart_folios: string[];
   backup_arrangements: string;
   type_approval_number: string;
@@ -45,7 +45,7 @@ const manufacturers = [
   { name: "Sperry Marine", models: ["VisionMaster FT", "VisionMaster"] },
 ];
 
-export const ECDISIntegration = memo(function() {
+export function ECDISIntegration() {
   const [selectedVessel, setSelectedVessel] = useState<string>("all");
 
   const { data: ecdisData = [], isLoading } = useQuery({
@@ -67,7 +67,7 @@ export const ECDISIntegration = memo(function() {
     expiring: ecdisData.filter(e => e.enc_permit_status === "expiring").length,
     expired: ecdisData.filter(e => e.enc_permit_status === "expired").length,
     totalCells: ecdisData.reduce((sum, e) => sum + (e.enc_cells_installed || 0), 0),
-  });
+  };
 
   const complianceRate = stats.total > 0 
     ? ((stats.valid / stats.total) * 100).toFixed(0)
@@ -181,7 +181,7 @@ export const ECDISIntegration = memo(function() {
                 <span className={cn(
                   "text-5xl font-bold",
                   Number(complianceRate) >= 90 ? "text-emerald-400" :
-                    Number(complianceRate) >= 70 ? "text-amber-400" : "text-destructive"
+                  Number(complianceRate) >= 70 ? "text-amber-400" : "text-destructive"
                 )}>
                   {complianceRate}%
                 </span>
@@ -316,7 +316,7 @@ export const ECDISIntegration = memo(function() {
                         <p className={cn(
                           "font-medium",
                           daysUntilUpdate && daysUntilUpdate <= 7 ? "text-destructive" :
-                            daysUntilUpdate && daysUntilUpdate <= 30 ? "text-amber-400" : "text-foreground"
+                          daysUntilUpdate && daysUntilUpdate <= 30 ? "text-amber-400" : "text-foreground"
                         )}>
                           {ecdis.next_update_due 
                             ? format(new Date(ecdis.next_update_due), "dd/MM/yyyy")
@@ -357,4 +357,4 @@ export const ECDISIntegration = memo(function() {
       </Card>
     </div>
   );
-});
+}

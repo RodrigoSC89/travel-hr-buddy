@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,7 @@ interface SupplyOrder {
   } | null;
 }
 
-export const SupplyOrdersManagement = memo(() => {
+export const SupplyOrdersManagement = () => {
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -114,7 +113,7 @@ export const SupplyOrdersManagement = memo(() => {
   };
 
   const updateOrderStatus = async (orderId: string, status: string, failureReason?: string) => {
-    const updates: unknown = { status };
+    const updates: any = { status };
     if (status === "delivered") {
       updates.actual_delivery_date = new Date().toISOString().split("T")[0];
     }
@@ -165,7 +164,7 @@ export const SupplyOrdersManagement = memo(() => {
   const getPriorityIcon = (priority: string) => {
     if (priority === "urgent" || priority === "high") {
       return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    };
+    }
     return <Package className="h-4 w-4 text-blue-500" />;
   };
 
@@ -206,7 +205,7 @@ export const SupplyOrdersManagement = memo(() => {
                   <Input
                     type="number"
                     value={newOrder.quantity}
-                    onChange={handleChange}
+                    onChange={(e) => setNewOrder({...newOrder, quantity: e.target.value})}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -228,14 +227,14 @@ export const SupplyOrdersManagement = memo(() => {
                 <Label>Fornecedor</Label>
                 <Input
                   value={newOrder.supplier}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrder({...newOrder, supplier: e.target.value})}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Endereço de Entrega</Label>
                 <Input
                   value={newOrder.delivery_address}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrder({...newOrder, delivery_address: e.target.value})}
                 />
               </div>
               <div className="grid gap-2">
@@ -243,14 +242,14 @@ export const SupplyOrdersManagement = memo(() => {
                 <Input
                   type="date"
                   value={newOrder.estimated_delivery_date}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrder({...newOrder, estimated_delivery_date: e.target.value})}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Notas</Label>
                 <Textarea
                   value={newOrder.notes}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrder({...newOrder, notes: e.target.value})}
                 />
               </div>
             </div>
@@ -306,18 +305,18 @@ export const SupplyOrdersManagement = memo(() => {
               )}
               <div className="flex gap-2 mt-4">
                 {order.status === "pending" && (
-                  <Button size="sm" onClick={() => handleupdateOrderStatus}>
+                  <Button size="sm" onClick={() => updateOrderStatus(order.id, "approved")}>
                     Aprovar
                   </Button>
                 )}
                 {order.status === "approved" && (
-                  <Button size="sm" onClick={() => handleupdateOrderStatus}>
+                  <Button size="sm" onClick={() => updateOrderStatus(order.id, "in_transit")}>
                     Em Trânsito
                   </Button>
                 )}
                 {order.status === "in_transit" && (
                   <>
-                    <Button size="sm" onClick={() => handleupdateOrderStatus}>
+                    <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivered")}>
                       Marcar como Entregue
                     </Button>
                     <Button 
@@ -339,4 +338,4 @@ export const SupplyOrdersManagement = memo(() => {
       </div>
     </div>
   );
-});
+};

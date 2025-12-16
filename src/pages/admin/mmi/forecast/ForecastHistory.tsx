@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -79,7 +79,7 @@ export default function ForecastHistoryPage() {
       .then(res => res.json())
       .then((forecasts) => {
         // Transform the data to match expected format
-        const transformed = forecasts.map((f: unknown) => ({
+        const transformed = forecasts.map((f: any) => ({
           ...f,
           last_maintenance: Array.isArray(f.last_maintenance) 
             ? f.last_maintenance 
@@ -93,7 +93,7 @@ export default function ForecastHistoryPage() {
       })
       .finally(() => {
         setLoading(false);
-  };
+      });
   }, []);
 
   if (loading) {
@@ -131,7 +131,7 @@ export default function ForecastHistoryPage() {
                 </div>
                 <Button 
                   variant="default"
-                  onClick={() => handlehandleGenerateOrder}
+                  onClick={() => handleGenerateOrder(f)}
                   disabled={generatingOrderId === f.id}
                 >
                   {generatingOrderId === f.id ? "⏳ Gerando..." : "➕ Gerar OS"}

@@ -3,7 +3,7 @@
  * Admin interface for viewing and managing the immutable evidence ledger
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export default function EvidenceLedgerPage() {
   const [loading, setLoading] = useState(true);
   const [selectedEntry, setSelectedEntry] = useState<EvidenceEntry | null>(null);
   const [verifying, setVerifying] = useState(false);
-  const [integrityResult, setIntegrityResult] = useState<unknown>(null);
+  const [integrityResult, setIntegrityResult] = useState<any>(null);
 
   // Filter state
   const [filterEventType, setFilterEventType] = useState<string>("");
@@ -109,7 +109,7 @@ export default function EvidenceLedgerPage() {
   };
 
   const applyFilters = async () => {
-    const filters: unknown = {};
+    const filters: any = {};
     if (filterEventType) filters.eventType = filterEventType;
     if (filterModule) filters.moduleId = filterModule;
     filters.limit = 100;
@@ -137,7 +137,7 @@ export default function EvidenceLedgerPage() {
       checklist: "bg-green-100 text-green-800",
       incident: "bg-red-100 text-red-800",
       training: "bg-indigo-100 text-indigo-800"
-    });
+    };
     return colors[type] || "bg-gray-100 text-gray-800";
   };
 
@@ -167,7 +167,7 @@ export default function EvidenceLedgerPage() {
         </div>
         <div className="flex gap-2">
           <Button onClick={handleVerifyIntegrity} disabled={verifying} variant="outline">
-            <CheckCircle2 className={`h-4 w-4 mr-2 ${verifying ? "animate-spin" : ""}`} />
+            <CheckCircle2 className={`h-4 w-4 mr-2 ${verifying ? 'animate-spin' : ''}`} />
             Verify Integrity
           </Button>
           <Button onClick={handleExport} variant="outline">
@@ -288,7 +288,7 @@ export default function EvidenceLedgerPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Event Type</Label>
-              <Select value={filterEventType || "all"} onValueChange={(value) => setFilterEventType(value === "all" ? "" : value}>
+              <Select value={filterEventType || "all"} onValueChange={(value) => setFilterEventType(value === "all" ? "" : value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="All types" />
                 </SelectTrigger>
@@ -308,7 +308,7 @@ export default function EvidenceLedgerPage() {
               <Label>Module ID</Label>
               <Input
                 value={filterModule}
-                onChange={handleChange}
+                onChange={(e) => setFilterModule(e.target.value)}
                 placeholder="e.g., ism-code"
               />
             </div>
@@ -333,7 +333,7 @@ export default function EvidenceLedgerPage() {
               <div
                 key={entry.id}
                 className="border rounded-lg p-4 hover:bg-accent cursor-pointer transition-colors"
-                onClick={handleSetSelectedEntry}
+                onClick={() => setSelectedEntry(entry)}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
@@ -374,7 +374,7 @@ export default function EvidenceLedgerPage() {
       </Card>
 
       {/* Entry Detail Dialog */}
-      <Dialog open={!!selectedEntry} onOpenChange={() => setSelectedEntry(null}>
+      <Dialog open={!!selectedEntry} onOpenChange={() => setSelectedEntry(null)}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

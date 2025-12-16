@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 646 - Modules Status Dashboard
  * Central admin panel for module activation, monitoring, and control
  */
@@ -80,7 +79,7 @@ const ModulesStatusDashboard: React.FC = () => {
       
       const data = await response.json();
       
-      const modulesData: Module[] = data.modules.map((m: unknown) => ({
+      const modulesData: Module[] = data.modules.map((m: any) => ({
         id: m.id,
         name: m.name,
         category: m.category || "uncategorized",
@@ -132,9 +131,9 @@ const ModulesStatusDashboard: React.FC = () => {
       prev.map((m) =>
         m.id === moduleId
           ? {
-            ...m,
-            status: m.status === "active" ? "inactive" : "active"
-          }
+              ...m,
+              status: m.status === "active" ? "inactive" : "active"
+            }
           : m
       )
     );
@@ -145,9 +144,9 @@ const ModulesStatusDashboard: React.FC = () => {
       prev.map((m) =>
         m.id === moduleId
           ? {
-            ...m,
-            status: m.status === "deprecated" ? "inactive" : "deprecated"
-          }
+              ...m,
+              status: m.status === "deprecated" ? "inactive" : "deprecated"
+            }
           : m
       )
     );
@@ -159,14 +158,14 @@ const ModulesStatusDashboard: React.FC = () => {
       beta: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
       inactive: "bg-gray-500/10 text-gray-500 border-gray-500/20",
       deprecated: "bg-red-500/10 text-red-500 border-red-500/20"
-    });
+    };
 
     const icons = {
       active: <CheckCircle className="h-3 w-3" />,
       beta: <AlertCircle className="h-3 w-3" />,
       inactive: <XCircle className="h-3 w-3" />,
       deprecated: <XCircle className="h-3 w-3" />
-    });
+    };
 
     return (
       <Badge
@@ -291,7 +290,7 @@ const ModulesStatusDashboard: React.FC = () => {
                 <Input
                   placeholder="Search modules..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-8"
                 />
               </div>
@@ -300,7 +299,7 @@ const ModulesStatusDashboard: React.FC = () => {
               <label className="text-sm font-medium">Category</label>
               <select
                 value={filterCategory}
-                onChange={handleChange}
+                onChange={(e) => setFilterCategory(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 <option value="all">All Categories</option>
@@ -315,7 +314,7 @@ const ModulesStatusDashboard: React.FC = () => {
               <label className="text-sm font-medium">Status</label>
               <select
                 value={filterStatus}
-                onChange={handleChange}
+                onChange={(e) => setFilterStatus(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 <option value="all">All Statuses</option>
@@ -394,14 +393,14 @@ const ModulesStatusDashboard: React.FC = () => {
                           <span className="text-xs text-muted-foreground">Active</span>
                           <Switch
                             checked={module.status === "active" || module.status === "beta"}
-                            onCheckedChange={() => toggleModuleStatus(module.id}
+                            onCheckedChange={() => toggleModuleStatus(module.id)}
                           />
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground">Visible</span>
                           <Switch
                             checked={module.status !== "deprecated"}
-                            onCheckedChange={() => toggleModuleVisibility(module.id}
+                            onCheckedChange={() => toggleModuleVisibility(module.id)}
                           />
                         </div>
                         <Link to={module.route}>

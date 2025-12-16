@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import {
   Card,
@@ -78,7 +77,7 @@ export default function Dashboard() {
       ]);
 
       const vessels = vesselsResult.data || [];
-      const activeVessels = vessels.filter((v: unknown) => v.status === "active").length;
+      const activeVessels = vessels.filter((v: any) => v.status === "active").length;
 
       setStats({
         totalVessels: vesselsResult.count || vessels.length,

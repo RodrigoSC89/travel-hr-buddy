@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -243,7 +242,7 @@ What would you like assistance with today?`,
       title: isListening ? "Voice input stopped" : "Voice input started",
       description: isListening ? "Click again to start listening" : "Speak your question"
     });
-  });
+  };
 
   const getCategoryColor = (category: CopilotCapability["category"]) => {
     switch (category) {
@@ -261,7 +260,7 @@ What would you like assistance with today?`,
       description: "Abrindo sistema de agendamento de manutenção preventiva"
     });
     // TODO: Open maintenance scheduling dialog
-  });
+  };
 
   const handleGenerateReport = () => {
     toast({
@@ -269,7 +268,7 @@ What would you like assistance with today?`,
       description: "Iniciando geração de relatório operacional"
     });
     // TODO: Open report generation dialog
-  });
+  };
 
   const handleCrewPlanning = () => {
     toast({
@@ -277,7 +276,7 @@ What would you like assistance with today?`,
       description: "Abrindo ferramenta de planejamento e escalas de tripulação"
     });
     // TODO: Open crew planning interface
-  });
+  };
 
   return (
     <div className="h-[600px] flex flex-col">
@@ -354,7 +353,7 @@ What would you like assistance with today?`,
                                   key={index}
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => handlehandleSuggestionClick}
+                                  onClick={() => handleSuggestionClick(suggestion)}
                                   className="h-6 text-xs"
                                 >
                                   {suggestion}
@@ -398,7 +397,7 @@ What would you like assistance with today?`,
                   <div className="flex-1">
                     <Input
                       value={inputValue}
-                      onChange={handleChange}
+                      onChange={(e) => setInputValue(e.target.value)}
                       placeholder="Ask me anything about your maritime operations..."
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                       disabled={isProcessing}

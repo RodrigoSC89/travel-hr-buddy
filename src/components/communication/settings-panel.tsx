@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -75,7 +74,7 @@ interface UserSettings {
   };
 }
 
-export const SettingsPanel = memo(() => {
+export const SettingsPanel = () => {
   const [settings, setSettings] = useState<UserSettings>({
     profile: {
       display_name: "João Silva",
@@ -132,7 +131,7 @@ export const SettingsPanel = memo(() => {
     }
   };
 
-  const updateSettings = (section: keyof UserSettings, updates: Record<string, unknown>) => {
+  const updateSettings = (section: keyof UserSettings, updates: any) => {
     setSettings(prev => ({
       ...prev,
       [section]: {
@@ -206,7 +205,7 @@ export const SettingsPanel = memo(() => {
       }
     });
     setHasChanges(true);
-  });
+  };
 
   const handleAvatarUpload = () => {
     const input = document.createElement("input");
@@ -235,7 +234,7 @@ export const SettingsPanel = memo(() => {
           description: "Foto de perfil atualizada"
         });
       }
-    });
+    };
     input.click();
   };
 
@@ -246,7 +245,7 @@ export const SettingsPanel = memo(() => {
         settings,
         messages: [], // Would include user messages
         export_date: new Date().toISOString()
-      });
+      };
       
       const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
         type: "application/json"
@@ -342,7 +341,7 @@ export const SettingsPanel = memo(() => {
                   <Label>Nome de Exibição</Label>
                   <Input
                     value={settings.profile.display_name}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings("profile", { display_name: e.target.value })}
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -351,7 +350,7 @@ export const SettingsPanel = memo(() => {
                   <Label>Assinatura</Label>
                   <Textarea
                     value={settings.profile.signature}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings("profile", { signature: e.target.value })}
                     placeholder="Assinatura para suas mensagens"
                     className="min-h-20"
                   />
@@ -418,7 +417,7 @@ export const SettingsPanel = memo(() => {
                   <Label>URL do Avatar</Label>
                   <Input
                     value={settings.profile.avatar_url}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings("profile", { avatar_url: e.target.value })}
                     placeholder="https://exemplo.com/avatar.jpg"
                   />
                 </div>
@@ -484,7 +483,7 @@ export const SettingsPanel = memo(() => {
                     {settings.notifications.sound_enabled ? 
                       <Volume2 className="h-4 w-4" /> : 
                       <VolumeX className="h-4 w-4" />
-                    });
+                    }
                     <Label>Som</Label>
                   </div>
                   <Switch 

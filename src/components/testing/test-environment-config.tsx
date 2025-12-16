@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,7 @@ export const TestEnvironmentConfig: React.FC = () => {
       title: "Configuração Aplicada",
       description: `Ambiente configurado para ${config.environment}`,
     });
-  });
+  };
 
   const resetToDefaults = () => {
     setConfig({
@@ -64,7 +63,7 @@ export const TestEnvironmentConfig: React.FC = () => {
       title: "Configuração Resetada",
       description: "Voltou às configurações padrão",
     });
-  });
+  };
 
   const exportConfig = () => {
     const dataStr = JSON.stringify(config, null, 2);
@@ -81,7 +80,7 @@ export const TestEnvironmentConfig: React.FC = () => {
       title: "Configuração Exportada",
       description: "Arquivo de configuração baixado",
     });
-  });
+  };
 
   const getEnvironmentBadge = (env: string) => {
     switch (env) {
@@ -133,19 +132,19 @@ export const TestEnvironmentConfig: React.FC = () => {
           <div className="flex gap-2">
             <Button
               variant={config.environment === "development" ? "default" : "outline"}
-              onClick={() => handlehandleConfigChange}
+              onClick={() => handleConfigChange("environment", "development")}
             >
               Desenvolvimento
             </Button>
             <Button
               variant={config.environment === "staging" ? "default" : "outline"}
-              onClick={() => handlehandleConfigChange}
+              onClick={() => handleConfigChange("environment", "staging")}
             >
               Homologação
             </Button>
             <Button
               variant={config.environment === "production" ? "default" : "outline"}
-              onClick={() => handlehandleConfigChange}
+              onClick={() => handleConfigChange("environment", "production")}
             >
               Produção
             </Button>
@@ -179,7 +178,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.debugMode}
-                  onCheckedChange={(checked) => handleConfigChange("debugMode", checked}
+                  onCheckedChange={(checked) => handleConfigChange("debugMode", checked)}
                 />
               </div>
 
@@ -192,7 +191,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.mockData}
-                  onCheckedChange={(checked) => handleConfigChange("mockData", checked}
+                  onCheckedChange={(checked) => handleConfigChange("mockData", checked)}
                 />
               </div>
 
@@ -205,7 +204,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.cacheEnabled}
-                  onCheckedChange={(checked) => handleConfigChange("cacheEnabled", checked}
+                  onCheckedChange={(checked) => handleConfigChange("cacheEnabled", checked)}
                 />
               </div>
             </CardContent>
@@ -247,7 +246,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.securityScanning}
-                  onCheckedChange={(checked) => handleConfigChange("securityScanning", checked}
+                  onCheckedChange={(checked) => handleConfigChange("securityScanning", checked)}
                 />
               </div>
             </CardContent>
@@ -272,7 +271,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.analyticsEnabled}
-                  onCheckedChange={(checked) => handleConfigChange("analyticsEnabled", checked}
+                  onCheckedChange={(checked) => handleConfigChange("analyticsEnabled", checked)}
                 />
               </div>
 
@@ -285,7 +284,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.errorReporting}
-                  onCheckedChange={(checked) => handleConfigChange("errorReporting", checked}
+                  onCheckedChange={(checked) => handleConfigChange("errorReporting", checked)}
                 />
               </div>
 
@@ -298,7 +297,7 @@ export const TestEnvironmentConfig: React.FC = () => {
                 </div>
                 <Switch
                   checked={config.performanceMonitoring}
-                  onCheckedChange={(checked) => handleConfigChange("performanceMonitoring", checked}
+                  onCheckedChange={(checked) => handleConfigChange("performanceMonitoring", checked)}
                 />
               </div>
             </CardContent>
@@ -307,4 +306,4 @@ export const TestEnvironmentConfig: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

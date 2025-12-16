@@ -1,11 +1,10 @@
 /**
-import { useEffect } from "react";;
  * Resource Hints Component
  * Preconnect, prefetch, and preload critical resources
  */
 
-import React, { useEffect, memo } from "react";
-import { Helmet } from "react-helmet-async";
+import React, { useEffect, memo } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 interface ResourceHintsProps {
   // External domains to preconnect
@@ -13,9 +12,9 @@ interface ResourceHintsProps {
   // Critical resources to preload
   preloadResources?: Array<{
     href: string;
-    as: "script" | "style" | "font" | "image" | "fetch";
+    as: 'script' | 'style' | 'font' | 'image' | 'fetch';
     type?: string;
-    crossOrigin?: "anonymous" | "use-credentials";
+    crossOrigin?: 'anonymous' | 'use-credentials';
   }>;
   // DNS prefetch domains
   dnsPrefetchDomains?: string[];
@@ -23,14 +22,14 @@ interface ResourceHintsProps {
 
 // Default critical domains
 const DEFAULT_PRECONNECT = [
-  "https://vnbptmixvwropvanyhdb.supabase.co",
-  "https://fonts.googleapis.com",
-  "https://fonts.gstatic.com",
+  'https://vnbptmixvwropvanyhdb.supabase.co',
+  'https://fonts.googleapis.com',
+  'https://fonts.gstatic.com',
 ];
 
 const DEFAULT_DNS_PREFETCH = [
-  "https://api.mapbox.com",
-  "https://events.mapbox.com",
+  'https://api.mapbox.com',
+  'https://events.mapbox.com',
 ];
 
 export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
@@ -40,17 +39,17 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
 }) => {
   // Add preconnect links dynamically for faster resource loading
   useEffect(() => {
-    const links: HTMLLinkElement[] = []);
+    const links: HTMLLinkElement[] = [];
     
     // Add preconnect links
     preconnectDomains.forEach(domain => {
-      const link = document.createElement("link");
-      link.rel = "preconnect";
+      const link = document.createElement('link');
+      link.rel = 'preconnect';
       link.href = domain;
-      link.crossOrigin = "anonymous";
+      link.crossOrigin = 'anonymous';
       document.head.appendChild(link);
       links.push(link);
-});
+    });
 
     // Cleanup on unmount
     return () => {
@@ -58,7 +57,7 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
         if (link.parentNode) {
           link.parentNode.removeChild(link);
         }
-      };
+      });
     };
   }, [preconnectDomains]);
 
@@ -84,7 +83,7 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
   );
 });
 
-ResourceHints.displayName = "ResourceHints";
+ResourceHints.displayName = 'ResourceHints';
 
 /**
  * Critical CSS inline component
@@ -127,6 +126,6 @@ export const CriticalCSS: React.FC = memo(() => {
   );
 });
 
-CriticalCSS.displayName = "CriticalCSS";
+CriticalCSS.displayName = 'CriticalCSS';
 
 export default ResourceHints;

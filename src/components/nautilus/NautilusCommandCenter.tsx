@@ -2,7 +2,7 @@
  * Nautilus Command Center - Centro de Comando Unificado com IA
  */
 
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ interface Notification {
   read: boolean;
 }
 
-export const NautilusCommandCenter = memo(function() {
+export function NautilusCommandCenter() {
   const [activeTab, setActiveTab] = useState("command");
   const { isOnline, pendingCount, forceSync, isSyncing } = useOfflineSync();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -188,7 +188,7 @@ export const NautilusCommandCenter = memo(function() {
                 <RefreshCw className={`h-5 w-5 ${isRefreshing ? "animate-spin" : ""}`} />
               </Button>
 
-              <Button variant="ghost" size="icon" onClick={handleSetSettingsOpen}>
+              <Button variant="ghost" size="icon" onClick={() => setSettingsOpen(true)}>
                 <Settings className="h-5 w-5" />
               </Button>
             </div>
@@ -216,14 +216,14 @@ export const NautilusCommandCenter = memo(function() {
                 <TabsTrigger key={tab.id} value={tab.id} className="flex flex-col items-center gap-1 py-2 relative">
                   <Icon className={`h-4 w-4 ${activeTab === tab.id ? "text-primary" : "text-muted-foreground"}`} />
                   <span className="text-[10px]">{tab.label}</span>
-                  {(tab as unknown).isNew && (
+                  {(tab as any).isNew && (
                     <Badge className="absolute -top-1 -right-1 h-4 px-1 text-[8px] bg-gradient-to-r from-purple-500 to-pink-500">
                       <Sparkles className="h-2 w-2" />
                     </Badge>
                   )}
-                  {(tab as unknown).count > 0 && (
+                  {(tab as any).count > 0 && (
                     <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 text-[9px]">
-                      {(tab as unknown).count}
+                      {(tab as any).count}
                     </Badge>
                   )}
                 </TabsTrigger>
@@ -242,7 +242,7 @@ export const NautilusCommandCenter = memo(function() {
 
           <TabsContent value="brain">
             <div className="h-[calc(100vh-250px)]">
-              <CommandBrainPanel context={context} onSettingsClick={() => setSettingsOpen(true} />
+              <CommandBrainPanel context={context} onSettingsClick={() => setSettingsOpen(true)} />
             </div>
           </TabsContent>
 
@@ -255,7 +255,7 @@ export const NautilusCommandCenter = memo(function() {
               notifications={notifications}
               onMarkAllRead={handleMarkAllRead}
               onDismiss={handleDismissNotification}
-              onSettingsClick={() => setSettingsOpen(true}
+              onSettingsClick={() => setSettingsOpen(true)}
               onFilterClick={() => {}}
             />
           </TabsContent>
@@ -274,4 +274,4 @@ export const NautilusCommandCenter = memo(function() {
       </div>
     </div>
   );
-});
+}

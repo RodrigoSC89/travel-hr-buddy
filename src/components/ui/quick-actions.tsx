@@ -1,5 +1,6 @@
 import React from "react";
-import { Download, FileText, Printer } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ExternalLink, Download, FileText, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSystemActions } from "@/hooks/use-system-actions";
 
@@ -12,7 +13,7 @@ export const QuickActions: React.FC = () => {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => handlehandleExportData}
+        onClick={() => handleExportData("pdf")}
         className="flex items-center gap-2"
       >
         <Download className="h-4 w-4" />

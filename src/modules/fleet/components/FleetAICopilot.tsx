@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,8 +30,8 @@ interface Message {
 }
 
 interface FleetAICopilotProps {
-  vessels: unknown[];
-  onInsightGenerated?: (insight: unknown: unknown: unknown) => void;
+  vessels: any[];
+  onInsightGenerated?: (insight: any) => void;
   className?: string;
 }
 
@@ -101,7 +100,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
           query,
           context: { fleet_summary: fleetSummary }
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -120,7 +119,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         role: "assistant",
         content: responseContent,
         timestamp: new Date()
-      });
+      };
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
@@ -146,62 +145,62 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
     return labels[action] || action;
   };
 
-  const formatActionResponse = (action: string, data: unknown): string => {
+  const formatActionResponse = (action: string, data: any): string => {
     if (!data) return "Análise não disponível.";
 
     switch (action) {
-    case "maintenance_prediction":
-      if (data.predictions?.length > 0) {
-        const critical = data.predictions.filter((p: unknown) => p.priority === "critical" || p.priority === "high").length;
-        return `📊 **Análise de Manutenção Preditiva**\n\n${data.summary || ""}\n\n` +
+      case "maintenance_prediction":
+        if (data.predictions?.length > 0) {
+          const critical = data.predictions.filter((p: any) => p.priority === "critical" || p.priority === "high").length;
+          return `📊 **Análise de Manutenção Preditiva**\n\n${data.summary || ""}\n\n` +
             `🔴 ${critical} embarcações requerem atenção prioritária\n` +
             `📋 ${data.predictions.length} previsões geradas\n\n` +
-            data.predictions.slice(0, 3).map((p: unknown) => 
+            data.predictions.slice(0, 3).map((p: any) => 
               `• **${p.vessel_name}**: ${p.priority.toUpperCase()} - ${p.reasoning || "Verificar componentes"}`
             ).join("\n") +
             (data.alerts?.length > 0 ? `\n\n⚠️ Alertas: ${data.alerts.join(", ")}` : "");
-      }
-      return "Análise de manutenção concluída. Nenhuma ação urgente necessária.";
+        }
+        return "Análise de manutenção concluída. Nenhuma ação urgente necessária.";
 
-    case "route_optimization":
-      if (data.optimizations?.length > 0 || data.total_savings) {
-        return "🗺️ **Otimização de Rotas**\n\n" +
+      case "route_optimization":
+        if (data.optimizations?.length > 0 || data.total_savings) {
+          return `🗺️ **Otimização de Rotas**\n\n` +
             `💰 Economia potencial: R$ ${data.total_savings?.cost?.toLocaleString() || "N/A"}\n` +
             `⛽ Redução de combustível: ${data.total_savings?.fuel_percent || 0}%\n` +
             `⏱️ Tempo economizado: ${data.total_savings?.time_hours || 0}h\n\n` +
-            (data.optimizations?.slice(0, 3).map((o: unknown) => 
+            (data.optimizations?.slice(0, 3).map((o: any) => 
               `• **${o.vessel_name}**: ${o.current_route} → ${o.optimized_route}`
             ).join("\n") || "Rotas já otimizadas.");
-      }
-      return "Rotas analisadas. Sugestões de otimização disponíveis.";
+        }
+        return "Rotas analisadas. Sugestões de otimização disponíveis.";
 
-    case "fuel_analysis":
-      if (data.analysis?.length > 0 || data.fleet_summary) {
-        return "⛽ **Análise de Combustível**\n\n" +
+      case "fuel_analysis":
+        if (data.analysis?.length > 0 || data.fleet_summary) {
+          return `⛽ **Análise de Combustível**\n\n` +
             `📊 Eficiência média: ${data.fleet_summary?.average_efficiency || 85}%\n` +
             `🔋 Consumo diário total: ${data.fleet_summary?.total_daily_consumption || "N/A"} L\n` +
             `⚠️ Embarcações necessitando reabastecimento: ${data.fleet_summary?.vessels_needing_refuel || 0}\n\n` +
-            (data.analysis?.slice(0, 3).map((a: unknown) => 
+            (data.analysis?.slice(0, 3).map((a: any) => 
               `• **${a.vessel_name}**: ${a.current_level_percent || 0}% - ${a.recommendations?.[0] || "Nível adequado"}`
             ).join("\n") || "");
-      }
-      return "Análise de combustível concluída.";
+        }
+        return "Análise de combustível concluída.";
 
-    case "fleet_insights":
-      if (data.insights?.length > 0 || data.kpis) {
-        return "📈 **Insights Estratégicos da Frota**\n\n" +
+      case "fleet_insights":
+        if (data.insights?.length > 0 || data.kpis) {
+          return `📈 **Insights Estratégicos da Frota**\n\n` +
             `🎯 Score de Saúde: ${data.kpis?.fleet_health_score || 85}/100\n` +
             `⚡ Eficiência Operacional: ${data.kpis?.operational_efficiency || 90}%\n` +
             `🔧 Compliance de Manutenção: ${data.kpis?.maintenance_compliance || 95}%\n\n` +
-            "**Top Insights:**\n" +
-            (data.insights?.slice(0, 3).map((i: unknown) => 
+            `**Top Insights:**\n` +
+            (data.insights?.slice(0, 3).map((i: any) => 
               `• [${i.type?.toUpperCase()}] ${i.title}: ${i.description}`
             ).join("\n") || data.recommendations?.join("\n• ") || "");
-      }
-      return "Insights gerados com sucesso.";
+        }
+        return "Insights gerados com sucesso.";
 
-    default:
-      return JSON.stringify(data, null, 2);
+      default:
+        return JSON.stringify(data, null, 2);
     }
   };
 
@@ -234,7 +233,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={handleSetIsExpanded}
+          onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </Button>
@@ -248,7 +247,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
               key={action.id}
               variant="outline"
               size="sm"
-              onClick={() => handlesendMessage}
+              onClick={() => sendMessage("", action.action)}
               disabled={isLoading}
               className="shrink-0"
             >
@@ -328,7 +327,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
           <Input
             value={input}
-            onChange={handleChange}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Pergunte sobre a frota..."
             disabled={isLoading}
             className="flex-1"

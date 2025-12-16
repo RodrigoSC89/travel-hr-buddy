@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ interface AddCrewDialogProps {
   onSuccess: () => void;
 }
 
-export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: AddCrewDialogProps) {
+export function AddCrewDialog({ open, onOpenChange, onSuccess }: AddCrewDialogProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -115,7 +115,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
               </Label>
               <Input
                 value={formData.full_name}
-                onChange={handleChange}))}
+                onChange={(e) => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
                 placeholder="Ex: João da Silva"
               />
             </div>
@@ -129,7 +129,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
                 <Input
                   type="email"
                   value={formData.email}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                   placeholder="email@exemplo.com"
                 />
               </div>
@@ -140,7 +140,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
                 </Label>
                 <Input
                   value={formData.phone}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                   placeholder="+55 11 99999-9999"
                 />
               </div>
@@ -203,7 +203,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
                 <Label>ID do Funcionário</Label>
                 <Input
                   value={formData.employee_id}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, employee_id: e.target.value }))}
                   placeholder="EMP001"
                 />
               </div>
@@ -234,14 +234,14 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
               <Input
                 type="date"
                 value={formData.join_date}
-                onChange={handleChange}))}
+                onChange={(e) => setFormData(prev => ({ ...prev, join_date: e.target.value }))}
               />
             </div>
           </TabsContent>
         </Tabs>
 
         <DialogFooter className="mt-6">
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
           <Button onClick={handleSubmit} disabled={isSubmitting}>

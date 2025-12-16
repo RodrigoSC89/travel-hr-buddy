@@ -1,7 +1,6 @@
-
 import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { memo, memo, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface AnimatedCardProps extends Omit<HTMLMotionProps<"div">, "children"> {
   children: ReactNode;
@@ -10,7 +9,7 @@ interface AnimatedCardProps extends Omit<HTMLMotionProps<"div">, "children"> {
   hover?: boolean;
 }
 
-export const AnimatedCard = memo(function({ 
+export function AnimatedCard({ 
   children, 
   delay = 0, 
   className,
@@ -50,7 +49,7 @@ interface AnimatedListProps {
   staggerDelay?: number;
 }
 
-export const AnimatedList = memo(function({ children, className, staggerDelay = 0.1 }: AnimatedListProps) {
+export function AnimatedList({ children, className, staggerDelay = 0.1 }: AnimatedListProps) {
   return (
     <motion.div
       initial="hidden"
@@ -90,7 +89,7 @@ interface AnimatedButtonProps extends HTMLMotionProps<"button"> {
   pulse?: boolean;
 }
 
-export const AnimatedButton = memo(function({ children, pulse, className, ...props }: AnimatedButtonProps) {
+export function AnimatedButton({ children, pulse, className, ...props }: AnimatedButtonProps) {
   return (
     <motion.button
       whileHover={{ scale: 1.02 }}
@@ -121,7 +120,7 @@ interface AnimatedCounterProps {
   duration?: number;
 }
 
-export const AnimatedCounter = memo(function({ value, className, duration = 1 }: AnimatedCounterProps) {
+export function AnimatedCounter({ value, className, duration = 1 }: AnimatedCounterProps) {
   return (
     <motion.span
       className={className}
@@ -138,4 +137,4 @@ export const AnimatedCounter = memo(function({ value, className, duration = 1 }:
       </motion.span>
     </motion.span>
   );
-});
+}

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -256,7 +255,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       );
     }
     return true;
-  };
+  });
 
   useEffect(() => {
     loadFeedbacks();
@@ -358,7 +357,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                     <Input
                       placeholder="Título, descrição ou usuário..."
                       value={filter.search || ""}
-                      onChange={handleChange}
+                      onChange={(e) => setFilter({...filter, search: e.target.value})}
                       className="pl-10"
                     />
                   </div>
@@ -366,7 +365,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Tipo</Label>
-                  <Select value={filter.type || "all"} onValueChange={(value) => setFilter({...filter, type: value === "all" ? undefined : value})}>
+                <Select value={filter.type || "all"} onValueChange={(value) => setFilter({...filter, type: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os tipos" />
                     </SelectTrigger>
@@ -383,7 +382,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Status</Label>
-                  <Select value={filter.status || "all"} onValueChange={(value) => setFilter({...filter, status: value === "all" ? undefined : value})}>
+                <Select value={filter.status || "all"} onValueChange={(value) => setFilter({...filter, status: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os status" />
                     </SelectTrigger>
@@ -400,7 +399,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Módulo</Label>
-                  <Select value={filter.module || "all"} onValueChange={(value) => setFilter({...filter, module: value === "all" ? undefined : value})}>
+                <Select value={filter.module || "all"} onValueChange={(value) => setFilter({...filter, module: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os módulos" />
                     </SelectTrigger>
@@ -522,7 +521,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="title"
                   placeholder="Resumo do seu feedback"
                   value={newFeedback.title}
-                  onChange={handleChange}
+                  onChange={(e) => setNewFeedback({...newFeedback, title: e.target.value})}
                 />
               </div>
 
@@ -532,14 +531,14 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="description"
                   placeholder="Descreva detalhadamente seu feedback, sugestão ou problema"
                   value={newFeedback.description}
-                  onChange={handleChange}
+                  onChange={(e) => setNewFeedback({...newFeedback, description: e.target.value})}
                   rows={4}
                 />
               </div>
 
               <div>
                 <Label htmlFor="rating">Avaliação Geral (1-5)</Label>
-                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value})}>
+                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value)})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -563,4 +562,4 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

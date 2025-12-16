@@ -1,4 +1,3 @@
-import { memo } from 'react';
 /**
  * Comprehensive Executive Dashboard
  * Dashboard executivo completo com informações sobre todos os módulos e sistemas
@@ -402,9 +401,9 @@ const ModuleCard = ({ module }: { module: typeof systemModules[0] }) => {
       </CardContent>
     </Card>
   );
-});
+};
 
-export const ComprehensiveExecutiveDashboard = memo(function() {
+export function ComprehensiveExecutiveDashboard() {
   const totalModules = systemModules.length;
   const operationalModules = systemModules.filter(m => m.status === "operational").length;
   const avgUptime = (systemModules.reduce((sum, m) => sum + m.uptime, 0) / totalModules).toFixed(1);

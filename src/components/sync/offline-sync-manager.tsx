@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface SyncItem {
   id: string;
   action: string;
-  data: unknown;
+  data: any;
   timestamp: number;
   synced: boolean;
   error?: string;

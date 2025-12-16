@@ -1,5 +1,4 @@
-
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +47,7 @@ interface GraphData {
   logs: DecisionLog[];
 }
 
-export const Patch612Validation = memo(function() {
+export function Patch612Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [graphData, setGraphData] = useState<GraphData | null>(null);
@@ -147,7 +146,7 @@ export const Patch612Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+      });
     }
 
     setResults(testResults);
@@ -203,7 +202,7 @@ export const Patch612Validation = memo(function() {
               <li>Conexões: {graphData.edges.length}</li>
               <li>Cenários Validados: {graphData.scenarios.length}</li>
               <li>Logs de Decisão: {graphData.logs.length}</li>
-              <li>Confidence Média: {(graphData.scenarios.reduce((sum: number, s: unknown) => sum + s.confidence, 0) / graphData.scenarios.length * 100).toFixed(1)}%</li>
+              <li>Confidence Média: {(graphData.scenarios.reduce((sum: number, s: any) => sum + s.confidence, 0) / graphData.scenarios.length * 100).toFixed(1)}%</li>
             </ul>
           </div>
         )}

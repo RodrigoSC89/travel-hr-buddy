@@ -1,4 +1,3 @@
-
 /**
  * PATCH 593 - Neuro-Human Interface Adapter
  * 
@@ -331,7 +330,7 @@ class NeuroHumanAdapter {
       hesitationCount: 0,
       confirmationRequired: false,
       inputHistory: []
-    });
+    };
   }
 
   /**

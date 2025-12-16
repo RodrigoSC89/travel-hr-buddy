@@ -3,7 +3,7 @@
  * Reusable confirmation dialog for destructive actions
  */
 
-import { useCallback, useState } from "react";;;
+import { useState, useCallback } from 'react';
 
 interface ConfirmationState {
   isOpen: boolean;
@@ -11,21 +11,21 @@ interface ConfirmationState {
   description: string;
   confirmText: string;
   cancelText: string;
-  variant: "default" | "destructive";
+  variant: 'default' | 'destructive';
   onConfirm: () => void | Promise<void>;
 }
 
 const defaultState: ConfirmationState = {
   isOpen: false,
-  title: "",
-  description: "",
-  confirmText: "Confirmar",
-  cancelText: "Cancelar",
-  variant: "default",
+  title: '',
+  description: '',
+  confirmText: 'Confirmar',
+  cancelText: 'Cancelar',
+  variant: 'default',
   onConfirm: () => {}
 };
 
-export const useConfirmation = memo(function() {
+export function useConfirmation() {
   const [state, setState] = useState<ConfirmationState>(defaultState);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,18 +34,18 @@ export const useConfirmation = memo(function() {
     description: string;
     confirmText?: string;
     cancelText?: string;
-    variant?: "default" | "destructive";
+    variant?: 'default' | 'destructive';
     onConfirm: () => void | Promise<void>;
   }) => {
     setState({
       isOpen: true,
       title: options.title,
       description: options.description,
-      confirmText: options.confirmText || "Confirmar",
-      cancelText: options.cancelText || "Cancelar",
-      variant: options.variant || "default",
+      confirmText: options.confirmText || 'Confirmar',
+      cancelText: options.cancelText || 'Cancelar',
+      variant: options.variant || 'default',
       onConfirm: options.onConfirm
-});
+    });
   }, []);
 
   const handleConfirm = useCallback(async () => {
@@ -67,10 +67,10 @@ export const useConfirmation = memo(function() {
     onConfirm: () => void | Promise<void>
   ) => {
     confirm({
-      title: "Confirmar exclusão",
+      title: 'Confirmar exclusão',
       description: `Tem certeza que deseja excluir "${itemName}"? Esta ação não pode ser desfeita.`,
-      confirmText: "Excluir",
-      variant: "destructive",
+      confirmText: 'Excluir',
+      variant: 'destructive',
       onConfirm
     });
   }, [confirm]);
@@ -80,7 +80,7 @@ export const useConfirmation = memo(function() {
     onConfirm: () => void | Promise<void>
   ) => {
     confirm({
-      title: "Confirmar ação",
+      title: 'Confirmar ação',
       description: `Tem certeza que deseja ${action}?`,
       onConfirm
     });
@@ -105,7 +105,7 @@ export const useConfirmation = memo(function() {
 /**
  * Confirmation Dialog Component
  */
-import React from "react";
+import React from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -115,8 +115,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/alert-dialog';
+import { Loader2 } from 'lucide-react';
 
 interface ConfirmationDialogProps {
   isOpen: boolean;
@@ -124,7 +124,7 @@ interface ConfirmationDialogProps {
   description: string;
   confirmText: string;
   cancelText: string;
-  variant: "default" | "destructive";
+  variant: 'default' | 'destructive';
   isLoading: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -155,7 +155,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           <AlertDialogAction
             onClick={onConfirm}
             disabled={isLoading}
-            className={variant === "destructive" ? "bg-destructive hover:bg-destructive/90" : ""}
+            className={variant === 'destructive' ? 'bg-destructive hover:bg-destructive/90' : ''}
           >
             {isLoading ? (
               <>
@@ -170,4 +170,4 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-});
+};

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -247,7 +246,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept="image/*"
-              onChange={handleChange}
+              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "photo")}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -272,7 +271,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept=".pdf,.doc,.docx,.txt"
-              onChange={handleChange}
+              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "document")}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -312,14 +311,14 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => window.open(item.url, "_blank"}
+                    onClick={() => window.open(item.url, "_blank")}
                   >
                     <Download className="w-4 h-4" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleremoveEvidence}
+                    onClick={() => removeEvidence(item.id)}
                   >
                     <X className="w-4 h-4" />
                   </Button>
@@ -338,4 +337,4 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

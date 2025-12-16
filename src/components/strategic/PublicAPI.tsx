@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,7 @@ interface SDK {
   status: "stable" | "beta" | "deprecated";
 }
 
-export const PublicAPI = memo(() => {
+export const PublicAPI = () => {
   const [apiKey, setApiKey] = useState("naut_live_sk_1a2b3c4d5e6f7g8h9i0j");
   const [copiedKey, setCopiedKey] = useState(false);
   const { toast } = useToast();
@@ -198,7 +197,7 @@ export const PublicAPI = memo(() => {
       description: "A chave da API foi copiada para a área de transferência.",
     });
     setTimeout(() => setCopiedKey(false), 2000);
-  });
+  };
 
   const generateNewKey = () => {
     const newKey = `naut_live_sk_${Math.random().toString(36).substring(2, 15)}`;
@@ -207,7 +206,7 @@ export const PublicAPI = memo(() => {
       title: "Nova chave gerada",
       description: "Uma nova chave da API foi gerada com sucesso.",
     });
-  });
+  };
 
   const getMethodColor = (method: string) => {
     switch (method) {
@@ -225,7 +224,7 @@ export const PublicAPI = memo(() => {
     case "beta": return "bg-warning text-warning-foreground";
     case "deprecated": return "bg-danger text-danger-foreground";
     default: return "bg-muted text-muted-foreground";
-    };
+    }
   };
 
   return (

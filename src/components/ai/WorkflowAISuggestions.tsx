@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useEffect, useState } from "react";;
  * PATCH 653.1 - Workflow AI Suggestions Component
  * Complete AI-powered workflow suggestions with LLM integration
  */
@@ -8,7 +7,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -75,7 +74,7 @@ const mockWorkflowContext = {
   ]
 };
 
-export const WorkflowAISuggestions = memo(function({ 
+export function WorkflowAISuggestions({ 
   workflowId, 
   limit = 10, 
   className,
@@ -167,7 +166,7 @@ Gere sugestões em formato JSON array.`
         const jsonMatch = responseText.match(/\[[\s\S]*\]/);
         if (jsonMatch) {
           const parsed = JSON.parse(jsonMatch[0]);
-          aiSuggestions = parsed.map((s: unknown, i: number) => ({
+          aiSuggestions = parsed.map((s: any, i: number) => ({
             id: `ai-${Date.now()}-${i}`,
             tipo_sugestao: s.tipo_sugestao || "Otimizar processo",
             conteudo: s.conteudo || s.content || s.description || "",
@@ -296,7 +295,7 @@ Gere sugestões em formato JSON array.`
       applied: data.filter(s => s.status === "applied").length,
       dismissed: data.filter(s => s.status === "dismissed").length
     });
-  });
+  };
 
   const handleApply = (suggestion: WorkflowSuggestion) => {
     setSuggestions(prev => prev.map(s => 
@@ -316,7 +315,7 @@ Gere sugestões em formato JSON array.`
     setSuggestions(prev => {
       updateStats(prev);
       return prev;
-  });
+    });
   };
 
   const handleDismiss = (suggestion: WorkflowSuggestion) => {
@@ -332,36 +331,36 @@ Gere sugestões em formato JSON array.`
     setSuggestions(prev => {
       updateStats(prev);
       return prev;
-  });
+    });
   };
 
   const getCriticidadeColor = (criticidade: string) => {
     switch (criticidade) {
-    case "crítica":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
-    case "alta":
-      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-    case "média":
-      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-    default:
-      return "bg-green-500/10 text-green-500 border-green-500/20";
+      case "crítica":
+        return "bg-red-500/10 text-red-500 border-red-500/20";
+      case "alta":
+        return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+      case "média":
+        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+      default:
+        return "bg-green-500/10 text-green-500 border-green-500/20";
     }
   };
 
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
-    case "Criar tarefa":
-      return <CheckCircle2 className="h-4 w-4 text-blue-500" />;
-    case "Ajustar prazo":
-      return <Clock className="h-4 w-4 text-yellow-500" />;
-    case "Trocar responsável":
-      return <User className="h-4 w-4 text-purple-500" />;
-    case "Escalar problema":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    case "Otimizar processo":
-      return <Zap className="h-4 w-4 text-green-500" />;
-    default:
-      return <Lightbulb className="h-4 w-4 text-yellow-500" />;
+      case "Criar tarefa":
+        return <CheckCircle2 className="h-4 w-4 text-blue-500" />;
+      case "Ajustar prazo":
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case "Trocar responsável":
+        return <User className="h-4 w-4 text-purple-500" />;
+      case "Escalar problema":
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "Otimizar processo":
+        return <Zap className="h-4 w-4 text-green-500" />;
+      default:
+        return <Lightbulb className="h-4 w-4 text-yellow-500" />;
     }
   };
 
@@ -370,7 +369,7 @@ Gere sugestões em formato JSON array.`
     if (activeTab === "applied") return s.status === "applied";
     if (activeTab === "critical") return s.criticidade === "crítica" || s.criticidade === "alta";
     return true;
-  };
+  });
 
   if (isLoading) {
     return (
@@ -467,8 +466,8 @@ Gere sugestões em formato JSON array.`
                         suggestion.status === "applied" 
                           ? "bg-green-500/5 border-green-500/20" 
                           : suggestion.status === "dismissed"
-                            ? "bg-muted/30 opacity-60"
-                            : "bg-card hover:bg-accent/50"
+                          ? "bg-muted/30 opacity-60"
+                          : "bg-card hover:bg-accent/50"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -527,7 +526,7 @@ Gere sugestões em formato JSON array.`
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-green-500 hover:text-green-600 hover:bg-green-500/10"
-                              onClick={() => handlehandleApply}
+                              onClick={() => handleApply(suggestion)}
                               title="Aplicar sugestão"
                             >
                               <Play className="h-4 w-4" />
@@ -536,7 +535,7 @@ Gere sugestões em formato JSON array.`
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                              onClick={() => handlehandleDismiss}
+                              onClick={() => handleDismiss(suggestion)}
                               title="Descartar"
                             >
                               <X className="h-4 w-4" />
@@ -554,4 +553,4 @@ Gere sugestões em formato JSON array.`
       </CardContent>
     </Card>
   );
-});
+}

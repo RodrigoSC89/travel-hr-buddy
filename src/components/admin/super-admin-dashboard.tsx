@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ export const SuperAdminDashboard: React.FC = () => {
       if (error) throw error;
 
       // Processar dados das organizações
-      const processedOrgs = orgs?.map((org: unknown) => ({
+      const processedOrgs = orgs?.map((org: any) => ({
         ...org,
         max_users: org.max_users ?? 0,
         max_vessels: org.max_vessels ?? 0,
@@ -255,7 +254,7 @@ export const SuperAdminDashboard: React.FC = () => {
                 <Label>Nome da Empresa</Label>
                 <Input
                   value={newOrgForm.name}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrgForm({...newOrgForm, name: e.target.value})}
                   placeholder="Ex: Blue Shipping"
                 />
               </div>
@@ -263,7 +262,7 @@ export const SuperAdminDashboard: React.FC = () => {
                 <Label>Slug (Subdomínio)</Label>
                 <Input
                   value={newOrgForm.slug}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrgForm({...newOrgForm, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-")})}
                   placeholder="Ex: blue-shipping"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
@@ -288,7 +287,7 @@ export const SuperAdminDashboard: React.FC = () => {
                 <Input
                   type="email"
                   value={newOrgForm.billing_email}
-                  onChange={handleChange}
+                  onChange={(e) => setNewOrgForm({...newOrgForm, billing_email: e.target.value})}
                   placeholder="financeiro@empresa.com"
                 />
               </div>
@@ -394,7 +393,7 @@ export const SuperAdminDashboard: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleupdateOrganizationStatus}
+                      onClick={() => updateOrganizationStatus(org.id, "suspended")}
                     >
                       <Ban className="w-4 h-4 mr-1" />
                       Suspender
@@ -404,7 +403,7 @@ export const SuperAdminDashboard: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleupdateOrganizationStatus}
+                      onClick={() => updateOrganizationStatus(org.id, "active")}
                     >
                       <CheckCircle className="w-4 h-4 mr-1" />
                       Ativar

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,7 @@ interface AccessLog {
   ip_address: string | null;
   user_agent: string | null;
   severity: string;
-  details: unknown: unknown: unknown;
+  details: any;
 }
 
 export default function AuditDashboard() {
@@ -70,11 +70,11 @@ export default function AuditDashboard() {
 
       if (error) throw error;
 
-      setLogs((data || []) as unknown);
+      setLogs((data || []) as any);
       if (count) {
         setTotalPages(Math.ceil(count / pageSize));
       }
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast.error("Failed to fetch audit logs");
     } finally {
       setLoading(false);
@@ -128,7 +128,7 @@ export default function AuditDashboard() {
       window.URL.revokeObjectURL(url);
 
       toast.success("Logs exported successfully");
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast.error("Failed to export logs");
     }
   }
@@ -158,7 +158,7 @@ export default function AuditDashboard() {
     default:
       return "text-blue-600 bg-blue-50";
     }
-  });
+  };
 
   const getResultColor = (result: string) => {
     switch (result) {
@@ -203,19 +203,19 @@ export default function AuditDashboard() {
             <Input
               placeholder="User ID"
               value={filters.user_id}
-              onChange={handleChange}
+              onChange={(e) => handleFilterChange("user_id", e.target.value)}
             />
             <Input
               placeholder="IP Address"
               value={filters.ip_address}
-              onChange={handleChange}
+              onChange={(e) => handleFilterChange("ip_address", e.target.value)}
             />
             <Input
               placeholder="Module/Route"
               value={filters.module_accessed}
-              onChange={handleChange}
+              onChange={(e) => handleFilterChange("module_accessed", e.target.value)}
             />
-            <Select value={filters.result || "all"} onValueChange={(value) => handleFilterChange("result", value === "all" ? "" : value}>
+            <Select value={filters.result || "all"} onValueChange={(value) => handleFilterChange("result", value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Result" />
               </SelectTrigger>
@@ -227,7 +227,7 @@ export default function AuditDashboard() {
                 <SelectItem value="error">Error</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.severity || "all"} onValueChange={(value) => handleFilterChange("severity", value === "all" ? "" : value}>
+            <Select value={filters.severity || "all"} onValueChange={(value) => handleFilterChange("severity", value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>
@@ -311,14 +311,14 @@ export default function AuditDashboard() {
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    onClick={handleSetPage}
+                    onClick={() => setPage(p => Math.max(1, p - 1))}
                     disabled={page === 1}
                     variant="outline"
                   >
                     Previous
                   </Button>
                   <Button
-                    onClick={handleSetPage}
+                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
                     variant="outline"
                   >

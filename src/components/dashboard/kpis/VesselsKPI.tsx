@@ -5,10 +5,10 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Ship } from "lucide-react";
-import { memo, memo, useEffect, useState } from "react";;;
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export const VesselsKPI = memo(function() {
+export function VesselsKPI() {
   const [vessels, setVessels] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -88,4 +88,4 @@ export const VesselsKPI = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

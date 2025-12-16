@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -93,13 +92,13 @@ export default function SolasIspsTraining() {
                 <Input
                   placeholder="Buscar treinamentos..."
                   value={searchQuery}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 w-64"
                 />
               </div>
 
               {/* Filters */}
-              <Button variant="outline" size="icon" onClick={handleSetFiltersOpen}>
+              <Button variant="outline" size="icon" onClick={() => setFiltersOpen(true)}>
                 <Filter className="h-4 w-4" />
               </Button>
 
@@ -108,7 +107,7 @@ export default function SolasIspsTraining() {
                 variant="outline"
                 size="icon"
                 className="relative"
-                onClick={handleSetNotificationsOpen}
+                onClick={() => setNotificationsOpen(true)}
               >
                 <Bell className="h-4 w-4" />
                 {unreadCount > 0 && (
@@ -119,7 +118,7 @@ export default function SolasIspsTraining() {
               </Button>
 
               {/* Settings */}
-              <Button variant="outline" size="icon" onClick={handleSetSettingsOpen}>
+              <Button variant="outline" size="icon" onClick={() => setSettingsOpen(true)}>
                 <Settings className="h-4 w-4" />
               </Button>
 

@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useEffect, useState } from "react";;
  * Operations Command Center - Unified Operations & Business Intelligence
  * PATCH UNIFY-OPS - Fusion of Business Insights + Operations Dashboard
  * Complete operational management with AI-powered business intelligence
@@ -18,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { 
   Ship, TrendingUp, TrendingDown, Users, Activity, BarChart3, Navigation, Gauge, AlertCircle,
@@ -187,7 +186,7 @@ export default function OperationsCommandCenter() {
       showNotifications: true,
       compactMode: false,
     };
-  };
+  });
 
   const [performanceData] = useState([
     { day: "Seg", efficiency: 85, fuel: 120, voyages: 12 },
@@ -247,11 +246,11 @@ export default function OperationsCommandCenter() {
       const vesselsList = vessels || [];
       const crewList = crew || [];
       
-      const activeVessels = vesselsList.filter((v: unknown) => v.status === "active" || v.status === "operational").length;
-      const vesselsInOperation = vesselsList.filter((v: unknown) => v.status === "operational").length;
-      const vesselsAtPort = vesselsList.filter((v: unknown) => v.status === "at_port" || v.status === "docked" || v.status === "active").length;
-      const vesselsInMaintenance = vesselsList.filter((v: unknown) => v.status === "maintenance").length;
-      const activeCrew = crewList.filter((c: unknown) => c.status === "active" || c.status === "onboard").length;
+      const activeVessels = vesselsList.filter((v: any) => v.status === "active" || v.status === "operational").length;
+      const vesselsInOperation = vesselsList.filter((v: any) => v.status === "operational").length;
+      const vesselsAtPort = vesselsList.filter((v: any) => v.status === "at_port" || v.status === "docked" || v.status === "active").length;
+      const vesselsInMaintenance = vesselsList.filter((v: any) => v.status === "maintenance").length;
+      const activeCrew = crewList.filter((c: any) => c.status === "active" || c.status === "onboard").length;
 
       setData({
         activeVessels,
@@ -276,7 +275,7 @@ export default function OperationsCommandCenter() {
         { name: "Inativos", value: Math.max(0, vesselsList.length - activeVessels), color: "hsl(var(--chart-4))" },
       ]);
 
-      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: unknown) => ({
+      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: any) => ({
         id: insight.id,
         title: insight.title || "Insight Operacional",
         message: insight.description || "",
@@ -317,18 +316,18 @@ export default function OperationsCommandCenter() {
   // Get insight type icon
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "opportunity": return <Lightbulb className="h-5 w-5 text-amber-500" />;
-    case "warning": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-    case "success": return <CheckCircle2 className="h-5 w-5 text-emerald-500" />;
-    default: return <Activity className="h-5 w-5 text-blue-500" />;
+      case "opportunity": return <Lightbulb className="h-5 w-5 text-amber-500" />;
+      case "warning": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+      case "success": return <CheckCircle2 className="h-5 w-5 text-emerald-500" />;
+      default: return <Activity className="h-5 w-5 text-blue-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "completed": return <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">Concluído</Badge>;
-    case "in_progress": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Em Progresso</Badge>;
-    default: return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Pendente</Badge>;
+      case "completed": return <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">Concluído</Badge>;
+      case "in_progress": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Em Progresso</Badge>;
+      default: return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Pendente</Badge>;
     }
   };
 
@@ -500,7 +499,7 @@ export default function OperationsCommandCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => handlefetchOperationalData} disabled={isRefreshing}>
+          <Button variant="outline" onClick={() => fetchOperationalData(true)} disabled={isRefreshing}>
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
@@ -518,7 +517,7 @@ export default function OperationsCommandCenter() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" onClick={handleSetShowSettings}>
+          <Button variant="outline" onClick={() => setShowSettings(true)}>
             <Settings className="h-4 w-4" />
           </Button>
         </div>
@@ -802,8 +801,8 @@ export default function OperationsCommandCenter() {
                         <Badge variant="outline">{insight.category}</Badge>
                         <Badge className={
                           insight.impact === "Crítico" ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" :
-                            insight.impact === "Alto" ? "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300" :
-                              "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                          insight.impact === "Alto" ? "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300" :
+                          "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                         }>
                           {insight.impact}
                         </Badge>
@@ -1016,7 +1015,7 @@ export default function OperationsCommandCenter() {
               </div>
               <Switch
                 checked={settings.autoRefresh}
-                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, autoRefresh: v }))}
+                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, autoRefresh: v }))}
               />
             </div>
             <Separator />
@@ -1025,7 +1024,7 @@ export default function OperationsCommandCenter() {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={handleChange}))}
+                onChange={(e) => setSettings((prev: any) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
                 disabled={!settings.autoRefresh}
               />
             </div>
@@ -1037,7 +1036,7 @@ export default function OperationsCommandCenter() {
               </div>
               <Switch
                 checked={settings.showNotifications}
-                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, showNotifications: v }))}
+                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, showNotifications: v }))}
               />
             </div>
           </div>

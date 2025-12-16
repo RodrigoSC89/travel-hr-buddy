@@ -1,5 +1,4 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
  * UNIFIED NotificationCenter Component
  * 
  * Consolidates:
@@ -93,8 +92,8 @@ export interface UnifiedNotification {
   actionUrl?: string;
   actionLabel?: string;
   action_type?: string;
-  action_data?: unknown;
-  metadata?: Record<string, unknown>;
+  action_data?: any;
+  metadata?: Record<string, any>;
   auto_dismiss?: boolean;
 }
 
@@ -156,7 +155,7 @@ const typeIcons: Record<string, React.ReactNode> = {
 // HELPER FUNCTIONS
 // ============================================
 
-const normalizeNotification = (n: unknown: unknown: unknown): UnifiedNotification => ({
+const normalizeNotification = (n: any): UnifiedNotification => ({
   id: n.id,
   title: n.title,
   message: n.message || n.description || "",
@@ -174,25 +173,25 @@ const normalizeNotification = (n: unknown: unknown: unknown): UnifiedNotificatio
   action_type: nullToUndefined(n.action_type),
   action_data: n.action_data || n.actionData,
   metadata: typeof n.metadata === "object" && n.metadata !== null && !Array.isArray(n.metadata)
-    ? n.metadata as Record<string, unknown>
+    ? n.metadata as Record<string, any>
     : {},
   auto_dismiss: n.auto_dismiss,
 });
 
 const getPriorityIcon = (priority: NotificationPriority) => {
   switch (priority) {
-  case "critical":
-  case "urgent":
-    return <AlertTriangle className="h-4 w-4 text-destructive" />;
-  case "high":
-    return <TrendingUp className="h-4 w-4 text-warning" />;
-  case "normal":
-  case "medium":
-    return <Activity className="h-4 w-4 text-primary" />;
-  case "low":
-    return <TrendingDown className="h-4 w-4 text-muted-foreground" />;
-  default:
-    return <Bell className="h-4 w-4 text-muted-foreground" />;
+    case "critical":
+    case "urgent":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "high":
+      return <TrendingUp className="h-4 w-4 text-warning" />;
+    case "normal":
+    case "medium":
+      return <Activity className="h-4 w-4 text-primary" />;
+    case "low":
+      return <TrendingDown className="h-4 w-4 text-muted-foreground" />;
+    default:
+      return <Bell className="h-4 w-4 text-muted-foreground" />;
   }
 };
 
@@ -226,7 +225,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           ? "bg-muted/30 border-border"
           : "bg-card border-primary/20 shadow-sm"
       )}
-      onClick={() => !isRead && onMarkAsRead(notification.id}
+      onClick={() => !isRead && onMarkAsRead(notification.id)}
     >
       <div className="flex gap-3">
         {/* Icon */}
@@ -239,8 +238,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           {notification.category
             ? categoryIcons[notification.category]
             : notification.type
-              ? typeIcons[notification.type] || <Bell className="w-4 h-4" />
-              : getPriorityIcon(notification.priority)}
+            ? typeIcons[notification.type] || <Bell className="w-4 h-4" />
+            : getPriorityIcon(notification.priority)}
         </div>
 
         {/* Content */}
@@ -310,13 +309,13 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       )}
     </motion.div>
   );
-});
+};
 
 // ============================================
 // MAIN HOOK
 // ============================================
 
-export const useUnifiedNotifications = memo(function(userId?: string, autoRefresh = true, refreshInterval = 30000) {
+export function useUnifiedNotifications(userId?: string, autoRefresh = true, refreshInterval = 30000) {
   const [notifications, setNotifications] = useState<UnifiedNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -673,14 +672,14 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
     if (!matchesSearch) return false;
 
     switch (filter) {
-    case "unread":
-      return !isRead;
-    case "priority":
-      return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
-    default:
-      return true;
+      case "unread":
+        return !isRead;
+      case "priority":
+        return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
+      default:
+        return true;
     }
-};
+  });
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -739,7 +738,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
                 type="text"
                 placeholder="Buscar..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-7 pr-3 py-1.5 text-xs border border-border rounded bg-background"
               />
             </div>
@@ -752,7 +751,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
                 <Button
                   key={filterType}
                   variant={filter === filterType ? "default" : "ghost"}
-                  onClick={handleSetFilter}
+                  onClick={() => setFilter(filterType)}
                   size="sm"
                   className="text-xs h-6 px-2"
                 >
@@ -844,7 +843,7 @@ const PageVariant: React.FC<PageVariantProps> = ({
     if (filter === "unread") return !n.read && !n.isRead && !n.is_read;
     if (filter === "high") return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
     return true;
-};
+  });
 
   if (loading) {
     return (
@@ -1038,7 +1037,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
   return (
     <>
       <button
-        onClick={handleSetOpen}
+        onClick={() => setOpen(true)}
         className={cn(
           "relative p-2 rounded-lg hover:bg-muted transition-colors",
           className
@@ -1060,12 +1059,12 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
       <NotificationCenter
         variant="panel"
         open={open}
-        onClose={() => setOpen(false}
+        onClose={() => setOpen(false)}
         userId={userId}
       />
     </>
   );
-  });
+};
 
 // ============================================
 // REAL-TIME NOTIFICATION CENTER (Alias)

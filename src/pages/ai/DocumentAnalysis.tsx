@@ -1,5 +1,4 @@
 /**
-import { useCallback, useState } from "react";;
  * AI Document Analysis - Análise de Documentos com IA
  * OCR e extração inteligente de dados de documentos
  */
@@ -231,7 +230,7 @@ Autoridade Marítima do Brasil`,
             <Textarea
               placeholder="Cole aqui o texto do documento para análise..."
               value={documentText}
-              onChange={handleChange}
+              onChange={(e) => setDocumentText(e.target.value)}
               className="min-h-[300px] font-mono text-sm"
             />
 
@@ -279,7 +278,7 @@ Autoridade Marítima do Brasil`,
                     key={idx}
                     variant="outline"
                     size="sm"
-                    onClick={handleSetDocumentText}
+                    onClick={() => setDocumentText(doc.text)}
                   >
                     {doc.title}
                   </Button>

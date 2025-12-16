@@ -11,7 +11,7 @@ interface AppWindowProps {
   onClose: () => void;
 }
 
-export const AppWindow = memo(function({ id, onClose }: AppWindowProps) {
+export function AppWindow({ id, onClose }: AppWindowProps) {
   const app = appsRegistry[id];
   const AppComponent = app.component;
 
@@ -41,4 +41,4 @@ export const AppWindow = memo(function({ id, onClose }: AppWindowProps) {
       </div>
     </Card>
   );
-});
+}

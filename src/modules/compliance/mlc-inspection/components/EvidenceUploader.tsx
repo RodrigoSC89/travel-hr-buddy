@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ interface EvidenceUploaderProps {
   onUpdate: () => void;
 }
 
-export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: EvidenceUploaderProps) {
+export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
@@ -22,7 +21,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
     if (file) {
       setSelectedFile(file);
     }
-  });
+  };
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -126,4 +125,4 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
       </CardContent>
     </Card>
   );
-});
+}

@@ -51,7 +51,9 @@ export const logger = {
   info: (message: string, context?: unknown) => {
     if (isDevelopment) {
       if (context !== undefined) {
+        console.info(`ℹ️ ${message}`, context);
       } else {
+        console.info(`ℹ️ ${message}`);
       }
     }
   },
@@ -62,7 +64,9 @@ export const logger = {
   debug: (message: string, context?: LogContext) => {
     if (isDevelopment) {
       if (context) {
+        console.debug(`🐛 ${message}`, context);
       } else {
+        console.debug(`🐛 ${message}`);
       }
     }
   },
@@ -72,7 +76,9 @@ export const logger = {
    */
   warn: (message: string, context?: LogContext) => {
     if (context) {
+      console.warn(`⚠️ ${message}`, context);
     } else {
+      console.warn(`⚠️ ${message}`);
     }
   },
 
@@ -88,8 +94,10 @@ export const logger = {
 
     if (Object.keys(fullContext).length > 0) {
       // eslint-disable-next-line no-console
+      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`, fullContext);
     } else {
       // eslint-disable-next-line no-console
+      console.error(`❌ ${message}${errorMessage ? `: ${errorMessage}` : ""}`);
     }
 
     // Send to Sentry in production
@@ -105,7 +113,6 @@ export const logger = {
       } catch (sentryError) {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
-          console.warn("Failed to send error to Sentry:", String(sentryError));
           console.warn("Failed to send error to Sentry:", String(sentryError));
         }
       }
@@ -124,8 +131,10 @@ export const logger = {
 
     if (Object.keys(fullContext).length > 0) {
       // eslint-disable-next-line no-console
+      console.error(`❌ ${message}: ${errorMessage}`, fullContext);
     } else {
       // eslint-disable-next-line no-console
+      console.error(`❌ ${message}: ${errorMessage}`);
     }
 
     // Send to Sentry in production
@@ -142,7 +151,6 @@ export const logger = {
         // Fail silently if Sentry is not available
         if (isDevelopment) {
           console.warn("Failed to send error to Sentry:", String(sentryError));
-          console.warn("Failed to send error to Sentry:", String(sentryError));
         }
       }
     }
@@ -153,6 +161,7 @@ export const logger = {
    */
   table: (data: any) => {
     if (isDevelopment) {
+      console.table(data);
     }
   },
 };

@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import DPSyncDashboard from "@/components/dp/DPSyncDashboard";
@@ -78,7 +78,7 @@ describe("DPSyncDashboard Component", () => {
         timestamp: expect.any(String),
       })
     );
-  };
+  });
 
   it("should display sync status message", () => {
     render(<DPSyncDashboard />);

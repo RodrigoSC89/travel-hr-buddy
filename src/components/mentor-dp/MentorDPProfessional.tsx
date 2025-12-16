@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -67,7 +66,7 @@ interface LogEntry {
   title: string;
   summary: string;
   timestamp: Date;
-  data?: unknown;
+  data?: any;
 }
 
 interface RepositoryQuestion {
@@ -153,7 +152,7 @@ export default function MentorDPProfessional() {
   const [quizTopic, setQuizTopic] = useState("");
   const [showQuizDialog, setShowQuizDialog] = useState(false);
   const [quizHistory, setQuizHistory] = useState<QuizItem[]>([]);
-  const [activeQuiz, setActiveQuiz] = useState<unknown>(null);
+  const [activeQuiz, setActiveQuiz] = useState<any>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
 
   // Logbook state
@@ -194,7 +193,7 @@ export default function MentorDPProfessional() {
   }, [logEntries]);
 
   // Add log entry helper
-  const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: unknown: unknown: unknown) => {
+  const addLogEntry = useCallback((type: LogEntry["type"], title: string, summary: string, data?: any) => {
     const entry: LogEntry = {
       id: crypto.randomUUID(),
       type,
@@ -207,20 +206,24 @@ export default function MentorDPProfessional() {
   }, []);
 
   // Call AI Edge Function with enhanced error handling
-  const callMentorAI = async (action: string, params: unknown = {}): Promise<any> => {
+  const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
+    console.log("[MentorDP] Calling edge function:", action, params);
     
     try {
-      const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai", {
+      const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
         },
         body: JSON.stringify({ action, ...params }),
-      };
+      });
+
+      console.log("[MentorDP] Response status:", response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
+        console.error("[MentorDP] Response error:", errorText);
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -232,14 +235,14 @@ export default function MentorDPProfessional() {
       }
 
       const data = await response.json();
+      console.log("[MentorDP] Response data:", { success: data.success, hasContent: !!data.content });
 
       if (!data.success && data.error) {
         throw new Error(data.error);
       }
 
       return data;
-    } catch (error: SupabaseError | null) {
-      console.error("[MentorDP] callMentorAI error:", error);
+    } catch (error: any) {
       console.error("[MentorDP] callMentorAI error:", error);
       throw error;
     }
@@ -258,12 +261,12 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("chat", {
         messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
-      };
+      });
 
       const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content, timestamp: new Date(), type: "chat" };
       setMessages(prev => [...prev, assistantMessage]);
       addLogEntry("chat", "Conversa com Mentor", messageText.substring(0, 100) + "...");
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({ title: "Erro", description: error.message || "Não foi possível obter resposta", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -285,7 +288,7 @@ export default function MentorDPProfessional() {
       setAcademyModules(prev => prev.map(m => m.id === module.id ? { ...m, progress: Math.min((m.progress || 0) + 25, 100) } : m));
       
       toast({ title: "Lição Gerada", description: `Lição sobre "${module.name}" pronta!` });
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({ title: "Erro", description: error.message || "Não foi possível gerar a lição", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -301,7 +304,7 @@ export default function MentorDPProfessional() {
         scenarioType: scenario.type,
         difficulty: scenario.difficulty,
         context: { conditions: scenario.description },
-      };
+      });
 
       const simMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 🎮 Simulação: ${scenario.name}\n\n${data.content}`, timestamp: new Date(), type: "simulation" };
       setMessages([simMessage]);
@@ -309,7 +312,7 @@ export default function MentorDPProfessional() {
       addLogEntry("simulation", `Simulação: ${scenario.name}`, scenario.description);
       
       toast({ title: "Simulação Iniciada", description: `Cenário "${scenario.name}" carregado!` });
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({ title: "Erro", description: error.message || "Não foi possível iniciar a simulação", variant: "destructive" });
       setActiveSimulation(null);
     } finally {
@@ -340,6 +343,7 @@ export default function MentorDPProfessional() {
             quizContent = JSON.parse(jsonMatch[1] || jsonMatch[0]);
           }
         } catch (e) {
+          console.log("Quiz not in JSON format, displaying as text");
         }
       }
 
@@ -359,7 +363,7 @@ export default function MentorDPProfessional() {
 
       toast({ title: "Quiz Gerado", description: `Quiz sobre "${quizTopicToUse}" pronto!` });
       setQuizTopic("");
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({ title: "Erro", description: error.message || "Não foi possível gerar o quiz", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -371,11 +375,11 @@ export default function MentorDPProfessional() {
     if (!activeQuiz) return;
     
     let correctCount = 0;
-    activeQuiz.questions.forEach((q: unknown: unknown: unknown, idx: number) => {
+    activeQuiz.questions.forEach((q: any, idx: number) => {
       if (quizAnswers[idx] === q.correctAnswer) {
         correctCount++;
       }
-    };
+    });
 
     const score = Math.round((correctCount / activeQuiz.questions.length) * 100);
     
@@ -405,7 +409,7 @@ export default function MentorDPProfessional() {
       category: "custom",
       lessons: 5,
       duration: "3h",
-      difficulty: newModuleDifficulty as unknown,
+      difficulty: newModuleDifficulty as any,
       icon: <BookOpen className="h-5 w-5" />,
       progress: 0,
     };
@@ -429,7 +433,7 @@ export default function MentorDPProfessional() {
       name: newScenarioName,
       description: newScenarioDescription || "Cenário personalizado",
       type: newScenarioType,
-      difficulty: newScenarioDifficulty as unknown,
+      difficulty: newScenarioDifficulty as any,
       duration: "20 min",
       isCustom: true,
     };
@@ -447,12 +451,12 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("chat", {
         messages: [{ role: "user", content: question.question }],
-      };
+      });
 
       setRepositoryQuestions(prev => prev.map(q => q.id === question.id ? { ...q, answer: data.content, answers: q.answers + 1 } : q));
       setSelectedQuestion({ ...question, answer: data.content });
       toast({ title: "Resposta Gerada", description: "A IA respondeu sua pergunta!" });
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({ title: "Erro", description: error.message || "Não foi possível gerar resposta", variant: "destructive" });
     } finally {
       setIsLoading(false);
@@ -609,7 +613,7 @@ export default function MentorDPProfessional() {
                         </p>
                         <div className="flex flex-wrap gap-2 justify-center max-w-lg">
                           {quickTopics.map((topic, i) => (
-                            <Button key={i} variant="outline" size="sm" onClick={() => handlesendMessage} className="text-xs">
+                            <Button key={i} variant="outline" size="sm" onClick={() => sendMessage(topic)} className="text-xs">
                               {topic}
                             </Button>
                           ))}
@@ -646,7 +650,7 @@ export default function MentorDPProfessional() {
                   </ScrollArea>
                   <div className="p-4 border-t">
                     <div className="flex gap-2">
-                      <Input value={inputMessage} onChange={handleChange} onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()} placeholder="Faça uma pergunta sobre DP..." disabled={isLoading} className="flex-1" />
+                      <Input value={inputMessage} onChange={(e) => setInputMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()} placeholder="Faça uma pergunta sobre DP..." disabled={isLoading} className="flex-1" />
                       <Button onClick={() => sendMessage()} disabled={isLoading || !inputMessage.trim()}>
                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                       </Button>
@@ -659,10 +663,10 @@ export default function MentorDPProfessional() {
                 <Card>
                   <CardHeader className="pb-3"><CardTitle className="text-sm font-medium">Ações Rápidas</CardTitle></CardHeader>
                   <CardContent className="space-y-2">
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={handleSetActiveTab}><GraduationCap className="h-4 w-4 text-purple-500" />Iniciar Lição</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={handleSetActiveTab}><Play className="h-4 w-4 text-green-500" />Nova Simulação</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={handleSetShowQuizDialog}><ClipboardList className="h-4 w-4 text-amber-500" />Gerar Quiz</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => handlesendMessage}><Award className="h-4 w-4 text-rose-500" />Avaliar Proficiência</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("academy")}><GraduationCap className="h-4 w-4 text-purple-500" />Iniciar Lição</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("simulator")}><Play className="h-4 w-4 text-green-500" />Nova Simulação</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setShowQuizDialog(true)}><ClipboardList className="h-4 w-4 text-amber-500" />Gerar Quiz</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => sendMessage("Avalie minha proficiência atual em DP")}><Award className="h-4 w-4 text-rose-500" />Avaliar Proficiência</Button>
                   </CardContent>
                 </Card>
                 <Card>
@@ -698,7 +702,7 @@ export default function MentorDPProfessional() {
                     <SelectItem value="expert">Expert</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button onClick={handleSetShowNewModuleDialog}><Plus className="h-4 w-4 mr-2" />Nova Trilha</Button>
+                <Button onClick={() => setShowNewModuleDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova Trilha</Button>
               </div>
             </div>
 
@@ -709,12 +713,12 @@ export default function MentorDPProfessional() {
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
                         module.category === "fundamentals" ? "bg-blue-500/10 text-blue-500" :
-                          module.category === "sensors" ? "bg-purple-500/10 text-purple-500" :
-                            module.category === "thrusters" ? "bg-green-500/10 text-green-500" :
-                              module.category === "redundancy" ? "bg-amber-500/10 text-amber-500" :
-                                module.category === "operations" ? "bg-cyan-500/10 text-cyan-500" :
-                                  module.category === "emergency" ? "bg-red-500/10 text-red-500" :
-                                    "bg-gray-500/10 text-gray-500"
+                        module.category === "sensors" ? "bg-purple-500/10 text-purple-500" :
+                        module.category === "thrusters" ? "bg-green-500/10 text-green-500" :
+                        module.category === "redundancy" ? "bg-amber-500/10 text-amber-500" :
+                        module.category === "operations" ? "bg-cyan-500/10 text-cyan-500" :
+                        module.category === "emergency" ? "bg-red-500/10 text-red-500" :
+                        "bg-gray-500/10 text-gray-500"
                       }`}>
                         {module.icon}
                       </div>
@@ -733,7 +737,7 @@ export default function MentorDPProfessional() {
                       <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{module.duration}</span>
                     </div>
                     <Progress value={module.progress || 0} className="h-1.5 mb-3" />
-                    <Button className="w-full" size="sm" onClick={() => handlegenerateLesson} disabled={isLoading}>
+                    <Button className="w-full" size="sm" onClick={() => generateLesson(module)} disabled={isLoading}>
                       {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Play className="h-4 w-4 mr-2" />}
                       {(module.progress || 0) > 0 ? "Continuar" : "Iniciar Lição"}
                     </Button>
@@ -750,7 +754,7 @@ export default function MentorDPProfessional() {
                 <h2 className="text-xl font-semibold">Simulador Embarcado</h2>
                 <p className="text-muted-foreground">Cenários interativos com avaliação de IA</p>
               </div>
-              <Button onClick={handleSetShowNewScenarioDialog}><Plus className="h-4 w-4 mr-2" />Novo Cenário</Button>
+              <Button onClick={() => setShowNewScenarioDialog(true)}><Plus className="h-4 w-4 mr-2" />Novo Cenário</Button>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -771,7 +775,7 @@ export default function MentorDPProfessional() {
                       <span className="flex items-center gap-1"><AlertTriangle className="h-3 w-3" />{scenario.type.replace("_", " ")}</span>
                       <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{scenario.duration}</span>
                     </div>
-                    <Button className="w-full" size="sm" onClick={() => handlestartSimulation} disabled={isLoading}>
+                    <Button className="w-full" size="sm" onClick={() => startSimulation(scenario)} disabled={isLoading}>
                       {isLoading && activeSimulation?.id === scenario.id ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Play className="h-4 w-4 mr-2" />}
                       Iniciar Simulação
                     </Button>
@@ -788,7 +792,7 @@ export default function MentorDPProfessional() {
                 <h2 className="text-xl font-semibold">Avaliações e Quizzes</h2>
                 <p className="text-muted-foreground">Teste seus conhecimentos com quizzes adaptativos</p>
               </div>
-              <Button onClick={handleSetShowQuizDialog}><Sparkles className="h-4 w-4 mr-2" />Gerar Novo Quiz</Button>
+              <Button onClick={() => setShowQuizDialog(true)}><Sparkles className="h-4 w-4 mr-2" />Gerar Novo Quiz</Button>
             </div>
 
             {activeQuiz ? (
@@ -801,13 +805,13 @@ export default function MentorDPProfessional() {
                   <CardDescription>{activeQuiz.questions.length} questões • {activeQuiz.quiz?.passingScore || 70}% para aprovação</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {activeQuiz.questions.map((q: unknown, idx: number) => (
+                  {activeQuiz.questions.map((q: any, idx: number) => (
                     <div key={idx} className="space-y-3 p-4 bg-muted/50 rounded-lg">
                       <p className="font-medium">{idx + 1}. {q.question}</p>
                       <div className="space-y-2">
-                        {q.options.map((opt: unknown, optIdx: number) => (
+                        {q.options.map((opt: any, optIdx: number) => (
                           <label key={optIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "bg-primary/10 border border-primary" : "bg-background hover:bg-muted"}`}>
-                            <input type="radio" name={`q${idx}`} value={opt.key || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx))} onChange={handleChange}))} className="sr-only" />
+                            <input type="radio" name={`q${idx}`} value={opt.key || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx))} onChange={(e) => setQuizAnswers(prev => ({ ...prev, [idx]: e.target.value }))} className="sr-only" />
                             <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "border-primary bg-primary" : "border-muted-foreground"}`}>
                               {quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) && <div className="w-2 h-2 rounded-full bg-primary-foreground" />}
                             </div>
@@ -837,7 +841,7 @@ export default function MentorDPProfessional() {
                           <span className="text-muted-foreground">10 questões</span>
                           <Badge variant="outline">Intermediário</Badge>
                         </div>
-                        <Button variant="outline" size="sm" className="w-full" onClick={() => handlegenerateQuiz} disabled={isLoading}>
+                        <Button variant="outline" size="sm" className="w-full" onClick={() => generateQuiz(topic)} disabled={isLoading}>
                           {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ClipboardList className="h-4 w-4 mr-2" />}
                           Iniciar Quiz
                         </Button>
@@ -893,7 +897,7 @@ export default function MentorDPProfessional() {
                     <p className="text-muted-foreground max-w-md mx-auto mb-4">
                       Comece a interagir com o Mentor DP para que suas dúvidas, simulações e aprendizados sejam registrados automaticamente aqui.
                     </p>
-                    <Button onClick={handleSetActiveTab}><MessageSquare className="h-4 w-4 mr-2" />Iniciar Conversa</Button>
+                    <Button onClick={() => setActiveTab("mentor")}><MessageSquare className="h-4 w-4 mr-2" />Iniciar Conversa</Button>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -901,14 +905,14 @@ export default function MentorDPProfessional() {
                       <div key={entry.id} className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg">
                         <div className={`p-2 rounded-lg ${
                           entry.type === "chat" ? "bg-blue-500/10 text-blue-500" :
-                            entry.type === "lesson" ? "bg-purple-500/10 text-purple-500" :
-                              entry.type === "simulation" ? "bg-green-500/10 text-green-500" :
-                                "bg-amber-500/10 text-amber-500"
+                          entry.type === "lesson" ? "bg-purple-500/10 text-purple-500" :
+                          entry.type === "simulation" ? "bg-green-500/10 text-green-500" :
+                          "bg-amber-500/10 text-amber-500"
                         }`}>
                           {entry.type === "chat" ? <MessageSquare className="h-4 w-4" /> :
-                            entry.type === "lesson" ? <GraduationCap className="h-4 w-4" /> :
-                              entry.type === "simulation" ? <Play className="h-4 w-4" /> :
-                                <ClipboardList className="h-4 w-4" />}
+                           entry.type === "lesson" ? <GraduationCap className="h-4 w-4" /> :
+                           entry.type === "simulation" ? <Play className="h-4 w-4" /> :
+                           <ClipboardList className="h-4 w-4" />}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
@@ -935,9 +939,9 @@ export default function MentorDPProfessional() {
               <div className="flex gap-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar no repositório..." className="w-64 pl-10" value={searchQuery} onChange={handleChange} />
+                  <Input placeholder="Buscar no repositório..." className="w-64 pl-10" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
-                <Button onClick={handleSetShowNewQuestionDialog}><Plus className="h-4 w-4 mr-2" />Nova Pergunta</Button>
+                <Button onClick={() => setShowNewQuestionDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova Pergunta</Button>
               </div>
             </div>
 
@@ -976,7 +980,7 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Tópico</label>
-                <Input value={quizTopic} onChange={handleChange} placeholder="Ex: Sensores de referência, Procedimentos de emergência..." />
+                <Input value={quizTopic} onChange={(e) => setQuizTopic(e.target.value)} placeholder="Ex: Sensores de referência, Procedimentos de emergência..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Dificuldade</label>
@@ -992,7 +996,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={handleSetShowQuizDialog}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setShowQuizDialog(false)}>Cancelar</Button>
               <Button onClick={() => generateQuiz()} disabled={!quizTopic.trim() || isLoading}>
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />}
                 Gerar Quiz
@@ -1011,11 +1015,11 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Nome da Trilha</label>
-                <Input value={newModuleName} onChange={handleChange} placeholder="Ex: Operações em Waters Profundas..." />
+                <Input value={newModuleName} onChange={(e) => setNewModuleName(e.target.value)} placeholder="Ex: Operações em Waters Profundas..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Descrição</label>
-                <Textarea value={newModuleDescription} onChange={handleChange} placeholder="Descreva os objetivos desta trilha..." />
+                <Textarea value={newModuleDescription} onChange={(e) => setNewModuleDescription(e.target.value)} placeholder="Descreva os objetivos desta trilha..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Dificuldade</label>
@@ -1031,7 +1035,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={handleSetShowNewModuleDialog}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setShowNewModuleDialog(false)}>Cancelar</Button>
               <Button onClick={createNewModule}><Plus className="h-4 w-4 mr-2" />Criar Trilha</Button>
             </div>
           </DialogContent>
@@ -1047,11 +1051,11 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Nome do Cenário</label>
-                <Input value={newScenarioName} onChange={handleChange} placeholder="Ex: Falha de Gyro durante manobra..." />
+                <Input value={newScenarioName} onChange={(e) => setNewScenarioName(e.target.value)} placeholder="Ex: Falha de Gyro durante manobra..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Descrição</label>
-                <Textarea value={newScenarioDescription} onChange={handleChange} placeholder="Descreva as condições e o cenário..." />
+                <Textarea value={newScenarioDescription} onChange={(e) => setNewScenarioDescription(e.target.value)} placeholder="Descreva as condições e o cenário..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Tipo de Falha</label>
@@ -1081,7 +1085,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={handleSetShowNewScenarioDialog}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setShowNewScenarioDialog(false)}>Cancelar</Button>
               <Button onClick={createNewScenario}><Plus className="h-4 w-4 mr-2" />Criar Cenário</Button>
             </div>
           </DialogContent>
@@ -1097,7 +1101,7 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Sua Pergunta</label>
-                <Textarea value={newQuestion} onChange={handleChange} placeholder="Digite sua pergunta sobre DP..." />
+                <Textarea value={newQuestion} onChange={(e) => setNewQuestion(e.target.value)} placeholder="Digite sua pergunta sobre DP..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Categoria</label>
@@ -1116,7 +1120,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={handleSetShowNewQuestionDialog}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setShowNewQuestionDialog(false)}>Cancelar</Button>
               <Button onClick={addNewQuestion}><Plus className="h-4 w-4 mr-2" />Adicionar Pergunta</Button>
             </div>
           </DialogContent>
@@ -1141,7 +1145,7 @@ export default function MentorDPProfessional() {
                 <div className="text-center py-8">
                   <HelpCircle className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
                   <p className="text-muted-foreground mb-4">Esta pergunta ainda não foi respondida.</p>
-                  <Button onClick={() => selectedQuestion && answerQuestion(selectedQuestion} disabled={isLoading}>
+                  <Button onClick={() => selectedQuestion && answerQuestion(selectedQuestion)} disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />}
                     Gerar Resposta com IA
                   </Button>
@@ -1149,11 +1153,11 @@ export default function MentorDPProfessional() {
               )}
             </div>
             <div className="flex justify-between">
-              <Button variant="outline" onClick={() => selectedQuestion && voteQuestion(selectedQuestion.id}>
+              <Button variant="outline" onClick={() => selectedQuestion && voteQuestion(selectedQuestion.id)}>
                 <ThumbsUp className="h-4 w-4 mr-2" />
                 Útil ({selectedQuestion?.votes})
               </Button>
-              <Button variant="outline" onClick={handleSetShowQuestionDialog}>Fechar</Button>
+              <Button variant="outline" onClick={() => setShowQuestionDialog(false)}>Fechar</Button>
             </div>
           </DialogContent>
         </Dialog>

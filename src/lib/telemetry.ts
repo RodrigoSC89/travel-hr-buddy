@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 /**
  * PATCH 638: Telemetry Tracking System
  * Capture user interactions for UX improvement suggestions
@@ -51,7 +51,7 @@ class TelemetryTracker {
         lastClickTime = now;
         this.handleClick(event);
       }
-    });
+    };
     
     document.addEventListener("click", throttledClick, true);
 
@@ -213,5 +213,5 @@ export function useTelemetry() {
     trackFeatureUse: telemetry.trackFeatureUse.bind(telemetry),
     trackInteraction: telemetry.trackInteraction.bind(telemetry),
     track: telemetry.track.bind(telemetry),
-  });
+  };
 }

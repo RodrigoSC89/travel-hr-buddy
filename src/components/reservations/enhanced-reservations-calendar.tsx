@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -92,7 +91,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       const eventStart = new Date(event.startDate);
       const eventEnd = new Date(event.endDate);
       return date >= eventStart && date <= eventEnd;
-  };
+    });
   };
 
   const duplicateReservation = (reservation: ReservationEvent) => {
@@ -100,7 +99,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       title: "Reserva Duplicada",
       description: `Reserva ${reservation.id} duplicada com sucesso. Nova reserva: ${reservation.id}-COPY`,
     });
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -130,11 +129,11 @@ export const EnhancedReservationsCalendar: React.FC = () => {
               Calendário de Reservas
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => handlenavigateMonth}>
+              <Button variant="outline" size="sm" onClick={() => navigateMonth("prev")}>
                 <ChevronLeft className="w-4 h-4" />
               </Button>
               <span className="font-medium text-lg capitalize">{monthName}</span>
-              <Button variant="outline" size="sm" onClick={() => handlenavigateMonth}>
+              <Button variant="outline" size="sm" onClick={() => navigateMonth("next")}>
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
@@ -176,7 +175,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
                           <div
                             key={event.id}
                             className={`text-xs p-1 rounded cursor-pointer hover:opacity-80 ${getTypeColor(event.type)}`}
-                            onClick={handleSetSelectedEvent}
+                            onClick={() => setSelectedEvent(event)}
                           >
                             <div className="font-medium truncate">{event.employee}</div>
                             <div className="truncate">{event.title}</div>
@@ -210,12 +209,12 @@ export const EnhancedReservationsCalendar: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleduplicateReservation}
+                  onClick={() => duplicateReservation(selectedEvent)}
                 >
                   <Copy className="w-4 h-4 mr-2" />
                   Duplicar
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleSetSelectedEvent}>
+                <Button variant="outline" size="sm" onClick={() => setSelectedEvent(null)}>
                   Fechar
                 </Button>
               </div>
@@ -313,4 +312,4 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       </div>
     </div>
   );
-});
+};

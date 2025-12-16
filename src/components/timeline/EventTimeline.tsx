@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -26,7 +25,7 @@ export interface TimelineEvent {
   title: string;
   description?: string;
   user_id?: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
   created_at: string;
 }
 
@@ -67,7 +66,7 @@ const severityConfig = {
   },
 };
 
-export const EventTimeline = memo(function({ events }: EventTimelineProps) {
+export function EventTimeline({ events }: EventTimelineProps) {
   if (!events || events.length === 0) {
     return (
       <Card>
@@ -137,4 +136,4 @@ export const EventTimeline = memo(function({ events }: EventTimelineProps) {
       })}
     </div>
   );
-});
+}

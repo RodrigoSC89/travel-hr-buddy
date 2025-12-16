@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -67,7 +66,7 @@ export const CertificateAlerts: React.FC = () => {
           employee_name: `Funcionário ${cert.employee_id.slice(-3)}`, // Simulated name
           days_until_expiry: daysUntilExpiry
         } as CertificateAlert;
-  };
+      });
 
       setAlerts(alertsWithEmployeeNames);
     } catch (error) {
@@ -146,7 +145,7 @@ export const CertificateAlerts: React.FC = () => {
 
   return (
     <>
-      <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={handleSetShowAlertsDialog}>
+      <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setShowAlertsDialog(true)}>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center">
@@ -231,7 +230,7 @@ export const CertificateAlerts: React.FC = () => {
           </div>
 
           <AlertDialogFooter>
-            <Button variant="outline" onClick={handleSetShowAlertsDialog}>
+            <Button variant="outline" onClick={() => setShowAlertsDialog(false)}>
               <X className="mr-2 h-4 w-4" />
               Fechar
             </Button>

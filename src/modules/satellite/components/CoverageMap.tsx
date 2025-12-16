@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Map, Globe } from "lucide-react";
@@ -14,7 +13,7 @@ interface CoverageMapProps {
   coverageData: Coverage[];
 }
 
-export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
+export function CoverageMap({ coverageData }: CoverageMapProps) {
   const getQualityColor = (quality: string) => {
     switch (quality) {
     case "excellent": return "default";
@@ -23,7 +22,7 @@ export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
     case "poor": return "destructive";
     default: return "secondary";
     }
-  });
+  };
 
   const getQualityLabel = (quality: string) => {
     switch (quality) {
@@ -33,7 +32,7 @@ export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
     case "poor": return "Fraca";
     default: return quality;
     }
-  });
+  };
 
   return (
     <Card>
@@ -74,4 +73,4 @@ export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
       </CardContent>
     </Card>
   );
-});
+}

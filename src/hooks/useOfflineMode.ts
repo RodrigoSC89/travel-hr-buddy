@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { useState, useEffect, useCallback } from 'react';
+import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 
 interface OfflineData {
   key: string;
@@ -8,7 +8,7 @@ interface OfflineData {
   expiresAt?: number;
 }
 
-const CACHE_PREFIX = "offline_cache_";
+const CACHE_PREFIX = 'offline_cache_';
 const DEFAULT_TTL = 30 * 60 * 1000; // 30 minutos
 
 /**
@@ -21,6 +21,7 @@ export function useOfflineMode() {
   // Verificar itens pendentes de sync ao reconectar
   useEffect(() => {
     if (isOnline && pendingSync.length > 0) {
+      console.log('[Offline] Reconectado - itens pendentes:', pendingSync.length);
     }
   }, [isOnline, pendingSync]);
 
@@ -38,8 +39,7 @@ export function useOfflineMode() {
       localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(cacheItem));
       return true;
     } catch (error) {
-      console.warn("[Offline] Erro ao salvar cache:", error);
-      console.warn("[Offline] Erro ao salvar cache:", error);
+      console.warn('[Offline] Erro ao salvar cache:', error);
       return false;
     }
   }, []);
@@ -148,7 +148,7 @@ export function useOfflineFetch<T>(
         setIsLoading(false);
         return;
       }
-      setError(new Error("Sem conexão e sem dados em cache"));
+      setError(new Error('Sem conexão e sem dados em cache'));
       setIsLoading(false);
       return;
     }
@@ -165,7 +165,7 @@ export function useOfflineFetch<T>(
         setData(cached);
         setIsFromCache(true);
       } else {
-        setError(err instanceof Error ? err : new Error("Erro desconhecido"));
+        setError(err instanceof Error ? err : new Error('Erro desconhecido'));
       }
     } finally {
       setIsLoading(false);

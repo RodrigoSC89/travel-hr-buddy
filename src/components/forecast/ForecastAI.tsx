@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";;
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
-let ort: unknown = null;
+let ort: any = null;
 const loadORT = async () => {
   if (!ort) {
     ort = await import("onnxruntime-web");

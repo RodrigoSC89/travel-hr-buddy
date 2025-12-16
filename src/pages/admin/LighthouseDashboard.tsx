@@ -3,7 +3,7 @@
  * PATCH 543 - Monitor Lighthouse CI scores & Core Web Vitals
  */
 
-import { useState, useMemo, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -204,7 +204,7 @@ export default function LighthouseDashboard() {
                       Target: {score.target}+
                     </p>
                   </div>
-                  <Badge variant={getScoreBadge(score.score, score.target) as unknown}>
+                  <Badge variant={getScoreBadge(score.score, score.target) as any}>
                     {score.score >= score.target ? "Passing" : "Needs Work"}
                   </Badge>
                   <p className="text-xs text-muted-foreground">

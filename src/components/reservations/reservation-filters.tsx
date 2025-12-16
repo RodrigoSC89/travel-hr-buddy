@@ -34,8 +34,8 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
       dateRange: null,
       searchTerm: "",
       crewMember: "all"
-});
-  });
+    });
+  };
 
   const uniqueCrewMembers = Array.from(
     new Set(reservations.map(r => r.crew_member_name).filter(Boolean))
@@ -64,7 +64,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
               <Input
                 placeholder="Buscar por título ou local..."
                 value={filters.searchTerm}
-                onChange={handleChange}
+                onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -72,7 +72,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Type Filter */}
             <Select
               value={filters.type}
-              onValueChange={(value) => handleFilterChange("type", value}
+              onValueChange={(value) => handleFilterChange("type", value)}
             >
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Tipo" />
@@ -90,7 +90,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Status Filter */}
             <Select
               value={filters.status}
-              onValueChange={(value) => handleFilterChange("status", value}
+              onValueChange={(value) => handleFilterChange("status", value)}
             >
               <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder="Status" />
@@ -107,7 +107,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Crew Member Filter */}
             <Select
               value={filters.crewMember}
-              onValueChange={(value) => handleFilterChange("crewMember", value}
+              onValueChange={(value) => handleFilterChange("crewMember", value)}
             >
               <SelectTrigger className="w-[160px]">
                 <SelectValue placeholder="Tripulante" />
@@ -127,14 +127,16 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
               <Input
                 type="date"
                 value={filters.dateRange?.from || ""}
-                onChange={handleChange} : null
+                onChange={(e) => handleFilterChange("dateRange", 
+                  e.target.value ? { ...filters.dateRange, from: e.target.value } : null
                 )}
                 className="w-[130px]"
               />
               <Input
                 type="date"
                 value={filters.dateRange?.to || ""}
-                onChange={handleChange} : null
+                onChange={(e) => handleFilterChange("dateRange", 
+                  filters.dateRange ? { ...filters.dateRange, to: e.target.value } : null
                 )}
                 className="w-[130px]"
               />

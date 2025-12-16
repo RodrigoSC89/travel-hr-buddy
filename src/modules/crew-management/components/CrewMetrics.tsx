@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Card } from "@/components/ui/card";
 import { Users, CheckCircle, Calendar, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
@@ -10,7 +9,7 @@ interface CrewMetricsProps {
   expiringCerts: number;
 }
 
-export const CrewMetrics = memo(function({ totalCrew, activeCrew, onLeaveCrew, expiringCerts }: CrewMetricsProps) {
+export function CrewMetrics({ totalCrew, activeCrew, onLeaveCrew, expiringCerts }: CrewMetricsProps) {
   const metrics = [
     {
       label: "Total de Tripulantes",
@@ -52,11 +51,11 @@ export const CrewMetrics = memo(function({ totalCrew, activeCrew, onLeaveCrew, e
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
         >
-          <Card className={`p-4 ${metric.highlight ? "border-rose-500/50 bg-rose-500/5" : ""}`}>
+          <Card className={`p-4 ${metric.highlight ? 'border-rose-500/50 bg-rose-500/5' : ''}`}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">{metric.label}</p>
-                <p className={`text-3xl font-bold mt-1 ${metric.highlight ? "text-rose-500" : ""}`}>
+                <p className={`text-3xl font-bold mt-1 ${metric.highlight ? 'text-rose-500' : ''}`}>
                   {metric.value}
                 </p>
               </div>
@@ -69,4 +68,4 @@ export const CrewMetrics = memo(function({ totalCrew, activeCrew, onLeaveCrew, e
       ))}
     </div>
   );
-});
+}

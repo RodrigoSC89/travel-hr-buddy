@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +36,7 @@ interface CommandData {
   logs: AuditLog[];
 }
 
-export const Patch608Validation = memo(function() {
+export function Patch608Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [commandData, setCommandData] = useState<CommandData | null>(null);
@@ -114,7 +114,7 @@ export const Patch608Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+      });
     }
 
     setResults(testResults);
@@ -169,7 +169,7 @@ export const Patch608Validation = memo(function() {
               <li>Comandos Executados: {commandData.commands.length}</li>
               <li>Módulos Acionados: {commandData.modules.length}</li>
               <li>Logs Auditáveis: {commandData.logs.length}</li>
-              <li>Latência Média: {(commandData.commands.reduce((sum: number, c: unknown) => sum + c.latency, 0) / commandData.commands.length).toFixed(0)}ms</li>
+              <li>Latência Média: {(commandData.commands.reduce((sum: number, c: any) => sum + c.latency, 0) / commandData.commands.length).toFixed(0)}ms</li>
               <li>Taxa de Sucesso: 100%</li>
             </ul>
           </div>
@@ -190,4 +190,4 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
       <span>{label}</span>
     </div>
   );
-});
+}

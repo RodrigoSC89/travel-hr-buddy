@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
     stress_level: 5,
     energy_level: 5,
     notes: "",
-});
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -67,7 +66,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
       });
 
       onSuccess();
-    } catch (error: unknown: unknown: unknown) {
+    } catch (error: any) {
       toast({
         title: "Error recording health data",
         description: error.message,
@@ -148,7 +147,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   step="0.5"
                   value={formData.sleep_hours}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, sleep_hours: parseFloat(e.target.value) })}
                   min="0"
                   max="24"
                 />
@@ -185,7 +184,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   placeholder="120"
                   value={formData.blood_pressure_systolic}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, blood_pressure_systolic: e.target.value })}
                 />
               </div>
 
@@ -195,7 +194,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   placeholder="80"
                   value={formData.blood_pressure_diastolic}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, blood_pressure_diastolic: e.target.value })}
                 />
               </div>
             </div>
@@ -206,7 +205,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                 type="number"
                 placeholder="72"
                 value={formData.heart_rate}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, heart_rate: e.target.value })}
               />
             </div>
 
@@ -228,7 +227,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
             <Label>Additional Notes (Optional)</Label>
             <Textarea
               value={formData.notes}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               placeholder="Any symptoms, concerns, or additional information..."
               rows={3}
             />

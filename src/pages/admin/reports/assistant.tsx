@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";;;
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,7 +86,7 @@ export default function AssistantReportLogsPage() {
       const [dayA, monthA] = a.split("/");
       const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
-  };
+    });
 
     return {
       labels: sortedDates,
@@ -99,7 +99,7 @@ export default function AssistantReportLogsPage() {
           borderWidth: 1,
         },
       ],
-    });
+    };
   }, [logs]);
 
   const chartOptions: ChartOptions<"bar"> = {
@@ -282,7 +282,7 @@ export default function AssistantReportLogsPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handlenavigate}
+            onClick={() => navigate("/admin")}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -307,19 +307,19 @@ export default function AssistantReportLogsPage() {
         <Input 
           type="date" 
           value={startDate} 
-          onChange={handleChange}
+          onChange={(e) => setStartDate(e.target.value)}
           placeholder="Data inicial"
         />
         <Input 
           type="date" 
           value={endDate} 
-          onChange={handleChange}
+          onChange={(e) => setEndDate(e.target.value)}
           placeholder="Data final"
         />
         <Input 
           placeholder="E-mail do usuário" 
           value={email} 
-          onChange={handleChange} 
+          onChange={(e) => setEmail(e.target.value)} 
         />
         <Button onClick={fetchLogs}>🔍 Buscar</Button>
       </div>

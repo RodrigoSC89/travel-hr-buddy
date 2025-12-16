@@ -1,4 +1,3 @@
-
 /**
  * PATCH 84.0 - Module Health Checker
  * Sistema de checklist automático que testa todos os módulos
@@ -141,7 +140,7 @@ export function generateMarkdownReport(results: ModuleCheckResult[]): string {
     ready: "✅",
     partial: "🟡",
     failed: "🔴",
-  });
+  };
 
   const readyCount = results.filter(r => r.status === "ready").length;
   const partialCount = results.filter(r => r.status === "partial").length;

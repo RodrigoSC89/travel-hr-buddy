@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,7 @@ interface ActivityLog {
   user: string;
 }
 
-export const CrewDossierManager = memo(() => {
+export const CrewDossierManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -162,35 +161,35 @@ export const CrewDossierManager = memo(() => {
 
   const getStatusBadge = (status: CrewMember["status"]) => {
     switch (status) {
-    case "active":
-      return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
-    case "shore_leave":
-      return <Badge className="bg-warning text-warning-foreground">Licença Terra</Badge>;
-    case "medical_leave":
-      return <Badge className="bg-orange-500 text-white">Licença Médica</Badge>;
-    case "inactive":
-      return <Badge variant="secondary">Inativo</Badge>;
+      case "active":
+        return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
+      case "shore_leave":
+        return <Badge className="bg-warning text-warning-foreground">Licença Terra</Badge>;
+      case "medical_leave":
+        return <Badge className="bg-orange-500 text-white">Licença Médica</Badge>;
+      case "inactive":
+        return <Badge variant="secondary">Inativo</Badge>;
     }
   };
 
   const getCertStatusBadge = (status: Certificate["status"]) => {
     switch (status) {
-    case "valid":
-      return <Badge className="bg-success text-success-foreground">Válido</Badge>;
-    case "expiring":
-      return <Badge className="bg-warning text-warning-foreground">Expirando</Badge>;
-    case "expired":
-      return <Badge variant="destructive">Expirado</Badge>;
+      case "valid":
+        return <Badge className="bg-success text-success-foreground">Válido</Badge>;
+      case "expiring":
+        return <Badge className="bg-warning text-warning-foreground">Expirando</Badge>;
+      case "expired":
+        return <Badge variant="destructive">Expirado</Badge>;
     }
   };
 
   const getCategoryIcon = (category: Document["category"]) => {
     switch (category) {
-    case "personal": return <User className="h-4 w-4" />;
-    case "professional": return <Briefcase className="h-4 w-4" />;
-    case "medical": return <Heart className="h-4 w-4" />;
-    case "training": return <GraduationCap className="h-4 w-4" />;
-    };
+      case "personal": return <User className="h-4 w-4" />;
+      case "professional": return <Briefcase className="h-4 w-4" />;
+      case "medical": return <Heart className="h-4 w-4" />;
+      case "training": return <GraduationCap className="h-4 w-4" />;
+    }
   };
 
   const filteredMembers = crewMembers.filter(member =>
@@ -293,7 +292,7 @@ export const CrewDossierManager = memo(() => {
             <Input
               placeholder="Buscar por nome, cargo ou ID..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -301,7 +300,7 @@ export const CrewDossierManager = memo(() => {
           {/* Members Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMembers.map((member) => (
-              <Card key={member.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleopenDossier}>
+              <Card key={member.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => openDossier(member)}>
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <Avatar className="h-12 w-12">

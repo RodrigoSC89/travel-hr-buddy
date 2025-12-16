@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -113,4 +112,4 @@ export const OrganizationSelector: React.FC = () => {
       </Select>
     </div>
   );
-});
+};

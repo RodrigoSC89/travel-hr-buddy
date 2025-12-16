@@ -1,4 +1,3 @@
-import { useEffect, useState, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -155,7 +154,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
           { month: "Dez", internal: 312, external: 61, emergency: 8 },
           { month: "Jan", internal: 345, external: 58, emergency: 5 }
         ]
-      });
+      };
 
       setAnalyticsData(mockData);
     } catch (error) {
@@ -181,7 +180,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
       stats,
       analyticsData,
       generatedAt: new Date().toISOString()
-    });
+    };
     
     const blob = new Blob([JSON.stringify(reportData, null, 2)], {
       type: "application/json"

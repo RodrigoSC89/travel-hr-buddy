@@ -51,6 +51,7 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
       .limit(50);
 
     if (historyError && historyError.code !== "PGRST116") {
+      console.error("Error fetching trust history:", historyError);
     }
 
     // Calculate base score from historical events
@@ -154,6 +155,7 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
       });
 
     if (insertError) {
+      console.error("Error logging trust event:", insertError);
     }
 
     return {
@@ -166,9 +168,8 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
         incidentHistory,
       },
       recommendation,
-    });
+    };
   } catch (error) {
-    console.error("Error calculating trust score:", error);
     console.error("Error calculating trust score:", error);
     // Return default medium score on error
     return {
@@ -201,6 +202,7 @@ export async function getTrustScoreHistory(
       .limit(limit);
 
     if (error) {
+      console.error("Error fetching trust score history:", error);
       return [];
     }
 
@@ -210,7 +212,6 @@ export async function getTrustScoreHistory(
       event_type: event.event_type,
     }));
   } catch (error) {
-    console.error("Error in getTrustScoreHistory:", error);
     console.error("Error in getTrustScoreHistory:", error);
     return [];
   }

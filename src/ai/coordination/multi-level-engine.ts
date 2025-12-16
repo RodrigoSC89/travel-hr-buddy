@@ -1,4 +1,3 @@
-
 /**
  * PATCH 586: Multi-Level Coordination Engine
  * 
@@ -6,6 +5,12 @@
  * - Strategic: Long-term planning and mission goals
  * - Operational: Medium-term resource allocation and execution
  * - Tactical: Short-term immediate actions and responses
+ * 
+ * Features:
+ * - Hierarchical decision structure with fallback
+ * - Conflict resolution between levels
+ * - Priority-based objective management
+ * - Per-layer decision logging
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -31,7 +36,7 @@ export interface LevelContext {
   objectives: Objective[];
   availableResources: string[];
   constraints: Record<string, any>;
-  timeHorizon: number;
+  timeHorizon: number; // in hours
 }
 
 export interface Objective {
@@ -64,6 +69,9 @@ export class MultiLevelCoordinationEngine {
   private conflicts: ConflictResolution[] = [];
   private logs: CoordinationLog[] = [];
 
+  /**
+   * Strategic level: Long-term planning (weeks to months)
+   */
   async makeStrategicDecision(
     context: LevelContext,
     missionGoals: string[]
@@ -87,6 +95,9 @@ export class MultiLevelCoordinationEngine {
     return decision;
   }
 
+  /**
+   * Operational level: Medium-term execution (days to weeks)
+   */
   async makeOperationalDecision(
     context: LevelContext,
     strategicDecision?: Decision
@@ -104,6 +115,7 @@ export class MultiLevelCoordinationEngine {
       dependencies: strategicDecision ? [strategicDecision.id] : [],
     };
 
+    // Check for conflicts with strategic level
     if (strategicDecision) {
       const conflict = this.detectConflict(decision, strategicDecision);
       if (conflict) {
@@ -118,6 +130,9 @@ export class MultiLevelCoordinationEngine {
     return decision;
   }
 
+  /**
+   * Tactical level: Immediate actions (minutes to hours)
+   */
   async makeTacticalDecision(
     context: LevelContext,
     operationalDecision?: Decision
@@ -135,6 +150,7 @@ export class MultiLevelCoordinationEngine {
       dependencies: operationalDecision ? [operationalDecision.id] : [],
     };
 
+    // Check for conflicts with operational level
     if (operationalDecision) {
       const conflict = this.detectConflict(decision, operationalDecision);
       if (conflict) {
@@ -149,6 +165,9 @@ export class MultiLevelCoordinationEngine {
     return decision;
   }
 
+  /**
+   * Coordinate decisions across all levels with fallback
+   */
   async coordinateDecisions(
     strategicContext: LevelContext,
     operationalContext: LevelContext,
@@ -161,21 +180,25 @@ export class MultiLevelCoordinationEngine {
     conflicts: ConflictResolution[];
   }> {
     try {
+      // Make strategic decision first
       const strategicDecision = await this.makeStrategicDecision(
         strategicContext,
         missionGoals
       );
 
+      // Make operational decision aligned with strategic
       const operationalDecision = await this.makeOperationalDecision(
         operationalContext,
         strategicDecision
       );
 
+      // Make tactical decision aligned with operational
       const tacticalDecision = await this.makeTacticalDecision(
         tacticalContext,
         operationalDecision
       );
 
+      // Final conflict check across all levels
       await this.performFinalConflictCheck([
         strategicDecision,
         operationalDecision,
@@ -189,6 +212,7 @@ export class MultiLevelCoordinationEngine {
         conflicts: this.conflicts,
       };
     } catch (error) {
+      // Fallback to tactical-only decision in case of coordination failure
       await this.logEvent("fallback", "tactical", {
         error: (error as Error).message,
         fallbackReason: "Coordination failure across levels",
@@ -205,7 +229,11 @@ export class MultiLevelCoordinationEngine {
     }
   }
 
+  /**
+   * Detect conflicts between decisions at different levels
+   */
   private detectConflict(decision1: Decision, decision2: Decision): boolean {
+    // Resource conflicts
     const resourceOverlap = decision1.resources.filter(r =>
       decision2.resources.includes(r)
     );
@@ -213,10 +241,13 @@ export class MultiLevelCoordinationEngine {
       return true;
     }
 
+    // Objective conflicts (opposing priorities)
     if (decision1.priority > 8 && decision2.priority > 8) {
+      // Both high priority but at different levels - potential conflict
       return true;
     }
 
+    // Constraint violations
     if (this.violatesConstraints(decision1, decision2)) {
       return true;
     }
@@ -224,9 +255,13 @@ export class MultiLevelCoordinationEngine {
     return false;
   }
 
+  /**
+   * Resolve conflicts between decisions (higher level wins)
+   */
   private async resolveConflict(decisions: Decision[]): Promise<Decision> {
     const levelPriority = { strategic: 3, operational: 2, tactical: 1 };
     
+    // Sort by level priority (strategic > operational > tactical)
     const sorted = decisions.sort(
       (a, b) => levelPriority[b.level] - levelPriority[a.level]
     );
@@ -249,6 +284,9 @@ export class MultiLevelCoordinationEngine {
     return winner;
   }
 
+  /**
+   * Perform final conflict check across all levels
+   */
   private async performFinalConflictCheck(decisions: Decision[]): Promise<void> {
     for (let i = 0; i < decisions.length; i++) {
       for (let j = i + 1; j < decisions.length; j++) {
@@ -260,15 +298,19 @@ export class MultiLevelCoordinationEngine {
     }
   }
 
+  /**
+   * Calculate priority based on level and context
+   */
   private calculatePriority(context: LevelContext, level: DecisionLevel): number {
-    const basePriority: Record<DecisionLevel, number> = {
+    const basePriority = {
       strategic: 7,
       operational: 5,
-      tactical: 8,
+      tactical: 8, // Higher for immediate response
     };
 
     let priority = basePriority[level];
 
+    // Adjust based on objectives
     const urgentObjectives = context.objectives.filter(
       obj => obj.priority > 8 && obj.status === "pending"
     );
@@ -279,6 +321,9 @@ export class MultiLevelCoordinationEngine {
     return Math.min(10, priority);
   }
 
+  /**
+   * Select the top priority objective
+   */
   private selectTopObjective(objectives: Objective[]): string {
     if (objectives.length === 0) {
       return "No specific objective";
@@ -291,7 +336,11 @@ export class MultiLevelCoordinationEngine {
     return sorted[0]?.description || "No active objective";
   }
 
+  /**
+   * Check if decisions violate constraints
+   */
   private violatesConstraints(decision1: Decision, decision2: Decision): boolean {
+    // Check budget constraints
     if (decision1.constraints.budget && decision2.constraints.budget) {
       const totalBudget = decision1.constraints.budget + decision2.constraints.budget;
       if (totalBudget > decision1.constraints.maxBudget) {
@@ -299,8 +348,10 @@ export class MultiLevelCoordinationEngine {
       }
     }
 
+    // Check timeline conflicts
     if (decision1.constraints.deadline && decision2.constraints.deadline) {
       if (decision1.constraints.deadline < decision2.constraints.deadline) {
+        // Note: timeHorizon is not part of Decision type, using constraints instead
         const timeHorizon1 = decision1.constraints.timeHorizon || 0;
         const timeHorizon2 = decision2.constraints.timeHorizon || 0;
         return timeHorizon1 + timeHorizon2 > (decision1.constraints.maxTimeHorizon || Infinity);
@@ -310,6 +361,9 @@ export class MultiLevelCoordinationEngine {
     return false;
   }
 
+  /**
+   * Planning methods for each level
+   */
   private planStrategicAction(context: LevelContext, goals: string[]): string {
     return `Execute long-term strategy aligned with goals: ${goals.join(", ")}`;
   }
@@ -328,6 +382,9 @@ export class MultiLevelCoordinationEngine {
     return `Execute immediate action for: ${this.selectTopObjective(context.objectives)}`;
   }
 
+  /**
+   * Resource allocation for each level
+   */
   private allocateStrategicResources(context: LevelContext): string[] {
     return context.availableResources.filter(r => 
       r.includes("long-term") || r.includes("strategic")
@@ -346,6 +403,9 @@ export class MultiLevelCoordinationEngine {
     );
   }
 
+  /**
+   * Assess confidence based on context completeness
+   */
   private assessConfidence(context: LevelContext, level: DecisionLevel): number {
     let confidence = 0.7;
 
@@ -356,6 +416,9 @@ export class MultiLevelCoordinationEngine {
     return Math.min(1.0, confidence);
   }
 
+  /**
+   * Logging methods
+   */
   private async logDecision(decision: Decision, outcome: string): Promise<void> {
     const log: CoordinationLog = {
       timestamp: new Date().toISOString(),
@@ -446,6 +509,9 @@ export class MultiLevelCoordinationEngine {
     }
   }
 
+  /**
+   * Get logs for a specific level or all levels
+   */
   getLogs(level?: DecisionLevel): CoordinationLog[] {
     if (level) {
       return this.logs.filter(log => log.level === level);
@@ -453,6 +519,9 @@ export class MultiLevelCoordinationEngine {
     return [...this.logs];
   }
 
+  /**
+   * Get all decisions
+   */
   getDecisions(level?: DecisionLevel): Decision[] {
     const allDecisions = Array.from(this.decisions.values());
     if (level) {
@@ -461,10 +530,16 @@ export class MultiLevelCoordinationEngine {
     return allDecisions;
   }
 
+  /**
+   * Get all conflicts
+   */
   getConflicts(): ConflictResolution[] {
     return [...this.conflicts];
   }
 
+  /**
+   * Export decision hierarchy for visualization
+   */
   exportHierarchy(): Record<string, any> {
     return {
       strategic: this.getDecisions("strategic"),
@@ -476,4 +551,5 @@ export class MultiLevelCoordinationEngine {
   }
 }
 
+// Export singleton instance
 export const multiLevelEngine = new MultiLevelCoordinationEngine();

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -152,7 +151,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const handleCreatePackage = () => {
     toast.success("Assistente de criação de pacote iniciado");
-  });
+  };
 
   const handleGeneratePDF = (pkg: EvidencePackage) => {
     toast.success(`Gerando PDF: ${pkg.name}`);
@@ -191,33 +190,33 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "ready": return <Badge className="bg-green-500">Pronto</Badge>;
-    case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
-    case "draft": return <Badge variant="secondary">Rascunho</Badge>;
-    case "submitted": return <Badge className="bg-purple-500">Enviado</Badge>;
-    default: return <Badge variant="outline">{status}</Badge>;
+      case "ready": return <Badge className="bg-green-500">Pronto</Badge>;
+      case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
+      case "draft": return <Badge variant="secondary">Rascunho</Badge>;
+      case "submitted": return <Badge className="bg-purple-500">Enviado</Badge>;
+      default: return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getItemStatusIcon = (status: string) => {
     switch (status) {
-    case "available": return <CheckCircle className="h-4 w-4 text-green-500" />;
-    case "pending": return <Clock className="h-4 w-4 text-yellow-500" />;
-    case "missing": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    default: return null;
+      case "available": return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case "pending": return <Clock className="h-4 w-4 text-yellow-500" />;
+      case "missing": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      default: return null;
     }
   };
 
   const getItemTypeIcon = (type: string) => {
     switch (type) {
-    case "logbook": return <BookOpen className="h-4 w-4" />;
-    case "checklist": return <FileCheck className="h-4 w-4" />;
-    case "certificate": return <Shield className="h-4 w-4" />;
-    case "report": return <FileText className="h-4 w-4" />;
-    case "photo": return <Eye className="h-4 w-4" />;
-    case "system_log": return <Layers className="h-4 w-4" />;
-    case "training": return <Target className="h-4 w-4" />;
-    default: return <FileText className="h-4 w-4" />;
+      case "logbook": return <BookOpen className="h-4 w-4" />;
+      case "checklist": return <FileCheck className="h-4 w-4" />;
+      case "certificate": return <Shield className="h-4 w-4" />;
+      case "report": return <FileText className="h-4 w-4" />;
+      case "photo": return <Eye className="h-4 w-4" />;
+      case "system_log": return <Layers className="h-4 w-4" />;
+      case "training": return <Target className="h-4 w-4" />;
+      default: return <FileText className="h-4 w-4" />;
     }
   };
 
@@ -361,7 +360,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => handlehandleGenerateAISummary}
+                        onClick={() => handleGenerateAISummary(pkg)}
                         disabled={generatingSummary === pkg.id}
                       >
                         {generatingSummary === pkg.id ? (
@@ -371,14 +370,14 @@ export const AutoEvidenceBuilder: React.FC = () => {
                         )}
                         Resumo IA
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handlehandleGeneratePDF}>
+                      <Button size="sm" variant="outline" onClick={() => handleGeneratePDF(pkg)}>
                         <Download className="w-3 h-3 mr-1" />PDF
                       </Button>
                       <Button size="sm" variant="outline">
                         <Eye className="w-3 h-3 mr-1" />Visualizar
                       </Button>
                       {pkg.status === "ready" && (
-                        <Button size="sm" onClick={() => handlehandleSubmitPackage}>
+                        <Button size="sm" onClick={() => handleSubmitPackage(pkg)}>
                           <Send className="w-3 h-3 mr-1" />Enviar
                         </Button>
                       )}
@@ -411,7 +410,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
             <CardContent className="pt-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Buscar evidências..." value={searchTerm} onChange={handleChange} className="pl-10" />
+                <Input placeholder="Buscar evidências..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
               </div>
             </CardContent>
           </Card>
@@ -462,7 +461,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <p className="font-medium">{selectedItems.length} itens selecionados</p>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={handleSetSelectedItems}>Limpar</Button>
+                    <Button variant="outline" onClick={() => setSelectedItems([])}>Limpar</Button>
                     <Button><FilePlus className="w-4 h-4 mr-2" />Criar Pacote</Button>
                   </div>
                 </div>

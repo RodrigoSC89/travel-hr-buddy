@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -165,14 +164,14 @@ export const BlockchainDocuments: React.FC = () => {
       title: "Upload Iniciado",
       description: "Documento sendo processado e adicionado à blockchain",
     });
-  });
+  };
 
   const downloadDocument = (document: BlockchainDocument) => {
     toast({
       title: "Download Iniciado",
       description: `Baixando ${document.name} do IPFS`,
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -267,11 +266,11 @@ export const BlockchainDocuments: React.FC = () => {
             <Input
               placeholder="Digite o hash do documento (0x...)"
               value={searchHash}
-              onChange={handleChange}
+              onChange={(e) => setSearchHash(e.target.value)}
               className="flex-1"
             />
             <Button 
-              onClick={() => handleverifyDocument}
+              onClick={() => verifyDocument(searchHash)}
               disabled={isVerifying || !searchHash}
               className="flex items-center gap-2"
             >
@@ -366,7 +365,7 @@ export const BlockchainDocuments: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handleverifyDocument}
+                      onClick={() => verifyDocument(document.hash)}
                       className="flex items-center gap-1"
                     >
                       <Shield className="h-3 w-3" />
@@ -375,7 +374,7 @@ export const BlockchainDocuments: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handledownloadDocument}
+                      onClick={() => downloadDocument(document)}
                       className="flex items-center gap-1"
                     >
                       <Download className="h-3 w-3" />
@@ -384,7 +383,7 @@ export const BlockchainDocuments: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={handleSetSelectedDocument}
+                      onClick={() => setSelectedDocument(document.id)}
                       className="flex items-center gap-1"
                     >
                       <Eye className="h-3 w-3" />

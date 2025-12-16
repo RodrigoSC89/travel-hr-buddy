@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bell, TrendingUp, TrendingDown, DollarSign, Plus } from "lucide-react";
@@ -70,7 +69,7 @@ const AlertasPrecosModule = () => {
           <Bell className="h-8 w-8 text-primary" />
           <h1 className="text-3xl font-bold">Alertas de Preços</h1>
         </div>
-        <Button onClick={handleSetShowCreateForm}>
+        <Button onClick={() => setShowCreateForm(!showCreateForm)}>
           <Plus className="w-4 h-4 mr-2" />
           {showCreateForm ? "Cancelar" : "Novo Alerta"}
         </Button>
@@ -147,6 +146,6 @@ const AlertasPrecosModule = () => {
       </div>
     </div>
   );
-});
+};
 
 export default AlertasPrecosModule;

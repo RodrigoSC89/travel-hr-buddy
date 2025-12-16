@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,7 +28,7 @@ export default function MMICopilot() {
     try {
       await streamCopilotSuggestions(prompt, (chunk) => {
         setSuggestion((prev) => prev + chunk);
-  });
+      });
     } catch (error) {
       toast({
         title: "Erro",
@@ -65,21 +65,21 @@ export default function MMICopilot() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handlehandleExamplePrompt}
+              onClick={() => handleExamplePrompt("Gerador STBD com ruído incomum e aumento de temperatura")}
             >
               Gerador com ruído
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handlehandleExamplePrompt}
+              onClick={() => handleExamplePrompt("Bomba hidráulica apresentando vibração excessiva")}
             >
               Bomba com vibração
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => handlehandleExamplePrompt}
+              onClick={() => handleExamplePrompt("Válvula de segurança com leitura fora do padrão")}
             >
               Válvula de segurança
             </Button>
@@ -92,7 +92,7 @@ export default function MMICopilot() {
           <Textarea
             placeholder="Ex: Gerador STBD com ruído incomum e aumento de temperatura"
             value={prompt}
-            onChange={handleChange}
+            onChange={(e) => setPrompt(e.target.value)}
             rows={3}
             disabled={isLoading}
           />

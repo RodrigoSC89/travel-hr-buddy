@@ -2,11 +2,12 @@
  * Scenario Simulator Panel - What-If analysis with AI
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FlaskConical,
@@ -16,6 +17,8 @@ import {
   TrendingDown,
   Minus,
   AlertTriangle,
+  DollarSign,
+  Clock,
   Fuel,
   Users,
   Wrench,
@@ -23,6 +26,7 @@ import {
   Sparkles,
   Loader2,
   Save,
+  Share2,
 } from "lucide-react";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { motion } from "framer-motion";
@@ -64,7 +68,7 @@ const PRESET_SCENARIOS: Scenario[] = [
   },
 ];
 
-export const ScenarioSimulatorPanel = memo(function() {
+export function ScenarioSimulatorPanel() {
   const [activeScenario, setActiveScenario] = useState<string>("custom");
   const [parameters, setParameters] = useState({
     fuelPrice: 0,
@@ -147,8 +151,8 @@ export const ScenarioSimulatorPanel = memo(function() {
     if (scenario) {
       setParameters({
         fuelPrice: scenario.parameters.fuelPrice || 0,
-        crewCost: scenario.parameters.crewCost || 0,
-        maintenanceBudget: scenario.parameters.maintenanceBudget || 0,
+        crewCost: scenario.parameters.crewReduction ? scenario.parameters.crewReduction * -5 : 0,
+        maintenanceBudget: scenario.parameters.maintenanceDelay ? -10 : 0,
         operationalDays: 0,
         speedAdjustment: scenario.parameters.speedReduction || 0,
       });
@@ -157,12 +161,12 @@ export const ScenarioSimulatorPanel = memo(function() {
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {
-    case "positive":
-      return <TrendingUp className="h-4 w-4 text-green-500" />;
-    case "negative":
-      return <TrendingDown className="h-4 w-4 text-red-500" />;
-    default:
-      return <Minus className="h-4 w-4 text-muted-foreground" />;
+      case "positive":
+        return <TrendingUp className="h-4 w-4 text-green-500" />;
+      case "negative":
+        return <TrendingDown className="h-4 w-4 text-red-500" />;
+      default:
+        return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -269,7 +273,7 @@ export const ScenarioSimulatorPanel = memo(function() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => handleloadPreset}
+                onClick={() => loadPreset(scenario.id)}
                 className="w-full"
               >
                 Carregar Parâmetros
@@ -351,4 +355,3 @@ export const ScenarioSimulatorPanel = memo(function() {
     </Card>
   );
 }
-);

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -140,7 +140,7 @@ export default function APIGateway() {
                   id="keyName"
                   placeholder="Ex: Integração ERP"
                   value={newKeyName}
-                  onChange={handleChange}
+                  onChange={(e) => setNewKeyName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
@@ -149,7 +149,7 @@ export default function APIGateway() {
                   id="keyScope"
                   placeholder="* para acesso total, ou: documents,analytics"
                   value={newKeyScope}
-                  onChange={handleChange}
+                  onChange={(e) => setNewKeyScope(e.target.value)}
                 />
                 <p className="text-xs text-muted-foreground">
                   Use * para acesso total ou especifique módulos: auth, documents, analytics, profile
@@ -162,12 +162,12 @@ export default function APIGateway() {
                   type="number"
                   placeholder="365"
                   value={newKeyExpiry}
-                  onChange={handleChange}
+                  onChange={(e) => setNewKeyExpiry(e.target.value)}
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsCreateOpen}>
+              <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateKey}>Criar Chave</Button>
@@ -256,7 +256,7 @@ export default function APIGateway() {
                         variant="ghost"
                         size="icon"
                         className="h-6 w-6"
-                        onClick={() => handletoggleKeyVisibility}
+                        onClick={() => toggleKeyVisibility(apiKey.id)}
                       >
                         {visibleKeys.has(apiKey.id) ? (
                           <EyeOff className="h-3 w-3" />
@@ -268,7 +268,7 @@ export default function APIGateway() {
                         variant="ghost"
                         size="icon"
                         className="h-6 w-6"
-                        onClick={() => handlecopyKey}
+                        onClick={() => copyKey(apiKey.key)}
                       >
                         <Copy className="h-3 w-3" />
                       </Button>
@@ -311,12 +311,12 @@ export default function APIGateway() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handlecopyKey}>
+                        <DropdownMenuItem onClick={() => copyKey(apiKey.key)}>
                           <Copy className="h-4 w-4 mr-2" />
                           Copiar chave
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => handlehandleToggleActive}
+                          onClick={() => handleToggleActive(apiKey.id, apiKey.isActive)}
                         >
                           {apiKey.isActive ? (
                             <>
@@ -332,7 +332,7 @@ export default function APIGateway() {
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           className="text-destructive"
-                          onClick={() => handlehandleDeleteKey}
+                          onClick={() => handleDeleteKey(apiKey.id)}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
                           Excluir

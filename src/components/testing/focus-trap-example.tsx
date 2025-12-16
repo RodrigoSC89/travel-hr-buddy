@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,7 +42,7 @@ export const FocusTrapExample: React.FC = () => {
           {/* Trigger Button */}
           <div className="space-y-4">
             <Button 
-              onClick={handleSetIsModalOpen}
+              onClick={() => setIsModalOpen(true)}
               variant="default"
             >
               Open Modal with Focus Trap
@@ -69,7 +68,7 @@ export const FocusTrapExample: React.FC = () => {
               {/* Overlay */}
               <div 
                 className="fixed inset-0 bg-black/80 animate-in fade-in"
-                onClick={handleSetIsModalOpen}
+                onClick={() => setIsModalOpen(false)}
                 aria-hidden="true"
               />
               
@@ -84,7 +83,7 @@ export const FocusTrapExample: React.FC = () => {
               >
                 {/* Close Button */}
                 <button
-                  onClick={handleSetIsModalOpen}
+                  onClick={() => setIsModalOpen(false)}
                   className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   aria-label="Close modal"
                 >
@@ -115,7 +114,7 @@ export const FocusTrapExample: React.FC = () => {
                         <Input
                           id="name"
                           value={formData.name}
-                          onChange={handleChange}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Enter your name"
                           required
                         />
@@ -127,7 +126,7 @@ export const FocusTrapExample: React.FC = () => {
                           id="email"
                           type="email"
                           value={formData.email}
-                          onChange={handleChange}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="Enter your email"
                           required
                         />
@@ -137,7 +136,7 @@ export const FocusTrapExample: React.FC = () => {
                         <Button 
                           type="button" 
                           variant="outline"
-                          onClick={handleSetIsModalOpen}
+                          onClick={() => setIsModalOpen(false)}
                         >
                           Cancel
                         </Button>

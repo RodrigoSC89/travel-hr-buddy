@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -248,13 +247,13 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
       title: "Tarefa iniciada",
       description: "A tarefa foi marcada como em andamento",
     });
-  });
+  };
 
   const handleCompleteTask = (taskId: string) => {
     setTasks(prev => 
       prev.map(task => 
         task.id === taskId 
-          ? { ...task, status: "completed" as const, completedDate: new Date().toISOString().split("T")[0] } 
+          ? { ...task, status: "completed" as const, completedDate: new Date().toISOString().split('T')[0] } 
           : task
       )
     );
@@ -262,7 +261,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
       title: "Tarefa concluída",
       description: "A tarefa foi marcada como concluída",
     });
-  });
+  };
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = 
@@ -273,7 +272,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     const matchesStatus = statusFilter === "all" || task.status === statusFilter;
     const matchesType = typeFilter === "all" || task.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  };
+  });
 
   return (
     <Card>
@@ -304,7 +303,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
                 placeholder="Buscar por título, equipamento ou responsável..."
                 className="pl-8"
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
@@ -379,12 +378,12 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
                     <TableCell>
                       <div className="flex items-center gap-1 text-sm">
                         <Calendar className="h-3 w-3" />
-                        {new Date(task.scheduledDate).toLocaleDateString("pt-BR")}
+                        {new Date(task.scheduledDate).toLocaleDateString('pt-BR')}
                       </div>
                       {task.completedDate && (
                         <div className="text-xs text-success flex items-center gap-1 mt-1">
                           <CheckCircle className="h-3 w-3" />
-                          {new Date(task.completedDate).toLocaleDateString("pt-BR")}
+                          {new Date(task.completedDate).toLocaleDateString('pt-BR')}
                         </div>
                       )}
                     </TableCell>
@@ -402,13 +401,13 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
                             Ver Detalhes
                           </DropdownMenuItem>
                           {task.status === "pending" && (
-                            <DropdownMenuItem onClick={() => handlehandleStartTask}>
+                            <DropdownMenuItem onClick={() => handleStartTask(task.id)}>
                               <Play className="h-4 w-4 mr-2" />
                               Iniciar Tarefa
                             </DropdownMenuItem>
                           )}
                           {(task.status === "pending" || task.status === "in_progress" || task.status === "overdue") && (
-                            <DropdownMenuItem onClick={() => handlehandleCompleteTask}>
+                            <DropdownMenuItem onClick={() => handleCompleteTask(task.id)}>
                               <CheckCheck className="h-4 w-4 mr-2" />
                               Marcar Concluído
                             </DropdownMenuItem>

@@ -82,7 +82,7 @@ export const ServiceStatusPanel: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handlecheckServiceHealth}
+                  onClick={() => checkServiceHealth(service.key)}
                   disabled={isChecking}
                   className="h-8"
                 >

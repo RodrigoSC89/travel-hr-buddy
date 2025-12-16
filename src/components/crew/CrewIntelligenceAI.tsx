@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo } from "react";;
  * Crew Intelligence AI - Diferencial vs Adonis/Seafair/OneOcean
  * - Matching inteligente tripulante-embarcação
  * - Análise de fadiga (MLC 2006)
@@ -23,6 +22,7 @@ import {
   UserCheck,
   AlertTriangle,
   TrendingUp,
+  Clock,
   Target,
   Heart,
   Award,
@@ -64,7 +64,7 @@ interface FatigueAlert {
   recommendation: string;
 }
 
-export const CrewIntelligenceAI = memo(function() {
+export function CrewIntelligenceAI() {
   const { analyze, suggest, predict, isLoading } = useNautilusAI();
   const [matchResults, setMatchResults] = useState<MatchResult[]>([]);
   const [fatigueAlerts, setFatigueAlerts] = useState<FatigueAlert[]>([]);
@@ -175,10 +175,10 @@ export const CrewIntelligenceAI = memo(function() {
 
   const getTurnoverColor = (risk: string) => {
     switch (risk) {
-    case "low": return "bg-green-500/10 text-green-500";
-    case "medium": return "bg-yellow-500/10 text-yellow-500";
-    case "high": return "bg-red-500/10 text-red-500";
-    default: return "";
+      case "low": return "bg-green-500/10 text-green-500";
+      case "medium": return "bg-yellow-500/10 text-yellow-500";
+      case "high": return "bg-red-500/10 text-red-500";
+      default: return "";
     }
   };
 
@@ -491,6 +491,6 @@ export const CrewIntelligenceAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default CrewIntelligenceAI;

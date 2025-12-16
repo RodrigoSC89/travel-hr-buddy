@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -89,7 +88,7 @@ const PerformanceOptimizer = () => {
     { time: "20:00", cpu: 45, memory: 58, network: 35 }
   ];
 
-  const runOptimization = async (optimization: unknown: unknown: unknown) => {
+  const runOptimization = async (optimization: any) => {
     setIsOptimizing(true);
     
     toast({
@@ -192,7 +191,7 @@ const PerformanceOptimizer = () => {
             />
           </div>
           <Button 
-            onClick={() => handlerunOptimization}
+            onClick={() => runOptimization(optimizations[0])}
             disabled={isOptimizing}
           >
             {isOptimizing ? (
@@ -385,7 +384,7 @@ const PerformanceOptimizer = () => {
                 {optimization.status === "recommended" && (
                   <Button 
                     size="sm" 
-                    onClick={() => handlerunOptimization}
+                    onClick={() => runOptimization(optimization)}
                     disabled={isOptimizing}
                   >
                     Aplicar
@@ -398,6 +397,6 @@ const PerformanceOptimizer = () => {
       </div>
     </div>
   );
-});
+};
 
 export default PerformanceOptimizer;

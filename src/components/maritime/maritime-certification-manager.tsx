@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +53,7 @@ interface CertificationAlert {
   alert_type: "expiring_soon" | "expired" | "renewal_required";
 }
 
-export const MaritimeCertificationManager = memo(() => {
+export const MaritimeCertificationManager = () => {
   const [certificates, setCertificates] = useState<MaritimeCertificate[]>([]);
   const [alerts, setAlerts] = useState<CertificationAlert[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
@@ -204,7 +203,7 @@ export const MaritimeCertificationManager = memo(() => {
                          cert.certification_type.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const stats = {
     total: certificates.length,
@@ -297,10 +296,10 @@ export const MaritimeCertificationManager = memo(() => {
               </div>
               
               <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
+                <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={handleSetIsAddDialogOpen}>
+                <Button onClick={() => setIsAddDialogOpen(false)}>
                   Salvar Certificação
                 </Button>
               </div>
@@ -377,7 +376,7 @@ export const MaritimeCertificationManager = memo(() => {
                         {alert.days_until_expiry > 0 
                           ? ` (${alert.days_until_expiry} dias)` 
                           : ` (vencida há ${Math.abs(alert.days_until_expiry)} dias)`
-                        });
+                        }
                       </p>
                     </div>
                     
@@ -414,7 +413,7 @@ export const MaritimeCertificationManager = memo(() => {
                     <Input
                       placeholder="Buscar por tripulante ou certificação..."
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -206,8 +205,8 @@ const IntelligentAlerts: React.FC = () => {
     
     const newAlert: IntelligentAlert = {
       id: Math.random().toString(),
-      type: alertTypes[Math.floor(Math.random() * alertTypes.length)] as unknown,
-      severity: severities[Math.floor(Math.random() * severities.length)] as unknown,
+      type: alertTypes[Math.floor(Math.random() * alertTypes.length)] as any,
+      severity: severities[Math.floor(Math.random() * severities.length)] as any,
       title: "Anomalia Detectada pelo Sistema de IA",
       description: "Sistema inteligente identificou padrão anômalo que requer atenção.",
       vessel_name: vessels[Math.floor(Math.random() * vessels.length)],
@@ -233,7 +232,7 @@ const IntelligentAlerts: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Real-time alert generation with optimized polling
   useOptimizedPolling({
@@ -259,7 +258,7 @@ const IntelligentAlerts: React.FC = () => {
       title: "Alerta Reconhecido",
       description: "O alerta foi marcado como reconhecido",
     });
-  });
+  };
 
   const resolveAlert = (alertId: string, notes: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -279,7 +278,7 @@ const IntelligentAlerts: React.FC = () => {
       title: "Alerta Resolvido",
       description: "O alerta foi marcado como resolvido",
     });
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -330,7 +329,7 @@ const IntelligentAlerts: React.FC = () => {
     const matchesStatus = statusFilter === "all" || alert.status === statusFilter;
     
     return matchesSearch && matchesSeverity && matchesType && matchesStatus;
-  };
+  });
 
   const stats = {
     total: alerts.length,
@@ -438,14 +437,14 @@ const IntelligentAlerts: React.FC = () => {
               <Input
                 placeholder="Buscar alertas..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
             
             <select 
               value={statusFilter} 
-              onChange={handleChange}
+              onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todos os Status</option>
@@ -456,7 +455,7 @@ const IntelligentAlerts: React.FC = () => {
             
             <select 
               value={severityFilter} 
-              onChange={handleChange}
+              onChange={(e) => setSeverityFilter(e.target.value)}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todas Severidades</option>
@@ -468,7 +467,7 @@ const IntelligentAlerts: React.FC = () => {
             
             <select 
               value={typeFilter} 
-              onChange={handleChange}
+              onChange={(e) => setTypeFilter(e.target.value)}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todos os Tipos</option>
@@ -545,7 +544,7 @@ const IntelligentAlerts: React.FC = () => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={handleSetSelectedAlert}
+                        onClick={() => setSelectedAlert(alert)}
                       >
                         <Eye className="h-4 w-4 mr-2" />
                         Detalhes
@@ -610,7 +609,7 @@ const IntelligentAlerts: React.FC = () => {
                               <Textarea
                                 id="resolution"
                                 value={resolutionNotes}
-                                onChange={handleChange}
+                                onChange={(e) => setResolutionNotes(e.target.value)}
                                 placeholder="Descreva as ações tomadas para resolver este alerta..."
                                 rows={3}
                               />
@@ -618,7 +617,7 @@ const IntelligentAlerts: React.FC = () => {
                             
                             <div className="flex gap-2">
                               <Button 
-                                onClick={() => handleresolveAlert}
+                                onClick={() => resolveAlert(alert.id, resolutionNotes)}
                                 disabled={!resolutionNotes.trim()}
                               >
                                 <CheckCircle className="h-4 w-4 mr-2" />
@@ -642,7 +641,7 @@ const IntelligentAlerts: React.FC = () => {
                     <Button 
                       variant="default" 
                       size="sm"
-                      onClick={() => handleacknowledgeAlert}
+                      onClick={() => acknowledgeAlert(alert.id)}
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Reconhecer

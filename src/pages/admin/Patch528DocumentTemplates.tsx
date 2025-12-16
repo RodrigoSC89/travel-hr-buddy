@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 528 - Sistema de Templates de Documentos
  */
 
@@ -19,7 +18,7 @@ export default function Patch528DocumentTemplates() {
 
   const toggleCheck = (key: keyof typeof checks) => {
     setChecks(prev => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   const allChecked = Object.values(checks).every(Boolean);
   const progress = Object.values(checks).filter(Boolean).length;
@@ -48,7 +47,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.editorFunctional}
-              onCheckedChange={() => toggleCheck("editorFunctional"}
+              onCheckedChange={() => toggleCheck("editorFunctional")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -65,7 +64,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.variablesWorking}
-              onCheckedChange={() => toggleCheck("variablesWorking"}
+              onCheckedChange={() => toggleCheck("variablesWorking")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -85,7 +84,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.pdfExport}
-              onCheckedChange={() => toggleCheck("pdfExport"}
+              onCheckedChange={() => toggleCheck("pdfExport")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -106,7 +105,7 @@ export default function Patch528DocumentTemplates() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.moduleIntegration}
-              onCheckedChange={() => toggleCheck("moduleIntegration"}
+              onCheckedChange={() => toggleCheck("moduleIntegration")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -60,7 +59,7 @@ export const UsageAnalytics: React.FC = () => {
       month: "2-digit", 
       hour: "2-digit", 
       minute: "2-digit" 
-    };
+    });
   };
 
   return (

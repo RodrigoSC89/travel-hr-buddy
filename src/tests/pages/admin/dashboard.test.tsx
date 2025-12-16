@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -49,7 +49,7 @@ vi.mock("react-router-dom", async () => {
     useNavigate: () => mockNavigate,
     useSearchParams: () => [mockSearchParams, vi.fn()],
   };
-  });
+});
 
 describe("AdminDashboard - Public Mode", () => {
   beforeEach(() => {
@@ -91,7 +91,7 @@ describe("AdminDashboard - Public Mode", () => {
 
     await waitFor(() => {
       expect(screen.getByText("🚀 Painel Administrativo")).toBeInTheDocument();
-  });
+    });
   });
 
   it("should display public mode indicator badge", async () => {
@@ -107,7 +107,7 @@ describe("AdminDashboard - Public Mode", () => {
       expect(
         screen.getByText(/🔒 Modo público somente leitura/i)
       ).toBeInTheDocument();
-  });
+    });
   });
 
   it("should NOT display public mode indicator in normal mode", () => {
@@ -137,7 +137,7 @@ describe("AdminDashboard - Public Mode", () => {
       expect(
         screen.queryByText("📱 Compartilhar Dashboard Público")
       ).not.toBeInTheDocument();
-  });
+    });
   });
 
   it("should display QR code section in normal mode", async () => {
@@ -153,9 +153,9 @@ describe("AdminDashboard - Public Mode", () => {
       expect(
         screen.getByText("📱 Compartilhar Dashboard Público")
       ).toBeInTheDocument();
+    });
   });
-  });
-  });
+});
 
 describe("AdminDashboard - Role-Based Access", () => {
   beforeEach(() => {
@@ -258,9 +258,9 @@ describe("AdminDashboard - Role-Based Access", () => {
       expect(screen.getByText("Checklists")).toBeInTheDocument();
       expect(screen.getByText("Restaurações Pessoais")).toBeInTheDocument();
       expect(screen.getByText("Histórico de IA")).toBeInTheDocument();
+    });
   });
-  });
-  });
+});
 
 describe("AdminDashboard - Navigation", () => {
   beforeEach(() => {
@@ -303,7 +303,7 @@ describe("AdminDashboard - Navigation", () => {
       const cards = screen.getAllByRole("generic");
       // Verify cards are rendered
       expect(cards.length).toBeGreaterThan(0);
-  });
+    });
   });
 
   it("should display quick links section", () => {

@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,11 +13,18 @@ import {
   Plus, 
   Play, 
   Pause, 
-  Edit,
+  Square, 
+  Edit, 
+  Copy, 
+  Trash2,
   Clock,
   CheckCircle,
   AlertCircle,
-  Users
+  Users,
+  ArrowRight,
+  Settings,
+  Calendar,
+  Target
 } from "lucide-react";
 
 interface WorkflowStep {
@@ -204,10 +210,10 @@ export const PeotramWorkflowManager: React.FC = () => {
                   <Textarea id="workflow-description" placeholder="Descrição do workflow" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsNewWorkflowOpen}>
+                  <Button variant="outline" onClick={() => setIsNewWorkflowOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSetIsNewWorkflowOpen}>
+                  <Button onClick={() => setIsNewWorkflowOpen(false)}>
                     Criar Workflow
                   </Button>
                 </div>

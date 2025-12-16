@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,7 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
       const { data, error } = await query;
       if (error) throw error;
       setActions(data || []);
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({
         title: "Error loading actions",
         description: error.message,

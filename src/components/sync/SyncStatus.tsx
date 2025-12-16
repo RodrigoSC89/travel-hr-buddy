@@ -1,4 +1,4 @@
-import { memo, memo, useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
  * PATCH 634: Sync Status Component
  * Display connection status and sync pending offline data
  */
-export const SyncStatus = memo(function() {
+export function SyncStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
@@ -25,7 +25,7 @@ export const SyncStatus = memo(function() {
         description: "Connection restored. Syncing pending data...",
       });
       syncPendingData();
-    });
+    };
 
     const handleOffline = () => {
       setIsOnline(false);
@@ -34,7 +34,7 @@ export const SyncStatus = memo(function() {
         description: "Changes will be saved locally and synced when reconnected",
         variant: "destructive",
       });
-    });
+    };
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
@@ -198,4 +198,4 @@ export const SyncStatus = memo(function() {
       </Card>
     </div>
   );
-});
+}

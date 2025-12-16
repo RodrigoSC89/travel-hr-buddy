@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -141,7 +140,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
     case "low": return "bg-success text-success-foreground";
     default: return "bg-muted text-muted-foreground";
     }
-  });
+  };
 
   const getTrendIcon = (trend: Prediction["trend"]) => {
     switch (trend) {
@@ -514,6 +513,6 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default PredictiveAnalyticsEnhanced;

@@ -30,7 +30,7 @@ vi.mock("@tiptap/react", () => ({
       },
     },
   })),
-  EditorContent: ({ editor }: unknown: unknown: unknown) => <div data-testid="editor-content">Editor</div>,
+  EditorContent: ({ editor }: any) => <div data-testid="editor-content">Editor</div>,
 }));
 
 vi.mock("@tiptap/starter-kit", () => ({
@@ -77,7 +77,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-  });
+});
 
 // Mock jsPDF
 vi.mock("jspdf", () => ({
@@ -124,7 +124,7 @@ describe("DocumentAIEditorPage", () => {
 
   it("should apply template from localStorage on mount", async () => {
     const mockSetContent = vi.fn();
-    const mod: unknown = await import("@tiptap/react");
+    const mod: any = await import("@tiptap/react");
     mod.useEditor.mockReturnValue({
       commands: { setContent: mockSetContent },
       getHTML: vi.fn(() => "<p>Test content</p>"),
@@ -142,9 +142,9 @@ describe("DocumentAIEditorPage", () => {
 
     await waitFor(() => {
       expect(mockSetContent).toHaveBeenCalledWith("<p>Template content</p>");
-  });
+    });
 
-    const toastMod: unknown = await import("@/hooks/use-toast");
+    const toastMod: any = await import("@/hooks/use-toast");
     expect(toastMod.toast).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Template aplicado",
@@ -166,8 +166,8 @@ describe("DocumentAIEditorPage", () => {
   });
 
   it("should save document to database", async () => {
-    const supaMod: unknown = await import("@/integrations/supabase/client");
-    const toastMod: unknown = await import("@/hooks/use-toast");
+    const supaMod: any = await import("@/integrations/supabase/client");
+    const toastMod: any = await import("@/hooks/use-toast");
     
     render(
       <MemoryRouter>
@@ -188,11 +188,11 @@ describe("DocumentAIEditorPage", () => {
           title: "Documento salvo com sucesso",
         })
       );
-  };
-  };
+    });
+  });
 
   it("should export document as PDF", async () => {
-    const toastMod: unknown = await import("@/hooks/use-toast");
+    const toastMod: any = await import("@/hooks/use-toast");
     
     render(
       <MemoryRouter>
@@ -212,11 +212,11 @@ describe("DocumentAIEditorPage", () => {
           title: "PDF exportado com sucesso",
         })
       );
-  });
+    });
   });
 
   it("should show validation error when saving without title", async () => {
-    const supaMod: unknown = await import("@/integrations/supabase/client");
+    const supaMod: any = await import("@/integrations/supabase/client");
     
     render(
       <MemoryRouter>
@@ -227,7 +227,7 @@ describe("DocumentAIEditorPage", () => {
     // Wait for component to be ready
     await waitFor(() => {
       expect(screen.getByPlaceholderText("Título do Documento")).toBeInTheDocument();
-  });
+    });
 
     const saveButton = screen.getByText("Salvar no Supabase");
     fireEvent.click(saveButton);
@@ -237,5 +237,5 @@ describe("DocumentAIEditorPage", () => {
     
     // Verify that supabase.from was NOT called (validation failed)
     expect(supaMod.supabase.from).not.toHaveBeenCalled();
-  };
-};
+  });
+});

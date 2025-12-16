@@ -1,16 +1,15 @@
 /**
-import { useState, useCallback } from "react";;
  * Settings Panel - Configurações do Safety Guardian
  */
 
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Settings, 
   Bell, 
@@ -22,9 +21,9 @@ import {
   Mail,
   Smartphone,
   MessageSquare
-} from "lucide-react";
-import { toast } from "sonner";
-import type { SafetySettings } from "../types";
+} from 'lucide-react';
+import { toast } from 'sonner';
+import type { SafetySettings } from '../types';
 
 interface SettingsPanelProps {
   settings: SafetySettings;
@@ -44,19 +43,19 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     setSaving(true);
     try {
       await onSave(settings);
-      toast.success("Configurações salvas com sucesso!");
+      toast.success('Configurações salvas com sucesso!');
     } catch (error) {
-      toast.error("Erro ao salvar configurações");
+      toast.error('Erro ao salvar configurações');
     } finally {
       setSaving(false);
     }
   };
 
-  const updateSettings = (path: string, value: unknown: unknown: unknown) => {
+  const updateSettings = (path: string, value: any) => {
     setSettings(prev => {
-      const parts = path.split(".");
+      const parts = path.split('.');
       const newSettings = { ...prev };
-      let current: unknown = newSettings;
+      let current: any = newSettings;
       
       for (let i = 0; i < parts.length - 1; i++) {
         current[parts[i]] = { ...current[parts[i]] };
@@ -65,7 +64,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       
       current[parts[parts.length - 1]] = value;
       return newSettings;
-    };
+    });
   };
 
   return (
@@ -82,7 +81,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </div>
         <Button onClick={handleSave} disabled={saving || loading}>
           <Save className="h-4 w-4 mr-2" />
-          {saving ? "Salvando..." : "Salvar"}
+          {saving ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
 
@@ -126,7 +125,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.ltiGoal}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings('ltiGoal', parseInt(e.target.value) || 365)}
                   />
                   <p className="text-xs text-muted-foreground">
                     Meta de dias consecutivos sem acidentes com afastamento
@@ -141,7 +140,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     step={0.01}
                     min={0}
                     value={settings.trirTarget}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings('trirTarget', parseFloat(e.target.value) || 0)}
                   />
                   <p className="text-xs text-muted-foreground">
                     Taxa de Incidentes Registráveis Total (por 200.000 horas)
@@ -160,7 +159,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.ddsRequiredDaily}
-                  onCheckedChange={(checked) => updateSettings("ddsRequiredDaily", checked}
+                  onCheckedChange={(checked) => updateSettings('ddsRequiredDaily', checked)}
                 />
               </div>
             </CardContent>
@@ -187,7 +186,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.autoAlertThresholds.certification_expiry_days}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings(
+                      'autoAlertThresholds.certification_expiry_days', 
+                      parseInt(e.target.value) || 30
+                    )}
                   />
                   <p className="text-xs text-muted-foreground">
                     Alertar X dias antes do vencimento
@@ -201,7 +203,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.autoAlertThresholds.training_overdue_days}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings(
+                      'autoAlertThresholds.training_overdue_days',
+                      parseInt(e.target.value) || 7
+                    )}
                   />
                   <p className="text-xs text-muted-foreground">
                     Alertar após X dias de atraso
@@ -215,7 +220,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.autoAlertThresholds.incident_escalation_hours}
-                    onChange={handleChange}
+                    onChange={(e) => updateSettings(
+                      'autoAlertThresholds.incident_escalation_hours',
+                      parseInt(e.target.value) || 24
+                    )}
                   />
                   <p className="text-xs text-muted-foreground">
                     Escalar incidente após X horas sem ação
@@ -252,7 +260,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.notificationPreferences.email}
-                  onCheckedChange={(checked) => updateSettings("notificationPreferences.email", checked}
+                  onCheckedChange={(checked) => updateSettings('notificationPreferences.email', checked)}
                 />
               </div>
 
@@ -272,7 +280,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.notificationPreferences.push}
-                  onCheckedChange={(checked) => updateSettings("notificationPreferences.push", checked}
+                  onCheckedChange={(checked) => updateSettings('notificationPreferences.push', checked)}
                 />
               </div>
 
@@ -292,7 +300,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.notificationPreferences.sms}
-                  onCheckedChange={(checked) => updateSettings("notificationPreferences.sms", checked}
+                  onCheckedChange={(checked) => updateSettings('notificationPreferences.sms', checked)}
                 />
               </div>
             </CardContent>
@@ -325,7 +333,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.aiSettings.predictiveAnalysisEnabled}
-                  onCheckedChange={(checked) => updateSettings("aiSettings.predictiveAnalysisEnabled", checked}
+                  onCheckedChange={(checked) => updateSettings('aiSettings.predictiveAnalysisEnabled', checked)}
                 />
               </div>
 
@@ -345,7 +353,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.aiSettings.autoRecommendationsEnabled}
-                  onCheckedChange={(checked) => updateSettings("aiSettings.autoRecommendationsEnabled", checked}
+                  onCheckedChange={(checked) => updateSettings('aiSettings.autoRecommendationsEnabled', checked)}
                 />
               </div>
 
@@ -365,7 +373,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.aiSettings.riskAssessmentEnabled}
-                  onCheckedChange={(checked) => updateSettings("aiSettings.riskAssessmentEnabled", checked}
+                  onCheckedChange={(checked) => updateSettings('aiSettings.riskAssessmentEnabled', checked)}
                 />
               </div>
 
@@ -385,4 +393,4 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       </Tabs>
     </div>
   );
-});
+};

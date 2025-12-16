@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,18 +19,22 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY!
 );
 
+
 export default function MMIJobsPanel() {
   const [jobs, setJobs] = useState<MMIJobForecast[]>([]);
   const [search, setSearch] = useState("");
+
 
   useEffect(() => {
     fetchJobs();
   }, []);
 
+
   async function fetchJobs() {
     const { data } = await supabase.from("mmi_jobs").select("*").order("forecast_date", { ascending: false });
     if (data) setJobs(data);
   }
+
 
   async function handleExport(job: MMIJobForecast) {
     try {
@@ -42,15 +46,18 @@ export default function MMIJobsPanel() {
     }
   }
 
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-semibold">🛠 Painel de Forecast MMI</h1>
 
+
       <Input
         placeholder="🔍 Buscar por sistema, componente..."
         value={search}
-        onChange={handleChange}
+        onChange={(e) => setSearch(e.target.value)}
       />
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {jobs
@@ -62,7 +69,7 @@ export default function MMIJobsPanel() {
                 <p>📅 Previsão: <strong>{job.forecast || "N/A"}</strong></p>
                 <p>⏱ Horímetro: <strong>{job.hours || 0}h</strong></p>
                 <p>👨‍🔧 Responsável: {job.responsible || "N/A"}</p>
-                <Button variant="outline" onClick={() => handlehandleExport}>
+                <Button variant="outline" onClick={() => handleExport(job)}>
                   📤 Exportar PDF
                 </Button>
               </CardContent>

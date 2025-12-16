@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import {
   Dialog,
@@ -39,7 +38,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
     destinationId: "",
     vesselName: "",
     departureDate: "",
-});
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +72,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
       arrivalDate: calculateArrivalDate(formData.departureDate, estimatedDays),
       weatherRisk: "low",
       createdAt: new Date().toISOString(),
-    });
+    };
 
     await new Promise((r) => setTimeout(r, 500));
     onCreateVoyage(newVoyage);
@@ -173,7 +172,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
               id="vessel"
               placeholder="Ex: MV Atlantic Pioneer"
               value={formData.vesselName}
-              onChange={handleChange}))}
+              onChange={(e) => setFormData((p) => ({ ...p, vesselName: e.target.value }))}
             />
           </div>
 
@@ -183,12 +182,12 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
               id="departure"
               type="date"
               value={formData.departureDate}
-              onChange={handleChange}))}
+              onChange={(e) => setFormData((p) => ({ ...p, departureDate: e.target.value }))}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
             <Button 

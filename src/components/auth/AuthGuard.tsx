@@ -1,5 +1,4 @@
 /**
-import { useEffect } from "react";;
  * PATCH 186.0 - Authentication Guard
  * 
  * Protects routes and components from unauthorized access
@@ -43,7 +42,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
       structuredLogger.warn("Unauthorized access attempt", {
         path: location.pathname,
         timestamp: new Date().toISOString(),
-};
+      });
       
       navigate(fallbackPath, {
         state: { from: location.pathname },
@@ -85,7 +84,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 
   // Check role requirements if specified
   if (requiredRoles.length > 0) {
-    const userRole = (user as unknown).user_metadata?.role || "user";
+    const userRole = (user as any).user_metadata?.role || "user";
     const hasRequiredRole = requiredRoles.includes(userRole);
 
     if (!hasRequiredRole) {
@@ -125,14 +124,14 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 /**
  * Hook to check if user is authenticated
  */
-export const useAuthGuard = memo(() => {
+export const useAuthGuard = () => {
   const { user, isLoading } = useAuth();
   
   const isAuthenticated = !isLoading && !!user;
   
   const hasRole = (roles: string[]): boolean => {
     if (!user) return false;
-    const userRole = (user as unknown).user_metadata?.role || "user";
+    const userRole = (user as any).user_metadata?.role || "user";
     return roles.includes(userRole);
   };
 
@@ -142,7 +141,7 @@ export const useAuthGuard = memo(() => {
     } else {
       structuredLogger.warn("Action requires authentication", {
         action: callback.name || "anonymous",
-      };
+      });
     }
   };
 
@@ -173,4 +172,4 @@ export function withAuthGuard<P extends object>(
       <Component {...props} />
     </AuthGuard>
   );
-};
+}

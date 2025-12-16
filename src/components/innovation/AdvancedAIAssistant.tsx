@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,7 @@ interface QuickAction {
   prompt: string;
 }
 
-export const AdvancedAIAssistant = memo(() => {
+export const AdvancedAIAssistant = () => {
   const [conversation, setConversation] = useState<ConversationMessage[]>([
     {
       id: "1",
@@ -89,7 +88,7 @@ export const AdvancedAIAssistant = memo(() => {
     recentActions: ["Visualizou dashboard", "Analisou KPIs", "Criou workflow"],
     preferences: { language: "pt-BR", timezone: "America/Sao_Paulo" },
     workPatterns: { peakHours: "9-11", preferredTasks: ["analysis", "reports"] }
-  };
+  });
 
   const [quickActions] = useState<QuickAction[]>([
     { id: 1, label: "Análise de Performance", icon: BarChart3, prompt: "Faça uma análise detalhada da performance da equipe nos últimos 30 dias" },
@@ -214,7 +213,7 @@ export const AdvancedAIAssistant = memo(() => {
     case "warning": return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     case "opportunity": return <TrendingUp className="w-4 h-4 text-green-500" />;
     default: return <Lightbulb className="w-4 h-4 text-blue-500" />;
-    };
+    }
   };
 
   return (
@@ -286,7 +285,7 @@ export const AdvancedAIAssistant = memo(() => {
                 <Input
                   placeholder="Descreva o que precisa analisar ou otimizar..."
                   value={inputMessage}
-                  onChange={handleChange}
+                  onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />
@@ -333,7 +332,7 @@ export const AdvancedAIAssistant = memo(() => {
                     key={action.id}
                     variant="outline"
                     size="sm"
-                    onClick={() => handlehandleQuickAction}
+                    onClick={() => handleQuickAction(action)}
                     className="w-full justify-start h-auto p-3"
                   >
                     <IconComponent className="w-4 h-4 mr-2 flex-shrink-0" />

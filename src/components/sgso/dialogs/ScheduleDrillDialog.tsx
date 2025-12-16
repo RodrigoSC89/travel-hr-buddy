@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * Schedule Drill Dialog
  * Dialog to schedule emergency drills
  */
@@ -35,7 +34,7 @@ import { cn } from "@/lib/utils";
 interface ScheduleDrillDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDrillScheduled?: (drill: unknown: unknown: unknown) => void;
+  onDrillScheduled?: (drill: any) => void;
 }
 
 const DRILL_TYPES = [
@@ -68,12 +67,12 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
     participants: "",
     objectives: "",
     notes: "",
-});
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  });
+  };
 
   const handleSubmit = async () => {
     if (!date || !formData.type || !formData.coordinator) {
@@ -160,7 +159,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="time">Horário *</Label>
-              <Select value={formData.time} onValueChange={(v) => handleChange("time", v}>
+              <Select value={formData.time} onValueChange={(v) => handleChange("time", v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -179,7 +178,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="type">Tipo de Simulado *</Label>
-              <Select value={formData.type} onValueChange={(v) => handleChange("type", v}>
+              <Select value={formData.type} onValueChange={(v) => handleChange("type", v)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
@@ -194,7 +193,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="duration">Duração (minutos)</Label>
-              <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v}>
+              <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -218,7 +217,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Input
               id="location"
               value={formData.location}
-              onChange={handleChange}
+              onChange={(e) => handleChange("location", e.target.value)}
               placeholder="Ex: Convés principal, Praça de máquinas, etc."
             />
           </div>
@@ -232,7 +231,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Input
               id="coordinator"
               value={formData.coordinator}
-              onChange={handleChange}
+              onChange={(e) => handleChange("coordinator", e.target.value)}
               placeholder="Nome do responsável pela condução"
             />
           </div>
@@ -243,7 +242,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Textarea
               id="participants"
               value={formData.participants}
-              onChange={handleChange}
+              onChange={(e) => handleChange("participants", e.target.value)}
               placeholder="Liste os participantes ou equipes envolvidas..."
               rows={2}
             />
@@ -255,7 +254,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Textarea
               id="objectives"
               value={formData.objectives}
-              onChange={handleChange}
+              onChange={(e) => handleChange("objectives", e.target.value)}
               placeholder="Descreva os objetivos a serem alcançados..."
               rows={3}
             />
@@ -267,7 +266,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={handleChange}
+              onChange={(e) => handleChange("notes", e.target.value)}
               placeholder="Notas adicionais..."
               rows={2}
             />
@@ -275,7 +274,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
           <Button onClick={handleSubmit} disabled={isSubmitting}>
@@ -286,4 +285,4 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

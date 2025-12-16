@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -25,7 +25,7 @@ export default function TestDashboard() {
       })
       .catch(() => {
         setLogs(["Relatório de cobertura não disponível. Execute 'npm run test:coverage' para gerar."]);
-  };
+      });
   }, []);
 
   const validationChecks = [

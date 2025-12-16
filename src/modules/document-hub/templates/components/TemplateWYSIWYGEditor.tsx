@@ -48,7 +48,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-});
+  });
 
   if (!editor) {
     return null;
@@ -56,7 +56,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
 
   const insertVariable = (variable: string) => {
     editor.chain().focus().insertContent(`{{${variable}}}`).run();
-  });
+  };
 
   // Common document variables
   const commonVariables = [
@@ -165,7 +165,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
             {commonVariables.map((variable) => (
               <DropdownMenuItem
                 key={variable.value}
-                onClick={() => handleinsertVariable}
+                onClick={() => insertVariable(variable.value)}
               >
                 {variable.label} - {`{{${variable.value}}}`}
               </DropdownMenuItem>
@@ -178,4 +178,4 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
       <EditorContent editor={editor} />
     </div>
   );
-});
+};

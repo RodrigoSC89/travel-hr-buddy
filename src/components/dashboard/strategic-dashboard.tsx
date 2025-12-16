@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -233,10 +232,10 @@ const StrategicDashboard: React.FC = () => {
       title: "Dashboard Atualizado",
       description: "Dados atualizados com sucesso!",
     });
-  });
+  };
 
   // Export dashboard data
-  const handleExport = async (format: string, options?: unknown: unknown: unknown) => {
+  const handleExport = async (format: string, options?: any) => {
     setIsExporting(true);
     
     try {
@@ -275,7 +274,7 @@ const StrategicDashboard: React.FC = () => {
     });
     // Navigate to settings or open customization modal
     navigate("/settings?tab=dashboard");
-  });
+  };
 
   // Open alerts center
   const handleAlertsCenter = () => {
@@ -285,7 +284,7 @@ const StrategicDashboard: React.FC = () => {
     });
     // Navigate to alerts page or open alerts panel
     setActiveTab("alerts");
-  });
+  };
 
   // Global search handler
   const handleGlobalSearch = () => {
@@ -298,7 +297,7 @@ const StrategicDashboard: React.FC = () => {
     if (searchInput) {
       searchInput.focus();
     }
-  });
+  };
 
   // AI Insights handler
   const handleAIInsights = () => {
@@ -308,7 +307,7 @@ const StrategicDashboard: React.FC = () => {
     });
     // Navigate to AI insights or open insights panel
     setActiveTab("ai-insights");
-  });
+  };
 
   // Initialize dashboard
   useEffect(() => {
@@ -372,7 +371,7 @@ const StrategicDashboard: React.FC = () => {
             
             <div className="flex items-center gap-4">
               {/* Profile Selector */}
-              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as unknown}>
+              <Tabs value={selectedProfile} onValueChange={(value) => setSelectedProfile(value as any)}>
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="admin" className="flex items-center gap-2">
                     <Crown className="h-4 w-4" />
@@ -412,7 +411,7 @@ const StrategicDashboard: React.FC = () => {
               <Input
                 placeholder="Buscar métricas, alertas, atividades..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -509,7 +508,7 @@ const StrategicDashboard: React.FC = () => {
                       className={`p-3 rounded-lg border cursor-pointer hover:shadow-md transition-all ${
                         !alert.isRead ? "bg-muted/50" : ""
                       }`}
-                      onClick={() => alert.actionUrl && navigate(alert.actionUrl}
+                      onClick={() => alert.actionUrl && navigate(alert.actionUrl)}
                     >
                       <div className="flex items-start gap-3">
                         <div className={`p-1 rounded-full ${
@@ -624,7 +623,7 @@ const StrategicDashboard: React.FC = () => {
                       key={item.title}
                       variant="outline" 
                       className="h-20 flex flex-col items-center gap-2 hover:shadow-md transition-all"
-                      onClick={() => handlenavigate}
+                      onClick={() => navigate(item.route)}
                     >
                       <item.icon className={`h-6 w-6 ${item.color}`} />
                       <span className="text-sm font-medium">{item.title}</span>

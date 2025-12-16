@@ -1,4 +1,3 @@
-import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -73,35 +72,35 @@ const PRIORITY_OPTIONS: { value: PriorityType; label: string }[] = [
 
 const getActivityIcon = (type: WorkspaceActivity["type"]) => {
   switch (type) {
-  case "document": return <FileText className="h-4 w-4" />;
-  case "task": return <CheckCircle2 className="h-4 w-4" />;
-  case "user": return <Users className="h-4 w-4" />;
-  case "meeting": return <Video className="h-4 w-4" />;
-  case "message": return <MessageSquare className="h-4 w-4" />;
-  case "alert": return <AlertTriangle className="h-4 w-4" />;
-  case "maintenance": return <Wrench className="h-4 w-4" />;
-  default: return <Activity className="h-4 w-4" />;
+    case "document": return <FileText className="h-4 w-4" />;
+    case "task": return <CheckCircle2 className="h-4 w-4" />;
+    case "user": return <Users className="h-4 w-4" />;
+    case "meeting": return <Video className="h-4 w-4" />;
+    case "message": return <MessageSquare className="h-4 w-4" />;
+    case "alert": return <AlertTriangle className="h-4 w-4" />;
+    case "maintenance": return <Wrench className="h-4 w-4" />;
+    default: return <Activity className="h-4 w-4" />;
   }
 };
 
 const getActivityColor = (type: WorkspaceActivity["type"]) => {
   switch (type) {
-  case "document": return "bg-blue-500/10 text-blue-500";
-  case "task": return "bg-green-500/10 text-green-500";
-  case "user": return "bg-purple-500/10 text-purple-500";
-  case "meeting": return "bg-orange-500/10 text-orange-500";
-  case "message": return "bg-cyan-500/10 text-cyan-500";
-  case "alert": return "bg-red-500/10 text-red-500";
-  case "maintenance": return "bg-yellow-500/10 text-yellow-500";
-  default: return "bg-muted text-muted-foreground";
+    case "document": return "bg-blue-500/10 text-blue-500";
+    case "task": return "bg-green-500/10 text-green-500";
+    case "user": return "bg-purple-500/10 text-purple-500";
+    case "meeting": return "bg-orange-500/10 text-orange-500";
+    case "message": return "bg-cyan-500/10 text-cyan-500";
+    case "alert": return "bg-red-500/10 text-red-500";
+    case "maintenance": return "bg-yellow-500/10 text-yellow-500";
+    default: return "bg-muted text-muted-foreground";
   }
 };
 
 const getPriorityColor = (priority?: WorkspaceActivity["priority"]) => {
   switch (priority) {
-  case "high": return "destructive";
-  case "medium": return "secondary";
-  default: return "outline";
+    case "high": return "destructive";
+    case "medium": return "secondary";
+    default: return "outline";
   }
 };
 
@@ -139,15 +138,15 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
         const diffDays = diffTime / (1000 * 60 * 60 * 24);
         
         switch (dateRange) {
-        case "today":
-          if (diffDays > 1) return false;
-          break;
-        case "week":
-          if (diffDays > 7) return false;
-          break;
-        case "month":
-          if (diffDays > 30) return false;
-          break;
+          case "today":
+            if (diffDays > 1) return false;
+            break;
+          case "week":
+            if (diffDays > 7) return false;
+            break;
+          case "month":
+            if (diffDays > 30) return false;
+            break;
         }
       }
       
@@ -183,7 +182,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
       title: "Filtros limpos",
       description: "Mostrando todas as atividades",
     });
-  });
+  };
 
   const formatTime = (timestamp: string) => {
     try {
@@ -274,7 +273,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                           key={option.value}
                           variant={dateRange === option.value ? "default" : "outline"}
                           size="sm"
-                          onClick={handleSetDateRange}
+                          onClick={() => setDateRange(option.value as typeof dateRange)}
                           className="w-full"
                         >
                           {option.label}
@@ -295,13 +294,13 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                           key={type.value}
                           className={`flex items-center gap-2 p-2 rounded-md cursor-pointer transition-colors ${
                             selectedTypes.has(type.value) 
-                              ? "bg-primary/10 border border-primary/30" 
-                              : "bg-muted/50 hover:bg-muted"
+                              ? 'bg-primary/10 border border-primary/30' 
+                              : 'bg-muted/50 hover:bg-muted'
                           }`}
                         >
                           <Checkbox
                             checked={selectedTypes.has(type.value)}
-                            onCheckedChange={() => toggleType(type.value}
+                            onCheckedChange={() => toggleType(type.value)}
                           />
                           <span className="text-xs">{type.label}</span>
                         </label>
@@ -321,13 +320,13 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                           key={priority.value}
                           className={`flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors flex-1 ${
                             selectedPriorities.has(priority.value) 
-                              ? "bg-primary/10 border border-primary/30" 
-                              : "bg-muted/50 hover:bg-muted"
+                              ? 'bg-primary/10 border border-primary/30' 
+                              : 'bg-muted/50 hover:bg-muted'
                           }`}
                         >
                           <Checkbox
                             checked={selectedPriorities.has(priority.value)}
-                            onCheckedChange={() => togglePriority(priority.value}
+                            onCheckedChange={() => togglePriority(priority.value)}
                           />
                           <span className="text-xs">{priority.label}</span>
                         </label>
@@ -392,7 +391,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                             </div>
                             {activity.priority && activity.priority !== "low" && (
                               <Badge 
-                                variant={getPriorityColor(activity.priority) as unknown}
+                                variant={getPriorityColor(activity.priority) as any}
                                 className="text-xs flex-shrink-0"
                               >
                                 {activity.priority === "high" ? "Alta" : "Média"}

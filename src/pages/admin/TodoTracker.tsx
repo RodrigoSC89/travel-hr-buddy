@@ -3,7 +3,7 @@
  * PATCH 545 - Technical Debt Visualization
  */
 
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -209,7 +209,7 @@ export default function TodoTracker() {
             <Input
               placeholder="Search modules..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -218,7 +218,7 @@ export default function TodoTracker() {
                 key={cat.id}
                 variant={selectedCategory === cat.id ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetSelectedCategory}
+                onClick={() => setSelectedCategory(cat.id)}
               >
                 {cat.name}
                 <Badge variant="secondary" className="ml-2">{cat.count}</Badge>

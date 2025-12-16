@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,8 +31,8 @@ export interface CustomChecklistItem {
   isImperative: boolean;
   evidence: string;
   standards: string[];
-  applicableDPClass: ("DP1" | "DP2" | "DP3")[];
-  criticality: "Alta" | "Média" | "Baixa";
+  applicableDPClass: ('DP1' | 'DP2' | 'DP3')[];
+  criticality: 'Alta' | 'Média' | 'Baixa';
   createdAt: Date;
   createdBy?: string;
 }
@@ -62,7 +61,7 @@ const STANDARD_OPTIONS = [
   "STCW 2010", "NORMAM-13", "DNV-RU-SHIP", "MTS DP Guidance", "NI DPO Scheme"
 ];
 
-export const IMCAAuditManager = memo(function({
+export function IMCAAuditManager({
   customItems,
   customCategories,
   onAddItem,
@@ -115,7 +114,7 @@ export const IMCAAuditManager = memo(function({
       applicableDPClass: newItem.applicableDPClass || ["DP1", "DP2", "DP3"],
       criticality: newItem.criticality || "Média",
       createdAt: new Date()
-    });
+    };
 
     onAddItem(item);
     setNewItem({
@@ -133,7 +132,7 @@ export const IMCAAuditManager = memo(function({
       title: "Item adicionado",
       description: "Novo item de checklist adicionado com sucesso."
     });
-  });
+  };
 
   const handleUpdateItem = () => {
     if (!editingItem) return;
@@ -143,7 +142,7 @@ export const IMCAAuditManager = memo(function({
       title: "Item atualizado",
       description: "Item de checklist atualizado com sucesso."
     });
-  });
+  };
 
   const handleAddCategory = () => {
     if (!newCategory.code || !newCategory.name) {
@@ -163,7 +162,7 @@ export const IMCAAuditManager = memo(function({
       title: "Categoria criada",
       description: "Nova categoria de auditoria criada com sucesso."
     });
-  });
+  };
 
   const handleExportItems = () => {
     const exportData = {
@@ -171,11 +170,11 @@ export const IMCAAuditManager = memo(function({
       items: customItems,
       exportedAt: new Date().toISOString()
     };
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `imca-audit-custom-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `imca-audit-custom-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -183,7 +182,7 @@ export const IMCAAuditManager = memo(function({
       title: "Exportado",
       description: "Itens customizados exportados com sucesso."
     });
-  });
+  };
 
   const toggleStandard = (std: string) => {
     if (editingItem) {
@@ -199,7 +198,7 @@ export const IMCAAuditManager = memo(function({
     }
   };
 
-  const toggleDPClass = (dpClass: "DP1" | "DP2" | "DP3") => {
+  const toggleDPClass = (dpClass: 'DP1' | 'DP2' | 'DP3') => {
     if (editingItem) {
       const classes = editingItem.applicableDPClass.includes(dpClass)
         ? editingItem.applicableDPClass.filter(c => c !== dpClass)
@@ -304,13 +303,13 @@ export const IMCAAuditManager = memo(function({
                 <div className="space-y-2">
                   <Label>Classes DP Aplicáveis</Label>
                   <div className="flex gap-2">
-                    {(["DP1", "DP2", "DP3"] as const).map(dp => (
+                    {(['DP1', 'DP2', 'DP3'] as const).map(dp => (
                       <Button
                         key={dp}
                         type="button"
                         variant={(newItem.applicableDPClass || []).includes(dp) ? "default" : "outline"}
                         size="sm"
-                        onClick={() => handletoggleDPClass}
+                        onClick={() => toggleDPClass(dp)}
                       >
                         {dp}
                       </Button>
@@ -337,7 +336,7 @@ export const IMCAAuditManager = memo(function({
                         key={std}
                         variant={(newItem.standards || []).includes(std) ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => handletoggleStandard}
+                        onClick={() => toggleStandard(std)}
                       >
                         {std}
                       </Badge>
@@ -347,7 +346,7 @@ export const IMCAAuditManager = memo(function({
               </div>
             </ScrollArea>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsAddItemOpen}>
+              <Button variant="outline" onClick={() => setIsAddItemOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleAddItem} className="gap-2">
@@ -403,7 +402,7 @@ export const IMCAAuditManager = memo(function({
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsAddCategoryOpen}>
+              <Button variant="outline" onClick={() => setIsAddCategoryOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleAddCategory} className="gap-2">
@@ -439,7 +438,7 @@ export const IMCAAuditManager = memo(function({
                     variant="ghost"
                     size="icon"
                     className="h-4 w-4 ml-1"
-                    onClick={() => handleonDeleteCategory}
+                    onClick={() => onDeleteCategory(cat.code)}
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>
@@ -474,13 +473,13 @@ export const IMCAAuditManager = memo(function({
                 {customItems.map(item => (
                   <div 
                     key={item.id} 
-                    className={`p-4 rounded-lg border ${item.isImperative ? "border-destructive/50 bg-destructive/5" : "bg-muted/30"}`}
+                    className={`p-4 rounded-lg border ${item.isImperative ? 'border-destructive/50 bg-destructive/5' : 'bg-muted/30'}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2 flex-wrap">
                           <Badge variant="outline">{item.categoryCode}</Badge>
-                          <Badge variant={item.criticality === "Alta" ? "destructive" : item.criticality === "Média" ? "default" : "secondary"}>
+                          <Badge variant={item.criticality === 'Alta' ? 'destructive' : item.criticality === 'Média' ? 'default' : 'secondary'}>
                             {item.criticality}
                           </Badge>
                           {item.isImperative && (
@@ -513,7 +512,7 @@ export const IMCAAuditManager = memo(function({
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={handleSetEditingItem}
+                          onClick={() => setEditingItem(item)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -538,7 +537,7 @@ export const IMCAAuditManager = memo(function({
       </Card>
 
       {/* Edit Item Dialog */}
-      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null}>
+      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
         <DialogContent className="max-w-2xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Editar Item de Checklist</DialogTitle>
@@ -611,13 +610,13 @@ export const IMCAAuditManager = memo(function({
                 <div className="space-y-2">
                   <Label>Classes DP Aplicáveis</Label>
                   <div className="flex gap-2">
-                    {(["DP1", "DP2", "DP3"] as const).map(dp => (
+                    {(['DP1', 'DP2', 'DP3'] as const).map(dp => (
                       <Button
                         key={dp}
                         type="button"
                         variant={editingItem.applicableDPClass.includes(dp) ? "default" : "outline"}
                         size="sm"
-                        onClick={() => handletoggleDPClass}
+                        onClick={() => toggleDPClass(dp)}
                       >
                         {dp}
                       </Button>
@@ -644,7 +643,7 @@ export const IMCAAuditManager = memo(function({
                         key={std}
                         variant={editingItem.standards.includes(std) ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => handletoggleStandard}
+                        onClick={() => toggleStandard(std)}
                       >
                         {std}
                       </Badge>
@@ -655,7 +654,7 @@ export const IMCAAuditManager = memo(function({
             </ScrollArea>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetEditingItem}>
+            <Button variant="outline" onClick={() => setEditingItem(null)}>
               Cancelar
             </Button>
             <Button onClick={handleUpdateItem} className="gap-2">
@@ -667,4 +666,4 @@ export const IMCAAuditManager = memo(function({
       </Dialog>
     </div>
   );
-});
+}

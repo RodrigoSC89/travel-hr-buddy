@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Finance Analytics AI - Gestão Financeira Inteligente
  * - Análise de OPEX
  * - Previsão de budget
@@ -15,8 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
-  Brain, DollarSign, TrendingUp, TrendingDown,
-  BarChart3, Sparkles, Zap, Target, Calendar
+  Brain, DollarSign, TrendingUp, TrendingDown, PieChart,
+  BarChart3, AlertTriangle, Sparkles, Zap, Target, Calendar
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -38,7 +37,7 @@ interface CostOptimization {
   timeline: string;
 }
 
-export const FinanceAnalyticsAI = memo(function() {
+export function FinanceAnalyticsAI() {
   const { analyze, predict, suggest, isLoading } = useNautilusAI();
   const [optimizations, setOptimizations] = useState<CostOptimization[]>([]);
   const [forecast, setForecast] = useState<string>("");
@@ -141,10 +140,10 @@ export const FinanceAnalyticsAI = memo(function() {
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
-    case "easy": return "bg-green-500";
-    case "medium": return "bg-yellow-500";
-    case "hard": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "easy": return "bg-green-500";
+      case "medium": return "bg-yellow-500";
+      case "hard": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
@@ -276,8 +275,8 @@ export const FinanceAnalyticsAI = memo(function() {
                         <div
                           className={`h-full transition-all ${
                             cost.variance > 5 ? "bg-red-500" :
-                              cost.variance > 0 ? "bg-yellow-500" :
-                                "bg-green-500"
+                            cost.variance > 0 ? "bg-yellow-500" :
+                            "bg-green-500"
                           }`}
                           style={{ width: `${Math.min(100, (cost.actual / cost.budget) * 100)}%` }}
                         />
@@ -287,8 +286,8 @@ export const FinanceAnalyticsAI = memo(function() {
                       variant="outline"
                       className={
                         cost.variance > 5 ? "text-red-500" :
-                          cost.variance > 0 ? "text-yellow-500" :
-                            "text-green-500"
+                        cost.variance > 0 ? "text-yellow-500" :
+                        "text-green-500"
                       }
                     >
                       {cost.variance > 0 ? "+" : ""}{cost.variance.toFixed(1)}%
@@ -394,6 +393,6 @@ export const FinanceAnalyticsAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default FinanceAnalyticsAI;

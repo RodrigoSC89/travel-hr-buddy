@@ -7,7 +7,7 @@ interface FinancialChartProps {
 export default function FinancialChart({ data }: FinancialChartProps) {
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <BarChart data={data as unknown}>
+      <BarChart data={data as any}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />

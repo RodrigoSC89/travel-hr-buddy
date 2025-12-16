@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 536 - Coordination AI Engine v1.0
  * Multi-agent coordination system with priority-based task distribution
  */
@@ -161,7 +160,7 @@ const CoordinationAIEnginePage: React.FC = () => {
       completed: "bg-green-500",
       failed: "bg-red-500",
       timeout: "bg-orange-500",
-    });
+    };
     return colors[status] || "bg-gray-500";
   };
 
@@ -312,13 +311,13 @@ const CoordinationAIEnginePage: React.FC = () => {
                   <Input
                     id="agent-name"
                     value={newAgentName}
-                    onChange={handleChange}
+                    onChange={(e) => setNewAgentName(e.target.value)}
                     placeholder="e.g., Analyzer Agent 1"
                   />
                 </div>
                 <div>
                   <Label htmlFor="agent-type">Agent Type</Label>
-                  <Select value={newAgentType} onValueChange={(v) => setNewAgentType(v as AgentType}>
+                  <Select value={newAgentType} onValueChange={(v) => setNewAgentType(v as AgentType)}>
                     <SelectTrigger id="agent-type">
                       <SelectValue />
                     </SelectTrigger>
@@ -356,7 +355,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                   <Input
                     id="task-name"
                     value={newTaskName}
-                    onChange={handleChange}
+                    onChange={(e) => setNewTaskName(e.target.value)}
                     placeholder="e.g., Analyze sensor data"
                   />
                 </div>
@@ -365,7 +364,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                   <Input
                     id="task-type"
                     value={newTaskType}
-                    onChange={handleChange}
+                    onChange={(e) => setNewTaskType(e.target.value)}
                     placeholder="e.g., analysis"
                   />
                 </div>
@@ -379,7 +378,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                     min="1"
                     max="10"
                     value={newTaskPriority}
-                    onChange={handleChange}
+                    onChange={(e) => setNewTaskPriority(parseInt(e.target.value))}
                   />
                 </div>
                 <Button onClick={handleCreateTask} disabled={loading} className="w-full">

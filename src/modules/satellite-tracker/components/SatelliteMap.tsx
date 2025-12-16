@@ -1,12 +1,11 @@
 /**
-import { useEffect, useRef, useState, useCallback } from "react";;
  * PATCH 501: Satellite Map Component
  * Displays satellite position on interactive map
  * Optimized with lazy-loaded Mapbox (~350KB bundle savings)
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 
@@ -74,7 +73,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
 
         map.current.on("load", () => {
           if (mounted) setIsLoading(false);
-  });
+        });
       } catch (err) {
         console.error("Failed to load Mapbox:", err);
         if (mounted) {

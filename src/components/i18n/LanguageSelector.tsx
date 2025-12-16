@@ -3,33 +3,33 @@
  * Easy language switching for global users
  */
 
-import React from "react";
-import { motion } from "framer-motion";
-import { Globe, Check } from "lucide-react";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Globe, Check } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { useTranslation, SupportedLanguage } from "@/lib/i18n/translation-manager";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { useTranslation, SupportedLanguage } from '@/lib/i18n/translation-manager';
+import { cn } from '@/lib/utils';
 
 const languageFlags: Record<SupportedLanguage, string> = {
-  "pt-BR": "🇧🇷",
-  "en-US": "🇺🇸",
-  "es-ES": "🇪🇸",
-  "fr-FR": "🇫🇷",
-  "zh-CN": "🇨🇳",
+  'pt-BR': '🇧🇷',
+  'en-US': '🇺🇸',
+  'es-ES': '🇪🇸',
+  'fr-FR': '🇫🇷',
+  'zh-CN': '🇨🇳',
 };
 
 interface LanguageSelectorProps {
-  variant?: "icon" | "full";
+  variant?: 'icon' | 'full';
   className?: string;
 }
 
-export const LanguageSelector = memo(function({ variant = "icon", className }: LanguageSelectorProps) {
+export function LanguageSelector({ variant = 'icon', className }: LanguageSelectorProps) {
   const { language, changeLanguage, languages } = useTranslation();
 
   const currentLang = languages.find(l => l.code === language);
@@ -39,15 +39,15 @@ export const LanguageSelector = memo(function({ variant = "icon", className }: L
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size={variant === "icon" ? "icon" : "sm"}
+          size={variant === 'icon' ? 'icon' : 'sm'}
           className={cn(
             "gap-2",
-            variant === "full" && "min-w-[140px] justify-start",
+            variant === 'full' && "min-w-[140px] justify-start",
             className
           )}
         >
           <Globe className="w-4 h-4" />
-          {variant === "full" && (
+          {variant === 'full' && (
             <>
               <span className="text-lg">{languageFlags[language]}</span>
               <span className="text-sm">{currentLang?.name}</span>
@@ -60,7 +60,7 @@ export const LanguageSelector = memo(function({ variant = "icon", className }: L
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => handlechangeLanguage}
+            onClick={() => changeLanguage(lang.code)}
             className="flex items-center gap-3 cursor-pointer"
           >
             <span className="text-xl">{languageFlags[lang.code]}</span>
@@ -81,7 +81,7 @@ export const LanguageSelector = memo(function({ variant = "icon", className }: L
 }
 
 // Compact version for mobile
-export const LanguageSelectorCompact = memo(function() {
+export function LanguageSelectorCompact() {
   const { language, changeLanguage, languages } = useTranslation();
 
   return (
@@ -89,7 +89,7 @@ export const LanguageSelectorCompact = memo(function() {
       {languages.map((lang) => (
         <button
           key={lang.code}
-          onClick={() => handlechangeLanguage}
+          onClick={() => changeLanguage(lang.code)}
           className={cn(
             "p-2 rounded-lg transition-colors text-lg",
             language === lang.code
@@ -103,4 +103,4 @@ export const LanguageSelectorCompact = memo(function() {
       ))}
     </div>
   );
-});
+}

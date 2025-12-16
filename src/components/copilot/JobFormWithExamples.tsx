@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState } from "react";
 import { logger } from "@/lib/logger";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,7 +42,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
     // Reset form
     setComponent("");
     setDescription("");
-  });
+  };
 
   const handleSelectSuggestion = (suggestion: string) => {
     setDescription(suggestion);
@@ -50,7 +50,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
       title: "Exemplo aplicado",
       description: "A descrição foi preenchida com o exemplo selecionado.",
     });
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -71,7 +71,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
               id="component"
               placeholder="Componente (ex: 603.0004.02)"
               value={component}
-              onChange={handleChange}
+              onChange={(e) => setComponent(e.target.value)}
             />
           </div>
 
@@ -81,7 +81,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
               id="description"
               placeholder="Descreva o problema ou ação necessária..."
               value={description}
-              onChange={handleChange}
+              onChange={(e) => setDescription(e.target.value)}
               rows={4}
               className="resize-none"
             />

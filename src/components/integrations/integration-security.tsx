@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -137,7 +136,7 @@ export const IntegrationSecurity: React.FC = () => {
       title: "Política Atualizada",
       description: `${policy?.name} foi ${policy?.enabled ? "desativada" : "ativada"}`,
     });
-  });
+  };
 
   const runSecurityScan = () => {
     toast({
@@ -253,7 +252,7 @@ export const IntegrationSecurity: React.FC = () => {
                   <Button
                     variant={policy.enabled ? "default" : "outline"}
                     size="sm"
-                    onClick={() => handletogglePolicy}
+                    onClick={() => togglePolicy(policy.id)}
                   >
                     {policy.enabled ? "Ativo" : "Inativo"}
                   </Button>
@@ -300,7 +299,7 @@ export const IntegrationSecurity: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={handleSetShowApiKeys}
+                      onClick={() => setShowApiKeys(!showApiKeys)}
                     >
                       {showApiKeys ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>

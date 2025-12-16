@@ -1,8 +1,7 @@
-import { memo } from 'react';
 // Stub component for workflow AI features
 import { Card, CardContent } from "@/components/ui/card";
 
-export const KanbanAISuggestions = memo(function() {
+export function KanbanAISuggestions() {
   return (
     <Card>
       <CardContent className="p-6 text-center text-muted-foreground">
@@ -10,4 +9,4 @@ export const KanbanAISuggestions = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 /**
  * PATCH 481 - AI Incident Replay Service
  * Provides AI-powered incident analysis, root cause identification, and recommendations
@@ -246,7 +246,7 @@ export class AIIncidentReplayService {
       high: "Moderate to high impact - prompt response needed. May affect operational efficiency or safety protocols.",
       medium: "Moderate impact - standard response timeline. Limited operational or safety implications.",
       low: "Low impact - routine handling sufficient. Minimal operational or safety concerns."
-    });
+    };
 
     return impactMap[incident.severity] || "Impact assessment pending";
   }

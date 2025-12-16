@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -108,7 +107,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
       title: "Otimização de Escalas",
       description: "IA analisou e sugeriu otimizações para reduzir custos em 15% e melhorar bem-estar da tripulação.",
     });
-  });
+  };
 
   const generateGanttView = () => {
     const months: Date[] = [];
@@ -197,14 +196,14 @@ export const CrewScheduleVisualizer: React.FC = () => {
               <Button
                 variant={viewMode === "gantt" ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetViewMode}
+                onClick={() => setViewMode("gantt")}
               >
                 Gantt
               </Button>
               <Button
                 variant={viewMode === "calendar" ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetViewMode}
+                onClick={() => setViewMode("calendar")}
               >
                 Calendário
               </Button>
@@ -226,7 +225,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
               <Button
                 variant={selectedVessel === "all" ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetSelectedVessel}
+                onClick={() => setSelectedVessel("all")}
               >
                 Todas
               </Button>
@@ -235,7 +234,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
                   key={vessel}
                   variant={selectedVessel === vessel ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetSelectedVessel}
+                  onClick={() => setSelectedVessel(vessel)}
                 >
                   {vessel.replace("MV ", "")}
                 </Button>

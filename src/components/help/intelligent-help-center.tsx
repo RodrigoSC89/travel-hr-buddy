@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -217,7 +216,7 @@ export const IntelligentHelpCenter: React.FC = () => {
         .insert({
           knowledge_item_id: itemId || null,
           action_type: action,
-          session_data: data ? (data as unknown) : {},
+          session_data: data ? (data as any) : {},
           user_id: null // Seria auth.uid() se autenticado
         });
     } catch (error) {
@@ -272,13 +271,13 @@ export const IntelligentHelpCenter: React.FC = () => {
                 <Input
                   placeholder="Digite sua dúvida ou o que deseja aprender (ex: 'como criar escala?')"
                   value={searchQuery}
-                  onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && handleSmartSearch(searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSmartSearch(searchQuery)}
                   className="pl-12 text-lg h-14"
                 />
               </div>
               <Button 
-                onClick={() => handlehandleSmartSearch}
+                onClick={() => handleSmartSearch(searchQuery)}
                 disabled={isLoading}
                 className="h-14 px-8"
               >
@@ -349,7 +348,7 @@ export const IntelligentHelpCenter: React.FC = () => {
               <Button
                 key={module.id}
                 variant={activeModule === module.id ? "default" : "outline"}
-                onClick={handleSetActiveModule}
+                onClick={() => setActiveModule(module.id)}
                 className="flex items-center gap-2"
               >
                 <Icon className="w-4 h-4" />
@@ -483,7 +482,7 @@ export const IntelligentHelpCenter: React.FC = () => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={() => handlehandleExportMaterial}
+                        onClick={() => handleExportMaterial("pdf", tutorial)}
                       >
                         <Download className="w-4 h-4" />
                       </Button>

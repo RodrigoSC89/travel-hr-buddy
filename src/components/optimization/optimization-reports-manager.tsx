@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,7 +42,7 @@ interface OptimizationHistory {
   status: "success" | "partial" | "failed";
 }
 
-export const OptimizationReportsManager = memo(() => {
+export const OptimizationReportsManager = () => {
   const { toast } = useToast();
   
   const [reports, setReports] = useState<OptimizationReport[]>([
@@ -181,7 +180,7 @@ export const OptimizationReportsManager = memo(() => {
       description: "Relatório exportado em PDF com sucesso!",
       duration: 2000
     });
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -207,7 +206,7 @@ export const OptimizationReportsManager = memo(() => {
     case "monthly": return "bg-info/10 text-info border-info/20";
     case "quarterly": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    };
+    }
   };
 
   return (
@@ -221,7 +220,7 @@ export const OptimizationReportsManager = memo(() => {
         
         <div className="flex gap-2">
           <Button
-            onClick={() => handlegenerateReport}
+            onClick={() => generateReport("weekly")}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -229,7 +228,7 @@ export const OptimizationReportsManager = memo(() => {
             Relatório Semanal
           </Button>
           <Button
-            onClick={() => handlegenerateReport}
+            onClick={() => generateReport("monthly")}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -237,7 +236,7 @@ export const OptimizationReportsManager = memo(() => {
             Relatório Mensal
           </Button>
           <Button
-            onClick={() => handlegenerateReport}
+            onClick={() => generateReport("quarterly")}
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
@@ -342,7 +341,7 @@ export const OptimizationReportsManager = memo(() => {
                         </Badge>
                       ) : (
                         <Button
-                          onClick={() => handleexportReport}
+                          onClick={() => exportReport(report.id)}
                           size="sm"
                           className="flex items-center gap-1"
                         >

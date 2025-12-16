@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 452 - Mission Control Consolidated
  * Unified mission planning, execution, and logging system
  * Consolidates: mission-engine/, mission-logs/, missions/

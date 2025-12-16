@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ComplianceByVesselData {
@@ -11,7 +11,7 @@ interface ComplianceByVesselData {
   pendente: number;
 }
 
-export const ComplianceByVesselTable = memo(function() {
+export function ComplianceByVesselTable() {
   const [data, setData] = useState<ComplianceByVesselData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -127,4 +127,4 @@ export const ComplianceByVesselTable = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

@@ -17,7 +17,7 @@ export default function CollaborativeEditor() {
             <p className="text-muted-foreground">
               Please provide a valid document ID in the URL
             </p>
-            <Button onClick={() => handlenavigate}>
+            <Button onClick={() => navigate("/admin/documents")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Documents
             </Button>
@@ -40,7 +40,7 @@ export default function CollaborativeEditor() {
             </div>
             <Button 
               variant="outline" 
-              onClick={() => handlenavigate}
+              onClick={() => navigate("/admin/documents")}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

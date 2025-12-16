@@ -1,4 +1,4 @@
-import { memo, memo, useEffect, useMemo, useState, useCallback } from "react";;;
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -50,7 +50,7 @@ interface PriceHistory {
   source: string;
 }
 
-export const EnhancedHistoryStats = memo(function() {
+export function EnhancedHistoryStats() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [dateFilter, setDateFilter] = useState("30d");
@@ -154,11 +154,11 @@ export const EnhancedHistoryStats = memo(function() {
     const flightPrices = labels.map((date) => {
       const prices = groupedByDate[date].flight;
       return prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-  };
+    });
     const hotelPrices = labels.map((date) => {
       const prices = groupedByDate[date].hotel;
       return prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-  };
+    });
 
     return {
       labels,
@@ -192,11 +192,11 @@ export const EnhancedHistoryStats = memo(function() {
       }
       routeStats[item.route].count++;
       routeStats[item.route].totalPrice += item.price;
-  };
+    });
 
     Object.keys(routeStats).forEach((route) => {
       routeStats[route].avgPrice = routeStats[route].totalPrice / routeStats[route].count;
-  };
+    });
 
     const sortedRoutes = Object.entries(routeStats)
       .sort(([, a], [, b]) => b.avgPrice - a.avgPrice)
@@ -273,7 +273,7 @@ export const EnhancedHistoryStats = memo(function() {
       title: "CSV exportado",
       description: "O arquivo foi baixado com sucesso",
     });
-  });
+  };
 
   const exportToPDF = async () => {
     const { jsPDF, autoTable } = await loadJsPDF();
@@ -317,7 +317,7 @@ export const EnhancedHistoryStats = memo(function() {
     });
 
     // History table
-    const finalY = (doc as unknown).lastAutoTable?.finalY || 100;
+    const finalY = (doc as any).lastAutoTable?.finalY || 100;
     doc.setFontSize(14);
     doc.text("Histórico Detalhado", 14, finalY + 10);
     autoTable(doc, {
@@ -499,4 +499,4 @@ export const EnhancedHistoryStats = memo(function() {
       </Card>
     </div>
   );
-});
+}

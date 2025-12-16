@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -188,7 +187,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     setRecentSearches(prev => {
       const updated = [result.title, ...prev.filter(item => item !== result.title)].slice(0, 5);
       return updated;
-  };
+    });
 
     // Navegar
     navigate(result.path);
@@ -200,7 +199,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       description: `Abrindo ${result.title}...`,
       duration: 2000
     });
-  });
+  };
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {
@@ -241,7 +240,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
             <Input
               ref={inputRef}
               value={query}
-              onChange={handleChange}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar módulos, auditorias, relatórios... (use / para ativar)"
               className="pl-10 pr-16 h-12 text-base bg-background border-2 border-primary/20 focus:border-primary/40 text-foreground placeholder:text-muted-foreground"
               autoComplete="off"
@@ -280,7 +279,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                         ? "bg-primary/10 shadow-md scale-[1.02] border-primary/30 border-2"
                         : "bg-background/50 hover:bg-accent/50 hover:shadow-sm"
                     }`}
-                    onClick={() => handlehandleResultClick}
+                    onClick={() => handleResultClick(result)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">

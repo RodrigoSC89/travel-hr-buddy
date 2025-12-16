@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useState } from "react";;
  * PATCH 801/835 - Quick Actions Panel
  * Acesso rápido às principais funcionalidades - Otimizado
  */

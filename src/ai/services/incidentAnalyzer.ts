@@ -1,4 +1,3 @@
-
 /**
  * PATCH 133.0 - AI-based Incident Analyzer
  * PATCH 659 - TypeScript fixes applied
@@ -92,7 +91,7 @@ Critérios para riskLevel:
     // Fallback analysis
     return generateFallbackAnalysis(incidentDescription, additionalContext);
   }
-});
+};
 
 /**
  * Parse AI response and validate structure
@@ -123,7 +122,7 @@ const parseAnalysisResponse = (responseText: string): IncidentAnalysis => {
       confidence: typeof parsed.confidence === "number" 
         ? Math.max(0, Math.min(1, parsed.confidence))
         : 0.7
-    });
+    };
   } catch (error) {
     logger.error("Error parsing analysis response", error);
     throw error;

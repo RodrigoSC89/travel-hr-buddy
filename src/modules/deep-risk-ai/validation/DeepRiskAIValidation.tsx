@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 455 - Deep Risk AI Validation
  */
 
@@ -19,7 +18,7 @@ export default function DeepRiskAIValidation() {
 
   const toggleCheck = (key: keyof typeof checks) => {
     setChecks(prev => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   const allChecked = Object.values(checks).every(Boolean);
   const progress = Object.values(checks).filter(Boolean).length;
@@ -40,7 +39,7 @@ export default function DeepRiskAIValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.modelLoaded}
-              onCheckedChange={() => toggleCheck("modelLoaded"}
+              onCheckedChange={() => toggleCheck("modelLoaded")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -57,7 +56,7 @@ export default function DeepRiskAIValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.anomalyDetection}
-              onCheckedChange={() => toggleCheck("anomalyDetection"}
+              onCheckedChange={() => toggleCheck("anomalyDetection")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -74,7 +73,7 @@ export default function DeepRiskAIValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.timelineUI}
-              onCheckedChange={() => toggleCheck("timelineUI"}
+              onCheckedChange={() => toggleCheck("timelineUI")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -91,7 +90,7 @@ export default function DeepRiskAIValidation() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.dataPersistence}
-              onCheckedChange={() => toggleCheck("dataPersistence"}
+              onCheckedChange={() => toggleCheck("dataPersistence")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

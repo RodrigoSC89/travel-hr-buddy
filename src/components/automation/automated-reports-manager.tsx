@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,8 +32,8 @@ import { toast } from "sonner";
 interface AutomatedReport {
   id: string;
   name: string;
-  type: "compliance" | "performance" | "maintenance" | "crew" | "financial" | "custom";
-  schedule: "daily" | "weekly" | "monthly" | "quarterly";
+  type: 'compliance' | 'performance' | 'maintenance' | 'crew' | 'financial' | 'custom';
+  schedule: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   recipients: string[];
   isActive: boolean;
   lastRun?: string;
@@ -42,53 +42,53 @@ interface AutomatedReport {
 }
 
 const REPORT_TYPES = [
-  { value: "compliance", label: "Compliance & Auditoria" },
-  { value: "performance", label: "Performance Operacional" },
-  { value: "maintenance", label: "Manutenção (MMI)" },
-  { value: "crew", label: "Tripulação & RH" },
-  { value: "financial", label: "Financeiro" },
-  { value: "custom", label: "Personalizado" },
+  { value: 'compliance', label: 'Compliance & Auditoria' },
+  { value: 'performance', label: 'Performance Operacional' },
+  { value: 'maintenance', label: 'Manutenção (MMI)' },
+  { value: 'crew', label: 'Tripulação & RH' },
+  { value: 'financial', label: 'Financeiro' },
+  { value: 'custom', label: 'Personalizado' },
 ];
 
 const SCHEDULES = [
-  { value: "daily", label: "Diário", icon: "📅" },
-  { value: "weekly", label: "Semanal", icon: "📆" },
-  { value: "monthly", label: "Mensal", icon: "🗓️" },
-  { value: "quarterly", label: "Trimestral", icon: "📊" },
+  { value: 'daily', label: 'Diário', icon: '📅' },
+  { value: 'weekly', label: 'Semanal', icon: '📆' },
+  { value: 'monthly', label: 'Mensal', icon: '🗓️' },
+  { value: 'quarterly', label: 'Trimestral', icon: '📊' },
 ];
 
-export const AutomatedReportsManager = memo(() => {
+export const AutomatedReportsManager = () => {
   const [reports, setReports] = useState<AutomatedReport[]>([
     {
-      id: "1",
-      name: "Relatório Semanal de Compliance",
-      type: "compliance",
-      schedule: "weekly",
-      recipients: ["compliance@empresa.com"],
+      id: '1',
+      name: 'Relatório Semanal de Compliance',
+      type: 'compliance',
+      schedule: 'weekly',
+      recipients: ['compliance@empresa.com'],
       isActive: true,
-      lastRun: "2025-01-06T08:00:00",
-      nextRun: "2025-01-13T08:00:00",
+      lastRun: '2025-01-06T08:00:00',
+      nextRun: '2025-01-13T08:00:00',
       aiEnabled: true,
     },
     {
-      id: "2",
-      name: "Status de Manutenção Diário",
-      type: "maintenance",
-      schedule: "daily",
-      recipients: ["manutencao@empresa.com", "operacoes@empresa.com"],
+      id: '2',
+      name: 'Status de Manutenção Diário',
+      type: 'maintenance',
+      schedule: 'daily',
+      recipients: ['manutencao@empresa.com', 'operacoes@empresa.com'],
       isActive: true,
-      lastRun: "2025-01-07T06:00:00",
-      nextRun: "2025-01-08T06:00:00",
+      lastRun: '2025-01-07T06:00:00',
+      nextRun: '2025-01-08T06:00:00',
       aiEnabled: true,
     },
   ]);
 
   const [isCreating, setIsCreating] = useState(false);
   const [newReport, setNewReport] = useState({
-    name: "",
-    type: "compliance",
-    schedule: "weekly",
-    recipients: "",
+    name: '',
+    type: 'compliance',
+    schedule: 'weekly',
+    recipients: '',
     aiEnabled: true,
   });
 
@@ -100,25 +100,25 @@ export const AutomatedReportsManager = memo(() => {
 
   const handleCreateReport = () => {
     if (!newReport.name || !newReport.recipients) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error('Preencha todos os campos obrigatórios');
       return;
     }
 
     const report: AutomatedReport = {
       id: Date.now().toString(),
       name: newReport.name,
-      type: newReport.type as AutomatedReport["type"],
-      schedule: newReport.schedule as AutomatedReport["schedule"],
-      recipients: newReport.recipients.split(",").map(e => e.trim()),
+      type: newReport.type as AutomatedReport['type'],
+      schedule: newReport.schedule as AutomatedReport['schedule'],
+      recipients: newReport.recipients.split(',').map(e => e.trim()),
       isActive: true,
       nextRun: new Date(Date.now() + 86400000).toISOString(),
       aiEnabled: newReport.aiEnabled,
-    });
+    };
 
     setReports([...reports, report]);
     setIsCreating(false);
-    setNewReport({ name: "", type: "compliance", schedule: "weekly", recipients: "", aiEnabled: true });
-    toast.success("Relatório automatizado criado com sucesso!");
+    setNewReport({ name: '', type: 'compliance', schedule: 'weekly', recipients: '', aiEnabled: true });
+    toast.success('Relatório automatizado criado com sucesso!');
   };
 
   const toggleReport = (id: string) => {
@@ -126,7 +126,7 @@ export const AutomatedReportsManager = memo(() => {
       r.id === id ? { ...r, isActive: !r.isActive } : r
     ));
     const report = reports.find(r => r.id === id);
-    toast.success(report?.isActive ? "Relatório pausado" : "Relatório ativado");
+    toast.success(report?.isActive ? 'Relatório pausado' : 'Relatório ativado');
   };
 
   const confirmDeleteReport = (id: string) => {
@@ -137,7 +137,7 @@ export const AutomatedReportsManager = memo(() => {
   const deleteReport = () => {
     if (reportToDelete) {
       setReports(reports.filter(r => r.id !== reportToDelete));
-      toast.success("Relatório removido com sucesso");
+      toast.success('Relatório removido com sucesso');
       setDeleteDialogOpen(false);
       setReportToDelete(null);
     }
@@ -172,17 +172,17 @@ export const AutomatedReportsManager = memo(() => {
 
         if (response.ok) {
           const data = await response.json();
-          toast.success("Relatório gerado com análise de IA!", {
+          toast.success('Relatório gerado com análise de IA!', {
             description: `Enviado para ${report.recipients.length} destinatário(s).`
           });
         } else {
-          toast.success("Relatório gerado com sucesso!", {
+          toast.success('Relatório gerado com sucesso!', {
             description: `Enviado para ${report.recipients.length} destinatário(s).`
           });
         }
       } else {
         await new Promise(resolve => setTimeout(resolve, 1500));
-        toast.success("Relatório gerado com sucesso!", {
+        toast.success('Relatório gerado com sucesso!', {
           description: `Enviado para ${report.recipients.length} destinatário(s).`
         });
       }
@@ -195,7 +195,7 @@ export const AutomatedReportsManager = memo(() => {
       ));
     } catch (error) {
       console.error("Error generating report:", error);
-      toast.success("Relatório gerado com sucesso!");
+      toast.success('Relatório gerado com sucesso!');
     } finally {
       setGeneratingReport(null);
     }
@@ -224,8 +224,8 @@ export const AutomatedReportsManager = memo(() => {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
             const formattedSuggestions = parsed.suggestions
-              .map((s: unknown) => `• ${s.title}: ${s.description} (${s.schedule})`)
-              .join("\n\n");
+              .map((s: any) => `• ${s.title}: ${s.description} (${s.schedule})`)
+              .join('\n\n');
             setAiSuggestion(formattedSuggestions);
           } else {
             setAiSuggestion(data.result);
@@ -234,17 +234,17 @@ export const AutomatedReportsManager = memo(() => {
           setAiSuggestion(data.result || data.fallback);
         }
       } else {
-        setAiSuggestion("Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.");
+        setAiSuggestion('Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.');
       }
       
-      toast.success("Sugestões de IA geradas!");
+      toast.success('Sugestões de IA geradas!');
     } catch (error) {
       console.error("Error getting AI suggestion:", error);
-      setAiSuggestion("Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.");
-      toast.success("Sugestões carregadas");
+      setAiSuggestion('Sugestões: 1) Relatório de compliance semanal para auditores, 2) Status de manutenção diário para operações, 3) Análise de custos mensal para financeiro.');
+      toast.success('Sugestões carregadas');
     } finally {
       setIsLoadingAI(false);
-    });
+    }
   };
 
   return (
@@ -261,9 +261,9 @@ export const AutomatedReportsManager = memo(() => {
             ) : (
               <Bot className="w-4 h-4 mr-2" />
             )}
-            {isLoadingAI ? "Analisando..." : "Sugestões IA"}
+            {isLoadingAI ? 'Analisando...' : 'Sugestões IA'}
           </Button>
-          <Button onClick={handleSetIsCreating}>
+          <Button onClick={() => setIsCreating(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Novo Relatório
           </Button>
@@ -282,7 +282,7 @@ export const AutomatedReportsManager = memo(() => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={handleSetAiSuggestion}
+                onClick={() => setAiSuggestion(null)}
               >
                 ✕
               </Button>
@@ -350,7 +350,7 @@ export const AutomatedReportsManager = memo(() => {
               <Label>Habilitar análise de IA (insights automáticos)</Label>
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={handleSetIsCreating}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setIsCreating(false)}>Cancelar</Button>
               <Button onClick={handleCreateReport}>Criar Relatório</Button>
             </div>
           </CardContent>
@@ -409,7 +409,7 @@ export const AutomatedReportsManager = memo(() => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetDeleteDialogOpen}>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
               Cancelar
             </Button>
             <Button variant="destructive" onClick={deleteReport}>
@@ -439,7 +439,7 @@ const ReportCard = ({
   const scheduleInfo = SCHEDULES.find(s => s.value === report.schedule);
 
   return (
-    <Card className={!report.isActive ? "opacity-60" : ""}>
+    <Card className={!report.isActive ? 'opacity-60' : ''}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -473,7 +473,7 @@ const ReportCard = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => handleonRunNow}
+              onClick={() => onRunNow(report)}
               disabled={isGenerating}
             >
               {isGenerating ? (
@@ -481,20 +481,20 @@ const ReportCard = ({
               ) : (
                 <Download className="w-4 h-4 mr-1" />
               )}
-              {isGenerating ? "Gerando..." : "Gerar Agora"}
+              {isGenerating ? 'Gerando...' : 'Gerar Agora'}
             </Button>
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => handleonToggle}
-              title={report.isActive ? "Pausar" : "Ativar"}
+              onClick={() => onToggle(report.id)}
+              title={report.isActive ? 'Pausar' : 'Ativar'}
             >
               {report.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => handleonDelete}
+              onClick={() => onDelete(report.id)}
               title="Excluir"
             >
               <Trash2 className="w-4 h-4 text-destructive" />
@@ -503,11 +503,11 @@ const ReportCard = ({
         </div>
         {report.lastRun && (
           <div className="mt-3 pt-3 border-t text-xs text-muted-foreground flex items-center gap-4">
-            <span>Última execução: {new Date(report.lastRun).toLocaleString("pt-BR")}</span>
-            <span>Próxima: {new Date(report.nextRun).toLocaleString("pt-BR")}</span>
+            <span>Última execução: {new Date(report.lastRun).toLocaleString('pt-BR')}</span>
+            <span>Próxima: {new Date(report.nextRun).toLocaleString('pt-BR')}</span>
           </div>
         )}
       </CardContent>
     </Card>
   );
-});
+};

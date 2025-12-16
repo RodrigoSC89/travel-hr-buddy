@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -199,7 +198,7 @@ const SmartTooltipSystem: React.FC = () => {
       title: "Tour Iniciado",
       description: "Siga as instruções para conhecer o sistema",
     });
-  });
+  };
 
   const nextTourStep = () => {
     if (currentTour !== null && currentTour < tooltipDatabase.length - 1) {
@@ -216,7 +215,7 @@ const SmartTooltipSystem: React.FC = () => {
       title: "Tour Concluído",
       description: "Agora você conhece as principais funcionalidades!",
     });
-  });
+  };
 
   const openOptimizationPanel = () => {
     toast({
@@ -224,7 +223,7 @@ const SmartTooltipSystem: React.FC = () => {
       description: "Redirecionando para sugestões de melhoria...",
     });
     dismissAssistant("low-efficiency");
-  });
+  };
 
   const openIdentitySystem = () => {
     toast({
@@ -232,7 +231,7 @@ const SmartTooltipSystem: React.FC = () => {
       description: "Abrindo painel de customização...",
     });
     dismissAssistant("new-feature");
-  });
+  };
 
   const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {
@@ -269,7 +268,7 @@ const SmartTooltipSystem: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handledismissAssistant}
+                  onClick={() => dismissAssistant(assistant.id)}
                   className="h-auto p-1"
                 >
                   <X className="w-4 h-4" />
@@ -347,6 +346,7 @@ const SmartTooltipSystem: React.FC = () => {
         </div>
       )}
 
+
       {/* Painel de Ajuda */}
       {isHelpMode && currentTour === null && (
         <Card className="fixed bottom-20 left-4 z-30 w-80 glass-maritime shadow-navigation">
@@ -369,7 +369,7 @@ const SmartTooltipSystem: React.FC = () => {
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
-              onClick={() => handleshowAssistant}
+              onClick={() => showAssistant("performance-tip")}
             >
               <Zap className="w-4 h-4 mr-2" />
               Dicas de Produtividade
@@ -378,7 +378,7 @@ const SmartTooltipSystem: React.FC = () => {
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
-              onClick={() => handleshowAssistant}
+              onClick={() => showAssistant("new-feature")}
             >
               <Star className="w-4 h-4 mr-2" />
               Novidades do Sistema
@@ -394,6 +394,6 @@ const SmartTooltipSystem: React.FC = () => {
       )}
     </>
   );
-});
+};
 
 export default SmartTooltipSystem;

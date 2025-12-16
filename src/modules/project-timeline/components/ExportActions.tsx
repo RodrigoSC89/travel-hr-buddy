@@ -42,7 +42,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
         title: "No tasks to export",
         description: "Create some tasks first",
         variant: "destructive",
-});
+      });
       return;
     }
 
@@ -92,7 +92,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
     const inProgressTasks = tasks.filter(t => t.status === "in_progress").length;
     const pendingTasks = tasks.filter(t => t.status === "pending").length;
 
-    const finalY = (doc as unknown).lastAutoTable.finalY || 50;
+    const finalY = (doc as any).lastAutoTable.finalY || 50;
     doc.setFontSize(10);
     doc.text("Summary:", 14, finalY + 10);
     doc.text(`Total Tasks: ${tasks.length}`, 14, finalY + 16);
@@ -138,7 +138,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       // Format dates as YYYYMMDD
       const formatICSDate = (date: Date) => {
         return format(date, "yyyyMMdd");
-      });
+      };
 
       const event = [
         "BEGIN:VEVENT",
@@ -155,7 +155,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       ].join("\r\n");
 
       icsContent += "\r\n" + event;
-    };
+    });
 
     icsContent += "\r\nEND:VCALENDAR";
 
@@ -172,7 +172,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       title: "Calendar exported successfully",
       description: "Import the .ics file to your calendar application",
     });
-  });
+  };
 
   return (
     <div className="flex gap-2">

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -152,7 +151,7 @@ export const TenantUserManagement: React.FC = () => {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   const handleInviteUser = async () => {
     if (!newUserEmail || !newUserRole) {
@@ -170,11 +169,11 @@ export const TenantUserManagement: React.FC = () => {
       user_id: Date.now().toString(),
       email: newUserEmail,
       full_name: newUserEmail.split("@")[0],
-      role: newUserRole as unknown,
+      role: newUserRole as any,
       status: "pending",
       joined_at: new Date().toISOString(),
       last_seen: undefined
-    });
+    };
 
     setUsers(prev => [...prev, newUser]);
     setNewUserEmail("");
@@ -200,7 +199,7 @@ export const TenantUserManagement: React.FC = () => {
       title: "Função atualizada",
       description: "A função do usuário foi atualizada com sucesso.",
     });
-  });
+  };
 
   const handleStatusChange = (userId: string, newStatus: string) => {
     setUsers(prev => 
@@ -215,7 +214,7 @@ export const TenantUserManagement: React.FC = () => {
       title: "Status atualizado",
       description: "O status do usuário foi atualizado com sucesso.",
     });
-  });
+  };
 
   const formatLastSeen = (lastSeen?: string) => {
     if (!lastSeen) return "Nunca";
@@ -270,7 +269,7 @@ export const TenantUserManagement: React.FC = () => {
                   type="email"
                   placeholder="usuario@empresa.com"
                   value={newUserEmail}
-                  onChange={handleChange}
+                  onChange={(e) => setNewUserEmail(e.target.value)}
                 />
               </div>
               
@@ -291,7 +290,7 @@ export const TenantUserManagement: React.FC = () => {
               <div className="flex justify-end space-x-2">
                 <Button 
                   variant="outline" 
-                  onClick={handleSetIsInviteDialogOpen}
+                  onClick={() => setIsInviteDialogOpen(false)}
                 >
                   Cancelar
                 </Button>
@@ -369,7 +368,7 @@ export const TenantUserManagement: React.FC = () => {
                 <Input
                   placeholder="Buscar por nome ou email..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -473,26 +472,26 @@ export const TenantUserManagement: React.FC = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem 
-                            onClick={() => handlehandleRoleChange}
+                            onClick={() => handleRoleChange(user.id, "admin")}
                             disabled={user.role === "admin"}
                           >
                             Promover a Admin
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handlehandleRoleChange}
+                            onClick={() => handleRoleChange(user.id, "manager")}
                             disabled={user.role === "manager"}
                           >
                             Tornar Gerente
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handlehandleRoleChange}
+                            onClick={() => handleRoleChange(user.id, "member")}
                             disabled={user.role === "member"}
                           >
                             Tornar Membro
                           </DropdownMenuItem>
                           {user.status === "active" && (
                             <DropdownMenuItem 
-                              onClick={() => handlehandleStatusChange}
+                              onClick={() => handleStatusChange(user.id, "suspended")}
                               className="text-red-600"
                             >
                               Suspender
@@ -500,7 +499,7 @@ export const TenantUserManagement: React.FC = () => {
                           )}
                           {user.status === "suspended" && (
                             <DropdownMenuItem 
-                              onClick={() => handlehandleStatusChange}
+                              onClick={() => handleStatusChange(user.id, "active")}
                               className="text-green-600"
                             >
                               Reativar

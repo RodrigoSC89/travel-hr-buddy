@@ -3,7 +3,7 @@
  * Tests feedback processing from voice, text, and click channels
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ interface FeedbackEvent {
   timestamp: string;
 }
 
-export const Patch603Validation = memo(function() {
+export function Patch603Validation() {
   const [feedback, setFeedback] = useState<FeedbackEvent[]>([]);
   const [textInput, setTextInput] = useState("");
   const [behaviorScore, setBehaviorScore] = useState(0.5);
@@ -46,13 +46,13 @@ export const Patch603Validation = memo(function() {
       event,
       newScore,
       behaviorAdjustment: event.impact 
-    };
+    });
     
     toast({
       title: `${channel.charAt(0).toUpperCase() + channel.slice(1)} Feedback Recorded`,
       description: `Behavior score adjusted: ${(newScore * 100).toFixed(0)}%`,
     });
-  });
+  };
 
   const simulateVoice = () => {
     addFeedback("voice", "Voice command: Increase priority of mission alpha");
@@ -138,8 +138,8 @@ export const Patch603Validation = memo(function() {
           <Input
             placeholder="Enter text feedback..."
             value={textInput}
-            onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && submitText()
+            onChange={(e) => setTextInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && submitText()}
           />
           <Button onClick={submitText}>Send</Button>
         </div>
@@ -174,4 +174,4 @@ export const Patch603Validation = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

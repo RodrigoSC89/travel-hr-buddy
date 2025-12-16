@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +23,7 @@ export const LogisticsAIInsights = ({ operations }: LogisticsAIInsightsProps) =>
   const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
   const [delayPredictions, setDelayPredictions] = useState<any[]>([]);
   const [inventoryOptimizations, setInventoryOptimizations] = useState<any[]>([]);
-  const [insights, setInsights] = useState<unknown>(null);
+  const [insights, setInsights] = useState<any>(null);
 
   const handleOptimizeRoutes = async () => {
     const opts = await optimizeRoutes(operations);

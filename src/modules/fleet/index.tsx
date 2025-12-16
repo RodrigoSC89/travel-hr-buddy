@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,7 @@ const FleetModule = () => {
   const [crewAssignments, setCrewAssignments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedVessel, setSelectedVessel] = useState<unknown>(null);
+  const [selectedVessel, setSelectedVessel] = useState<any>(null);
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
 
   const loadData = async () => {
@@ -31,13 +30,12 @@ const FleetModule = () => {
       const { data: vesselsData } = await supabase.from("vessels").select("*").order("name").limit(50);
       setVessels(vesselsData || []);
 
-      const { data: maintenanceData } = await supabase.from("maintenance_schedules" as unknown).select("*").order("scheduled_date", { ascending: false }).limit(50);
+      const { data: maintenanceData } = await supabase.from("maintenance_schedules" as any).select("*").order("scheduled_date", { ascending: false }).limit(50);
       setMaintenance((maintenanceData as any[]) || []);
 
-      const { data: crewData } = await supabase.from("crew_assignments" as unknown).select("*").limit(100);
+      const { data: crewData } = await supabase.from("crew_assignments" as any).select("*").limit(100);
       setCrewAssignments((crewData as any[]) || []);
     } catch (error) {
-      console.error("Error loading fleet data:", error);
       console.error("Error loading fleet data:", error);
     } finally {
       setLoading(false);
@@ -98,8 +96,8 @@ const FleetModule = () => {
                 <DialogDescription>Adicione uma embarcação à frota</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                <div><Label>Nome *</Label><Input value={newVessel.name} onChange={handleChange}))} placeholder="MV Ocean Star" /></div>
-                <div><Label>IMO</Label><Input value={newVessel.imo_number} onChange={handleChange}))} placeholder="9123456" /></div>
+                <div><Label>Nome *</Label><Input value={newVessel.name} onChange={(e) => setNewVessel(p => ({ ...p, name: e.target.value }))} placeholder="MV Ocean Star" /></div>
+                <div><Label>IMO</Label><Input value={newVessel.imo_number} onChange={(e) => setNewVessel(p => ({ ...p, imo_number: e.target.value }))} placeholder="9123456" /></div>
                 <div><Label>Tipo</Label>
                   <Select value={newVessel.vessel_type} onValueChange={(v) => setNewVessel(p => ({ ...p, vessel_type: v }))}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
@@ -111,10 +109,10 @@ const FleetModule = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <div><Label>Localização</Label><Input value={newVessel.location} onChange={handleChange}))} placeholder="Porto de Santos" /></div>
+                <div><Label>Localização</Label><Input value={newVessel.location} onChange={(e) => setNewVessel(p => ({ ...p, location: e.target.value }))} placeholder="Porto de Santos" /></div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={handleSetShowAddDialog}>Cancelar</Button>
+                <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
                 <Button onClick={handleAddVessel}>Adicionar</Button>
               </DialogFooter>
             </DialogContent>
@@ -160,11 +158,11 @@ const FleetModule = () => {
 
         {/* AI Copilot Sidebar */}
         <div className="xl:col-span-1">
-          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => {}} />
+          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => console.log("Insight:", insight)} />
         </div>
       </div>
     </div>
   );
-});
+};
 
 export default FleetModule;

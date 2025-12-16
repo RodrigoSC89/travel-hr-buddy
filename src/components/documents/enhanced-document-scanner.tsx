@@ -1,4 +1,3 @@
-import { useCallback, useRef, useState } from "react";;
 import React, { useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -239,7 +238,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
         });
       }
     }
-  });
+  };
 
   const retakePhoto = () => {
     setCapturedImage(null);
@@ -261,7 +260,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
         description: "Texto extraído copiado para a área de transferência"
       });
     }
-  });
+  };
 
   const downloadResult = (result: DocumentScanResult) => {
     const element = document.createElement("a");
@@ -273,7 +272,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
       title: "Download iniciado",
       description: "Documento sendo baixado"
     });
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -363,7 +362,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                 Capturar Novamente
               </Button>
               <Button 
-                onClick={() => handleprocessDocument} 
+                onClick={() => processDocument(capturedImage)} 
                 className="gap-2"
               >
                 <Brain className="h-4 w-4" />
@@ -430,7 +429,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={handleSetSelectedResult}
+                        onClick={() => setSelectedResult(result)}
                         className="gap-1"
                       >
                         <Eye className="h-3 w-3" />
@@ -441,14 +440,14 @@ export const EnhancedDocumentScanner: React.FC = () => {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => handleshareResult}
+                          onClick={() => shareResult(result)}
                         >
                           <Share2 className="h-3 w-3" />
                         </Button>
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => handledownloadResult}
+                          onClick={() => downloadResult(result)}
                         >
                           <Download className="h-3 w-3" />
                         </Button>
@@ -471,7 +470,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={handleSetSelectedResult}
+                onClick={() => setSelectedResult(null)}
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -594,4 +593,4 @@ export const EnhancedDocumentScanner: React.FC = () => {
       )}
     </div>
   );
-});
+};

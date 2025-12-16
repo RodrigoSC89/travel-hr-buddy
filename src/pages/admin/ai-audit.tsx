@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -11,7 +11,7 @@ import { logger } from "@/lib/logger";
 
 export default function AIAuditDashboard() {
   const [logs, setLogs] = useState<any[]>([]);
-  const [metrics, setMetrics] = useState<unknown>(null);
+  const [metrics, setMetrics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedService, setSelectedService] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -34,7 +34,7 @@ export default function AIAuditDashboard() {
       // Fetch metrics
       const metricsData = await aiLogger.getMetrics(selectedService || undefined);
       setMetrics(metricsData);
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       logger.error("Error fetching AI audit data", { error, selectedService, selectedStatus });
       toast.error("Failed to fetch AI audit data");
     } finally {
@@ -119,7 +119,7 @@ export default function AIAuditDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Select value={selectedService || "all"} onValueChange={(value) => setSelectedService(value === "all" ? "" : value}>
+            <Select value={selectedService || "all"} onValueChange={(value) => setSelectedService(value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="All Services" />
               </SelectTrigger>
@@ -133,7 +133,7 @@ export default function AIAuditDashboard() {
               </SelectContent>
             </Select>
 
-            <Select value={selectedStatus || "all"} onValueChange={(value) => setSelectedStatus(value === "all" ? "" : value}>
+            <Select value={selectedStatus || "all"} onValueChange={(value) => setSelectedStatus(value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>

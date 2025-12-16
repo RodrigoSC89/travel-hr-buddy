@@ -113,6 +113,7 @@ class TravelPriceService {
     });
 
     if (error) {
+      console.error("[TravelPriceService] Error:", error);
       throw new Error(error.message || "Failed to fetch travel data");
     }
 
@@ -187,6 +188,7 @@ class TravelPriceService {
    */
   exportToCSV(data: any[], filename: string): void {
     if (!data || data.length === 0) {
+      console.warn("No data to export");
       return;
     }
 

@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Procurement Intelligence AI - Diferencial vs ShipServ
  * - Previsão de necessidades
  * - Análise de TCO
@@ -28,7 +27,9 @@ import {
   Search,
   Sparkles,
   Zap,
+  BarChart3,
   Clock,
+  CheckCircle,
   Star
 } from "lucide-react";
 import { toast } from "sonner";
@@ -65,7 +66,7 @@ interface SupplierSuggestion {
   aiScore: number;
 }
 
-export const ProcurementIntelligenceAI = memo(function() {
+export function ProcurementIntelligenceAI() {
   const { predict, analyze, suggest, isLoading } = useNautilusAI();
   const [predictions, setPredictions] = useState<PurchasePrediction[]>([]);
   const [suppliers, setSuppliers] = useState<SupplierSuggestion[]>([]);
@@ -290,13 +291,13 @@ export const ProcurementIntelligenceAI = memo(function() {
                             value={(item.currentStock / item.maxStock) * 100}
                             className={`h-2 ${
                               item.currentStock <= item.minStock ? "[&>div]:bg-red-500" :
-                                item.currentStock <= item.minStock * 1.5 ? "[&>div]:bg-yellow-500" :
-                                  "[&>div]:bg-green-500"
+                              item.currentStock <= item.minStock * 1.5 ? "[&>div]:bg-yellow-500" :
+                              "[&>div]:bg-green-500"
                             }`}
                           />
                         </div>
                         <div className="flex justify-end mt-2">
-                          <Button size="sm" variant="outline" onClick={() => handlefindSuppliers}>
+                          <Button size="sm" variant="outline" onClick={() => findSuppliers(item.name)}>
                             <Search className="h-3 w-3 mr-1" />
                             Buscar Fornecedores
                           </Button>
@@ -361,7 +362,7 @@ export const ProcurementIntelligenceAI = memo(function() {
                             <ShoppingCart className="h-3 w-3 mr-1" />
                             Criar Pedido
                           </Button>
-                          <Button size="sm" variant="outline" onClick={() => handlefindSuppliers}>
+                          <Button size="sm" variant="outline" onClick={() => findSuppliers(pred.itemName)}>
                             <Truck className="h-3 w-3 mr-1" />
                             Ver Fornecedores
                           </Button>
@@ -385,10 +386,10 @@ export const ProcurementIntelligenceAI = memo(function() {
                 <div className="flex gap-2">
                   <Input
                     value={searchTerm}
-                    onChange={handleChange}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Buscar item para encontrar fornecedores..."
                   />
-                  <Button onClick={() => handlefindSuppliers}>
+                  <Button onClick={() => findSuppliers(searchTerm)}>
                     <Search className="h-4 w-4" />
                   </Button>
                 </div>
@@ -451,6 +452,6 @@ export const ProcurementIntelligenceAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default ProcurementIntelligenceAI;

@@ -364,7 +364,7 @@ export async function runComplianceAudit(
       score,
       checks: allChecks,
       recommendations
-    });
+    };
 
     logger.info("✅ Compliance audit complete", {
       score,

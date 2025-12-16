@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -112,7 +111,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
       title: "Download Iniciado",
       description: "O download do seu relatório foi iniciado.",
     });
-  });
+  };
 
   const getStatusIcon = (status: Report["status"]) => {
     switch (status) {
@@ -215,7 +214,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
 
                 <Button 
                   className="w-full" 
-                  onClick={() => handlegenerateReport}
+                  onClick={() => generateReport(selectedModule)}
                   disabled={isGenerating}
                 >
                   <FileText className="h-4 w-4 mr-2" />
@@ -242,7 +241,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline"
-                        onClick={() => handlegenerateReport}
+                        onClick={() => generateReport(type.id)}
                         disabled={isGenerating}
                       >
                         <Download className="h-3 w-3" />
@@ -339,7 +338,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                         <Button 
                           size="sm" 
                           variant="outline"
-                          onClick={() => handledownloadReport}
+                          onClick={() => downloadReport(report.id)}
                         >
                           <Download className="h-3 w-3 mr-1" />
                           Baixar

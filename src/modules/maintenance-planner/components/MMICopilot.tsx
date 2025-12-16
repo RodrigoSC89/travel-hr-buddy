@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,12 +44,12 @@ interface CopilotResponse {
 }
 
 interface MMICopilotProps {
-  onJobCreated?: (job: unknown: unknown: unknown) => void;
+  onJobCreated?: (job: any) => void;
   context?: {
-    jobs?: unknown[];
-    equipamentos?: unknown[];
-    historico?: unknown[];
-    estoque?: unknown[];
+    jobs?: any[];
+    equipamentos?: any[];
+    historico?: any[];
+    estoque?: any[];
   };
 }
 
@@ -96,13 +95,13 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("mmi-copilot", {
+      const { data, error } = await supabase.functions.invoke('mmi-copilot', {
         body: { 
           message: messageText,
           context: context,
           action: detectAction(messageText)
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -120,7 +119,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       if (data.tipo_resposta === "criacao_job" && data.job && onJobCreated) {
         onJobCreated(data.job);
       }
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       console.error("Copilot error:", error);
       
       const errorMessage: CopilotMessage = {
@@ -158,19 +157,19 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
 
   const getCriticalityColor = (criticidade: string) => {
     switch (criticidade) {
-    case "alta": return "bg-red-500";
-    case "media": return "bg-yellow-500";
-    case "baixa": return "bg-green-500";
-    default: return "bg-gray-500";
+      case "alta": return "bg-red-500";
+      case "media": return "bg-yellow-500";
+      case "baixa": return "bg-green-500";
+      default: return "bg-gray-500";
     }
   };
 
   const getRiskColor = (risco: string) => {
     switch (risco) {
-    case "alto": return "text-red-500";
-    case "medio": return "text-yellow-500";
-    case "baixo": return "text-green-500";
-    default: return "text-gray-500";
+      case "alto": return "text-red-500";
+      case "medio": return "text-yellow-500";
+      case "baixo": return "text-green-500";
+      default: return "text-gray-500";
     }
   };
 
@@ -267,7 +266,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
                         variant="outline"
                         size="sm"
                         className="text-xs h-7"
-                        onClick={() => handlesendMessage}
+                        onClick={() => sendMessage(acao)}
                       >
                         {acao}
                       </Button>
@@ -301,7 +300,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
               variant="outline"
               size="sm"
               className="whitespace-nowrap text-xs"
-              onClick={() => handlesendMessage}
+              onClick={() => sendMessage(action.prompt)}
               disabled={isLoading}
             >
               {action.label}
@@ -313,12 +312,15 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       {/* Input */}
       <CardContent className="pt-0 pb-4">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage(input);
+          }}
           className="flex gap-2"
         >
           <Input
             value={input}
-            onChange={handleChange}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Ex: Criar job urgente para vazamento na bomba STBD..."
             disabled={isLoading}
             className="flex-1"

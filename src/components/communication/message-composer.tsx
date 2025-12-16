@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -76,7 +75,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   // Real-time validation
   useEffect(() => {
-    const errors: string[] = []);
+    const errors: string[] = [];
     
     if (messageContent.length > 5000) {
       errors.push("Mensagem excede o limite de 5000 caracteres");
@@ -195,7 +194,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       
       // Auto-set category based on template
       if (["general", "hr", "operations", "emergency"].includes(template.category)) {
-        setCategory(template.category as unknown);
+        setCategory(template.category as any);
       }
     }
   };
@@ -234,7 +233,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Sucesso",
         description: `${files.length} imagem(ns) adicionada(s)`
       });
-    });
+    };
     input.click();
   };
 
@@ -263,7 +262,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Sucesso",
         description: `${files.length} áudio(s) adicionado(s)`
       });
-    });
+    };
     input.click();
   };
 
@@ -272,7 +271,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       title: "Emoji Picker",
       description: "Funcionalidade de emojis em breve!"
     });
-  });
+  };
 
   const saveDraft = async () => {
     try {
@@ -389,7 +388,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               <Input
                 placeholder="Buscar usuários, canais ou departamentos..."
                 value={recipientSearch}
-                onChange={handleChange}
+                onChange={(e) => setRecipientSearch(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -410,7 +409,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         key={id} 
                         variant="secondary" 
                         className="gap-1 cursor-pointer"
-                        onClick={() => handlehandleRecipientToggle}
+                        onClick={() => handleRecipientToggle(id)}
                       >
                         <Icon className="h-3 w-3" />
                         {recipient.name}
@@ -436,7 +435,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         ? "bg-primary text-primary-foreground" 
                         : "hover:bg-muted"
                     }`}
-                    onClick={() => handlehandleRecipientToggle}
+                    onClick={() => handleRecipientToggle(recipient.id)}
                   >
                     <Icon className="h-4 w-4" />
                     <div className="flex-1 min-w-0">
@@ -456,7 +455,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Prioridade</Label>
-              <Select value={priority} onValueChange={(value: "low" | "normal" | "high" | "critical") => setPriority(value}>
+              <Select value={priority} onValueChange={(value: "low" | "normal" | "high" | "critical") => setPriority(value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -471,7 +470,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             
             <div>
               <Label>Categoria</Label>
-              <Select value={category} onValueChange={(value: "general" | "hr" | "operations" | "emergency") => setCategory(value}>
+              <Select value={category} onValueChange={(value: "general" | "hr" | "operations" | "emergency") => setCategory(value)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -502,7 +501,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             <Input
               placeholder="Assunto da mensagem..."
               value={subject}
-              onChange={handleChange}
+              onChange={(e) => setSubject(e.target.value)}
             />
           </div>
 
@@ -527,7 +526,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         <div
                           key={template.id}
                           className="p-3 border rounded cursor-pointer hover:bg-muted transition-colors"
-                          onClick={() => handlehandleTemplateSelect}
+                          onClick={() => handleTemplateSelect(template.id)}
                         >
                           <div className="flex items-center justify-between mb-2">
                             <h4 className="font-medium">{template.name}</h4>
@@ -561,7 +560,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             <Textarea
               placeholder="Digite sua mensagem aqui..."
               value={messageContent}
-              onChange={handleChange}
+              onChange={(e) => setMessageContent(e.target.value)}
               className="min-h-32"
             />
             
@@ -622,7 +621,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleremoveAttachment}
+                      onClick={() => removeAttachment(index)}
                     >
                       ×
                     </Button>

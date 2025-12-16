@@ -1,7 +1,6 @@
-import { useMemo } from "react";;
-import React, { useMemo } from "react";
-import { useConnectionAdaptive } from "@/hooks/useConnectionAdaptive";
-import { OptimizedSkeleton } from "@/components/unified/Skeletons.unified";
+import React, { useMemo } from 'react';
+import { useConnectionAdaptive } from '@/hooks/useConnectionAdaptive';
+import { OptimizedSkeleton } from '@/components/ui/OptimizedSkeleton';
 
 interface AdaptiveChartProps {
   children: React.ReactNode;
@@ -25,7 +24,7 @@ export const AdaptiveChart: React.FC<AdaptiveChartProps> = ({
   const { quality, recommendations } = useConnectionAdaptive();
 
   const shouldSimplify = useMemo(() => {
-    return quality === "slow" || quality === "offline" || dataPoints > 100;
+    return quality === 'slow' || quality === 'offline' || dataPoints > 100;
   }, [quality, dataPoints]);
 
   if (isLoading) {
@@ -36,7 +35,7 @@ export const AdaptiveChart: React.FC<AdaptiveChartProps> = ({
     );
   }
 
-  if (quality === "offline") {
+  if (quality === 'offline') {
     return (
       <div 
         style={{ height }} 
@@ -51,10 +50,10 @@ export const AdaptiveChart: React.FC<AdaptiveChartProps> = ({
 
   return (
     <div 
-      className={`w-full transition-opacity ${shouldSimplify ? "chart-simplified" : ""}`}
+      className={`w-full transition-opacity ${shouldSimplify ? 'chart-simplified' : ''}`}
       style={{ 
         height,
-        "--chart-animation-duration": recommendations.enableAnimations ? "300ms" : "0ms"
+        '--chart-animation-duration': recommendations.enableAnimations ? '300ms' : '0ms'
       } as React.CSSProperties}
     >
       {children}
@@ -74,14 +73,14 @@ export function useAdaptiveChartData<T>(data: T[], maxPoints?: number): T[] {
     let targetPoints: number;
     
     switch (quality) {
-    case "slow":
-      targetPoints = maxPoints ? Math.min(maxPoints, 20) : 20;
-      break;
-    case "moderate":
-      targetPoints = maxPoints ? Math.min(maxPoints, 50) : 50;
-      break;
-    default:
-      targetPoints = maxPoints || data.length;
+      case 'slow':
+        targetPoints = maxPoints ? Math.min(maxPoints, 20) : 20;
+        break;
+      case 'moderate':
+        targetPoints = maxPoints ? Math.min(maxPoints, 50) : 50;
+        break;
+      default:
+        targetPoints = maxPoints || data.length;
     }
 
     if (data.length <= targetPoints) return data;

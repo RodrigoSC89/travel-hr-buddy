@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   Wrench, 
@@ -14,9 +14,12 @@ import {
   Calendar, 
   AlertTriangle,
   CheckCircle,
+  Clock,
   Plus,
   QrCode,
   Gauge,
+  Battery,
+  Thermometer,
   Zap,
   Fuel,
   Activity,
@@ -231,10 +234,10 @@ export const PeotramEquipmentManager: React.FC = () => {
                   <Input id="equipment-location" placeholder="Local de instalação" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsNewEquipmentOpen}>
+                  <Button variant="outline" onClick={() => setIsNewEquipmentOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSetIsNewEquipmentOpen}>
+                  <Button onClick={() => setIsNewEquipmentOpen(false)}>
                     Cadastrar
                   </Button>
                 </div>

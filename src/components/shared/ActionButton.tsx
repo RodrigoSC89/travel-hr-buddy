@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * ActionButton - Reusable button with integrated action handling
  * Provides consistent behavior across all modules
  */
@@ -18,7 +17,7 @@ interface ActionButtonProps extends Omit<ButtonProps, "onClick"> {
   children: React.ReactNode;
 }
 
-export const ActionButton = memo(function({
+export function ActionButton({
   action,
   successMessage,
   errorMessage = "Ocorreu um erro. Tente novamente.",

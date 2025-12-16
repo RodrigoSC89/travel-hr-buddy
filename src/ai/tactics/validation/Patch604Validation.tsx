@@ -3,7 +3,7 @@
  * Tests dynamic tactic optimization with before/after metrics
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +27,7 @@ interface TacticOptimization {
   improvement: number;
 }
 
-export const Patch604Validation = memo(function() {
+export function Patch604Validation() {
   const [optimizations, setOptimizations] = useState<TacticOptimization[]>([]);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const { toast } = useToast();
@@ -73,6 +73,7 @@ export const Patch604Validation = memo(function() {
         description: `${newOpts.length} tactics optimized with ${avgImprovement}% avg improvement`,
       });
       
+      console.log("PATCH 604 ✅ Tactic optimizations:", newOpts);
     }, 2000);
   };
 
@@ -171,4 +172,4 @@ export const Patch604Validation = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

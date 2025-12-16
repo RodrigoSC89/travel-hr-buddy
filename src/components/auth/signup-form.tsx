@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +28,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
         title: "Erro",
         description: "Preencha todos os campos",
         variant: "destructive",
-});
+      });
       return;
     }
 
@@ -84,7 +83,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
                 type="text"
                 placeholder="Seu nome completo"
                 value={name}
-                onChange={handleChange}
+                onChange={(e) => setName(e.target.value)}
                 className="pl-10"
                 disabled={isLoading}
               />
@@ -100,7 +99,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
                 type="email"
                 placeholder="seu@email.com"
                 value={email}
-                onChange={handleChange}
+                onChange={(e) => setEmail(e.target.value)}
                 className="pl-10"
                 disabled={isLoading}
               />
@@ -116,7 +115,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
                 type={showPassword ? "text" : "password"}
                 placeholder="Sua senha (min. 6 caracteres)"
                 value={password}
-                onChange={handleChange}
+                onChange={(e) => setPassword(e.target.value)}
                 className="pl-10 pr-10"
                 disabled={isLoading}
               />
@@ -125,7 +124,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
                 variant="ghost"
                 size="sm"
                 className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0"
-                onClick={handleSetShowPassword}
+                onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </Button>
@@ -141,7 +140,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
                 type={showPassword ? "text" : "password"}
                 placeholder="Confirme sua senha"
                 value={confirmPassword}
-                onChange={handleChange}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="pl-10"
                 disabled={isLoading}
               />

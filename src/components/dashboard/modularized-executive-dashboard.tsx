@@ -1,5 +1,4 @@
 /**
-import { useState } from "react";;
  * Modularized Executive Dashboard
  * PATCHES 622-626 - Performance-optimized dashboard with lazy loading
  */
@@ -7,7 +6,7 @@ import { useState } from "react";;
 import React, { Suspense, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, Layers, TrendingUp } from "lucide-react";
 import { KPIErrorBoundary } from "./kpis/KPIErrorBoundary";
 import { LayoutGrid } from "./LayoutGrid";
@@ -51,7 +50,7 @@ function KPILoadingFallback({ message }: { message: string }) {
   );
 }
 
-export const ModularizedExecutiveDashboard = memo(function() {
+export function ModularizedExecutiveDashboard() {
   const [refreshKey, setRefreshKey] = useState(0);
   
   // PATCH 623: Performance monitoring
@@ -59,6 +58,7 @@ export const ModularizedExecutiveDashboard = memo(function() {
     componentName: "ModularizedExecutiveDashboard",
     threshold: 3000,
     onSlowRender: (time) => {
+      console.warn(`Dashboard took ${time}ms to render - exceeds 3s threshold`);
     }
   });
 
@@ -87,8 +87,9 @@ export const ModularizedExecutiveDashboard = memo(function() {
    * PATCH 626: Auto-heal function
    */
   const handleAutoHeal = () => {
+    console.log("[Dashboard] Auto-heal triggered, forcing re-render");
     setRefreshKey(prev => prev + 1);
-  });
+  };
 
   return (
     <div className="space-y-6 p-6" data-dashboard-content key={refreshKey}>
@@ -229,4 +230,4 @@ export const ModularizedExecutiveDashboard = memo(function() {
       </Card>
     </div>
   );
-});
+}

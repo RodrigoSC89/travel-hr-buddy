@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +27,7 @@ interface DocumentTemplate {
   description: string;
   category: string;
   content: string;
-  variables: unknown[];
+  variables: any[];
   version: number;
   is_active: boolean;
   created_at: string;
@@ -92,7 +92,7 @@ export default function DocumentTemplates() {
   const fetchTemplates = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("document_templates")
         .select("*")
         .eq("is_active", true)
@@ -114,7 +114,7 @@ export default function DocumentTemplates() {
 
   const fetchGeneratedDocuments = async () => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("generated_documents")
         .select("*")
         .order("generated_at", { ascending: false })
@@ -129,7 +129,7 @@ export default function DocumentTemplates() {
 
   const fetchTemplateVersions = async (templateId: string) => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("template_versions")
         .select("*")
         .eq("template_id", templateId)
@@ -149,7 +149,7 @@ export default function DocumentTemplates() {
     Object.entries(variableValues).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       preview = preview.replace(regex, value || `[${key}]`);
-  };
+    });
     
     setPreviewContent(preview);
   };
@@ -158,7 +158,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) {
       // Create new template
       try {
-        const { error } = await (supabase as unknown)
+        const { error } = await (supabase as any)
           .from("document_templates")
           .insert({
             name: templateName,
@@ -187,7 +187,7 @@ export default function DocumentTemplates() {
     } else {
       // Update existing template (create new version)
       try {
-        const { error } = await (supabase as unknown).rpc("create_template_version", {
+        const { error } = await (supabase as any).rpc("create_template_version", {
           p_template_id: selectedTemplate.id,
           p_content: templateContent,
           p_variables: extractVariables(templateContent),
@@ -218,7 +218,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) return;
 
     try {
-      const { data, error } = await (supabase as unknown).rpc("generate_document_from_template", {
+      const { data, error } = await (supabase as any).rpc("generate_document_from_template", {
         p_template_id: selectedTemplate.id,
         p_name: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
         p_variable_values: variableValues,
@@ -247,7 +247,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) return;
 
     try {
-      const { error } = await (supabase as unknown).rpc("rollback_template_version", {
+      const { error } = await (supabase as any).rpc("rollback_template_version", {
         p_template_id: selectedTemplate.id,
         p_version: version
       });
@@ -271,7 +271,7 @@ export default function DocumentTemplates() {
     }
   };
 
-  const extractVariables = (content: string): unknown[] => {
+  const extractVariables = (content: string): any[] => {
     const matches = content.match(/\{\{([a-zA-Z0-9_]+)\}\}/g) || [];
     const uniqueVars = [...new Set(matches.map(m => m.slice(2, -2)))];
     
@@ -291,7 +291,7 @@ export default function DocumentTemplates() {
     // In production, this would trigger actual export
     // For now, just mark as exported
     try {
-      const { error } = await (supabase as unknown).rpc("export_document", {
+      const { error } = await (supabase as any).rpc("export_document", {
         p_document_id: documentId,
         p_file_url: `/exports/${documentId}.${format}`
       });
@@ -321,7 +321,7 @@ export default function DocumentTemplates() {
             Create and manage document templates with dynamic variables
           </p>
         </div>
-        <Button onClick={handleSetSelectedTemplate}>
+        <Button onClick={() => setSelectedTemplate(null)}>
           <Plus className="mr-2 h-4 w-4" />
           New Template
         </Button>
@@ -343,7 +343,7 @@ export default function DocumentTemplates() {
                     className={`cursor-pointer hover:bg-accent transition-colors ${
                       selectedTemplate?.id === template.id ? "border-primary" : ""
                     }`}
-                    onClick={handleSetSelectedTemplate}
+                    onClick={() => setSelectedTemplate(template)}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between">
@@ -379,7 +379,7 @@ export default function DocumentTemplates() {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={handleSetShowPreview}
+                  onClick={() => setShowPreview(!showPreview)}
                 >
                   <Eye className="mr-2 h-4 w-4" />
                   {showPreview ? "Hide" : "Show"} Preview
@@ -409,7 +409,7 @@ export default function DocumentTemplates() {
                     <Input
                       id="name"
                       value={templateName}
-                      onChange={handleChange}
+                      onChange={(e) => setTemplateName(e.target.value)}
                       placeholder="Enter template name"
                     />
                   </div>
@@ -436,7 +436,7 @@ export default function DocumentTemplates() {
                     <Input
                       id="description"
                       value={templateDescription}
-                      onChange={handleChange}
+                      onChange={(e) => setTemplateDescription(e.target.value)}
                       placeholder="Enter description"
                     />
                   </div>
@@ -446,7 +446,7 @@ export default function DocumentTemplates() {
                     <Textarea
                       id="content"
                       value={templateContent}
-                      onChange={handleChange}
+                      onChange={(e) => setTemplateContent(e.target.value)}
                       placeholder="Enter template content. Use {{variable_name}} for dynamic values."
                       className="min-h-[300px] font-mono text-sm"
                     />
@@ -479,7 +479,11 @@ export default function DocumentTemplates() {
                       <Input
                         id={variable.name}
                         value={variableValues[variable.name] || ""}
-                        onChange={handleChange})
+                        onChange={(e) =>
+                          setVariableValues({
+                            ...variableValues,
+                            [variable.name]: e.target.value
+                          })
                         }
                         placeholder={`Enter ${variable.name}`}
                       />
@@ -511,7 +515,7 @@ export default function DocumentTemplates() {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => handlerollbackVersion}
+                              onClick={() => rollbackVersion(version.version)}
                             >
                               Restore
                             </Button>
@@ -556,7 +560,7 @@ export default function DocumentTemplates() {
                           variant="outline" 
                           size="sm" 
                           className="flex-1"
-                          onClick={() => handleexportDocument}
+                          onClick={() => exportDocument(doc.id, "pdf")}
                         >
                           <Download className="mr-2 h-3 w-3" />
                           PDF
@@ -565,7 +569,7 @@ export default function DocumentTemplates() {
                           variant="outline" 
                           size="sm" 
                           className="flex-1"
-                          onClick={() => handleexportDocument}
+                          onClick={() => exportDocument(doc.id, "docx")}
                         >
                           <Download className="mr-2 h-3 w-3" />
                           DOCX

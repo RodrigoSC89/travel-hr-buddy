@@ -78,7 +78,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleonMarkAsRead}
+                        onClick={() => onMarkAsRead(notification.id)}
                         disabled={loading}
                       >
                         <Check className="w-4 h-4" />
@@ -93,4 +93,4 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

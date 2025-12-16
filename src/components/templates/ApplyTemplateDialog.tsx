@@ -1,5 +1,4 @@
 /**
-import { useEffect, useMemo, useState, useCallback } from "react";;
  * PATCH 409: Apply Template Dialog Component
  * Dialog for applying templates to documents with real-time preview
  */
@@ -42,7 +41,7 @@ interface ApplyTemplateDialogProps {
   onApply?: (result: string) => void;
 }
 
-export const ApplyTemplateDialog = memo(function({
+export function ApplyTemplateDialog({
   open,
   onOpenChange,
   templateContent,
@@ -84,7 +83,7 @@ export const ApplyTemplateDialog = memo(function({
       extractedVariables.forEach(varName => {
         // Try to use auto-fill suggestions
         initialVars[varName] = autoFillSuggestions[varName] || "";
-  };
+      });
       setVariables(initialVars);
     }
   }, [open, extractedVariables, autoFillSuggestions]);
@@ -98,7 +97,7 @@ export const ApplyTemplateDialog = memo(function({
       title: "Auto-fill applied",
       description: "Common variables have been filled automatically",
     });
-  });
+  };
 
   const handleVariableChange = (varName: string, value: string) => {
     setVariables(prev => ({
@@ -143,7 +142,7 @@ export const ApplyTemplateDialog = memo(function({
       });
       onOpenChange(false);
     }
-  });
+  };
 
   const getVariableLabel = (varName: string): string => {
     return TemplateApplicationService.COMMON_VARIABLES[varName as keyof typeof TemplateApplicationService.COMMON_VARIABLES] || varName;
@@ -162,7 +161,7 @@ export const ApplyTemplateDialog = memo(function({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "edit" | "preview"}>
+        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "edit" | "preview")}>
           <div className="flex items-center justify-between">
             <TabsList>
               <TabsTrigger value="edit" className="flex items-center gap-2">
@@ -206,7 +205,7 @@ export const ApplyTemplateDialog = memo(function({
                       <Input
                         id={varName}
                         value={variables[varName] || ""}
-                        onChange={handleChange}
+                        onChange={(e) => handleVariableChange(varName, e.target.value)}
                         placeholder={`Enter ${getVariableLabel(varName)}`}
                       />
                     </div>
@@ -244,7 +243,7 @@ export const ApplyTemplateDialog = memo(function({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handlehandleExport}
+                onClick={() => handleExport("TXT")}
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
@@ -253,7 +252,7 @@ export const ApplyTemplateDialog = memo(function({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handlehandleExport}
+                onClick={() => handleExport("HTML")}
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
@@ -264,7 +263,7 @@ export const ApplyTemplateDialog = memo(function({
         </Tabs>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button onClick={handleApply} disabled={!appliedResult.success}>
@@ -288,4 +287,4 @@ function getBadgeVariant(severity: string): BadgeVariant {
   default:
     return "secondary";
   }
-});
+}

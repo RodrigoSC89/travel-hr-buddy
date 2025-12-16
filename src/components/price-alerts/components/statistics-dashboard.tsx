@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +24,7 @@ interface AlertMetrics {
   categories: { [key: string]: number };
 }
 
-export const StatisticsDashboard = memo(() => {
+export const StatisticsDashboard = () => {
   const { user } = useAuth();
   const [statistics, setStatistics] = useState<UserStatistics>({
     total_alerts: 0,
@@ -38,7 +37,7 @@ export const StatisticsDashboard = memo(() => {
     average_discount: 0,
     best_deal: null,
     categories: {},
-  };
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -139,7 +138,7 @@ export const StatisticsDashboard = memo(() => {
         ))}
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">

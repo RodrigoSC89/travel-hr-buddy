@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -102,7 +101,7 @@ const FloatingMenu = () => {
           description: "Abrindo relatórios e sincronização global"
         });
       }
-    });
+    }
   ];
 
   return (
@@ -113,8 +112,8 @@ const FloatingMenu = () => {
             key={index}
             className={`transform transition-all duration-500 ${isVisible ? "translate-x-0" : "translate-x-16"}`}
             style={{ transitionDelay: `${action.delay}ms` }}
-            onMouseEnter={() => setHoveredIndex(index}
-            onMouseLeave={() => setHoveredIndex(-1}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(-1)}
           >
             <div className="relative group">
               {/* Tooltip */}
@@ -251,7 +250,7 @@ const StatusWidget = () => {
   );
 };
 
-export const InteractiveOverlay = memo(() => {
+export const InteractiveOverlay = () => {
   return (
     <>
       <FloatingMenu />

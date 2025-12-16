@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -42,7 +41,7 @@ export const PWAStatus: React.FC = () => {
 
   // Check if app is installable
   React.useEffect(() => {
-    const handler = (e: unknown) => {
+    const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);

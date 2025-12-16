@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -103,7 +102,7 @@ export const OperationalCommandCenter: React.FC = () => {
       .limit(8);
 
     if (error) throw error;
-    setMetrics((data || []).map((metric: unknown) => ({
+    setMetrics((data || []).map((metric: any) => ({
       ...metric,
       trend: metric.trend as "increasing" | "decreasing" | "stable"
     })));
@@ -118,7 +117,7 @@ export const OperationalCommandCenter: React.FC = () => {
       .limit(10);
 
     if (error) throw error;
-    setAlerts((data || []).map((alert: unknown) => ({
+    setAlerts((data || []).map((alert: any) => ({
       ...alert,
       severity: alert.severity as "low" | "medium" | "high" | "critical",
       status: alert.status as "active" | "acknowledged" | "resolved"
@@ -323,13 +322,13 @@ export const OperationalCommandCenter: React.FC = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleacknowledgeAlert}
+                          onClick={() => acknowledgeAlert(alert.id)}
                         >
                           Reconhecer
                         </Button>
                         <Button
                           size="sm"
-                          onClick={() => handleresolveAlert}
+                          onClick={() => resolveAlert(alert.id)}
                         >
                           Resolver
                         </Button>
@@ -410,7 +409,7 @@ export const OperationalCommandCenter: React.FC = () => {
             </div>
             <Button
               variant={realTimeEnabled ? "default" : "outline"}
-              onClick={handleSetRealTimeEnabled}
+              onClick={() => setRealTimeEnabled(!realTimeEnabled)}
             >
               {realTimeEnabled ? (
                 <>

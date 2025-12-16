@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -319,7 +318,7 @@ export const DPAIAdvisor: React.FC = () => {
                             {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-purple-500" />}
                           </div>
                           <div className={`p-3 rounded-lg ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                            <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: message.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br/>") }} />
+                            <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>') }} />
                             {message.references && message.references.length > 0 && (
                               <div className="mt-2 pt-2 border-t border-border/50">
                                 <p className="text-xs text-muted-foreground mb-1">Referências:</p>
@@ -332,13 +331,13 @@ export const DPAIAdvisor: React.FC = () => {
                             )}
                             {message.role === "assistant" && message.id !== "welcome" && (
                               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "positive")}>
                                   <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-green-500 fill-green-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
                                   <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleCopy}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleCopy(message.content)}>
                                   <Copy className="h-3 w-3" />
                                 </Button>
                               </div>
@@ -366,7 +365,7 @@ export const DPAIAdvisor: React.FC = () => {
                   <Input
                     placeholder="Digite sua pergunta sobre DP..."
                     value={input}
-                    onChange={handleChange}
+                    onChange={(e) => setInput(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleSend()}
                     disabled={isLoading}
                   />
@@ -394,7 +393,7 @@ export const DPAIAdvisor: React.FC = () => {
                   key={q.id}
                   variant="outline"
                   className="w-full justify-start text-left h-auto py-2 px-3"
-                  onClick={() => handlehandleQuickQuestion}
+                  onClick={() => handleQuickQuestion(q.question)}
                 >
                   <div className="flex items-start gap-2">
                     {q.icon}

@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 113.0 - Compliance Checklist & Auto-Auditor
  * Compliance Checklist - Regulatory compliance tracking with AI auditing
  */
@@ -50,8 +49,8 @@ interface ComplianceRecord {
   days_since_completion?: number;
   findings_count?: number;
   recommendations_count?: number;
-  findings?: unknown[];
-  recommendations?: unknown[];
+  findings?: any[];
+  recommendations?: any[];
 }
 
 const ComplianceChecklist = () => {
@@ -68,32 +67,32 @@ const ComplianceChecklist = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from("compliance_dashboard" as unknown)
+        .from("compliance_dashboard" as any)
         .select("*");
 
       if (error) throw error;
 
       // Also fetch full details for records with findings/recommendations
       const recordsWithDetails = await Promise.all(
-        (data || []).map(async (record: unknown) => {
+        (data || []).map(async (record: any) => {
           const { data: fullRecord } = await supabase
-            .from("compliance_records" as unknown)
+            .from("compliance_records" as any)
             .select("findings, recommendations")
             .eq("id", record.id)
             .single();
           
           return {
             ...record,
-            findings: (fullRecord as unknown)?.findings || [],
-            recommendations: (fullRecord as unknown)?.recommendations || []
+            findings: (fullRecord as any)?.findings || [],
+            recommendations: (fullRecord as any)?.recommendations || []
           };
         })
       );
 
-      setRecords(recordsWithDetails as unknown);
+      setRecords(recordsWithDetails as any);
       
       // PATCH 549: Call loadAIInsights after records are loaded
-      await loadAIInsightsInternal(recordsWithDetails as unknown);
+      await loadAIInsightsInternal(recordsWithDetails as any);
     } catch (error) {
       console.error("Error loading compliance records:", error);
       toast({
@@ -119,7 +118,7 @@ const ComplianceChecklist = () => {
     await loadAIInsightsInternal(records);
   };
 
-  const loadAIInsightsInternal = async (currentRecords: unknown[]) => {
+  const loadAIInsightsInternal = async (currentRecords: any[]) => {
     try {
       const nonCompliantCount = currentRecords.filter(r => r.risk_level === "non_compliant").length;
       const riskCount = currentRecords.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
@@ -195,7 +194,7 @@ const ComplianceChecklist = () => {
       record.vessel_name?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesType && matchesStatus && matchesRisk && matchesSearch;
-  };
+  });
 
   const types = Array.from(new Set(records.map(r => r.checklist_type)));
 
@@ -297,7 +296,7 @@ const ComplianceChecklist = () => {
               <Input
                 placeholder="Search checklists..."
                 value={searchQuery}
-                onChange={handleChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
               />
             </div>
@@ -431,7 +430,7 @@ const ComplianceChecklist = () => {
                           Findings ({record.findings.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.findings.slice(0, 3).map((finding: unknown, idx: number) => (
+                          {record.findings.slice(0, 3).map((finding: any, idx: number) => (
                             <div key={idx} className="text-sm pl-6 text-muted-foreground">
                               <span className="font-medium">{finding.item}:</span> {finding.issue}
                               {finding.severity && (
@@ -458,7 +457,7 @@ const ComplianceChecklist = () => {
                           Recommendations ({record.recommendations.length})
                         </h4>
                         <div className="space-y-1">
-                          {record.recommendations.slice(0, 2).map((rec: unknown, idx: number) => (
+                          {record.recommendations.slice(0, 2).map((rec: any, idx: number) => (
                             <div key={idx} className="text-sm pl-6 text-muted-foreground">
                               • {rec.recommendation}
                               {rec.priority && (

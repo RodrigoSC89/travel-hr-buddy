@@ -166,7 +166,7 @@ export const useVoiceNavigation = () => {
         "innovation": "Inovação",
         "intelligence": "Inteligência",
         "optimization": "Otimização"
-      });
+      };
 
       const moduleName = moduleNames[intent.module] || intent.module;
       
@@ -196,6 +196,7 @@ export const useVoiceNavigation = () => {
       return { success: false };
     }
 
+
     // Analisar comando
     const intent = parseVoiceCommand(command);
     
@@ -215,7 +216,7 @@ export const useVoiceNavigation = () => {
       success,
       intent,
       action: intent.action || "navigation"
-    });
+    };
   }, [parseVoiceCommand, executeNavigation, toast]);
 
   // Obter sugestões de comandos
@@ -229,7 +230,7 @@ export const useVoiceNavigation = () => {
       "Acessar relatórios",
       "Abrir configurações",
       "Mostrar analytics"
-    ]);
+    ];
   }, []);
 
   // Verificar se um comando é válido

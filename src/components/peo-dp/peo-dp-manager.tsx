@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -192,7 +191,7 @@ export const PeoDpManager: React.FC = () => {
     setIsWizardOpen(true);
   };
 
-  const handleWizardComplete = async (data: unknown) => {
+  const handleWizardComplete = async (data: any) => {
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");
   };
@@ -208,6 +207,7 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
+    console.log("Audit saved:", { items, score });
     toast.success("Auditoria salva como rascunho");
   };
 
@@ -222,7 +222,7 @@ export const PeoDpManager: React.FC = () => {
       status: "concluido",
       items,
       score,
-      scoreBySection: {} as unknown,
+      scoreBySection: {} as any,
       recommendations: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -235,6 +235,7 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleChecklistSave = (version: PEODPChecklistVersion) => {
+    console.log("Checklist saved:", version);
     setIsChecklistEditorOpen(false);
   };
 
@@ -286,8 +287,8 @@ export const PeoDpManager: React.FC = () => {
           status: asogStatus,
           statusLabel: asogStatus.toUpperCase(),
           statusDescription: asogStatus === "green" ? "Operações Normais" : 
-            asogStatus === "blue" ? "Advisory" : 
-              asogStatus === "yellow" ? "Degradado" : "Emergência",
+                            asogStatus === "blue" ? "Advisory" : 
+                            asogStatus === "yellow" ? "Degradado" : "Emergência",
           environmentalLimits: {
             windSpeed: { current: 12, limit: 25, unit: "kt" },
             waveHeight: { current: 1.8, limit: 3.5, unit: "m" },
@@ -381,7 +382,7 @@ export const PeoDpManager: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as unknown} className="space-y-6">
+      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
           <TabsList className="flex flex-wrap gap-1 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs px-2 py-1">
@@ -469,7 +470,7 @@ export const PeoDpManager: React.FC = () => {
           </TabsList>
 
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleSetIsAuditDialogOpen}>
+            <Button variant="outline" onClick={() => setIsAuditDialogOpen(true)}>
               <ClipboardCheck className="h-4 w-4 mr-2" />
               Nova Auditoria
             </Button>
@@ -626,7 +627,7 @@ export const PeoDpManager: React.FC = () => {
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                       selectedPlan?.id === plan.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                     }`}
-                    onClick={handleSetSelectedPlan}
+                    onClick={() => setSelectedPlan(plan)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -675,7 +676,7 @@ export const PeoDpManager: React.FC = () => {
                       Histórico de auditorias realizadas com checklist baseado no programa Petrobras
                     </CardDescription>
                   </div>
-                  <Button onClick={handleSetIsAuditDialogOpen}>
+                  <Button onClick={() => setIsAuditDialogOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Nova Auditoria
                   </Button>
@@ -689,7 +690,7 @@ export const PeoDpManager: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="mt-4"
-                      onClick={handleSetIsAuditDialogOpen}
+                      onClick={() => setIsAuditDialogOpen(true)}
                     >
                       Iniciar Primeira Auditoria
                     </Button>
@@ -861,12 +862,12 @@ export const PeoDpManager: React.FC = () => {
                 id="vesselName"
                 placeholder="Ex: PSV Atlantic Explorer"
                 value={newAuditVessel}
-                onChange={handleChange}
+                onChange={(e) => setNewAuditVessel(e.target.value)}
               />
             </div>
             <div className="space-y-2">
               <Label>Classe DP</Label>
-              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as unknown}>
+              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as any)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -885,7 +886,7 @@ export const PeoDpManager: React.FC = () => {
             </div>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={handleSetIsAuditDialogOpen}>
+            <Button variant="outline" onClick={() => setIsAuditDialogOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleStartAudit}>
@@ -904,10 +905,10 @@ export const PeoDpManager: React.FC = () => {
           </DialogHeader>
           <PeoDpWizard
             onComplete={handleWizardComplete}
-            onCancel={() => setIsWizardOpen(false}
+            onCancel={() => setIsWizardOpen(false)}
           />
         </DialogContent>
       </Dialog>
     </div>
   );
-});
+};

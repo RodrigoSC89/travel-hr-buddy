@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,7 @@ interface TrialTest {
   isRequired: boolean;
   frequency: string;
   lastExecuted?: Date;
-  result?: "pass" | "fail" | "pending";
+  result?: 'pass' | 'fail' | 'pending';
   evidence?: string[];
   notes?: string;
 }
@@ -155,21 +154,21 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
+export function IMCAAuditTrials({ selectedDPClass }: Props) {
   const { toast } = useToast();
   const [tests, setTests] = useState<TrialTest[]>(ANNUAL_TRIAL_TESTS);
   const [selectedTest, setSelectedTest] = useState<TrialTest | null>(null);
   const [isExecuteOpen, setIsExecuteOpen] = useState(false);
 
   const [executionData, setExecutionData] = useState({
-    result: "pending" as "pass" | "fail" | "pending",
-    notes: "",
+    result: 'pending' as 'pass' | 'fail' | 'pending',
+    notes: '',
     evidenceFiles: [] as string[]
   });
 
-  const passedTests = tests.filter(t => t.result === "pass").length;
-  const failedTests = tests.filter(t => t.result === "fail").length;
-  const pendingTests = tests.filter(t => !t.result || t.result === "pending").length;
+  const passedTests = tests.filter(t => t.result === 'pass').length;
+  const failedTests = tests.filter(t => t.result === 'fail').length;
+  const pendingTests = tests.filter(t => !t.result || t.result === 'pending').length;
   const progressPercent = Math.round((passedTests / tests.length) * 100);
 
   const handleExecuteTest = () => {
@@ -178,30 +177,30 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
     const updatedTests = tests.map(t => 
       t.id === selectedTest.id 
         ? { 
-          ...t, 
-          result: executionData.result,
-          notes: executionData.notes,
-          lastExecuted: new Date()
-        }
+            ...t, 
+            result: executionData.result,
+            notes: executionData.notes,
+            lastExecuted: new Date()
+          }
         : t
     );
 
     setTests(updatedTests);
     setIsExecuteOpen(false);
     setSelectedTest(null);
-    setExecutionData({ result: "pending", notes: "", evidenceFiles: [] });
+    setExecutionData({ result: 'pending', notes: '', evidenceFiles: [] });
 
     toast({
-      title: executionData.result === "pass" ? "Teste Aprovado" : "Teste Registrado",
-      description: `${selectedTest.name} - Resultado: ${executionData.result === "pass" ? "PASSOU" : executionData.result === "fail" ? "FALHOU" : "PENDENTE"}`
+      title: executionData.result === 'pass' ? "Teste Aprovado" : "Teste Registrado",
+      description: `${selectedTest.name} - Resultado: ${executionData.result === 'pass' ? 'PASSOU' : executionData.result === 'fail' ? 'FALHOU' : 'PENDENTE'}`
     });
-  });
+  };
 
   const getResultIcon = (result?: string) => {
     switch (result) {
-    case "pass": return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-    case "fail": return <XCircle className="h-5 w-5 text-red-600" />;
-    default: return <Clock className="h-5 w-5 text-amber-600" />;
+      case 'pass': return <CheckCircle2 className="h-5 w-5 text-green-600" />;
+      case 'fail': return <XCircle className="h-5 w-5 text-red-600" />;
+      default: return <Clock className="h-5 w-5 text-amber-600" />;
     }
   };
 
@@ -276,7 +275,7 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
                   {category} Tests
                 </CardTitle>
                 <CardDescription>
-                  {categoryTests.filter(t => t.result === "pass").length} de {categoryTests.length} aprovados
+                  {categoryTests.filter(t => t.result === 'pass').length} de {categoryTests.length} aprovados
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -285,9 +284,9 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
                     <div 
                       key={test.id}
                       className={`p-4 rounded-lg border transition-colors ${
-                        test.result === "pass" ? "bg-green-500/5 border-green-500/30" :
-                          test.result === "fail" ? "bg-red-500/5 border-red-500/30" :
-                            "bg-muted/30 hover:bg-muted/50"
+                        test.result === 'pass' ? 'bg-green-500/5 border-green-500/30' :
+                        test.result === 'fail' ? 'bg-red-500/5 border-red-500/30' :
+                        'bg-muted/30 hover:bg-muted/50'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4">
@@ -312,20 +311,20 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
                             </span>
                             {test.lastExecuted && (
                               <span>
-                                Executado: {test.lastExecuted.toLocaleDateString("pt-BR")}
+                                Executado: {test.lastExecuted.toLocaleDateString('pt-BR')}
                               </span>
                             )}
                           </div>
                         </div>
                         <Button
-                          variant={test.result === "pass" ? "outline" : "default"}
+                          variant={test.result === 'pass' ? "outline" : "default"}
                           size="sm"
                           onClick={() => {
                             setSelectedTest(test);
                             setIsExecuteOpen(true);
                           }}
                         >
-                          {test.result ? "Rever" : "Executar"}
+                          {test.result ? 'Rever' : 'Executar'}
                         </Button>
                       </div>
                     </div>
@@ -418,7 +417,7 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
                 </div>
               </div>
 
-              {executionData.result === "fail" && (
+              {executionData.result === 'fail' && (
                 <div className="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
                   <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
                   <div className="text-sm">
@@ -433,7 +432,7 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
           )}
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsExecuteOpen}>
+            <Button variant="outline" onClick={() => setIsExecuteOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleExecuteTest}>
@@ -444,4 +443,4 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
       </Dialog>
     </div>
   );
-});
+}

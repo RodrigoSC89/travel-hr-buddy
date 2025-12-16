@@ -1,5 +1,4 @@
 /**
-import { useContext, useState, useCallback } from "react";;
  * Global Brain Provider - Permite acesso ao Nautilus Brain de qualquer lugar
  */
 
@@ -14,18 +13,18 @@ interface BrainContextType {
 
 const BrainContext = createContext<BrainContextType | undefined>(undefined);
 
-export const useBrain = memo(() => {
+export const useBrain = () => {
   const context = useContext(BrainContext);
   if (!context) {
     throw new Error("useBrain must be used within GlobalBrainProvider");
   }
   return context;
-});
+};
 
 interface GlobalBrainProviderProps {
   children: ReactNode;
   showTrigger?: boolean;
-};
+}
 
 export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({ 
   children, 

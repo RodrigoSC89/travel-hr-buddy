@@ -1,9 +1,8 @@
-import { memo } from 'react';
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 
 // Dashboard Skeleton
-export const DashboardSkeleton = memo(function() {
+export function DashboardSkeleton() {
   return (
     <div className="space-y-6 p-6 animate-fade-in">
       {/* Header */}
@@ -56,7 +55,7 @@ export const DashboardSkeleton = memo(function() {
 }
 
 // Table/List Skeleton
-export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
     <div className="rounded-lg border animate-fade-in">
       {/* Header */}
@@ -85,7 +84,7 @@ export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
 }
 
 // Form Skeleton
-export const FormSkeleton = memo(function() {
+export function FormSkeleton() {
   return (
     <div className="space-y-6 max-w-2xl animate-fade-in">
       <Skeleton className="h-8 w-48 mb-6" />
@@ -113,7 +112,7 @@ export const FormSkeleton = memo(function() {
 }
 
 // Profile/Detail Skeleton
-export const ProfileSkeleton = memo(function() {
+export function ProfileSkeleton() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
@@ -151,7 +150,7 @@ export const ProfileSkeleton = memo(function() {
 }
 
 // Map/Chart Skeleton
-export const ChartSkeleton = memo(function() {
+export function ChartSkeleton() {
   return (
     <div className="rounded-lg border bg-card p-6 animate-fade-in">
       <div className="flex justify-between items-center mb-4">
@@ -178,7 +177,7 @@ export const ChartSkeleton = memo(function() {
 }
 
 // Generic Page Skeleton
-export const PageSkeleton = memo(function() {
+export function PageSkeleton() {
   return (
     <div className="space-y-6 p-6 animate-fade-in">
       <div className="flex justify-between items-center">
@@ -213,4 +212,4 @@ export const PageSkeleton = memo(function() {
       </div>
     </div>
   );
-});
+}

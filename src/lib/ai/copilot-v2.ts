@@ -141,22 +141,22 @@ export async function executeCopilotCommand(
   logger.info("🤖 Executing Copilot command", { commandId, context });
 
   switch (commandId) {
-  case "explain-nc":
-    return await explainNonConformance(context);
-  case "check-compliance":
-    return await checkComplianceStatus(context);
-  case "predict-risk":
-    return await predictRisks(context);
-  case "verify-evidence":
-    return await verifyEvidenceChain(context);
-  case "explain-report":
-    return await explainReport(context);
-  case "suggest-actions":
-    return await suggestCorrectiveActions(context);
-  case "training-mode":
-    return await startTrainingMode(context);
-  default:
-    return { success: false, message: "Command not implemented" };
+    case "explain-nc":
+      return await explainNonConformance(context);
+    case "check-compliance":
+      return await checkComplianceStatus(context);
+    case "predict-risk":
+      return await predictRisks(context);
+    case "verify-evidence":
+      return await verifyEvidenceChain(context);
+    case "explain-report":
+      return await explainReport(context);
+    case "suggest-actions":
+      return await suggestCorrectiveActions(context);
+    case "training-mode":
+      return await startTrainingMode(context);
+    default:
+      return { success: false, message: "Command not implemented" };
   }
 }
 
@@ -396,7 +396,7 @@ export async function processVoiceCommand(transcript: string): Promise<{
       understood: true,
       command: "check-compliance",
       response: "Running compliance check..."
-    });
+    };
   }
 
   if (lowerTranscript.includes("explain") || lowerTranscript.includes("what is")) {

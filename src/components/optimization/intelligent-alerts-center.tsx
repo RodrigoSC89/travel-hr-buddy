@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,7 +55,7 @@ interface AlertRule {
   cooldown: number; // minutes
 }
 
-export const IntelligentAlertsCenter = memo(() => {
+export const IntelligentAlertsCenter = () => {
   const { toast } = useToast();
   
   const [alerts, setAlerts] = useState<SmartAlert[]>([
@@ -214,7 +213,7 @@ export const IntelligentAlertsCenter = memo(() => {
         current: Math.floor(Math.random() * 100),
         trend: Math.random() > 0.5 ? "up" : "down"
       }
-    });
+    };
 
     setAlerts(prev => [newAlert, ...prev]);
     
@@ -223,7 +222,7 @@ export const IntelligentAlertsCenter = memo(() => {
       description: newAlert.message,
       duration: 4000
     });
-  });
+  };
 
   const markAsRead = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -245,7 +244,7 @@ export const IntelligentAlertsCenter = memo(() => {
       description: "Configuração de alerta foi atualizada",
       duration: 2000
     });
-  });
+  };
 
   const updateThreshold = (ruleId: string, newThreshold: number) => {
     setAlertRules(prev => prev.map(rule => 
@@ -427,7 +426,7 @@ export const IntelligentAlertsCenter = memo(() => {
                         <Button 
                           size="sm" 
                           variant="ghost"
-                          onClick={() => handlemarkAsRead}
+                          onClick={() => markAsRead(alert.id)}
                         >
                           Marcar como lido
                         </Button>
@@ -462,7 +461,7 @@ export const IntelligentAlertsCenter = memo(() => {
                     
                     <Switch
                       checked={rule.enabled}
-                      onCheckedChange={() => toggleRule(rule.id}
+                      onCheckedChange={() => toggleRule(rule.id)}
                     />
                   </div>
                   
@@ -475,7 +474,7 @@ export const IntelligentAlertsCenter = memo(() => {
                           </label>
                           <Slider
                             value={[rule.threshold]}
-                            onValueChange={(value) => updateThreshold(rule.id, value[0]}
+                            onValueChange={(value) => updateThreshold(rule.id, value[0])}
                             max={100}
                             min={0}
                             step={5}
@@ -568,7 +567,7 @@ export const IntelligentAlertsCenter = memo(() => {
                           ...prev,
                           severity: { ...prev.severity, [level]: checked }
                         }))
-                      };
+                      }
                     />
                   </div>
                 ))}
@@ -579,4 +578,4 @@ export const IntelligentAlertsCenter = memo(() => {
       </Card>
     </div>
   );
-});
+};

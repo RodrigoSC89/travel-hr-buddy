@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -36,7 +35,7 @@ const SHORTCUT_CATEGORIES = {
   system: "Sistema"
 };
 
-export const useKeyboardShortcuts = memo(() => {
+export const useKeyboardShortcuts = () => {
   const navigate = useNavigate();
   const [helpOpen, setHelpOpen] = useState(false);
 
@@ -60,7 +59,7 @@ export const useKeyboardShortcuts = memo(() => {
 
   // Listen for key sequences
   useEffect(() => {
-    let keySequence: string[] = []);
+    let keySequence: string[] = [];
     let sequenceTimeout: NodeJS.Timeout;
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -117,7 +116,7 @@ export const KeyboardShortcutsHelp: React.FC = () => {
   const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
     if (!acc[shortcut.category]) {
       acc[shortcut.category] = [];
-    };
+    }
     acc[shortcut.category].push(shortcut);
     return acc;
   }, {} as Record<string, Shortcut[]>);

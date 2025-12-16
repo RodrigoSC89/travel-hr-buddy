@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,7 @@ import {
 } from "@/types/imca-audit";
 import { generateIMCAAudit, saveAudit, downloadAuditMarkdown } from "@/services/imca-audit-service";
 
-export const IMCAAuditGenerator = memo(function() {
+export function IMCAAuditGenerator() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("basic");
   const [loading, setLoading] = useState(false);
@@ -99,7 +98,7 @@ export const IMCAAuditGenerator = memo(function() {
         description: "Audit report downloaded as Markdown",
       });
     }
-  });
+  };
 
   const handleReset = () => {
     setVesselName("");
@@ -143,14 +142,14 @@ export const IMCAAuditGenerator = memo(function() {
                       id="vesselName"
                       placeholder="e.g., DP Construction Vessel Delta"
                       value={vesselName}
-                      onChange={handleChange}
+                      onChange={(e) => setVesselName(e.target.value)}
                     />
                   </div>
                 </div>
 
                 <div className="grid gap-2">
                   <Label htmlFor="dpClass">DP Class *</Label>
-                  <Select value={dpClass} onValueChange={(value) => setDpClass(value as DPClass}>
+                  <Select value={dpClass} onValueChange={(value) => setDpClass(value as DPClass)}>
                     <SelectTrigger id="dpClass">
                       <SelectValue placeholder="Select DP Class" />
                     </SelectTrigger>
@@ -170,7 +169,7 @@ export const IMCAAuditGenerator = memo(function() {
                       id="location"
                       placeholder="e.g., Santos Basin, Brazil"
                       value={location}
-                      onChange={handleChange}
+                      onChange={(e) => setLocation(e.target.value)}
                     />
                   </div>
                 </div>
@@ -183,7 +182,7 @@ export const IMCAAuditGenerator = memo(function() {
                       id="objective"
                       placeholder="e.g., Post-incident technical evaluation"
                       value={auditObjective}
-                      onChange={handleChange}
+                      onChange={(e) => setAuditObjective(e.target.value)}
                       rows={3}
                     />
                   </div>
@@ -206,7 +205,8 @@ export const IMCAAuditGenerator = memo(function() {
                     id="incidentDetails"
                     placeholder="Describe any incidents or issues..."
                     value={operationalData.incidentDetails || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setOperationalData({ ...operationalData, incidentDetails: e.target.value })
                     }
                     rows={3}
                   />
@@ -218,7 +218,11 @@ export const IMCAAuditGenerator = memo(function() {
                     id="environmental"
                     placeholder="Weather, sea state, visibility..."
                     value={operationalData.environmentalConditions || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setOperationalData({
+                        ...operationalData,
+                        environmentalConditions: e.target.value,
+                      })
                     }
                     rows={2}
                   />
@@ -230,7 +234,8 @@ export const IMCAAuditGenerator = memo(function() {
                     id="systemStatus"
                     placeholder="Current status of DP systems..."
                     value={operationalData.systemStatus || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setOperationalData({ ...operationalData, systemStatus: e.target.value })
                     }
                     rows={2}
                   />
@@ -242,7 +247,11 @@ export const IMCAAuditGenerator = memo(function() {
                     id="crew"
                     placeholder="DPO certifications, training status..."
                     value={operationalData.crewQualifications || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setOperationalData({
+                        ...operationalData,
+                        crewQualifications: e.target.value,
+                      })
                     }
                     rows={2}
                   />
@@ -254,7 +263,11 @@ export const IMCAAuditGenerator = memo(function() {
                     id="maintenance"
                     placeholder="Recent maintenance activities..."
                     value={operationalData.maintenanceHistory || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setOperationalData({
+                        ...operationalData,
+                        maintenanceHistory: e.target.value,
+                      })
                     }
                     rows={2}
                   />
@@ -430,4 +443,4 @@ export const IMCAAuditGenerator = memo(function() {
       </Card>
     </div>
   );
-});
+}

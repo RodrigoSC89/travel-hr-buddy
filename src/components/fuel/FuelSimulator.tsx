@@ -1,4 +1,3 @@
-import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -97,7 +96,7 @@ export const FuelSimulator: React.FC = () => {
               </Label>
               <Slider
                 value={[distance]}
-                onValueChange={(v) => setDistance(v[0]}
+                onValueChange={(v) => setDistance(v[0])}
                 min={50}
                 max={2000}
                 step={50}
@@ -111,7 +110,7 @@ export const FuelSimulator: React.FC = () => {
               </Label>
               <Slider
                 value={[currentSpeed]}
-                onValueChange={(v) => setCurrentSpeed(v[0]}
+                onValueChange={(v) => setCurrentSpeed(v[0])}
                 min={8}
                 max={20}
                 step={0.5}
@@ -140,7 +139,7 @@ export const FuelSimulator: React.FC = () => {
               <Input
                 type="number"
                 value={fuelPrice}
-                onChange={handleChange}
+                onChange={(e) => setFuelPrice(parseFloat(e.target.value) || 0)}
                 step={0.10}
                 min={0}
               />

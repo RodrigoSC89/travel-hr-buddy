@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * PEO-DP Audit Component
  * Interface para auditoria PEO-DP Inteligente
  */
@@ -28,7 +27,7 @@ import { peodpCore } from "@/modules/hr/peo-dp";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import { getScoreLevel, getScoreColor } from "@/types/peodp-audit";
 
-export const PEODPAuditComponent = memo(function() {
+export function PEODPAuditComponent() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("input");
   const [loading, setLoading] = useState(false);
@@ -90,7 +89,7 @@ export const PEODPAuditComponent = memo(function() {
         description: "Relatório PDF está sendo baixado",
       });
     }
-  });
+  };
 
   const handleDownloadMarkdown = () => {
     if (auditoria) {
@@ -100,7 +99,7 @@ export const PEODPAuditComponent = memo(function() {
         description: "Relatório Markdown está sendo baixado",
       });
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">
@@ -137,7 +136,7 @@ export const PEODPAuditComponent = memo(function() {
                   id="vesselName"
                   placeholder="Ex: PSV Ocean Explorer"
                   value={vesselName}
-                  onChange={handleChange}
+                  onChange={(e) => setVesselName(e.target.value)}
                 />
               </div>
 
@@ -300,4 +299,4 @@ export const PEODPAuditComponent = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

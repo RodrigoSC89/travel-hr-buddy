@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +35,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
     overdueChecklists: 0,
     complianceScore: 0,
     avgCompletionTime: 0
-});
+  });
 
   useEffect(() => {
     if (checklists.length > 0) {
@@ -73,9 +72,9 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       complianceScore,
       avgCompletionTime: 45 // Mock data - would calculate from actual completion times
     });
-  });
+  };
 
-  const MetricCard = ({ title, value, icon: Icon, variant = "default", subtitle }: unknown: unknown: unknown) => (
+  const MetricCard = ({ title, value, icon: Icon, variant = "default", subtitle }: any) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>

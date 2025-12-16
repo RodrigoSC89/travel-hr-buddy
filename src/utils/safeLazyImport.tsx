@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import React, { ComponentType } from "react";
 
 /**
@@ -81,10 +80,10 @@ export const safeLazyImport = (
       };
       
       try {
-        localStorage.setItem("safeLazyImport:lastError", JSON.stringify(errorInfo));
-        console.warn("🔍 Debug info salvo em localStorage[\"safeLazyImport:lastError\"]", errorInfo);
+        localStorage.setItem('safeLazyImport:lastError', JSON.stringify(errorInfo));
+        console.warn('🔍 Debug info salvo em localStorage["safeLazyImport:lastError"]', errorInfo);
       } catch (storageErr) {
-        console.warn("Não foi possível salvar debug info no localStorage", storageErr);
+        console.warn('Não foi possível salvar debug info no localStorage', storageErr);
       }
       
       // Return a fallback component that displays an error message

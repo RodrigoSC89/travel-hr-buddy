@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -40,7 +40,7 @@ export default function DocumentListPage() {
   const loadDocuments = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("ai_generated_documents")
         .select("id, title, content, created_at, generated_by")
         .order("created_at", { ascending: false });
@@ -89,7 +89,7 @@ export default function DocumentListPage() {
               Visualize e gerencie todos os documentos gerados pela IA
             </p>
           </div>
-          <Button onClick={() => handlenavigate}>
+          <Button onClick={() => navigate("/admin/documents/ai")}>
             ✨ Gerar Novo Documento
           </Button>
         </div>
@@ -107,7 +107,7 @@ export default function DocumentListPage() {
               <Input
                 placeholder="Digite para buscar..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -132,7 +132,7 @@ export default function DocumentListPage() {
                   : "Comece gerando seu primeiro documento com IA"}
               </p>
               {!searchTerm && (
-                <Button onClick={() => handlenavigate}>
+                <Button onClick={() => navigate("/admin/documents/ai")}>
                   ✨ Gerar Primeiro Documento
                 </Button>
               )}
@@ -141,7 +141,7 @@ export default function DocumentListPage() {
         ) : (
           <div className="grid gap-4">
             {filteredDocuments.map((doc) => (
-              <Card key={doc.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handlehandleViewDocument}>
+              <Card key={doc.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleViewDocument(doc.id)}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">

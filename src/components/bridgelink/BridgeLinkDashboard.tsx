@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ export default function BridgeLinkDashboard() {
     publishEvent("nautilus/bridgelink/manual-sync", {
       timestamp: new Date().toISOString(),
       triggered_by: "manual",
-    };
+    });
     
     const timestamp = new Date().toLocaleTimeString();
     setLogs((prev) => [...prev, `[${timestamp}] Manual sync triggered`]);

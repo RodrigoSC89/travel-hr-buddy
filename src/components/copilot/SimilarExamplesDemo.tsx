@@ -5,7 +5,7 @@
  * in a real-world maintenance management scenario.
  */
 
-import { useState } from "react";;;
+import { useState } from "react";
 import { logger } from "@/lib/logger";
 import SimilarExamples from "@/components/copilot/SimilarExamples";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,7 +30,7 @@ export default function SimilarExamplesDemo() {
       title: jobTitle,
       description: jobDescription,
       component: component,
-    };
+    });
     // In a real application, this would call an API to save the job
   };
 
@@ -70,7 +70,7 @@ export default function SimilarExamplesDemo() {
                 id="title"
                 placeholder="Ex: Falha no gerador STBD"
                 value={jobTitle}
-                onChange={handleChange}
+                onChange={(e) => setJobTitle(e.target.value)}
               />
             </div>
 
@@ -81,7 +81,7 @@ export default function SimilarExamplesDemo() {
                 id="component"
                 placeholder="Ex: Gerador Diesel, Bomba Hidráulica"
                 value={component}
-                onChange={handleChange}
+                onChange={(e) => setComponent(e.target.value)}
               />
             </div>
 
@@ -92,7 +92,7 @@ export default function SimilarExamplesDemo() {
                 id="description"
                 placeholder="Descreva o problema de manutenção em detalhes..."
                 value={jobDescription}
-                onChange={handleChange}
+                onChange={(e) => setJobDescription(e.target.value)}
                 rows={4}
                 className="resize-none"
               />

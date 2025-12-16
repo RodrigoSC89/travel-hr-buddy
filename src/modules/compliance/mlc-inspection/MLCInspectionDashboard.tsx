@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -58,7 +57,7 @@ export default function MLCInspectionDashboard() {
       title: "Success",
       description: "Inspection created successfully",
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -71,11 +70,11 @@ export default function MLCInspectionDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleSetActiveTab}>
+          <Button variant="outline" onClick={() => setActiveTab("chatbot")}>
             <Shield className="h-4 w-4 mr-2" />
             AI Assistant
           </Button>
-          <Button onClick={handleSetShowCreateDialog}>
+          <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             New Inspection
           </Button>

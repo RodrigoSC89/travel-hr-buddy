@@ -1,9 +1,8 @@
-import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Lock, Webhook, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export const IntegrationsHubValidation = memo(() => {
+export const IntegrationsHubValidation = () => {
   const validationChecks = [
     {
       id: "oauth",

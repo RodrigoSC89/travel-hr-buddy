@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -146,7 +145,7 @@ const RealTimeAnalytics = () => {
     default:
       return "0";
     }
-  });
+  };
 
   const generateRandomChange = (): string => {
     const change = (Math.random() * 20 - 10).toFixed(1);
@@ -158,14 +157,14 @@ const RealTimeAnalytics = () => {
       title: "Exportando dados",
       description: "Relatório será enviado por email"
     });
-  });
+  };
 
   const shareReport = () => {
     toast({
       title: "Compartilhando relatório",
       description: "Link compartilhado copiado"
     });
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -205,7 +204,7 @@ const RealTimeAnalytics = () => {
           <Button
             variant={isLive ? "destructive" : "default"}
             size="sm"
-            onClick={handleSetIsLive}
+            onClick={() => setIsLive(!isLive)}
             className="gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLive ? "animate-spin" : ""}`} />
@@ -221,7 +220,7 @@ const RealTimeAnalytics = () => {
           <select 
             className="bg-background border border-border rounded px-3 py-1"
             value={selectedTimeRange}
-            onChange={handleChange}
+            onChange={(e) => setSelectedTimeRange(e.target.value)}
           >
             <option value="1h">Última hora</option>
             <option value="24h">Últimas 24h</option>

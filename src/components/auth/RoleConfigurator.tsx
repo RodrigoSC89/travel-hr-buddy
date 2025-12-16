@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * Role Configurator Component
  * PATCH 122.0 - RBAC Configuration UI
  * 
@@ -76,6 +75,7 @@ export const RoleConfigurator: React.FC = () => {
         .order("role", { ascending: true });
 
       if (error) {
+        console.error("Error loading permissions:", error);
         toast({
           title: "Erro",
           description: "Não foi possível carregar as permissões.",
@@ -86,7 +86,6 @@ export const RoleConfigurator: React.FC = () => {
 
       setPermissions(data || []);
     } catch (error) {
-      console.error("Error loading permissions:", error);
       console.error("Error loading permissions:", error);
     } finally {
       setLoading(false);
@@ -107,6 +106,7 @@ export const RoleConfigurator: React.FC = () => {
         .eq("id", permissionId);
 
       if (error) {
+        console.error("Error updating permission:", error);
         toast({
           title: "Erro",
           description: "Não foi possível atualizar a permissão.",
@@ -128,11 +128,10 @@ export const RoleConfigurator: React.FC = () => {
       });
     } catch (error) {
       console.error("Error updating permission:", error);
-      console.error("Error updating permission:", error);
     } finally {
       setSaving(false);
     }
-  });
+  };
 
   const createPermissionForModule = async (moduleName: string, role: string) => {
     try {
@@ -142,7 +141,7 @@ export const RoleConfigurator: React.FC = () => {
         .from("module_permissions")
         .insert({
           module_name: moduleName,
-          role: role as unknown,
+          role: role as any,
           can_read: true,
           can_write: false,
           can_delete: false,
@@ -150,6 +149,7 @@ export const RoleConfigurator: React.FC = () => {
         });
 
       if (error) {
+        console.error("Error creating permission:", error);
         toast({
           title: "Erro",
           description: "Não foi possível criar a permissão.",
@@ -165,7 +165,6 @@ export const RoleConfigurator: React.FC = () => {
 
       loadPermissions();
     } catch (error) {
-      console.error("Error creating permission:", error);
       console.error("Error creating permission:", error);
     } finally {
       setSaving(false);
@@ -213,7 +212,7 @@ export const RoleConfigurator: React.FC = () => {
                 <Button
                   key={module}
                   variant={selectedModule === module ? "default" : "outline"}
-                  onClick={handleSetSelectedModule}
+                  onClick={() => setSelectedModule(module)}
                   className="justify-start"
                 >
                   {module}
@@ -252,7 +251,7 @@ export const RoleConfigurator: React.FC = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handlecreatePermissionForModule}
+                              onClick={() => createPermissionForModule(selectedModule, role.value)}
                               disabled={saving}
                             >
                               Criar Permissão

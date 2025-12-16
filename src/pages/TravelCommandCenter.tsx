@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * TRAVEL COMMAND CENTER
  * Módulo unificado de Viagens + Smart Mobility + Reservas
  * Gestão completa de viagens corporativas, mobilidade e reservas
@@ -285,7 +284,7 @@ export default function TravelCommandCenter() {
           "Considere reagendar uma das reservas"
         ] : []
       };
-    };
+    });
   };
 
   const handleSendMessage = () => {
@@ -303,14 +302,14 @@ export default function TravelCommandCenter() {
       
       const key = chatMessage.toLowerCase().includes("voo") ? "voo" 
         : chatMessage.toLowerCase().includes("hotel") ? "hotel"
-          : chatMessage.toLowerCase().includes("transfer") ? "transfer"
-            : "default";
+        : chatMessage.toLowerCase().includes("transfer") ? "transfer"
+        : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
     
     setChatMessage("");
-  });
+  };
 
   const handleEdit = (reservation: EnhancedReservation) => {
     setSelectedReservation(reservation);
@@ -371,7 +370,7 @@ export default function TravelCommandCenter() {
     if (filters.status !== "all" && reservation.status !== filters.status) return false;
     if (filters.searchTerm && !reservation.title.toLowerCase().includes(filters.searchTerm.toLowerCase())) return false;
     return true;
-  };
+  });
 
   const quickStats = [
     { icon: Plane, label: "Viagens Ativas", value: mockTrips.length.toString(), color: "primary" },
@@ -418,7 +417,7 @@ export default function TravelCommandCenter() {
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>
-            <Button onClick={handleSetIsFormOpen}>
+            <Button onClick={() => setIsFormOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Reserva
             </Button>
@@ -520,7 +519,7 @@ export default function TravelCommandCenter() {
                     <Input
                       placeholder="Pergunte sobre seu voo, hotel..."
                       value={chatMessage}
-                      onChange={handleChange}
+                      onChange={(e) => setChatMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                     />
                     <Button size="icon" onClick={handleSendMessage}>
@@ -528,13 +527,13 @@ export default function TravelCommandCenter() {
                     </Button>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+                    <Button variant="outline" size="sm" onClick={() => setChatMessage("Qual meu próximo voo?")}>
                       Meu voo
                     </Button>
-                    <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+                    <Button variant="outline" size="sm" onClick={() => setChatMessage("Onde fica meu hotel?")}>
                       Meu hotel
                     </Button>
-                    <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+                    <Button variant="outline" size="sm" onClick={() => setChatMessage("Horário do transfer?")}>
                       Transfer
                     </Button>
                   </div>
@@ -571,14 +570,14 @@ export default function TravelCommandCenter() {
                           </div>
                           <Badge variant={
                             trip.status === "completed" ? "default" :
-                              trip.status === "delayed" ? "destructive" :
-                                trip.status === "in_progress" ? "secondary" : "outline"
+                            trip.status === "delayed" ? "destructive" :
+                            trip.status === "in_progress" ? "secondary" : "outline"
                           }>
                             {trip.status === "completed" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                             {trip.status === "delayed" && <AlertTriangle className="h-3 w-3 mr-1" />}
                             {trip.status === "scheduled" ? "Agendada" :
-                              trip.status === "in_progress" ? "Em andamento" :
-                                trip.status === "completed" ? "Concluída" : "Atrasada"}
+                             trip.status === "in_progress" ? "Em andamento" :
+                             trip.status === "completed" ? "Concluída" : "Atrasada"}
                           </Badge>
                         </div>
 
@@ -773,7 +772,7 @@ export default function TravelCommandCenter() {
             <ReservationStats reservations={reservations} />
             <ReservationFilters 
               filters={filters} 
-              onFiltersChange={(newFilters) => setFilters(newFilters as unknown}
+              onFiltersChange={(newFilters) => setFilters(newFilters as any)}
               reservations={reservations}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -791,7 +790,7 @@ export default function TravelCommandCenter() {
                 <CardContent className="p-8 text-center">
                   <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-semibold mb-2">Nenhuma reserva encontrada</h3>
-                  <Button onClick={handleSetIsFormOpen}>
+                  <Button onClick={() => setIsFormOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Nova Reserva
                   </Button>

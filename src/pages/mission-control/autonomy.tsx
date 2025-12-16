@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,9 +10,9 @@ import { Activity, Brain, CheckCircle, AlertTriangle, Zap, TrendingUp, Shield } 
 
 export default function AutonomyConsole() {
   const [actions, setActions] = useState<AutonomousAction[]>([]);
-  const [stats, setStats] = useState<unknown>(null);
-  const [patternStats, setPatternStats] = useState<unknown>(null);
-  const [hotfixStats, setHotfixStats] = useState<unknown>(null);
+  const [stats, setStats] = useState<any>(null);
+  const [patternStats, setPatternStats] = useState<any>(null);
+  const [hotfixStats, setHotfixStats] = useState<any>(null);
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
@@ -186,7 +186,7 @@ export default function AutonomyConsole() {
                   <Card key={action.id} className="border-l-4" style={{
                     borderLeftColor: action.success ? "#22c55e" : "#ef4444"
                   }}>
-                    <CardContent key={CardContent.id || index} className="p-4">
+                    <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">

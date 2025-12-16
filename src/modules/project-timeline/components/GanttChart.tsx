@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ interface Task {
   subtasks?: Task[];
 }
 
-export const GanttChart = memo(() => {
+export const GanttChart = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -254,7 +253,7 @@ export const GanttChart = memo(() => {
     // First pass: create map
     allTasks.forEach(task => {
       taskMap.set(task.id, { ...task, subtasks: [] });
-  };
+    });
 
     // Second pass: build hierarchy
     allTasks.forEach(task => {
@@ -267,11 +266,11 @@ export const GanttChart = memo(() => {
         }
       } else {
         rootTasks.push(taskWithSubtasks);
-      };
+      }
     });
 
     return rootTasks;
-  });
+  };
 
   const renderTaskRow = (task: Task, level: number = 0) => {
     const indent = level * 20;
@@ -283,13 +282,13 @@ export const GanttChart = memo(() => {
             dependencyMode && dependencySource?.id === task.id ? "bg-blue-100" : ""
           }`}
           draggable
-          onDragStart={() => handleDragStart(task}
+          onDragStart={() => handleDragStart(task)}
           onDragEnd={handleDragEnd}
         >
           <div className="w-56 shrink-0" style={{ paddingLeft: `${indent}px` }}>
             <Input
               value={task.task_name}
-              onChange={handleChange}
+              onChange={(e) => handleInlineEdit(task.id, "task_name", e.target.value)}
               className="font-medium text-sm border-0 p-1 h-7 bg-transparent hover:bg-white focus:bg-white"
             />
             <p className="text-xs text-muted-foreground">{task.project_name}</p>
@@ -317,14 +316,14 @@ export const GanttChart = memo(() => {
             <Input
               type="date"
               value={task.start_date}
-              onChange={handleChange}
+              onChange={(e) => handleInlineEdit(task.id, "start_date", e.target.value)}
               className="w-32 h-8 text-xs"
             />
             <ArrowRight className="h-4 w-4 text-muted-foreground" />
             <Input
               type="date"
               value={task.end_date}
-              onChange={handleChange}
+              onChange={(e) => handleInlineEdit(task.id, "end_date", e.target.value)}
               className="w-32 h-8 text-xs"
             />
           </div>
@@ -335,7 +334,7 @@ export const GanttChart = memo(() => {
               min="0"
               max="100"
               value={task.progress}
-              onChange={handleChange}
+              onChange={(e) => updateTaskProgress(task.id, parseInt(e.target.value))}
               className="h-2"
             />
           </div>
@@ -344,7 +343,7 @@ export const GanttChart = memo(() => {
             <Button 
               size="sm" 
               variant="ghost"
-              onClick={() => handlehandleDependencyClick}
+              onClick={() => handleDependencyClick(task)}
               className="h-7 w-7 p-0"
             >
               <LinkIcon className="h-4 w-4" />
@@ -352,7 +351,7 @@ export const GanttChart = memo(() => {
             <Button 
               size="sm" 
               variant="ghost"
-              onClick={handleSetEditingTask}
+              onClick={() => setEditingTask(task)}
               className="h-7 w-7 p-0"
             >
               <Edit className="h-4 w-4" />
@@ -360,7 +359,7 @@ export const GanttChart = memo(() => {
             <Button 
               size="sm" 
               variant="ghost"
-              onClick={() => handledeleteTask}
+              onClick={() => deleteTask(task.id)}
               className="h-7 w-7 p-0 text-destructive"
             >
               <Trash2 className="h-4 w-4" />
@@ -376,7 +375,7 @@ export const GanttChart = memo(() => {
         )}
       </div>
     );
-  });
+  };
 
   return (
     <div className="space-y-4">
@@ -394,7 +393,7 @@ export const GanttChart = memo(() => {
               Cancelar Dependência
             </Button>
           )}
-          <Button onClick={handleSetIsCreating}>
+          <Button onClick={() => setIsCreating(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Nova Tarefa
           </Button>
@@ -433,14 +432,14 @@ export const GanttChart = memo(() => {
               <Label>Nome do Projeto</Label>
               <Input
                 value={newTask.project_name}
-                onChange={handleChange}
+                onChange={(e) => setNewTask({...newTask, project_name: e.target.value})}
               />
             </div>
             <div className="grid gap-2">
               <Label>Nome da Tarefa</Label>
               <Input
                 value={newTask.task_name}
-                onChange={handleChange}
+                onChange={(e) => setNewTask({...newTask, task_name: e.target.value})}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -449,7 +448,7 @@ export const GanttChart = memo(() => {
                 <Input
                   type="date"
                   value={newTask.start_date}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTask({...newTask, start_date: e.target.value})}
                 />
               </div>
               <div className="grid gap-2">
@@ -457,7 +456,7 @@ export const GanttChart = memo(() => {
                 <Input
                   type="date"
                   value={newTask.end_date}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTask({...newTask, end_date: e.target.value})}
                 />
               </div>
             </div>
@@ -497,4 +496,4 @@ export const GanttChart = memo(() => {
       </Dialog>
     </div>
   );
-});
+};

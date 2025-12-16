@@ -1,26 +1,25 @@
 /**
-import { useCallback, useContext, useEffect, useState } from "react";;
  * Performance Provider
  * Centralizes all performance optimizations and provides context
  * PATCH: Fixed to avoid hook initialization issues
  */
 
-import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
-import { webVitalsMonitor } from "@/lib/web-vitals-monitor";
-import { imageOptimizer } from "@/lib/image-optimizer";
+import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { webVitalsMonitor } from '@/lib/web-vitals-monitor';
+import { imageOptimizer } from '@/lib/image-optimizer';
 
 interface PerformanceContextType {
   // Network state
   isSlowConnection: boolean;
   isOffline: boolean;
-  networkQuality: "excellent" | "good" | "fair" | "poor" | "offline";
+  networkQuality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
   
   // Performance metrics
   performanceScore: number;
-  performanceRating: "good" | "needs-improvement" | "poor";
+  performanceRating: 'good' | 'needs-improvement' | 'poor';
   
   // Image optimization
-  bestImageFormat: "avif" | "webp" | "jpeg";
+  bestImageFormat: 'avif' | 'webp' | 'jpeg';
   imageQuality: number;
   
   // Actions
@@ -30,16 +29,16 @@ interface PerformanceContextType {
 
 const PerformanceContext = createContext<PerformanceContextType | null>(null);
 
-export const usePerformance = memo(() => {
+export const usePerformance = () => {
   const context = useContext(PerformanceContext);
   if (!context) {
-    throw new Error("usePerformance must be used within PerformanceProvider");
+    throw new Error('usePerformance must be used within PerformanceProvider');
   }
   return context;
 };
 
 // Optional hook that doesn't throw
-export const usePerformanceOptional = memo(() => {
+export const usePerformanceOptional = () => {
   return useContext(PerformanceContext);
 };
 
@@ -51,11 +50,11 @@ interface PerformanceProviderProps {
 function useSimpleNetworkState() {
   const [isOnline, setIsOnline] = useState(true);
   const [isSlowConnection, setIsSlowConnection] = useState(false);
-  const [quality, setQuality] = useState<"excellent" | "good" | "fair" | "poor" | "offline">("good");
+  const [quality, setQuality] = useState<'excellent' | 'good' | 'fair' | 'poor' | 'offline'>('good');
 
   useEffect(() => {
     // Check if we're in browser
-    if (typeof window === "undefined" || typeof navigator === "undefined") {
+    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
       return;
     }
 
@@ -63,16 +62,16 @@ function useSimpleNetworkState() {
     setIsOnline(navigator.onLine);
 
     // Check connection quality
-    const connection = (navigator as unknown).connection || 
-                      (navigator as unknown).mozConnection || 
-                      (navigator as unknown).webkitConnection;
+    const connection = (navigator as any).connection || 
+                      (navigator as any).mozConnection || 
+                      (navigator as any).webkitConnection;
 
     const updateNetworkState = () => {
       const online = navigator.onLine;
       setIsOnline(online);
 
       if (!online) {
-        setQuality("offline");
+        setQuality('offline');
         setIsSlowConnection(true);
         return;
       }
@@ -81,17 +80,17 @@ function useSimpleNetworkState() {
         const effectiveType = connection.effectiveType;
         const downlink = connection.downlink ?? 10;
         
-        if (effectiveType === "4g" && downlink >= 5) {
-          setQuality("excellent");
+        if (effectiveType === '4g' && downlink >= 5) {
+          setQuality('excellent');
           setIsSlowConnection(false);
-        } else if (effectiveType === "4g" || effectiveType === "3g") {
-          setQuality("good");
+        } else if (effectiveType === '4g' || effectiveType === '3g') {
+          setQuality('good');
           setIsSlowConnection(downlink < 2);
-        } else if (effectiveType === "2g") {
-          setQuality("poor");
+        } else if (effectiveType === '2g') {
+          setQuality('poor');
           setIsSlowConnection(true);
         } else {
-          setQuality("fair");
+          setQuality('fair');
           setIsSlowConnection(downlink < 2);
         }
       }
@@ -100,18 +99,18 @@ function useSimpleNetworkState() {
     updateNetworkState();
 
     // Listen for changes
-    window.addEventListener("online", updateNetworkState);
-    window.addEventListener("offline", updateNetworkState);
+    window.addEventListener('online', updateNetworkState);
+    window.addEventListener('offline', updateNetworkState);
     
     if (connection?.addEventListener) {
-      connection.addEventListener("change", updateNetworkState);
+      connection.addEventListener('change', updateNetworkState);
     }
 
     return () => {
-      window.removeEventListener("online", updateNetworkState);
-      window.removeEventListener("offline", updateNetworkState);
+      window.removeEventListener('online', updateNetworkState);
+      window.removeEventListener('offline', updateNetworkState);
       if (connection?.removeEventListener) {
-        connection.removeEventListener("change", updateNetworkState);
+        connection.removeEventListener('change', updateNetworkState);
       }
     };
   }, []);
@@ -122,8 +121,8 @@ function useSimpleNetworkState() {
 export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ children }) => {
   const networkState = useSimpleNetworkState();
   const [performanceScore, setPerformanceScore] = useState(100);
-  const [performanceRating, setPerformanceRating] = useState<"good" | "needs-improvement" | "poor">("good");
-  const [bestImageFormat, setBestImageFormat] = useState<"avif" | "webp" | "jpeg">("jpeg");
+  const [performanceRating, setPerformanceRating] = useState<'good' | 'needs-improvement' | 'poor'>('good');
+  const [bestImageFormat, setBestImageFormat] = useState<'avif' | 'webp' | 'jpeg'>('jpeg');
 
   // Initialize image optimizer and get best format
   useEffect(() => {
@@ -145,7 +144,7 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
         const score = webVitalsMonitor.getScore();
         setPerformanceScore(score.score);
         setPerformanceRating(score.rating);
-  };
+      });
       
       return unsubscribe;
     } catch (e) {
@@ -168,8 +167,8 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
     if (networkState.isSlowConnection || !networkState.isOnline) return;
     
     try {
-      const link = document.createElement("link");
-      link.rel = "prefetch";
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
       link.href = route;
       document.head.appendChild(link);
     } catch (e) {
@@ -180,12 +179,12 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
   // Report custom performance metric
   const reportCustomMetric = useCallback((name: string, value: number) => {
     try {
-      if ("performance" in window && "mark" in performance) {
+      if ('performance' in window && 'mark' in performance) {
         performance.mark(`custom-${name}-${value}`);
       }
     } catch (e) {
       // Silently fail
-    };
+    }
   }, []);
 
   // Calculate image quality based on network

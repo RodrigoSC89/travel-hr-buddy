@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +29,7 @@ const MLC_CHECKLIST_ITEMS = [
   { title: "Title 5", regulation: "5.1", category: "Flag State Compliance", description: "Does the vessel comply with flag state requirements?" },
 ];
 
-export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: ChecklistInterfaceProps) {
+export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfaceProps) {
   const [findings, setFindings] = useState<MLCFinding[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
@@ -66,7 +65,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         category: item.category,
         description: item.description,
         compliance,
-        severity: severity as unknown,
+        severity: severity as any,
         corrective_action,
         evidence_attached: false,
       });
@@ -125,7 +124,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={handleSetExpandedItem}
+                      onClick={() => setExpandedItem(isExpanded ? null : index)}
                     >
                       {isExpanded ? "Collapse" : "Inspect"}
                     </Button>
@@ -140,7 +139,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
                         handleAddFinding(item, compliance, severity, corrective_action);
                         setExpandedItem(null);
                       }}
-                      onCancel={() => setExpandedItem(null}
+                      onCancel={() => setExpandedItem(null)}
                     />
                   </CardContent>
                 )}
@@ -189,7 +188,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
         <Checkbox
           id={`compliance-${item.regulation}`}
           checked={compliance}
-          onCheckedChange={(checked) => setCompliance(checked as boolean}
+          onCheckedChange={(checked) => setCompliance(checked as boolean)}
         />
         <Label htmlFor={`compliance-${item.regulation}`} className="text-sm font-medium">
           Item is compliant
@@ -219,7 +218,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
               id={`action-${item.regulation}`}
               placeholder="Describe the corrective action needed..."
               value={correctiveAction}
-              onChange={handleChange}
+              onChange={(e) => setCorrectiveAction(e.target.value)}
               rows={3}
             />
           </div>
@@ -229,7 +228,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
       <div className="flex gap-2">
         <Button
           type="button"
-          onClick={() => handleonSubmit}
+          onClick={() => onSubmit(compliance, compliance ? undefined : severity, compliance ? undefined : correctiveAction)}
         >
           Save Finding
         </Button>
@@ -239,4 +238,4 @@ function InspectionForm({ item, onSubmit, onCancel }: {
       </div>
     </div>
   );
-});
+}

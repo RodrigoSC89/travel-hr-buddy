@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * PATCH 516 – Underwater Drone Control
  * Sistema de controle de drone submarino com simulação de missão
  */
@@ -119,7 +118,7 @@ export default function Patch516UnderwaterDrone() {
     });
     setMissionActive(false);
     executeCommand("RESET_DRONE", "Drone retornando à superfície e resetando sistemas");
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -262,7 +261,7 @@ export default function Patch516UnderwaterDrone() {
                   Reset
                 </Button>
                 <Button
-                  onClick={() => handleexecuteCommand}
+                  onClick={() => executeCommand("CAPTURE_IMAGE", "Imagem capturada e armazenada")}
                   variant="outline"
                   className="h-20 flex flex-col items-center gap-2"
                 >

@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -131,7 +130,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
     case "failed": return "text-red-500";
     default: return "text-muted-foreground";
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

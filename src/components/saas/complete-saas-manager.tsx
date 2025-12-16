@@ -1,9 +1,9 @@
-import { useState } from "react";;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { 
@@ -13,11 +13,15 @@ import {
   Settings, 
   BarChart,
   DollarSign,
+  Globe,
+  Shield,
   Zap,
   Database,
+  Clock,
   AlertTriangle,
   CheckCircle,
-  UserPlus
+  UserPlus,
+  Trash2
 } from "lucide-react";
 
 interface Tenant {
@@ -93,7 +97,7 @@ export const CompleteSaaSManager: React.FC = () => {
     case "enterprise": return "bg-amber-100 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300";
     default: return "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-300";
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -113,28 +112,28 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       (activeFilter === "andamento" && job.status === "em_andamento");
 
     return matchesSearch && matchesFilter;
-};
+  });
 
   const handleStatusChange = (jobId: string, newStatus: string) => {
     toast({
       title: "Status Atualizado",
       description: `Job atualizado para: ${newStatus}`,
     });
-  });
+  };
 
   const handlePostpone = (jobId: string, justificativa: string) => {
     toast({
       title: "Job Postergado",
       description: "A IA está analisando o risco da postergação...",
     });
-  });
+  };
 
   const handleOpenOS = (jobId: string) => {
     toast({
       title: "Abrindo OS",
       description: "Ordem de serviço será criada para este job.",
     });
-  });
+  };
 
   const counts = {
     all: mockJobs.length,
@@ -159,21 +158,21 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
                 placeholder="Buscar job ou equipamento..."
                 className="pl-8"
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="flex border rounded-lg">
               <Button
                 variant={viewMode === "grid" ? "secondary" : "ghost"}
                 size="icon"
-                onClick={handleSetViewMode}
+                onClick={() => setViewMode("grid")}
               >
                 <LayoutGrid className="h-4 w-4" />
               </Button>
               <Button
                 variant={viewMode === "list" ? "secondary" : "ghost"}
                 size="icon"
-                onClick={handleSetViewMode}
+                onClick={() => setViewMode("list")}
               >
                 <List className="h-4 w-4" />
               </Button>
@@ -191,14 +190,14 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
           <Button
             variant={activeFilter === "all" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetActiveFilter}
+            onClick={() => setActiveFilter("all")}
           >
             Todos ({counts.all})
           </Button>
           <Button
             variant={activeFilter === "criticos" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetActiveFilter}
+            onClick={() => setActiveFilter("criticos")}
             className={activeFilter === "criticos" ? "" : "border-red-500/50 text-red-500 hover:bg-red-500/10"}
           >
             <AlertTriangle className="h-4 w-4 mr-1" />
@@ -207,7 +206,7 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
           <Button
             variant={activeFilter === "vencidos" ? "destructive" : "outline"}
             size="sm"
-            onClick={handleSetActiveFilter}
+            onClick={() => setActiveFilter("vencidos")}
           >
             <Clock className="h-4 w-4 mr-1" />
             Vencidos ({counts.vencidos})
@@ -215,14 +214,14 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
           <Button
             variant={activeFilter === "pendentes" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetActiveFilter}
+            onClick={() => setActiveFilter("pendentes")}
           >
             Pendentes ({counts.pendentes})
           </Button>
           <Button
             variant={activeFilter === "andamento" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetActiveFilter}
+            onClick={() => setActiveFilter("andamento")}
           >
             Em Andamento ({counts.andamento})
           </Button>
@@ -250,4 +249,4 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       </CardContent>
     </Card>
   );
-});
+};

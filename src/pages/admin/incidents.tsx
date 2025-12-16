@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,12 +43,12 @@ export default function IncidentsPage() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("incidents")
         .select("*")
         .order("created_at", { ascending: false })

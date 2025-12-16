@@ -1,10 +1,9 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { ResponsiveDashboard } from "./responsive-dashboard";
 import { EnhancedDashboard } from "./enhanced-dashboard";
 import PersonalizedRecommendations from "../intelligence/PersonalizedRecommendations";
 import IntelligentNotificationCenter from "../intelligence/IntelligentNotificationCenter";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -99,7 +98,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                   return (
                     <button
                       key={tab.id}
-                      onClick={handleSetActiveTab}
+                      onClick={() => setActiveTab(tab.id)}
                       className={`
                         relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
                         ${isActive 

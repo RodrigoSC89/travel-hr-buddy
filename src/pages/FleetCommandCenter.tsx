@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useEffect, useState } from "react";;
  * Fleet Command Center - Unified Fleet Module
  * Fusão de: Gestão de Frota, Fleet Dashboard, Fleet Tracking
  * Versão 192.0
@@ -32,7 +31,7 @@ import {
 // ============ COMPONENTES INTEGRADOS ============
 
 // KPI Card Component
-const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, delay = 0 }: unknown: unknown: unknown) => (
+const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, delay = 0 }: any) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -66,7 +65,7 @@ const KPICard = ({ title, value, suffix = "", icon: Icon, color, change, trend, 
 );
 
 // Vessel Card Component (do Fleet Dashboard)
-const VesselCard = ({ vessel, onClick }: { vessel: unknown: unknown: unknown; onClick: () => void }) => {
+const VesselCard = ({ vessel, onClick }: { vessel: any; onClick: () => void }) => {
   const statusConfig: Record<string, { color: string; label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
     operational: { color: "bg-green-500", label: "Operacional", variant: "default" },
     active: { color: "bg-green-500", label: "Ativa", variant: "default" },
@@ -150,7 +149,7 @@ const VesselCard = ({ vessel, onClick }: { vessel: unknown: unknown: unknown; on
 };
 
 // Tracking Map Component (simplificado do vessel-tracking-map)
-const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: unknown: unknown: unknown) => {
+const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[600px]">
       {/* Vessel List */}
@@ -163,13 +162,13 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: unknown: 
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 p-2">
-            {vessels.map((vessel: unknown) => (
+            {vessels.map((vessel: any) => (
               <div
                 key={vessel.id}
                 className={`p-3 rounded-lg cursor-pointer transition-all hover:bg-muted/50 ${
                   selectedVessel?.id === vessel.id ? "ring-2 ring-primary bg-primary/5" : "border"
                 }`}
-                onClick={() => handleonSelectVessel}
+                onClick={() => onSelectVessel(vessel)}
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-sm">{vessel.name}</span>
@@ -207,7 +206,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: unknown: 
                   </p>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2 mt-4">
-                  {vessels.slice(0, 4).map((v: unknown) => (
+                  {vessels.slice(0, 4).map((v: any) => (
                     <Badge key={v.id} variant="outline" className="gap-1">
                       <div className="h-2 w-2 rounded-full bg-green-500" />
                       {v.name}
@@ -235,7 +234,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: unknown: 
 };
 
 // AI Copilot Component
-const FleetAICopilot = ({ vessels }: { vessels: unknown[] }) => {
+const FleetAICopilot = ({ vessels }: { vessels: any[] }) => {
   const [query, setQuery] = useState("");
   const [thinking, setThinking] = useState(false);
 
@@ -260,13 +259,13 @@ const FleetAICopilot = ({ vessels }: { vessels: unknown[] }) => {
           {insights.map((insight, i) => (
             <div key={i} className={`flex items-start gap-2 p-2 rounded-lg ${
               insight.type === "success" ? "bg-green-50 dark:bg-green-950/20" :
-                insight.type === "warning" ? "bg-yellow-50 dark:bg-yellow-950/20" :
-                  "bg-blue-50 dark:bg-blue-950/20"
+              insight.type === "warning" ? "bg-yellow-50 dark:bg-yellow-950/20" :
+              "bg-blue-50 dark:bg-blue-950/20"
             }`}>
               <insight.icon className={`h-4 w-4 mt-0.5 ${
                 insight.type === "success" ? "text-green-600" :
-                  insight.type === "warning" ? "text-yellow-600" :
-                    "text-blue-600"
+                insight.type === "warning" ? "text-yellow-600" :
+                "text-blue-600"
               }`} />
               <span className="text-sm">{insight.text}</span>
             </div>
@@ -302,7 +301,7 @@ const FleetAICopilot = ({ vessels }: { vessels: unknown[] }) => {
             <Input
               placeholder="Pergunte ao AI Copilot..."
               value={query}
-              onChange={handleChange}
+              onChange={(e) => setQuery(e.target.value)}
               className="text-sm"
             />
             <Button size="sm" disabled={!query.trim() || thinking}>
@@ -343,7 +342,7 @@ export default function FleetCommandCenter() {
   const [maintenance, setMaintenance] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddDialog, setShowAddDialog] = useState(false);
-  const [selectedVessel, setSelectedVessel] = useState<unknown>(null);
+  const [selectedVessel, setSelectedVessel] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [newVessel, setNewVessel] = useState({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
 
@@ -368,7 +367,7 @@ export default function FleetCommandCenter() {
       setVessels(enrichedVessels);
 
       const { data: maintenanceData } = await supabase
-        .from("maintenance_schedules" as unknown)
+        .from("maintenance_schedules" as any)
         .select("*")
         .order("scheduled_date", { ascending: false })
         .limit(50);
@@ -440,8 +439,8 @@ export default function FleetCommandCenter() {
                 <DialogDescription>Adicione uma embarcação à frota</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                <div><Label>Nome *</Label><Input value={newVessel.name} onChange={handleChange}))} placeholder="MV Ocean Star" /></div>
-                <div><Label>IMO</Label><Input value={newVessel.imo_number} onChange={handleChange}))} placeholder="9123456" /></div>
+                <div><Label>Nome *</Label><Input value={newVessel.name} onChange={(e) => setNewVessel(p => ({ ...p, name: e.target.value }))} placeholder="MV Ocean Star" /></div>
+                <div><Label>IMO</Label><Input value={newVessel.imo_number} onChange={(e) => setNewVessel(p => ({ ...p, imo_number: e.target.value }))} placeholder="9123456" /></div>
                 <div><Label>Tipo</Label>
                   <Select value={newVessel.vessel_type} onValueChange={(v) => setNewVessel(p => ({ ...p, vessel_type: v }))}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
@@ -453,10 +452,10 @@ export default function FleetCommandCenter() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div><Label>Localização</Label><Input value={newVessel.location} onChange={handleChange}))} placeholder="Porto de Santos" /></div>
+                <div><Label>Localização</Label><Input value={newVessel.location} onChange={(e) => setNewVessel(p => ({ ...p, location: e.target.value }))} placeholder="Porto de Santos" /></div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={handleSetShowAddDialog}>Cancelar</Button>
+                <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
                 <Button onClick={handleAddVessel}>Adicionar</Button>
               </DialogFooter>
             </DialogContent>
@@ -489,7 +488,7 @@ export default function FleetCommandCenter() {
             <div className="xl:col-span-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {vessels.slice(0, 4).map(vessel => (
-                  <VesselCard key={vessel.id} vessel={vessel} onClick={handleSetSelectedVessel} />
+                  <VesselCard key={vessel.id} vessel={vessel} onClick={() => setSelectedVessel(vessel)} />
                 ))}
               </div>
             </div>
@@ -508,7 +507,7 @@ export default function FleetCommandCenter() {
         <TabsContent value="vessels">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {vessels.map(vessel => (
-              <VesselCard key={vessel.id} vessel={vessel} onClick={handleSetSelectedVessel} />
+              <VesselCard key={vessel.id} vessel={vessel} onClick={() => setSelectedVessel(vessel)} />
             ))}
             {vessels.length === 0 && !loading && (
               <Card className="col-span-full">
@@ -516,7 +515,7 @@ export default function FleetCommandCenter() {
                   <Ship className="h-16 w-16 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-semibold">Nenhuma embarcação cadastrada</h3>
                   <p className="text-muted-foreground mb-4">Adicione sua primeira embarcação</p>
-                  <Button onClick={handleSetShowAddDialog}><Plus className="h-4 w-4 mr-2" />Nova Embarcação</Button>
+                  <Button onClick={() => setShowAddDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova Embarcação</Button>
                 </CardContent>
               </Card>
             )}
@@ -536,7 +535,7 @@ export default function FleetCommandCenter() {
             <CardContent>
               {maintenance.length > 0 ? (
                 <div className="space-y-3">
-                  {maintenance.slice(0, 10).map((m: unknown) => (
+                  {maintenance.slice(0, 10).map((m: any) => (
                     <div key={m.id} className="flex items-center justify-between p-3 border rounded-lg">
                       <div>
                         <p className="font-medium">{m.description || "Manutenção Programada"}</p>

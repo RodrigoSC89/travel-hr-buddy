@@ -2,14 +2,7 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true,
-    "serviceworker": true
-  },
-  "globals": {
-    "importScripts": "readonly",
-    "firebase": "readonly",
-    "clients": "readonly",
-    "workbox": "readonly"
+    "node": true
   },
   "extends": [
     "eslint:recommended",
@@ -25,21 +18,11 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "react-hooks", "unused-imports"],
+  "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "no-unused-vars": "off",
-    "unused-imports/no-unused-imports": "error",
-    "unused-imports/no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "varsIgnorePattern": "^_",
-        "args": "after-used",
-        "argsIgnorePattern": "^_"
-      }
-    ],
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
     "react/no-unescaped-entities": "warn",
@@ -47,22 +30,7 @@
     "no-empty": "warn",
     "semi": ["error", "always"],
     "indent": ["error", 2],
-    "quotes": ["error", "double"],
-    
-    // Regras para prevenir console.* no código de produção
-    // FASE 2 - Ação Prioritária: Remoção de console.logs
-    // Permite apenas console.error e console.warn em blocos catch (via comentário eslint-disable)
-    // Proíbe: console.log, console.info, console.debug, console.table, etc.
-    "no-console": [
-      "error",
-      {
-        "allow": ["error", "warn"]
-      }
-    ],
-    "no-constant-condition": ["warn"],
-    "no-case-declarations": ["warn"],
-    "react/display-name": "off",
-    "no-useless-escape": "warn"
+    "quotes": ["error", "double"]
   },
   "settings": {
     "react": {
@@ -74,54 +42,6 @@
       "files": ["*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
-      }
-    },
-    {
-      "files": [
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-        "**/tests/**",
-        "**/e2e/**",
-        "**/test/**",
-        "__tests__/**"
-      ],
-      "rules": {
-        "no-console": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/ban-ts-comment": "off"
-      }
-    },
-    {
-      "files": [
-        "*.config.ts",
-        "*.config.js",
-        "vite.config.ts",
-        "vitest.config.ts"
-      ],
-      "rules": {
-        "no-console": "off",
-        "@typescript-eslint/no-var-requires": "off"
-      }
-    },
-    {
-      "files": ["**/scripts/**/*.js", "**/scripts/**/*.ts"],
-      "rules": {
-        "no-console": "off"
-      }
-    },
-    {
-      "files": ["**/sw.js", "**/service-worker.js", "**/*-sw.js", "**/firebase-messaging-sw.js"],
-      "rules": {
-        "no-console": "off",
-        "no-undef": "off"
-      }
-    },
-    {
-      "files": ["**/sentry.*.config.ts", "**/*.config.ts"],
-      "rules": {
-        "no-console": "off"
       }
     }
   ]

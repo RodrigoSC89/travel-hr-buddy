@@ -5,7 +5,7 @@
  * into a workflow detail page with real AI-generated suggestions.
  */
 
-import { memo, memo, useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { KanbanAISuggestions, type Suggestion } from "@/components/workflows";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,7 +15,7 @@ import type { Database } from "@/integrations/supabase/types";
 // type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
 
 // Example: Integration in a workflow detail page
-export const WorkflowDetailWithAISuggestions = memo(function({ workflowId }: { workflowId: string }) {
+export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
   const [aiSuggestions, setAiSuggestions] = useState<Suggestion[]>([]);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const WorkflowDetailWithAISuggestions = memo(function({ workflowId }: { w
           criticidade: "Crítica",
           responsavel_sugerido: "DevOps Lead"
         }
-      ]);
+      ];
 
       setAiSuggestions(suggestions);
     };
@@ -85,7 +85,7 @@ export const WorkflowDetailWithAISuggestions = memo(function({ workflowId }: { w
 // Example: Generate suggestions dynamically based on workflow analysis
 export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<Suggestion[]> {
   // Fetch workflow steps
-  const { data: steps } = await (supabase as unknown)
+  const { data: steps } = await (supabase as any)
     .from("smart_workflow_steps")
     .select("*")
     .eq("workflow_id", workflowId);
@@ -166,7 +166,7 @@ export default function ExampleWorkflowPage() {
           criticidade: "Média",
           responsavel_sugerido: "Tech Lead"
         }
-      ]);
+      ];
 
       // Method 2: Generate dynamic suggestions
       const dynamicSuggestions = await generateAISuggestionsForWorkflow("workflow-123");

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,7 +61,7 @@ export default function VaultAIComplete() {
 
   const loadDocuments = async () => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("vault_documents")
         .select("*")
         .eq("status", "active")
@@ -78,7 +77,7 @@ export default function VaultAIComplete() {
 
   const loadSearchLogs = async () => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("vault_search_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -116,7 +115,7 @@ export default function VaultAIComplete() {
       setSearchResults(results);
 
       // Log the search
-      await (supabase as unknown)
+      await (supabase as any)
         .from("vault_search_logs")
         .insert({
           query: searchQuery,
@@ -157,7 +156,7 @@ export default function VaultAIComplete() {
         queryTerms.forEach(term => {
           const occurrences = (contentLower.match(new RegExp(term, "g")) || []).length;
           score += occurrences * 0.1;
-  };
+        });
 
         // Boost score for title matches
         if (doc.title.toLowerCase().includes(queryLower)) {
@@ -178,7 +177,7 @@ export default function VaultAIComplete() {
           category: doc.category,
           similarity_score: score,
           highlighted_excerpt: excerpt
-        });
+        };
       })
       .filter(result => result.similarity_score >= similarityThreshold)
       .sort((a, b) => b.similarity_score - a.similarity_score);
@@ -211,7 +210,7 @@ export default function VaultAIComplete() {
       let score = 0;
       queryTerms.forEach(term => {
         if (excerptLower.includes(term)) score++;
-  };
+      });
 
       if (score > bestScore) {
         bestScore = score;
@@ -224,12 +223,12 @@ export default function VaultAIComplete() {
     queryTerms.forEach(term => {
       const regex = new RegExp(`(${term})`, "gi");
       highlighted = highlighted.replace(regex, "<mark>$1</mark>");
-  });
+    });
 
     return highlighted.length > maxLength 
       ? highlighted.substring(0, maxLength) + "..."
       : highlighted;
-  });
+  };
 
   const getDocumentTypeIcon = (type: string) => {
     switch (type) {
@@ -286,7 +285,7 @@ export default function VaultAIComplete() {
             <Input
               placeholder="Digite sua busca... (ex: procedimentos de segurança, manutenção preventiva)"
               value={searchQuery}
-              onChange={handleChange}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && performVectorSearch()}
               className="flex-1"
             />
@@ -326,7 +325,7 @@ export default function VaultAIComplete() {
               </SelectContent>
             </Select>
 
-            <Select value={similarityThreshold.toString()} onValueChange={(val) => setSimilarityThreshold(parseFloat(val}>
+            <Select value={similarityThreshold.toString()} onValueChange={(val) => setSimilarityThreshold(parseFloat(val))}>
               <SelectTrigger className="w-48">
                 <SelectValue />
               </SelectTrigger>

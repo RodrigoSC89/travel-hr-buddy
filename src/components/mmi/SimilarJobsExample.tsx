@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * Example React components showing how to use the MMI Jobs Similarity Search API
  * 
  * These components demonstrate both GET and POST modes of operation
@@ -22,7 +21,7 @@ import { Loader2 } from "lucide-react";
 // Example 1: Find Similar Jobs by ID (GET mode)
 // ============================================================================
 
-export const SimilarJobsByIdExample = memo(function() {
+export function SimilarJobsByIdExample() {
   const [jobId, setJobId] = useState<string>("550e8400-e29b-41d4-a716-446655440001");
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const { data, loading, error, similarJobs } = useSimilarJobsById(activeJobId);
@@ -44,7 +43,7 @@ export const SimilarJobsByIdExample = memo(function() {
           <Input
             placeholder="Enter job ID..."
             value={jobId}
-            onChange={handleChange}
+            onChange={(e) => setJobId(e.target.value)}
           />
           <Button onClick={handleSearch} disabled={loading || !jobId}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
@@ -74,7 +73,7 @@ export const SimilarJobsByIdExample = memo(function() {
 // Example 2: Semantic Search (POST mode)
 // ============================================================================
 
-export const SemanticSearchExample = memo(function() {
+export function SemanticSearchExample() {
   const [query, setQuery] = useState<string>("hydraulic system maintenance");
   const [activeQuery, setActiveQuery] = useState<string | null>(null);
   const { data, loading, error, results } = useSemanticSearch(activeQuery);
@@ -96,7 +95,7 @@ export const SemanticSearchExample = memo(function() {
           <Input
             placeholder="Enter search query..."
             value={query}
-            onChange={handleChange}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <Button onClick={handleSearch} disabled={loading || !query}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
@@ -126,7 +125,7 @@ export const SemanticSearchExample = memo(function() {
 // Example 3: Duplicate Detection
 // ============================================================================
 
-export const DuplicateDetectionExample = memo(function() {
+export function DuplicateDetectionExample() {
   const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -158,7 +157,7 @@ export const DuplicateDetectionExample = memo(function() {
           <Input
             placeholder="Describe the job..."
             value={query}
-            onChange={handleChange}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <Button onClick={handleCheckDuplicates} disabled={loading || !query}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Check"}
@@ -233,4 +232,4 @@ function SimilarJobsList({ jobs }: { jobs: SimilarJob[] }) {
       ))}
     </div>
   );
-});
+}

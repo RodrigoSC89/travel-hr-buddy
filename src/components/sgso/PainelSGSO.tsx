@@ -1,4 +1,3 @@
-import { useRef } from "react";;
 import React, { useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -100,7 +99,7 @@ export const PainelSGSO: React.FC = () => {
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
       })
       .save();
-  });
+  };
 
   return (
     <div className="space-y-6">

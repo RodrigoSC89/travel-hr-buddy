@@ -2,7 +2,7 @@
  * Crew Management - Advanced crew tracking and certification
  */
 
-import { memo, memo, useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface CrewMember {
   performance: number;
 }
 
-export const CrewManagement = memo(function() {
+export function CrewManagement() {
   const [crew, setCrew] = useState<CrewMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "expiring" | "resting">("all");
@@ -48,12 +48,13 @@ export const CrewManagement = memo(function() {
         .limit(20);
 
       if (error) {
+        console.error("Error loading crew:", error);
         setCrew(getDemoCrew());
         return;
       }
 
       if (data && data.length > 0) {
-        const mappedCrew: CrewMember[] = data.map((c: unknown) => ({
+        const mappedCrew: CrewMember[] = data.map((c: any) => ({
           id: c.id,
           name: c.full_name || "Tripulante",
           position: c.position || "Marinheiro",
@@ -79,7 +80,6 @@ export const CrewManagement = memo(function() {
         setCrew(getDemoCrew());
       }
     } catch (error) {
-      console.error("Error loading crew:", error);
       console.error("Error loading crew:", error);
       setCrew(getDemoCrew());
     } finally {
@@ -107,7 +107,7 @@ export const CrewManagement = memo(function() {
     if (filter === "expiring") return c.certifications.some(cert => cert.status === "expiring");
     if (filter === "resting") return c.restHours >= 10;
     return true;
-  };
+  });
 
   if (isLoading) {
     return (
@@ -206,14 +206,14 @@ export const CrewManagement = memo(function() {
         <Button 
           variant={filter === "all" ? "default" : "outline"} 
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("all")}
         >
           Todos
         </Button>
         <Button 
           variant={filter === "expiring" ? "default" : "outline"} 
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("expiring")}
         >
           <AlertCircle className="h-4 w-4 mr-1" />
           Certificados Expirando
@@ -221,7 +221,7 @@ export const CrewManagement = memo(function() {
         <Button 
           variant={filter === "resting" ? "default" : "outline"} 
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("resting")}
         >
           <Clock className="h-4 w-4 mr-1" />
           Em Descanso
@@ -313,4 +313,4 @@ export const CrewManagement = memo(function() {
       </Card>
     </div>
   );
-});
+}

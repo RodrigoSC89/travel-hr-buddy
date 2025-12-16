@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -140,7 +139,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
           category: selectedCategory,
           userId: user?.id
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -229,7 +228,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
           <Filter className="w-4 h-4" />
           <select 
             value={selectedTimeRange} 
-            onChange={handleChange}
+            onChange={(e) => setSelectedTimeRange(e.target.value)}
             className="border rounded px-3 py-1"
           >
             <option value="1d">Último dia</option>
@@ -241,7 +240,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         
         <select 
           value={selectedCategory} 
-          onChange={handleChange}
+          onChange={(e) => setSelectedCategory(e.target.value)}
           className="border rounded px-3 py-1"
         >
           <option value="all">Todas as categorias</option>

@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -59,7 +58,7 @@ interface Document {
   size: string;
 }
 
-export const CrewRealtimeWorkspace = memo(() => {
+export const CrewRealtimeWorkspace = () => {
   const [messageInput, setMessageInput] = useState("");
   const [selectedChannel, setSelectedChannel] = useState("operacoes-gerais");
 
@@ -93,11 +92,11 @@ export const CrewRealtimeWorkspace = memo(() => {
 
   const getStatusColor = (status: TeamMember["status"]) => {
     switch (status) {
-    case "online": return "bg-success";
-    case "away": return "bg-warning";
-    case "busy": return "bg-destructive";
-    case "offline": return "bg-muted-foreground/50";
-    };
+      case "online": return "bg-success";
+      case "away": return "bg-warning";
+      case "busy": return "bg-destructive";
+      case "offline": return "bg-muted-foreground/50";
+    }
   };
 
   const handleSendMessage = () => {
@@ -264,7 +263,7 @@ export const CrewRealtimeWorkspace = memo(() => {
                   <Input
                     placeholder="Digite sua mensagem..."
                     value={messageInput}
-                    onChange={handleChange}
+                    onChange={(e) => setMessageInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                     className="flex-1"
                   />
@@ -310,9 +309,9 @@ export const CrewRealtimeWorkspace = memo(() => {
                     >
                       <div className={`p-2 rounded ${
                         activity.type === "document" ? "bg-info/10" :
-                          activity.type === "task" ? "bg-success/10" :
-                            activity.type === "message" ? "bg-primary/10" :
-                              "bg-muted"
+                        activity.type === "task" ? "bg-success/10" :
+                        activity.type === "message" ? "bg-primary/10" :
+                        "bg-muted"
                       }`}>
                         {activity.type === "document" && <FileText className="h-4 w-4 text-info" />}
                         {activity.type === "task" && <Activity className="h-4 w-4 text-success" />}

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import {
   Truck, 
   Package, 
   MapPin, 
+  Clock, 
   TrendingUp, 
   AlertTriangle, 
   CheckCircle, 
@@ -25,12 +25,16 @@ import {
   Star, 
   Globe, 
   Zap, 
+  Shield, 
   Crown, 
   Diamond, 
   Activity,
+  Users,
+  Target,
   Plane,
   Ship,
   Navigation,
+  Anchor,
   Brain
 } from "lucide-react";
 import { LogisticsAIInsights } from "./logistics-ai-insights";
@@ -103,9 +107,9 @@ const EnhancedLogisticsDashboard: React.FC = () => {
     cargo: `Carga ${item.id}`,
     origin: item.origin,
     destination: item.destination,
-    status: item.status as unknown,
+    status: item.status as any,
     estimatedArrival: item.estimatedDelivery,
-    priority: item.priority as unknown,
+    priority: item.priority as any,
   }));
 
   const quickStats = [
@@ -277,7 +281,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
           {quickStats.map((stat, index) => (
             <Card key={index} className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
               bg-gradient-to-br from-card via-card/95 to-${stat.color}/5 border-${stat.color}/20 hover:border-${stat.color}/40`}>
-              <CardContent key={CardContent.id || index} className="p-4 flex items-center gap-3">
+              <CardContent className="p-4 flex items-center gap-3">
                 <div className={`p-3 rounded-xl bg-${stat.color}/20 group-hover:scale-110 transition-transform duration-300`}>
                   <stat.icon className={`w-6 h-6 text-${stat.color}`} />
                 </div>

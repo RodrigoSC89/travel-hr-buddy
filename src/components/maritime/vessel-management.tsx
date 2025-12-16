@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -68,7 +67,7 @@ const initialFormData: VesselFormData = {
   crew_capacity: 0
 };
 
-export const VesselManagement = memo(function() {
+export function VesselManagement() {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -177,7 +176,7 @@ export const VesselManagement = memo(function() {
       crew_capacity: vessel.crew_capacity || 0
     });
     setDialogOpen(true);
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -236,7 +235,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Ex: MV Atlantic Explorer"
                 />
               </div>
@@ -263,7 +262,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="imo_number"
                   value={formData.imo_number}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, imo_number: e.target.value })}
                   placeholder="Ex: 1234567"
                 />
               </div>
@@ -272,7 +271,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="flag_state"
                   value={formData.flag_state}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, flag_state: e.target.value })}
                   placeholder="Ex: Brasil"
                 />
               </div>
@@ -282,7 +281,7 @@ export const VesselManagement = memo(function() {
                   id="gross_tonnage"
                   type="number"
                   value={formData.gross_tonnage}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, gross_tonnage: parseInt(e.target.value) || 0 })}
                   placeholder="Ex: 50000"
                 />
               </div>
@@ -292,7 +291,7 @@ export const VesselManagement = memo(function() {
                   id="built_year"
                   type="number"
                   value={formData.built_year}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, built_year: parseInt(e.target.value) || new Date().getFullYear() })}
                   placeholder="Ex: 2020"
                 />
               </div>
@@ -301,7 +300,7 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="classification_society"
                   value={formData.classification_society}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, classification_society: e.target.value })}
                   placeholder="Ex: DNV GL"
                 />
               </div>
@@ -311,7 +310,7 @@ export const VesselManagement = memo(function() {
                   id="crew_capacity"
                   type="number"
                   value={formData.crew_capacity}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, crew_capacity: parseInt(e.target.value) || 0 })}
                   placeholder="Ex: 25"
                 />
               </div>
@@ -334,13 +333,13 @@ export const VesselManagement = memo(function() {
                 <Input
                   id="current_location"
                   value={formData.current_location}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, current_location: e.target.value })}
                   placeholder="Ex: Porto de Santos"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetDialogOpen}>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleSaveVessel}>
@@ -356,7 +355,7 @@ export const VesselManagement = memo(function() {
         <Input
           placeholder="Buscar navios..."
           value={searchTerm}
-          onChange={handleChange}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="max-w-md"
         />
       </div>
@@ -379,13 +378,13 @@ export const VesselManagement = memo(function() {
                   <CardTitle className="text-lg">{vessel.name}</CardTitle>
                 </div>
                 <div className="flex space-x-1">
-                  <Button variant="ghost" size="icon" onClick={() => handlehandleEditVessel}>
+                  <Button variant="ghost" size="icon" onClick={() => handleEditVessel(vessel)}>
                     <Edit className="w-4 h-4" />
                   </Button>
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    onClick={() => handlehandleDeleteVessel}
+                    onClick={() => handleDeleteVessel(vessel.id)}
                     className="text-destructive hover:text-destructive"
                   >
                     <Trash2 className="w-4 h-4" />

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -121,7 +120,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       setIsAnalyzing(false);
       toast.success("Análise preditiva concluída!", {
         description: `${insights.length} insights gerados com confiança média de 81%`
-      };
+      });
     }, 3000);
   };
 

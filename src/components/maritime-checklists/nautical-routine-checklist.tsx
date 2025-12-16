@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -128,7 +127,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: nauticalRoutineItems
-});
+  });
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -193,7 +192,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
       return (
         <Checkbox
           checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked}
+          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
           className="mr-2"
         />
       );
@@ -204,7 +203,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
           <Input
             type="number"
             value={String(item.value || "")}
-            onChange={handleChange}
+            onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
             placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
             className="w-32"
           />
@@ -216,7 +215,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
       return (
         <Input
           value={String(item.value || "")}
-          onChange={handleChange}
+          onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
           placeholder="Digite sua resposta..."
           className="w-full"
         />
@@ -295,7 +294,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                   <Button
                     variant={selectedCategory === "all" ? "default" : "outline"}
                     size="sm"
-                    onClick={handleSetSelectedCategory}
+                    onClick={() => setSelectedCategory("all")}
                   >
                     Todas as Categorias
                   </Button>
@@ -304,7 +303,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
                       size="sm"
-                      onClick={handleSetSelectedCategory}
+                      onClick={() => setSelectedCategory(category)}
                       className="flex items-center gap-2"
                     >
                       {getCategoryIcon(category)}
@@ -319,7 +318,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                     <Card key={item.id} className={`transition-colors ${
                       item.status === "completed" ? "bg-green-50 border-green-200" : ""
                     }`}>
-                      <CardHeader key={CardHeader.id || index} className="pb-3">
+                      <CardHeader className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
@@ -355,7 +354,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
                             value={item.notes || ""}
-                            onChange={handleChange}
+                            onChange={(e) => handleItemChange(item.id, "notes", e.target.value)}
                             placeholder="Adicione observações sobre este item..."
                             className="mt-1"
                             rows={2}

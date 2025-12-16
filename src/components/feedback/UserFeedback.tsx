@@ -1,18 +1,17 @@
 /**
-import { useState, useCallback } from "react";;
  * User Feedback Component
  * Quick feedback collection for user experience
  */
 
-import React, { memo, useState } from "react";
-import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import React, { memo, useState } from 'react';
+import { ThumbsUp, ThumbsDown, MessageSquare, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { cn } from '@/lib/utils';
 
 interface UserFeedbackProps {
   featureId: string;
-  onSubmit?: (feedback: { rating: "positive" | "negative"; comment?: string }) => void;
+  onSubmit?: (feedback: { rating: 'positive' | 'negative'; comment?: string }) => void;
   className?: string;
   compact?: boolean;
 }
@@ -23,9 +22,9 @@ export const UserFeedback = memo(function UserFeedback({
   className,
   compact = false
 }: UserFeedbackProps) {
-  const [rating, setRating] = useState<"positive" | "negative" | null>(null);
+  const [rating, setRating] = useState<'positive' | 'negative' | null>(null);
   const [showComment, setShowComment] = useState(false);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = () => {
@@ -33,7 +32,7 @@ export const UserFeedback = memo(function UserFeedback({
       onSubmit?.({ rating, comment: comment || undefined });
       setSubmitted(true);
     }
-  });
+  };
 
   if (submitted) {
     return (
@@ -54,10 +53,10 @@ export const UserFeedback = memo(function UserFeedback({
         <Button
           variant="ghost"
           size="sm"
-          className={cn("h-7 w-7 p-0", rating === "positive" && "text-green-500")}
+          className={cn("h-7 w-7 p-0", rating === 'positive' && "text-green-500")}
           onClick={() => {
-            setRating("positive");
-            onSubmit?.({ rating: "positive" });
+            setRating('positive');
+            onSubmit?.({ rating: 'positive' });
             setSubmitted(true);
           }}
         >
@@ -66,9 +65,9 @@ export const UserFeedback = memo(function UserFeedback({
         <Button
           variant="ghost"
           size="sm"
-          className={cn("h-7 w-7 p-0", rating === "negative" && "text-red-500")}
+          className={cn("h-7 w-7 p-0", rating === 'negative' && "text-red-500")}
           onClick={() => {
-            setRating("negative");
+            setRating('negative');
             setShowComment(true);
           }}
         >
@@ -84,22 +83,22 @@ export const UserFeedback = memo(function UserFeedback({
         <span className="text-sm text-muted-foreground">Esta funcionalidade foi útil?</span>
         <div className="flex gap-1">
           <Button
-            variant={rating === "positive" ? "default" : "outline"}
+            variant={rating === 'positive' ? 'default' : 'outline'}
             size="sm"
-            onClick={handleSetRating}
-            className={cn(rating === "positive" && "bg-green-500 hover:bg-green-600")}
+            onClick={() => setRating('positive')}
+            className={cn(rating === 'positive' && "bg-green-500 hover:bg-green-600")}
           >
             <ThumbsUp className="h-4 w-4 mr-1" />
             Sim
           </Button>
           <Button
-            variant={rating === "negative" ? "default" : "outline"}
+            variant={rating === 'negative' ? 'default' : 'outline'}
             size="sm"
             onClick={() => {
-              setRating("negative");
+              setRating('negative');
               setShowComment(true);
             }}
-            className={cn(rating === "negative" && "bg-red-500 hover:bg-red-600")}
+            className={cn(rating === 'negative' && "bg-red-500 hover:bg-red-600")}
           >
             <ThumbsDown className="h-4 w-4 mr-1" />
             Não
@@ -112,7 +111,7 @@ export const UserFeedback = memo(function UserFeedback({
           <Textarea
             placeholder="Como podemos melhorar? (opcional)"
             value={comment}
-            onChange={handleChange}
+            onChange={(e) => setComment(e.target.value)}
             rows={2}
             className="text-sm"
           />
@@ -123,7 +122,7 @@ export const UserFeedback = memo(function UserFeedback({
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={handleSetShowComment}
+              onClick={() => setShowComment(false)}
             >
               Cancelar
             </Button>
@@ -131,7 +130,7 @@ export const UserFeedback = memo(function UserFeedback({
         </div>
       )}
 
-      {rating === "positive" && !showComment && (
+      {rating === 'positive' && !showComment && (
         <div className="flex gap-2">
           <Button size="sm" onClick={handleSubmit}>
             Confirmar
@@ -139,7 +138,7 @@ export const UserFeedback = memo(function UserFeedback({
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleSetShowComment}
+            onClick={() => setShowComment(true)}
           >
             <MessageSquare className="h-4 w-4 mr-1" />
             Adicionar comentário

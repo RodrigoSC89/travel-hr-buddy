@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { QrCode, Scan, Plus, Edit, Trash2, MapPin, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +23,7 @@ interface QREquipment {
   notes?: string;
 }
 
-export const QREquipmentManager = memo(() => {
+export const QREquipmentManager = () => {
   const [equipment, setEquipment] = useState<QREquipment[]>([
     {
       id: "1",
@@ -69,7 +68,7 @@ export const QREquipmentManager = memo(() => {
     case "maintenance": return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
     case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
     default: return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
-    };
+    }
   };
 
   const handleCreateEquipment = () => {
@@ -78,14 +77,14 @@ export const QREquipmentManager = memo(() => {
       description: "Novo equipamento foi cadastrado com QR code gerado.",
     });
     setIsCreateOpen(false);
-  });
+  };
 
   const handleScanQR = () => {
     toast({
       title: "Scanner QR",
       description: "Abra a câmera para escanear o código QR do equipamento.",
     });
-  });
+  };
 
   const generateQRCode = (equipment: QREquipment) => {
     // Simulate QR code generation
@@ -142,7 +141,7 @@ export const QREquipmentManager = memo(() => {
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={handleSetIsCreateOpen}>
+                <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                   Cancelar
                 </Button>
                 <Button onClick={handleCreateEquipment}>

@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 393 - MMI Integration for Predictive Maintenance
  * Integration with MMI (Machine Maintenance Intelligence) for failure prediction
  */
@@ -37,7 +36,7 @@ export const MMIIntegration: React.FC = () => {
     try {
       // Fetch from MMI system (mocked for now, would integrate with real MMI API)
       const { data, error } = await supabase
-        .from("mmi_maintenance_jobs" as unknown)
+        .from("mmi_maintenance_jobs" as any)
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
@@ -68,7 +67,7 @@ export const MMIIntegration: React.FC = () => {
         ]);
       } else {
         // Transform MMI data to predictions
-        const transformed = (data || []).slice(0, 5).map((job: unknown) => ({
+        const transformed = (data || []).slice(0, 5).map((job: any) => ({
           id: job.id,
           equipment_id: job.component_id || "N/A",
           equipment_name: job.title || "Unknown Equipment",
@@ -90,7 +89,7 @@ export const MMIIntegration: React.FC = () => {
 
   const scheduleMaintenanceFromPrediction = async (prediction: MMIPrediction) => {
     try {
-      const { error } = await supabase.from("maintenance_tasks" as unknown).insert({
+      const { error } = await supabase.from("maintenance_tasks" as any).insert({
         task_name: `Preventive: ${prediction.equipment_name}`,
         equipment_id: prediction.equipment_id,
         scheduled_date: prediction.predicted_date.split("T")[0],
@@ -208,7 +207,7 @@ export const MMIIntegration: React.FC = () => {
                     </Badge>
                     <Button
                       size="sm"
-                      onClick={() => handlescheduleMaintenanceFromPrediction}
+                      onClick={() => scheduleMaintenanceFromPrediction(prediction)}
                     >
                       Schedule
                     </Button>
@@ -221,4 +220,4 @@ export const MMIIntegration: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

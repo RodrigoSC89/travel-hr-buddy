@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * Edge Computing Dashboard
  * Processamento distribuído na borda da rede
  */
@@ -54,7 +53,7 @@ const EdgeComputingPage: React.FC = () => {
       time: new Date().toLocaleTimeString(),
       latency: Math.floor(2 + Math.random() * 6),
       throughput: Math.floor(800 + Math.random() * 400)
-    };
+    });
 
     const initial = Array.from({ length: 20 }, () => generateData());
     setRealtimeData(initial);
@@ -79,12 +78,12 @@ const EdgeComputingPage: React.FC = () => {
 
   const getStatusBadge = (status: EdgeNode["status"]) => {
     switch (status) {
-    case "online":
-      return <Badge className="bg-green-500/20 text-green-400"><Signal className="h-3 w-3 mr-1" />Online</Badge>;
-    case "offline":
-      return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Offline</Badge>;
-    case "maintenance":
-      return <Badge className="bg-yellow-500/20 text-yellow-400"><Settings className="h-3 w-3 mr-1" />Manutenção</Badge>;
+      case "online":
+        return <Badge className="bg-green-500/20 text-green-400"><Signal className="h-3 w-3 mr-1" />Online</Badge>;
+      case "offline":
+        return <Badge className="bg-red-500/20 text-red-400"><AlertTriangle className="h-3 w-3 mr-1" />Offline</Badge>;
+      case "maintenance":
+        return <Badge className="bg-yellow-500/20 text-yellow-400"><Settings className="h-3 w-3 mr-1" />Manutenção</Badge>;
     }
   };
 
@@ -93,7 +92,7 @@ const EdgeComputingPage: React.FC = () => {
       title: "Reiniciando Nó",
       description: "O nó está sendo reiniciado. Isso pode levar alguns minutos.",
     });
-  });
+  };
 
   const onlineNodes = nodes.filter(n => n.status === "online").length;
   const avgLatency = nodes.filter(n => n.status === "online").reduce((a, b) => a + b.latency, 0) / onlineNodes;
@@ -218,7 +217,7 @@ const EdgeComputingPage: React.FC = () => {
                     </>
                   )}
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleRestartNode}>
+                    <Button size="sm" variant="outline" className="flex-1" onClick={() => handleRestartNode(node.id)}>
                       <RefreshCw className="h-4 w-4 mr-1" />
                       Reiniciar
                     </Button>
@@ -247,7 +246,7 @@ const EdgeComputingPage: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="time" stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                     <Line type="monotone" dataKey="latency" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="Latência (ms)" />
                   </LineChart>
                 </ResponsiveContainer>
@@ -267,7 +266,7 @@ const EdgeComputingPage: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="time" stroke="hsl(var(--muted-foreground))" tick={{ fontSize: 10 }} />
                     <YAxis stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                     <Area type="monotone" dataKey="throughput" stroke="#22c55e" fill="#22c55e" fillOpacity={0.3} name="Throughput (ops/s)" />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -303,6 +302,6 @@ const EdgeComputingPage: React.FC = () => {
       </Tabs>
     </ModulePageWrapper>
   );
-});
+};
 
 export default EdgeComputingPage;

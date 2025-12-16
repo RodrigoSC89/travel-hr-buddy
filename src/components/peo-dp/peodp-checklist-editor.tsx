@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PEO-DP Checklist Editor
  * Editor para criar/atualizar requisitos do checklist PEO-DP anualmente
  */
@@ -43,7 +42,7 @@ interface PEODPChecklistEditorProps {
   existingVersion?: PEODPChecklistVersion;
 }
 
-export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: PEODPChecklistEditorProps) {
+export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklistEditorProps) {
   const currentYear = new Date().getFullYear();
   
   const [version, setVersion] = useState<Partial<PEODPChecklistVersion>>({
@@ -83,7 +82,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       reference: newReq.reference || undefined,
       mandatory: newReq.mandatory ?? true,
       weight: newReq.weight ?? 5
-    });
+    };
 
     setVersion(prev => ({
       ...prev,
@@ -102,7 +101,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
 
     setIsAddDialogOpen(false);
     toast.success("Requisito adicionado");
-  });
+  };
 
   const handleUpdateRequirement = () => {
     if (!editingReq) return;
@@ -225,7 +224,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                 id="year"
                 type="number"
                 value={version.year}
-                onChange={handleChange}))}
+                onChange={(e) => setVersion(prev => ({ ...prev, year: parseInt(e.target.value) }))}
               />
             </div>
             <div className="space-y-2">
@@ -233,7 +232,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
               <Input
                 id="versionNum"
                 value={version.version}
-                onChange={handleChange}))}
+                onChange={(e) => setVersion(prev => ({ ...prev, version: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -242,7 +241,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                 id="effectiveDate"
                 type="date"
                 value={version.effectiveDate}
-                onChange={handleChange}))}
+                onChange={(e) => setVersion(prev => ({ ...prev, effectiveDate: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -256,7 +255,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
               id="notes"
               placeholder="Observações sobre esta versão do checklist..."
               value={version.notes}
-              onChange={handleChange}))}
+              onChange={(e) => setVersion(prev => ({ ...prev, notes: e.target.value }))}
               rows={2}
             />
           </div>
@@ -268,7 +267,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Select value={selectedSection} onValueChange={(v) => setSelectedSection(v as PEODPSection}>
+              <Select value={selectedSection} onValueChange={(v) => setSelectedSection(v as PEODPSection)}>
                 <SelectTrigger className="w-[250px]">
                   <SelectValue />
                 </SelectTrigger>
@@ -323,7 +322,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                       <Input
                         placeholder="Ex: 3.2.25"
                         value={newReq.code}
-                        onChange={handleChange}))}
+                        onChange={(e) => setNewReq(prev => ({ ...prev, code: e.target.value }))}
                       />
                     </div>
                   </div>
@@ -332,7 +331,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                     <Input
                       placeholder="Título do requisito"
                       value={newReq.title}
-                      onChange={handleChange}))}
+                      onChange={(e) => setNewReq(prev => ({ ...prev, title: e.target.value }))}
                     />
                   </div>
                   <div className="space-y-2">
@@ -340,7 +339,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                     <Textarea
                       placeholder="Descrição detalhada do requisito..."
                       value={newReq.description}
-                      onChange={handleChange}))}
+                      onChange={(e) => setNewReq(prev => ({ ...prev, description: e.target.value }))}
                       rows={3}
                     />
                   </div>
@@ -350,7 +349,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                       <Input
                         placeholder="Ex: IMCA M 117"
                         value={newReq.reference}
-                        onChange={handleChange}))}
+                        onChange={(e) => setNewReq(prev => ({ ...prev, reference: e.target.value }))}
                       />
                     </div>
                     <div className="space-y-2">
@@ -360,7 +359,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                         min={1}
                         max={10}
                         value={newReq.weight}
-                        onChange={handleChange}))}
+                        onChange={(e) => setNewReq(prev => ({ ...prev, weight: parseInt(e.target.value) }))}
                       />
                     </div>
                     <div className="space-y-2">
@@ -376,7 +375,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
+                  <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                     Cancelar
                   </Button>
                   <Button onClick={handleAddRequirement}>
@@ -430,14 +429,14 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={handleSetEditingReq}
+                          onClick={() => setEditingReq(req)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handlehandleDeleteRequirement}
+                          onClick={() => handleDeleteRequirement(req.id)}
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
@@ -452,7 +451,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       </Card>
 
       {/* Edit dialog */}
-      <Dialog open={!!editingReq} onOpenChange={() => setEditingReq(null}>
+      <Dialog open={!!editingReq} onOpenChange={() => setEditingReq(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Editar Requisito</DialogTitle>
@@ -482,7 +481,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                   <Label>Código</Label>
                   <Input
                     value={editingReq.code}
-                    onChange={handleChange}
+                    onChange={(e) => setEditingReq({ ...editingReq, code: e.target.value })}
                   />
                 </div>
               </div>
@@ -490,14 +489,14 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                 <Label>Título</Label>
                 <Input
                   value={editingReq.title}
-                  onChange={handleChange}
+                  onChange={(e) => setEditingReq({ ...editingReq, title: e.target.value })}
                 />
               </div>
               <div className="space-y-2">
                 <Label>Descrição</Label>
                 <Textarea
                   value={editingReq.description}
-                  onChange={handleChange}
+                  onChange={(e) => setEditingReq({ ...editingReq, description: e.target.value })}
                   rows={3}
                 />
               </div>
@@ -506,7 +505,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                   <Label>Referência</Label>
                   <Input
                     value={editingReq.reference || ""}
-                    onChange={handleChange}
+                    onChange={(e) => setEditingReq({ ...editingReq, reference: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -516,7 +515,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
                     min={1}
                     max={10}
                     value={editingReq.weight}
-                    onChange={handleChange}
+                    onChange={(e) => setEditingReq({ ...editingReq, weight: parseInt(e.target.value) })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -533,7 +532,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetEditingReq}>
+            <Button variant="outline" onClick={() => setEditingReq(null)}>
               Cancelar
             </Button>
             <Button onClick={handleUpdateRequirement}>

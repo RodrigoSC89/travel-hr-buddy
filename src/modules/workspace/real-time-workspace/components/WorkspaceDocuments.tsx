@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -75,20 +74,20 @@ interface WorkspaceDocumentsProps {
 
 const getFileIcon = (type: SharedDocument["type"]) => {
   switch (type) {
-  case "PDF": return <FileText className="h-5 w-5 text-red-500" />;
-  case "DOCX": return <FileText className="h-5 w-5 text-blue-500" />;
-  case "XLSX": return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
-  case "IMG": return <FileImage className="h-5 w-5 text-purple-500" />;
-  default: return <File className="h-5 w-5 text-muted-foreground" />;
+    case "PDF": return <FileText className="h-5 w-5 text-red-500" />;
+    case "DOCX": return <FileText className="h-5 w-5 text-blue-500" />;
+    case "XLSX": return <FileSpreadsheet className="h-5 w-5 text-green-500" />;
+    case "IMG": return <FileImage className="h-5 w-5 text-purple-500" />;
+    default: return <File className="h-5 w-5 text-muted-foreground" />;
   }
 };
 
 const getTypeBadgeVariant = (type: SharedDocument["type"]) => {
   switch (type) {
-  case "PDF": return "destructive";
-  case "DOCX": return "default";
-  case "XLSX": return "secondary";
-  default: return "outline";
+    case "PDF": return "destructive";
+    case "DOCX": return "default";
+    case "XLSX": return "secondary";
+    default: return "outline";
   }
 };
 
@@ -203,7 +202,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     }
     setIsDeleteOpen(false);
     setSelectedDoc(null);
-  });
+  };
 
   const handleCopyLink = async () => {
     try {
@@ -233,7 +232,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     }
     setIsShareOpen(false);
     setSelectedDoc(null);
-  });
+  };
 
   return (
     <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">
@@ -243,7 +242,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             <FolderOpen className="h-5 w-5 text-primary" />
             Documentos Compartilhados
           </CardTitle>
-          <Button size="sm" className="gap-2" onClick={handleSetIsUploadOpen}>
+          <Button size="sm" className="gap-2" onClick={() => setIsUploadOpen(true)}>
             <Upload className="h-4 w-4" />
             Upload
           </Button>
@@ -253,7 +252,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           <Input 
             placeholder="Buscar documentos..." 
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 bg-muted/50"
           />
         </div>
@@ -272,7 +271,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                 <div
                   key={doc.id}
                   className="group flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 hover:border-primary/30 cursor-pointer transition-all duration-200"
-                  onClick={() => handlehandleViewDoc}
+                  onClick={() => handleViewDoc(doc)}
                 >
                   <div className="p-2.5 rounded-lg bg-muted">
                     {getFileIcon(doc.type)}
@@ -298,7 +297,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                     </div>
                   </div>
                   
-                  <Badge variant={getTypeBadgeVariant(doc.type) as unknown} className="text-xs">
+                  <Badge variant={getTypeBadgeVariant(doc.type) as any} className="text-xs">
                     {doc.type}
                   </Badge>
                   
@@ -365,7 +364,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           </DialogHeader>
           <div 
             className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-              selectedFile ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+              selectedFile ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
             }`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -373,7 +372,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           >
             {selectedFile ? (
               <div className="flex flex-col items-center gap-2">
-                {getFileIcon(selectedFile.name.split(".").pop()?.toUpperCase() as any || "OTHER")}
+                {getFileIcon(selectedFile.name.split('.').pop()?.toUpperCase() as any || "OTHER")}
                 <p className="font-medium">{selectedFile.name}</p>
                 <p className="text-sm text-muted-foreground">
                   {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
@@ -402,7 +401,10 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
               id="file-input" 
               type="file" 
               className="hidden" 
-              onChange={handleChange}
+              onChange={(e) => {
+                if (e.target.files?.[0]) {
+                  setSelectedFile(e.target.files[0]);
+                }
               }} 
             />
           </div>
@@ -451,10 +453,10 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsViewOpen}>
+            <Button variant="outline" onClick={() => setIsViewOpen(false)}>
               Fechar
             </Button>
-            <Button onClick={() => selectedDoc && handleDownload(selectedDoc}>
+            <Button onClick={() => selectedDoc && handleDownload(selectedDoc)}>
               <Download className="h-4 w-4 mr-2" />
               Download
             </Button>
@@ -492,7 +494,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetIsShareOpen}>
+            <Button variant="outline" onClick={() => setIsShareOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={confirmShare}>

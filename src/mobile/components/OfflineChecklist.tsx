@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 161.0 - Offline Checklist Component
  * Operational checklists that work offline-first
  */
@@ -157,7 +156,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                 <Checkbox
                   id={item.id}
                   checked={item.checked}
-                  onCheckedChange={() => handleToggleItem(item.id}
+                  onCheckedChange={() => handleToggleItem(item.id)}
                   className="mt-1"
                 />
                 <div className="flex-1">
@@ -176,7 +175,8 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                     <Textarea
                       placeholder="Add notes..."
                       value={notes[item.id] || item.notes || ""}
-                      onChange={handleChange});
+                      onChange={(e) => {
+                        setNotes({ ...notes, [item.id]: e.target.value });
                       }}
                       onBlur={() => {
                         if (notes[item.id] !== item.notes) {

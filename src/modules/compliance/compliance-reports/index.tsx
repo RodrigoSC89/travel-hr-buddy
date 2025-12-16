@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const loadJsPDF = async () => {
   return { jsPDF, autoTable: autoTableModule.default };
 };
 
-let XLSX: unknown = null;
+let XLSX: any = null;
 const loadXLSX = async () => {
   if (!XLSX) {
     XLSX = await import("xlsx");
@@ -103,7 +102,7 @@ const ComplianceReports = () => {
   const fetchComplianceData = async () => {
     try {
       setLoading(true);
-      let query = supabase.from("compliance_items" as unknown).select("*");
+      let query = supabase.from("compliance_items" as any).select("*");
       
       // Apply filters if any
       if (reportConfig.categories?.length > 0) {
@@ -122,6 +121,7 @@ const ComplianceReports = () => {
       const { data, error } = await query;
       
       if (error) {
+        console.error("Error fetching compliance data:", error);
         // Use mock data if table doesn't exist
         setComplianceData([
           { id: 1, category: "Safety", severity: "high", status: "open", title: "Safety inspection pending", created_at: new Date().toISOString() },
@@ -131,7 +131,6 @@ const ComplianceReports = () => {
         setComplianceData(data || []);
       }
     } catch (error) {
-      console.error("Error:", error);
       console.error("Error:", error);
       // Use mock data on error
       setComplianceData([
@@ -144,7 +143,7 @@ const ComplianceReports = () => {
   };
 
   // PDF Export using jsPDF
-  const exportToPDF = async (data: unknown[]) => {
+  const exportToPDF = async (data: any[]) => {
     try {
       const { jsPDF, autoTable } = await loadJsPDF();
       const doc = new jsPDF();
@@ -175,7 +174,7 @@ const ComplianceReports = () => {
         startY: 42,
         styles: { fontSize: 8 },
         headStyles: { fillColor: [41, 128, 185] }
-      };
+      });
       
       // Save the PDF
       doc.save(`${reportConfig.title || "compliance-report"}.pdf`);
@@ -186,7 +185,6 @@ const ComplianceReports = () => {
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
-      console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
@@ -196,7 +194,7 @@ const ComplianceReports = () => {
   };
 
   // CSV Export with Excel compatibility
-  const exportToCSV = (data: unknown[]) => {
+  const exportToCSV = (data: any[]) => {
     try {
       const headers = ["ID", "Category", "Severity", "Status", "Title", "Date"];
       const rows = data.map(item => [
@@ -224,17 +222,16 @@ const ComplianceReports = () => {
       });
     } catch (error) {
       console.error("Error generating CSV:", error);
-      console.error("Error generating CSV:", error);
       toast({
         title: "Erro ao gerar CSV",
         description: "Tente novamente",
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Excel Export using xlsx
-  const exportToExcel = (data: unknown[]) => {
+  const exportToExcel = (data: any[]) => {
     try {
       const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
         "ID": item.id,
@@ -256,17 +253,16 @@ const ComplianceReports = () => {
       });
     } catch (error) {
       console.error("Error generating Excel:", error);
-      console.error("Error generating Excel:", error);
       toast({
         title: "Erro ao gerar Excel",
         description: "Tente novamente",
         variant: "destructive"
       });
     }
-  });
+  };
 
   // JSON Export with metadata
-  const exportToJSON = (data: unknown[]) => {
+  const exportToJSON = (data: any[]) => {
     try {
       const jsonData = {
         metadata: {
@@ -296,14 +292,13 @@ const ComplianceReports = () => {
       });
     } catch (error) {
       console.error("Error generating JSON:", error);
-      console.error("Error generating JSON:", error);
       toast({
         title: "Erro ao gerar JSON",
         description: "Tente novamente",
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleCreateReport = async () => {
     if (!reportConfig.title || !reportConfig.template) {
@@ -325,7 +320,7 @@ const ComplianceReports = () => {
       generated_at: new Date().toISOString(),
       scheduled: reportConfig.schedule !== "manual",
       next_run: reportConfig.schedule !== "manual" ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0] : undefined
-    });
+    };
 
     setReports([report, ...reports]);
     setShowForm(false);
@@ -361,7 +356,7 @@ const ComplianceReports = () => {
     }, 2000);
   };
 
-  const handleDownload = (report: unknown) => {
+  const handleDownload = (report: any) => {
     // Export based on format
     if (report.format === "pdf") {
       exportToPDF(complianceData);
@@ -428,7 +423,7 @@ const ComplianceReports = () => {
             <p className="text-muted-foreground">Geração e gerenciamento de relatórios de compliance</p>
           </div>
         </div>
-        <Button onClick={handleSetShowForm}>
+        <Button onClick={() => setShowForm(!showForm)}>
           <FileText className="mr-2 h-4 w-4" />
           Novo Relatório
         </Button>
@@ -485,7 +480,7 @@ const ComplianceReports = () => {
               <Label>Título do Relatório</Label>
               <Input
                 value={reportConfig.title}
-                onChange={handleChange}
+                onChange={(e) => setReportConfig({ ...reportConfig, title: e.target.value })}
                 placeholder="Ex: Relatório Mensal de Compliance"
               />
             </div>
@@ -551,7 +546,7 @@ const ComplianceReports = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleSetShowFilters}
+                  onClick={() => setShowFilters(!showFilters)}
                 >
                   <Filter className="h-4 w-4 mr-2" />
                   {showFilters ? "Ocultar" : "Mostrar"} Filtros
@@ -569,7 +564,7 @@ const ComplianceReports = () => {
                           <Checkbox
                             id={`cat-${category}`}
                             checked={reportConfig.categories.includes(category)}
-                            onCheckedChange={() => toggleCategory(category}
+                            onCheckedChange={() => toggleCategory(category)}
                           />
                           <label
                             htmlFor={`cat-${category}`}
@@ -591,7 +586,7 @@ const ComplianceReports = () => {
                           <Checkbox
                             id={`sev-${severity}`}
                             checked={reportConfig.severities.includes(severity)}
-                            onCheckedChange={() => toggleSeverity(severity}
+                            onCheckedChange={() => toggleSeverity(severity)}
                           />
                           <label
                             htmlFor={`sev-${severity}`}
@@ -611,7 +606,7 @@ const ComplianceReports = () => {
                       <Input
                         type="date"
                         value={reportConfig.dateFrom}
-                        onChange={handleChange}
+                        onChange={(e) => setReportConfig({ ...reportConfig, dateFrom: e.target.value })}
                       />
                     </div>
                     <div>
@@ -619,7 +614,7 @@ const ComplianceReports = () => {
                       <Input
                         type="date"
                         value={reportConfig.dateTo}
-                        onChange={handleChange}
+                        onChange={(e) => setReportConfig({ ...reportConfig, dateTo: e.target.value })}
                       />
                     </div>
                   </div>
@@ -631,7 +626,7 @@ const ComplianceReports = () => {
               <Button onClick={handleCreateReport} disabled={loading}>
                 {loading ? "Processando..." : "Criar Relatório"}
               </Button>
-              <Button variant="outline" onClick={handleSetShowForm}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setShowForm(false)}>Cancelar</Button>
             </div>
           </CardContent>
         </Card>
@@ -676,7 +671,7 @@ const ComplianceReports = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handlehandleGenerateNow}
+                      onClick={() => handleGenerateNow(report.id)}
                     >
                       <Send className="mr-2 h-4 w-4" />
                       Gerar Agora
@@ -686,7 +681,7 @@ const ComplianceReports = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handlehandleDownload}
+                      onClick={() => handleDownload(report)}
                     >
                       {report.format === "pdf" && <FileText className="mr-2 h-4 w-4" />}
                       {report.format === "excel" && <FileSpreadsheet className="mr-2 h-4 w-4" />}
@@ -703,6 +698,6 @@ const ComplianceReports = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default ComplianceReports;

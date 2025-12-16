@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -94,7 +93,7 @@ export const MobileOptimizationCenter: React.FC = () => {
     const mockSessions: UserSession[] = Array.from({ length: 50 }, (_, i) => ({
       id: `session-${i}`,
       userId: `user-${Math.floor(Math.random() * 20)}`,
-      device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as unknown,
+      device: ["mobile", "tablet", "desktop"][Math.floor(Math.random() * 3)] as any,
       os: ["iOS", "Android", "Windows", "macOS"][Math.floor(Math.random() * 4)],
       browser: ["Chrome", "Safari", "Firefox", "Edge"][Math.floor(Math.random() * 4)],
       location: ["São Paulo", "Rio de Janeiro", "Brasília", "Recife"][Math.floor(Math.random() * 4)],
@@ -129,7 +128,7 @@ export const MobileOptimizationCenter: React.FC = () => {
     setPerformance(mockPerformance);
     setBehavior(mockBehavior);
     setIsLoading(false);
-  });
+  };
 
   useEffect(() => {
     generateMockData();
@@ -142,7 +141,7 @@ export const MobileOptimizationCenter: React.FC = () => {
     case "desktop": return <Monitor className="h-4 w-4" />;
     default: return <Monitor className="h-4 w-4" />;
     }
-  });
+  };
 
   const getDeviceStats = () => {
     const total = sessions.length;
@@ -197,21 +196,21 @@ export const MobileOptimizationCenter: React.FC = () => {
       title: "Otimização iniciada",
       description: "Compressão de imagens para dispositivos móveis em andamento.",
     });
-  });
+  };
 
   const handleEnablePWA = () => {
     toast({
       title: "PWA habilitado",
       description: "Recursos de Progressive Web App foram ativados.",
     });
-  });
+  };
 
   const handleLazyLoad = () => {
     toast({
       title: "Lazy loading ativado",
       description: "Carregamento sob demanda configurado para componentes.",
     });
-  });
+  };
 
   if (isLoading) {
     return (

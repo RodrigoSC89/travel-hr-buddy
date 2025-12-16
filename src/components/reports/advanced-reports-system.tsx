@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -167,7 +166,7 @@ const AdvancedReportsSystem = () => {
                   variant="outline" 
                   size="sm" 
                   className="w-full justify-start"
-                  onClick={() => handleexportReport}
+                  onClick={() => exportReport("pdf")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -177,7 +176,7 @@ const AdvancedReportsSystem = () => {
                   variant="outline" 
                   size="sm" 
                   className="w-full justify-start"
-                  onClick={() => handleexportReport}
+                  onClick={() => exportReport("excel")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -187,7 +186,7 @@ const AdvancedReportsSystem = () => {
                   variant="outline" 
                   size="sm" 
                   className="w-full justify-start"
-                  onClick={() => handleexportReport}
+                  onClick={() => exportReport("csv")}
                   disabled={isExporting}
                 >
                   <Download className="w-4 h-4 mr-2" />

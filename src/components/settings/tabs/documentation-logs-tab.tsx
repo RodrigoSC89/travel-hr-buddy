@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -255,7 +254,7 @@ export const DocumentationLogsTab: React.FC = () => {
                     <Input
                       placeholder="Buscar nos logs..."
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>

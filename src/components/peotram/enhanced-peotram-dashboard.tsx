@@ -1,5 +1,4 @@
-import { useState } from "react";;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -11,15 +10,18 @@ import {
   AlertTriangle, 
   CheckCircle,
   Ship,
+  Building,
   Award,
   Clock,
   Users,
   Target,
   BarChart3,
   Download,
+  Upload,
   Eye,
   Edit,
   Calendar,
+  MapPin,
   Shield,
   Zap,
   Leaf,
@@ -28,7 +30,7 @@ import {
   Search,
   Filter
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PeotramMetrics {
@@ -107,7 +109,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
     elementId: element.id,
     elementName: element.name,
     progress: Math.floor(Math.random() * 100),
-    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as unknown,
+    status: ["completed", "in-progress", "pending", "overdue"][Math.floor(Math.random() * 4)] as any,
     dueDate: `2024-${String(12 - index % 12).padStart(2, "0")}-15`,
     assignedTo: `Auditor ${index + 1}`,
     lastUpdate: `2024-12-${String(Math.floor(Math.random() * 28) + 1).padStart(2, "0")}`
@@ -168,7 +170,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={handleSetShowFilters}>
+            <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
               <Filter className="w-4 h-4 mr-2" />
               Filtros
             </Button>
@@ -191,7 +193,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Período</label>
                 <select 
                   value={selectedPeriod} 
-                  onChange={handleChange}
+                  onChange={(e) => setSelectedPeriod(e.target.value)}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="2024">2024</option>
@@ -204,7 +206,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Tipo de Auditoria</label>
                 <select 
                   value={auditType} 
-                  onChange={handleChange}
+                  onChange={(e) => setAuditType(e.target.value as any)}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="all">Todas</option>
@@ -221,7 +223,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                     type="text"
                     placeholder="Buscar auditorias..."
                     value={searchTerm}
-                    onChange={handleChange}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border rounded-md bg-background"
                   />
                 </div>

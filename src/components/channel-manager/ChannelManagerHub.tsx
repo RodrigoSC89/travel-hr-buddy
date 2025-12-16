@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -86,7 +86,7 @@ export default function ChannelManagerHub() {
         .insert({
           name: channelName,
           created_by: user.id,
-        } as unknown)
+        } as any)
         .select()
         .single();
 
@@ -115,7 +115,7 @@ export default function ChannelManagerHub() {
           channel_id: selectedChannel!,
           sender_id: user.id,
           message_content: messageContent,
-        } as unknown)
+        } as any)
         .select()
         .single();
 
@@ -145,7 +145,7 @@ export default function ChannelManagerHub() {
       //   status: !isActive ? "online" : "offline",
       //   message: `Canal ${!isActive ? "ativado" : "desativado"} manualmente`,
       //   timestamp: new Date().toISOString(),
-      // } as unknown);
+      // } as any);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["communication-channels"] });
@@ -181,7 +181,7 @@ export default function ChannelManagerHub() {
                 <label className="text-sm font-medium">Nome do Canal</label>
                 <Input
                   value={channelName}
-                  onChange={handleChange}
+                  onChange={(e) => setChannelName(e.target.value)}
                   placeholder="Ex: Operações - Navio A"
                 />
               </div>
@@ -207,10 +207,10 @@ export default function ChannelManagerHub() {
                   <Button
                     variant={selectedChannel === channel.id ? "default" : "outline"}
                     className="w-full justify-start"
-                    onClick={handleSetSelectedChannel}
+                    onClick={() => setSelectedChannel(channel.id)}
                   >
                     <MessageSquare className="mr-2 h-4 w-4" />
-                    {(channel as unknown).channel_name || (channel as unknown).name}
+                    {(channel as any).channel_name || (channel as any).name}
                     {channel.is_active ? (
                       <Badge variant="default" className="ml-auto">Online</Badge>
                     ) : (
@@ -252,7 +252,7 @@ export default function ChannelManagerHub() {
                 <div className="flex gap-2">
                   <Input
                     value={messageContent}
-                    onChange={handleChange}
+                    onChange={(e) => setMessageContent(e.target.value)}
                     placeholder="Digite sua mensagem..."
                     onKeyPress={(e) => {
                       if (e.key === "Enter" && messageContent.trim()) {

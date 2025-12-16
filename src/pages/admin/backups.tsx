@@ -3,7 +3,7 @@
  * View, download, and manage system backups
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,7 +51,7 @@ export default function BackupsPage() {
   const loadBackups = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("backup_snapshots")
         .select("*")
         .is("deleted_at", null)
@@ -60,7 +60,7 @@ export default function BackupsPage() {
 
       if (error) throw error;
 
-      setBackups((data || []) as unknown);
+      setBackups((data || []) as any);
     } catch (error) {
       toast({
         title: "Error",
@@ -74,12 +74,12 @@ export default function BackupsPage() {
 
   const loadStats = async () => {
     try {
-      const { data, error } = await (supabase as unknown).rpc("get_backup_stats");
+      const { data, error } = await (supabase as any).rpc("get_backup_stats");
 
       if (error) throw error;
 
       if (data && data.length > 0) {
-        setStats(data[0] as unknown);
+        setStats(data[0] as any);
       }
     } catch (error) {
       // Silent fail for stats
@@ -314,7 +314,7 @@ export default function BackupsPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handledownloadBackup}
+                        onClick={() => downloadBackup(backup)}
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Download

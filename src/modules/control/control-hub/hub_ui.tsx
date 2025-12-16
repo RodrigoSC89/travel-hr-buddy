@@ -25,7 +25,7 @@ interface SystemStatusProps {
   health: SystemHealth;
 }
 
-export const SystemStatus = memo(function({ health }: SystemStatusProps) {
+export function SystemStatus({ health }: SystemStatusProps) {
   const getHealthInfo = () => {
     switch (health) {
     case "healthy":
@@ -34,14 +34,14 @@ export const SystemStatus = memo(function({ health }: SystemStatusProps) {
         text: "Sistema Operacional",
         bgColor: "bg-green-50",
         borderColor: "border-green-200",
-      });
+      };
     case "degraded":
       return {
         icon: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
         text: "Sistema com Degradação",
         bgColor: "bg-yellow-50",
         borderColor: "border-yellow-200",
-      });
+      };
     case "critical":
       return {
         icon: <XCircle className="h-5 w-5 text-red-500" />,
@@ -71,7 +71,7 @@ interface ConnectionStatusProps {
   lastCheck: Date | null;
 }
 
-export const ConnectionStatus = memo(function({ quality, lastCheck }: ConnectionStatusProps) {
+export function ConnectionStatus({ quality, lastCheck }: ConnectionStatusProps) {
   const getQualityInfo = () => {
     switch (quality) {
     case "excellent":
@@ -80,14 +80,14 @@ export const ConnectionStatus = memo(function({ quality, lastCheck }: Connection
         text: "Excelente",
         color: "text-green-600",
         bgColor: "bg-green-100",
-      });
+      };
     case "good":
       return {
         icon: <Wifi className="h-4 w-4 text-blue-500" />,
         text: "Boa",
         color: "text-blue-600",
         bgColor: "bg-blue-100",
-      });
+      };
     case "poor":
       return {
         icon: <Wifi className="h-4 w-4 text-yellow-500" />,
@@ -127,7 +127,7 @@ interface ModuleCardProps {
   module: ModuleState;
 }
 
-export const ModuleCard = memo(function({ moduleKey, module }: ModuleCardProps) {
+export function ModuleCard({ moduleKey, module }: ModuleCardProps) {
   const getStatusBadge = (status: ModuleStatus) => {
     switch (status) {
     case "operational":
@@ -139,13 +139,13 @@ export const ModuleCard = memo(function({ moduleKey, module }: ModuleCardProps) 
     case "error":
       return <Badge className="bg-red-500">Erro</Badge>;
     }
-  });
+  };
 
   const formatUptime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     return `${hours}h ${minutes}m`;
-  });
+  };
 
   return (
     <Card>
@@ -185,7 +185,7 @@ interface CacheStatsProps {
   total: number;
 }
 
-export const CacheStats = memo(function({ size, capacity, pending, total }: CacheStatsProps) {
+export function CacheStats({ size, capacity, pending, total }: CacheStatsProps) {
   const usagePercent = (size / capacity) * 100;
   
   const formatBytes = (bytes: number) => {
@@ -194,7 +194,7 @@ export const CacheStats = memo(function({ size, capacity, pending, total }: Cach
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i];
-  });
+  };
 
   return (
     <Card>
@@ -241,7 +241,7 @@ interface SyncStatusProps {
   onSync: () => void;
 }
 
-export const SyncStatus = memo(function({ lastSync, isSyncing, onSync }: SyncStatusProps) {
+export function SyncStatus({ lastSync, isSyncing, onSync }: SyncStatusProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -271,4 +271,4 @@ export const SyncStatus = memo(function({ lastSync, isSyncing, onSync }: SyncSta
       </CardContent>
     </Card>
   );
-});
+}

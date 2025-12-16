@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -167,7 +166,7 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
                     <Input
                       placeholder="Buscar usuários por nome ou email..."
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>

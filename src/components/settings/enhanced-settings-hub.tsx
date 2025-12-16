@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -27,11 +27,19 @@ import {
   Clock,
   Eye,
   Search,
+  Filter,
   Zap,
   Target,
+  TrendingUp,
   Activity,
   Bookmark,
-  Share2
+  Share2,
+  PenTool,
+  Layers,
+  Globe2,
+  Cpu,
+  Database,
+  Server
 } from "lucide-react";
 
 // Import category components
@@ -92,7 +100,7 @@ interface SettingsData {
   integrations: {
     apiKeys: Record<string, string>;
     webhooks: Array<{ id: string; name: string; url: string; active: boolean; events: string[] }>;
-    externalServices: Record<string, unknown>;
+    externalServices: Record<string, any>;
     rateLimits: Record<string, number>;
     enableApiVersioning: boolean;
   };
@@ -101,7 +109,7 @@ interface SettingsData {
     debugMode: boolean;
     performanceMonitoring: boolean;
     errorTracking: boolean;
-    customFields: Record<string, unknown>;
+    customFields: Record<string, any>;
     workflowAutomation: boolean;
     enableBetaFeatures: boolean;
   };
@@ -113,7 +121,7 @@ interface SettingsData {
   };
 }
 
-const EnhancedSettingsHubComponent: React.FC = () => {
+export const EnhancedSettingsHub: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   
@@ -247,7 +255,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
     calculateHealth();
   }, [settings]);
 
-  const updateSettings = (category: keyof SettingsData, updates: Record<string, unknown>) => {
+  const updateSettings = (category: keyof SettingsData, updates: any) => {
     setSettings(prev => ({
       ...prev,
       [category]: {
@@ -432,7 +440,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
     link.click();
     
     toast({
-      title: "📊 Configurações Exportadas",
+      title: "📥 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
     });
   };
@@ -532,7 +540,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
     }
   };
 
-  const logSettingsChange = async (action: string, data: unknown) => {
+  const logSettingsChange = async (action: string, data: any) => {
     const logEntry = {
       timestamp: new Date().toISOString(),
       user: user?.email || "sistema",
@@ -548,8 +556,8 @@ const EnhancedSettingsHubComponent: React.FC = () => {
   const toggleTestMode = () => {
     setTestMode(!testMode);
     toast({
-      title: "🔄 Modo de Teste",
-      description: settings.advanced.testMode
+      title: testMode ? "🔧 Modo Produção" : "🧪 Modo Teste",
+      description: testMode 
         ? "Voltando ao modo produção. Alterações afetarão o sistema."
         : "Modo teste ativado. Alterações não afetarão outros usuários.",
     });
@@ -559,8 +567,8 @@ const EnhancedSettingsHubComponent: React.FC = () => {
     const newPreviewMode = !previewMode;
     setPreviewMode(newPreviewMode);
     toast({
-      title: "🔍 Modo Prévia",
-      description: settings.advanced.previewMode
+      title: newPreviewMode ? "👁️ Modo Prévia" : "💾 Modo Normal",
+      description: newPreviewMode
         ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
         : "Voltando ao modo normal.",
     });
@@ -632,7 +640,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
                   type="text"
                   placeholder="Buscar configurações..."
                   value={searchQuery}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4 py-2 border rounded-lg bg-background/80 backdrop-blur-sm min-w-[200px] focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -673,7 +681,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleSetAutoSave}>
+                <Button variant="outline" size="sm" onClick={() => setAutoSave(!autoSave)}>
                   <Zap className={`w-4 h-4 mr-2 ${autoSave ? "text-yellow-500" : ""}`} />
                   {autoSave ? "Auto-Save ON" : "Auto-Save OFF"}
                 </Button>
@@ -757,7 +765,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
                     <span className="text-amber-700 dark:text-amber-300">
                       <AlertTriangle className="w-4 h-4 inline mr-1" />
                       {Object.keys(settings).filter(key => 
-                        JSON.stringify((settings as unknown)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
+                        JSON.stringify((settings as any)[key]) !== JSON.stringify(settings[key as keyof SettingsData])
                       ).length} seções com alterações pendentes
                     </span>
                   )}
@@ -895,5 +903,4 @@ const EnhancedSettingsHubComponent: React.FC = () => {
   );
 };
 
-export const EnhancedSettingsHub = memo(EnhancedSettingsHubComponent);
 export default EnhancedSettingsHub;

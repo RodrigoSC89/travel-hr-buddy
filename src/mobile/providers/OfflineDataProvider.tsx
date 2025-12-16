@@ -1,5 +1,4 @@
 /**
-import { useCallback, useContext, useEffect, useState } from "react";;
  * PATCH 190.0 - Offline Data Provider
  * 
  * React context for offline-first data access
@@ -22,7 +21,7 @@ interface OfflineDataContextType {
   // Data operations
   getData: <T>(table: string, id: string) => Promise<T | null>;
   getAllData: <T>(table: string) => Promise<T[]>;
-  saveData: (table: string, data: Record<string, unknown>, priority?: "high" | "medium" | "low") => Promise<void>;
+  saveData: (table: string, data: Record<string, any>, priority?: "high" | "medium" | "low") => Promise<void>;
   deleteData: (table: string, id: string) => Promise<void>;
   
   // Sync operations
@@ -36,7 +35,7 @@ interface OfflineDataProviderProps {
   children: ReactNode;
 }
 
-export const OfflineDataProvider = memo(function({ children }: OfflineDataProviderProps) {
+export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
   const [isOnline, setIsOnline] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingChanges, setPendingChanges] = useState(0);
@@ -58,18 +57,18 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
     // Listen to network changes
     const unsubNetwork = networkDetector.addListener((online) => {
       setIsOnline(online);
-  });
+    });
 
     // Listen to sync status changes
     const unsubSync = enhancedSyncEngine.addStatusListener((status) => {
       setPendingChanges(status.pendingChanges);
       setLastSync(status.lastSync);
-  });
+    });
 
     return () => {
       unsubNetwork();
       unsubSync();
-    });
+    };
   }, []);
 
   /**
@@ -83,7 +82,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
     // If online, fetch from server and cache
     if (isOnline) {
       try {
-        const { data, error } = await (supabase as unknown)
+        const { data, error } = await (supabase as any)
           .from(table)
           .select("*")
           .eq("id", id)
@@ -94,7 +93,6 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
           return data as T;
         }
       } catch (e) {
-        console.error("Failed to fetch from server:", e);
         console.error("Failed to fetch from server:", e);
       }
     }
@@ -112,7 +110,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
     // If online and cache is empty, fetch from server
     if (cached.length === 0 && isOnline) {
       try {
-        const { data, error } = await (supabase as unknown)
+        const { data, error } = await (supabase as any)
           .from(table)
           .select("*")
           .limit(500);
@@ -122,7 +120,6 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
           return data as T[];
         }
       } catch (e) {
-        console.error("Failed to fetch from server:", e);
         console.error("Failed to fetch from server:", e);
       }
     }
@@ -135,7 +132,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
    */
   const saveData = useCallback(async (
     table: string,
-    data: Record<string, unknown>,
+    data: Record<string, any>,
     priority: "high" | "medium" | "low" = "medium"
   ): Promise<void> => {
     const action = data.id ? "update" : "create";
@@ -156,6 +153,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
       try {
         await enhancedSyncEngine.forceSync();
       } catch (e) {
+        console.log("Sync queued for later:", e);
       }
     }
   }, [isOnline]);
@@ -179,6 +177,7 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
       try {
         await enhancedSyncEngine.forceSync();
       } catch (e) {
+        console.log("Delete queued for later:", e);
       }
     }
   }, [isOnline]);
@@ -298,4 +297,4 @@ export function useOfflineTable<T extends { id?: string }>(tableName: string) {
       setData(result);
     },
   };
-});
+}

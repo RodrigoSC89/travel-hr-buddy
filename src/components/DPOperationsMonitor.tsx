@@ -1,5 +1,3 @@
-import { useEffect, useState, useMemo } from "react";;
-
 /**
  * DP Operations Monitor Component
  * 
@@ -19,13 +17,13 @@ import { useEffect, useState, useMemo } from "react";;
  *   vesselLatitude={-22.9}
  *   vesselLongitude={-43.2}
  *   vesselName="MV Explorer"
- *   onStatusChange={(status) => }
+ *   onStatusChange={(status) => console.log(status)}
  * />
  * ```
  */
 
-import React, { useEffect, useState } from "react";
-import { useSpaceWeather } from "@/hooks/useSpaceWeather";
+import React, { useEffect, useState } from 'react';
+import { useSpaceWeather } from '@/hooks/useSpaceWeather';
 
 // ============================================================================
 // Types
@@ -48,7 +46,7 @@ export interface DPOperationsMonitorProps {
   refreshInterval?: number;
   
   /** Callback quando status muda */
-  onStatusChange?: (status: "GREEN" | "AMBER" | "RED") => void;
+  onStatusChange?: (status: 'GREEN' | 'AMBER' | 'RED') => void;
   
   /** Habilitar alertas sonoros (default: false) */
   enableAudioAlerts?: boolean;
@@ -61,10 +59,10 @@ export interface DPOperationsMonitorProps {
 // Component
 // ============================================================================
 
-export const DPOperationsMonitor = memo(function({
+export function DPOperationsMonitor({
   vesselLatitude,
   vesselLongitude,
-  vesselName = "Vessel",
+  vesselName = 'Vessel',
   hours = 6,
   refreshInterval = 5 * 60 * 1000,
   onStatusChange,
@@ -100,12 +98,13 @@ export const DPOperationsMonitor = memo(function({
 
     if (previousStatus && previousStatus !== status.status) {
       // Status changed
+      console.log(`[DPMonitor] Status changed: ${previousStatus} → ${status.status}`);
 
       if (enableAudioAlerts) {
-        if (status.status === "RED") {
-          playAlert("critical");
-        } else if (status.status === "AMBER") {
-          playAlert("warning");
+        if (status.status === 'RED') {
+          playAlert('critical');
+        } else if (status.status === 'AMBER') {
+          playAlert('warning');
         }
       }
     }
@@ -141,22 +140,22 @@ export const DPOperationsMonitor = memo(function({
 
   // Status colors
   const statusColor = 
-    status.status === "RED" ? "#ef4444" :
-      status.status === "AMBER" ? "#f59e0b" :
-        "#10b981";
+    status.status === 'RED' ? '#ef4444' :
+    status.status === 'AMBER' ? '#f59e0b' :
+    '#10b981';
 
   const statusIcon =
-    status.status === "RED" ? "🔴" :
-      status.status === "AMBER" ? "🟡" :
-        "🟢";
+    status.status === 'RED' ? '🔴' :
+    status.status === 'AMBER' ? '🟡' :
+    '🟢';
 
   const gateIcon =
-    status.dp_gate === "HOLD" ? "🛑" :
-      status.dp_gate === "CAUTION" ? "⚠️" :
-        "✅";
+    status.dp_gate === 'HOLD' ? '🛑' :
+    status.dp_gate === 'CAUTION' ? '⚠️' :
+    '✅';
 
   return (
-    <div className="dp-monitor" style={{ "--status-color": statusColor } as React.CSSProperties}>
+    <div className="dp-monitor" style={{ '--status-color': statusColor } as React.CSSProperties}>
       {/* Header */}
       <div className="dp-monitor-header">
         <div className="vessel-info">
@@ -288,7 +287,7 @@ function PDOPChart({ data }: PDOPChartProps) {
       const y = yScale(d.pdop);
       return i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`;
     })
-    .join(" ");
+    .join(' ');
 
   // Thresholds
   const amber = yScale(4.0);
@@ -318,13 +317,13 @@ function PDOPChart({ data }: PDOPChartProps) {
 
         {/* X-axis labels (first, middle, last) */}
         <text x={xScale(0)} y={height - padding + 20} textAnchor="middle" fontSize="12" fill="#666">
-          {new Date(data[0].time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {new Date(data[0].time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </text>
         <text x={xScale(Math.floor(data.length / 2))} y={height - padding + 20} textAnchor="middle" fontSize="12" fill="#666">
-          {new Date(data[Math.floor(data.length / 2)].time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {new Date(data[Math.floor(data.length / 2)].time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </text>
         <text x={xScale(data.length - 1)} y={height - padding + 20} textAnchor="middle" fontSize="12" fill="#666">
-          {new Date(data[data.length - 1].time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          {new Date(data[data.length - 1].time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </text>
 
         {/* PDOP line */}
@@ -355,17 +354,17 @@ function PDOPChart({ data }: PDOPChartProps) {
 // Audio Alerts
 // ============================================================================
 
-function playAlert(type: "warning" | "critical") {
+function playAlert(type: 'warning' | 'critical') {
   // Browser Web Audio API
   try {
-    const audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
 
-    if (type === "critical") {
+    if (type === 'critical') {
       // Critical: 3 beeps @ 800Hz
       oscillator.frequency.value = 800;
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
@@ -402,8 +401,7 @@ function playAlert(type: "warning" | "critical") {
       oscillator.stop(audioContext.currentTime + 0.3);
     }
   } catch (error) {
-    console.warn("[DPMonitor] Audio alert failed:", error);
-    console.warn("[DPMonitor] Audio alert failed:", error);
+    console.warn('[DPMonitor] Audio alert failed:', error);
   }
 }
 
@@ -623,8 +621,8 @@ const styles = `
 `;
 
 // Inject styles (in real app, use CSS file)
-if (typeof document !== "undefined") {
-  const styleEl = document.createElement("style");
+if (typeof document !== 'undefined') {
+  const styleEl = document.createElement('style');
   styleEl.textContent = styles;
   document.head.appendChild(styleEl);
 }

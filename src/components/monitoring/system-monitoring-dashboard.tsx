@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,14 +14,18 @@ import {
   Zap, 
   Users, 
   BarChart3, 
+  Target, 
   Shield, 
-  Globe,
+  Globe, 
+  Brain,
   Sparkles,
   Clock,
   Award,
-  Rocket
+  Rocket,
+  Heart,
+  MessageCircle
 } from "lucide-react";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface SystemStatus {
   module: string;

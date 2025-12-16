@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -48,7 +47,7 @@ interface Vessel {
   currentCrew: number;
 }
 
-export const CrewScheduleManager = memo(() => {
+export const CrewScheduleManager = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([
     {
       id: "1",
@@ -114,26 +113,26 @@ export const CrewScheduleManager = memo(() => {
 
   const getStatusBadge = (status: Schedule["status"]) => {
     switch (status) {
-    case "active":
-      return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
-    case "scheduled":
-      return <Badge className="bg-info text-info-foreground">Agendado</Badge>;
-    case "completed":
-      return <Badge variant="secondary">Concluído</Badge>;
-    case "cancelled":
-      return <Badge variant="destructive">Cancelado</Badge>;
+      case "active":
+        return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
+      case "scheduled":
+        return <Badge className="bg-info text-info-foreground">Agendado</Badge>;
+      case "completed":
+        return <Badge variant="secondary">Concluído</Badge>;
+      case "cancelled":
+        return <Badge variant="destructive">Cancelado</Badge>;
     }
   };
 
   const getTypeBadge = (type: Schedule["type"]) => {
     switch (type) {
-    case "regular":
-      return <Badge variant="outline">Regular</Badge>;
-    case "emergency":
-      return <Badge variant="destructive">Emergência</Badge>;
-    case "transfer":
-      return <Badge variant="secondary">Transferência</Badge>;
-    };
+      case "regular":
+        return <Badge variant="outline">Regular</Badge>;
+      case "emergency":
+        return <Badge variant="destructive">Emergência</Badge>;
+      case "transfer":
+        return <Badge variant="secondary">Transferência</Badge>;
+    }
   };
 
   const filteredSchedules = schedules.filter(schedule => {
@@ -141,7 +140,7 @@ export const CrewScheduleManager = memo(() => {
       schedule.vesselName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || schedule.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const activeCount = schedules.filter(s => s.status === "active").length;
   const scheduledCount = schedules.filter(s => s.status === "scheduled").length;
@@ -351,10 +350,10 @@ export const CrewScheduleManager = memo(() => {
                       </Select>
                     </div>
                     <div className="flex justify-end gap-2 pt-4">
-                      <Button variant="outline" onClick={handleSetIsNewScheduleOpen}>
+                      <Button variant="outline" onClick={() => setIsNewScheduleOpen(false)}>
                         Cancelar
                       </Button>
-                      <Button onClick={handleSetIsNewScheduleOpen}>
+                      <Button onClick={() => setIsNewScheduleOpen(false)}>
                         Criar Escala
                       </Button>
                     </div>
@@ -372,7 +371,7 @@ export const CrewScheduleManager = memo(() => {
               <Input
                 placeholder="Buscar por tripulante ou embarcação..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>

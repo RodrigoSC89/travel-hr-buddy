@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback } from "react";;
  * OptimizedImagePro Component
  * PATCH 753 - Imagem otimizada com lazy loading e placeholder blur
  */
@@ -78,12 +77,12 @@ export const OptimizedImagePro = memo(function OptimizedImagePro({
   const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-  });
+  };
   
   const handleError = () => {
     setError(true);
     onError?.();
-  });
+  };
   
   const blurPlaceholder = createPlaceholder(
     optimalWidth || 100,

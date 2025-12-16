@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 181.0 - Underwater Drone Control Module
  * Main component for ROV/AUV control and monitoring
  * 
@@ -74,12 +73,12 @@ const UnderwaterDrone: React.FC = () => {
     // Setup telemetry alert callback
     telemetry.onAlert((alert) => {
       setAlerts(prev => [alert, ...prev].slice(0, 10));
-  });
+    });
 
     // Setup mission event callback
     missionManager.onEvent((event) => {
       setMissionEvents(prev => [event, ...prev].slice(0, 20));
-  });
+    });
 
     // Start drone simulation
     droneCore.startSimulation(100);
@@ -121,7 +120,7 @@ const UnderwaterDrone: React.FC = () => {
     return () => {
       clearInterval(updateInterval);
       droneCore.stopSimulation();
-    });
+    };
   }, [droneCore, telemetry, missionManager]);
 
   // Command handlers
@@ -130,7 +129,7 @@ const UnderwaterDrone: React.FC = () => {
       type: "move",
       target: { lat: targetLat, lon: targetLon, depth: targetDepth, altitude: 0 },
       speed: 3,
-    });
+    };
     droneCore.executeCommand(command);
   };
 
@@ -294,7 +293,7 @@ const UnderwaterDrone: React.FC = () => {
                     type="number"
                     step="0.0001"
                     value={targetLat}
-                    onChange={handleChange}
+                    onChange={(e) => setTargetLat(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -304,7 +303,7 @@ const UnderwaterDrone: React.FC = () => {
                     type="number"
                     step="0.0001"
                     value={targetLon}
-                    onChange={handleChange}
+                    onChange={(e) => setTargetLon(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -313,7 +312,7 @@ const UnderwaterDrone: React.FC = () => {
                   <Input
                     type="number"
                     value={targetDepth}
-                    onChange={handleChange}
+                    onChange={(e) => setTargetDepth(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -436,7 +435,7 @@ const UnderwaterDrone: React.FC = () => {
                   <label className="text-sm text-zinc-400 mb-2 block">Upload Mission JSON</label>
                   <Textarea
                     value={missionJson}
-                    onChange={handleChange}
+                    onChange={(e) => setMissionJson(e.target.value)}
                     placeholder='{"id": "mission-1", "name": "Survey Mission", "waypoints": [...]}'
                     className="bg-zinc-900/50 border-zinc-700 text-white font-mono text-xs min-h-[150px]"
                   />
@@ -557,6 +556,6 @@ const UnderwaterDrone: React.FC = () => {
       </div>
     </div>
   );
-});
+};
 
 export default UnderwaterDrone;

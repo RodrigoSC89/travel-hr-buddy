@@ -1,9 +1,8 @@
-import { memo, memo, useEffect, useState, useCallback } from "react";;
 import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
-export const useIsMobile = memo(function() {
+export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
 
   React.useEffect(() => {
@@ -17,4 +16,4 @@ export const useIsMobile = memo(function() {
   }, []);
 
   return !!isMobile;
-});
+}

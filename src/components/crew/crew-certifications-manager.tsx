@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -112,10 +111,10 @@ const demoCertifications: Certification[] = [
 ];
 
 interface CrewCertificationsManagerProps {
-  crewMembers?: unknown[];
+  crewMembers?: any[];
 }
 
-export const CrewCertificationsManager = memo(function({ crewMembers = [] }: CrewCertificationsManagerProps) {
+export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificationsManagerProps) {
   const [certifications] = useState<Certification[]>(demoCertifications);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -123,28 +122,28 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "valid": return "bg-success text-success-foreground";
-    case "expiring": return "bg-warning text-warning-foreground";
-    case "expired": return "bg-destructive text-destructive-foreground";
-    default: return "bg-muted";
+      case "valid": return "bg-success text-success-foreground";
+      case "expiring": return "bg-warning text-warning-foreground";
+      case "expired": return "bg-destructive text-destructive-foreground";
+      default: return "bg-muted";
     }
-  });
+  };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "valid": return "Válido";
-    case "expiring": return "Vencendo";
-    case "expired": return "Vencido";
-    default: return status;
+      case "valid": return "Válido";
+      case "expiring": return "Vencendo";
+      case "expired": return "Vencido";
+      default: return status;
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "valid": return <CheckCircle className="h-4 w-4" />;
-    case "expiring": return <Clock className="h-4 w-4" />;
-    case "expired": return <AlertTriangle className="h-4 w-4" />;
-    default: return null;
+      case "valid": return <CheckCircle className="h-4 w-4" />;
+      case "expiring": return <Clock className="h-4 w-4" />;
+      case "expired": return <AlertTriangle className="h-4 w-4" />;
+      default: return null;
     }
   };
 
@@ -155,7 +154,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
       cert.number.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const stats = {
     total: certifications.length,
@@ -171,14 +170,14 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
       description: "Nova certificação registrada com sucesso",
     });
     setIsAddDialogOpen(false);
-  });
+  };
 
   const handleRenew = (certId: string) => {
     toast({
       title: "Renovação iniciada",
       description: "Processo de renovação iniciado. Você receberá notificações sobre o andamento.",
     });
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -330,7 +329,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 mt-4">
-                    <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
+                    <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
                       Cancelar
                     </Button>
                     <Button onClick={handleAddCertification}>
@@ -352,7 +351,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                   placeholder="Buscar por nome, tipo ou número..."
                   className="pl-8"
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
@@ -377,8 +376,8 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                 className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className={`p-2 rounded-lg ${cert.status === "expired" ? "bg-destructive/10" : cert.status === "expiring" ? "bg-warning/10" : "bg-success/10"}`}>
-                    <FileText className={`h-5 w-5 ${cert.status === "expired" ? "text-destructive" : cert.status === "expiring" ? "text-warning" : "text-success"}`} />
+                  <div className={`p-2 rounded-lg ${cert.status === 'expired' ? 'bg-destructive/10' : cert.status === 'expiring' ? 'bg-warning/10' : 'bg-success/10'}`}>
+                    <FileText className={`h-5 w-5 ${cert.status === 'expired' ? 'text-destructive' : cert.status === 'expiring' ? 'text-warning' : 'text-success'}`} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
@@ -396,7 +395,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                       <span>Nº: {cert.number}</span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        Venc: {new Date(cert.expiryDate).toLocaleDateString("pt-BR")}
+                        Venc: {new Date(cert.expiryDate).toLocaleDateString('pt-BR')}
                       </span>
                     </div>
                   </div>
@@ -421,7 +420,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handlehandleRenew}
+                      onClick={() => handleRenew(cert.id)}
                     >
                       <RefreshCw className="h-4 w-4 mr-1" />
                       Renovar
@@ -448,4 +447,4 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
       </Card>
     </div>
   );
-});
+}

@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * AI-powered incident classification modal
  * Integrates GPT-4 to automatically classify incidents based on description
  */
@@ -43,7 +42,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
         title: "⚠️ Descrição necessária",
         description: "Por favor, insira uma descrição do incidente para classificação.",
         variant: "destructive",
-});
+      });
       return;
     }
 
@@ -123,7 +122,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
               id="description"
               placeholder="Ex: Durante manobra de posicionamento dinâmico (DP), operador inseriu coordenadas erradas, causando desvio de rota."
               value={description}
-              onChange={handleChange}
+              onChange={(e) => setDescription(e.target.value)}
               rows={5}
               className="resize-none"
               disabled={isClassifying}

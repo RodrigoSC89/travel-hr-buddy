@@ -52,6 +52,7 @@ class SystemWatchdog {
 
     // Restore original console.error
     if (this.originalConsoleError) {
+      console.error = this.originalConsoleError;
       this.originalConsoleError = null;
     }
   }

@@ -13,10 +13,10 @@
  * @module services/space-weather/hybrid-monitoring
  */
 
-import { getDPASOGClient, mapDPASOGToSpaceWeatherStatus } from "./dp-asog-client.service";
-import type { DPASOGStatusResponse, DPASOGPDOPResponse } from "./dp-asog-client.service";
-import { SpaceWeatherMonitoring, DEFAULT_THRESHOLDS } from "./space-weather-monitoring.service";
-import type { SpaceWeatherStatus, SpaceWeatherThresholds } from "@/types/space-weather.types";
+import { getDPASOGClient, mapDPASOGToSpaceWeatherStatus } from './dp-asog-client.service';
+import type { DPASOGStatusResponse, DPASOGPDOPResponse } from './dp-asog-client.service';
+import { SpaceWeatherMonitoring, DEFAULT_THRESHOLDS } from './space-weather-monitoring.service';
+import type { SpaceWeatherStatus, SpaceWeatherThresholds } from '@/types/space-weather.types';
 
 // ============================================================================
 // Configuration
@@ -137,7 +137,9 @@ export class HybridSpaceWeatherService {
    * 
    * const status = await hybrid.getSpaceWeatherStatus(-22.9, -43.2);
    * 
-   *    *    * // 'DP_ASOG' ou 'TYPESCRIPT'
+   * console.log(`Risk: ${status.risk_level}`);
+   * console.log(`DP Gate: ${status.dp_gate_status}`);
+   * console.log(`Source: ${status.data_source}`); // 'DP_ASOG' ou 'TYPESCRIPT'
    * ```
    */
   async getSpaceWeatherStatus(
@@ -145,13 +147,14 @@ export class HybridSpaceWeatherService {
     longitude: number,
     altitude = 0,
     hours = 6
-  ): Promise<SpaceWeatherStatus & { data_source: "DP_ASOG" | "TYPESCRIPT" | "CACHED" }> {
+  ): Promise<SpaceWeatherStatus & { data_source: 'DP_ASOG' | 'TYPESCRIPT' | 'CACHED' }> {
     const cacheKey = `status_${latitude}_${longitude}_${altitude}_${hours}`;
     
     // Check cache
     const cached = this.cache.get(cacheKey);
     if (cached) {
-      return { ...cached, data_source: "CACHED" };
+      console.log('[HybridSpaceWeather] Using cached data');
+      return { ...cached, data_source: 'CACHED' };
     }
 
     // Try DP ASOG first (if preferred and available)
@@ -162,24 +165,25 @@ export class HybridSpaceWeatherService {
         try {
           const status = await this.getStatusFromDPASOG(latitude, longitude, altitude, hours);
           this.cache.set(cacheKey, status, this.config.cache_ttl_ms);
-          return { ...status, data_source: "DP_ASOG" };
+          return { ...status, data_source: 'DP_ASOG' };
         } catch (error) {
-          console.warn("[HybridSpaceWeather] DP ASOG failed:", error);
-          console.warn("[HybridSpaceWeather] DP ASOG failed:", error);
+          console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
           
           if (!this.config.enable_fallback) {
             throw error;
           }
           
+          console.log('[HybridSpaceWeather] Falling back to TypeScript implementation');
         }
       } else {
+        console.log('[HybridSpaceWeather] DP ASOG unavailable, using TypeScript fallback');
       }
     }
 
     // Fallback to TypeScript implementation
     const status = await this.getStatusFromTypeScript(latitude, longitude, altitude);
     this.cache.set(cacheKey, status, this.config.cache_ttl_ms);
-    return { ...status, data_source: "TYPESCRIPT" };
+    return { ...status, data_source: 'TYPESCRIPT' };
   }
 
   /**
@@ -203,7 +207,7 @@ export class HybridSpaceWeatherService {
         hours,
         step_min: 5,
         elev_mask: 10,
-        constellations: "GPS,GALILEO",
+        constellations: 'GPS,GALILEO',
       }).catch(() => null), // PDOP é opcional
     ]);
 
@@ -269,51 +273,51 @@ export class HybridSpaceWeatherService {
   /**
    * Estima risco de scintillation baseado em latitude e Kp
    */
-  private estimateScintillationRisk(latitude: number, kp: number): "LOW" | "MODERATE" | "HIGH" {
+  private estimateScintillationRisk(latitude: number, kp: number): 'LOW' | 'MODERATE' | 'HIGH' {
     const absLat = Math.abs(latitude);
     
     // Equatorial region (±20°)
     if (absLat <= 20) {
-      if (kp >= 5) return "HIGH";
-      if (kp >= 3) return "MODERATE";
-      return "LOW";
+      if (kp >= 5) return 'HIGH';
+      if (kp >= 3) return 'MODERATE';
+      return 'LOW';
     }
     
     // Polar region (>60°)
     if (absLat > 60) {
-      if (kp >= 6) return "HIGH";
-      if (kp >= 4) return "MODERATE";
-      return "LOW";
+      if (kp >= 6) return 'HIGH';
+      if (kp >= 4) return 'MODERATE';
+      return 'LOW';
     }
     
     // Mid-latitude
-    if (kp >= 7) return "HIGH";
-    if (kp >= 5) return "MODERATE";
-    return "LOW";
+    if (kp >= 7) return 'HIGH';
+    if (kp >= 5) return 'MODERATE';
+    return 'LOW';
   }
 
   /**
    * Quick DP check
    */
   async quickDPCheck(latitude: number, longitude: number): Promise<{
-    status: "GO" | "CAUTION" | "NO-GO";
+    status: 'GO' | 'CAUTION' | 'NO-GO';
     kp: number;
     pdop: number;
     message: string;
-    source: "DP_ASOG" | "TYPESCRIPT" | "CACHED";
+    source: 'DP_ASOG' | 'TYPESCRIPT' | 'CACHED';
   }> {
     const fullStatus = await this.getSpaceWeatherStatus(latitude, longitude);
     
     const status =
-      fullStatus.dp_gate_status === "PROCEED" ? "GO" :
-        fullStatus.dp_gate_status === "CAUTION" ? "CAUTION" :
-          "NO-GO";
+      fullStatus.dp_gate_status === 'PROCEED' ? 'GO' :
+      fullStatus.dp_gate_status === 'CAUTION' ? 'CAUTION' :
+      'NO-GO';
 
     return {
       status,
       kp: fullStatus.kp_current,
       pdop: fullStatus.pdop_current,
-      message: fullStatus.recommendations[0] || "No data",
+      message: fullStatus.recommendations[0] || 'No data',
       source: (fullStatus as any).data_source,
     };
   }
@@ -330,7 +334,7 @@ export class HybridSpaceWeatherService {
     const isHealthy = await this.checkDPASOGHealth();
     
     if (!isHealthy) {
-      throw new Error("DP ASOG Service is not available");
+      throw new Error('DP ASOG Service is not available');
     }
 
     return await this.getStatusFromDPASOG(latitude, longitude, altitude, hours);

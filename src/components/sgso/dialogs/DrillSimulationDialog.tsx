@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -159,7 +158,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       title: "Simulado Iniciado",
       description: `${plan.title} em andamento`,
     });
-  });
+  };
 
   const handlePauseDrill = () => {
     setIsPaused(!isPaused);
@@ -167,7 +166,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       title: isPaused ? "Simulado Retomado" : "Simulado Pausado",
       description: isPaused ? "Cronômetro retomado" : "Cronômetro pausado",
     });
-  });
+  };
 
   const handleStopDrill = () => {
     setIsRunning(false);
@@ -176,7 +175,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       description: `Duração total: ${formatTime(elapsedTime)}`,
       variant: "destructive"
     });
-  });
+  };
 
   const handleStepToggle = (stepId: string) => {
     setSteps(prev => prev.map(step => {
@@ -198,7 +197,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       description: "O relatório do simulado foi salvo com sucesso",
     });
     onOpenChange(false);
-  });
+  };
 
   const allCompleted = steps.every(s => s.completed);
 
@@ -288,7 +287,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
                     >
                       <Checkbox
                         checked={step.completed}
-                        onCheckedChange={() => handleStepToggle(step.id}
+                        onCheckedChange={() => handleStepToggle(step.id)}
                         disabled={!drillStarted}
                       />
                       <div className="flex-1">
@@ -317,7 +316,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
               id="observations"
               placeholder="Registre observações, não-conformidades ou pontos de melhoria..."
               value={observations}
-              onChange={handleChange}
+              onChange={(e) => setObservations(e.target.value)}
               rows={3}
             />
           </div>
@@ -343,7 +342,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
         <Separator />
 
         <div className="flex justify-between">
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
           <Button 
@@ -357,4 +356,4 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

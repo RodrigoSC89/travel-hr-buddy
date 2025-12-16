@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * AI Advisor Panel - Copiloto Adaptativo para PEO-DP
  * Interface de chat com personalidade baseada no perfil do usuário
  */
@@ -109,7 +108,7 @@ export const AIAdvisorPanel: React.FC = () => {
       role: "user",
       content: input,
       timestamp: new Date(),
-    });
+    };
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
@@ -173,7 +172,7 @@ export const AIAdvisorPanel: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={profile} onValueChange={(v) => setProfile(v as UserProfile}>
+          <Select value={profile} onValueChange={(v) => setProfile(v as UserProfile)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>
@@ -279,7 +278,7 @@ export const AIAdvisorPanel: React.FC = () => {
                               variant="ghost"
                               size="sm"
                               className="h-6 px-2"
-                              onClick={() => handlecopyToClipboard}
+                              onClick={() => copyToClipboard(message.content)}
                             >
                               <Copy className="h-3 w-3" />
                             </Button>
@@ -308,7 +307,7 @@ export const AIAdvisorPanel: React.FC = () => {
               <div className="flex gap-2 mt-4 pt-4 border-t">
                 <Input
                   value={input}
-                  onChange={handleChange}
+                  onChange={(e) => setInput(e.target.value)}
                   placeholder={`Pergunte ao assistente ${profileConfig[profile].label}...`}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   disabled={loading}
@@ -380,4 +379,4 @@ export const AIAdvisorPanel: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

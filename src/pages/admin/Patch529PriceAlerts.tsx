@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 529 - Alertas de Preço (UI + Notificações)
  */
 
@@ -19,7 +18,7 @@ export default function Patch529PriceAlerts() {
 
   const toggleCheck = (key: keyof typeof checks) => {
     setChecks(prev => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   const allChecked = Object.values(checks).every(Boolean);
   const progress = Object.values(checks).filter(Boolean).length;
@@ -48,7 +47,7 @@ export default function Patch529PriceAlerts() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.responsiveUI}
-              onCheckedChange={() => toggleCheck("responsiveUI"}
+              onCheckedChange={() => toggleCheck("responsiveUI")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -65,7 +64,7 @@ export default function Patch529PriceAlerts() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.notificationsWorking}
-              onCheckedChange={() => toggleCheck("notificationsWorking"}
+              onCheckedChange={() => toggleCheck("notificationsWorking")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -86,7 +85,7 @@ export default function Patch529PriceAlerts() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.historyVisible}
-              onCheckedChange={() => toggleCheck("historyVisible"}
+              onCheckedChange={() => toggleCheck("historyVisible")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -103,7 +102,7 @@ export default function Patch529PriceAlerts() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.aiPrediction}
-              onCheckedChange={() => toggleCheck("aiPrediction"}
+              onCheckedChange={() => toggleCheck("aiPrediction")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback } from "react";;
  * PATCH 541 - Virtualized Logs Center
  * High-performance logs rendering with @tanstack/react-virtual
  */
@@ -46,7 +45,7 @@ export default function VirtualizedLogsCenter() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("logs")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -180,7 +179,7 @@ export default function VirtualizedLogsCenter() {
               <Input
                 placeholder="Buscar logs..."
                 value={filters.search || ""}
-                onChange={handleChange}
+                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
               />
             </div>
 
@@ -208,13 +207,13 @@ export default function VirtualizedLogsCenter() {
               placeholder="Origem..."
               className="w-[200px]"
               value={filters.origin || ""}
-              onChange={handleChange}
+              onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
             />
 
             <Button
               variant="outline"
               size="icon"
-              onClick={handleSetFilters}
+              onClick={() => setFilters({})}
               title="Limpar filtros"
             >
               <Filter className="h-4 w-4" />

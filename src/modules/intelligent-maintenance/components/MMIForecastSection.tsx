@@ -2,7 +2,7 @@
  * MMI Forecast Section - Geração de forecasts com IA
  */
 
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,7 @@ export default function MMIForecastSection() {
 Com base no histórico fornecido e nos padrões de desgaste típicos, a IA identificou os seguintes pontos:
 
 1. PRÓXIMA MANUTENÇÃO PREVENTIVA
-   ├─ Data Estimada: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString("pt-BR")}
+   ├─ Data Estimada: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}
    ├─ Horímetro Previsto: ${Number(hourmeter) + 150}h
    └─ Tipo: Manutenção preventiva de rotina
 
@@ -68,7 +68,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
    └─ Estimativa: R$ 2.500,00 - R$ 4.200,00
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 Gerado por IA | ${new Date().toLocaleString("pt-BR")}
+🤖 Gerado por IA | ${new Date().toLocaleString('pt-BR')}
       `.trim();
 
       // Simulate streaming
@@ -143,7 +143,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
                 id="vessel"
                 placeholder="Ex: FPSO Alpha"
                 value={vesselName}
-                onChange={handleChange}
+                onChange={(e) => setVesselName(e.target.value)}
               />
             </div>
 
@@ -153,7 +153,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
                 id="system"
                 placeholder="Ex: Sistema hidráulico do guindaste"
                 value={systemName}
-                onChange={handleChange}
+                onChange={(e) => setSystemName(e.target.value)}
               />
             </div>
 
@@ -164,7 +164,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
                 type="number"
                 placeholder="Ex: 870"
                 value={hourmeter}
-                onChange={handleChange}
+                onChange={(e) => setHourmeter(e.target.value)}
               />
             </div>
 
@@ -174,7 +174,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
                 id="maintenance"
                 placeholder="Uma data por linha. Ex:&#10;12/04/2025 - troca de óleo&#10;20/06/2025 - verificação de pressão"
                 value={maintenanceDates}
-                onChange={handleChange}
+                onChange={(e) => setMaintenanceDates(e.target.value)}
                 rows={5}
               />
             </div>

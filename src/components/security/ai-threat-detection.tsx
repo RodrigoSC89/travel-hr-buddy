@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +12,7 @@ import {
   Lock,
   Eye,
   Zap,
+  TrendingUp,
   User,
   MapPin,
   Clock,
@@ -267,7 +267,7 @@ export const AIThreatDetection: React.FC = () => {
                         <div>
                           <div className="flex items-center gap-2">
                             <CardTitle className="text-base">{threat.title}</CardTitle>
-                            <Badge variant={getSeverityColor(threat.severity) as unknown}>
+                            <Badge variant={getSeverityColor(threat.severity) as any}>
                               {threat.severity.toUpperCase()}
                             </Badge>
                           </div>

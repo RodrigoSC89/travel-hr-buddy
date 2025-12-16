@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,8 +31,8 @@ export default function BridgeLinkDashboard() {
       toast.info(`Novo evento DP: ${event.type || "Desconhecido"}`, {
         description: event.description || "Evento do DP Intelligence Center",
         duration: 3000,
-      };
-  };
+      });
+    });
 
     return cleanup;
   }, [isLiveMode]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";;;
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -90,7 +90,7 @@ export default function TemplatesPage() {
         return;
       }
 
-      const query = (supabase as unknown)
+      const query = (supabase as any)
         .from("templates")
         .select("*")
         .order("created_at", { ascending: false });
@@ -252,7 +252,7 @@ export default function TemplatesPage() {
 
       if (isEditing && currentTemplateId) {
         // Update existing template
-        const { error } = await (supabase as unknown)
+        const { error } = await (supabase as any)
           .from("templates")
           .update({
             title: title.trim(),
@@ -268,7 +268,7 @@ export default function TemplatesPage() {
         });
       } else {
         // Create new template
-        const { error } = await (supabase as unknown)
+        const { error } = await (supabase as any)
           .from("templates")
           .insert({
             title: title.trim(),
@@ -302,7 +302,7 @@ export default function TemplatesPage() {
   // Toggle favorite
   const toggleFavorite = async (template: Template) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("templates")
         .update({ is_favorite: !template.is_favorite })
         .eq("id", template.id);
@@ -328,7 +328,7 @@ export default function TemplatesPage() {
   // Toggle private
   const togglePrivate = async (template: Template) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("templates")
         .update({ is_private: !template.is_private })
         .eq("id", template.id);
@@ -354,7 +354,7 @@ export default function TemplatesPage() {
   // Delete template
   const deleteTemplate = async (id: string) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("templates")
         .delete()
         .eq("id", id);
@@ -400,7 +400,7 @@ export default function TemplatesPage() {
     }));
     
     navigate("/admin/documents/ai");
-  });
+  };
 
   // Export template as PDF
   const exportToPDF = async (template: Template) => {
@@ -431,7 +431,7 @@ export default function TemplatesPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-  });
+      });
       
       pdf.save(`${template.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       
@@ -468,7 +468,7 @@ export default function TemplatesPage() {
     const matchesPrivate = !filterPrivate || template.is_private;
     
     return matchesSearch && matchesFavorites && matchesPrivate;
-  };
+  });
 
   return (
     <div className="space-y-6 p-8">
@@ -505,7 +505,7 @@ export default function TemplatesPage() {
                   <Input
                     placeholder="Título do Template"
                     value={title}
-                    onChange={handleChange}
+                    onChange={(e) => setTitle(e.target.value)}
                     className="flex-1"
                   />
                   <Button
@@ -525,7 +525,7 @@ export default function TemplatesPage() {
                   rows={3}
                   placeholder="Descreva o que você quer gerar... (opcional)"
                   value={prompt}
-                  onChange={handleChange}
+                  onChange={(e) => setPrompt(e.target.value)}
                 />
               </div>
 
@@ -571,7 +571,7 @@ export default function TemplatesPage() {
                   rows={12}
                   placeholder="Digite ou gere o conteúdo do template..."
                   value={content}
-                  onChange={handleChange}
+                  onChange={(e) => setContent(e.target.value)}
                   className="font-mono"
                 />
               </div>
@@ -613,14 +613,14 @@ export default function TemplatesPage() {
                   <Input
                     placeholder="Buscar templates..."
                     value={searchTerm}
-                    onChange={handleChange}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10"
                   />
                 </div>
                 <Button
                   variant={filterFavorites ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetFilterFavorites}
+                  onClick={() => setFilterFavorites(!filterFavorites)}
                 >
                   <Star className="w-4 h-4 mr-2" />
                   Favoritos
@@ -628,7 +628,7 @@ export default function TemplatesPage() {
                 <Button
                   variant={filterPrivate ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetFilterPrivate}
+                  onClick={() => setFilterPrivate(!filterPrivate)}
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   Privados
@@ -690,7 +690,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleeditTemplate}
+                        onClick={() => editTemplate(template.id)}
                       >
                         <Edit className="w-3 h-3 mr-1" />
                         Editar
@@ -699,7 +699,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleduplicateTemplate}
+                        onClick={() => duplicateTemplate(template)}
                       >
                         <Copy className="w-3 h-3 mr-1" />
                         Duplicar
@@ -708,7 +708,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleapplyTemplate}
+                        onClick={() => applyTemplate(template)}
                       >
                         <FileCheck className="w-3 h-3 mr-1" />
                         Aplicar
@@ -719,7 +719,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handletoggleFavorite}
+                        onClick={() => toggleFavorite(template)}
                       >
                         {template.is_favorite ? (
                           <StarOff className="w-3 h-3 mr-1" />
@@ -732,7 +732,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handletogglePrivate}
+                        onClick={() => togglePrivate(template)}
                       >
                         {template.is_private ? (
                           <Unlock className="w-3 h-3 mr-1" />
@@ -745,7 +745,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleexportToPDF}
+                        onClick={() => exportToPDF(template)}
                         disabled={exporting}
                       >
                         <Download className="w-3 h-3 mr-1" />
@@ -781,7 +781,7 @@ export default function TemplatesPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleSetTemplateToDelete}>
+            <AlertDialogCancel onClick={() => setTemplateToDelete(null)}>
               Cancelar
             </AlertDialogCancel>
             <AlertDialogAction

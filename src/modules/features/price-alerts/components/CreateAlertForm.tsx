@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,7 +26,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
     route: editingAlert?.route || "",
     notification_email: editingAlert?.notification_email ?? true,
     notification_push: editingAlert?.notification_push ?? true,
-});
+  });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,7 +83,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
             <Input
               id="product_name"
               value={formData.product_name}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, product_name: e.target.value })}
               placeholder="Ex: Passagem São Paulo - Rio de Janeiro"
               required
             />
@@ -96,7 +95,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
               id="product_url"
               type="url"
               value={formData.product_url}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, product_url: e.target.value })}
               placeholder="https://..."
               required
             />
@@ -107,7 +106,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
             <Input
               id="route"
               value={formData.route || ""}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, route: e.target.value })}
               placeholder="Ex: GRU-SDU"
             />
           </div>
@@ -120,7 +119,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
                 type="number"
                 step="0.01"
                 value={formData.target_price}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, target_price: parseFloat(e.target.value) })}
                 required
               />
             </div>
@@ -132,7 +131,10 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
                 type="number"
                 step="0.01"
                 value={formData.current_price || ""}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ 
+                  ...formData, 
+                  current_price: e.target.value ? parseFloat(e.target.value) : undefined 
+                })}
               />
             </div>
           </div>
@@ -169,4 +171,4 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
       </CardContent>
     </Card>
   );
-});
+};

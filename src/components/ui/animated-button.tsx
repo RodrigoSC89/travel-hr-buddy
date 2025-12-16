@@ -1,14 +1,13 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Animated Button Component
  * PATCH 860: UX Polimento Final - Botões com feedback tátil
  */
 
-import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
-import { Button, ButtonProps } from "./button";
-import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import React from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
+import { Button, ButtonProps } from './button';
+import { cn } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 interface AnimatedButtonProps extends ButtonProps {
   loading?: boolean;
@@ -35,21 +34,21 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
         setTimeout(() => setRippleStyle(prev => ({ ...prev, show: false })), 600);
       }
       onClick?.(e);
-    });
+    };
 
     return (
       <motion.div
         whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
         whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
-        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       >
         <Button
           ref={ref}
           disabled={disabled || loading}
           onClick={handleClick}
           className={cn(
-            "relative overflow-hidden",
-            success && "bg-green-500 hover:bg-green-600",
+            'relative overflow-hidden',
+            success && 'bg-green-500 hover:bg-green-600',
             className
           )}
           {...props}
@@ -81,6 +80,6 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
   }
 );
 
-AnimatedButton.displayName = "AnimatedButton";
+AnimatedButton.displayName = 'AnimatedButton';
 
 export default AnimatedButton;

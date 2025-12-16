@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { memo, memo, useState, useCallback, useMemo } from "react";;;
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 
 interface WorkflowStep {
   id: string;
-  type: "trigger" | "condition" | "action";
+  type: 'trigger' | 'condition' | 'action';
   name: string;
   config: Record<string, unknown>;
 }
@@ -48,53 +48,53 @@ interface AutomationWorkflow {
 }
 
 const TRIGGERS = [
-  { value: "schedule", label: "Agendamento", icon: "⏰" },
-  { value: "event", label: "Evento do Sistema", icon: "📡" },
-  { value: "threshold", label: "Limite Atingido", icon: "📊" },
-  { value: "document", label: "Documento Criado", icon: "📄" },
-  { value: "maintenance", label: "Manutenção Programada", icon: "🔧" },
-  { value: "compliance", label: "Prazo de Compliance", icon: "✅" },
+  { value: 'schedule', label: 'Agendamento', icon: '⏰' },
+  { value: 'event', label: 'Evento do Sistema', icon: '📡' },
+  { value: 'threshold', label: 'Limite Atingido', icon: '📊' },
+  { value: 'document', label: 'Documento Criado', icon: '📄' },
+  { value: 'maintenance', label: 'Manutenção Programada', icon: '🔧' },
+  { value: 'compliance', label: 'Prazo de Compliance', icon: '✅' },
 ];
 
-export const AutomationWorkflowsManager = memo(() => {
+export const AutomationWorkflowsManager = () => {
   const [workflows, setWorkflows] = useState<AutomationWorkflow[]>([
     {
-      id: "1",
-      name: "Alerta de Manutenção Preventiva",
-      description: "Notifica equipe quando manutenção está próxima",
-      trigger: "maintenance",
+      id: '1',
+      name: 'Alerta de Manutenção Preventiva',
+      description: 'Notifica equipe quando manutenção está próxima',
+      trigger: 'maintenance',
       steps: [
-        { id: "s1", type: "trigger", name: "Manutenção em 7 dias", config: { days: 7 } },
-        { id: "s2", type: "action", name: "Enviar Email", config: { to: "manutencao@empresa.com" } },
-        { id: "s3", type: "action", name: "Criar Tarefa", config: { assignee: "supervisor" } },
+        { id: 's1', type: 'trigger', name: 'Manutenção em 7 dias', config: { days: 7 } },
+        { id: 's2', type: 'action', name: 'Enviar Email', config: { to: 'manutencao@empresa.com' } },
+        { id: 's3', type: 'action', name: 'Criar Tarefa', config: { assignee: 'supervisor' } },
       ],
       isActive: true,
       executionCount: 45,
-      lastExecution: "2025-01-07T10:30:00",
+      lastExecution: '2025-01-07T10:30:00',
       aiOptimized: true,
     },
     {
-      id: "2",
-      name: "Compliance - Certificados Expirando",
-      description: "Alerta sobre certificados próximos do vencimento",
-      trigger: "compliance",
+      id: '2',
+      name: 'Compliance - Certificados Expirando',
+      description: 'Alerta sobre certificados próximos do vencimento',
+      trigger: 'compliance',
       steps: [
-        { id: "s1", type: "trigger", name: "Certificado expira em 30 dias", config: { days: 30 } },
-        { id: "s2", type: "condition", name: "Se certificado crítico", config: { critical: true } },
-        { id: "s3", type: "action", name: "Alerta Urgente", config: { priority: "high" } },
+        { id: 's1', type: 'trigger', name: 'Certificado expira em 30 dias', config: { days: 30 } },
+        { id: 's2', type: 'condition', name: 'Se certificado crítico', config: { critical: true } },
+        { id: 's3', type: 'action', name: 'Alerta Urgente', config: { priority: 'high' } },
       ],
       isActive: true,
       executionCount: 12,
-      lastExecution: "2025-01-06T08:00:00",
+      lastExecution: '2025-01-06T08:00:00',
       aiOptimized: false,
     },
   ]);
 
   const [isCreating, setIsCreating] = useState(false);
   const [newWorkflow, setNewWorkflow] = useState({
-    name: "",
-    description: "",
-    trigger: "schedule",
+    name: '',
+    description: '',
+    trigger: 'schedule',
     aiOptimized: true,
   });
 
@@ -107,7 +107,7 @@ export const AutomationWorkflowsManager = memo(() => {
 
   const handleCreateWorkflow = () => {
     if (!newWorkflow.name) {
-      toast.error("Informe o nome do workflow");
+      toast.error('Informe o nome do workflow');
       return;
     }
 
@@ -117,26 +117,26 @@ export const AutomationWorkflowsManager = memo(() => {
       description: newWorkflow.description,
       trigger: newWorkflow.trigger,
       steps: [
-        { id: "s1", type: "trigger", name: TRIGGERS.find(t => t.value === newWorkflow.trigger)?.label || "Trigger", config: {} },
-        { id: "s2", type: "action", name: "Enviar Notificação", config: {} },
+        { id: 's1', type: 'trigger', name: TRIGGERS.find(t => t.value === newWorkflow.trigger)?.label || 'Trigger', config: {} },
+        { id: 's2', type: 'action', name: 'Enviar Notificação', config: {} },
       ],
       isActive: true,
       executionCount: 0,
       aiOptimized: newWorkflow.aiOptimized,
-    });
+    };
 
     setWorkflows([...workflows, workflow]);
     setIsCreating(false);
-    setNewWorkflow({ name: "", description: "", trigger: "schedule", aiOptimized: true });
-    toast.success("Workflow criado com sucesso!");
-  });
+    setNewWorkflow({ name: '', description: '', trigger: 'schedule', aiOptimized: true });
+    toast.success('Workflow criado com sucesso!');
+  };
 
   const toggleWorkflow = (id: string) => {
     setWorkflows(workflows.map(w => 
       w.id === id ? { ...w, isActive: !w.isActive } : w
     ));
     const workflow = workflows.find(w => w.id === id);
-    toast.success(workflow?.isActive ? "Workflow pausado" : "Workflow ativado");
+    toast.success(workflow?.isActive ? 'Workflow pausado' : 'Workflow ativado');
   };
 
   const confirmDeleteWorkflow = (id: string) => {
@@ -147,7 +147,7 @@ export const AutomationWorkflowsManager = memo(() => {
   const deleteWorkflow = () => {
     if (workflowToDelete) {
       setWorkflows(workflows.filter(w => w.id !== workflowToDelete));
-      toast.success("Workflow removido com sucesso");
+      toast.success('Workflow removido com sucesso');
       setDeleteDialogOpen(false);
       setWorkflowToDelete(null);
     }
@@ -188,11 +188,11 @@ export const AutomationWorkflowsManager = memo(() => {
       ));
       
       if (response.ok) {
-        toast.success("Workflow executado com sucesso!", {
+        toast.success('Workflow executado com sucesso!', {
           description: `${workflow.steps.length} passos processados.`
         });
       } else {
-        toast.success("Workflow executado com sucesso!");
+        toast.success('Workflow executado com sucesso!');
       }
     } catch (error) {
       // Still show success for demo purposes
@@ -201,7 +201,7 @@ export const AutomationWorkflowsManager = memo(() => {
           ? { ...w, executionCount: w.executionCount + 1, lastExecution: new Date().toISOString() }
           : w
       ));
-      toast.success("Workflow executado com sucesso!");
+      toast.success('Workflow executado com sucesso!');
     } finally {
       setExecutingWorkflow(null);
     }
@@ -230,8 +230,8 @@ export const AutomationWorkflowsManager = memo(() => {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
             const formattedSuggestions = parsed.suggestions
-              .map((s: unknown) => `• ${s.title}: ${s.description} (${s.impact})`)
-              .join("\n\n");
+              .map((s: any) => `• ${s.title}: ${s.description} (${s.impact})`)
+              .join('\n\n');
             setAiSuggestion(formattedSuggestions);
           } else {
             setAiSuggestion(data.result);
@@ -241,14 +241,14 @@ export const AutomationWorkflowsManager = memo(() => {
         }
       } else {
         // Use fallback
-        setAiSuggestion("Sugestões: 1) Alerta automático quando horímetro atinge limite de manutenção, 2) Notificação de compliance quando certificado expira em 30 dias, 3) Criação automática de relatório semanal de performance.");
+        setAiSuggestion('Sugestões: 1) Alerta automático quando horímetro atinge limite de manutenção, 2) Notificação de compliance quando certificado expira em 30 dias, 3) Criação automática de relatório semanal de performance.');
       }
       
-      toast.success("Sugestões de IA geradas!");
+      toast.success('Sugestões de IA geradas!');
     } catch (error) {
       console.error("Error getting AI suggestion:", error);
-      setAiSuggestion("Sugestões: 1) Alerta automático quando horímetro atinge limite, 2) Notificação de compliance quando certificado expira em 30 dias, 3) Relatório semanal de performance.");
-      toast.success("Sugestões carregadas");
+      setAiSuggestion('Sugestões: 1) Alerta automático quando horímetro atinge limite, 2) Notificação de compliance quando certificado expira em 30 dias, 3) Relatório semanal de performance.');
+      toast.success('Sugestões carregadas');
     } finally {
       setIsLoadingAI(false);
     }
@@ -256,7 +256,7 @@ export const AutomationWorkflowsManager = memo(() => {
 
   const optimizeWithAI = async (workflow: AutomationWorkflow) => {
     setOptimizingWorkflow(workflow.id);
-    toast.info("Otimizando workflow com IA...");
+    toast.info('Otimizando workflow com IA...');
     
     try {
       const response = await fetch(
@@ -285,18 +285,18 @@ export const AutomationWorkflowsManager = memo(() => {
         w.id === workflow.id ? { ...w, aiOptimized: true } : w
       ));
       
-      toast.success("Workflow otimizado com IA!", {
-        description: "Parâmetros ajustados para melhor eficiência."
+      toast.success('Workflow otimizado com IA!', {
+        description: 'Parâmetros ajustados para melhor eficiência.'
       });
     } catch (error) {
       // Still mark as optimized for demo
       setWorkflows(workflows.map(w => 
         w.id === workflow.id ? { ...w, aiOptimized: true } : w
       ));
-      toast.success("Workflow otimizado!");
+      toast.success('Workflow otimizado!');
     } finally {
       setOptimizingWorkflow(null);
-    };
+    }
   };
 
   return (
@@ -313,9 +313,9 @@ export const AutomationWorkflowsManager = memo(() => {
             ) : (
               <Bot className="w-4 h-4 mr-2" />
             )}
-            {isLoadingAI ? "Analisando..." : "Sugestões IA"}
+            {isLoadingAI ? 'Analisando...' : 'Sugestões IA'}
           </Button>
-          <Button onClick={handleSetIsCreating}>
+          <Button onClick={() => setIsCreating(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Novo Workflow
           </Button>
@@ -334,7 +334,7 @@ export const AutomationWorkflowsManager = memo(() => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={handleSetAiSuggestion}
+                onClick={() => setAiSuggestion(null)}
               >
                 ✕
               </Button>
@@ -389,7 +389,7 @@ export const AutomationWorkflowsManager = memo(() => {
               <Label>Otimização por IA (ajuste automático de parâmetros)</Label>
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={handleSetIsCreating}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setIsCreating(false)}>Cancelar</Button>
               <Button onClick={handleCreateWorkflow}>Criar Workflow</Button>
             </div>
           </CardContent>
@@ -419,7 +419,7 @@ export const AutomationWorkflowsManager = memo(() => {
             <p className="text-sm text-muted-foreground mb-4">
               Crie seu primeiro workflow de automação para otimizar operações.
             </p>
-            <Button onClick={handleSetIsCreating}>
+            <Button onClick={() => setIsCreating(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Criar Workflow
             </Button>
@@ -437,7 +437,7 @@ export const AutomationWorkflowsManager = memo(() => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetDeleteDialogOpen}>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
               Cancelar
             </Button>
             <Button variant="destructive" onClick={deleteWorkflow}>
@@ -470,7 +470,7 @@ const WorkflowCard = ({
   const triggerInfo = TRIGGERS.find(t => t.value === workflow.trigger);
 
   return (
-    <Card className={!workflow.isActive ? "opacity-60" : ""}>
+    <Card className={!workflow.isActive ? 'opacity-60' : ''}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-4">
@@ -486,8 +486,8 @@ const WorkflowCard = ({
                     IA Otimizado
                   </Badge>
                 )}
-                <Badge variant={workflow.isActive ? "default" : "outline"}>
-                  {workflow.isActive ? "Ativo" : "Pausado"}
+                <Badge variant={workflow.isActive ? 'default' : 'outline'}>
+                  {workflow.isActive ? 'Ativo' : 'Pausado'}
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground mt-1">{workflow.description}</p>
@@ -498,9 +498,9 @@ const WorkflowCard = ({
                   <div key={step.id} className="flex items-center">
                     <div className={`
                       px-2 py-1 rounded text-xs
-                      ${step.type === "trigger" ? "bg-blue-500/10 text-blue-600 dark:text-blue-400" : ""}
-                      ${step.type === "condition" ? "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400" : ""}
-                      ${step.type === "action" ? "bg-green-500/10 text-green-600 dark:text-green-400" : ""}
+                      ${step.type === 'trigger' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' : ''}
+                      ${step.type === 'condition' ? 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400' : ''}
+                      ${step.type === 'action' ? 'bg-green-500/10 text-green-600 dark:text-green-400' : ''}
                     `}>
                       {step.name}
                     </div>
@@ -516,7 +516,7 @@ const WorkflowCard = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => handleonRun}
+              onClick={() => onRun(workflow)}
               disabled={isExecuting}
             >
               {isExecuting ? (
@@ -524,13 +524,13 @@ const WorkflowCard = ({
               ) : (
                 <Zap className="w-4 h-4 mr-1" />
               )}
-              {isExecuting ? "Executando..." : "Executar"}
+              {isExecuting ? 'Executando...' : 'Executar'}
             </Button>
             {!workflow.aiOptimized && (
               <Button 
                 variant="ghost" 
                 size="sm" 
-                onClick={() => handleonOptimize}
+                onClick={() => onOptimize(workflow)}
                 disabled={isOptimizing}
               >
                 {isOptimizing ? (
@@ -538,21 +538,21 @@ const WorkflowCard = ({
                 ) : (
                   <Bot className="w-4 h-4 mr-1" />
                 )}
-                {isOptimizing ? "Otimizando..." : "Otimizar"}
+                {isOptimizing ? 'Otimizando...' : 'Otimizar'}
               </Button>
             )}
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => handleonToggle}
-              title={workflow.isActive ? "Pausar" : "Ativar"}
+              onClick={() => onToggle(workflow.id)}
+              title={workflow.isActive ? 'Pausar' : 'Ativar'}
             >
               {workflow.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </Button>
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => handleonDelete}
+              onClick={() => onDelete(workflow.id)}
               title="Excluir"
             >
               <Trash2 className="w-4 h-4 text-destructive" />
@@ -568,7 +568,7 @@ const WorkflowCard = ({
           {workflow.lastExecution && (
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              Última: {new Date(workflow.lastExecution).toLocaleString("pt-BR")}
+              Última: {new Date(workflow.lastExecution).toLocaleString('pt-BR')}
             </span>
           )}
           <span className="flex items-center gap-1">

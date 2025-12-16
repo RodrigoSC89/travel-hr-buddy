@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ export default function UserManagementRBAC() {
   const fetchGroups = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("user_groups")
         .select("*")
         .order("name");
@@ -62,7 +62,7 @@ export default function UserManagementRBAC() {
   const fetchAuditLogs = async () => {
     setLoading(true);
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("role_audit_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -84,7 +84,7 @@ export default function UserManagementRBAC() {
 
   const createGroup = async (name: string, description: string) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("user_groups")
         .insert({ name, description });
 
@@ -107,7 +107,7 @@ export default function UserManagementRBAC() {
 
   const addUserToGroup = async (userId: string, groupId: string) => {
     try {
-      const { error } = await (supabase as unknown).rpc("add_user_to_group", {
+      const { error } = await (supabase as any).rpc("add_user_to_group", {
         p_user_id: userId,
         p_group_id: groupId,
       });
@@ -185,7 +185,7 @@ export default function UserManagementRBAC() {
                       <Card
                         key={group.id}
                         className="cursor-pointer hover:bg-accent"
-                        onClick={handleSetSelectedGroup}
+                        onClick={() => setSelectedGroup(group.id)}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -239,7 +238,7 @@ export const PeotramReportsGenerator: React.FC = () => {
                         ? "border-primary bg-primary/5" 
                         : "border-border hover:bg-accent/50"
                     }`}
-                    onClick={() => handlehandleTemplateSelect}
+                    onClick={() => handleTemplateSelect(template.id)}
                   >
                     <div className="flex items-start gap-3">
                       <TemplateIcon className={`w-5 h-5 mt-1 ${
@@ -434,7 +433,7 @@ export const PeotramReportsGenerator: React.FC = () => {
                             <Checkbox
                               id={section.id}
                               checked={reportConfig.sections.includes(section.id)}
-                              onCheckedChange={(checked) => handleSectionToggle(section.id, checked as boolean}
+                              onCheckedChange={(checked) => handleSectionToggle(section.id, checked as boolean)}
                               disabled={section.required}
                             />
                             <div className="flex-1">

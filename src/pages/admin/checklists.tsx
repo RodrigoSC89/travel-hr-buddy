@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * Smart Checklists Module - Complete Professional Version
  * PATCH 1101: Full functionality with AI generation, analytics dashboard, and all buttons working
  */
@@ -166,7 +165,7 @@ export default function SmartChecklistsPage() {
         return acc + (total > 0 ? (done / total) * 100 : 0);
       }, 0) / (checklists.length || 1)
     ),
-  });
+  };
 
   const filteredChecklists = checklists.filter(c => {
     const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -174,25 +173,25 @@ export default function SmartChecklistsPage() {
     const matchesType = selectedType === "all" || c.type === selectedType;
     const matchesStatus = selectedStatus === "all" || c.status === selectedStatus;
     return matchesSearch && matchesType && matchesStatus;
-  };
+  });
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {
-    case "critical": return "bg-red-500 text-white";
-    case "high": return "bg-orange-500 text-white";
-    case "medium": return "bg-yellow-500 text-black";
-    case "low": return "bg-green-500 text-white";
-    default: return "bg-gray-500 text-white";
+      case "critical": return "bg-red-500 text-white";
+      case "high": return "bg-orange-500 text-white";
+      case "medium": return "bg-yellow-500 text-black";
+      case "low": return "bg-green-500 text-white";
+      default: return "bg-gray-500 text-white";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100";
-    case "active": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100";
-    case "draft": return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100";
-    case "archived": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100";
-    default: return "bg-gray-100 text-gray-800";
+      case "completed": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100";
+      case "active": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100";
+      case "draft": return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100";
+      case "archived": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -368,7 +367,7 @@ export default function SmartChecklistsPage() {
               Ver Dashboard
             </Button>
           </Link>
-          <Button className="gap-2" onClick={handleSetShowCreateDialog}>
+          <Button className="gap-2" onClick={() => setShowCreateDialog(true)}>
             <Plus className="h-4 w-4" />
             Novo Checklist
           </Button>
@@ -457,7 +456,7 @@ export default function SmartChecklistsPage() {
                 <Input
                   placeholder="Descreva o checklist que deseja criar... Ex: Inspeção de segurança para operação de mergulho"
                   value={aiPrompt}
-                  onChange={handleChange}
+                  onChange={(e) => setAiPrompt(e.target.value)}
                   className="mt-2"
                 />
               </div>
@@ -507,7 +506,7 @@ export default function SmartChecklistsPage() {
               <Input
                 placeholder="Buscar..."
                 value={searchQuery}
-                onChange={handleChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9 w-[200px]"
               />
             </div>
@@ -547,7 +546,7 @@ export default function SmartChecklistsPage() {
                   <p className="text-muted-foreground mt-1">
                     Crie um novo checklist ou ajuste os filtros
                   </p>
-                  <Button className="mt-4 gap-2" onClick={handleSetShowCreateDialog}>
+                  <Button className="mt-4 gap-2" onClick={() => setShowCreateDialog(true)}>
                     <Plus className="h-4 w-4" />
                     Criar Checklist
                   </Button>
@@ -612,7 +611,7 @@ export default function SmartChecklistsPage() {
                                 <div
                                   key={item.id}
                                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer"
-                                  onClick={() => handlehandleToggleItem}
+                                  onClick={() => handleToggleItem(checklist.id, item.id)}
                                 >
                                   <Checkbox checked={item.completed} />
                                   <span className={item.completed ? "line-through text-muted-foreground" : ""}>
@@ -660,7 +659,7 @@ export default function SmartChecklistsPage() {
                               variant="outline"
                               size="sm"
                               className="gap-1"
-                              onClick={() => handlehandleSummarize}
+                              onClick={() => handleSummarize(checklist)}
                               disabled={isSummarizing}
                             >
                               {isSummarizing ? (
@@ -674,7 +673,7 @@ export default function SmartChecklistsPage() {
                               variant="outline"
                               size="sm"
                               className="gap-1"
-                              onClick={() => handlehandleExportPDF}
+                              onClick={() => handleExportPDF(checklist)}
                             >
                               <Download className="h-3 w-3" />
                               Exportar
@@ -683,7 +682,7 @@ export default function SmartChecklistsPage() {
                               variant="outline"
                               size="sm"
                               className="gap-1 text-destructive hover:text-destructive"
-                              onClick={() => handlehandleDeleteChecklist}
+                              onClick={() => handleDeleteChecklist(checklist.id)}
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
@@ -772,7 +771,7 @@ export default function SmartChecklistsPage() {
                 <Label>Título</Label>
                 <Input
                   value={newChecklist.title}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewChecklist(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Ex: Inspeção de Segurança"
                 />
               </div>
@@ -798,7 +797,7 @@ export default function SmartChecklistsPage() {
               <Label>Descrição</Label>
               <Textarea
                 value={newChecklist.description}
-                onChange={handleChange}))}
+                onChange={(e) => setNewChecklist(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Descreva o propósito deste checklist"
               />
             </div>
@@ -808,7 +807,7 @@ export default function SmartChecklistsPage() {
                 <Label>Embarcação (opcional)</Label>
                 <Input
                   value={newChecklist.vessel}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewChecklist(prev => ({ ...prev, vessel: e.target.value }))}
                   placeholder="Ex: Navio Sirius"
                 />
               </div>
@@ -817,7 +816,7 @@ export default function SmartChecklistsPage() {
                 <Input
                   type="date"
                   value={newChecklist.dueDate}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewChecklist(prev => ({ ...prev, dueDate: e.target.value }))}
                 />
               </div>
             </div>
@@ -828,11 +827,11 @@ export default function SmartChecklistsPage() {
               <div className="flex gap-2">
                 <Input
                   value={newItemTitle}
-                  onChange={handleChange}
+                  onChange={(e) => setNewItemTitle(e.target.value)}
                   placeholder="Adicionar item..."
                   onKeyDown={(e) => e.key === "Enter" && handleAddItem()}
                 />
-                <Select value={newItemCriticality} onValueChange={(v: unknown: unknown: unknown) => setNewItemCriticality(v}>
+                <Select value={newItemCriticality} onValueChange={(v: any) => setNewItemCriticality(v)}>
                   <SelectTrigger className="w-[120px]">
                     <SelectValue />
                   </SelectTrigger>
@@ -863,7 +862,7 @@ export default function SmartChecklistsPage() {
                       variant="ghost"
                       size="icon"
                       className="h-6 w-6"
-                      onClick={() => handlehandleRemoveItem}
+                      onClick={() => handleRemoveItem(item.id)}
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -874,7 +873,7 @@ export default function SmartChecklistsPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowCreateDialog}>
+            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateChecklist} disabled={!newChecklist.title.trim()}>
@@ -914,7 +913,7 @@ export default function SmartChecklistsPage() {
                     <div
                       key={item.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handlehandleToggleItem}
+                      onClick={() => handleToggleItem(selectedChecklist.id, item.id)}
                     >
                       <Checkbox checked={item.completed} />
                       <span className={`flex-1 ${item.completed ? "line-through text-muted-foreground" : ""}`}>
@@ -943,7 +942,7 @@ export default function SmartChecklistsPage() {
           <DialogFooter className="gap-2">
             <Button
               variant="outline"
-              onClick={() => selectedChecklist && handleSummarize(selectedChecklist}
+              onClick={() => selectedChecklist && handleSummarize(selectedChecklist)}
               disabled={isSummarizing}
             >
               {isSummarizing ? (
@@ -953,7 +952,7 @@ export default function SmartChecklistsPage() {
               )}
               Analisar com IA
             </Button>
-            <Button onClick={() => selectedChecklist && handleExportPDF(selectedChecklist}>
+            <Button onClick={() => selectedChecklist && handleExportPDF(selectedChecklist)}>
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>

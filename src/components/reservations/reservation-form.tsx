@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -57,7 +56,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     currency: "BRL",
     status: "confirmed" as EnhancedReservation["status"],
     notes: ""
-});
+  });
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -104,9 +103,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       status: "confirmed",
       notes: ""
     });
-  });
+  };
 
-  const handleTemplateUse = (templateData: unknown) => {
+  const handleTemplateUse = (templateData: any) => {
     setFormData({
       ...formData,
       title: templateData.title || "",
@@ -120,7 +119,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       currency: templateData.currency || "BRL",
       notes: templateData.notes || ""
     });
-  });
+  };
 
   const validateForm = () => {
     if (!formData.title.trim()) {
@@ -151,7 +150,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     }
 
     return true;
-  });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -249,7 +248,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
               <Button
                 type="button"
                 variant="outline"
-                onClick={handleSetShowTemplates}
+                onClick={() => setShowTemplates(true)}
                 className="flex items-center gap-2"
               >
                 <Bookmark className="h-4 w-4" />
@@ -271,7 +270,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                       placeholder="Ex: Hotel Santos Dumont - Rio de Janeiro"
                       required
                     />
@@ -308,7 +307,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Detalhes adicionais sobre a reserva..."
                     rows={3}
                   />
@@ -332,7 +331,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="start_date"
                       type="datetime-local"
                       value={formData.start_date}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                       required
                     />
                   </div>
@@ -342,7 +341,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="end_date"
                       type="datetime-local"
                       value={formData.end_date}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                       required
                     />
                   </div>
@@ -354,7 +353,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       placeholder="Ex: Rio de Janeiro, RJ"
                     />
                   </div>
@@ -363,7 +362,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="address"
                       value={formData.address}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       placeholder="Rua, número, bairro, CEP"
                     />
                   </div>
@@ -383,7 +382,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="confirmation_number"
                       value={formData.confirmation_number}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, confirmation_number: e.target.value })}
                       placeholder="Ex: ABC123456"
                     />
                   </div>
@@ -392,7 +391,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="room_type"
                       value={formData.room_type}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, room_type: e.target.value })}
                       placeholder="Ex: Quarto duplo standard"
                     />
                   </div>
@@ -408,7 +407,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         type="number"
                         step="0.01"
                         value={formData.total_amount}
-                        onChange={handleChange}
+                        onChange={(e) => setFormData({ ...formData, total_amount: e.target.value })}
                         placeholder="0.00"
                         className="pl-10"
                       />
@@ -467,7 +466,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       <Input
                         id="contact_info"
                         value={formData.contact_info}
-                        onChange={handleChange}
+                        onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
                         placeholder="Telefone, email, etc."
                         className="pl-10"
                       />
@@ -481,7 +480,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         id="supplier_url"
                         type="url"
                         value={formData.supplier_url}
-                        onChange={handleChange}
+                        onChange={(e) => setFormData({ ...formData, supplier_url: e.target.value })}
                         placeholder="https://..."
                         className="pl-10"
                       />
@@ -494,7 +493,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="notes"
                     value={formData.notes}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                     placeholder="Observações internas, requisitos especiais, etc."
                     rows={3}
                   />
@@ -528,9 +527,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       {/* Templates Dialog */}
       <ReservationTemplates
         isOpen={showTemplates}
-        onClose={() => setShowTemplates(false}
+        onClose={() => setShowTemplates(false)}
         onUseTemplate={handleTemplateUse}
       />
     </>
   );
-});
+};

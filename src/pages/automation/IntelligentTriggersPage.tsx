@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
@@ -242,8 +241,8 @@ export default function IntelligentTriggersPage() {
                               {trigger.type === "event"
                                 ? "Evento"
                                 : trigger.type === "schedule"
-                                  ? "Agendado"
-                                  : "Webhook"}
+                                ? "Agendado"
+                                : "Webhook"}
                             </Badge>
                           </div>
                           <p className="text-sm text-muted-foreground mt-1">{trigger.description}</p>
@@ -276,7 +275,7 @@ export default function IntelligentTriggersPage() {
                       <div className="flex items-center gap-4">
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id}
+                          onCheckedChange={() => toggleTrigger(trigger.id)}
                         />
                         <div className="flex gap-2">
                           <Button size="sm" variant="outline">
@@ -309,7 +308,7 @@ export default function IntelligentTriggersPage() {
                         </div>
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id}
+                          onCheckedChange={() => toggleTrigger(trigger.id)}
                         />
                       </div>
                     </CardContent>
@@ -333,7 +332,7 @@ export default function IntelligentTriggersPage() {
                         </div>
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id}
+                          onCheckedChange={() => toggleTrigger(trigger.id)}
                         />
                       </div>
                     </CardContent>
@@ -359,7 +358,7 @@ export default function IntelligentTriggersPage() {
                         </div>
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id}
+                          onCheckedChange={() => toggleTrigger(trigger.id)}
                         />
                       </div>
                     </CardContent>

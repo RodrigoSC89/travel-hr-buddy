@@ -1,16 +1,15 @@
-import { memo } from "react";
 /**
  * System Diagnostics Panel - PATCH 850
  * Visual component for system diagnostics
  */
 
-import { useSystemDiagnostics } from "@/lib/production";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle, XCircle, RefreshCw, Activity } from "lucide-react";
+import { useSystemDiagnostics } from '@/lib/production';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { CheckCircle, XCircle, RefreshCw, Activity } from 'lucide-react';
 
-export const SystemDiagnosticsPanel = memo(function() {
+export function SystemDiagnosticsPanel() {
   const { report, isRunning, runDiagnostics } = useSystemDiagnostics();
 
   return (
@@ -30,7 +29,7 @@ export const SystemDiagnosticsPanel = memo(function() {
           ) : (
             <RefreshCw className="h-4 w-4 mr-2" />
           )}
-          {isRunning ? "Executando..." : "Executar"}
+          {isRunning ? 'Executando...' : 'Executar'}
         </Button>
       </CardHeader>
       <CardContent>
@@ -91,7 +90,7 @@ export const SystemDiagnosticsPanel = memo(function() {
               <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                 <div>Plataforma: {report.systemInfo.platform}</div>
                 <div>Idioma: {report.systemInfo.language}</div>
-                <div>Conexão: {report.systemInfo.onLine ? "Online" : "Offline"}</div>
+                <div>Conexão: {report.systemInfo.onLine ? 'Online' : 'Offline'}</div>
                 {report.systemInfo.connection && (
                   <div>Rede: {report.systemInfo.connection.effectiveType}</div>
                 )}
@@ -107,4 +106,4 @@ export const SystemDiagnosticsPanel = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

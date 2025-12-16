@@ -1,5 +1,4 @@
 /**
-import { useMemo, useState, useCallback } from "react";;
  * Templates Module - Complete Professional Version
  * PATCH 1100: Full functionality with dialogs, AI integration, and all buttons working
  */
@@ -195,7 +194,7 @@ const Templates = () => {
         template.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
       return matchesSearch && matchesCategory;
-  });
+    });
   }, [templates, searchQuery, selectedCategory]);
 
   const handleDownload = (template: Template) => {
@@ -216,7 +215,7 @@ const Templates = () => {
     ));
     
     toast.success(`Download concluído: ${template.name}`);
-  });
+  };
 
   const handlePreview = (template: Template) => {
     setSelectedTemplate(template);
@@ -250,7 +249,7 @@ const Templates = () => {
       content: template.content || ""
     });
     setShowEditDialog(true);
-  });
+  };
 
   const handleCreateTemplate = () => {
     const template: Template = {
@@ -278,15 +277,15 @@ const Templates = () => {
     setTemplates(prev => prev.map(t => 
       t.id === selectedTemplate.id 
         ? {
-          ...t,
-          name: newTemplate.name,
-          description: newTemplate.description,
-          category: newTemplate.category,
-          type: newTemplate.type,
-          content: newTemplate.content,
-          lastModified: new Date().toISOString().split("T")[0],
-          variables: extractVariables(newTemplate.content)
-        }
+            ...t,
+            name: newTemplate.name,
+            description: newTemplate.description,
+            category: newTemplate.category,
+            type: newTemplate.type,
+            content: newTemplate.content,
+            lastModified: new Date().toISOString().split("T")[0],
+            variables: extractVariables(newTemplate.content)
+          }
         : t
     ));
     
@@ -384,7 +383,7 @@ const Templates = () => {
             Templates marítimos padronizados para operações, compliance e gestão
           </p>
         </div>
-        <Button className="gap-2" onClick={handleSetShowCreateDialog}>
+        <Button className="gap-2" onClick={() => setShowCreateDialog(true)}>
           <Plus className="h-4 w-4" />
           Novo Template
         </Button>
@@ -397,7 +396,7 @@ const Templates = () => {
           <Input
             placeholder="Buscar templates..."
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -430,7 +429,7 @@ const Templates = () => {
                 <p className="text-muted-foreground mt-1">
                   Tente ajustar os filtros ou criar um novo template
                 </p>
-                <Button className="mt-4 gap-2" onClick={handleSetShowCreateDialog}>
+                <Button className="mt-4 gap-2" onClick={() => setShowCreateDialog(true)}>
                   <Plus className="h-4 w-4" />
                   Criar Template
                 </Button>
@@ -461,7 +460,7 @@ const Templates = () => {
                                 variant="ghost"
                                 size="icon"
                                 className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => handlehandleEdit}
+                                onClick={() => handleEdit(template)}
                               >
                                 <Edit className="h-3 w-3" />
                               </Button>
@@ -482,7 +481,7 @@ const Templates = () => {
                               variant="outline"
                               size="sm"
                               className="flex-1 gap-1"
-                              onClick={() => handlehandlePreview}
+                              onClick={() => handlePreview(template)}
                             >
                               <Eye className="h-3 w-3" />
                               Ver
@@ -491,7 +490,7 @@ const Templates = () => {
                               variant="outline"
                               size="sm"
                               className="flex-1 gap-1"
-                              onClick={() => handlehandleDuplicate}
+                              onClick={() => handleDuplicate(template)}
                             >
                               <Copy className="h-3 w-3" />
                               Duplicar
@@ -499,7 +498,7 @@ const Templates = () => {
                             <Button
                               size="sm"
                               className="flex-1 gap-1"
-                              onClick={() => handlehandleDownload}
+                              onClick={() => handleDownload(template)}
                             >
                               <Download className="h-3 w-3" />
                               Baixar
@@ -566,15 +565,15 @@ const Templates = () => {
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => selectedTemplate && handlePrint(selectedTemplate}>
+            <Button variant="outline" onClick={() => selectedTemplate && handlePrint(selectedTemplate)}>
               <Printer className="h-4 w-4 mr-2" />
               Imprimir
             </Button>
-            <Button variant="outline" onClick={() => selectedTemplate && handleDuplicate(selectedTemplate}>
+            <Button variant="outline" onClick={() => selectedTemplate && handleDuplicate(selectedTemplate)}>
               <Copy className="h-4 w-4 mr-2" />
               Duplicar
             </Button>
-            <Button onClick={() => selectedTemplate && handleDownload(selectedTemplate}>
+            <Button onClick={() => selectedTemplate && handleDownload(selectedTemplate)}>
               <Download className="h-4 w-4 mr-2" />
               Baixar
             </Button>
@@ -599,7 +598,7 @@ const Templates = () => {
                 <Label>Nome do Template</Label>
                 <Input
                   value={newTemplate.name}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Ex: Relatório de Inspeção"
                 />
               </div>
@@ -647,7 +646,7 @@ const Templates = () => {
               <Label>Descrição</Label>
               <Input
                 value={newTemplate.description}
-                onChange={handleChange}))}
+                onChange={(e) => setNewTemplate(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Breve descrição do template"
               />
             </div>
@@ -677,7 +676,7 @@ const Templates = () => {
               </div>
               <Textarea
                 value={newTemplate.content}
-                onChange={handleChange}))}
+                onChange={(e) => setNewTemplate(prev => ({ ...prev, content: e.target.value }))}
                 placeholder="Conteúdo do template... Use {{variavel}} para campos dinâmicos"
                 className="min-h-[200px] font-mono text-sm"
               />
@@ -688,7 +687,7 @@ const Templates = () => {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowCreateDialog}>
+            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateTemplate} disabled={!newTemplate.name}>
@@ -715,7 +714,7 @@ const Templates = () => {
                 <Label>Nome do Template</Label>
                 <Input
                   value={newTemplate.name}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
                 />
               </div>
               <div className="space-y-2">
@@ -762,7 +761,7 @@ const Templates = () => {
               <Label>Descrição</Label>
               <Input
                 value={newTemplate.description}
-                onChange={handleChange}))}
+                onChange={(e) => setNewTemplate(prev => ({ ...prev, description: e.target.value }))}
               />
             </div>
 
@@ -770,7 +769,7 @@ const Templates = () => {
               <Label>Conteúdo</Label>
               <Textarea
                 value={newTemplate.content}
-                onChange={handleChange}))}
+                onChange={(e) => setNewTemplate(prev => ({ ...prev, content: e.target.value }))}
                 className="min-h-[200px] font-mono text-sm"
               />
             </div>
@@ -787,7 +786,7 @@ const Templates = () => {
               <Trash2 className="h-4 w-4 mr-2" />
               Excluir
             </Button>
-            <Button variant="outline" onClick={handleSetShowEditDialog}>
+            <Button variant="outline" onClick={() => setShowEditDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleUpdateTemplate}>
@@ -799,6 +798,6 @@ const Templates = () => {
       </Dialog>
     </div>
   );
-});
+};
 
 export default Templates;

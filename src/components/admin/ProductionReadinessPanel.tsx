@@ -1,15 +1,14 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Production Readiness Panel
  * PATCH 950: Painel de validação para go-live
  */
 
-import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   CheckCircle2,
   XCircle,
@@ -22,9 +21,9 @@ import {
   Eye,
   Brain,
   Loader2
-} from "lucide-react";
-import { useProductionReadiness, type ValidationResult } from "@/lib/validation/production-readiness";
-import { testPlan, type TestCase } from "@/lib/testing/test-plan";
+} from 'lucide-react';
+import { useProductionReadiness, type ValidationResult } from '@/lib/validation/production-readiness';
+import { testPlan, type TestCase } from '@/lib/testing/test-plan';
 
 const statusIcons = {
   pass: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
@@ -59,10 +58,10 @@ function ValidationResultItem({ result }: { result: ValidationResult }) {
           </Badge>
         )}
         <Badge
-          variant={result.status === "pass" ? "default" : result.status === "fail" ? "destructive" : "secondary"}
+          variant={result.status === 'pass' ? 'default' : result.status === 'fail' ? 'destructive' : 'secondary'}
           className="text-xs"
         >
-          {result.status === "pass" ? "OK" : result.status === "fail" ? "FALHA" : "ATENÇÃO"}
+          {result.status === 'pass' ? 'OK' : result.status === 'fail' ? 'FALHA' : 'ATENÇÃO'}
         </Badge>
       </div>
     </div>
@@ -73,9 +72,9 @@ function TestCaseItem({ test }: { test: TestCase }) {
   const [expanded, setExpanded] = useState(false);
   
   const priorityColors = {
-    high: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
-    medium: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
-    low: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+    high: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+    medium: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
+    low: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
   };
 
   return (
@@ -87,7 +86,7 @@ function TestCaseItem({ test }: { test: TestCase }) {
         </div>
         <div className="flex items-center gap-2">
           <Badge className={priorityColors[test.priority]}>
-            {test.priority === "high" ? "Alta" : test.priority === "medium" ? "Média" : "Baixa"}
+            {test.priority === 'high' ? 'Alta' : test.priority === 'medium' ? 'Média' : 'Baixa'}
           </Badge>
           {test.automated && (
             <Badge variant="secondary">Auto</Badge>
@@ -100,10 +99,10 @@ function TestCaseItem({ test }: { test: TestCase }) {
       <Button 
         variant="ghost" 
         size="sm" 
-        onClick={handleSetExpanded}
+        onClick={() => setExpanded(!expanded)}
         className="text-xs"
       >
-        {expanded ? "Ocultar detalhes" : "Ver procedimento"}
+        {expanded ? 'Ocultar detalhes' : 'Ver procedimento'}
       </Button>
       
       {expanded && (
@@ -130,28 +129,28 @@ function TestCaseItem({ test }: { test: TestCase }) {
   );
 }
 
-export const ProductionReadinessPanel = memo(function() {
+export function ProductionReadinessPanel() {
   const { readiness, isValidating, validate } = useProductionReadiness();
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const categories = readiness 
     ? [...new Set(readiness.results.map(r => r.category))]
     : [];
 
   const filteredResults = readiness?.results.filter(
-    r => activeCategory === "all" || r.category === activeCategory
+    r => activeCategory === 'all' || r.category === activeCategory
   ) || [];
 
   const overallStatusColors = {
-    "ready": "bg-emerald-500",
-    "not-ready": "bg-red-500",
-    "ready-with-restrictions": "bg-amber-500"
+    'ready': 'bg-emerald-500',
+    'not-ready': 'bg-red-500',
+    'ready-with-restrictions': 'bg-amber-500'
   };
 
   const overallStatusText = {
-    "ready": "PRONTO PARA PRODUÇÃO",
-    "not-ready": "NÃO PRONTO",
-    "ready-with-restrictions": "PRONTO COM RESTRIÇÕES"
+    'ready': 'PRONTO PARA PRODUÇÃO',
+    'not-ready': 'NÃO PRONTO',
+    'ready-with-restrictions': 'PRONTO COM RESTRIÇÕES'
   };
 
   return (
@@ -245,18 +244,18 @@ export const ProductionReadinessPanel = memo(function() {
               <CardHeader>
                 <div className="flex gap-2 flex-wrap">
                   <Badge
-                    variant={activeCategory === "all" ? "default" : "outline"}
+                    variant={activeCategory === 'all' ? 'default' : 'outline'}
                     className="cursor-pointer"
-                    onClick={handleSetActiveCategory}
+                    onClick={() => setActiveCategory('all')}
                   >
                     Todos
                   </Badge>
                   {categories.map(cat => (
                     <Badge
                       key={cat}
-                      variant={activeCategory === cat ? "default" : "outline"}
+                      variant={activeCategory === cat ? 'default' : 'outline'}
                       className="cursor-pointer"
-                      onClick={handleSetActiveCategory}
+                      onClick={() => setActiveCategory(cat)}
                     >
                       {categoryIcons[cat]}
                       <span className="ml-1">{cat}</span>
@@ -299,7 +298,7 @@ export const ProductionReadinessPanel = memo(function() {
                 {testPlan.checklist.map((item, i) => (
                   <div key={i} className="flex items-center gap-3 p-2 rounded hover:bg-muted/50">
                     <input type="checkbox" className="h-4 w-4" />
-                    <span className="text-sm text-foreground">{item.replace("[ ] ", "")}</span>
+                    <span className="text-sm text-foreground">{item.replace('[ ] ', '')}</span>
                   </div>
                 ))}
               </div>

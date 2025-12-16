@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,7 +185,7 @@ export const IntegrationTesting: React.FC = () => {
                   </label>
                   <select 
                     value={selectedEndpoint}
-                    onChange={handleChange}
+                    onChange={(e) => setSelectedEndpoint(e.target.value)}
                     className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
                   >
                     {endpoints.map(endpoint => (
@@ -406,7 +405,7 @@ export const IntegrationTesting: React.FC = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => copyToClipboard(JSON.stringify(result.response, null, 2}
+                            onClick={() => copyToClipboard(JSON.stringify(result.response, null, 2))}
                           >
                             <Copy className="w-3 h-3" />
                           </Button>

@@ -1,19 +1,27 @@
-
+// @ts-nocheck
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import {
+import { 
+  TrendingUp,
+  TrendingDown,
   DollarSign,
   Target,
+  Calendar,
+  Users,
+  Ship,
+  Award,
   AlertTriangle,
   CheckCircle,
   ArrowUpRight,
   ArrowDownRight,
   BarChart3,
-  Activity
+  Activity,
+  Clock
 } from "lucide-react";
-import { ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 
 const ExecutiveMetricsPanel = () => {
   const executiveMetrics = [

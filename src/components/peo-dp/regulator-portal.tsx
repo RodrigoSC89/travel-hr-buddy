@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -134,7 +133,7 @@ export const RegulatorPortal: React.FC = () => {
     const matchesStatus = filterStatus === "all" || pkg.status === filterStatus;
     const matchesRegulator = filterRegulator === "all" || pkg.regulator === filterRegulator;
     return matchesSearch && matchesStatus && matchesRegulator;
-  };
+  });
 
   const stats = {
     total: packages.length,
@@ -145,28 +144,28 @@ export const RegulatorPortal: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "approved": return <Badge className="bg-green-500">Aprovado</Badge>;
-    case "submitted": return <Badge className="bg-blue-500">Enviado</Badge>;
-    case "under_review": return <Badge className="bg-yellow-500 text-black">Em Análise</Badge>;
-    case "rejected": return <Badge variant="destructive">Rejeitado</Badge>;
-    default: return <Badge variant="secondary">Rascunho</Badge>;
+      case "approved": return <Badge className="bg-green-500">Aprovado</Badge>;
+      case "submitted": return <Badge className="bg-blue-500">Enviado</Badge>;
+      case "under_review": return <Badge className="bg-yellow-500 text-black">Em Análise</Badge>;
+      case "rejected": return <Badge variant="destructive">Rejeitado</Badge>;
+      default: return <Badge variant="secondary">Rascunho</Badge>;
     }
   };
 
   const getDocStatusIcon = (status: string) => {
     switch (status) {
-    case "approved": return <CheckCircle className="h-4 w-4 text-green-500" />;
-    case "rejected": return <XCircle className="h-4 w-4 text-red-500" />;
-    case "expired": return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-    default: return <Clock className="h-4 w-4 text-yellow-500" />;
+      case "approved": return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case "rejected": return <XCircle className="h-4 w-4 text-red-500" />;
+      case "expired": return <AlertTriangle className="h-4 w-4 text-orange-500" />;
+      default: return <Clock className="h-4 w-4 text-yellow-500" />;
     }
   };
 
   const getUserTypeBadge = (type: string) => {
     switch (type) {
-    case "regulator": return <Badge className="bg-purple-500">Regulador</Badge>;
-    case "client": return <Badge className="bg-blue-500">Cliente</Badge>;
-    default: return <Badge variant="secondary">Interno</Badge>;
+      case "regulator": return <Badge className="bg-purple-500">Regulador</Badge>;
+      case "client": return <Badge className="bg-blue-500">Cliente</Badge>;
+      default: return <Badge variant="secondary">Interno</Badge>;
     }
   };
 
@@ -253,7 +252,7 @@ export const RegulatorPortal: React.FC = () => {
           <Input
             placeholder="Buscar por embarcação ou IMO..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -314,8 +313,8 @@ export const RegulatorPortal: React.FC = () => {
                     </div>
                     <Badge variant="outline">
                       {pkg.packageType === "annual" ? "Anual" :
-                        pkg.packageType === "audit" ? "Auditoria" :
-                          pkg.packageType === "incident" ? "Incidente" : "Renovação"}
+                       pkg.packageType === "audit" ? "Auditoria" :
+                       pkg.packageType === "incident" ? "Incidente" : "Renovação"}
                     </Badge>
                   </div>
 
@@ -360,7 +359,7 @@ export const RegulatorPortal: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 pt-2">
-                    <Button variant="outline" size="sm" className="flex-1" onClick={handleSetSelectedPackage}>
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => setSelectedPackage(pkg)}>
                       <Eye className="w-4 h-4 mr-1" />
                       Ver
                     </Button>
@@ -368,7 +367,7 @@ export const RegulatorPortal: React.FC = () => {
                       <Download className="w-4 h-4" />
                     </Button>
                     {pkg.status === "draft" && (
-                      <Button size="sm" onClick={() => handlehandleSubmitToRegulator}>
+                      <Button size="sm" onClick={() => handleSubmitToRegulator(pkg.id)}>
                         <Send className="w-4 h-4 mr-1" />
                         Enviar
                       </Button>

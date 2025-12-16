@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,7 +40,7 @@ interface FeedbackData {
   logs: VoiceFeedbackLog[];
 }
 
-export const Patch610Validation = memo(function() {
+export function Patch610Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
@@ -131,7 +131,7 @@ export const Patch610Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+      });
     }
 
     setResults(testResults);

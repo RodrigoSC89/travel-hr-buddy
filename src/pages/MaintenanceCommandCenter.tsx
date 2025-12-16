@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * Maintenance Command Center
  * PATCH UNIFY-3.0 - Fusão dos módulos de Manutenção
  * 
@@ -156,7 +155,7 @@ const MaintenanceCommandCenter = () => {
           </div>
         </div>
         <div className="flex gap-2 flex-wrap">
-          <Button variant="outline" onClick={handleSetShowAlertsPanel}>
+          <Button variant="outline" onClick={() => setShowAlertsPanel(true)}>
             <Bell className="mr-2 h-4 w-4" />
             Alertas
             {stats.overdue > 0 && (
@@ -169,7 +168,7 @@ const MaintenanceCommandCenter = () => {
             <Download className="mr-2 h-4 w-4" />
             Exportar
           </Button>
-          <Button onClick={handleSetShowCreateDialog} className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700">
+          <Button onClick={() => setShowCreateDialog(true)} className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700">
             <Plus className="mr-2 h-4 w-4" />
             Novo Plano
           </Button>
@@ -317,7 +316,7 @@ const MaintenanceCommandCenter = () => {
         {/* Overview - Quick Access Cards */}
         <TabsContent value="overview" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-blue-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-blue-300" onClick={() => setActiveTab("saude")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Ship className="h-5 w-5 text-blue-500" />
@@ -332,7 +331,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-purple-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-purple-300" onClick={() => setActiveTab("copilot")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Bot className="h-5 w-5 text-purple-500" />
@@ -347,7 +346,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-indigo-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-indigo-300" onClick={() => setActiveTab("predictive")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-indigo-500" />
@@ -362,7 +361,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-pink-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-pink-300" onClick={() => setActiveTab("forecast")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-pink-500" />
@@ -377,7 +376,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-green-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-green-300" onClick={() => setActiveTab("jobs")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Wrench className="h-5 w-5 text-green-500" />
@@ -392,7 +391,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-orange-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-orange-300" onClick={() => setActiveTab("tasks")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-orange-500" />
@@ -407,7 +406,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-amber-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-amber-300" onClick={() => setActiveTab("os")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5 text-amber-500" />
@@ -422,7 +421,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-cyan-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-cyan-300" onClick={() => setActiveTab("twin")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Box className="h-5 w-5 text-cyan-500" />
@@ -437,7 +436,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-teal-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-teal-300" onClick={() => setActiveTab("horimetros")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-teal-500" />
@@ -452,7 +451,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-sky-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-sky-300" onClick={() => setActiveTab("calendar")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-sky-500" />
@@ -467,7 +466,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-rose-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-rose-300" onClick={() => setActiveTab("history")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <History className="h-5 w-5 text-rose-500" />
@@ -482,7 +481,7 @@ const MaintenanceCommandCenter = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-violet-300" onClick={handleSetActiveTab}>
+            <Card className="cursor-pointer hover:shadow-lg transition-all hover:border-violet-300" onClick={() => setActiveTab("dashboard")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-violet-500" />
@@ -521,7 +520,7 @@ const MaintenanceCommandCenter = () => {
 
         {/* Jobs Center */}
         <TabsContent value="jobs" className="mt-6">
-          <JobsCenter onCreateJob={() => setShowCreateDialog(true} />
+          <JobsCenter onCreateJob={() => setShowCreateDialog(true)} />
         </TabsContent>
 
         {/* Tasks */}

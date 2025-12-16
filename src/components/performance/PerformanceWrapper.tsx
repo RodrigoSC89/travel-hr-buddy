@@ -3,13 +3,13 @@
  * PATCH 834: Main performance wrapper component for the app
  */
 
-import React, { useEffect, ReactNode } from "react";
-import { bandwidthOptimizer, useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
-import { webVitalsMonitor } from "@/lib/performance/web-vitals-monitor";
-import { errorTracker } from "@/lib/error-tracking/error-tracker";
-import { analytics } from "@/lib/analytics/analytics-client";
-import { ConnectionIndicator } from "./ConnectionIndicator";
-import { PWAInstallPrompt, PWAUpdatePrompt, OfflineIndicator } from "@/components/pwa/PWAPrompt";
+import React, { useEffect, ReactNode } from 'react';
+import { bandwidthOptimizer, useBandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import { webVitalsMonitor } from '@/lib/performance/web-vitals-monitor';
+import { errorTracker } from '@/lib/error-tracking/error-tracker';
+import { analytics } from '@/lib/analytics/analytics-client';
+import { ConnectionIndicator } from './ConnectionIndicator';
+import { PWAInstallPrompt, PWAUpdatePrompt, OfflineIndicator } from '@/components/pwa/PWAPrompt';
 
 interface PerformanceWrapperProps {
   children: ReactNode;
@@ -21,7 +21,7 @@ interface PerformanceWrapperProps {
   enableWebVitals?: boolean;
 }
 
-export const PerformanceWrapper = memo(function({
+export function PerformanceWrapper({
   children,
   showConnectionIndicator = true,
   showPWAPrompts = true,
@@ -48,7 +48,7 @@ export const PerformanceWrapper = memo(function({
     // Track performance metrics
     if (enableAnalytics) {
       // Track initial page load
-      analytics.track("app_loaded", {
+      analytics.track('app_loaded', {
         connection_type: bandwidthOptimizer.getConnectionType(),
         viewport_width: window.innerWidth,
         viewport_height: window.innerHeight,
@@ -56,17 +56,17 @@ export const PerformanceWrapper = memo(function({
     }
 
     // Performance observer for LCP
-    if ("PerformanceObserver" in window) {
+    if ('PerformanceObserver' in window) {
       try {
         const lcpObserver = new PerformanceObserver((entryList) => {
           const entries = entryList.getEntries();
           const lastEntry = entries[entries.length - 1];
           
           if (enableAnalytics) {
-            analytics.timing("performance", "lcp", lastEntry.startTime);
+            analytics.timing('performance', 'lcp', lastEntry.startTime);
           }
         });
-        lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
+        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
         return () => {
           lcpObserver.disconnect();
@@ -82,12 +82,12 @@ export const PerformanceWrapper = memo(function({
 
   useEffect(() => {
     // Add connection class to body for CSS optimizations
-    document.body.setAttribute("data-connection", connectionType);
+    document.body.setAttribute('data-connection', connectionType);
     
     if (isLowBandwidth) {
-      document.body.classList.add("low-bandwidth");
+      document.body.classList.add('low-bandwidth');
     } else {
-      document.body.classList.remove("low-bandwidth");
+      document.body.classList.remove('low-bandwidth');
     }
   }, [connectionType, isLowBandwidth]);
 
@@ -128,7 +128,7 @@ export function withPerformance<P extends object>(
 }
 
 // Performance context for children
-import { createContext, useContext, useEffect, useCallback } from "react";;;
+import { createContext, useContext } from 'react';
 
 interface PerformanceContextValue {
   connectionType: string;
@@ -140,7 +140,7 @@ interface PerformanceContextValue {
 
 const PerformanceContext = createContext<PerformanceContextValue | null>(null);
 
-export const PerformanceProvider = memo(function({ children }: { children: ReactNode }) {
+export function PerformanceProvider({ children }: { children: ReactNode }) {
   const optimizer = useBandwidthOptimizer();
 
   const value: PerformanceContextValue = {
@@ -149,7 +149,7 @@ export const PerformanceProvider = memo(function({ children }: { children: React
     shouldLoadImages: optimizer.shouldLoadImages,
     shouldAnimate: optimizer.shouldAnimate,
     imageQuality: optimizer.imageQuality,
-  });
+  };
 
   return (
     <PerformanceContext.Provider value={value}>
@@ -158,10 +158,10 @@ export const PerformanceProvider = memo(function({ children }: { children: React
   );
 }
 
-export const usePerformanceContext = memo(function() {
+export function usePerformanceContext() {
   const context = useContext(PerformanceContext);
   if (!context) {
-    throw new Error("usePerformanceContext must be used within PerformanceProvider");
+    throw new Error('usePerformanceContext must be used within PerformanceProvider');
   }
   return context;
-});
+}

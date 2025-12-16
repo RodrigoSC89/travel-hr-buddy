@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";;
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -28,7 +26,7 @@ const quickActions = [
   { id: "autonomy", label: "Autonomy Console", icon: Zap, action: "/mission-control/autonomy" },
 ];
 
-export const CommandPalette = memo(() => {
+export const CommandPalette = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -37,7 +35,7 @@ export const CommandPalette = memo(() => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
-      };
+      }
     };
 
     document.addEventListener("keydown", down);
@@ -61,7 +59,7 @@ export const CommandPalette = memo(() => {
             return (
               <CommandItem
                 key={action.id}
-                onSelect={() => handleSelect(() => navigate(action.action}
+                onSelect={() => handleSelect(() => navigate(action.action))}
               >
                 <Icon className="mr-2 h-4 w-4" />
                 <span>{action.label}</span>
@@ -74,7 +72,7 @@ export const CommandPalette = memo(() => {
           {NAUTILUS_MODULES.slice(0, 15).map((module: ModuleDefinition) => (
             <CommandItem
               key={module.id}
-              onSelect={() => handleSelect(() => navigate(module.path}
+              onSelect={() => handleSelect(() => navigate(module.path))}
             >
               <Ship className="mr-2 h-4 w-4" />
               <span>{module.name}</span>
@@ -87,4 +85,4 @@ export const CommandPalette = memo(() => {
       </CommandList>
     </CommandDialog>
   );
-});
+};

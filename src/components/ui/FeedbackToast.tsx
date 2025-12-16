@@ -1,4 +1,3 @@
-import { memo } from 'react';
 /**
  * Feedback Toast Component
  * PATCH 624 - Toasts melhorados para feedback do usuário
@@ -19,16 +18,16 @@ interface ToastOptions {
 /**
  * Toast de sucesso
  */
-export const successToast = memo(function(message: string, options?: ToastOptions) {
+export function successToast(message: string, options?: ToastOptions) {
   toast.success(message, {
     duration: options?.duration || 4000,
     description: options?.description,
     icon: <CheckCircle className="h-5 w-5 text-green-500" />,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   });
 }
@@ -36,16 +35,16 @@ export const successToast = memo(function(message: string, options?: ToastOption
 /**
  * Toast de erro
  */
-export const errorToast = memo(function(message: string, options?: ToastOptions) {
+export function errorToast(message: string, options?: ToastOptions) {
   toast.error(message, {
     duration: options?.duration || 6000,
     description: options?.description,
     icon: <XCircle className="h-5 w-5 text-red-500" />,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   });
 }
@@ -53,16 +52,16 @@ export const errorToast = memo(function(message: string, options?: ToastOptions)
 /**
  * Toast de aviso
  */
-export const warningToast = memo(function(message: string, options?: ToastOptions) {
+export function warningToast(message: string, options?: ToastOptions) {
   toast.warning(message, {
     duration: options?.duration || 5000,
     description: options?.description,
     icon: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   });
 }
@@ -70,16 +69,16 @@ export const warningToast = memo(function(message: string, options?: ToastOption
 /**
  * Toast informativo
  */
-export const infoToast = memo(function(message: string, options?: ToastOptions) {
+export function infoToast(message: string, options?: ToastOptions) {
   toast.info(message, {
     duration: options?.duration || 4000,
     description: options?.description,
     icon: <Info className="h-5 w-5 text-blue-500" />,
     action: options?.action
       ? {
-        label: options.action.label,
-        onClick: options.action.onClick,
-      }
+          label: options.action.label,
+          onClick: options.action.onClick,
+        }
       : undefined,
   });
 }
@@ -105,7 +104,7 @@ export function loadingToast<T>(
 /**
  * Toast de loading manual
  */
-export const showLoadingToast = memo(function(message: string) {
+export function showLoadingToast(message: string) {
   return toast.loading(message, {
     icon: <Loader2 className="h-5 w-5 animate-spin text-primary" />,
   });
@@ -114,7 +113,7 @@ export const showLoadingToast = memo(function(message: string) {
 /**
  * Dismissar toast
  */
-export const dismissToast = memo(function(toastId?: string | number) {
+export function dismissToast(toastId?: string | number) {
   if (toastId) {
     toast.dismiss(toastId);
   } else {
@@ -136,7 +135,7 @@ export function undoToast(
       label: "Desfazer",
       onClick: onUndo,
     },
-  };
+  });
 }
 
 /**
@@ -157,5 +156,5 @@ export function actionToast(
       label: action.label,
       onClick: action.onClick,
     },
-  };
-});
+  });
+}

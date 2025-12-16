@@ -105,7 +105,7 @@ describe("Performance: Map Component", () => {
         clusters.set(key, []);
       }
       clusters.get(key)!.push(marker);
-  });
+    });
     
     const endTime = performance.now();
     const clusterTime = endTime - startTime;

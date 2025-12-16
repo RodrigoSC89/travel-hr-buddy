@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * ALERTS COMMAND CENTER - Unified Alert Management System
  * Fusion of: Price Alerts + Intelligent Alerts
  * 
@@ -319,34 +318,34 @@ const AlertsCommandCenter = () => {
 
   const getAlertIcon = (type: SmartAlert["type"]) => {
     switch (type) {
-    case "critical": return AlertTriangle;
-    case "warning": return Bell;
-    case "info": return Activity;
-    case "success": return CheckCircle;
-    default: return Bell;
+      case "critical": return AlertTriangle;
+      case "warning": return Bell;
+      case "info": return Activity;
+      case "success": return CheckCircle;
+      default: return Bell;
     }
   };
 
   const getAlertColor = (type: SmartAlert["type"]) => {
     switch (type) {
-    case "critical": return "border-destructive bg-destructive/10";
-    case "warning": return "border-yellow-500 bg-yellow-500/10";
-    case "info": return "border-blue-500 bg-blue-500/10";
-    case "success": return "border-green-500 bg-green-500/10";
-    default: return "border-muted bg-muted/10";
+      case "critical": return "border-destructive bg-destructive/10";
+      case "warning": return "border-yellow-500 bg-yellow-500/10";
+      case "info": return "border-blue-500 bg-blue-500/10";
+      case "success": return "border-green-500 bg-green-500/10";
+      default: return "border-muted bg-muted/10";
     }
   };
 
   const getCategoryIcon = (category: SmartAlert["category"]) => {
     switch (category) {
-    case "maintenance": return Ship;
-    case "safety": return Shield;
-    case "efficiency": return TrendingUp;
-    case "compliance": return CheckCircle;
-    case "crew": return Users;
-    case "weather": return Thermometer;
-    case "price": return DollarSign;
-    default: return Activity;
+      case "maintenance": return Ship;
+      case "safety": return Shield;
+      case "efficiency": return TrendingUp;
+      case "compliance": return CheckCircle;
+      case "crew": return Users;
+      case "weather": return Thermometer;
+      case "price": return DollarSign;
+      default: return Activity;
     }
   };
 
@@ -613,14 +612,14 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("all")}
                 >
                   Todos
                 </Button>
                 <Button 
                   variant={filterType === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("maintenance")}
                 >
                   <Ship className="h-4 w-4 mr-1" />
                   Manutenção
@@ -628,7 +627,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "safety" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("safety")}
                 >
                   <Shield className="h-4 w-4 mr-1" />
                   Segurança
@@ -636,7 +635,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "efficiency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("efficiency")}
                 >
                   <TrendingUp className="h-4 w-4 mr-1" />
                   Eficiência
@@ -644,7 +643,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "crew" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("crew")}
                 >
                   <Users className="h-4 w-4 mr-1" />
                   Tripulação
@@ -652,7 +651,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "weather" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("weather")}
                 >
                   <Thermometer className="h-4 w-4 mr-1" />
                   Clima
@@ -660,7 +659,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "price" ? "default" : "outline"} 
                   size="sm"
-                  onClick={handleSetFilterType}
+                  onClick={() => setFilterType("price")}
                 >
                   <DollarSign className="h-4 w-4 mr-1" />
                   Preços

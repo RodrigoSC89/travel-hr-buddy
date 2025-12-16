@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * PATCH 546 - Incident Timeline Generator
  * Visual timeline of incidents with month-based grouping and severity sorting
  */
@@ -94,12 +93,13 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         .order("created_at", { ascending: false });
 
       if (error) {
+        console.error("Error loading incidents:", error);
         toast.error("Failed to load incidents");
         setIsLoading(false);
         return;
       }
 
-      const formattedIncidents: Incident[] = (data || []).map((item: unknown) => ({
+      const formattedIncidents: Incident[] = (data || []).map((item: any) => ({
         id: item.id,
         title: item.title || item.incident_type || "Untitled Incident",
         description: item.description || "",
@@ -118,7 +118,6 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         .sort();
       setAvailableModules(modules);
     } catch (error) {
-      console.error("Error loading incidents:", error);
       console.error("Error loading incidents:", error);
       toast.error("Failed to load incidents");
     } finally {
@@ -152,10 +151,10 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
       if (severityDiff !== 0) return severityDiff;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-  });
+    });
 
     setFilteredIncidents(filtered);
-  });
+  };
 
   const groupByMonth = (incidents: Incident[]) => {
     const groups: { [key: string]: Incident[] } = {};
@@ -168,7 +167,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         groups[monthKey] = [];
       }
       groups[monthKey].push(incident);
-  };
+    });
 
     return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
   };
@@ -196,7 +195,6 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
 
       toast.success("Timeline exported successfully!");
     } catch (error) {
-      console.error("Error exporting timeline:", error);
       console.error("Error exporting timeline:", error);
       toast.error("Failed to export timeline");
     }
@@ -245,7 +243,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Module Filter</Label>
-              <Select value={moduleFilter || "all"} onValueChange={(value) => setModuleFilter(value === "all" ? "" : value}>
+              <Select value={moduleFilter || "all"} onValueChange={(value) => setModuleFilter(value === "all" ? "" : value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="All modules" />
                 </SelectTrigger>
@@ -264,7 +262,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
               <Input
                 type="date"
                 value={dateFrom}
-                onChange={handleChange}
+                onChange={(e) => setDateFrom(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -272,7 +270,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
               <Input
                 type="date"
                 value={dateTo}
-                onChange={handleChange}
+                onChange={(e) => setDateTo(e.target.value)}
               />
             </div>
             <div className="flex items-end">
@@ -386,4 +384,4 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       </Card>
     </div>
   );
-});
+};

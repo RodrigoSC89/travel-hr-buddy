@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * QHSE Autônomo com IA - Compliance ISM/ISPS/TMSA
  * - Monitoramento contínuo de compliance
  * - Geração automática de evidências
@@ -17,7 +16,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
-  Brain, Shield, AlertTriangle, CheckCircle, FileText, Clock, Zap, Sparkles, ClipboardCheck,
+  Brain, Shield, AlertTriangle, CheckCircle, FileText,
+  TrendingUp, Clock, Zap, Sparkles, Search, ClipboardCheck,
   AlertCircle, Target
 } from "lucide-react";
 import { toast } from "sonner";
@@ -42,7 +42,7 @@ interface VettingPrep {
   recommendations: string[];
 }
 
-export const QHSEAutonomousAI = memo(function() {
+export function QHSEAutonomousAI() {
   const { analyze, generate, suggest, isLoading } = useNautilusAI();
   const [complianceData, setComplianceData] = useState<ComplianceItem[]>([
     {
@@ -167,19 +167,19 @@ export const QHSEAutonomousAI = memo(function() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "compliant": return "bg-green-500";
-    case "partial": return "bg-yellow-500";
-    case "non-compliant": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "compliant": return "bg-green-500";
+      case "partial": return "bg-yellow-500";
+      case "non-compliant": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-    case "compliant": return "Conforme";
-    case "partial": return "Parcial";
-    case "non-compliant": return "Não Conforme";
-    default: return "Pendente";
+      case "compliant": return "Conforme";
+      case "partial": return "Parcial";
+      case "non-compliant": return "Não Conforme";
+      default: return "Pendente";
     }
   };
 
@@ -323,7 +323,7 @@ export const QHSEAutonomousAI = memo(function() {
                         </div>
                         <div className="text-right">
                           <p className="text-2xl font-bold">{item.score}%</p>
-                          <Button size="sm" variant="outline" onClick={() => handlegenerateEvidence}>
+                          <Button size="sm" variant="outline" onClick={() => generateEvidence(item.standard)}>
                             <FileText className="h-3 w-3 mr-1" />
                             Gerar Evidência
                           </Button>
@@ -414,6 +414,6 @@ export const QHSEAutonomousAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default QHSEAutonomousAI;

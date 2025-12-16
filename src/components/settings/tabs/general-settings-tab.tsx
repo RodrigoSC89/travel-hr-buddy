@@ -83,7 +83,7 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
             <Input
               id="companyName"
               value={settings.companyName}
-              onChange={handleChange}
+              onChange={(e) => onUpdate({ companyName: e.target.value })}
               placeholder="Digite o nome da sua empresa"
               className="text-lg font-medium"
             />

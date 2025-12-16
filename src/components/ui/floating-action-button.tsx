@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -99,7 +98,7 @@ export const FloatingActionButton: React.FC = () => {
           if (newIndex < 0) return actions.length - 1;
           if (newIndex >= actions.length) return 0;
           return newIndex;
-  };
+        });
         break;
       }
         
@@ -147,7 +146,7 @@ export const FloatingActionButton: React.FC = () => {
               transitionDelay: `${index * 50}ms`,
               zIndex: 60 
             }}
-            onClick={() => handlehandleActionClick}
+            onClick={() => handleActionClick(action)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();

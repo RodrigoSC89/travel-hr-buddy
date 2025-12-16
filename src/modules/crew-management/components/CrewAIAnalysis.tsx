@@ -3,7 +3,7 @@
  * PATCH 549 - Crew Management 2.0
  */
 
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -226,16 +226,16 @@ const generateAIInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
   });
 
   return insights;
-});
+};
 
 const FatigueIndicator = ({ score, risk }: { score: number; risk: string }) => {
   const getColor = () => {
     switch (risk) {
-    case "low": return "bg-green-500";
-    case "medium": return "bg-yellow-500";
-    case "high": return "bg-orange-500";
-    case "critical": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "low": return "bg-green-500";
+      case "medium": return "bg-yellow-500";
+      case "high": return "bg-orange-500";
+      case "critical": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
@@ -276,9 +276,9 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
   return (
     <Card className={`border-l-4 ${
       crew.fatigueRisk === "critical" ? "border-l-red-500 bg-red-500/5" :
-        crew.fatigueRisk === "high" ? "border-l-orange-500 bg-orange-500/5" :
-          crew.fatigueRisk === "medium" ? "border-l-yellow-500" :
-            "border-l-green-500"
+      crew.fatigueRisk === "high" ? "border-l-orange-500 bg-orange-500/5" :
+      crew.fatigueRisk === "medium" ? "border-l-yellow-500" :
+      "border-l-green-500"
     }`}>
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
@@ -349,7 +349,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
       </CardContent>
     </Card>
   );
-});
+};
 
 export default function CrewAIAnalysis() {
   const [crewData, setCrewData] = useState<CrewMemberAnalysis[]>([]);
@@ -418,9 +418,9 @@ export default function CrewAIAnalysis() {
                   key={i}
                   className={`flex items-start justify-between p-3 rounded-lg ${
                     insight.type === "warning" ? "bg-red-500/10 border border-red-500/20" :
-                      insight.type === "success" ? "bg-green-500/10 border border-green-500/20" :
-                        insight.type === "recommendation" ? "bg-blue-500/10 border border-blue-500/20" :
-                          "bg-muted"
+                    insight.type === "success" ? "bg-green-500/10 border border-green-500/20" :
+                    insight.type === "recommendation" ? "bg-blue-500/10 border border-blue-500/20" :
+                    "bg-muted"
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -548,10 +548,10 @@ export default function CrewAIAnalysis() {
                       </div>
                       <Badge variant={
                         gap.priority === "high" ? "destructive" :
-                          gap.priority === "medium" ? "default" : "outline"
+                        gap.priority === "medium" ? "default" : "outline"
                       }>
                         {gap.priority === "high" ? "Alta" :
-                          gap.priority === "medium" ? "Média" : "Baixa"}
+                         gap.priority === "medium" ? "Média" : "Baixa"}
                       </Badge>
                     </div>
                     <div className="space-y-2">
@@ -596,9 +596,9 @@ export default function CrewAIAnalysis() {
                     <div key={crew.id} className="flex items-center gap-4 p-3 border rounded-lg">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
                         i === 0 ? "bg-yellow-500 text-yellow-950" :
-                          i === 1 ? "bg-gray-300 text-gray-700" :
-                            i === 2 ? "bg-amber-600 text-amber-50" :
-                              "bg-muted"
+                        i === 1 ? "bg-gray-300 text-gray-700" :
+                        i === 2 ? "bg-amber-600 text-amber-50" :
+                        "bg-muted"
                       }`}>
                         {i + 1}
                       </div>

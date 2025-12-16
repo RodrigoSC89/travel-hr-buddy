@@ -3,7 +3,7 @@
  * Detects and prevents infinite loops in React components
  */
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect } from 'react';
 
 interface LoopGuardOptions {
   maxExecutions?: number;
@@ -33,7 +33,7 @@ export const useLoopGuard = (
   const {
     maxExecutions = DEFAULT_MAX_EXECUTIONS,
     timeWindow = DEFAULT_TIME_WINDOW,
-    componentName = "UnknownComponent",
+    componentName = 'UnknownComponent',
     onLoopDetected,
   } = options;
 
@@ -59,8 +59,14 @@ export const useLoopGuard = (
         componentName,
         executionCount: executionHistory.current.length,
         timestamp: now,
-        stackTrace: new Error().stack || "No stack trace available",
+        stackTrace: new Error().stack || 'No stack trace available',
       };
+
+      console.error(
+        `🔁 LOOP DETECTED in ${componentName}.${functionName}:`,
+        `${executionHistory.current.length} executions in ${timeWindow}ms`,
+        loopInfo
+      );
 
       // Call custom handler if provided
       if (onLoopDetected) {
@@ -86,7 +92,7 @@ export const useLoopGuard = (
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      executionHistory.current = []);
+      executionHistory.current = [];
       isLoopDetected.current = false;
     };
   }, []);
@@ -123,6 +129,10 @@ export const withLoopGuard = <T extends (...args: any[]) => any>(
     executionHistory.push(...validExecutions, now);
 
     if (executionHistory.length >= maxExecutions) {
+      console.error(
+        `🔁 LOOP DETECTED in ${guardName}:`,
+        `${executionHistory.length} executions in ${timeWindow}ms. Execution blocked.`
+      );
       return Promise.resolve(undefined);
     }
 

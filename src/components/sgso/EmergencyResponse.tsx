@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -252,42 +251,42 @@ export const EmergencyResponse: React.FC = () => {
           <div className="flex flex-wrap gap-2">
             <Button
               variant={selectedType === "all" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("all")}
               className="min-h-[44px]"
             >
               Todos
             </Button>
             <Button
               variant={selectedType === "fire" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("fire")}
               className="min-h-[44px]"
             >
               Incêndio
             </Button>
             <Button
               variant={selectedType === "oil_spill" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("oil_spill")}
               className="min-h-[44px]"
             >
               Derramamento
             </Button>
             <Button
               variant={selectedType === "man_overboard" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("man_overboard")}
               className="min-h-[44px]"
             >
               Homem ao Mar
             </Button>
             <Button
               variant={selectedType === "medical" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("medical")}
               className="min-h-[44px]"
             >
               Médica
             </Button>
             <Button
               variant={selectedType === "abandon_ship" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("abandon_ship")}
               className="min-h-[44px]"
             >
               Abandono
@@ -364,7 +363,7 @@ export const EmergencyResponse: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handlehandleViewPlan}
+                          onClick={() => handleViewPlan(plan)}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Plano
@@ -372,7 +371,7 @@ export const EmergencyResponse: React.FC = () => {
                         <Button
                           size="sm"
                           className="min-h-[44px] px-6 bg-orange-600 hover:bg-orange-700 text-white"
-                          onClick={() => handlehandleStartDrill}
+                          onClick={() => handleStartDrill(plan)}
                         >
                           <Activity className="h-4 w-4 mr-2" />
                           Simulado
@@ -449,28 +448,28 @@ export const EmergencyResponse: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={handleSetNewPlanOpen}
+              onClick={() => setNewPlanOpen(true)}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Novo Plano</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={handleSetScheduleDrillOpen}
+              onClick={() => setScheduleDrillOpen(true)}
             >
               <Clock className="h-6 w-6" />
               <span className="font-semibold">Agendar</span>
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={handleSetReportOpen}
+              onClick={() => setReportOpen(true)}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={handleSetLocationsOpen}
+              onClick={() => setLocationsOpen(true)}
             >
               <MapPin className="h-6 w-6" />
               <span className="font-semibold">Localização</span>
@@ -484,12 +483,14 @@ export const EmergencyResponse: React.FC = () => {
         open={newPlanOpen} 
         onOpenChange={setNewPlanOpen}
         onPlanCreated={(plan) => {
+          console.log("New plan created:", plan);
         }}
       />
       <ScheduleDrillDialog 
         open={scheduleDrillOpen} 
         onOpenChange={setScheduleDrillOpen}
         onDrillScheduled={(drill) => {
+          console.log("Drill scheduled:", drill);
         }}
       />
       <EmergencyReportDialog 

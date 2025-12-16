@@ -2,7 +2,7 @@
  * MMI Jobs Panel Section - Painel de forecasts de jobs
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -89,29 +89,29 @@ export default function MMIJobsPanelSection() {
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-    case "critical":
-      return <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">Crítico</Badge>;
-    case "high":
-      return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Alto</Badge>;
-    case "medium":
-      return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Médio</Badge>;
-    case "low":
-      return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Baixo</Badge>;
-    default:
-      return <Badge variant="secondary">{priority}</Badge>;
+      case "critical":
+        return <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">Crítico</Badge>;
+      case "high":
+        return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Alto</Badge>;
+      case "medium":
+        return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Médio</Badge>;
+      case "low":
+        return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Baixo</Badge>;
+      default:
+        return <Badge variant="secondary">{priority}</Badge>;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "concluido":
-      return <Badge className="bg-green-500 text-white">Concluído</Badge>;
-    case "em_andamento":
-      return <Badge className="bg-blue-500 text-white">Em Andamento</Badge>;
-    case "pendente":
-      return <Badge variant="secondary">Pendente</Badge>;
-    default:
-      return <Badge variant="secondary">{status}</Badge>;
+      case "concluido":
+        return <Badge className="bg-green-500 text-white">Concluído</Badge>;
+      case "em_andamento":
+        return <Badge className="bg-blue-500 text-white">Em Andamento</Badge>;
+      case "pendente":
+        return <Badge variant="secondary">Pendente</Badge>;
+      default:
+        return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
@@ -131,7 +131,7 @@ export default function MMIJobsPanelSection() {
           <Input
             placeholder="Buscar por sistema, componente..."
             value={search}
-            onChange={handleChange}
+            onChange={(e) => setSearch(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -154,11 +154,11 @@ export default function MMIJobsPanelSection() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => toast.info("Abrindo detalhes..."}>
+                    <DropdownMenuItem onClick={() => toast.info("Abrindo detalhes...")}>
                       <Eye className="h-4 w-4 mr-2" />
                       Ver Detalhes
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handlehandleExport}>
+                    <DropdownMenuItem onClick={() => handleExport(job)}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar PDF
                     </DropdownMenuItem>
@@ -185,7 +185,7 @@ export default function MMIJobsPanelSection() {
               </p>
               
               <div className="flex gap-2 pt-2">
-                <Button variant="outline" size="sm" className="flex-1" onClick={() => handlehandleExport}>
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => handleExport(job)}>
                   <Download className="h-4 w-4 mr-1" />
                   Exportar
                 </Button>

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -224,28 +223,28 @@ export const NonConformityManager: React.FC = () => {
           <div className="flex flex-wrap gap-2">
             <Button
               variant={selectedType === "all" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("all")}
               className="min-h-[44px]"
             >
               Todas
             </Button>
             <Button
               variant={selectedType === "major" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("major")}
               className="min-h-[44px]"
             >
               NC Maior
             </Button>
             <Button
               variant={selectedType === "minor" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("minor")}
               className="min-h-[44px]"
             >
               NC Menor
             </Button>
             <Button
               variant={selectedType === "observation" ? "default" : "outline"}
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType("observation")}
               className="min-h-[44px]"
             >
               Observações
@@ -328,7 +327,7 @@ export const NonConformityManager: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handlehandleViewNC}
+                          onClick={() => handleViewNC(nc.id, nc.number)}
                           disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
@@ -338,7 +337,7 @@ export const NonConformityManager: React.FC = () => {
                           <Button
                             size="sm"
                             className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => handlehandleUpdateNC}
+                            onClick={() => handleUpdateNC(nc.id, nc.number)}
                             disabled={isLoading}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
@@ -372,7 +371,7 @@ export const NonConformityManager: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handlehandleCreate}
+              onClick={() => handleCreate("Não Conformidade")}
               disabled={isLoading}
             >
               <Plus className="h-6 w-6" />
@@ -380,7 +379,7 @@ export const NonConformityManager: React.FC = () => {
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handlehandleGenerateReport}
+              onClick={() => handleGenerateReport("Relatório de Não Conformidades")}
               disabled={isLoading}
             >
               <FileText className="h-6 w-6" />
@@ -388,7 +387,7 @@ export const NonConformityManager: React.FC = () => {
             </Button>
             <Button
               className="bg-yellow-600 hover:bg-yellow-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleshowInfo}
+              onClick={() => showInfo("NCs Vencendo", "Abrindo lista de não conformidades próximas do vencimento")}
               disabled={isLoading}
             >
               <AlertTriangle className="h-6 w-6" />
@@ -396,7 +395,7 @@ export const NonConformityManager: React.FC = () => {
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleshowInfo}
+              onClick={() => showInfo("Estatísticas", "Abrindo painel de estatísticas de NCs")}
               disabled={isLoading}
             >
               <TrendingDown className="h-6 w-6" />

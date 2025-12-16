@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -101,7 +100,7 @@ const mockEmployees: Employee[] = [
   }
 ];
 
-export const EmployeeManagement = memo(() => {
+export const EmployeeManagement = () => {
   const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState("");
@@ -121,7 +120,7 @@ export const EmployeeManagement = memo(() => {
     certifications: [],
     rating: 4.0,
     salary: 0
-  };
+  });
 
   const handleCreateEmployee = () => {
     if (!newEmployee.name || !newEmployee.position || !newEmployee.department || !newEmployee.email) {
@@ -146,7 +145,7 @@ export const EmployeeManagement = memo(() => {
       certifications: newEmployee.certifications || [],
       rating: newEmployee.rating || 4.0,
       salary: newEmployee.salary || 0
-    });
+    };
 
     setEmployees(prev => [...prev, employee]);
     setNewEmployee({
@@ -167,7 +166,7 @@ export const EmployeeManagement = memo(() => {
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
     });
-  });
+  };
 
   const handleRemoveEmployee = (id: string) => {
     const employee = employees.find(e => e.id === id);
@@ -176,7 +175,7 @@ export const EmployeeManagement = memo(() => {
       title: "Funcionário removido",
       description: `${employee?.name} foi removido do sistema`,
     });
-  });
+  };
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
     setEmployees(prev => prev.map(emp => 
@@ -186,7 +185,7 @@ export const EmployeeManagement = memo(() => {
       title: "Status atualizado",
       description: "Status do funcionário foi alterado com sucesso"
     });
-  });
+  };
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -195,7 +194,7 @@ export const EmployeeManagement = memo(() => {
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  };
+  });
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
@@ -216,7 +215,7 @@ export const EmployeeManagement = memo(() => {
     case "travel": return "Viagem";
     case "inactive": return "Inativo";
     default: return "N/A";
-    };
+    }
   };
 
   return (
@@ -246,7 +245,7 @@ export const EmployeeManagement = memo(() => {
                 <Input
                   id="name"
                   value={newEmployee.name || ""}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
@@ -255,7 +254,7 @@ export const EmployeeManagement = memo(() => {
                 <Input
                   id="position"
                   value={newEmployee.position || ""}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
@@ -281,7 +280,7 @@ export const EmployeeManagement = memo(() => {
                   id="email"
                   type="email"
                   value={newEmployee.email || ""}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
@@ -290,7 +289,7 @@ export const EmployeeManagement = memo(() => {
                 <Input
                   id="phone"
                   value={newEmployee.phone || ""}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
@@ -299,7 +298,7 @@ export const EmployeeManagement = memo(() => {
                 <Input
                   id="location"
                   value={newEmployee.location || ""}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
                   className="col-span-3"
                 />
               </div>
@@ -309,13 +308,13 @@ export const EmployeeManagement = memo(() => {
                   id="salary"
                   type="number"
                   value={newEmployee.salary || ""}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewEmployee(prev => ({ ...prev, salary: parseFloat(e.target.value) || 0 }))}
                   className="col-span-3"
                 />
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={handleSetIsCreatingEmployee}>
+              <Button variant="outline" onClick={() => setIsCreatingEmployee(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateEmployee}>
@@ -334,7 +333,7 @@ export const EmployeeManagement = memo(() => {
             <Input
               placeholder="Buscar funcionários..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -432,7 +431,7 @@ export const EmployeeManagement = memo(() => {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-4 md:mt-0">
-                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"]}>
+                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"])}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
@@ -458,7 +457,7 @@ export const EmployeeManagement = memo(() => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handlehandleRemoveEmployee}
+                      onClick={() => handleRemoveEmployee(employee.id)}
                     >
                       <Trash2 className="w-4 h-4 mr-1" />
                       Remover

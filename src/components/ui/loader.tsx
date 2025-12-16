@@ -1,7 +1,6 @@
-import { memo } from 'react';
 import { motion } from "framer-motion";
 
-export const Loader = memo(function() {
+export function Loader() {
   return (
     <motion.div
       role="status"
@@ -13,4 +12,4 @@ export const Loader = memo(function() {
       className="w-6 h-6 border-4 border-[var(--nautilus-primary)] border-t-transparent rounded-full animate-spin"
     />
   );
-});
+}

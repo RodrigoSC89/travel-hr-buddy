@@ -271,7 +271,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
       success: false,
       message: "OpenAI API key not configured",
       error: "Missing VITE_OPENAI_API_KEY",
-    });
+    };
   }
   
   try {
@@ -286,7 +286,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
         messages: [
           {
             role: "user",
-            content: "Say \"API test successful\" if you can read this.",
+            content: 'Say "API test successful" if you can read this.',
           },
         ],
         max_tokens: 20,
@@ -302,7 +302,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
         message: `OpenAI API error: ${response.status} ${response.statusText}`,
         responseTime,
         error: errorData.error?.message || `HTTP ${response.status}`,
-      });
+      };
     }
     
     const data = await response.json();
@@ -316,7 +316,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
           model: data.model,
           response: data.choices[0].message.content,
         },
-      });
+      };
     }
     
     return {
@@ -324,14 +324,14 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
       message: "OpenAI API returned unexpected data",
       responseTime,
       error: "Invalid response format",
-    });
+    };
   } catch (error) {
     return {
       success: false,
       message: "Failed to connect to OpenAI API",
       responseTime: Date.now() - startTime,
       error: error instanceof Error ? error.message : "Unknown error",
-    });
+    };
   }
 }
 
@@ -350,7 +350,7 @@ export async function generateReportSummary(
   conclusions: string[];
   recommendations: string[];
 } | null> {
-  const systemPrompt = "You are a maritime operations analyst. Generate comprehensive reports with insights.";
+  const systemPrompt = `You are a maritime operations analyst. Generate comprehensive reports with insights.`;
   
   const userPrompt = `
 Analyze the following ${reportType} data and generate:
@@ -385,7 +385,7 @@ export async function generateDrillScenario(
   difficulty: string,
   historicalFailures: string[] = []
 ): Promise<Record<string, unknown> | null> {
-  const systemPrompt = "You are a maritime safety expert who creates realistic emergency drill scenarios for vessel crew training.";
+  const systemPrompt = `You are a maritime safety expert who creates realistic emergency drill scenarios for vessel crew training.`;
   
   const failuresContext = historicalFailures.length > 0
     ? `\n\nPast failures to address:\n${historicalFailures.map(f => `- ${f}`).join("\n")}`
@@ -438,7 +438,7 @@ export async function generateComplianceExplanation(
   }>;
   learningPoints: string[];
 } | null> {
-  const systemPrompt = "You are a maritime compliance expert who explains regulations in both technical and simple terms.";
+  const systemPrompt = `You are a maritime compliance expert who explains regulations in both technical and simple terms.`;
   
   const userPrompt = `
 Explain this ${finding.type} compliance finding:

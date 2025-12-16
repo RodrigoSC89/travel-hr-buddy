@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
@@ -87,7 +86,7 @@ export class MultimodalIntentEngine {
         ...intentResult,
         inputType,
         timestamp: new Date().toISOString(),
-      });
+      };
     } catch (error) {
       logger.error("Error processing intent", { error });
       throw error;
@@ -110,16 +109,16 @@ export class MultimodalIntentEngine {
         const transcript = event.results[0][0].transcript;
         onResult(transcript);
         resolve();
-      });
+      };
 
       this.recognitionService.onerror = (event: any) => {
         if (onError) onError(event.error);
         reject(event.error);
-      });
+      };
 
       this.recognitionService.onend = () => {
         resolve();
-      });
+      };
 
       this.recognitionService.start();
     });
@@ -203,7 +202,7 @@ export class MultimodalIntentEngine {
         confidence: intent.confidence,
         action: intent.action,
         parameters: intent.parameters,
-      });
+      };
     } catch (error) {
       logger.error("Error classifying intent", { error });
       
@@ -214,7 +213,7 @@ export class MultimodalIntentEngine {
         confidence: 0,
         action: "none",
         parameters: {},
-      });
+      };
     }
   }
 
@@ -236,7 +235,7 @@ export class MultimodalIntentEngine {
         confidence: 0.85,
         action: "navigate_to",
         parameters: {},
-      });
+      };
     }
     
     // Query intents
@@ -247,7 +246,7 @@ export class MultimodalIntentEngine {
         confidence: 0.80,
         action: "fetch_data",
         parameters: {},
-      });
+      };
     }
     
     // Command intents
@@ -258,7 +257,7 @@ export class MultimodalIntentEngine {
         confidence: 0.90,
         action: "create",
         parameters: {},
-      });
+      };
     }
     
     // Update intents
@@ -269,7 +268,7 @@ export class MultimodalIntentEngine {
         confidence: 0.85,
         action: "update",
         parameters: {},
-      });
+      };
     }
     
     // Default
@@ -279,7 +278,7 @@ export class MultimodalIntentEngine {
       confidence: 0.50,
       action: "process",
       parameters: {},
-    });
+    };
   }
 
   private extractTarget(prompt: string): string | null {

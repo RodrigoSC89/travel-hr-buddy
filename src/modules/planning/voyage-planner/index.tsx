@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,7 +68,7 @@ const VoyagePlanner = () => {
             </p>
           </div>
         </div>
-        <Button onClick={handleSetCreateDialogOpen}>
+        <Button onClick={() => setCreateDialogOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Nova Viagem
         </Button>

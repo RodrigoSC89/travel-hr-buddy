@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -66,7 +66,7 @@ export default function DocumentViewPage() {
       if (realtimeChannel) {
         supabase.removeChannel(realtimeChannel);
       }
-    });
+    };
   }, [realtimeChannel]);
 
   const loadCurrentUser = async () => {
@@ -102,7 +102,7 @@ export default function DocumentViewPage() {
   const loadDocument = async () => {
     try {
       // Use explicit foreign key relationship for better type safety and clarity
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("ai_generated_documents")
         .select(`
           title, 
@@ -126,7 +126,7 @@ export default function DocumentViewPage() {
         generated_by: data.generated_by,
         author_email: profiles?.email,
         author_name: profiles?.full_name,
-      });
+      };
 
       setDoc(transformedData);
     } catch (error) {
@@ -146,7 +146,7 @@ export default function DocumentViewPage() {
     
     setLoadingComments(true);
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("document_comments")
         .select(`
           id,
@@ -162,7 +162,7 @@ export default function DocumentViewPage() {
 
       // Fetch user emails for comments
       const commentsWithEmails = await Promise.all(
-        (data || []).map(async (comment: unknown) => ({
+        (data || []).map(async (comment: any) => ({
           ...comment,
           user_email: await fetchUserEmail(comment.user_id)
         }))
@@ -236,7 +236,7 @@ export default function DocumentViewPage() {
         throw new Error("User not authenticated");
       }
 
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("document_comments")
         .insert({
           document_id: id,
@@ -267,7 +267,7 @@ export default function DocumentViewPage() {
   const deleteComment = async (commentId: string) => {
     setDeletingCommentId(commentId);
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("document_comments")
         .delete()
         .eq("id", commentId);
@@ -313,7 +313,7 @@ export default function DocumentViewPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handlenavigate}
+            onClick={() => navigate("/admin/documents")}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -322,7 +322,7 @@ export default function DocumentViewPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handlenavigate}
+            onClick={() => navigate(`/admin/documents/history/${id}`)}
           >
             📜 Ver Histórico Completo
           </Button>
@@ -420,7 +420,7 @@ export default function DocumentViewPage() {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => handledeleteComment}
+                                    onClick={() => deleteComment(comment.id)}
                                     disabled={deletingCommentId === comment.id}
                                   >
                                     {deletingCommentId === comment.id ? (
@@ -449,7 +449,7 @@ export default function DocumentViewPage() {
                   <Textarea
                     placeholder="Adicione um comentário..."
                     value={newComment}
-                    onChange={handleChange}
+                    onChange={(e) => setNewComment(e.target.value)}
                     disabled={submittingComment}
                     className="min-h-20"
                   />

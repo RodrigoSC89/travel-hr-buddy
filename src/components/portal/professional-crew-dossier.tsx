@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -277,9 +276,9 @@ export const ProfessionalCrewDossier: React.FC = () => {
     if (!selectedCrewId) return;
 
     try {
-      const { error } = await (supabase as unknown).rpc("generate_crew_ai_recommendations", {
+      const { error } = await (supabase as any).rpc("generate_crew_ai_recommendations", {
         crew_uuid: selectedCrewId
-      } as unknown);
+      } as any);
 
       if (error) throw error;
 
@@ -632,7 +631,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
                   <Input
                     placeholder="Buscar por embarcação..."
                     value={searchTerm}
-                    onChange={handleChange}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full"
                   />
                 </div>

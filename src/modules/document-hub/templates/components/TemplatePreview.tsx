@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 417: Template Preview and PDF Generator
  * Preview templates with variable substitution and export to PDF
  */
@@ -43,7 +42,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       const escapedKey = escapeRegexSpecialChars(key);
       const regex = new RegExp(`{{${escapedKey}}}`, "g");
       content = content.replace(regex, value || `<span style="color: red;">{{${key}}}</span>`);
-};
+    });
     
     setPreviewContent(content);
   };
@@ -95,7 +94,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       title: "HTML Downloaded",
       description: "Your template has been exported to HTML",
     });
-  });
+  };
 
   return (
     <Card>
@@ -129,7 +128,11 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
                     <Input
                       id={variable}
                       value={variableValues[variable] || ""}
-                      onChange={handleChange})
+                      onChange={(e) =>
+                        setVariableValues({
+                          ...variableValues,
+                          [variable]: e.target.value
+                        })
                       }
                       placeholder={`Enter value for ${variable}`}
                     />

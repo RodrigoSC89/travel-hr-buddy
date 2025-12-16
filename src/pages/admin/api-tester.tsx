@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -135,7 +134,7 @@ const APITester = () => {
     if (!test) return;
 
     try {
-      const result = await test.testFn() as unknown;
+      const result = await test.testFn() as any;
 
       setTests((prev) =>
         prev.map((t) =>
@@ -375,7 +374,7 @@ const APITester = () => {
                         </div>
                       </div>
                       <Button
-                        onClick={() => handlerunTest}
+                        onClick={() => runTest(test.id)}
                         disabled={test.status === "loading"}
                         size="sm"
                         className="min-w-[80px]"

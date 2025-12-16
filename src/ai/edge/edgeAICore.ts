@@ -1,4 +1,3 @@
-
 /**
  * PATCH 223.0 - Edge AI Operations Core
  * Executes local embedded AI (small offline models)
@@ -95,7 +94,7 @@ class EdgeAICore {
     const capabilities: GPUCapabilities = {
       webGPUSupported: false,
       webGLSupported: false,
-    });
+    };
 
     // Check WebGPU support
     if ("gpu" in navigator) {
@@ -267,7 +266,7 @@ class EdgeAICore {
         modelUsed: model.id,
         fromCache: false,
         timestamp: new Date(),
-      });
+      };
 
       // Cache result
       this.resultsCache.set(cacheKey, result);
@@ -322,7 +321,7 @@ class EdgeAICore {
       estimatedTime: Math.random() * 120 + 60, // 60-180 minutes
       fuelEfficiency: Math.random() * 0.3 + 0.7, // 70-100%
       recommendations: ["Avoid heavy traffic areas", "Weather conditions favorable"],
-    });
+    };
   }
 
   private detectFailure(input: any): any {
@@ -334,7 +333,7 @@ class EdgeAICore {
       affectedComponent: input.component || "unknown",
       score: failureScore,
       recommendations: failureScore > 0.7 ? ["Immediate inspection required"] : ["Continue monitoring"],
-    });
+    };
   }
 
   private generateQuickResponse(input: any): any {
@@ -349,7 +348,7 @@ class EdgeAICore {
       response: responses[Math.floor(Math.random() * responses.length)],
       contextUnderstood: true,
       requiresFollowup: Math.random() > 0.7,
-    });
+    };
   }
 
   private detectAnomaly(input: any): any {
@@ -364,7 +363,7 @@ class EdgeAICore {
         deviation: anomalyScore,
         baseline: input.baseline || 0,
       },
-    });
+    };
   }
 
   private predictMaintenance(input: any): any {
@@ -380,7 +379,7 @@ class EdgeAICore {
         "Monitor temperature readings",
         "Check oil levels",
       ],
-    });
+    };
   }
 
   /**
@@ -469,7 +468,7 @@ class EdgeAICore {
       cacheSize: this.resultsCache.size,
       queueLength: this.inferenceQueue.length,
       webGPUAvailable: this.webGPUDevice !== null,
-    });
+    };
   }
 }
 

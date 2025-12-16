@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,7 +52,7 @@ interface ThreatData {
   scores: SituationalScore[];
 }
 
-export const Patch614Validation = memo(function() {
+export function Patch614Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [threatData, setThreatData] = useState<ThreatData | null>(null);
@@ -245,7 +245,7 @@ export const Patch614Validation = memo(function() {
           },
           wasAdjusted: adjustedScore !== baseScore
         };
-      };
+      });
 
       testResults["scores_adjusted"] = situationalScores.every(s => s.wasAdjusted === true);
 
@@ -259,7 +259,7 @@ export const Patch614Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+      });
     }
 
     setResults(testResults);
@@ -312,10 +312,10 @@ export const Patch614Validation = memo(function() {
             <p className="text-sm font-medium mb-2">Status do Threat Monitor:</p>
             <ul className="text-xs space-y-1">
               <li>Ameaças Detectadas: {threatData.threats.length}</li>
-              <li>Alertas Críticos: {threatData.threats.filter((t: unknown) => t.severity === "critical").length}</li>
+              <li>Alertas Críticos: {threatData.threats.filter((t: any) => t.severity === "critical").length}</li>
               <li>Watchdog Alerts: {threatData.watchdogAlerts.length}</li>
-              <li>Scores Ajustados: {threatData.scores.filter((s: unknown) => s.wasAdjusted).length}</li>
-              <li>Score Médio: {(threatData.scores.reduce((sum: number, s: unknown) => sum + s.adjustedScore, 0) / threatData.scores.length).toFixed(1)}</li>
+              <li>Scores Ajustados: {threatData.scores.filter((s: any) => s.wasAdjusted).length}</li>
+              <li>Score Médio: {(threatData.scores.reduce((sum: number, s: any) => sum + s.adjustedScore, 0) / threatData.scores.length).toFixed(1)}</li>
             </ul>
           </div>
         )}
@@ -335,4 +335,4 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
       <span>{label}</span>
     </div>
   );
-});
+}

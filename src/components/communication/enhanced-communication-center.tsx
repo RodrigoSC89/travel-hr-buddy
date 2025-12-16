@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,7 @@ import {
 import { InboxManager } from "./inbox-manager";
 import { ChannelManager } from "./channel-manager";
 import { MessageComposer } from "./message-composer";
-import { NotificationCenter } from "@/components/unified/NotificationCenter.unified";
+import { NotificationCenter } from "./notification-center";
 import { SettingsPanel } from "./settings-panel";
 import { CommunicationAnalytics } from "./communication-analytics";
 
@@ -44,7 +43,7 @@ interface CommunicationStats {
   responseRate: number;
 }
 
-export const EnhancedCommunicationCenter = memo(() => {
+export const EnhancedCommunicationCenter = () => {
   const [activeTab, setActiveTab] = useState("inbox");
   const [stats, setStats] = useState<CommunicationStats>({
     totalMessages: 0,
@@ -110,7 +109,7 @@ export const EnhancedCommunicationCenter = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -129,7 +128,7 @@ export const EnhancedCommunicationCenter = memo(() => {
               variant="outline" 
               size="sm" 
               className="gap-2"
-              onClick={handleSetActiveTab}
+              onClick={() => setActiveTab("notifications")}
             >
               <Bell className="h-4 w-4" />
               Notificações
@@ -142,7 +141,7 @@ export const EnhancedCommunicationCenter = memo(() => {
             <Button 
               size="sm" 
               className="gap-2"
-              onClick={handleSetActiveTab}
+              onClick={() => setActiveTab("compose")}
             >
               <PlusCircle className="h-4 w-4" />
               Nova Mensagem
@@ -242,7 +241,7 @@ export const EnhancedCommunicationCenter = memo(() => {
                 <Button 
                   variant="destructive" 
                   size="sm"
-                  onClick={handleSetActiveTab}
+                  onClick={() => setActiveTab("inbox")}
                 >
                   Ver Agora
                 </Button>

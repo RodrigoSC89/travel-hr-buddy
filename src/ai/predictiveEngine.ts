@@ -1,4 +1,3 @@
-
 /**
  * PATCH 206.0 - Predictive Engine
  * AI engine capable of forecasting failures, overloads or demands
@@ -105,14 +104,14 @@ class PredictiveEngine {
         watchdogLogs: watchdogLogs || [],
         usageStats: usageStats || [],
         incidentPatterns: incidentPatterns || [],
-      });
+      };
     } catch (error) {
       logger.error("[PredictiveEngine] Failed to fetch training data:", error);
       return {
         watchdogLogs: [],
         usageStats: [],
         incidentPatterns: [],
-      });
+      };
     }
   }
 
@@ -124,7 +123,7 @@ class PredictiveEngine {
       errorFrequency: {},
       moduleHealth: {},
       timePatterns: {},
-    });
+    };
 
     // Analyze error frequency by module
     data.watchdogLogs.forEach((log: any) => {
@@ -143,7 +142,7 @@ class PredictiveEngine {
           incidents: 0,
           avgResolutionTime: 0,
           severity: [],
-        });
+        };
       }
       patterns.moduleHealth[moduleName].incidents++;
       patterns.moduleHealth[moduleName].severity.push(incident.severity);
@@ -201,7 +200,7 @@ class PredictiveEngine {
         confidence,
         factors,
         predictedAt: new Date(),
-      });
+      };
 
       // Cache the prediction
       this.predictionCache.set(moduleName, prediction);
@@ -268,7 +267,7 @@ class PredictiveEngine {
         errorRate,
         usagePattern,
         lastIncidentTime: incidents?.[0]?.created_at ? new Date(incidents[0].created_at) : undefined,
-      });
+      };
     } catch (error) {
       logger.error(`[PredictiveEngine] Failed to fetch metrics for ${moduleName}:`, error);
       return {
@@ -276,7 +275,7 @@ class PredictiveEngine {
         avgResponseTime: 0,
         errorRate: 0,
         usagePattern: "stable",
-      });
+      };
     }
   }
 

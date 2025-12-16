@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Nautilus Assistant - Módulo Unificado de Assistentes
  * PATCH UNIFY-3.0 - Fusão dos módulos de Assistentes
  * 
@@ -72,10 +71,10 @@ const NautilusAssistant: React.FC = () => {
       const assistantMessage: ChatMessage = {
         role: "assistant",
         content: response?.response 
-          ? (typeof response.response === "string" ? response.response : JSON.stringify(response.response))
+          ? (typeof response.response === 'string' ? response.response : JSON.stringify(response.response))
           : "Entendi sua solicitação. Com base nos dados disponíveis, posso ajudá-lo com análises operacionais, planejamento de viagens, gestão de manutenção e conformidade regulatória. Qual área específica você gostaria de explorar?",
         timestamp: new Date()
-      });
+      };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
@@ -190,7 +189,7 @@ const NautilusAssistant: React.FC = () => {
             <Textarea 
               placeholder="Digite sua mensagem..."
               value={chatInput}
-              onChange={handleChange}
+              onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();

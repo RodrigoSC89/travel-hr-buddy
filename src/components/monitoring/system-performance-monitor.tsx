@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -121,7 +120,7 @@ const SystemPerformanceMonitor = () => {
     default:
       return <Activity className="w-4 h-4 text-muted-foreground" />;
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -502,7 +501,7 @@ const SystemPerformanceMonitor = () => {
                 <p className="text-sm text-muted-foreground">
                   Configure thresholds para receber alertas automáticos quando métricas críticas forem atingidas.
                 </p>
-                <Button onClick={handleSetAlertConfigOpen}>
+                <Button onClick={() => setAlertConfigOpen(true)}>
                   <Shield className="w-4 h-4 mr-2" />
                   Configurar Alertas
                 </Button>
@@ -538,7 +537,7 @@ const SystemPerformanceMonitor = () => {
                     min="0"
                     max="100"
                     value={alertConfig.cpuThreshold}
-                    onChange={handleChange}))}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, cpuThreshold: Number(e.target.value) }))}
                   />
                 </div>
                 <div className="space-y-2">
@@ -549,7 +548,7 @@ const SystemPerformanceMonitor = () => {
                     min="0"
                     max="100"
                     value={alertConfig.memoryThreshold}
-                    onChange={handleChange}))}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, memoryThreshold: Number(e.target.value) }))}
                   />
                 </div>
                 <div className="space-y-2">
@@ -560,7 +559,7 @@ const SystemPerformanceMonitor = () => {
                     min="0"
                     max="100"
                     value={alertConfig.diskThreshold}
-                    onChange={handleChange}))}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, diskThreshold: Number(e.target.value) }))}
                   />
                 </div>
                 <div className="space-y-2">
@@ -571,7 +570,7 @@ const SystemPerformanceMonitor = () => {
                     min="0"
                     max="100"
                     value={alertConfig.networkThreshold}
-                    onChange={handleChange}))}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, networkThreshold: Number(e.target.value) }))}
                   />
                 </div>
               </div>
@@ -616,7 +615,7 @@ const SystemPerformanceMonitor = () => {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetAlertConfigOpen}>
+            <Button variant="outline" onClick={() => setAlertConfigOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={() => {

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,7 +31,7 @@ interface Integration {
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
-  config?: Record<string, unknown>;
+  config?: Record<string, any>;
 }
 
 export const IntegrationsHub: React.FC = () => {
@@ -131,7 +130,7 @@ export const IntegrationsHub: React.FC = () => {
       title: "Integração Atualizada",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
-  });
+  };
 
   const handleTestConnection = (id: string) => {
     const integration = integrations.find(i => i.id === id);
@@ -139,7 +138,7 @@ export const IntegrationsHub: React.FC = () => {
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
     });
-  });
+  };
 
   const getIntegrationsByCategory = (category: string) => {
     return integrations.filter(integration => integration.category === category);
@@ -237,7 +236,7 @@ export const IntegrationsHub: React.FC = () => {
                       </div>
                       <Switch 
                         checked={integration.isEnabled}
-                        onCheckedChange={() => handleToggleIntegration(integration.id}
+                        onCheckedChange={() => handleToggleIntegration(integration.id)}
                       />
                     </div>
                     <CardDescription>{integration.description}</CardDescription>
@@ -263,7 +262,7 @@ export const IntegrationsHub: React.FC = () => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => handlehandleTestConnection}
+                          onClick={() => handleTestConnection(integration.id)}
                           className="flex-1"
                         >
                           Testar

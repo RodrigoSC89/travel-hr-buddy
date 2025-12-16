@@ -71,7 +71,7 @@ export default function WeatherDashboard() {
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
-  });
+  };
 
   return (
     <div className="container mx-auto py-8 space-y-6">
@@ -93,7 +93,7 @@ export default function WeatherDashboard() {
             caution: "secondary",
             warning: "outline",
             danger: "destructive",
-          }[severity] as unknown;
+          }[severity] as any;
 
           return (
             <Card key={weather.location.name} className="relative">

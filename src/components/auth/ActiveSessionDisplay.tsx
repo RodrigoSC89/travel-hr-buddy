@@ -3,7 +3,7 @@
  * Show current session information to users
  */
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,8 @@ import {
 } from "lucide-react";
 import { 
   getSessionMetadata, 
-  secureLogout,
+  secureLogout, 
+  TokenRefreshManager,
   initializeTokenRefresh 
 } from "@/services/enhanced-auth-service";
 import { useToast } from "@/hooks/use-toast";
@@ -36,7 +37,7 @@ interface SessionMetadata {
   isExpiring: boolean;
 }
 
-export const ActiveSessionDisplay = memo(function() {
+export function ActiveSessionDisplay() {
   const [session, setSession] = useState<SessionMetadata | null>(null);
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -236,4 +237,4 @@ export const ActiveSessionDisplay = memo(function() {
       </Card>
     </div>
   );
-});
+}

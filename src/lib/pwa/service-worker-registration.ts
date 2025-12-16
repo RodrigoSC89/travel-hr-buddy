@@ -17,33 +17,37 @@ class ServiceWorkerManager {
   async register(config: SWConfig = {}) {
     this.config = config;
 
-    if (!("serviceWorker" in navigator)) {
+    if (!('serviceWorker' in navigator)) {
+      console.log('[SW] Service Workers not supported');
       return;
     }
 
     // Only register in production
     if (import.meta.env.DEV) {
+      console.log('[SW] Skipping SW registration in development');
       return;
     }
 
     try {
-      const registration = await navigator.serviceWorker.register("/sw.js", {
-        scope: "/",
+      const registration = await navigator.serviceWorker.register('/sw.js', {
+        scope: '/',
       });
 
       this.registration = registration;
 
       // Check for updates
-      registration.addEventListener("updatefound", () => {
+      registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing;
         if (newWorker) {
-          newWorker.addEventListener("statechange", () => {
-            if (newWorker.state === "installed") {
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 // New update available
+                console.log('[SW] New content available');
                 config.onUpdate?.(registration);
               } else {
                 // Content cached for offline use
+                console.log('[SW] Content cached for offline use');
                 config.onSuccess?.(registration);
               }
             }
@@ -52,39 +56,43 @@ class ServiceWorkerManager {
       });
 
       // Handle controller change (new SW activated)
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        console.log('[SW] Controller changed');
       });
 
       // Listen for messages from SW
-      navigator.serviceWorker.addEventListener("message", (event) => {
-        if (event.data?.type === "SYNC_COMPLETE") {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data?.type === 'SYNC_COMPLETE') {
+          console.log('[SW] Background sync completed');
         }
       });
 
+      console.log('[SW] Service Worker registered successfully');
     } catch (error) {
-      console.error("[SW] Service Worker registration failed:", error);
-      console.error("[SW] Service Worker registration failed:", error);
+      console.error('[SW] Service Worker registration failed:', error);
     }
 
     // Network status listeners
-    window.addEventListener("online", () => {
+    window.addEventListener('online', () => {
+      console.log('[SW] Back online');
       config.onOnline?.();
     });
 
-    window.addEventListener("offline", () => {
+    window.addEventListener('offline', () => {
+      console.log('[SW] Gone offline');
       config.onOffline?.();
     });
   }
 
   async unregister() {
-    if (!("serviceWorker" in navigator)) return;
+    if (!('serviceWorker' in navigator)) return;
 
     try {
       const registration = await navigator.serviceWorker.ready;
       await registration.unregister();
+      console.log('[SW] Service Worker unregistered');
     } catch (error) {
-      console.error("[SW] Unregister failed:", error);
-      console.error("[SW] Unregister failed:", error);
+      console.error('[SW] Unregister failed:', error);
     }
   }
 
@@ -92,30 +100,30 @@ class ServiceWorkerManager {
     if (this.registration) {
       try {
         await this.registration.update();
+        console.log('[SW] Service Worker updated');
       } catch (error) {
-        console.error("[SW] Update failed:", error);
-        console.error("[SW] Update failed:", error);
+        console.error('[SW] Update failed:', error);
       }
     }
   }
 
   skipWaiting() {
     if (this.registration?.waiting) {
-      this.registration.waiting.postMessage({ type: "SKIP_WAITING" });
+      this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
     }
   }
 
   clearCache() {
-    navigator.serviceWorker.controller?.postMessage({ type: "CLEAR_CACHE" });
+    navigator.serviceWorker.controller?.postMessage({ type: 'CLEAR_CACHE' });
   }
 
   async requestNotificationPermission(): Promise<NotificationPermission> {
-    if (!("Notification" in window)) {
-      return "denied";
+    if (!('Notification' in window)) {
+      return 'denied';
     }
 
-    if (Notification.permission === "granted") {
-      return "granted";
+    if (Notification.permission === 'granted') {
+      return 'granted';
     }
 
     return await Notification.requestPermission();
@@ -131,8 +139,7 @@ class ServiceWorkerManager {
       });
       return subscription;
     } catch (error) {
-      console.error("[SW] Push subscription failed:", error);
-      console.error("[SW] Push subscription failed:", error);
+      console.error('[SW] Push subscription failed:', error);
       return null;
     }
   }
@@ -145,7 +152,7 @@ class ServiceWorkerManager {
 export const swManager = new ServiceWorkerManager();
 
 // React hook for PWA status
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export function usePWA() {
   const [isInstalled, setIsInstalled] = useState(false);
@@ -156,7 +163,7 @@ export function usePWA() {
 
   useEffect(() => {
     // Check if installed
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
       || (window.navigator as any).standalone === true;
     setIsInstalled(isStandalone);
 
@@ -165,9 +172,9 @@ export function usePWA() {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);
-    });
+    };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstall);
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
 
     // Register service worker
     swManager.register({
@@ -180,14 +187,14 @@ export function usePWA() {
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
     
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    });
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   const install = async () => {
@@ -198,7 +205,7 @@ export function usePWA() {
     setDeferredPrompt(null);
     setIsInstallable(false);
 
-    return outcome === "accepted";
+    return outcome === 'accepted';
   };
 
   const updateApp = () => {

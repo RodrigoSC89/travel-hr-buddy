@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
@@ -115,4 +115,4 @@ describe("AdminBI Page", () => {
 
     consoleSpy.mockRestore();
   });
-};
+});

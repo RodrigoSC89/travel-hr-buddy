@@ -1,4 +1,3 @@
-
 /**
  * PATCH 581 - Predictive Strategy Engine
  * AI engine for predictive strategy generation with continuous learning
@@ -185,7 +184,7 @@ class PredictiveStrategyEngine {
       analysisContext: this.buildAnalysisContext(),
       proposedAt: new Date(),
       missionId
-    });
+    };
 
     // Log proposal
     await this.logStrategyProposal(proposal);
@@ -247,7 +246,7 @@ class PredictiveStrategyEngine {
       stats[type] = {
         successRate,
         feedbackCount: this.getFeedbackCountForType(type)
-      });
+      };
     }
 
     return stats;
@@ -358,7 +357,7 @@ class PredictiveStrategyEngine {
         signalCount: signals.length,
         avgPriority: signals.reduce((sum, s) => sum + s.priority, 0) / signals.length
       }
-    });
+    };
 
     this.strategyHistory.set(strategyId, strategy);
     return strategy;
@@ -412,7 +411,7 @@ class PredictiveStrategyEngine {
       metadata: {
         signalCount: signals.length
       }
-    });
+    };
 
     this.strategyHistory.set(strategyId, strategy);
     return strategy;
@@ -475,7 +474,7 @@ class PredictiveStrategyEngine {
         signalCount: signals.length,
         riskLevel: "high"
       }
-    });
+    };
 
     this.strategyHistory.set(strategyId, strategy);
     return strategy;
@@ -593,7 +592,7 @@ class PredictiveStrategyEngine {
       avgSignalPriority: this.calculateAverageSignalPriority(),
       learningModelVersion: "1.0.0",
       timestamp: new Date().toISOString()
-    });
+    };
   }
 
   private calculateAverageSignalPriority(): number {

@@ -3,35 +3,35 @@
  * Show online users with real-time presence
  */
 
-import React from "react";
-import { Users } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { usePresence } from "@/lib/collaboration/realtime-presence";
+import React from 'react';
+import { Users } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import { usePresence } from '@/lib/collaboration/realtime-presence';
 
 interface PresenceAvatarsProps {
   maxVisible?: number;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
   showCount?: boolean;
 }
 
 const sizeClasses = {
-  sm: "h-6 w-6 text-xs",
-  md: "h-8 w-8 text-sm",
-  lg: "h-10 w-10 text-base",
+  sm: 'h-6 w-6 text-xs',
+  md: 'h-8 w-8 text-sm',
+  lg: 'h-10 w-10 text-base',
 };
 
 const overlapClasses = {
-  sm: "-ml-2",
-  md: "-ml-3",
-  lg: "-ml-4",
+  sm: '-ml-2',
+  md: '-ml-3',
+  lg: '-ml-4',
 };
 
-export const PresenceAvatars = memo(function({
+export function PresenceAvatars({
   maxVisible = 5,
-  size = "md",
+  size = 'md',
   className,
   showCount = true,
 }: PresenceAvatarsProps) {
@@ -46,29 +46,29 @@ export const PresenceAvatars = memo(function({
   
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map(n => n[0])
       .slice(0, 2)
-      .join("")
+      .join('')
       .toUpperCase();
-  });
+  };
   
   const statusColors = {
-    online: "bg-green-500",
-    away: "bg-yellow-500",
-    busy: "bg-red-500",
-  });
+    online: 'bg-green-500',
+    away: 'bg-yellow-500',
+    busy: 'bg-red-500',
+  };
   
   return (
     <TooltipProvider>
-      <div className={cn("flex items-center", className)}>
+      <div className={cn('flex items-center', className)}>
         <div className="flex items-center">
           {visibleUsers.map((user, index) => (
             <Tooltip key={user.id}>
               <TooltipTrigger asChild>
                 <div
                   className={cn(
-                    "relative",
+                    'relative',
                     index > 0 && overlapClasses[size]
                   )}
                   style={{ zIndex: visibleUsers.length - index }}
@@ -76,7 +76,7 @@ export const PresenceAvatars = memo(function({
                   <Avatar
                     className={cn(
                       sizeClasses[size],
-                      "ring-2 ring-background cursor-pointer transition-transform hover:scale-110"
+                      'ring-2 ring-background cursor-pointer transition-transform hover:scale-110'
                     )}
                   >
                     <AvatarImage src={user.avatar} alt={user.name} />
@@ -90,9 +90,9 @@ export const PresenceAvatars = memo(function({
                   {/* Status indicator */}
                   <span
                     className={cn(
-                      "absolute bottom-0 right-0 rounded-full ring-2 ring-background",
+                      'absolute bottom-0 right-0 rounded-full ring-2 ring-background',
                       statusColors[user.status],
-                      size === "sm" ? "h-2 w-2" : "h-2.5 w-2.5"
+                      size === 'sm' ? 'h-2 w-2' : 'h-2.5 w-2.5'
                     )}
                   />
                 </div>
@@ -101,7 +101,7 @@ export const PresenceAvatars = memo(function({
                 <p className="font-medium">{user.name}</p>
                 <p className="text-xs text-muted-foreground">
                   {user.currentPage === window.location.pathname
-                    ? "Nesta página"
+                    ? 'Nesta página'
                     : `Em ${user.currentPage}`}
                 </p>
               </TooltipContent>
@@ -112,11 +112,11 @@ export const PresenceAvatars = memo(function({
           {remainingCount > 0 && (
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className={cn("relative", overlapClasses[size])}>
+                <div className={cn('relative', overlapClasses[size])}>
                   <Avatar
                     className={cn(
                       sizeClasses[size],
-                      "ring-2 ring-background bg-muted cursor-pointer"
+                      'ring-2 ring-background bg-muted cursor-pointer'
                     )}
                   >
                     <AvatarFallback className="bg-muted text-muted-foreground font-medium">
@@ -147,12 +147,12 @@ export const PresenceAvatars = memo(function({
 /**
  * Compact presence indicator
  */
-export const PresenceIndicator = memo(function({ className }: { className?: string }) {
+export function PresenceIndicator({ className }: { className?: string }) {
   const { users, isConnected } = usePresence();
   
   if (!isConnected) {
     return (
-      <div className={cn("flex items-center gap-1.5 text-muted-foreground", className)}>
+      <div className={cn('flex items-center gap-1.5 text-muted-foreground', className)}>
         <span className="h-2 w-2 rounded-full bg-muted animate-pulse" />
         <span className="text-xs">Conectando...</span>
       </div>
@@ -160,10 +160,10 @@ export const PresenceIndicator = memo(function({ className }: { className?: stri
   }
   
   return (
-    <div className={cn("flex items-center gap-1.5", className)}>
+    <div className={cn('flex items-center gap-1.5', className)}>
       <span className="h-2 w-2 rounded-full bg-green-500" />
       <span className="text-xs text-muted-foreground">
-        {users.length > 0 ? `${users.length + 1} online` : "Online"}
+        {users.length > 0 ? `${users.length + 1} online` : 'Online'}
       </span>
     </div>
   );

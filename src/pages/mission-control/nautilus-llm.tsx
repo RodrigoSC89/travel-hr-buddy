@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ const NautilusLLM: React.FC = () => {
         confidenceScore: response.confidenceScore,
         executionTime: response.executionTime,
         model: response.model
-      });
+      };
 
       setMessages(prev => [...prev, assistantMessage]);
       loadStats();
@@ -219,7 +218,7 @@ const NautilusLLM: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Tabs value={mode} onValueChange={(v) => setMode(v as NautilusMode}>
+            <Tabs value={mode} onValueChange={(v) => setMode(v as NautilusMode)}>
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="deterministic">Determinístico</TabsTrigger>
                 <TabsTrigger value="safe">Seguro</TabsTrigger>
@@ -287,7 +286,7 @@ const NautilusLLM: React.FC = () => {
               <Input
                 placeholder="Digite sua pergunta ou comando..."
                 value={prompt}
-                onChange={handleChange}
+                onChange={(e) => setPrompt(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 disabled={isLoading}
               />
@@ -313,7 +312,7 @@ const NautilusLLM: React.FC = () => {
                   key={cmd.id}
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => handlehandleQuickCommand}
+                  onClick={() => handleQuickCommand(cmd.id)}
                   disabled={isLoading}
                 >
                   <cmd.icon className="h-4 w-4 mr-2" />
@@ -326,6 +325,6 @@ const NautilusLLM: React.FC = () => {
       </div>
     </ModulePageWrapper>
   );
-});
+};
 
 export default NautilusLLM;

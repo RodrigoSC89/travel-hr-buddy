@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -134,7 +133,7 @@ const VesselPerformanceMonitor = () => {
     }
     
     return points;
-  });
+  };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
 
@@ -171,7 +170,7 @@ const VesselPerformanceMonitor = () => {
               <Button
                 key={vessel.id}
                 variant={selectedVessel === vessel.id ? "default" : "outline"}
-                onClick={handleSetSelectedVessel}
+                onClick={() => setSelectedVessel(vessel.id)}
                 className="mb-2"
               >
                 {vessel.name}

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -422,7 +421,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                         alert.severity === "medium" ? "border-yellow-200 bg-yellow-50/50" :
                           "border-blue-200 bg-blue-50/50"
                     }`}
-                    onClick={() => !alert.isRead && markAlertAsRead(alert.id}
+                    onClick={() => !alert.isRead && markAlertAsRead(alert.id)}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3 flex-1">

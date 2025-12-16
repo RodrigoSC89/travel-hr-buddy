@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
@@ -210,7 +209,7 @@ export default function WorkflowsPage() {
                       <div className="flex items-center gap-4">
                         <Switch
                           checked={workflowStates[workflow.id]}
-                          onCheckedChange={() => toggleWorkflow(workflow.id}
+                          onCheckedChange={() => toggleWorkflow(workflow.id)}
                         />
                         <div className="flex gap-2">
                           <Button size="sm" variant="outline">

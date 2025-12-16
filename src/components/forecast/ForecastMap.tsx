@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MapPin } from "lucide-react";
@@ -27,7 +26,7 @@ export default function ForecastMap() {
             className="w-full h-96 rounded-lg border border-border"
             src="https://earth.nullschool.net/#current/wind/surface/level/orthographic=0,0,0"
             loading="lazy"
-            onLoad={() => setReady(true}
+            onLoad={() => setReady(true)}
             aria-label="Visualização interativa de condições oceânicas em tempo real"
           />
         </motion.div>

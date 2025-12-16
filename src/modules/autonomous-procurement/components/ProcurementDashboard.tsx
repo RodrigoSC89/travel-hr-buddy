@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -87,14 +86,14 @@ export default function ProcurementDashboard() {
       
       const key = chatMessage.toLowerCase().includes("atrasa") ? "atrasados" 
         : chatMessage.toLowerCase().includes("critic") ? "criticos"
-          : chatMessage.toLowerCase().includes("fornecedor") ? "fornecedor"
-            : "default";
+        : chatMessage.toLowerCase().includes("fornecedor") ? "fornecedor"
+        : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
     
     setChatMessage("");
-  });
+  };
 
   const totalCost = mockOrders.reduce((sum, o) => sum + o.cost, 0);
   const delayedOrders = mockOrders.filter(o => o.status === "delayed").length;
@@ -207,7 +206,7 @@ export default function ProcurementDashboard() {
               <Input
                 placeholder="Pergunte sobre pedidos, fornecedores..."
                 value={chatMessage}
-                onChange={handleChange}
+                onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -215,13 +214,13 @@ export default function ProcurementDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Listar pedidos atrasados")}>
                 Atrasados
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Pedidos críticos?")}>
                 Críticos
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Melhor fornecedor?")}>
                 Fornecedor
               </Button>
             </div>
@@ -259,9 +258,9 @@ export default function ProcurementDashboard() {
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
                         order.criticality === "critical" ? "bg-red-500/10 text-red-600" :
-                          order.criticality === "high" ? "bg-amber-500/10 text-amber-600" :
-                            order.criticality === "medium" ? "bg-blue-500/10 text-blue-600" :
-                              "bg-muted text-muted-foreground"
+                        order.criticality === "high" ? "bg-amber-500/10 text-amber-600" :
+                        order.criticality === "medium" ? "bg-blue-500/10 text-blue-600" :
+                        "bg-muted text-muted-foreground"
                       }`}>
                         <Package className="h-5 w-5" />
                       </div>
@@ -282,18 +281,18 @@ export default function ProcurementDashboard() {
                     </div>
                     <Badge variant={
                       order.status === "delivered" ? "default" :
-                        order.status === "delayed" ? "destructive" :
-                          order.status === "shipped" ? "secondary" : "outline"
+                      order.status === "delayed" ? "destructive" :
+                      order.status === "shipped" ? "secondary" : "outline"
                     }>
                       {order.status === "pending" && <Clock className="h-3 w-3 mr-1" />}
                       {order.status === "delivered" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                       {order.status === "delayed" && <AlertTriangle className="h-3 w-3 mr-1" />}
                       {order.status === "shipped" && <Truck className="h-3 w-3 mr-1" />}
                       {order.status === "pending" ? "Pendente" :
-                        order.status === "approved" ? "Aprovado" :
-                          order.status === "ordered" ? "Pedido" :
-                            order.status === "shipped" ? "Enviado" :
-                              order.status === "delivered" ? "Entregue" : "Atrasado"}
+                       order.status === "approved" ? "Aprovado" :
+                       order.status === "ordered" ? "Pedido" :
+                       order.status === "shipped" ? "Enviado" :
+                       order.status === "delivered" ? "Entregue" : "Atrasado"}
                     </Badge>
                   </div>
 
@@ -309,11 +308,11 @@ export default function ProcurementDashboard() {
                       </span>
                       <Badge variant={
                         order.criticality === "critical" ? "destructive" :
-                          order.criticality === "high" ? "default" : "secondary"
+                        order.criticality === "high" ? "default" : "secondary"
                       } className="text-xs">
                         {order.criticality === "critical" ? "Crítico" :
-                          order.criticality === "high" ? "Alta" :
-                            order.criticality === "medium" ? "Média" : "Baixa"}
+                         order.criticality === "high" ? "Alta" :
+                         order.criticality === "medium" ? "Média" : "Baixa"}
                       </Badge>
                     </div>
                     <Button variant="ghost" size="sm">

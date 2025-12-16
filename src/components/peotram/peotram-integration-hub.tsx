@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,7 +38,7 @@ interface Integration {
   category: "database" | "communication" | "reporting" | "storage" | "mobile" | "external-api";
   status: "connected" | "disconnected" | "error" | "configuring";
   lastSync?: string;
-  config: Record<string, unknown>;
+  config: Record<string, any>;
   isActive: boolean;
 }
 
@@ -212,10 +211,10 @@ export const PeotramIntegrationHub: React.FC = () => {
                   <Textarea id="integration-description" placeholder="Descrição da integração" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsConfigOpen}>
+                  <Button variant="outline" onClick={() => setIsConfigOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSetIsConfigOpen}>
+                  <Button onClick={() => setIsConfigOpen(false)}>
                     Configurar
                   </Button>
                 </div>
@@ -303,7 +302,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       </Badge>
                       <Switch 
                         checked={integration.isActive}
-                        onCheckedChange={() => toggleIntegration(integration.id}
+                        onCheckedChange={() => toggleIntegration(integration.id)}
                       />
                     </div>
                   </div>
@@ -323,7 +322,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={handleSetSelectedIntegration}
+                      onClick={() => setSelectedIntegration(integration)}
                     >
                       <Settings className="w-3 h-3 mr-1" />
                       Configurar
@@ -332,7 +331,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handlesyncIntegration}
+                      onClick={() => syncIntegration(integration.id)}
                       disabled={integration.status !== "connected"}
                     >
                       <RefreshCw className="w-3 h-3 mr-1" />

@@ -1,4 +1,3 @@
-
 /**
  * PATCH 582 - Decision Simulator Visualization UI
  * Visual representation of simulation results
@@ -367,7 +366,7 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
               <div
                 key={scenario.id}
                 className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
-                onClick={() => onScenarioSelect?.(scenario}
+                onClick={() => onScenarioSelect?.(scenario)}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div>
@@ -415,4 +414,4 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
       </Card>
     </div>
   );
-});
+};

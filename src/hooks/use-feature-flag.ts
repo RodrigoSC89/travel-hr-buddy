@@ -34,6 +34,7 @@ export function useFeatureFlag(key: string): boolean {
           .limit(5);
 
         if (error) {
+          console.warn(`Feature flag lookup error for "${key}":`, error);
           return false;
         }
 
@@ -44,7 +45,6 @@ export function useFeatureFlag(key: string): boolean {
 
         return prioritized?.enabled ?? false;
       } catch (error) {
-        console.error(`Feature flag error for "${key}":`, error);
         console.error(`Feature flag error for "${key}":`, error);
         return false;
       }
@@ -88,6 +88,7 @@ export function useToggleFeatureFlag() {
       .eq("key", key);
 
     if (error) {
+      console.error("Failed to toggle feature flag:", error);
       throw error;
     }
   };

@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Notifications Panel - Painel de notificações com ações
  */
 
@@ -40,7 +39,7 @@ interface NotificationsPanelProps {
   onFilterClick: () => void;
 }
 
-export const NotificationsPanel = memo(function({
+export function NotificationsPanel({
   notifications,
   onMarkAllRead,
   onDismiss,
@@ -60,19 +59,19 @@ export const NotificationsPanel = memo(function({
 
   const getIcon = (type: string) => {
     switch (type) {
-    case "critical": return <AlertOctagon className="h-4 w-4 text-red-500" />;
-    case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    default: return <Info className="h-4 w-4 text-blue-500" />;
+      case "critical": return <AlertOctagon className="h-4 w-4 text-red-500" />;
+      case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      default: return <Info className="h-4 w-4 text-blue-500" />;
     }
-  });
+  };
 
   const getStyle = (type: string) => {
     switch (type) {
-    case "critical": return "border-l-red-500 bg-red-50/50 dark:bg-red-950/20";
-    case "warning": return "border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/20";
-    default: return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20";
+      case "critical": return "border-l-red-500 bg-red-50/50 dark:bg-red-950/20";
+      case "warning": return "border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/20";
+      default: return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20";
     }
-  });
+  };
 
   const handleMarkAllRead = () => {
     onMarkAllRead();
@@ -112,15 +111,15 @@ export const NotificationsPanel = memo(function({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleSetFilter}>
+                <DropdownMenuItem onClick={() => setFilter("all")}>
                   Todas
                   {filter === "all" && <Badge className="ml-2 h-4 px-1">✓</Badge>}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSetFilter}>
+                <DropdownMenuItem onClick={() => setFilter("unread")}>
                   Não lidas ({unreadCount})
                   {filter === "unread" && <Badge className="ml-2 h-4 px-1">✓</Badge>}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSetFilter}>
+                <DropdownMenuItem onClick={() => setFilter("critical")}>
                   Críticas ({criticalCount})
                   {filter === "critical" && <Badge className="ml-2 h-4 px-1">✓</Badge>}
                 </DropdownMenuItem>
@@ -196,7 +195,7 @@ export const NotificationsPanel = memo(function({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs"
-                              onClick={() => toast.info("Ver detalhes"}
+                              onClick={() => toast.info("Ver detalhes")}
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               Ver
@@ -205,7 +204,7 @@ export const NotificationsPanel = memo(function({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs text-destructive"
-                              onClick={() => handleonDismiss}
+                              onClick={() => onDismiss(notification.id)}
                             >
                               <X className="h-3 w-3" />
                             </Button>
@@ -222,4 +221,4 @@ export const NotificationsPanel = memo(function({
       </CardContent>
     </Card>
   );
-});
+}

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -136,7 +135,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       
       // Enhance with AI predictions
       const enhancedAlerts = await Promise.all(
-        (data || []).map(async (alert: unknown) => ({
+        (data || []).map(async (alert: any) => ({
           ...alert,
           threshold_type: alert.threshold_type || "below",
           notification_settings: {
@@ -201,7 +200,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     setInsights(mockInsights);
   };
 
-  const generateAIPredictions = async (alert: unknown: unknown: unknown) => {
+  const generateAIPredictions = async (alert: any) => {
     // Simulated AI predictions - in production, this would use real ML models
     const trends = ["rising", "falling", "stable"] as const;
     const trend = trends[Math.floor(Math.random() * trends.length)];
@@ -397,7 +396,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     default:
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
-  };
+  });
 
   if (isLoading) {
     return (
@@ -465,7 +464,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                         <Input
                           id="product_name"
                           value={newAlert.product_name}
-                          onChange={handleChange}))}
+                          onChange={(e) => setNewAlert(prev => ({ ...prev, product_name: e.target.value }))}
                           placeholder="Ex: Passagem São Paulo - Rio de Janeiro"
                           className="border-primary/20 focus:border-primary"
                         />
@@ -498,7 +497,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                       <Input
                         id="product_url"
                         value={newAlert.product_url}
-                        onChange={handleChange}))}
+                        onChange={(e) => setNewAlert(prev => ({ ...prev, product_url: e.target.value }))}
                         placeholder="https://exemplo.com/produto"
                         className="border-primary/20 focus:border-primary"
                       />
@@ -530,7 +529,9 @@ export const AdvancedPriceAlerts: React.FC = () => {
                           id="target_price"
                           type="number"
                           value={newAlert.threshold_type === "percentage" ? newAlert.percentage_change.toString() : newAlert.target_price}
-                          onChange={handleChange}));
+                          onChange={(e) => {
+                            if (newAlert.threshold_type === "percentage") {
+                              setNewAlert(prev => ({ ...prev, percentage_change: parseInt(e.target.value) || 0 }));
                             } else {
                               setNewAlert(prev => ({ ...prev, target_price: e.target.value }));
                             }
@@ -592,7 +593,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                     <div className="flex justify-end gap-3 pt-4 border-t">
                       <Button 
                         variant="outline" 
-                        onClick={handleSetShowCreateDialog}
+                        onClick={() => setShowCreateDialog(false)}
                         className="border-primary/20 hover:bg-primary/5"
                       >
                         Cancelar
@@ -836,7 +837,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                     : "Comece criando seu primeiro alerta de preço"
                   }
                 </p>
-                <Button onClick={handleSetShowCreateDialog} className="bg-primary hover:bg-primary/90">
+                <Button onClick={() => setShowCreateDialog(true)} className="bg-primary hover:bg-primary/90">
                   <Plus className="w-4 h-4 mr-2" />
                   Criar Primeiro Alerta
                 </Button>
@@ -858,7 +859,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                       </div>
                       <Switch
                         checked={alert.is_active}
-                        onCheckedChange={() => toggleAlert(alert.id}
+                        onCheckedChange={() => toggleAlert(alert.id)}
                         className="data-[state=checked]:bg-primary"
                       />
                     </div>
@@ -907,7 +908,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handlenavigateToTravel}
+                          onClick={() => navigateToTravel(alert)}
                           className="h-8 w-8 p-0 hover:bg-primary/10"
                           title="Ver no módulo de compras"
                         >

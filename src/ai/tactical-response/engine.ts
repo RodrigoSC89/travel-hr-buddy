@@ -1,4 +1,3 @@
-
 /**
  * PATCH 577 - Tactical Response Engine
  * Automated tactical response system based on situational intelligence
@@ -178,7 +177,7 @@ export class TacticalResponseEngine {
       })),
       justification: this.generateJustification(rule, event),
       confidence: event.metadata?.confidence || 0.8,
-    });
+    };
 
     this.activeExecutions.set(execution.id, execution);
     execution.status = "running";
@@ -623,7 +622,7 @@ export class TacticalResponseEngine {
             severity: alert.severity,
             type: alert.type,
           },
-        });
+        };
         await this.processEvent(event);
       });
     });
@@ -669,7 +668,7 @@ export class TacticalResponseEngine {
         p95ResponseTime: 0,
         p99ResponseTime: 0,
       },
-    });
+    };
   }
 
   /**

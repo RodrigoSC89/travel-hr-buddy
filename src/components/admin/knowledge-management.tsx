@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -170,7 +169,7 @@ export const KnowledgeManagement: React.FC = () => {
     const matchesType = selectedType === "all" || item.type === selectedType;
     
     return matchesSearch && matchesModule && matchesType;
-  };
+  });
 
   const handleCreateNew = () => {
     setEditingItem({
@@ -192,7 +191,7 @@ export const KnowledgeManagement: React.FC = () => {
       metadata: {}
     });
     setIsEditDialogOpen(true);
-  });
+  };
 
   const handleEdit = (item: KnowledgeItem) => {
     setEditingItem({ ...item });
@@ -304,7 +303,7 @@ export const KnowledgeManagement: React.FC = () => {
       title: "Exportação iniciada",
       description: "Base de conhecimento exportada com sucesso",
     });
-  });
+  };
 
   const getModuleName = (moduleId: string) => {
     return modules.find(m => m.id === moduleId)?.name || moduleId;
@@ -379,7 +378,7 @@ export const KnowledgeManagement: React.FC = () => {
                       <Input
                         placeholder="Buscar por título, conteúdo ou tags..."
                         value={searchQuery}
-                        onChange={handleChange}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-10"
                       />
                     </div>
@@ -454,13 +453,13 @@ export const KnowledgeManagement: React.FC = () => {
                         <Button variant="ghost" size="sm">
                           <Eye className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handlehandleEdit}>
+                        <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
                           <Edit className="w-4 h-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => handlehandleDelete}
+                          onClick={() => handleDelete(item.id)}
                           className="text-red-500 hover:text-red-700"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -635,7 +634,7 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Título</label>
                     <Input
                       value={editingItem.title}
-                      onChange={handleChange}
+                      onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
                       placeholder="Título do conteúdo"
                     />
                   </div>
@@ -718,7 +717,10 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Tags (separadas por vírgula)</label>
                   <Input
                     value={editingItem.tags.join(", ")}
-                    onChange={handleChange}
+                    onChange={(e) => setEditingItem({ 
+                      ...editingItem, 
+                      tags: e.target.value.split(",").map(tag => tag.trim()).filter(Boolean)
+                    })}
                     placeholder="tag1, tag2, tag3"
                   />
                 </div>
@@ -727,7 +729,7 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Conteúdo</label>
                   <Textarea
                     value={editingItem.content}
-                    onChange={handleChange}
+                    onChange={(e) => setEditingItem({ ...editingItem, content: e.target.value })}
                     placeholder="Conteúdo do item"
                     rows={8}
                   />
@@ -736,7 +738,7 @@ export const KnowledgeManagement: React.FC = () => {
             )}
 
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsEditDialogOpen}>
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleSave}>

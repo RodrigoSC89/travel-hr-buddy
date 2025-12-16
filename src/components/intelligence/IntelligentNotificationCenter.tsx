@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,7 +28,7 @@ interface IntelligentNotification {
   message: string;
   actionText?: string;
   actionType?: "navigate" | "configure" | "dismiss" | "learn";
-  actionData?: unknown;
+  actionData?: any;
   isRead: boolean;
   createdAt: Date;
   category?: string;
@@ -147,14 +146,14 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     }
   };
 
-  const handleNewNotification = (payload: unknown) => {
+  const handleNewNotification = (payload: any) => {
     loadNotifications(); // Reload notifications
     
     toast({
       title: "Nova Notificação",
       description: payload.new.title,
     });
-  });
+  };
 
   const generateIntelligentNotification = async (type: string) => {
     if (!user) return;
@@ -170,7 +169,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
             timestamp: new Date().toISOString()
           }
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -206,7 +205,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       title: "Todas Marcadas como Lidas",
       description: "Todas as notificações foram marcadas como lidas",
     });
-  });
+  };
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
@@ -214,7 +213,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       title: "Notificação Dispensada",
       description: "A notificação foi removida",
     });
-  });
+  };
 
   const handleNotificationAction = (notification: IntelligentNotification) => {
     if (notification.actionType === "navigate" && notification.actionData?.module) {
@@ -225,7 +224,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         description: `Abrindo módulo: ${notification.actionData.module}`,
       });
     }
-  });
+  };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
@@ -286,7 +285,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as unknown} className="w-full">
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as any)} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">
               Todas ({notifications.length})
@@ -359,7 +358,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                               <div className="flex items-center gap-2">
                                 {notification.actionText && (
                                   <Button
-                                    onClick={() => handlehandleNotificationAction}
+                                    onClick={() => handleNotificationAction(notification)}
                                     size="sm"
                                     variant="outline"
                                   >
@@ -369,7 +368,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                 
                                 {!notification.isRead && (
                                   <Button
-                                    onClick={() => handlemarkAsRead}
+                                    onClick={() => markAsRead(notification.id)}
                                     size="sm"
                                     variant="ghost"
                                   >
@@ -378,7 +377,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                 )}
                                 
                                 <Button
-                                  onClick={() => handledismissNotification}
+                                  onClick={() => dismissNotification(notification.id)}
                                   size="sm"
                                   variant="ghost"
                                 >
@@ -402,28 +401,28 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
           <h4 className="font-medium mb-3">Gerar Notificações de Teste</h4>
           <div className="flex flex-wrap gap-2">
             <Button
-              onClick={() => handlegenerateIntelligentNotification}
+              onClick={() => generateIntelligentNotification("smart_alert")}
               size="sm"
               variant="outline"
             >
               Alerta Inteligente
             </Button>
             <Button
-              onClick={() => handlegenerateIntelligentNotification}
+              onClick={() => generateIntelligentNotification("system_insight")}
               size="sm"
               variant="outline"
             >
               Insight do Sistema
             </Button>
             <Button
-              onClick={() => handlegenerateIntelligentNotification}
+              onClick={() => generateIntelligentNotification("recommendation_update")}
               size="sm"
               variant="outline"
             >
               Atualização de Recomendação
             </Button>
             <Button
-              onClick={() => handlegenerateIntelligentNotification}
+              onClick={() => generateIntelligentNotification("performance_summary")}
               size="sm"
               variant="outline"
             >

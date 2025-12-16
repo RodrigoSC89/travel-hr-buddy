@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ Todas as minhas respostas incluem **citações das normas** aplicáveis. Como po
     try {
       const { data, error } = await supabase.functions.invoke("sgso-assistant", {
         body: { question: messageText }
-      };
+      });
 
       if (error) throw error;
 
@@ -368,7 +367,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                                 key={idx}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10"
-                                onClick={() => citation.link && window.open(citation.link, "_blank"}
+                                onClick={() => citation.link && window.open(citation.link, "_blank")}
                               >
                                 <BookOpen className="h-2 w-2 mr-1" />
                                 {citation.norma} - {citation.artigo}
@@ -396,7 +395,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
             <div className="flex gap-2">
               <Textarea
                 value={input}
-                onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Digite sua dúvida sobre SGSO, práticas ANP, auditorias..."
                 className="min-h-[60px] resize-none"
                 onKeyDown={(e) => {
@@ -435,7 +434,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                 key={idx}
                 variant="outline"
                 className="w-full justify-start text-left h-auto py-3 px-4"
-                onClick={() => handlehandleSendMessage}
+                onClick={() => handleSendMessage(question)}
                 disabled={isLoading}
               >
                 <FileText className="h-4 w-4 mr-2 shrink-0" />

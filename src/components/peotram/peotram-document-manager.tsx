@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -223,7 +222,7 @@ export const PeotramDocumentManager: React.FC = () => {
         if (category.id === "certificates") return doc.type === "certificate";
         if (category.id === "reports") return doc.type === "report";
         return false;
-  };
+      });
 
       return {
         ...category,
@@ -350,7 +349,7 @@ export const PeotramDocumentManager: React.FC = () => {
       doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return matchesCategory && matchesSearch;
-  };
+  });
 
   return (
     <TooltipProvider>
@@ -409,7 +408,7 @@ export const PeotramDocumentManager: React.FC = () => {
                       <Label>Auditoria</Label>
                       <Input
                         value={newDocument.auditId}
-                        onChange={handleChange}))}
+                        onChange={(e) => setNewDocument(prev => ({ ...prev, auditId: e.target.value }))}
                         placeholder="ID da Auditoria"
                       />
                     </div>
@@ -419,7 +418,7 @@ export const PeotramDocumentManager: React.FC = () => {
                     <Label>Descrição</Label>
                     <Textarea
                       value={newDocument.description}
-                      onChange={handleChange}))}
+                      onChange={(e) => setNewDocument(prev => ({ ...prev, description: e.target.value }))}
                       placeholder="Descreva o documento e sua relevância para a auditoria..."
                       rows={3}
                     />
@@ -429,7 +428,7 @@ export const PeotramDocumentManager: React.FC = () => {
                     <Label>Tags (separadas por vírgula)</Label>
                     <Input
                       value={newDocument.tags}
-                      onChange={handleChange}))}
+                      onChange={(e) => setNewDocument(prev => ({ ...prev, tags: e.target.value }))}
                       placeholder="evidência, conformidade, segurança"
                     />
                   </div>
@@ -440,7 +439,7 @@ export const PeotramDocumentManager: React.FC = () => {
                       <input
                         type="file"
                         multiple
-                        onChange={handleChange}
+                        onChange={(e) => handleFileUpload(e.target.files)}
                         className="hidden"
                         id="file-upload"
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.mp4,.mov,.mp3,.wav"
@@ -503,7 +502,7 @@ export const PeotramDocumentManager: React.FC = () => {
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -646,7 +645,7 @@ export const PeotramDocumentManager: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 {searchTerm ? "Nenhum documento corresponde aos filtros aplicados." : "Não há documentos nesta categoria."}
               </p>
-              <Button onClick={handleSetIsUploadOpen}>
+              <Button onClick={() => setIsUploadOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Documento
               </Button>

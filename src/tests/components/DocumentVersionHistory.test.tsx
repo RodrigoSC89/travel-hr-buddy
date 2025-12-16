@@ -69,11 +69,11 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as unknown) = mockFrom;
+    (supabase.from as any) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
     expect(screen.getByText(/Carregando histórico/i)).toBeInTheDocument();
-  };
+  });
 
   it("should render versions list when data is loaded", async () => {
     const mockFrom = vi.fn(() => ({
@@ -83,18 +83,18 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as unknown) = mockFrom;
+    (supabase.from as any) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
     await waitFor(() => {
       expect(screen.getByText(/Histórico de Versões/i)).toBeInTheDocument();
-  };
+    });
 
     await waitFor(() => {
       expect(screen.getByText(/Mais recente/i)).toBeInTheDocument();
-  };
-  };
+    });
+  });
 
   it("should display empty state when no versions exist", async () => {
     const mockFrom = vi.fn(() => ({
@@ -104,14 +104,14 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as unknown) = mockFrom;
+    (supabase.from as any) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhuma versão anterior encontrada/i)).toBeInTheDocument();
-  };
-  };
+    });
+  });
 
   it("should show restore button for non-latest versions", async () => {
     const mockFrom = vi.fn(() => ({
@@ -121,7 +121,7 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as unknown) = mockFrom;
+    (supabase.from as any) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
@@ -129,8 +129,8 @@ describe("DocumentVersionHistory Component", () => {
       const restoreButtons = screen.getAllByRole("button", { name: /Restaurar/i });
       // Should have 1 restore button (not for the latest version)
       expect(restoreButtons.length).toBe(1);
-  };
-  };
+    });
+  });
 
   it("should display version count correctly", async () => {
     const mockFrom = vi.fn(() => ({
@@ -140,12 +140,12 @@ describe("DocumentVersionHistory Component", () => {
         })),
       })),
     }));
-    (supabase.from as unknown) = mockFrom;
+    (supabase.from as any) = mockFrom;
 
     render(<DocumentVersionHistory documentId={mockDocumentId} />);
 
     await waitFor(() => {
       expect(screen.getByText(/2 versão\(ões\) anterior\(es\) disponível\(is\)/i)).toBeInTheDocument();
-  };
-  };
-};
+    });
+  });
+});

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -43,7 +43,7 @@ export default function DPIntelligenceDashboard() {
         console.error("Error fetching stats:", err);
         setError(err.message);
         setLoading(false);
-  };
+      });
   }, []);
 
   if (loading) {

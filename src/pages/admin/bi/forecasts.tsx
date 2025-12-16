@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
@@ -18,7 +18,7 @@ export default function BIForecastsPage() {
     fetch("/api/mmi/forecast/all")
       .then(res => res.json())
       .then((forecasts) => {
-        const grouped = forecasts.reduce((acc: unknown: unknown: unknown, item: unknown: unknown: unknown) => {
+        const grouped = forecasts.reduce((acc: any, item: any) => {
           const key = item.system_name;
           acc[key] = (acc[key] || 0) + 1;
           return acc;
@@ -36,7 +36,7 @@ export default function BIForecastsPage() {
       })
       .finally(() => {
         setLoading(false);
-  };
+      });
   }, []);
 
   return (

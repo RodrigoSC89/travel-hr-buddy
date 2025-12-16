@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -183,7 +183,7 @@ export default function DPIntelligenceCenter() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ incident_id: incident.id })
-      };
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -241,7 +241,7 @@ export default function DPIntelligenceCenter() {
         </Card>
         <Card
           className="cursor-pointer hover:bg-accent"
-          onClick={handleSetSelectedStatus}
+          onClick={() => setSelectedStatus(selectedStatus === "analyzed" ? null : "analyzed")}
         >
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.analyzed}</div>
@@ -250,7 +250,7 @@ export default function DPIntelligenceCenter() {
         </Card>
         <Card
           className="cursor-pointer hover:bg-accent"
-          onClick={handleSetSelectedStatus}
+          onClick={() => setSelectedStatus(selectedStatus === "pending" ? null : "pending")}
         >
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.pending}</div>
@@ -271,28 +271,28 @@ export default function DPIntelligenceCenter() {
           <Input
             placeholder="Buscar por título, embarcação, local ou tags..."
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           
           <div className="flex flex-wrap gap-2">
             <Button
               variant={selectedDPClass === "DP-1" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetSelectedDPClass}
+              onClick={() => setSelectedDPClass(selectedDPClass === "DP-1" ? null : "DP-1")}
             >
               DP-1
             </Button>
             <Button
               variant={selectedDPClass === "DP-2" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetSelectedDPClass}
+              onClick={() => setSelectedDPClass(selectedDPClass === "DP-2" ? null : "DP-2")}
             >
               DP-2
             </Button>
             <Button
               variant={selectedDPClass === "DP-3" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetSelectedDPClass}
+              onClick={() => setSelectedDPClass(selectedDPClass === "DP-3" ? null : "DP-3")}
             >
               DP-3
             </Button>
@@ -367,7 +367,7 @@ export default function DPIntelligenceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => window.open(incident.imca_report_url, "_blank"}
+                    onClick={() => window.open(incident.imca_report_url, "_blank")}
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Relatório
@@ -375,7 +375,7 @@ export default function DPIntelligenceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetSelectedIncident}
+                    onClick={() => setSelectedIncident(incident)}
                   >
                     <Brain className="w-4 h-4 mr-2" />
                     Analisar IA
@@ -383,7 +383,7 @@ export default function DPIntelligenceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handlegenerateActionPlan}
+                    onClick={() => generateActionPlan(incident)}
                     disabled={generatingPlan === incident.id}
                   >
                     <Zap className="w-4 h-4 mr-2" />
@@ -426,7 +426,7 @@ export default function DPIntelligenceCenter() {
       )}
 
       {/* AI Analysis Modal */}
-      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null}>
+      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null)}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>

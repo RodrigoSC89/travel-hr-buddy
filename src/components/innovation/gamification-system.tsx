@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -193,7 +192,7 @@ export const GamificationSystem: React.FC = () => {
         description: `Você ganhou ${challenge.reward} pontos!`,
       });
     }
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -352,7 +351,7 @@ export const GamificationSystem: React.FC = () => {
 
                   {challenge.completed ? (
                     <Button 
-                      onClick={() => handleclaimReward}
+                      onClick={() => claimReward(challenge.id)}
                       className="w-full"
                     >
                       Coletar Recompensa

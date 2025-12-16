@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
           return {
             status: "ok",
             message: "Cron diário executado com sucesso nas últimas 24h (Dev Mode)"
-          });
+          };
         }
         return res.json();
       })
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         logger.error("Error fetching cron status:", error);
         setCronStatus("warning");
         setCronMessage("Erro ao carregar status do cron");
-  };
+      });
   }, []);
 
   // Fetch restore activity trend data
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     const fetchTrendData = async () => {
       setLoadingTrend(true);
       try {
-        const { data, error } = await (supabase as unknown)
+        const { data, error } = await (supabase as any)
           .rpc("get_restore_count_by_day_with_email", { 
             email_input: user?.email || "" 
           });
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
       } finally {
         setLoadingTrend(false);
       }
-    });
+    };
 
     if (user) {
       fetchTrendData();
@@ -121,20 +121,20 @@ export default function AdminDashboard() {
     const fetchMonthlySummary = async () => {
       setLoadingMonthlySummary(true);
       try {
-        const { data, error } = await (supabase as unknown)
+        const { data, error } = await (supabase as any)
           .rpc("get_monthly_restore_summary_by_department");
 
         if (error) {
           logger.error("Error fetching monthly summary", { error });
         } else if (data) {
-          setMonthlySummary((data as unknown) || []);
+          setMonthlySummary((data as any) || []);
         }
       } catch (error) {
         logger.error("Error fetching monthly summary:", error);
       } finally {
         setLoadingMonthlySummary(false);
       }
-    });
+    };
 
     fetchMonthlySummary();
   }, []);
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
           }
           pdf.text(`${item.day}: ${item.count} restaurações`, margin, yPosition);
           yPosition += 6;
-  });
+        });
       }
 
       // Save PDF
@@ -404,7 +404,7 @@ export default function AdminDashboard() {
                     ? "border-l-purple-500"
                     : "border-l-indigo-500"
               }`}
-              onClick={() => handlenavigate}
+              onClick={() => navigate(cardPath)}
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -499,7 +499,7 @@ export default function AdminDashboard() {
                   key={link.path}
                   variant="outline"
                   className="justify-start h-auto py-4"
-                  onClick={() => handlenavigate}
+                  onClick={() => navigate(linkPath)}
                 >
                   <Icon className="w-5 h-5 mr-3 text-muted-foreground" />
                   <span className="text-left">{link.title}</span>

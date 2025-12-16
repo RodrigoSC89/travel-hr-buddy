@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -64,7 +63,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "EMG": <AlertTriangle className="h-5 w-5" />
 };
 
-export const IMCADPAuditDashboard = memo(function() {
+export function IMCADPAuditDashboard() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedDPClass, setSelectedDPClass] = useState<"DP1" | "DP2" | "DP3">("DP2");
@@ -84,22 +83,22 @@ export const IMCADPAuditDashboard = memo(function() {
 
     // Map category codes to section codes
     const categoryToSection: Record<string, string> = {
-      "ASOG": "OPR", "CAMO": "OPR", "DOC": "DOC", "MNT": "TEC",
-      "INF": "TEC", "COMP": "COMP", "MON": "OPR", "EMG": "OPR"
+      'ASOG': 'OPR', 'CAMO': 'OPR', 'DOC': 'DOC', 'MNT': 'TEC',
+      'INF': 'TEC', 'COMP': 'COMP', 'MON': 'OPR', 'EMG': 'OPR'
     };
 
     DP_CHECKLIST_ITEMS.forEach(item => {
       if (!item.applicableDPClass.includes(selectedDPClass)) return;
-      const section = categoryToSection[item.categoryCode] || "TEC";
+      const section = categoryToSection[item.categoryCode] || 'TEC';
       if (sections[section]) {
         sections[section].total++;
-        if (auditData[item.id]?.status === "C") sections[section].compliant++;
-        if (auditData[item.id]?.status === "NC") sections[section].nonCompliant++;
+        if (auditData[item.id]?.status === 'C') sections[section].compliant++;
+        if (auditData[item.id]?.status === 'NC') sections[section].nonCompliant++;
       }
     });
 
     return sections;
-  });
+  };
 
   // Calculate audit statistics
   const getAuditStatus = (): AuditStatus => {
@@ -152,14 +151,14 @@ export const IMCADPAuditDashboard = memo(function() {
       description: "Relatório sendo gerado em PDF..."
     });
     // Implementation for PDF export would go here
-  });
+  };
 
   const handleFilterSettings = () => {
     toast({
       title: "Filtros",
       description: "Configurações de filtro abertas"
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-4 space-y-6">
@@ -181,7 +180,7 @@ export const IMCADPAuditDashboard = memo(function() {
                 key={dpClass}
                 variant={selectedDPClass === dpClass ? "default" : "ghost"}
                 size="sm"
-                onClick={handleSetSelectedDPClass}
+                onClick={() => setSelectedDPClass(dpClass)}
               >
                 {dpClass}
               </Button>
@@ -190,7 +189,7 @@ export const IMCADPAuditDashboard = memo(function() {
           <Button variant="outline" size="icon" onClick={handleFilterSettings}>
             <Filter className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={handleSetAuditData}>
+          <Button variant="outline" size="icon" onClick={() => setAuditData({})}>
             <RefreshCw className="h-4 w-4" />
           </Button>
           <Button onClick={handleExportAudit}>
@@ -215,7 +214,7 @@ export const IMCADPAuditDashboard = memo(function() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-green-500/50 transition-colors" onClick={handleSetActiveTab}>
+        <Card className="cursor-pointer hover:border-green-500/50 transition-colors" onClick={() => setActiveTab("checklist")}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -227,7 +226,7 @@ export const IMCADPAuditDashboard = memo(function() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-red-500/50 transition-colors" onClick={handleSetActiveTab}>
+        <Card className="cursor-pointer hover:border-red-500/50 transition-colors" onClick={() => setActiveTab("nc")}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -239,7 +238,7 @@ export const IMCADPAuditDashboard = memo(function() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-amber-500/50 transition-colors" onClick={handleSetActiveTab}>
+        <Card className="cursor-pointer hover:border-amber-500/50 transition-colors" onClick={() => setActiveTab("checklist")}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -251,7 +250,7 @@ export const IMCADPAuditDashboard = memo(function() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-destructive/50 transition-colors" onClick={handleSetActiveTab}>
+        <Card className="cursor-pointer hover:border-destructive/50 transition-colors" onClick={() => setActiveTab("nc")}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -263,7 +262,7 @@ export const IMCADPAuditDashboard = memo(function() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={handleSetActiveTab}>
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => setActiveTab("checklist")}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -331,7 +330,7 @@ export const IMCADPAuditDashboard = memo(function() {
                 <Card 
                   key={category.code}
                   className="cursor-pointer hover:shadow-lg transition-all hover:border-primary/50"
-                  onClick={handleSetActiveTab}
+                  onClick={() => setActiveTab("checklist")}
                 >
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
@@ -472,11 +471,11 @@ export const IMCADPAuditDashboard = memo(function() {
           <IMCAAuditManager
             customItems={customItems}
             customCategories={customCategories}
-            onAddItem={(item) => setCustomItems([...customItems, item]}
-            onEditItem={(item) => setCustomItems(customItems.map(i => i.id === item.id ? item : i}
-            onDeleteItem={(id) => setCustomItems(customItems.filter(i => i.id !== id}
-            onAddCategory={(cat) => setCustomCategories([...customCategories, cat]}
-            onDeleteCategory={(code) => setCustomCategories(customCategories.filter(c => c.code !== code}
+            onAddItem={(item) => setCustomItems([...customItems, item])}
+            onEditItem={(item) => setCustomItems(customItems.map(i => i.id === item.id ? item : i))}
+            onDeleteItem={(id) => setCustomItems(customItems.filter(i => i.id !== id))}
+            onAddCategory={(cat) => setCustomCategories([...customCategories, cat])}
+            onDeleteCategory={(code) => setCustomCategories(customCategories.filter(c => c.code !== code))}
           />
         </TabsContent>
 
@@ -522,11 +521,11 @@ export const IMCADPAuditDashboard = memo(function() {
                       <Download className="h-4 w-4 mr-2" />
                       Exportar PDF
                     </Button>
-                    <Button variant="outline" onClick={() => handletoast}>
+                    <Button variant="outline" onClick={() => toast({ title: "Excel", description: "Exportando para Excel..." })}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar Excel
                     </Button>
-                    <Button variant="outline" onClick={() => handletoast}>
+                    <Button variant="outline" onClick={() => toast({ title: "JSON", description: "Exportando dados..." })}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar JSON
                     </Button>
@@ -539,4 +538,4 @@ export const IMCADPAuditDashboard = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

@@ -1,30 +1,29 @@
 /**
-import { useState, useCallback } from "react";;
  * Voice Command Button - PATCH 837
  * Floating voice command activation button
  */
 
-import React, { useState } from "react";
-import { Mic, MicOff, X, Volume2, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useVoiceCommands } from "@/lib/voice/advanced-voice-commands";
-import { useHapticFeedback } from "@/lib/ux/haptic-feedback";
+import React, { useState } from 'react';
+import { Mic, MicOff, X, Volume2, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useVoiceCommands } from '@/lib/voice/advanced-voice-commands';
+import { useHapticFeedback } from '@/lib/ux/haptic-feedback';
 
 interface VoiceCommandButtonProps {
-  position?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
+  position?: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
   className?: string;
 }
 
 const positionClasses = {
-  "bottom-left": "bottom-4 left-4",
-  "bottom-right": "bottom-4 right-4",
-  "top-left": "top-4 left-4",
-  "top-right": "top-4 right-4",
+  'bottom-left': 'bottom-4 left-4',
+  'bottom-right': 'bottom-4 right-4',
+  'top-left': 'top-4 left-4',
+  'top-right': 'top-4 right-4',
 };
 
-export const VoiceCommandButton = memo(function({
-  position = "bottom-right",
+export function VoiceCommandButton({
+  position = 'bottom-right',
   className,
 }: VoiceCommandButtonProps) {
   const {
@@ -44,22 +43,22 @@ export const VoiceCommandButton = memo(function({
   }
   
   const handleToggle = () => {
-    trigger("medium");
+    trigger('medium');
     if (isListening) {
       stopListening();
     } else {
       startListening();
       setShowPanel(true);
     }
-  });
+  };
   
   const handleClose = () => {
     stopListening();
     setShowPanel(false);
-  });
+  };
   
   return (
-    <div className={cn("fixed z-50", positionClasses[position], className)}>
+    <div className={cn('fixed z-50', positionClasses[position], className)}>
       {/* Voice panel */}
       {showPanel && (
         <div className="absolute bottom-16 right-0 w-80 bg-card border rounded-xl shadow-xl overflow-hidden animate-slide-in-bottom">
@@ -81,8 +80,8 @@ export const VoiceCommandButton = memo(function({
             <div className="flex justify-center mb-4">
               <div
                 className={cn(
-                  "relative w-20 h-20 rounded-full flex items-center justify-center",
-                  isListening ? "bg-primary/10" : "bg-muted"
+                  'relative w-20 h-20 rounded-full flex items-center justify-center',
+                  isListening ? 'bg-primary/10' : 'bg-muted'
                 )}
               >
                 {isListening && (
@@ -96,8 +95,8 @@ export const VoiceCommandButton = memo(function({
                 ) : (
                   <Mic
                     className={cn(
-                      "h-8 w-8",
-                      isListening ? "text-primary" : "text-muted-foreground"
+                      'h-8 w-8',
+                      isListening ? 'text-primary' : 'text-muted-foreground'
                     )}
                   />
                 )}
@@ -108,7 +107,7 @@ export const VoiceCommandButton = memo(function({
             <div className="min-h-[60px] p-3 bg-muted rounded-lg text-center">
               {isListening ? (
                 <p className="text-sm">
-                  {transcript || "Diga um comando..."}
+                  {transcript || 'Diga um comando...'}
                 </p>
               ) : (
                 <p className="text-sm text-muted-foreground">
@@ -121,7 +120,7 @@ export const VoiceCommandButton = memo(function({
             <div className="mt-4">
               <p className="text-xs text-muted-foreground mb-2">Comandos rápidos:</p>
               <div className="flex flex-wrap gap-1.5">
-                {["Dashboard", "Viagens", "RH", "Buscar", "Ajuda"].map((cmd) => (
+                {['Dashboard', 'Viagens', 'RH', 'Buscar', 'Ajuda'].map((cmd) => (
                   <span
                     key={cmd}
                     className="px-2 py-1 bg-muted rounded text-xs"
@@ -139,8 +138,8 @@ export const VoiceCommandButton = memo(function({
       <Button
         size="lg"
         className={cn(
-          "rounded-full h-14 w-14 shadow-lg transition-all",
-          isListening && "bg-destructive hover:bg-destructive/90 animate-glow"
+          'rounded-full h-14 w-14 shadow-lg transition-all',
+          isListening && 'bg-destructive hover:bg-destructive/90 animate-glow'
         )}
         onClick={handleToggle}
       >

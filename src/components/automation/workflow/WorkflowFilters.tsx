@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, X, SlidersHorizontal } from "lucide-react";
+import { Search, Filter, X, SlidersHorizontal } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -50,7 +50,7 @@ export const WorkflowFilters: React.FC<WorkflowFiltersProps> = ({
         <Input
           placeholder="Buscar workflows..."
           value={searchTerm}
-          onChange={handleChange}
+          onChange={(e) => onSearchChange(e.target.value)}
           className="pl-9 pr-9"
         />
         {searchTerm && (
@@ -58,7 +58,7 @@ export const WorkflowFilters: React.FC<WorkflowFiltersProps> = ({
             variant="ghost"
             size="icon"
             className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-            onClick={() => handleonSearchChange}
+            onClick={() => onSearchChange("")}
           >
             <X className="h-4 w-4" />
           </Button>

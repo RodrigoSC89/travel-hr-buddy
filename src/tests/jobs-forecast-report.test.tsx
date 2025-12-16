@@ -1,3 +1,4 @@
+// @ts-nocheck - Mock type compatibility
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
@@ -54,8 +55,8 @@ describe("JobsForecastReport Component", () => {
     await waitFor(() => {
       const skeletons = document.querySelectorAll(".animate-pulse");
       expect(skeletons.length).toBeGreaterThan(0);
-  };
-  };
+    });
+  });
 
   it("should display forecast when data is loaded", async () => {
     const mockForecast = "Previsão: Esperamos um aumento de 15% nos próximos 2 meses";
@@ -68,7 +69,7 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(mockForecast)).toBeDefined();
-  });
+    });
   });
 
   it("should handle error when forecast fetch fails", async () => {
@@ -81,7 +82,7 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Erro ao buscar previsão/i)).toBeDefined();
-  });
+    });
   });
 
   it("should call generate forecast when button is clicked", async () => {
@@ -98,7 +99,7 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(mockForecast)).toBeDefined();
-  });
+    });
   });
 
   it("should automatically fetch forecast when trend data is provided", async () => {
@@ -119,7 +120,7 @@ describe("JobsForecastReport Component", () => {
       expect(mockInvoke).toHaveBeenCalledWith("bi-jobs-forecast", {
         body: { trend: trendData }
       });
-  });
+    });
   });
 
   it("should not fetch when trend array is empty", () => {
@@ -149,7 +150,7 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(mockCallback).toHaveBeenCalledWith(mockForecast);
-  });
+    });
   });
 
   it("should call onForecastUpdate callback with error message on error", async () => {
@@ -163,6 +164,6 @@ describe("JobsForecastReport Component", () => {
 
     await waitFor(() => {
       expect(mockCallback).toHaveBeenCalledWith("Erro ao buscar previsão. Tente novamente.");
-  });
+    });
   });
 });

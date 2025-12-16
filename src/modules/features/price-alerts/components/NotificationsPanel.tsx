@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ export const NotificationsPanel: React.FC = () => {
       const data = await priceAlertsService.getNotifications(showUnreadOnly);
       setNotifications(data);
     } catch (error) {
-      console.error("Error loading notifications:", error);
       console.error("Error loading notifications:", error);
     } finally {
       setLoading(false);
@@ -42,12 +40,13 @@ export const NotificationsPanel: React.FC = () => {
           table: "price_notifications"
         },
         (payload) => {
+          console.log("Notification change:", payload);
           loadNotifications();
           
           // Show toast for new notifications
           if (payload.eventType === "INSERT") {
             toast.info("Nova notificação de alerta de preço!", {
-              description: (payload.new as unknown).message
+              description: (payload.new as any).message
             });
           }
         }
@@ -95,7 +94,7 @@ export const NotificationsPanel: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={handleSetShowUnreadOnly}
+              onClick={() => setShowUnreadOnly(!showUnreadOnly)}
             >
               {showUnreadOnly ? "Todas" : "Não Lidas"}
             </Button>
@@ -134,7 +133,7 @@ export const NotificationsPanel: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handlehandleMarkAsRead}
+                      onClick={() => handleMarkAsRead(notification.id)}
                     >
                       <Check className="w-4 h-4" />
                     </Button>
@@ -150,4 +149,4 @@ export const NotificationsPanel: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

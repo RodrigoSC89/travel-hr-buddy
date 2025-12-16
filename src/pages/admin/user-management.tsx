@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,7 @@ export default function UserManagement() {
       setLoading(true);
       
       // Fetch users from profiles table joined with auth.users
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("profiles")
         .select(`
           id,
@@ -72,7 +71,7 @@ export default function UserManagement() {
 
   const handleRoleUpdate = async (userId: string, newRole: string) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("profiles")
         .update({ role: newRole })
         .eq("id", userId);
@@ -91,7 +90,7 @@ export default function UserManagement() {
     const newStatus = currentStatus === "active" ? "inactive" : "active";
 
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("profiles")
         .update({ status: newStatus })
         .eq("id", userId);
@@ -127,7 +126,7 @@ export default function UserManagement() {
       admin: "bg-red-500",
       manager: "bg-blue-500",
       user: "bg-gray-500",
-    });
+    };
     return (
       <Badge className={`${colors[role as keyof typeof colors]} text-white`}>
         {role.toUpperCase()}
@@ -153,7 +152,7 @@ export default function UserManagement() {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
 
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   if (loading) {
     return (
@@ -191,7 +190,7 @@ export default function UserManagement() {
                   id="search"
                   placeholder="Search by name or email..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -256,7 +255,7 @@ export default function UserManagement() {
                   <TableCell>
                     <Select
                       value={user.role}
-                      onValueChange={(value) => handleRoleUpdate(user.id, value}
+                      onValueChange={(value) => handleRoleUpdate(user.id, value)}
                     >
                       <SelectTrigger className="w-32">
                         <SelectValue />
@@ -284,14 +283,14 @@ export default function UserManagement() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handlehandlePasswordReset}
+                        onClick={() => handlePasswordReset(user.email)}
                       >
                         <Key className="h-4 w-4" />
                       </Button>
                       <Button
                         variant={user.status === "active" ? "outline" : "default"}
                         size="sm"
-                        onClick={() => handlehandleStatusToggle}
+                        onClick={() => handleStatusToggle(user.id, user.status)}
                       >
                         {user.status === "active" ? (
                           <UserX className="h-4 w-4" />

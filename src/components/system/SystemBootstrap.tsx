@@ -1,17 +1,16 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 840: System Bootstrap Component
  * Initializes all system components and shows loading state
  */
 
-import React, { useEffect, useState } from "react";
-import { systemInit } from "@/lib/system/unified-init";
-import { OfflineBanner } from "@/components/OfflineBanner";
-import { OfflineIndicator } from "@/components/pwa/OfflineIndicator";
-import { UpdatePrompt } from "@/components/pwa/UpdatePrompt";
-import { InstallPrompt } from "@/components/pwa/InstallPrompt";
-import { VoiceCommandButton } from "@/components/voice/VoiceCommandButton";
-import { NotificationBell } from "@/components/unified/NotificationCenter.unified";
+import React, { useEffect, useState } from 'react';
+import { systemInit } from '@/lib/system/unified-init';
+import { OfflineBanner } from '@/components/OfflineBanner';
+import { OfflineIndicator } from '@/components/pwa/OfflineIndicator';
+import { UpdatePrompt } from '@/components/pwa/UpdatePrompt';
+import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { VoiceCommandButton } from '@/components/voice/VoiceCommandButton';
+import { NotificationBell } from '@/components/notifications/NotificationCenter';
 
 interface SystemBootstrapProps {
   children: React.ReactNode;
@@ -21,7 +20,7 @@ interface SystemBootstrapProps {
   showPWAPrompts?: boolean;
 }
 
-export const SystemBootstrap = memo(function({
+export function SystemBootstrap({
   children,
   showOfflineIndicator = true,
   showVoiceCommands = false,
@@ -33,7 +32,7 @@ export const SystemBootstrap = memo(function({
   useEffect(() => {
     systemInit.initialize().then(() => {
       setInitialized(true);
-  });
+    });
   }, []);
 
   return (

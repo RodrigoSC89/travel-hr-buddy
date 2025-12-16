@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -73,10 +73,10 @@ export default function CertificationsTab({
 
   const stats = {
     total: certifications.length,
-    valid: certifications.filter(c => c.status === "valid").length,
-    expiring: certifications.filter(c => c.status === "expiring").length,
-    expired: certifications.filter(c => c.status === "expired").length,
-  });
+    valid: certifications.filter(c => c.status === 'valid').length,
+    expiring: certifications.filter(c => c.status === 'expiring').length,
+    expired: certifications.filter(c => c.status === 'expired').length,
+  };
 
   const handleRenew = (cert: Certification) => {
     setSelectedCert(cert);
@@ -93,7 +93,7 @@ export default function CertificationsTab({
       setShowRenewDialog(false);
       setSelectedCert(null);
     }
-  });
+  };
 
   const handleView = (cert: Certification) => {
     setSelectedCert(cert);
@@ -111,16 +111,16 @@ export default function CertificationsTab({
       onUploadCertificate(selectedCert, file);
       toast({
         title: "Documento Enviado",
-        description: "O certificado foi atualizado com sucesso.",
+        description: `O certificado foi atualizado com sucesso.`,
       });
       setShowUploadDialog(false);
     }
-  });
+  };
 
   const groupedByStatus = {
-    expired: filteredCerts.filter(c => c.status === "expired"),
-    expiring: filteredCerts.filter(c => c.status === "expiring"),
-    valid: filteredCerts.filter(c => c.status === "valid"),
+    expired: filteredCerts.filter(c => c.status === 'expired'),
+    expiring: filteredCerts.filter(c => c.status === 'expiring'),
+    valid: filteredCerts.filter(c => c.status === 'valid'),
   };
 
   return (
@@ -183,7 +183,7 @@ export default function CertificationsTab({
                 placeholder="Buscar certificação, tripulante ou código..." 
                 className="pl-10"
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -306,7 +306,7 @@ export default function CertificationsTab({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowRenewDialog}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowRenewDialog(false)}>Cancelar</Button>
             <Button onClick={handleConfirmRenew}>
               <Calendar className="h-4 w-4 mr-2" />
               Agendar
@@ -342,7 +342,7 @@ export default function CertificationsTab({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowUploadDialog}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowUploadDialog(false)}>Cancelar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -387,8 +387,8 @@ function CertificationsList({
               
               return (
                 <div key={cert.id} className={`p-4 rounded-lg border ${
-                  cert.status === "expired" ? "bg-destructive/5 border-destructive/30" :
-                    cert.status === "expiring" ? "bg-amber-500/5 border-amber-500/30" : ""
+                  cert.status === 'expired' ? 'bg-destructive/5 border-destructive/30' :
+                  cert.status === 'expiring' ? 'bg-amber-500/5 border-amber-500/30' : ''
                 }`}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -397,7 +397,7 @@ function CertificationsList({
                         <Badge variant="outline">{cert.code}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">
-                        Tripulante: {member?.name || "N/A"} • {member?.position}
+                        Tripulante: {member?.name || 'N/A'} • {member?.position}
                       </p>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span>Emissão: {format(parseISO(cert.issueDate), "dd/MM/yyyy")}</span>
@@ -407,26 +407,26 @@ function CertificationsList({
                     </div>
                     <div className="text-right">
                       <Badge variant={
-                        cert.status === "valid" ? "outline" :
-                          cert.status === "expiring" ? "secondary" : "destructive"
+                        cert.status === 'valid' ? 'outline' :
+                        cert.status === 'expiring' ? 'secondary' : 'destructive'
                       }>
-                        {cert.status === "valid" ? "Válido" :
-                          cert.status === "expiring" ? `Expira em ${daysUntilExpiry} dias` : "Expirado"}
+                        {cert.status === 'valid' ? 'Válido' :
+                         cert.status === 'expiring' ? `Expira em ${daysUntilExpiry} dias` : 'Expirado'}
                       </Badge>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3">
-                    <Button variant="ghost" size="sm" onClick={() => handleonView}>
+                    <Button variant="ghost" size="sm" onClick={() => onView(cert)}>
                       <Eye className="h-4 w-4 mr-1" />
                       Ver Certificado
                     </Button>
-                    {(cert.status === "expiring" || cert.status === "expired") && (
-                      <Button variant="ghost" size="sm" onClick={() => handleonRenew}>
+                    {(cert.status === 'expiring' || cert.status === 'expired') && (
+                      <Button variant="ghost" size="sm" onClick={() => onRenew(cert)}>
                         <RefreshCw className="h-4 w-4 mr-1" />
                         Renovar
                       </Button>
                     )}
-                    <Button variant="ghost" size="sm" onClick={() => handleonUpload}>
+                    <Button variant="ghost" size="sm" onClick={() => onUpload(cert)}>
                       <Upload className="h-4 w-4 mr-1" />
                       Atualizar Doc
                     </Button>

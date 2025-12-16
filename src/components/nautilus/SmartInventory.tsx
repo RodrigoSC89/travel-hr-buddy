@@ -3,7 +3,7 @@
  * Integrated with Supabase for real-time data
  */
 
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface InventoryItem {
   vessel?: string;
 }
 
-export const SmartInventory = memo(function() {
+export function SmartInventory() {
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,7 +50,7 @@ export const SmartInventory = memo(function() {
         .limit(30);
 
       if (!error && data && data.length > 0) {
-        const mappedItems: InventoryItem[] = data.map((item: unknown) => ({
+        const mappedItems: InventoryItem[] = data.map((item: any) => ({
           id: item.id,
           name: item.item_name || item.name || "Item",
           category: item.category || "Geral",
@@ -76,13 +76,13 @@ export const SmartInventory = memo(function() {
     }
   };
 
-  const calculatePredictedDays = (item: unknown: unknown: unknown): number => {
+  const calculatePredictedDays = (item: any): number => {
     const stock = item.quantity || item.current_stock || 50;
     const dailyUsage = 2; // Estimated
     return Math.floor(stock / dailyUsage);
   };
 
-  const calculateTrend = (item: unknown: unknown: unknown): "up" | "down" | "stable" => {
+  const calculateTrend = (item: any): "up" | "down" | "stable" => {
     const stock = item.quantity || item.current_stock || 50;
     const min = item.min_quantity || item.min_stock || 10;
     if (stock < min) return "down";
@@ -118,7 +118,7 @@ export const SmartInventory = memo(function() {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const getStockStatus = (item: InventoryItem) => {
     if (item.currentStock < item.minStock) return { color: "text-red-500", bg: "bg-red-500/10", label: "Crítico" };
@@ -210,7 +210,7 @@ export const SmartInventory = memo(function() {
           <Input
             placeholder="Buscar itens..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-9"
           />
         </div>
@@ -220,7 +220,7 @@ export const SmartInventory = memo(function() {
               key={cat}
               variant={categoryFilter === cat ? "default" : "outline"}
               size="sm"
-              onClick={handleSetCategoryFilter}
+              onClick={() => setCategoryFilter(cat)}
             >
               {cat === "all" ? "Todos" : cat}
             </Button>
@@ -297,7 +297,7 @@ export const SmartInventory = memo(function() {
                         size="sm" 
                         variant="destructive" 
                         className="w-full mt-3"
-                        onClick={() => handlehandleRequestRestock}
+                        onClick={() => handleRequestRestock(item.id, item.name)}
                       >
                         Solicitar Reposição
                       </Button>
@@ -311,4 +311,4 @@ export const SmartInventory = memo(function() {
       </Card>
     </div>
   );
-});
+}

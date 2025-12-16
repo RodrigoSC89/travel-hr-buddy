@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       const now = new Date();
       const daysDiff = (startDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
       return daysDiff <= 7 && daysDiff > 0 && r.status === "confirmed";
-  };
+    });
 
     upcomingReservations.forEach(reservation => {
       const startDate = new Date(reservation.start_date);
@@ -139,7 +138,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
 
     setInsights(newInsights);
     setLoading(false);
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -175,7 +174,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         variant: "default"
       });
     }
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -320,7 +319,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      onClick={() => handlehandleApplySuggestion}
+                      onClick={() => handleApplySuggestion(insight)}
                       disabled={!insight.automatable}
                     >
                       {insight.automatable ? "Aplicar Automaticamente" : "Ação Manual"}
@@ -344,4 +343,4 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       </div>
     </div>
   );
-});
+};

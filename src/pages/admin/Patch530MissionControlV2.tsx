@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 530 - Mission Control v2 (Unificação)
  */
 
@@ -19,7 +18,7 @@ export default function Patch530MissionControlV2() {
 
   const toggleCheck = (key: keyof typeof checks) => {
     setChecks(prev => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   const allChecked = Object.values(checks).every(Boolean);
   const progress = Object.values(checks).filter(Boolean).length;
@@ -48,7 +47,7 @@ export default function Patch530MissionControlV2() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.singlePanel}
-              onCheckedChange={() => toggleCheck("singlePanel"}
+              onCheckedChange={() => toggleCheck("singlePanel")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -65,7 +64,7 @@ export default function Patch530MissionControlV2() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.allPhases}
-              onCheckedChange={() => toggleCheck("allPhases"}
+              onCheckedChange={() => toggleCheck("allPhases")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -87,7 +86,7 @@ export default function Patch530MissionControlV2() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.integrations}
-              onCheckedChange={() => toggleCheck("integrations"}
+              onCheckedChange={() => toggleCheck("integrations")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -104,7 +103,7 @@ export default function Patch530MissionControlV2() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.reportExport}
-              onCheckedChange={() => toggleCheck("reportExport"}
+              onCheckedChange={() => toggleCheck("reportExport")}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,7 +38,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const [showNewWorkflow, setShowNewWorkflow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<unknown>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
   // Filtered workflows
@@ -50,7 +49,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  };
+  });
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -72,8 +71,8 @@ export const WorkflowAutomationHub: React.FC = () => {
     await createWorkflow({
       name: newWorkflowData.name,
       description: newWorkflowData.description,
-      category: newWorkflowData.category as unknown,
-      priority: newWorkflowData.priority as unknown,
+      category: newWorkflowData.category as any,
+      priority: newWorkflowData.priority as any,
       status: "draft",
       steps: [],
     });
@@ -85,7 +84,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     await createWorkflow({
       name: template.name,
       description: template.description,
-      category: template.category as unknown,
+      category: template.category as any,
       priority: "medium",
       status: "draft",
       steps: template.steps,
@@ -107,9 +106,9 @@ export const WorkflowAutomationHub: React.FC = () => {
     <div className="space-y-6 p-1">
       <WorkflowHeader
         onExport={exportWorkflows}
-        onNewWorkflow={() => setShowNewWorkflow(true}
+        onNewWorkflow={() => setShowNewWorkflow(true)}
         onRefresh={refetch}
-        onSettings={() => setShowSettings(true}
+        onSettings={() => setShowSettings(true)}
         onMarkAllRead={handleMarkAllRead}
         unreadCount={unreadCount}
         isLoading={isLoading}
@@ -142,7 +141,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             {filteredWorkflows.length === 0 ? (
               <Card className="p-8 text-center">
                 <p className="text-muted-foreground">Nenhum workflow encontrado</p>
-                <Button className="mt-4" onClick={handleSetShowNewWorkflow}>Criar Workflow</Button>
+                <Button className="mt-4" onClick={() => setShowNewWorkflow(true)}>Criar Workflow</Button>
               </Card>
             ) : (
               filteredWorkflows.map((workflow) => (
@@ -184,10 +183,10 @@ export const WorkflowAutomationHub: React.FC = () => {
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handletoast}>
+                    <Button size="sm" variant="outline" onClick={() => toast({ title: "Configurações", description: "Abrindo configurações da regra..." })}>
                       <Settings className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => handletoggleAutomationRule}>
+                    <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => toggleAutomationRule(rule.id)}>
                       {rule.is_active ? "Desativar" : "Ativar"}
                     </Button>
                   </div>
@@ -215,7 +214,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                       <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">{template.steps.length} etapas</span>
-                        <Button size="sm" onClick={() => handlehandleUseTemplate}>
+                        <Button size="sm" onClick={() => handleUseTemplate(template)}>
                           <Sparkles className="h-3 w-3 mr-1" />
                           Usar Template
                         </Button>
@@ -270,8 +269,8 @@ export const WorkflowAutomationHub: React.FC = () => {
             <DialogDescription>Crie um novo fluxo de trabalho</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <Input placeholder="Nome do workflow" value={newWorkflowData.name} onChange={handleChange}))} />
-            <Textarea placeholder="Descrição" value={newWorkflowData.description} onChange={handleChange}))} />
+            <Input placeholder="Nome do workflow" value={newWorkflowData.name} onChange={(e) => setNewWorkflowData(p => ({ ...p, name: e.target.value }))} />
+            <Textarea placeholder="Descrição" value={newWorkflowData.description} onChange={(e) => setNewWorkflowData(p => ({ ...p, description: e.target.value }))} />
             <div className="grid grid-cols-2 gap-4">
               <Select value={newWorkflowData.category} onValueChange={(v) => setNewWorkflowData(p => ({ ...p, category: v }))}>
                 <SelectTrigger><SelectValue placeholder="Categoria" /></SelectTrigger>
@@ -294,7 +293,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowNewWorkflow}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowNewWorkflow(false)}>Cancelar</Button>
             <Button onClick={handleNewWorkflow}>Criar Workflow</Button>
           </DialogFooter>
         </DialogContent>
@@ -317,7 +316,7 @@ export const WorkflowAutomationHub: React.FC = () => {
               <Progress value={selectedWorkflow.progress} className="h-3" />
               <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
               <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                {selectedWorkflow.steps?.map((step: unknown, i: number) => (
+                {selectedWorkflow.steps?.map((step: any, i: number) => (
                   <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                     <span>{step.name}</span>
                     <Badge variant="outline">{step.status}</Badge>
@@ -327,7 +326,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowDetails}>Fechar</Button>
+            <Button variant="outline" onClick={() => setShowDetails(false)}>Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -343,7 +342,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             <p className="text-sm text-muted-foreground">Notificações, integrações e preferências podem ser configuradas aqui.</p>
           </div>
           <DialogFooter>
-            <Button onClick={handleSetShowSettings}>Fechar</Button>
+            <Button onClick={() => setShowSettings(false)}>Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

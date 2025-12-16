@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * PEO-DP AI Chat Component
  * LLM integrada para geração de evidências e consultas sobre:
  * - Auditoria PEO-DP Petrobras
@@ -181,7 +180,7 @@ Os 7 pilares estratégicos:
 
 Responda em português brasileiro, de forma técnica mas acessível. Inclua referências normativas quando aplicável. Formate suas respostas com markdown para melhor legibilidade.`;
 
-export const PEODPAIChat = memo(function() {
+export function PEODPAIChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",
@@ -228,7 +227,7 @@ Use as **ações rápidas** abaixo ou faça sua pergunta diretamente!`,
 
     try {
       // Usar Supabase Edge Function com Lovable AI
-      const { data: functionData, error: functionError } = await supabase.functions.invoke("peodp-ai-chat", {
+      const { data: functionData, error: functionError } = await supabase.functions.invoke('peodp-ai-chat', {
         body: { 
           messages: [...messages.filter(m => m.id !== "welcome"), userMessage].map(m => ({
             role: m.role,
@@ -236,7 +235,7 @@ Use as **ações rápidas** abaixo ou faça sua pergunta diretamente!`,
           })),
           systemPrompt: SYSTEM_PROMPT
         }
-      };
+      });
 
       if (functionError) {
         throw new Error(functionError.message);
@@ -355,7 +354,7 @@ Por favor, tente novamente ou consulte diretamente:
                       variant="ghost"
                       size="sm"
                       className="w-full justify-start text-left h-auto py-2"
-                      onClick={() => handlehandleQuickAction}
+                      onClick={() => handleQuickAction(action)}
                       disabled={isLoading}
                     >
                       <div className="flex items-center gap-2">
@@ -404,13 +403,13 @@ Por favor, tente novamente ou consulte diretamente:
                               className="prose prose-sm dark:prose-invert max-w-none text-sm"
                               dangerouslySetInnerHTML={{ 
                                 __html: message.content
-                                  .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-                                  .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-                                  .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-                                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                                  .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                                  .replace(/\n- /g, "<br/>• ")
-                                  .replace(/\n/g, "<br/>") 
+                                  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                                  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                                  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                  .replace(/\n- /g, '<br/>• ')
+                                  .replace(/\n/g, '<br/>') 
                               }} 
                             />
                             {message.references && message.references.length > 0 && (
@@ -425,13 +424,13 @@ Por favor, tente novamente ou consulte diretamente:
                             )}
                             {message.role === "assistant" && message.id !== "welcome" && (
                               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "positive")}>
                                   <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-green-500 fill-green-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
                                   <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleCopy}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleCopy(message.content)}>
                                   <Copy className="h-3 w-3" />
                                 </Button>
                               </div>
@@ -459,7 +458,7 @@ Por favor, tente novamente ou consulte diretamente:
                   <Input
                     placeholder="Pergunte sobre PEO-DP, ASOG, IMCA, NORMAM..."
                     value={input}
-                    onChange={handleChange}
+                    onChange={(e) => setInput(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
                     disabled={isLoading}
                     className="text-sm"

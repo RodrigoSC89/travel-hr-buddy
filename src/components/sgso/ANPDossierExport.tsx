@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -333,14 +332,14 @@ export const ANPDossierExport: React.FC = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetSelectedPractices}
+                    onClick={() => setSelectedPractices(PRACTICES_STATUS.map(p => p.id))}
                   >
                     Selecionar Todas
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetSelectedPractices}
+                    onClick={() => setSelectedPractices([])}
                   >
                     Limpar
                   </Button>
@@ -360,12 +359,12 @@ export const ANPDossierExport: React.FC = () => {
                           ? "border-primary bg-primary/5"
                           : "border-border hover:border-primary/50"
                       }`}
-                      onClick={() => handletogglePractice}
+                      onClick={() => togglePractice(practice.id)}
                     >
                       <div className="flex items-start gap-3">
                         <Checkbox
                           checked={selectedPractices.includes(practice.id)}
-                          onCheckedChange={() => togglePractice(practice.id}
+                          onCheckedChange={() => togglePractice(practice.id)}
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">

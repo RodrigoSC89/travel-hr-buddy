@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";;;
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format, subDays, startOfWeek, startOfMonth } from "date-fns";
@@ -106,7 +106,7 @@ export default function ExecutionLogsPage() {
         }
 
         // Transform data to include workflow name
-        const transformedData = (executionData || []).map((execution: unknown) => ({
+        const transformedData = (executionData || []).map((execution: any) => ({
           ...execution,
           workflow_name: execution.automation_workflows?.name || "Workflow Desconhecido"
         }));
@@ -206,8 +206,8 @@ export default function ExecutionLogsPage() {
         date: format(date, "dd/MM"),
         success: 0,
         failed: 0,
-      });
-  });
+      };
+    });
 
     filteredExecutions.forEach(exec => {
       const execDate = new Date(exec.started_at);
@@ -248,7 +248,7 @@ export default function ExecutionLogsPage() {
       failed,
       trendData: last7Days,
       workflowDistribution: topWorkflows,
-    });
+    };
   }, [filteredExecutions]);
 
   // CSV Export
@@ -421,7 +421,7 @@ export default function ExecutionLogsPage() {
     default:
       return <Badge variant="outline">{status}</Badge>;
     }
-  });
+  };
 
   return (
     <div className="p-8 space-y-6">
@@ -550,7 +550,7 @@ export default function ExecutionLogsPage() {
         <Input
           type="date"
           value={startDate}
-          onChange={handleChange}
+          onChange={(e) => setStartDate(e.target.value)}
           placeholder="Data inicial"
           className={dateError ? "border-red-500" : ""}
         />
@@ -558,7 +558,7 @@ export default function ExecutionLogsPage() {
         <Input
           type="date"
           value={endDate}
-          onChange={handleChange}
+          onChange={(e) => setEndDate(e.target.value)}
           placeholder="Data final"
           className={dateError ? "border-red-500" : ""}
         />
@@ -681,7 +681,7 @@ export default function ExecutionLogsPage() {
           <Button
             variant="ghost"
             disabled={page === 1}
-            onClick={handleSetPage}
+            onClick={() => setPage((prev) => prev - 1)}
           >
             ⬅️ Anterior
           </Button>
@@ -691,7 +691,7 @@ export default function ExecutionLogsPage() {
           <Button
             variant="ghost"
             disabled={page * pageSize >= filteredExecutions.length}
-            onClick={handleSetPage}
+            onClick={() => setPage((prev) => prev + 1)}
           >
             Próxima ➡️
           </Button>

@@ -44,17 +44,17 @@ export const ThemeToggle: React.FC = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={handleSetTheme}>
+        <DropdownMenuItem onClick={() => setTheme("light")}>
           <Sun className="mr-2 h-4 w-4" />
           <span>Light</span>
           {theme === "light" && <span className="ml-auto">✓</span>}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSetTheme}>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
           <Moon className="mr-2 h-4 w-4" />
           <span>Dark</span>
           {theme === "dark" && <span className="ml-auto">✓</span>}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSetTheme}>
+        <DropdownMenuItem onClick={() => setTheme("mission")}>
           <Target className="mr-2 h-4 w-4" />
           <span>Mission</span>
           {theme === "mission" && <span className="ml-auto">✓</span>}

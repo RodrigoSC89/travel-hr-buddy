@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -162,7 +161,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
     fuelEfficiency: 89.2,
     emissionCompliance: 94.7,
     safetyIncidents: 0
-  };
+  });
 
   const metrics = getMetrics();
 
@@ -234,7 +233,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
           <Button
             variant={autoRefresh ? "default" : "outline"}
             size="sm"
-            onClick={handleSetAutoRefresh}
+            onClick={() => setAutoRefresh(!autoRefresh)}
           >
             <Activity className="w-4 h-4 mr-2" />
             {autoRefresh ? "Pausar" : "Iniciar"} Atualização
@@ -398,7 +397,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
               <Card
                 key={vessel.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
-                onClick={handleSetSelectedVessel}
+                onClick={() => setSelectedVessel(vessel)}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">

@@ -1,5 +1,4 @@
 /**
-import { useState } from "react";;
  * ISM/ISPS Checklist Component
  * Quick reference guide for maritime compliance requirements
  */
@@ -50,7 +49,7 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, requirem
       </CollapsibleContent>
     </Collapsible>
   );
-});
+};
 
 export default function ISMChecklist() {
   const ismRequirements: RequirementItem[] = [

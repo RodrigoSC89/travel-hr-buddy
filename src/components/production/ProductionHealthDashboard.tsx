@@ -1,14 +1,13 @@
 /**
-import { useEffect, useCallback } from "react";;
  * Production Health Dashboard Component - PATCH 850
  * Visual component for system health monitoring
  */
 
-import React, { useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import React, { useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -20,9 +19,9 @@ import {
   Shield,
   Zap,
   HardDrive
-} from "lucide-react";
-import { useReadinessChecker, type ReadinessCheck } from "@/lib/production/readiness-checker";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import { useReadinessChecker, type ReadinessCheck } from '@/lib/production/readiness-checker';
+import { cn } from '@/lib/utils';
 
 interface HealthDashboardProps {
   autoRun?: boolean;
@@ -37,22 +36,22 @@ const statusIcons = {
 };
 
 const statusColors = {
-  pass: "text-green-500",
-  fail: "text-red-500",
-  warning: "text-yellow-500",
-  skipped: "text-muted-foreground",
+  pass: 'text-green-500',
+  fail: 'text-red-500',
+  warning: 'text-yellow-500',
+  skipped: 'text-muted-foreground',
 };
 
 const categoryIcons = {
-  "Supabase Connection": Database,
-  "Auth Configuration": Shield,
-  "Service Worker": Zap,
-  "Offline Capability": WifiOff,
-  "Memory Usage": HardDrive,
-  "Network Info": Wifi,
+  'Supabase Connection': Database,
+  'Auth Configuration': Shield,
+  'Service Worker': Zap,
+  'Offline Capability': WifiOff,
+  'Memory Usage': HardDrive,
+  'Network Info': Wifi,
 };
 
-export const ProductionHealthDashboard = memo(function({ autoRun = true, compact = false }: HealthDashboardProps) {
+export function ProductionHealthDashboard({ autoRun = true, compact = false }: HealthDashboardProps) {
   const { report, isChecking, runChecks } = useReadinessChecker();
 
   useEffect(() => {
@@ -65,10 +64,10 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
     if (!report) return null;
     
     const variants = {
-      "ready": { variant: "default" as const, className: "bg-green-500", text: "Pronto para Produção" },
-      "warning": { variant: "secondary" as const, className: "bg-yellow-500", text: "Atenção Necessária" },
-      "not-ready": { variant: "destructive" as const, className: "", text: "Não Pronto" },
-    });
+      'ready': { variant: 'default' as const, className: 'bg-green-500', text: 'Pronto para Produção' },
+      'warning': { variant: 'secondary' as const, className: 'bg-yellow-500', text: 'Atenção Necessária' },
+      'not-ready': { variant: 'destructive' as const, className: '', text: 'Não Pronto' },
+    };
     
     const status = variants[report.overallStatus];
     return (
@@ -76,7 +75,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
         {status.text}
       </Badge>
     );
-  });
+  };
 
   const renderCheck = (check: ReadinessCheck) => {
     const StatusIcon = statusIcons[check.status];
@@ -87,10 +86,10 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
         key={check.name} 
         className={cn(
           "flex items-center justify-between p-3 rounded-lg border",
-          check.status === "fail" && "border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950",
-          check.status === "warning" && "border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950",
-          check.status === "pass" && "border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950",
-          check.status === "skipped" && "border-muted bg-muted/30"
+          check.status === 'fail' && "border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950",
+          check.status === 'warning' && "border-yellow-200 bg-yellow-50 dark:border-yellow-900 dark:bg-yellow-950",
+          check.status === 'pass' && "border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950",
+          check.status === 'skipped' && "border-muted bg-muted/30"
         )}
       >
         <div className="flex items-center gap-3">
@@ -160,7 +159,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
               size="sm"
             >
               <RefreshCw className={cn("h-4 w-4 mr-2", isChecking && "animate-spin")} />
-              {isChecking ? "Verificando..." : "Verificar"}
+              {isChecking ? 'Verificando...' : 'Verificar'}
             </Button>
           </div>
         </div>
@@ -188,7 +187,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
                 </h4>
                 <div className="space-y-2">
                   {report.checks
-                    .filter(c => c.category === "critical")
+                    .filter(c => c.category === 'critical')
                     .map(renderCheck)}
                 </div>
               </div>
@@ -199,7 +198,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
                 </h4>
                 <div className="space-y-2">
                   {report.checks
-                    .filter(c => c.category === "important")
+                    .filter(c => c.category === 'important')
                     .map(renderCheck)}
                 </div>
               </div>
@@ -210,7 +209,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
                 </h4>
                 <div className="space-y-2">
                   {report.checks
-                    .filter(c => c.category === "optional")
+                    .filter(c => c.category === 'optional')
                     .map(renderCheck)}
                 </div>
               </div>
@@ -230,7 +229,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
 
             {/* Timestamp */}
             <div className="text-xs text-muted-foreground text-right">
-              Última verificação: {new Date(report.timestamp).toLocaleString("pt-BR")}
+              Última verificação: {new Date(report.timestamp).toLocaleString('pt-BR')}
             </div>
           </div>
         )}
@@ -250,6 +249,6 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
       </CardContent>
     </Card>
   );
-});
+}
 
 export default ProductionHealthDashboard;

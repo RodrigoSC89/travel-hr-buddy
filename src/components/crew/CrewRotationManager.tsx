@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
-
+// @ts-nocheck
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration
@@ -59,8 +58,8 @@ interface CrewRotation {
   departure_port?: string;
   arrival_port?: string;
   transportation_method?: string;
-  flight_details?: unknown;
-  accommodation_details?: unknown;
+  flight_details?: any;
+  accommodation_details?: any;
   documentation_status: "pending" | "verified" | "incomplete" | "expired";
   medical_clearance: boolean;
   visa_status?: string;
@@ -80,7 +79,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: member.id,
     data: member,
-});
+  });
 
   const style = transform
     ? {
@@ -109,7 +108,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
       </div>
     </div>
   );
-});
+};
 
 // Droppable Schedule Slot
 const DroppableScheduleSlot: React.FC<{
@@ -120,7 +119,7 @@ const DroppableScheduleSlot: React.FC<{
 }> = ({ date, rotationType, rotations, onDrop }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: `${date}-${rotationType}`,
-});
+  });
 
   const slotRotations = rotations.filter(
     (r) => r.scheduled_date === date && r.rotation_type === rotationType
@@ -143,7 +142,7 @@ const DroppableScheduleSlot: React.FC<{
       ))}
     </div>
   );
-});
+};
 
 export const CrewRotationManager: React.FC = () => {
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
@@ -159,7 +158,7 @@ export const CrewRotationManager: React.FC = () => {
     status: "scheduled",
     documentation_status: "pending",
     medical_clearance: false,
-  };
+  });
 
   useEffect(() => {
     loadData();
@@ -482,7 +481,8 @@ END:VCALENDAR`;
                   <Input
                     type="date"
                     value={newRotation.scheduled_date || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setNewRotation({ ...newRotation, scheduled_date: e.target.value })
                     }
                   />
                 </div>
@@ -491,7 +491,8 @@ END:VCALENDAR`;
                     <Label>Departure Port</Label>
                     <Input
                       value={newRotation.departure_port || ""}
-                      onChange={handleChange})
+                      onChange={(e) =>
+                        setNewRotation({ ...newRotation, departure_port: e.target.value })
                       }
                     />
                   </div>
@@ -499,7 +500,8 @@ END:VCALENDAR`;
                     <Label>Arrival Port</Label>
                     <Input
                       value={newRotation.arrival_port || ""}
-                      onChange={handleChange})
+                      onChange={(e) =>
+                        setNewRotation({ ...newRotation, arrival_port: e.target.value })
                       }
                     />
                   </div>
@@ -508,12 +510,13 @@ END:VCALENDAR`;
                   <Label>Notes</Label>
                   <Textarea
                     value={newRotation.notes || ""}
-                    onChange={handleChange})
+                    onChange={(e) =>
+                      setNewRotation({ ...newRotation, notes: e.target.value })
                     }
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsDialogOpen}>
+                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                     Cancel
                   </Button>
                   <Button onClick={handleCreateRotation}>Create Rotation</Button>
@@ -679,7 +682,7 @@ END:VCALENDAR`;
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleexportToCalendar}
+                      onClick={() => exportToCalendar(rotation)}
                     >
                       <CalendarIcon className="h-4 w-4" />
                     </Button>

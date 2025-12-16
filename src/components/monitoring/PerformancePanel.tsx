@@ -13,14 +13,14 @@ interface PerformancePanelProps {
   mqttClient?: MqttClient | null;
 }
 
-export const PerformancePanel = memo(function({ mqttClient }: PerformancePanelProps) {
+export function PerformancePanel({ mqttClient }: PerformancePanelProps) {
   const metrics = usePerformanceMonitor(mqttClient);
 
   const getStatusColor = (value: number, thresholds: { yellow: number; red: number }) => {
     if (value >= thresholds.red) return "text-red-500";
     if (value >= thresholds.yellow) return "text-yellow-500";
     return "text-green-500";
-  });
+  };
 
   const cpuColor = getStatusColor(metrics.cpu, { yellow: 60, red: 80 });
   const memoryColor = getStatusColor(metrics.memory, { yellow: 512, red: 1024 });
@@ -66,4 +66,4 @@ export const PerformancePanel = memo(function({ mqttClient }: PerformancePanelPr
       </CardContent>
     </Card>
   );
-});
+}

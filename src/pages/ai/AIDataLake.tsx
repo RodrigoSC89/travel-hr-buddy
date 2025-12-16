@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * AI Data Lake - Lago de Dados para IA
  * Repositório centralizado de dados para treinamento de modelos
  */
@@ -152,25 +151,25 @@ const AIDataLake: React.FC = () => {
 
   const getStatusBadge = (status: DataSource["status"]) => {
     switch (status) {
-    case "active":
-      return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Ativo</Badge>;
-    case "syncing":
-      return <Badge className="bg-blue-500/20 text-blue-400"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Sincronizando</Badge>;
-    case "error":
-      return <Badge className="bg-red-500/20 text-red-400"><Activity className="h-3 w-3 mr-1" />Erro</Badge>;
+      case "active":
+        return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Ativo</Badge>;
+      case "syncing":
+        return <Badge className="bg-blue-500/20 text-blue-400"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Sincronizando</Badge>;
+      case "error":
+        return <Badge className="bg-red-500/20 text-red-400"><Activity className="h-3 w-3 mr-1" />Erro</Badge>;
     }
   };
 
   const getTypeBadge = (type: DataSource["type"]) => {
     switch (type) {
-    case "structured":
-      return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Estruturado</Badge>;
-    case "unstructured":
-      return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Não-Estruturado</Badge>;
-    case "semi-structured":
-      return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Semi-Estruturado</Badge>;
-    case "streaming":
-      return <Badge variant="outline" className="border-green-500/30 text-green-400">Streaming</Badge>;
+      case "structured":
+        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Estruturado</Badge>;
+      case "unstructured":
+        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Não-Estruturado</Badge>;
+      case "semi-structured":
+        return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Semi-Estruturado</Badge>;
+      case "streaming":
+        return <Badge variant="outline" className="border-green-500/30 text-green-400">Streaming</Badge>;
     }
   };
 
@@ -178,21 +177,21 @@ const AIDataLake: React.FC = () => {
     const matchesSearch = source.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || selectedCategory === "Todos" || source.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const handleExploreData = (sourceId: string) => {
     toast({
       title: "Abrindo Explorador de Dados",
       description: "Carregando schema e preview dos dados...",
     });
-  });
+  };
 
   const handleSyncData = (sourceId: string) => {
     toast({
       title: "Sincronização Iniciada",
       description: "Os dados estão sendo sincronizados com o Data Lake.",
     });
-  });
+  };
 
   return (
     <ModulePageWrapper gradient="blue">
@@ -278,7 +277,7 @@ const AIDataLake: React.FC = () => {
                 placeholder="Buscar fontes de dados..." 
                 className="pl-10"
                 value={searchQuery}
-                onChange={handleChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -287,7 +286,7 @@ const AIDataLake: React.FC = () => {
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetSelectedCategory}
+                  onClick={() => setSelectedCategory(category === "Todos" ? null : category)}
                 >
                   {category}
                 </Button>
@@ -343,11 +342,11 @@ const AIDataLake: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1" onClick={() => handlehandleExploreData}>
+                    <Button size="sm" className="flex-1" onClick={() => handleExploreData(source.id)}>
                       <Eye className="h-4 w-4 mr-1" />
                       Explorar
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => handlehandleSyncData}>
+                    <Button size="sm" variant="outline" onClick={() => handleSyncData(source.id)}>
                       <RefreshCw className="h-4 w-4 mr-1" />
                       Sincronizar
                     </Button>
@@ -446,7 +445,7 @@ const AIDataLake: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                     <YAxis domain={[85, 100]} stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
                     <Bar dataKey="quality" fill="hsl(var(--primary))" name="Qualidade %" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -532,9 +531,9 @@ const AIDataLake: React.FC = () => {
                           )}
                           <Badge className={
                             pipeline.status === "running" ? "bg-green-500/20 text-green-400" :
-                              pipeline.status === "scheduled" ? "bg-blue-500/20 text-blue-400" :
-                                pipeline.status === "failed" ? "bg-red-500/20 text-red-400" :
-                                  "bg-gray-500/20 text-gray-400"
+                            pipeline.status === "scheduled" ? "bg-blue-500/20 text-blue-400" :
+                            pipeline.status === "failed" ? "bg-red-500/20 text-red-400" :
+                            "bg-gray-500/20 text-gray-400"
                           }>
                             {pipeline.status}
                           </Badge>

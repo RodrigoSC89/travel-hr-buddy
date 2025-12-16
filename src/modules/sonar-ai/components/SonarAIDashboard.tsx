@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 479: Enhanced Sonar AI Dashboard
  * Real-time dashboard with AI classification and risk alerts
  */
@@ -32,7 +31,7 @@ import { toast } from "sonner";
 export const SonarAIDashboard: React.FC = () => {
   const [events, setEvents] = useState<SonarEvent[]>([]);
   const [risks, setRisks] = useState<SonarRisk[]>([]);
-  const [statistics, setStatistics] = useState<unknown>(null);
+  const [statistics, setStatistics] = useState<any>(null);
   const [spectrogramData, setSpectrogramData] = useState<SpectrogramData | null>(null);
   const [scanning, setScanning] = useState(false);
   const [selectedRisk, setSelectedRisk] = useState<SonarRisk | null>(null);
@@ -279,7 +278,7 @@ export const SonarAIDashboard: React.FC = () => {
                           <div className="flex items-center gap-3">
                             <div className={`w-3 h-3 rounded-full ${getRiskLevelColor(risk.risk_level)}`} />
                             <div>
-                              <Badge variant={getRiskLevelBadge(risk.risk_level) as unknown}>
+                              <Badge variant={getRiskLevelBadge(risk.risk_level) as any}>
                                 {risk.risk_level.toUpperCase()}
                               </Badge>
                               <Badge variant="outline" className="ml-2">
@@ -303,7 +302,7 @@ export const SonarAIDashboard: React.FC = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handlehandleAcknowledgeRisk}
+                              onClick={() => handleAcknowledgeRisk(risk.id!)}
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
                               Reconhecer
@@ -311,7 +310,7 @@ export const SonarAIDashboard: React.FC = () => {
                             <Button
                               size="sm"
                               variant="default"
-                              onClick={() => handlehandleResolveRisk}
+                              onClick={() => handleResolveRisk(risk.id!)}
                             >
                               <XCircle className="h-4 w-4 mr-1" />
                               Resolver

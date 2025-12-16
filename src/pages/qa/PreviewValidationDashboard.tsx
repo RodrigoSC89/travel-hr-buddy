@@ -3,7 +3,7 @@
  * PATCH 624 - Dashboard centralizado para validação de preview
  */
 
-import { useCallback, useEffect, useMemo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,11 +39,11 @@ export default function PreviewValidationDashboard() {
   ];
 
   const getPriorityBadge = (priority: string) => {
-    const variants: Record<string, unknown> = {
+    const variants: Record<string, any> = {
       high: "destructive",
       medium: "default",
       low: "secondary"
-    });
+    };
     return <Badge variant={variants[priority] || "default"}>{priority}</Badge>;
   };
 
@@ -144,7 +144,7 @@ export default function PreviewValidationDashboard() {
                     key={component.name}
                     variant={selectedComponent === component.name ? "default" : "outline"}
                     className="justify-between h-auto py-4"
-                    onClick={handleSetSelectedComponent}
+                    onClick={() => setSelectedComponent(component.name)}
                   >
                     <div className="flex flex-col items-start gap-1">
                       <span className="font-medium">{component.name}</span>

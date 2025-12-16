@@ -1,4 +1,3 @@
-;
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,8 +8,10 @@ import {
   Zap, 
   CheckCircle, 
   Monitor, 
-  Smartphone,
+  Smartphone, 
+  Tablet,
   Users,
+  Database,
   Lock,
   Activity
 } from "lucide-react";

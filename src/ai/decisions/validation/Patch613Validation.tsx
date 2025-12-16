@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +41,7 @@ interface SimulatorData {
   exports: ExportFormat[];
 }
 
-export const Patch613Validation = memo(function() {
+export function Patch613Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [simulatorData, setSimulatorData] = useState<SimulatorData | null>(null);
@@ -186,7 +186,7 @@ export const Patch613Validation = memo(function() {
       });
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+      });
     }
 
     setResults(testResults);
@@ -262,4 +262,4 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
       <span>{label}</span>
     </div>
   );
-});
+}

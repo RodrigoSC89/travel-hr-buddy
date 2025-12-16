@@ -2,7 +2,7 @@
  * Autonomous Agent Panel - Proactive AI monitoring and actions
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import {
   Bot,
+  Brain,
+  Zap,
+  AlertTriangle,
   CheckCircle2,
+  Clock,
   Play,
   Pause,
   Settings,
@@ -105,7 +109,7 @@ const MOCK_ACTIONS: AgentAction[] = [
   },
 ];
 
-export const AutonomousAgentPanel = memo(function() {
+export function AutonomousAgentPanel() {
   const [isActive, setIsActive] = useState(true);
   const [actions, setActions] = useState<AgentAction[]>(MOCK_ACTIONS);
   const [autoApprove, setAutoApprove] = useState(false);
@@ -146,7 +150,7 @@ export const AutonomousAgentPanel = memo(function() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleSetIsActive}
+              onClick={() => setIsActive(!isActive)}
             >
               {isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
@@ -230,14 +234,14 @@ export const AutonomousAgentPanel = memo(function() {
                             size="sm"
                             variant="ghost"
                             className="h-6 px-2"
-                            onClick={() => handlehandleReject}
+                            onClick={() => handleReject(action.id)}
                           >
                             <X className="h-3 w-3" />
                           </Button>
                           <Button
                             size="sm"
                             className="h-6 px-2"
-                            onClick={() => handlehandleApprove}
+                            onClick={() => handleApprove(action.id)}
                           >
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             Aprovar
@@ -278,4 +282,4 @@ export const AutonomousAgentPanel = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";;;
+import { useState } from "react";
 import { querySimilarJobs, type SimilarJobResult } from "@/lib/ai/copilot/querySimilarJobs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         description: "A sugestão foi copiada para o formulário.",
       });
     }
-  });
+  };
 
   const getSimilarityPercentage = (similarity: number): string => {
     return `${Math.round(similarity * 100)}%`;
@@ -152,7 +152,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => handlehandleCopySuggestion}
+                    onClick={() => handleCopySuggestion(job.metadata.ai_suggestion || job.metadata.description || "")}
                   >
                     <Copy className="mr-2 h-4 w-4" />
                     📋 Usar como base

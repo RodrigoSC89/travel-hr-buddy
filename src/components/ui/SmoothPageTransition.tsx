@@ -5,7 +5,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import { memo, memo, ReactNode, useMemo, useCallback } from "react";;;
+import { ReactNode, useMemo } from "react";
 
 interface SmoothPageTransitionProps {
   children: ReactNode;
@@ -35,7 +35,7 @@ const pageVariants = {
   },
 };
 
-export const SmoothPageTransition = memo(function({ children, className }: SmoothPageTransitionProps) {
+export function SmoothPageTransition({ children, className }: SmoothPageTransitionProps) {
   const location = useLocation();
   
   // Memoize key to prevent unnecessary re-renders
@@ -60,7 +60,7 @@ export const SmoothPageTransition = memo(function({ children, className }: Smoot
 /**
  * Fade transition mais suave
  */
-export const FadeTransition = memo(function({ children, className }: SmoothPageTransitionProps) {
+export function FadeTransition({ children, className }: SmoothPageTransitionProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -77,7 +77,7 @@ export const FadeTransition = memo(function({ children, className }: SmoothPageT
 /**
  * Slide transition da direita
  */
-export const SlideTransition = memo(function({ children, className }: SmoothPageTransitionProps) {
+export function SlideTransition({ children, className }: SmoothPageTransitionProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -89,4 +89,4 @@ export const SlideTransition = memo(function({ children, className }: SmoothPage
       {children}
     </motion.div>
   );
-});
+}

@@ -1,5 +1,4 @@
-import { useState } from "react";;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,16 +11,21 @@ import {
   Award,
   TrendingUp,
   TrendingDown,
+  Calendar,
+  Target,
   AlertTriangle,
   CheckCircle,
   BarChart3,
   Gauge,
+  Clock,
   Users,
+  FileText,
   Download,
+  Info,
   Settings
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PerformanceIndicator {
   id: string;

@@ -55,13 +55,13 @@ const sizeClasses = {
   sm: "h-4 w-4",
   md: "h-8 w-8",
   lg: "h-12 w-12",
-});
+};
 
 const iconSizes = {
   sm: 16,
   md: 24,
   lg: 32
-});
+};
 
 export const Loading = memo(function Loading({
   message = "Carregando...",
@@ -72,33 +72,33 @@ export const Loading = memo(function Loading({
 }: LoadingProps) {
   const renderIcon = () => {
     switch (variant) {
-    case "maritime":
-      return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
-    case "offshore":
-      return (
-        <div className="relative">
-          <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
-          <Waves 
-            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse" 
-            size={iconSizes[size] / 2} 
+      case "maritime":
+        return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
+      case "offshore":
+        return (
+          <div className="relative">
+            <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
+            <Waves 
+              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse" 
+              size={iconSizes[size] / 2} 
+            />
+          </div>
+        );
+      case "spinner":
+        return (
+          <div 
+            className={cn(
+              "animate-spin rounded-full border-b-2 border-primary",
+              sizeClasses[size]
+            )}
+            role="status"
+            aria-label="Carregando"
           />
-        </div>
-      );
-    case "spinner":
-      return (
-        <div 
-          className={cn(
-            "animate-spin rounded-full border-b-2 border-primary",
-            sizeClasses[size]
-          )}
-          role="status"
-          aria-label="Carregando"
-        />
-      );
-    default:
-      return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
+        );
+      default:
+        return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
     }
-  });
+  };
 
   const content = (
     <div className={cn("flex flex-col items-center justify-center gap-3", className)}>

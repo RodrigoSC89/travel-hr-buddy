@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -130,7 +129,7 @@ export const EmployeePortal: React.FC = () => {
       ...newTimeEntry,
       hours: parseFloat(newTimeEntry.hours),
       status: "pending"
-    });
+    };
 
     setTimeEntries([...timeEntries, entry]);
     setNewTimeEntry({ date: "", hours: "", project: "", description: "" });
@@ -139,7 +138,7 @@ export const EmployeePortal: React.FC = () => {
       title: "Entrada registrada",
       description: "Suas horas foram registradas para aprovação"
     });
-  });
+  };
 
   const submitLeaveRequest = () => {
     if (!leaveRequest.startDate || !leaveRequest.endDate) {
@@ -248,19 +247,19 @@ export const EmployeePortal: React.FC = () => {
                 <Input
                   type="date"
                   value={newTimeEntry.date}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTimeEntry({...newTimeEntry, date: e.target.value})}
                 />
                 <Input
                   type="number"
                   placeholder="Horas"
                   step="0.5"
                   value={newTimeEntry.hours}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTimeEntry({...newTimeEntry, hours: e.target.value})}
                 />
                 <Input
                   placeholder="Projeto"
                   value={newTimeEntry.project}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTimeEntry({...newTimeEntry, project: e.target.value})}
                 />
                 <Button onClick={addTimeEntry} className="w-full">
                   Adicionar
@@ -269,7 +268,7 @@ export const EmployeePortal: React.FC = () => {
               <Textarea
                 placeholder="Descrição das atividades (opcional)"
                 value={newTimeEntry.description}
-                onChange={handleChange}
+                onChange={(e) => setNewTimeEntry({...newTimeEntry, description: e.target.value})}
               />
 
               <div className="space-y-2">
@@ -314,18 +313,18 @@ export const EmployeePortal: React.FC = () => {
                   type="date"
                   placeholder="Data de início"
                   value={leaveRequest.startDate}
-                  onChange={handleChange}
+                  onChange={(e) => setLeaveRequest({...leaveRequest, startDate: e.target.value})}
                 />
                 <Input
                   type="date"
                   placeholder="Data de fim"
                   value={leaveRequest.endDate}
-                  onChange={handleChange}
+                  onChange={(e) => setLeaveRequest({...leaveRequest, endDate: e.target.value})}
                 />
                 <select 
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   value={leaveRequest.type}
-                  onChange={handleChange}
+                  onChange={(e) => setLeaveRequest({...leaveRequest, type: e.target.value})}
                 >
                   <option value="vacation">Férias</option>
                   <option value="sick">Licença Médica</option>
@@ -336,7 +335,7 @@ export const EmployeePortal: React.FC = () => {
               <Textarea
                 placeholder="Motivo (opcional para férias, obrigatório para outros tipos)"
                 value={leaveRequest.reason}
-                onChange={handleChange}
+                onChange={(e) => setLeaveRequest({...leaveRequest, reason: e.target.value})}
               />
               <Button onClick={submitLeaveRequest} className="w-full">
                 Enviar Solicitação

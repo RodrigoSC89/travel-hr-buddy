@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";;
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Brain, AlertTriangle } from "lucide-react";
-let ort: unknown = null;
+let ort: any = null;
 const loadORT = async () => {
   if (!ort) {
     ort = await import("onnxruntime-web");
@@ -21,7 +20,7 @@ export default function ForecastAIInsights() {
         const input = new ortLib.Tensor("float32", Float32Array.from([2.5, 1.7, 28.3, 5.0]), [1, 4]);
         const output = await session.run({ input });
         const value = output.result.data[0];
-        setPrediction(typeof value === "bigint" ? Number(value) : value);
+        setPrediction(typeof value === 'bigint' ? Number(value) : value);
       } catch (err) {
         console.error("AI Forecast Error:", err);
         setPrediction("Erro na previsão IA");

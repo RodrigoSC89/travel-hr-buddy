@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import {
   Table,
@@ -56,7 +55,7 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
         newSet.add(planId);
       }
       return newSet;
-};
+    });
   };
 
   const getStatusBadge = (status: string) => {
@@ -110,7 +109,7 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
-      };
+      });
     } catch {
       return dateString;
     }
@@ -152,7 +151,7 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handletoggleRow}
+                      onClick={() => toggleRow(plan.id)}
                       aria-label={expandedRows.has(plan.id) ? "Fechar detalhes" : "Expandir detalhes"}
                     >
                       {expandedRows.has(plan.id) ? (

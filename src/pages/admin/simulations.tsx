@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +14,7 @@ export default function SimulationsPage() {
   const { data: stats } = useQuery<SimulationStats>({
     queryKey: ["simulation-stats"],
     queryFn: async () => {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .rpc("get_simulation_stats");
       
       if (error) throw error;
@@ -27,7 +26,7 @@ export default function SimulationsPage() {
   const { data: simulations = [], isLoading } = useQuery<SimulationExercise[]>({
     queryKey: ["simulations", selectedType],
     queryFn: async () => {
-      let query = (supabase as unknown)
+      let query = (supabase as any)
         .from("simulation_exercises")
         .select("*")
         .order("next_due", { ascending: true });
@@ -128,7 +127,7 @@ export default function SimulationsPage() {
             <Button
               variant={selectedType === null ? "default" : "outline"}
               size="sm"
-              onClick={handleSetSelectedType}
+              onClick={() => setSelectedType(null)}
             >
               Todos
             </Button>
@@ -137,7 +136,7 @@ export default function SimulationsPage() {
                 key={type}
                 variant={selectedType === type ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetSelectedType}
+                onClick={() => setSelectedType(type)}
               >
                 {type}
               </Button>

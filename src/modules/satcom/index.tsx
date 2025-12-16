@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * SATCOM Dashboard - Main Component
  * Monitors satellite communication connectivity (Iridium, Starlink, etc.)
  * PATCH 171.0 - Enhanced with redundancy engine, fallback management, and alert handling
@@ -229,6 +228,7 @@ const SatcomDashboard = () => {
         vesselId="vessel-001"
         onTestComplete={() => {
           // Reload any necessary data after test
+          console.log("Diagnostic test completed");
         }}
       />
 
@@ -280,6 +280,6 @@ const SatcomDashboard = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default SatcomDashboard;

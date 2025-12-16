@@ -26,6 +26,7 @@ export function initFailoverSystem() {
   setInterval(async () => {
     const diff = Date.now() - lastHeartbeat;
     if (diff > 8000) {
+      console.warn("⚠️ Falha detectada! Último heartbeat há", diff / 1000, "segundos.");
       // Tabela failover_events não existe - comentado para evitar erros 404
       // await (supabase as any).from("failover_events").insert({
       //   event: "Loss of Heartbeat",
@@ -49,7 +50,6 @@ async function executeRecovery(client: any) {
     //   module: "DP-Sync",
     // });
   } catch (err) {
-    console.error("❌ Falha ao executar recuperação:", err);
     console.error("❌ Falha ao executar recuperação:", err);
   }
 }

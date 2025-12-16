@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * Fuel Manager Module - PATCH 838
  * Módulo de gestão de combustível com IA
  */
@@ -247,7 +246,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
     avg_speed_knots: "",
     weather_conditions: "Calm",
     notes: "",
-});
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -256,7 +255,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
       description: "O registro de consumo foi salvo com sucesso.",
     });
     onClose();
-  });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -296,7 +295,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="quantity"
             value={formData.quantity_liters}
-            onChange={handleChange}
+            onChange={(e) => setFormData({...formData, quantity_liters: e.target.value})}
             placeholder="Ex: 45000"
           />
         </div>
@@ -307,7 +306,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="cost"
             value={formData.cost_usd}
-            onChange={handleChange}
+            onChange={(e) => setFormData({...formData, cost_usd: e.target.value})}
             placeholder="Ex: 67500"
           />
         </div>
@@ -318,7 +317,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="distance"
             value={formData.distance_nm}
-            onChange={handleChange}
+            onChange={(e) => setFormData({...formData, distance_nm: e.target.value})}
             placeholder="Ex: 850"
           />
         </div>
@@ -330,7 +329,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             id="speed"
             step="0.1"
             value={formData.avg_speed_knots}
-            onChange={handleChange}
+            onChange={(e) => setFormData({...formData, avg_speed_knots: e.target.value})}
             placeholder="Ex: 14.5"
           />
         </div>
@@ -352,7 +351,7 @@ const AIPredictions = () => {
       title: "Previsões atualizadas",
       description: "A IA recalculou as previsões de consumo.",
     });
-  });
+  };
 
   return (
     <Card>
@@ -452,7 +451,7 @@ const FuelManager = () => {
             Gestão inteligente de combustível com análise preditiva
           </p>
         </div>
-        <Button onClick={handleSetShowForm}>
+        <Button onClick={() => setShowForm(!showForm)}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Registro
         </Button>
@@ -465,7 +464,7 @@ const FuelManager = () => {
             <CardDescription>Adicione um novo registro de consumo de combustível</CardDescription>
           </CardHeader>
           <CardContent>
-            <ConsumptionForm onClose={() => setShowForm(false} />
+            <ConsumptionForm onClose={() => setShowForm(false)} />
           </CardContent>
         </Card>
       )}

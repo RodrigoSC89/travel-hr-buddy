@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Satellite, Signal, Battery, Thermometer } from "lucide-react";
@@ -17,7 +16,7 @@ interface SatelliteStatusProps {
   satellites: SatelliteData[];
 }
 
-export const SatelliteStatus = memo(function({ satellites }: SatelliteStatusProps) {
+export function SatelliteStatus({ satellites }: SatelliteStatusProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "active": return "default";
@@ -25,13 +24,13 @@ export const SatelliteStatus = memo(function({ satellites }: SatelliteStatusProp
     case "offline": return "destructive";
     default: return "secondary";
     }
-  });
+  };
 
   const getSignalColor = (strength: number) => {
     if (strength >= 80) return "text-success";
     if (strength >= 50) return "text-warning";
     return "text-destructive";
-  });
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -87,4 +86,4 @@ export const SatelliteStatus = memo(function({ satellites }: SatelliteStatusProp
       ))}
     </div>
   );
-});
+}

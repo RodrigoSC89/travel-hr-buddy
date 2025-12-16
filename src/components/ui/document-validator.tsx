@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     expiryDate: "",
     issuer: "",
     notes: ""
-});
+  });
   const { toast } = useToast();
 
   const documentTypeLabels = {
@@ -50,7 +49,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     passport: "Passaporte",
     visa: "Visto",
     contract: "Contrato"
-  });
+  };
 
   const validateDocument = async () => {
     setIsValidating(true);
@@ -151,7 +150,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         score: Math.max(0, score),
         issues,
         suggestions
-      });
+      };
 
       setValidationResult(result);
       onValidationComplete?.(result);
@@ -184,7 +183,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         description: `${selectedFile.name} foi carregado com sucesso`
       });
     }
-  });
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-600";
@@ -245,7 +244,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <Input
                 id="documentNumber"
                 value={manualData.documentNumber}
-                onChange={handleChange}))}
+                onChange={(e) => setManualData(prev => ({ ...prev, documentNumber: e.target.value }))}
                 placeholder="Ex: ABC123456"
               />
             </div>
@@ -254,7 +253,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <Input
                 id="issuer"
                 value={manualData.issuer}
-                onChange={handleChange}))}
+                onChange={(e) => setManualData(prev => ({ ...prev, issuer: e.target.value }))}
                 placeholder="Ex: Marinha do Brasil"
               />
             </div>
@@ -264,7 +263,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 id="issueDate"
                 type="date"
                 value={manualData.issueDate}
-                onChange={handleChange}))}
+                onChange={(e) => setManualData(prev => ({ ...prev, issueDate: e.target.value }))}
               />
             </div>
             <div>
@@ -273,7 +272,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 id="expiryDate"
                 type="date"
                 value={manualData.expiryDate}
-                onChange={handleChange}))}
+                onChange={(e) => setManualData(prev => ({ ...prev, expiryDate: e.target.value }))}
               />
             </div>
           </div>
@@ -283,7 +282,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             <Textarea
               id="notes"
               value={manualData.notes}
-              onChange={handleChange}))}
+              onChange={(e) => setManualData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Informações adicionais sobre o documento..."
               rows={3}
             />
@@ -360,4 +359,4 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       )}
     </div>
   );
-});
+};

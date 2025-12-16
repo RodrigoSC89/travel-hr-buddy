@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -183,7 +182,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
       aiSuggested: false,
       estimatedCost: newReq.items.reduce((sum, i) => sum + (i.quantity * i.estimatedUnitCost), 0),
       costCenter: newReq.costCenter,
-    });
+    };
 
     setRequisitions(prev => [newRequisition, ...prev]);
     setShowNewRequisition(false);
@@ -196,7 +195,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
       items: [{ id: "1", name: "", quantity: 1, unit: "un", estimatedUnitCost: 0, suggestedSupplier: "" }],
     });
     toast.success("Requisição criada e enviada para aprovação!");
-  });
+  };
 
   const handleApprove = (req: Requisition) => {
     setRequisitions(prev => prev.map(r => 
@@ -322,7 +321,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
           </Select>
         </div>
 
-        <Button onClick={handleSetShowNewRequisition}>
+        <Button onClick={() => setShowNewRequisition(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Nova Requisição
         </Button>
@@ -376,12 +375,12 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                   <TableCell className="text-center">
                     <Badge variant={
                       req.priority === "urgent" ? "destructive" :
-                        req.priority === "high" ? "default" :
-                          req.priority === "medium" ? "secondary" : "outline"
+                      req.priority === "high" ? "default" :
+                      req.priority === "medium" ? "secondary" : "outline"
                     }>
                       {req.priority === "urgent" ? "Urgente" :
-                        req.priority === "high" ? "Alta" :
-                          req.priority === "medium" ? "Média" : "Baixa"}
+                       req.priority === "high" ? "Alta" :
+                       req.priority === "medium" ? "Média" : "Baixa"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right font-semibold">
@@ -390,18 +389,18 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                   <TableCell>
                     <Badge variant={
                       req.status === "approved" ? "default" :
-                        req.status === "rejected" ? "destructive" :
-                          req.status === "converted" ? "secondary" :
-                            req.status === "pending" ? "outline" : "outline"
+                      req.status === "rejected" ? "destructive" :
+                      req.status === "converted" ? "secondary" :
+                      req.status === "pending" ? "outline" : "outline"
                     }>
                       {req.status === "pending" && <Clock className="h-3 w-3 mr-1" />}
                       {req.status === "approved" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                       {req.status === "rejected" && <XCircle className="h-3 w-3 mr-1" />}
                       {req.status === "converted" && <ArrowRight className="h-3 w-3 mr-1" />}
                       {req.status === "pending" ? "Pendente" :
-                        req.status === "approved" ? "Aprovada" :
-                          req.status === "rejected" ? "Rejeitada" :
-                            req.status === "converted" ? "Convertida" : "Rascunho"}
+                       req.status === "approved" ? "Aprovada" :
+                       req.status === "rejected" ? "Rejeitada" :
+                       req.status === "converted" ? "Convertida" : "Rascunho"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -412,7 +411,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                             variant="ghost"
                             size="icon"
                             className="text-green-600 hover:text-green-700"
-                            onClick={() => handlehandleApprove}
+                            onClick={() => handleApprove(req)}
                           >
                             <ThumbsUp className="h-4 w-4" />
                           </Button>
@@ -420,7 +419,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                             variant="ghost"
                             size="icon"
                             className="text-red-600 hover:text-red-700"
-                            onClick={() => handlehandleReject}
+                            onClick={() => handleReject(req, "Requisição rejeitada pelo aprovador.")}
                           >
                             <ThumbsDown className="h-4 w-4" />
                           </Button>
@@ -430,7 +429,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handlehandleConvertToPO}
+                          onClick={() => handleConvertToPO(req)}
                         >
                           <Send className="h-4 w-4 mr-1" />
                           Gerar PO
@@ -468,7 +467,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 <Input
                   placeholder="Título da requisição"
                   value={newReq.title}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewReq(prev => ({ ...prev, title: e.target.value }))}
                 />
               </div>
               <div className="col-span-2 space-y-2">
@@ -476,7 +475,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 <Textarea
                   placeholder="Descreva a necessidade..."
                   value={newReq.description}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewReq(prev => ({ ...prev, description: e.target.value }))}
                 />
               </div>
               <div className="space-y-2">
@@ -519,7 +518,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 <Input
                   placeholder="CC-XXX-000"
                   value={newReq.costCenter}
-                  onChange={handleChange}))}
+                  onChange={(e) => setNewReq(prev => ({ ...prev, costCenter: e.target.value }))}
                 />
               </div>
             </div>
@@ -539,7 +538,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                       <Input
                         placeholder="Nome do item"
                         value={item.name}
-                        onChange={handleChange}
+                        onChange={(e) => updateItem(index, "name", e.target.value)}
                       />
                     </div>
                     <div className="col-span-2">
@@ -547,13 +546,13 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                         type="number"
                         placeholder="Qtd"
                         value={item.quantity}
-                        onChange={handleChange}
+                        onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
                       />
                     </div>
                     <div className="col-span-2">
                       <Select
                         value={item.unit}
-                        onValueChange={(v) => updateItem(index, "unit", v}
+                        onValueChange={(v) => updateItem(index, "unit", v)}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -572,7 +571,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                         type="number"
                         placeholder="Custo unit."
                         value={item.estimatedUnitCost}
-                        onChange={handleChange}
+                        onChange={(e) => updateItem(index, "estimatedUnitCost", Number(e.target.value))}
                       />
                     </div>
                     <div className="col-span-2 text-right">
@@ -591,7 +590,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowNewRequisition}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowNewRequisition(false)}>Cancelar</Button>
             <Button onClick={handleCreateRequisition}>
               <Send className="h-4 w-4 mr-2" />
               Criar Requisição
@@ -620,13 +619,13 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 </div>
                 <Badge variant={
                   selectedRequisition.status === "approved" ? "default" :
-                    selectedRequisition.status === "rejected" ? "destructive" :
-                      selectedRequisition.status === "converted" ? "secondary" : "outline"
+                  selectedRequisition.status === "rejected" ? "destructive" :
+                  selectedRequisition.status === "converted" ? "secondary" : "outline"
                 }>
                   {selectedRequisition.status === "pending" ? "Pendente" :
-                    selectedRequisition.status === "approved" ? "Aprovada" :
-                      selectedRequisition.status === "rejected" ? "Rejeitada" :
-                        selectedRequisition.status === "converted" ? "Convertida" : "Rascunho"}
+                   selectedRequisition.status === "approved" ? "Aprovada" :
+                   selectedRequisition.status === "rejected" ? "Rejeitada" :
+                   selectedRequisition.status === "converted" ? "Convertida" : "Rascunho"}
                 </Badge>
               </div>
 

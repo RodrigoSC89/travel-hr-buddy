@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -95,7 +94,7 @@ export default function ProcurementInventory() {
                   placeholder="Buscar itens, pedidos, fornecedores..."
                   className="pl-10 w-64"
                   value={searchQuery}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
 
@@ -103,14 +102,14 @@ export default function ProcurementInventory() {
               <Button
                 variant={showAIPanel ? "default" : "outline"}
                 size="icon"
-                onClick={handleSetShowAIPanel}
+                onClick={() => setShowAIPanel(!showAIPanel)}
                 className="relative"
               >
                 <Brain className="h-4 w-4" />
               </Button>
 
               {/* Filters */}
-              <Button variant="outline" size="icon" onClick={handleSetShowFilters}>
+              <Button variant="outline" size="icon" onClick={() => setShowFilters(true)}>
                 <Filter className="h-4 w-4" />
               </Button>
 
@@ -118,7 +117,7 @@ export default function ProcurementInventory() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={handleSetShowNotifications}
+                onClick={() => setShowNotifications(true)}
                 className="relative"
               >
                 <Bell className="h-4 w-4" />
@@ -130,7 +129,7 @@ export default function ProcurementInventory() {
               </Button>
 
               {/* Settings */}
-              <Button variant="outline" size="icon" onClick={handleSetShowSettings}>
+              <Button variant="outline" size="icon" onClick={() => setShowSettings(true)}>
                 <Settings className="h-4 w-4" />
               </Button>
 
@@ -206,7 +205,7 @@ export default function ProcurementInventory() {
           {/* AI Panel */}
           {showAIPanel && (
             <div className="lg:col-span-1">
-              <AIAssistantPanel onClose={() => setShowAIPanel(false} />
+              <AIAssistantPanel onClose={() => setShowAIPanel(false)} />
             </div>
           )}
         </div>

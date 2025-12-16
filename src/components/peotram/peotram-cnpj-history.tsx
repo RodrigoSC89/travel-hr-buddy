@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,8 +16,11 @@ import {
   TrendingDown,
   FileText,
   AlertTriangle,
+  CheckCircle,
+  Clock,
   Download,
   Eye,
+  Filter,
   BarChart3,
   History,
   Target,
@@ -209,7 +211,7 @@ export const PeotramCNPJHistory: React.FC = () => {
               <Input
                 placeholder="Digite o CNPJ ou nome..."
                 value={searchCNPJ}
-                onChange={handleChange}
+                onChange={(e) => setSearchCNPJ(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
@@ -230,7 +232,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                   key={company.cnpj}
                   variant="outline"
                   size="sm"
-                  onClick={handleSetSelectedCompany}
+                  onClick={() => setSelectedCompany(company)}
                   className={selectedCompany?.cnpj === company.cnpj ? "border-primary" : ""}
                 >
                   {company.name}
@@ -256,7 +258,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                   {getTrendIcon(selectedCompany.trend)}
                   <Badge className={getRiskBadge(selectedCompany.riskLevel)}>
                     Risco {selectedCompany.riskLevel === "low" ? "Baixo" : 
-                      selectedCompany.riskLevel === "medium" ? "Médio" : "Alto"}
+                           selectedCompany.riskLevel === "medium" ? "Médio" : "Alto"}
                   </Badge>
                   <div className={`text-3xl font-bold ${getScoreColor(selectedCompany.overallScore)}`}>
                     {selectedCompany.overallScore}%
@@ -319,7 +321,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                     className={`cursor-pointer transition-all ${
                       selectedVessel?.id === vessel.id ? "border-primary shadow-lg" : "hover:shadow-md"
                     }`}
-                    onClick={handleSetSelectedVessel}
+                    onClick={() => setSelectedVessel(vessel)}
                   >
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
@@ -421,11 +423,11 @@ export const PeotramCNPJHistory: React.FC = () => {
                           </div>
                           <Badge className={
                             audit.status === "completed" ? "bg-green-100 text-green-800" :
-                              audit.status === "in_progress" ? "bg-yellow-100 text-yellow-800" :
-                                "bg-gray-100 text-gray-800"
+                            audit.status === "in_progress" ? "bg-yellow-100 text-yellow-800" :
+                            "bg-gray-100 text-gray-800"
                           }>
                             {audit.status === "completed" ? "Concluída" :
-                              audit.status === "in_progress" ? "Em Andamento" : "Pendente"}
+                             audit.status === "in_progress" ? "Em Andamento" : "Pendente"}
                           </Badge>
                           <Button size="sm" variant="ghost">
                             <Eye className="h-4 w-4" />
@@ -443,8 +445,8 @@ export const PeotramCNPJHistory: React.FC = () => {
                                 key={finding.id}
                                 className={`text-sm p-2 rounded ${
                                   finding.severity === "critical" ? "bg-red-50 text-red-700" :
-                                    finding.severity === "major" ? "bg-yellow-50 text-yellow-700" :
-                                      "bg-blue-50 text-blue-700"
+                                  finding.severity === "major" ? "bg-yellow-50 text-yellow-700" :
+                                  "bg-blue-50 text-blue-700"
                                 }`}
                               >
                                 <span className="font-medium">{finding.element}:</span> {finding.description}
@@ -537,7 +539,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                         {getTrendIcon(selectedCompany.trend)}
                         <span className="font-medium capitalize">
                           {selectedCompany.trend === "improving" ? "Melhorando" :
-                            selectedCompany.trend === "declining" ? "Declinando" : "Estável"}
+                           selectedCompany.trend === "declining" ? "Declinando" : "Estável"}
                         </span>
                       </div>
                     </div>
@@ -551,10 +553,10 @@ export const PeotramCNPJHistory: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Risco de NC Crítica</p>
                       <div className={`text-xl font-bold ${
                         selectedCompany.riskLevel === "low" ? "text-green-600" :
-                          selectedCompany.riskLevel === "medium" ? "text-yellow-600" : "text-red-600"
+                        selectedCompany.riskLevel === "medium" ? "text-yellow-600" : "text-red-600"
                       }`}>
                         {selectedCompany.riskLevel === "low" ? "15%" :
-                          selectedCompany.riskLevel === "medium" ? "35%" : "60%"}
+                         selectedCompany.riskLevel === "medium" ? "35%" : "60%"}
                       </div>
                     </div>
                   </div>

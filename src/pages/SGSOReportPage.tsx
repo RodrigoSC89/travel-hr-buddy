@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useMemo } from "react";;;
+import { useRef, useState } from "react";
 import { logger } from "@/lib/logger";
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
@@ -72,7 +72,7 @@ export default function SGSOReportPage({
         image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" as const }
-      });
+      };
 
       await html2pdf().set(opt).from(element).save();
       toast.success("PDF gerado com sucesso!", { 

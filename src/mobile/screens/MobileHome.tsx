@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 187.0 - Mobile Home Screen
  * 
  * Main dashboard for mobile app with quick access to key features
@@ -39,17 +38,17 @@ export const MobileHome: React.FC = () => {
     const unsubscribe = enhancedSyncEngine.addStatusListener((status) => {
       setSyncStatus(status);
       setPendingCount(status.pendingChanges);
-  };
+    });
 
     // Monitor network status
     const unsubscribeNetwork = networkDetector.addListener((online: boolean) => {
       setIsOnline(online);
-  };
+    });
 
     // Check biometric availability
     biometricAuthService.isAvailable().then((result) => {
       setBiometricAvailable(result.available);
-  };
+    });
 
     return () => {
       unsubscribe();

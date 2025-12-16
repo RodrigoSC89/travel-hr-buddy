@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 114.0 - Smart Alerts with AI Predictive Analysis
  * Smart Alerts - Intelligent operational alerts with anomaly detection
  */
@@ -43,7 +42,7 @@ interface SmartAlert {
   confidence_score: number | null;
   impact_estimate: string | null;
   cause_analysis: string | null;
-  recommended_actions: unknown[];
+  recommended_actions: any[];
   affected_systems: string[];
   acknowledged: boolean;
   resolved: boolean;
@@ -75,7 +74,7 @@ const SmartAlerts = () => {
       setLoading(true);
       
       let query = supabase
-        .from("active_alerts_dashboard" as unknown)
+        .from("active_alerts_dashboard" as any)
         .select("*");
       
       if (!showResolved) {
@@ -88,22 +87,22 @@ const SmartAlerts = () => {
 
       // Fetch full details for alerts with actions
       const alertsWithDetails = await Promise.all(
-        (data || []).map(async (alert: unknown) => {
+        (data || []).map(async (alert: any) => {
           const { data: fullAlert } = await supabase
-            .from("smart_alerts" as unknown)
+            .from("smart_alerts" as any)
             .select("recommended_actions, affected_systems")
             .eq("id", alert.id)
             .single();
           
           return {
             ...alert,
-            recommended_actions: (fullAlert as unknown)?.recommended_actions || [],
-            affected_systems: (fullAlert as unknown)?.affected_systems || []
+            recommended_actions: (fullAlert as any)?.recommended_actions || [],
+            affected_systems: (fullAlert as any)?.affected_systems || []
           };
         })
       );
 
-      setAlerts(alertsWithDetails as unknown);
+      setAlerts(alertsWithDetails as any);
     } catch (error) {
       console.error("Error loading smart alerts:", error);
       toast({
@@ -144,8 +143,8 @@ const SmartAlerts = () => {
   const handleAcknowledge = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("smart_alerts" as unknown)
-        .update({ acknowledged: true } as unknown)
+        .from("smart_alerts" as any)
+        .update({ acknowledged: true } as any)
         .eq("id", alertId);
 
       if (error) throw error;
@@ -169,8 +168,8 @@ const SmartAlerts = () => {
   const handleResolve = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("smart_alerts" as unknown)
-        .update({ resolved: true, acknowledged: true } as unknown)
+        .from("smart_alerts" as any)
+        .update({ resolved: true, acknowledged: true } as any)
         .eq("id", alertId);
 
       if (error) throw error;
@@ -224,7 +223,7 @@ const SmartAlerts = () => {
       alert.source_module.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesLevel && matchesModule && matchesSearch;
-  };
+  });
 
   const modules = Array.from(new Set(alerts.map(a => a.source_module)));
 
@@ -246,7 +245,7 @@ const SmartAlerts = () => {
         <div className="flex gap-2">
           <Button 
             variant={showResolved ? "default" : "outline"} 
-            onClick={handleSetShowResolved}
+            onClick={() => setShowResolved(!showResolved)}
           >
             {showResolved ? "Hide" : "Show"} Resolved
           </Button>
@@ -331,7 +330,7 @@ const SmartAlerts = () => {
               <Input
                 placeholder="Search alerts..."
                 value={searchQuery}
-                onChange={handleChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
               />
             </div>
@@ -439,7 +438,7 @@ const SmartAlerts = () => {
                           <div className="mt-3">
                             <h4 className="text-sm font-semibold mb-2">Recommended Actions:</h4>
                             <div className="space-y-1">
-                              {alert.recommended_actions.slice(0, 3).map((action: unknown, idx: number) => (
+                              {alert.recommended_actions.slice(0, 3).map((action: any, idx: number) => (
                                 <div key={idx} className="text-sm pl-4 text-muted-foreground flex items-start gap-2">
                                   <span className="text-primary">•</span>
                                   <span className="flex-1">
@@ -469,7 +468,7 @@ const SmartAlerts = () => {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => handlehandleAcknowledge}
+                              onClick={() => handleAcknowledge(alert.id)}
                             >
                               <Eye className="h-4 w-4 mr-2" />
                               Acknowledge
@@ -478,7 +477,7 @@ const SmartAlerts = () => {
                           <Button 
                             variant="default" 
                             size="sm"
-                            onClick={() => handlehandleResolve}
+                            onClick={() => handleResolve(alert.id)}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
                             Resolve
@@ -495,6 +494,6 @@ const SmartAlerts = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default SmartAlerts;

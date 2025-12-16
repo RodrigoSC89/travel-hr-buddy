@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,7 +41,7 @@ interface Report {
   enabled: boolean;
 }
 
-export const AnalyticsDashboard = memo(() => {
+export const AnalyticsDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const { toast } = useToast();
 
@@ -223,15 +222,15 @@ export const AnalyticsDashboard = memo(() => {
               Dashboards dinâmicos, KPIs e relatórios automáticos para gestão estratégica.
             </p>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => handleexportDashboard}>
+              <Button variant="outline" size="sm" onClick={() => exportDashboard("pdf")}>
                 <Download className="h-4 w-4 mr-2" />
                 PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => handleexportDashboard}>
+              <Button variant="outline" size="sm" onClick={() => exportDashboard("excel")}>
                 <Download className="h-4 w-4 mr-2" />
                 Excel
               </Button>
-              <Button variant="outline" size="sm" onClick={() => handleexportDashboard}>
+              <Button variant="outline" size="sm" onClick={() => exportDashboard("powerbi")}>
                 <Download className="h-4 w-4 mr-2" />
                 Power BI
               </Button>
@@ -267,7 +266,7 @@ export const AnalyticsDashboard = memo(() => {
                       {typeof metric.value === "number" && metric.unit === "R$" 
                         ? `R$ ${metric.value.toLocaleString()}`
                         : `${metric.value}${metric.unit || ""}`
-                      };
+                      }
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-sm font-medium ${
@@ -362,7 +361,7 @@ export const AnalyticsDashboard = memo(() => {
                     <div className="flex items-center gap-2">
                       <Button 
                         size="sm" 
-                        onClick={() => handlegenerateReport}
+                        onClick={() => generateReport(report.id)}
                         disabled={!report.enabled}
                       >
                         <Mail className="h-4 w-4 mr-2" />

@@ -1,10 +1,9 @@
-import { useState } from "react";;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { logger } from "@/lib/logger";
 import {
   Shield, 
@@ -15,7 +14,10 @@ import {
   AlertTriangle,
   CheckCircle,
   Eye,
-  Copy
+  EyeOff,
+  Copy,
+  RefreshCw,
+  Lock
 } from "lucide-react";
 
 export const AdvancedAuthenticationSystem: React.FC = () => {
@@ -218,7 +220,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                   </p>
                   <div className="flex items-center gap-2">
                     <Input value={totpSecret} readOnly className="font-mono text-sm" />
-                    <Button size="sm" variant="outline" onClick={() => handlecopyToClipboard}>
+                    <Button size="sm" variant="outline" onClick={() => copyToClipboard(totpSecret)}>
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
@@ -233,7 +235,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     {backupCodes.map((code, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <Input value={code} readOnly className="font-mono text-sm" />
-                        <Button size="sm" variant="outline" onClick={() => handlecopyToClipboard}>
+                        <Button size="sm" variant="outline" onClick={() => copyToClipboard(code)}>
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
@@ -338,7 +340,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handlerevokeSession}
+                      onClick={() => revokeSession(session.id)}
                     >
                       Revogar
                     </Button>

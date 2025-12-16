@@ -2,7 +2,7 @@
  * MMI History Section - Histórico de manutenções
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,18 +105,18 @@ export default function MMIHistorySection() {
     const matchesType = !filterType || record.type === filterType;
     
     return matchesSearch && matchesType;
-  };
+  });
 
   const getTypeBadge = (type: string) => {
     switch (type) {
-    case "preventiva":
-      return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Preventiva</Badge>;
-    case "corretiva":
-      return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Corretiva</Badge>;
-    case "preditiva":
-      return <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">Preditiva</Badge>;
-    default:
-      return <Badge variant="secondary">{type}</Badge>;
+      case "preventiva":
+        return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Preventiva</Badge>;
+      case "corretiva":
+        return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Corretiva</Badge>;
+      case "preditiva":
+        return <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">Preditiva</Badge>;
+      default:
+        return <Badge variant="secondary">{type}</Badge>;
     }
   };
 
@@ -154,7 +154,7 @@ export default function MMIHistorySection() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Custo Total</p>
-                <p className="text-2xl font-bold">R$ {totalCost.toLocaleString("pt-BR")}</p>
+                <p className="text-2xl font-bold">R$ {totalCost.toLocaleString('pt-BR')}</p>
               </div>
               <Wrench className="h-8 w-8 text-muted-foreground/50" />
             </div>
@@ -184,7 +184,7 @@ export default function MMIHistorySection() {
               <Input
                 placeholder="Buscar por título, embarcação ou sistema..."
                 value={search}
-                onChange={handleChange}
+                onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -192,28 +192,28 @@ export default function MMIHistorySection() {
               <Button 
                 variant={filterType === null ? "default" : "outline"} 
                 size="sm"
-                onClick={handleSetFilterType}
+                onClick={() => setFilterType(null)}
               >
                 Todos
               </Button>
               <Button 
                 variant={filterType === "preventiva" ? "default" : "outline"} 
                 size="sm"
-                onClick={handleSetFilterType}
+                onClick={() => setFilterType("preventiva")}
               >
                 Preventiva
               </Button>
               <Button 
                 variant={filterType === "corretiva" ? "default" : "outline"} 
                 size="sm"
-                onClick={handleSetFilterType}
+                onClick={() => setFilterType("corretiva")}
               >
                 Corretiva
               </Button>
               <Button 
                 variant={filterType === "preditiva" ? "default" : "outline"} 
                 size="sm"
-                onClick={handleSetFilterType}
+                onClick={() => setFilterType("preditiva")}
               >
                 Preditiva
               </Button>
@@ -271,7 +271,7 @@ export default function MMIHistorySection() {
 
                     <div className="flex items-center gap-4 text-sm">
                       <span>Técnico: <strong>{record.technician}</strong></span>
-                      <span>Custo: <strong>R$ {record.cost.toLocaleString("pt-BR")}</strong></span>
+                      <span>Custo: <strong>R$ {record.cost.toLocaleString('pt-BR')}</strong></span>
                     </div>
                   </div>
 

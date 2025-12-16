@@ -10,11 +10,11 @@ const { mockUseEditor } = vi.hoisted(() => {
       state: {},
     })),
   };
-  };
+});
 
 vi.mock("@tiptap/react", () => ({
   useEditor: mockUseEditor,
-  EditorContent: ({ editor }: { editor: unknown: unknown: unknown }) => (
+  EditorContent: ({ editor }: { editor: any }) => (
     <div data-testid="editor-content">Editor Content</div>
   ),
 }));

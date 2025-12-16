@@ -1,21 +1,32 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import {
   Cloud,
+  Wind,
+  Waves,
+  Navigation,
   AlertTriangle,
   CheckCircle,
   Clock,
   TrendingUp,
+  TrendingDown,
   Activity,
+  Thermometer,
+  Eye,
+  Ship,
+  Target,
   Bell,
+  FileText,
   RefreshCw,
   Calendar,
+  MapPin,
+  Gauge,
   ArrowUp,
   ArrowDown,
   Minus
@@ -208,9 +219,9 @@ export const OperationalWindowMonitor: React.FC = () => {
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-    case "increasing": return <ArrowUp className="h-4 w-4 text-red-500" />;
-    case "decreasing": return <ArrowDown className="h-4 w-4 text-green-500" />;
-    default: return <Minus className="h-4 w-4 text-muted-foreground" />;
+      case "increasing": return <ArrowUp className="h-4 w-4 text-red-500" />;
+      case "decreasing": return <ArrowDown className="h-4 w-4 text-green-500" />;
+      default: return <Minus className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -260,8 +271,8 @@ export const OperationalWindowMonitor: React.FC = () => {
               <div>
                 <h3 className="text-xl font-bold">
                   {overallStatus === "normal" ? "Condições Operacionais Normais" :
-                    overallStatus === "warning" ? "Atenção: Condições Próximas ao Limite" :
-                      "ALERTA: Condições Fora do ASOG"}
+                   overallStatus === "warning" ? "Atenção: Condições Próximas ao Limite" :
+                   "ALERTA: Condições Fora do ASOG"}
                 </h3>
                 <p className="text-muted-foreground">
                   Perfil ASOG ativo: <span className="font-medium">{selectedProfile.name}</span> ({selectedProfile.operationType})
@@ -272,7 +283,7 @@ export const OperationalWindowMonitor: React.FC = () => {
               <select
                 className="border rounded-md px-3 py-2 text-sm"
                 value={selectedProfile.id}
-                onChange={handleChange}
+                onChange={(e) => setSelectedProfile(mockASOGProfiles.find(p => p.id === e.target.value) || mockASOGProfiles[0])}
               >
                 {mockASOGProfiles.map(profile => (
                   <option key={profile.id} value={profile.id}>{profile.name}</option>
@@ -361,7 +372,7 @@ export const OperationalWindowMonitor: React.FC = () => {
                       <span className="font-medium">{condition.parameter}</span>
                       <span className="text-sm text-muted-foreground">
                         {condition.trend === "increasing" ? "📈 Tendência de aumento" :
-                          condition.trend === "decreasing" ? "📉 Tendência de queda" : "➡️ Estável"}
+                         condition.trend === "decreasing" ? "📉 Tendência de queda" : "➡️ Estável"}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -432,7 +443,7 @@ export const OperationalWindowMonitor: React.FC = () => {
                         </div>
                       </div>
                       {!alert.acknowledged && (
-                        <Button size="sm" onClick={() => handlehandleAcknowledgeAlert}>
+                        <Button size="sm" onClick={() => handleAcknowledgeAlert(alert.id)}>
                           <CheckCircle className="w-4 h-4 mr-1" />Reconhecer
                         </Button>
                       )}

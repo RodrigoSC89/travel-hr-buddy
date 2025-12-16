@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -51,7 +50,7 @@ interface MetricasEmbarcacaoData {
   ultima_auditoria: string;
 }
 
-export const MetricasPanel = memo(() => {
+export const MetricasPanel = () => {
   const [metricsRisco, setMetricsRisco] = useState<MetricasRiscoData[]>([]);
   const [evolucaoMensal, setEvolucaoMensal] = useState<EvolucaoMensalData[]>([]);
   const [metricsEmbarcacao, setMetricsEmbarcacao] = useState<MetricasEmbarcacaoData[]>([]);
@@ -174,7 +173,7 @@ export const MetricasPanel = memo(() => {
         </CardContent>
       </Card>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -365,4 +364,4 @@ export const MetricasPanel = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

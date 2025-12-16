@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -67,12 +66,12 @@ export const SmartInsights: React.FC = () => {
             activeModule: "optimization"
           }
         }
-      };
+      });
 
       if (error) throw error;
 
       if (data.success && data.insights) {
-        setInsights(data.insights.map((insight: unknown) => ({
+        setInsights(data.insights.map((insight: any) => ({
           id: insight.id || Math.random().toString(),
           type: insight.priority === "high" ? "warning" : "recommendation",
           title: insight.title,
@@ -173,13 +172,13 @@ export const SmartInsights: React.FC = () => {
           userId: "demo-user",
           category: "all"
         }
-      };
+      });
 
       if (error) throw error;
 
       if (data.success) {
         // Convert performance data to predictions format
-        const predictiveData = data.metrics?.slice(0, 4).map((metric: unknown, index: number) => ({
+        const predictiveData = data.metrics?.slice(0, 4).map((metric: any, index: number) => ({
           id: `prediction_${index}`,
           name: `Previsão ${metric.name}`,
           currentValue: metric.value,
@@ -403,7 +402,7 @@ export const SmartInsights: React.FC = () => {
                     {insight.actionable && (
                       <Button 
                         size="sm"
-                        onClick={() => handleimplementInsight}
+                        onClick={() => implementInsight(insight)}
                         disabled={isGenerating}
                         className="hover-glow"
                       >

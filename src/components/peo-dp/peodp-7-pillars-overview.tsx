@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * PEO-DP 7 Pillars Overview Component
  * Visão geral dos 7 pilares estratégicos do Programa de Excelência em Operações DP
  * Baseado no documento Petrobras DC&L/LOEP/LOFF/EO - 15/09/2021
@@ -200,7 +199,7 @@ const PILLARS: PillarData[] = [
   }
 ];
 
-export const PEODP7PillarsOverview = memo(function() {
+export function PEODP7PillarsOverview() {
   const [selectedPillar, setSelectedPillar] = useState<PillarData | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -264,7 +263,7 @@ export const PEODP7PillarsOverview = memo(function() {
             <Card 
               key={pillar.id} 
               className="hover:shadow-lg transition-all duration-200 cursor-pointer group"
-              onClick={() => handlehandleViewDetails}
+              onClick={() => handleViewDetails(pillar)}
             >
               <CardHeader className={`${pillar.bgColor} border-b`}>
                 <div className="flex items-center justify-between">
@@ -398,7 +397,7 @@ export const PEODP7PillarsOverview = memo(function() {
               </ScrollArea>
 
               <div className="flex justify-end gap-2 pt-4 border-t">
-                <Button variant="outline" onClick={handleSetIsDialogOpen}>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Fechar
                 </Button>
                 <Button>

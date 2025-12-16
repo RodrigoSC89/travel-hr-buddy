@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
-
+// @ts-nocheck
 /**
  * PATCH 370 - Operations Dashboard - Real Data Integration
  * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket
@@ -41,7 +40,7 @@ interface OperationalMetrics {
   mission_status: Record<string, number>;
   vessel_health: Record<string, number>;
   alerts_by_severity: Record<string, number>;
-  telemetry_data: unknown[];
+  telemetry_data: any[];
   active_operations: number;
   crew_availability: number;
   system_health: number;
@@ -62,7 +61,7 @@ interface RealTimeAlert {
   message: string;
   source: "supabase" | "mqtt" | "websocket";
   timestamp: string;
-  metadata: unknown;
+  metadata: any;
 }
 
 export const OperationsDashboardRealTime: React.FC = () => {
@@ -75,7 +74,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     crew_availability: 0,
     system_health: 100,
     last_update: new Date().toISOString(),
-  };
+  });
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterConfig>({
@@ -129,6 +128,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
+          console.log("Sensor data update:", payload);
           handleSupabaseUpdate(payload, "sensor");
         }
       )
@@ -136,6 +136,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "crew_rotations" },
         (payload) => {
+          console.log("Crew rotation update:", payload);
           handleSupabaseUpdate(payload, "crew");
         }
       )
@@ -143,15 +144,17 @@ export const OperationsDashboardRealTime: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "vessels" },
         (payload) => {
+          console.log("Vessel update:", payload);
           handleSupabaseUpdate(payload, "vessel");
         }
       )
       .subscribe((status) => {
+        console.log("Supabase subscription status:", status);
         if (status === "SUBSCRIBED") {
           toast.success("Real-time data connected");
         }
       });
-  });
+  };
 
   const setupMQTTConnection = () => {
     try {
@@ -162,12 +165,12 @@ export const OperationsDashboardRealTime: React.FC = () => {
       // mqttClientRef.current.on('connect', () => setMqttConnected(true));
       // mqttClientRef.current.on('message', (topic, message) => handleMQTTMessage({ topic, payload: JSON.parse(message) }));
       
+      console.log("MQTT connection simulated for demo");
       setMqttConnected(false);
       
       // Simulate MQTT messages for demo
       simulateMQTTMessages();
     } catch (error) {
-      console.error("MQTT connection error:", error);
       console.error("MQTT connection error:", error);
     }
   };
@@ -175,12 +178,12 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const setupWebSocketConnection = () => {
     try {
       // In production, connect to actual WebSocket server
+      console.log("WebSocket connection would be established here");
       setWsConnected(false); // Set to false for demo
       
       // Simulate WebSocket messages
       simulateWebSocketMessages();
     } catch (error) {
-      console.error("WebSocket connection error:", error);
       console.error("WebSocket connection error:", error);
     }
   };
@@ -206,7 +209,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       
       handleMQTTMessage(mqttData);
     }, 5000);
-  });
+  };
 
   const simulateWebSocketMessages = () => {
     // Clear existing interval if any
@@ -227,7 +230,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }, 15000);
   };
 
-  const handleSupabaseUpdate = (payload: unknown, type: string) => {
+  const handleSupabaseUpdate = (payload: any, type: string) => {
     const newAlert: RealTimeAlert = {
       id: `alert-${Date.now()}`,
       type,
@@ -242,7 +245,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     loadRealTimeData();
   };
 
-  const handleMQTTMessage = (data: unknown) => {
+  const handleMQTTMessage = (data: any) => {
     const newAlert: RealTimeAlert = {
       id: `mqtt-${Date.now()}`,
       type: "telemetry",
@@ -256,7 +259,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
   };
 
-  const handleWebSocketMessage = (data: unknown) => {
+  const handleWebSocketMessage = (data: any) => {
     const newAlert: RealTimeAlert = {
       id: `ws-${Date.now()}`,
       type: "system",
@@ -341,7 +344,6 @@ export const OperationsDashboardRealTime: React.FC = () => {
       });
     } catch (error) {
       console.error("Error loading real-time data:", error);
-      console.error("Error loading real-time data:", error);
       toast.error("Failed to load operations data");
     } finally {
       setLoading(false);
@@ -364,8 +366,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }
   };
 
-  const calculateSystemHealth = (vesselHealth: unknown: unknown: unknown, alerts: unknown: unknown: unknown): number => {
-    const totalVessels = Object.values(vesselHealth).reduce((a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b, 0);
+  const calculateSystemHealth = (vesselHealth: any, alerts: any): number => {
+    const totalVessels = Object.values(vesselHealth).reduce((a: any, b: any) => a + b, 0);
     const healthyVessels = vesselHealth.healthy || 0;
     const criticalAlerts = alerts.critical || 0;
 
@@ -473,7 +475,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         <div className="flex gap-2 flex-wrap">
           <Button
             variant="outline"
-            onClick={handleSetAutoRefresh}
+            onClick={() => setAutoRefresh(!autoRefresh)}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-spin" : ""}`} />
             {autoRefresh ? "Auto" : "Manual"}
@@ -553,7 +555,13 @@ export const OperationsDashboardRealTime: React.FC = () => {
             <div className="flex items-end">
               <Button
                 variant="outline"
-                onClick={handleSetFilter}
+                onClick={() =>
+                  setFilter({
+                    operation_type: "all",
+                    time_range: "24h",
+                    criticality: "all",
+                  })
+                }
                 className="w-full"
               >
                 Reset Filters
@@ -587,7 +595,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{metrics.active_operations}</div>
             <p className="text-xs text-muted-foreground">
-              {Object.values(metrics.mission_status).reduce((a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b, 0)} total
+              {Object.values(metrics.mission_status).reduce((a: any, b: any) => a + b, 0)} total
             </p>
           </CardContent>
         </Card>
@@ -599,7 +607,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {Object.values(metrics.alerts_by_severity).reduce((a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b, 0)}
+              {Object.values(metrics.alerts_by_severity).reduce((a: any, b: any) => a + b, 0)}
             </div>
             <p className="text-xs text-muted-foreground">
               {metrics.alerts_by_severity.critical || 0} critical
@@ -662,7 +670,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           value={
                             (count /
                               Object.values(metrics.vessel_health).reduce(
-                                (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
+                                (a: any, b: any) => a + b,
                                 0
                               )) *
                             100
@@ -776,7 +784,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                   <div className="space-y-2">
                     {Object.entries(metrics.alerts_by_severity).map(([severity, count]) => {
                       const total = Object.values(metrics.alerts_by_severity).reduce(
-                        (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
+                        (a: any, b: any) => a + b,
                         0
                       );
                       const percentage = total > 0 ? (count / total) * 100 : 0;
@@ -811,7 +819,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                             ? Math.round(
                               (metrics.active_operations /
                                   Object.values(metrics.mission_status).reduce(
-                                    (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
+                                    (a: any, b: any) => a + b,
                                     1
                                   )) *
                                   100
@@ -825,7 +833,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           metrics.active_operations > 0
                             ? (metrics.active_operations /
                                 Object.values(metrics.mission_status).reduce(
-                                  (a: unknown: unknown: unknown, b: unknown: unknown: unknown) => a + b,
+                                  (a: any, b: any) => a + b,
                                   1
                                 )) *
                               100

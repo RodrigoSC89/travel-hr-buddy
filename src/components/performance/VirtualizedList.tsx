@@ -1,11 +1,10 @@
 /**
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";;
  * Virtualized List Component - PATCH 831
  * Efficient rendering for large datasets
  */
 
-import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { cn } from "@/lib/utils";
+import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+import { cn } from '@/lib/utils';
 
 interface VirtualizedListProps<T> {
   items: T[];
@@ -43,7 +42,7 @@ export function VirtualizedList<T>({
   // Calculate item heights
   const getItemHeight = useCallback(
     (index: number): number => {
-      if (typeof itemHeight === "function") {
+      if (typeof itemHeight === 'function') {
         return itemHeight(index, items[index]);
       }
       return itemHeight;
@@ -53,13 +52,13 @@ export function VirtualizedList<T>({
 
   // Calculate total height and item positions
   const { totalHeight, itemPositions } = useMemo(() => {
-    const positions: number[] = []);
+    const positions: number[] = [];
     let total = 0;
 
     items.forEach((_, index) => {
       positions.push(total);
       total += getItemHeight(index);
-  };
+    });
 
     return { totalHeight: total, itemPositions: positions };
   }, [items, getItemHeight]);
@@ -125,7 +124,7 @@ export function VirtualizedList<T>({
       for (const entry of entries) {
         setContainerHeight(entry.contentRect.height);
       }
-    };
+    });
 
     resizeObserver.observe(container);
     setContainerHeight(container.clientHeight);
@@ -135,7 +134,7 @@ export function VirtualizedList<T>({
 
   // Render visible items
   const visibleItems = useMemo(() => {
-    const visible: React.ReactNode[] = []);
+    const visible: React.ReactNode[] = [];
 
     for (let i = startIndex; i < endIndex; i++) {
       const item = items[i];
@@ -143,7 +142,7 @@ export function VirtualizedList<T>({
       const top = itemPositions[i];
 
       const style: React.CSSProperties = {
-        position: "absolute",
+        position: 'absolute',
         top,
         left: 0,
         right: 0,
@@ -167,12 +166,12 @@ export function VirtualizedList<T>({
   return (
     <div
       ref={containerRef}
-      className={cn("overflow-auto relative", containerClassName)}
+      className={cn('overflow-auto relative', containerClassName)}
       onScroll={handleScroll}
     >
       <div
-        className={cn("relative", className)}
-        style={{ height: totalHeight, minHeight: "100%" }}
+        className={cn('relative', className)}
+        style={{ height: totalHeight, minHeight: '100%' }}
       >
         {visibleItems}
       </div>
@@ -207,7 +206,7 @@ export function useVirtualizedData<T>(
       setItems((prev) => [...prev, ...newItems]);
       setPage((p) => p + 1);
     } catch (error) {
-      console.error("Failed to load more items:", error);
+      console.error('Failed to load more items:', error);
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,7 +8,7 @@ import DocumentProcessor from "../intelligence/DocumentProcessor";
 const ReportsDashboard = () => {
   const [activeReport, setActiveReport] = useState<unknown>(null);
 
-  const handleReportGenerated = (report: unknown) => {
+  const handleReportGenerated = (report: any) => {
     setActiveReport(report);
   };
 

@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
 import { FileDown } from "lucide-react";
@@ -13,7 +12,7 @@ interface ExportarComentariosPDFProps {
   comentarios: Comentario[];
 }
 
-export const ExportarComentariosPDF = memo(function({ comentarios }: ExportarComentariosPDFProps) {
+export function ExportarComentariosPDF({ comentarios }: ExportarComentariosPDFProps) {
   const gerarPDF = () => {
     if (comentarios.length === 0) {
       return;
@@ -69,7 +68,7 @@ export const ExportarComentariosPDF = memo(function({ comentarios }: ExportarCom
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
       })
       .save();
-  });
+  };
 
   return (
     <Button
@@ -82,4 +81,4 @@ export const ExportarComentariosPDF = memo(function({ comentarios }: ExportarCom
       Exportar Comentários (PDF)
     </Button>
   );
-});
+}

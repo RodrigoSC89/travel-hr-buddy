@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * Training Academy AI - Diferencial vs OLP/Seagull/Videotel
  * - Trilhas adaptativas personalizadas
  * - Tutor IA 24/7
@@ -14,8 +13,10 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
+import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
   Brain,
   GraduationCap,
@@ -26,10 +27,12 @@ import {
   Play,
   CheckCircle,
   Clock,
+  TrendingUp,
   FileText,
   Sparkles,
   MessageSquare,
-  Lightbulb
+  Lightbulb,
+  AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -62,7 +65,7 @@ interface SimulationScenario {
   skills: string[];
 }
 
-export const TrainingAcademyAI = memo(function() {
+export function TrainingAcademyAI() {
   const { generate, analyze, suggest, chat, isLoading } = useNautilusAI();
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([
     {
@@ -150,7 +153,7 @@ export const TrainingAcademyAI = memo(function() {
       const quiz: QuizQuestion[] = [
         {
           id: "q1",
-          question: "Durante uma operação DP, qual é o procedimento correto quando o status ASOG muda de Verde para Amarelo?",
+          question: `Durante uma operação DP, qual é o procedimento correto quando o status ASOG muda de Verde para Amarelo?`,
           options: [
             "Continuar operação normalmente",
             "Reduzir operações e aumentar monitoramento",
@@ -221,10 +224,10 @@ export const TrainingAcademyAI = memo(function() {
 
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
-    case "beginner": return "bg-green-500";
-    case "intermediate": return "bg-yellow-500";
-    case "advanced": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "beginner": return "bg-green-500";
+      case "intermediate": return "bg-yellow-500";
+      case "advanced": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
@@ -391,13 +394,13 @@ export const TrainingAcademyAI = memo(function() {
             <CardContent>
               <div className="mb-4">
                 <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => handlegenerateQuiz}>
+                  <Button variant="outline" onClick={() => generateQuiz("Operações DP e ASOG")}>
                     Gerar Quiz: DP/ASOG
                   </Button>
-                  <Button variant="outline" onClick={() => handlegenerateQuiz}>
+                  <Button variant="outline" onClick={() => generateQuiz("Segurança SOLAS")}>
                     Gerar Quiz: SOLAS
                   </Button>
-                  <Button variant="outline" onClick={() => handlegenerateQuiz}>
+                  <Button variant="outline" onClick={() => generateQuiz("Navegação ECDIS")}>
                     Gerar Quiz: ECDIS
                   </Button>
                 </div>
@@ -420,7 +423,7 @@ export const TrainingAcademyAI = memo(function() {
                               key={optIdx}
                               variant={selectedAnswer === optIdx ? (optIdx === q.correctAnswer ? "default" : "destructive") : "outline"}
                               className="w-full justify-start"
-                              onClick={() => handlecheckAnswer}
+                              onClick={() => checkAnswer(q.id, optIdx)}
                             >
                               {String.fromCharCode(65 + optIdx)}. {opt}
                             </Button>
@@ -487,7 +490,7 @@ export const TrainingAcademyAI = memo(function() {
               <div className="flex gap-2">
                 <Textarea
                   value={tutorQuestion}
-                  onChange={handleChange}
+                  onChange={(e) => setTutorQuestion(e.target.value)}
                   placeholder="Faça qualquer pergunta sobre navegação, DP, segurança, procedimentos..."
                   className="flex-1"
                   rows={3}
@@ -522,7 +525,7 @@ export const TrainingAcademyAI = memo(function() {
                       key={q}
                       variant="outline"
                       size="sm"
-                      onClick={handleSetTutorQuestion}
+                      onClick={() => setTutorQuestion(q)}
                     >
                       <Lightbulb className="h-3 w-3 mr-1" />
                       {q}
@@ -536,4 +539,6 @@ export const TrainingAcademyAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
+
+export default TrainingAcademyAI;

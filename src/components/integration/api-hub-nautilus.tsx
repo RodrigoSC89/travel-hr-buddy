@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -257,7 +256,7 @@ export const APIHubNautilus: React.FC = () => {
       description: "Abrindo documentação completa com exemplos e referências"
     });
     // TODO: Open documentation page or modal
-  });
+  };
 
   const handleNewAPIKey = () => {
     toast({
@@ -265,7 +264,7 @@ export const APIHubNautilus: React.FC = () => {
       description: "Gerando nova chave de autenticação segura"
     });
     // TODO: Open API key generation dialog
-  });
+  };
 
   const handleTestAPI = (endpointName: string) => {
     toast({
@@ -273,7 +272,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Abrindo console de testes para ${endpointName}`
     });
     // TODO: Open API testing console
-  });
+  };
 
   const handleViewDocumentation = (endpointName: string) => {
     toast({
@@ -281,7 +280,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Abrindo documentação detalhada de ${endpointName}`
     });
     // TODO: Open API documentation modal
-  });
+  };
 
   const handleDownloadExamples = (endpointName: string) => {
     toast({
@@ -289,7 +288,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Baixando exemplos de código para ${endpointName}`
     });
     // TODO: Download code examples
-  });
+  };
 
   const handleConfigureIntegration = (integrationName: string) => {
     toast({
@@ -297,7 +296,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Abrindo configurações de ${integrationName}`
     });
     // TODO: Open integration configuration dialog
-  });
+  };
 
   const handleViewLogs = (integrationName: string) => {
     toast({
@@ -305,7 +304,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Visualizando logs de ${integrationName}`
     });
     // TODO: Open logs viewer
-  });
+  };
 
   const handleTestIntegration = (integrationName: string) => {
     toast({
@@ -313,7 +312,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Testando conexão com ${integrationName}`
     });
     // TODO: Run integration test
-  });
+  };
 
   const handleDownloadSDK = (sdkName: string) => {
     toast({
@@ -321,7 +320,7 @@ export const APIHubNautilus: React.FC = () => {
       description: `Baixando ${sdkName}`
     });
     // TODO: Download SDK package
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -479,7 +478,7 @@ export const APIHubNautilus: React.FC = () => {
                           <Badge className={getMethodColor(endpoint.method)}>
                             {endpoint.method}
                           </Badge>
-                          <Badge variant={getStatusColor(endpoint.status) as unknown}>
+                          <Badge variant={getStatusColor(endpoint.status) as any}>
                             {endpoint.status}
                           </Badge>
                         </div>
@@ -531,15 +530,15 @@ export const APIHubNautilus: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleTestAPI}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleTestAPI(endpoint.name)}>
                         <Code className="h-4 w-4 mr-2" />
                         Testar API
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleViewDocumentation}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleViewDocumentation(endpoint.name)}>
                         <Book className="h-4 w-4 mr-2" />
                         Documentação
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handlehandleDownloadExamples}>
+                      <Button size="sm" variant="outline" onClick={() => handleDownloadExamples(endpoint.name)}>
                         <Download className="h-4 w-4 mr-2" />
                         Exemplos
                       </Button>
@@ -620,13 +619,13 @@ export const APIHubNautilus: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleConfigureIntegration}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleConfigureIntegration(integration.name)}>
                         Configurar
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleViewLogs}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleViewLogs(integration.name)}>
                         Logs
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handlehandleTestIntegration}>
+                      <Button size="sm" variant="outline" onClick={() => handleTestIntegration(integration.name)}>
                         Testar
                       </Button>
                     </div>
@@ -655,7 +654,7 @@ export const APIHubNautilus: React.FC = () => {
                         <div className="font-medium">{sdk.name}</div>
                         <div className="text-sm text-muted-foreground">v{sdk.version} • {sdk.downloads} downloads</div>
                       </div>
-                      <Button size="sm" variant="outline" onClick={() => handlehandleDownloadSDK}>
+                      <Button size="sm" variant="outline" onClick={() => handleDownloadSDK(sdk.name)}>
                         <Download className="h-4 w-4 mr-2" />
                         Download
                       </Button>

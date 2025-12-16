@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,9 +7,13 @@ import { Separator } from "@/components/ui/separator";
 import { 
   Ship, 
   MapPin, 
+  Fuel, 
+  Users, 
   Calendar,
   Wrench,
-  TrendingUp
+  AlertTriangle,
+  TrendingUp,
+  Activity
 } from "lucide-react";
 
 interface VesselPerformance {
@@ -40,7 +43,7 @@ interface VesselDetails {
   route: string;
 }
 
-export const VesselPerformanceDashboard = memo(() => {
+export const VesselPerformanceDashboard = () => {
   const [vessels, setVessels] = useState<VesselDetails[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
@@ -119,7 +122,7 @@ export const VesselPerformanceDashboard = memo(() => {
     case "docked": return "bg-green-100 text-green-800";
     case "maintenance": return "bg-red-100 text-red-800";
     default: return "bg-secondary text-secondary-foreground";
-    };
+    }
   };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
@@ -141,7 +144,7 @@ export const VesselPerformanceDashboard = memo(() => {
             key={range}
             variant={timeRange === range ? "default" : "outline"}
             size="sm"
-            onClick={handleSetTimeRange}
+            onClick={() => setTimeRange(range)}
           >
             {range === "24h" ? "24 Horas" : range === "7d" ? "7 Dias" : "30 Dias"}
           </Button>
@@ -157,7 +160,7 @@ export const VesselPerformanceDashboard = memo(() => {
               className={`cursor-pointer transition-all hover:shadow-md ${
                 selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
               }`}
-              onClick={handleSetSelectedVessel}
+              onClick={() => setSelectedVessel(vessel.id)}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -368,4 +371,4 @@ export const VesselPerformanceDashboard = memo(() => {
       </div>
     </div>
   );
-});
+};

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -131,7 +130,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       // Battery API (se disponível)
       if ("getBattery" in navigator) {
         try {
-          const battery = await (navigator as unknown).getBattery();
+          const battery = await (navigator as any).getBattery();
           info.batteryLevel = Math.round(battery.level * 100);
           info.isCharging = battery.charging;
         } catch (error) {
@@ -140,7 +139,7 @@ export const EnhancedMobileSupport: React.FC = () => {
 
       // Connection API (se disponível)
       if ("connection" in navigator) {
-        const connection = (navigator as unknown).connection;
+        const connection = (navigator as any).connection;
         info.connection = connection.effectiveType;
       }
 
@@ -153,15 +152,15 @@ export const EnhancedMobileSupport: React.FC = () => {
 
   const setupPWAListeners = () => {
     // Listener para o evento beforeinstallprompt
-    window.addEventListener("beforeinstallprompt", (e: Event) => {
+    window.addEventListener("beforeinstallprompt", (e: any) => {
       e.preventDefault();
       setInstallPrompt(e);
       setPwaStatus(prev => ({ ...prev, canInstall: true }));
-  };
+    });
 
     // Verificar se está rodando como PWA
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
-                        (window.navigator as unknown).standalone === true;
+                        (window.navigator as any).standalone === true;
     
     setPwaStatus(prev => ({ 
       ...prev, 
@@ -316,7 +315,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           title: "Atualizando app",
           description: "A nova versão será carregada em breve"
         });
-  });
+      });
     }
   };
 
@@ -475,7 +474,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.notifications}
-                  onCheckedChange={() => requestPermission("notifications"}
+                  onCheckedChange={() => requestPermission("notifications")}
                 />
               </div>
               
@@ -486,7 +485,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.location}
-                  onCheckedChange={() => requestPermission("location"}
+                  onCheckedChange={() => requestPermission("location")}
                 />
               </div>
               
@@ -497,7 +496,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.camera}
-                  onCheckedChange={() => requestPermission("camera"}
+                  onCheckedChange={() => requestPermission("camera")}
                 />
               </div>
               
@@ -508,7 +507,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.microphone}
-                  onCheckedChange={() => requestPermission("microphone"}
+                  onCheckedChange={() => requestPermission("microphone")}
                 />
               </div>
               
@@ -519,7 +518,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 </div>
                 <Switch
                   checked={mobileSettings.vibration}
-                  onCheckedChange={() => requestPermission("vibration"}
+                  onCheckedChange={() => requestPermission("vibration")}
                 />
               </div>
             </div>
@@ -583,7 +582,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               <Button 
                 size="sm" 
                 variant="outline" 
-                onClick={() => handletoast}
+                onClick={() => toast({ title: "Teste", description: "Notificação de teste" })}
                 className="gap-2"
               >
                 <Bell className="h-3 w-3" />

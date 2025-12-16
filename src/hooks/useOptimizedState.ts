@@ -66,7 +66,6 @@ export function usePersistedState<T>(
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
       } catch (error) {
         console.warn(`Error saving to localStorage key "${key}":`, error);
-        console.warn(`Error saving to localStorage key "${key}":`, error);
       }
     },
     [key, storedValue]
@@ -88,6 +87,7 @@ export function useSafeLoading(timeout: number = 30000) {
     // Timeout de segurança para evitar loading infinito
     timeoutRef.current = setTimeout(() => {
       setIsLoading(false);
+      console.warn("Loading timeout reached");
     }, timeout);
   }, [timeout]);
 

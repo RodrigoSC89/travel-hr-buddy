@@ -66,13 +66,14 @@ function LoadingFallback() {
   );
 }
 
-export const MobileLayout = memo(function({ children, showNav = true }: MobileLayoutProps) {
+export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
   const { isOnline, pendingChanges, isSyncing } = useOfflineSync();
 
   return (
     <ErrorBoundary 
       FallbackComponent={ErrorFallback}
       onError={(error, errorInfo) => {
+        console.error("Mobile app error:", error, errorInfo);
       }}
     >
       <div className="min-h-screen bg-background">
@@ -96,4 +97,4 @@ export const MobileLayout = memo(function({ children, showNav = true }: MobileLa
       </div>
     </ErrorBoundary>
   );
-});
+}

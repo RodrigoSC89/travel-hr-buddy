@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 476: Enhanced SATCOM Connectivity Panel
  * Shows real-time connectivity status with ping simulation
  */
@@ -139,7 +138,7 @@ export const ConnectivityPanel: React.FC = () => {
               <Button
                 variant={autoPing ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetAutoPing}
+                onClick={() => setAutoPing(!autoPing)}
               >
                 <Activity className="h-4 w-4 mr-2" />
                 {autoPing ? "Auto-Ping Ativo" : "Auto-Ping"}

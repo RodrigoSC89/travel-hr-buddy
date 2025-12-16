@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback } from "react";;
  * PATCH 542 - Enhanced Optimized Image Component
  * Advanced lazy loading, blur placeholder, WebP/AVIF support, and CDN integration
  */
@@ -48,7 +47,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
             setIsInView(true);
             observer.disconnect();
           }
-};
+        });
       },
       {
         rootMargin: "50px",

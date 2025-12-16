@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,22 +15,22 @@ interface Props {
   setAuditData: React.Dispatch<React.SetStateAction<Record<number, { status: string; notes: string; evidence: string }>>>;
 }
 
-export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAuditData }: Props) {
+export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Props) {
   const updateItem = (id: number, field: string, value: string) => {
     setAuditData(prev => ({
       ...prev,
       [id]: { ...prev[id], [field]: value }
     }));
-  });
+  };
 
   const getStatusIcon = (status?: string) => {
     switch(status) {
-    case "C": return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-    case "NC": return <XCircle className="h-5 w-5 text-red-600" />;
-    case "NA": return <MinusCircle className="h-5 w-5 text-gray-400" />;
-    default: return <Clock className="h-5 w-5 text-amber-500" />;
+      case "C": return <CheckCircle2 className="h-5 w-5 text-green-600" />;
+      case "NC": return <XCircle className="h-5 w-5 text-red-600" />;
+      case "NA": return <MinusCircle className="h-5 w-5 text-gray-400" />;
+      default: return <Clock className="h-5 w-5 text-amber-500" />;
     }
-  });
+  };
 
   return (
     <Card>
@@ -58,7 +57,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
                   </AccordionTrigger>
                   <AccordionContent className="space-y-4 pt-2">
                     {items.map(item => (
-                      <div key={item.id} className={`p-4 rounded-lg border ${item.isImperative ? "border-destructive/50 bg-destructive/5" : "bg-muted/30"}`}>
+                      <div key={item.id} className={`p-4 rounded-lg border ${item.isImperative ? 'border-destructive/50 bg-destructive/5' : 'bg-muted/30'}`}>
                         <div className="flex items-start gap-3">
                           {getStatusIcon(auditData[item.id]?.status)}
                           <div className="flex-1 space-y-3">
@@ -76,7 +75,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
                               </div>
                               <Select
                                 value={auditData[item.id]?.status || ""}
-                                onValueChange={(v) => updateItem(item.id, "status", v}
+                                onValueChange={(v) => updateItem(item.id, "status", v)}
                               >
                                 <SelectTrigger className="w-[140px]">
                                   <SelectValue placeholder="Status" />
@@ -99,7 +98,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
                             <Textarea
                               placeholder="Notas do auditor..."
                               value={auditData[item.id]?.notes || ""}
-                              onChange={handleChange}
+                              onChange={(e) => updateItem(item.id, "notes", e.target.value)}
                               className="min-h-[60px]"
                             />
                           </div>
@@ -115,4 +114,4 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
       </CardContent>
     </Card>
   );
-});
+}

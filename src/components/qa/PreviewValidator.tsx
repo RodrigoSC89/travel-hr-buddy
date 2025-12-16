@@ -3,7 +3,7 @@
  * PATCH 624 - Componente visual para validação de preview
  */
 
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +17,7 @@ interface PreviewValidatorProps {
   showDetails?: boolean;
 }
 
-export const PreviewValidator = memo(function({ 
+export function PreviewValidator({ 
   componentName, 
   autoRun = false,
   showDetails = true 
@@ -47,7 +47,7 @@ export const PreviewValidator = memo(function({
     case "low": return "text-blue-500";
     default: return "text-muted-foreground";
     }
-  });
+  };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -59,7 +59,7 @@ export const PreviewValidator = memo(function({
     default:
       return <CheckCircle2 className="h-4 w-4" />;
     }
-  });
+  };
 
   return (
     <Card className="w-full">
@@ -219,7 +219,7 @@ function MetricCard({
     good: "text-green-500",
     bad: "text-red-500",
     neutral: "text-muted-foreground"
-  });
+  };
 
   return (
     <div className="p-3 rounded-md border bg-card">
@@ -229,4 +229,4 @@ function MetricCard({
       </p>
     </div>
   );
-});
+}

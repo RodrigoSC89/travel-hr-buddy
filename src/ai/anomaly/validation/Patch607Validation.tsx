@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +35,7 @@ interface DetectorData {
   metrics: TestMetrics;
 }
 
-export const Patch607Validation = memo(function() {
+export function Patch607Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [detectorData, setDetectorData] = useState<DetectorData | null>(null);
@@ -119,7 +119,7 @@ export const Patch607Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-  });
+      });
     }
 
     setResults(testResults);
@@ -182,7 +182,7 @@ export const Patch607Validation = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}
 
 function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
   return (

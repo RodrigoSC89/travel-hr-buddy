@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +53,7 @@ interface DocumentStats {
   expiring_soon: number;
 }
 
-export const DocumentManagementCenter = memo(() => {
+export const DocumentManagementCenter = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<DocumentStats | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -205,7 +204,7 @@ export const DocumentManagementCenter = memo(() => {
       recent_uploads: recentUploads,
       expiring_soon: expiringSoon
     });
-  });
+  };
 
   useEffect(() => {
     calculateStats();
@@ -264,7 +263,7 @@ export const DocumentManagementCenter = memo(() => {
     const matchesType = typeFilter === "all" || doc.type === typeFilter;
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     return matchesSearch && matchesType && matchesStatus;
-  };
+  });
 
   if (loading) {
     return (
@@ -272,7 +271,7 @@ export const DocumentManagementCenter = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  }
 
   return (
     <RoleBasedAccess roles={["admin", "hr_manager"]}>
@@ -352,10 +351,10 @@ export const DocumentManagementCenter = memo(() => {
                 </div>
               
                 <div className="flex justify-end gap-2 mt-6">
-                  <Button variant="outline" onClick={handleSetIsUploadDialogOpen}>
+                  <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
                   Cancelar
                   </Button>
-                  <Button onClick={handleSetIsUploadDialogOpen}>
+                  <Button onClick={() => setIsUploadDialogOpen(false)}>
                   Fazer Upload
                   </Button>
                 </div>
@@ -423,7 +422,7 @@ export const DocumentManagementCenter = memo(() => {
                       <Input
                         placeholder="Buscar documentos, tags ou descrições..."
                         value={searchTerm}
-                        onChange={handleChange}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
                       />
                     </div>

@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,16 +13,24 @@ import {
   TrendingUp, 
   BarChart3, 
   PieChart, 
+  LineChart,
+  Download, 
+  Mail, 
   Calendar,
   Filter,
   FileText,
   Eye,
+  Share,
+  Settings,
   Clock,
   Target,
   AlertTriangle,
   CheckCircle,
   Zap,
-  Users
+  Users,
+  Ship,
+  Building,
+  Globe
 } from "lucide-react";
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell } from "recharts";
 
@@ -254,10 +261,10 @@ export const PeotramAdvancedReporting: React.FC = () => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsNewReportOpen}>
+                  <Button variant="outline" onClick={() => setIsNewReportOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSetIsNewReportOpen}>
+                  <Button onClick={() => setIsNewReportOpen(false)}>
                     Criar Relatório
                   </Button>
                 </div>
@@ -406,7 +413,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handlegenerateReport}
+                      onClick={() => generateReport(report.id)}
                     >
                       <Zap className="w-3 h-3 mr-1" />
                       Gerar
@@ -415,7 +422,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={handleSetSelectedReport}
+                      onClick={() => setSelectedReport(report)}
                     >
                       <Eye className="w-3 h-3 mr-1" />
                       Visualizar
@@ -424,7 +431,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handlescheduleReport}
+                      onClick={() => scheduleReport(report.id)}
                     >
                       <Calendar className="w-3 h-3 mr-1" />
                       Agendar

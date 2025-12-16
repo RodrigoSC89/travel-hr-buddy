@@ -1,6 +1,6 @@
 // ✅ Grid de Módulos — Interface Inteligente para Nautilus One
 
-import { useState, useMemo, useCallback } from "react";;;
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -101,7 +101,7 @@ export default function ModulesGrid() {
     const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === "all" || m.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const handleModuleClick = (slug: string, status?: string) => {
     if (status === "functional") {
@@ -125,7 +125,7 @@ export default function ModulesGrid() {
           <Input
             placeholder="🔍 Buscar módulo..."
             value={search}
-            onChange={handleChange}
+            onChange={(e) => setSearch(e.target.value)}
             className="max-w-xs"
           />
         </div>
@@ -135,7 +135,7 @@ export default function ModulesGrid() {
           <Button
             variant={selectedCategory === "all" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetSelectedCategory}
+            onClick={() => setSelectedCategory("all")}
           >
             Todos
           </Button>
@@ -144,7 +144,7 @@ export default function ModulesGrid() {
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
               size="sm"
-              onClick={handleSetSelectedCategory}
+              onClick={() => setSelectedCategory(category)}
             >
               {category}
             </Button>
@@ -192,7 +192,7 @@ export default function ModulesGrid() {
                     <Button
                       variant={isDisabled ? "ghost" : "outline"}
                       size="sm"
-                      onClick={() => handlehandleModuleClick}
+                      onClick={() => handleModuleClick(mod.slug, mod.status)}
                       disabled={isDisabled}
                       className="w-full"
                     >

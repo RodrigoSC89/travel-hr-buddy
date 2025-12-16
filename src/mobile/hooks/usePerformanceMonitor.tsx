@@ -5,7 +5,7 @@
  * Tracks metrics and provides optimization recommendations
  */
 
-import { memo, memo, useCallback, useEffect, useRef, useState, useMemo } from "react";;;
+import { useEffect, useRef, useCallback, useState } from "react";
 
 interface PerformanceMetrics {
   fps: number;
@@ -37,7 +37,7 @@ interface UsePerformanceMonitorOptions {
 /**
  * Hook for monitoring mobile app performance
  */
-export const usePerformanceMonitor = memo(function(options: UsePerformanceMonitorOptions = {}) {
+export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}) {
   const {
     fpsThreshold = 30,
     memoryThreshold = 80,
@@ -89,13 +89,13 @@ export const usePerformanceMonitor = memo(function(options: UsePerformanceMonito
       lastFrameTime.current = now;
 
       // Get memory info (Chrome only)
-      const memory = (performance as unknown).memory;
+      const memory = (performance as any).memory;
       const memoryInfo = memory
         ? {
-          used: memory.usedJSHeapSize,
-          total: memory.jsHeapSizeLimit,
-          percentage: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100,
-        }
+            used: memory.usedJSHeapSize,
+            total: memory.jsHeapSizeLimit,
+            percentage: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100,
+          }
         : null;
 
       // Calculate heap growth
@@ -105,7 +105,7 @@ export const usePerformanceMonitor = memo(function(options: UsePerformanceMonito
       lastHeapSize.current = memory?.usedJSHeapSize || 0;
 
       // Get network type
-      const connection = (navigator as unknown).connection;
+      const connection = (navigator as any).connection;
       const networkType = connection?.effectiveType || "unknown";
 
       // Get render timing
@@ -165,7 +165,7 @@ export const usePerformanceMonitor = memo(function(options: UsePerformanceMonito
 
   // Get optimization suggestions
   const getSuggestions = useCallback((): string[] => {
-    const suggestions: string[] = []);
+    const suggestions: string[] = [];
 
     if (metrics.fps < fpsThreshold) {
       suggestions.push("Reduce DOM complexity or use virtualization");
@@ -201,7 +201,7 @@ export const usePerformanceMonitor = memo(function(options: UsePerformanceMonito
 /**
  * Component to display performance metrics (debug only)
  */
-export const PerformanceOverlay = memo(function() {
+export function PerformanceOverlay() {
   const { metrics, alerts, isHealthy } = usePerformanceMonitor();
 
   if (process.env.NODE_ENV === "production") {
@@ -234,4 +234,4 @@ export const PerformanceOverlay = memo(function() {
       )}
     </div>
   );
-});
+}

@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,8 +27,8 @@ interface ClassSurvey {
   surveyor_name: string | null;
   survey_location: string | null;
   status: string;
-  findings: unknown[];
-  conditions_of_class: unknown[];
+  findings: any[];
+  conditions_of_class: any[];
   cost: number | null;
 }
 
@@ -61,7 +61,7 @@ const surveyTypeLabels: Record<string, string> = {
   condition_of_class: "Condição de Classe",
 };
 
-export const ClassSurveyDashboard = memo(function() {
+export function ClassSurveyDashboard() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterSociety, setFilterSociety] = useState<string>("all");
 
@@ -92,7 +92,7 @@ export const ClassSurveyDashboard = memo(function() {
   const getSocietyName = (id: string) => {
     const society = societies.find(s => s.id === id);
     return society?.code || "N/A";
-  });
+  };
 
   const getSocietyFullName = (id: string) => {
     const society = societies.find(s => s.id === id);
@@ -103,7 +103,7 @@ export const ClassSurveyDashboard = memo(function() {
     const matchesStatus = filterStatus === "all" || survey.status === filterStatus;
     const matchesSociety = filterSociety === "all" || survey.classification_society_id === filterSociety;
     return matchesStatus && matchesSociety;
-  };
+  });
 
   // Calculate stats
   const stats = {
@@ -305,7 +305,7 @@ export const ClassSurveyDashboard = memo(function() {
                         <span className={cn(
                           "font-medium",
                           daysUntil <= 30 ? "text-amber-400" : 
-                            daysUntil <= 7 ? "text-destructive" : "text-muted-foreground"
+                          daysUntil <= 7 ? "text-destructive" : "text-muted-foreground"
                         )}>
                           {daysUntil} dias restantes
                         </span>
@@ -340,4 +340,4 @@ export const ClassSurveyDashboard = memo(function() {
       </Card>
     </div>
   );
-});
+}

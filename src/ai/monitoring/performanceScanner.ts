@@ -1,4 +1,3 @@
-
 /**
  * PATCH 235: Multi-Agent Performance Scanner
  * 
@@ -361,7 +360,7 @@ export class MultiAgentPerformanceScanner {
         reliability: this.calculateReliabilityScore(agent.performance, agent.availability),
         efficiency: this.calculateEfficiencyScore(agent.performance, agent.resourceUsage),
         quality: this.calculateQualityScore(agent.performance),
-      });
+      };
 
       const overallScore = (
         categoryScores.performance * 0.3 +
@@ -454,7 +453,7 @@ export class MultiAgentPerformanceScanner {
       reason,
       timestamp: new Date().toISOString(),
       success: true,
-    });
+    };
 
     logger.info("Switching agents", { fromAgentId, toAgentId, reason });
 

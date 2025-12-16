@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, memo, useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
@@ -28,7 +28,7 @@ interface TemporalData {
   falhas_criticas: number;
 }
 
-export const PainelMetricasRisco = memo(function() {
+export function PainelMetricasRisco() {
   const [dados, setDados] = useState<MetricData[]>([]);
   const [embarcacaoSelecionada, setEmbarcacaoSelecionada] = useState<string>("Todos");
   const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ export const PainelMetricasRisco = memo(function() {
       .catch((error) => {
         console.error("Erro ao buscar métricas:", error);
         setLoading(false);
-  };
+      });
   }, []);
 
   // Get unique vessel names for filter

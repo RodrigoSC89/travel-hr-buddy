@@ -1,4 +1,3 @@
-import { memo } from "react";
 /**
  * AI Modules Dashboard
  * Visual overview of all AI-integrated modules
@@ -18,7 +17,7 @@ import {
   Zap
 } from "lucide-react";
 
-export const AIModulesDashboard = memo(() => {
+export const AIModulesDashboard = () => {
   const { modules, isLoading, overallHealth, refresh } = useAIModulesStatus();
 
   const getStatusIcon = (status: string) => {
@@ -57,7 +56,7 @@ export const AIModulesDashboard = memo(() => {
       return "text-red-500";
     default:
       return "text-gray-500";
-    };
+    }
   };
 
   return (
@@ -200,4 +199,4 @@ export const AIModulesDashboard = memo(() => {
       </Card>
     </div>
   );
-});
+};

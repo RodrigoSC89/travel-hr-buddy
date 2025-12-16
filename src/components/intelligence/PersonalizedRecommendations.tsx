@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -86,7 +85,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
             notificationsEnabled: true
           }
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -182,7 +181,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         description: "Abrindo configurações relevantes",
       });
     }
-  });
+  };
 
   const dismissRecommendation = (id: string) => {
     setDismissedRecommendations(prev => [...prev, id]);
@@ -190,7 +189,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
       title: "Recomendação Dispensada",
       description: "Você pode atualizá-las a qualquer momento",
     });
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -312,7 +311,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                               
                               <div className="flex items-center gap-2">
                                 <Button
-                                  onClick={() => handlehandleRecommendationAction}
+                                  onClick={() => handleRecommendationAction(recommendation)}
                                   size="sm"
                                 >
                                   {recommendation.actionType === "navigate" ? (
@@ -329,7 +328,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                                 </Button>
                                 
                                 <Button
-                                  onClick={() => handledismissRecommendation}
+                                  onClick={() => dismissRecommendation(recommendation.id)}
                                   variant="ghost"
                                   size="sm"
                                 >

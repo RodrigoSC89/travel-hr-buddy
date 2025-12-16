@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useMemo } from "react";;
  * PATCH 220 - Collective Dashboard
  * Unified dashboard showing decisions, contexts, conflicts, AI suggestions, learning, and performance
  */
@@ -139,7 +138,7 @@ export const CollectiveDashboard: React.FC = () => {
       stats.total++;
       if (d.success) stats.successes++;
       else stats.failures++;
-  };
+    });
 
     return Array.from(moduleMap.entries()).map(([moduleName, stats]) => {
       const successRate = stats.total > 0 ? stats.successes / stats.total : 0;
@@ -151,9 +150,9 @@ export const CollectiveDashboard: React.FC = () => {
         accuracy: successRate,
         decisionCount: stats.total,
         successRate
-      });
+      };
     });
-  });
+  };
 
   // Optimized polling for dashboard refresh
   useOptimizedPolling({
@@ -178,12 +177,12 @@ export const CollectiveDashboard: React.FC = () => {
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, unknown> = {
+    const variants: Record<string, any> = {
       info: "default",
       warning: "secondary",
       error: "destructive",
       critical: "destructive"
-    });
+    };
     return <Badge variant={variants[severity] || "default"}>{severity}</Badge>;
   };
 
@@ -193,7 +192,7 @@ export const CollectiveDashboard: React.FC = () => {
       escalated: "bg-orange-500",
       delegated: "bg-purple-500",
       collaborative: "bg-green-500"
-    });
+    };
     return (
       <Badge className={colors[level] || "bg-gray-500"}>
         {level}
@@ -566,4 +565,4 @@ export const CollectiveDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

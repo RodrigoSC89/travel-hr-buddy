@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +23,7 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
   const [maintenancePredictions, setMaintenancePredictions] = useState<any[]>([]);
   const [routeOptimizations, setRouteOptimizations] = useState<any[]>([]);
   const [fuelPredictions, setFuelPredictions] = useState<any[]>([]);
-  const [recommendations, setRecommendations] = useState<unknown>(null);
+  const [recommendations, setRecommendations] = useState<any>(null);
 
   const handlePredictMaintenance = async () => {
     const predictions = await predictMaintenance(vessels);

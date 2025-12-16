@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,13 +8,16 @@ import {
   Wrench, 
   AlertTriangle,
   CheckCircle,
+  Clock,
   Activity,
+  TrendingUp,
   Zap,
   Calendar,
   BarChart3,
   Settings,
   AlertCircle,
-  Battery
+  Battery,
+  Gauge
 } from "lucide-react";
 
 interface MaintenanceItem {
@@ -296,7 +298,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
                             <div>
                               <div className="flex items-center gap-2">
                                 <CardTitle className="text-base">{item.equipment}</CardTitle>
-                                <Badge variant={getPriorityColor(item.priority) as unknown}>
+                                <Badge variant={getPriorityColor(item.priority) as any}>
                                   {item.priority.toUpperCase()}
                                 </Badge>
                               </div>

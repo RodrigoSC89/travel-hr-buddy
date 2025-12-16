@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { useChecklists } from "../hooks/useChecklists";
 import { ChecklistCard } from "../components/ChecklistCard";
 import { supabase } from "@/integrations/supabase/client";
 
-export const ChecklistsPage = memo(function() {
+export function ChecklistsPage() {
   const [userId, setUserId] = useState<string>("");
   const [title, setTitle] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
@@ -18,7 +17,7 @@ export const ChecklistsPage = memo(function() {
   React.useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUserId(data?.user?.id || "");
-};
+    });
   }, []);
 
   const {
@@ -75,7 +74,7 @@ export const ChecklistsPage = memo(function() {
           placeholder="Descreva seu checklist..."
           className="min-w-[250px]"
           value={title}
-          onChange={handleChange}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <Button onClick={handleCreateManual} disabled={!title}>
           <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual
@@ -201,4 +200,4 @@ export const ChecklistsPage = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

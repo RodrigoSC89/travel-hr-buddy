@@ -1,4 +1,3 @@
-import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -59,7 +58,7 @@ export interface DataTableProps<T = any> {
 
 type SortDirection = "asc" | "desc" | null;
 
-export function DataTable<T extends Record<string, unknown>>({
+export function DataTable<T extends Record<string, any>>({
   data,
   columns,
   searchable = true,
@@ -81,7 +80,7 @@ export function DataTable<T extends Record<string, unknown>>({
 
   // Filter and search data
   const filteredData = useMemo(() => {
-    let result = [...data]);
+    let result = [...data];
 
     // Apply search
     if (searchTerm) {
@@ -101,7 +100,7 @@ export function DataTable<T extends Record<string, unknown>>({
           const rowValue = row[key];
           return rowValue && 
             rowValue.toString().toLowerCase().includes(value.toLowerCase());
-  });
+        });
       }
     });
 
@@ -115,7 +114,7 @@ export function DataTable<T extends Record<string, unknown>>({
         
         const comparison = aValue > bValue ? 1 : -1;
         return sortDirection === "asc" ? comparison : -comparison;
-  });
+      });
     }
 
     return result;
@@ -201,7 +200,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 <Input
                   placeholder="Buscar..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -232,7 +231,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     column.align === "right" && "text-right"
                   )}
                   style={{ width: column.width }}
-                  onClick={() => handlehandleSort}
+                  onClick={() => handleSort(column.key)}
                 >
                   <div className="flex items-center space-x-2">
                     <span>{column.header}</span>
@@ -282,7 +281,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     "border-b border-border hover:bg-accent/50 transition-colors",
                     onRowClick && "cursor-pointer"
                   )}
-                  onClick={() => onRowClick?.(row}
+                  onClick={() => onRowClick?.(row)}
                 >
                   {columns.map((column) => (
                     <td
@@ -386,7 +385,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <Button
               variant="outline"
               size="sm"
-              onClick={handleSetCurrentPage}
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
             >
               Anterior
@@ -402,7 +401,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     key={page}
                     variant={isActive ? "default" : "outline"}
                     size="sm"
-                    onClick={handleSetCurrentPage}
+                    onClick={() => setCurrentPage(page)}
                     className="w-10"
                   >
                     {page}
@@ -414,7 +413,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <Button
               variant="outline"
               size="sm"
-              onClick={handleSetCurrentPage}
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages}
             >
               Próximo

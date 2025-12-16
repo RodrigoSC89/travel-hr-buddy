@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -54,15 +53,15 @@ export const DPIntelCenter: React.FC = () => {
   const fetchIncidents = async () => {
     try {
       const { data, error } = await supabase
-        .from("dp_incidents")
-        .select("*")
-        .order("incident_date", { ascending: false });
+        .from('dp_incidents')
+        .select('*')
+        .order('incident_date', { ascending: false });
 
       if (error) throw error;
       setIncidents(data || []);
     } catch (error) {
-      console.error("Error fetching incidents:", error);
-      toast.error("Erro ao carregar incidentes");
+      console.error('Error fetching incidents:', error);
+      toast.error('Erro ao carregar incidentes');
     } finally {
       setLoading(false);
     }
@@ -74,15 +73,15 @@ export const DPIntelCenter: React.FC = () => {
     setAnalysisResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("dp-intel-analyze", {
-        body: { incident, action: "analyze" }
-      };
+      const { data, error } = await supabase.functions.invoke('dp-intel-analyze', {
+        body: { incident, action: 'analyze' }
+      });
 
       if (error) throw error;
       setAnalysisResult(data.result);
     } catch (error) {
-      console.error("Error analyzing incident:", error);
-      toast.error("Erro ao analisar incidente");
+      console.error('Error analyzing incident:', error);
+      toast.error('Erro ao analisar incidente');
     } finally {
       setAnalyzing(false);
     }
@@ -90,10 +89,10 @@ export const DPIntelCenter: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-100 text-red-800 border-red-300";
-    case "high": return "bg-orange-100 text-orange-800 border-orange-300";
-    case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-300";
-    default: return "bg-blue-100 text-blue-800 border-blue-300";
+      case 'critical': return 'bg-red-100 text-red-800 border-red-300';
+      case 'high': return 'bg-orange-100 text-orange-800 border-orange-300';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      default: return 'bg-blue-100 text-blue-800 border-blue-300';
     }
   };
 
@@ -102,10 +101,10 @@ export const DPIntelCenter: React.FC = () => {
       incident.vessel?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       incident.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    const matchesClass = filterClass === "all" || incident.dp_class?.includes(filterClass);
+    const matchesClass = filterClass === 'all' || incident.dp_class?.includes(filterClass);
     
     return matchesSearch && matchesClass;
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -137,20 +136,20 @@ export const DPIntelCenter: React.FC = () => {
             <Input
               placeholder="Buscar por título, embarcação ou tags..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
         </div>
         <div className="flex gap-2">
-          {["all", "DP Class 2", "DP Class 3"].map((cls) => (
+          {['all', 'DP Class 2', 'DP Class 3'].map((cls) => (
             <Button
               key={cls}
               variant={filterClass === cls ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilterClass}
+              onClick={() => setFilterClass(cls)}
             >
-              {cls === "all" ? "Todas Classes" : cls}
+              {cls === 'all' ? 'Todas Classes' : cls}
             </Button>
           ))}
         </div>
@@ -164,7 +163,7 @@ export const DPIntelCenter: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredIncidents.map((incident) => (
-            <Card key={incident.id} className={`border-l-4 ${getSeverityColor(incident.severity || "medium")}`}>
+            <Card key={incident.id} className={`border-l-4 ${getSeverityColor(incident.severity || 'medium')}`}>
               <CardContent className="pt-4 space-y-3">
                 <div className="flex justify-between items-start gap-2">
                   <h3 className="font-semibold text-sm leading-tight">{incident.title}</h3>
@@ -185,7 +184,7 @@ export const DPIntelCenter: React.FC = () => {
                     <MapPin className="h-3 w-3" /> {incident.location}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" /> {new Date(incident.incident_date).toLocaleDateString("pt-BR")}
+                    <Calendar className="h-3 w-3" /> {new Date(incident.incident_date).toLocaleDateString('pt-BR')}
                   </span>
                 </div>
 
@@ -200,7 +199,7 @@ export const DPIntelCenter: React.FC = () => {
                 <div className="flex gap-2 pt-2">
                   <Button 
                     size="sm" 
-                    onClick={() => handleanalyzeIncident}
+                    onClick={() => analyzeIncident(incident)}
                     disabled={analyzing}
                   >
                     <Brain className="h-3 w-3 mr-1" />
@@ -222,7 +221,7 @@ export const DPIntelCenter: React.FC = () => {
       )}
 
       {/* Analysis Dialog */}
-      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null}>
+      <Dialog open={!!selectedIncident} onOpenChange={() => setSelectedIncident(null)}>
         <DialogContent className="max-w-3xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">

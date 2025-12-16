@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -157,13 +156,13 @@ const HelpCenter = () => {
     const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          article.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  };
+  });
 
   const filteredVideos = videoTutorials.filter(video => {
     const matchesCategory = selectedCategory === "all" || video.category === selectedCategory;
     const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  };
+  });
 
   const getLevelColor = (level: string) => {
     switch (level) {
@@ -221,7 +220,7 @@ const HelpCenter = () => {
         <Input
           placeholder="Buscar artigos, tutoriais..."
           value={searchTerm}
-          onChange={handleChange}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10"
         />
       </div>
@@ -233,7 +232,7 @@ const HelpCenter = () => {
             key={category.id}
             variant={selectedCategory === category.id ? "default" : "outline"}
             size="sm"
-            onClick={handleSetSelectedCategory}
+            onClick={() => setSelectedCategory(category.id)}
             className="flex items-center gap-2"
           >
             <category.icon className="w-4 h-4" />

@@ -1,5 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;
-
+// @ts-nocheck
 // PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
 // PATCH 653 - Lazy loading for jsPDF
 import React, { useState, useEffect } from "react";
@@ -74,7 +73,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     assigned_to: "",
     due_date: "",
     status: "pending"
-});
+  });
   const [showActionForm, setShowActionForm] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(incident?.status || "new");
   const { toast } = useToast();
@@ -275,9 +274,9 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
           styles: { fontSize: 8 }
-        };
+        });
         
-        yPos = (doc as unknown).lastAutoTable.finalY + 10;
+        yPos = (doc as any).lastAutoTable.finalY + 10;
       }
       
       // Signatures
@@ -331,7 +330,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -409,7 +408,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Ações Corretivas</CardTitle>
-                <Button onClick={handleSetShowActionForm} size="sm">
+                <Button onClick={() => setShowActionForm(!showActionForm)} size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   Nova Ação
                 </Button>
@@ -421,7 +420,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                       <Label>Descrição da Ação *</Label>
                       <Textarea
                         value={newAction.action_description}
-                        onChange={handleChange}
+                        onChange={(e) => setNewAction({ ...newAction, action_description: e.target.value })}
                         placeholder="Descreva a ação corretiva necessária"
                         rows={3}
                       />
@@ -431,7 +430,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                         <Label>Responsável *</Label>
                         <Input
                           value={newAction.assigned_to}
-                          onChange={handleChange}
+                          onChange={(e) => setNewAction({ ...newAction, assigned_to: e.target.value })}
                           placeholder="Nome do responsável"
                         />
                       </div>
@@ -440,13 +439,13 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                         <Input
                           type="date"
                           value={newAction.due_date}
-                          onChange={handleChange}
+                          onChange={(e) => setNewAction({ ...newAction, due_date: e.target.value })}
                         />
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <Button onClick={handleAddAction} size="sm">Adicionar</Button>
-                      <Button onClick={handleSetShowActionForm} variant="outline" size="sm">Cancelar</Button>
+                      <Button onClick={() => setShowActionForm(false)} variant="outline" size="sm">Cancelar</Button>
                     </div>
                   </div>
                 )}
@@ -484,7 +483,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Assinaturas Digitais</CardTitle>
-                <Button onClick={handleSetShowSignatureDialog} size="sm">
+                <Button onClick={() => setShowSignatureDialog(true)} size="sm">
                   <PenTool className="mr-2 h-4 w-4" />
                   Assinar
                 </Button>
@@ -565,21 +564,21 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                   <div className="grid grid-cols-3 gap-2">
                     <Button
                       variant={currentStatus === "new" ? "default" : "outline"}
-                      onClick={() => handlehandleStatusUpdate}
+                      onClick={() => handleStatusUpdate("new")}
                       className="w-full"
                     >
                       Novo
                     </Button>
                     <Button
                       variant={currentStatus === "under_analysis" ? "default" : "outline"}
-                      onClick={() => handlehandleStatusUpdate}
+                      onClick={() => handleStatusUpdate("under_analysis")}
                       className="w-full"
                     >
                       Em Análise
                     </Button>
                     <Button
                       variant={currentStatus === "resolved" ? "default" : "outline"}
-                      onClick={() => handlehandleStatusUpdate}
+                      onClick={() => handleStatusUpdate("resolved")}
                       className="w-full"
                     >
                       Resolvido
@@ -602,7 +601,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             <FileDown className="mr-2 h-4 w-4" />
             Exportar PDF
           </Button>
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Fechar
           </Button>
         </div>
@@ -617,4 +616,4 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

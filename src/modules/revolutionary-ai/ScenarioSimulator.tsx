@@ -1,22 +1,21 @@
 /**
-import { useMemo, useState, useCallback } from "react";;
  * REVOLUTIONARY AI - Scenario Simulator
  * Funcionalidade 7: Simulador de Impacto Financeiro e Operacional
  */
 
-import React, { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import React, { useState, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { 
   Calculator, TrendingUp, TrendingDown, AlertTriangle,
   DollarSign, Clock, Shield, Activity, Play, RefreshCw,
   Lightbulb, BarChart3, Target, Zap
-} from "lucide-react";
-import { motion } from "framer-motion";
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface ScenarioResult {
   cost: number;
@@ -43,7 +42,7 @@ const INITIAL_SCENARIO: ScenarioInput = {
   equipmentAge: 5
 };
 
-export const ScenarioSimulator = memo(function() {
+export function ScenarioSimulator() {
   const [scenario, setScenario] = useState<ScenarioInput>(INITIAL_SCENARIO);
   const [isSimulating, setIsSimulating] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -94,15 +93,15 @@ export const ScenarioSimulator = memo(function() {
     baseOperational = Math.max(0, baseOperational - (scenario.equipmentAge - 5) * 2);
 
     // Determine recommendation
-    let recommendation = "";
+    let recommendation = '';
     if (baseRisk > 50) {
-      recommendation = "⚠️ ALTO RISCO: Cenário não recomendado. Risco de falha operacional significativo.";
+      recommendation = '⚠️ ALTO RISCO: Cenário não recomendado. Risco de falha operacional significativo.';
     } else if (baseRisk > 30) {
-      recommendation = "⚡ ATENÇÃO: Cenário viável com ressalvas. Monitoramento intensivo necessário.";
+      recommendation = '⚡ ATENÇÃO: Cenário viável com ressalvas. Monitoramento intensivo necessário.';
     } else if (baseCost < 95000 && baseCompliance > 90) {
-      recommendation = "✅ RECOMENDADO: Cenário otimizado com bom equilíbrio custo-benefício.";
+      recommendation = '✅ RECOMENDADO: Cenário otimizado com bom equilíbrio custo-benefício.';
     } else {
-      recommendation = "📊 NEUTRO: Cenário viável. Avalie trade-offs antes de implementar.";
+      recommendation = '📊 NEUTRO: Cenário viável. Avalie trade-offs antes de implementar.';
     }
 
     return {
@@ -130,13 +129,13 @@ export const ScenarioSimulator = memo(function() {
 
   const getScoreColor = (score: number, inverse: boolean = false) => {
     if (inverse) {
-      if (score < 20) return "text-green-400";
-      if (score < 40) return "text-amber-400";
-      return "text-red-400";
+      if (score < 20) return 'text-green-400';
+      if (score < 40) return 'text-amber-400';
+      return 'text-red-400';
     }
-    if (score >= 80) return "text-green-400";
-    if (score >= 60) return "text-amber-400";
-    return "text-red-400";
+    if (score >= 80) return 'text-green-400';
+    if (score >= 60) return 'text-amber-400';
+    return 'text-red-400';
   };
 
   return (
@@ -217,7 +216,7 @@ export const ScenarioSimulator = memo(function() {
                   <DollarSign className="h-4 w-4 text-muted-foreground" />
                   Variação do Combustível
                 </Label>
-                <Badge variant="outline">{scenario.fuelCostChange > 0 ? "+" : ""}{scenario.fuelCostChange}%</Badge>
+                <Badge variant="outline">{scenario.fuelCostChange > 0 ? '+' : ''}{scenario.fuelCostChange}%</Badge>
               </div>
               <Slider
                 value={[scenario.fuelCostChange + 50]}
@@ -262,11 +261,11 @@ export const ScenarioSimulator = memo(function() {
                 </p>
               </div>
               <Button
-                variant={scenario.routeAlternative ? "default" : "outline"}
+                variant={scenario.routeAlternative ? 'default' : 'outline'}
                 size="sm"
-                onClick={handleSetScenario}
+                onClick={() => setScenario(s => ({ ...s, routeAlternative: !s.routeAlternative }))}
               >
-                {scenario.routeAlternative ? "Ativado" : "Desativado"}
+                {scenario.routeAlternative ? 'Ativado' : 'Desativado'}
               </Button>
             </div>
 
@@ -346,8 +345,8 @@ export const ScenarioSimulator = memo(function() {
                     <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
                       <div 
                         className={`h-full ${
-                          simulationResult.risk < 20 ? "bg-green-500" :
-                            simulationResult.risk < 40 ? "bg-amber-500" : "bg-red-500"
+                          simulationResult.risk < 20 ? 'bg-green-500' :
+                          simulationResult.risk < 40 ? 'bg-amber-500' : 'bg-red-500'
                         }`}
                         style={{ width: `${simulationResult.risk}%` }}
                       />
@@ -367,8 +366,8 @@ export const ScenarioSimulator = memo(function() {
                     <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
                       <div 
                         className={`h-full ${
-                          simulationResult.compliance >= 80 ? "bg-green-500" :
-                            simulationResult.compliance >= 60 ? "bg-amber-500" : "bg-red-500"
+                          simulationResult.compliance >= 80 ? 'bg-green-500' :
+                          simulationResult.compliance >= 60 ? 'bg-amber-500' : 'bg-red-500'
                         }`}
                         style={{ width: `${simulationResult.compliance}%` }}
                       />
@@ -388,8 +387,8 @@ export const ScenarioSimulator = memo(function() {
                     <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
                       <div 
                         className={`h-full ${
-                          simulationResult.operationalImpact >= 80 ? "bg-green-500" :
-                            simulationResult.operationalImpact >= 60 ? "bg-amber-500" : "bg-red-500"
+                          simulationResult.operationalImpact >= 80 ? 'bg-green-500' :
+                          simulationResult.operationalImpact >= 60 ? 'bg-amber-500' : 'bg-red-500'
                         }`}
                         style={{ width: `${simulationResult.operationalImpact}%` }}
                       />
@@ -415,16 +414,16 @@ export const ScenarioSimulator = memo(function() {
 
               {/* Recommendation */}
               <Card className={`${
-                simulationResult.risk > 50 ? "bg-red-500/10 border-red-500/20" :
-                  simulationResult.risk > 30 ? "bg-amber-500/10 border-amber-500/20" :
-                    "bg-green-500/10 border-green-500/20"
+                simulationResult.risk > 50 ? 'bg-red-500/10 border-red-500/20' :
+                simulationResult.risk > 30 ? 'bg-amber-500/10 border-amber-500/20' :
+                'bg-green-500/10 border-green-500/20'
               }`}>
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
                     <Zap className={`h-6 w-6 ${
-                      simulationResult.risk > 50 ? "text-red-400" :
-                        simulationResult.risk > 30 ? "text-amber-400" :
-                          "text-green-400"
+                      simulationResult.risk > 50 ? 'text-red-400' :
+                      simulationResult.risk > 30 ? 'text-amber-400' :
+                      'text-green-400'
                     }`} />
                     <div>
                       <p className="font-semibold mb-1">Recomendação da IA</p>

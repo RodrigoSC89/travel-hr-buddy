@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -142,7 +141,7 @@ export default function TemplateEditor() {
     } finally {
       setIsExporting(false);
     }
-  });
+  };
 
   const handleExportHTML = () => {
     if (!editor) return;
@@ -169,7 +168,7 @@ export default function TemplateEditor() {
         variant: "destructive",
       });
     }
-  });
+  };
 
   const insertPlaceholder = () => {
     if (!editor || !placeholderName.trim()) {
@@ -189,7 +188,7 @@ export default function TemplateEditor() {
       title: "Placeholder inserido!",
       description: `A variável {{${placeholderName.trim()}}} foi adicionada ao template.`,
     });
-  });
+  };
 
   const handleGenerateWithAI = async () => {
     if (!title.trim()) {
@@ -246,7 +245,7 @@ export default function TemplateEditor() {
             type="text"
             placeholder="Digite o título do template..."
             value={title}
-            onChange={handleChange}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full"
           />
         </div>
@@ -357,7 +356,7 @@ export default function TemplateEditor() {
                         id="placeholder"
                         placeholder="Ex: nome, data, empresa..."
                         value={placeholderName}
-                        onChange={handleChange}
+                        onChange={(e) => setPlaceholderName(e.target.value)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
@@ -368,7 +367,7 @@ export default function TemplateEditor() {
                     </div>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={handleSetShowPlaceholderDialog}>
+                    <Button variant="outline" onClick={() => setShowPlaceholderDialog(false)}>
                       Cancelar
                     </Button>
                     <Button onClick={insertPlaceholder}>

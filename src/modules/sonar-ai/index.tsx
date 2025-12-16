@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 435 - Sonar AI Enhancement
  * Enhanced AI sonar data interpretation with risk detection
  * PATCH 479 - Added ONNX classification and detailed dashboard
@@ -60,7 +59,7 @@ const SonarAI: React.FC = () => {
   const [riskAssessment, setRiskAssessment] = useState<RiskAssessment | null>(null);
   const [detections, setDetections] = useState<SonarDetection[]>([]);
   const [detectionHistory, setDetectionHistory] = useState<SonarDetection[]>([]);
-  const [visualizationData, setVisualizationData] = useState<unknown>(null);
+  const [visualizationData, setVisualizationData] = useState<any>(null);
   
   // Scan parameters
   const [scanDepth, setScanDepth] = useState(50);
@@ -269,7 +268,7 @@ const SonarAI: React.FC = () => {
                   <Input
                     type="number"
                     value={scanDepth}
-                    onChange={handleChange}
+                    onChange={(e) => setScanDepth(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                     disabled={isScanning || autoScan}
                   />
@@ -279,7 +278,7 @@ const SonarAI: React.FC = () => {
                   <Input
                     type="number"
                     value={scanRadius}
-                    onChange={handleChange}
+                    onChange={(e) => setScanRadius(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                     disabled={isScanning || autoScan}
                   />
@@ -289,7 +288,7 @@ const SonarAI: React.FC = () => {
                   <Input
                     type="number"
                     value={numPings}
-                    onChange={handleChange}
+                    onChange={(e) => setNumPings(parseInt(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                     disabled={isScanning || autoScan}
                   />
@@ -315,7 +314,7 @@ const SonarAI: React.FC = () => {
                   )}
                 </Button>
                 <Button
-                  onClick={handleSetAutoScan}
+                  onClick={() => setAutoScan(!autoScan)}
                   variant={autoScan ? "destructive" : "outline"}
                   className={autoScan ? "" : "border-zinc-600"}
                 >

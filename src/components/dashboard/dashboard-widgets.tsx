@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -118,7 +117,7 @@ const DashboardKPIWidget: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => handleonExport}
+              onClick={() => onExport(kpi.id, "excel")}
               className="opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Download className="h-3 w-3" />
@@ -144,7 +143,7 @@ const DashboardKPIWidget: React.FC<{
 };
 
 const DashboardExportPanel: React.FC<{
-  onExport: (format: string, options?: unknown: unknown: unknown) => void;
+  onExport: (format: string, options?: any) => void;
   isExporting?: boolean;
 }> = ({ onExport, isExporting }) => {
   const exportOptions: ExportOption[] = [
@@ -189,7 +188,7 @@ const DashboardExportPanel: React.FC<{
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => handleonExport}
+              onClick={() => onExport(option.format)}
               disabled={isExporting}
             >
               {isExporting ? (
@@ -204,7 +203,7 @@ const DashboardExportPanel: React.FC<{
         
         <div className="pt-4 border-t">
           <Button 
-            onClick={() => handleonExport}
+            onClick={() => onExport("full")}
             disabled={isExporting}
             className="w-full"
           >
@@ -215,16 +214,16 @@ const DashboardExportPanel: React.FC<{
       </CardContent>
     </Card>
   );
-});
+};
 
 const DashboardFilters: React.FC<{
-  onFilterChange: (filters: unknown: unknown: unknown) => void;
-  currentFilters: unknown: unknown: unknown;
+  onFilterChange: (filters: any) => void;
+  currentFilters: any;
 }> = ({ onFilterChange, currentFilters }) => {
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
     end: new Date().toISOString().split("T")[0]
-});
+  });
 
   const [selectedModules, setSelectedModules] = useState<string[]>(["all"]);
   const [selectedVessels, setSelectedVessels] = useState<string[]>(["all"]);
@@ -252,7 +251,7 @@ const DashboardFilters: React.FC<{
       modules: selectedModules,
       vessels: selectedVessels
     });
-  });
+  };
 
   return (
     <Card>
@@ -275,7 +274,7 @@ const DashboardFilters: React.FC<{
               <input 
                 type="date" 
                 value={dateRange.start}
-                onChange={handleChange}))}
+                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
                 className="w-full mt-1 px-3 py-2 text-sm border rounded-md"
               />
             </div>
@@ -284,7 +283,7 @@ const DashboardFilters: React.FC<{
               <input 
                 type="date" 
                 value={dateRange.end}
-                onChange={handleChange}))}
+                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
                 className="w-full mt-1 px-3 py-2 text-sm border rounded-md"
               />
             </div>
@@ -300,7 +299,10 @@ const DashboardFilters: React.FC<{
                 <input 
                   type="checkbox" 
                   checked={selectedModules.includes(module.id)}
-                  onChange={handleChange} else {
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedModules(prev => [...prev, module.id]);
+                    } else {
                       setSelectedModules(prev => prev.filter(id => id !== module.id));
                     }
                   }}
@@ -321,7 +323,10 @@ const DashboardFilters: React.FC<{
                 <input 
                   type="checkbox" 
                   checked={selectedVessels.includes(vessel.id)}
-                  onChange={handleChange} else {
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedVessels(prev => [...prev, vessel.id]);
+                    } else {
                       setSelectedVessels(prev => prev.filter(id => id !== vessel.id));
                     }
                   }}

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +42,7 @@ interface UserSatisfaction {
   trend: "up" | "down" | "stable";
 }
 
-export const FeedbackSystem = memo(() => {
+export const FeedbackSystem = () => {
   const [newFeedback, setNewFeedback] = useState({
     title: "",
     description: "",
@@ -127,7 +126,7 @@ export const FeedbackSystem = memo(() => {
     case "general": return "bg-info text-info-foreground";
     default: return "bg-muted text-muted-foreground";
     }
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -163,7 +162,7 @@ export const FeedbackSystem = memo(() => {
     case "up": return <TrendingUp className="h-4 w-4 text-success" />;
     case "down": return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
     default: return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
-    };
+    }
   };
 
   const handleSubmitFeedback = () => {
@@ -219,7 +218,7 @@ export const FeedbackSystem = memo(() => {
                 <Input
                   placeholder="Descreva sua sugestão em poucas palavras"
                   value={newFeedback.title}
-                  onChange={handleChange}
+                  onChange={(e) => setNewFeedback({...newFeedback, title: e.target.value})}
                 />
               </div>
               <div>
@@ -261,7 +260,7 @@ export const FeedbackSystem = memo(() => {
               <Textarea
                 placeholder="Descreva sua sugestão ou problema detalhadamente..."
                 value={newFeedback.description}
-                onChange={handleChange}
+                onChange={(e) => setNewFeedback({...newFeedback, description: e.target.value})}
                 rows={4}
               />
             </div>

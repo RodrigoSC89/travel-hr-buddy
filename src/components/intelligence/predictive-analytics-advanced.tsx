@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -205,7 +204,7 @@ export const PredictiveAnalyticsAdvanced: React.FC = () => {
           <select 
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm max-w-32"
             value={selectedTimeframe}
-            onChange={handleChange}
+            onChange={(e) => setSelectedTimeframe(e.target.value)}
           >
             <option value="7d">7 dias</option>
             <option value="30d">30 dias</option>

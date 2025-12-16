@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, memo, useEffect, useRef, useState } from "react";;;
+import { useEffect, useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ interface ExportData {
   pendente: number;
 }
 
-export const PainelBI = memo(function() {
+export function PainelBI() {
   const [dados, setDados] = useState<ComplianceData[]>([]);
   const [filtroMes, setFiltroMes] = useState("");
   const [loading, setLoading] = useState(true);
@@ -152,12 +152,12 @@ export const PainelBI = memo(function() {
         .catch((error) => {
           console.error("Error generating PDF:", error);
           toast.error("Erro ao gerar PDF");
-  });
+        });
     } catch (err) {
       console.error("Error in exportToPDF:", err);
       toast.error("Erro ao gerar PDF");
     }
-  });
+  };
 
   const dadosFiltrados = filtroMes 
     ? dados.filter((d) => d.mes === filtroMes) 
@@ -167,7 +167,7 @@ export const PainelBI = memo(function() {
 
   if (loading) {
     return (
-      <Card key={Card.id || index}>
+      <Card>
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-64">
             <p className="text-muted-foreground">Carregando dados...</p>
@@ -196,7 +196,7 @@ export const PainelBI = memo(function() {
               <select
                 className="border rounded-md p-2 bg-background text-foreground"
                 value={filtroMes}
-                onChange={handleChange}
+                onChange={(e) => setFiltroMes(e.target.value)}
               >
                 <option value="">Todos os meses</option>
                 {mesesDisponiveis.map((mes) => (
@@ -280,4 +280,4 @@ export const PainelBI = memo(function() {
       </div>
     </div>
   );
-});
+}

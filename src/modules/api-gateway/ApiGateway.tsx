@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 100.0 - API Gateway Functional
  * Enhanced API Gateway with routing, rate limiting, and analytics
  */
@@ -64,7 +63,7 @@ const ApiGateway = () => {
     return <Badge variant={variants[method] || "default"}>{method}</Badge>;
   };
 
-  const handleTestEndpoint = async (route: unknown: unknown: unknown) => {
+  const handleTestEndpoint = async (route: any) => {
     toast({
       title: "Testing Endpoint",
       description: `Testing ${route.service}...`
@@ -85,7 +84,7 @@ const ApiGateway = () => {
     }
   };
 
-  const handleCheckStatus = async (route: unknown: unknown: unknown) => {
+  const handleCheckStatus = async (route: any) => {
     const status = await apiProxyRouter.checkEndpointStatus(route.path);
     toast({
       title: "Endpoint Status",
@@ -112,7 +111,7 @@ const ApiGateway = () => {
       title: "API Key Created",
       description: `Key "${key.name}" has been created successfully`
     });
-  });
+  };
 
   const handleRevokeKey = (keyId: string) => {
     apiKeyManager.revokeKey(keyId);
@@ -121,7 +120,7 @@ const ApiGateway = () => {
       title: "Key Revoked",
       description: "API key has been revoked"
     });
-  });
+  };
 
   const handleCopyKey = (key: string) => {
     navigator.clipboard.writeText(key);
@@ -129,7 +128,7 @@ const ApiGateway = () => {
       title: "Copied",
       description: "API key copied to clipboard"
     });
-  });
+  };
 
   const handleCreateWebhook = () => {
     if (!newWebhookName.trim() || !newWebhookUrl.trim()) {
@@ -151,7 +150,7 @@ const ApiGateway = () => {
       title: "Webhook Created",
       description: `Webhook "${newWebhookName}" has been created`
     });
-  });
+  };
 
   const handleDeleteWebhook = (webhookId: string) => {
     webhookManager.deleteWebhook(webhookId);
@@ -160,7 +159,7 @@ const ApiGateway = () => {
       title: "Webhook Deleted",
       description: "Webhook has been removed"
     });
-  });
+  };
 
   const handleTestWebhook = async (webhookId: string) => {
     toast({
@@ -278,14 +277,14 @@ const ApiGateway = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handlehandleTestEndpoint}
+                        onClick={() => handleTestEndpoint(route)}
                       >
                         Test
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handlehandleCheckStatus}
+                        onClick={() => handleCheckStatus(route)}
                       >
                         Status
                       </Button>
@@ -422,7 +421,7 @@ const ApiGateway = () => {
                         id="keyName"
                         placeholder="Production API Key"
                         value={newKeyName}
-                        onChange={handleChange}
+                        onChange={(e) => setNewKeyName(e.target.value)}
                       />
                     </div>
                   </div>
@@ -452,14 +451,14 @@ const ApiGateway = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handlehandleCopyKey}
+                          onClick={() => handleCopyKey(key.key)}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handlehandleRevokeKey}
+                          onClick={() => handleRevokeKey(key.id)}
                           disabled={!key.isActive}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -509,7 +508,7 @@ const ApiGateway = () => {
                         id="webhookName"
                         placeholder="My Webhook"
                         value={newWebhookName}
-                        onChange={handleChange}
+                        onChange={(e) => setNewWebhookName(e.target.value)}
                       />
                     </div>
                     <div className="space-y-2">
@@ -518,7 +517,7 @@ const ApiGateway = () => {
                         id="webhookUrl"
                         placeholder="https://example.com/webhook"
                         value={newWebhookUrl}
-                        onChange={handleChange}
+                        onChange={(e) => setNewWebhookUrl(e.target.value)}
                       />
                     </div>
                   </div>
@@ -547,14 +546,14 @@ const ApiGateway = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handlehandleTestWebhook}
+                          onClick={() => handleTestWebhook(webhook.id)}
                         >
                           Test
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handlehandleDeleteWebhook}
+                          onClick={() => handleDeleteWebhook(webhook.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

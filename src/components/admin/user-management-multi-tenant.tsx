@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { useOrganizationPermissions } from "@/hooks/use-organization-permissions";
@@ -180,7 +179,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                   id="email"
                   type="email"
                   value={inviteEmail}
-                  onChange={handleChange}
+                  onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="usuario@exemplo.com"
                 />
               </div>
@@ -202,7 +201,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                   <Mail className="h-4 w-4 mr-2" />
                   Enviar Convite
                 </Button>
-                <Button variant="outline" onClick={handleSetShowInviteDialog}>
+                <Button variant="outline" onClick={() => setShowInviteDialog(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -262,7 +261,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                           <>
                             <Select
                               value={user.role}
-                              onValueChange={(newRole) => handleUpdateRole(user.id, newRole}
+                              onValueChange={(newRole) => handleUpdateRole(user.id, newRole)}
                             >
                               <SelectTrigger className="w-32">
                                 <SelectValue />
@@ -278,7 +277,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handlehandleRemoveUser}
+                                onClick={() => handleRemoveUser(user.id)}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -296,4 +295,4 @@ export const UserManagementMultiTenant: React.FC = () => {
       </Card>
     </div>
   );
-});
+};

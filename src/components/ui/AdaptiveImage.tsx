@@ -3,7 +3,7 @@
  * Carrega versões menores em conexões lentas
  */
 
-import { memo, memo, useEffect, useRef, useState, useCallback } from "react";;;
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { connectionAdaptive } from "@/lib/performance/connection-adaptive";
 
@@ -14,19 +14,19 @@ interface AdaptiveImageProps {
   width?: number;
   height?: number;
   priority?: boolean;
-  placeholder?: "blur" | "empty";
+  placeholder?: 'blur' | 'empty';
   onLoad?: () => void;
   onError?: () => void;
 }
 
-export const AdaptiveImage = memo(function({
+export function AdaptiveImage({
   src,
   alt,
   className,
   width,
   height,
   priority = false,
-  placeholder = "blur",
+  placeholder = 'blur',
   onLoad,
   onError,
 }: AdaptiveImageProps) {
@@ -38,19 +38,19 @@ export const AdaptiveImage = memo(function({
   useEffect(() => {
     if (priority && imgRef.current) {
       // Carregar imediatamente se for prioritária
-      imgRef.current.loading = "eager";
+      imgRef.current.loading = 'eager';
     }
   }, [priority]);
 
   const handleLoad = () => {
     setLoaded(true);
     onLoad?.();
-  });
+  };
 
   const handleError = () => {
     setError(true);
     onError?.();
-  });
+  };
 
   // Calcular dimensões adaptativas
   const adaptiveWidth = width 
@@ -74,7 +74,7 @@ export const AdaptiveImage = memo(function({
   return (
     <div className={cn("relative overflow-hidden", className)}>
       {/* Placeholder blur */}
-      {placeholder === "blur" && !loaded && (
+      {placeholder === 'blur' && !loaded && (
         <div 
           className="absolute inset-0 bg-muted animate-pulse"
           style={{ width: adaptiveWidth, height }}
@@ -87,7 +87,7 @@ export const AdaptiveImage = memo(function({
         alt={alt}
         width={adaptiveWidth}
         height={height}
-        loading={priority ? "eager" : "lazy"}
+        loading={priority ? 'eager' : 'lazy'}
         decoding="async"
         onLoad={handleLoad}
         onError={handleError}
@@ -102,7 +102,7 @@ export const AdaptiveImage = memo(function({
 }
 
 // Avatar otimizado para listas
-export const AdaptiveAvatar = memo(function({
+export function AdaptiveAvatar({
   src,
   alt,
   size = 40,
@@ -116,10 +116,10 @@ export const AdaptiveAvatar = memo(function({
   const [error, setError] = useState(false);
 
   const initials = alt
-    .split(" ")
+    .split(' ')
     .map(n => n[0])
     .slice(0, 2)
-    .join("")
+    .join('')
     .toUpperCase();
 
   if (!src || error) {
@@ -144,8 +144,8 @@ export const AdaptiveAvatar = memo(function({
       height={size}
       loading="lazy"
       decoding="async"
-      onError={() => setError(true}
+      onError={() => setError(true)}
       className={cn("rounded-full object-cover", className)}
     />
   );
-});
+}

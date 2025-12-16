@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +43,7 @@ interface AITask {
   estimatedTime?: string;
 }
 
-export const AIAssistantPanel = memo(() => {
+export const AIAssistantPanel = () => {
   const [query, setQuery] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
@@ -185,7 +184,7 @@ export const AIAssistantPanel = memo(() => {
       } finally {
         setIsProcessing(false);
       }
-    });
+    }
   };
 
   return (
@@ -233,7 +232,7 @@ export const AIAssistantPanel = memo(() => {
             <Input
               placeholder="Ex: 'Analisar eficiência da frota no último trimestre'"
               value={query}
-              onChange={handleChange}
+              onChange={(e) => setQuery(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleQuery()}
               disabled={isProcessing}
             />

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -407,7 +406,7 @@ Como posso ajudá-lo especificamente hoje?`,
         description: "Voltando ao modo texto"
       });
     }
-  });
+  };
 
   const exportConversation = () => {
     const conversation = messages.map(msg => 
@@ -428,7 +427,7 @@ Como posso ajudá-lo especificamente hoje?`,
       title: "Conversa exportada",
       description: "Arquivo baixado com sucesso"
     });
-  });
+  };
 
   const handleSettingsClick = () => {
     toast({
@@ -436,7 +435,7 @@ Como posso ajudá-lo especificamente hoje?`,
       description: "Ajuste preferências de idioma, modelo de IA e comportamento"
     });
     // TODO: Implement settings dialog with model selection, temperature, etc.
-  });
+  };
 
   return (
     <div className="flex h-screen bg-background">
@@ -465,7 +464,7 @@ Como posso ajudá-lo especificamente hoje?`,
                   <Card 
                     key={action.id} 
                     className="cursor-pointer hover:bg-accent/50 transition-colors"
-                    onClick={() => handlehandleQuickAction}
+                    onClick={() => handleQuickAction(action)}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-start gap-3">
@@ -629,7 +628,7 @@ Como posso ajudá-lo especificamente hoje?`,
                 <Input
                   ref={inputRef}
                   value={currentMessage}
-                  onChange={handleChange}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   placeholder="Digite sua mensagem ou escolha uma ação rápida..."
                   className="pr-12"

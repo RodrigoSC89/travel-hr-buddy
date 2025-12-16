@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -130,7 +129,7 @@ const AdvancedAIInsights = () => {
       ],
       estimatedSavings: "18% melhoria",
       status: "new"
-    });
+    };
 
     setAiInsights(prev => [newInsight, ...prev]);
     setIsAnalyzing(false);
@@ -174,7 +173,7 @@ const AdvancedAIInsights = () => {
       description: `Iniciando implementação: ${insightTitle}`
     });
     // TODO: Open implementation workflow dialog
-  });
+  };
 
   return (
     <div className="space-y-6 p-6">
@@ -192,7 +191,7 @@ const AdvancedAIInsights = () => {
         <div className="flex items-center gap-2">
           <Button 
             variant="outline"
-            onClick={() => handletoast}
+            onClick={() => toast({ title: "Relatório", description: "Exportando insights..." })}
           >
             <Download className="w-4 h-4 mr-2" />
             Exportar
@@ -327,7 +326,7 @@ const AdvancedAIInsights = () => {
                         {insight.estimatedSavings}
                       </span>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => handlehandleImplementInsight}>
+                    <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight.title)}>
                       Implementar
                     </Button>
                   </div>
@@ -501,7 +500,7 @@ const AdvancedAIInsights = () => {
                         </Badge>
                       </div>
                     </div>
-                    <Button onClick={() => handlehandleImplementInsight}>Implementar</Button>
+                    <Button onClick={() => handleImplementInsight(rec.title)}>Implementar</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -511,6 +510,6 @@ const AdvancedAIInsights = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default AdvancedAIInsights;

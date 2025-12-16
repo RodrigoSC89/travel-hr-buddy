@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -138,7 +137,7 @@ const Auth: React.FC = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handlehandleOAuthSignIn}
+          onClick={() => handleOAuthSignIn("google")}
           disabled={!!oauthLoading || isLoading}
           className="w-full"
         >
@@ -170,7 +169,7 @@ const Auth: React.FC = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handlehandleOAuthSignIn}
+          onClick={() => handleOAuthSignIn("github")}
           disabled={!!oauthLoading || isLoading}
           className="w-full"
         >
@@ -187,7 +186,7 @@ const Auth: React.FC = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handlehandleOAuthSignIn}
+          onClick={() => handleOAuthSignIn("azure")}
           disabled={!!oauthLoading || isLoading}
           className="w-full"
         >
@@ -320,7 +319,7 @@ const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                          onClick={handleSetShowPassword}
+                          onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
@@ -340,24 +339,24 @@ const Auth: React.FC = () => {
                     </Button>
                   </form>
 
-                  <div className="text-center">
-                    <Button
-                      variant="link"
-                      className="text-sm text-muted-foreground"
-                      onClick={handleSetActiveTab}
-                    >
+                    <div className="text-center">
+                      <Button
+                        variant="link"
+                        className="text-sm text-muted-foreground"
+                        onClick={() => setActiveTab("reset")}
+                      >
                         Esqueceu sua senha?
-                    </Button>
-                  </div>
+                      </Button>
+                    </div>
 
-                  <OAuthButtons />
-                </TabsContent>
+                    <OAuthButtons />
+                  </TabsContent>
 
-                {/* Sign Up Form */}
-                <TabsContent value="signup" className="space-y-4">
-                  <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-name">Nome Completo</Label>
+                  {/* Sign Up Form */}
+                  <TabsContent value="signup" className="space-y-4">
+                    <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="signup-name">Nome Completo</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -406,7 +405,7 @@ const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                          onClick={handleSetShowPassword}
+                          onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
@@ -440,11 +439,11 @@ const Auth: React.FC = () => {
                     >
                       {isLoading ? "Criando conta..." : "Criar Conta"}
                       <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </form>
+                      </Button>
+                    </form>
 
-                  <OAuthButtons />
-                </TabsContent>
+                    <OAuthButtons />
+                  </TabsContent>
 
                 {/* Reset Password Tab */}
                 {activeTab === "reset" && (
@@ -480,7 +479,7 @@ const Auth: React.FC = () => {
                       <Button
                         variant="link"
                         className="text-sm text-muted-foreground"
-                        onClick={handleSetActiveTab}
+                        onClick={() => setActiveTab("signin")}
                       >
                         Voltar ao login
                       </Button>

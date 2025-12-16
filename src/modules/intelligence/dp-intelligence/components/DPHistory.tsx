@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -102,33 +101,33 @@ const historyData: HistoryItem[] = [
 
 const getStatusBadge = (status: string) => {
   switch (status) {
-  case "success":
-    return <Badge className="bg-emerald-100 text-emerald-700">Sucesso</Badge>;
-  case "warning":
-    return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
-  case "error":
-    return <Badge className="bg-red-100 text-red-700">Erro</Badge>;
-  case "info":
-    return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
-  default:
-    return <Badge>{status}</Badge>;
+    case "success":
+      return <Badge className="bg-emerald-100 text-emerald-700">Sucesso</Badge>;
+    case "warning":
+      return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+    case "error":
+      return <Badge className="bg-red-100 text-red-700">Erro</Badge>;
+    case "info":
+      return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
+    default:
+      return <Badge>{status}</Badge>;
   }
 };
 
 const getTypeIcon = (type: string) => {
   switch (type) {
-  case "analysis":
-    return <TrendingUp className="h-4 w-4 text-purple-500" />;
-  case "operation":
-    return <Activity className="h-4 w-4 text-blue-500" />;
-  case "alert":
-    return <Activity className="h-4 w-4 text-amber-500" />;
-  case "optimization":
-    return <TrendingUp className="h-4 w-4 text-emerald-500" />;
-  case "maintenance":
-    return <Activity className="h-4 w-4 text-cyan-500" />;
-  default:
-    return <Clock className="h-4 w-4" />;
+    case "analysis":
+      return <TrendingUp className="h-4 w-4 text-purple-500" />;
+    case "operation":
+      return <Activity className="h-4 w-4 text-blue-500" />;
+    case "alert":
+      return <Activity className="h-4 w-4 text-amber-500" />;
+    case "optimization":
+      return <TrendingUp className="h-4 w-4 text-emerald-500" />;
+    case "maintenance":
+      return <Activity className="h-4 w-4 text-cyan-500" />;
+    default:
+      return <Clock className="h-4 w-4" />;
   }
 };
 
@@ -207,7 +206,7 @@ export default function DPHistory() {
     setIsFilterOpen(false);
     toast.success("Filtros aplicados", {
       description: `${filteredData.length} eventos encontrados.`,
-    };
+    });
   };
 
   const handleClearFilters = () => {
@@ -283,7 +282,7 @@ export default function DPHistory() {
     }
 
     setIsExportOpen(false);
-  });
+  };
 
   const hasActiveFilters =
     activeFilters.types.length > 0 ||
@@ -331,7 +330,7 @@ export default function DPHistory() {
                   <Input
                     placeholder="Buscar por evento ou detalhes..."
                     value={filters.searchText}
-                    onChange={handleChange}
+                    onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
                   />
                 </div>
 
@@ -343,7 +342,7 @@ export default function DPHistory() {
                       <label key={type} className="flex items-center gap-2 cursor-pointer">
                         <Checkbox
                           checked={filters.types.includes(type)}
-                          onCheckedChange={() => handleToggleType(type}
+                          onCheckedChange={() => handleToggleType(type)}
                         />
                         <span className="text-sm">{getTypeLabel(type)}</span>
                       </label>
@@ -359,7 +358,7 @@ export default function DPHistory() {
                       <label key={status} className="flex items-center gap-2 cursor-pointer">
                         <Checkbox
                           checked={filters.statuses.includes(status)}
-                          onCheckedChange={() => handleToggleStatus(status}
+                          onCheckedChange={() => handleToggleStatus(status)}
                         />
                         <span className="text-sm">{getStatusLabel(status)}</span>
                       </label>
@@ -374,7 +373,7 @@ export default function DPHistory() {
                     <Input
                       type="date"
                       value={filters.dateFrom}
-                      onChange={handleChange}
+                      onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
                     />
                   </div>
                   <div className="space-y-2">
@@ -382,7 +381,7 @@ export default function DPHistory() {
                     <Input
                       type="date"
                       value={filters.dateTo}
-                      onChange={handleChange}
+                      onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
                     />
                   </div>
                 </div>
@@ -416,7 +415,7 @@ export default function DPHistory() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => handlehandleExport}
+                    onClick={() => handleExport("csv")}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Exportar como CSV
@@ -424,7 +423,7 @@ export default function DPHistory() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => handlehandleExport}
+                    onClick={() => handleExport("json")}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Exportar como JSON
@@ -432,7 +431,7 @@ export default function DPHistory() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => handlehandleExport}
+                    onClick={() => handleExport("pdf")}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Exportar como Relatório

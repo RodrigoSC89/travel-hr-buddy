@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -231,7 +231,7 @@ export default function RestoreAnalyticsPage() {
         backgroundColor: "#3b82f6",
       },
     ],
-  });
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -239,7 +239,7 @@ export default function RestoreAnalyticsPage() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/admin")}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
@@ -252,7 +252,7 @@ export default function RestoreAnalyticsPage() {
         <Input
           placeholder="Filtrar por e-mail"
           value={filterEmail}
-          onChange={handleChange}
+          onChange={(e) => setFilterEmail(e.target.value)}
         />
         <Button onClick={fetchStats} disabled={loading}>
           🔍 Buscar

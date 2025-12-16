@@ -1,16 +1,15 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 837: PWA Update Prompt
  * Prompt users to update the app
  */
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { RefreshCw, X, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useServiceWorker } from "@/lib/pwa/service-worker-manager";
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { RefreshCw, X, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useServiceWorker } from '@/lib/pwa/service-worker-manager';
 
-export const UpdatePrompt = memo(function() {
+export function UpdatePrompt() {
   const { updateAvailable, skipWaiting } = useServiceWorker();
   const [dismissed, setDismissed] = React.useState(false);
 
@@ -57,7 +56,7 @@ export const UpdatePrompt = memo(function() {
                     Atualizar
                   </Button>
                   <Button
-                    onClick={handleSetDismissed}
+                    onClick={() => setDismissed(true)}
                     variant="ghost"
                     size="sm"
                   >
@@ -67,7 +66,7 @@ export const UpdatePrompt = memo(function() {
               </div>
 
               <button
-                onClick={handleSetDismissed}
+                onClick={() => setDismissed(true)}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -78,4 +77,4 @@ export const UpdatePrompt = memo(function() {
       </motion.div>
     </AnimatePresence>
   );
-});
+}

@@ -5,8 +5,8 @@
 
 interface LeakReport {
   component: string;
-  type: "event-listener" | "timer" | "closure" | "dom-reference" | "subscription";
-  severity: "low" | "medium" | "high";
+  type: 'event-listener' | 'timer' | 'closure' | 'dom-reference' | 'subscription';
+  severity: 'low' | 'medium' | 'high';
   suggestion: string;
 }
 
@@ -38,6 +38,7 @@ class MemoryLeakDetector {
   startMonitoring(intervalMs: number = 10000): void {
     if (this.intervalId) return;
     
+    console.log('[MemoryLeakDetector] Starting monitoring...');
     this.takeSnapshot();
     
     this.intervalId = window.setInterval(() => {
@@ -94,6 +95,10 @@ class MemoryLeakDetector {
     
     // Warning if growing more than 5MB in last 5 snapshots
     if (recentGrowth > 5 * 1024 * 1024) {
+      console.warn('[MemoryLeakDetector] Possible memory leak detected:', {
+        growthMB: (recentGrowth / 1024 / 1024).toFixed(2),
+        currentHeapMB: (this.snapshots[this.snapshots.length - 1].heapUsed / 1024 / 1024).toFixed(2)
+      });
     }
   }
   
@@ -127,8 +132,8 @@ class MemoryLeakDetector {
       if (count > 10) {
         reports.push({
           component,
-          type: "event-listener",
-          severity: count > 50 ? "high" : count > 20 ? "medium" : "low",
+          type: 'event-listener',
+          severity: count > 50 ? 'high' : count > 20 ? 'medium' : 'low',
           suggestion: `Componente "${component}" tem ${count} listeners ativos. Verifique se estão sendo removidos no cleanup.`
         });
       }
@@ -137,9 +142,9 @@ class MemoryLeakDetector {
     // Check for many active timers
     if (this.timers.size > 20) {
       reports.push({
-        component: "Global",
-        type: "timer",
-        severity: this.timers.size > 50 ? "high" : "medium",
+        component: 'Global',
+        type: 'timer',
+        severity: this.timers.size > 50 ? 'high' : 'medium',
         suggestion: `${this.timers.size} timers ativos. Considere usar um único timer centralizado.`
       });
     }
@@ -156,7 +161,7 @@ class MemoryLeakDetector {
     averageGrowthKB: number;
     snapshotCount: number;
     potentialLeaks: boolean;
-    } {
+  } {
     const current = this.snapshots[this.snapshots.length - 1];
     const avgGrowth = this.snapshots.length > 1
       ? this.snapshots.slice(1).reduce((sum, s) => sum + s.growth, 0) / (this.snapshots.length - 1)
@@ -168,7 +173,7 @@ class MemoryLeakDetector {
       averageGrowthKB: Math.round(avgGrowth / 1024),
       snapshotCount: this.snapshots.length,
       potentialLeaks: avgGrowth > 500 * 1024 // More than 500KB average growth
-    });
+    };
   }
   
   /**
@@ -177,6 +182,7 @@ class MemoryLeakDetector {
   requestGC(): void {
     if ((window as any).gc) {
       (window as any).gc();
+      console.log('[MemoryLeakDetector] GC requested');
     }
   }
   
@@ -250,7 +256,7 @@ export function debounce<T extends (...args: any[]) => any>(
 export function createCleanupEffect(setup: () => (() => void) | void): () => void {
   const cleanup = setup();
   return () => {
-    if (typeof cleanup === "function") {
+    if (typeof cleanup === 'function') {
       cleanup();
     }
   };

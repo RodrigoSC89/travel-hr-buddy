@@ -1,5 +1,4 @@
 /**
-import { useCallback, useEffect, useMemo, useState } from "react";;
  * PATCH 578 - Multilayer Reaction Mapper Component
  * Interactive visualization of multi-layer reaction system
  */
@@ -63,7 +62,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     logs: [],
     simulationMode: false,
     simulationSpeed: 1,
-});
+  });
 
   const [selectedNode, setSelectedNode] = useState<DecisionNode | null>(null);
   const [metrics, setMetrics] = useState<ReactionMetrics | null>(null);
@@ -106,7 +105,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
           ? (automatedNodes.length / layerNodes.length) * 100 
           : 0,
       };
-    };
+    });
 
     // Calculate path execution rates
     const pathExecutionRate: Record<string, number> = {};
@@ -115,7 +114,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
         l.nodeId === path.fromNodeId || l.nodeId === path.toNodeId
       ).length;
       pathExecutionRate[path.id] = executions;
-  };
+    });
 
     // Calculate critical path time
     const criticalPathTime = nodes.reduce((max, node) => {
@@ -162,10 +161,10 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
 
     // Trigger simulation event
     if (integrateWithControlHub) {
-      BridgeLink.emit("reaction-mapper:simulation-started" as unknown, "ReactionMapper", {
+      BridgeLink.emit("reaction-mapper:simulation-started" as any, "ReactionMapper", {
         scenarioId: state.currentScenario.id,
         timestamp: Date.now(),
-      };
+      });
     }
 
     // Simulate nodes execution
@@ -267,9 +266,9 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     }));
 
     if (integrateWithControlHub) {
-      BridgeLink.emit("reaction-mapper:simulation-stopped" as unknown, "ReactionMapper", {
+      BridgeLink.emit("reaction-mapper:simulation-stopped" as any, "ReactionMapper", {
         timestamp: Date.now(),
-      };
+      });
     }
   }, [integrateWithControlHub]);
 
@@ -358,7 +357,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
         className={`mb-2 cursor-pointer transition-all ${
           selectedNode?.id === node.id ? "ring-2 ring-blue-500" : ""
         } ${isActive ? "border-blue-500 shadow-lg" : ""}`}
-        onClick={handleSetSelectedNode}
+        onClick={() => setSelectedNode(node)}
       >
         <CardHeader className="p-3">
           <div className="flex items-start justify-between">

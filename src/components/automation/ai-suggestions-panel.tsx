@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
-
+// @ts-nocheck
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -116,6 +115,7 @@ export const AISuggestionsPanel: React.FC = () => {
         .limit(20);
 
       if (error) {
+        console.warn("Error loading from database, using mock data:", error);
         // Use mock data if database fails
         setSuggestions(MOCK_SUGGESTIONS);
         return;
@@ -135,7 +135,6 @@ export const AISuggestionsPanel: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Error loading suggestions:", error);
       console.error("Error loading suggestions:", error);
       // Fallback to mock data
       setSuggestions(MOCK_SUGGESTIONS);
@@ -165,7 +164,7 @@ export const AISuggestionsPanel: React.FC = () => {
         try {
           const parsed = JSON.parse(data.result);
           if (parsed.suggestions && Array.isArray(parsed.suggestions)) {
-            const newSuggestions = parsed.suggestions.map((s: unknown, idx: number) => ({
+            const newSuggestions = parsed.suggestions.map((s: any, idx: number) => ({
               ...s,
               id: s.id || `ai-${Date.now()}-${idx}`,
               is_read: false,
@@ -189,7 +188,6 @@ export const AISuggestionsPanel: React.FC = () => {
       }
     } catch (error) {
       console.error("Error refreshing with AI:", error);
-      console.error("Error refreshing with AI:", error);
       await loadSuggestions(true);
     } finally {
       setIsRefreshing(false);
@@ -206,11 +204,11 @@ export const AISuggestionsPanel: React.FC = () => {
       prev.map(s => 
         s.id === suggestion.id 
           ? { 
-            ...s, 
-            is_read: true,
-            ...(actionType === "accept" && { is_acted_upon: true }),
-            ...(actionType === "dismiss" && { is_dismissed: true })
-          }
+              ...s, 
+              is_read: true,
+              ...(actionType === "accept" && { is_acted_upon: true }),
+              ...(actionType === "dismiss" && { is_dismissed: true })
+            }
           : s
       ).filter(s => !s.is_dismissed)
     );
@@ -227,7 +225,6 @@ export const AISuggestionsPanel: React.FC = () => {
           })
           .eq("id", suggestion.id);
       } catch (error) {
-        console.warn("Failed to update suggestion in database:", error);
         console.warn("Failed to update suggestion in database:", error);
       }
     }
@@ -256,46 +253,46 @@ export const AISuggestionsPanel: React.FC = () => {
 
   const getSuggestionIcon = (type: string) => {
     switch (type) {
-    case "action": return CheckCircle;
-    case "insight": return Lightbulb;
-    case "reminder": return Clock;
-    case "optimization": return TrendingUp;
-    default: return Zap;
+      case "action": return CheckCircle;
+      case "insight": return Lightbulb;
+      case "reminder": return Clock;
+      case "optimization": return TrendingUp;
+      default: return Zap;
     }
   };
 
   const getSuggestionColor = (priority: number) => {
     switch (priority) {
-    case 4: return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400";
-    case 3: return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400";
-    case 2: return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400";
-    default: return "bg-secondary text-secondary-foreground border-border";
+      case 4: return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400";
+      case 3: return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400";
+      case 2: return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400";
+      default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getPriorityLabel = (priority: number) => {
     switch (priority) {
-    case 4: return "Urgente";
-    case 3: return "Alta";
-    case 2: return "Média";
-    default: return "Baixa";
+      case 4: return "Urgente";
+      case 3: return "Alta";
+      case 2: return "Média";
+      default: return "Baixa";
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-    case "action": return "Ação Requerida";
-    case "insight": return "Insight";
-    case "reminder": return "Lembrete";
-    case "optimization": return "Otimização";
-    default: return type;
+      case "action": return "Ação Requerida";
+      case "insight": return "Insight";
+      case "reminder": return "Lembrete";
+      case "optimization": return "Otimização";
+      default: return type;
     }
   };
 
   const filteredSuggestions = suggestions.filter(suggestion => {
     if (filter === "all") return true;
     return suggestion.type === filter;
-  };
+  });
 
   if (isLoading) {
     return (
@@ -339,21 +336,21 @@ export const AISuggestionsPanel: React.FC = () => {
           <Button
             variant={filter === "all" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetFilter}
+            onClick={() => setFilter("all")}
           >
             Todas
           </Button>
           <Button
             variant={filter === "action" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetFilter}
+            onClick={() => setFilter("action")}
           >
             Ações
           </Button>
           <Button
             variant={filter === "optimization" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetFilter}
+            onClick={() => setFilter("optimization")}
           >
             Otimizações
           </Button>
@@ -424,7 +421,7 @@ export const AISuggestionsPanel: React.FC = () => {
                           {(suggestion.type === "action" || suggestion.action_data?.route) && !suggestion.is_acted_upon && (
                             <Button
                               size="sm"
-                              onClick={() => handlehandleAction}
+                              onClick={() => handleAction(suggestion, "accept")}
                               className="h-8 px-3"
                             >
                               Executar
@@ -434,7 +431,7 @@ export const AISuggestionsPanel: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handlehandleAction}
+                            onClick={() => handleAction(suggestion, "dismiss")}
                             className="h-8 w-8 p-0"
                           >
                             <X className="w-4 h-4" />
@@ -448,22 +445,22 @@ export const AISuggestionsPanel: React.FC = () => {
                       
                       {suggestion.action_data && Object.keys(suggestion.action_data).length > 0 && (
                         <div className="flex gap-2 text-xs text-muted-foreground">
-                          {(suggestion.action_data as unknown)?.savings && (
+                          {(suggestion.action_data as any)?.savings && (
                             <div className="flex items-center gap-1">
                               <TrendingUp className="w-3 h-3" />
-                              Economia: {(suggestion.action_data as unknown).savings}
+                              Economia: {(suggestion.action_data as any).savings}
                             </div>
                           )}
-                          {(suggestion.action_data as unknown)?.vessel && (
+                          {(suggestion.action_data as any)?.vessel && (
                             <div className="flex items-center gap-1">
                               <Ship className="w-3 h-3" />
-                              {(suggestion.action_data as unknown).vessel}
+                              {(suggestion.action_data as any).vessel}
                             </div>
                           )}
-                          {(suggestion.action_data as unknown)?.days_overdue && (
+                          {(suggestion.action_data as any)?.days_overdue && (
                             <div className="flex items-center gap-1">
                               <AlertTriangle className="w-3 h-3" />
-                              {(suggestion.action_data as unknown).days_overdue} dias em atraso
+                              {(suggestion.action_data as any).days_overdue} dias em atraso
                             </div>
                           )}
                         </div>

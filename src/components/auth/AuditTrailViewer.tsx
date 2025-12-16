@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useMemo } from "react";;
  * Audit Trail Viewer Component
  * PATCH 123.0 - Audit Trail por Role
  * 
@@ -49,7 +48,7 @@ interface AccessLog {
   created_at: string;
 }
 
-const RESULT_CONFIG: Record<string, { label: string; icon: React.ComponentType<any>; color: string }> = {
+const RESULT_CONFIG: Record<string, { label: string; icon: any; color: string }> = {
   success: { label: "Sucesso", icon: CheckCircle, color: "text-green-500" },
   failure: { label: "Falha", icon: XCircle, color: "text-red-500" },
   denied: { label: "Negado", icon: XCircle, color: "text-orange-500" },
@@ -86,6 +85,7 @@ export const AuditTrailViewer: React.FC = () => {
       const { data, error } = await query;
 
       if (error) {
+        console.error("Error loading audit logs:", error);
         toast({
           title: "Erro",
           description: "Não foi possível carregar os logs de auditoria.",
@@ -102,7 +102,6 @@ export const AuditTrailViewer: React.FC = () => {
       setLogs(typedData);
     } catch (error) {
       console.error("Error loading audit logs:", error);
-      console.error("Error loading audit logs:", error);
     } finally {
       setLoading(false);
     }
@@ -115,7 +114,7 @@ export const AuditTrailViewer: React.FC = () => {
       log.action.toLowerCase().includes(searchLower) ||
       log.module_accessed.toLowerCase().includes(searchLower)
     );
-  };
+  });
 
   const getResultConfig = (result: string) => {
     return RESULT_CONFIG[result] || RESULT_CONFIG.success;
@@ -152,7 +151,7 @@ export const AuditTrailViewer: React.FC = () => {
                 <Input
                   placeholder="Buscar ações..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -283,4 +282,4 @@ export const AuditTrailViewer: React.FC = () => {
       </div>
     </RoleGuard>
   );
-});
+};

@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * PEO-DP Enhanced AI - Conformidade Petrobras com IA
  * - Monitoramento ASOG em tempo real
  * - Geração automática de evidências
@@ -8,7 +7,7 @@ import { useState, useMemo, useCallback } from "react";;
  */
 
 import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -16,8 +15,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
-  Brain, Shield, FileText,
-  Activity, Sparkles, Zap, Settings, AlertCircle
+  Brain, Shield, AlertTriangle, CheckCircle, FileText,
+  Activity, Sparkles, Zap, Target, Settings, AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -38,7 +37,7 @@ interface ASOGStatus {
   recommendations: string[];
 }
 
-export const PEODPEnhancedAI = memo(function() {
+export function PEODPEnhancedAI() {
   const { analyze, generate, suggest, isLoading } = useNautilusAI();
   const [asogStatus, setAsogStatus] = useState<ASOGStatus>({
     current: "green",
@@ -115,7 +114,7 @@ export const PEODPEnhancedAI = memo(function() {
       // Simulated ASOG check
       const newStatus: ASOGStatus = {
         current: pillars.some(p => p.status === "red") ? "red" : 
-          pillars.some(p => p.status === "yellow") ? "yellow" : "green",
+                 pillars.some(p => p.status === "yellow") ? "yellow" : "green",
         reason: "Pilares 3 e 6 requerem atenção",
         timestamp: new Date().toISOString(),
         recommendations: [
@@ -134,10 +133,10 @@ export const PEODPEnhancedAI = memo(function() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "green": return "bg-green-500";
-    case "yellow": return "bg-yellow-500";
-    case "red": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "green": return "bg-green-500";
+      case "yellow": return "bg-yellow-500";
+      case "red": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
@@ -177,8 +176,8 @@ export const PEODPEnhancedAI = memo(function() {
       {/* ASOG Status Card */}
       <Card className={`border-2 ${
         asogStatus.current === "green" ? "border-green-500 bg-green-500/5" :
-          asogStatus.current === "yellow" ? "border-yellow-500 bg-yellow-500/5" :
-            "border-red-500 bg-red-500/5"
+        asogStatus.current === "yellow" ? "border-yellow-500 bg-yellow-500/5" :
+        "border-red-500 bg-red-500/5"
       }`}>
         <CardContent className="pt-4">
           <div className="flex items-center justify-between">
@@ -243,15 +242,15 @@ export const PEODPEnhancedAI = memo(function() {
                   </div>
                   <Progress value={pillar.score} className={`h-2 mb-2 ${
                     pillar.status === "green" ? "[&>div]:bg-green-500" :
-                      pillar.status === "yellow" ? "[&>div]:bg-yellow-500" :
-                        "[&>div]:bg-red-500"
+                    pillar.status === "yellow" ? "[&>div]:bg-yellow-500" :
+                    "[&>div]:bg-red-500"
                   }`} />
                   <div className="flex justify-between text-xs text-muted-foreground">
                     <span>{pillar.compliant}/{pillar.items} itens conformes</span>
                     <span>Auditado: {pillar.lastAudit}</span>
                   </div>
                   <div className="flex justify-end mt-3">
-                    <Button size="sm" variant="outline" onClick={() => handlegenerateEvidence}>
+                    <Button size="sm" variant="outline" onClick={() => generateEvidence(pillar.name)}>
                       <FileText className="h-3 w-3 mr-1" />
                       Gerar Evidência
                     </Button>
@@ -287,6 +286,6 @@ export const PEODPEnhancedAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default PEODPEnhancedAI;

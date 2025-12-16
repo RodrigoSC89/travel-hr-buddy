@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -283,11 +282,12 @@ Métricas de Sistema:
             })),
           context,
         },
-      };
+      });
 
       let responseContent: string;
 
       if (error) {
+        console.warn("Edge function error, using fallback:", error);
         responseContent = generateLocalFallback(textToSend);
         
         // Show toast for rate limit or payment errors
@@ -315,11 +315,10 @@ Métricas de Sistema:
         role: "assistant",
         content: responseContent,
         timestamp: new Date(),
-      });
+      };
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      console.error("Error sending message:", error);
       console.error("Error sending message:", error);
       
       const fallbackMessage: Message = {
@@ -360,7 +359,7 @@ Métricas de Sistema:
                 variant="outline"
                 size="sm"
                 className="text-xs hover-lift"
-                onClick={() => handlesendMessage}
+                onClick={() => sendMessage(action.prompt)}
                 disabled={isLoading}
               >
                 <action.icon className="h-3 w-3 mr-1" />
@@ -435,7 +434,7 @@ Métricas de Sistema:
           <div className="flex gap-2">
             <Textarea
               value={input}
-              onChange={handleChange}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Pergunte sobre otimização, performance, UX..."
               className="min-h-[40px] max-h-[100px] resize-none"
               onKeyDown={(e) => {
@@ -458,4 +457,4 @@ Métricas de Sistema:
       </CardContent>
     </Card>
   );
-});
+};

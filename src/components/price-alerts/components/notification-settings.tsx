@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +29,7 @@ interface NotificationSettings {
   weekly_report: boolean;
 }
 
-export const NotificationSettings = memo(() => {
+export const NotificationSettings = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [settings, setSettings] = useState<NotificationSettings>({
@@ -145,7 +144,7 @@ export const NotificationSettings = memo(() => {
         body: "Este é um exemplo de notificação! 🎉",
         icon: "/favicon.ico",
         badge: "/favicon.ico",
-      };
+      });
     }
   };
 
@@ -171,7 +170,7 @@ export const NotificationSettings = memo(() => {
         </CardContent>
       </Card>
     );
-  });
+  }
 
   return (
     <div className="space-y-6">
@@ -201,7 +200,7 @@ export const NotificationSettings = memo(() => {
               </div>
               <Switch
                 checked={settings.email_enabled}
-                onCheckedChange={(checked) => updateSetting("email_enabled", checked}
+                onCheckedChange={(checked) => updateSetting("email_enabled", checked)}
               />
             </div>
             <Separator />
@@ -250,7 +249,7 @@ export const NotificationSettings = memo(() => {
                 ) : (
                   <Switch
                     checked={settings.push_enabled && pushPermission === "granted"}
-                    onCheckedChange={(checked) => updateSetting("push_enabled", checked}
+                    onCheckedChange={(checked) => updateSetting("push_enabled", checked)}
                     disabled={!pushSupported || pushPermission !== "granted"}
                   />
                 )}
@@ -276,7 +275,7 @@ export const NotificationSettings = memo(() => {
                 type="number"
                 placeholder="0"
                 value={settings.price_drop_threshold}
-                onChange={handleChange}
+                onChange={(e) => updateSetting("price_drop_threshold", Number(e.target.value))}
                 className="w-32"
                 min="0"
                 step="0.01"
@@ -305,7 +304,7 @@ export const NotificationSettings = memo(() => {
                 </div>
                 <Switch
                   checked={settings.daily_summary}
-                  onCheckedChange={(checked) => updateSetting("daily_summary", checked}
+                  onCheckedChange={(checked) => updateSetting("daily_summary", checked)}
                 />
               </div>
               
@@ -318,7 +317,7 @@ export const NotificationSettings = memo(() => {
                 </div>
                 <Switch
                   checked={settings.weekly_report}
-                  onCheckedChange={(checked) => updateSetting("weekly_report", checked}
+                  onCheckedChange={(checked) => updateSetting("weekly_report", checked)}
                 />
               </div>
             </div>

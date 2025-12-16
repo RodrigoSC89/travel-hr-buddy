@@ -13,7 +13,7 @@ interface ChecklistCardProps {
   onAnalyze?: (checklistId: string) => void;
 }
 
-export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: ChecklistCardProps) {
+export function ChecklistCard({ checklist, onView, onAnalyze }: ChecklistCardProps) {
   const progress = calculateProgress(checklist.items);
   
   const getStatusColor = (status: string) => {
@@ -23,12 +23,12 @@ export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: Che
     case "approved": return "bg-purple-500";
     default: return "bg-gray-500";
     }
-  });
+  };
 
   return (
     <Card 
       className="cursor-pointer hover:shadow-md transition-shadow"
-      onClick={() => onView?.(checklist}
+      onClick={() => onView?.(checklist)}
     >
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
@@ -95,4 +95,4 @@ export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: Che
       </CardContent>
     </Card>
   );
-});
+}

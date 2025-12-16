@@ -1,4 +1,3 @@
-import { useCallback, useRef, useState } from "react";;
 import React, { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -108,7 +107,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
             audio: base64Audio,
             crewMemberId
           }
-        };
+        });
 
         if (error) throw error;
 
@@ -123,7 +122,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
             crewMemberId,
             responseFormat: "voice"
           }
-        };
+        });
 
         if (aiError) throw aiError;
 
@@ -160,7 +159,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           voiceId: "Sarah", // Voz padrão
           crewMemberId
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -198,7 +197,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         variant: "destructive"
       });
     }
-  });
+  };
 
   // Parar fala
   const stopSpeaking = () => {

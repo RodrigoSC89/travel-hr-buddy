@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * AI Module Enhancer - Componente reutilizável para adicionar IA a qualquer módulo
  */
 
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI, AIModule, AIAction } from "@/hooks/useNautilusAI";
 import {
   Brain,
@@ -109,7 +109,7 @@ const DEFAULT_ACTIONS: Record<AIModule, QuickAction[]> = {
   ]
 };
 
-export const AIModuleEnhancer = memo(function({
+export function AIModuleEnhancer({
   module,
   title,
   description,
@@ -161,7 +161,7 @@ export const AIModuleEnhancer = memo(function({
       <div className={`flex items-center gap-2 ${className}`}>
         <Input
           value={input}
-          onChange={handleChange}
+          onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
           placeholder="Pergunte à IA..."
           className="flex-1"
@@ -206,7 +206,7 @@ export const AIModuleEnhancer = memo(function({
               key={action.id}
               variant="outline"
               size="sm"
-              onClick={() => handlehandleQuery}
+              onClick={() => handleQuery(action)}
               disabled={isLoading}
               className="text-xs"
             >
@@ -220,7 +220,7 @@ export const AIModuleEnhancer = memo(function({
         <div className="flex gap-2">
           <Input
             value={input}
-            onChange={handleChange}
+            onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ou faça sua pergunta..."
             disabled={isLoading}
@@ -264,7 +264,7 @@ export const AIModuleEnhancer = memo(function({
                     variant="secondary"
                     size="sm"
                     className="text-xs h-7"
-                    onClick={handleSetInput}
+                    onClick={() => setInput(s)}
                   >
                     <Lightbulb className="h-3 w-3 mr-1" />
                     {s}
@@ -277,5 +277,6 @@ export const AIModuleEnhancer = memo(function({
       </CardContent>
     </Card>
   );
-});
+}
+
 export default AIModuleEnhancer;

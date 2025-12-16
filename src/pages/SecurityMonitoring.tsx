@@ -2,7 +2,7 @@
  * Security Monitoring - Monitoramento de Segurança com IA
  */
 
-import { useCallback, useState } from "react";;;
+import { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -140,23 +140,23 @@ Forneça análises detalhadas e recomendações de segurança.`;
 
   const getAlertIcon = (type: SecurityAlert["type"]) => {
     switch (type) {
-    case "critical":
-      return <XCircle className="h-5 w-5 text-destructive" />;
-    case "warning":
-      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    default:
-      return <CheckCircle2 className="h-5 w-5 text-green-500" />;
+      case "critical":
+        return <XCircle className="h-5 w-5 text-destructive" />;
+      case "warning":
+        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+      default:
+        return <CheckCircle2 className="h-5 w-5 text-green-500" />;
     }
   };
 
   const getStatusBadge = (status: SecurityAlert["status"]) => {
     switch (status) {
-    case "open":
-      return <Badge variant="destructive">Aberto</Badge>;
-    case "investigating":
-      return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Investigando</Badge>;
-    default:
-      return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Resolvido</Badge>;
+      case "open":
+        return <Badge variant="destructive">Aberto</Badge>;
+      case "investigating":
+        return <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Investigando</Badge>;
+      default:
+        return <Badge className="bg-green-500/20 text-green-500 border-green-500/30">Resolvido</Badge>;
     }
   };
 
@@ -278,7 +278,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Input
                   placeholder="Ex: Quais são os principais riscos de segurança atuais?"
                   value={query}
-                  onChange={handleChange}
+                  onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && analyzeWithAI()}
                   disabled={isAnalyzing}
                 />
@@ -308,7 +308,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Button
                   variant="outline"
                   className="justify-start"
-                  onClick={handleSetQuery}
+                  onClick={() => setQuery("Analise os alertas críticos atuais")}
                 >
                   <AlertTriangle className="h-4 w-4 mr-2" />
                   Analisar alertas críticos
@@ -316,7 +316,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Button
                   variant="outline"
                   className="justify-start"
-                  onClick={handleSetQuery}
+                  onClick={() => setQuery("Recomende melhorias de segurança")}
                 >
                   <Shield className="h-4 w-4 mr-2" />
                   Recomendações de segurança
@@ -324,7 +324,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Button
                   variant="outline"
                   className="justify-start"
-                  onClick={handleSetQuery}
+                  onClick={() => setQuery("Verifique conformidade de segurança")}
                 >
                   <CheckCircle2 className="h-4 w-4 mr-2" />
                   Verificar conformidade

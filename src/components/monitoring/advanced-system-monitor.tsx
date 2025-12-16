@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -122,7 +121,7 @@ const AdvancedSystemMonitor: React.FC = () => {
     }
     
     return data;
-  });
+  };
 
   const loadSystemMetrics = async () => {
     try {
@@ -254,7 +253,7 @@ const AdvancedSystemMonitor: React.FC = () => {
                 <Input
                   type="number"
                   value={refreshInterval}
-                  onChange={handleChange}
+                  onChange={(e) => setRefreshInterval(Number(e.target.value))}
                   className="w-20"
                   min="10"
                   max="300"
@@ -388,6 +387,6 @@ const AdvancedSystemMonitor: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default AdvancedSystemMonitor;

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -144,7 +143,7 @@ export const POPsLibrary: React.FC = () => {
                          pop.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || pop.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const favorites = pops.filter(p => p.isFavorite);
 
@@ -175,10 +174,10 @@ export const POPsLibrary: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "active": return <Badge className="bg-green-500">Ativo</Badge>;
-    case "draft": return <Badge variant="secondary">Rascunho</Badge>;
-    case "review": return <Badge className="bg-yellow-500 text-black">Em Revisão</Badge>;
-    default: return <Badge variant="outline">Arquivado</Badge>;
+      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
+      case "draft": return <Badge variant="secondary">Rascunho</Badge>;
+      case "review": return <Badge className="bg-yellow-500 text-black">Em Revisão</Badge>;
+      default: return <Badge variant="outline">Arquivado</Badge>;
     }
   };
 
@@ -208,7 +207,7 @@ export const POPsLibrary: React.FC = () => {
           <Input
             placeholder="Buscar por título, código ou tag..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -216,7 +215,7 @@ export const POPsLibrary: React.FC = () => {
           <Button
             variant={selectedCategory === "all" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetSelectedCategory}
+            onClick={() => setSelectedCategory("all")}
           >
             Todos
           </Button>
@@ -225,7 +224,7 @@ export const POPsLibrary: React.FC = () => {
               key={cat}
               variant={selectedCategory === cat ? "default" : "outline"}
               size="sm"
-              onClick={handleSetSelectedCategory}
+              onClick={() => setSelectedCategory(cat)}
             >
               {cat}
             </Button>
@@ -296,7 +295,7 @@ export const POPsLibrary: React.FC = () => {
         <TabsContent value="all">
           <div className="grid grid-cols-2 gap-4">
             {filteredPOPs.map(pop => (
-              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => handlehandleViewPOP}>
+              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => handleViewPOP(pop)}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
@@ -342,7 +341,7 @@ export const POPsLibrary: React.FC = () => {
         <TabsContent value="favorites">
           <div className="grid grid-cols-2 gap-4">
             {favorites.map(pop => (
-              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer border-yellow-500/30" onClick={() => handlehandleViewPOP}>
+              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer border-yellow-500/30" onClick={() => handleViewPOP(pop)}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <Badge variant="outline" className="font-mono text-xs">{pop.code}</Badge>
@@ -365,7 +364,7 @@ export const POPsLibrary: React.FC = () => {
           <ScrollArea className="h-[400px]">
             <div className="space-y-2">
               {pops.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()).map(pop => (
-                <div key={pop.id} className="p-3 rounded-lg border hover:shadow-md transition-all cursor-pointer" onClick={() => handlehandleViewPOP}>
+                <div key={pop.id} className="p-3 rounded-lg border hover:shadow-md transition-all cursor-pointer" onClick={() => handleViewPOP(pop)}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge variant="outline" className="font-mono">{pop.code}</Badge>

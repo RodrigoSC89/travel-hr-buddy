@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,7 @@ interface MLCRestHours {
   crew_member_id: string;
   vessel_id: string;
   record_date: string;
-  rest_periods: unknown[];
+  rest_periods: any[];
   total_rest_hours: number;
   total_work_hours: number;
   compliant: boolean;
@@ -52,7 +52,7 @@ const checklistItems = [
   { id: "crew_notified", label: "Tripulação informada dos horários", category: "A2.3" },
 ];
 
-export const MLCComplianceDashboard = memo(function() {
+export function MLCComplianceDashboard() {
   const [selectedVessel, setSelectedVessel] = useState<string>("all");
 
   const { data: restHours = [], isLoading } = useQuery({
@@ -83,7 +83,7 @@ export const MLCComplianceDashboard = memo(function() {
   const getCrewName = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
     return crew?.full_name || "N/A";
-  });
+  };
 
   // Calculate stats
   const totalRecords = restHours.length;
@@ -134,7 +134,7 @@ export const MLCComplianceDashboard = memo(function() {
                 <span className={cn(
                   "text-5xl font-bold",
                   Number(complianceRate) >= 95 ? "text-emerald-400" :
-                    Number(complianceRate) >= 80 ? "text-amber-400" : "text-destructive"
+                  Number(complianceRate) >= 80 ? "text-amber-400" : "text-destructive"
                 )}>
                   {complianceRate}%
                 </span>
@@ -340,4 +340,4 @@ export const MLCComplianceDashboard = memo(function() {
       </Card>
     </div>
   );
-});
+}

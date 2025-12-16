@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * AI Copilot - Processamento de Linguagem Natural
  * Página de chat com IA integrada via Lovable AI Gateway
  */
@@ -80,7 +79,7 @@ const AICopilot: React.FC = () => {
           type: "nlp",
           context: "Processamento de Linguagem Natural para operações marítimas",
         },
-      };
+      });
 
       if (error) {
         throw error;
@@ -108,7 +107,7 @@ const AICopilot: React.FC = () => {
         role: "assistant",
         content: data?.response || "Desculpe, não consegui processar sua solicitação.",
         timestamp: new Date(),
-      });
+      };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
@@ -139,7 +138,7 @@ const AICopilot: React.FC = () => {
       title: "Chat limpo",
       description: "Histórico de mensagens removido.",
     });
-  });
+  };
 
   return (
     <div className="p-6 space-y-6 min-h-screen">
@@ -221,7 +220,7 @@ const AICopilot: React.FC = () => {
                               variant="ghost"
                               size="sm"
                               className="h-6 px-2"
-                              onClick={() => handlehandleCopy}
+                              onClick={() => handleCopy(message.content, message.id)}
                             >
                               {copiedId === message.id ? (
                                 <Check className="h-3 w-3" />
@@ -258,12 +257,15 @@ const AICopilot: React.FC = () => {
             {/* Input */}
             <div className="p-4">
               <form
-                onSubmit={handleSubmit}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSend();
+                }}
                 className="flex gap-2"
               >
                 <Input
                   value={input}
-                  onChange={handleChange}
+                  onChange={(e) => setInput(e.target.value)}
                   placeholder="Digite sua pergunta..."
                   disabled={isLoading}
                   className="flex-1"
@@ -296,7 +298,7 @@ const AICopilot: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start text-left h-auto py-2 px-3"
-                  onClick={() => handlehandleSend}
+                  onClick={() => handleSend(question)}
                   disabled={isLoading}
                 >
                   <span className="line-clamp-2 text-xs">{question}</span>
@@ -335,6 +337,6 @@ const AICopilot: React.FC = () => {
       </div>
     </div>
   );
-});
+};
 
 export default AICopilot;

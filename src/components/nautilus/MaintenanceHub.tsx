@@ -3,7 +3,7 @@
  * Integrated with Supabase for real-time data
  */
 
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ interface ComponentHealth {
   lastMaintenance: string;
 }
 
-export const MaintenanceHub = memo(function() {
+export function MaintenanceHub() {
   const [tasks, setTasks] = useState<MaintenanceTask[]>([]);
   const [components, setComponents] = useState<ComponentHealth[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,7 +64,7 @@ export const MaintenanceHub = memo(function() {
         .limit(20);
 
       if (!schedulesError && schedulesData && schedulesData.length > 0) {
-        const mappedTasks: MaintenanceTask[] = schedulesData.map((s: unknown) => ({
+        const mappedTasks: MaintenanceTask[] = schedulesData.map((s: any) => ({
           id: s.id,
           title: s.maintenance_type || "Manutenção Programada",
           description: s.description || "Manutenção preventiva",
@@ -89,7 +89,7 @@ export const MaintenanceHub = memo(function() {
         .limit(10);
 
       if (vesselsData && vesselsData.length > 0) {
-        const healthData: ComponentHealth[] = vesselsData.flatMap((v: unknown: unknown: unknown) => [
+        const healthData: ComponentHealth[] = vesselsData.flatMap((v: any) => [
           {
             id: `${v.id}-engine`,
             name: "Motor Principal",
@@ -140,7 +140,7 @@ export const MaintenanceHub = memo(function() {
     return "pending";
   };
 
-  const generateAIRecommendation = (schedule: unknown: unknown: unknown): string | undefined => {
+  const generateAIRecommendation = (schedule: any): string | undefined => {
     const daysUntil = Math.ceil((new Date(schedule.scheduled_date).getTime() - Date.now()) / 86400000);
     if (daysUntil < 7 && daysUntil > 0) {
       return `Manutenção programada para os próximos ${daysUntil} dias. Recomendamos preparar peças de reposição.`;
@@ -443,7 +443,7 @@ export const MaintenanceHub = memo(function() {
                       A saúde atual está em <strong>{component.health}%</strong>.
                     </p>
                     <div className="flex gap-2 mt-3">
-                      <Button size="sm" onClick={() => handlehandleScheduleMaintenance}>
+                      <Button size="sm" onClick={() => handleScheduleMaintenance(component.id, component.name)}>
                         Agendar Manutenção
                       </Button>
                       <Button size="sm" variant="outline">Ver Detalhes</Button>
@@ -457,4 +457,4 @@ export const MaintenanceHub = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

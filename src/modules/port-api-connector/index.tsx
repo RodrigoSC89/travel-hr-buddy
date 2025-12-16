@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * PATCH: Conector API Universal para Portos
  * Integração com sistemas portuários globais
  */
@@ -122,7 +121,7 @@ export default function PortAPIConnector() {
   const [connections, setConnections] = useState<PortConnection[]>(mockConnections);
   const [logs, setLogs] = useState<APILog[]>(mockLogs);
   const [isSyncing, setIsSyncing] = useState(false);
-  const [aiStatus, setAiStatus] = useState<Record<string, unknown>>({});
+  const [aiStatus, setAiStatus] = useState<Record<string, any>>({});
 
   const syncAll = () => {
     setIsSyncing(true);
@@ -169,21 +168,21 @@ export default function PortAPIConnector() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "connected": return "bg-green-500/20 text-green-400";
-    case "disconnected": return "bg-gray-500/20 text-gray-400";
-    case "error": return "bg-red-500/20 text-red-400";
-    case "syncing": return "bg-blue-500/20 text-blue-400";
-    default: return "bg-muted text-muted-foreground";
+      case "connected": return "bg-green-500/20 text-green-400";
+      case "disconnected": return "bg-gray-500/20 text-gray-400";
+      case "error": return "bg-red-500/20 text-red-400";
+      case "syncing": return "bg-blue-500/20 text-blue-400";
+      default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "connected": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
-    case "disconnected": return <XCircle className="h-4 w-4 text-gray-400" />;
-    case "error": return <AlertTriangle className="h-4 w-4 text-red-400" />;
-    case "syncing": return <RefreshCw className="h-4 w-4 text-blue-400 animate-spin" />;
-    default: return <Clock className="h-4 w-4" />;
+      case "connected": return <CheckCircle2 className="h-4 w-4 text-green-400" />;
+      case "disconnected": return <XCircle className="h-4 w-4 text-gray-400" />;
+      case "error": return <AlertTriangle className="h-4 w-4 text-red-400" />;
+      case "syncing": return <RefreshCw className="h-4 w-4 text-blue-400 animate-spin" />;
+      default: return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -201,7 +200,7 @@ export default function PortAPIConnector() {
         </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" onClick={syncAll} disabled={isSyncing}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? "animate-spin" : ""}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
             Sincronizar Todos
           </Button>
           <Button>
@@ -294,8 +293,8 @@ export default function PortAPIConnector() {
                   <div className="flex items-center justify-between">
                     <Badge className={getStatusColor(conn.status)}>
                       {conn.status === "connected" ? "Conectado" :
-                        conn.status === "disconnected" ? "Desconectado" :
-                          conn.status === "error" ? "Erro" : "Sincronizando"}
+                       conn.status === "disconnected" ? "Desconectado" :
+                       conn.status === "error" ? "Erro" : "Sincronizando"}
                     </Badge>
                     <Badge variant="outline">{conn.apiType}</Badge>
                   </div>
@@ -324,7 +323,7 @@ export default function PortAPIConnector() {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handletestConnection}
+                      onClick={() => testConnection(conn.id)}
                     >
                       <Zap className="h-3 w-3 mr-1" />
                       Testar
@@ -333,7 +332,7 @@ export default function PortAPIConnector() {
                       variant={conn.status === "connected" ? "destructive" : "default"}
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handletoggleConnection}
+                      onClick={() => toggleConnection(conn.id)}
                     >
                       {conn.status === "connected" ? "Desconectar" : "Conectar"}
                     </Button>
@@ -428,7 +427,7 @@ export default function PortAPIConnector() {
                 </div>
               </div>
 
-              <Button onClick={() => toast.success("Configurações salvas!"}>
+              <Button onClick={() => toast.success("Configurações salvas!")}>
                 Salvar Configurações
               </Button>
             </CardContent>

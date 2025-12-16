@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,7 +123,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           <Input
             placeholder="Buscar produtos..."
             value={tempFilters.search}
-            onChange={handleChange}
+            onChange={(e) => updateFilter("search", e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && applyFilters()}
             className="pl-10"
           />
@@ -133,7 +132,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={handleSetIsExpanded}
+            onClick={() => setIsExpanded(!isExpanded)}
             className="flex items-center gap-2"
           >
             <Filter className="h-4 w-4" />
@@ -255,7 +254,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </Label>
               <Slider
                 value={tempFilters.priceRange}
-                onValueChange={(value) => updateFilter("priceRange", value}
+                onValueChange={(value) => updateFilter("priceRange", value)}
                 max={maxPrice}
                 min={0}
                 step={10}
@@ -271,7 +270,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </Label>
               <Slider
                 value={tempFilters.discountRange}
-                onValueChange={(value) => updateFilter("discountRange", value}
+                onValueChange={(value) => updateFilter("discountRange", value)}
                 max={100}
                 min={0}
                 step={5}
@@ -366,7 +365,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <Button onClick={applyFilters} className="flex-1">
                 Aplicar Filtros
               </Button>
-              <Button variant="outline" onClick={handleSetIsExpanded}>
+              <Button variant="outline" onClick={() => setIsExpanded(false)}>
                 Cancelar
               </Button>
             </div>

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,9 +62,10 @@ export default function DPAIAnalyzer() {
     setAnalysis(null);
 
     try {
+      console.log("Starting DP analysis:", type, telemetry);
       
       const response = await fetch(
-        "https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai",
+        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai`,
         {
           method: "POST",
           headers: {
@@ -78,25 +78,24 @@ export default function DPAIAnalyzer() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         console.error("Analysis error:", response.status, errorData);
-        console.error("Analysis error:", response.status, errorData);
         
         if (response.status === 429) {
           toast.error("Limite de requisições", {
             description: "Muitas requisições. Aguarde alguns segundos e tente novamente.",
-          };
+          });
           return;
         }
         
         if (response.status === 402) {
           toast.error("Créditos insuficientes", {
             description: "Adicione créditos ao workspace para continuar usando a IA.",
-          };
+          });
           return;
         }
         
         toast.error("Erro na análise", {
           description: errorData.message || "Não foi possível completar a análise.",
-        };
+        });
         return;
       }
 
@@ -114,7 +113,6 @@ export default function DPAIAnalyzer() {
       });
     } catch (err) {
       console.error("Error:", err);
-      console.error("Error:", err);
       toast.error("Erro de conexão", {
         description: "Não foi possível conectar ao serviço de IA. Verifique sua conexão.",
       });
@@ -125,11 +123,11 @@ export default function DPAIAnalyzer() {
 
   const getAnalysisLabel = (type: string) => {
     switch (type) {
-    case "full": return "Completa";
-    case "predictive": return "Preditiva";
-    case "optimization": return "Otimização";
-    case "emergency": return "Emergência";
-    default: return type;
+      case "full": return "Completa";
+      case "predictive": return "Preditiva";
+      case "optimization": return "Otimização";
+      case "emergency": return "Emergência";
+      default: return type;
     }
   };
 
@@ -232,7 +230,7 @@ export default function DPAIAnalyzer() {
         {/* Analysis Actions */}
         <div className="flex flex-wrap gap-2">
           <Button
-            onClick={() => handlerunAnalysis}
+            onClick={() => runAnalysis("full")}
             disabled={isAnalyzing}
             className="flex-1 min-w-[150px]"
           >
@@ -244,7 +242,7 @@ export default function DPAIAnalyzer() {
             Análise Completa
           </Button>
           <Button
-            onClick={() => handlerunAnalysis}
+            onClick={() => runAnalysis("predictive")}
             disabled={isAnalyzing}
             variant="secondary"
             className="flex-1 min-w-[150px]"
@@ -257,7 +255,7 @@ export default function DPAIAnalyzer() {
             Análise Preditiva
           </Button>
           <Button
-            onClick={() => handlerunAnalysis}
+            onClick={() => runAnalysis("optimization")}
             disabled={isAnalyzing}
             variant="outline"
             className="flex-1 min-w-[150px]"
@@ -270,7 +268,7 @@ export default function DPAIAnalyzer() {
             Otimização
           </Button>
           <Button
-            onClick={() => handlerunAnalysis}
+            onClick={() => runAnalysis("emergency")}
             disabled={isAnalyzing}
             variant="destructive"
             className="flex-1 min-w-[150px]"

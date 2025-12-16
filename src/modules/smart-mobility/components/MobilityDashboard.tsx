@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -157,14 +156,14 @@ export default function MobilityDashboard() {
       
       const key = chatMessage.toLowerCase().includes("voo") ? "voo" 
         : chatMessage.toLowerCase().includes("hotel") ? "hotel"
-          : chatMessage.toLowerCase().includes("transfer") ? "transfer"
-            : "default";
+        : chatMessage.toLowerCase().includes("transfer") ? "transfer"
+        : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
     
     setChatMessage("");
-  });
+  };
 
   const totalCost = mockTrips.reduce((sum, t) => sum + t.cost, 0);
   const totalCarbon = mockTrips.reduce((sum, t) => sum + t.carbonFootprint, 0);
@@ -277,7 +276,7 @@ export default function MobilityDashboard() {
               <Input
                 placeholder="Pergunte sobre seu voo, hotel..."
                 value={chatMessage}
-                onChange={handleChange}
+                onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -285,13 +284,13 @@ export default function MobilityDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Qual meu próximo voo?")}>
                 Meu voo
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Onde fica meu hotel?")}>
                 Meu hotel
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Horário do transfer?")}>
                 Transfer
               </Button>
             </div>
@@ -338,14 +337,14 @@ export default function MobilityDashboard() {
                     <div className="flex items-center gap-2">
                       <Badge variant={
                         trip.status === "completed" ? "default" :
-                          trip.status === "delayed" ? "destructive" :
-                            trip.status === "in_progress" ? "secondary" : "outline"
+                        trip.status === "delayed" ? "destructive" :
+                        trip.status === "in_progress" ? "secondary" : "outline"
                       }>
                         {trip.status === "completed" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                         {trip.status === "delayed" && <AlertTriangle className="h-3 w-3 mr-1" />}
                         {trip.status === "scheduled" ? "Agendada" :
-                          trip.status === "in_progress" ? "Em andamento" :
-                            trip.status === "completed" ? "Concluída" : "Atrasada"}
+                         trip.status === "in_progress" ? "Em andamento" :
+                         trip.status === "completed" ? "Concluída" : "Atrasada"}
                       </Badge>
                     </div>
                   </div>

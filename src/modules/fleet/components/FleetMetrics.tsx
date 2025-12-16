@@ -84,9 +84,9 @@ const MetricCard: React.FC<MetricCardProps> = ({
 };
 
 interface FleetMetricsProps {
-  vessels: unknown[];
-  maintenance: unknown[];
-  crewAssignments: unknown[];
+  vessels: any[];
+  maintenance: any[];
+  crewAssignments: any[];
 }
 
 export const FleetMetrics: React.FC<FleetMetricsProps> = ({

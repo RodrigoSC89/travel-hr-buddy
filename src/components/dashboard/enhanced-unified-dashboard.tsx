@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -320,7 +319,7 @@ const EnhancedUnifiedDashboard = () => {
     case "info": return <Bell className="w-4 h-4 text-info" />;
     default: return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
     }
-  });
+  };
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -433,7 +432,7 @@ const EnhancedUnifiedDashboard = () => {
                       Atualizar Dados
                     </Button>
                     <Button 
-                      onClick={() => handlenavigate}
+                      onClick={() => navigate("/executive")}
                       className="bg-gradient-ocean text-white hover:shadow-glow shadow-azure"
                     >
                       <Target className="w-4 h-4 mr-2" />

@@ -1,19 +1,19 @@
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { AlertTriangle, FileText, Calendar } from "lucide-react";
-import { OVIQ4_SECTIONS } from "@/data/oviq4-checklist";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { AlertTriangle, FileText, Calendar } from 'lucide-react';
+import { OVIQ4_SECTIONS } from '@/data/oviq4-checklist';
 
 interface OVIDNonConformitiesProps {
-  answers: Record<string, { answer: "yes" | "no" | "na" | null; observation: string; evidence: string[] }>;
+  answers: Record<string, { answer: 'yes' | 'no' | 'na' | null; observation: string; evidence: string[] }>;
   onGenerateActionPlan: (questionId: string) => void;
 }
 
 export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answers, onGenerateActionPlan }) => {
   const nonConformities = Object.entries(answers)
-    .filter(([_, value]) => value.answer === "no")
+    .filter(([_, value]) => value.answer === 'no')
     .map(([questionId, value]) => {
       let question = null;
       for (const section of OVIQ4_SECTIONS) {
@@ -21,7 +21,7 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
         if (question) break;
       }
       return { questionId, ...value, question };
-};
+    });
 
   if (nonConformities.length === 0) {
     return (
@@ -54,13 +54,13 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
                       <Badge variant="destructive">{nc.questionId}</Badge>
                       <Badge variant="outline">NC</Badge>
                     </div>
-                    <p className="text-sm font-medium">{nc.question?.question || "Questão não encontrada"}</p>
+                    <p className="text-sm font-medium">{nc.question?.question || 'Questão não encontrada'}</p>
                     {nc.observation && (
                       <p className="text-sm text-muted-foreground mt-2 italic">"{nc.observation}"</p>
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handleonGenerateActionPlan}>
+                    <Button size="sm" variant="outline" onClick={() => onGenerateActionPlan(nc.questionId)}>
                       <FileText className="w-4 h-4 mr-1" />
                       Plano
                     </Button>
@@ -77,4 +77,4 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
       </CardContent>
     </Card>
   );
-});
+};

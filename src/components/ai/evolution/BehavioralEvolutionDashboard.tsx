@@ -1,5 +1,5 @@
-
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+// @ts-nocheck
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ interface SystemStatus {
   evolution_trend: "improving" | "stable" | "degrading";
 }
 
-export const BehavioralEvolutionDashboard = memo(function() {
+export function BehavioralEvolutionDashboard() {
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     total_modules: 0,
     active_alerts: 0,
@@ -60,7 +60,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const fetchSystemStatus = async () => {
@@ -106,7 +106,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     }
   };
 
-  const calculateAverageAlignment = (data: unknown[]): number => {
+  const calculateAverageAlignment = (data: any[]): number => {
     if (data.length === 0) return 0;
     const sum = data.reduce((acc, d) => {
       const precision = d.precision_score || 0;
@@ -116,7 +116,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     return (sum / data.length) * 100;
   };
 
-  const determineEvolutionTrend = (data: unknown[]): "improving" | "stable" | "degrading" => {
+  const determineEvolutionTrend = (data: any[]): "improving" | "stable" | "degrading" => {
     if (data.length < 10) return "stable";
     
     const recent = data.slice(0, 5);
@@ -133,7 +133,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     return "stable";
   };
 
-  const generateEvolutionData = (data: unknown[]): BehaviorEvolution[] => {
+  const generateEvolutionData = (data: any[]): BehaviorEvolution[] => {
     const moduleData = new Map<string, any[]>();
     
     data.forEach(d => {
@@ -141,7 +141,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         moduleData.set(d.module_name, []);
       }
       moduleData.get(d.module_name)?.push(d);
-  };
+    });
 
     const evolutions: BehaviorEvolution[] = [];
     moduleData.forEach((records, moduleName) => {
@@ -159,7 +159,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     });
 
     return evolutions.slice(0, 10);
-  });
+  };
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
@@ -199,7 +199,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         </div>
         <Button
           variant={showPerformanceMonitor ? "default" : "outline"}
-          onClick={handleSetShowPerformanceMonitor}
+          onClick={() => setShowPerformanceMonitor(!showPerformanceMonitor)}
         >
           <Shield className="h-4 w-4 mr-2" />
           {showPerformanceMonitor ? "Hide" : "Show"} Performance Monitor
@@ -355,4 +355,4 @@ export const BehavioralEvolutionDashboard = memo(function() {
       )}
     </div>
   );
-});
+}

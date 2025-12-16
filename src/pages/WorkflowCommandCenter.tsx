@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useState } from "react";;
  * PATCH UNIFY-12.0 - Workflow Command Center
  * Centro Unificado de Workflows - Fusão de 4 módulos:
  * - Workflow Visual IA (/workflow-visual)
@@ -57,7 +56,7 @@ interface WorkflowNode {
   type: "trigger" | "action" | "condition" | "delay" | "end";
   label: string;
   status: "pending" | "running" | "completed" | "error";
-  config?: Record<string, unknown>;
+  config?: Record<string, any>;
 }
 
 // Mock visual workflow data
@@ -128,7 +127,7 @@ export default function WorkflowCommandCenter() {
   const [showNewWorkflow, setShowNewWorkflow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [selectedWorkflow, setSelectedWorkflow] = useState<unknown>(null);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<any>(null);
   const [newWorkflowData, setNewWorkflowData] = useState({ name: "", description: "", category: "custom", priority: "medium" });
 
   // Visual workflow state
@@ -142,7 +141,7 @@ export default function WorkflowCommandCenter() {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  };
+  });
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -164,8 +163,8 @@ export default function WorkflowCommandCenter() {
     await createWorkflow({
       name: newWorkflowData.name,
       description: newWorkflowData.description,
-      category: newWorkflowData.category as unknown,
-      priority: newWorkflowData.priority as unknown,
+      category: newWorkflowData.category as any,
+      priority: newWorkflowData.priority as any,
       status: "draft",
       steps: [],
     });
@@ -177,7 +176,7 @@ export default function WorkflowCommandCenter() {
     await createWorkflow({
       name: template.name,
       description: template.description,
-      category: template.category as unknown,
+      category: template.category as any,
       priority: "medium",
       status: "draft",
       steps: template.steps,
@@ -189,21 +188,21 @@ export default function WorkflowCommandCenter() {
 
   const getNodeStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-green-500";
-    case "running": return "bg-blue-500 animate-pulse";
-    case "error": return "bg-red-500";
-    default: return "bg-muted";
+      case "completed": return "bg-green-500";
+      case "running": return "bg-blue-500 animate-pulse";
+      case "error": return "bg-red-500";
+      default: return "bg-muted";
     }
   };
 
   const getNodeIcon = (type: string) => {
     switch (type) {
-    case "trigger": return <Zap className="h-4 w-4" />;
-    case "action": return <Play className="h-4 w-4" />;
-    case "condition": return <GitBranch className="h-4 w-4" />;
-    case "delay": return <Clock className="h-4 w-4" />;
-    case "end": return <CheckCircle2 className="h-4 w-4" />;
-    default: return <Workflow className="h-4 w-4" />;
+      case "trigger": return <Zap className="h-4 w-4" />;
+      case "action": return <Play className="h-4 w-4" />;
+      case "condition": return <GitBranch className="h-4 w-4" />;
+      case "delay": return <Clock className="h-4 w-4" />;
+      case "end": return <CheckCircle2 className="h-4 w-4" />;
+      default: return <Workflow className="h-4 w-4" />;
     }
   };
 
@@ -253,7 +252,7 @@ export default function WorkflowCommandCenter() {
               <BarChart3 className="h-4 w-4 mr-2" />
               Exportar
             </Button>
-            <Button onClick={handleSetShowNewWorkflow}>
+            <Button onClick={() => setShowNewWorkflow(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Workflow
             </Button>
@@ -380,7 +379,7 @@ export default function WorkflowCommandCenter() {
                     <div 
                       key={workflow.id} 
                       className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-                      onClick={handleSetSelectedVisualWorkflow}
+                      onClick={() => setSelectedVisualWorkflow(workflow)}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium">{workflow.name}</h4>
@@ -452,7 +451,7 @@ export default function WorkflowCommandCenter() {
                 <Card className="p-8 text-center">
                   <Workflow className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
                   <p className="text-muted-foreground">Nenhum workflow encontrado</p>
-                  <Button className="mt-4" onClick={handleSetShowNewWorkflow}>
+                  <Button className="mt-4" onClick={() => setShowNewWorkflow(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Criar Workflow
                   </Button>
@@ -490,7 +489,7 @@ export default function WorkflowCommandCenter() {
                     <Card 
                       key={workflow.id} 
                       className="hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={handleSetSelectedVisualWorkflow}
+                      onClick={() => setSelectedVisualWorkflow(workflow)}
                     >
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
@@ -582,7 +581,7 @@ export default function WorkflowCommandCenter() {
                         <Button size="sm" variant="outline">
                           <Settings className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => handletoggleAutomationRule}>
+                        <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => toggleAutomationRule(rule.id)}>
                           {rule.is_active ? "Desativar" : "Ativar"}
                         </Button>
                       </div>
@@ -650,7 +649,7 @@ export default function WorkflowCommandCenter() {
                         <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-muted-foreground">{template.steps.length} etapas</span>
-                          <Button size="sm" onClick={() => handlehandleUseTemplate}>
+                          <Button size="sm" onClick={() => handleUseTemplate(template)}>
                             <Sparkles className="h-3 w-3 mr-1" />
                             Usar Template
                           </Button>
@@ -758,12 +757,12 @@ export default function WorkflowCommandCenter() {
               <Input 
                 placeholder="Nome do workflow" 
                 value={newWorkflowData.name} 
-                onChange={handleChange}))} 
+                onChange={(e) => setNewWorkflowData(p => ({ ...p, name: e.target.value }))} 
               />
               <Textarea 
                 placeholder="Descrição" 
                 value={newWorkflowData.description} 
-                onChange={handleChange}))} 
+                onChange={(e) => setNewWorkflowData(p => ({ ...p, description: e.target.value }))} 
               />
               <div className="grid grid-cols-2 gap-4">
                 <Select value={newWorkflowData.category} onValueChange={(v) => setNewWorkflowData(p => ({ ...p, category: v }))}>
@@ -788,7 +787,7 @@ export default function WorkflowCommandCenter() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetShowNewWorkflow}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setShowNewWorkflow(false)}>Cancelar</Button>
               <Button onClick={handleNewWorkflow}>Criar Workflow</Button>
             </DialogFooter>
           </DialogContent>
@@ -811,7 +810,7 @@ export default function WorkflowCommandCenter() {
                 <Progress value={selectedWorkflow.progress} className="h-3" />
                 <p className="text-sm text-muted-foreground">Progresso: {selectedWorkflow.progress}%</p>
                 <div className="border rounded-lg p-4 max-h-60 overflow-auto space-y-2">
-                  {selectedWorkflow.steps?.map((step: unknown, i: number) => (
+                  {selectedWorkflow.steps?.map((step: any, i: number) => (
                     <div key={i} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                       <span>{step.name}</span>
                       <Badge variant="outline">{step.status}</Badge>
@@ -821,13 +820,13 @@ export default function WorkflowCommandCenter() {
               </div>
             )}
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetShowDetails}>Fechar</Button>
+              <Button variant="outline" onClick={() => setShowDetails(false)}>Fechar</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
         {/* Visual Workflow Details Dialog */}
-        <Dialog open={!!selectedVisualWorkflow} onOpenChange={() => setSelectedVisualWorkflow(null}>
+        <Dialog open={!!selectedVisualWorkflow} onOpenChange={() => setSelectedVisualWorkflow(null)}>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -858,7 +857,7 @@ export default function WorkflowCommandCenter() {
                           <span className="text-xs text-center max-w-[100px]">{node.label}</span>
                           <Badge variant="outline" className="text-xs">
                             {node.status === "completed" ? "Concluído" : 
-                              node.status === "running" ? "Executando" : "Pendente"}
+                             node.status === "running" ? "Executando" : "Pendente"}
                           </Badge>
                         </div>
                         {i < selectedVisualWorkflow.nodes.length - 1 && (
@@ -890,7 +889,7 @@ export default function WorkflowCommandCenter() {
               </div>
             )}
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetSelectedVisualWorkflow}>Fechar</Button>
+              <Button variant="outline" onClick={() => setSelectedVisualWorkflow(null)}>Fechar</Button>
               <Button>
                 <Play className="h-4 w-4 mr-2" />
                 Executar

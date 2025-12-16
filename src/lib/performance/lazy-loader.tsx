@@ -1,10 +1,9 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 800: Enhanced Lazy Loading System for Low Bandwidth
  * Provides optimized lazy loading with retry, timeout, and fallback support
  */
 import React, { Suspense, ComponentType, lazy } from "react";
-import { FullScreenLoader as OffshoreLoader } from "@/components/ux/LoadingStates";
+import { OffshoreLoader } from "@/components/LoadingStates";
 
 interface LazyConfig {
   /** Timeout in ms before showing error (default: 10000) */
@@ -51,7 +50,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
 /**
  * Wrapper component for lazy-loaded components with loading state
  */
-export const LazyWrapper = memo(function({
+export function LazyWrapper({
   children,
   fallback = <OffshoreLoader />,
 }: {
@@ -100,4 +99,4 @@ export function useInViewport(
   }, [ref, options]);
 
   return isInViewport;
-});
+}

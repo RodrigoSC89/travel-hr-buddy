@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useEffect, useRef, useState } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
@@ -8,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Ship, MapPin, Navigation, Activity, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface VesselLocation {
   id: string;
@@ -210,13 +209,13 @@ const VesselTrackingMap = () => {
           zoom: 10,
           duration: 2000
         });
-  });
+      });
 
       new mapboxgl.Marker(el)
         .setLngLat([vessel.longitude, vessel.latitude])
         .addTo(map.current!);
     });
-  });
+  };
 
   // Real-time updates with optimized polling
   useOptimizedPolling({
@@ -238,7 +237,7 @@ const VesselTrackingMap = () => {
     default:
       return "background-color: #6b7280;";
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
@@ -261,7 +260,7 @@ const VesselTrackingMap = () => {
       });
       setSelectedVessel(vessel);
     }
-  });
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-screen">
@@ -281,7 +280,7 @@ const VesselTrackingMap = () => {
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedVessel?.id === vessel.id ? "ring-2 ring-primary" : ""
                 }`}
-                onClick={() => handlecenterOnVessel}
+                onClick={() => centerOnVessel(vessel)}
               >
                 <CardContent className="p-4">
                   <div className="space-y-2">

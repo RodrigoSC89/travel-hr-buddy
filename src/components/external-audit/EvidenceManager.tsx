@@ -1,10 +1,9 @@
-import { memo } from 'react';
 // Evidence Manager - Stub
 // TODO: Implement evidence management functionality
 
 import { Card, CardContent } from "@/components/ui/card";
 
-export const EvidenceManager = memo(function() {
+export function EvidenceManager() {
   return (
     <Card>
       <CardContent className="p-6 text-center text-muted-foreground">
@@ -12,4 +11,4 @@ export const EvidenceManager = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

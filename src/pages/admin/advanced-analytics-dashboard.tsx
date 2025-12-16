@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -60,8 +60,8 @@ interface DashboardWidget {
   widget_type: string;
   title: string;
   chart_type?: string;
-  config: Record<string, unknown>;
-  position: unknown: unknown: unknown;
+  config: any;
+  position: any;
 }
 
 interface DashboardFilter {
@@ -109,7 +109,7 @@ export default function AdvancedAnalyticsDashboard() {
     setLoading(true);
     try {
       // Fetch widgets
-      const { data: widgetsData, error: widgetsError } = await (supabase as unknown)
+      const { data: widgetsData, error: widgetsError } = await (supabase as any)
         .from("dashboard_widgets")
         .select("*")
         .eq("is_active", true)
@@ -118,7 +118,7 @@ export default function AdvancedAnalyticsDashboard() {
       if (widgetsError) throw widgetsError;
 
       // Fetch KPI values
-      const { data: kpisData, error: kpisError } = await (supabase as unknown)
+      const { data: kpisData, error: kpisError } = await (supabase as any)
         .from("kpi_definitions")
         .select(`
           id,
@@ -135,10 +135,10 @@ export default function AdvancedAnalyticsDashboard() {
 
       if (kpisError) throw kpisError;
 
-      setWidgets((widgetsData || []) as unknown);
+      setWidgets((widgetsData || []) as any);
       
       // Transform KPI data
-      const transformedKpis: KPIWidget[] = (kpisData || []).map((kpi: unknown) => ({
+      const transformedKpis: KPIWidget[] = (kpisData || []).map((kpi: any) => ({
         id: kpi.id,
         title: kpi.name,
         value: kpi.kpi_values?.[0]?.value || 0,
@@ -161,7 +161,7 @@ export default function AdvancedAnalyticsDashboard() {
 
   const addWidget = async (widgetType: string, chartType?: string) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("dashboard_widgets")
         .insert({
           widget_type: widgetType,

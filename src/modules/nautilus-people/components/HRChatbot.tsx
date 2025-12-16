@@ -1,16 +1,15 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * HR Chatbot - Assistente Virtual de RH com LLM
  */
 
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import React, { useState, useRef, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { 
   MessageSquare, 
   Send, 
@@ -25,12 +24,12 @@ import {
   X,
   Maximize2,
   Minimize2
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
   id: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
   suggestions?: string[];
@@ -41,19 +40,19 @@ const HRChatbot: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: "1",
-      role: "assistant",
-      content: "Olá! Sou o assistente virtual de RH do Nautilus. Como posso ajudá-lo hoje? Posso responder dúvidas sobre férias, benefícios, políticas internas e muito mais.",
+      id: '1',
+      role: 'assistant',
+      content: 'Olá! Sou o assistente virtual de RH do Nautilus. Como posso ajudá-lo hoje? Posso responder dúvidas sobre férias, benefícios, políticas internas e muito mais.',
       timestamp: new Date(),
       suggestions: [
-        "Quantos dias de férias tenho?",
-        "Qual a política de home office?",
-        "Como solicitar licença?",
-        "Ver meus benefícios"
+        'Quantos dias de férias tenho?',
+        'Qual a política de home office?',
+        'Como solicitar licença?',
+        'Ver meus benefícios'
       ]
     }
   ]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -64,21 +63,21 @@ const HRChatbot: React.FC = () => {
   }, [messages]);
 
   const quickActions = [
-    { icon: Calendar, label: "Férias", query: "Quantos dias de férias eu tenho disponível?" },
-    { icon: FileText, label: "Holerite", query: "Como acessar meu holerite?" },
-    { icon: HelpCircle, label: "Benefícios", query: "Quais são meus benefícios?" },
-    { icon: Clock, label: "Banco de Horas", query: "Qual é meu saldo de banco de horas?" }
+    { icon: Calendar, label: 'Férias', query: 'Quantos dias de férias eu tenho disponível?' },
+    { icon: FileText, label: 'Holerite', query: 'Como acessar meu holerite?' },
+    { icon: HelpCircle, label: 'Benefícios', query: 'Quais são meus benefícios?' },
+    { icon: Clock, label: 'Banco de Horas', query: 'Qual é meu saldo de banco de horas?' }
   ];
 
   const simulateResponse = async (userMessage: string): Promise<string> => {
     // Simulated AI responses based on common HR queries
     const responses: Record<string, string> = {
-      "férias": "📅 **Informações de Férias**\n\nVocê possui **12 dias** de férias acumulados.\n\n**Próximo período aquisitivo:** 15/03/2026\n\nPara solicitar férias:\n1. Acesse o Portal do Colaborador\n2. Vá em \"Solicitações > Férias\"\n3. Selecione o período desejado\n4. Aguarde aprovação do gestor\n\nDeseja que eu abra a solicitação de férias para você?",
-      "holerite": "💰 **Acesso ao Holerite**\n\nSeu holerite está disponível no Portal do Colaborador.\n\n**Último holerite:** Novembro/2025\n- Salário Bruto: R$ 12.500,00\n- Descontos: R$ 2.875,00\n- Líquido: R$ 9.625,00\n\nDeseja ver o detalhamento ou acessar holerites anteriores?",
-      "benefícios": "🎁 **Seus Benefícios**\n\n✅ **Plano de Saúde** - Bradesco Saúde (cobertura familiar)\n✅ **Plano Odontológico** - Odontoprev\n✅ **Vale Refeição** - R$ 45,00/dia\n✅ **Vale Alimentação** - R$ 600,00/mês\n✅ **Gympass** - Plano Gold\n✅ **Seguro de Vida** - 24x salário\n✅ **PLR** - Até 2 salários\n\nTem alguma dúvida sobre algum benefício específico?",
-      "banco de horas": "⏰ **Banco de Horas**\n\n**Saldo Atual:** +16h 30min\n\n**Últimos registros:**\n- 05/12: +2h 15min\n- 04/12: +1h 45min\n- 03/12: -0h 30min\n\n**Política:** O banco de horas deve ser compensado em até 6 meses.\n\nDeseja solicitar uma folga?",
-      "home office": "🏠 **Política de Home Office**\n\nSua posição permite **regime híbrido**:\n- 3 dias presenciais (Seg, Qua, Sex)\n- 2 dias remotos (Ter, Qui)\n\n**Para solicitar alteração temporária:**\n1. Comunique seu gestor com 48h de antecedência\n2. Registre no sistema de ponto\n\n**Equipamentos fornecidos:**\n- Notebook corporativo\n- Auxílio home office: R$ 150/mês",
-      "licença": "📋 **Tipos de Licença**\n\n🤰 **Maternidade:** 180 dias\n👶 **Paternidade:** 20 dias\n💍 **Casamento:** 3 dias\n😢 **Luto:** 3-7 dias (conforme grau)\n📚 **Estudos:** Conforme aprovação\n\nPara solicitar, acesse o Portal > Solicitações > Licenças e anexe a documentação necessária.\n\nQual tipo de licença você precisa?"
+      'férias': `📅 **Informações de Férias**\n\nVocê possui **12 dias** de férias acumulados.\n\n**Próximo período aquisitivo:** 15/03/2026\n\nPara solicitar férias:\n1. Acesse o Portal do Colaborador\n2. Vá em "Solicitações > Férias"\n3. Selecione o período desejado\n4. Aguarde aprovação do gestor\n\nDeseja que eu abra a solicitação de férias para você?`,
+      'holerite': `💰 **Acesso ao Holerite**\n\nSeu holerite está disponível no Portal do Colaborador.\n\n**Último holerite:** Novembro/2025\n- Salário Bruto: R$ 12.500,00\n- Descontos: R$ 2.875,00\n- Líquido: R$ 9.625,00\n\nDeseja ver o detalhamento ou acessar holerites anteriores?`,
+      'benefícios': `🎁 **Seus Benefícios**\n\n✅ **Plano de Saúde** - Bradesco Saúde (cobertura familiar)\n✅ **Plano Odontológico** - Odontoprev\n✅ **Vale Refeição** - R$ 45,00/dia\n✅ **Vale Alimentação** - R$ 600,00/mês\n✅ **Gympass** - Plano Gold\n✅ **Seguro de Vida** - 24x salário\n✅ **PLR** - Até 2 salários\n\nTem alguma dúvida sobre algum benefício específico?`,
+      'banco de horas': `⏰ **Banco de Horas**\n\n**Saldo Atual:** +16h 30min\n\n**Últimos registros:**\n- 05/12: +2h 15min\n- 04/12: +1h 45min\n- 03/12: -0h 30min\n\n**Política:** O banco de horas deve ser compensado em até 6 meses.\n\nDeseja solicitar uma folga?`,
+      'home office': `🏠 **Política de Home Office**\n\nSua posição permite **regime híbrido**:\n- 3 dias presenciais (Seg, Qua, Sex)\n- 2 dias remotos (Ter, Qui)\n\n**Para solicitar alteração temporária:**\n1. Comunique seu gestor com 48h de antecedência\n2. Registre no sistema de ponto\n\n**Equipamentos fornecidos:**\n- Notebook corporativo\n- Auxílio home office: R$ 150/mês`,
+      'licença': `📋 **Tipos de Licença**\n\n🤰 **Maternidade:** 180 dias\n👶 **Paternidade:** 20 dias\n💍 **Casamento:** 3 dias\n😢 **Luto:** 3-7 dias (conforme grau)\n📚 **Estudos:** Conforme aprovação\n\nPara solicitar, acesse o Portal > Solicitações > Licenças e anexe a documentação necessária.\n\nQual tipo de licença você precisa?`
     };
 
     const lowerMessage = userMessage.toLowerCase();
@@ -97,13 +96,13 @@ const HRChatbot: React.FC = () => {
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: "user",
+      role: 'user',
       content: msgToSend,
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInput("");
+    setInput('');
     setIsLoading(true);
 
     // Simulate API delay
@@ -113,7 +112,7 @@ const HRChatbot: React.FC = () => {
     
     const assistantMessage: Message = {
       id: (Date.now() + 1).toString(),
-      role: "assistant",
+      role: 'assistant',
       content: response,
       timestamp: new Date()
     };
@@ -132,7 +131,7 @@ const HRChatbot: React.FC = () => {
             variant="outline"
             size="sm"
             className="shrink-0"
-            onClick={() => handlehandleSend}
+            onClick={() => handleSend(action.query)}
           >
             <action.icon className="w-3 h-3 mr-1" />
             {action.label}
@@ -150,21 +149,21 @@ const HRChatbot: React.FC = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className={`flex gap-3 ${message.role === "user" ? "justify-end" : ""}`}
+                className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
               >
-                {message.role === "assistant" && (
+                {message.role === 'assistant' && (
                   <Avatar className="w-8 h-8 shrink-0">
                     <AvatarFallback className="bg-primary text-primary-foreground">
                       <Bot className="w-4 h-4" />
                     </AvatarFallback>
                   </Avatar>
                 )}
-                <div className={`max-w-[80%] ${message.role === "user" ? "order-first" : ""}`}>
+                <div className={`max-w-[80%] ${message.role === 'user' ? 'order-first' : ''}`}>
                   <div
                     className={`p-3 rounded-lg ${
-                      message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
+                      message.role === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -176,7 +175,7 @@ const HRChatbot: React.FC = () => {
                           key={idx}
                           variant="secondary"
                           className="cursor-pointer hover:bg-primary/10"
-                          onClick={() => handlehandleSend}
+                          onClick={() => handleSend(suggestion)}
                         >
                           {suggestion}
                         </Badge>
@@ -184,10 +183,10 @@ const HRChatbot: React.FC = () => {
                     </div>
                   )}
                   <span className="text-xs text-muted-foreground mt-1 block">
-                    {message.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                    {message.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
-                {message.role === "user" && (
+                {message.role === 'user' && (
                   <Avatar className="w-8 h-8 shrink-0">
                     <AvatarFallback className="bg-secondary">
                       <User className="w-4 h-4" />
@@ -222,8 +221,8 @@ const HRChatbot: React.FC = () => {
           <Input
             placeholder="Digite sua pergunta..."
             value={input}
-            onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             disabled={isLoading}
           />
           <Button onClick={() => handleSend()} disabled={isLoading || !input.trim()}>
@@ -247,7 +246,7 @@ const HRChatbot: React.FC = () => {
       </SheetTrigger>
       <SheetContent 
         side="right" 
-        className={`p-0 ${isExpanded ? "w-full sm:max-w-full" : "sm:max-w-md"}`}
+        className={`p-0 ${isExpanded ? 'w-full sm:max-w-full' : 'sm:max-w-md'}`}
       >
         <SheetHeader className="p-4 border-b flex flex-row items-center justify-between">
           <div className="flex items-center gap-3">
@@ -262,7 +261,7 @@ const HRChatbot: React.FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={handleSetIsExpanded}
+            onClick={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </Button>

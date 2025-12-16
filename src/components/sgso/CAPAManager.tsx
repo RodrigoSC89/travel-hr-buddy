@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -184,7 +183,7 @@ export const CAPAManager: React.FC = () => {
       description: "Nova ação corretiva/preventiva registrada com sucesso."
     });
     setShowNewCAPADialog(false);
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -387,7 +386,7 @@ export const CAPAManager: React.FC = () => {
                         </div>
 
                         <div className="flex flex-col gap-2 ml-4">
-                          <Button variant="outline" size="sm" onClick={handleSetSelectedCAPA}>
+                          <Button variant="outline" size="sm" onClick={() => setSelectedCAPA(capa)}>
                             <FileText className="h-4 w-4 mr-1" />
                             Detalhes
                           </Button>
@@ -442,7 +441,7 @@ export const CAPAManager: React.FC = () => {
                     <CardContent>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {Object.entries(selectedCAPA.fishbone).map(([key, value]) => {
-                          const labels: Record<string key={string.id || index}, string> = {
+                          const labels: Record<string, string> = {
                             metodo: "📋 Método",
                             maquina: "⚙️ Máquina",
                             mao_obra: "👷 Mão de Obra",

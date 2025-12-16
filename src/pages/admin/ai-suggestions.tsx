@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 648 - AI Suggestions Dashboard
  * Proactive AI insights and automation recommendations
  */
@@ -147,7 +146,7 @@ const AISuggestionsDashboard: React.FC = () => {
   const filteredSuggestions = suggestions.filter(s => {
     if (filter === "all") return true;
     return s.status === filter;
-  };
+  });
 
   const stats = {
     total: suggestions.length,
@@ -282,7 +281,7 @@ const AISuggestionsDashboard: React.FC = () => {
       </div>
 
       {/* Filter Tabs */}
-      <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter}>
+      <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
         <TabsList>
           <TabsTrigger value="pending">Pending</TabsTrigger>
           <TabsTrigger value="applied">Applied</TabsTrigger>
@@ -351,7 +350,7 @@ const AISuggestionsDashboard: React.FC = () => {
                             <div className="flex gap-2">
                               <Button
                                 size="sm"
-                                onClick={() => handleapplySuggestion}
+                                onClick={() => applySuggestion(suggestion.id)}
                                 className="bg-green-500 hover:bg-green-600"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
@@ -360,7 +359,7 @@ const AISuggestionsDashboard: React.FC = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => handlerejectSuggestion}
+                                onClick={() => rejectSuggestion(suggestion.id)}
                               >
                                 <XCircle className="h-4 w-4 mr-1" />
                                 Reject

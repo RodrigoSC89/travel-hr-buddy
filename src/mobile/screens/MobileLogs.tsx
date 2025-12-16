@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 187.0 - Mobile Logs Screen
  * 
  * Real-time system logs and activity tracking for mobile app
@@ -47,7 +46,7 @@ export const MobileLogs: React.FC = () => {
     const matchesSearch = searchTerm === "" || 
       log.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
-  };
+  });
 
   const getLogIcon = (level: LogLevel) => {
     switch (level) {
@@ -83,7 +82,7 @@ export const MobileLogs: React.FC = () => {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-    };
+    });
   };
 
   const getLevelStats = () => {
@@ -144,7 +143,7 @@ export const MobileLogs: React.FC = () => {
         <Input
           placeholder="Buscar logs..."
           value={searchTerm}
-          onChange={handleChange}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10"
         />
       </div>
@@ -154,14 +153,14 @@ export const MobileLogs: React.FC = () => {
         <Button
           variant={filter === "all" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("all")}
         >
           Todos
         </Button>
         <Button
           variant={filter === "error" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("error")}
           className="whitespace-nowrap"
         >
           Erros ({stats.error})
@@ -169,7 +168,7 @@ export const MobileLogs: React.FC = () => {
         <Button
           variant={filter === "warn" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("warn")}
           className="whitespace-nowrap"
         >
           Avisos ({stats.warn})
@@ -177,7 +176,7 @@ export const MobileLogs: React.FC = () => {
         <Button
           variant={filter === "info" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("info")}
           className="whitespace-nowrap"
         >
           Info ({stats.info})

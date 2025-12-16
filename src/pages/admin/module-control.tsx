@@ -1,27 +1,26 @@
 /**
-import { useMemo, useState, useCallback } from "react";;
  * PATCH 655 - Module Control Admin Page
  * Dynamic module activation panel
  */
 
-import React, { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { useNavigationStructure, ModuleStatus } from "@/hooks/useNavigationStructure";
-import { ModuleToggleCard } from "@/components/ui/ModuleToggleCard";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Search, Filter, BarChart3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useNavigationStructure, ModuleStatus } from '@/hooks/useNavigationStructure';
+import { ModuleToggleCard } from '@/components/ui/ModuleToggleCard';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Search, Filter, BarChart3 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { logger } from "@/lib/logger";
+} from '@/components/ui/select';
+import { logger } from '@/lib/logger';
 
 export const ModuleControl: React.FC = () => {
   const navigate = useNavigate();
@@ -37,16 +36,16 @@ export const ModuleControl: React.FC = () => {
     includeDeprecated: true,
   });
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeModules, setActiveModules] = useState<Set<string>>(
-    new Set(modules.filter((m) => m.status === "production").map((m) => m.id))
+    new Set(modules.filter((m) => m.status === 'production').map((m) => m.id))
   );
 
   // Get unique categories
   const categories = useMemo(() => {
     const cats = new Set(modules.map((m) => m.category));
-    return ["all", ...Array.from(cats)].sort();
+    return ['all', ...Array.from(cats)].sort();
   }, [modules]);
 
   // Filter modules
@@ -63,7 +62,7 @@ export const ModuleControl: React.FC = () => {
     }
 
     // Filter by category
-    if (selectedCategory !== "all") {
+    if (selectedCategory !== 'all') {
       filtered = filtered.filter((m) => m.category === selectedCategory);
     }
 
@@ -79,10 +78,10 @@ export const ModuleControl: React.FC = () => {
         updated.delete(id);
       }
       return updated;
-  });
+    });
 
     // Log activation change
-    logger.info("Module activation state changed", { moduleId: id, newState });
+    logger.info(`Module activation state changed`, { moduleId: id, newState });
   };
 
   const handleNavigate = (path: string) => {
@@ -90,7 +89,7 @@ export const ModuleControl: React.FC = () => {
   };
 
   const handleViewHistory = (id: string) => {
-    logger.info("Viewing module history", { moduleId: id });
+    logger.info(`Viewing module history`, { moduleId: id });
     // TODO: Implement history view
   };
 
@@ -124,7 +123,7 @@ export const ModuleControl: React.FC = () => {
         ))}
       </div>
     );
-  });
+  };
 
   return (
     <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module Control Center">
@@ -192,7 +191,7 @@ export const ModuleControl: React.FC = () => {
               <Input
                 placeholder="Search modules..."
                 value={searchQuery}
-                onChange={handleChange}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -204,7 +203,7 @@ export const ModuleControl: React.FC = () => {
               <SelectContent>
                 {categories.map((cat) => (
                   <SelectItem key={cat} value={cat}>
-                    {cat === "all" ? "All Categories" : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    {cat === 'all' ? 'All Categories' : cat.charAt(0).toUpperCase() + cat.slice(1)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -220,16 +219,16 @@ export const ModuleControl: React.FC = () => {
             All ({filteredModules.length})
           </TabsTrigger>
           <TabsTrigger value="production">
-            ✅ Production ({getModulesByStatus("production").length})
+            ✅ Production ({getModulesByStatus('production').length})
           </TabsTrigger>
           <TabsTrigger value="development">
-            ⚠️ Development ({getModulesByStatus("development").length})
+            ⚠️ Development ({getModulesByStatus('development').length})
           </TabsTrigger>
           <TabsTrigger value="experimental">
-            🧪 Experimental ({getModulesByStatus("experimental").length})
+            🧪 Experimental ({getModulesByStatus('experimental').length})
           </TabsTrigger>
           <TabsTrigger value="deprecated">
-            ❌ Deprecated ({getModulesByStatus("deprecated").length})
+            ❌ Deprecated ({getModulesByStatus('deprecated').length})
           </TabsTrigger>
         </TabsList>
 
@@ -239,25 +238,25 @@ export const ModuleControl: React.FC = () => {
 
         <TabsContent value="production" className="mt-6">
           {renderModuleGrid(
-            filteredModules.filter((m) => m.status === "production")
+            filteredModules.filter((m) => m.status === 'production')
           )}
         </TabsContent>
 
         <TabsContent value="development" className="mt-6">
           {renderModuleGrid(
-            filteredModules.filter((m) => m.status === "development")
+            filteredModules.filter((m) => m.status === 'development')
           )}
         </TabsContent>
 
         <TabsContent value="experimental" className="mt-6">
           {renderModuleGrid(
-            filteredModules.filter((m) => m.status === "experimental")
+            filteredModules.filter((m) => m.status === 'experimental')
           )}
         </TabsContent>
 
         <TabsContent value="deprecated" className="mt-6">
           {renderModuleGrid(
-            filteredModules.filter((m) => m.status === "deprecated")
+            filteredModules.filter((m) => m.status === 'deprecated')
           )}
         </TabsContent>
       </Tabs>

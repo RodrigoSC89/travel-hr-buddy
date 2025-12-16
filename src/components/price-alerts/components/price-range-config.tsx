@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CalendarIcon, Save, TrendingDown } from "lucide-react";
 import { format } from "date-fns";
 
-export const PriceRangeConfig = memo(function() {
+export function PriceRangeConfig() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [origin, setOrigin] = useState("");
@@ -64,7 +64,7 @@ export const PriceRangeConfig = memo(function() {
           notification_push: pushEnabled,
           notification_frequency: notificationFrequency,
           active: true
-        } as unknown);
+        } as any);
 
       if (error) throw error;
 
@@ -110,7 +110,7 @@ export const PriceRangeConfig = memo(function() {
               id="origin"
               placeholder="Ex: São Paulo"
               value={origin}
-              onChange={handleChange}
+              onChange={(e) => setOrigin(e.target.value)}
             />
           </div>
           <div className="space-y-2">
@@ -119,7 +119,7 @@ export const PriceRangeConfig = memo(function() {
               id="destination"
               placeholder="Ex: Rio de Janeiro"
               value={destination}
-              onChange={handleChange}
+              onChange={(e) => setDestination(e.target.value)}
             />
           </div>
         </div>
@@ -154,7 +154,7 @@ export const PriceRangeConfig = memo(function() {
               type="number"
               placeholder="Ex: 500.00"
               value={maxPrice}
-              onChange={handleChange}
+              onChange={(e) => setMaxPrice(e.target.value)}
             />
           </div>
         </div>
@@ -203,7 +203,7 @@ export const PriceRangeConfig = memo(function() {
                 <input
                   type="checkbox"
                   checked={emailEnabled}
-                  onChange={handleChange}
+                  onChange={(e) => setEmailEnabled(e.target.checked)}
                   className="w-4 h-4"
                 />
                 <span className="text-sm">Email</span>
@@ -212,7 +212,7 @@ export const PriceRangeConfig = memo(function() {
                 <input
                   type="checkbox"
                   checked={pushEnabled}
-                  onChange={handleChange}
+                  onChange={(e) => setPushEnabled(e.target.checked)}
                   className="w-4 h-4"
                 />
                 <span className="text-sm">Push</span>
@@ -253,4 +253,4 @@ export const PriceRangeConfig = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

@@ -1,4 +1,3 @@
-import { memo } from 'react';
 /**
  * Professional KPI Card
  * Card de KPI profissional com animações e gradientes
@@ -50,7 +49,7 @@ const colorVariants = {
   },
 };
 
-export const ProfessionalKPICard = memo(function({
+export function ProfessionalKPICard({
   title,
   value,
   change,
@@ -118,4 +117,4 @@ export const ProfessionalKPICard = memo(function({
       </Card>
     </motion.div>
   );
-});
+}

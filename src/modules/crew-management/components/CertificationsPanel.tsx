@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback, useMemo } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,7 @@ interface CertificationsPanelProps {
   crewMembers: { id: string; full_name: string; employee_id: string }[];
 }
 
-export const CertificationsPanel = memo(function({ certificates, crewMembers }: CertificationsPanelProps) {
+export function CertificationsPanel({ certificates, crewMembers }: CertificationsPanelProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
@@ -46,7 +46,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
     return {
       ...cert,
       employee_name: crew?.full_name || "Desconhecido",
-    });
+    };
   });
 
   const today = new Date();
@@ -68,7 +68,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       const expiry = new Date(c.expiry_date);
       return expiry > sixtyDaysFromNow;
     }),
-  });
+  };
 
   const filteredCerts = categorizedCerts[activeTab as keyof typeof categorizedCerts]?.filter(cert =>
     cert.employee_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -175,7 +175,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
             <Input
               placeholder="Buscar certificado..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -209,9 +209,9 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        status.variant === "destructive" ? "bg-rose-500/10" :
-                          status.variant === "default" ? "bg-amber-500/10" :
-                            "bg-muted"
+                        status.variant === 'destructive' ? 'bg-rose-500/10' :
+                        status.variant === 'default' ? 'bg-amber-500/10' :
+                        'bg-muted'
                       }`}>
                         <FileText className={`h-4 w-4 ${status.color}`} />
                       </div>
@@ -242,4 +242,4 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       </CardContent>
     </Card>
   );
-});
+}

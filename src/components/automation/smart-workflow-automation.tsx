@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -225,7 +224,7 @@ const SmartWorkflowAutomation = () => {
               status: "completed",
               completedAt: new Date(),
               duration: Math.floor((Date.now() - exec.startedAt.getTime()) / 1000)
-            });
+            };
           }
         }
         return exec;
@@ -276,7 +275,7 @@ const SmartWorkflowAutomation = () => {
       title: "Status atualizado",
       description: "Workflow foi ativado/desativado com sucesso"
     });
-  });
+  };
 
   const executeWorkflow = (id: string) => {
     const newExecution: WorkflowExecution = {
@@ -297,7 +296,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow iniciado",
       description: "Execução em andamento..."
     });
-  });
+  };
 
   const createWorkflow = () => {
     if (!newWorkflow.name.trim()) return;
@@ -324,7 +323,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow criado",
       description: "Novo workflow adicionado como rascunho"
     });
-  });
+  };
 
   const duplicateWorkflow = (workflow: Workflow) => {
     const duplicated: Workflow = {
@@ -343,7 +342,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow duplicado",
       description: "Cópia criada como rascunho"
     });
-  });
+  };
 
   const deleteWorkflow = (id: string) => {
     setWorkflows(prev => prev.filter(w => w.id !== id));
@@ -351,7 +350,7 @@ const SmartWorkflowAutomation = () => {
       title: "Workflow excluído",
       description: "Workflow removido permanentemente"
     });
-  });
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
@@ -408,7 +407,7 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Nome do Workflow</label>
                   <Input
                     value={newWorkflow.name}
-                    onChange={handleChange}))}
+                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Ex: Aprovação de Documentos"
                   />
                 </div>
@@ -416,7 +415,7 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Descrição</label>
                   <Textarea
                     value={newWorkflow.description}
-                    onChange={handleChange}))}
+                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Descreva o objetivo deste workflow..."
                   />
                 </div>
@@ -440,12 +439,12 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Trigger</label>
                   <Input
                     value={newWorkflow.trigger}
-                    onChange={handleChange}))}
+                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, trigger: e.target.value }))}
                     placeholder="Ex: Documento Enviado"
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetShowCreateDialog}>
+                  <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
                     Cancelar
                   </Button>
                   <Button onClick={createWorkflow}>
@@ -586,7 +585,7 @@ const SmartWorkflowAutomation = () => {
                   <div className="flex gap-2 pt-2">
                     <Button 
                       size="sm" 
-                      onClick={() => handleexecuteWorkflow}
+                      onClick={() => executeWorkflow(workflow.id)}
                       disabled={workflow.status !== "active"}
                       className="flex-1"
                     >
@@ -597,7 +596,7 @@ const SmartWorkflowAutomation = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handletoggleWorkflowStatus}
+                      onClick={() => toggleWorkflowStatus(workflow.id)}
                     >
                       {workflow.status === "active" ? 
                         <Pause className="w-3 h-3" /> : 
@@ -608,7 +607,7 @@ const SmartWorkflowAutomation = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handleduplicateWorkflow}
+                      onClick={() => duplicateWorkflow(workflow)}
                     >
                       <Copy className="w-3 h-3" />
                     </Button>

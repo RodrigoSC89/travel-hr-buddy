@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback } from "react";;
  * Windy Map Plugin Component
  * Embeds interactive Windy weather map with full plugin features
  */
@@ -19,7 +18,7 @@ interface WindyMapPluginProps {
   height?: string;
   showControls?: boolean;
   overlay?: "wind" | "rain" | "temp" | "clouds" | "waves" | "pressure";
-  onMapReady?: (api: unknown: unknown: unknown) => void;
+  onMapReady?: (api: any) => void;
 }
 
 const WINDY_API_KEY = "5XejbCIAVmWgaG78DrWz0BkwEuyl6rrV";
@@ -47,7 +46,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentOverlay, setCurrentOverlay] = useState<string>(overlay);
-  const [windyAPI, setWindyAPI] = useState<unknown>(null);
+  const [windyAPI, setWindyAPI] = useState<any>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -91,11 +90,10 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       script.onerror = () => {
         setError("Falha ao carregar Windy API");
         setIsLoading(false);
-      });
+      };
 
       document.head.appendChild(script);
     } catch (err) {
-      console.error("Error loading Windy:", err);
       console.error("Error loading Windy:", err);
       setError("Erro ao inicializar mapa");
       setIsLoading(false);
@@ -103,7 +101,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   };
 
   const initializeWindy = () => {
-    if (!(window as unknown).windyInit) {
+    if (!(window as any).windyInit) {
       setTimeout(initializeWindy, 100);
       return;
     }
@@ -117,7 +115,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       overlay: currentOverlay,
     };
 
-    (window as unknown).windyInit(options, (api: unknown: unknown: unknown) => {
+    (window as any).windyInit(options, (api: any) => {
       setWindyAPI(api);
       setIsLoading(false);
       
@@ -130,13 +128,15 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       
       // Enable picker for point forecast
       picker.on("pickerOpened", (latLon: { lat: number; lon: number }) => {
-};
+        console.log("Picker opened at:", latLon);
+      });
 
       // Log current overlay changes
       store.on("overlay", (overlayName: string) => {
+        console.log("Overlay changed to:", overlayName);
       });
-  });
-  });
+    });
+  };
 
   const handleRefresh = () => {
     if (windyAPI) {

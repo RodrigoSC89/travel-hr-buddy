@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -295,21 +294,21 @@ export const MaritimeHRDashboard: React.FC = () => {
       description: "IA detectou sinais de estresse elevado em 2 tripulantes. Consulta com psicólogo recomendada.",
       variant: "destructive"
     });
-  });
+  };
 
   const handleTelemedicine = () => {
     toast({
       title: "Telemedicina Ativada",
       description: "Conectando com Dr. Anderson - Especialista em Medicina Marítima",
     });
-  });
+  };
 
   const handleComplianceCheck = () => {
     toast({
       title: "Verificação de Compliance",
       description: "Sistema detectou 3 certificações vencendo nos próximos 30 dias. Renovação automática iniciada.",
     });
-  });
+  };
 
   const handlePlanRotation = () => {
     toast({
@@ -317,7 +316,7 @@ export const MaritimeHRDashboard: React.FC = () => {
       description: "Abrindo ferramenta de planejamento inteligente de escalas e rotações de tripulação",
     });
     // TODO: Implement rotation planning dialog/page
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -568,7 +567,7 @@ export const MaritimeHRDashboard: React.FC = () => {
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                         selectedCrew?.id === crew.id ? "bg-primary/10 border-primary" : "hover:bg-muted/50"
                       }`}
-                      onClick={handleSetSelectedCrew}
+                      onClick={() => setSelectedCrew(crew)}
                     >
                       <h3 className="font-semibold">{crew.name}</h3>
                       <p className="text-sm text-muted-foreground">{crew.rank}</p>

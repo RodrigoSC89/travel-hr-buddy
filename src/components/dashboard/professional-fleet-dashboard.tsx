@@ -3,7 +3,7 @@
  * Dashboard de frota com visualizações avançadas e métricas operacionais
  */
 
-import { memo, memo, useState, useMemo } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,7 +99,7 @@ const performanceMetrics = [
   { metric: "Compliance", value: 97 }
 ];
 
-const VesselCard = ({ vessel }: unknown: unknown: unknown) => {
+const VesselCard = ({ vessel }: any) => {
   const statusConfig = {
     operational: { color: "bg-green-500", label: "Operacional", variant: "default" as const },
     "in-port": { color: "bg-blue-500", label: "Em Porto", variant: "secondary" as const },
@@ -190,7 +190,7 @@ const VesselCard = ({ vessel }: unknown: unknown: unknown) => {
   );
 };
 
-export const ProfessionalFleetDashboard = memo(function() {
+export function ProfessionalFleetDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   const totalVessels = vessels.length;
@@ -457,4 +457,4 @@ export const ProfessionalFleetDashboard = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

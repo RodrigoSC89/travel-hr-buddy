@@ -3,12 +3,12 @@
  * PATCH 833: Real-time performance monitoring with Web Vitals
  */
 
-import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from "web-vitals";
+import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from 'web-vitals';
 
 interface VitalMetric {
   name: string;
   value: number;
-  rating: "good" | "needs-improvement" | "poor";
+  rating: 'good' | 'needs-improvement' | 'poor';
   delta: number;
   id: string;
   navigationType: string;
@@ -52,6 +52,10 @@ class WebVitalsMonitor {
 
       // Log to console in development
       if (import.meta.env.DEV) {
+        console.log(`[Web Vitals] ${metric.name}:`, {
+          value: metric.value.toFixed(2),
+          rating: metric.rating,
+        });
       }
     };
 
@@ -143,14 +147,13 @@ class WebVitalsMonitor {
     if (endpoint) {
       try {
         await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(report),
           keepalive: true,
         });
       } catch (error) {
-        console.error("[Web Vitals] Failed to send report:", error);
-        console.error("[Web Vitals] Failed to send report:", error);
+        console.error('[Web Vitals] Failed to send report:', error);
       }
     }
 
@@ -161,7 +164,7 @@ class WebVitalsMonitor {
 export const webVitalsMonitor = new WebVitalsMonitor();
 
 // React hook for Web Vitals
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export function useWebVitals() {
   const [metrics, setMetrics] = useState<VitalMetric[]>([]);

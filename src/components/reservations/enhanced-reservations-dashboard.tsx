@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -171,7 +170,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           "Verifique horários de check-in/check-out"
         ] : []
       };
-    };
+    });
   };
 
   const filteredReservations = reservations.filter(reservation => {
@@ -186,7 +185,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       if (startDate < filterStart || startDate > filterEnd) return false;
     }
     return true;
-  };
+  });
 
   const handleReservationSaved = () => {
     setIsFormOpen(false);
@@ -276,7 +275,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={handleSetIsFormOpen}>
+          <Button onClick={() => setIsFormOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Reserva
           </Button>
@@ -311,7 +310,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           {/* Filters */}
           <ReservationFilters 
             filters={filters} 
-            onFiltersChange={(newFilters) => setFilters(newFilters as unknown}
+            onFiltersChange={(newFilters) => setFilters(newFilters as any)}
             reservations={reservations}
           />
 
@@ -338,7 +337,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
                     : "Crie sua primeira reserva para começar"
                   }
                 </p>
-                <Button onClick={handleSetIsFormOpen}>
+                <Button onClick={() => setIsFormOpen(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nova Reserva
                 </Button>
@@ -421,4 +420,4 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       />
     </div>
   );
-});
+};

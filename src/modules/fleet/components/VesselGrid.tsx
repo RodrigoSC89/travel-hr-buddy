@@ -137,7 +137,7 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
             <Button 
               variant="outline" 
               className="flex-1"
-              onClick={() => handleonViewDetails}
+              onClick={() => onViewDetails(vessel)}
             >
               <Eye className="h-4 w-4 mr-2" />
               Detalhes
@@ -150,7 +150,7 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
       </Card>
     </motion.div>
   );
-});
+};
 
 export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, isLoading }) => {
   if (isLoading) {
@@ -205,4 +205,4 @@ export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, 
       ))}
     </div>
   );
-});
+};

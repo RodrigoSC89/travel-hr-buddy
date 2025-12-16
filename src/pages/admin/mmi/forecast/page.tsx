@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -47,7 +47,7 @@ export default function ForecastPage() {
         const data = await res.json();
         
         // Transform data to ensure correct format
-        const transformed = data.map((f: unknown) => ({
+        const transformed = data.map((f: any) => ({
           ...f,
           last_maintenance: Array.isArray(f.last_maintenance) 
             ? f.last_maintenance 
@@ -74,7 +74,7 @@ export default function ForecastPage() {
 
   // Apply filters
   useEffect(() => {
-    let filtered = [...forecasts]);
+    let filtered = [...forecasts];
     
     if (vesselFilter !== "all") {
       filtered = filtered.filter(f => f.vessel_name === vesselFilter);
@@ -186,7 +186,7 @@ export default function ForecastPage() {
         risk.level,
         f.forecast_text.replace(/"/g, "\"\"") // Escape quotes
       ];
-  };
+    });
 
     // PATCH 540: Otimização - pré-processar linhas CSV
     const csvRows = rows.map(row => row.map(cell => `"${cell}"`).join(","));
@@ -206,7 +206,7 @@ export default function ForecastPage() {
       title: "✅ CSV exportado",
       description: `${filteredForecasts.length} forecast(s) exportado(s)`,
     });
-  });
+  };
 
   if (loading) {
     return (
@@ -317,7 +317,7 @@ export default function ForecastPage() {
                       <Button 
                         size="sm" 
                         variant="secondary" 
-                        onClick={() => handlehandleGenerateOrder}
+                        onClick={() => handleGenerateOrder(f)}
                         disabled={generatingOrderId === f.id}
                       >
                         {generatingOrderId === f.id ? "⏳ Gerando..." : "➕ Gerar OS"}

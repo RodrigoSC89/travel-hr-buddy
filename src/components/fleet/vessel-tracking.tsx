@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +41,7 @@ interface VesselPosition {
   eta: string;
 }
 
-export const VesselTracking = memo(() => {
+export const VesselTracking = () => {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [trackingMode, setTrackingMode] = useState<"real-time" | "historical">("real-time");
@@ -66,7 +65,7 @@ export const VesselTracking = memo(() => {
         longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
         speed: Math.random() * 20,
         heading: Math.random() * 360,
-        status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as unknown,
+        status: ["sailing", "anchored", "docked"][Math.floor(Math.random() * 3)] as any,
         fuel_level: 50 + Math.random() * 50,
         last_update: new Date().toISOString(),
         weather: {
@@ -117,7 +116,7 @@ export const VesselTracking = memo(() => {
     case "emergency": return "bg-red-500";
     default: return "bg-gray-500";
     }
-  });
+  };
 
   const getStatusText = (status: VesselPosition["status"]) => {
     switch (status) {
@@ -140,7 +139,7 @@ export const VesselTracking = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -153,7 +152,7 @@ export const VesselTracking = memo(() => {
           </p>
         </div>
         
-        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as unknown}>
+        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as any)}>
           <TabsList>
             <TabsTrigger value="real-time">Tempo Real</TabsTrigger>
             <TabsTrigger value="historical">Histórico</TabsTrigger>
@@ -180,7 +179,7 @@ export const VesselTracking = memo(() => {
                       ? "border-primary bg-primary/5" 
                       : "border-border hover:bg-accent"
                   }`}
-                  onClick={handleSetSelectedVessel}
+                  onClick={() => setSelectedVessel(vessel)}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{vessel.name}</h4>

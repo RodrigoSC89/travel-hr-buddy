@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Shield } from "lucide-react";
 
 // Lazy load heavy components

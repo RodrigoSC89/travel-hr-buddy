@@ -4,16 +4,16 @@
  */
 
 export type VoiceCommand =
-  | "start_psc_inspection"
-  | "open_ism_panel"
-  | "open_mlc_panel"
-  | "open_ovid_panel"
-  | "open_lsa_panel"
-  | "record_non_conformity"
-  | "show_dashboard"
-  | "open_reports"
-  | "help"
-  | "cancel";
+  | 'start_psc_inspection'
+  | 'open_ism_panel'
+  | 'open_mlc_panel'
+  | 'open_ovid_panel'
+  | 'open_lsa_panel'
+  | 'record_non_conformity'
+  | 'show_dashboard'
+  | 'open_reports'
+  | 'help'
+  | 'cancel';
 
 export interface VoiceCommandConfig {
   command: VoiceCommand;
@@ -49,7 +49,7 @@ export class VoiceRecognitionEngine {
 
   constructor(config?: Partial<VoiceAssistantConfig>) {
     this.config = {
-      language: "pt-BR",
+      language: 'pt-BR',
       continuous: false,
       interimResults: false,
       maxAlternatives: 1,
@@ -65,6 +65,7 @@ export class VoiceRecognitionEngine {
    */
   private initializeRecognition(): void {
     if (!this.isBrowserSupported()) {
+      console.warn('Web Speech API not supported in this browser');
       return;
     }
 
@@ -85,7 +86,7 @@ export class VoiceRecognitionEngine {
    */
   static isBrowserSupported(): boolean {
     return !!(
-      typeof window !== "undefined" &&
+      typeof window !== 'undefined' &&
       ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)
     );
   }
@@ -102,13 +103,16 @@ export class VoiceRecognitionEngine {
 
     this.recognition.onstart = () => {
       this.isListening = true;
+      console.log('Voice recognition started');
     };
 
     this.recognition.onend = () => {
       this.isListening = false;
+      console.log('Voice recognition ended');
     };
 
     this.recognition.onerror = (event: any) => {
+      console.error('Voice recognition error:', event.error);
       this.isListening = false;
     };
 
@@ -133,6 +137,7 @@ export class VoiceRecognitionEngine {
     };
 
     this.commandHistory.push(result);
+    console.log('Voice transcript:', transcript, 'Confidence:', confidence);
   }
 
   /**
@@ -140,18 +145,19 @@ export class VoiceRecognitionEngine {
    */
   start(): void {
     if (!this.recognition) {
+      console.error('Speech recognition not available');
       return;
     }
 
     if (this.isListening) {
+      console.warn('Already listening');
       return;
     }
 
     try {
       this.recognition.start();
     } catch (error) {
-      console.error("Failed to start recognition:", error);
-      console.error("Failed to start recognition:", error);
+      console.error('Failed to start recognition:', error);
     }
   }
 
@@ -166,8 +172,7 @@ export class VoiceRecognitionEngine {
     try {
       this.recognition.stop();
     } catch (error) {
-      console.error("Failed to stop recognition:", error);
-      console.error("Failed to stop recognition:", error);
+      console.error('Failed to stop recognition:', error);
     }
   }
 
@@ -181,8 +186,7 @@ export class VoiceRecognitionEngine {
       this.recognition.abort();
       this.isListening = false;
     } catch (error) {
-      console.error("Failed to abort recognition:", error);
-      console.error("Failed to abort recognition:", error);
+      console.error('Failed to abort recognition:', error);
     }
   }
 
@@ -224,115 +228,125 @@ export class VoiceCommandProcessor {
    */
   private registerDefaultCommands(): void {
     this.registerCommand({
-      command: "start_psc_inspection",
-      keywords: ["iniciar", "inspeção", "psc", "port state control"],
-      alternativeKeywords: ["começar", "abrir", "psc"],
+      command: 'start_psc_inspection',
+      keywords: ['iniciar', 'inspeção', 'psc', 'port state control'],
+      alternativeKeywords: ['começar', 'abrir', 'psc'],
       action: () => {
+        console.log('Starting PSC inspection...');
         // Navigate to PSC module
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/psc-inspection";
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/psc-inspection';
         }
       },
-      description: "Iniciar inspeção PSC",
+      description: 'Iniciar inspeção PSC',
     });
 
     this.registerCommand({
-      command: "open_ism_panel",
-      keywords: ["abrir", "painel", "ism", "safety management"],
-      alternativeKeywords: ["mostrar", "ism", "gestão", "segurança"],
+      command: 'open_ism_panel',
+      keywords: ['abrir', 'painel', 'ism', 'safety management'],
+      alternativeKeywords: ['mostrar', 'ism', 'gestão', 'segurança'],
       action: () => {
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/ism-audit";
+        console.log('Opening ISM panel...');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/ism-audit';
         }
       },
-      description: "Abrir painel ISM",
+      description: 'Abrir painel ISM',
     });
 
     this.registerCommand({
-      command: "open_mlc_panel",
-      keywords: ["abrir", "painel", "mlc", "maritime labour"],
-      alternativeKeywords: ["mostrar", "mlc", "trabalho", "marítimo"],
+      command: 'open_mlc_panel',
+      keywords: ['abrir', 'painel', 'mlc', 'maritime labour'],
+      alternativeKeywords: ['mostrar', 'mlc', 'trabalho', 'marítimo'],
       action: () => {
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/mlc-inspection";
+        console.log('Opening MLC panel...');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/mlc-inspection';
         }
       },
-      description: "Abrir painel MLC",
+      description: 'Abrir painel MLC',
     });
 
     this.registerCommand({
-      command: "open_ovid_panel",
-      keywords: ["abrir", "painel", "ovid", "vessel inspection"],
-      alternativeKeywords: ["mostrar", "ovid", "embarcação"],
+      command: 'open_ovid_panel',
+      keywords: ['abrir', 'painel', 'ovid', 'vessel inspection'],
+      alternativeKeywords: ['mostrar', 'ovid', 'embarcação'],
       action: () => {
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/ovid";
+        console.log('Opening OVID panel...');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/ovid';
         }
       },
-      description: "Abrir painel OVID",
+      description: 'Abrir painel OVID',
     });
 
     this.registerCommand({
-      command: "open_lsa_panel",
-      keywords: ["abrir", "painel", "lsa", "life saving", "salva-vidas"],
-      alternativeKeywords: ["mostrar", "lsa", "equipamento", "salvamento"],
+      command: 'open_lsa_panel',
+      keywords: ['abrir', 'painel', 'lsa', 'life saving', 'salva-vidas'],
+      alternativeKeywords: ['mostrar', 'lsa', 'equipamento', 'salvamento'],
       action: () => {
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/lsa-inspection";
+        console.log('Opening LSA panel...');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/lsa-inspection';
         }
       },
-      description: "Abrir painel LSA",
+      description: 'Abrir painel LSA',
     });
 
     this.registerCommand({
-      command: "record_non_conformity",
-      keywords: ["registrar", "não conformidade", "deficiência"],
-      alternativeKeywords: ["anotar", "documentar", "problema"],
+      command: 'record_non_conformity',
+      keywords: ['registrar', 'não conformidade', 'deficiência'],
+      alternativeKeywords: ['anotar', 'documentar', 'problema'],
       action: () => {
+        console.log('Recording non-conformity...');
         // Open non-conformity recording modal/form
       },
-      description: "Registrar não conformidade",
+      description: 'Registrar não conformidade',
     });
 
     this.registerCommand({
-      command: "show_dashboard",
-      keywords: ["mostrar", "dashboard", "painel", "principal"],
-      alternativeKeywords: ["voltar", "início", "home"],
+      command: 'show_dashboard',
+      keywords: ['mostrar', 'dashboard', 'painel', 'principal'],
+      alternativeKeywords: ['voltar', 'início', 'home'],
       action: () => {
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/dashboard";
+        console.log('Showing dashboard...');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/dashboard';
         }
       },
-      description: "Mostrar dashboard",
+      description: 'Mostrar dashboard',
     });
 
     this.registerCommand({
-      command: "open_reports",
-      keywords: ["abrir", "relatórios", "reports"],
-      alternativeKeywords: ["mostrar", "ver", "relatórios"],
+      command: 'open_reports',
+      keywords: ['abrir', 'relatórios', 'reports'],
+      alternativeKeywords: ['mostrar', 'ver', 'relatórios'],
       action: () => {
-        if (typeof window !== "undefined") {
-          window.location.hash = "#/reports";
+        console.log('Opening reports...');
+        if (typeof window !== 'undefined') {
+          window.location.hash = '#/reports';
         }
       },
-      description: "Abrir relatórios",
+      description: 'Abrir relatórios',
     });
 
     this.registerCommand({
-      command: "help",
-      keywords: ["ajuda", "help", "comandos"],
+      command: 'help',
+      keywords: ['ajuda', 'help', 'comandos'],
       action: () => {
+        console.log('Showing help...');
         this.showAvailableCommands();
       },
-      description: "Mostrar ajuda",
+      description: 'Mostrar ajuda',
     });
 
     this.registerCommand({
-      command: "cancel",
-      keywords: ["cancelar", "parar", "cancel", "stop"],
+      command: 'cancel',
+      keywords: ['cancelar', 'parar', 'cancel', 'stop'],
       action: () => {
+        console.log('Canceling...');
       },
-      description: "Cancelar",
+      description: 'Cancelar',
     });
   }
 
@@ -361,13 +375,13 @@ export class VoiceCommandProcessor {
           
           return command;
         } catch (error) {
-          console.error("Error executing command:", error);
-          console.error("Error executing command:", error);
+          console.error('Error executing command:', error);
           return null;
         }
       }
     }
 
+    console.log('No matching command found for:', transcript);
     return null;
   }
 
@@ -389,7 +403,7 @@ export class VoiceCommandProcessor {
     const hasMinimumMatch = matchScore >= 2;
     
     // For specific module commands, check for unique identifier
-    const uniqueIdentifiers = ["psc", "ism", "mlc", "ovid", "lsa"];
+    const uniqueIdentifiers = ['psc', 'ism', 'mlc', 'ovid', 'lsa'];
     const hasUniqueId = uniqueIdentifiers.some(id => 
       config.keywords.includes(id) && transcript.includes(id)
     );
@@ -418,7 +432,9 @@ export class VoiceCommandProcessor {
    * Show available commands
    */
   showAvailableCommands(): void {
+    console.log('Available voice commands:');
     this.commands.forEach((config) => {
+      console.log(`- ${config.description}: ${config.keywords.join(', ')}`);
     });
   }
 }
@@ -463,6 +479,7 @@ export class VoiceAssistant {
    */
   enable(): void {
     this.isEnabled = true;
+    console.log('Voice assistant enabled');
   }
 
   /**
@@ -471,6 +488,7 @@ export class VoiceAssistant {
   disable(): void {
     this.isEnabled = false;
     this.stop();
+    console.log('Voice assistant disabled');
   }
 
   /**
@@ -478,6 +496,7 @@ export class VoiceAssistant {
    */
   start(): void {
     if (!this.isEnabled) {
+      console.warn('Voice assistant is not enabled');
       return;
     }
 

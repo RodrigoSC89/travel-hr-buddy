@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,7 +38,7 @@ interface ReplayEvent {
   type: "mode_change" | "alarm" | "sensor" | "position" | "thruster" | "environmental";
   description: string;
   severity: "info" | "warning" | "critical";
-  data?: Record<string, unknown>;
+  data?: Record<string, any>;
 }
 
 interface ReplaySession {
@@ -133,9 +132,9 @@ export const DPReplaySystem: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "text-red-500 bg-red-500/10";
-    case "warning": return "text-yellow-500 bg-yellow-500/10";
-    default: return "text-blue-500 bg-blue-500/10";
+      case "critical": return "text-red-500 bg-red-500/10";
+      case "warning": return "text-yellow-500 bg-yellow-500/10";
+      default: return "text-blue-500 bg-blue-500/10";
     }
   };
 
@@ -184,7 +183,7 @@ export const DPReplaySystem: React.FC = () => {
       <Card>
         <CardContent className="pt-4">
           <div className="flex items-center gap-4">
-            <Select value={selectedSession?.id || ""} onValueChange={(id) => setSelectedSession(sessions.find(s => s.id === id) || null}>
+            <Select value={selectedSession?.id || ""} onValueChange={(id) => setSelectedSession(sessions.find(s => s.id === id) || null)}>
               <SelectTrigger className="w-80">
                 <SelectValue placeholder="Selecionar sessão para replay..." />
               </SelectTrigger>
@@ -298,7 +297,7 @@ export const DPReplaySystem: React.FC = () => {
                       <div
                         key={event.id}
                         className={`p-2 rounded-lg border cursor-pointer transition-all ${event.timestamp <= currentTime ? "opacity-100" : "opacity-40"} ${getSeverityColor(event.severity)}`}
-                        onClick={() => handlehandleSkipToEvent}
+                        onClick={() => handleSkipToEvent(event.timestamp)}
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-mono">{formatTime(event.timestamp)}</span>
@@ -323,7 +322,7 @@ export const DPReplaySystem: React.FC = () => {
                     value={[currentTime]}
                     max={selectedSession.duration}
                     step={1}
-                    onValueChange={([v]) => setCurrentTime(v}
+                    onValueChange={([v]) => setCurrentTime(v)}
                     className="cursor-pointer"
                   />
                   <div className="flex justify-between text-sm text-muted-foreground">
@@ -334,25 +333,25 @@ export const DPReplaySystem: React.FC = () => {
 
                 {/* Controls */}
                 <div className="flex items-center justify-center gap-4">
-                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(0)}>
                     <SkipBack className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.max(0, currentTime - 300))}>
                     <Rewind className="h-4 w-4" />
                   </Button>
                   <Button size="lg" onClick={handlePlay} className="px-8">
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                   </Button>
-                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.min(selectedSession.duration, currentTime + 300))}>
                     <FastForward className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
+                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(selectedSession.duration)}>
                     <SkipForward className="h-4 w-4" />
                   </Button>
                   
                   <div className="ml-4 flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Velocidade:</span>
-                    <Select value={playbackSpeed.toString()} onValueChange={(v) => setPlaybackSpeed(Number(v}>
+                    <Select value={playbackSpeed.toString()} onValueChange={(v) => setPlaybackSpeed(Number(v))}>
                       <SelectTrigger className="w-20">
                         <SelectValue />
                       </SelectTrigger>

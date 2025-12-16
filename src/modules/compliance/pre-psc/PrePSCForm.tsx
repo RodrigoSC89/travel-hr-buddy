@@ -3,7 +3,7 @@
  * Interactive checklist form for Port State Control self-assessments
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,7 +71,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     }
   };
 
-  const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: unknown: unknown: unknown) => {
+  const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: any) => {
     const updated = [...checklistItems];
     updated[index] = { ...updated[index], [field]: value };
     
@@ -105,7 +105,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           port_country: portCountry,
           inspection_date: inspectionDate,
           status: submit ? "submitted" : "draft",
-        });
+        };
 
         const created = await prePSCService.createInspection(inspection);
         inspId = created.id!;
@@ -237,7 +237,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
               <Input
                 id="inspectorName"
                 value={inspectorName}
-                onChange={handleChange}
+                onChange={(e) => setInspectorName(e.target.value)}
                 placeholder="Enter inspector name"
               />
             </div>
@@ -246,7 +246,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
               <Input
                 id="portCountry"
                 value={portCountry}
-                onChange={handleChange}
+                onChange={(e) => setPortCountry(e.target.value)}
                 placeholder="e.g., Singapore"
               />
             </div>
@@ -256,7 +256,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                 id="inspectionDate"
                 type="date"
                 value={inspectionDate}
-                onChange={handleChange}
+                onChange={(e) => setInspectionDate(e.target.value)}
               />
             </div>
           </div>
@@ -306,7 +306,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                     <Label>Status</Label>
                     <Select
                       value={item.status || "pending"}
-                      onValueChange={(value) => handleItemChange(index, "status", value}
+                      onValueChange={(value) => handleItemChange(index, "status", value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -326,7 +326,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                       <Label>Priority</Label>
                       <Select
                         value={item.action_priority || "medium"}
-                        onValueChange={(value) => handleItemChange(index, "action_priority", value}
+                        onValueChange={(value) => handleItemChange(index, "action_priority", value)}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -346,7 +346,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                   <Label>Inspector Comments</Label>
                   <Textarea
                     value={item.inspector_comments || ""}
-                    onChange={handleChange}
+                    onChange={(e) => handleItemChange(index, "inspector_comments", e.target.value)}
                     placeholder="Add notes, observations, or corrective actions..."
                     rows={2}
                   />
@@ -363,7 +363,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           <div className="flex gap-3 justify-end">
             <Button
               variant="outline"
-              onClick={() => handlehandleSaveInspection}
+              onClick={() => handleSaveInspection(false)}
               disabled={saving}
             >
               {saving ? (
@@ -379,7 +379,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
               )}
             </Button>
             <Button
-              onClick={() => handlehandleSaveInspection}
+              onClick={() => handleSaveInspection(true)}
               disabled={saving || progress < 100}
             >
               {saving ? (

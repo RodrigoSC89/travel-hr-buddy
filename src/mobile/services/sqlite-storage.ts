@@ -60,6 +60,7 @@ class SQLiteStorage {
         this.db = request.result;
         this.isInitialized = true;
         this.startCleanupJob();
+        console.log("SQLite storage initialized");
         resolve();
       };
 

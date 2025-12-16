@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,9 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Ship, 
   Shield, 
+  Users, 
   BarChart3, 
+  Settings, 
   CheckCircle2,
   ArrowRight,
   Sparkles,
@@ -166,7 +167,7 @@ export const WelcomeOnboarding: React.FC = () => {
                   {ONBOARDING_STEPS.map((_, index) => (
                     <button
                       key={index}
-                      onClick={handleSetCurrentStep}
+                      onClick={() => setCurrentStep(index)}
                       className={`w-2 h-2 rounded-full transition-all ${
                         index === currentStep 
                           ? "w-6 bg-primary" 

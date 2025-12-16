@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +12,8 @@ import {
 } from "@/components/ui/dialog";
 import { 
   Server,
+  Database,
+  Cloud,
   Cpu,
   HardDrive,
   Network,
@@ -20,8 +21,11 @@ import {
   Activity,
   Zap,
   Shield,
+  Clock,
   Eye,
-  CheckCircle
+  AlertCircle,
+  CheckCircle,
+  TrendingUp
 } from "lucide-react";
 
 const SystemStatusDashboard = () => {
@@ -255,11 +259,11 @@ const SystemStatusDashboard = () => {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={handleSetShowLogsDialog}>
+            <Button variant="outline" size="sm" onClick={() => setShowLogsDialog(true)}>
               <Eye className="w-4 h-4 mr-2" />
               Logs Detalhados
             </Button>
-            <Button variant="outline" size="sm" onClick={handleSetShowHistoryDialog}>
+            <Button variant="outline" size="sm" onClick={() => setShowHistoryDialog(true)}>
               <Activity className="w-4 h-4 mr-2" />
               Histórico
             </Button>

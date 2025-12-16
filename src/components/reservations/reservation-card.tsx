@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -213,7 +212,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleonEdit}
+            onClick={() => onEdit(reservation)}
             className="flex-1"
           >
             <Edit className="h-4 w-4 mr-1" />
@@ -223,7 +222,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={handleSetShowAttachments}
+            onClick={() => setShowAttachments(true)}
           >
             <Paperclip className="h-4 w-4" />
           </Button>
@@ -231,7 +230,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={handleSetShowPDFGenerator}
+            onClick={() => setShowPDFGenerator(true)}
           >
             <Download className="h-4 w-4" />
           </Button>
@@ -240,7 +239,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(reservation.supplier_url, "_blank"}
+              onClick={() => window.open(reservation.supplier_url, "_blank")}
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
@@ -249,7 +248,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleonDelete}
+            onClick={() => onDelete(reservation.id)}
             className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
           >
             <Trash2 className="h-4 w-4" />
@@ -261,14 +260,14 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
       <ReservationAttachments
         reservationId={reservation.id}
         isOpen={showAttachments}
-        onClose={() => setShowAttachments(false}
+        onClose={() => setShowAttachments(false)}
       />
       
       <ReservationPDFGenerator
         reservation={reservation}
         isOpen={showPDFGenerator}
-        onClose={() => setShowPDFGenerator(false}
+        onClose={() => setShowPDFGenerator(false)}
       />
     </Card>
   );
-});
+};

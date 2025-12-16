@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -81,7 +80,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             return 90;
           }
           return prev + 10;
-  };
+        });
       }, 200);
 
       // Converter arquivo para base64
@@ -96,7 +95,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           fileType: file.type,
           crewMemberId
         }
-      };
+      });
 
       clearInterval(progressInterval);
       setValidationProgress(100);
@@ -157,7 +156,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
-  };
+    });
   };
 
   // Get validation status color
@@ -198,7 +197,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               e.preventDefault();
               setIsDragOver(true);
             }}
-            onDragLeave={() => setIsDragOver(false}
+            onDragLeave={() => setIsDragOver(false)}
           >
             {isValidating ? (
               <div className="space-y-4">

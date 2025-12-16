@@ -39,7 +39,6 @@ class EventTrackingService {
       }
     } catch (error) {
       console.error("Error initializing organization:", error);
-      console.error("Error initializing organization:", error);
     }
   }
 
@@ -70,9 +69,9 @@ class EventTrackingService {
         .insert([eventData]);
 
       if (error) {
+        console.error("Error tracking event:", error);
       }
     } catch (error) {
-      console.error("Error in trackEvent:", error);
       console.error("Error in trackEvent:", error);
     }
   }

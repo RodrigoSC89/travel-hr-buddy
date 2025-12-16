@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -79,7 +78,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
           message: inputMessage,
           context: "procurement-inventory"
         },
-      };
+      });
 
       if (error) throw error;
 
@@ -221,7 +220,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
                       variant="outline"
                       size="sm"
                       className="text-xs h-7"
-                      onClick={() => handlehandleSuggestionClick}
+                      onClick={() => handleSuggestionClick(suggestion)}
                     >
                       {suggestion}
                     </Button>
@@ -258,7 +257,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
               variant="ghost"
               size="sm"
               className="flex-1 h-8 text-xs"
-              onClick={() => handlehandleSuggestionClick}
+              onClick={() => handleSuggestionClick(action.label)}
             >
               <action.icon className={`h-3 w-3 mr-1 ${action.color}`} />
               <span className="hidden sm:inline">{action.label}</span>
@@ -273,7 +272,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
           <Input
             placeholder="Pergunte sobre estoque, compras..."
             value={inputMessage}
-            onChange={handleChange}
+            onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
             disabled={isLoading}
             className="flex-1"

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,10 +31,10 @@ interface VesselMetrics {
   lastMaintenance: Date;
   nextMaintenance: Date;
   crew: number;
-  weather?: unknown;
+  weather?: any;
 }
 
-export const RealTimeFleetMonitor = memo(() => {
+export const RealTimeFleetMonitor = () => {
   const [vessels, setVessels] = useState<VesselMetrics[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -81,8 +80,8 @@ export const RealTimeFleetMonitor = memo(() => {
         location: vessel.current_location && 
                  typeof vessel.current_location === "object"
           ? { 
-            lat: (vessel.current_location as unknown).lat || -23.5505, 
-            lon: (vessel.current_location as unknown).lon || -46.6333 
+            lat: (vessel.current_location as any).lat || -23.5505, 
+            lon: (vessel.current_location as any).lon || -46.6333 
           }
           : { lat: -23.5505, lon: -46.6333 },
         speed: Math.random() * 20 + 5, // Mock speed 5-25 knots
@@ -102,7 +101,7 @@ export const RealTimeFleetMonitor = memo(() => {
     }
   };
 
-  const handleFleetUpdate = (payload: unknown) => {
+  const handleFleetUpdate = (payload: any) => {
     // Update specific vessel data
     if (payload.eventType === "UPDATE") {
       setVessels(prev => prev.map(vessel => 
@@ -137,7 +136,7 @@ export const RealTimeFleetMonitor = memo(() => {
     try {
       const { data, error } = await supabase.functions.invoke("maritime-weather", {
         body: { location, vesselId }
-});
+      });
 
       if (error) throw error;
 
@@ -181,7 +180,7 @@ export const RealTimeFleetMonitor = memo(() => {
         </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -391,7 +390,7 @@ export const RealTimeFleetMonitor = memo(() => {
                           <CardTitle className="text-lg text-red-600">Alertas Meteorológicos</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          {weatherData.alerts.map((alert: unknown, index: number) => (
+                          {weatherData.alerts.map((alert: any, index: number) => (
                             <div key={index} className="p-2 bg-red-50 border border-red-200 rounded mb-2">
                               <p className="text-sm text-red-800">{alert.message}</p>
                             </div>
@@ -402,7 +401,7 @@ export const RealTimeFleetMonitor = memo(() => {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Button onClick={() => handleupdateWeatherForVessel}>
+                    <Button onClick={() => updateWeatherForVessel(selectedVesselData.id, selectedVesselData.location)}>
                       Carregar Dados Meteorológicos
                     </Button>
                   </div>
@@ -414,4 +413,4 @@ export const RealTimeFleetMonitor = memo(() => {
       )}
     </div>
   );
-});
+};

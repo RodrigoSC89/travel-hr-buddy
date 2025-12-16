@@ -1,28 +1,27 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Usage Simulation Page - PATCH 980
  * Simulate real-world usage scenarios
  */
 
-import React, { useState, useEffect, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import React, { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Play, Pause, RotateCcw, CheckCircle2, XCircle, 
   Clock, Activity, Database, Wifi, WifiOff, Brain,
   Ship, Wrench, FileText, Users, Download
-} from "lucide-react";
-import { toast } from "sonner";
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 interface SimulationStep {
   id: string;
   action: string;
   module: string;
   description: string;
-  status: "pending" | "running" | "success" | "error";
+  status: 'pending' | 'running' | 'success' | 'error';
   duration: number;
   logs: string[];
 }
@@ -37,56 +36,56 @@ interface SimulationScenario {
 
 const SCENARIOS: SimulationScenario[] = [
   {
-    id: "daily-ops",
-    name: "Operação Diária",
-    description: "Simula um dia típico de operações marítimas",
+    id: 'daily-ops',
+    name: 'Operação Diária',
+    description: 'Simula um dia típico de operações marítimas',
     offline: false,
     steps: [
-      { id: "1", action: "Login", module: "Auth", description: "Operador faz login no sistema", status: "pending", duration: 500, logs: [] },
-      { id: "2", action: "Carregar Dashboard", module: "Dashboard", description: "Carrega KPIs e alertas do dia", status: "pending", duration: 1200, logs: [] },
-      { id: "3", action: "Verificar Alertas", module: "Notifications", description: "Revisa alertas críticos pendentes", status: "pending", duration: 800, logs: [] },
-      { id: "4", action: "Consultar Frota", module: "Fleet", description: "Verifica status das embarcações", status: "pending", duration: 1000, logs: [] },
-      { id: "5", action: "Abrir OS de Manutenção", module: "Maintenance", description: "Cria ordem de serviço preventiva", status: "pending", duration: 1500, logs: [] },
-      { id: "6", action: "Consultar Estoque", module: "Inventory", description: "Verifica peças disponíveis", status: "pending", duration: 900, logs: [] },
-      { id: "7", action: "Perguntar à IA", module: "AI", description: "Solicita recomendação de manutenção", status: "pending", duration: 2000, logs: [] },
-      { id: "8", action: "Gerar Relatório", module: "Reports", description: "Gera relatório diário de operações", status: "pending", duration: 3000, logs: [] },
-      { id: "9", action: "Verificar Compliance", module: "Compliance", description: "Revisa status de conformidade", status: "pending", duration: 1100, logs: [] },
-      { id: "10", action: "Logout", module: "Auth", description: "Encerra sessão", status: "pending", duration: 300, logs: [] }
+      { id: '1', action: 'Login', module: 'Auth', description: 'Operador faz login no sistema', status: 'pending', duration: 500, logs: [] },
+      { id: '2', action: 'Carregar Dashboard', module: 'Dashboard', description: 'Carrega KPIs e alertas do dia', status: 'pending', duration: 1200, logs: [] },
+      { id: '3', action: 'Verificar Alertas', module: 'Notifications', description: 'Revisa alertas críticos pendentes', status: 'pending', duration: 800, logs: [] },
+      { id: '4', action: 'Consultar Frota', module: 'Fleet', description: 'Verifica status das embarcações', status: 'pending', duration: 1000, logs: [] },
+      { id: '5', action: 'Abrir OS de Manutenção', module: 'Maintenance', description: 'Cria ordem de serviço preventiva', status: 'pending', duration: 1500, logs: [] },
+      { id: '6', action: 'Consultar Estoque', module: 'Inventory', description: 'Verifica peças disponíveis', status: 'pending', duration: 900, logs: [] },
+      { id: '7', action: 'Perguntar à IA', module: 'AI', description: 'Solicita recomendação de manutenção', status: 'pending', duration: 2000, logs: [] },
+      { id: '8', action: 'Gerar Relatório', module: 'Reports', description: 'Gera relatório diário de operações', status: 'pending', duration: 3000, logs: [] },
+      { id: '9', action: 'Verificar Compliance', module: 'Compliance', description: 'Revisa status de conformidade', status: 'pending', duration: 1100, logs: [] },
+      { id: '10', action: 'Logout', module: 'Auth', description: 'Encerra sessão', status: 'pending', duration: 300, logs: [] }
     ]
   },
   {
-    id: "offline-ops",
-    name: "Operação Offline (7 dias)",
-    description: "Simula operação sem internet por uma semana",
+    id: 'offline-ops',
+    name: 'Operação Offline (7 dias)',
+    description: 'Simula operação sem internet por uma semana',
     offline: true,
     steps: [
-      { id: "1", action: "Entrar em Modo Offline", module: "Offline", description: "Sistema detecta perda de conexão", status: "pending", duration: 500, logs: [] },
-      { id: "2", action: "Carregar Cache Local", module: "Storage", description: "Carrega dados do IndexedDB", status: "pending", duration: 800, logs: [] },
-      { id: "3", action: "Cadastrar Tripulante", module: "HR", description: "Adiciona novo membro da tripulação", status: "pending", duration: 1200, logs: [] },
-      { id: "4", action: "Registrar Manutenção", module: "Maintenance", description: "Cria OS corretiva emergencial", status: "pending", duration: 1500, logs: [] },
-      { id: "5", action: "Consultar IA Offline", module: "AI", description: "Pergunta usando cache local", status: "pending", duration: 300, logs: [] },
-      { id: "6", action: "Upload de Documento", module: "Documents", description: "Adiciona documento para sync posterior", status: "pending", duration: 1000, logs: [] },
-      { id: "7", action: "Simular 7 Dias", module: "Offline", description: "Acumula operações offline", status: "pending", duration: 2000, logs: [] },
-      { id: "8", action: "Reconectar", module: "Sync", description: "Detecta retorno de conexão", status: "pending", duration: 500, logs: [] },
-      { id: "9", action: "Sincronizar Dados", module: "Sync", description: "Envia queue pendente ao servidor", status: "pending", duration: 5000, logs: [] },
-      { id: "10", action: "Resolver Conflitos", module: "Sync", description: "Processa conflitos detectados", status: "pending", duration: 1500, logs: [] },
-      { id: "11", action: "Validar Integridade", module: "Sync", description: "Verifica consistência dos dados", status: "pending", duration: 1000, logs: [] }
+      { id: '1', action: 'Entrar em Modo Offline', module: 'Offline', description: 'Sistema detecta perda de conexão', status: 'pending', duration: 500, logs: [] },
+      { id: '2', action: 'Carregar Cache Local', module: 'Storage', description: 'Carrega dados do IndexedDB', status: 'pending', duration: 800, logs: [] },
+      { id: '3', action: 'Cadastrar Tripulante', module: 'HR', description: 'Adiciona novo membro da tripulação', status: 'pending', duration: 1200, logs: [] },
+      { id: '4', action: 'Registrar Manutenção', module: 'Maintenance', description: 'Cria OS corretiva emergencial', status: 'pending', duration: 1500, logs: [] },
+      { id: '5', action: 'Consultar IA Offline', module: 'AI', description: 'Pergunta usando cache local', status: 'pending', duration: 300, logs: [] },
+      { id: '6', action: 'Upload de Documento', module: 'Documents', description: 'Adiciona documento para sync posterior', status: 'pending', duration: 1000, logs: [] },
+      { id: '7', action: 'Simular 7 Dias', module: 'Offline', description: 'Acumula operações offline', status: 'pending', duration: 2000, logs: [] },
+      { id: '8', action: 'Reconectar', module: 'Sync', description: 'Detecta retorno de conexão', status: 'pending', duration: 500, logs: [] },
+      { id: '9', action: 'Sincronizar Dados', module: 'Sync', description: 'Envia queue pendente ao servidor', status: 'pending', duration: 5000, logs: [] },
+      { id: '10', action: 'Resolver Conflitos', module: 'Sync', description: 'Processa conflitos detectados', status: 'pending', duration: 1500, logs: [] },
+      { id: '11', action: 'Validar Integridade', module: 'Sync', description: 'Verifica consistência dos dados', status: 'pending', duration: 1000, logs: [] }
     ]
   },
   {
-    id: "ai-intensive",
-    name: "Uso Intensivo de IA",
-    description: "Testa capacidades de IA em múltiplos módulos",
+    id: 'ai-intensive',
+    name: 'Uso Intensivo de IA',
+    description: 'Testa capacidades de IA em múltiplos módulos',
     offline: false,
     steps: [
-      { id: "1", action: "Solicitar Resumo Executivo", module: "AI", description: "Gera resumo do período", status: "pending", duration: 2500, logs: [] },
-      { id: "2", action: "Análise Preditiva", module: "AI", description: "Solicita previsão de falhas", status: "pending", duration: 3000, logs: [] },
-      { id: "3", action: "Recomendação de Treinamento", module: "AI", description: "Sugere treinamentos para equipe", status: "pending", duration: 2000, logs: [] },
-      { id: "4", action: "Otimização de Rotas", module: "AI", description: "Calcula rotas mais eficientes", status: "pending", duration: 2500, logs: [] },
-      { id: "5", action: "Análise de Compliance", module: "AI", description: "Verifica conformidade com MLC", status: "pending", duration: 2200, logs: [] },
-      { id: "6", action: "Geração de Relatório AI", module: "AI", description: "Gera relatório com insights", status: "pending", duration: 4000, logs: [] },
-      { id: "7", action: "Perguntas em Série", module: "AI", description: "Testa cache semântico com 10 perguntas", status: "pending", duration: 3000, logs: [] },
-      { id: "8", action: "Verificar Cache Hit Rate", module: "AI", description: "Analisa eficiência do cache", status: "pending", duration: 500, logs: [] }
+      { id: '1', action: 'Solicitar Resumo Executivo', module: 'AI', description: 'Gera resumo do período', status: 'pending', duration: 2500, logs: [] },
+      { id: '2', action: 'Análise Preditiva', module: 'AI', description: 'Solicita previsão de falhas', status: 'pending', duration: 3000, logs: [] },
+      { id: '3', action: 'Recomendação de Treinamento', module: 'AI', description: 'Sugere treinamentos para equipe', status: 'pending', duration: 2000, logs: [] },
+      { id: '4', action: 'Otimização de Rotas', module: 'AI', description: 'Calcula rotas mais eficientes', status: 'pending', duration: 2500, logs: [] },
+      { id: '5', action: 'Análise de Compliance', module: 'AI', description: 'Verifica conformidade com MLC', status: 'pending', duration: 2200, logs: [] },
+      { id: '6', action: 'Geração de Relatório AI', module: 'AI', description: 'Gera relatório com insights', status: 'pending', duration: 4000, logs: [] },
+      { id: '7', action: 'Perguntas em Série', module: 'AI', description: 'Testa cache semântico com 10 perguntas', status: 'pending', duration: 3000, logs: [] },
+      { id: '8', action: 'Verificar Cache Hit Rate', module: 'AI', description: 'Analisa eficiência do cache', status: 'pending', duration: 500, logs: [] }
     ]
   }
 ];
@@ -102,13 +101,13 @@ export default function UsageSimulation() {
   const logsEndRef = useRef<HTMLDivElement>(null);
 
   const addLog = (message: string) => {
-    const timestamp = new Date().toLocaleTimeString("pt-BR");
+    const timestamp = new Date().toLocaleTimeString('pt-BR');
     setLogs(prev => [...prev, `[${timestamp}] ${message}`]);
   };
 
   const runStep = async (step: SimulationStep, index: number) => {
     setSteps(prev => prev.map((s, i) => 
-      i === index ? { ...s, status: "running" } : s
+      i === index ? { ...s, status: 'running' } : s
     ));
     addLog(`▶ Iniciando: ${step.action} (${step.module})`);
 
@@ -121,13 +120,13 @@ export default function UsageSimulation() {
       `Executando ${step.description}`,
       `Módulo: ${step.module}`,
       `Tempo: ${step.duration}ms`,
-      hasError ? "❌ Erro simulado - recuperando..." : "✓ Concluído com sucesso"
+      hasError ? '❌ Erro simulado - recuperando...' : '✓ Concluído com sucesso'
     ];
 
     setSteps(prev => prev.map((s, i) => 
       i === index ? { 
         ...s, 
-        status: hasError ? "error" : "success",
+        status: hasError ? 'error' : 'success',
         logs: stepLogs
       } : s
     ));
@@ -142,20 +141,20 @@ export default function UsageSimulation() {
 
   const startSimulation = async () => {
     if (!selectedScenario) {
-      toast.error("Selecione um cenário primeiro");
+      toast.error('Selecione um cenário primeiro');
       return;
     }
 
     setIsRunning(true);
     setIsPaused(false);
     setCurrentStepIndex(0);
-    setSteps(selectedScenario.steps.map(s => ({ ...s, status: "pending", logs: [] })));
+    setSteps(selectedScenario.steps.map(s => ({ ...s, status: 'pending', logs: [] })));
     setLogs([]);
     setStats({ success: 0, error: 0, totalTime: 0 });
 
     addLog(`🚀 Iniciando simulação: ${selectedScenario.name}`);
     if (selectedScenario.offline) {
-      addLog("📴 Modo offline ativado");
+      addLog('📴 Modo offline ativado');
     }
 
     let successCount = 0;
@@ -164,11 +163,11 @@ export default function UsageSimulation() {
 
     for (let i = 0; i < selectedScenario.steps.length; i++) {
       if (isPaused) {
-        addLog("⏸ Simulação pausada");
+        addLog('⏸ Simulação pausada');
         while (isPaused) {
           await new Promise(resolve => setTimeout(resolve, 100));
         }
-        addLog("▶ Simulação retomada");
+        addLog('▶ Simulação retomada');
       }
 
       setCurrentStepIndex(i);
@@ -181,11 +180,11 @@ export default function UsageSimulation() {
       setStats({ success: successCount, error: errorCount, totalTime });
     }
 
-    addLog("✅ Simulação concluída!");
+    addLog(`✅ Simulação concluída!`);
     addLog(`📊 Resultados: ${successCount} sucessos, ${errorCount} erros, ${(totalTime / 1000).toFixed(1)}s total`);
     
     setIsRunning(false);
-    toast.success("Simulação concluída!");
+    toast.success('Simulação concluída!');
   };
 
   const pauseSimulation = () => {
@@ -196,42 +195,42 @@ export default function UsageSimulation() {
     setIsRunning(false);
     setIsPaused(false);
     setCurrentStepIndex(0);
-    setSteps(selectedScenario?.steps.map(s => ({ ...s, status: "pending", logs: [] })) || []);
+    setSteps(selectedScenario?.steps.map(s => ({ ...s, status: 'pending', logs: [] })) || []);
     setLogs([]);
     setStats({ success: 0, error: 0, totalTime: 0 });
   };
 
   const exportLogs = () => {
-    const content = logs.join("\n");
-    const blob = new Blob([content], { type: "text/plain" });
+    const content = logs.join('\n');
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `simulation-logs-${new Date().toISOString().split("T")[0]}.txt`;
+    a.download = `simulation-logs-${new Date().toISOString().split('T')[0]}.txt`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Logs exportados!");
+    toast.success('Logs exportados!');
   };
 
   useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
 
   const getModuleIcon = (module: string) => {
     switch (module) {
-    case "Fleet": return <Ship className="h-4 w-4" />;
-    case "Maintenance": return <Wrench className="h-4 w-4" />;
-    case "Reports": return <FileText className="h-4 w-4" />;
-    case "HR": return <Users className="h-4 w-4" />;
-    case "AI": return <Brain className="h-4 w-4" />;
-    case "Offline":
-    case "Sync": return <WifiOff className="h-4 w-4" />;
-    default: return <Activity className="h-4 w-4" />;
+      case 'Fleet': return <Ship className="h-4 w-4" />;
+      case 'Maintenance': return <Wrench className="h-4 w-4" />;
+      case 'Reports': return <FileText className="h-4 w-4" />;
+      case 'HR': return <Users className="h-4 w-4" />;
+      case 'AI': return <Brain className="h-4 w-4" />;
+      case 'Offline':
+      case 'Sync': return <WifiOff className="h-4 w-4" />;
+      default: return <Activity className="h-4 w-4" />;
     }
   };
 
   const progress = steps.length > 0 
-    ? ((steps.filter(s => s.status === "success" || s.status === "error").length) / steps.length) * 100
+    ? ((steps.filter(s => s.status === 'success' || s.status === 'error').length) / steps.length) * 100
     : 0;
 
   return (
@@ -250,9 +249,9 @@ export default function UsageSimulation() {
               Iniciar
             </Button>
           ) : (
-            <Button onClick={pauseSimulation} variant={isPaused ? "default" : "outline"}>
+            <Button onClick={pauseSimulation} variant={isPaused ? 'default' : 'outline'}>
               <Pause className="h-4 w-4 mr-2" />
-              {isPaused ? "Retomar" : "Pausar"}
+              {isPaused ? 'Retomar' : 'Pausar'}
             </Button>
           )}
           <Button variant="outline" onClick={resetSimulation}>
@@ -273,13 +272,13 @@ export default function UsageSimulation() {
             key={scenario.id}
             className={`cursor-pointer transition-all ${
               selectedScenario?.id === scenario.id 
-                ? "ring-2 ring-primary" 
-                : "hover:border-primary/50"
+                ? 'ring-2 ring-primary' 
+                : 'hover:border-primary/50'
             }`}
             onClick={() => {
               if (!isRunning) {
                 setSelectedScenario(scenario);
-                setSteps(scenario.steps.map(s => ({ ...s, status: "pending", logs: [] })));
+                setSteps(scenario.steps.map(s => ({ ...s, status: 'pending', logs: [] })));
               }
             }}
           >
@@ -324,23 +323,23 @@ export default function UsageSimulation() {
                     <div 
                       key={step.id}
                       className={`flex items-center gap-3 p-3 rounded-lg border ${
-                        step.status === "running" ? "bg-blue-500/10 border-blue-500" :
-                          step.status === "success" ? "bg-green-500/10 border-green-500/30" :
-                            step.status === "error" ? "bg-red-500/10 border-red-500/30" :
-                              idx === currentStepIndex && isRunning ? "border-primary" : ""
+                        step.status === 'running' ? 'bg-blue-500/10 border-blue-500' :
+                        step.status === 'success' ? 'bg-green-500/10 border-green-500/30' :
+                        step.status === 'error' ? 'bg-red-500/10 border-red-500/30' :
+                        idx === currentStepIndex && isRunning ? 'border-primary' : ''
                       }`}
                     >
                       <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
-                        step.status === "running" ? "bg-blue-500 animate-pulse" :
-                          step.status === "success" ? "bg-green-500" :
-                            step.status === "error" ? "bg-red-500" :
-                              "bg-muted"
+                        step.status === 'running' ? 'bg-blue-500 animate-pulse' :
+                        step.status === 'success' ? 'bg-green-500' :
+                        step.status === 'error' ? 'bg-red-500' :
+                        'bg-muted'
                       }`}>
-                        {step.status === "success" ? (
+                        {step.status === 'success' ? (
                           <CheckCircle2 className="h-4 w-4 text-white" />
-                        ) : step.status === "error" ? (
+                        ) : step.status === 'error' ? (
                           <XCircle className="h-4 w-4 text-white" />
-                        ) : step.status === "running" ? (
+                        ) : step.status === 'running' ? (
                           <Activity className="h-4 w-4 text-white animate-spin" />
                         ) : (
                           <span className="text-xs text-muted-foreground">{idx + 1}</span>
@@ -381,10 +380,10 @@ export default function UsageSimulation() {
                 <div className="space-y-1 text-green-400">
                   {logs.map((log, idx) => (
                     <div key={idx} className={
-                      log.includes("✗") || log.includes("Erro") ? "text-red-400" :
-                        log.includes("✓") || log.includes("sucesso") ? "text-green-400" :
-                          log.includes("▶") || log.includes("🚀") ? "text-blue-400" :
-                            "text-gray-400"
+                      log.includes('✗') || log.includes('Erro') ? 'text-red-400' :
+                      log.includes('✓') || log.includes('sucesso') ? 'text-green-400' :
+                      log.includes('▶') || log.includes('🚀') ? 'text-blue-400' :
+                      'text-gray-400'
                     }>
                       {log}
                     </div>

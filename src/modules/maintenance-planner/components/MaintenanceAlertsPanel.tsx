@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -122,16 +121,16 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "overdue":
-      return <XCircle className="h-4 w-4 text-destructive" />;
-    case "critical":
-      return <AlertTriangle className="h-4 w-4 text-destructive" />;
-    case "upcoming":
-      return <Clock className="h-4 w-4 text-warning" />;
-    case "warning":
-      return <Bell className="h-4 w-4 text-muted-foreground" />;
-    default:
-      return <Bell className="h-4 w-4" />;
+      case "overdue":
+        return <XCircle className="h-4 w-4 text-destructive" />;
+      case "critical":
+        return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case "upcoming":
+        return <Clock className="h-4 w-4 text-warning" />;
+      case "warning":
+        return <Bell className="h-4 w-4 text-muted-foreground" />;
+      default:
+        return <Bell className="h-4 w-4" />;
     }
   };
 
@@ -155,7 +154,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
       title: "Alerta marcado como lido",
       description: "O alerta foi marcado como lido",
     });
-  });
+  };
 
   const handleMarkAllAsRead = () => {
     setAlerts(prev => prev.map(alert => ({ ...alert, isRead: true })));
@@ -163,14 +162,14 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
       title: "Todos os alertas marcados como lidos",
       description: `${alerts.filter(a => !a.isRead).length} alertas marcados`,
     });
-  });
+  };
 
   const handleViewDetails = (alert: MaintenanceAlert) => {
     toast({
       title: alert.title,
       description: `${alert.equipment} - ${alert.description}`,
     });
-  });
+  };
 
   const filteredAlerts = alerts.filter(alert => {
     if (activeTab === "all") return true;
@@ -178,7 +177,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     if (activeTab === "overdue") return alert.type === "overdue";
     if (activeTab === "upcoming") return alert.type === "upcoming" || alert.type === "warning";
     return true;
-  };
+  });
 
   const overdueCount = alerts.filter(a => a.type === "overdue").length;
   const unreadCount = alerts.filter(a => !a.isRead).length;
@@ -273,8 +272,8 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                               </h4>
                               <Badge className={getPriorityBadge(alert.priority)} variant="secondary">
                                 {alert.priority === "critical" ? "Crítico" : 
-                                  alert.priority === "high" ? "Alto" :
-                                    alert.priority === "medium" ? "Médio" : "Baixo"}
+                                 alert.priority === "high" ? "Alto" :
+                                 alert.priority === "medium" ? "Médio" : "Baixo"}
                               </Badge>
                             </div>
                             <p className="text-xs text-muted-foreground mt-1">
@@ -289,14 +288,14 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                             </div>
                             <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
                               <Calendar className="h-3 w-3" />
-                              <span>Prazo: {new Date(alert.dueDate).toLocaleDateString("pt-BR")}</span>
+                              <span>Prazo: {new Date(alert.dueDate).toLocaleDateString('pt-BR')}</span>
                             </div>
                             <div className="flex gap-2 mt-2">
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 className="h-7 text-xs"
-                                onClick={() => handlehandleViewDetails}
+                                onClick={() => handleViewDetails(alert)}
                               >
                                 <Eye className="h-3 w-3 mr-1" />
                                 Detalhes
@@ -306,7 +305,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                                   variant="ghost"
                                   size="sm"
                                   className="h-7 text-xs"
-                                  onClick={() => handlehandleMarkAsRead}
+                                  onClick={() => handleMarkAsRead(alert.id)}
                                 >
                                   <Check className="h-3 w-3 mr-1" />
                                   Marcar lido

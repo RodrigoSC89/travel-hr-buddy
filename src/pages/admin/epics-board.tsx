@@ -3,7 +3,7 @@
  * Administrative panel for tracking patches and development progress
  */
 
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -290,16 +290,16 @@ export default function EpicsBoard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-    case "completed":
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-    case "in_progress":
-      return <Play className="h-4 w-4 text-blue-500" />;
-    case "testing":
-      return <Clock className="h-4 w-4 text-yellow-500" />;
-    case "blocked":
-      return <XCircle className="h-4 w-4 text-red-500" />;
-    default:
-      return <Circle className="h-4 w-4 text-gray-400" />;
+      case "completed":
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      case "in_progress":
+        return <Play className="h-4 w-4 text-blue-500" />;
+      case "testing":
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case "blocked":
+        return <XCircle className="h-4 w-4 text-red-500" />;
+      default:
+        return <Circle className="h-4 w-4 text-gray-400" />;
     }
   };
 
@@ -359,7 +359,7 @@ export default function EpicsBoard() {
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-  });
+  };
 
   const filteredEpics =
     selectedStatus === "all"

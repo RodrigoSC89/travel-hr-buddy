@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -85,7 +84,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
     } else {
       return (b.is_active ? 1 : 0) - (a.is_active ? 1 : 0);
     }
-  };
+  });
 
   const isPriceDropped = (alert: PriceAlert) => {
     return alert.current_price && alert.current_price <= alert.target_price;
@@ -103,21 +102,21 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
           <Button
             variant={sortBy === "created" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetSortBy}
+            onClick={() => setSortBy("created")}
           >
             Recentes
           </Button>
           <Button
             variant={sortBy === "target" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetSortBy}
+            onClick={() => setSortBy("target")}
           >
             Preço
           </Button>
           <Button
             variant={sortBy === "status" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetSortBy}
+            onClick={() => setSortBy("status")}
           >
             Status
           </Button>
@@ -181,7 +180,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handlehandleToggle}
+                    onClick={() => handleToggle(alert)}
                   >
                     {alert.is_active ? (
                       <>
@@ -198,7 +197,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleonEdit}
+                    onClick={() => onEdit(alert)}
                   >
                     <Edit className="w-4 h-4 mr-1" />
                     Editar
@@ -206,7 +205,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handlehandleDelete}
+                    onClick={() => handleDelete(alert.id)}
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
                     Excluir
@@ -219,4 +218,4 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
       )}
     </div>
   );
-});
+};

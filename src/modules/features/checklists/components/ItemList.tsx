@@ -9,7 +9,7 @@ interface ItemListProps {
   readonly?: boolean;
 }
 
-export const ItemList = memo(function({ items, onToggle, readonly = false }: ItemListProps) {
+export function ItemList({ items, onToggle, readonly = false }: ItemListProps) {
   const sortedItems = [...items].sort((a, b) => a.order - b.order);
 
   return (
@@ -18,7 +18,7 @@ export const ItemList = memo(function({ items, onToggle, readonly = false }: Ite
         <div 
           key={item.id} 
           className="flex items-start gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-          onClick={() => !readonly && onToggle?.(item.id}
+          onClick={() => !readonly && onToggle?.(item.id)}
         >
           <Checkbox 
             checked={item.status === "completed"} 
@@ -64,4 +64,4 @@ export const ItemList = memo(function({ items, onToggle, readonly = false }: Ite
       )}
     </div>
   );
-});
+}

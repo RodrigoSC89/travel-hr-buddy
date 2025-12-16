@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -401,14 +400,14 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
       title: "📄 OCR Ativado",
       description: "Sistema de análise de documentos pronto. Selecione um arquivo para processar.",
     });
-  });
+  };
 
   const generateReport = () => {
     toast({
       title: "📊 Gerando Relatório",
       description: "Relatório especializado sendo gerado em " + languages.find(l => l.code === selectedLanguage)?.name,
     });
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -519,7 +518,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 <Languages className="h-4 w-4 text-muted-foreground" />
                 <select
                   value={selectedLanguage}
-                  onChange={handleChange}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
                   className="text-sm border rounded px-2 py-1"
                 >
                   {languages.map((lang) => (
@@ -611,7 +610,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Textarea
                 placeholder="Digite sua consulta marítima... (ex: 'Requisitos SOLAS para embarcações', 'Compliance MARPOL', 'Certificações STCW')"
                 value={inputMessage}
-                onChange={handleChange}
+                onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -622,7 +621,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 disabled={isProcessing}
               />
               <Button
-                onClick={() => handleprocessMessage}
+                onClick={() => processMessage(inputMessage)}
                 disabled={isProcessing || !inputMessage.trim()}
                 size="icon"
                 className="h-[60px] w-[60px]"
@@ -636,7 +635,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleSetInputMessage}
+                onClick={() => setInputMessage("Quais são os requisitos SOLAS para equipamentos salva-vidas?")}
               >
                 <Shield className="h-3 w-3 mr-1" />
                 SOLAS
@@ -644,7 +643,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleSetInputMessage}
+                onClick={() => setInputMessage("Como fazer compliance com MARPOL Anexo VI?")}
               >
                 <Anchor className="h-3 w-3 mr-1" />
                 MARPOL
@@ -652,7 +651,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleSetInputMessage}
+                onClick={() => setInputMessage("Quais certificações STCW são necessárias para oficiais?")}
               >
                 <FileText className="h-3 w-3 mr-1" />
                 STCW
@@ -660,7 +659,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={handleSetInputMessage}
+                onClick={() => setInputMessage("Explique as regras COLREG para navegação em névoa")}
               >
                 <Compass className="h-3 w-3 mr-1" />
                 COLREG

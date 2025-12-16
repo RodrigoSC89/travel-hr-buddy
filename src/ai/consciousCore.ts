@@ -1,4 +1,3 @@
-
 /**
  * PATCH 218 - Conscious Core
  * Monitors all system flows, understands global state, and anticipates collapses or inconsistencies

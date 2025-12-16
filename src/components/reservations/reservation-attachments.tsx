@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -290,7 +289,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => window.open(attachment.file_url, "_blank"}
+                            onClick={() => window.open(attachment.file_url, "_blank")}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>

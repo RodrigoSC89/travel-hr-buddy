@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -336,7 +335,7 @@ const ProductionDeployCenter: React.FC = () => {
                       id="domain"
                       placeholder="exemplo.com.br"
                       value={deployConfig.domain}
-                      onChange={handleChange}))}
+                      onChange={(e) => setDeployConfig(prev => ({ ...prev, domain: e.target.value }))}
                     />
                   </div>
 
@@ -346,7 +345,7 @@ const ProductionDeployCenter: React.FC = () => {
                       id="subdomain"
                       placeholder="nautilus"
                       value={deployConfig.subdomain}
-                      onChange={handleChange}))}
+                      onChange={(e) => setDeployConfig(prev => ({ ...prev, subdomain: e.target.value }))}
                     />
                   </div>
 

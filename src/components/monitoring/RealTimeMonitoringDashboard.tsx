@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * Real-Time Monitoring Dashboard - PATCH 67.5
  * Live metrics visualization with performance, errors, and analytics
  */
@@ -16,7 +15,7 @@ import { userAnalytics } from "@/lib/monitoring/user-analytics";
 export default function RealTimeMonitoringDashboard() {
   const [perfSnapshot, setPerfSnapshot] = useState<PerformanceSnapshot | null>(null);
   const [recentErrors, setRecentErrors] = useState<TrackedError[]>([]);
-  const [analytics, setAnalytics] = useState<unknown>(null);
+  const [analytics, setAnalytics] = useState<any>(null);
   const [liveMetrics, setLiveMetrics] = useState<Record<string, WebVitalMetric>>({});
 
   useEffect(() => {
@@ -31,12 +30,12 @@ export default function RealTimeMonitoringDashboard() {
         ...prev,
         [metric.name]: metric,
       }));
-  };
+    });
 
     // Subscribe to errors
     const unsubscribeErrors = errorTracker.subscribe((error) => {
       setRecentErrors(prev => [error, ...prev].slice(0, 10));
-  };
+    });
 
     // Update snapshot every 5 seconds
     const interval = setInterval(() => {
@@ -337,7 +336,7 @@ export default function RealTimeMonitoringDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {analytics.events.recent.map((event: unknown, idx: number) => (
+                    {analytics.events.recent.map((event: any, idx: number) => (
                       <div key={idx} className="flex justify-between items-center p-2 rounded bg-muted/50">
                         <div>
                           <span className="text-sm font-medium">{event.name}</span>

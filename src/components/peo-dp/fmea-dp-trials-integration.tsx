@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -323,7 +322,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                   className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                     selectedReport?.id === report.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                   }`}
-                  onClick={handleSetSelectedReport}
+                  onClick={() => setSelectedReport(report)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -347,8 +346,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                       </div>
                       <Badge className={getRiskBadge(report.overallRisk)}>
                         Risco {report.overallRisk === "low" ? "Baixo" : 
-                          report.overallRisk === "medium" ? "Médio" :
-                            report.overallRisk === "high" ? "Alto" : "Crítico"}
+                               report.overallRisk === "medium" ? "Médio" :
+                               report.overallRisk === "high" ? "Alto" : "Crítico"}
                       </Badge>
                       <div className="flex gap-1">
                         <Button size="sm" variant="ghost">
@@ -426,16 +425,16 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                   key={level.level}
                   className={`p-4 rounded-lg border-2 ${
                     level.status === "green" ? "border-green-200 bg-green-50" :
-                      level.status === "yellow" ? "border-yellow-200 bg-yellow-50" :
-                        "border-red-200 bg-red-50"
+                    level.status === "yellow" ? "border-yellow-200 bg-yellow-50" :
+                    "border-red-200 bg-red-50"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
                         level.status === "green" ? "bg-green-600" :
-                          level.status === "yellow" ? "bg-yellow-600" :
-                            "bg-red-600"
+                        level.status === "yellow" ? "bg-yellow-600" :
+                        "bg-red-600"
                       }`}>
                         {level.level}
                       </div>
@@ -505,7 +504,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                           <Progress value={capability} className="flex-1 h-3" />
                           <span className={`text-sm font-medium w-12 ${
                             capability >= 80 ? "text-green-600" :
-                              capability >= 60 ? "text-yellow-600" : "text-red-600"
+                            capability >= 60 ? "text-yellow-600" : "text-red-600"
                           }`}>
                             {capability}%
                           </span>
@@ -530,7 +529,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                           <Progress value={capability} className="flex-1 h-3" />
                           <span className={`text-sm font-medium w-12 ${
                             capability >= 80 ? "text-green-600" :
-                              capability >= 60 ? "text-yellow-600" : "text-red-600"
+                            capability >= 60 ? "text-yellow-600" : "text-red-600"
                           }`}>
                             {capability}%
                           </span>

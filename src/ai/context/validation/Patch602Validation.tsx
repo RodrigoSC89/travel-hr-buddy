@@ -3,7 +3,7 @@
  * Tests context recognition across layers with transitions
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +21,7 @@ interface ContextLayer {
   actions: string[];
 }
 
-export const Patch602Validation = memo(function() {
+export function Patch602Validation() {
   const [layers, setLayers] = useState<ContextLayer[]>([
     { level: "Strategic", status: "inactive", metrics: { awareness: 0, adaptation: 0 }, actions: [] },
     { level: "Operational", status: "inactive", metrics: { awareness: 0, adaptation: 0 }, actions: [] },
@@ -68,7 +68,7 @@ export const Patch602Validation = memo(function() {
           awareness: 0.85 + Math.random() * 0.15,
           adaptation: 0.80 + Math.random() * 0.20
         }
-      };
+      });
       
       await new Promise(resolve => setTimeout(resolve, 1200));
     }
@@ -184,4 +184,4 @@ export const Patch602Validation = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

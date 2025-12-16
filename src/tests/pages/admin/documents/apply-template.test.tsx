@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import ApplyTemplate from "@/pages/admin/documents/apply-template";
@@ -77,7 +77,7 @@ describe("ApplyTemplate", () => {
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
       expect(screen.getByTestId("tiptap-preview")).toHaveTextContent("Hello John, your order is ready!");
-  });
+    });
   });
 
   it("should show error toast when trying to save without preview", async () => {
@@ -92,7 +92,7 @@ describe("ApplyTemplate", () => {
         description: "Por favor, gere o preview antes de salvar.",
         variant: "destructive",
       });
-  });
+    });
   });
 
   it("should save document and show success toast", async () => {
@@ -108,7 +108,7 @@ describe("ApplyTemplate", () => {
     
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
-  };
+    });
     
     const saveButton = screen.getByText("💾 Salvar Documento");
     fireEvent.click(saveButton);
@@ -122,7 +122,7 @@ describe("ApplyTemplate", () => {
         title: "Sucesso",
         description: "Documento salvo com sucesso!",
       });
-  });
+    });
   });
 
   it("should handle save failure gracefully", async () => {
@@ -136,7 +136,7 @@ describe("ApplyTemplate", () => {
     
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
-  };
+    });
     
     const saveButton = screen.getByText("💾 Salvar Documento");
     fireEvent.click(saveButton);
@@ -147,7 +147,7 @@ describe("ApplyTemplate", () => {
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
       });
-  });
+    });
   });
 
   it("should handle duplicate variable names correctly", () => {

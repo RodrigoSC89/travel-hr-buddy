@@ -34,6 +34,7 @@ class ValidationRegistry {
 
   register(validator: PatchValidator): void {
     if (this.validators.has(validator.metadata.id)) {
+      console.warn(`Validator for Patch ${validator.metadata.id} already registered, overwriting`);
     }
     this.validators.set(validator.metadata.id, validator);
   }

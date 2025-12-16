@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,7 @@ const MLC_KNOWLEDGE_BASE: Record<string, string> = {
   "renewal": "The Maritime Labour Certificate (MLC) must be renewed every 5 years. Intermediate inspections are required between the second and third anniversary dates of the certificate.",
 };
 
-export const InspectorChatbot = memo(function() {
+export function InspectorChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -129,7 +128,7 @@ export const InspectorChatbot = memo(function() {
             <Input
               placeholder="Ask about MLC regulations..."
               value={input}
-              onChange={handleChange}
+              onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               disabled={loading}
             />
@@ -141,4 +140,4 @@ export const InspectorChatbot = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

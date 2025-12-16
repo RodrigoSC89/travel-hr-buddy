@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * PATCH 394 - Complete Incident Workflow
  * Full lifecycle management: Report → Investigation → Resolution → Closure
  */
@@ -21,7 +20,7 @@ const loadJsPDF = async () => {
 };
 
 interface IncidentWorkflowProps {
-  incident: unknown: unknown: unknown;
+  incident: any;
   onUpdate: () => void;
 }
 
@@ -41,7 +40,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
   const updateIncidentStatus = async () => {
     try {
       const { error } = await supabase
-        .from("incident_reports" as unknown)
+        .from("incident_reports" as any)
         .update({
           status,
           updated_at: new Date().toISOString(),
@@ -52,13 +51,14 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       // Log workflow step (optional table)
       try {
-        await supabase.from("incident_workflow_logs" as unknown).insert({
+        await supabase.from("incident_workflow_logs" as any).insert({
           incident_id: incident.id,
           action: `Status changed to ${status}`,
           notes,
           performed_at: new Date().toISOString(),
         });
       } catch (logError) {
+        console.log("Workflow log not saved (table may not exist)");
       }
 
       toast({
@@ -68,7 +68,6 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       onUpdate();
     } catch (error) {
-      console.error("Error updating incident:", error);
       console.error("Error updating incident:", error);
       toast({
         title: "Error",
@@ -96,7 +95,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       // Save file reference to database (optional table)
       try {
-        await supabase.from("incident_attachments" as unknown).insert({
+        await supabase.from("incident_attachments" as any).insert({
           incident_id: incident.id,
           file_name: file.name,
           file_path: filePath,
@@ -104,6 +103,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           uploaded_at: new Date().toISOString(),
         });
       } catch (dbError) {
+        console.log("File metadata not saved (table may not exist)");
       }
 
       toast({
@@ -111,7 +111,6 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         description: "Evidence file uploaded successfully",
       });
     } catch (error) {
-      console.error("Error uploading file:", error);
       console.error("Error uploading file:", error);
       toast({
         title: "Upload Failed",
@@ -150,7 +149,6 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         description: "Incident report downloaded successfully",
       });
     } catch (error) {
-      console.error("Error exporting PDF:", error);
       console.error("Error exporting PDF:", error);
       toast({
         title: "Export Failed",
@@ -229,7 +227,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
               <Textarea
                 placeholder="Add workflow notes..."
                 value={notes}
-                onChange={handleChange}
+                onChange={(e) => setNotes(e.target.value)}
                 rows={3}
               />
             </div>

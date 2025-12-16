@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -68,13 +67,13 @@ const MaintenancePlanner = () => {
     });
   };
 
-  const handleJobCreated = (job: unknown) => {
+  const handleJobCreated = (job: any) => {
     toast({
       title: "Job Criado via IA",
       description: `${job.nome} - ${job.equipamento_nome}`,
     });
     fetchStats();
-  });
+  };
 
   if (loading) {
     return (
@@ -105,7 +104,7 @@ const MaintenancePlanner = () => {
           </Badge>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleSetShowAlertsPanel}>
+          <Button variant="outline" onClick={() => setShowAlertsPanel(true)}>
             <Bell className="mr-2 h-4 w-4" />
             Alertas
             {stats.overdue > 0 && (
@@ -118,7 +117,7 @@ const MaintenancePlanner = () => {
             <Download className="mr-2 h-4 w-4" />
             Exportar
           </Button>
-          <Button onClick={handleSetShowCreateDialog}>
+          <Button onClick={() => setShowCreateDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Novo Plano
           </Button>
@@ -223,7 +222,7 @@ const MaintenancePlanner = () => {
         </TabsContent>
 
         <TabsContent value="jobs" className="mt-6">
-          <JobsCenter onCreateJob={() => setShowCreateDialog(true} />
+          <JobsCenter onCreateJob={() => setShowCreateDialog(true)} />
         </TabsContent>
 
         <TabsContent value="horimetros" className="mt-6">

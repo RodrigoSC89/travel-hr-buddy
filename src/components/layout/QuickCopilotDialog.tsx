@@ -3,7 +3,7 @@
  * Assistente IA rápido no header
  */
 
-import { memo, memo, useCallback, useEffect, useRef, useState } from "react";;;
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +45,7 @@ const quickActions = [
   { label: "Ajuda Geral", icon: HelpCircle, prompt: "O que você pode fazer por mim?" },
 ];
 
-export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCopilotDialogProps) {
+export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -66,27 +66,27 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
     const msg = userMessage.toLowerCase();
     
     if (msg.includes("frota") || msg.includes("embarcações") || msg.includes("navios")) {
-      return "📊 **Status da Frota Atual:**\n\n- **20 embarcações** operacionais\n- **3 embarcações** em manutenção programada\n- **1 embarcação** em standby\n\n✅ Taxa de disponibilidade: **83%**\n\nDeseja ver detalhes de alguma embarcação específica?";
+      return `📊 **Status da Frota Atual:**\n\n- **20 embarcações** operacionais\n- **3 embarcações** em manutenção programada\n- **1 embarcação** em standby\n\n✅ Taxa de disponibilidade: **83%**\n\nDeseja ver detalhes de alguma embarcação específica?`;
     }
     
     if (msg.includes("manutenção") || msg.includes("manutenções")) {
-      return "🔧 **Manutenções Pendentes:**\n\n1. **Ocean Pioneer** - Manutenção preventiva (amanhã)\n2. **Sea Guardian** - Troca de filtros (próxima semana)\n3. **Atlantic Star** - Inspeção de casco (em 15 dias)\n\n⚠️ Total: **3 manutenções** nos próximos 30 dias\n\nPosso agendar ou reprogramar alguma?";
+      return `🔧 **Manutenções Pendentes:**\n\n1. **Ocean Pioneer** - Manutenção preventiva (amanhã)\n2. **Sea Guardian** - Troca de filtros (próxima semana)\n3. **Atlantic Star** - Inspeção de casco (em 15 dias)\n\n⚠️ Total: **3 manutenções** nos próximos 30 dias\n\nPosso agendar ou reprogramar alguma?`;
     }
     
     if (msg.includes("kpi") || msg.includes("indicador") || msg.includes("métricas")) {
-      return "📈 **KPIs do Dia:**\n\n- **Uptime da Frota:** 94.5%\n- **Índice de Segurança (TRIR):** 0.42\n- **Emissões CO2:** -12% vs meta\n- **Eficiência Operacional:** 87%\n- **Custos:** Dentro do orçamento\n\n🎯 Todos os indicadores dentro das metas!";
+      return `📈 **KPIs do Dia:**\n\n- **Uptime da Frota:** 94.5%\n- **Índice de Segurança (TRIR):** 0.42\n- **Emissões CO2:** -12% vs meta\n- **Eficiência Operacional:** 87%\n- **Custos:** Dentro do orçamento\n\n🎯 Todos os indicadores dentro das metas!`;
     }
     
     if (msg.includes("segurança") || msg.includes("alerta") || msg.includes("incidente")) {
-      return "🛡️ **Status de Segurança:**\n\n- **0 incidentes** nas últimas 24h\n- **156 dias** sem LTI (Lost Time Injury)\n- **2 alertas** de verificação pendente\n\n⚠️ Alertas ativos:\n1. Verificação de equipamento de segurança - Deck 3\n2. Atualização de treinamento - 5 tripulantes\n\nDeseja mais detalhes?";
+      return `🛡️ **Status de Segurança:**\n\n- **0 incidentes** nas últimas 24h\n- **156 dias** sem LTI (Lost Time Injury)\n- **2 alertas** de verificação pendente\n\n⚠️ Alertas ativos:\n1. Verificação de equipamento de segurança - Deck 3\n2. Atualização de treinamento - 5 tripulantes\n\nDeseja mais detalhes?`;
     }
     
     if (msg.includes("ajuda") || msg.includes("o que você pode")) {
-      return "🤖 **Como posso ajudar:**\n\n- 📊 Consultar status da frota\n- 🔧 Ver manutenções pendentes\n- 📈 Analisar KPIs e métricas\n- 🛡️ Verificar alertas de segurança\n- 📋 Gerar relatórios rápidos\n- 🌱 Consultar dados ESG\n- 👥 Status da tripulação\n- 📦 Verificar suprimentos\n\nBasta me perguntar!";
+      return `🤖 **Como posso ajudar:**\n\n- 📊 Consultar status da frota\n- 🔧 Ver manutenções pendentes\n- 📈 Analisar KPIs e métricas\n- 🛡️ Verificar alertas de segurança\n- 📋 Gerar relatórios rápidos\n- 🌱 Consultar dados ESG\n- 👥 Status da tripulação\n- 📦 Verificar suprimentos\n\nBasta me perguntar!`;
     }
     
     return `Entendi sua pergunta sobre "${userMessage}". \n\nPosso ajudar com:\n- Status da frota e embarcações\n- Manutenções programadas\n- KPIs e métricas operacionais\n- Alertas de segurança\n- Relatórios e análises\n\nPode reformular ou escolher uma das opções acima?`;
-  });
+  };
 
   const sendMessage = useCallback(async (messageText?: string) => {
     const text = messageText || input.trim();
@@ -130,7 +130,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
       e.preventDefault();
       sendMessage();
     }
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -156,7 +156,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
               variant="outline"
               size="sm"
               className="text-xs h-7"
-              onClick={() => handlesendMessage}
+              onClick={() => sendMessage(action.prompt)}
               disabled={isLoading}
             >
               <action.icon className="h-3 w-3 mr-1" />
@@ -201,7 +201,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
         <div className="flex gap-2 pt-2 border-t">
           <Input
             value={input}
-            onChange={handleChange}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Digite sua pergunta..."
             disabled={isLoading}
@@ -222,4 +222,4 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
       </DialogContent>
     </Dialog>
   );
-});
+}

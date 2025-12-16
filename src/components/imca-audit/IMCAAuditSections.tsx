@@ -110,7 +110,7 @@ interface Props {
   sectionScores: Record<string, { compliant: number; nonCompliant: number; total: number }>;
 }
 
-export const IMCAAuditSections = memo(function({ selectedDPClass, sectionScores }: Props) {
+export function IMCAAuditSections({ selectedDPClass, sectionScores }: Props) {
   const calculateOverallScore = () => {
     let weightedSum = 0;
     let totalWeight = 0;
@@ -125,13 +125,13 @@ export const IMCAAuditSections = memo(function({ selectedDPClass, sectionScores 
     });
 
     return totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
-  });
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600";
     if (score >= 70) return "text-amber-600";
     return "text-red-600";
-  });
+  };
 
   const getScoreBadge = (score: number) => {
     if (score >= 90) return <Badge className="bg-green-500">Conforme</Badge>;

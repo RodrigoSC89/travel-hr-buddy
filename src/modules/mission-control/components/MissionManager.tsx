@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,7 @@ interface Mission {
   endDate?: Date;
 }
 
-export const MissionManager = memo(function() {
+export function MissionManager() {
   const [missions, setMissions] = useState<Mission[]>([
     {
       id: "1",
@@ -80,7 +79,7 @@ export const MissionManager = memo(function() {
       status: "planned",
       agents: selectedAgents.map(a => ({ ...a, status: "assigned" as const })),
       createdAt: new Date()
-    });
+    };
 
     setMissions([mission, ...missions]);
     
@@ -167,7 +166,7 @@ export const MissionManager = memo(function() {
                   id="name"
                   placeholder="Ex: Inspeção de Segurança"
                   value={newMission.name}
-                  onChange={handleChange}
+                  onChange={(e) => setNewMission({ ...newMission, name: e.target.value })}
                 />
               </div>
               <div className="grid gap-2">
@@ -176,7 +175,7 @@ export const MissionManager = memo(function() {
                   id="description"
                   placeholder="Descreva os objetivos e detalhes da missão"
                   value={newMission.description}
-                  onChange={handleChange}
+                  onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
                   rows={3}
                 />
               </div>
@@ -209,7 +208,9 @@ export const MissionManager = memo(function() {
                         type="checkbox"
                         checked={newMission.agents.includes(agent.id)}
                         disabled={agent.status === "assigned"}
-                        onChange={handleChange});
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setNewMission({ ...newMission, agents: [...newMission.agents, agent.id] });
                           } else {
                             setNewMission({ ...newMission, agents: newMission.agents.filter(id => id !== agent.id) });
                           }
@@ -231,7 +232,7 @@ export const MissionManager = memo(function() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsDialogOpen}>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateMission}>

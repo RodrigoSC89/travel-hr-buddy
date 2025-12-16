@@ -3,7 +3,7 @@
  * PATCH 549 - Advanced Maritime Intelligence
  */
 
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -102,25 +102,25 @@ export default function DPCopilot() {
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      const SpeechRecognition = (window as unknown).webkitSpeechRecognition;
+      const SpeechRecognition = (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = "pt-BR";
 
-      recognitionRef.current.onresult = (event: Event) => {
+      recognitionRef.current.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
-      });
+      };
 
       recognitionRef.current.onerror = () => {
         setIsListening(false);
-      });
+      };
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
-      });
+      };
     }
   }, []);
 
@@ -164,7 +164,7 @@ export default function DPCopilot() {
           },
           history: messages.slice(-6).map(m => ({ role: m.role, content: m.content }))
         }
-      };
+      });
 
       if (response.error) throw response.error;
 
@@ -292,7 +292,7 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
         variant: level === "red" ? "destructive" : "default"
       });
     }
-  });
+  };
 
   const quickActions = [
     { label: "Status ASOG", query: "Qual o status atual do ASOG?" },
@@ -306,20 +306,20 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
       {/* ASOG Status Banner */}
       <Card className={`border-l-4 ${
         currentASOG.level === "green" ? "border-l-green-500 bg-green-500/5" :
-          currentASOG.level === "yellow" ? "border-l-yellow-500 bg-yellow-500/5" :
-            "border-l-red-500 bg-red-500/5"
+        currentASOG.level === "yellow" ? "border-l-yellow-500 bg-yellow-500/5" :
+        "border-l-red-500 bg-red-500/5"
       }`}>
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-full ${
                 currentASOG.level === "green" ? "bg-green-500/20" :
-                  currentASOG.level === "yellow" ? "bg-yellow-500/20" :
-                    "bg-red-500/20"
+                currentASOG.level === "yellow" ? "bg-yellow-500/20" :
+                "bg-red-500/20"
               }`}>
                 {currentASOG.level === "green" ? <CheckCircle className="h-5 w-5 text-green-500" /> :
-                  currentASOG.level === "yellow" ? <AlertTriangle className="h-5 w-5 text-yellow-500" /> :
-                    <XCircle className="h-5 w-5 text-red-500" />}
+                 currentASOG.level === "yellow" ? <AlertTriangle className="h-5 w-5 text-yellow-500" /> :
+                 <XCircle className="h-5 w-5 text-red-500" />}
               </div>
               <div>
                 <h4 className="font-semibold flex items-center gap-2">
@@ -332,10 +332,10 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => handlesimulateASOGChange}>
+              <Button variant="outline" size="sm" onClick={() => simulateASOGChange("green")}>
                 <CheckCircle className="h-4 w-4 mr-1" /> Normal
               </Button>
-              <Button variant="outline" size="sm" onClick={() => handlesimulateASOGChange}>
+              <Button variant="outline" size="sm" onClick={() => simulateASOGChange("yellow")}>
                 <AlertTriangle className="h-4 w-4 mr-1" /> Alerta
               </Button>
             </div>
@@ -414,7 +414,7 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
               </Button>
               <Textarea
                 value={input}
-                onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();

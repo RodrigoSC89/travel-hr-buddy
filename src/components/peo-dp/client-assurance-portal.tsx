@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,8 @@ import {
   TrendingUp,
   Lock,
   Globe,
-  BarChart3
+  BarChart3,
+  RefreshCw
 } from "lucide-react";
 
 interface VesselStatus {
@@ -98,19 +98,19 @@ export const ClientAssurancePortal: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "green": case "compliant": case "within_limits": return "text-green-500";
-    case "yellow": case "pending": case "approaching_limits": return "text-yellow-500";
-    case "red": case "non_compliant": case "exceeded": return "text-red-500";
-    default: return "text-muted-foreground";
+      case "green": case "compliant": case "within_limits": return "text-green-500";
+      case "yellow": case "pending": case "approaching_limits": return "text-yellow-500";
+      case "red": case "non_compliant": case "exceeded": return "text-red-500";
+      default: return "text-muted-foreground";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
-    case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
-    case "non_compliant": return <Badge variant="destructive">Não Conforme</Badge>;
-    default: return <Badge variant="secondary">{status}</Badge>;
+      case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
+      case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
+      case "non_compliant": return <Badge variant="destructive">Não Conforme</Badge>;
+      default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 

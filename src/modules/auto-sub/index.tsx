@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 184.0 - Autonomous Submission System (AutoSub)
  * AI-driven autonomous mission planning for underwater operations
  * 
@@ -60,7 +59,7 @@ const AutoSub: React.FC = () => {
   useEffect(() => {
     planner.onFeedback((fb) => {
       setFeedback(prev => [fb, ...prev].slice(0, 20));
-  });
+    });
   }, [planner]);
 
   const handleGeneratePlan = () => {
@@ -178,7 +177,7 @@ const AutoSub: React.FC = () => {
                 <label className="text-xs text-zinc-400 mb-2 block">Area Name</label>
                 <Input
                   value={areaName}
-                  onChange={handleChange}
+                  onChange={(e) => setAreaName(e.target.value)}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                 />
               </div>
@@ -189,7 +188,7 @@ const AutoSub: React.FC = () => {
                     type="number"
                     step="0.01"
                     value={northBound}
-                    onChange={handleChange}
+                    onChange={(e) => setNorthBound(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -199,7 +198,7 @@ const AutoSub: React.FC = () => {
                     type="number"
                     step="0.01"
                     value={southBound}
-                    onChange={handleChange}
+                    onChange={(e) => setSouthBound(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -209,7 +208,7 @@ const AutoSub: React.FC = () => {
                     type="number"
                     step="0.01"
                     value={eastBound}
-                    onChange={handleChange}
+                    onChange={(e) => setEastBound(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -219,7 +218,7 @@ const AutoSub: React.FC = () => {
                     type="number"
                     step="0.01"
                     value={westBound}
-                    onChange={handleChange}
+                    onChange={(e) => setWestBound(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -228,7 +227,7 @@ const AutoSub: React.FC = () => {
                   <Input
                     type="number"
                     value={minDepth}
-                    onChange={handleChange}
+                    onChange={(e) => setMinDepth(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -237,7 +236,7 @@ const AutoSub: React.FC = () => {
                   <Input
                     type="number"
                     value={maxDepth}
-                    onChange={handleChange}
+                    onChange={(e) => setMaxDepth(parseFloat(e.target.value))}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                   />
                 </div>
@@ -259,7 +258,7 @@ const AutoSub: React.FC = () => {
                   type="number"
                   step="0.1"
                   value={maxCurrent}
-                  onChange={handleChange}
+                  onChange={(e) => setMaxCurrent(parseFloat(e.target.value))}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                 />
               </div>
@@ -269,7 +268,7 @@ const AutoSub: React.FC = () => {
                   type="number"
                   step="0.1"
                   value={maxWaves}
-                  onChange={handleChange}
+                  onChange={(e) => setMaxWaves(parseFloat(e.target.value))}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                 />
               </div>
@@ -278,7 +277,7 @@ const AutoSub: React.FC = () => {
                 <Input
                   type="number"
                   value={minVisibility}
-                  onChange={handleChange}
+                  onChange={(e) => setMinVisibility(parseFloat(e.target.value))}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                 />
               </div>
@@ -286,7 +285,7 @@ const AutoSub: React.FC = () => {
                 <label className="text-xs text-zinc-400 mb-2 block">Scan Pattern</label>
                 <select
                   value={scanPattern}
-                  onChange={handleChange}
+                  onChange={(e) => setScanPattern(e.target.value as any)}
                   className="w-full bg-zinc-900/50 border border-zinc-700 text-white rounded-md p-2"
                 >
                   <option value="grid">Grid (Lawnmower)</option>

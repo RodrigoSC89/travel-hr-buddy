@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import { logger } from "@/lib/logger";
 import { Textarea } from "@/components/ui/textarea";
@@ -56,7 +56,7 @@ export default function SGSOAuditPage() {
       if (!error && data) {
         setVessels(data);
       }
-    });
+    };
     fetchVessels();
   }, []);
 
@@ -80,8 +80,8 @@ export default function SGSOAuditPage() {
               compliance: match?.compliance_status || "compliant",
               evidence: match?.evidence || "",
               comment: match?.comment || ""
-            });
-  };
+            };
+          });
 
           setAuditData(updatedData);
           toast.success("✅ Última auditoria carregada.");
@@ -90,14 +90,14 @@ export default function SGSOAuditPage() {
         const error = err instanceof Error ? err : new Error(String(err));
         toast.error(`Erro ao carregar auditoria: ${error.message}`);
       }
-    });
+    };
 
     fetchAudit();
   }, [selectedVessel]);
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData];
-    (updated[index] as unknown)[field] = value;
+    (updated[index] as any)[field] = value;
     setAuditData(updated);
   };
 
@@ -149,7 +149,7 @@ export default function SGSOAuditPage() {
       })
       .from(element)
       .save();
-  });
+  };
 
   const handleExplainWithAI = async (index: number) => {
     const item = auditData[index];
@@ -225,7 +225,7 @@ export default function SGSOAuditPage() {
             <RadioGroup
               defaultValue="compliant"
               className="flex gap-4 mt-2"
-              onValueChange={val => handleChange(idx, "compliance", val}
+              onValueChange={val => handleChange(idx, "compliance", val)}
             >
               <div className="flex items-center gap-1">
                 <RadioGroupItem value="compliant" id={`c-${idx}`} />
@@ -244,17 +244,17 @@ export default function SGSOAuditPage() {
             <Textarea
               placeholder="📄 Descreva a evidência observada"
               value={item.evidence}
-              onChange={e => handleChange(idx, "evidence", e.target.value}
+              onChange={e => handleChange(idx, "evidence", e.target.value)}
             />
             <Textarea
               placeholder="💬 Comentário adicional ou observação"
               value={item.comment}
-              onChange={e => handleChange(idx, "comment", e.target.value}
+              onChange={e => handleChange(idx, "comment", e.target.value)}
             />
             
             <Button
               variant="outline"
-              onClick={() => handlehandleExplainWithAI}
+              onClick={() => handleExplainWithAI(idx)}
               disabled={explainLoading === idx}
             >
               🤖 {explainLoading === idx ? "Carregando..." : "Explicar com IA"}

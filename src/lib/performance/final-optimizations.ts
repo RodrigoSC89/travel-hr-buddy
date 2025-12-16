@@ -15,7 +15,7 @@ export function createLazyObserver(
       }
     });
   }, {
-    rootMargin: "100px",
+    rootMargin: '100px',
     threshold: 0.1,
     ...options
   });
@@ -113,6 +113,7 @@ export function measureTime<T>(fn: () => T, label?: string): T {
   const duration = performance.now() - start;
   
   if (label) {
+    console.debug(`[Performance] ${label}: ${duration.toFixed(2)}ms`);
   }
   
   return result;
@@ -128,6 +129,7 @@ export async function measureTimeAsync<T>(
   const duration = performance.now() - start;
   
   if (label) {
+    console.debug(`[Performance] ${label}: ${duration.toFixed(2)}ms`);
   }
   
   return result;

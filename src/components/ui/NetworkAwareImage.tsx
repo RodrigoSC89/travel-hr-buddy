@@ -3,7 +3,7 @@
  * Automatically adjusts image quality based on connection speed
  */
 
-import { memo, memo, useEffect, useMemo, useRef, useState, useCallback } from "react";;;
+import { useState, useEffect, useRef, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useSlowNetwork } from "@/components/performance/SlowNetworkOptimizer";
 import { Skeleton } from "./skeleton";
@@ -23,7 +23,7 @@ interface NetworkAwareImageProps {
   aspectRatio?: string;
 }
 
-export const NetworkAwareImage = memo(function({
+export function NetworkAwareImage({
   src,
   alt,
   className,
@@ -143,7 +143,7 @@ export const NetworkAwareImage = memo(function({
 /**
  * Optimized avatar for slow networks
  */
-export const NetworkAwareAvatar = memo(function({
+export function NetworkAwareAvatar({
   src,
   alt,
   fallbackInitials,
@@ -208,8 +208,8 @@ export const NetworkAwareAvatar = memo(function({
           alt={alt}
           loading="lazy"
           decoding="async"
-          onLoad={() => setLoadState("loaded"}
-          onError={() => setLoadState("error"}
+          onLoad={() => setLoadState("loaded")}
+          onError={() => setLoadState("error")}
           className={cn(
             "absolute inset-0 w-full h-full object-cover transition-opacity duration-200",
             loadState === "loaded" ? "opacity-100" : "opacity-0"
@@ -218,4 +218,4 @@ export const NetworkAwareAvatar = memo(function({
       )}
     </div>
   );
-});
+}

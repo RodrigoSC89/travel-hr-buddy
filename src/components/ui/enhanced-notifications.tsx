@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -210,7 +209,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
         
         if (soundEnabled && "Audio" in window) {
           // Som de notificação simples
-          const audioContext = new (window.AudioContext || (window as unknown).webkitAudioContext)();
+          const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
           const oscillator = audioContext.createOscillator();
           const gainNode = audioContext.createGain();
           
@@ -282,7 +281,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
       title: "Notificações",
       description: "Todas as notificações foram marcadas como lidas"
     });
-  });
+  };
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(notification => notification.id !== id));
@@ -294,7 +293,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
     case "urgent": return notification.priority === "urgent" || notification.priority === "high";
     default: return true;
     }
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const urgentCount = notifications.filter(n => n.priority === "urgent").length;
@@ -328,7 +327,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleSetSoundEnabled}
+                onClick={() => setSoundEnabled(!soundEnabled)}
                 className="w-8 h-8 p-0"
               >
                 {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -349,7 +348,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
             <Button
               variant={filter === "all" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilter}
+              onClick={() => setFilter("all")}
               className="text-xs"
             >
               Todas ({notifications.length})
@@ -357,7 +356,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
             <Button
               variant={filter === "unread" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilter}
+              onClick={() => setFilter("unread")}
               className="text-xs"
             >
               Não lidas ({unreadCount})
@@ -365,7 +364,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
             <Button
               variant={filter === "urgent" ? "destructive" : "outline"}
               size="sm"
-              onClick={handleSetFilter}
+              onClick={() => setFilter("urgent")}
               className="text-xs"
             >
               Urgentes ({urgentCount})
@@ -404,7 +403,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                           ? "bg-primary/5 border-primary/30 shadow-sm" 
                           : "bg-background border-border/30"
                       } hover:shadow-md hover:scale-[1.02]`}
-                      onClick={() => handlemarkAsRead}
+                      onClick={() => markAsRead(notification.id)}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">

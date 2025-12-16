@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -138,7 +137,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
         item.category.toLowerCase().includes(searchText) ||
         (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchText)))
       );
-  };
+    });
 
     // Apply filter
     const filteredByType = activeFilter === "all" 
@@ -158,7 +157,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
       saveToCache("search_data", {
         recent: newRecent,
         favorites
-      };
+      });
 
       navigate(result.route);
       onOpenChange(false);
@@ -176,7 +175,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
     saveToCache("search_data", {
       recent: recentSearches,
       favorites: newFavorites
-    };
+    });
   };
 
   const handleRecentSearch = (searchTerm: string) => {
@@ -214,7 +213,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
             <Input
               placeholder="Digite para buscar páginas, documentos, funcionários..."
               value={query}
-              onChange={handleChange}
+              onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
               className="pl-10 text-base"
               autoFocus
@@ -227,7 +226,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                 key={filter.key}
                 variant={activeFilter === filter.key ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetActiveFilter}
+                onClick={() => setActiveFilter(filter.key)}
                 className="flex items-center gap-1"
               >
                 {filter.icon}
@@ -251,7 +250,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                       <div
                         key={result.id}
                         className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors group"
-                        onClick={() => handlehandleResultClick}
+                        onClick={() => handleResultClick(result)}
                       >
                         <div className="flex-shrink-0 text-primary">
                           {result.icon}
@@ -313,7 +312,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                     <div
                       key={search.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handlehandleResultClick}
+                      onClick={() => handleResultClick(search)}
                     >
                       {search.icon}
                       <span className="text-sm ml-2">{search.title}</span>
@@ -335,7 +334,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                     <div
                       key={favorite.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handlehandleResultClick}
+                      onClick={() => handleResultClick(favorite)}
                     >
                       <div className="flex-shrink-0 text-primary">
                         {favorite.icon}

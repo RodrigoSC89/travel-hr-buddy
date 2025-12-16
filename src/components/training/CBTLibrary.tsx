@@ -1,4 +1,4 @@
-import { memo, memo, useMemo, useState, useCallback } from "react";;;
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,7 +66,7 @@ const statusColors: Record<string, string> = {
   expired: "bg-orange-500/20 text-orange-400",
 };
 
-export const CBTLibrary = memo(function() {
+export function CBTLibrary() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterMandatory, setFilterMandatory] = useState<string>("all");
@@ -97,7 +97,7 @@ export const CBTLibrary = memo(function() {
 
   const getCourseProgress = (courseId: string) => {
     return progress.find(p => p.course_id === courseId);
-  });
+  };
 
   const filteredCourses = useMemo(() => {
     return courses.filter(course => {
@@ -107,7 +107,7 @@ export const CBTLibrary = memo(function() {
       const matchesMandatory = filterMandatory === "all" || 
         (filterMandatory === "mandatory" ? course.is_mandatory : !course.is_mandatory);
       return matchesSearch && matchesCategory && matchesMandatory;
-  };
+    });
   }, [courses, searchQuery, filterCategory, filterMandatory]);
 
   // Stats
@@ -217,7 +217,7 @@ export const CBTLibrary = memo(function() {
             placeholder="Buscar cursos..." 
             className="pl-10 bg-muted/30"
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Select value={filterCategory} onValueChange={setFilterCategory}>
@@ -324,8 +324,8 @@ export const CBTLibrary = memo(function() {
                           statusColors[courseProgress.status]?.split(" ")[1]
                         )}>
                           {courseProgress.status === "completed" ? "Concluído" :
-                            courseProgress.status === "in_progress" ? "Em Andamento" :
-                              courseProgress.status === "failed" ? "Não Aprovado" : "Expirado"}
+                           courseProgress.status === "in_progress" ? "Em Andamento" :
+                           courseProgress.status === "failed" ? "Não Aprovado" : "Expirado"}
                         </span>
                         <span className="text-muted-foreground">{courseProgress.progress_percent}%</span>
                       </div>
@@ -368,4 +368,4 @@ export const CBTLibrary = memo(function() {
       )}
     </div>
   );
-});
+}

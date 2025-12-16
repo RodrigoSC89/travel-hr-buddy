@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";;;
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -78,7 +78,7 @@ export default function ListaAuditoriasIMCA() {
       a.item_auditado?.toLowerCase().includes(searchTerm) ||
       a.resultado?.toLowerCase().includes(searchTerm)
     );
-  };
+  });
 
   const exportarCSV = () => {
     const headers = ["Navio", "Data", "Norma", "Item Auditado", "Resultado", "Comentários"];
@@ -141,7 +141,7 @@ export default function ListaAuditoriasIMCA() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
-      };
+      });
       const dataExplain = await resExplain.json();
       setExplicacao((prev) => ({ ...prev, [id]: dataExplain.resultado }));
 
@@ -153,7 +153,7 @@ export default function ListaAuditoriasIMCA() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
-      };
+      });
       const dataPlano = await resPlano.json();
       setPlano((prev) => ({ ...prev, [id]: dataPlano.plano }));
 
@@ -183,7 +183,7 @@ export default function ListaAuditoriasIMCA() {
       <Input
         placeholder="🔍 Filtrar por navio, norma, item ou resultado..."
         value={filtro}
-        onChange={handleChange}
+        onChange={(e) => setFiltro(e.target.value)}
       />
 
       <div className="text-sm text-muted-foreground mt-2">
@@ -221,7 +221,7 @@ export default function ListaAuditoriasIMCA() {
                   <div className="mt-2 space-y-2">
                     <Button
                       disabled={loadingIA === a.id}
-                      onClick={() => handleexplicarIA}
+                      onClick={() => explicarIA(a.id, a.navio, a.item_auditado, a.norma)}
                       className="w-full md:w-auto"
                     >
                       {loadingIA === a.id ? "Gerando análise..." : "🧠 Análise IA e Plano de Ação"}

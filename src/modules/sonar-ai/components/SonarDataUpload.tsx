@@ -1,5 +1,4 @@
 /**
-import { useCallback, useState } from "react";;
  * PATCH 407: Sonar Data Upload Component
  * Upload files (JSON/CSV/TXT) with mock streaming visualization
  */
@@ -12,13 +11,13 @@ import { Upload, FileJson, FileText, Table, Loader2 } from "lucide-react";
 import { SonarAIService } from "../sonar-service";
 import { cn } from "@/lib/utils";
 
-export const SonarDataUpload = memo(function() {
+export function SonarDataUpload() {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const { toast } = useToast();
 
   const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]);
+    const file = event.target.files?.[0];
     if (!file) return;
 
     const fileType = file.name.split(".").pop()?.toUpperCase();
@@ -59,7 +58,7 @@ export const SonarDataUpload = memo(function() {
             obj[header.trim()] = values[index]?.trim();
             return obj;
           }, {} as Record<string, string>);
-  });
+        });
       } else {
         parsedData = { raw: content };
       }
@@ -80,7 +79,7 @@ export const SonarDataUpload = memo(function() {
         },
         anomalies: Math.random() > 0.7 ? { detected: true, count: Math.floor(Math.random() * 5) } : null,
         recommendations: "Continue monitoring frequency patterns",
-      });
+      };
 
       // Mock alerts
       const mockAlerts = [];
@@ -224,4 +223,4 @@ export const SonarDataUpload = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

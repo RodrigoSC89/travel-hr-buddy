@@ -16,7 +16,7 @@ const competencyRequirements = [
   { role: "Master", imcaM117: "DP Authority", stcw: "STCW II/2", simulator: "Overview", experience: "DP Command" },
 ];
 
-export const IMCADPCompetencyMatrix = memo(function({ selectedDPClass }: Props) {
+export function IMCADPCompetencyMatrix({ selectedDPClass }: Props) {
   return (
     <Card>
       <CardHeader>
@@ -60,4 +60,4 @@ export const IMCADPCompetencyMatrix = memo(function({ selectedDPClass }: Props) 
       </CardContent>
     </Card>
   );
-});
+}

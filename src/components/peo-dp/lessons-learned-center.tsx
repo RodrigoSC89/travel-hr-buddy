@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -219,7 +218,7 @@ export const LessonsLearnedCenter: React.FC = () => {
     const matchesFailure = filterFailureType === "all" || lesson.failureType === filterFailureType;
     const matchesSeverity = filterSeverity === "all" || lesson.severity === filterSeverity;
     return matchesSearch && matchesSource && matchesFailure && matchesSeverity;
-  };
+  });
 
   const stats = {
     total: lessons.length,
@@ -244,10 +243,10 @@ export const LessonsLearnedCenter: React.FC = () => {
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-    case "Critical": return <Badge variant="destructive">Crítico</Badge>;
-    case "High": return <Badge className="bg-orange-500 text-white">Alto</Badge>;
-    case "Medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
-    default: return <Badge variant="secondary">Baixo</Badge>;
+      case "Critical": return <Badge variant="destructive">Crítico</Badge>;
+      case "High": return <Badge className="bg-orange-500 text-white">Alto</Badge>;
+      case "Medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+      default: return <Badge variant="secondary">Baixo</Badge>;
     }
   };
 
@@ -349,7 +348,7 @@ export const LessonsLearnedCenter: React.FC = () => {
               <div className="flex items-center gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar por título, descrição ou tags..." value={searchTerm} onChange={handleChange} className="pl-10" />
+                  <Input placeholder="Buscar por título, descrição ou tags..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
                 </div>
                 <Select value={filterSource} onValueChange={setFilterSource}>
                   <SelectTrigger className="w-36"><Globe className="w-4 h-4 mr-2" /><SelectValue /></SelectTrigger>
@@ -390,7 +389,7 @@ export const LessonsLearnedCenter: React.FC = () => {
           {/* Lessons List */}
           <div className="grid grid-cols-1 gap-4">
             {filteredLessons.map((lesson) => (
-              <Card key={lesson.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={handleSetSelectedLesson}>
+              <Card key={lesson.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => setSelectedLesson(lesson)}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">
@@ -535,7 +534,7 @@ export const LessonsLearnedCenter: React.FC = () => {
       </Tabs>
 
       {/* Detail Dialog */}
-      <Dialog open={!!selectedLesson} onOpenChange={() => setSelectedLesson(null}>
+      <Dialog open={!!selectedLesson} onOpenChange={() => setSelectedLesson(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           {selectedLesson && (
             <>
@@ -600,10 +599,10 @@ export const LessonsLearnedCenter: React.FC = () => {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <Button onClick={() => handlehandleDownloadPDF}>
+                  <Button onClick={() => handleDownloadPDF(selectedLesson)}>
                     <Download className="w-4 h-4 mr-2" />Baixar PDF
                   </Button>
-                  <Button variant="outline" onClick={() => handlehandleLinkToTraining}>
+                  <Button variant="outline" onClick={() => handleLinkToTraining(selectedLesson)}>
                     <Link2 className="w-4 h-4 mr-2" />Vincular ao CPD
                   </Button>
                 </div>

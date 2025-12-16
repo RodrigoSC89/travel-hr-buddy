@@ -1,32 +1,30 @@
-import { useCallback, useEffect, useState } from "react";;
-
 /**
  * DevOps Panel - PATCH 960
  * Painel técnico local para monitoramento e controle em campo
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Wifi, WifiOff, Database, Cpu, HardDrive, RefreshCw, 
   AlertTriangle, CheckCircle, Clock, Zap, Server, Activity,
   Download, Upload, Trash2, Settings, Bug, FileText
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { indexedDBSync } from "@/lib/offline/indexeddb-sync";
-import { networkQualityMonitor, useNetworkQuality } from "@/lib/performance/network-quality-monitor";
-import { offlineSyncManager } from "@/lib/offline/sync-manager";
-import { circuitBreakerRegistry } from "@/lib/offline/circuit-breaker";
-import { bandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { indexedDBSync } from '@/lib/offline/indexeddb-sync';
+import { networkQualityMonitor, useNetworkQuality } from '@/lib/performance/network-quality-monitor';
+import { offlineSyncManager } from '@/lib/offline/sync-manager';
+import { circuitBreakerRegistry } from '@/lib/offline/circuit-breaker';
+import { bandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import { cn } from '@/lib/utils';
 
 interface SystemMetrics {
   memory: { used: number; total: number };
@@ -39,12 +37,12 @@ interface SystemMetrics {
 interface LogEntry {
   id: string;
   timestamp: Date;
-  level: "info" | "warn" | "error";
+  level: 'info' | 'warn' | 'error';
   module: string;
   message: string;
 }
 
-export const DevOpsPanel = memo(function() {
+export function DevOpsPanel() {
   const { toast } = useToast();
   const networkQuality = useNetworkQuality();
   const [metrics, setMetrics] = useState<SystemMetrics | null>(null);
@@ -59,7 +57,7 @@ export const DevOpsPanel = memo(function() {
     
     try {
       // Memory (if available)
-      const memory = (performance as unknown).memory;
+      const memory = (performance as any).memory;
       const memoryInfo = memory ? {
         used: memory.usedJSHeapSize,
         total: memory.jsHeapSizeLimit,
@@ -91,15 +89,15 @@ export const DevOpsPanel = memo(function() {
       });
 
       // Add log entry
-      addLog("info", "DevOps", "Métricas coletadas com sucesso");
+      addLog('info', 'DevOps', 'Métricas coletadas com sucesso');
     } catch (error) {
-      addLog("error", "DevOps", `Erro ao coletar métricas: ${error}`);
+      addLog('error', 'DevOps', `Erro ao coletar métricas: ${error}`);
     } finally {
       setIsRefreshing(false);
     }
   }, []);
 
-  const addLog = (level: LogEntry["level"], module: string, message: string) => {
+  const addLog = (level: LogEntry['level'], module: string, message: string) => {
     setLogs(prev => [{
       id: `log-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
       timestamp: new Date(),
@@ -111,21 +109,21 @@ export const DevOpsPanel = memo(function() {
 
   // Force sync
   const forceSync = async () => {
-    addLog("info", "Sync", "Forçando sincronização...");
+    addLog('info', 'Sync', 'Forçando sincronização...');
     try {
       const stats = await offlineSyncManager.syncAll();
-      addLog("info", "Sync", `Sincronização concluída: ${stats.completed} sucesso, ${stats.failed} falhas`);
+      addLog('info', 'Sync', `Sincronização concluída: ${stats.completed} sucesso, ${stats.failed} falhas`);
       toast({
-        title: "Sincronização concluída",
+        title: 'Sincronização concluída',
         description: `${stats.completed} operações sincronizadas`,
       });
       await collectMetrics();
     } catch (error) {
-      addLog("error", "Sync", `Erro na sincronização: ${error}`);
+      addLog('error', 'Sync', `Erro na sincronização: ${error}`);
       toast({
-        title: "Erro na sincronização",
-        description: "Verifique os logs para mais detalhes",
-        variant: "destructive",
+        title: 'Erro na sincronização',
+        description: 'Verifique os logs para mais detalhes',
+        variant: 'destructive',
       });
     }
   };
@@ -134,17 +132,17 @@ export const DevOpsPanel = memo(function() {
   const clearCompleted = async () => {
     try {
       const cleared = await indexedDBSync.clearCompletedOperations();
-      addLog("info", "Sync", `${cleared} operações concluídas removidas da fila`);
+      addLog('info', 'Sync', `${cleared} operações concluídas removidas da fila`);
       await collectMetrics();
     } catch (error) {
-      addLog("error", "Sync", `Erro ao limpar fila: ${error}`);
+      addLog('error', 'Sync', `Erro ao limpar fila: ${error}`);
     }
   };
 
   // Reset circuits
   const resetCircuits = () => {
     circuitBreakerRegistry.resetAll();
-    addLog("info", "Circuit", "Todos os circuit breakers resetados");
+    addLog('info', 'Circuit', 'Todos os circuit breakers resetados');
     collectMetrics();
   };
 
@@ -153,14 +151,14 @@ export const DevOpsPanel = memo(function() {
     try {
       await caches.keys().then(names => Promise.all(names.map(name => caches.delete(name))));
       await indexedDBSync.clearAll();
-      addLog("warn", "Cache", "Todos os caches foram limpos");
+      addLog('warn', 'Cache', 'Todos os caches foram limpos');
       toast({
-        title: "Caches limpos",
-        description: "Todos os dados em cache foram removidos",
+        title: 'Caches limpos',
+        description: 'Todos os dados em cache foram removidos',
       });
       await collectMetrics();
     } catch (error) {
-      addLog("error", "Cache", `Erro ao limpar caches: ${error}`);
+      addLog('error', 'Cache', `Erro ao limpar caches: ${error}`);
     }
   };
 
@@ -168,17 +166,17 @@ export const DevOpsPanel = memo(function() {
   const exportLogs = () => {
     const logData = logs.map(l => 
       `[${l.timestamp.toISOString()}] [${l.level.toUpperCase()}] [${l.module}] ${l.message}`
-    ).join("\n");
+    ).join('\n');
     
-    const blob = new Blob([logData], { type: "text/plain" });
+    const blob = new Blob([logData], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `nautilus-logs-${new Date().toISOString().slice(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
     
-    addLog("info", "DevOps", "Logs exportados");
+    addLog('info', 'DevOps', 'Logs exportados');
   };
 
   // Auto refresh
@@ -192,9 +190,9 @@ export const DevOpsPanel = memo(function() {
   }, [autoRefresh, collectMetrics]);
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return "0 B";
+    if (bytes === 0) return '0 B';
     const k = 1024;
-    const sizes = ["B", "KB", "MB", "GB"];
+    const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
   };
@@ -294,7 +292,7 @@ export const DevOpsPanel = memo(function() {
             <div className="text-2xl font-bold">
               {metrics?.memory.total ? 
                 `${((metrics.memory.used / metrics.memory.total) * 100).toFixed(0)}%` : 
-                "N/A"}
+                'N/A'}
             </div>
             <div className="text-xs text-muted-foreground">
               {formatBytes(metrics?.memory.used || 0)} / {formatBytes(metrics?.memory.total || 0)}
@@ -314,7 +312,7 @@ export const DevOpsPanel = memo(function() {
             <div className="text-2xl font-bold">
               {metrics?.storage.quota ? 
                 `${((metrics.storage.used / metrics.storage.quota) * 100).toFixed(0)}%` : 
-                "N/A"}
+                'N/A'}
             </div>
             <div className="text-xs text-muted-foreground">
               {formatBytes(metrics?.storage.used || 0)} usado
@@ -385,7 +383,7 @@ export const DevOpsPanel = memo(function() {
                 <div>
                   <div className="text-sm text-muted-foreground">Modo</div>
                   <div className="font-medium">
-                    {networkQuality.isOnline ? "Híbrido (API + Local)" : "Local Only"}
+                    {networkQuality.isOnline ? 'Híbrido (API + Local)' : 'Local Only'}
                   </div>
                 </div>
                 <div>
@@ -419,9 +417,9 @@ export const DevOpsPanel = memo(function() {
                     <div className="flex items-center gap-3">
                       <div className={cn(
                         "w-3 h-3 rounded-full",
-                        state === "closed" && "bg-green-500",
-                        state === "open" && "bg-red-500",
-                        state === "half-open" && "bg-yellow-500",
+                        state === 'closed' && "bg-green-500",
+                        state === 'open' && "bg-red-500",
+                        state === 'half-open' && "bg-yellow-500",
                       )} />
                       <div>
                         <div className="font-medium capitalize">{name}</div>
@@ -430,7 +428,7 @@ export const DevOpsPanel = memo(function() {
                         </div>
                       </div>
                     </div>
-                    <Badge variant={state === "closed" ? "default" : "destructive"}>
+                    <Badge variant={state === 'closed' ? 'default' : 'destructive'}>
                       {state}
                     </Badge>
                   </div>
@@ -466,17 +464,17 @@ export const DevOpsPanel = memo(function() {
                       key={log.id} 
                       className={cn(
                         "text-xs font-mono p-2 rounded",
-                        log.level === "error" && "bg-destructive/10 text-destructive",
-                        log.level === "warn" && "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-                        log.level === "info" && "bg-muted",
+                        log.level === 'error' && "bg-destructive/10 text-destructive",
+                        log.level === 'warn' && "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+                        log.level === 'info' && "bg-muted",
                       )}
                     >
                       <span className="text-muted-foreground">
                         [{log.timestamp.toLocaleTimeString()}]
                       </span>
-                      {" "}
+                      {' '}
                       <span className="font-semibold">[{log.module}]</span>
-                      {" "}
+                      {' '}
                       {log.message}
                     </div>
                   ))}
@@ -512,18 +510,18 @@ export const DevOpsPanel = memo(function() {
                   <div>
                     <h4 className="font-medium mb-2">Configurações de Rede</h4>
                     <pre className="text-xs bg-muted p-3 rounded overflow-auto">
-                      {JSON.stringify({
-                        connectionType: bandwidthOptimizer.getConnectionType(),
-                        isLowBandwidth: bandwidthOptimizer.isLowBandwidth(),
-                        config: bandwidthOptimizer.getConfig(),
-                      }, null, 2)}
+{JSON.stringify({
+  connectionType: bandwidthOptimizer.getConnectionType(),
+  isLowBandwidth: bandwidthOptimizer.isLowBandwidth(),
+  config: bandwidthOptimizer.getConfig(),
+}, null, 2)}
                     </pre>
                   </div>
                   
                   <div>
                     <h4 className="font-medium mb-2">Sync Status</h4>
                     <pre className="text-xs bg-muted p-3 rounded overflow-auto">
-                      {JSON.stringify(offlineSyncManager.getNetworkStatus(), null, 2)}
+{JSON.stringify(offlineSyncManager.getNetworkStatus(), null, 2)}
                     </pre>
                   </div>
                   

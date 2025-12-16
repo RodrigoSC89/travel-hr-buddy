@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import {
   Dialog,
@@ -30,7 +29,7 @@ interface AuditSubmissionFormProps {
 
 type SgsoAuditInsert = Database["public"]["Tables"]["sgso_audits"]["Insert"];
 
-export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmissionFormProps) {
+export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -71,7 +70,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
         recommendations: null,
         non_conformities_count: 0,
         compliance_score: null,
-      });
+      };
 
       const { error } = await supabase
         .from("sgso_audits")
@@ -133,7 +132,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
             <Textarea
               id="audit_scope"
               value={formData.audit_scope}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, audit_scope: e.target.value})}
               placeholder="Describe the scope of this audit..."
               required
               rows={3}
@@ -146,7 +145,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
               id="audit_date"
               type="date"
               value={formData.audit_date}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, audit_date: e.target.value})}
               required
             />
           </div>
@@ -156,7 +155,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
             <Input
               id="auditors"
               value={formData.auditors}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, auditors: e.target.value})}
               placeholder="John Doe, Jane Smith, ..."
             />
           </div>
@@ -166,7 +165,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={handleChange}
+              onChange={(e) => setFormData({...formData, notes: e.target.value})}
               placeholder="Any additional information..."
               rows={2}
             />

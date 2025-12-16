@@ -1,4 +1,4 @@
-import { memo, memo, useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
   ChevronDown,
@@ -139,25 +139,12 @@ const groupedModules = [
     items: [
       { label: "🔗 Hub de Integrações", path: "/integrations" },
       { label: "🌐 API Gateway", path: "/api-gateway" },
-      { label: "🔑 Public API", path: "/public-api" },
       { label: "🤝 Colaboração", path: "/collaboration" },
       { label: "📊 IoT Dashboard", path: "/iot" },
       { label: "🎮 Gamificação", path: "/gamification" },
-      { label: "🧩 Plugins", path: "/plugins" },
       { label: "⚙️ Configurações", path: "/settings" },
       { label: "🧪 QA Preview", path: "/qa/preview" },
       { label: "🚀 Production Deploy", path: "/production-deploy" },
-    ],
-  },
-  {
-    title: "🚀 Enterprise Features",
-    items: [
-      { label: "🧠 IA Preditiva", path: "/predictive-maintenance" },
-      { label: "📊 BI Dashboard", path: "/bi-dashboard" },
-      { label: "🔧 Assistente Diagnóstico", path: "/diagnostic-assistant" },
-      { label: "🗺️ Simulador de Viagem", path: "/voyage-simulator" },
-      { label: "📋 Compliance Automation", path: "/compliance-automation" },
-      { label: "📷 Image Recognition", path: "/image-recognition" },
     ],
   },
 ];
@@ -166,7 +153,7 @@ interface SmartSidebarProps {
   className?: string;
 }
 
-export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
+export function SmartSidebar({ className }: SmartSidebarProps) {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
@@ -198,7 +185,7 @@ export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
       {/* Mobile menu button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-sidebar-background text-sidebar-foreground shadow-lg border border-sidebar-border"
-        onClick={handleSetIsMobileOpen}
+        onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
@@ -235,7 +222,7 @@ export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
                   "flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   openSection === group.title && "bg-sidebar-accent text-sidebar-accent-foreground"
                 )}
-                onClick={() => handletoggleSection}
+                onClick={() => toggleSection(group.title)}
               >
                 <span>{group.title}</span>
                 {openSection === group.title ? (
@@ -275,6 +262,6 @@ export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
       </aside>
     </>
   );
-});
+}
 
 export default SmartSidebar;

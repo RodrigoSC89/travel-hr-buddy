@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -205,7 +204,7 @@ const NauticalCopilot: React.FC = () => {
       title: "Ação Executada",
       description: "Informações atualizadas pelo Copilot",
     });
-  });
+  };
 
   const toggleVoiceInput = () => {
     setIsListening(!isListening);
@@ -213,7 +212,7 @@ const NauticalCopilot: React.FC = () => {
       title: isListening ? "Microfone Desligado" : "Microfone Ligado",
       description: isListening ? "Comando de voz desativado" : "Fale agora para enviar comando",
     });
-  });
+  };
 
   const getCategoryIcon = (category?: CopilotMessage["category"]) => {
     switch (category) {
@@ -272,7 +271,7 @@ const NauticalCopilot: React.FC = () => {
                   key={mode}
                   variant={activeMode === mode ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetActiveMode}
+                  onClick={() => setActiveMode(mode as any)}
                   className="capitalize"
                 >
                   {mode === "chat" && <MessageSquare className="w-4 h-4 mr-1" />}
@@ -346,7 +345,7 @@ const NauticalCopilot: React.FC = () => {
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
-                      onChange={handleChange}
+                      onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                       placeholder="Digite sua pergunta sobre operações marítimas..."
                       className="flex-1"
@@ -424,7 +423,7 @@ const NauticalCopilot: React.FC = () => {
                   <Button
                     key={index}
                     variant="outline"
-                    onClick={() => handlehandleQuickAction}
+                    onClick={() => handleQuickAction(action.action)}
                     className="h-auto flex-col gap-2 p-4 hover:scale-105 transition-transform"
                   >
                     <Icon className="w-5 h-5" />

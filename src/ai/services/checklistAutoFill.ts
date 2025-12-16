@@ -1,4 +1,3 @@
-
 /**
  * PATCH 134.0 - Checklist Autocompletion with AI
  * PATCH 659 - TypeScript fixes applied
@@ -33,8 +32,8 @@ export interface ChecklistHistory {
   user?: string;
 }
 
-type ChecklistCompletionRow = Database["public"]["Tables"]["checklist_completions"]["Row"];
-type ChecklistCompletionInsert = Database["public"]["Tables"]["checklist_completions"]["Insert"];
+type ChecklistCompletionRow = Database['public']['Tables']['checklist_completions']['Row'];
+type ChecklistCompletionInsert = Database['public']['Tables']['checklist_completions']['Insert'];
 
 export interface AutoFillResult {
   items: ChecklistItem[];
@@ -66,7 +65,7 @@ export const autoFillChecklist = async (
         confidence: 0,
         source: "manual",
         suggestions: ["Sem histórico disponível para este tipo de checklist."]
-      });
+      };
     }
 
     // Use AI to generate completions
@@ -205,7 +204,7 @@ Regras:
     logger.error("Error generating AI completions", error);
     throw error;
   }
-});
+};
 
 /**
  * Parse AI response for checklist completions
@@ -234,7 +233,7 @@ const parseAICompletionResponse = (
           checked: aiItem.checked ?? originalItem.checked,
           value: aiItem.value ?? originalItem.value,
           notes: aiItem.notes ?? originalItem.notes
-        });
+        };
       }
       
       return originalItem;
@@ -249,7 +248,7 @@ const parseAICompletionResponse = (
       suggestions: Array.isArray(parsed.suggestions) 
         ? parsed.suggestions.slice(0, 5)
         : []
-    });
+    };
   } catch (error) {
     logger.error("Error parsing AI completion response", error);
     throw error;
@@ -272,7 +271,7 @@ const generatePatternBasedCompletions = (
         "Configure a chave da API OpenAI para preenchimento automático inteligente",
         "Ou complete manualmente para criar histórico de padrões"
       ]
-    });
+    };
   }
 
   // Simple pattern matching based on frequency
@@ -290,7 +289,7 @@ const generatePatternBasedCompletions = (
         checked: checkedCount / matches.length > 0.7, // 70% threshold
         value: mostCommonValue || item.value,
         notes: matches.length > 3 ? `Baseado em ${matches.length} registros anteriores` : undefined
-      });
+      };
     }
     
     return item;
@@ -352,8 +351,8 @@ export const saveChecklistCompletion = async (
       completed_by: context?.userId || null,
       completed_at: new Date().toISOString(),
       started_at: new Date().toISOString(),
-      status: "completed"
-    });
+      status: 'completed'
+    };
 
     const { error } = await supabase
       .from("checklist_completions")

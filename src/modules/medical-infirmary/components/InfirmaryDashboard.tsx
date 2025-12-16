@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -77,14 +76,14 @@ export default function InfirmaryDashboard() {
       
       const key = chatMessage.toLowerCase().includes("dor") ? "dor" 
         : chatMessage.toLowerCase().includes("corte") || chatMessage.toLowerCase().includes("ferimento") ? "corte"
-          : chatMessage.toLowerCase().includes("estoque") || chatMessage.toLowerCase().includes("medicamento") ? "estoque"
-            : "default";
+        : chatMessage.toLowerCase().includes("estoque") || chatMessage.toLowerCase().includes("medicamento") ? "estoque"
+        : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
     
     setChatMessage("");
-  });
+  };
 
   const expiringItems = mockSupplies.filter(s => s.status === "expiring" || s.status === "critical").length;
   const lowStockItems = mockSupplies.filter(s => s.status === "low" || s.status === "critical").length;
@@ -187,7 +186,7 @@ export default function InfirmaryDashboard() {
               <Input
                 placeholder="Descreva sintomas ou dúvidas..."
                 value={chatMessage}
-                onChange={handleChange}
+                onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -195,13 +194,13 @@ export default function InfirmaryDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Protocolo para dor de cabeça")}>
                 Dor de cabeça
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Como tratar corte?")}>
                 Ferimentos
               </Button>
-              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
+              <Button variant="outline" size="sm" onClick={() => setChatMessage("Verificar estoque")}>
                 Estoque
               </Button>
             </div>
@@ -270,9 +269,9 @@ export default function InfirmaryDashboard() {
             {mockSupplies.map((supply) => (
               <div key={supply.id} className={`p-4 rounded-lg border ${
                 supply.status === "critical" ? "bg-red-500/10 border-red-500/30" :
-                  supply.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
-                    supply.status === "low" ? "bg-yellow-500/10 border-yellow-500/30" :
-                      "bg-muted/30 border-border"
+                supply.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
+                supply.status === "low" ? "bg-yellow-500/10 border-yellow-500/30" :
+                "bg-muted/30 border-border"
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <Badge variant={supply.status === "ok" ? "outline" : supply.status === "critical" ? "destructive" : "secondary"}>

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +40,7 @@ export const PriceAlertsValidationReport: React.FC = () => {
       updateTest("list", { 
         status: "passed", 
         message: `${alerts.length} alertas carregados com sucesso` 
-      };
+      });
     } catch (error) {
       updateTest("list", { status: "failed", message: String(error) });
     }

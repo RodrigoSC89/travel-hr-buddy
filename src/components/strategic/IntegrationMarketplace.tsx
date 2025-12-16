@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -137,7 +136,7 @@ export const IntegrationMarketplace: React.FC = () => {
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const getPriceColor = (price: string) => {
     switch (price) {
@@ -178,7 +177,7 @@ export const IntegrationMarketplace: React.FC = () => {
           <Input
             placeholder="Buscar integrações..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>

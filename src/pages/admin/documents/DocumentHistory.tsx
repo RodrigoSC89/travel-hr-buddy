@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";;;
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -42,7 +42,7 @@ export default function DocumentHistoryPage() {
     try {
       setLoading(true);
       // Use explicit foreign key relationship for author email
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("document_versions")
         .select(`
           id,
@@ -58,7 +58,7 @@ export default function DocumentHistoryPage() {
       if (error) throw error;
 
       // Transform data with author email
-      const transformedData = (data || []).map((version: unknown) => {
+      const transformedData = (data || []).map((version: any) => {
         const profiles = version.profiles as unknown as { email: string } | null;
         return {
           id: version.id,
@@ -67,8 +67,8 @@ export default function DocumentHistoryPage() {
           created_at: version.created_at,
           updated_by: version.updated_by,
           author_email: profiles?.email || "Desconhecido",
-        });
-  };
+        };
+      });
 
       setVersions(transformedData);
     } catch (error) {
@@ -91,7 +91,7 @@ export default function DocumentHistoryPage() {
       const matchesDate = dateFilter === "" ||
         new Date(version.created_at) >= new Date(dateFilter);
       return matchesEmail && matchesDate;
-  };
+    });
   }, [versions, emailFilter, dateFilter]);
 
   const hasActiveFilters = emailFilter.trim() !== "" || dateFilter !== "";
@@ -107,7 +107,7 @@ export default function DocumentHistoryPage() {
     setRestoring(versionId);
     try {
       // Update the document with the version content
-      const { error: updateError } = await (supabase as unknown)
+      const { error: updateError } = await (supabase as any)
         .from("ai_generated_documents")
         .update({ content: versionContent })
         .eq("id", id);
@@ -153,7 +153,7 @@ export default function DocumentHistoryPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handlenavigate}
+            onClick={() => navigate(`/admin/documents/view/${id}`)}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -186,7 +186,7 @@ export default function DocumentHistoryPage() {
                   type="text"
                   placeholder="Digite o email ou parte dele..."
                   value={emailFilter}
-                  onChange={handleChange}
+                  onChange={(e) => setEmailFilter(e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -200,7 +200,7 @@ export default function DocumentHistoryPage() {
                   id="date-filter"
                   type="date"
                   value={dateFilter}
-                  onChange={handleChange}
+                  onChange={(e) => setDateFilter(e.target.value)}
                   className="w-full"
                 />
               </div>
@@ -290,7 +290,7 @@ export default function DocumentHistoryPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handlehandleRestore}
+                                onClick={() => handleRestore(version.id, version.content)}
                                 disabled={restoring !== null}
                                 className="ml-4 shrink-0"
                               >

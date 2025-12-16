@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,7 +97,7 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel (Esc)</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleSetSelectedAction}>
+                  <AlertDialogAction onClick={() => setSelectedAction("Confirmed!")}>
                     Continue (Enter)
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -125,17 +124,17 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setSelectedAction("Profile selected"}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Profile selected")}>
                   Profile (Arrow + Enter)
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setSelectedAction("Billing selected"}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Billing selected")}>
                   Billing
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setSelectedAction("Team selected"}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Team selected")}>
                   Team
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setSelectedAction("Logout selected"}>
+                <DropdownMenuItem onSelect={() => setSelectedAction("Logout selected")}>
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

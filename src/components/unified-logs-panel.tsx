@@ -1,4 +1,4 @@
-import { memo, memo, useEffect, useMemo, useState } from "react";;;
+import { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,10 +20,10 @@ interface LogEntry {
   level: string;
   source: string;
   timestamp: string;
-  metadata?: Record<string, unknown>;
+  metadata?: any;
 }
 
-export const UnifiedLogsPanel = memo(function() {
+export function UnifiedLogsPanel() {
   const { user } = useAuth();
   const { toast } = useToast();
   const { getJsPDF, getAutoTable } = usePDFExport();
@@ -223,7 +223,7 @@ export const UnifiedLogsPanel = memo(function() {
       title: "CSV exportado",
       description: "O arquivo foi baixado com sucesso",
     });
-  });
+  };
 
   const exportToPDF = async () => {
     const jsPDF = await getJsPDF();
@@ -254,7 +254,7 @@ export const UnifiedLogsPanel = memo(function() {
     });
 
     // Logs table
-    const finalY = (doc as unknown).lastAutoTable?.finalY || 100;
+    const finalY = (doc as any).lastAutoTable?.finalY || 100;
     doc.setFontSize(14);
     doc.text("Log Entries", 14, finalY + 10);
     autoTable(doc, {
@@ -355,7 +355,7 @@ export const UnifiedLogsPanel = memo(function() {
               <Input
                 placeholder="Buscar nos logs..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
               />
             </div>
@@ -419,7 +419,7 @@ export const UnifiedLogsPanel = memo(function() {
                       <div className="mt-1">{getSeverityIcon(log.level)}</div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <Badge variant={getSeverityColor(log.level) as unknown}>
+                          <Badge variant={getSeverityColor(log.level) as any}>
                             {log.level}
                           </Badge>
                           <Badge variant="outline" className={`text-${getSourceColor(log.source)}-600`}>
@@ -451,4 +451,4 @@ export const UnifiedLogsPanel = memo(function() {
       </Card>
     </div>
   );
-});
+}

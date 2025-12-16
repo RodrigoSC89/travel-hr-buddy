@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -112,7 +112,7 @@ export default function WorkOrderManager() {
       in_progress: { label: "Em Execução", variant: "default" as const, icon: AlertCircle },
       completed: { label: "Concluída", variant: "outline" as const, icon: CheckCircle2 },
       cancelled: { label: "Cancelada", variant: "destructive" as const, icon: AlertCircle },
-    });
+    };
     const { label, variant, icon: Icon } = config[status];
     return (
       <Badge variant={variant} className="flex items-center gap-1">
@@ -154,7 +154,7 @@ export default function WorkOrderManager() {
       equipmentCode: "XXX.XXXX.XX",
       requestedParts: [],
       createdAt: new Date().toISOString().split("T")[0],
-    });
+    };
 
     setWorkOrders((prev) => [newOrder, ...prev]);
     setIsCreating(false);
@@ -164,7 +164,7 @@ export default function WorkOrderManager() {
       title: "OS Criada",
       description: `${newOrder.number} criada com sucesso`,
     });
-  });
+  };
 
   const handleApprove = (id: string) => {
     setWorkOrders((prev) =>
@@ -176,7 +176,7 @@ export default function WorkOrderManager() {
   const filteredOrders = workOrders.filter((os) => {
     if (filter === "all") return true;
     return os.status === filter;
-  };
+  });
 
   return (
     <div className="space-y-4">
@@ -197,20 +197,20 @@ export default function WorkOrderManager() {
               <Input
                 placeholder="Título da OS"
                 value={newOS.title}
-                onChange={handleChange}))}
+                onChange={(e) => setNewOS((prev) => ({ ...prev, title: e.target.value }))}
               />
               <Textarea
                 placeholder="Descrição detalhada"
                 value={newOS.description}
-                onChange={handleChange}))}
+                onChange={(e) => setNewOS((prev) => ({ ...prev, description: e.target.value }))}
               />
               <Input
                 placeholder="Equipamento"
                 value={newOS.equipment}
-                onChange={handleChange}))}
+                onChange={(e) => setNewOS((prev) => ({ ...prev, equipment: e.target.value }))}
               />
               <div className="flex gap-2">
-                <Button variant="outline" onClick={handleSetIsCreating}>
+                <Button variant="outline" onClick={() => setIsCreating(false)}>
                   Cancelar
                 </Button>
                 <Button onClick={handleCreateOS}>Criar OS</Button>
@@ -226,12 +226,12 @@ export default function WorkOrderManager() {
             key={status}
             variant={filter === status ? "default" : "outline"}
             size="sm"
-            onClick={handleSetFilter}
+            onClick={() => setFilter(status)}
           >
             {status === "all" ? "Todas" : 
-              status === "pending" ? "Pendentes" :
-                status === "approved" ? "Aprovadas" :
-                  status === "in_progress" ? "Em Execução" : "Concluídas"}
+             status === "pending" ? "Pendentes" :
+             status === "approved" ? "Aprovadas" :
+             status === "in_progress" ? "Em Execução" : "Concluídas"}
           </Button>
         ))}
       </div>
@@ -295,7 +295,7 @@ export default function WorkOrderManager() {
               )}
 
               {os.status === "pending" && (
-                <Button size="sm" className="w-full" onClick={() => handlehandleApprove}>
+                <Button size="sm" className="w-full" onClick={() => handleApprove(os.id)}>
                   Aprovar OS
                 </Button>
               )}

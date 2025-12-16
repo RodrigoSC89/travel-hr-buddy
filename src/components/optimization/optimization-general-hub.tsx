@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -60,7 +59,7 @@ interface SystemOptimization {
   autoApplicable: boolean;
 }
 
-export const OptimizationGeneralHub = memo(() => {
+export const OptimizationGeneralHub = () => {
   const { toast } = useToast();
   const [overallScore, setOverallScore] = useState(78.5);
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -275,7 +274,7 @@ export const OptimizationGeneralHub = memo(() => {
     case "medium": return "bg-warning/10 text-warning border-warning/20";
     case "low": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    };
+    }
   };
 
   const filteredOptimizations = selectedCategory === "all" 
@@ -407,7 +406,7 @@ export const OptimizationGeneralHub = memo(() => {
                         <label className="text-sm font-medium">Nível de Otimização</label>
                         <Slider
                           value={[optimizationLevel]}
-                          onValueChange={(value) => setOptimizationLevel(value[0]}
+                          onValueChange={(value) => setOptimizationLevel(value[0])}
                           max={100}
                           min={25}
                           step={25}
@@ -530,7 +529,7 @@ export const OptimizationGeneralHub = memo(() => {
                     <Button
                       variant={selectedCategory === "all" ? "default" : "outline"}
                       size="sm"
-                      onClick={handleSetSelectedCategory}
+                      onClick={() => setSelectedCategory("all")}
                     >
                       Todas
                     </Button>
@@ -539,7 +538,7 @@ export const OptimizationGeneralHub = memo(() => {
                         key={category}
                         variant={selectedCategory === category ? "default" : "outline"}
                         size="sm"
-                        onClick={handleSetSelectedCategory}
+                        onClick={() => setSelectedCategory(category)}
                         className="capitalize"
                       >
                         {category}
@@ -601,7 +600,7 @@ export const OptimizationGeneralHub = memo(() => {
                                   </Badge>
                                 ) : (
                                   <Button 
-                                    onClick={() => handleapplyOptimization}
+                                    onClick={() => applyOptimization(optimization.id)}
                                     size="sm"
                                     className="flex items-center gap-1"
                                   >

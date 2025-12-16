@@ -1,27 +1,26 @@
-import { useState, useMemo, useCallback } from "react";;
-import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { toast } from "sonner";
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
 import {
   Ship, FileText, CheckCircle, AlertTriangle, XCircle, 
   Plus, Download, Filter, Search, Calendar, User, 
   ClipboardCheck, BarChart3, MessageSquare, Settings,
   Brain, FileCheck, Clock, Target, Shield, Anchor
-} from "lucide-react";
-import { OVIQ4_SECTIONS, VESSEL_TYPES, getTotalQuestions } from "@/data/oviq4-checklist";
-import { OVIDChecklist } from "./OVIDChecklist";
-import { OVIDNonConformities } from "./OVIDNonConformities";
-import { OVIDAIAssistant } from "./OVIDAIAssistant";
-import { OVIDReports } from "./OVIDReports";
+} from 'lucide-react';
+import { OVIQ4_SECTIONS, VESSEL_TYPES, getTotalQuestions } from '@/data/oviq4-checklist';
+import { OVIDChecklist } from './OVIDChecklist';
+import { OVIDNonConformities } from './OVIDNonConformities';
+import { OVIDAIAssistant } from './OVIDAIAssistant';
+import { OVIDReports } from './OVIDReports';
 
 interface InspectionStatus {
   compliant: number;
@@ -31,13 +30,13 @@ interface InspectionStatus {
 }
 
 export const OVIDInspectionDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [selectedVesselType, setSelectedVesselType] = useState<string>("Offshore Supply Vessel (OSV)");
+  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedVesselType, setSelectedVesselType] = useState<string>('Offshore Supply Vessel (OSV)');
   const [inspectionStarted, setInspectionStarted] = useState(false);
-  const [vesselName, setVesselName] = useState("");
-  const [imoNumber, setImoNumber] = useState("");
-  const [inspectorName, setInspectorName] = useState("");
-  const [inspectionDate, setInspectionDate] = useState(new Date().toISOString().split("T")[0]);
+  const [vesselName, setVesselName] = useState('');
+  const [imoNumber, setImoNumber] = useState('');
+  const [inspectorName, setInspectorName] = useState('');
+  const [inspectionDate, setInspectionDate] = useState(new Date().toISOString().split('T')[0]);
   
   const [status, setStatus] = useState<InspectionStatus>({
     compliant: 0,
@@ -47,7 +46,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
   });
 
   const [checklistAnswers, setChecklistAnswers] = useState<Record<string, { 
-    answer: "yes" | "no" | "na" | null;
+    answer: 'yes' | 'no' | 'na' | null;
     observation: string;
     evidence: string[];
   }>>({});
@@ -62,15 +61,15 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
   const handleStartInspection = () => {
     if (!vesselName || !imoNumber || !inspectorName) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error('Preencha todos os campos obrigatórios');
       return;
     }
     setInspectionStarted(true);
-    setActiveTab("checklist");
-    toast.success("Inspeção OVID iniciada");
+    setActiveTab('checklist');
+    toast.success('Inspeção OVID iniciada');
   };
 
-  const handleAnswerChange = (questionId: string, answer: "yes" | "no" | "na", observation?: string) => {
+  const handleAnswerChange = (questionId: string, answer: 'yes' | 'no' | 'na', observation?: string) => {
     const prevAnswer = checklistAnswers[questionId]?.answer;
     
     setChecklistAnswers(prev => ({
@@ -78,7 +77,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
       [questionId]: {
         ...prev[questionId],
         answer,
-        observation: observation || prev[questionId]?.observation || "",
+        observation: observation || prev[questionId]?.observation || '',
         evidence: prev[questionId]?.evidence || [],
       }
     }));
@@ -88,27 +87,27 @@ export const OVIDInspectionDashboard: React.FC = () => {
       const newStatus = { ...prev };
       
       // Decrement previous count
-      if (prevAnswer === "yes") newStatus.compliant--;
-      else if (prevAnswer === "no") newStatus.nonCompliant--;
-      else if (prevAnswer === "na") newStatus.notApplicable--;
+      if (prevAnswer === 'yes') newStatus.compliant--;
+      else if (prevAnswer === 'no') newStatus.nonCompliant--;
+      else if (prevAnswer === 'na') newStatus.notApplicable--;
       else newStatus.pending--;
       
       // Increment new count
-      if (answer === "yes") newStatus.compliant++;
-      else if (answer === "no") newStatus.nonCompliant++;
-      else if (answer === "na") newStatus.notApplicable++;
+      if (answer === 'yes') newStatus.compliant++;
+      else if (answer === 'no') newStatus.nonCompliant++;
+      else if (answer === 'na') newStatus.notApplicable++;
       
       return newStatus;
     });
-  });
+  };
 
   const handleExport = () => {
-    toast.success("Exportando relatório OVID...");
+    toast.success('Exportando relatório OVID...');
     // Export logic would go here
   };
 
   const handleFilter = () => {
-    toast.info("Filtros aplicados");
+    toast.info('Filtros aplicados');
   };
 
   return (
@@ -123,7 +122,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </div>
         <div className="flex gap-2">
           {!inspectionStarted ? (
-            <Button onClick={handleSetActiveTab}>
+            <Button onClick={() => setActiveTab('new')}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Inspeção
             </Button>
@@ -179,20 +178,20 @@ export const OVIDInspectionDashboard: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" 
-          onClick={handleSetActiveTab}>
+              onClick={() => setActiveTab('overview')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Score</p>
                 <p className="text-2xl font-bold">{complianceScore}%</p>
               </div>
-              <Target className={`w-8 h-8 ${complianceScore >= 85 ? "text-green-500" : complianceScore >= 70 ? "text-yellow-500" : "text-red-500"}`} />
+              <Target className={`w-8 h-8 ${complianceScore >= 85 ? 'text-green-500' : complianceScore >= 70 ? 'text-yellow-500' : 'text-red-500'}`} />
             </div>
           </CardContent>
         </Card>
 
         <Card className="cursor-pointer hover:border-green-500/50 transition-colors"
-          onClick={handleSetActiveTab}>
+              onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -205,7 +204,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-red-500/50 transition-colors"
-          onClick={handleSetActiveTab}>
+              onClick={() => setActiveTab('ncs')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -218,7 +217,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-muted-foreground/50 transition-colors"
-          onClick={handleSetActiveTab}>
+              onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -231,7 +230,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-yellow-500/50 transition-colors"
-          onClick={handleSetActiveTab}>
+              onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -244,7 +243,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-blue-500/50 transition-colors"
-          onClick={handleSetActiveTab}>
+              onClick={() => setActiveTab('checklist')}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -367,14 +366,14 @@ export const OVIDInspectionDashboard: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {[
-                    { name: "SOLAS", desc: "Safety of Life at Sea" },
-                    { name: "MARPOL", desc: "Marine Pollution Prevention" },
-                    { name: "ISM Code", desc: "International Safety Management" },
-                    { name: "ISPS Code", desc: "Ship and Port Facility Security" },
-                    { name: "STCW 2010", desc: "Training, Certification and Watchkeeping" },
-                    { name: "MLC 2006", desc: "Maritime Labour Convention" },
-                    { name: "IMCA M103", desc: "DP Vessels Guidelines" },
-                    { name: "GOMO", desc: "Guidelines for Offshore Marine Operations" },
+                    { name: 'SOLAS', desc: 'Safety of Life at Sea' },
+                    { name: 'MARPOL', desc: 'Marine Pollution Prevention' },
+                    { name: 'ISM Code', desc: 'International Safety Management' },
+                    { name: 'ISPS Code', desc: 'Ship and Port Facility Security' },
+                    { name: 'STCW 2010', desc: 'Training, Certification and Watchkeeping' },
+                    { name: 'MLC 2006', desc: 'Maritime Labour Convention' },
+                    { name: 'IMCA M103', desc: 'DP Vessels Guidelines' },
+                    { name: 'GOMO', desc: 'Guidelines for Offshore Marine Operations' },
                   ].map((ref) => (
                     <div key={ref.name} className="p-3 rounded-lg bg-muted/50">
                       <p className="font-medium text-sm">{ref.name}</p>
@@ -408,7 +407,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="vesselName"
                       placeholder="Ex: SKANDI NEPTUNE"
                       value={vesselName}
-                      onChange={handleChange}
+                      onChange={(e) => setVesselName(e.target.value)}
                     />
                   </div>
                   <div>
@@ -417,7 +416,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="imoNumber"
                       placeholder="Ex: 9876543"
                       value={imoNumber}
-                      onChange={handleChange}
+                      onChange={(e) => setImoNumber(e.target.value)}
                     />
                   </div>
                   <div>
@@ -435,7 +434,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="inspectorName"
                       placeholder="Seu nome completo"
                       value={inspectorName}
-                      onChange={handleChange}
+                      onChange={(e) => setInspectorName(e.target.value)}
                     />
                   </div>
                   <div>
@@ -444,7 +443,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="inspectionDate"
                       type="date"
                       value={inspectionDate}
-                      onChange={handleChange}
+                      onChange={(e) => setInspectionDate(e.target.value)}
                     />
                   </div>
                   <div>

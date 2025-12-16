@@ -1,4 +1,4 @@
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ const MOCK_INCIDENTS: DPIncident[] = [
   },
 ];
 
-export const IncidentsSGSOPanel = memo(function() {
+export function IncidentsSGSOPanel() {
   const [incidents, setIncidents] = useState<DPIncident[]>(MOCK_INCIDENTS);
   const [filteredIncidents, setFilteredIncidents] = useState<DPIncident[]>(MOCK_INCIDENTS);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -310,4 +310,4 @@ export const IncidentsSGSOPanel = memo(function() {
       </div>
     </div>
   );
-});
+}

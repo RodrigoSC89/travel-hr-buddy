@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,7 +41,7 @@ interface WorkflowDefinition {
 const WorkflowEngine = () => {
   const { toast } = useToast();
   const [workflows, setWorkflows] = useState<WorkflowDefinition[]>([]);
-  const [activeExecution, setActiveExecution] = useState<unknown>(null);
+  const [activeExecution, setActiveExecution] = useState<any>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newWorkflow, setNewWorkflow] = useState<WorkflowDefinition>({
     name: "",
@@ -56,13 +55,14 @@ const WorkflowEngine = () => {
 
   const loadWorkflows = async () => {
     const { data, error } = await supabase
-      .from("nautilus_workflows" as unknown)
+      .from("nautilus_workflows" as any)
       .select("*")
       .order("created_at", { ascending: false });
 
     if (error) {
+      console.error("Error loading workflows:", error);
     } else {
-      setWorkflows((data || []) as unknown);
+      setWorkflows((data || []) as any);
     }
   };
 
@@ -78,7 +78,7 @@ const WorkflowEngine = () => {
 
     const { data: { user } } = await supabase.auth.getUser();
     
-    const { error } = await supabase.from("nautilus_workflows" as unknown).insert({
+    const { error } = await supabase.from("nautilus_workflows" as any).insert({
       name: newWorkflow.name,
       description: newWorkflow.description,
       steps: newWorkflow.steps,
@@ -103,12 +103,12 @@ const WorkflowEngine = () => {
   };
 
   const executeWorkflow = async (workflowId: string) => {
-    const { data, error } = await supabase.functions.invoke("workflow-execute" as unknown, {
+    const { data, error } = await supabase.functions.invoke("workflow-execute" as any, {
       body: {
         workflow_id: workflowId,
         action: "execute",
       },
-    };
+    });
 
     if (error) {
       toast({
@@ -138,16 +138,16 @@ const WorkflowEngine = () => {
         },
       ],
     });
-  });
+  };
 
   const removeStep = (index: number) => {
     setNewWorkflow({
       ...newWorkflow,
       steps: newWorkflow.steps.filter((_, i) => i !== index),
     });
-  });
+  };
 
-  const updateStep = (index: number, field: string, value: unknown: unknown: unknown) => {
+  const updateStep = (index: number, field: string, value: any) => {
     const updatedSteps = [...newWorkflow.steps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
     setNewWorkflow({ ...newWorkflow, steps: updatedSteps });
@@ -165,7 +165,7 @@ const WorkflowEngine = () => {
             </p>
           </div>
         </div>
-        <Button onClick={handleSetIsCreating}>
+        <Button onClick={() => setIsCreating(!isCreating)}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Workflow
         </Button>
@@ -213,7 +213,7 @@ const WorkflowEngine = () => {
               <Label>Nome do Workflow</Label>
               <Input
                 value={newWorkflow.name}
-                onChange={handleChange}
+                onChange={(e) => setNewWorkflow({ ...newWorkflow, name: e.target.value })}
                 placeholder="Ex: Análise Diária de Saúde"
               />
             </div>
@@ -222,7 +222,7 @@ const WorkflowEngine = () => {
               <Label>Descrição</Label>
               <Textarea
                 value={newWorkflow.description}
-                onChange={handleChange}
+                onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
                 placeholder="Descreva o objetivo deste workflow"
                 rows={2}
               />
@@ -247,7 +247,7 @@ const WorkflowEngine = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => handleremoveStep}
+                            onClick={() => removeStep(index)}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -255,13 +255,13 @@ const WorkflowEngine = () => {
 
                         <Input
                           value={step.name}
-                          onChange={handleChange}
+                          onChange={(e) => updateStep(index, "name", e.target.value)}
                           placeholder="Nome do passo"
                         />
 
                         <Select
                           value={step.type}
-                          onValueChange={(value) => updateStep(index, "type", value}
+                          onValueChange={(value) => updateStep(index, "type", value)}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -275,7 +275,7 @@ const WorkflowEngine = () => {
 
                         <Textarea
                           value={step.description}
-                          onChange={handleChange}
+                          onChange={(e) => updateStep(index, "description", e.target.value)}
                           placeholder="Descrição ou prompt"
                           rows={2}
                         />
@@ -284,7 +284,9 @@ const WorkflowEngine = () => {
                           <input
                             type="checkbox"
                             checked={step.requires_approval}
-                            onChange={handleChange}
+                            onChange={(e) =>
+                              updateStep(index, "requires_approval", e.target.checked)
+                            }
                             className="rounded"
                           />
                           <Label className="text-sm">Requer aprovação manual</Label>
@@ -298,7 +300,7 @@ const WorkflowEngine = () => {
 
             <div className="flex gap-2">
               <Button onClick={createWorkflow}>Criar Workflow</Button>
-              <Button variant="outline" onClick={handleSetIsCreating}>
+              <Button variant="outline" onClick={() => setIsCreating(false)}>
                 Cancelar
               </Button>
             </div>
@@ -331,7 +333,7 @@ const WorkflowEngine = () => {
                         </div>
                       </div>
                       <Button
-                        onClick={() => handleexecuteWorkflow}
+                        onClick={() => executeWorkflow(workflow.id!)}
                         disabled={!!activeExecution}
                       >
                         <Play className="h-4 w-4 mr-2" />
@@ -347,6 +349,6 @@ const WorkflowEngine = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default WorkflowEngine;

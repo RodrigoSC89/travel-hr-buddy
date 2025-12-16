@@ -1,10 +1,10 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   ChevronRight,
@@ -83,13 +83,13 @@ const WIZARD_STEPS: WizardStep[] = [
 ];
 
 interface PeoDpWizardProps {
-  onComplete: (data: unknown) => void;
+  onComplete: (data: any) => void;
   onCancel: () => void;
 }
 
 export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<Record<string, unknown>>({});
+  const [formData, setFormData] = useState<Record<string, any>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentWizardStep = WIZARD_STEPS[currentStep];
@@ -137,7 +137,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               id="vessel_name"
               placeholder="Ex: PSV Atlantic Explorer"
               value={formData.vessel_name || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("vessel_name", e.target.value)}
             />
           </div>
           <div>
@@ -146,7 +146,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               id="vessel_type"
               className="w-full px-3 py-2 border rounded-md"
               value={formData.vessel_type || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("vessel_type", e.target.value)}
             >
               <option value="">Selecione...</option>
               <option value="PSV">PSV - Platform Supply Vessel</option>
@@ -162,7 +162,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               id="dp_class"
               className="w-full px-3 py-2 border rounded-md"
               value={formData.dp_class || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("dp_class", e.target.value)}
             >
               <option value="">Selecione...</option>
               <option value="DP1">DP1</option>
@@ -176,7 +176,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               id="operation_type"
               placeholder="Ex: Apoio à plataforma offshore"
               value={formData.operation_type || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("operation_type", e.target.value)}
             />
           </div>
         </div>
@@ -192,7 +192,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Descreva a estrutura organizacional e hierarquia..."
               rows={4}
               value={formData.org_structure || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("org_structure", e.target.value)}
             />
           </div>
           <div>
@@ -201,7 +201,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               id="dp_master"
               placeholder="Nome e certificações do DP Master"
               value={formData.dp_master || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("dp_master", e.target.value)}
             />
           </div>
           <div>
@@ -211,7 +211,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Defina responsabilidades de cada função..."
               rows={4}
               value={formData.responsibilities || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("responsibilities", e.target.value)}
             />
           </div>
         </div>
@@ -227,7 +227,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Liste todas as certificações necessárias (STCW, DP, etc.)"
               rows={4}
               value={formData.required_certs || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("required_certs", e.target.value)}
             />
           </div>
           <div>
@@ -237,7 +237,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Descreva o plano de treinamento e reciclagem..."
               rows={4}
               value={formData.training_plan || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("training_plan", e.target.value)}
             />
           </div>
           <div>
@@ -247,7 +247,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Defina a matriz de competências por função..."
               rows={4}
               value={formData.competency_matrix || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("competency_matrix", e.target.value)}
             />
           </div>
         </div>
@@ -263,7 +263,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Análise de modos de falha e seus efeitos..."
               rows={4}
               value={formData.fmea || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("fmea", e.target.value)}
             />
           </div>
           <div>
@@ -273,7 +273,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Diretrizes operacionais específicas da atividade..."
               rows={4}
               value={formData.asog || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("asog", e.target.value)}
             />
           </div>
           <div>
@@ -283,7 +283,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Procedimentos de emergência e contingência..."
               rows={4}
               value={formData.contingency_plan || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("contingency_plan", e.target.value)}
             />
           </div>
         </div>
@@ -299,7 +299,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Descreva o sistema de turnos e watch keeping..."
               rows={4}
               value={formData.watch_keeping || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("watch_keeping", e.target.value)}
             />
           </div>
           <div>
@@ -309,7 +309,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Procedimentos de comunicação interna e externa..."
               rows={4}
               value={formData.communication || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("communication", e.target.value)}
             />
           </div>
           <div>
@@ -319,7 +319,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Protocolos de operação DP..."
               rows={4}
               value={formData.protocols || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("protocols", e.target.value)}
             />
           </div>
         </div>
@@ -335,7 +335,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Programa de manutenção preventiva..."
               rows={4}
               value={formData.preventive || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("preventive", e.target.value)}
             />
           </div>
           <div>
@@ -345,7 +345,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Estratégias de manutenção preditiva..."
               rows={4}
               value={formData.predictive || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("predictive", e.target.value)}
             />
           </div>
           <div>
@@ -355,7 +355,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Procedimentos de manutenção corretiva..."
               rows={4}
               value={formData.corrective || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("corrective", e.target.value)}
             />
           </div>
         </div>
@@ -371,7 +371,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Programação e procedimentos dos DP trials..."
               rows={4}
               value={formData.dp_trials || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("dp_trials", e.target.value)}
             />
           </div>
           <div>
@@ -381,7 +381,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Análise e atualização dos capability plots..."
               rows={4}
               value={formData.capability_plots || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("capability_plots", e.target.value)}
             />
           </div>
           <div>
@@ -391,7 +391,7 @@ export const PeoDpWizard: React.FC<PeoDpWizardProps> = ({ onComplete, onCancel }
               placeholder="Processo de validação e certificação do sistema DP..."
               rows={4}
               value={formData.validation || ""}
-              onChange={handleChange}
+              onChange={(e) => updateFormData("validation", e.target.value)}
             />
           </div>
         </div>

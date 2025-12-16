@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -193,7 +192,7 @@ export const DocumentManagement: React.FC = () => {
         version: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      });
+      };
       
       setDocuments([...documents, document]);
       setNewDocument({
@@ -225,7 +224,7 @@ export const DocumentManagement: React.FC = () => {
         id: Math.random().toString(),
         ...newCategory,
         count: 0
-      });
+      };
       
       setCategories([...categories, category]);
       setNewCategory({
@@ -288,7 +287,7 @@ export const DocumentManagement: React.FC = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -322,7 +321,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="cat-name"
                     value={newCategory.name}
-                    onChange={handleChange}
+                    onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
                     placeholder="Ex: Contratos"
                   />
                 </div>
@@ -331,7 +330,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="cat-desc"
                     value={newCategory.description}
-                    onChange={handleChange}
+                    onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
                     placeholder="Descrição da categoria..."
                   />
                 </div>
@@ -341,7 +340,7 @@ export const DocumentManagement: React.FC = () => {
                     id="cat-color"
                     type="color"
                     value={newCategory.color}
-                    onChange={handleChange}
+                    onChange={(e) => setNewCategory({ ...newCategory, color: e.target.value })}
                   />
                 </div>
               </div>
@@ -349,7 +348,7 @@ export const DocumentManagement: React.FC = () => {
                 <Button onClick={handleAddCategory} className="flex-1">
                   Criar Categoria
                 </Button>
-                <Button variant="outline" onClick={handleSetShowAddCategoryDialog}>
+                <Button variant="outline" onClick={() => setShowAddCategoryDialog(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -373,7 +372,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="title"
                     value={newDocument.title}
-                    onChange={handleChange}
+                    onChange={(e) => setNewDocument({ ...newDocument, title: e.target.value })}
                     placeholder="Ex: Manual de Procedimentos"
                   />
                 </div>
@@ -382,7 +381,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="description"
                     value={newDocument.description}
-                    onChange={handleChange}
+                    onChange={(e) => setNewDocument({ ...newDocument, description: e.target.value })}
                     placeholder="Descrição do documento..."
                   />
                 </div>
@@ -428,7 +427,7 @@ export const DocumentManagement: React.FC = () => {
                     id="expires"
                     type="datetime-local"
                     value={newDocument.expires_at}
-                    onChange={handleChange}
+                    onChange={(e) => setNewDocument({ ...newDocument, expires_at: e.target.value })}
                   />
                 </div>
                 <div>
@@ -446,7 +445,7 @@ export const DocumentManagement: React.FC = () => {
                 <Button onClick={handleAddDocument} className="flex-1">
                   Adicionar Documento
                 </Button>
-                <Button variant="outline" onClick={handleSetShowAddDialog}>
+                <Button variant="outline" onClick={() => setShowAddDialog(false)}>
                   Cancelar
                 </Button>
               </div>
@@ -528,7 +527,7 @@ export const DocumentManagement: React.FC = () => {
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-64"
               />
             </div>
@@ -562,7 +561,7 @@ export const DocumentManagement: React.FC = () => {
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
                           selectedDocument?.id === doc.id ? "border-primary bg-primary/5" : ""
                         }`}
-                        onClick={handleSetSelectedDocument}
+                        onClick={() => setSelectedDocument(doc)}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3 flex-1">

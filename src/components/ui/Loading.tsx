@@ -1,5 +1,4 @@
 import React from "react";
-import { memo } from "react";
 import { Loader2, Anchor, Ship, Waves } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -112,13 +111,13 @@ export interface LoadingOverlayProps {
 /**
  * Loading overlay that wraps content and shows loading state
  */
-export const LoadingOverlay: React.FC<LoadingOverlayProps> = memo(function LoadingOverlay({
+export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   isLoading,
   message,
   children,
   variant = "default",
   size = "md",
-}: LoadingOverlayProps) {
+}) => {
   return (
     <div className="relative">
       {children}
@@ -148,7 +147,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
       aria-hidden="true"
     />
   );
-});
+};
 
 export interface LoadingCardProps {
   variant?: "default" | "maritime";

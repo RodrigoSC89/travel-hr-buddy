@@ -42,8 +42,8 @@ describe("Integration: Crew Assignment Workflow", () => {
     // Act - Schedule rotation
     const rotation = {
       scheduled_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      crew_off_duty: onDutyCrew.map((c: unknown) => c.id),
-      crew_on_duty: offDutyCrew.map((c: unknown) => c.id),
+      crew_off_duty: onDutyCrew.map((c: any) => c.id),
+      crew_on_duty: offDutyCrew.map((c: any) => c.id),
     };
 
     // Assert
@@ -104,7 +104,7 @@ describe("Integration: Crew Assignment Workflow", () => {
     expect(totalHours).toBe(46);
     expect(averageHours).toBe(9.2);
     expect(totalHours).toBeLessThanOrEqual(MAX_WEEKLY_HOURS);
-  };
+  });
 
   it("should handle emergency crew replacement", async () => {
     // Arrange
@@ -133,7 +133,7 @@ describe("Integration: Crew Assignment Workflow", () => {
     const crewMembers = createMany(mockCrew, 20, { status: "available" });
 
     // Act - Bulk assign
-    const assignments = crewMembers.map((crew: unknown) => ({
+    const assignments = crewMembers.map((crew: any) => ({
       crew_id: crew.id,
       vessel_id: vessel.id,
       assigned_at: new Date(),
@@ -143,5 +143,5 @@ describe("Integration: Crew Assignment Workflow", () => {
     // Assert
     expect(assignments).toHaveLength(20);
     expect(assignments.every(a => a.vessel_id === vessel.id)).toBe(true);
-  };
-};
+  });
+});

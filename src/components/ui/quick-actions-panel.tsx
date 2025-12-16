@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -85,7 +84,7 @@ export const QuickActionsPanel: React.FC = () => {
                          action.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "Todos" || action.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const handleQuickAction = (module: string) => {
     handleNavigation(module);
@@ -106,7 +105,7 @@ export const QuickActionsPanel: React.FC = () => {
             <Input
               placeholder="Buscar módulo..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -117,7 +116,7 @@ export const QuickActionsPanel: React.FC = () => {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetSelectedCategory}
+                onClick={() => setSelectedCategory(category)}
                 className="text-xs"
               >
                 {category}
@@ -135,7 +134,7 @@ export const QuickActionsPanel: React.FC = () => {
               <Card 
                 key={index}
                 className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-br from-card to-secondary/5 group"
-                onClick={() => handlehandleQuickAction}
+                onClick={() => handleQuickAction(action.module)}
               >
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">

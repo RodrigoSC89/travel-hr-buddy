@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -114,7 +113,7 @@ export const SmartNotifications: React.FC = () => {
             min_discount_percentage: 10,
             min_savings_amount: 50
           }
-        });
+        };
         setSettings(defaultSettings);
       }
     } catch (error) {
@@ -449,7 +448,10 @@ export const SmartNotifications: React.FC = () => {
                       <Input
                         type="time"
                         value={settings.quiet_hours.start}
-                        onChange={handleChange} 
+                        onChange={(e) => 
+                          setSettings(prev => prev ? { 
+                            ...prev, 
+                            quiet_hours: { ...prev.quiet_hours, start: e.target.value } 
                           } : null)
                         }
                         className="text-sm border-primary/20"
@@ -460,7 +462,10 @@ export const SmartNotifications: React.FC = () => {
                       <Input
                         type="time"
                         value={settings.quiet_hours.end}
-                        onChange={handleChange} 
+                        onChange={(e) => 
+                          setSettings(prev => prev ? { 
+                            ...prev, 
+                            quiet_hours: { ...prev.quiet_hours, end: e.target.value } 
                           } : null)
                         }
                         className="text-sm border-primary/20"
@@ -488,7 +493,13 @@ export const SmartNotifications: React.FC = () => {
                 <Input
                   type="number"
                   value={settings.thresholds.min_discount_percentage}
-                  onChange={handleChange} 
+                  onChange={(e) => 
+                    setSettings(prev => prev ? { 
+                      ...prev, 
+                      thresholds: { 
+                        ...prev.thresholds, 
+                        min_discount_percentage: parseInt(e.target.value) || 0 
+                      } 
                     } : null)
                   }
                   className="border-primary/20"
@@ -504,7 +515,13 @@ export const SmartNotifications: React.FC = () => {
                 <Input
                   type="number"
                   value={settings.thresholds.min_savings_amount}
-                  onChange={handleChange} 
+                  onChange={(e) => 
+                    setSettings(prev => prev ? { 
+                      ...prev, 
+                      thresholds: { 
+                        ...prev.thresholds, 
+                        min_savings_amount: parseInt(e.target.value) || 0 
+                      } 
                     } : null)
                   }
                   className="border-primary/20"
@@ -547,7 +564,8 @@ export const SmartNotifications: React.FC = () => {
             
             <Input
               value={testNotification.message}
-              onChange={handleChange}))
+              onChange={(e) => 
+                setTestNotification(prev => ({ ...prev, message: e.target.value }))
               }
               placeholder="Mensagem de teste"
               className="flex-1 border-primary/20"

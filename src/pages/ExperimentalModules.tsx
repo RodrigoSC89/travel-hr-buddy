@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";;;
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -352,7 +352,7 @@ const ExperimentalModules = () => {
               <Input
                 placeholder="Search modules..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
               />
             </div>
@@ -408,7 +408,7 @@ const ExperimentalModules = () => {
                 className={`transition-all ${
                   module.route ? "cursor-pointer hover:shadow-lg hover:scale-[1.02]" : ""
                 }`}
-                onClick={() => handlehandleModuleClick}
+                onClick={() => handleModuleClick(module)}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -416,7 +416,7 @@ const ExperimentalModules = () => {
                       <Icon className="w-5 h-5" />
                       <CardTitle className="text-lg">{module.name}</CardTitle>
                     </div>
-                    <Badge variant={getStatusColor(module.status) as unknown}>{module.status}</Badge>
+                    <Badge variant={getStatusColor(module.status) as any}>{module.status}</Badge>
                   </div>
                   <CardDescription className="line-clamp-2">{module.description}</CardDescription>
                 </CardHeader>

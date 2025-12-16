@@ -1,5 +1,4 @@
-import { useState } from "react";;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -130,7 +129,7 @@ export const IntegrationMonitoring: React.FC = () => {
     case "warning": return "text-warning";
     case "critical": return "text-destructive";
     }
-  });
+  };
 
   const getTrendIcon = (trend: MetricData["trend"]) => {
     switch (trend) {

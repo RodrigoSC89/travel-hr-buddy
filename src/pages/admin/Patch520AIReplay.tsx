@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 520 – AI Replay de Missões
  * Replay temporal de missões com análise de decisões e desvios
  */
@@ -32,7 +31,7 @@ interface MissionEvent {
   title: string;
   description: string;
   module: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 interface Mission {
@@ -154,7 +153,7 @@ export default function Patch520AIReplay() {
             return selectedMission.duration;
           }
           return next;
-  });
+        });
       }, 100);
     }
 
@@ -351,7 +350,7 @@ export default function Patch520AIReplay() {
                 key={speed}
                 variant={playbackSpeed === speed ? "default" : "outline"}
                 size="sm"
-                onClick={handleSetPlaybackSpeed}
+                onClick={() => setPlaybackSpeed(speed)}
               >
                 {speed}x
               </Button>

@@ -68,7 +68,7 @@ describe("PlanStatusSelect Component", () => {
     const incident = {
       id: "test-1",
       plan_status: "pendente",
-    });
+    };
 
     render(<PlanStatusSelect incident={incident} />);
     
@@ -100,7 +100,7 @@ describe("PlanStatusSelect Component", () => {
     const incident = {
       id: "test-1",
       plan_status: "pendente",
-    });
+    };
 
     render(<PlanStatusSelect incident={incident} onUpdate={onUpdate} />);
     
@@ -109,7 +109,7 @@ describe("PlanStatusSelect Component", () => {
 
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith("concluído");
-  });
+    });
   });
 
   it("should disable select while loading", async () => {
@@ -128,6 +128,6 @@ describe("PlanStatusSelect Component", () => {
 
     await waitFor(() => {
       expect(select.disabled).toBe(true);
-  });
+    });
   });
 });

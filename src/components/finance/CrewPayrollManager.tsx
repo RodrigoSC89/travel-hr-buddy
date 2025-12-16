@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,9 +26,9 @@ interface CrewPayroll {
   days_onboard: number;
   overtime_hours: number;
   overtime_amount: number;
-  bonuses: unknown[];
-  deductions: unknown[];
-  allowances: unknown[];
+  bonuses: any[];
+  deductions: any[];
+  allowances: any[];
   gross_pay: number;
   net_pay: number;
   tax_amount: number;
@@ -50,7 +50,7 @@ const statusConfig: Record<string, { color: string; label: string; icon: typeof 
   cancelled: { color: "bg-destructive/20 text-destructive border-destructive/30", label: "Cancelado", icon: AlertCircle },
 };
 
-export const CrewPayrollManager = memo(function() {
+export function CrewPayrollManager() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterPeriod, setFilterPeriod] = useState<string>("current");
@@ -82,7 +82,7 @@ export const CrewPayrollManager = memo(function() {
   const getCrewName = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
     return crew?.full_name || "N/A";
-  });
+  };
 
   const getCrewRank = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
@@ -95,7 +95,7 @@ export const CrewPayrollManager = memo(function() {
     const matchesSearch = crewName.includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || p.payment_status === filterStatus;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   // Stats
   const stats = {
@@ -228,7 +228,7 @@ export const CrewPayrollManager = memo(function() {
             placeholder="Buscar tripulante..." 
             className="pl-10 bg-muted/30"
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
@@ -361,4 +361,4 @@ export const CrewPayrollManager = memo(function() {
       </Card>
     </div>
   );
-});
+}

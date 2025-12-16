@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 187.0 - Mobile Missions Screen
  * 
  * Mission management and tracking for mobile app
@@ -79,7 +78,7 @@ export const MobileMissions: React.FC = () => {
     if (filter === "active") return mission.status === "active";
     if (filter === "completed") return mission.status === "completed";
     return true;
-  };
+  });
 
   const getStatusIcon = (status: Mission["status"]) => {
     switch (status) {
@@ -145,21 +144,21 @@ export const MobileMissions: React.FC = () => {
         <Button
           variant={filter === "all" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("all")}
         >
           Todas
         </Button>
         <Button
           variant={filter === "active" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("active")}
         >
           Ativas
         </Button>
         <Button
           variant={filter === "completed" ? "default" : "outline"}
           size="sm"
-          onClick={handleSetFilter}
+          onClick={() => setFilter("completed")}
         >
           Concluídas
         </Button>
@@ -246,4 +245,4 @@ export const MobileMissions: React.FC = () => {
       </div>
     </div>
   );
-});
+};

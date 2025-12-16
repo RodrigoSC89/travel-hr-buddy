@@ -1,4 +1,3 @@
-import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -119,7 +118,7 @@ export default function DPAlerts() {
 
   const sources = useMemo(() => 
     [...new Set(alerts.map(a => a.source))],
-  []
+    []
   );
 
   const hasActiveFilters = filters.severity.length > 0 || filters.source.length > 0 || filters.acknowledged !== null;
@@ -136,7 +135,7 @@ export default function DPAlerts() {
         return false;
       }
       return true;
-    };
+    });
   }, [activeAlerts, filters]);
 
   const pendingFilteredAlerts = filteredAlerts.filter(a => !a.acknowledged);
@@ -171,27 +170,27 @@ export default function DPAlerts() {
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-    case "critical":
-      return <XCircle className="h-5 w-5 text-red-500" />;
-    case "warning":
-      return <AlertTriangle className="h-5 w-5 text-amber-500" />;
-    case "info":
-      return <Bell className="h-5 w-5 text-blue-500" />;
-    default:
-      return <Bell className="h-5 w-5" />;
+      case "critical":
+        return <XCircle className="h-5 w-5 text-red-500" />;
+      case "warning":
+        return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+      case "info":
+        return <Bell className="h-5 w-5 text-blue-500" />;
+      default:
+        return <Bell className="h-5 w-5" />;
     }
   };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
-    case "critical":
-      return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
-    case "warning":
-      return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
-    case "info":
-      return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
-    default:
-      return <Badge>{severity}</Badge>;
+      case "critical":
+        return <Badge className="bg-red-100 text-red-700">Crítico</Badge>;
+      case "warning":
+        return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+      case "info":
+        return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
+      default:
+        return <Badge>{severity}</Badge>;
     }
   };
 
@@ -311,7 +310,7 @@ export default function DPAlerts() {
                           <Checkbox
                             id={`severity-${option.value}`}
                             checked={filters.severity.includes(option.value)}
-                            onCheckedChange={() => toggleSeverityFilter(option.value}
+                            onCheckedChange={() => toggleSeverityFilter(option.value)}
                           />
                           <Label htmlFor={`severity-${option.value}`} className="text-sm cursor-pointer">
                             {option.label}
@@ -329,7 +328,7 @@ export default function DPAlerts() {
                           <Checkbox
                             id={`source-${source}`}
                             checked={filters.source.includes(source)}
-                            onCheckedChange={() => toggleSourceFilter(source}
+                            onCheckedChange={() => toggleSourceFilter(source)}
                           />
                           <Label htmlFor={`source-${source}`} className="text-sm cursor-pointer">
                             {source}
@@ -356,8 +355,8 @@ export default function DPAlerts() {
             {pendingFilteredAlerts.map(alert => (
               <Card key={alert.id} className={`border-l-4 ${
                 alert.severity === "critical" ? "border-l-red-500" :
-                  alert.severity === "warning" ? "border-l-amber-500" :
-                    "border-l-blue-500"
+                alert.severity === "warning" ? "border-l-amber-500" :
+                "border-l-blue-500"
               }`}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">
@@ -378,7 +377,7 @@ export default function DPAlerts() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleacknowledgeAlert}
+                      onClick={() => acknowledgeAlert(alert.id)}
                     >
                       <CheckCircle2 className="h-4 w-4 mr-1" />
                       Reconhecer
@@ -449,14 +448,14 @@ export default function DPAlerts() {
                         <span className="text-sm text-muted-foreground">Ativo</span>
                         <Switch
                           checked={item.enabled}
-                          onCheckedChange={() => toggleConfig(index, "enabled"}
+                          onCheckedChange={() => toggleConfig(index, "enabled")}
                         />
                       </div>
                       <div className="flex items-center gap-2">
                         <Volume2 className="h-4 w-4 text-muted-foreground" />
                         <Switch
                           checked={item.sound}
-                          onCheckedChange={() => toggleConfig(index, "sound"}
+                          onCheckedChange={() => toggleConfig(index, "sound")}
                         />
                       </div>
                     </div>

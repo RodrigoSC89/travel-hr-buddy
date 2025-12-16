@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Alerts Dialog Component
  * Exibe notificações e alertas do sistema
  */
@@ -99,14 +98,14 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
 
   const getTypeIcon = (type: Alert["type"]) => {
     switch (type) {
-    case "warning":
-      return <AlertTriangle className="h-4 w-4 text-amber-500" />;
-    case "success":
-      return <CheckCircle className="h-4 w-4 text-emerald-500" />;
-    case "error":
-      return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    default:
-      return <Info className="h-4 w-4 text-blue-500" />;
+      case "warning":
+        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+      case "success":
+        return <CheckCircle className="h-4 w-4 text-emerald-500" />;
+      case "error":
+        return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      default:
+        return <Info className="h-4 w-4 text-blue-500" />;
     }
   };
 
@@ -223,7 +222,7 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
                               variant="ghost"
                               size="icon"
                               className="h-7 w-7"
-                              onClick={() => handlemarkAsRead}
+                              onClick={() => markAsRead(alert.id)}
                               title="Marcar como lida"
                             >
                               <Check className="h-3 w-3" />
@@ -233,7 +232,7 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                            onClick={() => handledeleteAlert}
+                            onClick={() => deleteAlert(alert.id)}
                             title="Excluir"
                           >
                             <Trash2 className="h-3 w-3" />
@@ -251,4 +250,5 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
     </Dialog>
   );
 };
+
 export { AlertsDialog };

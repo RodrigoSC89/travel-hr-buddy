@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Activity, Wifi, ShieldCheck } from "lucide-react";
@@ -14,7 +13,7 @@ export default function BridgeLinkStatus() {
         latency: (data.latency as number) ?? 0,
         lastSync: (data.lastSync as string) ?? "—"
       });
-  });
+    });
     return () => {
       client.end();
     };

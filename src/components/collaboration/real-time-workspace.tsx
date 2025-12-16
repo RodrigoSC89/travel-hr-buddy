@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -133,7 +132,7 @@ const RealTimeWorkspace: React.FC = () => {
                   last_seen?: string;
                   current_page?: string;
                   vessel_id?: string;
-                });
+                };
                 const status = presence.status as "online" | "busy" | "away" | "offline" | undefined;
                 users.push({
                   user_id: userId,
@@ -155,15 +154,15 @@ const RealTimeWorkspace: React.FC = () => {
             toast({
               title: `${newUser.name} entrou no workspace`,
               description: "Usuário conectado",
-});
+            });
           })
           .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
             const leftUser = leftPresences[0];
             toast({
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
-});
-  });
+            });
+          });
 
         // Configurar mensagens de chat
         channel.on("broadcast", { event: "chat_message" }, (payload) => {
@@ -175,7 +174,7 @@ const RealTimeWorkspace: React.FC = () => {
             timestamp: payload.payload.timestamp,
             type: payload.payload.type || "text",
             metadata: payload.payload.metadata
-          });
+          };
           
           setChatMessages(prev => [...prev, message]);
         });
@@ -192,7 +191,7 @@ const RealTimeWorkspace: React.FC = () => {
             priority: payload.priority || "low",
             vessel_id: payload.vessel_id,
             related_data: payload.related_data
-          });
+          };
           
           setWorkspaceUpdates(prev => [update, ...prev.slice(0, 49)]);
         });
@@ -226,7 +225,7 @@ const RealTimeWorkspace: React.FC = () => {
       } finally {
         setIsLoading(false);
       }
-    });
+    };
 
     setupRealtime();
 
@@ -235,7 +234,7 @@ const RealTimeWorkspace: React.FC = () => {
       if (channelRef.current) {
         channelRef.current.unsubscribe();
       }
-    });
+    };
   }, [user, myStatus, toast]);
 
   // Carregar dados iniciais
@@ -385,7 +384,7 @@ const RealTimeWorkspace: React.FC = () => {
                 <Button
                   variant={myStatus === "online" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handlechangeStatus}
+                  onClick={() => changeStatus("online")}
                   className="text-xs"
                 >
                   <Circle className="h-3 w-3 mr-1 fill-current text-green-500" />
@@ -394,7 +393,7 @@ const RealTimeWorkspace: React.FC = () => {
                 <Button
                   variant={myStatus === "busy" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handlechangeStatus}
+                  onClick={() => changeStatus("busy")}
                   className="text-xs"
                 >
                   <AlertTriangle className="h-3 w-3 mr-1 text-red-500" />
@@ -403,7 +402,7 @@ const RealTimeWorkspace: React.FC = () => {
                 <Button
                   variant={myStatus === "away" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handlechangeStatus}
+                  onClick={() => changeStatus("away")}
                   className="text-xs"
                 >
                   <Clock className="h-3 w-3 mr-1 text-yellow-500" />
@@ -450,7 +449,7 @@ const RealTimeWorkspace: React.FC = () => {
             <Button 
               size="sm" 
               className="w-full justify-start"
-              onClick={() => handlesendWorkspaceUpdate}
+              onClick={() => sendWorkspaceUpdate("emergency_drill", "Simulado de emergência iniciado", "high")}
             >
               <AlertTriangle className="h-4 w-4 mr-2" />
               Simulado de Emergência
@@ -459,7 +458,7 @@ const RealTimeWorkspace: React.FC = () => {
               size="sm" 
               variant="outline"
               className="w-full justify-start"
-              onClick={() => handlesendWorkspaceUpdate}
+              onClick={() => sendWorkspaceUpdate("shift_change", "Troca de turno em andamento", "medium")}
             >
               <Clock className="h-4 w-4 mr-2" />
               Troca de Turno
@@ -468,7 +467,7 @@ const RealTimeWorkspace: React.FC = () => {
               size="sm" 
               variant="outline"
               className="w-full justify-start"
-              onClick={() => handlesendWorkspaceUpdate}
+              onClick={() => sendWorkspaceUpdate("maintenance_alert", "Manutenção programada", "low")}
             >
               <Activity className="h-4 w-4 mr-2" />
               Alerta de Manutenção
@@ -559,7 +558,7 @@ const RealTimeWorkspace: React.FC = () => {
                     <Input
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
-                      onChange={handleChange}
+                      onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                       className="flex-1"
                     />

@@ -1,22 +1,21 @@
 /**
-import { useState, useCallback } from "react";;
  * DDS Panel - Diálogo Diário de Segurança
  */
 
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Plus, Users, Clock, FileText, CheckCircle, Search } from "lucide-react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { toast } from "sonner";
-import type { DDSRecord } from "../types";
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar, Plus, Users, Clock, FileText, CheckCircle, Search } from 'lucide-react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { toast } from 'sonner';
+import type { DDSRecord } from '../types';
 
 interface DDSPanelProps {
   records: DDSRecord[];
@@ -26,19 +25,19 @@ interface DDSPanelProps {
 
 export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loading }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
-    topic: "",
-    vessel_name: "",
-    conductor: "",
+    topic: '',
+    vessel_name: '',
+    conductor: '',
     participants_count: 0,
     duration_minutes: 15,
-    notes: ""
-});
+    notes: ''
+  });
 
   const handleSubmit = async () => {
     if (!formData.topic || !formData.vessel_name || !formData.conductor) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error('Preencha todos os campos obrigatórios');
       return;
     }
 
@@ -49,15 +48,15 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
     });
 
     setFormData({
-      topic: "",
-      vessel_name: "",
-      conductor: "",
+      topic: '',
+      vessel_name: '',
+      conductor: '',
       participants_count: 0,
       duration_minutes: 15,
-      notes: ""
+      notes: ''
     });
     setDialogOpen(false);
-    toast.success("DDS registrado com sucesso!");
+    toast.success('DDS registrado com sucesso!');
   };
 
   const filteredRecords = records.filter(r =>
@@ -68,13 +67,13 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
   const todayRecords = records.filter(r => {
     const today = new Date().toDateString();
     return new Date(r.date).toDateString() === today;
-  };
+  });
 
   const weekRecords = records.filter(r => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(r.date) >= weekAgo;
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -150,7 +149,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
           <Input
             placeholder="Buscar DDS..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -172,7 +171,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                 <Input
                   placeholder="Ex: Uso correto de EPIs"
                   value={formData.topic}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
                 />
               </div>
 
@@ -200,7 +199,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                   <Input
                     placeholder="Nome do condutor"
                     value={formData.conductor}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, conductor: e.target.value })}
                   />
                 </div>
               </div>
@@ -212,7 +211,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                     type="number"
                     min={0}
                     value={formData.participants_count}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, participants_count: parseInt(e.target.value) || 0 })}
                   />
                 </div>
 
@@ -222,7 +221,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                     type="number"
                     min={5}
                     value={formData.duration_minutes}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 15 })}
                   />
                 </div>
               </div>
@@ -232,13 +231,13 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                 <Textarea
                   placeholder="Anotações adicionais..."
                   value={formData.notes}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows={3}
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
-                <Button variant="outline" onClick={handleSetDialogOpen}>
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>
                   Cancelar
                 </Button>
                 <Button onClick={handleSubmit}>

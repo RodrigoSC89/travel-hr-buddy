@@ -3,7 +3,7 @@
  * PATCH 623 - Monitor component render times
  */
 
-import { memo, memo, useEffect, useRef, useCallback } from "react";;;
+import { useEffect, useRef } from "react";
 
 interface PerformanceLogOptions {
   componentName: string;
@@ -11,7 +11,7 @@ interface PerformanceLogOptions {
   onSlowRender?: (time: number) => void;
 }
 
-export const usePerformanceLog = memo(function({ 
+export function usePerformanceLog({ 
   componentName, 
   threshold = 1000,
   onSlowRender 
@@ -25,8 +25,10 @@ export const usePerformanceLog = memo(function({
       mountTime.current = Date.now();
       const mountDuration = mountTime.current - renderStartTime.current;
       
+      console.log(`[Performance] ${componentName} mounted in ${mountDuration}ms`);
       
       if (mountDuration > threshold) {
+        console.warn(`[Performance] ${componentName} exceeded threshold (${threshold}ms)`);
         onSlowRender?.(mountDuration);
       }
     }
@@ -36,4 +38,4 @@ export const usePerformanceLog = memo(function({
   useEffect(() => {
     renderStartTime.current = Date.now();
   });
-});
+}

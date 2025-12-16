@@ -3,7 +3,7 @@
  * User-friendly loading states for slow connections
  */
 
-import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSlowNetwork } from "@/components/performance/SlowNetworkOptimizer";
 import { Skeleton } from "./skeleton";
@@ -17,7 +17,7 @@ interface SlowConnectionBannerProps {
   message?: string;
 }
 
-export const SlowConnectionBanner = memo(function({ onRetry, message }: SlowConnectionBannerProps) {
+export function SlowConnectionBanner({ onRetry, message }: SlowConnectionBannerProps) {
   const { quality, isSlowNetwork, isCriticallySlowNetwork } = useSlowNetwork();
 
   if (!isSlowNetwork) return null;
@@ -64,7 +64,7 @@ interface ProgressiveLoadingProps {
   className?: string;
 }
 
-export const ProgressiveLoading = memo(function({
+export function ProgressiveLoading({
   progress,
   message = "Carregando...",
   showDetails = false,
@@ -99,7 +99,7 @@ export const ProgressiveLoading = memo(function({
     if (elapsedTime > 15) return "Carregamento lento devido à conexão";
     if (elapsedTime > 5) return "Otimizando para sua conexão...";
     return null;
-  });
+  };
 
   const slowMessage = getSlowMessage();
 
@@ -156,7 +156,7 @@ interface TimeoutMessageProps {
   className?: string;
 }
 
-export const TimeoutMessage = memo(function({ 
+export function TimeoutMessage({ 
   onRetry, 
   message = "A solicitação demorou muito",
   className 
@@ -196,7 +196,7 @@ interface OfflineMessageProps {
   className?: string;
 }
 
-export const OfflineMessage = memo(function({ onRetry, className }: OfflineMessageProps) {
+export function OfflineMessage({ onRetry, className }: OfflineMessageProps) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -209,7 +209,7 @@ export const OfflineMessage = memo(function({ onRetry, className }: OfflineMessa
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    });
+    };
   }, []);
 
   if (isOnline) return null;
@@ -248,7 +248,7 @@ interface DataSkeletonProps {
   className?: string;
 }
 
-export const DataSkeleton = memo(function({ rows = 5, columns = 4, className }: DataSkeletonProps) {
+export function DataSkeleton({ rows = 5, columns = 4, className }: DataSkeletonProps) {
   return (
     <div className={cn("space-y-3", className)}>
       {/* Header */}
@@ -282,7 +282,7 @@ interface CardSkeletonGridProps {
   className?: string;
 }
 
-export const CardSkeletonGrid = memo(function({ 
+export function CardSkeletonGrid({ 
   count = 4, 
   columns = 4,
   className 
@@ -301,8 +301,8 @@ export const CardSkeletonGrid = memo(function({
         className
       )}
       style={{ 
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-        maxWidth: "100%" 
+        gridTemplateColumns: `repeat(auto-fit, minmax(280px, 1fr))`,
+        maxWidth: '100%' 
       }}
     >
       {Array.from({ length: actualCount }).map((_, i) => (
@@ -317,4 +317,4 @@ export const CardSkeletonGrid = memo(function({
       ))}
     </div>
   );
-});
+}

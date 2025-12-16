@@ -55,7 +55,7 @@ export class ErrorBoundaryWrapper extends React.Component<
       error: null,
       errorInfo: null,
     });
-  });
+  };
 
   render() {
     if (this.state.hasError) {
@@ -108,7 +108,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
             </Button>
             <Button 
               variant="outline" 
-              onClick={() => handlenavigate}
+              onClick={() => navigate("/")}
               className="w-full"
             >
               <Home className="h-4 w-4 mr-2" />
@@ -119,4 +119,4 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
       </Card>
     </div>
   );
-});
+};

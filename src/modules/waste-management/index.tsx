@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Recycle, LayoutDashboard, Droplets, Trash2, FileText, Brain } from "lucide-react";
-import { useState, useMemo, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -72,25 +72,25 @@ function WasteManagement() {
       
       const key = chatMessage.toLowerCase().includes("marpol") ? "marpol" 
         : chatMessage.toLowerCase().includes("descart") ? "descarte"
-          : chatMessage.toLowerCase().includes("relat") ? "relatorio"
-            : "default";
+        : chatMessage.toLowerCase().includes("relat") ? "relatorio"
+        : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
     
     setChatMessage("");
-  });
+  };
 
   const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
   const warningTanks = mockTanks.filter(t => t.status === "warning").length;
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "oily": return <Droplets className="h-5 w-5 text-amber-600" />;
-    case "sewage": return <Trash2 className="h-5 w-5 text-stone-600" />;
-    case "bilge": return <Droplets className="h-5 w-5 text-blue-600" />;
-    case "garbage": return <Recycle className="h-5 w-5 text-green-600" />;
-    default: return <Trash2 className="h-5 w-5" />;
+      case "oily": return <Droplets className="h-5 w-5 text-amber-600" />;
+      case "sewage": return <Trash2 className="h-5 w-5 text-stone-600" />;
+      case "bilge": return <Droplets className="h-5 w-5 text-blue-600" />;
+      case "garbage": return <Recycle className="h-5 w-5 text-green-600" />;
+      default: return <Trash2 className="h-5 w-5" />;
     }
   };
 
@@ -280,7 +280,7 @@ function WasteManagement() {
                       <Input
                         placeholder="Pergunte sobre MARPOL, descarte..."
                         value={chatMessage}
-                        onChange={handleChange}
+                        onChange={(e) => setChatMessage(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                       />
                       <Button size="icon" onClick={handleSendMessage}>

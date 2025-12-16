@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -168,7 +167,7 @@ export const IntegrationTemplates: React.FC = () => {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const getDifficultyColor = (difficulty: IntegrationTemplate["difficulty"]) => {
     switch (difficulty) {
@@ -228,7 +227,7 @@ export const IntegrationTemplates: React.FC = () => {
                 <Input
                   placeholder="Buscar templates..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -239,7 +238,7 @@ export const IntegrationTemplates: React.FC = () => {
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetSelectedCategory}
+                  onClick={() => setSelectedCategory(category.id)}
                   className="whitespace-nowrap"
                 >
                   {category.id !== "all" && getCategoryIcon(category.id as IntegrationTemplate["category"])}

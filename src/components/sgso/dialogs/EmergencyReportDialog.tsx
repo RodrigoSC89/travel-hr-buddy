@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * Emergency Report Dialog
  * Generate and view emergency response reports
  */
@@ -248,7 +247,7 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
         </div>
 
         <DialogFooter className="flex gap-2">
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Fechar
           </Button>
           <Button variant="outline" onClick={handlePrint}>
@@ -263,4 +262,4 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-});
+};

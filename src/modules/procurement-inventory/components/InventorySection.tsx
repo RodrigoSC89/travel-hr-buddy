@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -148,7 +147,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
         return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
       }
       return 0;
-  });
+    });
 
   const handleSort = (field: keyof InventoryItem) => {
     if (sortField === field) {
@@ -157,12 +156,12 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
       setSortField(field);
       setSortDirection("asc");
     }
-  });
+  };
 
   const handleAddItem = () => {
     const status = newItem.quantity <= newItem.minStock * 0.5 ? "critical" :
       newItem.quantity <= newItem.minStock ? "low" :
-        newItem.quantity >= newItem.maxStock ? "excess" : "ok";
+      newItem.quantity >= newItem.maxStock ? "excess" : "ok";
 
     const item: InventoryItem = {
       id: Date.now().toString(),
@@ -188,7 +187,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
       unitCost: 0,
     });
     toast.success("Item adicionado ao estoque com sucesso!");
-  });
+  };
 
   const handleMovement = () => {
     if (!selectedItem) return;
@@ -204,7 +203,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
       if (item.id === selectedItem.id) {
         const status = newQuantity <= item.minStock * 0.5 ? "critical" :
           newQuantity <= item.minStock ? "low" :
-            newQuantity >= item.maxStock ? "excess" : "ok";
+          newQuantity >= item.maxStock ? "excess" : "ok";
         return { ...item, quantity: newQuantity, status, lastMovement: new Date().toISOString().split("T")[0] };
       }
       return item;
@@ -323,7 +322,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Download className="h-4 w-4" />
             </Button>
 
-            <Button onClick={handleSetShowAddItem}>
+            <Button onClick={() => setShowAddItem(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Item
             </Button>
@@ -336,20 +335,20 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="cursor-pointer" onClick={() => handlehandleSort}>
+                    <TableHead className="cursor-pointer" onClick={() => handleSort("sku")}>
                       <div className="flex items-center gap-1">
                         SKU
                         {sortField === "sku" && (sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
                       </div>
                     </TableHead>
-                    <TableHead className="cursor-pointer" onClick={() => handlehandleSort}>
+                    <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
                       <div className="flex items-center gap-1">
                         Descrição
                         {sortField === "name" && (sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
                       </div>
                     </TableHead>
                     <TableHead>Categoria</TableHead>
-                    <TableHead className="text-center cursor-pointer" onClick={() => handlehandleSort}>
+                    <TableHead className="text-center cursor-pointer" onClick={() => handleSort("quantity")}>
                       <div className="flex items-center justify-center gap-1">
                         Qtd
                         {sortField === "quantity" && (sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
@@ -390,8 +389,8 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                             value={(item.quantity / item.maxStock) * 100} 
                             className={`h-2 ${
                               item.status === "critical" ? "[&>div]:bg-destructive" : 
-                                item.status === "low" ? "[&>div]:bg-amber-500" :
-                                  item.status === "excess" ? "[&>div]:bg-purple-500" : "[&>div]:bg-green-500"
+                              item.status === "low" ? "[&>div]:bg-amber-500" :
+                              item.status === "excess" ? "[&>div]:bg-purple-500" : "[&>div]:bg-green-500"
                             }`}
                           />
                           <p className="text-xs text-muted-foreground mt-1">
@@ -409,12 +408,12 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                       <TableCell>
                         <Badge variant={
                           item.status === "critical" ? "destructive" :
-                            item.status === "low" ? "default" :
-                              item.status === "excess" ? "secondary" : "outline"
+                          item.status === "low" ? "default" :
+                          item.status === "excess" ? "secondary" : "outline"
                         }>
                           {item.status === "critical" ? "Crítico" :
-                            item.status === "low" ? "Baixo" :
-                              item.status === "excess" ? "Excesso" : "OK"}
+                           item.status === "low" ? "Baixo" :
+                           item.status === "excess" ? "Excesso" : "OK"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -476,14 +475,14 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                       <TableCell>
                         <Badge variant={
                           mov.type === "in" ? "default" :
-                            mov.type === "out" ? "destructive" :
-                              mov.type === "transfer" ? "secondary" : "outline"
+                          mov.type === "out" ? "destructive" :
+                          mov.type === "transfer" ? "secondary" : "outline"
                         }>
                           {mov.type === "in" && <ArrowDown className="h-3 w-3 mr-1" />}
                           {mov.type === "out" && <ArrowUp className="h-3 w-3 mr-1" />}
                           {mov.type === "in" ? "Entrada" :
-                            mov.type === "out" ? "Saída" :
-                              mov.type === "transfer" ? "Transferência" : "Ajuste"}
+                           mov.type === "out" ? "Saída" :
+                           mov.type === "transfer" ? "Transferência" : "Ajuste"}
                         </Badge>
                       </TableCell>
                       <TableCell className="font-medium">{mov.itemName}</TableCell>
@@ -556,7 +555,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="FIL-OLE-007"
                 value={newItem.sku}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, sku: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -564,7 +563,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="Nome do item"
                 value={newItem.name}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, name: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -608,7 +607,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="number"
                 value={newItem.quantity}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, quantity: Number(e.target.value) }))}
               />
             </div>
             <div className="space-y-2">
@@ -617,7 +616,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 type="number"
                 step="0.01"
                 value={newItem.unitCost}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, unitCost: Number(e.target.value) }))}
               />
             </div>
             <div className="space-y-2">
@@ -625,7 +624,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="number"
                 value={newItem.minStock}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, minStock: Number(e.target.value) }))}
               />
             </div>
             <div className="space-y-2">
@@ -633,7 +632,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="number"
                 value={newItem.maxStock}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, maxStock: Number(e.target.value) }))}
               />
             </div>
             <div className="space-y-2">
@@ -641,7 +640,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="A1-01"
                 value={newItem.location}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, location: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -649,7 +648,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="L2024-XXX"
                 value={newItem.lot}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, lot: e.target.value }))}
               />
             </div>
             <div className="space-y-2 col-span-2">
@@ -657,12 +656,12 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="date"
                 value={newItem.expiryDate}
-                onChange={handleChange}))}
+                onChange={(e) => setNewItem(prev => ({ ...prev, expiryDate: e.target.value }))}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowAddItem}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowAddItem(false)}>Cancelar</Button>
             <Button onClick={handleAddItem}>
               <Plus className="h-4 w-4 mr-2" />
               Adicionar Item
@@ -677,7 +676,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
           <DialogHeader>
             <DialogTitle>
               {movementType === "in" ? "Entrada de Estoque" :
-                movementType === "out" ? "Saída de Estoque" : "Ajuste de Estoque"}
+               movementType === "out" ? "Saída de Estoque" : "Ajuste de Estoque"}
             </DialogTitle>
           </DialogHeader>
           {selectedItem && (
@@ -691,7 +690,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Label>Tipo de Movimentação</Label>
                 <Select 
                   value={movementType} 
-                  onValueChange={(v: "in" | "out" | "adjustment") => setMovementType(v}
+                  onValueChange={(v: "in" | "out" | "adjustment") => setMovementType(v)}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -709,7 +708,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Input 
                   type="number"
                   value={movementData.quantity}
-                  onChange={handleChange}))}
+                  onChange={(e) => setMovementData(prev => ({ ...prev, quantity: Number(e.target.value) }))}
                 />
               </div>
 
@@ -718,7 +717,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Textarea 
                   placeholder="Descreva o motivo da movimentação..."
                   value={movementData.reason}
-                  onChange={handleChange}))}
+                  onChange={(e) => setMovementData(prev => ({ ...prev, reason: e.target.value }))}
                 />
               </div>
 
@@ -727,13 +726,13 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Input 
                   placeholder="OS-2024-XXX"
                   value={movementData.reference}
-                  onChange={handleChange}))}
+                  onChange={(e) => setMovementData(prev => ({ ...prev, reference: e.target.value }))}
                 />
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowMovement}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowMovement(false)}>Cancelar</Button>
             <Button onClick={handleMovement}>
               <CheckCircle2 className="h-4 w-4 mr-2" />
               Confirmar Movimentação

@@ -1,4 +1,3 @@
-import { useEffect, useCallback } from "react";;
 import React, { memo } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { logger } from "@/lib/logger";
@@ -9,7 +8,7 @@ interface LazyComponentProps {
   fallback?: React.ReactNode;
   children?: React.ReactNode;
   componentName?: string;
-  [key: string]: unknown: unknown: unknown;
+  [key: string]: any;
 }
 
 export const LazyComponent: React.FC<LazyComponentProps> = memo(({ 
@@ -47,12 +46,12 @@ export const usePerformanceMonitor = (componentName: string) => {
 };
 
 // Componente otimizado para cards
-export const OptimizedCard = memo(({ children, className, ...props }: unknown: unknown: unknown) => {
+export const OptimizedCard = memo(({ children, className, ...props }: any) => {
   return (
     <div className={`transition-all duration-200 ${className}`} {...props}>
       {children}
     </div>
   );
-  };
+});
 
 OptimizedCard.displayName = "OptimizedCard";

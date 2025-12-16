@@ -16,12 +16,12 @@ vi.mock("@/hooks/use-toast", () => ({
 }));
 
 vi.mock("@/components/editor/TipTapEditor", () => ({
-  default: ({ content, onChange }: unknown: unknown: unknown) => (
+  default: ({ content, onChange }: any) => (
     <div data-testid="tiptap-editor">
       <textarea
         data-testid="editor-content"
         value={typeof content === "string" ? content : JSON.stringify(content)}
-        onChange={handleChange}
+        onChange={(e) => onChange && onChange(e.target.value)}
       />
     </div>
   ),
@@ -82,7 +82,7 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("tiptap-editor")).toBeInTheDocument();
-  });
+    });
   });
 
   it("should show editor immediately if no variables", () => {
@@ -107,7 +107,7 @@ describe("CreateFromTemplate", () => {
       id: "template-456",
       title: "Simple Template",
       content: "<p>No variables here</p>",
-    });
+    };
 
     render(<CreateFromTemplate template={templateNoVars} />);
     
@@ -116,7 +116,7 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(createDocument).toHaveBeenCalled();
-  });
+    });
   });
 
   it("should call onSaved callback after successful save", async () => {
@@ -142,7 +142,7 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(onSaved).toHaveBeenCalledWith(mockDoc);
-  });
+    });
   });
 
   it("should handle save error gracefully", async () => {
@@ -161,6 +161,6 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(createDocument).toHaveBeenCalled();
-  });
+    });
   });
 });

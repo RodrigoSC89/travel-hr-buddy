@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -109,7 +108,7 @@ export const PeotramPermissionsManager: React.FC = () => {
 
       if (error) throw error;
       
-      const mappedPermissions = (data || []).map((permission: unknown) => ({
+      const mappedPermissions = (data || []).map((permission: any) => ({
         ...permission,
         permission_level: permission.permission_level as "none" | "read" | "write" | "admin",
         location_type: permission.location_type as "vessel" | "shore" | "both"
@@ -176,7 +175,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     }
   };
 
-  const updatePermission = async (id: string, updates: Record<string, unknown>) => {
+  const updatePermission = async (id: string, updates: any) => {
     try {
       const { error } = await supabase
         .from("user_feature_permissions")
@@ -257,7 +256,7 @@ export const PeotramPermissionsManager: React.FC = () => {
   const filteredPermissions = permissions.filter(permission => {
     const userName = permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email || "";
     return userName.toLowerCase().includes(searchTerm.toLowerCase());
-  };
+  });
 
   const areas = [
     "Ponte de Comando",
@@ -416,7 +415,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Input
                     type="date"
                     value={permissionForm.expires_at}
-                    onChange={handleChange}))}
+                    onChange={(e) => setPermissionForm(prev => ({ ...prev, expires_at: e.target.value }))}
                   />
                 </div>
               </div>
@@ -502,7 +501,7 @@ export const PeotramPermissionsManager: React.FC = () => {
               )}
               
               <div className="flex justify-end gap-2 pt-4 border-t">
-                <Button variant="outline" onClick={handleSetIsDialogOpen}>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Cancelar
                 </Button>
                 <Button 
@@ -525,7 +524,7 @@ export const PeotramPermissionsManager: React.FC = () => {
               <Input
                 placeholder="Buscar usuários..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
@@ -641,14 +640,14 @@ export const PeotramPermissionsManager: React.FC = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handletogglePermissionStatus}
+                        onClick={() => togglePermissionStatus(permission)}
                       >
                         {permission.is_active ? "Desativar" : "Ativar"}
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handledeletePermission}
+                        onClick={() => deletePermission(permission.id)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -662,4 +661,4 @@ export const PeotramPermissionsManager: React.FC = () => {
       </div>
     </div>
   );
-});
+};

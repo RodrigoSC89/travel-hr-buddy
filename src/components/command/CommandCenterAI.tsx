@@ -1,5 +1,4 @@
 /**
-import { useState } from "react";;
  * Command Center AI - Centro de Comando Unificado
  * Dashboard inteligente com visão 360° de toda operação
  */
@@ -13,11 +12,11 @@ import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
   Brain, Ship, Users, Wrench, Shield, DollarSign, 
-  AlertTriangle, Activity, Sparkles, Zap, LayoutDashboard
+  AlertTriangle, TrendingUp, Activity, Sparkles, Zap, LayoutDashboard
 } from "lucide-react";
 import { toast } from "sonner";
 
-export const CommandCenterAI = memo(function() {
+export function CommandCenterAI() {
   const { analyze, isLoading } = useNautilusAI();
   const [briefing, setBriefing] = useState<string>("");
 
@@ -130,6 +129,6 @@ export const CommandCenterAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default CommandCenterAI;

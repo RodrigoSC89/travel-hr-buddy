@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,8 +40,8 @@ const ThoughtChainPage = () => {
             return updated;
           }
           return [...prev, step];
-  });
-  });
+        });
+      });
 
       setTotalTime(result.totalTime);
 
@@ -108,7 +107,7 @@ const ThoughtChainPage = () => {
               <Textarea
                 placeholder="Exemplo:&#10;Verificar status dos módulos críticos&#10;Identificar latências acima de 500ms&#10;Sugerir ações corretivas"
                 value={input}
-                onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 rows={8}
                 disabled={isRunning}
               />
@@ -143,7 +142,7 @@ const ThoughtChainPage = () => {
 
         <TabsContent value="templates" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleloadTemplate}>
+            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => loadTemplate(CHAIN_TEMPLATES.systemHealth)}>
               <CardHeader>
                 <CardTitle className="text-base">Saúde do Sistema</CardTitle>
                 <CardDescription>
@@ -155,7 +154,7 @@ const ThoughtChainPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleloadTemplate}>
+            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => loadTemplate(CHAIN_TEMPLATES.fleetAnalysis)}>
               <CardHeader>
                 <CardTitle className="text-base">Análise de Frota</CardTitle>
                 <CardDescription>
@@ -167,7 +166,7 @@ const ThoughtChainPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleloadTemplate}>
+            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => loadTemplate(CHAIN_TEMPLATES.maintenanceAudit)}>
               <CardHeader>
                 <CardTitle className="text-base">Auditoria de Manutenção</CardTitle>
                 <CardDescription>
@@ -179,7 +178,7 @@ const ThoughtChainPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleloadTemplate}>
+            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => loadTemplate(CHAIN_TEMPLATES.crewWellness)}>
               <CardHeader>
                 <CardTitle className="text-base">Bem-estar da Tripulação</CardTitle>
                 <CardDescription>
@@ -191,7 +190,7 @@ const ThoughtChainPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleloadTemplate}>
+            <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => loadTemplate(CHAIN_TEMPLATES.sarPreparation)}>
               <CardHeader>
                 <CardTitle className="text-base">Preparação SAR</CardTitle>
                 <CardDescription>
@@ -229,6 +228,6 @@ const ThoughtChainPage = () => {
       )}
     </div>
   );
-});
+};
 
 export default ThoughtChainPage;

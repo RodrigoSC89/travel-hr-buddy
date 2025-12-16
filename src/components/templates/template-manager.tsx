@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -125,7 +124,7 @@ const TemplateManager = () => {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesType && matchesSearch;
-  };
+  });
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -161,7 +160,7 @@ const TemplateManager = () => {
       title: "Template duplicado",
       description: "Template copiado com sucesso",
     });
-  });
+  };
 
   const deleteTemplate = (id: string) => {
     setTemplates(prev => prev.filter(template => template.id !== id));
@@ -169,7 +168,7 @@ const TemplateManager = () => {
       title: "Template removido",
       description: "Template excluído com sucesso",
     });
-  });
+  };
 
   const handleUseTemplate = (template: Template) => {
     // Simular uso do template
@@ -182,7 +181,7 @@ const TemplateManager = () => {
       title: "Template aplicado",
       description: `Template "${template.name}" foi usado com sucesso`,
     });
-  });
+  };
 
   const getRelativeTime = (date?: Date) => {
     if (!date) return "Nunca";
@@ -213,7 +212,7 @@ const TemplateManager = () => {
             <Upload className="w-4 h-4 mr-2" />
             Importar
           </Button>
-          <Button onClick={handleSetShowCreateForm}>
+          <Button onClick={() => setShowCreateForm(true)}>
             <Plus className="w-4 h-4 mr-2" />
             Novo Template
           </Button>
@@ -227,7 +226,7 @@ const TemplateManager = () => {
           <Input
             placeholder="Buscar templates..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
@@ -285,10 +284,10 @@ const TemplateManager = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => handlehandleUseTemplate}>
+                      <Button variant="ghost" size="sm" onClick={() => handleUseTemplate(template)}>
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={handleSetEditingTemplate}>
+                      <Button variant="ghost" size="sm" onClick={() => setEditingTemplate(template)}>
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
@@ -326,16 +325,16 @@ const TemplateManager = () => {
                   </div>
                   
                   <div className="flex items-center gap-2 mt-4">
-                    <Button size="sm" onClick={() => handlehandleUseTemplate}>
+                    <Button size="sm" onClick={() => handleUseTemplate(template)}>
                       Usar Template
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleduplicateTemplate}>
+                    <Button variant="outline" size="sm" onClick={() => duplicateTemplate(template)}>
                       <Copy className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="sm">
                       <Share className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handledeleteTemplate}>
+                    <Button variant="outline" size="sm" onClick={() => deleteTemplate(template.id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -351,7 +350,7 @@ const TemplateManager = () => {
               <p className="text-muted-foreground mb-4">
                 Tente ajustar os filtros ou criar um novo template
               </p>
-              <Button onClick={handleSetShowCreateForm}>
+              <Button onClick={() => setShowCreateForm(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Criar Primeiro Template
               </Button>
@@ -380,13 +379,13 @@ const TemplateManager = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" onClick={() => handlehandleUseTemplate}>
+                    <Button size="sm" onClick={() => handleUseTemplate(template)}>
                       Usar
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleduplicateTemplate}>
+                    <Button variant="outline" size="sm" onClick={() => duplicateTemplate(template)}>
                       <Copy className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={handleSetEditingTemplate}>
+                    <Button variant="outline" size="sm" onClick={() => setEditingTemplate(template)}>
                       <Edit className="w-4 h-4" />
                     </Button>
                   </div>
@@ -419,7 +418,7 @@ const TemplateManager = () => {
                     </p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-medium">{template.usageCount} usos</span>
-                      <Button size="sm" onClick={() => handlehandleUseTemplate}>
+                      <Button size="sm" onClick={() => handleUseTemplate(template)}>
                         Usar Template
                       </Button>
                     </div>
@@ -473,10 +472,10 @@ const TemplateManager = () => {
                 />
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={handleSetShowCreateForm}>
+                <Button variant="outline" onClick={() => setShowCreateForm(false)}>
                   Cancelar
                 </Button>
-                <Button onClick={handleSetShowCreateForm}>
+                <Button onClick={() => setShowCreateForm(false)}>
                   Criar Template
                 </Button>
               </div>

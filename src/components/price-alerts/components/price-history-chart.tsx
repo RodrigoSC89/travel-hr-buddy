@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +29,7 @@ interface ChartData {
   target: number;
 }
 
-export const PriceHistoryChart = memo(() => {
+export const PriceHistoryChart = () => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [selectedAlert, setSelectedAlert] = useState<string>("");
@@ -174,7 +173,7 @@ export const PriceHistoryChart = memo(() => {
         </CardContent>
       </Card>
     );
-  };
+  }
 
   return (
     <Card>
@@ -182,7 +181,7 @@ export const PriceHistoryChart = memo(() => {
         <div className="flex items-center justify-between">
           <CardTitle>Histórico de Preços</CardTitle>
           <div className="flex gap-2">
-            <Select value={timeRange} onValueChange={(value: "7d" | "30d" | "90d") => setTimeRange(value}>
+            <Select value={timeRange} onValueChange={(value: "7d" | "30d" | "90d") => setTimeRange(value)}>
               <SelectTrigger className="w-24">
                 <SelectValue />
               </SelectTrigger>

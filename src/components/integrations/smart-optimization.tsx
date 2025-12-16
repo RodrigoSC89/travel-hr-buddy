@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -380,7 +379,7 @@ export const SmartOptimization: React.FC = () => {
                         <Button 
                           size="sm" 
                           className="flex-1 bg-primary hover:bg-primary/90"
-                          onClick={() => handleimplementSuggestion}
+                          onClick={() => implementSuggestion(suggestion.id)}
                         >
                           <Wand2 className="w-3 h-3 mr-1" />
                           Implementar

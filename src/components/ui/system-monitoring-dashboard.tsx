@@ -1,6 +1,7 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
@@ -139,7 +140,7 @@ export const SystemMonitoringDashboard: React.FC = () => {
                   className={`p-4 cursor-pointer transition-all hover:shadow-md ${
                     selectedMetric === metric.title ? "ring-2 ring-primary" : ""
                   }`}
-                  onClick={handleSetSelectedMetric}
+                  onClick={() => setSelectedMetric(selectedMetric === metric.title ? null : metric.title)}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className={`p-2 rounded-lg bg-opacity-20 ${metric.color}`}>

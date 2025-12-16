@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { RealTimeNotificationCenter } from "@/components/unified/NotificationCenter.unified";
+import { RealTimeNotificationCenter } from "@/components/notifications/real-time-notification-center";
 import { UserMenu } from "@/components/auth/user-menu";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     className="h-9 w-9 p-0 cursor-pointer hover:bg-accent transition-colors"
-                    onClick={() => handlenavigate}
+                    onClick={() => navigate("/settings")}
                     aria-label="Configurações"
                   >
                     <Settings className="h-4 w-4 text-foreground" />

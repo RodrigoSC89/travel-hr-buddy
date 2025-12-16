@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -164,7 +163,7 @@ export const DPCompetenceHub: React.FC = () => {
       member.vessel.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === "all" || member.role === filterRole;
     return matchesSearch && matchesRole;
-  };
+  });
 
   const getExpiringCerts = () => {
     return crewMembers.flatMap(m => m.certifications.filter(c => c.status === "expiring" || c.status === "expired").map(c => ({ ...c, crewName: m.name, crewRole: m.role })));
@@ -180,20 +179,20 @@ export const DPCompetenceHub: React.FC = () => {
 
   const getCertStatusBadge = (status: string) => {
     switch (status) {
-    case "valid": return <Badge className="bg-green-500">Válido</Badge>;
-    case "expiring": return <Badge className="bg-yellow-500 text-black">Vencendo</Badge>;
-    case "expired": return <Badge variant="destructive">Expirado</Badge>;
-    default: return <Badge variant="secondary">{status}</Badge>;
+      case "valid": return <Badge className="bg-green-500">Válido</Badge>;
+      case "expiring": return <Badge className="bg-yellow-500 text-black">Vencendo</Badge>;
+      case "expired": return <Badge variant="destructive">Expirado</Badge>;
+      default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
   const getTrainingStatusBadge = (status: string) => {
     switch (status) {
-    case "completed": return <Badge className="bg-green-500">Concluído</Badge>;
-    case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
-    case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
-    case "overdue": return <Badge variant="destructive">Atrasado</Badge>;
-    default: return <Badge variant="secondary">{status}</Badge>;
+      case "completed": return <Badge className="bg-green-500">Concluído</Badge>;
+      case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
+      case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
+      case "overdue": return <Badge variant="destructive">Atrasado</Badge>;
+      default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
@@ -325,9 +324,9 @@ export const DPCompetenceHub: React.FC = () => {
               <div className="flex items-center gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar por nome ou embarcação..." value={searchTerm} onChange={handleChange} className="pl-10" />
+                  <Input placeholder="Buscar por nome ou embarcação..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
                 </div>
-                <select className="border rounded-md px-3 py-2 text-sm" value={filterRole} onChange={handleChange}>
+                <select className="border rounded-md px-3 py-2 text-sm" value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
                   <option value="all">Todas as Funções</option>
                   <option value="SDPO">SDPO</option>
                   <option value="DPO">DPO</option>
@@ -342,7 +341,7 @@ export const DPCompetenceHub: React.FC = () => {
           {/* Crew List */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredMembers.map((member) => (
-              <Card key={member.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={handleSetSelectedMember}>
+              <Card key={member.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => setSelectedMember(member)}>
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-4">
                     <Avatar className="h-16 w-16">
@@ -402,7 +401,7 @@ export const DPCompetenceHub: React.FC = () => {
                     <span>Nota de Aprovação</span>
                     <span className="font-medium">{assessment.passScore}%</span>
                   </div>
-                  <Button className="w-full" onClick={() => handlehandleStartAssessment}>
+                  <Button className="w-full" onClick={() => handleStartAssessment(assessment)}>
                     <Play className="w-4 h-4 mr-2" />Iniciar Avaliação
                   </Button>
                 </CardContent>
@@ -495,7 +494,7 @@ export const DPCompetenceHub: React.FC = () => {
       </Tabs>
 
       {/* Detail Dialog */}
-      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null}>
+      <Dialog open={!!selectedMember} onOpenChange={() => setSelectedMember(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selectedMember && (
             <>

@@ -3,13 +3,13 @@
  * PATCH 838: Estados de carregamento melhorados com Framer Motion
  */
 
-import React, { memo } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, RefreshCw, WifiOff } from "lucide-react";
+import { Loader2, RefreshCw, Wifi, WifiOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Spinner Component
-export const Spinner = memo(({ 
+export const Spinner = ({ 
   size = "default", 
   className 
 }: { 
@@ -25,10 +25,10 @@ export const Spinner = memo(({
   return (
     <Loader2 className={cn("animate-spin", sizeClasses[size], className)} />
   );
-});
+};
 
 // Full Screen Loader
-export const FullScreenLoader = memo(({ message = "Carregando..." }: { message?: string }) => (
+export const FullScreenLoader = ({ message = "Carregando..." }: { message?: string }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -45,7 +45,7 @@ export const FullScreenLoader = memo(({ message = "Carregando..." }: { message?:
       <p className="text-lg font-medium">{message}</p>
     </div>
   </motion.div>
-));
+);
 
 // Inline Loader
 export const InlineLoader = ({ 

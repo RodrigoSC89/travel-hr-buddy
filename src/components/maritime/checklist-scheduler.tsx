@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Calendar, Clock, Plus, Settings, Bell } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +22,7 @@ interface ScheduledChecklist {
   notifications: boolean;
 }
 
-export const ChecklistScheduler = memo(() => {
+export const ChecklistScheduler = () => {
   const [schedules, setSchedules] = useState<ScheduledChecklist[]>([
     {
       id: "1",
@@ -58,7 +57,7 @@ export const ChecklistScheduler = memo(() => {
     case "quarterly": return "bg-purple-100 text-purple-800";
     case "annually": return "bg-green-100 text-green-800";
     default: return "bg-secondary text-secondary-foreground";
-    };
+    }
   };
 
   const getStatusColor = (isActive: boolean) => {
@@ -71,7 +70,7 @@ export const ChecklistScheduler = memo(() => {
       description: "Nova agenda de checklist foi criada com sucesso.",
     });
     setIsCreateOpen(false);
-  });
+  };
 
   const toggleSchedule = (id: string) => {
     setSchedules(prev => prev.map(schedule => 
@@ -145,7 +144,7 @@ export const ChecklistScheduler = memo(() => {
               </div>
             </div>
             <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={handleSetIsCreateOpen}>
+              <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateSchedule}>
@@ -210,7 +209,7 @@ export const ChecklistScheduler = memo(() => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={() => handletoggleSchedule}
+                        onClick={() => toggleSchedule(schedule.id)}
                       >
                         {schedule.isActive ? "Desativar" : "Ativar"}
                       </Button>
@@ -241,7 +240,7 @@ export const ChecklistScheduler = memo(() => {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => handletoggleSchedule}
+                    onClick={() => toggleSchedule(schedule.id)}
                   >
                     Reativar
                   </Button>
@@ -282,4 +281,4 @@ export const ChecklistScheduler = memo(() => {
       </Tabs>
     </div>
   );
-});
+};

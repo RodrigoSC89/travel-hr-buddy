@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useMemo, useState } from "react";;
 import React, { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { DashboardSkeleton } from "@/components/unified/Skeletons.unified";
+import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Ship, 
@@ -68,13 +67,13 @@ export default function Maritime() {
 
   // PATCH 960: Memoized compliance data to prevent re-renders
   const complianceData = useMemo(() => [
-    { name: "PEOTRAM", value: 87, color: "text-green-600" },
-    { name: "ISM Code", value: 92, color: "text-green-600" },
-    { name: "ISPS Code", value: 78, color: "text-yellow-600" },
-    { name: "MARPOL", value: 95, color: "text-green-600" },
+    { name: 'PEOTRAM', value: 87, color: 'text-green-600' },
+    { name: 'ISM Code', value: 92, color: 'text-green-600' },
+    { name: 'ISPS Code', value: 78, color: 'text-yellow-600' },
+    { name: 'MARPOL', value: 95, color: 'text-green-600' },
   ], []);
 
-  const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: unknown: unknown: unknown) => (
+  const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
@@ -133,7 +132,7 @@ export default function Maritime() {
           value={stats.totalVessels}
           icon={Ship}
           trend="+2 este mês"
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/fleet-dashboard")}
         />
         <StatCard
           title="Tripulação Ativa"
@@ -141,7 +140,7 @@ export default function Maritime() {
           icon={Users}
           variant="success"
           trend="100% operacional"
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/crew")}
         />
         <StatCard
           title="Certificações Pendentes"
@@ -149,7 +148,7 @@ export default function Maritime() {
           icon={AlertTriangle}
           variant="warning"
           trend="3 vencem em 30 dias"
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/maritime-certifications")}
         />
         <StatCard
           title="Auditorias Completas"
@@ -157,7 +156,7 @@ export default function Maritime() {
           icon={CheckCircle}
           variant="success"
           trend="+4 este mês"
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/peotram")}
         />
         <StatCard
           title="Alertas Ativos"
@@ -165,7 +164,7 @@ export default function Maritime() {
           icon={AlertTriangle}
           variant="danger"
           trend="2 críticos"
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/intelligent-alerts")}
         />
         <StatCard
           title="Compliance Score"
@@ -231,7 +230,7 @@ export default function Maritime() {
                     Carregando embarcações...
                   </div>
                 )}
-                <Button variant="outline" className="w-full" onClick={() => handlenavigate}>
+                <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-dashboard")}>
                   Ver Todas as Embarcações
                 </Button>
               </CardContent>
@@ -249,23 +248,23 @@ export default function Maritime() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button className="w-full justify-start" variant="outline" onClick={() => handlenavigate}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/peotram")}>
                   <FileText className="h-4 w-4 mr-2" />
                   Nova Auditoria PEOTRAM
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => handlenavigate}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew")}>
                   <Users className="h-4 w-4 mr-2" />
                   Gerenciar Tripulação
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => handlenavigate}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maritime-certifications")}>
                   <Shield className="h-4 w-4 mr-2" />
                   Verificar Certificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => handlenavigate}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/checklists")}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => handlenavigate}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maintenance/planner")}>
                   <Wrench className="h-4 w-4 mr-2" />
                   Manutenção Preditiva
                 </Button>
@@ -315,7 +314,7 @@ export default function Maritime() {
                 <p className="text-muted-foreground mb-4">
                   Acesse a gestão completa da frota através do menu dedicado
                 </p>
-                <Button onClick={() => handlenavigate}>Ir para Gestão de Frota</Button>
+                <Button onClick={() => navigate("/fleet-dashboard")}>Ir para Gestão de Frota</Button>
               </div>
             </CardContent>
           </Card>
@@ -336,7 +335,7 @@ export default function Maritime() {
                 <p className="text-muted-foreground mb-4">
                   Sistema completo de auditorias e gestão de conformidade
                 </p>
-                <Button onClick={() => handlenavigate}>Acessar PEOTRAM</Button>
+                <Button onClick={() => navigate("/peotram")}>Acessar PEOTRAM</Button>
               </div>
             </CardContent>
           </Card>
@@ -352,12 +351,12 @@ export default function Maritime() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => handlenavigate}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/task-management")}>
                   <Calendar className="h-8 w-8 mx-auto mb-2 text-blue-600" />
                   <h4 className="font-semibold">Planejamento</h4>
                   <p className="text-sm text-muted-foreground">Cronogramas e roteiros</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => handlenavigate}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/fleet-tracking")}>
                   <Activity className="h-8 w-8 mx-auto mb-2 text-green-600" />
                   <h4 className="font-semibold">Monitoramento</h4>
                   <p className="text-sm text-muted-foreground">Tempo real</p>
@@ -367,7 +366,7 @@ export default function Maritime() {
                   <h4 className="font-semibold">Manutenção</h4>
                   <p className="text-sm text-muted-foreground">Preventiva e corretiva</p>
                 </div>
-                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => handlenavigate}>
+                <div className="p-4 border rounded-lg text-center cursor-pointer hover:bg-gray-50" onClick={() => navigate("/analytics")}>
                   <BarChart3 className="h-8 w-8 mx-auto mb-2 text-purple-600" />
                   <h4 className="font-semibold">Analytics</h4>
                   <p className="text-sm text-muted-foreground">KPIs operacionais</p>

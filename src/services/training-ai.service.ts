@@ -53,6 +53,7 @@ export class TrainingAIService {
       .order("created_at", { ascending: false });
 
     if (error) {
+      console.error("Error fetching training sessions:", error);
       throw error;
     }
 
@@ -74,6 +75,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
+      console.error("Error creating training session:", error);
       throw error;
     }
 
@@ -97,6 +99,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
+      console.error("Error updating training session:", error);
       throw error;
     }
 
@@ -131,6 +134,7 @@ export class TrainingAIService {
       .order("occurred_at", { ascending: true });
 
     if (error) {
+      console.error("Error fetching training history:", error);
       throw error;
     }
 
@@ -153,6 +157,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
+      console.error("Error adding training history:", error);
       throw error;
     }
 
@@ -170,6 +175,7 @@ export class TrainingAIService {
       .order("created_at", { ascending: false });
 
     if (error) {
+      console.error("Error fetching learning paths:", error);
       throw error;
     }
 
@@ -192,6 +198,7 @@ export class TrainingAIService {
       .single();
 
     if (error) {
+      console.error("Error creating learning path:", error);
       throw error;
     }
 
@@ -258,6 +265,7 @@ export class TrainingAIService {
     });
 
     if (error) {
+      console.error("Error generating LLM explanation:", error);
       throw error;
     }
 
@@ -275,6 +283,7 @@ export class TrainingAIService {
     });
 
     if (error) {
+      console.error("Error generating quiz:", error);
       throw error;
     }
 
@@ -318,9 +327,9 @@ export class TrainingAIService {
       typeof content.passed === "boolean"
         ? content.passed
         : Boolean(
-          row.completed_at &&
+            row.completed_at &&
               (row.status === "completed" || (row.final_score ?? 0) >= PASSING_SCORE)
-        );
+          );
 
     return {
       id: row.id,
@@ -482,7 +491,7 @@ export class TrainingAIService {
       interaction_data: interactionData,
       correctness: history.is_correct ?? null,
       occurred_at: history.timestamp ?? new Date().toISOString(),
-    });
+    };
   }
 
   private static buildLearningPathInsert(

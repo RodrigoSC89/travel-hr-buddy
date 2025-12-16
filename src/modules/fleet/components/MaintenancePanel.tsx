@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,7 @@ interface MaintenanceItem {
 
 interface MaintenancePanelProps {
   maintenance: MaintenanceItem[];
-  vessels: unknown[];
+  vessels: any[];
   onRefresh: () => void;
 }
 
@@ -71,7 +70,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
     description: "",
     scheduled_date: "",
     priority: "medium",
-});
+  });
 
   const filteredMaintenance = maintenance.filter(item => {
     const matchesSearch = item.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,7 +91,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
 
     try {
       const { error } = await supabase
-        .from("maintenance_schedules" as unknown)
+        .from("maintenance_schedules" as any)
         .insert([{
           vessel_id: newMaintenance.vessel_id,
           maintenance_type: newMaintenance.type,
@@ -252,7 +251,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
                   <Input
                     type="date"
                     value={newMaintenance.scheduled_date}
-                    onChange={handleChange}))}
+                    onChange={(e) => setNewMaintenance(prev => ({ ...prev, scheduled_date: e.target.value }))}
                   />
                 </div>
 
@@ -278,14 +277,14 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
                   <Label>Descrição</Label>
                   <Textarea
                     value={newMaintenance.description}
-                    onChange={handleChange}))}
+                    onChange={(e) => setNewMaintenance(prev => ({ ...prev, description: e.target.value }))}
                     placeholder="Descreva a manutenção..."
                   />
                 </div>
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={handleSetShowAddDialog}>Cancelar</Button>
+                <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
                 <Button onClick={handleAddMaintenance}>Agendar</Button>
               </DialogFooter>
             </DialogContent>
@@ -300,7 +299,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
               <Input
                 placeholder="Buscar manutenção..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>

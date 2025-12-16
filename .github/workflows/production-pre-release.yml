@@ -97,7 +97,7 @@ jobs:
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: production-build-${{ github.sha }}
           path: dist/
@@ -131,7 +131,7 @@ jobs:
           CI: true
 
       - name: Upload E2E test results
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: e2e-test-results
@@ -166,7 +166,7 @@ jobs:
           path: dist/
 
       - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v12
+        uses: treosh/lighthouse-ci-action@v11
         with:
           configPath: './lighthouserc.json'
           uploadArtifacts: true

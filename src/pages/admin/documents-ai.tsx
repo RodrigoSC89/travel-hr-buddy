@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -101,7 +101,7 @@ export default function DocumentsAIPage() {
         return;
       }
 
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("ai_generated_documents")
         .insert({
           title: title.trim(),
@@ -170,7 +170,7 @@ export default function DocumentsAIPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-  });
+      });
       
       pdf.save(`${title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       
@@ -266,7 +266,7 @@ export default function DocumentsAIPage() {
     <div className="space-y-6 p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
-        <Button variant="outline" onClick={() => handlenavigate}>
+        <Button variant="outline" onClick={() => navigate("/admin/documents")}>
           <List className="w-4 h-4 mr-2" />
           Ver Todos os Documentos
         </Button>
@@ -277,13 +277,13 @@ export default function DocumentsAIPage() {
           <Input
             placeholder="Título do Documento"
             value={title}
-            onChange={handleChange}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <Textarea
             rows={4}
             placeholder="Descreva o que você quer gerar com a IA..."
             value={prompt}
-            onChange={handleChange}
+            onChange={(e) => setPrompt(e.target.value)}
           />
           <Button onClick={generateDocument} disabled={loading || !prompt}>
             {loading ? (

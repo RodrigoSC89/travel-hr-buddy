@@ -3,9 +3,9 @@
  * Displays key metrics in a compact format
  */
 
-import React, { memo } from "react";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { memo } from 'react';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface StatItem {
   label: string;
@@ -30,14 +30,14 @@ export const QuickStats = memo(function QuickStats({
     if (change > 0) return <TrendingUp className="h-3 w-3 text-green-500" />;
     if (change < 0) return <TrendingDown className="h-3 w-3 text-red-500" />;
     return <Minus className="h-3 w-3 text-muted-foreground" />;
-  });
+  };
 
   const getTrendColor = (change?: number) => {
-    if (change === undefined) return "";
-    if (change > 0) return "text-green-500";
-    if (change < 0) return "text-red-500";
-    return "text-muted-foreground";
-  });
+    if (change === undefined) return '';
+    if (change > 0) return 'text-green-500';
+    if (change < 0) return 'text-red-500';
+    return 'text-muted-foreground';
+  };
 
   if (compact) {
     return (
@@ -62,8 +62,8 @@ export const QuickStats = memo(function QuickStats({
     <div className={cn(
       "grid gap-4",
       stats.length <= 2 ? "grid-cols-2" : 
-        stats.length === 3 ? "grid-cols-3" : 
-          "grid-cols-2 sm:grid-cols-4",
+      stats.length === 3 ? "grid-cols-3" : 
+      "grid-cols-2 sm:grid-cols-4",
       className
     )}>
       {stats.map((stat, index) => (
@@ -77,7 +77,7 @@ export const QuickStats = memo(function QuickStats({
             {stat.change !== undefined && (
               <div className={cn("flex items-center gap-0.5 text-xs", getTrendColor(stat.change))}>
                 {getTrendIcon(stat.change)}
-                <span>{stat.change > 0 ? "+" : ""}{stat.change}%</span>
+                <span>{stat.change > 0 ? '+' : ''}{stat.change}%</span>
               </div>
             )}
           </div>

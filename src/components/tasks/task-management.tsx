@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -189,7 +188,7 @@ export const TaskManagement: React.FC = () => {
       title: "Status Atualizado",
       description: "Status da tarefa foi atualizado com sucesso"
     });
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -245,7 +244,7 @@ export const TaskManagement: React.FC = () => {
                          task.assigned_to?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || task.status === filterStatus;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const tasksByStatus = {
     pending: tasks.filter(t => t.status === "pending").length,
@@ -289,7 +288,7 @@ export const TaskManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newTask.title}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                   placeholder="Ex: Inspeção de Segurança"
                 />
               </div>
@@ -298,7 +297,7 @@ export const TaskManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newTask.description}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                   placeholder="Descreva os detalhes da tarefa..."
                   rows={3}
                 />
@@ -325,7 +324,7 @@ export const TaskManagement: React.FC = () => {
                   <Input
                     id="assigned"
                     value={newTask.assigned_to}
-                    onChange={handleChange}
+                    onChange={(e) => setNewTask({ ...newTask, assigned_to: e.target.value })}
                     placeholder="Nome do responsável"
                   />
                 </div>
@@ -336,7 +335,7 @@ export const TaskManagement: React.FC = () => {
                   id="due_date"
                   type="datetime-local"
                   value={newTask.due_date}
-                  onChange={handleChange}
+                  onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -378,7 +377,7 @@ export const TaskManagement: React.FC = () => {
               <Button onClick={handleAddTask} className="flex-1">
                 Criar Tarefa
               </Button>
-              <Button variant="outline" onClick={handleSetShowAddDialog}>
+              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
                 Cancelar
               </Button>
             </div>
@@ -452,7 +451,7 @@ export const TaskManagement: React.FC = () => {
               <Input
                 placeholder="Buscar tarefas..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-64"
               />
             </div>
@@ -487,7 +486,7 @@ export const TaskManagement: React.FC = () => {
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
                           selectedTask?.id === task.id ? "border-primary bg-primary/5" : ""
                         }`}
-                        onClick={handleSetSelectedTask}
+                        onClick={() => setSelectedTask(task)}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -612,7 +611,7 @@ export const TaskManagement: React.FC = () => {
                       {selectedTask.status === "pending" && (
                         <Button 
                           className="w-full"
-                          onClick={() => handleupdateTaskStatus}
+                          onClick={() => updateTaskStatus(selectedTask.id, "in_progress")}
                         >
                           Iniciar Tarefa
                         </Button>
@@ -620,7 +619,7 @@ export const TaskManagement: React.FC = () => {
                       {selectedTask.status === "in_progress" && (
                         <Button 
                           className="w-full"
-                          onClick={() => handleupdateTaskStatus}
+                          onClick={() => updateTaskStatus(selectedTask.id, "completed")}
                         >
                           Marcar como Concluída
                         </Button>

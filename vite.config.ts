@@ -5,7 +5,6 @@ import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
 import { createHtmlPlugin } from "vite-plugin-html";
-import viteCompression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -212,43 +211,11 @@ export default defineConfig(({ mode }) => {
           enabled: false,
           type: "module"
         }
-      }),
-      // FASE A.4: Brotli compression (melhor compressão para conexões lentas)
-      mode === "production" && viteCompression({
-        verbose: true,
-        disable: false,
-        threshold: 1024, // Comprimir tudo > 1KB
-        algorithm: "brotliCompress",
-        ext: ".br",
-        compressionOptions: {
-          level: 11, // Máxima compressão Brotli
-        },
-        deleteOriginFile: false,
-      }),
-      // FASE A.4: Gzip compression (fallback)
-      mode === "production" && viteCompression({
-        verbose: true,
-        disable: false,
-        threshold: 1024, // Comprimir tudo > 1KB
-        algorithm: "gzip",
-        ext: ".gz",
-        compressionOptions: {
-          level: 9, // Máxima compressão Gzip
-        },
-        deleteOriginFile: false,
       })
     ].filter(Boolean),
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        // CRITICAL PATCH 854.0: Force all React imports to resolve to the same location
-        // This prevents "Cannot read properties of null (reading 'useEffect')" error
-        "react": path.resolve(__dirname, "node_modules/react"),
-        "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
-        "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
-        "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
-        // CRITICAL: Also alias scheduler to prevent React internals mismatch
-        "scheduler": path.resolve(__dirname, "node_modules/scheduler"),
       },
       // CRITICAL: Ensure single React instance to prevent useState null error
       dedupe: [
@@ -256,16 +223,13 @@ export default defineConfig(({ mode }) => {
         "react-dom", 
         "react-router-dom",
         "@tanstack/react-query",
-        "react-helmet-async",
-        "scheduler",
-        "react/jsx-runtime",
-        "react/jsx-dev-runtime"
+        "react-helmet-async"
       ],
     },
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 500, // FASE 2.5: Reduzido para 500KB para forçar melhor splitting
+      chunkSizeWarningLimit: 1000, // Reduzido para forçar chunks menores
       target: "esnext",
       cssCodeSplit: true,
       minify: "terser",
@@ -290,7 +254,7 @@ export default defineConfig(({ mode }) => {
       assetsInlineLimit: 4096, // Inline assets pequenos
       rollupOptions: {
         output: {
-          // FASE 2.5: Otimização ultra-agressiva para reduzir bundle inicial
+          // PATCH 547: Otimização agressiva para chunks menores e melhor cache
           manualChunks: (id) => {
             // Core vendors - carregados primeiro (prioritário)
             if (id.includes("node_modules")) {
@@ -454,92 +418,15 @@ export default defineConfig(({ mode }) => {
               return "modules-misc";
             }
             
-            // FASE 2.5: Pages - chunking ultra-granular para reduzir bundles
+            // Pages - agrupar por área
             if (id.includes("src/pages/")) {
-              // Admin pages separadas por funcionalidade
               if (id.includes("admin/")) {
-                if (id.includes("admin/sgso") || id.includes("admin/templates") || id.includes("admin/training")) {
-                  return "pages-admin-docs";
-                }
-                if (id.includes("admin/ci-") || id.includes("admin/performance") || id.includes("admin/dashboard")) {
-                  return "pages-admin-monitoring";
-                }
-                if (id.includes("admin/restore")) {
-                  return "pages-admin-restore";
-                }
-                return "pages-admin-core";
+                return "pages-admin";
               }
-              
-              // AI pages - separar do main
-              if (id.includes("pages/ai/")) {
-                return "pages-ai";
-              }
-              
-              // Emerging tech pages - lazy load
-              if (id.includes("pages/emerging/")) {
-                return "pages-emerging";
-              }
-              
-              // Developer pages
               if (id.includes("developer/")) {
                 return "pages-dev";
               }
-              
-              // Command Centers - páginas pesadas divididas
-              if (id.includes("CommandCenter") || id.includes("OperationsCommandCenter") || id.includes("FinanceCommandCenter")) {
-                return "pages-command-centers";
-              }
-              if (id.includes("WorkflowCommandCenter") || id.includes("VoyageCommandCenter") || id.includes("AlertsCommandCenter")) {
-                return "pages-workflow-centers";
-              }
-              
-              // Dashboards específicos
-              if (id.includes("BIDashboard") || id.includes("MMIDashboard") || id.includes("Dashboard")) {
-                return "pages-dashboards";
-              }
-              
-              // Fleet e Tracking - podem ter mapas
-              if (id.includes("FleetTracking") || id.includes("Fleet") || id.includes("Voyage")) {
-                return "pages-fleet";
-              }
-              
-              // Analytics e BI
-              if (id.includes("Analytics") || id.includes("Insights") || id.includes("Predictive") || id.includes("Forecast")) {
-                return "pages-analytics";
-              }
-              
-              // Experimental e features
-              if (id.includes("Experimental") || id.includes("AR.tsx") || id.includes("PluginManager")) {
-                return "pages-experimental";
-              }
-              
-              // Gamification e engagement
-              if (id.includes("Gamification") || id.includes("Notification") || id.includes("Alerts")) {
-                return "pages-engagement";
-              }
-              
-              // Sistema e configuração
-              if (id.includes("SystemHub") || id.includes("Settings") || id.includes("Admin.tsx")) {
-                return "pages-system";
-              }
-              
-              // Auth e profile
-              if (id.includes("Auth") || id.includes("user/profile")) {
-                return "pages-auth";
-              }
-              
-              // Finance específico
-              if (id.includes("Finance")) {
-                return "pages-finance";
-              }
-              
-              // Workflow e processos
-              if (id.includes("Workflow") || id.includes("Bridge") || id.includes("MMI")) {
-                return "pages-workflow";
-              }
-              
-              // Páginas principais lightweight (Index, etc.)
-              return "pages-core";
+              return "pages-main";
             }
           }
         }
@@ -555,33 +442,13 @@ export default defineConfig(({ mode }) => {
         "react-router-dom",
         "@supabase/supabase-js",
         "@tanstack/react-query",
-        "@tanstack/react-query-devtools",
         "react-helmet-async",
-        "scheduler",
-        "mqtt",
-        "lucide-react"
+        "mqtt"
       ],
+      // Remove force: true to prevent HMR issues
       exclude: [],
-      // CRITICAL: Force rebuild of optimized deps to clear corrupted cache
-      force: true, // ← CHANGED: Force rebuild to clear React errors
-      // CRITICAL FIX: Deduplicate React in optimizeDeps too
-      dedupe: [
-        "react",
-        "react-dom",
-        "react-router-dom",
-        "@tanstack/react-query",
-        "scheduler"
-      ],
-      // Ensure single React instance by not allowing esbuild to bundle React separately
-      esbuildOptions: {
-        target: "esnext",
-        // Force React to be resolved from the same location
-        resolveExtensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
-      },
     },
-    // Use fresh cache directory - increment version to force rebuild
-    // PATCH 854.0: New cache version to clear corrupted React instances
-    cacheDir: ".vite-cache-v5",
+    cacheDir: ".vite-cache",
     esbuild: {
       logOverride: { "this-is-undefined-in-esm": "silent" },
       logLevel: "silent",

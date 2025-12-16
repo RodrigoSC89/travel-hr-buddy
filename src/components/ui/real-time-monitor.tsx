@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -9,6 +8,7 @@ import {
   Zap,
   Thermometer,
   Droplets,
+  Wind,
   Compass,
   Gauge
 } from "lucide-react";
@@ -322,7 +322,9 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
               vessel.isOnline ? "border-border" : "border-danger/30",
               selectedVessel === vessel.vesselId && "ring-2 ring-primary"
             )}
-            onClick={handleSetSelectedVessel}
+            onClick={() => setSelectedVessel(
+              selectedVessel === vessel.vesselId ? null : vessel.vesselId
+            )}
           >
             {/* Vessel Header */}
             <div className="p-4 border-b border-border">

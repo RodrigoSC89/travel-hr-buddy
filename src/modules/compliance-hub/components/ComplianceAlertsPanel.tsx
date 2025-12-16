@@ -3,11 +3,11 @@
  * Painel de alertas e notificações de conformidade
  */
 
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Bell, 
   CheckCheck, 
@@ -16,9 +16,9 @@ import {
   Info,
   ExternalLink,
   X 
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import type { ComplianceAlert } from "../types";
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import type { ComplianceAlert } from '../types';
 
 interface ComplianceAlertsPanelProps {
   alerts: ComplianceAlert[];
@@ -26,7 +26,7 @@ interface ComplianceAlertsPanelProps {
   onMarkAllAsRead: () => void;
 }
 
-export const ComplianceAlertsPanel = memo(function({ 
+export function ComplianceAlertsPanel({ 
   alerts, 
   onMarkAsRead, 
   onMarkAllAsRead 
@@ -34,29 +34,29 @@ export const ComplianceAlertsPanel = memo(function({
   const navigate = useNavigate();
   const unreadCount = alerts.filter(a => !a.isRead).length;
 
-  const getSeverityIcon = (severity: ComplianceAlert["severity"]) => {
+  const getSeverityIcon = (severity: ComplianceAlert['severity']) => {
     switch (severity) {
-    case "critical":
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
-    case "warning":
-      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-    default:
-      return <Info className="h-4 w-4 text-blue-500" />;
+      case 'critical':
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
+      case 'warning':
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      default:
+        return <Info className="h-4 w-4 text-blue-500" />;
     }
-  });
+  };
 
-  const getSeverityBadge = (severity: ComplianceAlert["severity"]) => {
+  const getSeverityBadge = (severity: ComplianceAlert['severity']) => {
     const variants: Record<string, string> = {
-      critical: "bg-red-500/10 text-red-500 border-red-500/20",
-      warning: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-      info: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    });
+      critical: 'bg-red-500/10 text-red-500 border-red-500/20',
+      warning: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+      info: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+    };
     
     const labels: Record<string, string> = {
-      critical: "Crítico",
-      warning: "Atenção",
-      info: "Info",
-    });
+      critical: 'Crítico',
+      warning: 'Atenção',
+      info: 'Info',
+    };
     
     return (
       <Badge variant="outline" className={variants[severity]}>
@@ -113,10 +113,10 @@ export const ComplianceAlertsPanel = memo(function({
                   key={alert.id}
                   className={`group relative p-3 rounded-lg border cursor-pointer transition-all hover:shadow-md ${
                     alert.isRead 
-                      ? "bg-muted/30 border-border/50" 
-                      : "bg-card border-border shadow-sm"
+                      ? 'bg-muted/30 border-border/50' 
+                      : 'bg-card border-border shadow-sm'
                   }`}
-                  onClick={() => handlehandleAlertClick}
+                  onClick={() => handleAlertClick(alert)}
                 >
                   {!alert.isRead && (
                     <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-primary animate-pulse" />
@@ -125,7 +125,7 @@ export const ComplianceAlertsPanel = memo(function({
                     {getSeverityIcon(alert.severity)}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className={`font-medium text-sm ${alert.isRead ? "text-muted-foreground" : "text-foreground"}`}>
+                        <span className={`font-medium text-sm ${alert.isRead ? 'text-muted-foreground' : 'text-foreground'}`}>
                           {alert.title}
                         </span>
                         {getSeverityBadge(alert.severity)}
@@ -135,7 +135,7 @@ export const ComplianceAlertsPanel = memo(function({
                       </p>
                       <div className="flex items-center justify-between mt-2">
                         <span className="text-xs text-muted-foreground">
-                          {new Date(alert.createdAt).toLocaleDateString("pt-BR")}
+                          {new Date(alert.createdAt).toLocaleDateString('pt-BR')}
                         </span>
                         {alert.actionUrl && (
                           <span className="text-xs text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -165,4 +165,4 @@ export const ComplianceAlertsPanel = memo(function({
       </CardContent>
     </Card>
   );
-});
+}

@@ -1,11 +1,10 @@
 /**
-import { useEffect, useRef, useState, useCallback } from "react";;
  * Satellite Globe Map Component
  * Interactive 3D globe showing satellite positions
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Globe, Satellite } from "lucide-react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import type { DemoSatellite } from "../data/demo-satellites";
@@ -95,7 +94,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
     };
   }, [mapboxToken]);
 
-  const updateMarkers = async (mapboxgl: unknown: unknown: unknown) => {
+  const updateMarkers = async (mapboxgl: any) => {
     if (!map.current) return;
 
     // Clear existing markers
@@ -140,7 +139,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
 
       el.addEventListener("click", () => {
         onSelectSatellite?.(sat);
-  });
+      });
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([sat.longitude, sat.latitude])
@@ -148,7 +147,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
         .addTo(map.current);
 
       markers.current.push(marker);
-  });
+    });
   };
 
   // Update markers when satellites or selection changes

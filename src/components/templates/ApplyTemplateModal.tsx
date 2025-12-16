@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -67,7 +67,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
       id: row.id,
       title: row.title,
       created_at: row.created_at ?? null,
-    });
+    };
 
     if (source === "templates") {
       const templateRow = row as TemplatesRow;
@@ -137,7 +137,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
           <Input
             placeholder="🔍 Buscar template..."
             value={search}
-            onChange={handleChange}
+            onChange={(e) => setSearch(e.target.value)}
           />
 
           <div className="max-h-[300px] overflow-y-auto space-y-2">
@@ -151,7 +151,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
                   key={template.id}
                   variant="ghost"
                   className="justify-start w-full text-left h-auto py-3"
-                  onClick={() => handleapplyTemplate}
+                  onClick={() => applyTemplate(template.content)}
                 >
                   <div className="flex flex-col items-start w-full">
                     <span className="font-medium">{template.title}</span>

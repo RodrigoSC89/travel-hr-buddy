@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -164,7 +164,7 @@ const CrewManagement = () => {
               <CrewList
                 crewMembers={crewMembers}
                 onViewMember={setSelectedMember}
-                onAddMember={() => setShowAddDialog(true}
+                onAddMember={() => setShowAddDialog(true)}
                 onExport={handleExport}
               />
             </TabsContent>

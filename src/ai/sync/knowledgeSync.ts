@@ -1,4 +1,3 @@
-
 /**
  * PATCH 199.0 - Knowledge Sync (IA Local + Global)
  * 
@@ -104,7 +103,7 @@ class KnowledgeSync {
       drifts_detected: [],
       merges_applied: 0,
       timestamp: new Date().toISOString(),
-    });
+    };
 
     try {
       // Step 1: Create local snapshots
@@ -170,7 +169,7 @@ class KnowledgeSync {
           module_name: module,
           usage_data: usageData,
           performance_metrics: performanceMetrics,
-        });
+        };
 
         // Save to Supabase
         const { error } = await (supabase as any)
@@ -241,7 +240,7 @@ class KnowledgeSync {
             last_sync: new Date().toISOString(),
             performance: snapshot.performance_metrics,
           },
-        });
+        };
 
         const { error } = await (supabase as any)
           .from("global_knowledge")
@@ -320,7 +319,7 @@ class KnowledgeSync {
               global_value: globalValue,
               drift_percentage: driftPercentage,
               significance: driftPercentage > 50 ? "high" : driftPercentage > 35 ? "medium" : "low",
-            });
+            };
 
             drifts.push(drift);
             logger.warn("[KnowledgeSync] Significant drift detected", drift);
@@ -411,7 +410,7 @@ class KnowledgeSync {
       event_types: this.groupBy(events || [], "event_type"),
       outcomes: this.groupBy(events || [], "outcome"),
       timestamp: new Date().toISOString(),
-    });
+    };
   }
 
   /**
@@ -423,7 +422,7 @@ class KnowledgeSync {
       error_rate: 0.01,
       avg_response_time: 150,
       success_rate: 0.99,
-    });
+    };
   }
 
   /**
@@ -444,7 +443,7 @@ class KnowledgeSync {
         ...newData.outcomes,
       },
       merged_at: new Date().toISOString(),
-    });
+    };
   }
 
   /**
@@ -478,7 +477,7 @@ class KnowledgeSync {
       value,
       updated_at: new Date().toISOString(),
       source: "global",
-    });
+    };
 
     localStorage.setItem("local_models", JSON.stringify(localModels));
   }

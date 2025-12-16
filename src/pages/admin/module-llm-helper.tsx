@@ -1,30 +1,29 @@
 /**
-import { useMemo, useState, useCallback } from "react";;
  * PATCH 655 - Module LLM Helper Page
  * Generate and manage AI prompts for modules
  */
 
-import React, { useState, useMemo } from "react";
-import { useNavigationStructure, ModuleStatus } from "@/hooks/useNavigationStructure";
+import React, { useState, useMemo } from 'react';
+import { useNavigationStructure, ModuleStatus } from '@/hooks/useNavigationStructure';
 import {
   generateModulePrompt,
   generateBatchPrompts,
   exportPromptsToMarkdown,
   exportPromptsToJSON,
-} from "@/lib/utils/modulePromptGenerator";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/lib/utils/modulePromptGenerator';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Copy,
   Download,
@@ -34,8 +33,8 @@ import {
   Brain,
   CheckCircle,
   FileText,
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export const ModuleLLMHelper: React.FC = () => {
   const { toast } = useToast();
@@ -46,16 +45,16 @@ export const ModuleLLMHelper: React.FC = () => {
     includeDeprecated: false,
   });
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
-  const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
+  const [generatedPrompt, setGeneratedPrompt] = useState<string>('');
 
   // Get unique categories
   const categories = useMemo(() => {
     const cats = new Set(modules.map((m) => m.category));
-    return ["all", ...Array.from(cats)].sort();
+    return ['all', ...Array.from(cats)].sort();
   }, [modules]);
 
   // Filter modules
@@ -70,11 +69,11 @@ export const ModuleLLMHelper: React.FC = () => {
       );
     }
 
-    if (selectedCategory !== "all") {
+    if (selectedCategory !== 'all') {
       filtered = filtered.filter((m) => m.category === selectedCategory);
     }
 
-    if (selectedStatus !== "all") {
+    if (selectedStatus !== 'all') {
       filtered = filtered.filter((m) => m.status === selectedStatus);
     }
 
@@ -88,58 +87,58 @@ export const ModuleLLMHelper: React.FC = () => {
     const promptTemplate = generateModulePrompt(module);
     setGeneratedPrompt(promptTemplate.prompt);
     setSelectedModule(moduleId);
-  });
+  };
 
   const handleCopyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(generatedPrompt);
       toast({
-        title: "Copiado!",
-        description: "Prompt copiado para a área de transferência",
+        title: 'Copiado!',
+        description: 'Prompt copiado para a área de transferência',
       });
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Falha ao copiar prompt",
-        variant: "destructive",
+        title: 'Erro',
+        description: 'Falha ao copiar prompt',
+        variant: 'destructive',
       });
     }
   };
 
-  const handleExportAll = (format: "markdown" | "json") => {
+  const handleExportAll = (format: 'markdown' | 'json') => {
     const allPrompts = generateBatchPrompts(filteredModules);
     const content =
-      format === "markdown"
+      format === 'markdown'
         ? exportPromptsToMarkdown(allPrompts)
         : exportPromptsToJSON(allPrompts);
 
-    const blob = new Blob([content], { type: "text/plain" });
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = `nautilus-prompts-${Date.now()}.${format === "markdown" ? "md" : "json"}`;
+    a.download = `nautilus-prompts-${Date.now()}.${format === 'markdown' ? 'md' : 'json'}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
     toast({
-      title: "Exportado!",
+      title: 'Exportado!',
       description: `${allPrompts.length} prompts exportados em ${format.toUpperCase()}`,
     });
-  });
+  };
 
   const handleSendToAI = () => {
     // TODO: Implement API integration
     toast({
-      title: "Enviado para IA",
-      description: "Prompt enviado para processamento",
+      title: 'Enviado para IA',
+      description: 'Prompt enviado para processamento',
     });
-  });
+  };
 
   return (
     <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module LLM Prompt Helper"
-    >
+>
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
@@ -202,7 +201,7 @@ export const ModuleLLMHelper: React.FC = () => {
                 <Input
                   placeholder="Search modules..."
                   value={searchQuery}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -215,8 +214,8 @@ export const ModuleLLMHelper: React.FC = () => {
                   <SelectContent>
                     {categories.map((cat) => (
                       <SelectItem key={cat} value={cat}>
-                        {cat === "all"
-                          ? "All Categories"
+                        {cat === 'all'
+                          ? 'All Categories'
                           : cat.charAt(0).toUpperCase() + cat.slice(1)}
                       </SelectItem>
                     ))}
@@ -239,7 +238,7 @@ export const ModuleLLMHelper: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlehandleExportAll}
+                  onClick={() => handleExportAll('markdown')}
                   className="flex-1"
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -248,7 +247,7 @@ export const ModuleLLMHelper: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlehandleExportAll}
+                  onClick={() => handleExportAll('json')}
                   className="flex-1"
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -267,9 +266,9 @@ export const ModuleLLMHelper: React.FC = () => {
                 {filteredModules.map((module) => (
                   <Button
                     key={module.id}
-                    variant={selectedModule === module.id ? "default" : "outline"}
+                    variant={selectedModule === module.id ? 'default' : 'outline'}
                     className="w-full justify-start text-left h-auto py-3"
-                    onClick={() => handlehandleGeneratePrompt}
+                    onClick={() => handleGeneratePrompt(module.id)}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
@@ -302,13 +301,13 @@ export const ModuleLLMHelper: React.FC = () => {
               <CardDescription>
                 {selectedModule
                   ? `Prompt for ${modules.find((m) => m.id === selectedModule)?.name}`
-                  : "Select a module to generate a prompt"}
+                  : 'Select a module to generate a prompt'}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea
                 value={generatedPrompt}
-                onChange={handleChange}
+                onChange={(e) => setGeneratedPrompt(e.target.value)}
                 placeholder="Generated prompt will appear here..."
                 className="min-h-[400px] font-mono text-sm"
               />

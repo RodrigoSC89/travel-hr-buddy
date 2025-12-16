@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -118,7 +117,7 @@ export default function ApiStatusPage() {
   const downloadLog = () => {
     const blob = new Blob([JSON.stringify(history, null, 2)], {
       type: "application/json",
-    };
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

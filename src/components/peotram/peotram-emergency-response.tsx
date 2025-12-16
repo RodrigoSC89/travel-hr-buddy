@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -235,10 +234,10 @@ export const PeotramEmergencyResponse: React.FC = () => {
                   <Textarea id="incident-description" placeholder="Descreva o incidente" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsNewIncidentOpen}>
+                  <Button variant="outline" onClick={() => setIsNewIncidentOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button variant="destructive" onClick={handleSetIsNewIncidentOpen}>
+                  <Button variant="destructive" onClick={() => setIsNewIncidentOpen(false)}>
                     Reportar Emergência
                   </Button>
                 </div>

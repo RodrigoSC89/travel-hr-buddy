@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createDocument } from "@/lib/documents/api";
@@ -15,7 +15,7 @@ interface Template {
 
 interface CreateFromTemplateProps {
   template: Template;
-  onSaved?: (doc: unknown: unknown: unknown) => void;
+  onSaved?: (doc: any) => void;
 }
 
 /**
@@ -48,7 +48,7 @@ export default function CreateFromTemplate({
     return Array.from(
       new Set(matches.map((m) => m.replace(/[{}]/g, "").trim()))
     );
-  });
+  };
 
   /**
    * Handle variable input change
@@ -94,7 +94,7 @@ export default function CreateFromTemplate({
         description: "O conteúdo foi atualizado com sucesso.",
       });
     }
-  });
+  };
 
   /**
    * Save document to database
@@ -148,7 +148,7 @@ export default function CreateFromTemplate({
         <Input
           placeholder="Título do Documento"
           value={title}
-          onChange={handleChange}
+          onChange={(e) => setTitle(e.target.value)}
           className="text-lg"
         />
 
@@ -163,7 +163,7 @@ export default function CreateFromTemplate({
                   <label className="text-sm font-medium">{key}</label>
                   <Input
                     placeholder={`Valor para ${key}`}
-                    onChange={handleChange}
+                    onChange={(e) => handleChangeVar(key, e.target.value)}
                     value={variables[key] || ""}
                   />
                 </div>

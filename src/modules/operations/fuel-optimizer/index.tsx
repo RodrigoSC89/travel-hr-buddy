@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ const FuelOptimizer = () => {
     weather_condition: "normal"
   });
 
-  const [optimization, setOptimization] = useState<unknown>(null);
+  const [optimization, setOptimization] = useState<any>(null);
   const [history, setHistory] = useState([
     {
       id: "1",
@@ -63,7 +62,7 @@ const FuelOptimizer = () => {
         "Evitar correntes contrárias no trecho sul",
         "Janela de tempo favorável: próximas 48h"
       ]
-    });
+    };
 
     setOptimization(result);
     
@@ -71,7 +70,7 @@ const FuelOptimizer = () => {
       title: "Otimização concluída",
       description: `Economia estimada: ${result.savings_liters}L (${result.savings_percentage}%)`
     });
-  });
+  };
 
   const totalSavings = history.reduce((sum, h) => sum + h.savings, 0);
 
@@ -134,7 +133,7 @@ const FuelOptimizer = () => {
               <Label>Origem</Label>
               <Input
                 value={routeData.origin}
-                onChange={handleChange}
+                onChange={(e) => setRouteData({ ...routeData, origin: e.target.value })}
                 placeholder="Porto de origem"
               />
             </div>
@@ -142,7 +141,7 @@ const FuelOptimizer = () => {
               <Label>Destino</Label>
               <Input
                 value={routeData.destination}
-                onChange={handleChange}
+                onChange={(e) => setRouteData({ ...routeData, destination: e.target.value })}
                 placeholder="Porto de destino"
               />
             </div>
@@ -151,7 +150,7 @@ const FuelOptimizer = () => {
               <Input
                 type="number"
                 value={routeData.cargo_weight}
-                onChange={handleChange}
+                onChange={(e) => setRouteData({ ...routeData, cargo_weight: e.target.value })}
                 placeholder="0"
               />
             </div>
@@ -160,7 +159,7 @@ const FuelOptimizer = () => {
               <select
                 className="w-full p-2 border rounded-md bg-background"
                 value={routeData.weather_condition}
-                onChange={handleChange}
+                onChange={(e) => setRouteData({ ...routeData, weather_condition: e.target.value })}
               >
                 <option value="normal">Normal</option>
                 <option value="adversa">Adversa</option>

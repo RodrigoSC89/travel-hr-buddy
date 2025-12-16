@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +24,7 @@ export const ModuleList: React.FC = () => {
                          module.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === "all" || module.status === filterStatus;
     return matchesSearch && matchesFilter;
-  };
+  });
 
   const getStatusIcon = (status: Module["status"]) => {
     switch (status) {
@@ -93,7 +92,7 @@ export const ModuleList: React.FC = () => {
             <Input
               placeholder="Buscar módulos..."
               value={searchTerm}
-              onChange={handleChange}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-9"
             />
           </div>
@@ -101,21 +100,21 @@ export const ModuleList: React.FC = () => {
             <Button
               variant={filterStatus === "all" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilterStatus}
+              onClick={() => setFilterStatus("all")}
             >
               Todos
             </Button>
             <Button
               variant={filterStatus === "functional" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilterStatus}
+              onClick={() => setFilterStatus("functional")}
             >
               Funcionais
             </Button>
             <Button
               variant={filterStatus === "pending" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilterStatus}
+              onClick={() => setFilterStatus("pending")}
             >
               Pendentes
             </Button>

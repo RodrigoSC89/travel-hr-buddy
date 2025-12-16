@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
     return array.includes(item)
       ? array.filter(i => i !== item)
       : [...array, item];
-  });
+  };
 
   const handleApply = () => {
     toast.success("Filtros aplicados!");
@@ -65,7 +64,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
       priority: [],
     });
     toast.info("Filtros limpos");
-  });
+  };
 
   const activeFiltersCount = [
     filters.dateFrom || filters.dateTo ? 1 : 0,
@@ -108,7 +107,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                 <Input
                   type="date"
                   value={filters.dateFrom}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, dateFrom: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
@@ -116,7 +115,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                 <Input
                   type="date"
                   value={filters.dateTo}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, dateTo: e.target.value }))}
                 />
               </div>
             </div>
@@ -136,7 +135,10 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                   key={cat}
                   variant={filters.categories.includes(cat) ? "default" : "outline"}
                   className="cursor-pointer"
-                  onClick={handleSetFilters}))}
+                  onClick={() => setFilters(prev => ({
+                    ...prev,
+                    categories: toggleArrayItem(prev.categories, cat)
+                  }))}
                 >
                   {cat}
                   {filters.categories.includes(cat) && (
@@ -161,7 +163,10 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                   key={sup}
                   variant={filters.suppliers.includes(sup) ? "default" : "outline"}
                   className="cursor-pointer"
-                  onClick={handleSetFilters}))}
+                  onClick={() => setFilters(prev => ({
+                    ...prev,
+                    suppliers: toggleArrayItem(prev.suppliers, sup)
+                  }))}
                 >
                   {sup}
                   {filters.suppliers.includes(sup) && (
@@ -186,7 +191,10 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                   key={status}
                   variant={filters.status.includes(status) ? "default" : "outline"}
                   className="cursor-pointer"
-                  onClick={handleSetFilters}))}
+                  onClick={() => setFilters(prev => ({
+                    ...prev,
+                    status: toggleArrayItem(prev.status, status)
+                  }))}
                 >
                   {status}
                   {filters.status.includes(status) && (
@@ -212,7 +220,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                   type="number"
                   placeholder="0"
                   value={filters.minValue}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, minValue: e.target.value }))}
                 />
               </div>
               <div className="space-y-1">
@@ -221,7 +229,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                   type="number"
                   placeholder="100000"
                   value={filters.maxValue}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFilters(prev => ({ ...prev, maxValue: e.target.value }))}
                 />
               </div>
             </div>
@@ -238,7 +246,10 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
                   key={priority}
                   variant={filters.priority.includes(priority) ? "default" : "outline"}
                   className="cursor-pointer"
-                  onClick={handleSetFilters}))}
+                  onClick={() => setFilters(prev => ({
+                    ...prev,
+                    priority: toggleArrayItem(prev.priority, priority)
+                  }))}
                 >
                   {priority}
                   {filters.priority.includes(priority) && (
@@ -251,7 +262,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => handleonOpenChange}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
           <Button onClick={handleApply}>

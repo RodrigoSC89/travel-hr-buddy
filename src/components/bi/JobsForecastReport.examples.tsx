@@ -1,13 +1,13 @@
 // Example Usage of JobsForecastReport Component
 // This file demonstrates how to integrate the JobsForecastReport component into your application
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Example 1: Basic usage with hardcoded trend data
-export const BasicExample = memo(function() {
+export function BasicExample() {
   const trendData = [
     { date: "2025-08", jobs: 45 },
     { date: "2025-09", jobs: 52 },
@@ -23,7 +23,7 @@ export const BasicExample = memo(function() {
 }
 
 // Example 2: Integration with API data
-export const ApiExample = memo(function() {
+export function ApiExample() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,7 +57,7 @@ export const ApiExample = memo(function() {
 }
 
 // Example 3: Full BI Dashboard with multiple components
-export const FullBIDashboard = memo(function() {
+export function FullBIDashboard() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export const FullBIDashboard = memo(function() {
       { date: "2025-08", jobs: 45 },
       { date: "2025-09", jobs: 52 },
       { date: "2025-10", jobs: 48 },
-    ]);
+    ];
     setTrendData(mockTrend);
   }, []);
 
@@ -92,7 +92,7 @@ export const FullBIDashboard = memo(function() {
 }
 
 // Example 4: With manual refresh capability
-export const RefreshableExample = memo(function() {
+export function RefreshableExample() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -103,7 +103,7 @@ export const RefreshableExample = memo(function() {
         { date: "2025-08", jobs: Math.floor(Math.random() * 50) + 30 },
         { date: "2025-09", jobs: Math.floor(Math.random() * 50) + 30 },
         { date: "2025-10", jobs: Math.floor(Math.random() * 50) + 30 },
-      ]);
+      ];
       setTrendData(data);
     }
     void loadTrend();
@@ -130,7 +130,7 @@ export const RefreshableExample = memo(function() {
 }
 
 // Example 5: Integration in existing page
-export const IntegrateInExistingPage = memo(function() {
+export function IntegrateInExistingPage() {
   const [showForecast, setShowForecast] = useState(false);
   const [trendData] = useState([
     { date: "2025-08", jobs: 45 },
@@ -155,7 +155,7 @@ export const IntegrateInExistingPage = memo(function() {
         <input
           type="checkbox"
           checked={showForecast}
-          onChange={handleChange}
+          onChange={(e) => setShowForecast(e.target.checked)}
           id="show-forecast"
         />
         <label htmlFor="show-forecast">Show AI Forecast</label>
@@ -168,7 +168,7 @@ export const IntegrateInExistingPage = memo(function() {
 }
 
 // Example 6: With Supabase real-time data
-export const RealtimeExample = memo(function() {
+export function RealtimeExample() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
 
   useEffect(() => {
@@ -212,4 +212,4 @@ export default {
   RefreshableExample,
   IntegrateInExistingPage,
   RealtimeExample,
-});
+};

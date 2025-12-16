@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -66,7 +65,7 @@ const VoiceAssistant: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const SpeechRecognition = (window as unknown).SpeechRecognition || (window as unknown).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognition || !window.speechSynthesis) {
       setIsSupported(false);
@@ -78,7 +77,7 @@ const VoiceAssistant: React.FC = () => {
     recognitionRef.current.interimResults = true;
     recognitionRef.current.lang = "pt-BR";
 
-    recognitionRef.current.onresult = (event: Event) => {
+    recognitionRef.current.onresult = (event: any) => {
       const current = event.resultIndex;
       const transcriptText = event.results[current][0].transcript;
       setTranscript(transcriptText);
@@ -87,9 +86,9 @@ const VoiceAssistant: React.FC = () => {
         processCommand(transcriptText);
         setTranscript("");
       }
-    });
+    };
 
-    recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
+    recognitionRef.current.onerror = (event: any) => {
       logger.error("Speech recognition error", { error: event.error });
       if (event.error !== "no-speech") {
         toast({
@@ -99,7 +98,7 @@ const VoiceAssistant: React.FC = () => {
         });
       }
       setIsListening(false);
-    });
+    };
 
     recognitionRef.current.onend = () => {
       if (isListening) {
@@ -109,7 +108,7 @@ const VoiceAssistant: React.FC = () => {
           logger.error("Error restarting recognition", { error });
         }
       }
-    });
+    };
 
     synthRef.current = window.speechSynthesis;
     audioRef.current = new Audio();
@@ -118,7 +117,7 @@ const VoiceAssistant: React.FC = () => {
       recognitionRef.current?.stop();
       synthRef.current?.cancel();
       audioRef.current?.pause();
-    });
+    };
   }, [isListening]);
 
   useEffect(() => {
@@ -150,7 +149,7 @@ const VoiceAssistant: React.FC = () => {
         });
       }
     }
-  });
+  };
 
   const processCommand = async (command: string) => {
     if (!command.trim()) return;
@@ -165,7 +164,7 @@ const VoiceAssistant: React.FC = () => {
       type: "user",
       content: command,
       status: "success",
-    });
+    };
     setMessages(prev => [...prev, userMessage]);
 
     // Add pending assistant message
@@ -175,7 +174,7 @@ const VoiceAssistant: React.FC = () => {
       type: "assistant",
       content: "",
       status: "pending",
-    });
+    };
     setMessages(prev => [...prev, pendingMessage]);
     setIsProcessing(true);
 
@@ -206,12 +205,12 @@ const VoiceAssistant: React.FC = () => {
         prev.map(msg =>
           msg.id === assistantMessageId
             ? {
-              ...msg,
-              content: response,
-              navigation,
-              action,
-              status: "success",
-            }
+                ...msg,
+                content: response,
+                navigation,
+                action,
+                status: "success",
+              }
             : msg
         )
       );
@@ -236,10 +235,10 @@ const VoiceAssistant: React.FC = () => {
         prev.map(msg =>
           msg.id === assistantMessageId
             ? {
-              ...msg,
-              content: "Desculpe, ocorreu um erro. Tente novamente.",
-              status: "error",
-            }
+                ...msg,
+                content: "Desculpe, ocorreu um erro. Tente novamente.",
+                status: "error",
+              }
             : msg
         )
       );
@@ -273,7 +272,7 @@ const VoiceAssistant: React.FC = () => {
             audioRef.current.onerror = () => {
               setIsSpeaking(false);
               fallbackSpeak(text);
-            });
+            };
             await audioRef.current.play();
             return;
           }
@@ -319,7 +318,7 @@ const VoiceAssistant: React.FC = () => {
     toast({
       title: newVolume > 0 ? "🔊 Som ativado" : "🔇 Som desativado",
     });
-  });
+  };
 
   const clearHistory = () => {
     setMessages([]);
@@ -477,9 +476,9 @@ const VoiceAssistant: React.FC = () => {
                   className={`
                     h-16 w-16 rounded-full flex items-center justify-center transition-all
                     ${isListening 
-      ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50" 
-      : "bg-gradient-to-br from-primary to-purple-600 hover:opacity-90 shadow-lg shadow-primary/50"
-    }
+                      ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50" 
+                      : "bg-gradient-to-br from-primary to-purple-600 hover:opacity-90 shadow-lg shadow-primary/50"
+                    }
                     ${(!isSupported || isProcessing) && "opacity-50 cursor-not-allowed"}
                   `}
                 >
@@ -498,7 +497,7 @@ const VoiceAssistant: React.FC = () => {
                 <Input
                   placeholder="Ou digite sua mensagem..."
                   value={textInput}
-                  onChange={handleChange}
+                  onChange={(e) => setTextInput(e.target.value)}
                   disabled={isProcessing}
                   className="flex-1"
                 />
@@ -528,7 +527,7 @@ const VoiceAssistant: React.FC = () => {
                     variant="outline"
                     size="sm"
                     className="justify-start"
-                    onClick={() => handleprocessCommand}
+                    onClick={() => processCommand(cmd.command)}
                     disabled={isProcessing}
                   >
                     {cmd.label}
@@ -559,7 +558,7 @@ const VoiceAssistant: React.FC = () => {
               <Button
                 variant="outline"
                 className="w-full justify-between"
-                onClick={handleSetUseElevenLabs}
+                onClick={() => setUseElevenLabs(!useElevenLabs)}
               >
                 <span>Voz Premium</span>
                 {useElevenLabs ? <CheckCircle className="h-4 w-4 text-green-500" /> : <AlertCircle className="h-4 w-4 text-muted-foreground" />}

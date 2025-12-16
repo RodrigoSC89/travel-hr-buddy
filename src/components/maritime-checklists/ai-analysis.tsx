@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -66,7 +65,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
           checklist_id: checklist.id,
           overall_score: aiAnalysis.overallScore,
           analysis_type: "comprehensive",
-          analysis_data: aiAnalysis as unknown,
+          analysis_data: aiAnalysis as any,
           recommendations: aiAnalysis.suggestions,
           issues_found: aiAnalysis.anomalies.length,
           critical_issues: aiAnalysis.anomalies.filter(a => a.severity === "critical").length,

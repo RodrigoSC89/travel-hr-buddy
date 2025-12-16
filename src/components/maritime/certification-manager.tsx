@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -166,19 +165,19 @@ export const CertificationManager: React.FC = () => {
       title: "🔄 Renovação em Massa",
       description: "Processando renovações automáticas...",
     });
-  });
+  };
 
   const handleGenerateReport = () => {
     toast({
       title: "📊 Relatório Gerado",
       description: "Relatório de compliance exportado com sucesso!",
     });
-  });
+  };
 
   const expiringCertifications = certifications.filter(cert => {
     const days = getDaysUntilExpiry(cert.expiryDate);
     return days <= 90 && days > 0;
-  };
+  });
 
   const expiredCertifications = certifications.filter(cert => 
     getDaysUntilExpiry(cert.expiryDate) < 0

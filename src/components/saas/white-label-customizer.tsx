@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -63,7 +62,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       [field]: value
     }));
     setHasChanges(true);
-  });
+  };
 
   const handleNestedChange = (parent: string, field: string, value: unknown) => {
     setFormData(prev => {
@@ -78,7 +77,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
         };
       }
       return prev;
-    };
+    });
     setHasChanges(true);
   };
 
@@ -122,7 +121,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       business_rules: currentBranding?.business_rules || {}
     });
     setHasChanges(false);
-  });
+  };
 
   const languages = [
     { value: "pt-BR", label: "Português (Brasil)" },
@@ -216,7 +215,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Input
                     id="company_name"
                     value={formData.company_name}
-                    onChange={handleChange}
+                    onChange={(e) => handleInputChange("company_name", e.target.value)}
                     placeholder="Digite o nome da sua empresa"
                   />
                 </div>
@@ -226,7 +225,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                     <Input
                       id="logo_url"
                       value={formData.logo_url}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("logo_url", e.target.value)}
                       placeholder="https://exemplo.com/logo.png"
                     />
                     <Button variant="outline" size="icon">
@@ -242,7 +241,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Input
                     id="favicon_url"
                     value={formData.favicon_url}
-                    onChange={handleChange}
+                    onChange={(e) => handleInputChange("favicon_url", e.target.value)}
                     placeholder="https://exemplo.com/favicon.ico"
                   />
                   <Button variant="outline" size="icon">
@@ -274,12 +273,12 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       type="color"
                       id="primary_color"
                       value={formData.primary_color}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("primary_color", e.target.value)}
                       className="w-12 h-10 border rounded cursor-pointer"
                     />
                     <Input
                       value={formData.primary_color}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("primary_color", e.target.value)}
                       placeholder="#2563eb"
                     />
                   </div>
@@ -292,12 +291,12 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       type="color"
                       id="secondary_color"
                       value={formData.secondary_color}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("secondary_color", e.target.value)}
                       className="w-12 h-10 border rounded cursor-pointer"
                     />
                     <Input
                       value={formData.secondary_color}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("secondary_color", e.target.value)}
                       placeholder="#64748b"
                     />
                   </div>
@@ -310,12 +309,12 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       type="color"
                       id="accent_color"
                       value={formData.accent_color}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("accent_color", e.target.value)}
                       className="w-12 h-10 border rounded cursor-pointer"
                     />
                     <Input
                       value={formData.accent_color}
-                      onChange={handleChange}
+                      onChange={(e) => handleInputChange("accent_color", e.target.value)}
                       placeholder="#7c3aed"
                     />
                   </div>
@@ -328,7 +327,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                 <h4 className="text-sm font-medium">Modo de Tema</h4>
                 <Select
                   value={formData.theme_mode}
-                  onValueChange={(value) => handleInputChange("theme_mode", value}
+                  onValueChange={(value) => handleInputChange("theme_mode", value)}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -376,7 +375,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Label>Idioma Padrão</Label>
                   <Select
                     value={formData.default_language}
-                    onValueChange={(value) => handleInputChange("default_language", value}
+                    onValueChange={(value) => handleInputChange("default_language", value)}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -395,7 +394,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Label>Moeda Padrão</Label>
                   <Select
                     value={formData.default_currency}
-                    onValueChange={(value) => handleInputChange("default_currency", value}
+                    onValueChange={(value) => handleInputChange("default_currency", value)}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -414,7 +413,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Label>Fuso Horário</Label>
                   <Select
                     value={formData.timezone}
-                    onValueChange={(value) => handleInputChange("timezone", value}
+                    onValueChange={(value) => handleInputChange("timezone", value)}
                   >
                     <SelectTrigger>
                       <SelectValue />

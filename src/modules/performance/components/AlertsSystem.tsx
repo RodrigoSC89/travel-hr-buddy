@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 392 - Performance Monitoring Alerts System
  * Automated threshold-based alerts
  */
@@ -47,7 +46,7 @@ export const AlertsSystem: React.FC = () => {
           table: "performance_alerts",
         },
         (payload) => {
-          const newAlert = payload.new as unknown;
+          const newAlert = payload.new as any;
           setAlerts((prev) => [newAlert, ...prev]);
           
           if (newAlert.severity === "critical") {
@@ -73,7 +72,7 @@ export const AlertsSystem: React.FC = () => {
         },
         (payload) => {
           setAlerts((prev) =>
-            prev.map((a) => (a.id === payload.new.id ? (payload.new as unknown) : a))
+            prev.map((a) => (a.id === payload.new.id ? (payload.new as any) : a))
           );
         }
       )
@@ -88,7 +87,7 @@ export const AlertsSystem: React.FC = () => {
   const fetchAlerts = async () => {
     try {
       const { data, error } = await supabase
-        .from("performance_alerts" as unknown)
+        .from("performance_alerts" as any)
         .select("*")
         .eq("is_resolved", false)
         .order("created_at", { ascending: false });
@@ -99,7 +98,7 @@ export const AlertsSystem: React.FC = () => {
         setLoading(false);
         return;
       }
-      setAlerts((data as unknown) || []);
+      setAlerts((data as any) || []);
     } catch (error) {
       console.error("Error fetching alerts:", error);
       setAlerts([]);
@@ -111,7 +110,7 @@ export const AlertsSystem: React.FC = () => {
   const resolveAlert = async (alertId: string) => {
     try {
       const { error } = await supabase
-        .from("performance_alerts" as unknown)
+        .from("performance_alerts" as any)
         .update({ is_resolved: true, resolved_at: new Date().toISOString() })
         .eq("id", alertId);
 
@@ -200,7 +199,7 @@ export const AlertsSystem: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleresolveAlert}
+                      onClick={() => resolveAlert(alert.id)}
                       title="Resolve alert"
                     >
                       <X className="h-4 w-4" />
@@ -214,4 +213,4 @@ export const AlertsSystem: React.FC = () => {
       </CardContent>
     </Card>
   );
-});
+};

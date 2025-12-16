@@ -1,4 +1,3 @@
-
 /**
  * PATCH 200.0 - Mission AI Core (IA Autônoma de Missão)
  * 
@@ -400,7 +399,7 @@ class MissionAICore {
         requires_human_override: requiresOverride,
         automated_steps: automatedSteps,
         manual_steps: manualSteps,
-      });
+      };
 
       // Track decision
       await learningCore.trackDecision(
@@ -588,7 +587,7 @@ class MissionAICore {
       requires_human_override: true,
       automated_steps: [],
       manual_steps: ["Review situation and make manual decision"],
-    });
+    };
   }
 
   /**

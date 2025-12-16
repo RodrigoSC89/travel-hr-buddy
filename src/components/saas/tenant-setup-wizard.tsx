@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ export const TenantSetupWizard: React.FC = () => {
         variant: "destructive"
       });
     }
-  });
+  };
 
   const handleSubmit = async () => {
     if (!validateStep(4)) return;
@@ -171,7 +170,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={handleChange}
+                  onChange={(e) => updateFormData("name", e.target.value)}
                   placeholder="Ex: Blue Shipping"
                 />
               </div>
@@ -182,7 +181,7 @@ export const TenantSetupWizard: React.FC = () => {
                   <Input
                     id="subdomain"
                     value={formData.subdomain}
-                    onChange={handleChange}
+                    onChange={(e) => updateFormData("subdomain", e.target.value.toLowerCase())}
                     placeholder="blueshipping"
                     className="rounded-r-none"
                   />
@@ -197,14 +196,14 @@ export const TenantSetupWizard: React.FC = () => {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={handleChange}
+                  onChange={(e) => updateFormData("description", e.target.value)}
                   placeholder="Descreva brevemente a empresa e suas atividades..."
                 />
               </div>
               
               <div className="space-y-2">
                 <Label htmlFor="industry">Setor *</Label>
-                <Select value={formData.industry} onValueChange={(value) => updateFormData("industry", value}>
+                <Select value={formData.industry} onValueChange={(value) => updateFormData("industry", value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o setor" />
                   </SelectTrigger>
@@ -221,7 +220,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="company_size">Tamanho da Empresa</Label>
-                <Select value={formData.company_size} onValueChange={(value) => updateFormData("company_size", value}>
+                <Select value={formData.company_size} onValueChange={(value) => updateFormData("company_size", value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tamanho" />
                   </SelectTrigger>
@@ -246,7 +245,7 @@ export const TenantSetupWizard: React.FC = () => {
                     className={`cursor-pointer transition-colors ${
                       formData.plan_id === plan.id ? "ring-2 ring-primary" : "hover:bg-muted/50"
                     }`}
-                    onClick={() => handleupdateFormData}
+                    onClick={() => updateFormData("plan_id", plan.id)}
                   >
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
@@ -280,7 +279,7 @@ export const TenantSetupWizard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="currency">Moeda Principal *</Label>
-                <Select value={formData.primary_currency} onValueChange={(value) => updateFormData("primary_currency", value}>
+                <Select value={formData.primary_currency} onValueChange={(value) => updateFormData("primary_currency", value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -294,7 +293,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="timezone">Fuso Horário *</Label>
-                <Select value={formData.timezone} onValueChange={(value) => updateFormData("timezone", value}>
+                <Select value={formData.timezone} onValueChange={(value) => updateFormData("timezone", value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -308,7 +307,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="language">Idioma *</Label>
-                <Select value={formData.language} onValueChange={(value) => updateFormData("language", value}>
+                <Select value={formData.language} onValueChange={(value) => updateFormData("language", value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -329,7 +328,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Input
                   id="admin_name"
                   value={formData.admin_name}
-                  onChange={handleChange}
+                  onChange={(e) => updateFormData("admin_name", e.target.value)}
                   placeholder="Nome completo"
                 />
               </div>
@@ -340,7 +339,7 @@ export const TenantSetupWizard: React.FC = () => {
                   id="admin_email"
                   type="email"
                   value={formData.admin_email}
-                  onChange={handleChange}
+                  onChange={(e) => updateFormData("admin_email", e.target.value)}
                   placeholder="admin@empresa.com"
                 />
               </div>
@@ -350,7 +349,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Input
                   id="admin_phone"
                   value={formData.admin_phone}
-                  onChange={handleChange}
+                  onChange={(e) => updateFormData("admin_phone", e.target.value)}
                   placeholder="+55 (11) 99999-9999"
                 />
               </div>
@@ -361,7 +360,7 @@ export const TenantSetupWizard: React.FC = () => {
           <div className="flex justify-between pt-6">
             <Button
               variant="outline"
-              onClick={handleSetCurrentStep}
+              onClick={() => setCurrentStep(prev => prev - 1)}
               disabled={currentStep === 1}
             >
               Voltar

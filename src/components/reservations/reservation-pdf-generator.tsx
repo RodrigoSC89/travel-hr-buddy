@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -418,7 +417,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
       const shareText = `Reserva: ${reservation.title}\nData: ${new Date(reservation.start_date).toLocaleDateString("pt-BR")}\nStatus: ${getStatusLabel(reservation.status)}`;
       navigator.clipboard.writeText(shareText);
     }
-  });
+  };
 
   const getStatusLabel = (status: string) => {
     switch (status) {

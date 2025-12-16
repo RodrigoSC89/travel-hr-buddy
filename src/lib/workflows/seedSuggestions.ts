@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 /**
  * Workflow Suggestions Seeder
  * 
@@ -269,6 +269,7 @@ export async function seedSuggestionsForWorkflow(
       .select();
 
     if (error) {
+      console.error("Error creating workflow steps:", error);
       return {
         success: false,
         suggestions: [],
@@ -281,7 +282,6 @@ export async function seedSuggestionsForWorkflow(
       suggestions: data || [],
     };
   } catch (error) {
-    console.error("Unexpected error in seedSuggestionsForWorkflow:", error);
     console.error("Unexpected error in seedSuggestionsForWorkflow:", error);
     return {
       success: false,

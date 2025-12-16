@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -89,7 +88,7 @@ ${plannedVoyages.map((v) => `- ${v.name}: partida ${v.departureDate}, ${v.distan
           ],
           context,
         },
-      };
+      });
 
       if (response.error) throw response.error;
 
@@ -282,7 +281,7 @@ Faça sua pergunta e vou analisar com base nas suas viagens atuais.`;
             <Textarea
               placeholder="Pergunte sobre rotas, clima, ETA..."
               value={input}
-              onChange={handleChange}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -300,6 +299,6 @@ Faça sua pergunta e vou analisar com base nas suas viagens atuais.`;
       </CardContent>
     </Card>
   );
-});
+};
 
 export default VoyageAICopilot;

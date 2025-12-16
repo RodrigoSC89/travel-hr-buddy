@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ interface AuditsListProps {
   onRefresh?: () => void;
 }
 
-export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
+export function AuditsList({ onRefresh }: AuditsListProps) {
   const { toast } = useToast();
   const [audits, setAudits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +45,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
 
       if (error) throw error;
       setAudits(data || []);
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({
         title: "Error loading audits",
         description: error.message,
@@ -58,7 +57,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: unknown: unknown: unknown; icon: unknown: unknown: unknown }> = {
+    const statusConfig: Record<string, { variant: any; icon: any }> = {
       "planned": { variant: "outline", icon: Clock },
       "in_progress": { variant: "default", icon: Clock },
       "completed": { variant: "default", icon: CheckCircle },
@@ -93,7 +92,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
 
       loadAudits();
       if (onRefresh) onRefresh();
-    } catch (error: SupabaseError | null) {
+    } catch (error: any) {
       toast({
         title: "Error",
         description: error.message,
@@ -175,19 +174,19 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
                         View Details
                       </DropdownMenuItem>
                       {audit.status === "planned" && (
-                        <DropdownMenuItem onClick={() => handlehandleStatusChange}>
+                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "in_progress")}>
                           <Clock className="h-4 w-4 mr-2" />
                           Start Audit
                         </DropdownMenuItem>
                       )}
                       {audit.status === "in_progress" && (
-                        <DropdownMenuItem onClick={() => handlehandleStatusChange}>
+                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "completed")}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Mark Complete
                         </DropdownMenuItem>
                       )}
                       {audit.status === "completed" && (
-                        <DropdownMenuItem onClick={() => handlehandleStatusChange}>
+                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "closed")}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Close Audit
                         </DropdownMenuItem>
@@ -202,4 +201,4 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
       </CardContent>
     </Card>
   );
-});
+}

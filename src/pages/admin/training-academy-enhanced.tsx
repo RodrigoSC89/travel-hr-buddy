@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -81,18 +80,18 @@ export default function TrainingAcademyEnhanced() {
 
     return () => {
       supabase.removeChannel(progressChannel);
-    });
+    };
   }, []);
 
   const loadData = async () => {
     try {
       const [progressData, certificatesData, historyData] = await Promise.all([
-        (supabase as unknown)
+        (supabase as any)
           .from("course_enrollments")
           .select("*, courses(title, category, estimated_duration_hours)")
           .order("last_accessed_at", { ascending: false })
           .limit(100),
-        (supabase as unknown)
+        (supabase as any)
           .from("certifications")
           .select("*, courses(title)")
           .order("issue_date", { ascending: false })
@@ -121,7 +120,7 @@ export default function TrainingAcademyEnhanced() {
   const loadLearningHistory = async () => {
     try {
       // Aggregate user learning data
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("course_enrollments")
         .select("user_id, enrollment_status, time_spent_minutes, average_score");
       
@@ -130,7 +129,7 @@ export default function TrainingAcademyEnhanced() {
       // Group by user
       const userMap = new Map<string, any>();
       
-      data?.forEach((enrollment: unknown) => {
+      data?.forEach((enrollment: any) => {
         const userId = enrollment.user_id;
         if (!userMap.has(userId)) {
           userMap.set(userId, {
@@ -172,12 +171,12 @@ export default function TrainingAcademyEnhanced() {
     }
   };
 
-  const generateCertificate = async (enrollment: unknown: unknown: unknown) => {
+  const generateCertificate = async (enrollment: any) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       const certificateNumber = `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
       
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("certifications")
         .insert({
           user_id: enrollment.user_id,
@@ -269,11 +268,11 @@ export default function TrainingAcademyEnhanced() {
       title: "Download Concluído",
       description: "Certificado baixado com sucesso"
     });
-  });
+  };
 
   const updateProgress = async (enrollmentId: string, progress: number) => {
     try {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("course_enrollments")
         .update({
           overall_progress_percentage: progress,
@@ -482,7 +481,7 @@ export default function TrainingAcademyEnhanced() {
                           </div>
                           <Button 
                             size="sm" 
-                            onClick={() => handledownloadCertificatePDF}
+                            onClick={() => downloadCertificatePDF(cert)}
                           >
                             <Download className="h-4 w-4 mr-2" />
                             Baixar PDF

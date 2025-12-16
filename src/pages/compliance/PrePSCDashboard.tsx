@@ -3,7 +3,7 @@
  * Main dashboard for Port State Control self-assessments
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -59,7 +59,7 @@ export default function PrePSCDashboard() {
       title: "Success",
       description: "Inspection completed successfully",
     });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

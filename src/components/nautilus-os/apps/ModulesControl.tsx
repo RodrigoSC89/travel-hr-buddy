@@ -2,7 +2,7 @@ import React from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-export const ModulesControl = memo(function() {
+export function ModulesControl() {
   const modules = [
     { id: "ai", name: "IA Embarcada", enabled: true },
     { id: "monitoring", name: "Monitoramento", enabled: true },
@@ -25,4 +25,4 @@ export const ModulesControl = memo(function() {
       ))}
     </div>
   );
-});
+}

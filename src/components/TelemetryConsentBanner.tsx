@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";;
-
 /**
  * PATCH 499: Telemetry Consent Banner
  * GDPR-compliant consent banner for telemetry
@@ -12,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { X } from "lucide-react";
 
-export const TelemetryConsentBanner = memo(function() {
+export function TelemetryConsentBanner() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
@@ -81,4 +79,4 @@ export const TelemetryConsentBanner = memo(function() {
       </Card>
     </div>
   );
-});
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -87,12 +87,12 @@ export default function CollaborationPage() {
       if (repliesChannel) {
         supabase.removeChannel(repliesChannel);
       }
-    });
+    };
   }, []);
 
   const fetchComments = async () => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("colab_comments")
         .select(`
           id,
@@ -107,7 +107,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails
       const commentsWithEmails = await Promise.all(
-        (data || []).map(async (comment: unknown) => {
+        (data || []).map(async (comment: any) => {
           const { data: profile } = await supabase
             .from("profiles")
             .select("email")
@@ -121,7 +121,7 @@ export default function CollaborationPage() {
             ...comment,
             author_email: profile?.email || "Usuário desconhecido",
             reactions: comment.reactions || {}
-          });
+          };
         })
       );
 
@@ -166,7 +166,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("colab_comments")
         .insert({
           author_id: user.id,
@@ -194,7 +194,7 @@ export default function CollaborationPage() {
 
   const fetchReplies = async (commentId: string) => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("colab_replies")
         .select(`
           id,
@@ -210,7 +210,7 @@ export default function CollaborationPage() {
 
       // Fetch author emails for replies
       const repliesWithEmails = await Promise.all(
-        (data || []).map(async (reply: unknown) => {
+        (data || []).map(async (reply: any) => {
           const { data: profile } = await supabase
             .from("profiles")
             .select("email")
@@ -220,7 +220,7 @@ export default function CollaborationPage() {
           return {
             ...reply,
             author_email: profile?.email || "Usuário desconhecido"
-          });
+          };
         })
       );
 
@@ -241,9 +241,9 @@ export default function CollaborationPage() {
       const newReactions = {
         ...currentReactions,
         [emoji]: (currentReactions[emoji] || 0) + 1
-      });
+      };
 
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("colab_comments")
         .update({ reactions: newReactions })
         .eq("id", commentId);
@@ -284,7 +284,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("colab_replies")
         .insert({
           comment_id: commentId,
@@ -316,7 +316,7 @@ export default function CollaborationPage() {
       <div className="flex items-center justify-between">
         <Button 
           variant="outline" 
-          onClick={() => handlenavigate}
+          onClick={() => navigate("/admin")}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
@@ -333,7 +333,7 @@ export default function CollaborationPage() {
             <Textarea
               placeholder="💬 Deixe seu comentário..."
               value={newComment}
-              onChange={handleChange}
+              onChange={(e) => setNewComment(e.target.value)}
               disabled={submitting}
               rows={4}
             />
@@ -389,7 +389,7 @@ export default function CollaborationPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleaddReaction}
+                              onClick={() => addReaction(comment.id, "👍")}
                               className="h-8 px-3"
                             >
                               👍 {comment.reactions?.["👍"] || 0}
@@ -397,7 +397,7 @@ export default function CollaborationPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleaddReaction}
+                              onClick={() => addReaction(comment.id, "❤️")}
                               className="h-8 px-3"
                             >
                               ❤️ {comment.reactions?.["❤️"] || 0}
@@ -405,7 +405,7 @@ export default function CollaborationPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleaddReaction}
+                              onClick={() => addReaction(comment.id, "👏")}
                               className="h-8 px-3"
                             >
                               👏 {comment.reactions?.["👏"] || 0}
@@ -434,13 +434,13 @@ export default function CollaborationPage() {
                               <Textarea
                                 placeholder="Escreva uma resposta..."
                                 value={replyTexts[comment.id] || ""}
-                                onChange={handleChange}))}
+                                onChange={(e) => setReplyTexts((prev) => ({ ...prev, [comment.id]: e.target.value }))}
                                 rows={2}
                                 className="text-sm"
                               />
                               <Button
                                 size="sm"
-                                onClick={() => handlesubmitReply}
+                                onClick={() => submitReply(comment.id)}
                                 disabled={!replyTexts[comment.id]?.trim()}
                               >
                                 ➕ Responder

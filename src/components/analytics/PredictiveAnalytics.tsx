@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,7 +51,7 @@ const PredictiveAnalytics: React.FC = () => {
           timeframe: selectedTimeframe,
           includeFactors: true
         }
-      };
+      });
 
       if (error) throw error;
 

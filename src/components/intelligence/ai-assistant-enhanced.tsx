@@ -1,24 +1,30 @@
-import { useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Brain, 
   MessageCircle, 
   Mic, 
   MicOff, 
   Send, 
+  Sparkles, 
   Bot, 
   User, 
   Star, 
   TrendingUp, 
+  Shield, 
   Zap, 
   Clock,
   BarChart3,
+  FileText,
+  Search,
+  Settings,
   Globe,
+  Heart,
   Crown,
   Diamond
 } from "lucide-react";
@@ -259,7 +265,7 @@ const AIAssistantEnhanced: React.FC = () => {
               className={`group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-2xl
                 ${selectedCapability === capability.id ? "ring-2 ring-primary shadow-primary/25" : ""}
                 bg-gradient-to-br from-card via-card/95 to-${capability.color}/5 border-${capability.color}/20 hover:border-${capability.color}/40`}
-              onClick={handleSetSelectedCapability}
+              onClick={() => setSelectedCapability(capability.id)}
             >
               <CardContent className="p-4 flex items-center gap-3">
                 <div className={`p-3 rounded-xl bg-${capability.color}/20 group-hover:scale-110 transition-transform duration-300`}>
@@ -357,7 +363,7 @@ const AIAssistantEnhanced: React.FC = () => {
                     <div className="flex-1">
                       <Input
                         value={inputMessage}
-                        onChange={handleChange}
+                        onChange={(e) => setInputMessage(e.target.value)}
                         placeholder="Digite sua pergunta para a IA..."
                         onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                         className="bg-background/50 backdrop-blur-sm"
@@ -409,7 +415,7 @@ const AIAssistantEnhanced: React.FC = () => {
                     variant="outline"
                     size="sm"
                     className="w-full text-left justify-start h-auto py-3 px-3 hover:bg-primary/5"
-                    onClick={() => handlehandleQuickAction}
+                    onClick={() => handleQuickAction(action.text, action.category)}
                   >
                     <span className="text-xs leading-relaxed">{action.text}</span>
                   </Button>

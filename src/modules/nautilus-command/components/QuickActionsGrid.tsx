@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 
 interface QuickActionsGridProps {
-  context?: unknown;
+  context?: any;
   onContactClick?: () => void;
   onReorderClick?: () => void;
   onCreateOrderClick?: () => void;
 }
 
-export const QuickActionsGrid = memo(function({
+export function QuickActionsGrid({
   context,
   onContactClick,
   onReorderClick,
@@ -39,7 +39,7 @@ export const QuickActionsGrid = memo(function({
       });
       navigate("/communication-center");
     }
-  });
+  };
 
   const handleReorder = () => {
     if (onReorderClick) {
@@ -50,7 +50,7 @@ export const QuickActionsGrid = memo(function({
       });
       navigate("/procurement-inventory");
     }
-  });
+  };
 
   const handleCreateOrder = () => {
     if (onCreateOrderClick) {
@@ -58,7 +58,7 @@ export const QuickActionsGrid = memo(function({
     } else {
       toast.success("Criar pedido", {
         description: "Abrindo formulário de novo pedido"
-      };
+      });
       navigate("/procurement-inventory");
     }
   };
@@ -204,4 +204,4 @@ export const QuickActionsGrid = memo(function({
       </CardContent>
     </Card>
   );
-});
+}

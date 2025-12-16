@@ -3,9 +3,9 @@
  * Automatically activates reduced features for slow connections
  */
 
-import { memo, memo, ReactNode, createContext, useContext, useEffect, useState, useCallback } from "react";;;
-import { useNetworkStatus } from "@/hooks/use-network-status";
-import { toast } from "@/hooks/use-toast";
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { useNetworkStatus } from '@/hooks/use-network-status';
+import { toast } from '@/hooks/use-toast';
 
 interface LiteModeConfig {
   enabled: boolean;
@@ -41,7 +41,7 @@ const LiteModeContext = createContext<LiteModeContextType>({
   autoDetected: false,
 });
 
-export const useLiteMode = memo(function() {
+export function useLiteMode() {
   return useContext(LiteModeContext);
 }
 
@@ -50,7 +50,7 @@ interface LiteModeProviderProps {
   autoEnable?: boolean;
 }
 
-export const LiteModeProvider = memo(function({ children, autoEnable = true }: LiteModeProviderProps) {
+export function LiteModeProvider({ children, autoEnable = true }: LiteModeProviderProps) {
   const { quality, effectiveType } = useNetworkStatus();
   const [config, setConfig] = useState<LiteModeConfig>(defaultConfig);
   const [autoDetected, setAutoDetected] = useState(false);
@@ -60,7 +60,7 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
   useEffect(() => {
     if (!autoEnable) return;
 
-    const isSlowConnection = quality === "slow" || effectiveType === "2g" || effectiveType === "slow-2g";
+    const isSlowConnection = quality === 'slow' || effectiveType === '2g' || effectiveType === 'slow-2g';
     
     if (isSlowConnection && userOverride === null) {
       setAutoDetected(true);
@@ -71,12 +71,12 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
         disableAutoplay: true,
         reducePollingFrequency: true,
         disablePrefetch: true,
-        simplifyUI: effectiveType === "slow-2g" || effectiveType === "2g",
+        simplifyUI: effectiveType === 'slow-2g' || effectiveType === '2g',
       });
 
       toast({
-        title: "Modo Lite Ativado",
-        description: "Conexão lenta detectada. Recursos reduzidos para melhor performance.",
+        title: 'Modo Lite Ativado',
+        description: 'Conexão lenta detectada. Recursos reduzidos para melhor performance.',
       });
     } else if (!isSlowConnection && autoDetected && userOverride === null) {
       setAutoDetected(false);
@@ -87,9 +87,9 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
   // Apply CSS class for animations
   useEffect(() => {
     if (config.disableAnimations) {
-      document.documentElement.classList.add("reduce-motion");
+      document.documentElement.classList.add('reduce-motion');
     } else {
-      document.documentElement.classList.remove("reduce-motion");
+      document.documentElement.classList.remove('reduce-motion');
     }
   }, [config.disableAnimations]);
 
@@ -110,7 +110,7 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
     } else {
       setConfig(defaultConfig);
     }
-  });
+  };
 
   return (
     <LiteModeContext.Provider
@@ -129,16 +129,16 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
 /**
  * Lite Mode Toggle Button
  */
-import { Zap, ZapOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Zap, ZapOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
-export const LiteModeToggle = memo(function({ className }: { className?: string }) {
+export function LiteModeToggle({ className }: { className?: string }) {
   const { isLiteMode, toggleLiteMode, autoDetected } = useLiteMode();
 
   return (
@@ -146,7 +146,7 @@ export const LiteModeToggle = memo(function({ className }: { className?: string 
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            variant={isLiteMode ? "secondary" : "ghost"}
+            variant={isLiteMode ? 'secondary' : 'ghost'}
             size="icon"
             onClick={() => toggleLiteMode()}
             className={className}
@@ -159,10 +159,10 @@ export const LiteModeToggle = memo(function({ className }: { className?: string 
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{isLiteMode ? "Desativar Modo Lite" : "Ativar Modo Lite"}</p>
+          <p>{isLiteMode ? 'Desativar Modo Lite' : 'Ativar Modo Lite'}</p>
           {autoDetected && <p className="text-xs text-muted-foreground">Auto-detectado</p>}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
-});
+}

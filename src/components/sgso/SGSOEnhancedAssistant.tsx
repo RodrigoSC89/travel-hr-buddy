@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -138,7 +137,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
     try {
       const { data, error } = await supabase.functions.invoke("sgso-assistant", {
         body: { question: messageText, type: messageType }
-      };
+      });
 
       if (error) throw error;
 
@@ -173,7 +172,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
       title: "Copiado!",
       description: "Conteúdo copiado para a área de transferência"
     });
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     const typeConfig = GENERATION_TYPES.find(t => t.id === type);
@@ -254,7 +253,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                     key={type.id}
                     variant={selectedType === type.id ? "default" : "outline"}
                     size="sm"
-                    onClick={handleSetSelectedType}
+                    onClick={() => setSelectedType(type.id)}
                     className="text-xs"
                     title={type.description}
                   >
@@ -300,7 +299,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                           variant="ghost"
                           size="icon"
                           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
-                          onClick={() => handlecopyToClipboard}
+                          onClick={() => copyToClipboard(message.content)}
                         >
                           <Copy className="h-3 w-3" />
                         </Button>
@@ -319,7 +318,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                                 key={idx}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10 transition-colors"
-                                onClick={() => citation.link && window.open(citation.link, "_blank"}
+                                onClick={() => citation.link && window.open(citation.link, "_blank")}
                               >
                                 <BookOpen className="h-2 w-2 mr-1" />
                                 {citation.norma} - {citation.artigo}
@@ -347,7 +346,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
             <div className="flex gap-2">
               <Textarea
                 value={input}
-                onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder={`Digite sua pergunta ou solicitação de ${GENERATION_TYPES.find(t => t.id === selectedType)?.label.toLowerCase()}...`}
                 className="min-h-[60px] resize-none"
                 onKeyDown={(e) => {
@@ -408,7 +407,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                       key={idx}
                       variant="outline"
                       className="w-full justify-start text-left h-auto py-2.5 px-3 text-xs hover:bg-primary/5"
-                      onClick={() => handlehandleSendMessage}
+                      onClick={() => handleSendMessage(action.query)}
                       disabled={isLoading}
                     >
                       <FileText className="h-3 w-3 mr-2 shrink-0 text-primary" />

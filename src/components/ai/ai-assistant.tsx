@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -105,7 +104,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
-      });
+      };
 
       recognition.onerror = () => {
         setIsListening(false);
@@ -114,7 +113,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           description: "Não foi possível capturar o áudio",
           variant: "destructive"
         });
-      });
+      };
 
       recognition.onend = () => {
         setIsListening(false);
@@ -165,7 +164,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       recognition.start();
       setIsListening(true);
     }
-  });
+  };
 
   const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -191,7 +190,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           user_id: user?.id,
           conversation_history: messages.slice(-5) // Last 5 messages for context
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -211,7 +210,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           if (onAction) {
             onAction(action.action, action.data);
           }
-};
+        });
       }
 
     } catch (error) {
@@ -246,7 +245,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       title: "Ação executada",
       description: `${action} foi executado com sucesso`,
     });
-  });
+  };
 
   const renderMessage = (message: Message) => {
     const isUser = message.type === "user";
@@ -285,7 +284,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
                   key={index}
                   variant="outline"
                   className="cursor-pointer hover:bg-accent"
-                  onClick={() => handlehandleSuggestionClick}
+                  onClick={() => handleSuggestionClick(suggestion)}
                 >
                   <Lightbulb className="w-3 h-3 mr-1" />
                   {suggestion}
@@ -302,7 +301,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
                   key={index}
                   variant="outline"
                   size="sm"
-                  onClick={() => handlehandleActionClick}
+                  onClick={() => handleActionClick(action.action, action.data)}
                   className="h-8"
                 >
                   <Sparkles className="w-3 h-3 mr-1" />
@@ -314,7 +313,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         </div>
       </div>
     );
-  });
+  };
 
   return (
     <Card className="h-[600px] flex flex-col">
@@ -353,7 +352,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         <div className="flex gap-2 pt-4 border-t">
           <Input
             value={input}
-            onChange={handleChange}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Digite sua mensagem ou use o microfone..."
             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             className="flex-1"

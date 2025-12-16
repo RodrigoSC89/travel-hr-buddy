@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { FileText, Download, Calendar, Filter, BarChart3, TrendingUp, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +25,7 @@ interface ReportData {
   };
 }
 
-export const ChecklistReports = memo(() => {
+export const ChecklistReports = () => {
   const [reports, setReports] = useState<ReportData[]>([
     {
       id: "1",
@@ -78,7 +77,7 @@ export const ChecklistReports = memo(() => {
     case "audit": return <AlertTriangle className="h-4 w-4" />;
     case "trend": return <TrendingUp className="h-4 w-4" />;
     default: return <FileText className="h-4 w-4" />;
-    };
+    }
   };
 
   const handleGenerateReport = () => {
@@ -86,14 +85,14 @@ export const ChecklistReports = memo(() => {
       title: "Relatório em Geração",
       description: "Seu relatório está sendo gerado e estará disponível em breve.",
     });
-  });
+  };
 
   const handleDownloadReport = (reportId: string) => {
     toast({
       title: "Download Iniciado",
       description: "O download do relatório foi iniciado.",
     });
-  });
+  };
 
   const filteredReports = reports.filter(report => 
     filterType === "all" || report.type === filterType
@@ -210,7 +209,7 @@ export const ChecklistReports = memo(() => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handlehandleDownloadReport}
+                      onClick={() => handleDownloadReport(report.id)}
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download

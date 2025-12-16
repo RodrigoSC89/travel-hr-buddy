@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -168,7 +167,7 @@ const SystemAuditor: React.FC = () => {
     }
 
     return results;
-  });
+  };
 
   const auditSecurity = async (): Promise<AuditResult[]> => {
     const results: AuditResult[] = [];
@@ -221,7 +220,7 @@ const SystemAuditor: React.FC = () => {
     }
 
     return results;
-  });
+  };
 
   const auditPerformance = async (): Promise<AuditResult[]> => {
     const results: AuditResult[] = [];
@@ -244,7 +243,7 @@ const SystemAuditor: React.FC = () => {
     });
 
     return results;
-  });
+  };
 
   const auditIntegrations = async (): Promise<AuditResult[]> => {
     const results: AuditResult[] = [];
@@ -272,7 +271,7 @@ const SystemAuditor: React.FC = () => {
     }
 
     return results;
-  });
+  };
 
   const runTestSuite = async (suiteIndex: number) => {
     const newTestSuites = [...testSuites];
@@ -525,7 +524,7 @@ const SystemAuditor: React.FC = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handlerunTestSuite}
+                            onClick={() => runTestSuite(suiteIndex)}
                             disabled={suite.status === "running"}
                           >
                             {suite.status === "running" ? "Executando" : "Executar"}

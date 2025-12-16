@@ -1,4 +1,3 @@
-
 /**
  * PATCH 536: Self Evolution Model
  * 
@@ -140,7 +139,7 @@ export class SelfEvolutionModel {
       mutationType,
       hypothesis: this.formHypothesis(candidate, mutationType),
       createdAt: new Date().toISOString(),
-    });
+    };
 
     return alternative;
   }
@@ -214,7 +213,7 @@ export class SelfEvolutionModel {
       metricComparisons: comparisons,
       winner: scoreB > scoreA + 0.05 ? "B" : scoreA > scoreB + 0.05 ? "A" : "tie",
       confidence: this.calculateOverallConfidence(comparisons),
-    });
+    };
 
     return result;
   }
@@ -304,7 +303,7 @@ export class SelfEvolutionModel {
       alternativesGenerated,
       mutationsApplied,
       mutations,
-    });
+    };
   }
 
   // Helper methods
@@ -392,7 +391,7 @@ export class SelfEvolutionModel {
       logic_change: "dynamic-programming-approach",
       algorithm_swap: "genetic-algorithm",
       parameter_tuning: "dijkstra-algorithm-tuned",
-    });
+    };
 
     return improvements[mutationType] || original.implementation;
   }
@@ -420,7 +419,7 @@ export class SelfEvolutionModel {
       userSatisfaction: Math.min(1, Math.max(0, func.performanceMetrics.userSatisfaction + variance)),
       resourceEfficiency: Math.min(1, Math.max(0, func.performanceMetrics.resourceEfficiency + variance)),
       callCount: sampleSize,
-    });
+    };
   }
 
   private calculateSignificance(valueA: number, valueB: number, sampleSize: number): number {

@@ -1,5 +1,4 @@
 /**
-import { useState } from "react";;
  * CopilotJobFormExample Component
  * 
  * This file demonstrates the JobFormWithExamples component in action.
@@ -128,7 +127,7 @@ function MyMaintenancePage() {
     fetch('/api/jobs', {
       method: 'POST',
       body: JSON.stringify(data),
-    };
+    });
   };
 
   return (

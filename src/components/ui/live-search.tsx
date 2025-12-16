@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -103,9 +102,9 @@ export const LiveSearch = ({
         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
         <Input
           value={value}
-          onChange={handleChange}
-          onFocus={() => value.length === 0 && setIsOpen(true}
-          onBlur={() => setTimeout(() => setIsOpen(false), 200}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={() => value.length === 0 && setIsOpen(true)}
+          onBlur={() => setTimeout(() => setIsOpen(false), 200)}
           placeholder={placeholder}
           className="pl-10 pr-10"
         />
@@ -140,7 +139,7 @@ export const LiveSearch = ({
                   <button
                     key={suggestion.id}
                     className="w-full text-left p-3 hover:bg-accent rounded-lg transition-colors"
-                    onMouseDown={() => handleSelect(suggestion}
+                    onMouseDown={() => handleSelect(suggestion)}
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -167,7 +166,7 @@ export const LiveSearch = ({
                   <button
                     key={suggestion.id}
                     className="w-full text-left p-3 hover:bg-accent rounded-lg transition-colors"
-                    onMouseDown={() => handleSelect(suggestion}
+                    onMouseDown={() => handleSelect(suggestion)}
                   >
                     <div className="flex items-center justify-between">
                       <div>

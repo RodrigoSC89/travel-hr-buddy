@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -100,12 +99,12 @@ export default function IncidentReportsComplete() {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   }, []);
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("incident_reports")
         .select("*")
         .order("created_at", { ascending: false });
@@ -126,7 +125,7 @@ export default function IncidentReportsComplete() {
 
   const loadFollowups = async (incidentId: string) => {
     try {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("incident_followups")
         .select("*")
         .eq("incident_id", incidentId)
@@ -146,7 +145,7 @@ export default function IncidentReportsComplete() {
 
       const incidentNumber = `INC-${Date.now()}`;
       
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("incident_reports")
         .insert({
           incident_number: incidentNumber,
@@ -195,13 +194,13 @@ export default function IncidentReportsComplete() {
       environmental: "operations",
       equipment: "maintenance",
       personnel: "hr"
-    });
+    };
     
     const assignedTeam = teamMapping[incident.category] || "operations";
     
     // Create workflow state
     try {
-      await (supabase as unknown)
+      await (supabase as any)
         .from("incident_workflow_states")
         .insert({
           incident_id: incident.id,
@@ -222,7 +221,7 @@ export default function IncidentReportsComplete() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("incident_followups")
         .insert({
           incident_id: selectedIncident.id,
@@ -236,7 +235,7 @@ export default function IncidentReportsComplete() {
       
       // Update incident status if changed
       if (newFollowup.new_status && newFollowup.new_status !== selectedIncident.status) {
-        await (supabase as unknown)
+        await (supabase as any)
           .from("incident_reports")
           .update({ 
             status: newFollowup.new_status,
@@ -325,7 +324,7 @@ export default function IncidentReportsComplete() {
       const statusMatch = filterStatus === "all" || inc.status === filterStatus;
       const severityMatch = filterSeverity === "all" || inc.severity === filterSeverity;
       return statusMatch && severityMatch;
-  };
+    });
   };
 
   const getSeverityColor = (severity: string) => {
@@ -390,7 +389,7 @@ export default function IncidentReportsComplete() {
                 <Label>Título</Label>
                 <Input
                   value={newIncident.title}
-                  onChange={handleChange}
+                  onChange={(e) => setNewIncident({...newIncident, title: e.target.value})}
                   placeholder="Título breve do incidente"
                 />
               </div>
@@ -398,7 +397,7 @@ export default function IncidentReportsComplete() {
                 <Label>Descrição</Label>
                 <Textarea
                   value={newIncident.description}
-                  onChange={handleChange}
+                  onChange={(e) => setNewIncident({...newIncident, description: e.target.value})}
                   placeholder="Descreva o incidente detalhadamente"
                   rows={4}
                 />
@@ -439,7 +438,7 @@ export default function IncidentReportsComplete() {
                   <Label>Local</Label>
                   <Input
                     value={newIncident.incident_location}
-                    onChange={handleChange}
+                    onChange={(e) => setNewIncident({...newIncident, incident_location: e.target.value})}
                     placeholder="Local do incidente"
                   />
                 </div>
@@ -460,7 +459,7 @@ export default function IncidentReportsComplete() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsCreateDialogOpen}>
+              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={createIncident}>
@@ -558,7 +557,7 @@ export default function IncidentReportsComplete() {
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
               {getFilteredIncidents().map((incident) => (
-                <Card key={incident.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleopenIncidentDetail}>
+                <Card key={incident.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => openIncidentDetail(incident)}>
                   <CardContent className="pt-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 space-y-2">
@@ -710,7 +709,7 @@ export default function IncidentReportsComplete() {
                         <Label>Descrição</Label>
                         <Textarea
                           value={newFollowup.description}
-                          onChange={handleChange}
+                          onChange={(e) => setNewFollowup({...newFollowup, description: e.target.value})}
                           placeholder="Descreva a atualização"
                           rows={3}
                         />
@@ -738,7 +737,7 @@ export default function IncidentReportsComplete() {
                 </TabsContent>
                 
                 <TabsContent value="actions" className="space-y-4">
-                  <Button onClick={() => handleexportToPDF} className="w-full">
+                  <Button onClick={() => exportToPDF(selectedIncident)} className="w-full">
                     <Download className="h-4 w-4 mr-2" />
                     Exportar para PDF
                   </Button>

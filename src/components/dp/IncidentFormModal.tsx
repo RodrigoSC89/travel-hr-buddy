@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ interface IncidentFormModalProps {
   onSave: (incident: Partial<DPIncident>) => void;
 }
 
-export const IncidentFormModal = memo(function({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
+export function IncidentFormModal({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
   const [formData, setFormData] = useState<Partial<DPIncident>>({
     vessel: incident?.vessel || "",
     incident_date: incident?.incident_date || new Date().toISOString().split("T")[0],
@@ -34,11 +34,11 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
     e.preventDefault();
     onSave(formData);
     onOpenChange(false);
-  });
+  };
 
   const handleChange = (field: keyof DPIncident, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -65,7 +65,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
                 <Input
                   id="vessel"
                   value={formData.vessel}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange("vessel", e.target.value)}
                   placeholder="Nome da embarcação"
                   required
                 />
@@ -77,7 +77,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
                   id="incident_date"
                   type="date"
                   value={formData.incident_date}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange("incident_date", e.target.value)}
                   required
                 />
               </div>
@@ -88,7 +88,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
                 <Label htmlFor="class_dp">Classe DP *</Label>
                 <Select
                   value={formData.class_dp}
-                  onValueChange={(value) => handleChange("class_dp", value}
+                  onValueChange={(value) => handleChange("class_dp", value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione a classe" />
@@ -105,7 +105,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
                 <Label htmlFor="severity">Severidade *</Label>
                 <Select
                   value={formData.severity}
-                  onValueChange={(value) => handleChange("severity", value as "Alta" | "Média" | "Baixa"}
+                  onValueChange={(value) => handleChange("severity", value as "Alta" | "Média" | "Baixa")}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione a severidade" />
@@ -124,7 +124,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Input
                 id="location"
                 value={formData.location}
-                onChange={handleChange}
+                onChange={(e) => handleChange("location", e.target.value)}
                 placeholder="Ex: Santos Basin, Campos Basin"
               />
             </div>
@@ -134,7 +134,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Input
                 id="title"
                 value={formData.title}
-                onChange={handleChange}
+                onChange={(e) => handleChange("title", e.target.value)}
                 placeholder="Breve descrição do incidente"
                 required
               />
@@ -145,7 +145,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={handleChange}
+                onChange={(e) => handleChange("description", e.target.value)}
                 placeholder="Descreva o incidente em detalhes..."
                 rows={3}
               />
@@ -156,7 +156,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Input
                 id="root_cause"
                 value={formData.root_cause}
-                onChange={handleChange}
+                onChange={(e) => handleChange("root_cause", e.target.value)}
                 placeholder="Causa raiz identificada"
               />
             </div>
@@ -172,7 +172,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Label htmlFor="sgso_category">Categoria SGSO</Label>
               <Select
                 value={formData.sgso_category}
-                onValueChange={(value) => handleChange("sgso_category", value}
+                onValueChange={(value) => handleChange("sgso_category", value)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione a categoria" />
@@ -189,7 +189,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Label htmlFor="sgso_risk_level">Nível de Risco SGSO</Label>
               <Select
                 value={formData.sgso_risk_level}
-                onValueChange={(value) => handleChange("sgso_risk_level", value as SGSORiskLevel}
+                onValueChange={(value) => handleChange("sgso_risk_level", value as SGSORiskLevel)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o nível de risco" />
@@ -208,7 +208,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
               <Textarea
                 id="sgso_root_cause"
                 value={formData.sgso_root_cause}
-                onChange={handleChange}
+                onChange={(e) => handleChange("sgso_root_cause", e.target.value)}
                 placeholder="Causa raiz identificada dentro do framework SGSO..."
                 rows={2}
               />
@@ -216,7 +216,7 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
             <Button type="submit">
@@ -228,4 +228,4 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
       </DialogContent>
     </Dialog>
   );
-});
+}

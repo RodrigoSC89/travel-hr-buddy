@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -194,7 +193,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
     const matchesStatus = filterStatus === "all" || supplier.status === filterStatus;
     const matchesCategory = filterCategory === "all" || supplier.category.includes(filterCategory);
     return matchesSearch && matchesStatus && matchesCategory;
-  };
+  });
 
   const preferredCount = suppliers.filter(s => s.status === "preferred").length;
   const activeCount = suppliers.filter(s => s.status === "active").length;
@@ -282,7 +281,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
           </Select>
         </div>
 
-        <Button onClick={handleSetShowAddSupplier}>
+        <Button onClick={() => setShowAddSupplier(true)}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Fornecedor
         </Button>
@@ -306,13 +305,13 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-lg ${
                     supplier.status === "preferred" ? "bg-amber-500/10" :
-                      supplier.status === "active" ? "bg-green-500/10" :
-                        supplier.status === "suspended" ? "bg-destructive/10" : "bg-muted"
+                    supplier.status === "active" ? "bg-green-500/10" :
+                    supplier.status === "suspended" ? "bg-destructive/10" : "bg-muted"
                   }`}>
                     <Building2 className={`h-5 w-5 ${
                       supplier.status === "preferred" ? "text-amber-600" :
-                        supplier.status === "active" ? "text-green-600" :
-                          supplier.status === "suspended" ? "text-destructive" : "text-muted-foreground"
+                      supplier.status === "active" ? "text-green-600" :
+                      supplier.status === "suspended" ? "text-destructive" : "text-muted-foreground"
                     }`} />
                   </div>
                   <div>
@@ -322,13 +321,13 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                 </div>
                 <Badge variant={
                   supplier.status === "preferred" ? "default" :
-                    supplier.status === "active" ? "secondary" :
-                      supplier.status === "suspended" ? "destructive" : "outline"
+                  supplier.status === "active" ? "secondary" :
+                  supplier.status === "suspended" ? "destructive" : "outline"
                 }>
                   {supplier.status === "preferred" && <Star className="h-3 w-3 mr-1 fill-current" />}
                   {supplier.status === "preferred" ? "Preferencial" :
-                    supplier.status === "active" ? "Ativo" :
-                      supplier.status === "suspended" ? "Suspenso" : "Pendente"}
+                   supplier.status === "active" ? "Ativo" :
+                   supplier.status === "suspended" ? "Suspenso" : "Pendente"}
                 </Badge>
               </div>
             </CardHeader>
@@ -355,7 +354,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                   </div>
                   <div className={`flex items-center gap-2 ${
                     supplier.deliveryRate >= 95 ? "text-green-600" :
-                      supplier.deliveryRate >= 90 ? "text-amber-600" : "text-red-600"
+                    supplier.deliveryRate >= 90 ? "text-amber-600" : "text-red-600"
                   }`}>
                     <TrendingUp className="h-4 w-4" />
                     <span>{supplier.deliveryRate}% on-time</span>
@@ -400,10 +399,10 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
                   </div>
                   <Badge variant={
                     selectedSupplier.status === "preferred" ? "default" :
-                      selectedSupplier.status === "active" ? "secondary" : "destructive"
+                    selectedSupplier.status === "active" ? "secondary" : "destructive"
                   } className="ml-auto">
                     {selectedSupplier.status === "preferred" ? "⭐ Preferencial" :
-                      selectedSupplier.status === "active" ? "Ativo" : "Suspenso"}
+                     selectedSupplier.status === "active" ? "Ativo" : "Suspenso"}
                   </Badge>
                 </div>
 
@@ -639,7 +638,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowAddSupplier}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setShowAddSupplier(false)}>Cancelar</Button>
             <Button onClick={() => {
               toast.success("Fornecedor adicionado com sucesso!");
               setShowAddSupplier(false);

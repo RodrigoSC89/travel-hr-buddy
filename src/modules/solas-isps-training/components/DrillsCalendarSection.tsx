@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -107,7 +106,7 @@ export default function DrillsCalendarSection() {
       return <Icon className={cn("h-5 w-5", drillType.color)} />;
     }
     return <CalendarIcon className="h-5 w-5" />;
-  });
+  };
 
   const handleScheduleDrill = () => {
     if (!selectedDate || !formData.type || !formData.coordinator) {
@@ -141,7 +140,7 @@ export default function DrillsCalendarSection() {
       objectives: "",
       notes: "",
     });
-  });
+  };
 
   const handleStartDrill = (drill: ScheduledDrill) => {
     setSelectedDrill(drill);
@@ -192,7 +191,7 @@ export default function DrillsCalendarSection() {
             <Separator className="my-4" />
             <Button 
               className="w-full bg-gradient-to-r from-orange-500 to-red-600"
-              onClick={handleSetScheduleDialogOpen}
+              onClick={() => setScheduleDialogOpen(true)}
             >
               <Plus className="h-4 w-4 mr-2" />
               Agendar Novo Drill
@@ -248,8 +247,8 @@ export default function DrillsCalendarSection() {
                                 </div>
                                 <Badge variant={drill.status === "completed" ? "default" : "secondary"}>
                                   {drill.status === "scheduled" ? "Agendado" : 
-                                    drill.status === "in_progress" ? "Em Andamento" :
-                                      drill.status === "completed" ? "Concluído" : "Cancelado"}
+                                   drill.status === "in_progress" ? "Em Andamento" :
+                                   drill.status === "completed" ? "Concluído" : "Cancelado"}
                                 </Badge>
                               </div>
                             </div>
@@ -257,7 +256,7 @@ export default function DrillsCalendarSection() {
                           <div className="flex gap-2">
                             {drill.status === "scheduled" && (
                               <Button 
-                                onClick={() => handlehandleStartDrill}
+                                onClick={() => handleStartDrill(drill)}
                                 className="bg-green-600 hover:bg-green-700"
                               >
                                 <Play className="h-4 w-4 mr-2" />
@@ -311,7 +310,7 @@ export default function DrillsCalendarSection() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1" onClick={() => handlehandleStartDrill}>
+                      <Button variant="outline" size="sm" className="flex-1" onClick={() => handleStartDrill(drill)}>
                         <Play className="h-3 w-3 mr-1" />
                         Iniciar
                       </Button>
@@ -415,7 +414,7 @@ export default function DrillsCalendarSection() {
               </Label>
               <Input
                 value={formData.location}
-                onChange={handleChange}))}
+                onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
                 placeholder="Ex: Convés principal, Praça de máquinas"
               />
             </div>
@@ -427,7 +426,7 @@ export default function DrillsCalendarSection() {
               </Label>
               <Input
                 value={formData.coordinator}
-                onChange={handleChange}))}
+                onChange={(e) => setFormData(prev => ({ ...prev, coordinator: e.target.value }))}
                 placeholder="Nome do responsável"
               />
             </div>
@@ -436,7 +435,7 @@ export default function DrillsCalendarSection() {
               <Label>Objetivos do Drill</Label>
               <Textarea
                 value={formData.objectives}
-                onChange={handleChange}))}
+                onChange={(e) => setFormData(prev => ({ ...prev, objectives: e.target.value }))}
                 placeholder="Descreva os objetivos..."
                 rows={3}
               />
@@ -444,7 +443,7 @@ export default function DrillsCalendarSection() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetScheduleDialogOpen}>
+            <Button variant="outline" onClick={() => setScheduleDialogOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleScheduleDrill} className="bg-gradient-to-r from-orange-500 to-red-600">
@@ -505,7 +504,7 @@ export default function DrillsCalendarSection() {
           )}
 
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetDrillSimulationOpen}>
+            <Button variant="outline" onClick={() => setDrillSimulationOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCompleteDrill} className="bg-green-600 hover:bg-green-700">

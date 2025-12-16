@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useRef, useState } from "react";;
 import React, { useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ export const PeotramOCRProcessor: React.FC = () => {
           
           const result = await ocrService.processImage(file, (progress: OCRProgress) => {
             setCurrentProgress(progress.progress * 100);
-  });
+          });
 
           const extractedFields = await ocrService.extractFormFields(file);
 
@@ -146,7 +145,7 @@ export const PeotramOCRProcessor: React.FC = () => {
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
       type: "application/json" 
-    };
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -203,7 +202,7 @@ export const PeotramOCRProcessor: React.FC = () => {
               <select
                 className="w-full px-3 py-2 border rounded-md"
                 value={language}
-                onChange={handleChange}
+                onChange={(e) => setLanguage(e.target.value as any)}
                 disabled={isProcessing}
               >
                 <option value="por+eng">Português + Inglês</option>
@@ -219,7 +218,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                   type="checkbox"
                   id="batchMode"
                   checked={batchMode}
-                  onChange={handleChange}
+                  onChange={(e) => setBatchMode(e.target.checked)}
                   disabled={isProcessing}
                   className="w-4 h-4"
                 />
@@ -300,7 +299,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                         selectedDoc?.id === doc.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                       }`}
-                      onClick={handleSetSelectedDoc}
+                      onClick={() => setSelectedDoc(doc)}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">

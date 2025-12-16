@@ -1,5 +1,4 @@
 /**
-import { useCallback, useState } from "react";;
  * Dashboard Actions Component
  * Provides functional action buttons for the dashboard
  */
@@ -38,9 +37,11 @@ import {
   MoreHorizontal,
   Printer,
   Share2,
+  Filter,
   BarChart3,
   FileSpreadsheet,
   Loader2,
+  CheckCircle,
 } from "lucide-react";
 
 interface DashboardActionsProps {
@@ -75,9 +76,9 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
         // Create CSV content
         const headers = ["Tipo", "Nome", "Status", "Atualizado em"];
         const rows = [
-          ...(vessels || []).map((v: unknown) => ["Embarcação", v.name || "-", v.status || "-", v.updated_at || "-"]),
-          ...(crew || []).map((c: unknown) => ["Tripulante", c.full_name || "-", c.status || "-", c.updated_at || "-"]),
-          ...(checklists || []).map((c: unknown) => ["Checklist", c.title || "-", c.status || "-", c.updated_at || "-"])
+          ...(vessels || []).map((v: any) => ["Embarcação", v.name || "-", v.status || "-", v.updated_at || "-"]),
+          ...(crew || []).map((c: any) => ["Tripulante", c.full_name || "-", c.status || "-", c.updated_at || "-"]),
+          ...(checklists || []).map((c: any) => ["Checklist", c.title || "-", c.status || "-", c.updated_at || "-"])
         ];
 
         content = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
@@ -174,7 +175,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
               disabled={isRefreshing}
               className="gap-2"
             >
-              <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               {isRefreshing ? "Atualizando..." : "Atualizar"}
             </Button>
 
@@ -202,7 +203,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuLabel>Mais ações</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSetIsExportDialogOpen}>
+                <DropdownMenuItem onClick={() => setIsExportDialogOpen(true)}>
                   <Download className="h-4 w-4 mr-2" />
                   Exportar Dados
                 </DropdownMenuItem>
@@ -215,11 +216,11 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
                   Compartilhar
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handlenavigate}>
+                <DropdownMenuItem onClick={() => navigate("/analytics")}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Analytics
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handlenavigate}>
+                <DropdownMenuItem onClick={() => navigate("/settings")}>
                   <Settings className="h-4 w-4 mr-2" />
                   Configurações
                 </DropdownMenuItem>
@@ -243,7 +244,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
             <Button
               variant="outline"
               className="h-24 flex-col gap-2"
-              onClick={() => handlehandleExport}
+              onClick={() => handleExport("csv")}
               disabled={isExporting}
             >
               {isExporting && exportType === "csv" ? (
@@ -256,7 +257,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
             <Button
               variant="outline"
               className="h-24 flex-col gap-2"
-              onClick={() => handlehandleExport}
+              onClick={() => handleExport("json")}
               disabled={isExporting}
             >
               {isExporting && exportType === "json" ? (
@@ -269,7 +270,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
           </div>
 
           <DialogFooter>
-            <Button variant="ghost" onClick={handleSetIsExportDialogOpen}>
+            <Button variant="ghost" onClick={() => setIsExportDialogOpen(false)}>
               Cancelar
             </Button>
           </DialogFooter>

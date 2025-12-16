@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -114,7 +113,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     if (filter === "unread") return !notification.read;
     if (filter === "critical") return notification.priority === "critical";
     return true;
-  };
+  });
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 
@@ -149,7 +148,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
       if (Math.random() > 0.8) { // 20% chance a cada 30s
         const newNotification: Notification = {
           id: Date.now().toString(),
-          type: ["alert", "warning", "info"][Math.floor(Math.random() * 3)] as unknown,
+          type: ["alert", "warning", "info"][Math.floor(Math.random() * 3)] as any,
           title: "Nova Notificação",
           message: "Esta é uma notificação de exemplo em tempo real",
           timestamp: new Date(),
@@ -167,7 +166,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     <div className={cn("relative", className)}>
       {/* Notification Bell */}
       <button
-        onClick={handleSetIsOpen}
+        onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 rounded-lg hover:bg-azure-600/20 transition-colors"
       >
         <Bell size={20} className="text-azure-50" />
@@ -188,7 +187,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
         <>
           <div 
             className="fixed inset-0 z-40" 
-            onClick={handleSetIsOpen}
+            onClick={() => setIsOpen(false)}
           />
           <div className="absolute right-0 top-12 w-96 max-h-[500px] bg-card border border-border rounded-xl shadow-nautical z-50 overflow-hidden">
             {/* Header */}
@@ -205,7 +204,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                     Marcar como lidas
                   </Button>
                   <button
-                    onClick={handleSetIsOpen}
+                    onClick={() => setIsOpen(false)}
                     className="p-1 hover:bg-azure-600/20 rounded text-azure-50"
                   >
                     <X size={16} />
@@ -218,7 +217,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                 {["all", "unread", "critical"].map((filterType) => (
                   <button
                     key={filterType}
-                    onClick={handleSetFilter}
+                    onClick={() => setFilter(filterType as any)}
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-medium transition-colors",
                       filter === filterType
@@ -251,7 +250,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                         "p-4 border-b border-border hover:bg-accent/50 transition-colors cursor-pointer",
                         !notification.read && "bg-accent/20"
                       )}
-                      onClick={() => handlemarkAsRead}
+                      onClick={() => markAsRead(notification.id)}
                     >
                       <div className="flex items-start space-x-3">
                         <div className={cn(
@@ -328,4 +327,4 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
       )}
     </div>
   );
-});
+};

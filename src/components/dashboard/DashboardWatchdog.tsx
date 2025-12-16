@@ -3,7 +3,7 @@
  * PATCH 626 - Auto-healing visual watchdog
  */
 
-import { memo, memo, useCallback, useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ interface WatchdogState {
   autoHealAttempts: number;
 }
 
-export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProps) {
+export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
   const [state, setState] = useState<WatchdogState>({
     hasBlankScreen: false,
     hasFrozenUI: false,
@@ -48,7 +48,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
   const checkFrozenUI = useCallback(() => {
     // Check if there are any pending animations or transitions
     const hasActiveAnimations = document.getAnimations().length > 0;
-    const lastInteraction = (window as unknown).__lastInteractionTime || Date.now();
+    const lastInteraction = (window as any).__lastInteractionTime || Date.now();
     const timeSinceInteraction = Date.now() - lastInteraction;
     
     // UI is frozen if no animations and no interactions for 30s
@@ -145,7 +145,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
       }, 2000);
       
       // Store timeout ID for cleanup if needed
-      (window as unknown).__watchdogTimeout = recheckTimeout;
+      (window as any).__watchdogTimeout = recheckTimeout;
 
     } catch (error) {
       logger.error("[Watchdog] Auto-heal error:", error);
@@ -177,8 +177,8 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
   useEffect(() => {
     // Track user interactions
     const updateInteractionTime = () => {
-      (window as unknown).__lastInteractionTime = Date.now();
-    });
+      (window as any).__lastInteractionTime = Date.now();
+    };
 
     window.addEventListener("click", updateInteractionTime);
     window.addEventListener("keydown", updateInteractionTime);
@@ -187,15 +187,15 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
     return () => {
       
       // Clear any pending timeouts
-      if ((window as unknown).__watchdogTimeout) {
-        clearTimeout((window as unknown).__watchdogTimeout);
-        delete (window as unknown).__watchdogTimeout;
+      if ((window as any).__watchdogTimeout) {
+        clearTimeout((window as any).__watchdogTimeout);
+        delete (window as any).__watchdogTimeout;
       }
       
       window.removeEventListener("click", updateInteractionTime);
       window.removeEventListener("keydown", updateInteractionTime);
       window.removeEventListener("scroll", updateInteractionTime);
-    });
+    };
   }, [runWatchdogChecks]);
 
   // Show alert if issues detected
@@ -245,7 +245,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
 /**
  * Log watchdog event (console only for now)
  */
-async function logWatchdogEvent(data: Record<string, unknown>) {
+async function logWatchdogEvent(data: Record<string, any>) {
   try {
     logger.info("[Watchdog Event]", data);
     
@@ -260,4 +260,4 @@ async function logWatchdogEvent(data: Record<string, unknown>) {
   } catch (error) {
     logger.error("[Watchdog] Error logging event:", error);
   }
-});
+}

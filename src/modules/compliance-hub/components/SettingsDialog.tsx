@@ -1,10 +1,9 @@
 /**
-import { useState, useCallback } from "react";;
  * Compliance Settings Dialog Component
  * Dialog para configurações do módulo de conformidade
  */
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,13 +11,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 import { 
   Settings, 
   Bell, 
@@ -27,8 +26,8 @@ import {
   FileText, 
   Loader2,
   Check
-} from "lucide-react";
-import { toast } from "sonner";
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -49,7 +48,7 @@ export interface ComplianceSettings {
     autoAnalysis: boolean;
     predictiveAlerts: boolean;
     aiSuggestions: boolean;
-    analysisFrequency: "daily" | "weekly" | "monthly";
+    analysisFrequency: 'daily' | 'weekly' | 'monthly';
   };
   audit: {
     autoGenerateChecklist: boolean;
@@ -59,7 +58,7 @@ export interface ComplianceSettings {
   };
   reports: {
     autoGenerateReports: boolean;
-    reportFrequency: "weekly" | "monthly" | "quarterly";
+    reportFrequency: 'weekly' | 'monthly' | 'quarterly';
     includeAIAnalysis: boolean;
     emailReports: boolean;
   };
@@ -77,7 +76,7 @@ const defaultSettings: ComplianceSettings = {
     autoAnalysis: true,
     predictiveAlerts: true,
     aiSuggestions: true,
-    analysisFrequency: "weekly",
+    analysisFrequency: 'weekly',
   },
   audit: {
     autoGenerateChecklist: true,
@@ -87,13 +86,13 @@ const defaultSettings: ComplianceSettings = {
   },
   reports: {
     autoGenerateReports: true,
-    reportFrequency: "monthly",
+    reportFrequency: 'monthly',
     includeAIAnalysis: true,
     emailReports: true,
   },
 };
 
-export const SettingsDialog = memo(function({
+export function SettingsDialog({
   open,
   onOpenChange,
   settings = defaultSettings,
@@ -106,43 +105,43 @@ export const SettingsDialog = memo(function({
     setLoading(true);
     try {
       await onSaveSettings(currentSettings);
-      toast.success("Configurações salvas com sucesso");
+      toast.success('Configurações salvas com sucesso');
       onOpenChange(false);
     } catch (error) {
-      console.error("Error saving settings:", error);
-      toast.error("Erro ao salvar configurações");
+      console.error('Error saving settings:', error);
+      toast.error('Erro ao salvar configurações');
     } finally {
       setLoading(false);
     }
   };
 
-  const updateNotifications = (key: keyof ComplianceSettings["notifications"], value: unknown: unknown: unknown) => {
+  const updateNotifications = (key: keyof ComplianceSettings['notifications'], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       notifications: { ...currentSettings.notifications, [key]: value },
     });
-  });
+  };
 
-  const updateAI = (key: keyof ComplianceSettings["ai"], value: unknown: unknown: unknown) => {
+  const updateAI = (key: keyof ComplianceSettings['ai'], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       ai: { ...currentSettings.ai, [key]: value },
     });
-  });
+  };
 
-  const updateAudit = (key: keyof ComplianceSettings["audit"], value: unknown: unknown: unknown) => {
+  const updateAudit = (key: keyof ComplianceSettings['audit'], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       audit: { ...currentSettings.audit, [key]: value },
     });
-  });
+  };
 
-  const updateReports = (key: keyof ComplianceSettings["reports"], value: unknown: unknown: unknown) => {
+  const updateReports = (key: keyof ComplianceSettings['reports'], value: any) => {
     setCurrentSettings({
       ...currentSettings,
       reports: { ...currentSettings.reports, [key]: value },
     });
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -188,7 +187,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.notifications.emailAlerts}
-                  onCheckedChange={(checked) => updateNotifications("emailAlerts", checked}
+                  onCheckedChange={(checked) => updateNotifications('emailAlerts', checked)}
                 />
               </div>
 
@@ -201,7 +200,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.notifications.pushNotifications}
-                  onCheckedChange={(checked) => updateNotifications("pushNotifications", checked}
+                  onCheckedChange={(checked) => updateNotifications('pushNotifications', checked)}
                 />
               </div>
 
@@ -213,7 +212,7 @@ export const SettingsDialog = memo(function({
                   <Input
                     type="number"
                     value={currentSettings.notifications.certificateExpiryDays}
-                    onChange={handleChange}
+                    onChange={(e) => updateNotifications('certificateExpiryDays', parseInt(e.target.value))}
                     min={1}
                     max={90}
                   />
@@ -223,7 +222,7 @@ export const SettingsDialog = memo(function({
                   <Input
                     type="number"
                     value={currentSettings.notifications.auditReminderDays}
-                    onChange={handleChange}
+                    onChange={(e) => updateNotifications('auditReminderDays', parseInt(e.target.value))}
                     min={1}
                     max={60}
                   />
@@ -233,7 +232,7 @@ export const SettingsDialog = memo(function({
                   <Input
                     type="number"
                     value={currentSettings.notifications.findingOverdueDays}
-                    onChange={handleChange}
+                    onChange={(e) => updateNotifications('findingOverdueDays', parseInt(e.target.value))}
                     min={1}
                     max={30}
                   />
@@ -253,7 +252,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.ai.autoAnalysis}
-                  onCheckedChange={(checked) => updateAI("autoAnalysis", checked}
+                  onCheckedChange={(checked) => updateAI('autoAnalysis', checked)}
                 />
               </div>
 
@@ -266,7 +265,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.ai.predictiveAlerts}
-                  onCheckedChange={(checked) => updateAI("predictiveAlerts", checked}
+                  onCheckedChange={(checked) => updateAI('predictiveAlerts', checked)}
                 />
               </div>
 
@@ -279,7 +278,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.ai.aiSuggestions}
-                  onCheckedChange={(checked) => updateAI("aiSuggestions", checked}
+                  onCheckedChange={(checked) => updateAI('aiSuggestions', checked)}
                 />
               </div>
 
@@ -288,15 +287,15 @@ export const SettingsDialog = memo(function({
               <div className="space-y-2">
                 <Label>Frequência de Análise</Label>
                 <div className="flex gap-2">
-                  {(["daily", "weekly", "monthly"] as const).map((freq) => (
+                  {(['daily', 'weekly', 'monthly'] as const).map((freq) => (
                     <Button
                       key={freq}
                       type="button"
-                      variant={currentSettings.ai.analysisFrequency === freq ? "default" : "outline"}
+                      variant={currentSettings.ai.analysisFrequency === freq ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => handleupdateAI}
+                      onClick={() => updateAI('analysisFrequency', freq)}
                     >
-                      {freq === "daily" ? "Diária" : freq === "weekly" ? "Semanal" : "Mensal"}
+                      {freq === 'daily' ? 'Diária' : freq === 'weekly' ? 'Semanal' : 'Mensal'}
                     </Button>
                   ))}
                 </div>
@@ -315,7 +314,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.autoGenerateChecklist}
-                  onCheckedChange={(checked) => updateAudit("autoGenerateChecklist", checked}
+                  onCheckedChange={(checked) => updateAudit('autoGenerateChecklist', checked)}
                 />
               </div>
 
@@ -328,7 +327,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.requireEvidence}
-                  onCheckedChange={(checked) => updateAudit("requireEvidence", checked}
+                  onCheckedChange={(checked) => updateAudit('requireEvidence', checked)}
                 />
               </div>
 
@@ -341,7 +340,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.autoCloseFindings}
-                  onCheckedChange={(checked) => updateAudit("autoCloseFindings", checked}
+                  onCheckedChange={(checked) => updateAudit('autoCloseFindings', checked)}
                 />
               </div>
 
@@ -354,7 +353,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.findingAutoEscalation}
-                  onCheckedChange={(checked) => updateAudit("findingAutoEscalation", checked}
+                  onCheckedChange={(checked) => updateAudit('findingAutoEscalation', checked)}
                 />
               </div>
             </div>
@@ -371,7 +370,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.reports.autoGenerateReports}
-                  onCheckedChange={(checked) => updateReports("autoGenerateReports", checked}
+                  onCheckedChange={(checked) => updateReports('autoGenerateReports', checked)}
                 />
               </div>
 
@@ -384,7 +383,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.reports.includeAIAnalysis}
-                  onCheckedChange={(checked) => updateReports("includeAIAnalysis", checked}
+                  onCheckedChange={(checked) => updateReports('includeAIAnalysis', checked)}
                 />
               </div>
 
@@ -397,7 +396,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.reports.emailReports}
-                  onCheckedChange={(checked) => updateReports("emailReports", checked}
+                  onCheckedChange={(checked) => updateReports('emailReports', checked)}
                 />
               </div>
 
@@ -406,15 +405,15 @@ export const SettingsDialog = memo(function({
               <div className="space-y-2">
                 <Label>Frequência de Relatórios</Label>
                 <div className="flex gap-2">
-                  {(["weekly", "monthly", "quarterly"] as const).map((freq) => (
+                  {(['weekly', 'monthly', 'quarterly'] as const).map((freq) => (
                     <Button
                       key={freq}
                       type="button"
-                      variant={currentSettings.reports.reportFrequency === freq ? "default" : "outline"}
+                      variant={currentSettings.reports.reportFrequency === freq ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => handleupdateReports}
+                      onClick={() => updateReports('reportFrequency', freq)}
                     >
-                      {freq === "weekly" ? "Semanal" : freq === "monthly" ? "Mensal" : "Trimestral"}
+                      {freq === 'weekly' ? 'Semanal' : freq === 'monthly' ? 'Mensal' : 'Trimestral'}
                     </Button>
                   ))}
                 </div>
@@ -424,7 +423,7 @@ export const SettingsDialog = memo(function({
         </Tabs>
 
         <DialogFooter className="mt-6">
-          <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
           <Button onClick={handleSave} disabled={loading}>
@@ -439,4 +438,4 @@ export const SettingsDialog = memo(function({
       </DialogContent>
     </Dialog>
   );
-});
+}

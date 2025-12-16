@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +46,7 @@ interface CrewAssignment {
   status: "active" | "completed" | "scheduled";
 }
 
-export const CrewManagementDashboard = memo(() => {
+export const CrewManagementDashboard = () => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [assignments, setAssignments] = useState<CrewAssignment[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
@@ -148,7 +147,7 @@ export const CrewManagementDashboard = memo(() => {
                          member.position.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const crewStats = {
     total: crewMembers.length,
@@ -164,7 +163,7 @@ export const CrewManagementDashboard = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -248,7 +247,7 @@ export const CrewManagementDashboard = memo(() => {
                     <Input
                       placeholder="Buscar por nome ou cargo..."
                       value={searchTerm}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10"
                     />
                   </div>

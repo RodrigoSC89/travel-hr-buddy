@@ -3,7 +3,7 @@
  * Tests strategic decision sequences with justifications
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ interface ReasoningStep {
   efficiency: number;
 }
 
-export const Patch601Validation = memo(function() {
+export function Patch601Validation() {
   const [reasoning, setReasoning] = useState<ReasoningStep[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
@@ -74,6 +74,7 @@ export const Patch601Validation = memo(function() {
         description: `Processed ${steps.length} reasoning steps with coherent justifications`,
       });
       
+      console.log("PATCH 601 ✅ Strategic reasoning sequence:", steps);
     }, 1500);
   };
 
@@ -161,4 +162,4 @@ export const Patch601Validation = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

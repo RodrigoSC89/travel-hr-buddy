@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DollarSign, TrendingUp, TrendingDown, Wallet, Calendar, RefreshCw, Plus, Activity, Brain } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { TransactionList } from "./components/TransactionList";
 import { BudgetOverview } from "./components/BudgetOverview";
 import { ExpenseChart } from "./components/ExpenseChart";
@@ -54,7 +54,7 @@ export default function FinanceHub() {
       if (error) throw error;
 
       if (transactionsData && transactionsData.length > 0) {
-        const transactions: Transaction[] = transactionsData.map((t: unknown) => ({
+        const transactions: Transaction[] = transactionsData.map((t: any) => ({
           id: t.id,
           type: t.transaction_type === "income" || t.amount > 0 ? "income" : "expense",
           amount: Math.abs(t.amount),
@@ -144,7 +144,7 @@ export default function FinanceHub() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button onClick={handleSetShowAddTransaction}>
+          <Button onClick={() => setShowAddTransaction(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Transação
           </Button>
@@ -154,21 +154,21 @@ export default function FinanceHub() {
           </Button>
           <Button
             variant={selectedPeriod === "month" ? "default" : "outline"}
-            onClick={handleSetSelectedPeriod}
+            onClick={() => setSelectedPeriod("month")}
             size="sm"
           >
             Mês
           </Button>
           <Button
             variant={selectedPeriod === "quarter" ? "default" : "outline"}
-            onClick={handleSetSelectedPeriod}
+            onClick={() => setSelectedPeriod("quarter")}
             size="sm"
           >
             Trimestre
           </Button>
           <Button
             variant={selectedPeriod === "year" ? "default" : "outline"}
-            onClick={handleSetSelectedPeriod}
+            onClick={() => setSelectedPeriod("year")}
             size="sm"
           >
             Ano

@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -16,7 +15,7 @@ interface CreateInspectionDialogProps {
   onInspectionCreated: (inspectionId: string) => void;
 }
 
-export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInspectionCreated }: CreateInspectionDialogProps) {
+export function CreateInspectionDialog({ open, onOpenChange, onInspectionCreated }: CreateInspectionDialogProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     vessel_id: "",
@@ -95,7 +94,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="vessel_id"
                 placeholder="Enter vessel ID"
                 value={formData.vessel_id}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, vessel_id: e.target.value })}
                 required
               />
             </div>
@@ -106,7 +105,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="inspector_name"
                 placeholder="Enter inspector name"
                 value={formData.inspector_name}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, inspector_name: e.target.value })}
                 required
               />
             </div>
@@ -115,7 +114,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
               <Label htmlFor="inspection_type">Inspection Type</Label>
               <Select
                 value={formData.inspection_type}
-                onValueChange={(value: unknown) => setFormData({ ...formData, inspection_type: value })}
+                onValueChange={(value: any) => setFormData({ ...formData, inspection_type: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -136,14 +135,14 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="notes"
                 placeholder="Enter any initial notes..."
                 value={formData.notes}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 rows={3}
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
@@ -154,4 +153,4 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
       </DialogContent>
     </Dialog>
   );
-});
+}

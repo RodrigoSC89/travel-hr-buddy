@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState } from "react";;
  * PATCH 201.0 - Weekly Feedback Report Component
  * Displays AI cognitive feedback reports and insights
  */

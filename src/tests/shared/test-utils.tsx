@@ -29,7 +29,7 @@ interface AllTheProvidersProps {
 /**
  * Wrapper component with all necessary providers
  */
-export const AllTheProviders = memo(({ children }: AllTheProvidersProps) => {
+export const AllTheProviders = ({ children }: AllTheProvidersProps) => {
   const queryClient = createTestQueryClient();
 
   return (
@@ -45,17 +45,17 @@ export const AllTheProviders = memo(({ children }: AllTheProvidersProps) => {
       </BrowserRouter>
     </QueryClientProvider>
   );
-});
+};
 
 /**
  * Custom render function that includes all providers
  */
-export const renderWithProviders = memo((
+export const renderWithProviders = (
   ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
-});
+};
 
 /**
  * Wait for all loading states to finish
@@ -73,10 +73,10 @@ export const waitForLoadingToFinish = async () => {
         resolve();
       } else {
         setTimeout(checkLoading, 50);
-      };
+      }
     };
     checkLoading();
-  };
+  });
 };
 
 /**
@@ -102,7 +102,7 @@ export const createMockSupabaseClient = () => ({
       getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: "mock-url" } }),
     })),
   },
-};
+});
 
 /**
  * Create mock user for authentication tests
@@ -115,7 +115,7 @@ export const createMockUser = (overrides = {}) => ({
     role: "operator",
   },
   ...overrides,
-};
+});
 
 /**
  * Create mock session for authentication tests
@@ -125,36 +125,38 @@ export const createMockSession = (userOverrides = {}) => ({
   refresh_token: "mock-refresh-token",
   expires_at: Date.now() + 3600000,
   user: createMockUser(userOverrides),
-};
+});
 
 /**
  * Suppress console errors during tests
  */
-export const suppressConsoleError = memo(() => {
+export const suppressConsoleError = () => {
   const originalError = console.error;
   beforeEach(() => {
-  };
+    console.error = vi.fn();
+  });
   afterEach(() => {
-  };
+    console.error = originalError;
+  });
 };
 
 /**
  * Mock fetch for API tests
  */
-export const mockFetch = memo((response: SupabaseResponse<unknown>, options = {}) => {
+export const mockFetch = (response: any, options = {}) => {
   global.fetch = vi.fn(() =>
     Promise.resolve({
       ok: true,
       json: () => Promise.resolve(response),
       ...options,
     })
-  ) as unknown;
+  ) as any;
 };
 
 /**
  * Reset all mocks between tests
  */
-export const resetAllMocks = memo(() => {
+export const resetAllMocks = () => {
   vi.clearAllMocks();
   vi.resetAllMocks();
 };

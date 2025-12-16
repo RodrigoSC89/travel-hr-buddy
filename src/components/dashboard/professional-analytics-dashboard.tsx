@@ -3,7 +3,7 @@
  * Dashboard de analytics com métricas avançadas e visualizações de BI
  */
 
-import { memo, memo, useState, useMemo } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -78,7 +78,7 @@ const scatterData = [
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
 
-const MetricCard = ({ title, value, change, icon: Icon, trend }: unknown: unknown: unknown) => {
+const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
   const isPositive = change >= 0;
   
   return (
@@ -112,7 +112,7 @@ const MetricCard = ({ title, value, change, icon: Icon, trend }: unknown: unknow
   );
 };
 
-export const ProfessionalAnalyticsDashboard = memo(function() {
+export function ProfessionalAnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
@@ -456,4 +456,4 @@ export const ProfessionalAnalyticsDashboard = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH: Trilha de Auditoria com IA
  * Sistema inteligente de rastreamento e análise de ações
  */
@@ -44,7 +43,7 @@ interface AuditEntry {
   details: string;
   severity: "info" | "warning" | "critical";
   ipAddress: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, any>;
 }
 
 interface AIInsight {
@@ -171,7 +170,7 @@ export default function AuditTrail() {
     const matchesSeverity = !selectedSeverity || entry.severity === selectedSeverity;
     
     return matchesSearch && matchesSeverity;
-  };
+  });
 
   const runAIAnalysis = async () => {
     toast.info("Analisando padrões com IA...");
@@ -182,16 +181,16 @@ export default function AuditTrail() {
       const aiResponse = result.response;
       const newInsight: AIInsight = {
         id: Date.now().toString(),
-        type: aiResponse.riskLevel === "high" ? "risk" : aiResponse.riskLevel === "medium" ? "anomaly" : "pattern",
+        type: aiResponse.riskLevel === 'high' ? "risk" : aiResponse.riskLevel === 'medium' ? "anomaly" : "pattern",
         title: aiResponse.summary || "Análise de IA concluída",
-        description: aiResponse.findings?.join(" ") || `Análise de ${auditEntries.length} registros concluída.`,
+        description: aiResponse.findings?.join(' ') || `Análise de ${auditEntries.length} registros concluída.`,
         confidence: aiResponse.confidence || 85,
         affectedEntries: aiResponse.affectedCount || auditEntries.length,
         timestamp: new Date()
       };
       
       // Add anomaly insights if present
-      const anomalyInsights: AIInsight[] = (aiResponse.anomalies || []).map((a: unknown, idx: number) => ({
+      const anomalyInsights: AIInsight[] = (aiResponse.anomalies || []).map((a: any, idx: number) => ({
         id: `anomaly-${Date.now()}-${idx}`,
         type: "anomaly" as const,
         title: a.title || "Anomalia detectada",
@@ -214,30 +213,30 @@ export default function AuditTrail() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
-    case "warning": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
-    case "info": return "bg-blue-500/20 text-blue-400 border-blue-500/50";
-    default: return "bg-muted text-muted-foreground";
+      case "critical": return "bg-red-500/20 text-red-400 border-red-500/50";
+      case "warning": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/50";
+      case "info": return "bg-blue-500/20 text-blue-400 border-blue-500/50";
+      default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-    case "anomaly": return <AlertTriangle className="h-5 w-5 text-red-400" />;
-    case "pattern": return <Activity className="h-5 w-5 text-blue-400" />;
-    case "recommendation": return <TrendingUp className="h-5 w-5 text-green-400" />;
-    case "risk": return <Shield className="h-5 w-5 text-orange-400" />;
-    default: return <Brain className="h-5 w-5 text-primary" />;
+      case "anomaly": return <AlertTriangle className="h-5 w-5 text-red-400" />;
+      case "pattern": return <Activity className="h-5 w-5 text-blue-400" />;
+      case "recommendation": return <TrendingUp className="h-5 w-5 text-green-400" />;
+      case "risk": return <Shield className="h-5 w-5 text-orange-400" />;
+      default: return <Brain className="h-5 w-5 text-primary" />;
     }
   };
 
   const getInsightColor = (type: string) => {
     switch (type) {
-    case "anomaly": return "border-red-500/50 bg-red-500/5";
-    case "pattern": return "border-blue-500/50 bg-blue-500/5";
-    case "recommendation": return "border-green-500/50 bg-green-500/5";
-    case "risk": return "border-orange-500/50 bg-orange-500/5";
-    default: return "border-primary/50 bg-primary/5";
+      case "anomaly": return "border-red-500/50 bg-red-500/5";
+      case "pattern": return "border-blue-500/50 bg-blue-500/5";
+      case "recommendation": return "border-green-500/50 bg-green-500/5";
+      case "risk": return "border-orange-500/50 bg-orange-500/5";
+      default: return "border-primary/50 bg-primary/5";
     }
   };
 
@@ -339,7 +338,7 @@ export default function AuditTrail() {
                     <Input
                       placeholder="Buscar registros..."
                       value={searchQuery}
-                      onChange={handleChange}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-9 w-64"
                     />
                   </div>
@@ -347,21 +346,21 @@ export default function AuditTrail() {
                     <Button
                       variant={selectedSeverity === null ? "default" : "outline"}
                       size="sm"
-                      onClick={handleSetSelectedSeverity}
+                      onClick={() => setSelectedSeverity(null)}
                     >
                       Todos
                     </Button>
                     <Button
                       variant={selectedSeverity === "critical" ? "default" : "outline"}
                       size="sm"
-                      onClick={handleSetSelectedSeverity}
+                      onClick={() => setSelectedSeverity("critical")}
                     >
                       Críticos
                     </Button>
                     <Button
                       variant={selectedSeverity === "warning" ? "default" : "outline"}
                       size="sm"
-                      onClick={handleSetSelectedSeverity}
+                      onClick={() => setSelectedSeverity("warning")}
                     >
                       Alertas
                     </Button>
@@ -390,7 +389,7 @@ export default function AuditTrail() {
                               </Badge>
                               <Badge className={getSeverityColor(entry.severity)}>
                                 {entry.severity === "critical" ? "Crítico" :
-                                  entry.severity === "warning" ? "Alerta" : "Info"}
+                                 entry.severity === "warning" ? "Alerta" : "Info"}
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground mt-1">{entry.details}</p>
@@ -465,15 +464,15 @@ export default function AuditTrail() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório..."}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
                   <FileText className="h-6 w-6 mb-2" />
                   <span>Relatório Diário</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório..."}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
                   <Shield className="h-6 w-6 mb-2" />
                   <span>Relatório de Segurança</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório..."}>
+                <Button variant="outline" className="h-24 flex-col" onClick={() => toast.success("Gerando relatório...")}>
                   <Brain className="h-6 w-6 mb-2" />
                   <span>Análise de IA</span>
                 </Button>

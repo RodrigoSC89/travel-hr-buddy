@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
     const matchesStatus = selectedStatus === "all" || nc.status === selectedStatus;
     
     return matchesSearch && matchesType && matchesStatus;
-};
+  });
 
   const getTypeLabel = (type: string) => {
     switch (type) {
@@ -174,7 +173,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
               <Input
                 placeholder="Buscar não conformidades..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -293,7 +292,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={handleSetSelectedNC}
+                          onClick={() => setSelectedNC(nc)}
                         >
                           <Eye className="w-4 h-4 mr-2" />
                           Detalhes
@@ -314,7 +313,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                               <Textarea
                                 id="description"
                                 value={selectedNC.description}
-                                onChange={handleChange}
+                                onChange={(e) => setSelectedNC({ ...selectedNC, description: e.target.value })}
                                 rows={3}
                               />
                             </div>
@@ -324,7 +323,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                               <Textarea
                                 id="corrective_action"
                                 value={selectedNC.corrective_action}
-                                onChange={handleChange}
+                                onChange={(e) => setSelectedNC({ ...selectedNC, corrective_action: e.target.value })}
                                 rows={3}
                               />
                             </div>
@@ -353,7 +352,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                                 <Input
                                   id="responsible_person"
                                   value={selectedNC.responsible_person}
-                                  onChange={handleChange}
+                                  onChange={(e) => setSelectedNC({ ...selectedNC, responsible_person: e.target.value })}
                                 />
                               </div>
                             </div>
@@ -364,15 +363,15 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
                                 id="target_date"
                                 type="date"
                                 value={selectedNC.target_date}
-                                onChange={handleChange}
+                                onChange={(e) => setSelectedNC({ ...selectedNC, target_date: e.target.value })}
                               />
                             </div>
                             
                             <div className="flex justify-end gap-2 pt-4">
-                              <Button variant="outline" onClick={handleSetIsEditDialogOpen}>
+                              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
                                 Cancelar
                               </Button>
-                              <Button onClick={() => handleupdateNC}>
+                              <Button onClick={() => updateNC(selectedNC.id, selectedNC)}>
                                 Salvar Alterações
                               </Button>
                             </div>

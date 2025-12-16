@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -151,8 +150,8 @@ const CRITICALITY_LEVELS = {
 
 interface PeotramAuditWizardProps {
   auditId?: string;
-  onSave?: (data: unknown) => void;
-  onComplete?: (data: unknown) => void;
+  onSave?: (data: any) => void;
+  onComplete?: (data: any) => void;
   onCancel?: () => void;
 }
 
@@ -176,7 +175,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     observations: "",
     auditors: [],
     auditees: []
-};
+  });
   const [elements, setElements] = useState<AuditElement[]>(PEOTRAM_ELEMENTS);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
@@ -213,7 +212,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       }
       
       return newElements;
-    };
+    });
   };
 
   const handleSave = async () => {
@@ -262,7 +261,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       description: "Selecione arquivos PDF, imagens ou documentos como evidência"
     });
     // TODO: Implement file upload dialog
-  });
+  };
 
   const handleCameraCapture = () => {
     toast({
@@ -270,7 +269,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       description: "Tire uma foto diretamente como evidência da auditoria"
     });
     // TODO: Implement camera capture functionality
-  });
+  };
 
   const handleAudioRecording = () => {
     toast({
@@ -278,7 +277,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       description: "Grave notas de voz ou observações verbais da auditoria"
     });
     // TODO: Implement audio recording functionality
-  });
+  };
 
   const renderStepIndicator = () => (
     <div className="flex items-center justify-center mb-8">
@@ -357,7 +356,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Input
               id="auditPeriod"
               value={auditData.auditPeriod}
-              onChange={handleChange}))}
+              onChange={(e) => setAuditData(prev => ({ ...prev, auditPeriod: e.target.value }))}
               placeholder="Ex: 2024-Q4"
             />
           </div>
@@ -368,7 +367,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               id="auditDate"
               type="date"
               value={auditData.auditDate}
-              onChange={handleChange}))}
+              onChange={(e) => setAuditData(prev => ({ ...prev, auditDate: e.target.value }))}
             />
           </div>
 
@@ -377,7 +376,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Input
               id="auditorName"
               value={auditData.auditorName}
-              onChange={handleChange}))}
+              onChange={(e) => setAuditData(prev => ({ ...prev, auditorName: e.target.value }))}
               placeholder="Nome completo do auditor responsável"
             />
           </div>
@@ -394,7 +393,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Nome da Embarcação</Label>
                 <Input
                   value={auditData.vessel?.name || ""}
-                  onChange={handleChange}
+                  onChange={(e) => setAuditData(prev => ({
+                    ...prev,
+                    vessel: { ...prev.vessel!, name: e.target.value }
                   }))}
                   placeholder="Nome da embarcação"
                 />
@@ -403,7 +404,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Indicação Petrobras</Label>
                 <Input
                   value={auditData.vessel?.indication || ""}
-                  onChange={handleChange}
+                  onChange={(e) => setAuditData(prev => ({
+                    ...prev,
+                    vessel: { ...prev.vessel!, indication: e.target.value }
                   }))}
                   placeholder="Código de indicação Petrobras"
                 />
@@ -423,7 +426,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Base/Terminal</Label>
                 <Input
                   value={auditData.location?.base || ""}
-                  onChange={handleChange}
+                  onChange={(e) => setAuditData(prev => ({
+                    ...prev,
+                    location: { ...prev.location!, base: e.target.value }
                   }))}
                   placeholder="Nome da base ou terminal"
                 />
@@ -432,7 +437,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Cidade</Label>
                 <Input
                   value={auditData.location?.city || ""}
-                  onChange={handleChange}
+                  onChange={(e) => setAuditData(prev => ({
+                    ...prev,
+                    location: { ...prev.location!, city: e.target.value }
                   }))}
                   placeholder="Cidade"
                 />
@@ -441,7 +448,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Estado</Label>
                 <Input
                   value={auditData.location?.state || ""}
-                  onChange={handleChange}
+                  onChange={(e) => setAuditData(prev => ({
+                    ...prev,
+                    location: { ...prev.location!, state: e.target.value }
                   }))}
                   placeholder="Estado"
                 />
@@ -456,7 +465,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Textarea
               id="scope"
               value={auditData.scope}
-              onChange={handleChange}))}
+              onChange={(e) => setAuditData(prev => ({ ...prev, scope: e.target.value }))}
               placeholder="Descreva o escopo e objetivos da auditoria..."
               rows={3}
             />
@@ -467,7 +476,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Textarea
               id="operationSummary"
               value={auditData.operationSummary}
-              onChange={handleChange}))}
+              onChange={(e) => setAuditData(prev => ({ ...prev, operationSummary: e.target.value }))}
               placeholder="Descreva as principais operações realizadas..."
               rows={3}
             />
@@ -478,7 +487,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Textarea
               id="observations"
               value={auditData.observations}
-              onChange={handleChange}))}
+              onChange={(e) => setAuditData(prev => ({ ...prev, observations: e.target.value }))}
               placeholder="Observações gerais sobre a auditoria..."
               rows={3}
             />
@@ -561,7 +570,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetCurrentRequirement}
+                    onClick={() => setCurrentRequirement(prev => prev - 1)}
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Anterior
@@ -571,7 +580,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={handleSetCurrentRequirement}
+                    onClick={() => setCurrentRequirement(prev => prev + 1)}
                   >
                     Próximo
                     <ChevronRight className="w-4 h-4" />
@@ -657,7 +666,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Textarea
                   id="comments"
                   value={requirement.comments || ""}
-                  onChange={handleChange}
+                  onChange={(e) => updateRequirement(currentElement, currentRequirement, { 
+                    comments: e.target.value 
+                  })}
                   placeholder="Descreva as observações, evidências encontradas e justificativas para a pontuação..."
                   rows={4}
                 />
@@ -687,7 +698,9 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Textarea
                     id="justification"
                     value={requirement.justification}
-                    onChange={handleChange}
+                    onChange={(e) => updateRequirement(currentElement, currentRequirement, { 
+                      justification: e.target.value 
+                    })}
                     placeholder="Justifique a não conformidade e as ações corretivas necessárias..."
                     rows={3}
                   />
@@ -739,7 +752,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
         </div>
       </div>
     );
-  });
+  };
 
   const renderReviewStep = () => (
     <div className="space-y-6">
@@ -849,7 +862,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
           <div className="flex justify-between pt-6 border-t">
             <Button
               variant="outline"
-              onClick={handleSetCurrentStep}
+              onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
               disabled={currentStep === 0}
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
@@ -857,7 +870,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             </Button>
 
             <Button
-              onClick={handleSetCurrentStep}
+              onClick={() => setCurrentStep(prev => Math.min(2, prev + 1))}
               disabled={currentStep === 1 && overallProgress < 100}
             >
               Próxima Etapa

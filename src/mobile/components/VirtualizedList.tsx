@@ -1,5 +1,4 @@
 /**
-import { useMemo, useCallback } from "react";;
  * PATCH 189.0 - Virtualized List Component
  * 
  * High-performance virtualized list for mobile
@@ -8,7 +7,7 @@ import { useMemo, useCallback } from "react";;
 
 import React, { memo, useMemo } from "react";
 import { useVirtualizedList } from "../hooks/useVirtualizedList";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 interface VirtualizedListProps<T> {
@@ -152,7 +151,7 @@ function VirtualizedGridInner<T>({
 }: VirtualizedGridProps<T>) {
   // Group items into rows
   const rows = useMemo(() => {
-    const result: T[][] = []);
+    const result: T[][] = [];
     for (let i = 0; i < items.length; i += columns) {
       result.push(items.slice(i, i + columns));
     }

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,7 +45,7 @@ interface ActiveWorkflow {
   timeSaved: string;
 }
 
-export const SmartWorkflow = memo(() => {
+export const SmartWorkflow = () => {
   const [activeWorkflows, setActiveWorkflows] = useState<ActiveWorkflow[]>([]);
   const [templates, setTemplates] = useState<WorkflowTemplate[]>([]);
   const { toast } = useToast();
@@ -141,7 +140,7 @@ export const SmartWorkflow = memo(() => {
       title: "Status atualizado",
       description: "Workflow foi pausado/reativado",
     });
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -167,7 +166,7 @@ export const SmartWorkflow = memo(() => {
     case "RH": return <Users className="h-4 w-4" />;
     case "Analytics": return <TrendingUp className="h-4 w-4" />;
     default: return <Workflow className="h-4 w-4" />;
-    };
+    }
   };
 
   return (
@@ -270,7 +269,7 @@ export const SmartWorkflow = memo(() => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handletoggleWorkflow}
+                          onClick={() => toggleWorkflow(workflow.id)}
                         >
                           {workflow.status === "running" ? (
                             <Pause className="h-4 w-4" />

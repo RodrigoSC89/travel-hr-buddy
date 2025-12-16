@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,14 +75,14 @@ export default function HourometerManager() {
       prev.map((h) =>
         h.id === id
           ? {
-            ...h,
-            currentHours: Number(newHours),
-            lastUpdate: new Date().toISOString().split("T")[0],
-            hoursUntilMaintenance: Math.max(
-              0,
-              h.maintenanceInterval - (Number(newHours) % h.maintenanceInterval)
-            ),
-          }
+              ...h,
+              currentHours: Number(newHours),
+              lastUpdate: new Date().toISOString().split("T")[0],
+              hoursUntilMaintenance: Math.max(
+                0,
+                h.maintenanceInterval - (Number(newHours) % h.maintenanceInterval)
+              ),
+            }
           : h
       )
     );
@@ -94,7 +94,7 @@ export default function HourometerManager() {
 
     setEditingId(null);
     setNewHours("");
-  });
+  };
 
   const getProgressColor = (hoursUntil: number, interval: number) => {
     const percent = (hoursUntil / interval) * 100;
@@ -179,10 +179,10 @@ export default function HourometerManager() {
                     type="number"
                     placeholder="Novas horas"
                     value={newHours}
-                    onChange={handleChange}
+                    onChange={(e) => setNewHours(e.target.value)}
                     className="h-8"
                   />
-                  <Button size="sm" onClick={() => handlehandleUpdateHours}>
+                  <Button size="sm" onClick={() => handleUpdateHours(h.id)}>
                     Salvar
                   </Button>
                 </div>

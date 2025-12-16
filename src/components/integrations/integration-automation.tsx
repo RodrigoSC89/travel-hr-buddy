@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -89,7 +88,7 @@ export const IntegrationAutomation: React.FC = () => {
     retry: { enabled: true, maxAttempts: 3, backoffMultiplier: 2 },
     caching: { enabled: false, ttlSeconds: 300 },
     monitoring: { healthCheck: true, alerting: true, logging: true }
-  };
+  });
 
   const { toast } = useToast();
 
@@ -189,14 +188,14 @@ export const IntegrationAutomation: React.FC = () => {
       title: "Configuração Salva",
       description: "As configurações da integração foram salvas com sucesso.",
     });
-  });
+  };
 
   const handleToggleRule = (ruleId: string) => {
     toast({
       title: "Regra Atualizada",
       description: "Status da regra de automação foi alterado.",
     });
-  });
+  };
 
   return (
     <div className="space-y-6">
@@ -234,7 +233,7 @@ export const IntegrationAutomation: React.FC = () => {
               <h3 className="text-lg font-semibold text-foreground">Regras de Automação</h3>
               <p className="text-sm text-muted-foreground">Configure ações automáticas baseadas em eventos</p>
             </div>
-            <Button onClick={handleSetIsCreatingRule} className="bg-primary hover:bg-primary/90">
+            <Button onClick={() => setIsCreatingRule(true)} className="bg-primary hover:bg-primary/90">
               <Zap className="w-4 h-4 mr-2" />
               Nova Regra
             </Button>
@@ -256,7 +255,7 @@ export const IntegrationAutomation: React.FC = () => {
                     </div>
                     <Switch 
                       checked={rule.isActive}
-                      onCheckedChange={() => handleToggleRule(rule.id}
+                      onCheckedChange={() => handleToggleRule(rule.id)}
                     />
                   </div>
                 </CardHeader>
@@ -324,7 +323,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <Input
                     id="endpoint"
                     value={config.endpoint || ""}
-                    onChange={handleChange}
+                    onChange={(e) => setConfig({...config, endpoint: e.target.value})}
                     placeholder="https://api.exemplo.com/v1"
                   />
                 </div>

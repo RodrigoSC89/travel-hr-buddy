@@ -1,4 +1,3 @@
-
 /**
  * PATCH 211.1 - Mission Simulation Core (Simulação Autônoma)
  * 
@@ -391,7 +390,7 @@ class MissionSimulationCore {
       confidence: 0.75,
       critical_factors: criticalFactors,
       recommendations: recommendations,
-    });
+    };
   }
 
   /**
@@ -478,7 +477,7 @@ class MissionSimulationCore {
         medium: 1.5,
         high: 3,
         critical: 5,
-      });
+      };
       return sum + severityScore[i.severity];
     }, 0));
 
@@ -519,7 +518,7 @@ class MissionSimulationCore {
       },
       lessons_learned: lessonsLearned,
       ai_recommendations: aiRecommendations,
-    });
+    };
   }
 
   /**
@@ -557,7 +556,7 @@ class MissionSimulationCore {
         riskFactors: d.risk_factors,
         failureInjections: d.failure_injections,
         duration_hours: 24,
-      });
+      };
     } catch (error) {
       logger.warn("[MissionSimulationCore] Failed to get simulation", { error });
       return null;

@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 93.0 - System Watchdog UI Component
  * Real-time system monitoring dashboard with AI diagnostics
  */
@@ -51,7 +50,7 @@ export default function SystemWatchdog() {
 
     return () => {
       if (interval) clearInterval(interval);
-    });
+    };
   }, [isAutoRefresh]);
 
   const loadHealthStatus = async () => {
@@ -149,7 +148,7 @@ export default function SystemWatchdog() {
           <Button
             variant="outline"
             size="sm"
-            onClick={handleSetIsAutoRefresh}
+            onClick={() => setIsAutoRefresh(!isAutoRefresh)}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isAutoRefresh ? "animate-spin" : ""}`} />
             {isAutoRefresh ? "Auto-Refresh On" : "Auto-Refresh Off"}

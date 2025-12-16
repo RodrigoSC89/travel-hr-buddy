@@ -1,4 +1,3 @@
-import { useRef, useState, useCallback } from "react";;
 import React, { useState, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -145,7 +144,7 @@ const IntelligentDocumentManager = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -225,7 +224,7 @@ const IntelligentDocumentManager = () => {
             confidence: 0,
             version: 1,
             permissions: ["read", "write", "share"]
-          });
+          };
           
           setDocuments(prev => [newDoc, ...prev]);
         }, 1000);
@@ -245,7 +244,7 @@ const IntelligentDocumentManager = () => {
       title: "Documento excluído",
       description: "O documento foi removido permanentemente"
     });
-  });
+  };
 
   const analyzeDocument = (id: string) => {
     setDocuments(prev => prev.map(doc => 
@@ -275,7 +274,7 @@ const IntelligentDocumentManager = () => {
       title: "Link de compartilhamento",
       description: "Link copiado para a área de transferência"
     });
-  });
+  };
 
   return (
     <div className="p-6 space-y-6 bg-background min-h-screen">
@@ -315,14 +314,14 @@ const IntelligentDocumentManager = () => {
           <Input
             placeholder="Buscar documentos, tags ou conteúdo..."
             value={searchTerm}
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
           />
         </div>
         
         <select 
           value={selectedCategory}
-          onChange={handleChange}
+          onChange={(e) => setSelectedCategory(e.target.value)}
           className="bg-background border border-border rounded px-3 py-2"
         >
           {categories.map(category => (
@@ -340,13 +339,13 @@ const IntelligentDocumentManager = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={handleSetSortBy}>
+            <DropdownMenuItem onClick={() => setSortBy("lastModified")}>
               Última modificação
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSetSortBy}>
+            <DropdownMenuItem onClick={() => setSortBy("name")}>
               Nome
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSetSortBy}>
+            <DropdownMenuItem onClick={() => setSortBy("size")}>
               Tamanho
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -356,14 +355,14 @@ const IntelligentDocumentManager = () => {
           <Button
             variant={viewMode === "grid" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetViewMode}
+            onClick={() => setViewMode("grid")}
           >
             <Grid className="w-4 h-4" />
           </Button>
           <Button
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            onClick={handleSetViewMode}
+            onClick={() => setViewMode("list")}
           >
             <List className="w-4 h-4" />
           </Button>
@@ -452,16 +451,16 @@ const IntelligentDocumentManager = () => {
                         <Eye className="w-4 h-4 mr-2" />
                         Visualizar
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleshareDocument}>
+                      <DropdownMenuItem onClick={() => shareDocument(document)}>
                         <Share2 className="w-4 h-4 mr-2" />
                         Compartilhar
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleanalyzeDocument}>
+                      <DropdownMenuItem onClick={() => analyzeDocument(document.id)}>
                         <Brain className="w-4 h-4 mr-2" />
                         Analisar IA
                       </DropdownMenuItem>
                       <DropdownMenuItem 
-                        onClick={() => handledeleteDocument}
+                        onClick={() => deleteDocument(document.id)}
                         className="text-red-600"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
@@ -481,7 +480,7 @@ const IntelligentDocumentManager = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handletoggleFavorite}
+                      onClick={() => toggleFavorite(document.id)}
                     >
                       {document.favorite ? 
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> :
@@ -551,7 +550,7 @@ const IntelligentDocumentManager = () => {
                     <Button variant="ghost" size="sm">
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleshareDocument}>
+                    <Button variant="ghost" size="sm" onClick={() => shareDocument(document)}>
                       <Share2 className="w-4 h-4" />
                     </Button>
                     <DropdownMenu>
@@ -561,11 +560,11 @@ const IntelligentDocumentManager = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleanalyzeDocument}>
+                        <DropdownMenuItem onClick={() => analyzeDocument(document.id)}>
                           <Brain className="w-4 h-4 mr-2" />
                           Analisar IA
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handledeleteDocument}>
+                        <DropdownMenuItem onClick={() => deleteDocument(document.id)}>
                           <Trash2 className="w-4 h-4 mr-2" />
                           Excluir
                         </DropdownMenuItem>

@@ -1,5 +1,4 @@
-import { useState } from "react";;
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -218,7 +217,7 @@ export const InsightEngine: React.FC = () => {
                           </CardDescription>
                         </div>
                       </div>
-                      <Badge variant={getImpactColor(insight.impact) as unknown}>
+                      <Badge variant={getImpactColor(insight.impact) as any}>
                         {insight.impact.toUpperCase()}
                       </Badge>
                     </div>

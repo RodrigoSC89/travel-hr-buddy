@@ -3,7 +3,7 @@
  * Real-time compliance monitoring with automated audit simulation
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -69,12 +69,12 @@ export default function ComplianceStatusPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: unknown: unknown: unknown; className: string }> = {
+    const variants: Record<string, { variant: any; className: string }> = {
       pass: { variant: "default", className: "bg-green-100 text-green-800" },
       fail: { variant: "destructive", className: "bg-red-100 text-red-800" },
       warning: { variant: "default", className: "bg-yellow-100 text-yellow-800" },
       not_applicable: { variant: "secondary", className: "bg-gray-100 text-gray-800" }
-    });
+    };
     return variants[status] || variants.not_applicable;
   };
 
@@ -104,7 +104,7 @@ export default function ComplianceStatusPage() {
         </div>
         <div className="text-right">
           <Button onClick={loadData} disabled={loading} variant="outline">
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Run Audit
           </Button>
           <p className="text-sm text-muted-foreground mt-2">
@@ -252,8 +252,8 @@ function ChecksList({
   checks, 
   getStatusBadge 
 }: { 
-  checks: unknown[];
-  getStatusBadge: (status: string) => { variant: unknown: unknown: unknown; className: string };
+  checks: any[];
+  getStatusBadge: (status: string) => { variant: any; className: string };
 }) {
   return (
     <Card>

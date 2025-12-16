@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Voyage Command Center - Módulo Unificado de Planejamento de Viagens
  * PATCH UNIFY-12.0 - Fusão dos módulos de viagem
  * 
@@ -216,7 +215,7 @@ export default function VoyageCommandCenter() {
     onTimeRate: 94,
     totalCost: voyages.reduce((sum, v) => sum + (v.estimatedCost || 0), 0),
     fuelSaved: 245,
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -255,14 +254,14 @@ export default function VoyageCommandCenter() {
     setVoyages(prev => prev.map(v => 
       v.id === voyageId 
         ? { 
-          ...v, 
-          fuelConsumption: Math.round(v.fuelConsumption * 0.92),
-          aiRecommendations: [
-            ...(v.aiRecommendations || []),
-            "Rota otimizada com economia de 8% em combustível",
-            `Novo consumo estimado: ${Math.round(v.fuelConsumption * 0.92)} ton`
-          ]
-        }
+            ...v, 
+            fuelConsumption: Math.round(v.fuelConsumption * 0.92),
+            aiRecommendations: [
+              ...(v.aiRecommendations || []),
+              "Rota otimizada com economia de 8% em combustível",
+              `Novo consumo estimado: ${Math.round(v.fuelConsumption * 0.92)} ton`
+            ]
+          }
         : v
     ));
     
@@ -290,10 +289,10 @@ export default function VoyageCommandCenter() {
       fuelConsumption: Math.floor(Math.random() * 2000) + 1500,
       status: "planned",
       vesselName: newVoyage.vessel || "A definir",
-      departureDate: newVoyage.departure || new Date().toISOString().split("T")[0],
-      arrivalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      departureDate: newVoyage.departure || new Date().toISOString().split('T')[0],
+      arrivalDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       weatherRisk: "medium",
-      createdAt: new Date().toISOString().split("T")[0],
+      createdAt: new Date().toISOString().split('T')[0],
       estimatedCost: Math.floor(Math.random() * 500000) + 200000,
       aiRecommendations: ["Aguardando análise de IA para otimização de rota"]
     };
@@ -353,11 +352,11 @@ export default function VoyageCommandCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => toast.info("Exportando relatório..."}>
+          <Button variant="outline" onClick={() => toast.info("Exportando relatório...")}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={handleSetCreateDialogOpen}>
+          <Button onClick={() => setCreateDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Viagem
           </Button>
@@ -633,7 +632,7 @@ export default function VoyageCommandCenter() {
                   <Button 
                     variant="outline" 
                     className="flex-1"
-                    onClick={() => handlehandleOptimizeRoute}
+                    onClick={() => handleOptimizeRoute(voyage.id)}
                     disabled={isOptimizing || voyage.status === "completed" || voyage.status === "cancelled"}
                   >
                     <Brain className="h-4 w-4 mr-2" />
@@ -652,7 +651,7 @@ export default function VoyageCommandCenter() {
                   <Button 
                     variant="outline" 
                     className="text-destructive"
-                    onClick={() => handlehandleDeleteVoyage}
+                    onClick={() => handleDeleteVoyage(voyage.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -693,7 +692,7 @@ export default function VoyageCommandCenter() {
                   <Input 
                     placeholder="Pergunte ao Copiloto IA..."
                     value={aiCopilotInput}
-                    onChange={e => setAiCopilotInput(e.target.value}
+                    onChange={e => setAiCopilotInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && handleAiCopilotSend()}
                   />
                   <Button onClick={handleAiCopilotSend}>
@@ -817,8 +816,8 @@ export default function VoyageCommandCenter() {
                   </div>
                   <Badge className={`w-full justify-center ${
                     weather.risk === "low" ? "bg-green-500/20 text-green-600" :
-                      weather.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
-                        "bg-red-500/20 text-red-600"
+                    weather.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
+                    "bg-red-500/20 text-red-600"
                   }`}>
                     Risco {weather.risk === "low" ? "Baixo" : weather.risk === "medium" ? "Médio" : "Alto"}
                   </Badge>
@@ -952,8 +951,8 @@ export default function VoyageCommandCenter() {
                     </div>
                     <Badge className={`mt-2 ${
                       port.type === "origin" ? "bg-green-500/10 text-green-600" :
-                        port.type === "destination" ? "bg-blue-500/10 text-blue-600" :
-                          "bg-amber-500/10 text-amber-600"
+                      port.type === "destination" ? "bg-blue-500/10 text-blue-600" :
+                      "bg-amber-500/10 text-amber-600"
                     }`}>
                       {port.type === "origin" ? "Origem" : port.type === "destination" ? "Destino" : "Escala"}
                     </Badge>
@@ -1025,7 +1024,7 @@ export default function VoyageCommandCenter() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetCreateDialogOpen}>
+            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateVoyage}>
@@ -1112,7 +1111,7 @@ export default function VoyageCommandCenter() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetDetailsDialogOpen}>
+            <Button variant="outline" onClick={() => setDetailsDialogOpen(false)}>
               Fechar
             </Button>
             <Button onClick={() => {

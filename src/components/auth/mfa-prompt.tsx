@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { 
   Shield, 
@@ -42,7 +41,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
           title: "2FA não configurado",
           description: "Configure a autenticação de dois fatores primeiro",
           variant: "destructive"
-});
+        });
         onCancel();
         return;
       }
@@ -137,7 +136,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
             <Input
               id="mfa-code"
               value={code}
-              onChange={handleChange}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
               placeholder="000000"
               className="text-center font-mono text-xl tracking-widest"
               maxLength={6}
@@ -145,7 +144,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
               onKeyDown={(e) => {
                 if (e.key === "Enter" && code.length === 6) {
                   verifyMFA();
-                });
+                }
               }}
             />
           </div>
@@ -191,7 +190,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 };
 
 // Hook for easier MFA verification
-export const useMFA = memo(() => {
+export const useMFA = () => {
   const [showMFAPrompt, setShowMFAPrompt] = useState(false);
   const [mfaResolver, setMfaResolver] = useState<{
     resolve: (success: boolean) => void;
@@ -201,7 +200,7 @@ export const useMFA = memo(() => {
     return new Promise((resolve) => {
       setMfaResolver({ resolve });
       setShowMFAPrompt(true);
-  };
+    });
   };
 
   const handleMFASuccess = () => {

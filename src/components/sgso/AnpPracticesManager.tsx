@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +10,8 @@ import {
   AlertCircle,
   Clock,
   FileText,
+  Calendar,
+  Users,
   TrendingUp,
   Shield
 } from "lucide-react";
@@ -170,7 +171,7 @@ export const AnpPracticesManager: React.FC = () => {
                 <Card 
                   key={practice.id}
                   className="border-2 hover:shadow-lg transition-all cursor-pointer"
-                  onClick={handleSetSelectedPractice}
+                  onClick={() => setSelectedPractice(practice)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between gap-4">
@@ -219,7 +220,7 @@ export const AnpPracticesManager: React.FC = () => {
                   <Card 
                     key={practice.id}
                     className="border-2 hover:shadow-lg transition-all cursor-pointer"
-                    onClick={handleSetSelectedPractice}
+                    onClick={() => setSelectedPractice(practice)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between gap-4">

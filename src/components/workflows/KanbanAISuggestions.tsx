@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +11,7 @@ import type { Database } from "@/integrations/supabase/types";
 // Missing table in database schema - using any for now
 // type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
 
-export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAISuggestionsProps) {
+export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsProps) {
   const [accepted, setAccepted] = useState<string[]>([]);
   const { toast } = useToast();
 
@@ -20,18 +19,19 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
     try {
       setAccepted((prev) => [...prev, etapa]);
 
-      const payload: unknown = {
+      const payload: any = {
         etapa: s.etapa,
         tipo_sugestao: s.tipo_sugestao,
         conteudo: s.conteudo,
         criticidade: s.criticidade,
         responsavel_sugerido: s.responsavel_sugerido,
         origem: "Copilot",
-      });
+      };
 
-      const { error } = await (supabase as unknown).from("workflow_ai_suggestions").insert(payload);
+      const { error } = await (supabase as any).from("workflow_ai_suggestions").insert(payload);
 
       if (error) {
+        console.error("Error inserting AI suggestion:", error);
         toast({
           title: "Erro",
           description: "Não foi possível salvar a sugestão da IA",
@@ -47,7 +47,6 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
         description: "Sugestão da IA aceita e salva com sucesso!",
       });
     } catch (error) {
-      console.error("Error accepting suggestion:", error);
       console.error("Error accepting suggestion:", error);
       toast({
         title: "Erro",
@@ -94,7 +93,7 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
               </div>
               
               {!accepted.includes(s.etapa) && (
-                <Button onClick={() => handlehandleAccept} className="mt-4">
+                <Button onClick={() => handleAccept(s.etapa, s)} className="mt-4">
                   ✅ Aceitar sugestão
                 </Button>
               )}
@@ -104,4 +103,4 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
       ))}
     </div>
   );
-});
+}

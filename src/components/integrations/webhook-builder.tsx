@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -84,7 +83,7 @@ export const WebhookBuilder: React.FC = () => {
       maxRetries: 3,
       backoffStrategy: "exponential"
     }
-  };
+  });
 
   const [webhooks] = useState<WebhookConfig[]>([
     {
@@ -252,7 +251,7 @@ export const WebhookBuilder: React.FC = () => {
       title: "URL Copiada",
       description: "URL do webhook foi copiada para a área de transferência.",
     });
-  });
+  };
 
   const loadTemplate = (template: string) => {
     setWebhookConfig({
@@ -264,7 +263,7 @@ export const WebhookBuilder: React.FC = () => {
       title: "Template Carregado",
       description: `Template ${template} foi aplicado ao payload.`,
     });
-  });
+  };
 
   const getStatusColor = (status: WebhookEvent["status"]) => {
     switch (status) {
@@ -327,7 +326,7 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-name"
                     value={webhookConfig.name}
-                    onChange={handleChange}
+                    onChange={(e) => setWebhookConfig({...webhookConfig, name: e.target.value})}
                     placeholder="Ex: Notificações Slack"
                   />
                 </div>
@@ -337,7 +336,7 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-url"
                     value={webhookConfig.url}
-                    onChange={handleChange}
+                    onChange={(e) => setWebhookConfig({...webhookConfig, url: e.target.value})}
                     placeholder="https://hooks.slack.com/services/..."
                   />
                 </div>
@@ -368,7 +367,13 @@ export const WebhookBuilder: React.FC = () => {
                           type="checkbox"
                           id={trigger.value}
                           checked={webhookConfig.triggers?.includes(trigger.value)}
-                          onChange={handleChange});
+                          onChange={(e) => {
+                            const triggers = webhookConfig.triggers || [];
+                            if (e.target.checked) {
+                              setWebhookConfig({
+                                ...webhookConfig,
+                                triggers: [...triggers, trigger.value]
+                              });
                             } else {
                               setWebhookConfig({
                                 ...webhookConfig,
@@ -406,21 +411,21 @@ export const WebhookBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => handleloadTemplate}
+                        onClick={() => loadTemplate("slack")}
                       >
                         Slack
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => handleloadTemplate}
+                        onClick={() => loadTemplate("teams")}
                       >
                         Teams
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => handleloadTemplate}
+                        onClick={() => loadTemplate("generic")}
                       >
                         Generic
                       </Button>
@@ -428,7 +433,7 @@ export const WebhookBuilder: React.FC = () => {
                   </div>
                   <Textarea
                     value={webhookConfig.payload}
-                    onChange={handleChange}
+                    onChange={(e) => setWebhookConfig({...webhookConfig, payload: e.target.value})}
                     placeholder="Payload JSON do webhook..."
                     className="font-mono text-sm min-h-32"
                   />
@@ -464,7 +469,12 @@ export const WebhookBuilder: React.FC = () => {
                     <Input
                       type="password"
                       value={webhookConfig.authentication?.value || ""}
-                      onChange={handleChange}
+                      onChange={(e) => setWebhookConfig({
+                        ...webhookConfig,
+                        authentication: {
+                          type: webhookConfig.authentication?.type || "none",
+                          value: e.target.value
+                        }
                       })}
                       placeholder="Token ou chave de autenticação"
                     />
@@ -533,7 +543,7 @@ export const WebhookBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="ghost" 
-                        onClick={() => handlecopyWebhookUrl}
+                        onClick={() => copyWebhookUrl(webhook.url)}
                       >
                         <Copy className="w-3 h-3" />
                       </Button>
@@ -556,7 +566,7 @@ export const WebhookBuilder: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handlehandleTestWebhook}
+                      onClick={() => handleTestWebhook(webhook.id)}
                       disabled={isTesting}
                     >
                       {isTesting ? (
@@ -646,7 +656,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => handleloadTemplate}
+                    onClick={() => loadTemplate("slack")}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -675,7 +685,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => handleloadTemplate}
+                    onClick={() => loadTemplate("teams")}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -704,7 +714,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => handleloadTemplate}
+                    onClick={() => loadTemplate("generic")}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -717,4 +727,4 @@ export const WebhookBuilder: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};

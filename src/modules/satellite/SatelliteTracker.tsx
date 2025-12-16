@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,7 @@ const SatelliteTracker = () => {
           setLastUpdate(latestUpdate);
           toast.success("Satellite positions loaded from cache", {
             description: `${cachedOrbits.length} satellites tracked`
-          };
+          });
           setIsLoadingSatellites(false);
           return;
         }
@@ -262,14 +261,14 @@ const SatelliteTracker = () => {
             <Button
               variant={typeFilter === "all" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetTypeFilter}
+              onClick={() => setTypeFilter("all")}
             >
               Todos ({satelliteOrbits.length})
             </Button>
             <Button
               variant={typeFilter === "communication" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetTypeFilter}
+              onClick={() => setTypeFilter("communication")}
             >
               Comunicação ({satelliteOrbits.filter(s => s.type === "communication").length})
             </Button>
@@ -354,13 +353,13 @@ const SatelliteTracker = () => {
       {selectedVessel && (
         <AISMapOverlay 
           vessel={selectedVessel}
-          onClose={() => setSelectedVessel(null}
+          onClose={() => setSelectedVessel(null)}
         />
       )}
 
       <CoverageMap coverageData={coverageData} />
     </div>
   );
-});
+};
 
 export default SatelliteTracker;

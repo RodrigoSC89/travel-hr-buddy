@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,13 +64,13 @@ interface Conversation {
     user: {
       full_name: string;
       email: string;
-    });
+    };
   }>;
   last_message?: Message;
   unread_count?: number;
 }
 
-export const ChatInterface = memo(() => {
+export const ChatInterface = () => {
   const { toast } = useToast();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -95,12 +94,12 @@ export const ChatInterface = memo(() => {
           full_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
-        });
-        setCurrentUser(userProfile as unknown);
+        };
+        setCurrentUser(userProfile as any);
         await loadConversations();
         await loadAllUsers();
       }
-    });
+    };
 
     getCurrentUser();
   }, []);
@@ -165,8 +164,8 @@ export const ChatInterface = memo(() => {
       if (error) throw error;
 
       const conversationsWithDetails = await Promise.all(
-        (data || []).map(async (conv: unknown) => {
-          const typedConv = conv as { id: string; type: string; title?: string | null; last_message_at: string | null; conversation_participants: Array<{ user_id: string; profiles: unknown }> };
+        (data || []).map(async (conv: any) => {
+          const typedConv = conv as { id: string; type: string; title?: string | null; last_message_at: string | null; conversation_participants: Array<{ user_id: string; profiles: any }> };
           // Carregar última mensagem
           const { data: lastMessage } = await supabase
             .from("messages")
@@ -209,7 +208,7 @@ export const ChatInterface = memo(() => {
               sender: lastMessage.profiles
             } : undefined,
             unread_count: count || 0
-          });
+          };
         })
       );
 
@@ -244,7 +243,7 @@ export const ChatInterface = memo(() => {
 
       if (error) throw error;
 
-      const messagesWithSender = (data || []).map((msg: unknown) => ({
+      const messagesWithSender = (data || []).map((msg: any) => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
@@ -256,7 +255,7 @@ export const ChatInterface = memo(() => {
         } : undefined
       }));
 
-      setMessages(messagesWithSender as unknown);
+      setMessages(messagesWithSender as any);
 
       // Marcar mensagens como lidas
       await markMessagesAsRead(conversationId);
@@ -275,12 +274,12 @@ export const ChatInterface = memo(() => {
           full_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
           avatar_url: user.user_metadata?.avatar_url,
           status: "online"
-        });
-        setCurrentUser(userProfile as unknown);
+        };
+        setCurrentUser(userProfile as any);
         await loadConversations();
         await loadAllUsers();
       }
-    });
+    };
 
     getCurrentUser();
   }, [loadConversations, loadAllUsers]);
@@ -353,7 +352,7 @@ export const ChatInterface = memo(() => {
             .single();
 
           if (newMessage) {
-            const profiles = (newMessage as unknown).profiles;
+            const profiles = (newMessage as any).profiles;
             const messageWithSender = {
               id: newMessage.id,
               content: newMessage.content,
@@ -363,8 +362,8 @@ export const ChatInterface = memo(() => {
                 full_name: profiles.full_name || profiles.email?.split("@")[0] || "User",
                 email: profiles.email || ""
               } : undefined
-            });
-            setMessages(prev => [...prev, messageWithSender as unknown]);
+            };
+            setMessages(prev => [...prev, messageWithSender as any]);
           }
         }
       )
@@ -372,7 +371,7 @@ export const ChatInterface = memo(() => {
 
     return () => {
       supabase.removeChannel(channel);
-    });
+    };
   };
 
   const sendMessage = async () => {
@@ -385,7 +384,7 @@ export const ChatInterface = memo(() => {
           sender_id: currentUser.id,
           content: newMessage.trim(),
           conversation_id: selectedConversation
-        } as unknown);
+        } as any);
 
       if (error) throw error;
 
@@ -447,7 +446,7 @@ export const ChatInterface = memo(() => {
       const { error: participantsError } = await supabase
         .from("conversation_participants")
         .insert([
-          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as unknown,
+          { conversation_id: newConv.id, user_id: currentUser?.id ?? "" } as any,
           { conversation_id: newConv.id, user_id: userId } as any
         ]);
 
@@ -503,7 +502,7 @@ export const ChatInterface = memo(() => {
             <h2 className="text-lg font-semibold">Mensagens</h2>
             <Button
               size="sm"
-              onClick={handleSetShowNewChat}
+              onClick={() => setShowNewChat(!showNewChat)}
               className="rounded-full"
             >
               <Plus className="h-4 w-4" />
@@ -515,7 +514,7 @@ export const ChatInterface = memo(() => {
             <Input
               placeholder="Buscar conversas..."
               value={searchQuery}
-              onChange={handleChange}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -530,7 +529,7 @@ export const ChatInterface = memo(() => {
                 <div
                   key={user.id}
                   className="flex items-center gap-3 p-2 hover:bg-muted rounded-lg cursor-pointer"
-                  onClick={() => handlecreateNewConversation}
+                  onClick={() => createNewConversation(user.id)}
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarFallback>
@@ -556,7 +555,7 @@ export const ChatInterface = memo(() => {
               className={`p-4 border-b cursor-pointer hover:bg-muted/50 transition-colors ${
                 selectedConversation === conversation.id ? "bg-muted" : ""
               }`}
-              onClick={handleSetSelectedConversation}
+              onClick={() => setSelectedConversation(conversation.id)}
             >
               <div className="flex items-center gap-3">
                 <Avatar>
@@ -634,7 +633,7 @@ export const ChatInterface = memo(() => {
                       ?.type === "group"
                       ? `${conversations.find(c => c.id === selectedConversation)?.participants.length} membros`
                       : "Online"
-                    });
+                    }
                   </p>
                 </div>
               </div>
@@ -724,7 +723,7 @@ export const ChatInterface = memo(() => {
                 <Input
                   placeholder="Digite uma mensagem..."
                   value={newMessage}
-                  onChange={handleChange}
+                  onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />

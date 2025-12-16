@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -138,7 +137,7 @@ const IoTRealtimeSensors: React.FC = () => {
     case "offline": return "text-muted-foreground";
     default: return "text-muted-foreground";
     }
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -294,6 +293,6 @@ const IoTRealtimeSensors: React.FC = () => {
       </div>
     </div>
   );
-});
+};
 
 export default IoTRealtimeSensors;

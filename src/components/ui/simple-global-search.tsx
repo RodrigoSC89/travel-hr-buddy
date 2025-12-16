@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";;;
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Search, Users, BarChart3, Settings, Bot, Ship, Shield, Anchor, Leaf } from "lucide-react";
+import { Search, FileText, Users, Calendar, BarChart3, Settings, Plane, Hotel, Bot, Trophy, Ship, Shield, Anchor, Leaf } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface SearchResult {
   id: string;
@@ -117,6 +118,7 @@ export const SimpleGlobalSearch: React.FC = () => {
         .eq("enabled", true);
       
       if (error) {
+        console.log("No tenant_modules table available, using static results");
         setSearchResults(staticResults);
         return;
       }
@@ -145,7 +147,6 @@ export const SimpleGlobalSearch: React.FC = () => {
       
       setSearchResults(allResults);
     } catch (error) {
-      console.error("Error loading modules:", error);
       console.error("Error loading modules:", error);
       // Fallback to static results on error
       setSearchResults(staticResults);
@@ -194,7 +195,7 @@ export const SimpleGlobalSearch: React.FC = () => {
       <Button
         variant="outline"
         className="relative w-full justify-start text-sm text-muted-foreground h-9"
-        onClick={handleSetOpen}
+        onClick={() => setOpen(true)}
       >
         <Search className="mr-2 h-4 w-4" />
         <span className="hidden lg:inline-flex">Buscar no sistema...</span>

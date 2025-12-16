@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useEffect, useRef, useState } from "react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Truck, Package } from "lucide-react";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Set your Mapbox access token (should be in environment variables)
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 if (!MAPBOX_TOKEN) {
+  console.warn("Mapbox token not configured. Map functionality will be limited.");
 }
 
 interface DeliveryLocation {
@@ -30,7 +30,7 @@ interface DeliveryMapProps {
   deliveries: DeliveryLocation[];
 }
 
-export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
+export function DeliveryMap({ deliveries }: DeliveryMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const mapboxRef = useRef<any>(null);
@@ -40,6 +40,7 @@ export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
     if (!mapContainer.current || map.current) return;
 
     if (!MAPBOX_TOKEN) {
+      console.error("Mapbox token is required for map functionality");
       setIsLoading(false);
       return;
     }
@@ -71,7 +72,6 @@ export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
           }
         });
       } catch (error) {
-        console.error("Error initializing map:", error);
         console.error("Error initializing map:", error);
         if (mounted) setIsLoading(false);
       }
@@ -299,4 +299,4 @@ export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
       </CardContent>
     </Card>
   );
-});
+}

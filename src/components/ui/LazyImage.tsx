@@ -3,7 +3,7 @@
  * PATCH 624 - Carregamento otimizado de imagens
  */
 
-import { memo, memo, useEffect, useRef, useState, useCallback } from "react";;;
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface LazyImageProps {
@@ -18,7 +18,7 @@ interface LazyImageProps {
   onError?: () => void;
 }
 
-export const LazyImage = memo(function({
+export function LazyImage({
   src,
   alt,
   className,
@@ -60,12 +60,12 @@ export const LazyImage = memo(function({
   const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-  });
+  };
 
   const handleError = () => {
     setHasError(true);
     onError?.();
-  });
+  };
 
   return (
     <div
@@ -114,7 +114,7 @@ export const LazyImage = memo(function({
 /**
  * Avatar com lazy loading
  */
-export const LazyAvatar = memo(function({
+export function LazyAvatar({
   src,
   alt,
   fallback,
@@ -154,8 +154,8 @@ export const LazyAvatar = memo(function({
           alt={alt}
           loading="lazy"
           decoding="async"
-          onLoad={() => setIsLoaded(true}
-          onError={() => setHasError(true}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setHasError(true)}
           className={cn(
             "absolute inset-0 w-full h-full object-cover transition-opacity duration-200",
             isLoaded ? "opacity-100" : "opacity-0"
@@ -164,4 +164,4 @@ export const LazyAvatar = memo(function({
       )}
     </div>
   );
-});
+}

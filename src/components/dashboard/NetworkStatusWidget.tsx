@@ -1,5 +1,4 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
  * PATCH 900 - Network Status Widget Otimizado
  * Removidos intervals excessivos
  */
@@ -30,16 +29,16 @@ const NetworkStatusWidgetComponent: React.FC = () => {
   const [stats, setStats] = useState<NetworkStats>({
     downlink: 10,
     rtt: 50,
-    effectiveType: "4g",
+    effectiveType: '4g',
     isOnline: navigator.onLine,
   });
 
   const updateStats = useCallback(() => {
-    const connection = (navigator as unknown).connection;
+    const connection = (navigator as any).connection;
     setStats({
       downlink: connection?.downlink || 10,
       rtt: connection?.rtt || 50,
-      effectiveType: connection?.effectiveType || "4g",
+      effectiveType: connection?.effectiveType || '4g',
       isOnline: navigator.onLine,
     });
   }, []);
@@ -48,18 +47,18 @@ const NetworkStatusWidgetComponent: React.FC = () => {
     updateStats();
     
     // Apenas eventos, sem polling
-    window.addEventListener("online", updateStats);
-    window.addEventListener("offline", updateStats);
+    window.addEventListener('online', updateStats);
+    window.addEventListener('offline', updateStats);
     
-    if ("connection" in navigator) {
-      (navigator as unknown).connection?.addEventListener("change", updateStats);
+    if ('connection' in navigator) {
+      (navigator as any).connection?.addEventListener('change', updateStats);
     }
 
     return () => {
-      window.removeEventListener("online", updateStats);
-      window.removeEventListener("offline", updateStats);
-      if ("connection" in navigator) {
-        (navigator as unknown).connection?.removeEventListener("change", updateStats);
+      window.removeEventListener('online', updateStats);
+      window.removeEventListener('offline', updateStats);
+      if ('connection' in navigator) {
+        (navigator as any).connection?.removeEventListener('change', updateStats);
       }
     };
   }, [updateStats]);
@@ -101,7 +100,7 @@ const NetworkStatusWidgetComponent: React.FC = () => {
           </div>
           <div className="flex items-center gap-2">
             <Badge variant={stats.isOnline ? "default" : "destructive"} className="text-xs font-semibold">
-              {stats.isOnline ? "Online" : "Offline"}
+              {stats.isOnline ? 'Online' : 'Offline'}
             </Badge>
             <Button variant="ghost" size="icon" className="h-7 w-7" onClick={updateStats}>
               <RefreshCw className="h-3.5 w-3.5" />

@@ -1,9 +1,9 @@
 /**
  * Fuel Manager Page
  */
-import React, { Suspense } from "react";
-import { FuelManager } from "@/modules/fuel-manager";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import React, { Suspense } from 'react';
+import { FuelManager } from '@/modules/fuel-manager';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const FuelManagerPage = () => {
   return (

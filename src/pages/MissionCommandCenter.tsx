@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useEffect, useState } from "react";;
  * Mission Command Center
  * PATCH UNIFY-8.0 - Fusão dos módulos de Missão
  * 
@@ -111,7 +110,7 @@ const MissionCommandCenter: React.FC = () => {
     status: "planned",
     description: "",
     location: ""
-  };
+  });
 
   // Mission Control state
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -224,7 +223,7 @@ const MissionCommandCenter: React.FC = () => {
       location: ""
     });
     setEditingLog(null);
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -238,52 +237,52 @@ const MissionCommandCenter: React.FC = () => {
 
   const getStatusColor = (status: ModuleStatus["status"]) => {
     switch (status) {
-    case "operational": return "text-green-500 bg-green-500/10";
-    case "warning": return "text-yellow-500 bg-yellow-500/10";
-    case "critical": return "text-red-500 bg-red-500/10";
-    case "offline": return "text-gray-500 bg-gray-500/10";
-    default: return "text-gray-500 bg-gray-500/10";
+      case "operational": return "text-green-500 bg-green-500/10";
+      case "warning": return "text-yellow-500 bg-yellow-500/10";
+      case "critical": return "text-red-500 bg-red-500/10";
+      case "offline": return "text-gray-500 bg-gray-500/10";
+      default: return "text-gray-500 bg-gray-500/10";
     }
   };
 
   const getStatusIcon = (moduleId: string) => {
     switch (moduleId) {
-    case "fleet": return <Ship className="w-5 h-5" />;
-    case "emergency": return <AlertTriangle className="w-5 h-5" />;
-    case "satellite": return <Satellite className="w-5 h-5" />;
-    case "weather": return <Cloud className="w-5 h-5" />;
-    default: return <Activity className="w-5 h-5" />;
+      case "fleet": return <Ship className="w-5 h-5" />;
+      case "emergency": return <AlertTriangle className="w-5 h-5" />;
+      case "satellite": return <Satellite className="w-5 h-5" />;
+      case "weather": return <Cloud className="w-5 h-5" />;
+      default: return <Activity className="w-5 h-5" />;
     }
   };
 
   const getMissionStatusIcon = (status: Mission["status"]) => {
     switch (status) {
-    case "in_progress": return <Activity className="w-4 h-4 text-blue-400 animate-pulse" />;
-    case "completed": return <CheckCircle2 className="w-4 h-4 text-green-400" />;
-    case "error": return <AlertCircle className="w-4 h-4 text-red-400" />;
-    case "paused": return <Pause className="w-4 h-4 text-yellow-400" />;
-    case "planning": return <Clock className="w-4 h-4 text-gray-400" />;
-    case "cancelled": return <XCircle className="w-4 h-4 text-gray-400" />;
-    default: return <Activity className="w-4 h-4" />;
+      case "in_progress": return <Activity className="w-4 h-4 text-blue-400 animate-pulse" />;
+      case "completed": return <CheckCircle2 className="w-4 h-4 text-green-400" />;
+      case "error": return <AlertCircle className="w-4 h-4 text-red-400" />;
+      case "paused": return <Pause className="w-4 h-4 text-yellow-400" />;
+      case "planning": return <Clock className="w-4 h-4 text-gray-400" />;
+      case "cancelled": return <XCircle className="w-4 h-4 text-gray-400" />;
+      default: return <Activity className="w-4 h-4" />;
     }
   };
 
   const getMissionStatusColor = (status: Mission["status"]) => {
     switch (status) {
-    case "in_progress": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    case "completed": return "bg-green-500/20 text-green-400 border-green-500/30";
-    case "error": return "bg-red-500/20 text-red-400 border-red-500/30";
-    case "paused": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+      case "in_progress": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      case "completed": return "bg-green-500/20 text-green-400 border-green-500/30";
+      case "error": return "bg-red-500/20 text-red-400 border-red-500/30";
+      case "paused": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+      default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {
-    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
-    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-    case "normal": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+      case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
+      case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+      case "normal": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+      default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
@@ -328,7 +327,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Mission Name</Label>
                     <Input
                       value={formData.missionName}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, missionName: e.target.value })}
                       required
                       className="bg-zinc-800 border-zinc-700"
                     />
@@ -339,14 +338,14 @@ const MissionCommandCenter: React.FC = () => {
                       <Input
                         type="date"
                         value={formData.missionDate}
-                        onChange={handleChange}
+                        onChange={(e) => setFormData({ ...formData, missionDate: e.target.value })}
                         required
                         className="bg-zinc-800 border-zinc-700"
                       />
                     </div>
                     <div>
                       <Label>Status</Label>
-                      <Select value={formData.status} onValueChange={(value: unknown) => setFormData({ ...formData, status: value })}>
+                      <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
                         <SelectTrigger className="bg-zinc-800 border-zinc-700">
                           <SelectValue />
                         </SelectTrigger>
@@ -363,7 +362,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Location</Label>
                     <Input
                       value={formData.location}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       className="bg-zinc-800 border-zinc-700"
                     />
                   </div>
@@ -371,7 +370,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Crew Members (comma-separated)</Label>
                     <Input
                       value={formData.crewMembers?.join(", ")}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, crewMembers: e.target.value.split(",").map(s => s.trim()) })}
                       className="bg-zinc-800 border-zinc-700"
                     />
                   </div>
@@ -379,7 +378,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Description</Label>
                     <Textarea
                       value={formData.description}
-                      onChange={handleChange}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                       rows={4}
                       className="bg-zinc-800 border-zinc-700"
                     />
@@ -521,7 +520,7 @@ const MissionCommandCenter: React.FC = () => {
             <Card className="p-4 bg-zinc-800/50 border-zinc-700">
               <div className="flex items-center gap-4">
                 <Filter className="h-4 w-4" />
-                <Select value={statusFilter || "all"} onValueChange={(value) => setStatusFilter(value === "all" ? "" : value}>
+                <Select value={statusFilter || "all"} onValueChange={(value) => setStatusFilter(value === "all" ? "" : value)}>
                   <SelectTrigger className="w-48 bg-zinc-900 border-zinc-700">
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
@@ -577,7 +576,7 @@ const MissionCommandCenter: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="border-zinc-600 hover:bg-zinc-700"
-                          onClick={() => log.id && handleDelete(log.id}
+                          onClick={() => log.id && handleDelete(log.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

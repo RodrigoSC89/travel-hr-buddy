@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -126,9 +126,10 @@ export default function AdvancedCopilot() {
             systems: ["Propulsão", "DP", "Geração"],
           },
         },
-      };
+      });
 
       if (error) {
+        console.error("Supabase function error:", error);
         
         // Fallback: generate local response when edge function fails
         const fallbackResponse = generateLocalResponse(input);
@@ -163,7 +164,6 @@ export default function AdvancedCopilot() {
       }
     } catch (error) {
       console.error("Copilot error:", error);
-      console.error("Copilot error:", error);
       
       // Fallback response when request fails completely
       const fallbackResponse = generateLocalResponse(input);
@@ -189,23 +189,23 @@ export default function AdvancedCopilot() {
     const input = userInput.toLowerCase();
     
     if (input.includes("job") || input.includes("criar") || input.includes("manutenção")) {
-      return "Entendi que você precisa de suporte com manutenção. Para criar um novo job:\n\n1. Clique em \"Novo Plano\" no topo da página\n2. Preencha os dados do equipamento e tipo de manutenção\n3. Defina a prioridade e data programada\n\nPosso ajudar com mais alguma coisa?";
+      return `Entendi que você precisa de suporte com manutenção. Para criar um novo job:\n\n1. Clique em "Novo Plano" no topo da página\n2. Preencha os dados do equipamento e tipo de manutenção\n3. Defina a prioridade e data programada\n\nPosso ajudar com mais alguma coisa?`;
     }
     
     if (input.includes("vazamento") || input.includes("falha") || input.includes("problema")) {
-      return "Para problemas técnicos como vazamentos ou falhas:\n\n**Ações Recomendadas:**\n1. Isole o sistema afetado se possível\n2. Documente com fotos e descrição detalhada\n3. Verifique o histórico de manutenções do equipamento\n4. Crie um job corretivo com prioridade alta\n\n**Próximos passos:** Acesse a aba \"Jobs\" para registrar o problema.";
+      return `Para problemas técnicos como vazamentos ou falhas:\n\n**Ações Recomendadas:**\n1. Isole o sistema afetado se possível\n2. Documente com fotos e descrição detalhada\n3. Verifique o histórico de manutenções do equipamento\n4. Crie um job corretivo com prioridade alta\n\n**Próximos passos:** Acesse a aba "Jobs" para registrar o problema.`;
     }
     
     if (input.includes("thruster") || input.includes("dp") || input.includes("posicionamento")) {
-      return "Para questões de Posicionamento Dinâmico (DP):\n\n**Verificações importantes:**\n- Status dos thrusters\n- Sistemas de referência (DGNSS, HPR)\n- Power Management System\n- Redundância operacional\n\nConsulte o manual ISM ou entre em contato com o comandante para procedimentos específicos.";
+      return `Para questões de Posicionamento Dinâmico (DP):\n\n**Verificações importantes:**\n- Status dos thrusters\n- Sistemas de referência (DGNSS, HPR)\n- Power Management System\n- Redundância operacional\n\nConsulte o manual ISM ou entre em contato com o comandante para procedimentos específicos.`;
     }
     
     if (input.includes("relatório") || input.includes("conformidade") || input.includes("auditoria")) {
-      return "Para relatórios de conformidade:\n\n1. Acesse a aba \"Jobs\" para ver histórico de manutenções\n2. Use a aba \"Timeline\" para visão cronológica\n3. Exporte os dados pelo botão \"Exportar\"\n\nRelatórios detalhados incluem: taxa de conclusão, MTBF, MTTR e compliance com normas ISM/IMCA.";
+      return `Para relatórios de conformidade:\n\n1. Acesse a aba "Jobs" para ver histórico de manutenções\n2. Use a aba "Timeline" para visão cronológica\n3. Exporte os dados pelo botão "Exportar"\n\nRelatórios detalhados incluem: taxa de conclusão, MTBF, MTTR e compliance com normas ISM/IMCA.`;
     }
     
     if (input.includes("oi") || input.includes("olá") || input.includes("bom dia") || input.includes("boa tarde")) {
-      return "Olá! Sou o Copilot de Manutenção Inteligente. Posso ajudar com:\n\n🔧 **Criar jobs** de manutenção\n🔍 **Diagnosticar** problemas técnicos\n📋 **Consultar procedimentos** ISM/IMCA\n📊 **Gerar relatórios** de conformidade\n\nComo posso ajudá-lo hoje?";
+      return `Olá! Sou o Copilot de Manutenção Inteligente. Posso ajudar com:\n\n🔧 **Criar jobs** de manutenção\n🔍 **Diagnosticar** problemas técnicos\n📋 **Consultar procedimentos** ISM/IMCA\n📊 **Gerar relatórios** de conformidade\n\nComo posso ajudá-lo hoje?`;
     }
     
     return `Entendi sua solicitação: "${userInput}"\n\nPosso ajudar com:\n- Criar jobs de manutenção preventiva/corretiva\n- Diagnosticar problemas em equipamentos\n- Consultar procedimentos técnicos\n- Verificar status de manutenções\n\nPor favor, descreva com mais detalhes o que você precisa.`;
@@ -221,7 +221,6 @@ export default function AdvancedCopilot() {
       utterance.onend = () => setIsSpeaking(false);
       speechSynthesis.speak(utterance);
     } catch (error) {
-      console.error("TTS error:", error);
       console.error("TTS error:", error);
       setIsSpeaking(false);
     }
@@ -247,25 +246,26 @@ export default function AdvancedCopilot() {
     recognitionRef.current.onend = () => setIsListening(false);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognitionRef.current.onresult = (event: Event) => {
+    recognitionRef.current.onresult = (event: any) => {
       const transcript = Array.from(event.results)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((result: unknown) => result[0].transcript)
+        .map((result: any) => result[0].transcript)
         .join("");
       setInput(transcript);
 
       if (event.results[0].isFinal) {
         setInput(transcript);
       }
-    });
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
+    recognitionRef.current.onerror = (event: any) => {
+      console.error("Speech recognition error:", event.error);
       setIsListening(false);
-    });
+    };
 
     recognitionRef.current.start();
-  });
+  };
 
   const stopListening = () => {
     if (recognitionRef.current) {
@@ -287,27 +287,27 @@ export default function AdvancedCopilot() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical":
-      return "bg-destructive text-destructive-foreground";
-    case "high":
-      return "bg-orange-500 text-white";
-    case "medium":
-      return "bg-warning text-warning-foreground";
-    default:
-      return "bg-muted text-muted-foreground";
+      case "critical":
+        return "bg-destructive text-destructive-foreground";
+      case "high":
+        return "bg-orange-500 text-white";
+      case "medium":
+        return "bg-warning text-warning-foreground";
+      default:
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-    case "maintenance":
-      return <Wrench className="h-4 w-4" />;
-    case "certification":
-      return <Clock className="h-4 w-4" />;
-    case "risk":
-      return <AlertTriangle className="h-4 w-4" />;
-    default:
-      return <Lightbulb className="h-4 w-4" />;
+      case "maintenance":
+        return <Wrench className="h-4 w-4" />;
+      case "certification":
+        return <Clock className="h-4 w-4" />;
+      case "risk":
+        return <AlertTriangle className="h-4 w-4" />;
+      default:
+        return <Lightbulb className="h-4 w-4" />;
     }
   };
 
@@ -329,7 +329,7 @@ export default function AdvancedCopilot() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={handleSetVoiceEnabled}
+                onClick={() => setVoiceEnabled(!voiceEnabled)}
                 title={voiceEnabled ? "Desativar voz" : "Ativar voz"}
               >
                 {voiceEnabled ? (
@@ -356,13 +356,13 @@ export default function AdvancedCopilot() {
                     Descreva problemas, crie jobs por voz ou texto, e receba diagnósticos baseados em IA.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2 mt-4">
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={handleSetInput}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setInput("Criar job urgente para vazamento na bomba hidráulica STBD")}>
                       "Criar job urgente..."
                     </Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={handleSetInput}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setInput("Qual procedimento para blackout parcial no bus B?")}>
                       "Procedimento blackout..."
                     </Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={handleSetInput}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setInput("Gerar relatório de conformidade da semana")}>
                       "Relatório conformidade..."
                     </Badge>
                   </div>
@@ -425,7 +425,7 @@ export default function AdvancedCopilot() {
             <Textarea
               placeholder="Descreva o problema ou comando... (voz ou texto)"
               value={input}
-              onChange={handleChange}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -488,7 +488,7 @@ export default function AdvancedCopilot() {
               <Card
                 key={suggestion.id}
                 className="cursor-pointer hover:bg-muted/50 transition-colors"
-                onClick={() => handlehandleSuggestionAction}
+                onClick={() => handleSuggestionAction(suggestion)}
               >
                 <CardContent className="p-3">
                   <div className="flex items-start gap-2">

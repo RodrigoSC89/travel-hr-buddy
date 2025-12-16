@@ -1,10 +1,9 @@
 /**
-import { useEffect, useState } from "react";;
  * Real-Time Metrics Dashboard - PATCH 837
  * Live analytics and performance metrics
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { 
   Activity, 
   Users, 
@@ -15,13 +14,13 @@ import {
   Wifi,
   Server,
   Globe
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
-import { usePresence } from "@/lib/collaboration/realtime-presence";
-import { useNetworkStatus } from "@/lib/performance/network-monitor";
-import { useWebVitals } from "@/lib/performance/web-vitals-monitor";
+} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
+import { usePresence } from '@/lib/collaboration/realtime-presence';
+import { useNetworkStatus } from '@/lib/performance/network-monitor';
+import { useWebVitals } from '@/lib/performance/web-vitals-monitor';
 
 interface MetricCardProps {
   title: string;
@@ -32,13 +31,13 @@ interface MetricCardProps {
   subtext?: string;
 }
 
-function MetricCard({ title, value, change, icon: Icon, color = "primary", subtext }: MetricCardProps) {
+function MetricCard({ title, value, change, icon: Icon, color = 'primary', subtext }: MetricCardProps) {
   const colorClasses: Record<string, string> = {
-    primary: "text-primary bg-primary/10",
-    green: "text-green-500 bg-green-500/10",
-    yellow: "text-yellow-500 bg-yellow-500/10",
-    red: "text-red-500 bg-red-500/10",
-    blue: "text-blue-500 bg-blue-500/10",
+    primary: 'text-primary bg-primary/10',
+    green: 'text-green-500 bg-green-500/10',
+    yellow: 'text-yellow-500 bg-yellow-500/10',
+    red: 'text-red-500 bg-red-500/10',
+    blue: 'text-blue-500 bg-blue-500/10',
   };
   
   return (
@@ -52,7 +51,7 @@ function MetricCard({ title, value, change, icon: Icon, color = "primary", subte
               <p className="text-xs text-muted-foreground mt-1">{subtext}</p>
             )}
           </div>
-          <div className={cn("p-2 rounded-lg", colorClasses[color])}>
+          <div className={cn('p-2 rounded-lg', colorClasses[color])}>
             <Icon className="h-5 w-5" />
           </div>
         </div>
@@ -64,10 +63,10 @@ function MetricCard({ title, value, change, icon: Icon, color = "primary", subte
               <TrendingDown className="h-3.5 w-3.5 text-red-500" />
             )}
             <span className={cn(
-              "text-xs font-medium",
-              change >= 0 ? "text-green-500" : "text-red-500"
+              'text-xs font-medium',
+              change >= 0 ? 'text-green-500' : 'text-red-500'
             )}>
-              {change >= 0 ? "+" : ""}{change}%
+              {change >= 0 ? '+' : ''}{change}%
             </span>
             <span className="text-xs text-muted-foreground">vs ontem</span>
           </div>
@@ -85,13 +84,13 @@ interface PerformanceGaugeProps {
   thresholds?: { good: number; warning: number };
 }
 
-function PerformanceGauge({ label, value, max, unit = "ms", thresholds }: PerformanceGaugeProps) {
+function PerformanceGauge({ label, value, max, unit = 'ms', thresholds }: PerformanceGaugeProps) {
   const percent = Math.min((value / max) * 100, 100);
   
-  let color = "bg-green-500";
+  let color = 'bg-green-500';
   if (thresholds) {
-    if (value > thresholds.warning) color = "bg-red-500";
-    else if (value > thresholds.good) color = "bg-yellow-500";
+    if (value > thresholds.warning) color = 'bg-red-500';
+    else if (value > thresholds.good) color = 'bg-yellow-500';
   }
   
   return (
@@ -102,7 +101,7 @@ function PerformanceGauge({ label, value, max, unit = "ms", thresholds }: Perfor
       </div>
       <div className="h-2 bg-muted rounded-full overflow-hidden">
         <div
-          className={cn("h-full rounded-full transition-all duration-500", color)}
+          className={cn('h-full rounded-full transition-all duration-500', color)}
           style={{ width: `${percent}%` }}
         />
       </div>
@@ -110,7 +109,7 @@ function PerformanceGauge({ label, value, max, unit = "ms", thresholds }: Perfor
   );
 }
 
-export const RealTimeMetrics = memo(function() {
+export function RealTimeMetrics() {
   const { users } = usePresence();
   const networkStatus = useNetworkStatus();
   const webVitals = useWebVitals();
@@ -121,10 +120,10 @@ export const RealTimeMetrics = memo(function() {
     return metric?.value || 0;
   };
   
-  const lcp = getMetricValue("LCP");
-  const fid = getMetricValue("FID");
-  const cls = getMetricValue("CLS");
-  const ttfb = getMetricValue("TTFB");
+  const lcp = getMetricValue('LCP');
+  const fid = getMetricValue('FID');
+  const cls = getMetricValue('CLS');
+  const ttfb = getMetricValue('TTFB');
   
   const [sessionDuration, setSessionDuration] = useState(0);
   const [pageViews, setPageViews] = useState(1);
@@ -141,23 +140,23 @@ export const RealTimeMetrics = memo(function() {
   // Track page views
   useEffect(() => {
     const handleNavigation = () => setPageViews(p => p + 1);
-    window.addEventListener("popstate", handleNavigation);
-    return () => window.removeEventListener("popstate", handleNavigation);
+    window.addEventListener('popstate', handleNavigation);
+    return () => window.removeEventListener('popstate', handleNavigation);
   }, []);
   
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
   
   const getNetworkColor = () => {
     switch (networkStatus.quality) {
-    case "excellent": return "green";
-    case "good": return "blue";
-    case "fair": return "yellow";
-    case "poor": return "red";
-    default: return "primary";
+      case 'excellent': return 'green';
+      case 'good': return 'blue';
+      case 'fair': return 'yellow';
+      case 'poor': return 'red';
+      default: return 'primary';
     }
   };
   
@@ -250,17 +249,17 @@ export const RealTimeMetrics = memo(function() {
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Economia de Dados</p>
-              <p className="text-lg font-semibold">{networkStatus.saveData ? "Ativo" : "Inativo"}</p>
+              <p className="text-lg font-semibold">{networkStatus.saveData ? 'Ativo' : 'Inativo'}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Status</p>
               <div className="flex items-center gap-2">
                 <span className={cn(
-                  "h-2.5 w-2.5 rounded-full",
-                  networkStatus.online ? "bg-green-500" : "bg-red-500"
+                  'h-2.5 w-2.5 rounded-full',
+                  networkStatus.online ? 'bg-green-500' : 'bg-red-500'
                 )} />
                 <p className="text-lg font-semibold">
-                  {networkStatus.online ? "Online" : "Offline"}
+                  {networkStatus.online ? 'Online' : 'Offline'}
                 </p>
               </div>
             </div>

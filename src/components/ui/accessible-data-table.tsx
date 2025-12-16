@@ -1,14 +1,17 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Search, 
-  Download,
+  Filter, 
+  Download, 
+  Calendar,
+  Users,
+  Ship,
   AlertTriangle,
   CheckCircle2,
   Clock,
@@ -174,7 +177,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 type="text"
                 placeholder={searchPlaceholder}
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 bg-background text-foreground border-border focus:ring-2 focus:ring-primary/50"
                 aria-label="Campo de busca"
               />
@@ -208,7 +211,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 <th className="text-left p-4 font-semibold text-foreground">
                   <Button
                     variant="ghost"
-                    onClick={() => handlehandleSort}
+                    onClick={() => handleSort("name")}
                     className="p-0 h-auto font-semibold text-foreground hover:text-primary"
                     aria-label="Ordenar por nome"
                   >
@@ -219,7 +222,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 <th className="text-left p-4 font-semibold text-foreground">
                   <Button
                     variant="ghost"
-                    onClick={() => handlehandleSort}
+                    onClick={() => handleSort("status")}
                     className="p-0 h-auto font-semibold text-foreground hover:text-primary"
                     aria-label="Ordenar por status"
                   >
@@ -231,7 +234,7 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                 <th className="text-left p-4 font-semibold text-foreground">
                   <Button
                     variant="ghost"
-                    onClick={() => handlehandleSort}
+                    onClick={() => handleSort("priority")}
                     className="p-0 h-auto font-semibold text-foreground hover:text-primary"
                     aria-label="Ordenar por prioridade"
                   >
@@ -291,20 +294,20 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
                           <DropdownMenuLabel className="text-popover-foreground">Ações</DropdownMenuLabel>
                           <DropdownMenuSeparator className="bg-border" />
                           <DropdownMenuItem 
-                            onClick={() => handlehandleRowAction}
+                            onClick={() => handleRowAction("view", row)}
                             className="text-popover-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
                           >
                             <Eye className="w-4 h-4 mr-2" />
                             Visualizar
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handlehandleRowAction}
+                            onClick={() => handleRowAction("edit", row)}
                             className="text-popover-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer"
                           >
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handlehandleRowAction}
+                            onClick={() => handleRowAction("delete", row)}
                             className="text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
                           >
                             Excluir

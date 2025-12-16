@@ -1,4 +1,3 @@
-
 /**
  * PATCH 135.0 - AI Self-Healing + Logs Analyzer
  * PATCH 659 - TypeScript fixes applied
@@ -18,7 +17,7 @@ import { logsEngine } from "@/lib/monitoring/LogsEngine";
 import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
 
-type SystemLogRow = Database["public"]["Tables"]["system_logs"]["Row"];
+type SystemLogRow = Database['public']['Tables']['system_logs']['Row'];
 
 export interface LogAnalysisResult {
   anomalies: Anomaly[];
@@ -104,7 +103,7 @@ const analyzeLogsData = async (allLogs: (SystemLogRow | any)[]): Promise<LogAnal
       recommendations: [],
       overallHealth: "healthy",
       analyzedAt: new Date().toISOString()
-    });
+    };
   }
 
   // Detect patterns
@@ -262,7 +261,7 @@ Regras:
     // Return fallback recommendations
     return generateFallbackRecommendations(anomalies);
   }
-});
+};
 
 /**
  * Parse AI recommendations response
@@ -371,7 +370,7 @@ export const storeAutoFixHistory = async (
     logger.error("Error storing autofix history", error);
     return false;
   }
-});
+};
 
 // Helper functions
 

@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrganizationLayout } from "@/components/layout/organization-layout";
@@ -206,12 +205,12 @@ export default function CommandCenter() {
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    });
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
   
   const loadingRef = useRef(false);
@@ -224,7 +223,7 @@ export default function CommandCenter() {
       reports: FileText,
       calendar: Calendar,
       settings: CheckCircle
-    });
+    };
     return iconMap[moduleName || ""] || Activity;
   };
 
@@ -315,7 +314,7 @@ export default function CommandCenter() {
         setIsLoading(false);
         loadingRef.current = false;
       }
-    });
+    };
 
     loadData();
   }, [currentOrganization?.id]);
@@ -391,7 +390,7 @@ export default function CommandCenter() {
               </Button>
               
               <Button 
-                onClick={() => handleopenBrain}
+                onClick={() => openBrain("Command Center - Dashboard Executivo e Operacional")}
                 className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
               >
                 <Brain className="h-4 w-4 mr-2" />
@@ -438,7 +437,7 @@ export default function CommandCenter() {
                           className={`${selectedPeriod === period
                             ? "bg-primary text-primary-foreground"
                             : "bg-secondary text-secondary-foreground shadow-sm border border-border"}`}
-                          onClick={handleSetSelectedPeriod}
+                          onClick={() => setSelectedPeriod(period)}
                         >
                           {period === "weekly" ? "Semanal" :
                             period === "monthly" ? "Mensal" :
@@ -474,35 +473,35 @@ export default function CommandCenter() {
                   const visual = kpiVisuals[index % kpiVisuals.length];
                   const IconComponent = visual.icon;
                   return (
-                    <Card
-                      key={index}
-                      className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60"
-                    >
-                      <CardContent className="p-6 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm font-semibold text-slate-500 dark:text-white/70">
-                              {kpi.metric}
-                            </p>
-                            <p className="text-3xl font-semibold text-slate-900 dark:text-white">{kpi.value}</p>
-                          </div>
-                          <div className={`rounded-2xl border ${visual.ringClass} p-3`}>
-                            <IconComponent className="h-6 w-6" />
-                          </div>
+                  <Card
+                    key={index}
+                    className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60"
+                  >
+                    <CardContent className="p-6 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-500 dark:text-white/70">
+                            {kpi.metric}
+                          </p>
+                          <p className="text-3xl font-semibold text-slate-900 dark:text-white">{kpi.value}</p>
                         </div>
-                        <Badge
-                          variant="outline"
-                          className={`border-0 px-3 py-1 text-xs font-medium ${
-                            kpi.trend === "up"
-                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200"
-                              : "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-200"
-                          }`}
-                        >
-                          {kpi.change} vs período anterior
-                        </Badge>
-                      </CardContent>
-                    </Card>
-                  );
+                        <div className={`rounded-2xl border ${visual.ringClass} p-3`}>
+                          <IconComponent className="h-6 w-6" />
+                        </div>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className={`border-0 px-3 py-1 text-xs font-medium ${
+                          kpi.trend === "up"
+                            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200"
+                            : "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-200"
+                        }`}
+                      >
+                        {kpi.change} vs período anterior
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                );
                 })}
               </div>
 
@@ -542,7 +541,7 @@ export default function CommandCenter() {
                         </div>
                         <Button 
                           className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                          onClick={() => handlenavigate}
+                          onClick={() => navigate("/peo-dp")}
                         >
                           Acessar PEO-DP
                         </Button>
@@ -574,7 +573,7 @@ export default function CommandCenter() {
                         </div>
                         <Button 
                           className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
-                          onClick={() => handlenavigate}
+                          onClick={() => navigate("/sgso")}
                         >
                           Acessar SGSO
                         </Button>
@@ -606,7 +605,7 @@ export default function CommandCenter() {
                         </div>
                         <Button 
                           className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold"
-                          onClick={() => handlenavigate}
+                          onClick={() => navigate("/peotram")}
                         >
                           Acessar PEOTRAM
                         </Button>

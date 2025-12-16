@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * AI Navigation Assistant - Assistente de Navegação
  * Rotas otimizadas e assistência de navegação com IA
  */
@@ -184,7 +183,7 @@ Formate a resposta em markdown estruturado com informações práticas para nave
               <Input
                 id="origin"
                 value={origin}
-                onChange={handleChange}
+                onChange={(e) => setOrigin(e.target.value)}
                 placeholder="Ex: Santos, BR"
               />
             </div>
@@ -201,7 +200,7 @@ Formate a resposta em markdown estruturado com informações práticas para nave
               <Input
                 id="destination"
                 value={destination}
-                onChange={handleChange}
+                onChange={(e) => setDestination(e.target.value)}
                 placeholder="Ex: Rio de Janeiro, BR"
               />
             </div>
@@ -235,7 +234,7 @@ Formate a resposta em markdown estruturado com informações práticas para nave
                     variant="outline"
                     size="sm"
                     className="w-full justify-between text-xs"
-                    onClick={() => handleselectRoute}
+                    onClick={() => selectRoute(route)}
                   >
                     <span>{route.origin} → {route.destination}</span>
                     <Badge variant="secondary">{route.distance}</Badge>

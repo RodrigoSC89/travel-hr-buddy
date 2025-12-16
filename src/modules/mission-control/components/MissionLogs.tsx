@@ -1,5 +1,4 @@
 /**
-import { useState, useCallback } from "react";;
  * PATCH 452 - Mission Logs Component
  */
 
@@ -53,21 +52,21 @@ export const MissionLogs: React.FC<MissionLogsProps> = ({ logs, onRefresh }) => 
             <Button
               variant={filter === "all" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilter}
+              onClick={() => setFilter("all")}
             >
               All
             </Button>
             <Button
               variant={filter === "critical" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilter}
+              onClick={() => setFilter("critical")}
             >
               Critical
             </Button>
             <Button
               variant={filter === "error" ? "default" : "outline"}
               size="sm"
-              onClick={handleSetFilter}
+              onClick={() => setFilter("error")}
             >
               Error
             </Button>

@@ -47,6 +47,8 @@ class DataCompressionService {
       timeMs: performance.now() - startTime,
     };
 
+    console.debug("Data compressed", stats);
+
     return { compressed: compressedBytes, stats };
   }
 

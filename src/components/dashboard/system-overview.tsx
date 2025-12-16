@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -53,7 +52,7 @@ const SystemOverview = () => {
     default:
       return "text-muted-foreground bg-muted/20 border-muted/30";
     }
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

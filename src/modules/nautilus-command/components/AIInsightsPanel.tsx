@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * AI Insights Panel - Painel de Insights com IA
  */
 
@@ -22,7 +21,7 @@ interface AIInsightsPanelProps {
   context: SystemContext;
 }
 
-export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) {
+export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
   const { 
     generateBriefing, 
     analyzeAlerts, 
@@ -60,7 +59,7 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Insight exportado!");
-  });
+  };
 
   const quickActions = [
     {
@@ -168,7 +167,7 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
                   variant="ghost" 
                   size="sm" 
                   className="h-7"
-                  onClick={() => handleexportInsight}
+                  onClick={() => exportInsight(insights[activeInsight], activeInsight)}
                 >
                   <Download className="h-3 w-3 mr-1" />
                   Exportar
@@ -221,4 +220,4 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
       </CardContent>
     </Card>
   );
-});
+}

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -139,7 +138,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
     const matchesStatus = statusFilter === "all" || checklist.status === statusFilter;
     const matchesType = typeFilter === "all" || checklist.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -182,7 +181,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
             Gerencie inspeções e rotinas operacionais
           </p>
         </div>
-        <Button onClick={() => handleonTemplateSelect}>
+        <Button onClick={() => onTemplateSelect(templates[0])}>
           <PlusCircle className="w-4 h-4 mr-2" />
           Novo Checklist
         </Button>
@@ -202,7 +201,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
               <Input
                 placeholder="Buscar checklists..."
                 value={searchTerm}
-                onChange={handleChange}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
@@ -287,7 +286,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
 
                     <Button 
                       className="w-full mt-4" 
-                      onClick={() => handleonChecklistSelect}
+                      onClick={() => onChecklistSelect(checklist)}
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Abrir Checklist
@@ -339,7 +338,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
 
                   <Button 
                     className="w-full mt-4" 
-                    onClick={() => handleonTemplateSelect}
+                    onClick={() => onTemplateSelect(template)}
                   >
                     <PlusCircle className="w-4 h-4 mr-2" />
                     Criar Checklist

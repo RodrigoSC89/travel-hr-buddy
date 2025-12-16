@@ -1,4 +1,3 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,9 @@ import {
   Radio, 
   Phone, 
   Mail, 
-  MessageSquare,
+  MessageSquare, 
+  Bell, 
+  Users,
   Send,
   Mic,
   MicOff,
@@ -25,6 +26,7 @@ import {
   Plus,
   Clock,
   AlertTriangle,
+  CheckCircle,
   Megaphone,
   Settings
 } from "lucide-react";
@@ -294,10 +296,10 @@ export const PeotramCommunicationCenter: React.FC = () => {
                   <Textarea id="message-content" placeholder="Digite sua mensagem" rows={4} />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleSetIsNewMessageOpen}>
+                  <Button variant="outline" onClick={() => setIsNewMessageOpen(false)}>
                     Cancelar
                   </Button>
-                  <Button onClick={handleSetIsNewMessageOpen}>
+                  <Button onClick={() => setIsNewMessageOpen(false)}>
                     <Send className="w-4 h-4 mr-2" />
                     Enviar
                   </Button>
@@ -353,7 +355,7 @@ export const PeotramCommunicationCenter: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={handleSetIsMicMuted}
+                      onClick={() => setIsMicMuted(!isMicMuted)}
                       className={isMicMuted ? "bg-destructive/20" : ""}
                     >
                       {isMicMuted ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -361,7 +363,7 @@ export const PeotramCommunicationCenter: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={handleSetIsSpeakerMuted}
+                      onClick={() => setIsSpeakerMuted(!isSpeakerMuted)}
                       className={isSpeakerMuted ? "bg-destructive/20" : ""}
                     >
                       {isSpeakerMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
@@ -387,7 +389,7 @@ export const PeotramCommunicationCenter: React.FC = () => {
                         key={channel.id}
                         variant={selectedChannel === channel.id ? "default" : "outline"}
                         className="w-full justify-start"
-                        onClick={handleSetSelectedChannel}
+                        onClick={() => setSelectedChannel(channel.id)}
                       >
                         <Radio className="w-4 h-4 mr-2" />
                         <div className="text-left">

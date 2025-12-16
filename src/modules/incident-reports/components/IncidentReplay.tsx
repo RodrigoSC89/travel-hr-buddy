@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 472 - Incident Replay Component
  * Timeline-based incident replay with AI analysis
  */
@@ -101,7 +100,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
           return prev;
         }
         return prev + 1;
-  };
+      });
     }, 2000);
   };
 

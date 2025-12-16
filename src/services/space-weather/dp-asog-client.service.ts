@@ -69,7 +69,7 @@ export interface DPASOGPDOPResponse {
 
 export interface DPASOGStatusResponse {
   /** Status operacional */
-  status: "GREEN" | "AMBER" | "RED";
+  status: 'GREEN' | 'AMBER' | 'RED';
   /** Razões para o status */
   reasons: string[];
   /** Kp atual */
@@ -127,12 +127,12 @@ export class DPASOGClient {
 
   private getDefaultBaseUrl(): string {
     // Tenta obter da env var, senão usa localhost
-    if (typeof process !== "undefined" && process.env?.VITE_DP_ASOG_SERVICE_URL) {
+    if (typeof process !== 'undefined' && process.env?.VITE_DP_ASOG_SERVICE_URL) {
       return process.env.VITE_DP_ASOG_SERVICE_URL;
     }
     
     // Fallback para localhost (desenvolvimento)
-    return "http://localhost:8000";
+    return 'http://localhost:8000';
   }
 
   /**
@@ -166,7 +166,7 @@ export class DPASOGClient {
    * ```typescript
    * const client = new DPASOGClient();
    * const kp = await client.getKp();
-   * // Kp atual: 3.0
+   * console.log(`Kp atual: ${kp.kp}`); // Kp atual: 3.0
    * ```
    */
   async getKp(): Promise<DPASOGKpResponse> {
@@ -181,8 +181,8 @@ export class DPASOGClient {
       
       return await response.json();
     } catch (error) {
-      logger.error("[DPASOGClient] Failed to fetch Kp", error as Error);
-      throw new Error(`Failed to fetch Kp from DP ASOG Service: ${error instanceof Error ? error.message : "Unknown error"}`);
+      logger.error('[DPASOGClient] Failed to fetch Kp', error as Error);
+      throw new Error(`Failed to fetch Kp from DP ASOG Service: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -206,20 +206,23 @@ export class DPASOGClient {
    *   constellations: 'GPS,GALILEO'
    * });
    * 
-   *    *    * pdop.timeline.forEach(p => {
-   *      * });
+   * console.log(`Pior PDOP: ${pdop.worst_pdop}`);
+   * console.log(`Melhor PDOP: ${pdop.best_pdop}`);
+   * pdop.timeline.forEach(p => {
+   *   console.log(`${p.time}: PDOP=${p.pdop}, sats=${p.satellites}`);
+   * });
    * ```
    */
   async getPDOP(request: DPASOGPDOPRequest): Promise<DPASOGPDOPResponse> {
     const params = new URLSearchParams();
-    params.append("lat", request.lat.toString());
-    params.append("lon", request.lon.toString());
+    params.append('lat', request.lat.toString());
+    params.append('lon', request.lon.toString());
     
-    if (request.alt !== undefined) params.append("alt", request.alt.toString());
-    if (request.hours !== undefined) params.append("hours", request.hours.toString());
-    if (request.step_min !== undefined) params.append("step_min", request.step_min.toString());
-    if (request.elev_mask !== undefined) params.append("elev_mask", request.elev_mask.toString());
-    if (request.constellations) params.append("constellations", request.constellations);
+    if (request.alt !== undefined) params.append('alt', request.alt.toString());
+    if (request.hours !== undefined) params.append('hours', request.hours.toString());
+    if (request.step_min !== undefined) params.append('step_min', request.step_min.toString());
+    if (request.elev_mask !== undefined) params.append('elev_mask', request.elev_mask.toString());
+    if (request.constellations) params.append('constellations', request.constellations);
     
     const url = `${this.baseUrl}/gnss/pdop?${params.toString()}`;
     
@@ -232,8 +235,8 @@ export class DPASOGClient {
       
       return await response.json();
     } catch (error) {
-      logger.error("[DPASOGClient] Failed to fetch PDOP", error as Error, { lat: request.lat, lon: request.lon, hours: request.hours });
-      throw new Error(`Failed to fetch PDOP from DP ASOG Service: ${error instanceof Error ? error.message : "Unknown error"}`);
+      logger.error('[DPASOGClient] Failed to fetch PDOP', error as Error, { lat: request.lat, lon: request.lon, hours: request.hours });
+      throw new Error(`Failed to fetch PDOP from DP ASOG Service: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -259,22 +262,25 @@ export class DPASOGClient {
    *   hours: 6
    * });
    * 
-   * // GREEN, AMBER ou RED
-   * }`);
+   * console.log(`Status: ${status.status}`); // GREEN, AMBER ou RED
+   * console.log(`Razões: ${status.reasons.join(', ')}`);
    * 
    * if (status.status === 'RED') {
-   *      * } else if (status.status === 'AMBER') {
-   *      * } else {
-   *      * }
+   *   console.log('🔴 HOLD DP operations!');
+   * } else if (status.status === 'AMBER') {
+   *   console.log('🟡 CAUTION - Monitor closely');
+   * } else {
+   *   console.log('🟢 PROCEED');
+   * }
    * ```
    */
   async getStatus(request: DPASOGStatusRequest): Promise<DPASOGStatusResponse> {
     const params = new URLSearchParams();
-    params.append("lat", request.lat.toString());
-    params.append("lon", request.lon.toString());
+    params.append('lat', request.lat.toString());
+    params.append('lon', request.lon.toString());
     
-    if (request.hours !== undefined) params.append("hours", request.hours.toString());
-    if (request.alt !== undefined) params.append("alt", request.alt.toString());
+    if (request.hours !== undefined) params.append('hours', request.hours.toString());
+    if (request.alt !== undefined) params.append('alt', request.alt.toString());
     
     const url = `${this.baseUrl}/status?${params.toString()}`;
     
@@ -287,8 +293,8 @@ export class DPASOGClient {
       
       return await response.json();
     } catch (error) {
-      logger.error("[DPASOGClient] Failed to fetch status", error as Error, { lat: request.lat, lon: request.lon, hours: request.hours });
-      throw new Error(`Failed to fetch status from DP ASOG Service: ${error instanceof Error ? error.message : "Unknown error"}`);
+      logger.error('[DPASOGClient] Failed to fetch status', error as Error, { lat: request.lat, lon: request.lon, hours: request.hours });
+      throw new Error(`Failed to fetch status from DP ASOG Service: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -359,7 +365,7 @@ export async function getPDOPTimeline(
     hours,
     step_min: stepMin,
     elev_mask: elevMask,
-    constellations: "GPS,GALILEO",
+    constellations: 'GPS,GALILEO',
   });
   return response.timeline;
 }
@@ -376,8 +382,8 @@ export function mapDPASOGToSpaceWeatherStatus(
   dpasogStatus: DPASOGStatusResponse,
   dpasogPdop?: DPASOGPDOPResponse
 ): {
-  risk_level: "GREEN" | "AMBER" | "RED";
-  dp_gate_status: "PROCEED" | "CAUTION" | "HOLD";
+  risk_level: 'GREEN' | 'AMBER' | 'RED';
+  dp_gate_status: 'PROCEED' | 'CAUTION' | 'HOLD';
   kp_current: number;
   pdop_current: number;
   recommendations: string[];
@@ -386,25 +392,25 @@ export function mapDPASOGToSpaceWeatherStatus(
   const risk_level = dpasogStatus.status;
   
   const dp_gate_status =
-    risk_level === "RED" ? "HOLD" :
-      risk_level === "AMBER" ? "CAUTION" :
-        "PROCEED";
+    risk_level === 'RED' ? 'HOLD' :
+    risk_level === 'AMBER' ? 'CAUTION' :
+    'PROCEED';
   
   // Recomendações baseadas no status
   const recommendations: string[] = [];
   
-  if (risk_level === "RED") {
-    recommendations.push("🔴 DP GATE: HOLD - Conditions unfavorable");
+  if (risk_level === 'RED') {
+    recommendations.push('🔴 DP GATE: HOLD - Conditions unfavorable');
     recommendations.push(...dpasogStatus.reasons.map(r => `⚠️ ${r}`));
-    recommendations.push("→ Consider postponing DP operations");
-    recommendations.push("→ If critical, activate backup systems (INS/radar)");
-  } else if (risk_level === "AMBER") {
-    recommendations.push("🟡 DP GATE: CAUTION - Monitor closely");
+    recommendations.push('→ Consider postponing DP operations');
+    recommendations.push('→ If critical, activate backup systems (INS/radar)');
+  } else if (risk_level === 'AMBER') {
+    recommendations.push('🟡 DP GATE: CAUTION - Monitor closely');
     recommendations.push(...dpasogStatus.reasons.map(r => `⚠️ ${r}`));
-    recommendations.push("→ Increase monitoring frequency to 1-5 min");
-    recommendations.push("→ Verify backup systems ready");
+    recommendations.push('→ Increase monitoring frequency to 1-5 min');
+    recommendations.push('→ Verify backup systems ready');
   } else {
-    recommendations.push("🟢 DP GATE: PROCEED - Conditions nominal");
+    recommendations.push('🟢 DP GATE: PROCEED - Conditions nominal');
     recommendations.push(`→ Kp ${dpasogStatus.kp} (quiet to unsettled)`);
     recommendations.push(`→ PDOP ${dpasogStatus.worst_pdop.toFixed(1)} (good geometry)`);
   }
@@ -415,5 +421,5 @@ export function mapDPASOGToSpaceWeatherStatus(
     kp_current: dpasogStatus.kp,
     pdop_current: dpasogStatus.worst_pdop,
     recommendations,
-  });
+  };
 }

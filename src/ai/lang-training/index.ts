@@ -1,4 +1,3 @@
-
 /**
  * PATCH 575 - LLM Fine-tuning for Multilingual Support
  * Treinamento de IA com dados multilíngues
@@ -88,7 +87,7 @@ class LangTrainingEngine {
           de: ["Hallo", "Willkommen", "Fehler"],
         },
         quality_score: 0.95,
-      });
+      };
     }
     throw new Error(`Unknown dataset source: ${source}`);
   }
@@ -109,7 +108,7 @@ class LangTrainingEngine {
           bleu_score: Math.min(0.95, 0.5 + epoch * 0.09),
           perplexity: Math.max(1.5, 15 - epoch * 2),
           language_scores: {} as Record<SupportedLanguage, number>,
-        });
+        };
         for (const lang of config.languages) {
           metrics.language_scores[lang] = Math.min(0.95, 0.6 + epoch * 0.07);
         }

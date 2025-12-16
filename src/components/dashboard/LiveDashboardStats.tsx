@@ -6,7 +6,7 @@
 import React, { memo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Ship, 
   Users, 
@@ -14,9 +14,10 @@ import {
   AlertTriangle, 
   TrendingUp, 
   TrendingDown,
+  CheckCircle,
   Shield
 } from "lucide-react";
-import { useDashboardData } from "./index/DashboardDataProvider";
+import { useDashboardData, DashboardMetrics } from "./index/DashboardDataProvider";
 
 interface StatCardProps {
   title: string;

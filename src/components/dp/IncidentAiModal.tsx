@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,7 +23,6 @@ export default function IncidentAiModal() {
           setAnalysis(""); // Reset analysis when new incident is loaded
           localStorage.removeItem("incident_to_analyze");
         } catch (error) {
-          console.error("Error parsing incident data:", error);
           console.error("Error parsing incident data:", error);
         }
       }
@@ -51,12 +50,13 @@ export default function IncidentAiModal() {
     try {
       const { data, error } = await supabase.functions.invoke("dp-intel-analyze", {
         body: { incident },
-      };
+      });
 
       if (error) {
+        console.error("Error calling AI analysis:", error);
         toast.error("Erro ao analisar incidente", {
           description: error.message || "Tente novamente mais tarde",
-        };
+        });
         setAnalysis("Erro ao processar análise. Por favor, tente novamente.");
         return;
       }
@@ -68,7 +68,6 @@ export default function IncidentAiModal() {
         setAnalysis("Análise não retornou resultados.");
       }
     } catch (err) {
-      console.error("Unexpected error:", err);
       console.error("Unexpected error:", err);
       toast.error("Erro inesperado ao analisar incidente");
       setAnalysis("Erro inesperado. Por favor, tente novamente.");

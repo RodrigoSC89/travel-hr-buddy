@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Command Brain Panel - Painel de Chat com IA otimizado
  */
 
@@ -23,7 +22,7 @@ interface CommandBrainPanelProps {
   onSettingsClick?: () => void;
 }
 
-export const CommandBrainPanel = memo(function({ context, onSettingsClick }: CommandBrainPanelProps) {
+export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPanelProps) {
   const { 
     messages, 
     isLoading, 
@@ -64,7 +63,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
       return;
     }
 
-    const SpeechRecognition = (window as unknown).webkitSpeechRecognition || (window as unknown).SpeechRecognition;
+    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = "pt-BR";
     recognition.interimResults = true;
@@ -74,16 +73,16 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     recognition.onerror = () => {
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");
-    });
-    recognition.onresult = (event: Event) => {
+    };
+    recognition.onresult = (event: any) => {
       const transcript = Array.from(event.results)
-        .map((result: unknown) => result[0].transcript)
+        .map((result: any) => result[0].transcript)
         .join("");
       setInput(transcript);
-    });
+    };
 
     recognition.start();
-  });
+  };
 
   const speakMessage = (content: string) => {
     if (!("speechSynthesis" in window)) {
@@ -143,7 +142,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
             </div>
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico em desenvolvimento"}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico em desenvolvimento")}>
               <History className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat}>
@@ -225,7 +224,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
                             variant="ghost" 
                             size="sm" 
                             className="h-6 px-2"
-                            onClick={() => handlecopyMessage}
+                            onClick={() => copyMessage(message.content)}
                           >
                             <Copy className="h-3 w-3" />
                           </Button>
@@ -233,7 +232,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
                             variant="ghost" 
                             size="sm" 
                             className="h-6 px-2"
-                            onClick={() => handlespeakMessage}
+                            onClick={() => speakMessage(message.content)}
                           >
                             {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
                           </Button>
@@ -241,7 +240,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
                             variant="ghost" 
                             size="sm" 
                             className={`h-6 px-2 ${message.feedback === "positive" ? "text-green-500 bg-green-50" : ""}`}
-                            onClick={() => handlehandleFeedback}
+                            onClick={() => handleFeedback(message.id, "positive")}
                           >
                             <ThumbsUp className="h-3 w-3" />
                           </Button>
@@ -249,7 +248,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
                             variant="ghost" 
                             size="sm" 
                             className={`h-6 px-2 ${message.feedback === "negative" ? "text-red-500 bg-red-50" : ""}`}
-                            onClick={() => handlehandleFeedback}
+                            onClick={() => handleFeedback(message.id, "negative")}
                           >
                             <ThumbsDown className="h-3 w-3" />
                           </Button>
@@ -276,7 +275,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
           <Input
             ref={inputRef}
             value={input}
-            onChange={handleChange}
+            onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
             placeholder="Pergunte ao Nautilus Brain..."
             disabled={isLoading}

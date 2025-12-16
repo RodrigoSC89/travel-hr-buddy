@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * PATCH 589 - Network Aware Image Component
  * Optimized image loading based on network conditions
  */
@@ -7,7 +6,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef, memo } from "react";
 import { cn } from "@/lib/utils";
 import { networkDetector } from "../services/networkDetector";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface NetworkAwareImageProps {
   src: string;
@@ -186,7 +185,7 @@ export const NetworkAwareImage = memo<NetworkAwareImageProps>(({
       )}
     </div>
   );
-};
+});
 
 NetworkAwareImage.displayName = "NetworkAwareImage";
 

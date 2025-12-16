@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";;;
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CollaborativeDocumentEditor } from "@/components/documents/CollaborativeDocumentEditor";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -19,7 +19,7 @@ export default function DocumentEditorDemo() {
       title: "New Document ID Generated",
       description: "A new document ID has been created",
     });
-  });
+  };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(documentId);
@@ -27,7 +27,7 @@ export default function DocumentEditorDemo() {
       title: "Copied!",
       description: "Document ID copied to clipboard",
     });
-  });
+  };
 
   return (
     <RoleBasedAccess roles={["admin", "manager"]}>
@@ -42,7 +42,7 @@ export default function DocumentEditorDemo() {
             </div>
             <Button 
               variant="outline" 
-              onClick={() => handlenavigate}
+              onClick={() => navigate("/admin/documents")}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

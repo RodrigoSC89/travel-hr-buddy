@@ -2,7 +2,7 @@ import React from "react";
 import { Activity, Zap, Shield, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export const SystemMonitor = memo(function() {
+export function SystemMonitor() {
   const systemMetrics = [
     { label: "Status", value: "Operacional", icon: Activity, variant: "default" as const },
     { label: "Uptime", value: "48h 32m", icon: Clock, variant: "secondary" as const },
@@ -26,4 +26,4 @@ export const SystemMonitor = memo(function() {
       ))}
     </div>
   );
-});
+}

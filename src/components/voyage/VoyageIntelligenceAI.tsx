@@ -1,5 +1,4 @@
 /**
-import { useState, useMemo, useCallback } from "react";;
  * Voyage Intelligence AI - Planejamento Integrado de Viagens
  * - Otimização multi-objetivo (crew, manutenção, bunker)
  * - Weather routing inteligente
@@ -11,12 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { AIModuleEnhancer } from "@/components/ai/AIModuleEnhancer";
 import {
   Brain, Navigation, Fuel, Users, Wrench, Cloud,
   MapPin, Clock, DollarSign, TrendingUp, Sparkles, Zap,
-  Anchor, Ship
+  Anchor, Ship, AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -44,7 +44,7 @@ interface PortSuggestion {
   aiRecommendation: string;
 }
 
-export const VoyageIntelligenceAI = memo(function() {
+export function VoyageIntelligenceAI() {
   const { optimize, analyze, suggest, isLoading } = useNautilusAI();
   const [optimizations, setOptimizations] = useState<VoyageOptimization[]>([]);
   const [portSuggestions, setPortSuggestions] = useState<PortSuggestion[]>([]);
@@ -179,10 +179,10 @@ export const VoyageIntelligenceAI = memo(function() {
 
   const getWeatherRiskColor = (risk: string) => {
     switch (risk) {
-    case "low": return "bg-green-500";
-    case "medium": return "bg-yellow-500";
-    case "high": return "bg-red-500";
-    default: return "bg-gray-500";
+      case "low": return "bg-green-500";
+      case "medium": return "bg-yellow-500";
+      case "high": return "bg-red-500";
+      default: return "bg-gray-500";
     }
   };
 
@@ -439,6 +439,6 @@ export const VoyageIntelligenceAI = memo(function() {
       </Tabs>
     </div>
   );
-});
+}
 
 export default VoyageIntelligenceAI;

@@ -3,7 +3,7 @@
  * PATCH 624 - Loading progressivo com feedback visual melhorado
  */
 
-import { memo, memo, useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ interface ProgressiveLoaderProps {
   className?: string;
 }
 
-export const ProgressiveLoader = memo(function({
+export function ProgressiveLoader({
   isLoading,
   progress,
   message = "Carregando...",
@@ -92,7 +92,7 @@ export const ProgressiveLoader = memo(function({
 /**
  * Skeleton com shimmer effect otimizado
  */
-export const ShimmerSkeleton = memo(function({ className }: { className?: string }) {
+export function ShimmerSkeleton({ className }: { className?: string }) {
   return (
     <div
       className={cn(
@@ -109,7 +109,7 @@ export const ShimmerSkeleton = memo(function({ className }: { className?: string
 /**
  * Card skeleton com layout realista
  */
-export const CardSkeleton = memo(function() {
+export function CardSkeleton() {
   return (
     <div className="rounded-xl border bg-card p-6 space-y-4">
       <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export const CardSkeleton = memo(function() {
 /**
  * Table skeleton
  */
-export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
+export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
     <div className="rounded-xl border bg-card overflow-hidden">
       {/* Header */}
@@ -144,4 +144,4 @@ export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
       ))}
     </div>
   );
-});
+}

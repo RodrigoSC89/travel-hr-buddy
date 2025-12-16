@@ -5,7 +5,7 @@
  */
 
 import { motion } from "framer-motion";
-import { memo, memo, ReactNode, useCallback } from "react";
+import { ReactNode } from "react";
 
 interface AnimatedPageProps {
   children: ReactNode;
@@ -110,7 +110,7 @@ interface AnimatedPageWithPresetProps extends AnimatedPageProps {
   preset?: keyof typeof animationPresets;
 }
 
-export const AnimatedPageWithPreset = memo(function({ 
+export function AnimatedPageWithPreset({ 
   children, 
   className = "", 
   preset = "fade" 
@@ -127,4 +127,4 @@ export const AnimatedPageWithPreset = memo(function({
       {children}
     </motion.div>
   );
-});
+}

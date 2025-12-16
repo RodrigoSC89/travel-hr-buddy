@@ -40,6 +40,7 @@ class LovableValidatorClass {
     maxDataSize?: number;
     maxReRenders?: number;
   }): Promise<ValidationResult> {
+    console.log(`[LovableValidator] Iniciando validação para ${componentName}`);
     
     const startTime = performance.now();
     this.issues = [];
@@ -83,6 +84,10 @@ class LovableValidatorClass {
         memoryUsage: this.getMemoryUsage()
       }
     };
+
+    console.log(`[LovableValidator] Validação concluída em ${totalTime.toFixed(2)}ms`);
+    console.log(`[LovableValidator] Status: ${passed ? "✅ PASS" : "❌ FAIL"}`);
+    console.log(`[LovableValidator] Issues: ${this.issues.length} | Warnings: ${this.warnings.length}`);
 
     return result;
   }
@@ -136,7 +141,7 @@ class LovableValidatorClass {
       __maxDataSize: 3072,
       __fallbackEnabled: true,
       __consoleErrorsSilenced: true
-    });
+    };
   }
 
   /**
@@ -281,7 +286,9 @@ class LovableValidatorClass {
       issue.severity === "high" ? "🟠" : 
         issue.severity === "medium" ? "🟡" : "🟢";
     
+    console.warn(`${emoji} [${issue.severity.toUpperCase()}] ${issue.component}: ${issue.description}`);
     if (issue.fix) {
+      console.log(`   💡 Fix: ${issue.fix}`);
     }
   }
 

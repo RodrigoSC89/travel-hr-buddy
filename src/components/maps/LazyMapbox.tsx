@@ -1,14 +1,13 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Lazy-loaded Mapbox wrapper to reduce initial bundle size (~350KB savings)
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 
 // Lazy load mapbox-gl - use any type to avoid complex mapbox types
-let mapboxgl: unknown = null;
+let mapboxgl: any = null;
 
 export const loadMapbox = async (): Promise<any> => {
   if (!mapboxgl) {
@@ -26,7 +25,7 @@ interface LazyMapboxProps {
   style?: string;
   projection?: string;
   pitch?: number;
-  onMapLoad?: (map: unknown: unknown: unknown) => void;
+  onMapLoad?: (map: any) => void;
   className?: string;
   children?: React.ReactNode;
 }
@@ -85,14 +84,14 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
           }
         });
 
-        mapInstance.on("error", (e: unknown: unknown: unknown) => {
+        mapInstance.on("error", (e: any) => {
+          console.error("Mapbox error:", e);
           if (mounted) {
             setError("Failed to load map");
             setIsLoading(false);
           }
         });
       } catch (err) {
-        console.error("Failed to load Mapbox:", err);
         console.error("Failed to load Mapbox:", err);
         if (mounted) {
           setError("Failed to load Mapbox library");

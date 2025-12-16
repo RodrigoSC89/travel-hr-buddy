@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -19,8 +19,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 export default function InsightDashboard() {
-  const [metrics, setMetrics] = useState<unknown>(null);
-  const [systemStatus, setSystemStatus] = useState<unknown>(null);
+  const [metrics, setMetrics] = useState<any>(null);
+  const [systemStatus, setSystemStatus] = useState<any>(null);
   const [logs, setLogs] = useState<any[]>([]);
   const [aiReport, setAiReport] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -50,7 +50,7 @@ export default function InsightDashboard() {
     updateTimeSeriesData(currentMetrics);
   };
 
-  const updateTimeSeriesData = (newMetrics: unknown) => {
+  const updateTimeSeriesData = (newMetrics: any) => {
     setTimeSeriesData(prev => {
       const updated = [...prev, {
         time: new Date().toLocaleTimeString("pt-BR"),
@@ -60,7 +60,7 @@ export default function InsightDashboard() {
         errors: newMetrics.error_rate
       }];
       return updated.slice(-20); // Keep last 20 data points
-    };
+    });
   };
 
   const generateAIReport = async () => {
@@ -72,7 +72,7 @@ export default function InsightDashboard() {
           systemStatus,
           logs: logs.slice(0, 20)
         }
-      };
+      });
 
       if (error) throw error;
       
@@ -133,7 +133,7 @@ ${logs.slice(0, 10).map(log =>
       title: "Relatório Baixado",
       description: "Arquivo salvo com sucesso",
     });
-  });
+  };
 
   const sendReportByEmail = async () => {
     toast({
@@ -350,7 +350,7 @@ ${logs.slice(0, 10).map(log =>
             <CardContent>
               <ScrollArea className="h-[500px]">
                 <div className="space-y-3">
-                  {systemStatus?.modules?.map((module: unknown) => (
+                  {systemStatus?.modules?.map((module: any) => (
                     <Card key={module.id}>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">

@@ -11,7 +11,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export const IMCADPNonConformities = memo(function({ auditData, selectedDPClass }: Props) {
+export function IMCADPNonConformities({ auditData, selectedDPClass }: Props) {
   const nonConformities = Object.entries(auditData)
     .filter(([_, v]) => v.status === "NC")
     .map(([id, data]) => {
@@ -44,7 +44,7 @@ export const IMCADPNonConformities = memo(function({ auditData, selectedDPClass 
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2">
-                          <Badge variant="destructive">NC-{id.toString().padStart(3, "0")}</Badge>
+                          <Badge variant="destructive">NC-{id.toString().padStart(3, '0')}</Badge>
                           {item?.isImperative && (
                             <Badge variant="outline" className="border-destructive text-destructive">
                               <AlertTriangle className="h-3 w-3 mr-1" />
@@ -80,4 +80,4 @@ export const IMCADPNonConformities = memo(function({ auditData, selectedDPClass 
       </CardContent>
     </Card>
   );
-});
+}

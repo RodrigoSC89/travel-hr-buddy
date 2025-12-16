@@ -61,7 +61,7 @@ export const WelcomeCard: React.FC = () => {
     });
     
     return actions.slice(0, 3); // Limitar a 3 ações
-  });
+  };
 
   return (
     <Card className="border-primary/30 bg-gradient-to-br from-primary/8 via-background to-secondary/8">

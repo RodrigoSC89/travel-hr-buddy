@@ -3,7 +3,7 @@
  * Tests learning system that adapts decision weights over time
  */
 
-import { memo, memo, useState } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ interface LearningEvent {
   accuracy: number;
 }
 
-export const Patch605Validation = memo(function() {
+export function Patch605Validation() {
   const [events, setEvents] = useState<LearningEvent[]>([]);
   const [isLearning, setIsLearning] = useState(false);
   const [currentIteration, setCurrentIteration] = useState(0);
@@ -59,7 +59,7 @@ export const Patch605Validation = memo(function() {
         event,
         weightAdjustment: event.adjustedWeight - event.initialWeight,
         feedbackType: event.feedback
-      };
+      });
     }
     
     setIsLearning(false);
@@ -94,13 +94,13 @@ export const Patch605Validation = memo(function() {
       report,
       totalIterations: events.length,
       averageAccuracy: report.averageAccuracy
-    };
+    });
     
     toast({
       title: "Report Exported",
       description: "Learning report saved to console",
     });
-  });
+  };
 
   const avgAccuracy = events.length > 0
     ? (events.reduce((sum, e) => sum + e.accuracy, 0) / events.length * 100).toFixed(1)
@@ -207,4 +207,4 @@ export const Patch605Validation = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

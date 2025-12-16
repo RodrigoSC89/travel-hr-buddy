@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -64,7 +63,7 @@ interface Integration {
   icon: React.ElementType;
   isEnabled: boolean;
   lastSync?: string;
-  config?: Record<string, unknown>;
+  config?: Record<string, any>;
   template?: boolean;
   provider: string;
   healthScore: number;
@@ -310,7 +309,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
       title: "Status Atualizado",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
     });
-  });
+  };
 
   const handleTestConnection = (id: string) => {
     const integration = integrations.find(i => i.id === id);
@@ -333,7 +332,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  };
+  });
 
   const connectedCount = integrations.filter(i => i.status === "connected").length;
   const errorCount = integrations.filter(i => i.status === "error").length;
@@ -372,7 +371,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                     Configure uma nova integração em poucos passos
                   </DialogDescription>
                 </DialogHeader>
-                <IntegrationWizard onClose={() => setIsWizardOpen(false} />
+                <IntegrationWizard onClose={() => setIsWizardOpen(false)} />
               </DialogContent>
             </Dialog>
           </div>
@@ -483,7 +482,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                 <Input
                   placeholder="Buscar integrações..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -494,7 +493,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetSelectedCategory}
+                  onClick={() => setSelectedCategory(category)}
                   className="capitalize"
                 >
                   {category === "all" ? "Todas" : category}
@@ -599,7 +598,7 @@ const IntegrationCard: React.FC<{
           </div>
           <Switch 
             checked={integration.isEnabled}
-            onCheckedChange={() => onToggle(integration.id}
+            onCheckedChange={() => onToggle(integration.id)}
           />
         </div>
       </CardHeader>
@@ -643,7 +642,7 @@ const IntegrationCard: React.FC<{
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => handleonTest}
+            onClick={() => onTest(integration.id)}
             className="flex-1"
           >
             <RefreshCw className="w-4 h-4 mr-1" />
@@ -659,7 +658,7 @@ const IntegrationCard: React.FC<{
       </CardContent>
     </Card>
   );
-});
+};
 
 // Componente de Status do Sistema com IA
 const AISystemStatus: React.FC<{
@@ -819,7 +818,7 @@ const IntegrationTemplates: React.FC<{
                 <h4 className="font-semibold text-lg text-foreground mb-2">{template.name}</h4>
                 <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
                 <Button 
-                  onClick={() => handleonSelect} 
+                  onClick={() => onSelect(template.name)} 
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Configurar Agora
@@ -831,7 +830,7 @@ const IntegrationTemplates: React.FC<{
       </div>
     </div>
   );
-});
+};
 
 // Componente de Logs
 const LogsViewer: React.FC<{
@@ -971,7 +970,7 @@ const IntegrationWizard: React.FC<{
     method: "GET",
     headers: {},
     auth: ""
-});
+  });
 
   const steps = [
     { title: "Tipo de Integração", description: "Selecione o tipo de integração" },
@@ -1009,8 +1008,8 @@ const IntegrationWizard: React.FC<{
               {["REST API", "Webhook", "OAuth 2.0", "Database"].map((type) => (
                 <Card key={type} className={`cursor-pointer transition-all hover:shadow-md border ${
                   formData.type === type ? "border-primary bg-primary/5" : "border-border"
-                }`} onClick={handleSetFormData}>
-                  <CardContent key={CardContent.id || index} className="p-4 text-center">
+                }`} onClick={() => setFormData(prev => ({ ...prev, type }))}>
+                  <CardContent className="p-4 text-center">
                     <p className="font-medium text-foreground">{type}</p>
                   </CardContent>
                 </Card>
@@ -1028,7 +1027,7 @@ const IntegrationWizard: React.FC<{
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Ex: Sistema ERP Interno"
                 />
               </div>
@@ -1037,7 +1036,7 @@ const IntegrationWizard: React.FC<{
                 <Input
                   id="endpoint"
                   value={formData.endpoint}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, endpoint: e.target.value }))}
                   placeholder="https://api.exemplo.com/v1"
                 />
               </div>
@@ -1045,7 +1044,7 @@ const IntegrationWizard: React.FC<{
                 <Label htmlFor="method">Método HTTP</Label>
                 <select 
                   value={formData.method}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, method: e.target.value }))}
                   className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="GET">GET</option>
@@ -1066,7 +1065,7 @@ const IntegrationWizard: React.FC<{
                 <Label htmlFor="auth">Tipo de Autenticação</Label>
                 <select 
                   value={formData.auth}
-                  onChange={handleChange}))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, auth: e.target.value }))}
                   className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="">Selecione...</option>
@@ -1107,7 +1106,7 @@ const IntegrationWizard: React.FC<{
       <div className="flex justify-between">
         <Button 
           variant="outline" 
-          onClick={handleSetCurrentStep}
+          onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
           disabled={currentStep === 1}
         >
           Anterior
@@ -1127,4 +1126,4 @@ const IntegrationWizard: React.FC<{
       </div>
     </div>
   );
-});
+};

@@ -1,5 +1,4 @@
 /**
-import { useCallback, useMemo, useEffect, useState } from "react";;
  * Finance Command Center - Unified Financial Operations
  * PATCH UNIFY-FINANCE - Fusion of Finance Hub + Route Cost Analysis
  * Complete financial management with cost analysis per route
@@ -21,7 +20,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFo
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Skeleton } from "@/components/unified/Skeletons.unified";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   DollarSign, TrendingUp, TrendingDown, PiggyBank, Receipt, CreditCard,
   BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Calendar, AlertCircle,
@@ -60,7 +59,7 @@ interface BudgetCategory {
   allocated: number;
   spent: number;
   color: string;
-  icon: React.ComponentType<any>;
+  icon: any;
 }
 
 interface RouteCost {
@@ -98,7 +97,7 @@ const CHART_COLORS = [
   "hsl(var(--chart-4))",
 ];
 
-const CATEGORY_ICONS: Record<string, unknown> = {
+const CATEGORY_ICONS: Record<string, any> = {
   fuel: Fuel,
   maintenance: Wrench,
   crew: Users,
@@ -229,7 +228,7 @@ const FinanceCommandCenter: React.FC = () => {
       showNotifications: true,
       currency: "BRL",
       fiscalYearStart: "01",
-    });
+    };
   });
 
   const [newExpense, setNewExpense] = useState({
@@ -246,7 +245,7 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       minimumFractionDigits: 0,
     }).format(value);
-  });
+  };
 
   // Fetch data
   const fetchData = useCallback(async (showToast = false) => {
@@ -261,7 +260,7 @@ const FinanceCommandCenter: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(10);
 
-      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: unknown) => ({
+      const mappedNotifications: Notification[] = (aiInsights || []).map((insight: any) => ({
         id: insight.id,
         title: insight.title || "Insight Financeiro",
         message: insight.description || "",
@@ -301,14 +300,14 @@ const FinanceCommandCenter: React.FC = () => {
   // Status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
-    case "approved":
-      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Aprovado</Badge>;
-    case "pending":
-      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
-    case "rejected":
-      return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejeitado</Badge>;
-    default:
-      return <Badge variant="outline">{status}</Badge>;
+      case "approved":
+        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Aprovado</Badge>;
+      case "pending":
+        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
+      case "rejected":
+        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejeitado</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -372,7 +371,7 @@ const FinanceCommandCenter: React.FC = () => {
       const csvRows = ["Descrição,Valor,Data,Categoria,Status"];
       transactions.forEach(tx => {
         csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category}","${tx.status}"`);
-  };
+      });
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -430,7 +429,7 @@ const FinanceCommandCenter: React.FC = () => {
         const percentage = ((cat.spent / cat.allocated) * 100).toFixed(1);
         doc.text(`${cat.name}: ${formatCurrency(cat.spent)} / ${formatCurrency(cat.allocated)} (${percentage}%)`, 25, yPos);
         yPos += 7;
-  });
+      });
 
       yPos += 10;
 
@@ -444,7 +443,7 @@ const FinanceCommandCenter: React.FC = () => {
       routeCosts.forEach(cost => {
         doc.text(`${cost.route} (${cost.vessel}): ${formatCurrency(cost.totalCost)} - Eficiência: ${cost.efficiency}%`, 25, yPos);
         yPos += 6;
-  });
+      });
 
       doc.setFontSize(8);
       doc.setTextColor(128, 128, 128);
@@ -506,7 +505,7 @@ const FinanceCommandCenter: React.FC = () => {
             
             Forneça recomendações práticas para otimização financeira e redução de custos operacionais.`,
         },
-      };
+      });
 
       if (error) throw error;
       setAiInsight(response?.content || "Análise concluída com sucesso.");
@@ -597,7 +596,7 @@ const FinanceCommandCenter: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => handlefetchData} disabled={isRefreshing}>
+          <Button variant="outline" onClick={() => fetchData(true)} disabled={isRefreshing}>
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
@@ -613,17 +612,17 @@ const FinanceCommandCenter: React.FC = () => {
                 <FileText className="h-4 w-4 mr-2" />
                 Relatório PDF
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleexportData}>
+              <DropdownMenuItem onClick={() => exportData("csv")}>
                 <FileText className="h-4 w-4 mr-2" />
                 Exportar CSV
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleexportData}>
+              <DropdownMenuItem onClick={() => exportData("json")}>
                 <FileText className="h-4 w-4 mr-2" />
                 Exportar JSON
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button onClick={handleSetShowNewExpense}>
+          <Button onClick={() => setShowNewExpense(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Despesa
           </Button>
@@ -816,7 +815,7 @@ const FinanceCommandCenter: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Todas as Transações</CardTitle>
-                <Button variant="outline" size="sm" onClick={handleSetShowFilters}>
+                <Button variant="outline" size="sm" onClick={() => setShowFilters(true)}>
                   <Filter className="h-4 w-4 mr-2" />
                   Filtros
                 </Button>
@@ -1037,7 +1036,7 @@ const FinanceCommandCenter: React.FC = () => {
                       <p className="text-2xl font-bold">R$ {(cost.totalCost / 1000).toFixed(0)}k</p>
                       <p className={`text-sm flex items-center gap-1 justify-end ${getCostColor(cost.variance)}`}>
                         {cost.variance > 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                        {cost.variance > 0 ? "+" : ""}{cost.variance}% vs orçado
+                        {cost.variance > 0 ? '+' : ''}{cost.variance}% vs orçado
                       </p>
                     </div>
                   </div>
@@ -1094,13 +1093,13 @@ const FinanceCommandCenter: React.FC = () => {
                     </div>
                     <ul className="space-y-1">
                       {cost.aiInsights.map((insight, idx) => (
-                        <li key={idx} className={`text-sm flex items-start gap-2 ${insight.startsWith("⚠️") ? "text-amber-600" : "text-muted-foreground"}`}>
-                          {insight.startsWith("⚠️") ? (
+                        <li key={idx} className={`text-sm flex items-start gap-2 ${insight.startsWith('⚠️') ? 'text-amber-600' : 'text-muted-foreground'}`}>
+                          {insight.startsWith('⚠️') ? (
                             <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
                           ) : (
                             <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                           )}
-                          {insight.replace("⚠️ ", "")}
+                          {insight.replace('⚠️ ', '')}
                         </li>
                       ))}
                     </ul>
@@ -1160,10 +1159,10 @@ const FinanceCommandCenter: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <p className="text-lg font-bold text-red-500">{formatCurrency(-approval.amount)}</p>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" className="text-red-500 hover:bg-red-500/10" onClick={() => handlehandleReject}>
+                          <Button size="sm" variant="outline" className="text-red-500 hover:bg-red-500/10" onClick={() => handleReject(approval.id)}>
                             <X className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" className="bg-green-500 hover:bg-green-600" onClick={() => handlehandleApprove}>
+                          <Button size="sm" className="bg-green-500 hover:bg-green-600" onClick={() => handleApprove(approval.id)}>
                             <Check className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1233,7 +1232,7 @@ const FinanceCommandCenter: React.FC = () => {
                 id="description"
                 placeholder="Ex: Manutenção preventiva do motor"
                 value={newExpense.description}
-                onChange={handleChange}))}
+                onChange={(e) => setNewExpense(prev => ({ ...prev, description: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -1243,7 +1242,7 @@ const FinanceCommandCenter: React.FC = () => {
                 type="number"
                 placeholder="0.00"
                 value={newExpense.amount}
-                onChange={handleChange}))}
+                onChange={(e) => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
               />
             </div>
             <div className="space-y-2">
@@ -1268,12 +1267,12 @@ const FinanceCommandCenter: React.FC = () => {
                 id="notes"
                 placeholder="Detalhes adicionais..."
                 value={newExpense.notes}
-                onChange={handleChange}))}
+                onChange={(e) => setNewExpense(prev => ({ ...prev, notes: e.target.value }))}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={handleSetShowNewExpense}>
+            <Button variant="outline" onClick={() => setShowNewExpense(false)}>
               Cancelar
             </Button>
             <Button onClick={handleCreateExpense}>
@@ -1299,7 +1298,7 @@ const FinanceCommandCenter: React.FC = () => {
               </div>
               <Switch
                 checked={settings.autoRefresh}
-                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, autoRefresh: v }))}
+                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, autoRefresh: v }))}
               />
             </div>
             <Separator />
@@ -1308,7 +1307,7 @@ const FinanceCommandCenter: React.FC = () => {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={handleChange}))}
+                onChange={(e) => setSettings((prev: any) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
                 disabled={!settings.autoRefresh}
               />
             </div>
@@ -1320,7 +1319,7 @@ const FinanceCommandCenter: React.FC = () => {
               </div>
               <Switch
                 checked={settings.showNotifications}
-                onCheckedChange={(v) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, showNotifications: v }))}
+                onCheckedChange={(v) => setSettings((prev: any) => ({ ...prev, showNotifications: v }))}
               />
             </div>
           </div>
@@ -1328,6 +1327,6 @@ const FinanceCommandCenter: React.FC = () => {
       </Sheet>
     </div>
   );
-});
+};
 
 export default FinanceCommandCenter;

@@ -1,4 +1,4 @@
-import { memo, memo, useMemo, useState } from "react";;;
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,7 +56,7 @@ const functionAreas: Record<string, string> = {
   safety: "Segurança",
 };
 
-export const STCWCompetencyMatrix = memo(function() {
+export function STCWCompetencyMatrix() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterArea, setFilterArea] = useState<string>("all");
   const [filterLevel, setFilterLevel] = useState<string>("all");
@@ -104,7 +104,7 @@ export const STCWCompetencyMatrix = memo(function() {
       const matchesArea = filterArea === "all" || c.function_area === filterArea;
       const matchesLevel = filterLevel === "all" || c.level === filterLevel;
       return matchesSearch && matchesArea && matchesLevel;
-  });
+    });
   }, [competencies, searchQuery, filterArea, filterLevel]);
 
   const getAssessmentStatus = (crewId: string, competencyId: string): string => {
@@ -119,7 +119,7 @@ export const STCWCompetencyMatrix = memo(function() {
     }
     
     return assessment.status;
-  });
+  };
 
   const calculateStats = useMemo(() => {
     const total = crewMembers.length * filteredCompetencies.length;
@@ -133,8 +133,8 @@ export const STCWCompetencyMatrix = memo(function() {
         if (status === "competent") competent++;
         else if (status === "in_training") inTraining++;
         else gaps++;
-  };
-  };
+      });
+    });
 
     return {
       total,
@@ -208,7 +208,7 @@ export const STCWCompetencyMatrix = memo(function() {
             placeholder="Buscar competência por nome ou código..." 
             className="pl-10 bg-muted/30"
             value={searchQuery}
-            onChange={handleChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <Select value={filterArea} onValueChange={setFilterArea}>
@@ -326,4 +326,4 @@ export const STCWCompetencyMatrix = memo(function() {
       </div>
     </div>
   );
-});
+}

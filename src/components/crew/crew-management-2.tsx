@@ -1,4 +1,3 @@
-import { useState, useMemo } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -438,7 +437,7 @@ export const CrewManagement2: React.FC = () => {
                                   {cert.daysRemaining > 0 ? `${cert.daysRemaining} dias` : "Vencida"}
                                 </div>
                               </div>
-                              <Badge variant={getCertStatusColor(cert.status) as unknown}>
+                              <Badge variant={getCertStatusColor(cert.status) as any}>
                                 {cert.status.toUpperCase()}
                               </Badge>
                             </div>

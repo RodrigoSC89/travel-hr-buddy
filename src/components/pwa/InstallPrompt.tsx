@@ -1,27 +1,26 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * PATCH 837: PWA Install Prompt
  * Encourage users to install the app
  */
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Download, X, Smartphone, Zap, WifiOff, Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Download, X, Smartphone, Zap, WifiOff, Bell } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-export const InstallPrompt = memo(function() {
+export function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = React.useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = React.useState(false);
   const [dismissed, setDismissed] = React.useState(false);
 
   React.useEffect(() => {
     // Check if already dismissed
-    const wasDismissed = localStorage.getItem("pwa-install-dismissed");
+    const wasDismissed = localStorage.getItem('pwa-install-dismissed');
     if (wasDismissed) {
       const dismissedAt = new Date(wasDismissed);
       const daysSinceDismissed = (Date.now() - dismissedAt.getTime()) / (1000 * 60 * 60 * 24);
@@ -38,9 +37,9 @@ export const InstallPrompt = memo(function() {
       setTimeout(() => setShowPrompt(true), 3000);
     };
 
-    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener('beforeinstallprompt', handler);
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstall = async () => {
@@ -49,7 +48,8 @@ export const InstallPrompt = memo(function() {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     
-    if (outcome === "accepted") {
+    if (outcome === 'accepted') {
+      console.log('User accepted PWA install');
     }
     
     setDeferredPrompt(null);
@@ -57,7 +57,7 @@ export const InstallPrompt = memo(function() {
   };
 
   const handleDismiss = () => {
-    localStorage.setItem("pwa-install-dismissed", new Date().toISOString());
+    localStorage.setItem('pwa-install-dismissed', new Date().toISOString());
     setDismissed(true);
     setShowPrompt(false);
   };
@@ -153,4 +153,4 @@ export const InstallPrompt = memo(function() {
       </motion.div>
     </AnimatePresence>
   );
-});
+}

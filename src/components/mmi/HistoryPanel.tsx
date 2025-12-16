@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -112,7 +112,7 @@ export default function HistoryPanel() {
       <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
       
       ${selectedRecords.map((history, index) => `
-        <div key={div.id || index} style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
           <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
           
           <div style="margin-bottom: 10px;">
@@ -225,7 +225,7 @@ export default function HistoryPanel() {
                     <input
                       type="checkbox"
                       checked={selectedHistories.has(history.id)}
-                      onChange={() => toggleSelection(history.id}
+                      onChange={() => toggleSelection(history.id)}
                       className="mt-1 h-4 w-4 rounded border-gray-300"
                     />
                     <div className="flex-1 space-y-3">
@@ -265,7 +265,7 @@ export default function HistoryPanel() {
                   </div>
 
                   <Button
-                    onClick={() => handleexportSinglePDF}
+                    onClick={() => exportSinglePDF(history)}
                     variant="outline"
                     size="sm"
                   >

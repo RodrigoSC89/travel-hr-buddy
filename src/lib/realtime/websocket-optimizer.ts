@@ -17,11 +17,11 @@ interface WebSocketOptions {
 interface QueuedMessage {
   data: unknown;
   timestamp: number;
-  priority: "high" | "normal" | "low";
+  priority: 'high' | 'normal' | 'low';
 }
 
 type MessageHandler = (data: unknown) => void;
-type StatusHandler = (status: "connecting" | "connected" | "disconnected" | "error") => void;
+type StatusHandler = (status: 'connecting' | 'connected' | 'disconnected' | 'error') => void;
 
 export class OptimizedWebSocket {
   private ws: WebSocket | null = null;
@@ -52,14 +52,15 @@ export class OptimizedWebSocket {
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.isIntentionallyClosed = false;
-      this.notifyStatus("connecting");
+      this.notifyStatus('connecting');
 
       try {
         this.ws = new WebSocket(this.options.url, this.options.protocols);
 
         this.ws.onopen = () => {
+          console.log('[WS] Connected');
           this.reconnectAttempt = 0;
-          this.notifyStatus("connected");
+          this.notifyStatus('connected');
           this.startHeartbeat();
           resolve();
         };
@@ -69,13 +70,15 @@ export class OptimizedWebSocket {
         };
 
         this.ws.onerror = (error) => {
-          this.notifyStatus("error");
+          console.error('[WS] Error:', error);
+          this.notifyStatus('error');
           reject(error);
         };
 
         this.ws.onclose = () => {
+          console.log('[WS] Closed');
           this.stopHeartbeat();
-          this.notifyStatus("disconnected");
+          this.notifyStatus('disconnected');
           
           if (!this.isIntentionallyClosed) {
             this.attemptReconnect();
@@ -89,15 +92,14 @@ export class OptimizedWebSocket {
 
   private handleMessage(rawData: string | ArrayBuffer | Blob) {
     try {
-      const data = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
+      const data = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
       this.messageHandlers.forEach(handler => handler(data));
     } catch (error) {
-      console.error("[WS] Failed to parse message:", error);
-      console.error("[WS] Failed to parse message:", error);
+      console.error('[WS] Failed to parse message:', error);
     }
   }
 
-  send(data: unknown, priority: "high" | "normal" | "low" = "normal") {
+  send(data: unknown, priority: 'high' | 'normal' | 'low' = 'normal') {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
       // Queue message for when reconnected
       this.messageQueue.push({ data, timestamp: Date.now(), priority });
@@ -105,7 +107,7 @@ export class OptimizedWebSocket {
     }
 
     // High priority messages sent immediately
-    if (priority === "high") {
+    if (priority === 'high') {
       this.sendImmediate(data);
       return;
     }
@@ -139,7 +141,7 @@ export class OptimizedWebSocket {
     }
   }
 
-  private queueForBatch(data: unknown, priority: "high" | "normal" | "low") {
+  private queueForBatch(data: unknown, priority: 'high' | 'normal' | 'low') {
     this.messageQueue.push({ data, timestamp: Date.now(), priority });
 
     if (!this.batchTimeout) {
@@ -162,7 +164,7 @@ export class OptimizedWebSocket {
       .map(m => m.data);
 
     // Send as batch
-    this.sendImmediate({ type: "batch", messages });
+    this.sendImmediate({ type: 'batch', messages });
     
     this.messageQueue = [];
     this.batchTimeout = null;
@@ -170,10 +172,12 @@ export class OptimizedWebSocket {
 
   private attemptReconnect() {
     if (this.reconnectAttempt >= this.options.reconnectAttempts) {
+      console.log('[WS] Max reconnect attempts reached');
       return;
     }
 
     const delay = this.options.reconnectDelay * Math.pow(2, this.reconnectAttempt);
+    console.log(`[WS] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempt + 1})`);
 
     this.reconnectTimeout = setTimeout(() => {
       this.reconnectAttempt++;
@@ -186,7 +190,7 @@ export class OptimizedWebSocket {
   private startHeartbeat() {
     this.heartbeatTimeout = setInterval(() => {
       if (this.ws?.readyState === WebSocket.OPEN) {
-        this.send({ type: "ping" }, "low");
+        this.send({ type: 'ping' }, 'low');
       }
     }, this.options.heartbeatInterval);
   }
@@ -208,7 +212,7 @@ export class OptimizedWebSocket {
     return () => this.statusHandlers.delete(handler);
   }
 
-  private notifyStatus(status: "connecting" | "connected" | "disconnected" | "error") {
+  private notifyStatus(status: 'connecting' | 'connected' | 'disconnected' | 'error') {
     this.statusHandlers.forEach(handler => handler(status));
   }
 
@@ -244,7 +248,7 @@ export class OptimizedWebSocket {
  */
 export function createAdaptiveWebSocket(
   url: string,
-  networkQuality: "fast" | "medium" | "slow" | "offline"
+  networkQuality: 'fast' | 'medium' | 'slow' | 'offline'
 ): OptimizedWebSocket {
   const configs: Record<string, Partial<WebSocketOptions>> = {
     fast: {

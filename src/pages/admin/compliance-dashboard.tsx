@@ -3,7 +3,7 @@
  * Real-time risk monitoring and predictive compliance analysis
  */
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -24,7 +24,7 @@ import { logger } from "@/lib/logger";
 
 export default function ComplianceDashboard() {
   const [risks, setRisks] = useState<RiskScore[]>([]);
-  const [summary, setSummary] = useState<unknown>(null);
+  const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
@@ -51,11 +51,11 @@ export default function ComplianceDashboard() {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-    case "critical": return "text-red-600 bg-red-50 border-red-200";
-    case "high": return "text-orange-600 bg-orange-50 border-orange-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-green-600 bg-green-50 border-green-200";
-    default: return "text-gray-600 bg-gray-50 border-gray-200";
+      case "critical": return "text-red-600 bg-red-50 border-red-200";
+      case "high": return "text-orange-600 bg-orange-50 border-orange-200";
+      case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "low": return "text-green-600 bg-green-50 border-green-200";
+      default: return "text-gray-600 bg-gray-50 border-gray-200";
     }
   };
 
@@ -91,7 +91,7 @@ export default function ComplianceDashboard() {
         </div>
         <div className="text-right">
           <Button onClick={loadRiskData} disabled={loading} variant="outline">
-            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
           <p className="text-sm text-muted-foreground mt-2">

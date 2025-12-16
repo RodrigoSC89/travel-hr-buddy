@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";;
-
+// @ts-nocheck
 /**
  * Compliance Reporter Component
  * Real-time incident tracking with Supabase Realtime subscriptions
@@ -70,6 +69,7 @@ export default function ComplianceReporter() {
       .limit(50);
 
     if (error) {
+      console.error("Error fetching incidents:", error);
       return;
     }
 

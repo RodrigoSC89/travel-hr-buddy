@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -51,7 +50,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
     activeUsers: 24,
     errors: 3,
     uptime: 99.8
-});
+  });
 
   const metrics = [
     {
@@ -95,7 +94,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
         [metric]: value
       }
     });
-  });
+  };
 
   const getStatusColor = (color: string) => {
     switch (color) {
@@ -241,7 +240,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.cpu || 80}
-                    onChange={handleChange}
+                    onChange={(e) => updateThreshold("cpu", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
@@ -253,7 +252,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.memory || 85}
-                    onChange={handleChange}
+                    onChange={(e) => updateThreshold("memory", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
@@ -265,7 +264,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="0"
                     max="100"
                     value={settings.alertThresholds.disk || 90}
-                    onChange={handleChange}
+                    onChange={(e) => updateThreshold("disk", parseInt(e.target.value))}
                     className="w-20"
                   />
                 </div>
@@ -276,7 +275,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     type="number"
                     min="0"
                     value={settings.alertThresholds.responseTime || 2000}
-                    onChange={handleChange}
+                    onChange={(e) => updateThreshold("responseTime", parseInt(e.target.value))}
                     className="w-24"
                   />
                 </div>
@@ -294,7 +293,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
                     min="1"
                     max="365"
                     value={settings.retentionDays}
-                    onChange={handleChange}
+                    onChange={(e) => onUpdate({ retentionDays: parseInt(e.target.value) })}
                     className="w-20"
                   />
                 </div>

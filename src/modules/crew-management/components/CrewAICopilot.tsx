@@ -1,4 +1,4 @@
-import { memo, memo, useEffect, useRef, useState, useCallback, useMemo } from "react";;;
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,8 +26,8 @@ interface Message {
 }
 
 interface CrewAICopilotProps {
-  crewData?: unknown[];
-  certificates?: unknown[];
+  crewData?: any[];
+  certificates?: any[];
 }
 
 const quickActions = [
@@ -57,7 +57,7 @@ const quickActions = [
   },
 ];
 
-export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICopilotProps) {
+export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +134,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
                     const updated = [...prev];
                     updated[updated.length - 1] = { role: "assistant", content: assistantContent };
                     return updated;
-  });
+                  });
                 }
               } catch {
                 // Skip invalid JSON
@@ -203,7 +203,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
                     <Button
                       variant="outline"
                       className="w-full justify-start h-auto py-3 px-4"
-                      onClick={() => handlehandleQuickAction}
+                      onClick={() => handleQuickAction(action.prompt)}
                     >
                       <action.icon className={`h-4 w-4 mr-3 ${action.color}`} />
                       <span className="text-sm">{action.label}</span>
@@ -253,12 +253,15 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
         {/* Input */}
         <div className="p-4 border-t bg-background">
           <form
-            onSubmit={handleSubmit}
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage(input);
+            }}
             className="flex gap-2"
           >
             <Input
               value={input}
-              onChange={handleChange}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Pergunte sobre a tripulação..."
               disabled={isLoading}
               className="flex-1"
@@ -275,4 +278,4 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
       </CardContent>
     </Card>
   );
-});
+}

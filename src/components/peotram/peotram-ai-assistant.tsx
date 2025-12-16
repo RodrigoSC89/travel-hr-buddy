@@ -1,5 +1,4 @@
 /**
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * PEOTRAM AI Assistant Component
  * LLM integrada para geração de evidências, análise de conformidade e
  * consultas sobre auditorias PEOTRAM, legislação marítima e melhores práticas.
@@ -161,7 +160,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   }
 ];
 
-export const PeotramAIAssistant = memo(function() {
+export function PeotramAIAssistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",
@@ -208,7 +207,7 @@ Use as **ações rápidas** ou faça sua pergunta diretamente!`,
     setIsLoading(true);
 
     try {
-      const { data: functionData, error: functionError } = await supabase.functions.invoke("peotram-ai-chat", {
+      const { data: functionData, error: functionError } = await supabase.functions.invoke('peotram-ai-chat', {
         body: { 
           messages: [...messages.filter(m => m.id !== "welcome"), userMessage].map(m => ({
             role: m.role,
@@ -216,7 +215,7 @@ Use as **ações rápidas** ou faça sua pergunta diretamente!`,
           })),
           action
         }
-      };
+      });
 
       if (functionError) {
         throw new Error(functionError.message);
@@ -334,7 +333,7 @@ Por favor, tente novamente ou consulte:
                       variant="ghost"
                       size="sm"
                       className="w-full justify-start text-left h-auto py-2"
-                      onClick={() => handlehandleQuickAction}
+                      onClick={() => handleQuickAction(action)}
                       disabled={isLoading}
                     >
                       <div className="flex items-center gap-2">
@@ -385,13 +384,13 @@ Por favor, tente novamente ou consulte:
                               className="prose prose-sm dark:prose-invert max-w-none text-sm"
                               dangerouslySetInnerHTML={{ 
                                 __html: message.content
-                                  .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-                                  .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-                                  .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-                                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                                  .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                                  .replace(/\n- /g, "<br/>• ")
-                                  .replace(/\n/g, "<br/>") 
+                                  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                                  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                                  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                  .replace(/\n- /g, '<br/>• ')
+                                  .replace(/\n/g, '<br/>') 
                               }} 
                             />
                             {message.references && message.references.length > 0 && (
@@ -406,13 +405,13 @@ Por favor, tente novamente ou consulte:
                             )}
                             {message.role === "assistant" && message.id !== "welcome" && (
                               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "positive")}>
                                   <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-green-500 fill-green-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
                                   <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleCopy}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleCopy(message.content)}>
                                   <Copy className="h-3 w-3" />
                                 </Button>
                               </div>
@@ -436,12 +435,12 @@ Por favor, tente novamente ou consulte:
               {/* Input */}
               <div className="p-4 border-t">
                 <form 
-                  onSubmit={handleSubmit}
+                  onSubmit={(e) => { e.preventDefault(); handleSend(); }}
                   className="flex gap-2"
                 >
                   <Input
                     value={input}
-                    onChange={handleChange}
+                    onChange={(e) => setInput(e.target.value)}
                     placeholder="Pergunte sobre PEOTRAM, legislação ou peça para gerar evidências..."
                     disabled={isLoading}
                     className="flex-1"

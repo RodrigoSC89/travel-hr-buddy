@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -254,7 +253,7 @@ const SmartIntegrationHub: React.FC = () => {
     };
 
     return (
-      <Badge variant={variants[status] as unknown}>
+      <Badge variant={variants[status] as any}>
         {getStatusIcon(status)}
         <span className="ml-1">{labels[status]}</span>
       </Badge>
@@ -303,7 +302,7 @@ const SmartIntegrationHub: React.FC = () => {
             <Button
               key={tab.id}
               variant={activeTab === tab.id ? "default" : "ghost"}
-              onClick={handleSetActiveTab}
+              onClick={() => setActiveTab(tab.id as any)}
               className="flex items-center gap-2"
             >
               <Icon className="w-4 h-4" />
@@ -324,7 +323,7 @@ const SmartIntegrationHub: React.FC = () => {
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
                   size="sm"
-                  onClick={handleSetSelectedCategory}
+                  onClick={() => setSelectedCategory(category.id)}
                   className="flex items-center gap-2"
                 >
                   <Icon className="w-4 h-4" />
@@ -381,7 +380,7 @@ const SmartIntegrationHub: React.FC = () => {
                       <Button
                         size="sm"
                         variant={integration.status === "connected" ? "destructive" : "default"}
-                        onClick={() => handletoggleIntegration}
+                        onClick={() => toggleIntegration(integration.id)}
                         className="flex-1"
                       >
                         {integration.status === "connected" ? "Desconectar" : "Conectar"}
@@ -391,7 +390,7 @@ const SmartIntegrationHub: React.FC = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handlesyncIntegration}
+                          onClick={() => syncIntegration(integration.id)}
                         >
                           <RefreshCw className="w-4 h-4" />
                         </Button>
@@ -450,7 +449,7 @@ const SmartIntegrationHub: React.FC = () => {
                       <Button
                         size="sm"
                         variant={rule.status === "active" ? "destructive" : "default"}
-                        onClick={() => handletoggleAutomationRule}
+                        onClick={() => toggleAutomationRule(rule.id)}
                       >
                         {rule.status === "active" ? "Pausar" : "Ativar"}
                       </Button>

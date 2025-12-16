@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,7 @@ export default function ChecklistDashboard() {
             items: [],
             created_at: checklist.created_at,
             created_by: checklist.created_by,
-          });
+          };
         }
 
         return {
@@ -83,7 +83,7 @@ export default function ChecklistDashboard() {
             })) || [],
           created_at: checklist.created_at,
           created_by: checklist.created_by,
-        });
+        };
       })
     );
 

@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -238,7 +237,7 @@ export const PeotramEnvironmentalMonitor: React.FC = () => {
     const matchesLocation = selectedLocation === "all" || sensor.location === selectedLocation;
     const matchesType = selectedType === "all" || sensor.type === selectedType;
     return matchesLocation && matchesType;
-  };
+  });
 
   const activeAlerts = alerts.filter(alert => !alert.acknowledged);
   const criticalSensors = sensors.filter(sensor => sensor.status === "critical").length;

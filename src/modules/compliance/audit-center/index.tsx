@@ -1,5 +1,4 @@
 /**
-import { useEffect, useState, useCallback } from "react";;
  * Audit Center - Main Component
  * PATCH 62.0 - Complete Implementation with Supabase Integration
  */
@@ -55,14 +54,14 @@ const AuditCenter = () => {
 
       // Map PEOTRAM audits
       if (peotramAudits && peotramAudits.length > 0) {
-        const mappedPeotram: AuditItem[] = peotramAudits.map((a: unknown) => ({
+        const mappedPeotram: AuditItem[] = peotramAudits.map((a: any) => ({
           id: a.id,
-          title: `PEOTRAM ${a.audit_type === "vessel" ? "Vessel" : "Shore"} Audit - ${a.audit_period}`,
+          title: `PEOTRAM ${a.audit_type === 'vessel' ? 'Vessel' : 'Shore'} Audit - ${a.audit_period}`,
           type: "PEOTRAM",
           status: mapStatus(a.status),
           score: a.compliance_score,
           scheduled_date: a.audit_date,
-          completion_date: a.status === "concluido" || a.status === "aprovado" ? a.audit_date : undefined,
+          completion_date: a.status === 'concluido' || a.status === 'aprovado' ? a.audit_date : undefined,
           findings_count: a.non_conformities_count || 0,
           checklist_data: a.metadata?.checklist_data
         }));
@@ -71,9 +70,9 @@ const AuditCenter = () => {
 
       // Map SGSO audits
       if (sgsoAudits && sgsoAudits.length > 0) {
-        const mappedSgso: AuditItem[] = sgsoAudits.map((a: unknown) => ({
+        const mappedSgso: AuditItem[] = sgsoAudits.map((a: any) => ({
           id: a.id,
-          title: `SGSO Audit - ${a.audit_type || "Internal"}`,
+          title: `SGSO Audit - ${a.audit_type || 'Internal'}`,
           type: "SGSO",
           status: mapStatus(a.status),
           score: a.score,
@@ -109,16 +108,16 @@ const AuditCenter = () => {
 
   const mapStatus = (status: string): AuditItem["status"] => {
     const statusMap: Record<string, AuditItem["status"]> = {
-      "concluido": "completed",
-      "aprovado": "completed",
-      "em_andamento": "in_progress",
-      "in_progress": "in_progress",
-      "agendado": "scheduled",
-      "scheduled": "scheduled",
-      "pendente": "scheduled",
-      "atrasado": "overdue"
+      'concluido': 'completed',
+      'aprovado': 'completed',
+      'em_andamento': 'in_progress',
+      'in_progress': 'in_progress',
+      'agendado': 'scheduled',
+      'scheduled': 'scheduled',
+      'pendente': 'scheduled',
+      'atrasado': 'overdue'
     };
-    return statusMap[status?.toLowerCase()] || "scheduled";
+    return statusMap[status?.toLowerCase()] || 'scheduled';
   };
 
   const handleStartAudit = (audit: AuditItem) => {
@@ -130,7 +129,7 @@ const AuditCenter = () => {
     const initialChecklist: Record<string, ChecklistStatus> = {};
     items.forEach(item => {
       initialChecklist[item.id] = "not_checked";
-  };
+    });
     setChecklistData(audit.checklist_data || initialChecklist);
     
     Logger.module("audit-center", "Started audit", { auditId: audit.id, type: audit.type });
@@ -303,7 +302,7 @@ const AuditCenter = () => {
                   <Card 
                     key={audit.id} 
                     className="hover:border-primary/50 transition-colors cursor-pointer"
-                    onClick={() => handlehandleStartAudit}
+                    onClick={() => handleStartAudit(audit)}
                   >
                     <CardHeader>
                       <div className="flex items-start justify-between">
@@ -349,7 +348,7 @@ const AuditCenter = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <Button variant="ghost" onClick={handleSetSelectedAudit}>
+              <Button variant="ghost" onClick={() => setSelectedAudit(null)}>
                 ← Back to Audits
               </Button>
               <h1 className="text-3xl font-bold mt-2">{selectedAudit.title}</h1>
@@ -396,7 +395,7 @@ const AuditCenter = () => {
                       </div>
                       <Select
                         value={checklistData[item.id] || "not_checked"}
-                        onValueChange={(value) => handleChecklistChange(item.id, value as ChecklistStatus}
+                        onValueChange={(value) => handleChecklistChange(item.id, value as ChecklistStatus)}
                       >
                         <SelectTrigger className="w-[140px]">
                           <SelectValue />

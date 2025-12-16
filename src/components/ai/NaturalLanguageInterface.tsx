@@ -2,7 +2,7 @@
  * Natural Language Interface - Execute commands via text/voice
  */
 
-import { memo, memo, useEffect, useRef, useState } from "react";;;
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,7 +59,7 @@ const SUGGESTED_COMMANDS = [
   { text: "Gere relatório de compliance QHSE", module: "qhse" },
 ];
 
-export const NaturalLanguageInterface = memo(function() {
+export function NaturalLanguageInterface() {
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [results, setResults] = useState<CommandResult[]>([]);
@@ -102,7 +102,7 @@ export const NaturalLanguageInterface = memo(function() {
 
     try {
       const response = await analyze(
-        module as unknown,
+        module as any,
         command,
         { command, module, timestamp: new Date().toISOString() }
       );
@@ -111,14 +111,14 @@ export const NaturalLanguageInterface = memo(function() {
         prev.map(r =>
           r.id === pendingResult.id
             ? {
-              ...r,
-              response: response?.response || "Comando processado com sucesso.",
-              status: "success" as const,
-              actions: [
-                { label: "Ver detalhes", action: "view" },
-                { label: "Exportar", action: "export" },
-              ],
-            }
+                ...r,
+                response: response?.response || "Comando processado com sucesso.",
+                status: "success" as const,
+                actions: [
+                  { label: "Ver detalhes", action: "view" },
+                  { label: "Exportar", action: "export" },
+                ],
+              }
             : r
         )
       );
@@ -127,10 +127,10 @@ export const NaturalLanguageInterface = memo(function() {
         prev.map(r =>
           r.id === pendingResult.id
             ? {
-              ...r,
-              response: "Erro ao processar comando. Tente novamente.",
-              status: "error",
-            }
+                ...r,
+                response: "Erro ao processar comando. Tente novamente.",
+                status: "error",
+              }
             : r
         )
       );
@@ -140,10 +140,10 @@ export const NaturalLanguageInterface = memo(function() {
   const toggleVoice = () => {
     if (!isListening) {
       if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
-        const SpeechRecognition = (window as unknown).webkitSpeechRecognition || (window as unknown).SpeechRecognition;
+        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = "pt-BR";
-        recognition.onresult = (event: Event) => {
+        recognition.onresult = (event: any) => {
           const transcript = event.results[0][0].transcript;
           setInput(transcript);
           setIsListening(false);
@@ -176,7 +176,7 @@ export const NaturalLanguageInterface = memo(function() {
           <div className="relative flex-1">
             <Input
               value={input}
-              onChange={handleChange}
+              onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && executeCommand(input)}
               placeholder="Digite um comando em linguagem natural..."
               className="pr-10"
@@ -195,7 +195,7 @@ export const NaturalLanguageInterface = memo(function() {
               )}
             </Button>
           </div>
-          <Button onClick={() => handleexecuteCommand} disabled={isLoading || !input.trim()}>
+          <Button onClick={() => executeCommand(input)} disabled={isLoading || !input.trim()}>
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>
@@ -211,7 +211,7 @@ export const NaturalLanguageInterface = memo(function() {
                   variant="outline"
                   size="sm"
                   className="text-xs h-7"
-                  onClick={() => handleexecuteCommand}
+                  onClick={() => executeCommand(cmd.text)}
                 >
                   {MODULE_ICONS[cmd.module]}
                   <span className="ml-1 truncate max-w-[200px]">{cmd.text}</span>
@@ -283,4 +283,4 @@ export const NaturalLanguageInterface = memo(function() {
       </CardContent>
     </Card>
   );
-});
+}

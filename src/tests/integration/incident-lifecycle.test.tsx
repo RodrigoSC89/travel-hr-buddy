@@ -61,7 +61,7 @@ describe("Integration: Incident Lifecycle", () => {
       severity: "high",
       escalatedAt: new Date(),
       escalationReason: "Situation worsened",
-    });
+    };
 
     // Assert
     expect(escalated.severity).toBe("high");
@@ -72,7 +72,7 @@ describe("Integration: Incident Lifecycle", () => {
   it("should track incident timeline events", async () => {
     // Arrange
     const incident = mockIncident();
-    const timeline: unknown[] = [];
+    const timeline: any[] = [];
 
     // Act - Add timeline events
     timeline.push({

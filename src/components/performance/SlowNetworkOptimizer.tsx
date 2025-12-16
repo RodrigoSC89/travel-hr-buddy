@@ -3,7 +3,7 @@
  * Automatic optimizations for connections < 2 Mbps
  */
 
-import { memo, memo, ReactNode, createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";;;
+import { useEffect, useState, createContext, useContext, ReactNode } from "react";
 import { logger } from "@/lib/logger";
 
 // ===== Types =====
@@ -105,7 +105,7 @@ interface SlowNetworkProviderProps {
   children: ReactNode;
 }
 
-export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProviderProps) {
+export function SlowNetworkProvider({ children }: SlowNetworkProviderProps) {
   const [quality, setQuality] = useState<NetworkQuality>(DEFAULT_QUALITY);
   const [optimizations, setOptimizations] = useState<NetworkOptimizations>(FAST_NETWORK_OPTS);
 
@@ -117,8 +117,8 @@ export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProvid
           downlink?: number;
           rtt?: number;
           saveData?: boolean;
-        });
-      });
+        };
+      };
 
       if (nav.connection) {
         const newQuality: NetworkQuality = {
@@ -126,7 +126,7 @@ export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProvid
           downlink: nav.connection.downlink || 10,
           rtt: nav.connection.rtt || 50,
           saveData: nav.connection.saveData || false,
-        });
+        };
 
         setQuality(newQuality);
 
@@ -187,7 +187,7 @@ export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProvid
 /**
  * Conditionally render based on network speed
  */
-export const NetworkAware = memo(function({ 
+export function NetworkAware({ 
   children, 
   fallback,
   minSpeed = 2, // Minimum Mbps to show full content
@@ -208,7 +208,7 @@ export const NetworkAware = memo(function({
 /**
  * Defer loading on slow networks
  */
-export const DeferOnSlowNetwork = memo(function({ 
+export function DeferOnSlowNetwork({ 
   children,
   delay = 2000,
 }: { 
@@ -235,7 +235,7 @@ export const DeferOnSlowNetwork = memo(function({
 /**
  * Network status indicator
  */
-export const NetworkStatusBadge = memo(function() {
+export function NetworkStatusBadge() {
   const { quality, isSlowNetwork, isCriticallySlowNetwork } = useSlowNetwork();
 
   if (!isSlowNetwork) return null;
@@ -244,12 +244,12 @@ export const NetworkStatusBadge = memo(function() {
     <div className={`
       fixed bottom-4 left-4 z-50 px-3 py-1.5 rounded-full text-xs font-medium
       ${isCriticallySlowNetwork 
-      ? "bg-destructive/90 text-destructive-foreground" 
-      : "bg-warning/90 text-warning-foreground"}
+        ? "bg-destructive/90 text-destructive-foreground" 
+        : "bg-warning/90 text-warning-foreground"}
       backdrop-blur-sm shadow-lg
     `}>
       {isCriticallySlowNetwork ? "⚠️ Conexão muito lenta" : "📶 Conexão lenta"} 
       ({quality.downlink.toFixed(1)} Mbps)
     </div>
   );
-});
+}

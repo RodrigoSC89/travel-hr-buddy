@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -102,7 +102,7 @@ export default function DocumentAIEditorPage() {
         return;
       }
 
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("ai_generated_documents")
         .insert({
           title: title.trim(),
@@ -181,7 +181,7 @@ export default function DocumentAIEditorPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-  });
+      });
       
       pdf.save(`${title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       
@@ -250,11 +250,11 @@ export default function DocumentAIEditorPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">📝 Editor de Documentos com IA</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => handlenavigate}>
+          <Button variant="outline" onClick={() => navigate("/admin/documents/ai/templates")}>
             <FileText className="w-4 h-4 mr-2" />
             Templates
           </Button>
-          <Button variant="outline" onClick={() => handlenavigate}>
+          <Button variant="outline" onClick={() => navigate("/admin/documents")}>
             <List className="w-4 h-4 mr-2" />
             Ver Documentos
           </Button>
@@ -269,7 +269,7 @@ export default function DocumentAIEditorPage() {
           <Input
             placeholder="Título do Documento"
             value={title}
-            onChange={handleChange}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </CardContent>
       </Card>

@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -74,7 +73,7 @@ export default function AdminWallPage() {
           setOffline(true);
         }
       }
-    });
+    };
 
     fetchInitialData();
 
@@ -94,7 +93,7 @@ export default function AdminWallPage() {
             const updated = [newEntry, ...prev];
             localStorage.setItem("ci-wall-data", JSON.stringify(updated));
             return updated;
-  });
+          });
 
           // Trigger alerts on failure
           if (newEntry.status === "failure" && newEntry.commit_hash !== lastAlert) {
@@ -133,7 +132,7 @@ export default function AdminWallPage() {
 
     return () => {
       supabase.removeChannel(subscription);
-    });
+    };
   }, [lastAlert, muted]);
 
   const getStatusIcon = (status: string) => {
@@ -189,7 +188,7 @@ export default function AdminWallPage() {
                   </Badge>
                 )}
                 <Button
-                  onClick={handleSetMuted}
+                  onClick={() => setMuted(!muted)}
                   variant={muted ? "destructive" : "default"}
                   size="lg"
                   className="ml-auto"

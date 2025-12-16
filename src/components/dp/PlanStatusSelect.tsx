@@ -1,4 +1,4 @@
-import { memo, memo, useState, useCallback } from "react";;;
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface Incident {
@@ -16,7 +16,7 @@ interface PlanStatusSelectProps {
  * Component for updating the action plan status of a DP incident
  * Allows selecting between: pendente, em andamento, concluído
  */
-export const PlanStatusSelect = memo(function({ incident, onUpdate }: PlanStatusSelectProps) {
+export function PlanStatusSelect({ incident, onUpdate }: PlanStatusSelectProps) {
   const [status, setStatus] = useState(incident.plan_status || "pendente");
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +32,7 @@ export const PlanStatusSelect = memo(function({ incident, onUpdate }: PlanStatus
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ id: incident.id, status: newStatus }),
-      };
+      });
 
       const data = await response.json();
 
@@ -82,4 +82,4 @@ export const PlanStatusSelect = memo(function({ incident, onUpdate }: PlanStatus
       )}
     </div>
   );
-});
+}

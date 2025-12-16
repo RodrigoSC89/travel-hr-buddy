@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useMemo, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -212,7 +211,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedChannels = React.useMemo(() => {
-    let filtered = [...channels]);
+    let filtered = [...channels];
 
     if (searchTerm) {
       filtered = filtered.filter(c => 
@@ -236,13 +235,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       if (mounted) {
         await loadChannels();
       }
-    });
+    };
     
     init();
     
     return () => {
       mounted = false;
-    });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -269,7 +268,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         member_count: 1,
         settings: { notifications: true },
         created_at: new Date().toISOString()
-      });
+      };
 
       setChannels(prev => [channel, ...prev]);
       setNewChannel({ name: "", description: "", type: "group", is_public: true });
@@ -390,7 +389,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Input
                       placeholder="Ex: Equipe de Deck"
                       value={newChannel.name}
-                      onChange={handleChange}))}
+                      onChange={(e) => setNewChannel(prev => ({ ...prev, name: e.target.value }))}
                     />
                   </div>
                   <div>
@@ -398,7 +397,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Textarea
                       placeholder="Descreva o propósito do canal..."
                       value={newChannel.description}
-                      onChange={handleChange}))}
+                      onChange={(e) => setNewChannel(prev => ({ ...prev, description: e.target.value }))}
                     />
                   </div>
                   <div>
@@ -423,7 +422,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     />
                   </div>
                   <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={handleSetIsNewChannelOpen}>
+                    <Button variant="outline" onClick={() => setIsNewChannelOpen(false)}>
                       Cancelar
                     </Button>
                     <Button onClick={createChannel}>
@@ -443,7 +442,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                 <Input
                   placeholder="Buscar canais..."
                   value={searchTerm}
-                  onChange={handleChange}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -627,7 +626,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
             <p className="text-muted-foreground mb-4">
               Tente ajustar os filtros ou crie um novo canal.
             </p>
-            <Button onClick={handleSetIsNewChannelOpen}>
+            <Button onClick={() => setIsNewChannelOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Criar Primeiro Canal
             </Button>

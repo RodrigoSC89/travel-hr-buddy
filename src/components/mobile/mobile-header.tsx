@@ -1,10 +1,12 @@
 import React from "react";
-import { Menu, Search } from "lucide-react";
+import { Menu, Search, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { NotificationCenter } from "@/components/unified/NotificationCenter.unified";
+import { Badge } from "@/components/ui/badge";
+import { NotificationCenter } from "@/components/notifications/notification-center";
 import { useEnhancedNotifications } from "@/hooks/use-enhanced-notifications";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
 interface MobileHeaderProps {
   title?: string;

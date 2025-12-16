@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -210,7 +209,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
       title: "Alerta resolvido",
       description: "O alerta de segurança foi marcado como resolvido.",
     });
-  });
+  };
 
   const handleRunScan = () => {
     setIsLoading(true);
@@ -380,7 +379,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handlehandleResolveAlert}
+                            onClick={() => handleResolveAlert(alert.id)}
                           >
                             Resolver
                           </Button>

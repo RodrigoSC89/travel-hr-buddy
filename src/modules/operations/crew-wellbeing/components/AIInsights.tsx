@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ interface AIAnalysis {
   preventive_actions?: string[];
 }
 
-export const AIInsights = memo(() => {
+export const AIInsights = () => {
   const { toast } = useToast();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
@@ -38,7 +37,7 @@ export const AIInsights = memo(() => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("crew-ai-analysis" as unknown, {
+      const { data, error } = await supabase.functions.invoke("crew-ai-analysis" as any, {
         body: { crewMemberId: user.id, analysisType: "wellbeing" }
       });
 
@@ -69,7 +68,7 @@ export const AIInsights = memo(() => {
     case "high": return "text-orange-500";
     case "critical": return "text-red-500";
     default: return "text-gray-500";
-    };
+    }
   };
 
   return (
@@ -162,4 +161,4 @@ export const AIInsights = memo(() => {
       </CardContent>
     </Card>
   );
-});
+};

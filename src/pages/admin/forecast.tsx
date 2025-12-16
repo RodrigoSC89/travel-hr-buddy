@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";;;
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -51,7 +51,7 @@ export default function ForecastPage() {
           confidence: Math.round(confidence * 100) / 100,
           trend
         };
-      };
+      });
 
       setForecasts(mockForecasts);
       setLastUpdate(new Date());

@@ -76,7 +76,7 @@ describe("SGSOAuditHistoryPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("PSV Atlântico")).toBeInTheDocument();
-  });
+    });
 
     expect(screen.getByText("AHTS Pacífico")).toBeInTheDocument();
     expect(screen.getByText("João Silva")).toBeInTheDocument();
@@ -93,7 +93,7 @@ describe("SGSOAuditHistoryPage", () => {
     await waitFor(() => {
       const links = screen.getAllByText("🔍 Reabrir Auditoria");
       expect(links).toHaveLength(2);
-  });
+    });
   });
 
   it("should render back button", () => {

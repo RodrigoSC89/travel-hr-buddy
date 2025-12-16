@@ -1,4 +1,3 @@
-import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,7 +71,7 @@ export default function TrainingAcademyAdmin() {
   const { data: courses = [], isLoading } = useQuery<Course[]>({
     queryKey: ["admin-courses"],
     queryFn: async () => {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("courses")
         .select("*")
         .order("created_at", { ascending: false });
@@ -86,7 +85,7 @@ export default function TrainingAcademyAdmin() {
   const { data: enrollments = [] } = useQuery<Enrollment[]>({
     queryKey: ["course-enrollments"],
     queryFn: async () => {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("course_enrollments")
         .select("*, courses(title)")
         .order("enrolled_at", { ascending: false })
@@ -102,10 +101,10 @@ export default function TrainingAcademyAdmin() {
     queryKey: ["training-stats"],
     queryFn: async () => {
       const [coursesCount, enrollmentsCount, completedCount, certificatesCount] = await Promise.all([
-        (supabase as unknown).from("courses").select("id", { count: "exact", head: true }),
-        (supabase as unknown).from("course_enrollments").select("id", { count: "exact", head: true }),
-        (supabase as unknown).from("course_enrollments").select("id", { count: "exact", head: true }).eq("status", "completed"),
-        (supabase as unknown).from("certifications").select("id", { count: "exact", head: true }).eq("is_valid", true)
+        (supabase as any).from("courses").select("id", { count: "exact", head: true }),
+        (supabase as any).from("course_enrollments").select("id", { count: "exact", head: true }),
+        (supabase as any).from("course_enrollments").select("id", { count: "exact", head: true }).eq("status", "completed"),
+        (supabase as any).from("certifications").select("id", { count: "exact", head: true }).eq("is_valid", true)
       ]);
 
       return {
@@ -113,7 +112,7 @@ export default function TrainingAcademyAdmin() {
         total_enrollments: enrollmentsCount.count || 0,
         completed_courses: completedCount.count || 0,
         active_certificates: certificatesCount.count || 0
-      });
+      };
     }
   });
 
@@ -122,7 +121,7 @@ export default function TrainingAcademyAdmin() {
     mutationFn: async (courseData: typeof newCourse) => {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("courses")
         .insert({
           ...courseData,
@@ -143,7 +142,7 @@ export default function TrainingAcademyAdmin() {
       setIsCreateDialogOpen(false);
       resetForm();
     },
-    onError: (error: SupabaseError | null) => {
+    onError: (error: any) => {
       toast({
         title: "Erro ao criar curso",
         description: error.message,
@@ -155,7 +154,7 @@ export default function TrainingAcademyAdmin() {
   // Update course mutation
   const updateCourseMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Course> }) => {
-      const { data, error } = await (supabase as unknown)
+      const { data, error } = await (supabase as any)
         .from("courses")
         .update(updates)
         .eq("id", id)
@@ -170,10 +169,10 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso atualizado",
         description: "O curso foi atualizado com sucesso.",
-});
+      });
       setEditingCourse(null);
     },
-    onError: (error: SupabaseError | null) => {
+    onError: (error: any) => {
       toast({
         title: "Erro ao atualizar curso",
         description: error.message,
@@ -185,7 +184,7 @@ export default function TrainingAcademyAdmin() {
   // Delete course mutation
   const deleteCourseMutation = useMutation({
     mutationFn: async (courseId: string) => {
-      const { error } = await (supabase as unknown)
+      const { error } = await (supabase as any)
         .from("courses")
         .delete()
         .eq("id", courseId);
@@ -199,7 +198,7 @@ export default function TrainingAcademyAdmin() {
         description: "O curso foi removido com sucesso.",
       });
     },
-    onError: (error: SupabaseError | null) => {
+    onError: (error: any) => {
       toast({
         title: "Erro ao deletar curso",
         description: error.message,
@@ -219,7 +218,7 @@ export default function TrainingAcademyAdmin() {
       is_mandatory: false,
       instructor_name: ""
     });
-  });
+  };
 
   const handleCreateCourse = () => {
     createCourseMutation.mutate(newCourse);
@@ -230,7 +229,7 @@ export default function TrainingAcademyAdmin() {
       id: course.id,
       updates: { is_published: !course.is_published }
     });
-  });
+  };
 
   const handleDeleteCourse = (courseId: string) => {
     if (confirm("Tem certeza que deseja deletar este curso?")) {
@@ -271,7 +270,7 @@ export default function TrainingAcademyAdmin() {
                 <Input
                   id="title"
                   value={newCourse.title}
-                  onChange={handleChange}
+                  onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
                   placeholder="Ex: Operações DP Avançadas"
                 />
               </div>
@@ -280,7 +279,7 @@ export default function TrainingAcademyAdmin() {
                 <Textarea
                   id="description"
                   value={newCourse.description}
-                  onChange={handleChange}
+                  onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
                   placeholder="Descrição detalhada do curso"
                   rows={3}
                 />
@@ -331,7 +330,7 @@ export default function TrainingAcademyAdmin() {
                     min="0.5"
                     step="0.5"
                     value={newCourse.duration_hours}
-                    onChange={handleChange}
+                    onChange={(e) => setNewCourse({ ...newCourse, duration_hours: parseFloat(e.target.value) })}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -339,14 +338,14 @@ export default function TrainingAcademyAdmin() {
                   <Input
                     id="instructor"
                     value={newCourse.instructor_name}
-                    onChange={handleChange}
+                    onChange={(e) => setNewCourse({ ...newCourse, instructor_name: e.target.value })}
                     placeholder="Nome do instrutor"
                   />
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleSetIsCreateDialogOpen}>
+              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateCourse} disabled={!newCourse.title}>
@@ -474,7 +473,7 @@ export default function TrainingAcademyAdmin() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handletogglePublishStatus}
+                            onClick={() => togglePublishStatus(course)}
                           >
                             {course.is_published ? (
                               <>
@@ -491,14 +490,14 @@ export default function TrainingAcademyAdmin() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={handleSetEditingCourse}
+                            onClick={() => setEditingCourse(course)}
                           >
                             <Edit2 className="w-4 h-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handlehandleDeleteCourse}
+                            onClick={() => handleDeleteCourse(course.id)}
                           >
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>

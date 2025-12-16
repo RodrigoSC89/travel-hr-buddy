@@ -1,5 +1,4 @@
 /**
-import { useMemo, useState, useCallback } from "react";;
  * PEO-DP Audit Form
  * Formulário de auditoria com checklist dinâmico baseado no PEO-DP Petrobras
  */
@@ -65,7 +64,7 @@ interface PEODPAuditFormProps {
   onComplete?: (items: PEODPAuditItem[], score: number) => void;
 }
 
-export const PEODPAuditForm = memo(function({
+export function PEODPAuditForm({
   vesselName,
   vesselId,
   dpClass,
@@ -107,11 +106,11 @@ export const PEODPAuditForm = memo(function({
       operacao: [],
       manutencao: [],
       testes_anuais: []
-    });
+    };
     
     requirements.forEach(req => {
       grouped[req.section].push(req);
-  });
+    });
     
     return grouped;
   }, [requirements]);
@@ -123,7 +122,7 @@ export const PEODPAuditForm = memo(function({
 
   // Count items by status per section
   const sectionStats = useMemo(() => {
-    const stats: Record<PEODPSection, { total: number; completed: number; conformes: number; naoConformes: number }> = {} as unknown;
+    const stats: Record<PEODPSection, { total: number; completed: number; conformes: number; naoConformes: number }> = {} as any;
     
     PEODP_SECTIONS.forEach(section => {
       const sectionReqs = requirementsBySection[section.id];
@@ -135,7 +134,7 @@ export const PEODPAuditForm = memo(function({
         conformes: sectionItems.filter(item => item?.status === "conforme").length,
         naoConformes: sectionItems.filter(item => item?.status === "nao_conforme").length
       };
-  };
+    });
     
     return stats;
   }, [requirementsBySection, auditItems]);
@@ -146,7 +145,7 @@ export const PEODPAuditForm = memo(function({
       const existing = newMap.get(reqId) || { requirementId: reqId, status: "pendente" as ComplianceStatus };
       newMap.set(reqId, { ...existing, ...updates });
       return newMap;
-  };
+    });
   };
 
   const toggleExpanded = (reqId: string) => {
@@ -158,7 +157,7 @@ export const PEODPAuditForm = memo(function({
         newSet.add(reqId);
       }
       return newSet;
-  };
+    });
   };
 
   const handleSave = () => {
@@ -178,11 +177,11 @@ export const PEODPAuditForm = memo(function({
 
   const getStatusIcon = (status: ComplianceStatus) => {
     switch (status) {
-    case "conforme": return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-    case "parcial": return <MinusCircle className="h-4 w-4 text-yellow-600" />;
-    case "nao_conforme": return <AlertCircle className="h-4 w-4 text-red-600" />;
-    case "nao_aplicavel": return <HelpCircle className="h-4 w-4 text-gray-400" />;
-    default: return <HelpCircle className="h-4 w-4 text-muted-foreground" />;
+      case "conforme": return <CheckCircle2 className="h-4 w-4 text-green-600" />;
+      case "parcial": return <MinusCircle className="h-4 w-4 text-yellow-600" />;
+      case "nao_conforme": return <AlertCircle className="h-4 w-4 text-red-600" />;
+      case "nao_aplicavel": return <HelpCircle className="h-4 w-4 text-gray-400" />;
+      default: return <HelpCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -219,7 +218,7 @@ export const PEODPAuditForm = memo(function({
       </Card>
 
       {/* Section tabs */}
-      <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as PEODPSection}>
+      <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as PEODPSection)}>
         <TabsList className="grid w-full grid-cols-6 h-auto">
           {PEODP_SECTIONS.map(section => {
             const Icon = SECTION_ICONS[section.icon] || FileText;
@@ -267,7 +266,7 @@ export const PEODPAuditForm = memo(function({
                         <Collapsible
                           key={req.id}
                           open={isExpanded}
-                          onOpenChange={() => toggleExpanded(req.id}
+                          onOpenChange={() => toggleExpanded(req.id)}
                         >
                           <div className={`p-4 ${getStatusBgColor(item?.status || "pendente")}`}>
                             <CollapsibleTrigger className="w-full">
@@ -301,7 +300,7 @@ export const PEODPAuditForm = memo(function({
                                   {getStatusIcon(item?.status || "pendente")}
                                   <Badge
                                     variant={item?.status === "conforme" ? "default" : 
-                                      item?.status === "nao_conforme" ? "destructive" : "secondary"}
+                                            item?.status === "nao_conforme" ? "destructive" : "secondary"}
                                   >
                                     {getStatusLabel(item?.status || "pendente")}
                                   </Badge>
@@ -361,7 +360,7 @@ export const PEODPAuditForm = memo(function({
                                     id={`${req.id}-evidence`}
                                     placeholder="Descreva as evidências encontradas..."
                                     value={item?.evidence || ""}
-                                    onChange={handleChange}
+                                    onChange={(e) => updateItem(req.id, { evidence: e.target.value })}
                                     rows={3}
                                   />
                                 </div>
@@ -371,7 +370,7 @@ export const PEODPAuditForm = memo(function({
                                     id={`${req.id}-observations`}
                                     placeholder="Observações adicionais..."
                                     value={item?.observations || ""}
-                                    onChange={handleChange}
+                                    onChange={(e) => updateItem(req.id, { observations: e.target.value })}
                                     rows={3}
                                   />
                                 </div>
@@ -384,7 +383,7 @@ export const PEODPAuditForm = memo(function({
                                     id={`${req.id}-action`}
                                     placeholder="Descreva a ação corretiva necessária..."
                                     value={item?.actionRequired || ""}
-                                    onChange={handleChange}
+                                    onChange={(e) => updateItem(req.id, { actionRequired: e.target.value })}
                                     rows={2}
                                   />
                                 </div>
@@ -420,4 +419,4 @@ export const PEODPAuditForm = memo(function({
       </div>
     </div>
   );
-});
+}

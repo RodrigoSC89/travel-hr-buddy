@@ -3,7 +3,7 @@
  * Dashboard executivo com métricas, KPIs e visualizações avançadas
  */
 
-import { memo, memo, useState, useMemo } from "react";;;
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ const operationalMetrics = [
   { name: "Crítico", value: 2, color: "#ef4444" },
 ];
 
-const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: unknown: unknown: unknown) => {
+const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: any) => {
   const isPositive = change >= 0;
   const TrendIcon = isPositive ? ArrowUpRight : ArrowDownRight;
 
@@ -95,7 +95,7 @@ const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix 
   );
 };
 
-const MetricIndicator = ({ label, value, target, color = "blue" }: unknown: unknown: unknown) => {
+const MetricIndicator = ({ label, value, target, color = "blue" }: any) => {
   const percentage = (value / target) * 100;
   const isExceeding = percentage >= 100;
 
@@ -123,7 +123,7 @@ const MetricIndicator = ({ label, value, target, color = "blue" }: unknown: unkn
   );
 };
 
-const VesselPerformanceCard = ({ vessel }: unknown: unknown: unknown) => (
+const VesselPerformanceCard = ({ vessel }: any) => (
   <Card>
     <CardContent className="pt-6">
       <div className="space-y-4">
@@ -165,7 +165,7 @@ const VesselPerformanceCard = ({ vessel }: unknown: unknown: unknown) => (
   </Card>
 );
 
-export const ExecutiveDashboard = memo(function() {
+export function ExecutiveDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
@@ -517,4 +517,4 @@ export const ExecutiveDashboard = memo(function() {
       </Tabs>
     </div>
   );
-});
+}

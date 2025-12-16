@@ -1,4 +1,3 @@
-import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -164,7 +163,7 @@ export const OrganizationSetupWizard: React.FC = () => {
           default_language: "pt-BR",
           default_currency: orgData.currency,
           timezone: orgData.timezone,
-          enabled_modules: orgData.modules as unknown,
+          enabled_modules: orgData.modules as any,
           custom_fields: {
             industry: orgData.industry,
             company_size: orgData.size,
@@ -182,7 +181,7 @@ export const OrganizationSetupWizard: React.FC = () => {
         accent_color: "#f59e0b",
         default_currency: orgData.currency,
         timezone: orgData.timezone,
-        enabled_modules: orgData.modules as unknown,
+        enabled_modules: orgData.modules as any,
         custom_fields: {
           industry: orgData.industry,
           company_size: orgData.size,
@@ -219,7 +218,7 @@ export const OrganizationSetupWizard: React.FC = () => {
             <Input
               id="name"
               value={orgData.name}
-              onChange={handleChange}))}
+              onChange={(e) => setOrgData(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Ex: Empresa Marítima LTDA"
             />
           </div>
@@ -229,7 +228,7 @@ export const OrganizationSetupWizard: React.FC = () => {
             <Textarea
               id="description"
               value={orgData.description}
-              onChange={handleChange}))}
+              onChange={(e) => setOrgData(prev => ({ ...prev, description: e.target.value }))}
               placeholder="Breve descrição da sua empresa..."
               rows={3}
             />
@@ -280,7 +279,7 @@ export const OrganizationSetupWizard: React.FC = () => {
                 <Checkbox
                   id={module.id}
                   checked={orgData.modules.includes(module.id)}
-                  onCheckedChange={() => handleModuleToggle(module.id}
+                  onCheckedChange={() => handleModuleToggle(module.id)}
                 />
                 <div className="flex-1">
                   <Label htmlFor={module.id} className="text-base font-medium cursor-pointer">
@@ -320,12 +319,12 @@ export const OrganizationSetupWizard: React.FC = () => {
                 type="color"
                 id="color"
                 value={orgData.primary_color}
-                onChange={handleChange}))}
+                onChange={(e) => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
                 className="w-12 h-12 rounded border"
               />
               <Input
                 value={orgData.primary_color}
-                onChange={handleChange}))}
+                onChange={(e) => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
                 placeholder="#3b82f6"
                 className="flex-1"
               />

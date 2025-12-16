@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -163,7 +162,7 @@ export const ReservationsDashboard: React.FC = () => {
       status: "confirmed" as "pending" | "confirmed" | "cancelled"
     });
     setSelectedReservation(null);
-  });
+  };
 
   const openEditDialog = (reservation: Reservation) => {
     setSelectedReservation(reservation);
@@ -177,7 +176,7 @@ export const ReservationsDashboard: React.FC = () => {
       status: reservation.status
     });
     setIsDialogOpen(true);
-  });
+  };
 
   const openNewDialog = () => {
     resetForm();
@@ -247,7 +246,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Título</label>
                 <Input
                   value={formData.title}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Título da reserva"
                   required
                 />
@@ -276,7 +275,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.start_date}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                     required
                   />
                 </div>
@@ -285,7 +284,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.end_date}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
                     required
                   />
                 </div>
@@ -294,7 +293,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Local</label>
                 <Input
                   value={formData.location}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   placeholder="Local da reserva"
                 />
               </div>
@@ -302,7 +301,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Descrição</label>
                 <Textarea
                   value={formData.description}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Descrição adicional"
                   rows={3}
                 />
@@ -332,7 +331,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleSetIsDialogOpen}
+                  onClick={() => setIsDialogOpen(false)}
                 >
                   Cancelar
                 </Button>
@@ -436,7 +435,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleopenEditDialog}
+                  onClick={() => openEditDialog(reservation)}
                   className="flex-1"
                 >
                   <Edit className="h-4 w-4 mr-1" />
@@ -445,7 +444,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlehandleDelete}
+                  onClick={() => handleDelete(reservation.id)}
                   className="text-red-600 hover:text-red-700"
                 >
                   <Trash2 className="h-4 w-4" />

@@ -3,7 +3,7 @@
  * Interactive AI assistant sidebar with hotkey support
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import {
   Send,
   Shield,
   FileText,
+  TrendingUp,
   GraduationCap,
   Lightbulb
 } from "lucide-react";
@@ -34,7 +35,7 @@ export default function CopilotV2() {
   const [input, setInput] = useState("");
   const [commands, setCommands] = useState<CopilotCommand[]>([]);
   const [suggestions, setSuggestions] = useState<CopilotSuggestion[]>([]);
-  const [response, setResponse] = useState<unknown>(null);
+  const [response, setResponse] = useState<any>(null);
   const [isListening, setIsListening] = useState(false);
 
   // Load commands and suggestions
@@ -50,7 +51,7 @@ export default function CopilotV2() {
         e.preventDefault();
         setOpen(prev => !prev);
       }
-    });
+    };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
@@ -65,7 +66,7 @@ export default function CopilotV2() {
     }
   };
 
-  const handleCommand = async (commandId: string, context?: unknown) => {
+  const handleCommand = async (commandId: string, context?: any) => {
     try {
       const result = await executeCopilotCommand(commandId, context);
       setResponse(result);
@@ -104,12 +105,12 @@ export default function CopilotV2() {
   };
 
   const getCategoryIcon = (category: string) => {
-    const icons: Record<string, unknown> = {
+    const icons: Record<string, any> = {
       compliance: Shield,
       documentation: FileText,
       operations: Lightbulb,
       safety: GraduationCap
-    });
+    };
     return icons[category] || Sparkles;
   };
 
@@ -118,7 +119,7 @@ export default function CopilotV2() {
       {/* Floating Action Button */}
       <Button
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
-        onClick={handleSetOpen}
+        onClick={() => setOpen(true)}
         size="icon"
         aria-label="Open Nautilus Copilot AI Assistant"
         aria-expanded={open}
@@ -153,7 +154,7 @@ export default function CopilotV2() {
               <Input
                 placeholder="Ask me anything or type a command..."
                 value={input}
-                onChange={handleChange}
+                onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleTextInput()}
                 className="flex-1"
               />
@@ -165,7 +166,7 @@ export default function CopilotV2() {
                 size="icon"
                 variant={isListening ? "destructive" : "outline"}
               >
-                <Mic className={`h-4 w-4 ${isListening ? "animate-pulse" : ""}`} />
+                <Mic className={`h-4 w-4 ${isListening ? 'animate-pulse' : ''}`} />
               </Button>
             </div>
 
@@ -179,7 +180,7 @@ export default function CopilotV2() {
                   </p>
                   {response.actions && (
                     <div className="flex gap-2 mt-3">
-                      {response.actions.map((action: unknown, idx: number) => (
+                      {response.actions.map((action: any, idx: number) => (
                         <Button key={idx} size="sm" variant="outline">
                           {action.label}
                         </Button>
@@ -198,7 +199,7 @@ export default function CopilotV2() {
                   <Card
                     key={cmd.id}
                     className="hover:bg-accent cursor-pointer transition-colors"
-                    onClick={() => handlehandleCommand}
+                    onClick={() => handleCommand(cmd.id)}
                   >
                     <CardHeader className="py-3">
                       <div className="flex items-center justify-between">
@@ -268,7 +269,7 @@ export default function CopilotV2() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={() => handlehandleCommand} className="w-full">
+                  <Button onClick={() => handleCommand("training-mode")} className="w-full">
                     <GraduationCap className="h-4 w-4 mr-2" />
                     Start Training Session
                   </Button>
@@ -277,7 +278,7 @@ export default function CopilotV2() {
 
               {response?.length > 0 && Array.isArray(response) && (
                 <div className="space-y-2">
-                  {response.map((module: unknown) => (
+                  {response.map((module: any) => (
                     <Card key={module.id}>
                       <CardHeader className="py-3">
                         <CardTitle className="text-sm">{module.title}</CardTitle>

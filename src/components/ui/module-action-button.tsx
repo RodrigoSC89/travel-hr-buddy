@@ -1,11 +1,19 @@
-import { useState } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   ChevronDown,
-  Zap
+  ChevronUp,
+  Zap,
+  Settings,
+  Search,
+  Download,
+  RefreshCw,
+  Plus,
+  FileText,
+  Users,
+  TrendingUp
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -57,7 +65,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
       >
         <FloatingShortcutButton
           icon={moduleIcon}
-          onClick={handleSetIsMinimized}
+          onClick={() => setIsMinimized(false)}
           label={`Ações ${moduleName}`}
           bgColor="bg-azure-700 hover:bg-azure-800"
           iconColor="text-azure-50"
@@ -86,7 +94,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleSetIsMinimized}
+            onClick={() => setIsMinimized(true)}
             className="ml-auto h-6 w-6 p-0"
           >
             <ChevronDown className="h-3 w-3" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, memo, useEffect, useState, useCallback } from "react";;;
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LineChart,
@@ -44,7 +44,7 @@ function formatData(rawData: RawDataEntry[]): ChartDataEntry[] {
     const displayMonth = date.toLocaleDateString("pt-BR", { 
       month: "short", 
       year: "numeric" 
-};
+    });
 
     if (!grouped[monthKey]) {
       grouped[monthKey] = { mes: displayMonth };
@@ -65,7 +65,7 @@ interface SGSOTrendChartProps {
   data?: RawDataEntry[];
 }
 
-export const SGSOTrendChart = memo(function({ data: customData }: SGSOTrendChartProps = {}) {
+export function SGSOTrendChart({ data: customData }: SGSOTrendChartProps = {}) {
   const [data, setData] = useState<RawDataEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

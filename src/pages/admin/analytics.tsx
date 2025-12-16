@@ -1,4 +1,3 @@
-import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -211,13 +210,13 @@ export default function AnalyticsPage() {
             <Input
               type="date"
               value={startDate}
-              onChange={handleChange}
+              onChange={(e) => setStartDate(e.target.value)}
               placeholder="Data inicial"
             />
             <Input
               type="date"
               value={endDate}
-              onChange={handleChange}
+              onChange={(e) => setEndDate(e.target.value)}
               placeholder="Data final"
             />
             <Button onClick={exportPDF}>📄 Exportar PDF</Button>
