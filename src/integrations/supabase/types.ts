@@ -349,6 +349,125 @@ export type Database = {
           },
         ]
       }
+      ai_audit_logs: {
+        Row: {
+          ai_response: string | null
+          approval_comments: string | null
+          approval_decision: string | null
+          approved_at: string | null
+          approved_by: string | null
+          approved_by_name: string | null
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          input_hash: string | null
+          interaction_type: string | null
+          ip_address: unknown
+          model_parameters: Json | null
+          model_provider: string | null
+          model_version: string | null
+          module_name: string | null
+          organization_id: string | null
+          quality_score: number | null
+          rag_enabled: boolean | null
+          rag_source_documents: string[] | null
+          rag_sources: Json | null
+          requires_approval: boolean | null
+          response_hash: string | null
+          response_time_ms: number | null
+          session_id: string | null
+          tokens_input: number | null
+          tokens_output: number | null
+          trust_score: number | null
+          user_agent: string | null
+          user_id: string | null
+          user_input: string
+          user_name: string | null
+          user_permission_level: string | null
+          user_role: string | null
+        }
+        Insert: {
+          ai_response?: string | null
+          approval_comments?: string | null
+          approval_decision?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          approved_by_name?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          input_hash?: string | null
+          interaction_type?: string | null
+          ip_address?: unknown
+          model_parameters?: Json | null
+          model_provider?: string | null
+          model_version?: string | null
+          module_name?: string | null
+          organization_id?: string | null
+          quality_score?: number | null
+          rag_enabled?: boolean | null
+          rag_source_documents?: string[] | null
+          rag_sources?: Json | null
+          requires_approval?: boolean | null
+          response_hash?: string | null
+          response_time_ms?: number | null
+          session_id?: string | null
+          tokens_input?: number | null
+          tokens_output?: number | null
+          trust_score?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+          user_input: string
+          user_name?: string | null
+          user_permission_level?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          ai_response?: string | null
+          approval_comments?: string | null
+          approval_decision?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          approved_by_name?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          input_hash?: string | null
+          interaction_type?: string | null
+          ip_address?: unknown
+          model_parameters?: Json | null
+          model_provider?: string | null
+          model_version?: string | null
+          module_name?: string | null
+          organization_id?: string | null
+          quality_score?: number | null
+          rag_enabled?: boolean | null
+          rag_source_documents?: string[] | null
+          rag_sources?: Json | null
+          requires_approval?: boolean | null
+          response_hash?: string | null
+          response_time_ms?: number | null
+          session_id?: string | null
+          tokens_input?: number | null
+          tokens_output?: number | null
+          trust_score?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+          user_input?: string
+          user_name?: string | null
+          user_permission_level?: string | null
+          user_role?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_audit_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_commands: {
         Row: {
           command_hash: string
@@ -5061,6 +5180,242 @@ export type Database = {
         }
         Relationships: []
       }
+      document_approvals: {
+        Row: {
+          approver_id: string | null
+          approver_name: string | null
+          approver_role: string | null
+          comments: string | null
+          created_at: string | null
+          decision: string | null
+          document_id: string | null
+          id: string
+          ip_address: unknown
+          required_role: string | null
+          signature_data: Json | null
+          signed_at: string | null
+          step_name: string
+          step_order: number
+          version: number
+        }
+        Insert: {
+          approver_id?: string | null
+          approver_name?: string | null
+          approver_role?: string | null
+          comments?: string | null
+          created_at?: string | null
+          decision?: string | null
+          document_id?: string | null
+          id?: string
+          ip_address?: unknown
+          required_role?: string | null
+          signature_data?: Json | null
+          signed_at?: string | null
+          step_name: string
+          step_order: number
+          version: number
+        }
+        Update: {
+          approver_id?: string | null
+          approver_name?: string | null
+          approver_role?: string | null
+          comments?: string | null
+          created_at?: string | null
+          decision?: string | null
+          document_id?: string | null
+          id?: string
+          ip_address?: unknown
+          required_role?: string | null
+          signature_data?: Json | null
+          signed_at?: string | null
+          step_name?: string
+          step_order?: number
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_approvals_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_distribution: {
+        Row: {
+          access_count: number | null
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledgment_signature: Json | null
+          distributed_at: string | null
+          distributed_by: string | null
+          distribution_method: string | null
+          document_id: string | null
+          first_accessed_at: string | null
+          id: string
+          recipient_id: string | null
+          recipient_name: string | null
+          recipient_type: string | null
+          version: number
+        }
+        Insert: {
+          access_count?: number | null
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledgment_signature?: Json | null
+          distributed_at?: string | null
+          distributed_by?: string | null
+          distribution_method?: string | null
+          document_id?: string | null
+          first_accessed_at?: string | null
+          id?: string
+          recipient_id?: string | null
+          recipient_name?: string | null
+          recipient_type?: string | null
+          version: number
+        }
+        Update: {
+          access_count?: number | null
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledgment_signature?: Json | null
+          distributed_at?: string | null
+          distributed_by?: string | null
+          distribution_method?: string | null
+          document_id?: string | null
+          first_accessed_at?: string | null
+          id?: string
+          recipient_id?: string | null
+          recipient_name?: string | null
+          recipient_type?: string | null
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_distribution_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_registry: {
+        Row: {
+          category: Database["public"]["Enums"]["document_category"]
+          checksum: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          document_number: string
+          effective_date: string | null
+          expiry_date: string | null
+          file_path: string | null
+          file_size: number | null
+          file_type: string | null
+          id: string
+          is_current_version: boolean | null
+          ism_code_reference: string | null
+          marpol_reference: string | null
+          metadata: Json | null
+          mlc_reference: string | null
+          organization_id: string | null
+          parent_document_id: string | null
+          review_date: string | null
+          revision_number: string | null
+          solas_reference: string | null
+          status: Database["public"]["Enums"]["approval_status"] | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          version: number
+          vessel_id: string | null
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["document_category"]
+          checksum?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          document_number: string
+          effective_date?: string | null
+          expiry_date?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          is_current_version?: boolean | null
+          ism_code_reference?: string | null
+          marpol_reference?: string | null
+          metadata?: Json | null
+          mlc_reference?: string | null
+          organization_id?: string | null
+          parent_document_id?: string | null
+          review_date?: string | null
+          revision_number?: string | null
+          solas_reference?: string | null
+          status?: Database["public"]["Enums"]["approval_status"] | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          version?: number
+          vessel_id?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["document_category"]
+          checksum?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          document_number?: string
+          effective_date?: string | null
+          expiry_date?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          is_current_version?: boolean | null
+          ism_code_reference?: string | null
+          marpol_reference?: string | null
+          metadata?: Json | null
+          mlc_reference?: string | null
+          organization_id?: string | null
+          parent_document_id?: string | null
+          review_date?: string | null
+          revision_number?: string | null
+          solas_reference?: string | null
+          status?: Database["public"]["Enums"]["approval_status"] | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          version?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_registry_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_registry_parent_document_id_fkey"
+            columns: ["parent_document_id"]
+            isOneToOne: false
+            referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_registry_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_template_versions: {
         Row: {
           change_description: string | null
@@ -5163,6 +5518,53 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_versions: {
+        Row: {
+          change_summary: string | null
+          changed_at: string | null
+          changed_by: string | null
+          checksum: string | null
+          document_id: string | null
+          document_snapshot: Json | null
+          file_path: string
+          file_size: number | null
+          id: string
+          version: number
+        }
+        Insert: {
+          change_summary?: string | null
+          changed_at?: string | null
+          changed_by?: string | null
+          checksum?: string | null
+          document_id?: string | null
+          document_snapshot?: Json | null
+          file_path: string
+          file_size?: number | null
+          id?: string
+          version: number
+        }
+        Update: {
+          change_summary?: string | null
+          changed_at?: string | null
+          changed_by?: string | null
+          checksum?: string | null
+          document_id?: string | null
+          document_snapshot?: Json | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_versions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "document_registry"
             referencedColumns: ["id"]
           },
         ]
@@ -11749,6 +12151,140 @@ export type Database = {
           },
         ]
       }
+      psc_deficiencies: {
+        Row: {
+          action_code: string | null
+          category: string | null
+          corrected_at: string | null
+          corrective_action: string | null
+          corrective_deadline: string | null
+          created_at: string | null
+          deficiency_code: string
+          deficiency_description: string
+          evidence_files: string[] | null
+          id: string
+          inspection_id: string | null
+          severity: string | null
+          status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          action_code?: string | null
+          category?: string | null
+          corrected_at?: string | null
+          corrective_action?: string | null
+          corrective_deadline?: string | null
+          created_at?: string | null
+          deficiency_code: string
+          deficiency_description: string
+          evidence_files?: string[] | null
+          id?: string
+          inspection_id?: string | null
+          severity?: string | null
+          status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          action_code?: string | null
+          category?: string | null
+          corrected_at?: string | null
+          corrective_action?: string | null
+          corrective_deadline?: string | null
+          created_at?: string | null
+          deficiency_code?: string
+          deficiency_description?: string
+          evidence_files?: string[] | null
+          id?: string
+          inspection_id?: string | null
+          severity?: string | null
+          status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "psc_deficiencies_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "psc_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      psc_inspections: {
+        Row: {
+          created_at: string | null
+          deficiencies_count: number | null
+          detention: boolean | null
+          detention_reason: string | null
+          id: string
+          inspection_date: string
+          inspection_focus: string[] | null
+          inspection_type: string | null
+          organization_id: string | null
+          port_country: string
+          port_name: string
+          port_state_authority: string | null
+          report_file_path: string | null
+          risk_score: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          deficiencies_count?: number | null
+          detention?: boolean | null
+          detention_reason?: string | null
+          id?: string
+          inspection_date: string
+          inspection_focus?: string[] | null
+          inspection_type?: string | null
+          organization_id?: string | null
+          port_country: string
+          port_name: string
+          port_state_authority?: string | null
+          report_file_path?: string | null
+          risk_score?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          deficiencies_count?: number | null
+          detention?: boolean | null
+          detention_reason?: string | null
+          id?: string
+          inspection_date?: string
+          inspection_focus?: string[] | null
+          inspection_type?: string | null
+          organization_id?: string | null
+          port_country?: string
+          port_name?: string
+          port_state_authority?: string | null
+          report_file_path?: string | null
+          risk_score?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "psc_inspections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "psc_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       real_time_notifications: {
         Row: {
           category: string
@@ -17159,6 +17695,25 @@ export type Database = {
       }
     }
     Enums: {
+      approval_status:
+        | "draft"
+        | "pending_review"
+        | "pending_approval"
+        | "approved"
+        | "rejected"
+        | "superseded"
+        | "archived"
+      document_category:
+        | "ism_procedure"
+        | "mlc_agreement"
+        | "psc_checklist"
+        | "audit_report"
+        | "safety_manual"
+        | "crew_certificate"
+        | "vessel_certificate"
+        | "emergency_procedure"
+        | "training_record"
+        | "maintenance_procedure"
       user_role:
         | "admin"
         | "hr_manager"
@@ -17296,6 +17851,27 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      approval_status: [
+        "draft",
+        "pending_review",
+        "pending_approval",
+        "approved",
+        "rejected",
+        "superseded",
+        "archived",
+      ],
+      document_category: [
+        "ism_procedure",
+        "mlc_agreement",
+        "psc_checklist",
+        "audit_report",
+        "safety_manual",
+        "crew_certificate",
+        "vessel_certificate",
+        "emergency_procedure",
+        "training_record",
+        "maintenance_procedure",
+      ],
       user_role: [
         "admin",
         "hr_manager",
