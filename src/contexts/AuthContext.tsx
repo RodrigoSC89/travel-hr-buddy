@@ -1,4 +1,3 @@
-// AuthContext - PATCH 850.1 - Cache invalidation fix
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import type { ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
