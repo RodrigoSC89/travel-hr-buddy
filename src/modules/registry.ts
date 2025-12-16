@@ -1000,17 +1000,15 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // PATCH FINAL: Module deprecated - redirects to /optimization
   "features.mobile-optimization": {
     id: "features.mobile-optimization",
     name: "Mobile Optimization",
     category: "features",
-    path: "pages/Optimization",
-    description: "DEPRECATED: Redirecionado para Optimization Center",
-    status: "deprecated",
+    path: "pages/MobileOptimization",
+    description: "Mobile performance optimization center",
+    status: "active",
     completeness: "100%",
     route: "/mobile-optimization",
-    redirectTo: "/optimization",
     icon: "Smartphone",
     lazy: true,
   },

@@ -1,9 +1,7 @@
-import React, { Suspense, useMemo } from "react";
+import React, { useEffect, Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
-import { TenantProvider } from "./contexts/TenantContext";
-import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { Toaster } from "@/components/ui/toaster";
 
 // Simple inline error boundary for maximum reliability
@@ -75,9 +73,15 @@ const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
 // Protected Route wrappers - PATCH 68.5
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
-// Lazy load heavy components (NOT context providers)
+// Lazy load heavy components
 const SmartLayout = React.lazy(() => 
   import("./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
+);
+const TenantProvider = React.lazy(() => 
+  import("./contexts/TenantContext").then(m => ({ default: m.TenantProvider }))
+);
+const OrganizationProvider = React.lazy(() => 
+  import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
 );
 const GlobalBrainProvider = React.lazy(() => 
   import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
@@ -104,10 +108,10 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TenantProvider>
-            <OrganizationProvider>
-              <RouterType>
-                <Suspense fallback={<OffshoreLoader />}>
+          <Suspense fallback={<OffshoreLoader />}>
+            <TenantProvider>
+              <OrganizationProvider>
+                <RouterType>
                   <GlobalBrainProvider showTrigger={true}>
                     <Routes>
                       {/* Public Routes */}
@@ -248,10 +252,10 @@ function App() {
                     
                     <Toaster />
                   </GlobalBrainProvider>
-                </Suspense>
-              </RouterType>
-            </OrganizationProvider>
-          </TenantProvider>
+                </RouterType>
+              </OrganizationProvider>
+            </TenantProvider>
+          </Suspense>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
