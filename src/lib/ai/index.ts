@@ -64,24 +64,3 @@ export {
   type ComplianceCheckResult,
   type ComplianceReport,
 } from './compliance-checker';
-
-// AI Audit Logger (PATCH 850)
-export {
-  logAIInteraction,
-  searchAuditLogs,
-  getAuditStatistics,
-  exportAuditLogsCSV,
-  type AIAuditEntry,
-  type AuditSearchFilters,
-} from './audit-logger';
-
-// Predictive Engine (PHASE 1 - PATCH 851)
-export {
-  generateMaintenancePredictions,
-  analyzeCrewTrainingGaps,
-  analyzeComplianceRisks,
-  generateFullPredictiveAnalysis,
-  usePredictiveEngine,
-  type PredictiveRecommendation,
-  type PredictiveAnalysis
-} from './predictive-engine';

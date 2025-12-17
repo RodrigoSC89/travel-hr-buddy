@@ -108,9 +108,6 @@ const groupedModules = [
       { label: "🔍 IMCA Audit", path: "/imca-audit" },
       { label: "🔍 Pre-OVID Inspection", path: "/pre-ovid-inspection" },
       { label: "🔍 MLC Inspection", path: "/mlc-inspection" },
-      { label: "📄 Workflow Documentos ISM/MLC", path: "/document-workflow" },
-      { label: "🛡️ Gerador Pacotes PSC", path: "/psc-package" },
-      { label: "🤖 Auditoria de IA", path: "/ai-audit" },
     ],
   },
   {
