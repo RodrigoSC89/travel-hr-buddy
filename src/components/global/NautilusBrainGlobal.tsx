@@ -1,16 +1,16 @@
 /**
  * NAUTILUS BRAIN GLOBAL - IA Central Acessível de Qualquer Módulo
- * Assistente inteligente com LLM para toda operação marítima
+ * PATCH 850.3 - Fixed useToast hook usage
  */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Send, X, Loader2, Sparkles, Ship, Wrench, Users,
@@ -33,17 +33,36 @@ interface NautilusBrainGlobalProps {
   initialContext?: string;
 }
 
+// Trigger button component
+export const NautilusBrainTrigger: React.FC<{ onClick: () => void }> = ({ onClick }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    className="fixed bottom-4 right-4 z-50"
+  >
+    <Button
+      onClick={onClick}
+      className="h-14 w-14 rounded-full bg-gradient-to-br from-purple-600 to-pink-500 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+    >
+      <Brain className="h-6 w-6 text-white" />
+    </Button>
+  </motion.div>
+);
+
 export const NautilusBrainGlobal: React.FC<NautilusBrainGlobalProps> = ({
   isOpen,
   onClose,
   initialContext = ""
 }) => {
-  const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [systemData, setSystemData] = useState<any>(null);
+  const [systemData, setSystemData] = useState<{
+    fleet?: { total: number; active: number };
+    crew?: { total: number; onboard: number };
+    maintenance?: { pending: number };
+  } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +70,7 @@ export const NautilusBrainGlobal: React.FC<NautilusBrainGlobalProps> = ({
     if (isOpen && messages.length === 0) {
       loadSystemContext();
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -63,9 +82,9 @@ export const NautilusBrainGlobal: React.FC<NautilusBrainGlobalProps> = ({
     try {
       // Load system-wide data for context
       const [vesselsRes, crewRes, maintenanceRes] = await Promise.all([
-        supabase.from('vessels').select('*'),
-        supabase.from('crew_members').select('*'),
-        supabase.from('maintenance_records').select('*').eq('status', 'pending')
+        supabase.from('vessels').select('id, status'),
+        supabase.from('crew_members').select('id, status'),
+        supabase.from('maintenance_records').select('id').eq('status', 'pending')
       ]);
 
       const data = {
@@ -124,6 +143,84 @@ Como posso ajudar você hoje?`,
     }
   };
 
+  const generateFallbackResponse = useCallback((query: string): string => {
+    const q = query.toLowerCase();
+    
+    if (q.includes('manutenção') || q.includes('manutencao')) {
+      return `📊 **Análise de Manutenção:**
+
+Com base nos dados disponíveis:
+- ${systemData?.maintenance?.pending || 0} manutenções pendentes
+- Sistema de manutenção preditiva ativo
+
+**Recomendações IA:**
+1. Verificar itens com maior criticidade
+2. Agendar manutenções preventivas
+3. Avaliar estoque de peças críticas
+
+Deseja que eu gere um plano detalhado?`;
+    }
+
+    if (q.includes('frota') || q.includes('embarcação') || q.includes('navio')) {
+      return `🚢 **Status da Frota:**
+
+- Total: ${systemData?.fleet?.total || 0} embarcações
+- Ativas: ${systemData?.fleet?.active || 0}
+
+Todas as embarcações estão operando dentro dos parâmetros normais.
+
+Deseja detalhes de alguma embarcação específica?`;
+    }
+
+    if (q.includes('tripulação') || q.includes('crew') || q.includes('certificado')) {
+      return `👥 **Status da Tripulação:**
+
+- Total cadastrado: ${systemData?.crew?.total || 0}
+- A bordo: ${systemData?.crew?.onboard || 0}
+
+Posso verificar certificações expirando ou sugerir rotações de escala.`;
+    }
+
+    if (q.includes('relatório') || q.includes('relatorio') || q.includes('report')) {
+      return `📊 **Geração de Relatórios:**
+
+Posso gerar relatórios de:
+- Status operacional da frota
+- Performance de tripulação
+- Compliance e auditorias
+- KPIs executivos
+- Manutenção e previsões
+
+Qual tipo de relatório você precisa?`;
+    }
+
+    return `Entendi sua solicitação.
+
+Com base nos dados do sistema, posso ajudar com:
+- 🚢 Análise de frota e embarcações
+- 👥 Gestão de tripulação
+- 🔧 Manutenção preditiva
+- 📊 Relatórios e KPIs
+- ✅ Compliance e auditorias
+
+Como posso ajudar?`;
+  }, [systemData]);
+
+  const generateSuggestions = useCallback((query: string): string[] => {
+    const q = query.toLowerCase();
+    
+    if (q.includes('manutenção')) {
+      return ["Ver pendências", "Gerar cronograma", "Previsão de falhas"];
+    }
+    if (q.includes('frota')) {
+      return ["Localização atual", "Status de combustível", "Próximas rotas"];
+    }
+    if (q.includes('tripulação')) {
+      return ["Certificados expirando", "Escala atual", "Performance"];
+    }
+    return ["Relatório executivo", "Alertas ativos", "Previsões IA"];
+  }, []);
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -135,6 +232,7 @@ Como posso ajudar você hoje?`,
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput("");
     setIsLoading(true);
 
@@ -153,13 +251,13 @@ Como posso ajudar você hoje?`,
         role: m.role,
         content: m.content
       }));
-      messageHistory.push({ role: 'user', content: input });
+      messageHistory.push({ role: 'user', content: currentInput });
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-brain`, {
+      const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nautilus-brain`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`,
         },
         body: JSON.stringify({
           messages: messageHistory,
@@ -223,7 +321,7 @@ Como posso ajudar você hoje?`,
       // Add suggestions after complete
       setMessages(prev => prev.map(m => 
         m.id === assistantId 
-          ? { ...m, suggestions: generateSuggestions(input) }
+          ? { ...m, suggestions: generateSuggestions(currentInput) }
           : m
       ));
 
@@ -235,98 +333,16 @@ Como posso ajudar você hoje?`,
         m.id === assistantId 
           ? { 
               ...m, 
-              content: generateFallbackResponse(input),
-              suggestions: generateSuggestions(input)
+              content: generateFallbackResponse(currentInput),
+              suggestions: generateSuggestions(currentInput)
             }
           : m
       ));
       
-      toast({
-        title: "Aviso",
-        description: error instanceof Error ? error.message : "Usando resposta offline",
-        variant: "default"
-      });
+      toast.info(error instanceof Error ? error.message : "Usando resposta offline");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const generateFallbackResponse = (query: string): string => {
-    const q = query.toLowerCase();
-    
-    if (q.includes('manutenção') || q.includes('manutencao')) {
-      return `📊 **Análise de Manutenção:**
-
-Com base nos dados disponíveis:
-- ${systemData?.maintenance?.pending || 0} manutenções pendentes
-- Sistema de manutenção preditiva ativo
-
-**Recomendações IA:**
-1. Verificar itens com maior criticidade
-2. Agendar manutenções preventivas
-3. Avaliar estoque de peças críticas
-
-Deseja que eu gere um plano detalhado?`;
-    }
-
-    if (q.includes('frota') || q.includes('embarcação') || q.includes('navio')) {
-      return `🚢 **Status da Frota:**
-
-- Total: ${systemData?.fleet?.total || 0} embarcações
-- Ativas: ${systemData?.fleet?.active || 0}
-
-Todas as embarcações estão operando dentro dos parâmetros normais.
-
-Deseja detalhes de alguma embarcação específica?`;
-    }
-
-    if (q.includes('tripulação') || q.includes('crew') || q.includes('certificado')) {
-      return `👥 **Status da Tripulação:**
-
-- Total cadastrado: ${systemData?.crew?.total || 0}
-- A bordo: ${systemData?.crew?.onboard || 0}
-
-Posso verificar certificações expirando ou sugerir rotações de escala.`;
-    }
-
-    if (q.includes('relatório') || q.includes('relatorio') || q.includes('report')) {
-      return `📊 **Geração de Relatórios:**
-
-Posso gerar relatórios de:
-- Status operacional da frota
-- Performance de tripulação
-- Compliance e auditorias
-- KPIs executivos
-- Manutenção e previsões
-
-Qual tipo de relatório você precisa?`;
-    }
-
-    return `Entendi sua solicitação.
-
-Com base nos dados do sistema, posso ajudar com:
-- 🚢 Análise de frota e embarcações
-- 👥 Gestão de tripulação
-- 🔧 Manutenção preditiva
-- 📊 Relatórios e KPIs
-- ✅ Compliance e auditorias
-
-Como posso ajudar?`;
-  };
-
-  const generateSuggestions = (query: string): string[] => {
-    const q = query.toLowerCase();
-    
-    if (q.includes('manutenção')) {
-      return ["Ver pendências", "Gerar cronograma", "Previsão de falhas"];
-    }
-    if (q.includes('frota')) {
-      return ["Localização atual", "Status de combustível", "Próximas rotas"];
-    }
-    if (q.includes('tripulação')) {
-      return ["Certificados expirando", "Escala atual", "Performance"];
-    }
-    return ["Relatório executivo", "Alertas ativos", "Previsões IA"];
   };
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -336,7 +352,14 @@ Como posso ajudar?`;
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast({ title: "Copiado!", description: "Mensagem copiada" });
+    toast.success("Mensagem copiada!");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   if (!isOpen) return null;
@@ -440,7 +463,7 @@ Como posso ajudar?`;
                       ))}
                     </div>
                     
-                    {message.role === 'assistant' && (
+                    {message.role === 'assistant' && message.content && (
                       <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
                         <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => copyMessage(message.content)}>
                           <Copy className="h-3 w-3 mr-1" />
@@ -475,7 +498,7 @@ Como posso ajudar?`;
                 </motion.div>
               ))}
 
-              {isLoading && (
+              {isLoading && messages[messages.length - 1]?.content === '' && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -499,12 +522,16 @@ Como posso ajudar?`;
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Pergunte ao Nautilus Brain..."
+                onKeyDown={handleKeyDown}
+                placeholder="Pergunte sobre a operação..."
                 className="flex-1"
                 disabled={isLoading}
               />
-              <Button onClick={handleSend} disabled={!input.trim() || isLoading}>
+              <Button 
+                onClick={handleSend} 
+                disabled={!input.trim() || isLoading}
+                className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
+              >
                 {isLoading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
@@ -512,6 +539,9 @@ Como posso ajudar?`;
                 )}
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground mt-2 text-center">
+              Nautilus Brain powered by Gemini 2.5 Flash
+            </p>
           </div>
         </motion.div>
       </motion.div>
@@ -519,14 +549,4 @@ Como posso ajudar?`;
   );
 };
 
-// Floating trigger button for global access
-export const NautilusBrainTrigger: React.FC<{ onClick: () => void }> = ({ onClick }) => (
-  <motion.button
-    onClick={onClick}
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="fixed bottom-6 right-6 z-40 h-14 w-14 rounded-full bg-gradient-to-br from-purple-600 to-pink-500 shadow-lg hover:shadow-xl flex items-center justify-center transition-shadow"
-  >
-    <Brain className="h-6 w-6 text-white" />
-  </motion.button>
-);
+export default NautilusBrainGlobal;
