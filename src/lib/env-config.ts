@@ -5,9 +5,6 @@
  * e fornece mensagens de erro claras
  */
 
-// @ts-ignore - process is available in Node.js runtime
-declare const process: any;
-
 interface EnvConfig {
   // Supabase
   supabaseUrl: string;
@@ -38,14 +35,15 @@ interface EnvConfig {
 }
 
 /**
- * Pega variável de ambiente com validação
+ * Pega variável de ambiente com validação (Vite-compatible)
  */
 function getEnvVar(key: string, required: boolean = true, defaultValue?: string): string {
-  // Suporta tanto NEXT_PUBLIC_ quanto VITE_
+  // Vite exposes env vars via import.meta.env
+  const env = import.meta.env as Record<string, string | undefined>;
+  
   const value = 
-    process.env[key] || 
-    process.env[`NEXT_PUBLIC_${key}`] || 
-    process.env[`VITE_${key}`] ||
+    env[key] || 
+    env[`VITE_${key}`] ||
     defaultValue;
   
   if (required && !value) {

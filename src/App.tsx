@@ -3,7 +3,7 @@ import React, { useEffect, Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 
 // Simple inline error boundary for maximum reliability
 class ErrorBoundary extends React.Component<

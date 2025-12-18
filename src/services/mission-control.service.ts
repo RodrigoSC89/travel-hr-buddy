@@ -122,8 +122,13 @@ export class MissionControlService {
 
     const { data, error } = await query;
     if (error) throw error;
-    // @ts-ignore Schema mismatch: mission_id null vs string
-    return (data || []) as Mission[];
+    // Map data ensuring mission_id is never null and cast through unknown for schema mismatch
+    return (data || []).map(d => ({
+      ...d,
+      mission_id: d.mission_id || d.id,
+      resources: (d.resources as unknown) as ResourceAllocation[] || [],
+      objectives: (d.objectives as unknown) as MissionObjective[] || [],
+    })) as unknown as Mission[];
   }
 
   static async getMission(missionId: string): Promise<Mission | null> {
@@ -134,8 +139,14 @@ export class MissionControlService {
       .single();
 
     if (error) throw error;
-    // @ts-ignore Schema mismatch: mission_id null vs string
-    return data as Mission | null;
+    if (!data) return null;
+    // Convert DB record to Mission type
+    return {
+      ...data,
+      mission_id: data.mission_id || data.id,
+      resources: (data.resources as unknown) as ResourceAllocation[] || [],
+      objectives: (data.objectives as unknown) as MissionObjective[] || [],
+    } as unknown as Mission;
   }
 
   static async createMission(mission: Partial<Mission>): Promise<Mission> {
@@ -160,8 +171,13 @@ export class MissionControlService {
       created_by: mission.created_by,
     });
 
-    // @ts-ignore Schema mismatch: mission_id null vs string
-    return data as Mission;
+    // Convert DB record to Mission type
+    return {
+      ...data,
+      mission_id: data.mission_id || data.id,
+      resources: (data.resources as unknown) as ResourceAllocation[] || [],
+      objectives: (data.objectives as unknown) as MissionObjective[] || [],
+    } as unknown as Mission;
   }
 
   static async updateMission(
@@ -186,8 +202,13 @@ export class MissionControlService {
       fields_updated: Object.keys(updates),
     });
 
-    // @ts-ignore Schema mismatch: mission_id null vs string
-    return data as Mission;
+    // Convert DB record to Mission type
+    return {
+      ...data,
+      mission_id: data.mission_id || data.id,
+      resources: (data.resources as unknown) as ResourceAllocation[] || [],
+      objectives: (data.objectives as unknown) as MissionObjective[] || [],
+    } as unknown as Mission;
   }
 
   static async updateMissionStatus(
