@@ -306,8 +306,24 @@ export class MissionControlService {
 
     const { data, error } = await query;
     if (error) throw error;
-    // @ts-ignore Schema missing agent_name and capabilities fields
-    return (data || []) as MissionAgent[];
+    // Map DB records to MissionAgent type with safe defaults for missing fields
+    // DB schema has: agent_id, agent_type, mission_id, role, status, performance_score
+    // MissionAgent needs: id, agent_id, agent_name, agent_type, role, capabilities, status, current_mission_id, performance_rating, metadata
+    return (data || []).map(d => {
+      const record = d as Record<string, unknown>;
+      return {
+        id: d.id,
+        agent_id: d.agent_id || d.id,
+        agent_name: typeof record.agent_name === 'string' ? record.agent_name : `Agent ${d.id.slice(0, 8)}`,
+        agent_type: (d.agent_type as MissionAgent['agent_type']) || 'human',
+        role: d.role || 'operator',
+        capabilities: Array.isArray(record.capabilities) ? record.capabilities as string[] : [],
+        status: (d.status as MissionAgent['status']) || 'available',
+        current_mission_id: d.mission_id || undefined,
+        performance_rating: d.performance_score || undefined,
+        metadata: typeof record.metadata === 'object' ? record.metadata as Record<string, unknown> : undefined,
+      };
+    }) as MissionAgent[];
   }
 
   static async assignAgentToMission(

@@ -143,8 +143,8 @@ export const safeLazyImport = (
   });
 
   // Set display name for better debugging in React DevTools
-  // @ts-ignore - displayName is not in type but works at runtime
-  Component.displayName = `SafeLazy(${name})`;
+  // React.lazy returns a LazyExoticComponent which has displayName at runtime
+  (Component as unknown as { displayName: string }).displayName = `SafeLazy(${name})`;
 
   // Return a component that wraps the lazy-loaded component with Suspense
   const SafeComponent = (props: unknown) => (
