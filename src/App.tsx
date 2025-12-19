@@ -1,9 +1,14 @@
-// App.tsx - PATCH 850.1 - Force cache invalidation
-import React, { useEffect, Suspense, useMemo } from "react";
+// App.tsx - PATCH 850.2 - Fix context provider loading
+import React, { Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
 import { Toaster } from "sonner";
+
+// Context providers must NOT be lazy-loaded to avoid React hook issues
+import { TenantProvider } from "./contexts/TenantContext";
+import { OrganizationProvider } from "./contexts/OrganizationContext";
+import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
 
 // Simple inline error boundary for maximum reliability
 class ErrorBoundary extends React.Component<
@@ -74,18 +79,9 @@ const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
 // Protected Route wrappers - PATCH 68.5
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
-// Lazy load heavy components
+// Lazy load heavy layout component
 const SmartLayout = React.lazy(() => 
   import("./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
-);
-const TenantProvider = React.lazy(() => 
-  import("./contexts/TenantContext").then(m => ({ default: m.TenantProvider }))
-);
-const OrganizationProvider = React.lazy(() => 
-  import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
-);
-const GlobalBrainProvider = React.lazy(() => 
-  import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
 );
 
 // Initialize monitoring & services with optimized query client
@@ -109,13 +105,12 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <Suspense fallback={<OffshoreLoader />}>
-            <TenantProvider>
-              <OrganizationProvider>
-                <RouterType>
-                  <GlobalBrainProvider showTrigger={true}>
-                    <Routes>
-                      {/* Public Routes */}
+          <TenantProvider>
+            <OrganizationProvider>
+              <RouterType>
+                <GlobalBrainProvider showTrigger={true}>
+                  <Routes>
+                    {/* Public Routes */}
                       <Route path="/auth" element={
                         <Suspense fallback={<OffshoreLoader />}>
                           <Auth />
@@ -256,9 +251,8 @@ function App() {
                 </RouterType>
               </OrganizationProvider>
             </TenantProvider>
-          </Suspense>
-        </AuthProvider>
-      </QueryClientProvider>
+          </AuthProvider>
+        </QueryClientProvider>
     </ErrorBoundary>
   );
 }
