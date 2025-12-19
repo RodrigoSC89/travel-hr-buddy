@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * MMI Forecast Storage Service
  * Handles saving forecasts to the database
@@ -26,7 +24,9 @@ export async function saveForecast(input: SaveForecastInput) {
   try {
     const supabase = createClient();
 
-    const { data, error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const client = supabase as any;
+    const { data, error } = await client
       .from("mmi_forecasts")
       .insert({
         vessel_id: input.vessel_id,
