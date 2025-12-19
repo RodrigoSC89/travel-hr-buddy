@@ -1,16 +1,13 @@
-// App.tsx - PATCH 850.2 - Fix context provider loading
-import React, { Suspense, useMemo } from "react";
+// App.tsx - PATCH 850.3 - Simplified to fix React hooks issue
+import * as React from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "./contexts/AuthContext";
 import { Toaster } from "sonner";
 
-// Context providers must NOT be lazy-loaded to avoid React hook issues
-import { TenantProvider } from "./contexts/TenantContext";
-import { OrganizationProvider } from "./contexts/OrganizationContext";
-import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
+// Import AuthProvider from contexts
+import { AuthProvider } from "./contexts/AuthContext";
 
-// Simple inline error boundary for maximum reliability
+// Simple inline error boundary
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean; error?: Error }
@@ -59,11 +56,23 @@ const OffshoreLoader = () => (
   </div>
 );
 
-// PATCH 68.2 - Module Loader System
+// Import after React to avoid potential circular issues
 import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
+import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
-// Core pages - Lazy loading for better performance
+// Lazy load context providers to avoid React instance issues
+const TenantProvider = React.lazy(() => 
+  import("./contexts/TenantContext").then(m => ({ default: m.TenantProvider }))
+);
+const OrganizationProvider = React.lazy(() => 
+  import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
+);
+const GlobalBrainProvider = React.lazy(() => 
+  import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
+);
+
+// Core pages - Lazy loading
 const Index = React.lazy(() => import("@/pages/Index"));
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Admin = React.lazy(() => import("@/pages/Admin"));
@@ -75,24 +84,19 @@ const Auth = React.lazy(() => import("@/pages/Auth"));
 const UserProfilePage = React.lazy(() => import("@/pages/user/profile"));
 const RevolutionaryAI = React.lazy(() => import("@/pages/RevolutionaryAI"));
 const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
-
-// Protected Route wrappers - PATCH 68.5
-import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
-
-// Lazy load heavy layout component
 const SmartLayout = React.lazy(() => 
   import("./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
 
-// Initialize monitoring & services with optimized query client
+// Initialize query client
 const queryClient = createOptimizedQueryClient();
 
 // RouterType based on environment
 const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : Router;
 
 function App() {
-  // PATCH 68.2/68.7 - Get module routes automatically from MODULE_REGISTRY (memoized)
-  const moduleRoutes = useMemo(() => {
+  // Memoize module routes
+  const moduleRoutes = React.useMemo(() => {
     try {
       return getModuleRoutes();
     } catch (e) {
@@ -105,51 +109,52 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TenantProvider>
-            <OrganizationProvider>
-              <RouterType>
-                <GlobalBrainProvider showTrigger={true}>
-                  <Routes>
-                    {/* Public Routes */}
+          <React.Suspense fallback={<OffshoreLoader />}>
+            <TenantProvider>
+              <OrganizationProvider>
+                <RouterType>
+                  <GlobalBrainProvider showTrigger={true}>
+                    <Routes>
+                      {/* Public Routes */}
                       <Route path="/auth" element={
-                        <Suspense fallback={<OffshoreLoader />}>
+                        <React.Suspense fallback={<OffshoreLoader />}>
                           <Auth />
-                        </Suspense>
+                        </React.Suspense>
                       } />
                       <Route path="/unauthorized" element={
-                        <Suspense fallback={<OffshoreLoader />}>
+                        <React.Suspense fallback={<OffshoreLoader />}>
                           <Unauthorized />
-                        </Suspense>
+                        </React.Suspense>
                       } />
                       
                       {/* Protected Routes */}
                       <Route path="/" element={
                         <ProtectedRoute>
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <SmartLayout />
-                          </Suspense>
+                          </React.Suspense>
                         </ProtectedRoute>
                       }>
                         <Route index element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <Index />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         <Route path="dashboard" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <Dashboard />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         
-                        {/* PATCH 68.2 - Module Routes from Registry */}
+                        {/* Module Routes from Registry */}
                         {moduleRoutes.map((route) => (
                           <Route
                             key={route.id}
                             path={route.path}
                             element={
-                              <Suspense fallback={<OffshoreLoader />}>
+                              <React.Suspense fallback={<OffshoreLoader />}>
                                 <route.component />
-                              </Suspense>
+                              </React.Suspense>
                             }
                           />
                         ))}
@@ -157,45 +162,45 @@ function App() {
                         {/* Admin Routes */}
                         <Route path="admin/*" element={
                           <AdminRoute>
-                            <Suspense fallback={<OffshoreLoader />}>
+                            <React.Suspense fallback={<OffshoreLoader />}>
                               <Admin />
-                            </Suspense>
+                            </React.Suspense>
                           </AdminRoute>
                         } />
                         
                         {/* Settings */}
                         <Route path="settings" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <Settings />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         
                         {/* Profile */}
                         <Route path="profile" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <UserProfilePage />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         
                         {/* Health Check */}
                         <Route path="health" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <HealthCheck />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         
                         {/* Revolutionary AI Hub */}
                         <Route path="revolutionary-ai/*" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <RevolutionaryAI />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         
                         {/* AI Enhanced Modules */}
                         <Route path="ai-modules" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <AIEnhancedModules />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                         
                         {/* Route Redirects - Legacy Routes */}
@@ -239,9 +244,9 @@ function App() {
                         
                         {/* 404 Route */}
                         <Route path="*" element={
-                          <Suspense fallback={<OffshoreLoader />}>
+                          <React.Suspense fallback={<OffshoreLoader />}>
                             <NotFound />
-                          </Suspense>
+                          </React.Suspense>
                         } />
                       </Route>
                     </Routes>
@@ -251,8 +256,9 @@ function App() {
                 </RouterType>
               </OrganizationProvider>
             </TenantProvider>
-          </AuthProvider>
-        </QueryClientProvider>
+          </React.Suspense>
+        </AuthProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
