@@ -1,17 +1,25 @@
-// @ts-nocheck
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
 import { subscribeDPAlerts } from "@/lib/mqtt/publisher";
 
+interface DPAlert {
+  type?: string;
+  timestamp?: number;
+  risk?: number;
+  [key: string]: unknown;
+}
+
 export default function DPAlertFeed() {
-  const [alerts, setAlerts] = useState<Array<Record<string, unknown>>>([]);
+  const [alerts, setAlerts] = useState<DPAlert[]>([]);
 
   useEffect(() => {
     const client = subscribeDPAlerts((msg) =>
-      setAlerts((prev) => [msg, ...prev].slice(0, 10))
+      setAlerts((prev) => [msg as DPAlert, ...prev].slice(0, 10))
     );
-    return () => client.end();
+    return () => {
+      client.end();
+    };
   }, []);
 
   return (
@@ -21,14 +29,14 @@ export default function DPAlertFeed() {
           <AlertTriangle className="text-yellow-500" /> Últimos Alertas DP
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2 text-sm text-gray-300">
+      <CardContent className="space-y-2 text-sm text-muted-foreground">
         {alerts.length === 0
           ? "Sem alertas recentes."
           : alerts.map((a, i) => (
-            <div key={i} className="border-b border-gray-700 pb-2">
-              <p>{a.type as string}</p>
-              <p className="text-xs text-gray-500">
-                {new Date(a.timestamp as number).toLocaleTimeString()} — Risco: {((a.risk as number) * 100).toFixed(1)}%
+            <div key={i} className="border-b border-border pb-2">
+              <p>{a.type || "Alerta"}</p>
+              <p className="text-xs text-muted-foreground">
+                {a.timestamp ? new Date(a.timestamp).toLocaleTimeString() : "N/A"} — Risco: {a.risk ? (a.risk * 100).toFixed(1) : "0"}%
               </p>
             </div>
           ))}
