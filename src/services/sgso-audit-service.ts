@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 import { supabase } from "@/integrations/supabase/client";
 
 /**
@@ -19,29 +17,33 @@ export type AuditItem = {
 export type SGSOAudit = {
   id: string;
   audit_date: string;
-  auditor_id: string;
+  auditor_id: string | null;
   sgso_audit_items: AuditItem[];
 };
 
 /**
+ * DB record type for audit items
+ */
+type AuditItemDBRecord = {
+  id: string;
+  requirement_number: number;
+  requirement_title: string;
+  compliance_status: string;
+  evidence: string | null;
+  comment: string | null;
+};
+
+/**
  * Submit a new SGSO audit with items
- * 
- * Creates a new audit record and associated audit items in a transactional manner.
- * Returns the ID of the created audit on success.
- * 
- * @param vesselId - UUID of the vessel being audited
- * @param auditorId - UUID of the auditor conducting the audit
- * @param items - Array of audit items with compliance data
- * @returns Promise<string> - ID of the created audit
- * @throws Error if audit creation or items insertion fails
  */
 export async function submitSGSOAudit(
   vesselId: string,
   auditorId: string,
   items: AuditItem[]
 ): Promise<string> {
-  const { data: audit, error: auditError } = await supabase
-    .from("sgso_audits")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: audit, error: auditError } = await (supabase
+    .from("sgso_audits") as any)
     .insert({
       vessel_id: vesselId,
       auditor_id: auditorId
@@ -58,8 +60,9 @@ export async function submitSGSOAudit(
     ...item
   }));
 
-  const { error: itemsError } = await supabase
-    .from("sgso_audit_items")
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error: itemsError } = await (supabase
+    .from("sgso_audit_items") as any)
     .insert(itemsPayload);
 
   if (itemsError) {
@@ -71,13 +74,6 @@ export async function submitSGSOAudit(
 
 /**
  * Load SGSO audits for a specific vessel
- * 
- * Retrieves all audits for a vessel with nested audit items,
- * ordered by audit date (newest first).
- * 
- * @param vesselId - UUID of the vessel
- * @returns Promise<SGSOAudit[]> - Array of audits with nested items
- * @throws Error if query fails
  */
 export async function loadSGSOAudit(vesselId: string): Promise<SGSOAudit[]> {
   const { data: audits, error } = await supabase
@@ -102,5 +98,17 @@ export async function loadSGSOAudit(vesselId: string): Promise<SGSOAudit[]> {
     throw new Error(`Erro ao carregar auditorias: ${error.message}`);
   }
 
-  return audits as SGSOAudit[];
+  // Map DB records to typed SGSOAudit with proper type assertions
+  return (audits || []).map(audit => ({
+    id: audit.id,
+    audit_date: audit.audit_date,
+    auditor_id: audit.auditor_id,
+    sgso_audit_items: (audit.sgso_audit_items as unknown as AuditItemDBRecord[] || []).map(item => ({
+      requirement_number: item.requirement_number,
+      requirement_title: item.requirement_title,
+      compliance_status: item.compliance_status as AuditItem['compliance_status'],
+      evidence: item.evidence || '',
+      comment: item.comment || '',
+    })),
+  }));
 }
