@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
@@ -61,7 +60,7 @@ export const useOrganization = (): OrganizationContextType => {
   }
 };
 
-export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
   const [currentBranding, setCurrentBranding] = useState<OrganizationBranding | null>(null);
@@ -79,8 +78,8 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setIsLoading(true);
       setError(null);
 
-      // Usar organização demo
-      const demoOrg: Organization = {
+      // Usar organização demo - cast to Organization with required fields
+      const demoOrg = {
         id: "550e8400-e29b-41d4-a716-446655440000",
         name: "Nautilus Demo",
         slug: "nautilus-demo",
@@ -92,8 +91,15 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         features: { peotram: true, fleet_management: true, analytics: true, ai_analysis: true },
         trial_ends_at: null,
         subscription_ends_at: null,
-        created_at: new Date().toISOString()
-      };
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        billing_email: null,
+        domain: null,
+        metadata: {},
+        owner_id: null,
+        stripe_customer_id: null,
+        stripe_subscription_id: null,
+      } as Organization;
       
       setCurrentOrganization(demoOrg);
       setUserRole("admin");
