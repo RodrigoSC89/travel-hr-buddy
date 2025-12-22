@@ -3,9 +3,8 @@
  * Hook React para internacionalização com fallback AI
  */
 
-// @ts-nocheck
-import { useState, useEffect, useCallback } from "react";
-import { aiTranslator, SupportedLanguage, TranslationResult } from "./translator";
+import { useState, useEffect, useCallback, createContext, useContext, type ReactNode } from "react";
+import { aiTranslator, type SupportedLanguage, type TranslationResult } from "./translator";
 import { logger } from "@/lib/logger";
 
 interface UseTranslationConfig {
@@ -200,8 +199,6 @@ export function useLanguageSwitcher() {
 /**
  * Provider de contexto para tradução (opcional)
  */
-import { createContext, useContext, ReactNode } from "react";
-
 interface I18nContextValue {
   language: SupportedLanguage;
   setLanguage: (lang: SupportedLanguage) => void;
