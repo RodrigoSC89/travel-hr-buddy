@@ -4,7 +4,7 @@
  * Evaluates source, protocol security, and payload schema compliance
  */
 
-// @ts-nocheck
+// @ts-nocheck - Tabela trust_compliance_logs não existe no schema ainda
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { ProtocolType } from "@/core/interop/protocolAdapter";

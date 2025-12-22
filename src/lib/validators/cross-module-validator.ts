@@ -3,9 +3,9 @@
  * Validates data integrity between different system modules
  */
 
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { logger } from "@/lib/logger";
 
 export interface ValidationResult {
   module: string;
@@ -200,7 +200,7 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
   try {
     // Check 1: Verify crew profiles have valid vessel references
     const { data: crewWithVessels } = await supabase
-      .from<CrewMemberRow>("crew_members")
+      .from("crew_members")
       .select("id, vessel_id")
       .not("vessel_id", "is", null);
     

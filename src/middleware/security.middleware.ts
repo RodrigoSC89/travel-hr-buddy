@@ -11,9 +11,12 @@
  * Compatible with both Next.js and standalone environments
  */
 
-// @ts-ignore - Next.js types optional
-type NextRequest = any;
-type NextResponse = any;
+// Define types locally since Next.js is not a dependency
+interface NextRequest extends Request {
+  nextUrl: URL;
+}
+
+type NextResponse = Response;
 
 import { SECURITY_HEADERS, RATE_LIMITS, CORS_CONFIG, isAllowedOrigin, logSecurityEvent } from '@/lib/security';
 

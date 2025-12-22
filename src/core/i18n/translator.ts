@@ -1,11 +1,9 @@
 /**
  * PATCH 571 - AI Translator Core
- * TODO PATCH 659: TypeScript fixes deferred (translation_cache table schema missing)
  * Sistema de tradução multilíngue em tempo real com fallback para IA
  * Suporte: pt, en, es, fr, de
  */
 
-// @ts-nocheck
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -146,9 +144,9 @@ class AITranslator {
       }
     }
 
-    // Salvar no Supabase para auditoria
+    // Salvar no Supabase para auditoria - use any for dynamic table
     try {
-      await supabase.from("translation_cache").upsert({
+      await (supabase as any).from("translation_cache").upsert({
         key: cache.key,
         lang: cache.lang,
         value: cache.value,

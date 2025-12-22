@@ -1,6 +1,13 @@
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+
+interface SGSOAuditRecord {
+  id: string;
+  vessel_id: string;
+  auditor_id: string;
+  audit_date: string;
+  status: string;
+}
 
 export interface SGSOAuditItem {
   requirement_number: number;
@@ -25,8 +32,8 @@ export async function submitSGSOAudit(
   try {
     logger.info("Submitting SGSO audit", { vesselId, userId, itemCount: auditItems.length });
 
-    // Create the audit record
-    const { data: auditRecord, error: auditError } = await supabase
+    // Create the audit record - cast to any for dynamic table
+    const { data: auditRecord, error: auditError } = await (supabase as any)
       .from("sgso_audits")
       .insert({
         vessel_id: vesselId,
@@ -35,11 +42,11 @@ export async function submitSGSOAudit(
         status: "completed",
       })
       .select()
-      .single();
+      .single() as { data: SGSOAuditRecord | null; error: Error | null };
 
-    if (auditError) {
+    if (auditError || !auditRecord) {
       logger.error("Error creating SGSO audit record", { error: auditError });
-      throw new Error(`Failed to create audit record: ${auditError.message}`);
+      throw new Error(`Failed to create audit record: ${auditError?.message || "Unknown error"}`);
     }
 
     // Insert all audit items
@@ -52,7 +59,7 @@ export async function submitSGSOAudit(
       comment: item.comment,
     }));
 
-    const { error: itemsError } = await supabase
+    const { error: itemsError } = await (supabase as any)
       .from("sgso_audit_items")
       .insert(itemsToInsert);
 

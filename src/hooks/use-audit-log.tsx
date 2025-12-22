@@ -5,17 +5,22 @@
  * Hook for automatically logging user actions with role context
  */
 
-// @ts-nocheck
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { ComponentType } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Database, Json } from "@/integrations/supabase/types";
+import type { Json } from "@/integrations/supabase/types";
 
-type LogUserActionArgs = Database["public"]["Functions"]["log_user_action"]["Args"];
-type LogUserActionReturn = Database["public"]["Functions"]["log_user_action"]["Returns"];
 type AuditLogStatus = "success" | "failure" | "error";
 type JsonObject = Record<string, Json | undefined>;
+
+interface LogUserActionArgs {
+  p_action: string;
+  p_resource_type: string;
+  p_resource_id?: string;
+  p_status?: string;
+  p_details?: JsonObject;
+}
 
 interface LogActionParams {
   action: LogUserActionArgs["p_action"];
@@ -90,12 +95,12 @@ export const useAuditLog = () => {
     } satisfies JsonObject;
 
     try {
-      const { data, error } = await supabase.rpc<LogUserActionReturn>("log_user_action", {
+      const { data, error } = await supabase.rpc("log_user_action", {
         p_action: action,
         p_resource_type: resourceType,
         p_resource_id: resourceId ?? undefined,
         p_status: status,
-        p_details: mergedDetails,
+        p_details: mergedDetails as unknown as Json,
       });
 
       if (error) {
