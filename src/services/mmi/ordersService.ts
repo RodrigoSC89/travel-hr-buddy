@@ -1,20 +1,21 @@
-// @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * MMI Orders (OS) Service
  * Service for fetching and managing work orders
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { MMIOS } from "@/types/mmi";
+import type { MMIOS } from "@/types/mmi";
 import { logger } from "@/lib/logger";
+
+// Dynamic supabase for tables not in schema
+const dynamicDb = supabase as any;
 
 /**
  * Fetch all work orders with job details
  */
 export async function fetchOrders(): Promise<MMIOS[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dynamicDb
       .from("mmi_os")
       .select(`
         *,
@@ -34,7 +35,7 @@ export async function fetchOrders(): Promise<MMIOS[]> {
       throw error;
     }
 
-    return data || [];
+    return (data || []) as MMIOS[];
   } catch (error) {
     logger.error("Failed to fetch orders", error as Error);
     return [];
@@ -46,7 +47,7 @@ export async function fetchOrders(): Promise<MMIOS[]> {
  */
 export async function fetchOrderById(orderId: string): Promise<MMIOS | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dynamicDb
       .from("mmi_os")
       .select(`
         *,
@@ -67,7 +68,7 @@ export async function fetchOrderById(orderId: string): Promise<MMIOS | null> {
       throw error;
     }
 
-    return data;
+    return data as MMIOS | null;
   } catch (error) {
     logger.error("Failed to fetch order", error as Error, { orderId });
     return null;
@@ -82,7 +83,7 @@ export async function updateOrderStatus(
   status: "open" | "in_progress" | "completed" | "cancelled"
 ): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dynamicDb
       .from("mmi_os")
       .update({ 
         status,
@@ -106,7 +107,7 @@ export async function addTechnicianComment(
   comment: string
 ): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dynamicDb
       .from("mmi_os")
       .update({ 
         notes: comment,
@@ -145,7 +146,7 @@ export async function createOSFromForecast(
     }
 
     // Insert work order into mmi_os table
-    const { error } = await supabase.from("mmi_os").insert({
+    const { error } = await dynamicDb.from("mmi_os").insert({
       forecast_id: forecastId,
       job_id: jobId,
       descricao,

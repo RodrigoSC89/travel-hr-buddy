@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * MMI Jobs API v1.1.0
  * Enhanced with Supabase integration, vector embeddings, and graceful fallback
@@ -8,8 +6,11 @@
 import { supabase } from "@/integrations/supabase/client";
 import { generateJobEmbedding } from "./embeddingService";
 import { getAIRecommendation } from "./copilotApi";
-import { MMIJob } from "@/types/mmi";
+import type { MMIJob } from "@/types/mmi";
 import { logger } from "@/lib/logger";
+
+// Dynamic supabase for tables not in schema
+const dynamicDb = supabase as any;
 
 // Legacy Job interface for backward compatibility
 export interface Job {
@@ -108,13 +109,29 @@ const convertToMMIJob = (job: Job): MMIJob => {
   };
 };
 
+interface DbJob {
+  id: string;
+  title: string;
+  status?: string;
+  priority?: string;
+  due_date?: string;
+  component_name: string;
+  asset_name?: string;
+  vessel_name?: string;
+  suggestion_ia?: string;
+  can_postpone?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  embedding?: number[];
+}
+
 /**
  * Fetches the list of jobs from Supabase with graceful fallback
  */
 export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
   try {
     // Try fetching from Supabase
-    const { data, error } = await supabase
+    const { data, error } = await dynamicDb
       .from("mmi_jobs")
       .select("*")
       .order("created_at", { ascending: false });
@@ -126,21 +143,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
 
     if (data && data.length > 0) {
       // Convert database format to MMIJob format
-      const jobs: MMIJob[] = data.map((dbJob: {
-        id: string;
-        title: string;
-        status?: string;
-        priority?: string;
-        due_date?: string;
-        component_name: string;
-        asset_name?: string;
-        vessel_name?: string;
-        suggestion_ia?: string;
-        can_postpone?: boolean;
-        created_at?: string;
-        updated_at?: string;
-        embedding?: number[];
-      }) => ({
+      const jobs: MMIJob[] = (data as DbJob[]).map((dbJob) => ({
         id: dbJob.id,
         title: dbJob.title,
         status: dbJob.status || "Pendente",
@@ -180,7 +183,7 @@ export const fetchJobs = async (): Promise<{ jobs: MMIJob[] }> => {
  */
 export const fetchJobWithAI = async (jobId: string): Promise<MMIJob | null> => {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await dynamicDb
       .from("mmi_jobs")
       .select("*")
       .eq("id", jobId)
@@ -223,7 +226,7 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
       priority: jobData.priority,
     });
 
-    const { data, error } = await supabase
+    const { data, error } = await dynamicDb
       .from("mmi_jobs")
       .insert({
         ...jobData,
@@ -260,7 +263,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
 
     if (data && data.message) {
       // Update job with new date if AI approves
-      const { data: job } = await supabase
+      const { data: job } = await dynamicDb
         .from("mmi_jobs")
         .select("*")
         .eq("id", jobId)
@@ -271,7 +274,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
         currentDate.setDate(currentDate.getDate() + 7);
         const newDate = currentDate.toISOString().split("T")[0];
 
-        await supabase
+        await dynamicDb
           .from("mmi_jobs")
           .update({ 
             due_date: newDate,
@@ -285,7 +288,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
           component_name: job.component_name,
         });
 
-        await supabase
+        await dynamicDb
           .from("mmi_job_history")
           .insert({
             job_id: jobId,
@@ -343,7 +346,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
 
     if (data && data.os_id) {
       // Update job status
-      await supabase
+      await dynamicDb
         .from("mmi_jobs")
         .update({ 
           status: "OS Criada",
@@ -352,7 +355,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
         .eq("id", jobId);
 
       // Fetch job for history
-      const { data: job } = await supabase
+      const { data: job } = await dynamicDb
         .from("mmi_jobs")
         .select("*")
         .eq("id", jobId)
@@ -365,7 +368,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
           component_name: job.component_name,
         });
 
-        await supabase
+        await dynamicDb
           .from("mmi_job_history")
           .insert({
             job_id: jobId,
