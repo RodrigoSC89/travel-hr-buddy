@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * MMI Task Service
  * Automatic task and work order creation from AI forecasts
@@ -8,6 +6,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { MMITask, AIForecast } from "@/types/mmi";
+
+// Dynamic supabase for tables not in schema
+const dynamicDb = supabase as any;
 
 interface CreateTaskFromForecastInput {
   forecast: AIForecast;
@@ -53,7 +54,7 @@ ${forecast.maintenance_history.map((h) => `• ${h.date}: ${h.action}`).join("\n
     }
 
     // Create task
-    const { data: task, error } = await supabase
+    const { data: task, error } = await dynamicDb
       .from("mmi_tasks")
       .insert({
         title,
@@ -75,9 +76,9 @@ ${forecast.maintenance_history.map((h) => `• ${h.date}: ${h.action}`).join("\n
     }
 
     logger.info("Task created successfully", { taskId: task.id, title });
-    return task;
+    return task as MMITask;
   } catch (error) {
-    logger.error("Error in createTaskFromForecast", error as Error, { systemName: system_name, componentName: component_name });
+    logger.error("Error in createTaskFromForecast", error as Error, { systemName: input.system_name, componentName: input.component_name });
     return null;
   }
 }
@@ -91,7 +92,7 @@ export async function fetchTasks(filters?: {
   vessel_id?: string;
 }): Promise<MMITask[]> {
   try {
-    let query = supabase
+    let query = dynamicDb
       .from("mmi_tasks")
       .select(`
         *,
@@ -115,7 +116,7 @@ export async function fetchTasks(filters?: {
 
     if (error) throw error;
 
-    return data || [];
+    return (data || []) as MMITask[];
   } catch (error) {
     logger.error("Error fetching tasks", error as Error, { filters });
     return [];
@@ -130,7 +131,7 @@ export async function updateTaskStatus(
   status: "pendente" | "em_andamento" | "concluido" | "cancelado"
 ): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dynamicDb
       .from("mmi_tasks")
       .update({ status, updated_at: new Date().toISOString() })
       .eq("id", taskId);
@@ -149,7 +150,7 @@ export async function updateTaskStatus(
  */
 export async function assignTask(taskId: string, userId: string): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dynamicDb
       .from("mmi_tasks")
       .update({ assigned_to: userId, updated_at: new Date().toISOString() })
       .eq("id", taskId);
@@ -169,7 +170,7 @@ export async function assignTask(taskId: string, userId: string): Promise<boolea
 export async function createWorkOrderFromTask(taskId: string): Promise<{ os_number: string; id: string } | null> {
   try {
     // Fetch the task details
-    const { data: task, error: taskError } = await supabase
+    const { data: task, error: taskError } = await dynamicDb
       .from("mmi_tasks")
       .select("*")
       .eq("id", taskId)
@@ -180,7 +181,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
     }
 
     // Find or create a corresponding mmi_job
-    const { data: existingJob } = await supabase
+    const { data: existingJob } = await dynamicDb
       .from("mmi_jobs")
       .select("id")
       .eq("title", task.title)
@@ -190,7 +191,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
 
     if (!jobId) {
       // Create a new job
-      const { data: newJob, error: jobError } = await supabase
+      const { data: newJob, error: jobError } = await dynamicDb
         .from("mmi_jobs")
         .insert({
           title: task.title,
@@ -214,7 +215,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
 
     // Generate OS number (format: OS-YYYYNNNN)
     const year = new Date().getFullYear();
-    const { count } = await supabase
+    const { count } = await dynamicDb
       .from("mmi_os")
       .select("*", { count: "exact", head: true })
       .like("os_number", `OS-${year}%`);
@@ -226,7 +227,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
     const { data: { user } } = await supabase.auth.getUser();
 
     // Create work order
-    const { data: workOrder, error: osError } = await supabase
+    const { data: workOrder, error: osError } = await dynamicDb
       .from("mmi_os")
       .insert({
         job_id: jobId,
@@ -260,7 +261,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
  */
 export async function deleteTask(taskId: string): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await dynamicDb
       .from("mmi_tasks")
       .delete()
       .eq("id", taskId);
