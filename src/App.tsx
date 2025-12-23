@@ -1,5 +1,9 @@
-// App.tsx - PATCH 850.4 - Optimized lazy loading & extracted redirects
-import * as React from "react";
+/**
+ * App.tsx - Main application entry point
+ * Uses named React imports to prevent multiple React instances
+ */
+import { lazy, Suspense, useMemo, Component } from "react";
+import type { ReactNode, ErrorInfo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -27,11 +31,11 @@ const OffshoreLoader = () => (
 );
 
 // Simple inline error boundary
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
+class ErrorBoundary extends Component<
+  { children: ReactNode },
   { hasError: boolean; error?: Error }
 > {
-  constructor(props: { children: React.ReactNode }) {
+  constructor(props: { children: ReactNode }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -40,7 +44,7 @@ class ErrorBoundary extends React.Component<
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("App Error:", error, errorInfo);
   }
 
@@ -66,19 +70,19 @@ class ErrorBoundary extends React.Component<
 }
 
 // Core pages - Lazy loading with named chunks
-const Index = React.lazy(() => import(/* webpackChunkName: "page-index" */ "@/pages/Index"));
-const Dashboard = React.lazy(() => import(/* webpackChunkName: "page-dashboard" */ "@/pages/Dashboard"));
-const Admin = React.lazy(() => import(/* webpackChunkName: "page-admin" */ "@/pages/Admin"));
-const Settings = React.lazy(() => import(/* webpackChunkName: "page-settings" */ "@/pages/Settings"));
-const HealthCheck = React.lazy(() => import(/* webpackChunkName: "page-health" */ "@/pages/HealthCheck"));
-const NotFound = React.lazy(() => import(/* webpackChunkName: "page-notfound" */ "@/pages/NotFoundProfessional"));
-const Unauthorized = React.lazy(() => import(/* webpackChunkName: "page-unauthorized" */ "@/pages/Unauthorized"));
-const Auth = React.lazy(() => import(/* webpackChunkName: "page-auth" */ "@/pages/Auth"));
-const UserProfilePage = React.lazy(() => import(/* webpackChunkName: "page-profile" */ "@/pages/user/profile"));
-const RevolutionaryAI = React.lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/RevolutionaryAI"));
-const AIEnhancedModules = React.lazy(() => import(/* webpackChunkName: "page-ai-modules" */ "@/pages/AIEnhancedModules"));
-const SystemDebug = React.lazy(() => import(/* webpackChunkName: "page-debug" */ "@/pages/SystemDebug"));
-const SmartLayout = React.lazy(() => 
+const Index = lazy(() => import(/* webpackChunkName: "page-index" */ "@/pages/Index"));
+const Dashboard = lazy(() => import(/* webpackChunkName: "page-dashboard" */ "@/pages/Dashboard"));
+const Admin = lazy(() => import(/* webpackChunkName: "page-admin" */ "@/pages/Admin"));
+const Settings = lazy(() => import(/* webpackChunkName: "page-settings" */ "@/pages/Settings"));
+const HealthCheck = lazy(() => import(/* webpackChunkName: "page-health" */ "@/pages/HealthCheck"));
+const NotFound = lazy(() => import(/* webpackChunkName: "page-notfound" */ "@/pages/NotFoundProfessional"));
+const Unauthorized = lazy(() => import(/* webpackChunkName: "page-unauthorized" */ "@/pages/Unauthorized"));
+const Auth = lazy(() => import(/* webpackChunkName: "page-auth" */ "@/pages/Auth"));
+const UserProfilePage = lazy(() => import(/* webpackChunkName: "page-profile" */ "@/pages/user/profile"));
+const RevolutionaryAI = lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/RevolutionaryAI"));
+const AIEnhancedModules = lazy(() => import(/* webpackChunkName: "page-ai-modules" */ "@/pages/AIEnhancedModules"));
+const SystemDebug = lazy(() => import(/* webpackChunkName: "page-debug" */ "@/pages/SystemDebug"));
+const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
 
@@ -90,7 +94,7 @@ const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter 
 
 function App() {
   // Memoize module routes
-  const moduleRoutes = React.useMemo(() => {
+  const moduleRoutes = useMemo(() => {
     try {
       return getModuleRoutes();
     } catch (e) {
@@ -103,7 +107,7 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <React.Suspense fallback={<OffshoreLoader />}>
+          <Suspense fallback={<OffshoreLoader />}>
             <TenantProvider>
               <OrganizationProvider>
                 <RouterType>
@@ -159,7 +163,7 @@ function App() {
                 </RouterType>
               </OrganizationProvider>
             </TenantProvider>
-          </React.Suspense>
+          </Suspense>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
