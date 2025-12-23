@@ -17,6 +17,12 @@ import {
   TrendingDown,
 } from "lucide-react";
 
+// Import new components
+import { TanksManagement } from "./components/TanksManagement";
+import { GarbageRegistry } from "./components/GarbageRegistry";
+import { RecordBooks } from "./components/RecordBooks";
+import { WasteReports } from "./components/WasteReports";
+
 interface WasteTank {
   id: string;
   name: string;
@@ -347,27 +353,19 @@ function WasteManagement() {
           </TabsContent>
 
           <TabsContent value="tanks">
-            <div className="text-center py-12 text-muted-foreground">
-              Gestão detalhada de tanques - Em desenvolvimento
-            </div>
+            <TanksManagement />
           </TabsContent>
 
           <TabsContent value="garbage">
-            <div className="text-center py-12 text-muted-foreground">
-              Controle de resíduos sólidos - Em desenvolvimento
-            </div>
+            <GarbageRegistry />
           </TabsContent>
 
           <TabsContent value="records">
-            <div className="text-center py-12 text-muted-foreground">
-              Oil Record Book e Garbage Record Book - Em desenvolvimento
-            </div>
+            <RecordBooks />
           </TabsContent>
 
           <TabsContent value="reports">
-            <div className="text-center py-12 text-muted-foreground">
-              Relatórios MARPOL e certificados - Em desenvolvimento
-            </div>
+            <WasteReports />
           </TabsContent>
         </Tabs>
       </div>
