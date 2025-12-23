@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import * as React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -13,12 +13,12 @@ export interface UserWithRole extends Profile {
 export type { UserRole };
 
 export const useUsers = () => {
-  const [users, setUsers] = useState<UserWithRole[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const isMountedRef = useRef(true);
+  const [users, setUsers] = React.useState<UserWithRole[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const isMountedRef = React.useRef(true);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = React.useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -64,7 +64,7 @@ export const useUsers = () => {
     }
   }, []);
 
-  const updateUserRole = useCallback(async (userId: string, newRole: UserRole) => {
+  const updateUserRole = React.useCallback(async (userId: string, newRole: UserRole) => {
     try {
       const { error } = await supabase
         .from("user_roles")
@@ -79,8 +79,8 @@ export const useUsers = () => {
       if (error) throw error;
 
       // Atualizar estado local
-      setUsers(prev => 
-        prev.map(user => 
+      setUsers((prev: UserWithRole[]) => 
+        prev.map((user: UserWithRole) => 
           user.id === userId 
             ? { ...user, role: newRole }
             : user
@@ -95,7 +95,7 @@ export const useUsers = () => {
     }
   }, []);
 
-  const updateUserProfile = useCallback(async (userId: string, profileData: Partial<UserWithRole>) => {
+  const updateUserProfile = React.useCallback(async (userId: string, profileData: Partial<UserWithRole>) => {
     try {
       const { error } = await supabase
         .from("profiles")
@@ -119,8 +119,8 @@ export const useUsers = () => {
       }
 
       // Atualizar estado local
-      setUsers(prev => 
-        prev.map(user => 
+      setUsers((prev: UserWithRole[]) => 
+        prev.map((user: UserWithRole) => 
           user.id === userId 
             ? { ...user, ...profileData }
             : user
@@ -135,25 +135,25 @@ export const useUsers = () => {
     }
   }, [updateUserRole]);
 
-  const getRoleStats = useCallback(() => {
-    const stats = users.reduce((acc, user) => {
+  const getRoleStats = React.useCallback(() => {
+    const stats = users.reduce((acc: Record<UserRole, number>, user: UserWithRole) => {
       acc[user.role] = (acc[user.role] || 0) + 1;
       return acc;
     }, {} as Record<UserRole, number>);
 
     return {
       total: users.length,
-      active: users.filter(u => u.status === "active").length,
-      inactive: users.filter(u => u.status === "inactive").length,
+      active: users.filter((u: UserWithRole) => u.status === "active").length,
+      inactive: users.filter((u: UserWithRole) => u.status === "inactive").length,
       byRole: stats
     };
   }, [users]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     return () => {
       isMountedRef.current = false;
     };

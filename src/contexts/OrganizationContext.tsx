@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import * as React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
@@ -48,11 +48,11 @@ const defaultContextValue: OrganizationContextType = {
   updateUserRole: async () => {}
 };
 
-const OrganizationContext = createContext<OrganizationContextType>(defaultContextValue);
+const OrganizationContext = React.createContext<OrganizationContextType>(defaultContextValue);
 
 export const useOrganization = (): OrganizationContextType => {
   try {
-    const context = useContext(OrganizationContext);
+    const context = React.useContext(OrganizationContext);
     return context || defaultContextValue;
   } catch (error) {
     console.warn("useOrganization called outside of provider, returning default value");
@@ -60,16 +60,16 @@ export const useOrganization = (): OrganizationContextType => {
   }
 };
 
-export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
+export const OrganizationProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
-  const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
-  const [currentBranding, setCurrentBranding] = useState<OrganizationBranding | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [currentOrganization, setCurrentOrganization] = React.useState<Organization | null>(null);
+  const [currentBranding, setCurrentBranding] = React.useState<OrganizationBranding | null>(null);
+  const [userRole, setUserRole] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   // Carregar organização demo
-  useEffect(() => {
+  React.useEffect(() => {
     loadDemoOrganization();
   }, []);
 
