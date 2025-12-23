@@ -58,31 +58,31 @@ serve(async (req: Request) => {
         realData: {
           vessels: {
             total: vessels.length,
-            active: vessels.filter(v => v.status === "active").length,
-            maintenance: vessels.filter(v => v.status === "maintenance").length,
+            active: vessels.filter((v: { status?: string }) => v.status === "active").length,
+            maintenance: vessels.filter((v: { status?: string }) => v.status === "maintenance").length,
             list: vessels.slice(0, 5)
           },
           crew: {
             total: crew.length,
-            onboard: crew.filter(c => c.status === "active").length,
-            onLeave: crew.filter(c => c.status === "on_leave").length
+            onboard: crew.filter((c: { status?: string }) => c.status === "active").length,
+            onLeave: crew.filter((c: { status?: string }) => c.status === "on_leave").length
           },
           maintenance: {
             total: maintenance.length,
-            overdue: maintenance.filter(m => m.status === "overdue").length,
-            scheduled: maintenance.filter(m => m.status === "scheduled").length,
-            critical: maintenance.filter(m => m.priority === "critical").length
+            overdue: maintenance.filter((m: { status?: string }) => m.status === "overdue").length,
+            scheduled: maintenance.filter((m: { status?: string }) => m.status === "scheduled").length,
+            critical: maintenance.filter((m: { priority?: string }) => m.priority === "critical").length
           },
           certificates: {
             total: certs.length,
-            expiringSoon: certs.filter(c => {
-              const expiry = new Date(c.expiry_date);
+            expiringSoon: certs.filter((c: { expiry_date?: string }) => {
+              const expiry = new Date(c.expiry_date || "");
               return expiry <= thirtyDays && expiry >= today;
             }).length
           }
         }
       };
-    } catch (dbError) {
+    } catch (dbError: unknown) {
       console.error("Error loading context data:", dbError);
     }
 
@@ -162,7 +162,7 @@ ${JSON.stringify(enrichedContext, null, 2)}
         prompt_length: JSON.stringify(messages).length,
         status: "success",
         model: "google/gemini-2.5-flash"
-      }).catch(err => console.error("Log error:", err));
+      }).catch((err: unknown) => console.error("Log error:", err));
     }
 
     return new Response(response.body, {
