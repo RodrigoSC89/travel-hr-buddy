@@ -1,8 +1,8 @@
 /**
- * PATCH 452 - Mission Execution Component
+ * Mission Execution Component - Uses named imports
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ interface MissionExecutionProps {
   onRefresh: () => void;
 }
 
-export const MissionExecution: React.FC<MissionExecutionProps> = ({ missions, tasks, onRefresh }) => {
+export const MissionExecution: FC<MissionExecutionProps> = ({ missions, tasks, onRefresh }) => {
   const handleStart = async (id: string) => {
     try {
       await missionControlService.updateMission(id, { status: "in-progress" });

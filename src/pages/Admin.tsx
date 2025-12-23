@@ -1,4 +1,3 @@
-import React from "react";
 import { AdminPanel } from "@/components/auth/admin-panel";
 import { MultiTenantWrapper } from "@/components/layout/multi-tenant-wrapper";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";

@@ -1,8 +1,8 @@
 /**
- * Offline-First Sync Manager - PATCH 831
- * Handles data synchronization with offline support
+ * Offline-First Sync Manager - Uses named imports
  */
 
+import { useState, useEffect } from 'react';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 
 // Define IndexedDB schema
@@ -349,13 +349,13 @@ export const offlineSync = new OfflineSyncManager();
 
 // React hook for offline sync
 export function useOfflineSync() {
-  const [status, setStatus] = React.useState<SyncStatus>({
+  const [status, setStatus] = useState<SyncStatus>({
     isOnline: navigator.onLine,
     pendingCount: 0,
     lastSync: null,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = offlineSync.subscribe(setStatus);
     
     // Get initial pending count
@@ -375,5 +375,4 @@ export function useOfflineSync() {
   };
 }
 
-// Need React import for the hook
-import React from 'react';
+// useState and useEffect are imported at the top of the file

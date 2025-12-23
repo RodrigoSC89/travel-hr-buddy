@@ -1,14 +1,12 @@
 /**
- * PATCH 202.0 - Responsive Container Component
- * Mobile-first responsive container using mobile-ui-kit
+ * Responsive Container Component - Uses named imports
  */
-
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { cn } from "@/lib/utils";
 import { getContainerStyles, mobileClasses, spacing } from "@/styles/mobile-ui-kit";
 
 interface ResponsiveContainerProps {
-  children: React.ReactNode;
+  children: ReactNode;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "full";
   className?: string;
   noPadding?: boolean;
@@ -16,7 +14,7 @@ interface ResponsiveContainerProps {
   safeArea?: boolean;
 }
 
-export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
+export const ResponsiveContainer: FC<ResponsiveContainerProps> = ({
   children,
   size = "xl",
   className,
@@ -50,7 +48,7 @@ export const ResponsiveContainer: React.FC<ResponsiveContainerProps> = ({
 };
 
 interface ResponsiveGridProps {
-  children: React.ReactNode;
+  children: ReactNode;
   columns?: {
     xs?: number;
     sm?: number;
@@ -62,7 +60,7 @@ interface ResponsiveGridProps {
   className?: string;
 }
 
-export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
+export const ResponsiveGrid: FC<ResponsiveGridProps> = ({
   children,
   columns = { xs: 1, sm: 2, md: 3, lg: 4 },
   gap = 4,
@@ -95,7 +93,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 };
 
 interface ResponsiveStackProps {
-  children: React.ReactNode;
+  children: ReactNode;
   direction?: "vertical" | "horizontal" | "responsive";
   gap?: keyof typeof spacing;
   align?: "start" | "center" | "end" | "stretch";
@@ -103,7 +101,7 @@ interface ResponsiveStackProps {
   className?: string;
 }
 
-export const ResponsiveStack: React.FC<ResponsiveStackProps> = ({
+export const ResponsiveStack: FC<ResponsiveStackProps> = ({
   children,
   direction = "vertical",
   gap = 4,

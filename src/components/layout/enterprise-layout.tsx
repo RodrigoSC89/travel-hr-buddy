@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { Activity, Shield, Zap } from "lucide-react";
 
-export const EnterpriseLayout: React.FC = () => {
+export const EnterpriseLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
   const { user } = useAuth();
 

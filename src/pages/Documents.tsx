@@ -1,4 +1,3 @@
-import React from "react";
 import { AdvancedDocumentCenter } from "@/components/documents/advanced-document-center";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";

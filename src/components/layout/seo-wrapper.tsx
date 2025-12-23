@@ -1,12 +1,12 @@
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { useLocation } from "react-router-dom";
 import { SEOHead } from "@/components/seo/seo-head";
 
 interface SEOWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const SEOWrapper: React.FC<SEOWrapperProps> = ({ children }) => {
+export const SEOWrapper: FC<SEOWrapperProps> = ({ children }) => {
   const location = useLocation();
   
   const getPageSEO = (pathname: string) => {

@@ -1,9 +1,8 @@
 /**
- * Fallback Status Component - Patch 142.1
- * Clear UI display for active fallback connections
+ * Fallback Status Component - Uses named imports
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -24,7 +23,7 @@ interface FallbackStatusProps {
   isFallbackActive: boolean;
 }
 
-export const FallbackStatus: React.FC<FallbackStatusProps> = ({
+export const FallbackStatus: FC<FallbackStatusProps> = ({
   primaryConnection,
   fallbackConnection,
   isFallbackActive,
