@@ -2,6 +2,7 @@
  * Memory Leak Detector - PATCH 975
  * Detects memory leaks and CPU inefficiencies
  */
+import { logger } from "@/lib/logger";
 
 interface LeakReport {
   component: string;
@@ -38,7 +39,7 @@ class MemoryLeakDetector {
   startMonitoring(intervalMs: number = 10000): void {
     if (this.intervalId) return;
     
-    console.log('[MemoryLeakDetector] Starting monitoring...');
+    logger.info('[MemoryLeakDetector] Starting monitoring...');
     this.takeSnapshot();
     
     this.intervalId = window.setInterval(() => {
@@ -95,7 +96,7 @@ class MemoryLeakDetector {
     
     // Warning if growing more than 5MB in last 5 snapshots
     if (recentGrowth > 5 * 1024 * 1024) {
-      console.warn('[MemoryLeakDetector] Possible memory leak detected:', {
+      logger.warn('[MemoryLeakDetector] Possible memory leak detected:', {
         growthMB: (recentGrowth / 1024 / 1024).toFixed(2),
         currentHeapMB: (this.snapshots[this.snapshots.length - 1].heapUsed / 1024 / 1024).toFixed(2)
       });

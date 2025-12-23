@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import {
   LayoutDashboard, Activity, TrendingUp, Brain, Bell, Settings,
   RefreshCw, Sun, Moon, Maximize2, Ship, 
@@ -127,7 +128,7 @@ export default function NautilusCommandCenter() {
 
       setLastSync(new Date());
     } catch (error) {
-      console.warn("Error loading system data:", error);
+      logger.warn("Error loading system data:", { error });
     } finally {
       setIsLoading(false);
     }

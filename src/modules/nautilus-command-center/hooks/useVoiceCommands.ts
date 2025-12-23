@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { logger } from "@/lib/logger";
 
 interface UseVoiceCommandsOptions {
   onCommand?: (command: string) => void;
@@ -132,7 +133,7 @@ export function useVoiceCommands(options: UseVoiceCommandsOptions = {}): UseVoic
       recognitionRef.current.start();
     } catch (err) {
       // Recognition may already be started
-      console.warn("Speech recognition error:", err);
+      logger.warn("Speech recognition error:", { error: err });
     }
   }, [isListening]);
 
