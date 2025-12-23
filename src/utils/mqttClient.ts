@@ -38,12 +38,12 @@ class MQTTClientManager {
       });
 
       this.client.on("error", (error) => {
-        console.error("❌ MQTT connection error:", error);
+        logger.error("MQTT connection error:", error);
         this.connected = false;
       });
 
       this.client.on("offline", () => {
-        console.warn("⚠️ MQTT client offline");
+        logger.warn("MQTT client offline");
         this.connected = false;
       });
 
@@ -52,7 +52,7 @@ class MQTTClientManager {
         logger.info(`🔄 MQTT reconnecting... (attempt ${this.reconnectAttempts})`);
         
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-          console.error("❌ Max reconnect attempts reached");
+          logger.error("Max MQTT reconnect attempts reached");
           this.disconnect();
         }
       });

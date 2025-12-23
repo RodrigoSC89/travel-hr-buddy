@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import type * as CocoSsdType from "@tensorflow-models/coco-ssd";
 import type * as TFType from "@tensorflow/tfjs";
 
@@ -144,7 +145,7 @@ export class CopilotVision {
   ): Promise<DetectedObject[]> {
     try {
       if (!this.cocoModel) {
-        console.warn("COCO model not loaded, skipping object detection");
+        logger.warn("COCO model not loaded, skipping object detection");
         return [];
       }
 

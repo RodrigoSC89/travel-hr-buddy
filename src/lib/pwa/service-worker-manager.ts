@@ -2,6 +2,7 @@
  * PATCH 837: Service Worker Manager
  * Advanced PWA capabilities for offline-first experience
  */
+import { logger } from "@/lib/logger";
 
 interface ServiceWorkerConfig {
   scope: string;
@@ -25,7 +26,7 @@ class ServiceWorkerManager {
 
   async register(): Promise<boolean> {
     if (!('serviceWorker' in navigator)) {
-      console.warn('Service Workers not supported');
+      logger.warn('Service Workers not supported');
       return false;
     }
 
@@ -34,14 +35,14 @@ class ServiceWorkerManager {
         scope: this.config.scope,
       });
 
-      console.log('Service Worker registered:', this.registration.scope);
+      logger.info('Service Worker registered:', { scope: this.registration.scope });
 
       // Setup update checking
       this.setupUpdateChecking();
 
       // Listen for controller changes
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log('New Service Worker activated');
+        logger.info('New Service Worker activated');
       });
 
       // Listen for messages from SW

@@ -2,6 +2,7 @@
  * PATCH 652 - Error Tracking System
  * Centralized error tracking and logging
  */
+import { logger } from "@/lib/logger";
 
 export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
 export type ErrorCategory = 'network' | 'validation' | 'authentication' | 'runtime' | 'unknown';
@@ -184,13 +185,13 @@ class ErrorTracker {
     switch (error.severity) {
       case 'critical':
       case 'high':
-        console.error(prefix, error.message, error);
+        logger.error(prefix, new Error(error.message), error);
         break;
       case 'medium':
-        console.warn(prefix, error.message, error);
+        logger.warn(prefix, error);
         break;
       case 'low':
-        console.info(prefix, error.message, error);
+        logger.info(prefix, error);
         break;
     }
   }

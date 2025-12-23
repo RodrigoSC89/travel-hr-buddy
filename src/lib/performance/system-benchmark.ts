@@ -2,6 +2,7 @@
  * System Benchmark - PATCH 970
  * Embedded performance benchmark with automatic diagnostics
  */
+import { logger } from "@/lib/logger";
 
 export interface BenchmarkResult {
   score: number;
@@ -245,7 +246,7 @@ class SystemBenchmark {
       }
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(history));
     } catch (e) {
-      console.warn('[Benchmark] Failed to save result:', e);
+      logger.warn('[Benchmark] Failed to save result:', { error: e });
     }
   }
 
