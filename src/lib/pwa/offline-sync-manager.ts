@@ -4,6 +4,7 @@
  */
 
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { logger } from '@/lib/logger';
 
 interface OfflineSyncDB extends DBSchema {
   pendingMutations: {
@@ -82,7 +83,7 @@ class OfflineSyncManager {
     } catch (error) {
       // Silently handle - background sync is an enhancement, not required
       if (error instanceof Error && !error.message.includes('without a window')) {
-        console.warn('[OfflineSync] Background sync not available');
+        logger.warn('[OfflineSync] Background sync not available');
       }
     }
   }
@@ -142,7 +143,7 @@ class OfflineSyncManager {
           
           if (mutation.retryCount >= 5) {
             // Move to dead letter queue or notify user
-            console.error('[OfflineSync] Mutation failed after max retries:', mutation);
+            logger.error('[OfflineSync] Mutation failed after max retries:', mutation);
             await this.db!.delete('pendingMutations', mutation.id);
             failed++;
           } else {
@@ -236,12 +237,12 @@ class OfflineSyncManager {
   }
 
   private onOnline(): void {
-    console.log('[OfflineSync] Back online, syncing...');
+    logger.info('[OfflineSync] Back online, syncing...');
     this.syncPendingMutations();
   }
 
   private onOffline(): void {
-    console.log('[OfflineSync] Offline mode activated');
+    logger.info('[OfflineSync] Offline mode activated');
     this.notifyListeners({ offline: true });
   }
 }

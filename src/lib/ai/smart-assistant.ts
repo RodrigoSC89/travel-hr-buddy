@@ -6,6 +6,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { hybridLLMEngine } from '@/lib/llm/hybrid-engine';
+import { logger } from '@/lib/logger';
 
 interface AssistantMessage {
   id: string;
@@ -213,7 +214,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
         },
       };
     } catch (error) {
-      console.warn('[SmartAssistant] LLM query failed, using fallback:', error);
+      logger.warn('[SmartAssistant] LLM query failed, using fallback:', error instanceof Error ? { message: error.message } : undefined);
     }
 
     // Fallback responses for common intents

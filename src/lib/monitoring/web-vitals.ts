@@ -4,6 +4,7 @@
  */
 
 import { onCLS, onFCP, onINP, onLCP, onTTFB, Metric } from 'web-vitals';
+import { logger } from '@/lib/logger';
 
 interface VitalMetric {
   name: string;
@@ -43,7 +44,7 @@ class WebVitalsMonitor {
 
       // Log in development
       if (import.meta.env.DEV) {
-        console.log(`[WebVitals] ${metric.name}:`, {
+        logger.info(`[WebVitals] ${metric.name}:`, {
           value: metric.value.toFixed(2),
           rating: metric.rating,
         });
@@ -133,7 +134,7 @@ class WebVitalsMonitor {
         keepalive: true,
       });
     } catch (error) {
-      console.warn('[WebVitals] Failed to send metrics:', error);
+      logger.warn('[WebVitals] Failed to send metrics:', error instanceof Error ? error : undefined);
     }
   }
 }
