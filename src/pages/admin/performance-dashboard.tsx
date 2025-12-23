@@ -1,4 +1,5 @@
-// @ts-nocheck
+// @ts-nocheck - TODO: Fix Supabase type mismatches
+// PATCH 850.5 - Migrated to LazyChart for bundle optimization
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,11 +12,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { LazyLineChart } from "@/components/charts/LazyChart";
 import { logger } from "@/lib/logger";
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 interface PerformanceMetric {
   id: string;
@@ -354,11 +352,10 @@ export default function PerformanceDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="h-64">
-                  <Line 
+                  <LazyLineChart 
                     data={getChartData(metric)} 
+                    height={256}
                     options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
                       plugins: {
                         legend: { display: false }
                       }

@@ -168,7 +168,8 @@ export class CopilotVision {
     imageSource: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | ImageData
   ): Promise<OCRResult[]> {
     try {
-      const result = await Tesseract.recognize(imageSource as any, "eng", {
+      const TesseractLib = await loadTesseract();
+      const result = await TesseractLib.recognize(imageSource as any, "eng", {
         logger: (m) => {
           if (m.status === "recognizing text") {
             console.log(`OCR Progress: ${(m.progress * 100).toFixed(0)}%`);

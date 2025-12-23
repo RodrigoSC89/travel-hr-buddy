@@ -4,25 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Download, BarChart3, Clock, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { LazyBarChart } from "@/components/charts/LazyChart";
 
 /**
  * PATCH 643: Usage Metrics Dashboard
@@ -195,7 +177,7 @@ export default function UsageMetrics() {
           <CardDescription>Module access frequency in the last 30 days</CardDescription>
         </CardHeader>
         <CardContent>
-          <Bar data={moduleChartData} options={{ responsive: true, maintainAspectRatio: true }} />
+          <LazyBarChart data={moduleChartData} height={300} />
         </CardContent>
       </Card>
 
@@ -206,7 +188,7 @@ export default function UsageMetrics() {
           <CardDescription>Request distribution throughout the day</CardDescription>
         </CardHeader>
         <CardContent>
-          <Bar data={peakHoursChartData} options={{ responsive: true, maintainAspectRatio: true }} />
+          <LazyBarChart data={peakHoursChartData} height={300} />
         </CardContent>
       </Card>
 
