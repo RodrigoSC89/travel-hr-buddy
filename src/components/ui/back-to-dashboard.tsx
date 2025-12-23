@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ interface BackToDashboardProps {
   variant?: "default" | "outline" | "ghost";
 }
 
-export const BackToDashboard: React.FC<BackToDashboardProps> = ({ 
+export const BackToDashboard: FC<BackToDashboardProps> = ({ 
   className = "", 
   variant = "outline" 
 }) => {

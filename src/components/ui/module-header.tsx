@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BackToDashboard } from "./back-to-dashboard";
@@ -26,7 +26,7 @@ const gradientClasses = {
   indigo: "from-indigo-600 via-indigo-600/90 to-indigo-700",
 };
 
-export const ModuleHeader: React.FC<ModuleHeaderProps> = ({
+export const ModuleHeader: FC<ModuleHeaderProps> = ({
   icon: Icon,
   title,
   description,
