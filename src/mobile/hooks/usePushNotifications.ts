@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 // Capacitor imports with web fallbacks
 const PushNotifications = typeof window !== "undefined" && 
@@ -76,7 +77,7 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
       }
       return false;
     } catch (error) {
-      console.error("Failed to request push permission", error);
+      logger.error("Failed to request push permission", error);
       return false;
     }
   }, []);
@@ -89,7 +90,7 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
       // Request permission first
       const hasPermission = await requestPermission();
       if (!hasPermission) {
-        console.warn("Push notification permission denied");
+        logger.warn("Push notification permission denied");
         return null;
       }
 
@@ -101,13 +102,13 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
         return null;
       } else if ("serviceWorker" in navigator) {
         // Web Push - simplified without VAPID for now
-        console.info("Web push registration would happen here");
+        logger.info("Web push registration would happen here");
         return null;
       }
       
       return null;
     } catch (error) {
-      console.error("Failed to register push notifications", error);
+      logger.error("Failed to register push notifications", error);
       options.onRegistrationError?.(error as Error);
       return null;
     } finally {
@@ -131,7 +132,7 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
         token: null,
       }));
     } catch (error) {
-      console.error("Failed to unregister push notifications", error);
+      logger.error("Failed to unregister push notifications", error);
     }
   }, []);
 
@@ -155,7 +156,7 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
         new Notification(title, { body, data });
       }
     } catch (error) {
-      console.error("Failed to show local notification", error);
+      logger.error("Failed to show local notification", error);
     }
   }, []);
 
@@ -174,7 +175,7 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
       
       // Registration success
       PushNotifications.addListener("registration", async (token: any) => {
-        console.info("Push registration success", { token: token.value });
+        logger.info("Push registration success", { token: token.value });
         await saveToken(token.value);
         setState(prev => ({
           ...prev,
@@ -185,19 +186,19 @@ export function usePushNotifications(options: PushNotificationOptions = {}) {
 
       // Registration error
       PushNotifications.addListener("registrationError", (error: any) => {
-        console.error("Push registration error", error);
+        logger.error("Push registration error", error);
         options.onRegistrationError?.(new Error(error.error));
       }).then((l: any) => listeners.push(l));
 
       // Notification received
       PushNotifications.addListener("pushNotificationReceived", (notification: any) => {
-        console.info("Push notification received", notification);
+        logger.info("Push notification received", notification);
         options.onReceived?.(notification);
       }).then((l: any) => listeners.push(l));
 
       // Notification action
       PushNotifications.addListener("pushNotificationActionPerformed", (action: any) => {
-        console.info("Push notification action", action);
+        logger.info("Push notification action", action);
         options.onAction?.(action);
       }).then((l: any) => listeners.push(l));
 
@@ -224,9 +225,9 @@ async function saveToken(token: string): Promise<void> {
     if (!user) return;
 
     // Save token to user profile or dedicated push_tokens table
-    console.info("Push token saved", { userId: user.id, token });
+    logger.info("Push token saved", { userId: user.id, token });
   } catch (error) {
-    console.error("Failed to save push token", error);
+    logger.error("Failed to save push token", error);
   }
 }
 
@@ -237,8 +238,8 @@ async function removeToken(): Promise<void> {
     if (!user) return;
 
     // Remove token from server
-    console.info("Push token removed");
+    logger.info("Push token removed");
   } catch (error) {
-    console.error("Failed to remove push token", error);
+    logger.error("Failed to remove push token", error);
   }
 }

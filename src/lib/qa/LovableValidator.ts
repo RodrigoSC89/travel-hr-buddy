@@ -3,6 +3,8 @@
  * PATCH 624 - Sistema de validação para módulos React em preview
  */
 
+import { logger } from "@/lib/logger";
+
 interface ValidationResult {
   passed: boolean;
   issues: ValidationIssue[];
@@ -40,7 +42,7 @@ class LovableValidatorClass {
     maxDataSize?: number;
     maxReRenders?: number;
   }): Promise<ValidationResult> {
-    console.log(`[LovableValidator] Iniciando validação para ${componentName}`);
+    logger.info(`[LovableValidator] Iniciando validação para ${componentName}`);
     
     const startTime = performance.now();
     this.issues = [];
@@ -85,9 +87,9 @@ class LovableValidatorClass {
       }
     };
 
-    console.log(`[LovableValidator] Validação concluída em ${totalTime.toFixed(2)}ms`);
-    console.log(`[LovableValidator] Status: ${passed ? "✅ PASS" : "❌ FAIL"}`);
-    console.log(`[LovableValidator] Issues: ${this.issues.length} | Warnings: ${this.warnings.length}`);
+    logger.info(`[LovableValidator] Validação concluída`, { duration: `${totalTime.toFixed(2)}ms` });
+    logger.info(`[LovableValidator] Status: ${passed ? "✅ PASS" : "❌ FAIL"}`);
+    logger.debug(`[LovableValidator] Resultados`, { issues: this.issues.length, warnings: this.warnings.length });
 
     return result;
   }
@@ -237,7 +239,7 @@ class LovableValidatorClass {
           fix: "Reduza quantidade de dados mockados ou use paginação"
         });
       }
-    } catch (error) {
+    } catch {
       this.warnings.push("Não foi possível verificar tamanho de dados mockados");
     }
 
@@ -286,9 +288,9 @@ class LovableValidatorClass {
       issue.severity === "high" ? "🟠" : 
         issue.severity === "medium" ? "🟡" : "🟢";
     
-    console.warn(`${emoji} [${issue.severity.toUpperCase()}] ${issue.component}: ${issue.description}`);
+    logger.warn(`${emoji} [${issue.severity.toUpperCase()}] ${issue.component}: ${issue.description}`);
     if (issue.fix) {
-      console.log(`   💡 Fix: ${issue.fix}`);
+      logger.debug(`   💡 Fix: ${issue.fix}`);
     }
   }
 
