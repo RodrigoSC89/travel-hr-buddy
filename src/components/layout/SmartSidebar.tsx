@@ -9,15 +9,12 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Grouped modules by category - PATCH 177.0 AUDIT COMPLETE
+// Grouped modules by category - PATCH UNIFY-COMMAND: Fusão realizada
 const groupedModules = [
   {
     title: "🎯 Centro de Comando",
     items: [
-      { label: "🚀 Command Center", path: "/command-center" },
-      { label: "📊 Dashboard Executivo", path: "/executive-dashboard" },
-      { label: "🧠 Nautilus Command", path: "/nautilus-command" },
-      { label: "🏢 Centro de Operações", path: "/system-hub" },
+      { label: "🧠 Nautilus Command Center", path: "/nautilus-command" },
       { label: "📡 Telemetria", path: "/telemetry" },
       { label: "🌤️ Weather Command", path: "/weather-command" },
     ],
