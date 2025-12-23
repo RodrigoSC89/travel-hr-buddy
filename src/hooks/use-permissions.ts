@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import type { UserRole } from "./use-users";
@@ -19,11 +19,11 @@ interface RolePermission {
 
 export const usePermissions = () => {
   const { user } = useAuth();
-  const [userRole, setUserRole] = React.useState<UserRole | null>(null);
-  const [permissions, setPermissions] = React.useState<RolePermission[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [permissions, setPermissions] = useState<RolePermission[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchUserRoleAndPermissions = async () => {
       if (!user) {
         setUserRole(null);
