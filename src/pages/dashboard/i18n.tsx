@@ -1,10 +1,10 @@
 /**
- * PATCH 574 - Dashboard de Internacionalização
+ * PATCH 851 - Dashboard de Internacionalização
  * Painel para monitorar uso multilíngue do sistema
+ * Removed @ts-nocheck, added proper typing
  */
 
-// @ts-nocheck
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,10 +23,8 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
 } from "recharts";
-import { Download, Globe, TrendingUp, AlertCircle } from "lucide-react";
+import { Download, Globe, AlertCircle } from "lucide-react";
 
 interface LanguageStats {
   language: string;
@@ -56,7 +54,13 @@ interface TranslationFeedback {
   created_at: string;
 }
 
-const COLORS = {
+interface AggregatedLanguage {
+  language: string;
+  count: number;
+  color: string;
+}
+
+const COLORS: Record<string, string> = {
   pt: "#10b981",
   en: "#3b82f6",
   es: "#f59e0b",
@@ -72,65 +76,22 @@ const LANGUAGE_NAMES: Record<string, string> = {
   de: "Deutsch",
 };
 
-export default function I18nDashboard() {
-  const { t, language } = useTranslation();
-  const [stats, setStats] = useState<LanguageStats[]>([]);
-  const [logs, setLogs] = useState<TranslationLog[]>([]);
-  const [feedback, setFeedback] = useState<TranslationFeedback[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [timeRange, setTimeRange] = useState<"day" | "week" | "month">("week");
+// Dynamic DB access for tables not in schema
+const dynamicDb = supabase as unknown as {
+  from: (table: string) => ReturnType<typeof supabase.from>;
+};
 
-  useEffect(() => {
+export default function I18nDashboard() {
+  const { t } = useTranslation();
+  const [stats, setStats] = React.useState<LanguageStats[]>([]);
+  const [logs, setLogs] = React.useState<TranslationLog[]>([]);
+  const [feedback, setFeedback] = React.useState<TranslationFeedback[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [timeRange, setTimeRange] = React.useState<"day" | "week" | "month">("week");
+
+  React.useEffect(() => {
     loadDashboardData();
   }, [timeRange]);
-
-  const loadDashboardData = async () => {
-    setLoading(true);
-    try {
-      // Carregar estatísticas de uso
-      const { data: statsData, error: statsError } = await supabase
-        .from("language_usage_stats")
-        .select("*")
-        .gte(
-          "date",
-          getStartDate(timeRange)
-        )
-        .order("translation_count", { ascending: false });
-
-      if (statsError) throw statsError;
-      setStats(statsData || []);
-
-      // Carregar logs de tradução
-      const { data: logsData, error: logsError } = await supabase
-        .from("translation_logs")
-        .select("*")
-        .gte(
-          "created_at",
-          getStartDate(timeRange)
-        )
-        .order("created_at", { ascending: false })
-        .limit(100);
-
-      if (logsError) throw logsError;
-      setLogs(logsData || []);
-
-      // Carregar feedback
-      const { data: feedbackData, error: feedbackError } = await supabase
-        .from("translation_feedback")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(50);
-
-      if (feedbackError) throw feedbackError;
-      setFeedback(feedbackData || []);
-
-      logger.info("[I18nDashboard] Data loaded successfully");
-    } catch (error) {
-      logger.error("[I18nDashboard] Failed to load data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getStartDate = (range: "day" | "week" | "month"): string => {
     const date = new Date();
@@ -146,6 +107,48 @@ export default function I18nDashboard() {
       break;
     }
     return date.toISOString();
+  };
+
+  const loadDashboardData = async () => {
+    setLoading(true);
+    try {
+      // Carregar estatísticas de uso
+      const { data: statsData, error: statsError } = await dynamicDb
+        .from("language_usage_stats")
+        .select("*")
+        .gte("date", getStartDate(timeRange))
+        .order("translation_count", { ascending: false });
+
+      if (statsError) throw statsError;
+      setStats((statsData as LanguageStats[]) || []);
+
+      // Carregar logs de tradução
+      const { data: logsData, error: logsError } = await dynamicDb
+        .from("translation_logs")
+        .select("*")
+        .gte("created_at", getStartDate(timeRange))
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      if (logsError) throw logsError;
+      setLogs((logsData as TranslationLog[]) || []);
+
+      // Carregar feedback
+      const { data: feedbackData, error: feedbackError } = await dynamicDb
+        .from("translation_feedback")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (feedbackError) throw feedbackError;
+      setFeedback((feedbackData as TranslationFeedback[]) || []);
+
+      logger.info("[I18nDashboard] Data loaded successfully");
+    } catch (error) {
+      logger.error("[I18nDashboard] Failed to load data", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const exportData = () => {
@@ -176,11 +179,11 @@ export default function I18nDashboard() {
       acc.push({
         language: LANGUAGE_NAMES[stat.language] || stat.language,
         count: stat.translation_count,
-        color: COLORS[stat.language as keyof typeof COLORS],
+        color: COLORS[stat.language] || "#6b7280",
       });
     }
     return acc;
-  }, [] as Array<{ language: string; count: number; color: string }>);
+  }, [] as AggregatedLanguage[]);
 
   const successRate =
     logs.length > 0
@@ -224,21 +227,21 @@ export default function I18nDashboard() {
           <Button
             variant="outline"
             onClick={() => setTimeRange("day")}
-            className={timeRange === "day" ? "bg-primary text-white" : ""}
+            className={timeRange === "day" ? "bg-primary text-primary-foreground" : ""}
           >
             24h
           </Button>
           <Button
             variant="outline"
             onClick={() => setTimeRange("week")}
-            className={timeRange === "week" ? "bg-primary text-white" : ""}
+            className={timeRange === "week" ? "bg-primary text-primary-foreground" : ""}
           >
             7d
           </Button>
           <Button
             variant="outline"
             onClick={() => setTimeRange("month")}
-            className={timeRange === "month" ? "bg-primary text-white" : ""}
+            className={timeRange === "month" ? "bg-primary text-primary-foreground" : ""}
           >
             30d
           </Button>

@@ -1,5 +1,8 @@
-// @ts-nocheck
-import React, { useState, useEffect } from "react";
+/**
+ * PATCH 851 - Logistics Hub Dashboard
+ * Removed @ts-nocheck, added proper typing
+ */
+import * as React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Package, Truck, Users, BarChart3, Map } from "lucide-react";
@@ -9,23 +12,51 @@ import { SupplyOrdersManagement } from "./supply-orders-management";
 import { DeliveryMap } from "./DeliveryMap";
 import { supabase } from "@/integrations/supabase/client";
 
-const LogisticsHubDashboard = () => {
-  const [deliveryLocations, setDeliveryLocations] = useState([]);
+interface LocalDeliveryLocation {
+  id: string;
+  shipment_number: string;
+  origin: string;
+  destination: string;
+  status: "pending" | "in_transit" | "delivered" | "delayed";
+  estimated_arrival: string | null;
+  coordinates: {
+    origin: [number, number];
+    destination: [number, number];
+    current?: [number, number];
+  };
+}
 
-  useEffect(() => {
+interface ShipmentData {
+  id: string;
+  shipment_number: string;
+  origin: string;
+  destination: string;
+  status: string;
+  estimated_arrival: string | null;
+}
+
+// Dynamic DB access for tables not in schema
+const dynamicDb = supabase as unknown as {
+  from: (table: string) => ReturnType<typeof supabase.from>;
+};
+
+const LogisticsHubDashboard = () => {
+  const [deliveryLocations, setDeliveryLocations] = React.useState<DeliveryLocation[]>([]);
+
+  React.useEffect(() => {
     loadDeliveryData();
   }, []);
 
   const loadDeliveryData = async () => {
     // Load shipment data and transform to map format
-    const { data: shipments } = await supabase
+    const { data: shipments } = await dynamicDb
       .from("logistics_shipments")
       .select("*")
       .in("status", ["in_transit", "delivered"]);
 
     if (shipments) {
       // Transform shipments to delivery locations with mock coordinates
-      const locations = shipments.map((shipment, idx) => ({
+      const locations: DeliveryLocation[] = (shipments as ShipmentData[]).map((shipment, idx) => ({
         id: shipment.id,
         shipment_number: shipment.shipment_number,
         origin: shipment.origin,
@@ -33,10 +64,10 @@ const LogisticsHubDashboard = () => {
         status: shipment.status,
         estimated_arrival: shipment.estimated_arrival,
         coordinates: {
-          origin: [-47 - (idx * 2), -10 - (idx * 1.5)],
-          destination: [-43 + (idx * 2), -8 + (idx * 1)],
+          origin: [-47 - (idx * 2), -10 - (idx * 1.5)] as [number, number],
+          destination: [-43 + (idx * 2), -8 + (idx * 1)] as [number, number],
           current: shipment.status === "in_transit" 
-            ? [-45 + (idx * 0.5), -9 + (idx * 0.5)] 
+            ? [-45 + (idx * 0.5), -9 + (idx * 0.5)] as [number, number]
             : undefined
         }
       }));

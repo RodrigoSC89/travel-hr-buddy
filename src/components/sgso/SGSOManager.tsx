@@ -1,5 +1,8 @@
-// @ts-nocheck
-import { useState } from "react";
+/**
+ * PATCH 851 - SGSO Manager Component
+ * Removed @ts-nocheck, added proper typing
+ */
+import * as React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,22 +20,37 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 
+interface SGSOPlan {
+  id: string;
+  plan_name: string;
+  plan_version?: string | number;
+  status: string;
+  content: unknown;
+  created_at: string;
+  created_by?: string;
+}
+
+// Dynamic DB access for tables not in schema
+const dynamicDb = supabase as unknown as {
+  from: (table: string) => ReturnType<typeof supabase.from>;
+};
+
 export default function SGSOManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [planName, setPlanName] = useState("");
-  const [planContent, setPlanContent] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [planName, setPlanName] = React.useState("");
+  const [planContent, setPlanContent] = React.useState("");
 
   const { data: plans, isLoading } = useQuery({
     queryKey: ["sgso-plans"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await dynamicDb
         .from("sgso_plans")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data;
+      return data as SGSOPlan[];
     },
   });
 
@@ -41,7 +59,7 @@ export default function SGSOManager() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { data, error } = await supabase
+      const { data, error } = await dynamicDb
         .from("sgso_plans")
         .insert({
           plan_name: planName,
@@ -146,7 +164,7 @@ export default function SGSOManager() {
               <div>
                 <h3 className="font-semibold text-lg">{plan.plan_name}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Versão {(plan.plan_version as any) || "1.0"}
+                  Versão {plan.plan_version || "1.0"}
                 </p>
               </div>
               <div className="flex gap-2">

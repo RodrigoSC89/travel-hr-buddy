@@ -1,30 +1,46 @@
-// @ts-nocheck
-// PATCH 226 - Protocol Adapter
+/**
+ * PATCH 851 - Protocol Adapter
+ * Removed @ts-nocheck, added proper typing with dynamic table access
+ */
 import { supabase } from "@/integrations/supabase/client";
 
 export type ProtocolType = "json-rpc" | "gmdss" | "ais" | "http" | "mqtt";
 
 export interface ProtocolMessage {
   protocol: ProtocolType;
-  payload: any;
+  payload: unknown;
   timestamp?: string;
 }
 
 export interface ProtocolResponse {
   success: boolean;
-  data?: any;
+  data?: unknown;
   error?: string;
   message?: string;
 }
 
+interface JsonRpcMessage {
+  jsonrpc: string;
+  method?: string;
+  id?: string | number;
+  params?: unknown;
+}
+
+// Dynamic DB access for tables not in schema
+const dynamicDb = supabase as unknown as {
+  from: (table: string) => ReturnType<typeof supabase.from>;
+};
+
 // JSON-RPC Protocol Handler
-export async function handleJsonRpc(message: any): Promise<ProtocolResponse> {
+export async function handleJsonRpc(message: unknown): Promise<ProtocolResponse> {
   try {
-    if (!message.jsonrpc || message.jsonrpc !== "2.0") {
+    const rpcMessage = message as JsonRpcMessage;
+    
+    if (!rpcMessage.jsonrpc || rpcMessage.jsonrpc !== "2.0") {
       throw new Error("Invalid JSON-RPC version");
     }
     
-    if (!message.method) {
+    if (!rpcMessage.method) {
       throw new Error("Missing method in JSON-RPC request");
     }
 
@@ -36,15 +52,16 @@ export async function handleJsonRpc(message: any): Promise<ProtocolResponse> {
       success: true,
       data: {
         jsonrpc: "2.0",
-        id: message.id,
-        result: { status: "processed", method: message.method }
+        id: rpcMessage.id,
+        result: { status: "processed", method: rpcMessage.method }
       }
     };
-  } catch (error: any) {
-    await logInterop("json-rpc", message, "error", error.message);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    await logInterop("json-rpc", message, "error", errorMessage);
     return {
       success: false,
-      error: error.message,
+      error: errorMessage,
       message: "JSON-RPC processing failed"
     };
   }
@@ -77,11 +94,12 @@ export async function parseGmdss(message: string): Promise<ProtocolResponse> {
       success: true,
       data: parsed
     };
-  } catch (error: any) {
-    await logInterop("gmdss", { raw: message }, "error", error.message);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    await logInterop("gmdss", { raw: message }, "error", errorMessage);
     return {
       success: false,
-      error: error.message,
+      error: errorMessage,
       message: "GMDSS parsing failed"
     };
   }
@@ -94,7 +112,7 @@ export async function processProtocolMessage(msg: ProtocolMessage): Promise<Prot
     return handleJsonRpc(msg.payload);
     
   case "gmdss":
-    return parseGmdss(msg.payload);
+    return parseGmdss(msg.payload as string);
     
   default:
     await logInterop(msg.protocol, msg.payload, "warning", "Unsupported protocol");
@@ -109,12 +127,12 @@ export async function processProtocolMessage(msg: ProtocolMessage): Promise<Prot
 // Log interop events
 async function logInterop(
   protocolType: string,
-  message: any,
+  message: unknown,
   status: "success" | "error" | "warning",
   errorMessage?: string
 ): Promise<void> {
   try {
-    await supabase.from("interop_log").insert({
+    await dynamicDb.from("interop_log").insert({
       protocol_type: protocolType,
       message: message,
       status: status,
@@ -127,7 +145,7 @@ async function logInterop(
 
 // Get recent logs
 export async function getInteropLogs(protocolType?: string, limit: number = 50) {
-  let query = supabase
+  let query = dynamicDb
     .from("interop_log")
     .select("*")
     .order("created_at", { ascending: false })

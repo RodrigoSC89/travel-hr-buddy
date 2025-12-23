@@ -1,11 +1,11 @@
-// @ts-nocheck
+/**
+ * Enhanced Supabase Manager with retry logic and error handling
+ * PATCH 851 - Removed @ts-nocheck, added proper typing
+ */
 import { supabase } from "@/integrations/supabase/client";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
 
-/**
- * Enhanced Supabase Manager with retry logic and error handling
- */
 export class SupabaseManager {
   private client: SupabaseClient;
   private retryCount = 0;
@@ -33,8 +33,7 @@ export class SupabaseManager {
         // Exponential backoff
         const delay = this.retryDelay * Math.pow(2, retryCount);
         logger.warn(
-          `Supabase operation failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`,
-          error
+          `Supabase operation failed, retrying in ${delay}ms (attempt ${retryCount + 1}/${this.maxRetries})`
         );
         
         await new Promise((resolve) => setTimeout(resolve, delay));
@@ -61,10 +60,10 @@ export class SupabaseManager {
         .from("profiles")
         .select("id")
         .limit(1)
-        .single();
+        .maybeSingle();
       
       return !error || error.code === "PGRST116"; // No rows is ok
-    } catch (error) {
+    } catch {
       return false;
     }
   }
