@@ -1,17 +1,25 @@
+// @ts-nocheck - Tables satcom_links/satcom_logs not in generated schema
 /**
  * PATCH 476: SATCOM Ping Service
  * Simulates satellite link pings and monitors connectivity
+ * NOTE: Requires satcom_links and satcom_logs tables migration
  */
 
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
+
+export type SatcomProvider = "Iridium" | "Starlink" | "Inmarsat" | "Thuraya";
+export type SatcomStatus = "online" | "offline" | "degraded";
+export type TransmissionType = "send" | "receive" | "status" | "heartbeat";
+export type LogStatus = "success" | "failed" | "degraded" | "timeout";
 
 export interface SatcomLink {
   id: string;
   vessel_id: string | null;
   name: string;
-  provider: "Iridium" | "Starlink" | "Inmarsat" | "Thuraya";
-  status: "online" | "offline" | "degraded";
+  provider: SatcomProvider;
+  status: SatcomStatus;
   signal_strength: number | null;
   latency_ms: number | null;
   bandwidth_kbps: number | null;
@@ -20,7 +28,7 @@ export interface SatcomLink {
   failure_reason: string | null;
   priority: number;
   is_primary: boolean;
-  config: any;
+  config: Json;
   created_at: string;
   updated_at: string;
 }
@@ -36,15 +44,15 @@ export interface PingResult {
 
 export interface SatcomLog {
   vessel_id: string | null;
-  transmission_type: "send" | "receive" | "status" | "heartbeat";
-  provider: "Iridium" | "Starlink" | "Inmarsat" | "Thuraya";
+  transmission_type: TransmissionType;
+  provider: SatcomProvider;
   message_content: string | null;
   signal_strength: number | null;
   latency_ms: number | null;
   bandwidth_kbps: number | null;
-  status: "success" | "failed" | "degraded" | "timeout";
+  status: LogStatus;
   error_message: string | null;
-  metadata?: any;
+  metadata?: Json;
 }
 
 class SatcomPingService {
@@ -58,11 +66,11 @@ class SatcomPingService {
       .order("priority", { ascending: false });
 
     if (error) {
-      console.error("Error fetching satcom links:", error);
+      logger.error("Error fetching satcom links:", { error });
       return [];
     }
 
-    return data || [];
+    return (data || []) as SatcomLink[];
   }
 
   /**
@@ -76,11 +84,11 @@ class SatcomPingService {
       .single();
 
     if (error) {
-      console.error("Error upserting satcom link:", error);
+      logger.error("Error upserting satcom link:", { error });
       return null;
     }
 
-    return data;
+    return data as SatcomLink;
   }
 
   /**
@@ -207,7 +215,7 @@ class SatcomPingService {
   /**
    * Get recent logs for a link
    */
-  async getLogs(linkId?: string, limit: number = 50): Promise<any[]> {
+  async getLogs(linkId?: string, limit: number = 50): Promise<SatcomLog[]> {
     let query = supabase
       .from("satcom_logs")
       .select("*")
@@ -221,11 +229,11 @@ class SatcomPingService {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching satcom logs:", error);
+      logger.error("Error fetching satcom logs:", { error });
       return [];
     }
 
-    return data || [];
+    return (data || []) as SatcomLog[];
   }
 
   /**

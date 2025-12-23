@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 197.0 - SaaS Engine (Multitenant Engine)
  * 
@@ -84,10 +83,10 @@ export function clearTenantContext(): void {
  * Higher-order function to wrap Supabase queries with tenant context
  * Automatically injects tenant_id into queries for data isolation
  */
-export function withTenantContext<T extends (...args: any[]) => any>(
-  fn: T
-): (...args: Parameters<T>) => ReturnType<T> {
-  return (...args: Parameters<T>): ReturnType<T> => {
+export function withTenantContext<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn
+): (...args: TArgs) => TReturn {
+  return (...args: TArgs): TReturn => {
     const context = getCurrentTenantContext();
     
     if (!context) {
@@ -117,37 +116,37 @@ export function createTenantClient() {
 
   return {
     from: (table: string) => {
-      const baseQuery = (supabase as any).from(table);
+      const baseQuery = supabase.from(table as "profiles");
       
       // Automatically add tenant_id filter if table has tenant_id column
       return {
-        select: (...args: any[]) => {
+        select: (...args: Parameters<typeof baseQuery.select>) => {
           const query = baseQuery.select(...args);
           
           // Add tenant filter if applicable
-          return query.eq("tenant_id", context.tenantId);
+          return query.eq("tenant_id" as never, context.tenantId as never);
         },
-        insert: (data: any) => {
+        insert: (data: Record<string, unknown> | Record<string, unknown>[]) => {
           // Automatically inject tenant_id
           const dataWithTenant = Array.isArray(data)
             ? data.map(item => ({ ...item, tenant_id: context.tenantId }))
             : { ...data, tenant_id: context.tenantId };
           
-          return baseQuery.insert(dataWithTenant);
+          return baseQuery.insert(dataWithTenant as never);
         },
-        update: (data: any) => {
+        update: (data: Record<string, unknown>) => {
           const dataWithTenant = { ...data, tenant_id: context.tenantId };
-          return baseQuery.update(dataWithTenant).eq("tenant_id", context.tenantId);
+          return baseQuery.update(dataWithTenant as never).eq("tenant_id" as never, context.tenantId as never);
         },
         delete: () => {
-          return baseQuery.delete().eq("tenant_id", context.tenantId);
+          return baseQuery.delete().eq("tenant_id" as never, context.tenantId as never);
         },
-        upsert: (data: any) => {
+        upsert: (data: Record<string, unknown> | Record<string, unknown>[]) => {
           const dataWithTenant = Array.isArray(data)
             ? data.map(item => ({ ...item, tenant_id: context.tenantId }))
             : { ...data, tenant_id: context.tenantId };
           
-          return baseQuery.upsert(dataWithTenant);
+          return baseQuery.upsert(dataWithTenant as never);
         },
       };
     },
@@ -253,9 +252,9 @@ export async function isModuleEnabledForTenant(
       return true;
     }
 
-    return data.enabled;
-  } catch (error) {
-    logger.error("[TenantContext] Failed to check module status", { error });
+    return data.enabled ?? true;
+  } catch (err) {
+    logger.error("[TenantContext] Failed to check module status", { error: err });
     return true;
   }
 }
