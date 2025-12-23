@@ -1,13 +1,37 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+interface PriceAlert {
+  id: string;
+  user_id: string;
+  product_name: string;
+  product_url: string;
+  target_price: number;
+  current_price?: number;
+}
+
+interface PriceCheckResult {
+  success: boolean;
+  price?: number;
+}
+
+interface AlertResult {
+  alert_id: string;
+  product_name: string;
+  current_price?: number;
+  target_price?: number;
+  target_met?: boolean;
+  success: boolean;
+  error?: string;
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -18,7 +42,6 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
 
-    // Get all active price alerts
     const { data: alerts, error: alertsError } = await supabaseClient
       .from("price_alerts")
       .select("*")
@@ -30,11 +53,10 @@ serve(async (req) => {
 
     console.log(`Found ${alerts?.length || 0} active alerts to check`);
 
-    const results = [];
+    const results: AlertResult[] = [];
 
-    for (const alert of alerts || []) {
+    for (const alert of (alerts as PriceAlert[]) || []) {
       try {
-        // Call the check-price function
         const priceCheckResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/check-price`, {
           method: "POST",
           headers: {
@@ -47,12 +69,11 @@ serve(async (req) => {
           })
         });
 
-        const priceData = await priceCheckResponse.json();
+        const priceData: PriceCheckResult = await priceCheckResponse.json();
         
         if (priceData.success && priceData.price) {
           const currentPrice = priceData.price;
 
-          // Update the alert with new price
           const { error: updateError } = await supabaseClient
             .from("price_alerts")
             .update({
@@ -66,7 +87,6 @@ serve(async (req) => {
             continue;
           }
 
-          // Add to price history
           const { error: historyError } = await supabaseClient
             .from("price_history")
             .insert({
@@ -79,12 +99,9 @@ serve(async (req) => {
             console.error(`Error adding price history for alert ${alert.id}:`, historyError);
           }
 
-          // Check if target price is met
           if (currentPrice <= alert.target_price) {
-            const savings = alert.current_price ? alert.current_price - currentPrice : 0;
             const message = `🎉 Meta de preço atingida! ${alert.product_name} agora custa R$ ${currentPrice.toFixed(2)} (meta: R$ ${alert.target_price.toFixed(2)})`;
             
-            // Create notification
             const { error: notificationError } = await supabaseClient
               .from("price_notifications")
               .insert({

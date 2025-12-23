@@ -1,8 +1,8 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
@@ -12,7 +12,15 @@ interface PriceCheckRequest {
   product_url: string;
 }
 
-serve(async (req) => {
+interface PerplexityResponse {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -30,7 +38,6 @@ serve(async (req) => {
       throw new Error("PERPLEXITY_API_KEY not found");
     }
 
-    // Use Perplexity to search for current price
     const perplexityResponse = await fetch("https://api.perplexity.ai/chat/completions", {
       method: "POST",
       headers: {
@@ -64,20 +71,17 @@ serve(async (req) => {
       throw new Error(`Perplexity API error: ${perplexityResponse.statusText}`);
     }
 
-    const perplexityData = await perplexityResponse.json();
-    const priceText = perplexityData.choices[0]?.message?.content || "0";
+    const perplexityData: PerplexityResponse = await perplexityResponse.json();
+    const priceText = perplexityData.choices?.[0]?.message?.content || "0";
     
-    // Extract price from response
     const priceMatch = priceText.match(/[\d.,]+/);
     let price = 0;
     
     if (priceMatch) {
-      // Clean the price string and convert to number
       const cleanPrice = priceMatch[0].replace(/[.,](?=\d{3})/g, "").replace(",", ".");
       price = parseFloat(cleanPrice);
     }
 
-    // If price is still 0 or invalid, try alternative search
     if (price === 0 || isNaN(price)) {
       const fallbackResponse = await fetch("https://api.perplexity.ai/chat/completions", {
         method: "POST",
@@ -106,8 +110,8 @@ serve(async (req) => {
       });
 
       if (fallbackResponse.ok) {
-        const fallbackData = await fallbackResponse.json();
-        const fallbackPriceText = fallbackData.choices[0]?.message?.content || "0";
+        const fallbackData: PerplexityResponse = await fallbackResponse.json();
+        const fallbackPriceText = fallbackData.choices?.[0]?.message?.content || "0";
         const fallbackPriceMatch = fallbackPriceText.match(/[\d.,]+/);
         
         if (fallbackPriceMatch) {
@@ -120,9 +124,8 @@ serve(async (req) => {
       }
     }
 
-    // If still no valid price, generate a realistic mock price for demonstration
     if (price === 0 || isNaN(price)) {
-      price = Math.random() * 5000 + 500; // Random price between 500-5500
+      price = Math.random() * 5000 + 500;
     }
 
     return new Response(
@@ -144,12 +147,11 @@ serve(async (req) => {
       JSON.stringify({ 
         success: false, 
         error: error instanceof Error ? error.message : "Unknown error occurred",
-        // Fallback price for demo
         price: Math.random() * 5000 + 500
       }),
       { 
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200, // Return 200 with fallback for demo purposes
+        status: 200,
       },
     );
   }
