@@ -2,7 +2,7 @@
  * Quick Actions Panel - Ações rápidas do sistema
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";

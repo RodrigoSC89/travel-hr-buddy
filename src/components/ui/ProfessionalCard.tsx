@@ -3,7 +3,7 @@
  * Enterprise-grade cards with consistent styling
  */
 
-import React from 'react';
+import type { FC, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
 

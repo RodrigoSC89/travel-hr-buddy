@@ -3,7 +3,7 @@
  * Network-aware loading states with shimmer effects
  */
 
-import React from 'react';
+import type { FC } from 'react';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 

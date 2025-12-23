@@ -3,7 +3,7 @@
  * PATCH 838: Skeletons e loading states melhorados
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 

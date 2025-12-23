@@ -3,7 +3,8 @@
  * Enhanced with benefits, payroll, feedback, and personal documents
  */
 
-import React from "react";
+import { useState } from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, UserCheck, Calendar, Award, Shield, DollarSign, FileText, MessageSquare } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

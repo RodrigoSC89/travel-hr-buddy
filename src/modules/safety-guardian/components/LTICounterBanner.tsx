@@ -3,7 +3,7 @@
  * Banner de dias sem LTI
  */
 
-import React from 'react';
+import type { FC } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';

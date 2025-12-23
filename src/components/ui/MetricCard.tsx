@@ -3,7 +3,7 @@
  * Enhanced with better contrast and accessibility
  */
 
-import React from "react";
+import type { FC, ReactNode } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";

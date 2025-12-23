@@ -2,7 +2,7 @@
  * System Health Grid - Status de saúde de todos os módulos
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";

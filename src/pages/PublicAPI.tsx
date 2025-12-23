@@ -3,7 +3,8 @@
  * Página de gerenciamento e documentação da API pública
  */
 
-import React from "react";
+import { useState } from "react";
+import type { FC } from "react";
 import { Helmet } from "react-helmet-async";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiKeyManagement } from "@/components/api/ApiKeyManagement";

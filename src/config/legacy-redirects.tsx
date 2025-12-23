@@ -3,7 +3,7 @@
  * PATCH 850.4 - Extracted from App.tsx for cleaner routing
  */
 import { Navigate, Route } from "react-router-dom";
-import React from "react";
+import type { FC } from "react";
 
 // Redirect configuration for cleaner maintenance
 const redirects: Array<[string, string]> = [
