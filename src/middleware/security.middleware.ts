@@ -11,6 +11,8 @@
  * Compatible with both Next.js and standalone environments
  */
 
+import { logger } from "@/lib/logger";
+
 // Define types locally since Next.js is not a dependency
 interface NextRequest extends Request {
   nextUrl: URL;
@@ -126,7 +128,7 @@ function handleCORS(request: NextRequest): Response | null {
         reason: 'CORS_VIOLATION'
       },
       timestamp: new Date().toISOString(),
-    }).catch(console.error);
+    }).catch((error) => logger.error("Failed to log security event", error));
     
     return new Response(
       JSON.stringify({ error: 'CORS policy violation' }),
@@ -255,12 +257,10 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
             'X-RateLimit-Limit': String(RATE_LIMITS.api.maxRequests),
             'X-RateLimit-Remaining': '0',
             'X-RateLimit-Reset': String(rateLimit.resetAt),
+            'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
           }
         }
       );
-      
-      return response;
-      response.headers.set('Retry-After', String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)));
       
       return response;
     }
@@ -300,7 +300,7 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
       
       // Log apenas se demorar mais de 1 segundo ou for erro
       if (duration > 1000) {
-        console.log({
+        logger.info("Slow API request", {
           requestId,
           method,
           endpoint,
@@ -315,7 +315,7 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
     
   } catch (error) {
     // Log error
-    console.error('Security middleware error:', error);
+    logger.error('Security middleware error', error);
     
     // Retornar erro genérico (não expor detalhes)
     return new Response(
@@ -374,13 +374,13 @@ export function withSecurity<T>(
       // 7. Log performance
       const duration = Date.now() - startTime;
       if (duration > 2000) {
-        console.warn(`Slow request: ${url.pathname} took ${duration}ms`);
+        logger.warn(`Slow request: ${url.pathname}`, { duration: `${duration}ms` });
       }
       
       return response;
       
     } catch (error) {
-      console.error(`Error in edge function (${requestId}):`, error);
+      logger.error(`Error in edge function (${requestId})`, error);
       
       return new Response(
         JSON.stringify({ 
@@ -426,7 +426,7 @@ export async function validateAuth(req: Request): Promise<{ valid: boolean; user
     return { valid: true, userId: 'user-id-placeholder' };
     
   } catch (error) {
-    console.error('Auth validation error:', error);
+    logger.error('Auth validation error', error);
     return { valid: false, error: 'Authentication failed' };
   }
 }

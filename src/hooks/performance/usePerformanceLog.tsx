@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef } from "react";
+import { logger } from "@/lib/logger";
 
 interface PerformanceLogOptions {
   componentName: string;
@@ -25,10 +26,10 @@ export function usePerformanceLog({
       mountTime.current = Date.now();
       const mountDuration = mountTime.current - renderStartTime.current;
       
-      console.log(`[Performance] ${componentName} mounted in ${mountDuration}ms`);
+      logger.debug(`[Performance] ${componentName} mounted`, { duration: `${mountDuration}ms` });
       
       if (mountDuration > threshold) {
-        console.warn(`[Performance] ${componentName} exceeded threshold (${threshold}ms)`);
+        logger.warn(`[Performance] ${componentName} exceeded threshold`, { threshold: `${threshold}ms`, duration: `${mountDuration}ms` });
         onSlowRender?.(mountDuration);
       }
     }
