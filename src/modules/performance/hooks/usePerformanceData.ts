@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export interface PerformanceMetrics {
   fuelEfficiency: number;
@@ -70,7 +71,7 @@ export const usePerformanceData = (period: number = 7) => {
         calculateMetrics(fleetLogs || [], missions || [], fuelUsage || []);
       } else {
         // Show empty state with helpful message
-        console.warn("Some performance tables not found, showing empty state");
+        logger.warn("Some performance tables not found, showing empty state");
         setMetrics({
           fuelEfficiency: 0,
           navigationHours: 0,

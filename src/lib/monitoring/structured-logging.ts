@@ -178,7 +178,8 @@ class StructuredLogger {
     } catch (error) {
       // Re-add to buffer on failure
       this.buffer = [...logs, ...this.buffer].slice(-100);
-      console.warn('[Logger] Failed to flush logs:', error);
+      // Note: Using native console here to avoid circular dependency
+      if (import.meta.env.DEV) console.warn('[Logger] Failed to flush logs:', error);
     }
   }
 
