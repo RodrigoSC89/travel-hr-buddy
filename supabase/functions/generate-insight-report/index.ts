@@ -1,6 +1,42 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+interface SystemMetrics {
+  cpu_usage?: number;
+  memory_usage?: number;
+  fps?: number;
+  error_rate?: number;
+  active_modules?: number;
+  avg_response_time?: number;
+}
+
+interface SystemStatus {
+  totalModules: number;
+  active: number;
+  degraded: number;
+  offline: number;
+  health: string;
+  modules?: Array<{
+    name: string;
+    status: string;
+    responseTime: number;
+    errors: string[];
+  }>;
+}
+
+interface LogEntry {
+  level: string;
+  category: string;
+  message: string;
+}
+
+interface AIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
 
 const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
@@ -9,7 +45,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
