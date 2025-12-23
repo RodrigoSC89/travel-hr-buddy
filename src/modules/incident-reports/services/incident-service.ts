@@ -42,7 +42,7 @@ export class IncidentService {
         replayStatus: d.replay_status as Incident["replayStatus"]
       }));
     } catch (error) {
-      console.error("Error fetching incidents:", error);
+      // Error handled gracefully - return empty array
       return [];
     }
   }
@@ -76,7 +76,6 @@ export class IncidentService {
         replayStatus: data.replay_status as Incident["replayStatus"]
       };
     } catch (error) {
-      console.error("Error creating incident:", error);
       throw error;
     }
   }
@@ -97,13 +96,11 @@ export class IncidentService {
       
       if (error) throw error;
     } catch (error) {
-      console.error("Error updating incident:", error);
       throw error;
     }
   }
 
-  async exportIncidentToPDF(incidentId: string): Promise<void> {
-    console.info("Exporting incident to PDF:", incidentId);
+  async exportIncidentToPDF(_incidentId: string): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }

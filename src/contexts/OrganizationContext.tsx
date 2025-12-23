@@ -51,13 +51,9 @@ const defaultContextValue: OrganizationContextType = {
 const OrganizationContext = React.createContext<OrganizationContextType>(defaultContextValue);
 
 export const useOrganization = (): OrganizationContextType => {
-  try {
-    const context = React.useContext(OrganizationContext);
-    return context || defaultContextValue;
-  } catch (error) {
-    console.warn("useOrganization called outside of provider, returning default value");
-    return defaultContextValue;
-  }
+  const context = React.useContext(OrganizationContext);
+  // Context always has a value due to defaultContextValue
+  return context;
 };
 
 export const OrganizationProvider = ({ children }: { children: React.ReactNode }) => {
