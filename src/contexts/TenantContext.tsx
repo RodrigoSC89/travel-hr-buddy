@@ -1,4 +1,5 @@
-import * as React from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
+import type { ReactNode, FC } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
@@ -170,11 +171,11 @@ const defaultTenantValue: TenantContextType = {
   getSubdomain: () => "demo",
 };
 
-const TenantContext = React.createContext<TenantContextType>(defaultTenantValue);
+const TenantContext = createContext<TenantContextType>(defaultTenantValue);
 
 export const useTenant = (): TenantContextType => {
   try {
-    const context = React.useContext(TenantContext);
+    const context = useContext(TenantContext);
     return context || defaultTenantValue;
   } catch (error) {
     console.warn("useTenant called outside of provider, returning default value");
@@ -182,21 +183,21 @@ export const useTenant = (): TenantContextType => {
   }
 };
 
-export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const TenantProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   
   // Estados
-  const [currentTenant, setCurrentTenant] = React.useState<SaasTenant | null>(null);
-  const [currentBranding, setCurrentBranding] = React.useState<TenantBranding | null>(null);
-  const [currentUser, setCurrentUser] = React.useState<TenantUser | null>(null);
-  const [tenantPlans, setTenantPlans] = React.useState<SaasPlan[]>([]);
-  const [tenantUsage, setTenantUsage] = React.useState<TenantUsage | null>(null);
-  const [availableTenants, setAvailableTenants] = React.useState<SaasTenant[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [currentTenant, setCurrentTenant] = useState<SaasTenant | null>(null);
+  const [currentBranding, setCurrentBranding] = useState<TenantBranding | null>(null);
+  const [currentUser, setCurrentUser] = useState<TenantUser | null>(null);
+  const [tenantPlans, setTenantPlans] = useState<SaasPlan[]>([]);
+  const [tenantUsage, setTenantUsage] = useState<TenantUsage | null>(null);
+  const [availableTenants, setAvailableTenants] = useState<SaasTenant[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Carregar dados iniciais
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       loadTenantData();
       loadPlans();

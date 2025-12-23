@@ -1,4 +1,5 @@
-import * as React from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
+import type { ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
@@ -48,24 +49,24 @@ const defaultContextValue: OrganizationContextType = {
   updateUserRole: async () => {}
 };
 
-const OrganizationContext = React.createContext<OrganizationContextType>(defaultContextValue);
+const OrganizationContext = createContext<OrganizationContextType>(defaultContextValue);
 
 export const useOrganization = (): OrganizationContextType => {
-  const context = React.useContext(OrganizationContext);
+  const context = useContext(OrganizationContext);
   // Context always has a value due to defaultContextValue
   return context;
 };
 
-export const OrganizationProvider = ({ children }: { children: React.ReactNode }) => {
+export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const [currentOrganization, setCurrentOrganization] = React.useState<Organization | null>(null);
-  const [currentBranding, setCurrentBranding] = React.useState<OrganizationBranding | null>(null);
-  const [userRole, setUserRole] = React.useState<string | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
+  const [currentBranding, setCurrentBranding] = useState<OrganizationBranding | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Carregar organização demo
-  React.useEffect(() => {
+  useEffect(() => {
     loadDemoOrganization();
   }, []);
 

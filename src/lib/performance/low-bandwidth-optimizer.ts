@@ -1,10 +1,10 @@
 /**
  * Low Bandwidth Optimizer
  * PATCH 834: Aggressive optimizations for 2 Mbps networks
- * PATCH 1001: Fixed React hooks initialization order to prevent useState null error
+ * PATCH 1002: Fixed React imports - use named imports to prevent multiple React instances
  */
 
-import * as React from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface BandwidthConfig {
   maxImageSize: number;
@@ -239,9 +239,9 @@ export const bandwidthOptimizer = new LowBandwidthOptimizer();
 // Default config for SSR/initial render
 const DEFAULT_CONFIG: BandwidthConfig = BANDWIDTH_CONFIGS['4g'];
 
-// React hook - using React namespace import to prevent null errors (PATCH 1001)
+// React hook - using named imports to prevent null errors (PATCH 1002)
 export function useBandwidthOptimizer() {
-  const [config, setConfig] = React.useState<BandwidthConfig>(() => {
+  const [config, setConfig] = useState<BandwidthConfig>(() => {
     try {
       return bandwidthOptimizer.getConfig();
     } catch {
@@ -249,7 +249,7 @@ export function useBandwidthOptimizer() {
     }
   });
   
-  const [connectionType, setConnectionType] = React.useState(() => {
+  const [connectionType, setConnectionType] = useState(() => {
     try {
       return bandwidthOptimizer.getConnectionType();
     } catch {
@@ -257,7 +257,7 @@ export function useBandwidthOptimizer() {
     }
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     try {
       bandwidthOptimizer.init();
       
@@ -272,7 +272,7 @@ export function useBandwidthOptimizer() {
     }
   }, []);
 
-  const optimizations = React.useMemo(() => ({
+  const optimizations = useMemo(() => ({
     isLowBandwidth: config ? ['2g', 'slow-2g', 'offline'].includes(connectionType) : false,
     shouldLoadImages: config ? config.maxImageSize > 0 : true,
     shouldAnimate: config ? config.enableAnimations : true,

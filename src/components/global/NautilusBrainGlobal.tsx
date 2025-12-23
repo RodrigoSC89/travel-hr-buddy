@@ -1,9 +1,10 @@
 /**
  * NAUTILUS BRAIN GLOBAL - IA Central Acessível de Qualquer Módulo
- * PATCH 850.4 - Fixed React import to prevent multiple instances
+ * PATCH 1002 - Fixed React import to use named imports
  */
 
-import * as React from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import type { FC, KeyboardEvent } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +35,7 @@ interface NautilusBrainGlobalProps {
 }
 
 // Trigger button component
-export const NautilusBrainTrigger: React.FC<{ onClick: () => void }> = ({ onClick }) => (
+export const NautilusBrainTrigger: FC<{ onClick: () => void }> = ({ onClick }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.8 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -49,30 +50,30 @@ export const NautilusBrainTrigger: React.FC<{ onClick: () => void }> = ({ onClic
   </motion.div>
 );
 
-export const NautilusBrainGlobal: React.FC<NautilusBrainGlobalProps> = ({
+export const NautilusBrainGlobal: FC<NautilusBrainGlobalProps> = ({
   isOpen,
   onClose,
   initialContext = ""
 }) => {
-  const [messages, setMessages] = React.useState<Message[]>([]);
-  const [input, setInput] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isMinimized, setIsMinimized] = React.useState(false);
-  const [systemData, setSystemData] = React.useState<{
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [systemData, setSystemData] = useState<{
     fleet?: { total: number; active: number };
     crew?: { total: number; onboard: number };
     maintenance?: { pending: number };
   } | null>(null);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen && messages.length === 0) {
       loadSystemContext();
     }
   }, [isOpen, messages.length]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
@@ -143,7 +144,7 @@ Como posso ajudar você hoje?`,
     }
   };
 
-  const generateFallbackResponse = React.useCallback((query: string): string => {
+  const generateFallbackResponse = useCallback((query: string): string => {
     const q = query.toLowerCase();
     
     if (q.includes('manutenção') || q.includes('manutencao')) {
@@ -206,7 +207,7 @@ Com base nos dados do sistema, posso ajudar com:
 Como posso ajudar?`;
   }, [systemData]);
 
-  const generateSuggestions = React.useCallback((query: string): string[] => {
+  const generateSuggestions = useCallback((query: string): string[] => {
     const q = query.toLowerCase();
     
     if (q.includes('manutenção')) {
