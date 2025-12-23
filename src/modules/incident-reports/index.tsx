@@ -1,8 +1,9 @@
-// @ts-nocheck - incident_reports table schema mismatch with local interface
 /**
  * PATCH 491 - Consolidated Incident Reports Module
  * Consolidates incident-reports/ and incidents/ into one unified system
  * Features: Detection, Documentation, Closure workflows + Full CRUD
+ * 
+ * PATCH 660 - TypeScript Fix: Removed @ts-nocheck, aligned with Supabase schema
  */
 
 import React, { useState, useEffect } from "react";
@@ -29,6 +30,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CreateIncidentDialog } from "./components/CreateIncidentDialog";
 import { IncidentDetailDialog } from "./components/IncidentDetailDialog";
+import { logger } from "@/lib/logger";
+import type { Tables } from "@/integrations/supabase/types";
+
+// Use Supabase generated type with local extensions
+type IncidentReportRow = Tables<"incident_reports">;
 
 interface Incident {
   id: string;
@@ -40,13 +46,35 @@ interface Incident {
   incident_date: string;
   impact_level: string;
   description?: string;
-  reported_by?: string;
-  assigned_to?: string;
+  reported_by?: string | null;
+  assigned_to?: string | null;
   incident_location?: string;
   root_cause?: string;
   immediate_actions?: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+/**
+ * Map Supabase row to local Incident interface
+ */
+function mapRowToIncident(row: IncidentReportRow): Incident {
+  return {
+    id: row.id,
+    incident_number: row.code || "",
+    title: row.title,
+    severity: (row.severity as Incident["severity"]) || "medium",
+    category: row.type || "general",
+    status: (row.status as Incident["status"]) || "pending",
+    incident_date: row.reported_at,
+    impact_level: row.severity || "medium",
+    description: row.description,
+    reported_by: row.reported_by,
+    assigned_to: row.assigned_to,
+    incident_location: row.location,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
 }
 
 const IncidentReports = () => {
@@ -66,13 +94,14 @@ const IncidentReports = () => {
       const { data, error } = await supabase
         .from("incident_reports")
         .select("*")
-        .order("incident_date", { ascending: false });
+        .order("reported_at", { ascending: false });
 
       if (error) throw error;
 
-      setIncidents((data ?? []) as Incident[]);
+      const mappedIncidents = (data ?? []).map(mapRowToIncident);
+      setIncidents(mappedIncidents);
     } catch (error) {
-      console.error("Error fetching incidents:", error);
+      logger.error("Error fetching incidents", error);
       toast({
         title: "Error",
         description: "Failed to load incidents",
