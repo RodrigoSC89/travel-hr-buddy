@@ -1,4 +1,4 @@
-// @ts-nocheck - TODO: Fix Supabase type mismatches
+// @ts-nocheck - Table performance_alerts not in current schema
 // PATCH 850.5 - Migrated to LazyChart for bundle optimization
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +22,7 @@ interface PerformanceMetric {
   metric_value: number;
   metric_unit: string;
   status: "normal" | "warning" | "critical";
-  metadata: any;
+  metadata: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -104,8 +104,8 @@ export default function PerformanceDashboard() {
       if (metricsResult.error) throw metricsResult.error;
       if (alertsResult.error) throw alertsResult.error;
 
-      setMetrics(metricsResult.data || []);
-      setAlerts(alertsResult.data || []);
+      setMetrics((metricsResult.data ?? []) as PerformanceMetric[]);
+      setAlerts((alertsResult.data ?? []) as PerformanceAlert[]);
     } catch (error) {
       logger.error("Error loading performance dashboard data", { error, timeRange });
       toast({

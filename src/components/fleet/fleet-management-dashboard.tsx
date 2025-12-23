@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Tables vessel_status, maintenance_alerts, fuel_usage not in current schema
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { VesselStatus, MaintenanceAlert, FuelUsage } from "@/types/modules";
@@ -42,9 +42,9 @@ export function FleetManagementDashboard() {
       if (alertsRes.error) throw alertsRes.error;
       if (fuelRes.error) throw fuelRes.error;
 
-      setVesselStatuses(statusRes.data || []);
-      setMaintenanceAlerts(alertsRes.data || []);
-      setFuelUsage(fuelRes.data || []);
+      setVesselStatuses((statusRes.data ?? []) as VesselStatus[]);
+      setMaintenanceAlerts((alertsRes.data ?? []) as MaintenanceAlert[]);
+      setFuelUsage((fuelRes.data ?? []) as FuelUsage[]);
     } catch (error) {
       logger.error("Error loading fleet data", { error });
       toast.error("Failed to load fleet data");
