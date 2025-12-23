@@ -1,13 +1,12 @@
 /**
- * PREDICTIVE AI PAGE - PHASE 1
- * Página de Recomendações Preditivas com IA
+ * Predictive AI Page - Uses named imports
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Helmet } from "react-helmet-async";
 import { PredictiveRecommendationsPanel } from "@/components/ai/PredictiveRecommendationsPanel";
 
-const PredictiveAI: React.FC = () => {
+const PredictiveAI: FC = () => {
   return (
     <>
       <Helmet>

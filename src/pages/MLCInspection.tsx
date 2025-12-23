@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FC } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { Shield, Users, FileCheck, Brain, Scale, Globe } from 'lucide-react';
 import { MLCInspectionDashboard } from '@/components/mlc/MLCInspectionDashboard';
 
-const MLCInspection: React.FC = () => {
+const MLCInspection: FC = () => {
   return (
     <ModulePageWrapper gradient="green">
       <ModuleHeader
