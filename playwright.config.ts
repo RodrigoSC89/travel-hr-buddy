@@ -1,26 +1,31 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Playwright Configuration - PATCH: Enhanced E2E Testing
+ * Playwright Configuration - Nautilus One CI
  * https://playwright.dev/docs/test-configuration
  */
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:4173";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:5173";
 
 export default defineConfig({
-  testDir: "./tests/e2e",
+  testDir: "./tests",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
   workers: process.env.CI ? 1 : undefined,
+  timeout: 60000,
   
   // Enhanced reporters
   reporter: [
-    ["html", { outputFolder: "tests/coverage/playwright-report" }],
-    ["json", { outputFile: "tests/coverage/test-results.json" }],
+    ["html", { outputFolder: "playwright-report" }],
+    ["json", { outputFile: "test-results.json" }],
     ["list"],
   ],
   
+  expect: {
+    timeout: 5000,
+  },
+
   use: {
     baseURL,
     trace: "on-first-retry",
@@ -40,15 +45,13 @@ export default defineConfig({
     },
   },
 
-  // Global timeout
-  timeout: 60000,
-  expect: {
-    timeout: 10000,
-  },
-
   // Projects for different browsers and devices
   projects: [
     // Desktop browsers
+    {
+      name: "Desktop Chrome",
+      use: { ...devices["Desktop Chrome"] },
+    },
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
@@ -99,5 +102,5 @@ export default defineConfig({
   },
 
   // Output directories
-  outputDir: "tests/coverage/test-artifacts",
+  outputDir: "test-artifacts",
 });
