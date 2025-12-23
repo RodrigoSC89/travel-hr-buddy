@@ -1,4 +1,4 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -12,10 +12,34 @@ interface AmadeusToken {
   token_type: string;
 }
 
+interface FlightSearchParams {
+  origin: string;
+  destination: string;
+  departureDate: string;
+  adults: number;
+}
+
+interface HotelSearchParams {
+  cityName: string;
+  checkIn: string;
+  checkOut: string;
+  adults: number;
+}
+
+interface SearchRequest {
+  searchType: "flights" | "hotels";
+  origin?: string;
+  destination?: string;
+  departureDate?: string;
+  cityName?: string;
+  checkIn?: string;
+  checkOut?: string;
+  adults: number;
+}
+
 let tokenCache: { token: string; expiresAt: number } | null = null;
 
 async function getAmadeusToken(): Promise<string> {
-  // Check if we have a valid cached token
   if (tokenCache && tokenCache.expiresAt > Date.now()) {
     return tokenCache.token;
   }
@@ -30,7 +54,6 @@ async function getAmadeusToken(): Promise<string> {
     throw new Error("Amadeus API secret not configured");
   }
 
-  // Retry logic for token fetching
   let lastError: Error | null = null;
   const maxRetries = 3;
   
@@ -54,7 +77,6 @@ async function getAmadeusToken(): Promise<string> {
 
       const tokenData: AmadeusToken = await tokenResponse.json();
       
-      // Cache the token (subtract 60 seconds for safety)
       tokenCache = {
         token: tokenData.access_token,
         expiresAt: Date.now() + ((tokenData.expires_in - 60) * 1000),
@@ -66,7 +88,6 @@ async function getAmadeusToken(): Promise<string> {
       console.warn(`Token fetch attempt ${attempt + 1} failed:`, lastError.message);
       
       if (attempt < maxRetries - 1) {
-        // Wait before retrying (exponential backoff)
         await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
       }
     }
@@ -75,7 +96,7 @@ async function getAmadeusToken(): Promise<string> {
   throw lastError || new Error("Failed to get Amadeus token after retries");
 }
 
-async function searchFlights(searchParams: any) {
+async function searchFlights(searchParams: FlightSearchParams): Promise<unknown> {
   const token = await getAmadeusToken();
   
   const params = new URLSearchParams({
@@ -83,7 +104,7 @@ async function searchFlights(searchParams: any) {
     destinationLocationCode: searchParams.destination,
     departureDate: searchParams.departureDate,
     adults: searchParams.adults.toString(),
-    max: "10", // Limit results
+    max: "10",
   });
 
   const response = await fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?${params}`, {
@@ -99,10 +120,9 @@ async function searchFlights(searchParams: any) {
   return await response.json();
 }
 
-async function searchHotels(searchParams: any) {
+async function searchHotels(searchParams: HotelSearchParams): Promise<unknown> {
   const token = await getAmadeusToken();
   
-  // First, get city code from city name
   const cityResponse = await fetch(`https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword=${encodeURIComponent(searchParams.cityName)}&max=1`, {
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -120,7 +140,6 @@ async function searchHotels(searchParams: any) {
 
   const cityCode = cityData.data[0].iataCode;
 
-  // Search for hotels in the city
   const params = new URLSearchParams({
     cityCode: cityCode,
     checkInDate: searchParams.checkIn,
@@ -144,22 +163,23 @@ async function searchHotels(searchParams: any) {
   return await hotelResponse.json();
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const { searchType, ...searchParams } = await req.json();
+    const requestData: SearchRequest = await req.json();
+    const { searchType, ...searchParams } = requestData;
     
     console.log(`Amadeus ${searchType} search:`, searchParams);
     
-    let result;
+    let result: unknown;
     
     if (searchType === "flights") {
-      result = await searchFlights(searchParams);
+      result = await searchFlights(searchParams as FlightSearchParams);
     } else if (searchType === "hotels") {
-      result = await searchHotels(searchParams);
+      result = await searchHotels(searchParams as HotelSearchParams);
     } else {
       throw new Error("Invalid search type. Use \"flights\" or \"hotels\"");
     }

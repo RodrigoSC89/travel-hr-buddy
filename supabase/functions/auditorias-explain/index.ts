@@ -1,39 +1,52 @@
-// @ts-nocheck
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+/// <reference path="../deno-ambient.d.ts" />
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface ExplainRequest {
+  navio: string;
+  item: string;
+  norma: string;
 }
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+interface AIResponse {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+}
+
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { navio, item, norma } = await req.json()
+    const { navio, item, norma }: ExplainRequest = await req.json();
 
-    // Validate required fields
     if (!navio || !item || !norma) {
       return new Response(
         JSON.stringify({ error: 'Campos obrigatórios: navio, item, norma' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
-    // Get OpenAI API key from environment
-    const openaiApiKey = Deno.env.get('VITE_OPENAI_API_KEY') || Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      console.error('OpenAI API key not configured')
+    // Prefer Lovable AI Gateway, fallback to OpenAI
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
+    
+    if (!LOVABLE_API_KEY && !OPENAI_API_KEY) {
+      console.error('No AI API key configured');
       return new Response(
         JSON.stringify({ error: 'Configuração de IA não disponível' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
-    // Create prompt for AI explanation
     const prompt = `Você é um auditor técnico especializado em normas IMCA (International Marine Contractors Association).
 
 Contexto da Auditoria:
@@ -48,17 +61,23 @@ Inclua:
 2. Possíveis razões para a não conformidade
 3. Impactos operacionais ou de segurança
 
-Mantenha a resposta profissional, técnica e em português brasileiro.`
+Mantenha a resposta profissional, técnica e em português brasileiro.`;
 
-    // Call OpenAI API
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    const apiUrl = LOVABLE_API_KEY 
+      ? 'https://ai.gateway.lovable.dev/v1/chat/completions'
+      : 'https://api.openai.com/v1/chat/completions';
+    
+    const apiKey = LOVABLE_API_KEY || OPENAI_API_KEY;
+    const model = LOVABLE_API_KEY ? 'google/gemini-2.5-flash' : 'gpt-4o-mini';
+
+    const aiResponse = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model,
         messages: [
           {
             role: 'system',
@@ -72,30 +91,44 @@ Mantenha a resposta profissional, técnica e em português brasileiro.`
         temperature: 0.7,
         max_tokens: 500
       })
-    })
+    });
 
-    if (!openaiResponse.ok) {
-      const errorData = await openaiResponse.text()
-      console.error('OpenAI API error:', errorData)
+    if (aiResponse.status === 429) {
+      return new Response(
+        JSON.stringify({ error: 'Rate limit excedido. Tente novamente em alguns segundos.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (aiResponse.status === 402) {
+      return new Response(
+        JSON.stringify({ error: 'Créditos de IA esgotados. Recarregue seu plano.' }),
+        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!aiResponse.ok) {
+      const errorData = await aiResponse.text();
+      console.error('AI API error:', errorData);
       return new Response(
         JSON.stringify({ error: 'Erro ao gerar explicação da IA' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
-    const data = await openaiResponse.json()
-    const resultado = data.choices[0]?.message?.content?.trim() || 'Não foi possível gerar explicação.'
+    const data: AIResponse = await aiResponse.json();
+    const resultado = data.choices?.[0]?.message?.content?.trim() || 'Não foi possível gerar explicação.';
 
     return new Response(
       JSON.stringify({ resultado }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    );
 
   } catch (error) {
-    console.error('Error in explain function:', error)
+    console.error('Error in explain function:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Erro interno do servidor' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Erro interno do servidor' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    );
   }
-})
+});
