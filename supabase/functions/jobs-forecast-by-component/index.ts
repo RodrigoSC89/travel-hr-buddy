@@ -1,27 +1,40 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 
-// Initialize Supabase client
-const supabaseUrl = Deno.env.get("SUPABASE_URL");
-const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-
-if (!supabaseUrl || !supabaseKey) {
-  console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+interface JobsByComponentTrend {
+  [componentId: string]: string[]; // Array of YYYY-MM strings
 }
 
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+interface JobRecord {
+  component_id: string;
+  completed_date: string;
+}
+
+interface AIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface JobsByComponentTrend {
-  [componentId: string]: string[]; // Array of YYYY-MM strings
+// Initialize Supabase client
+const supabaseUrl = Deno.env.get("SUPABASE_URL");
+const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+let supabase: SupabaseClient | null = null;
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+} else {
+  console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
 }
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -73,7 +86,7 @@ Deno.serve(async (req) => {
     // Group jobs by component_id and extract monthly trends
     const trendByComponent: JobsByComponentTrend = {};
     
-    jobs.forEach((job: { component_id: string; completed_date: string }) => {
+    (jobs as JobRecord[]).forEach((job) => {
       if (!job.component_id || !job.completed_date) return;
       
       // Extract YYYY-MM format from completed_date
@@ -87,31 +100,31 @@ Deno.serve(async (req) => {
 
     console.log(`Grouped data by ${Object.keys(trendByComponent).length} components`);
 
-    // Get OpenAI API key
-    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-    if (!OPENAI_API_KEY) {
-      console.error("OPENAI_API_KEY not configured");
-      throw new Error("OPENAI_API_KEY is not configured");
+    // Get Lovable AI API key
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY not configured");
+      throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    // Build prompt for OpenAI
+    // Build prompt for AI
     const prompt = `Você é uma IA de manutenção. Abaixo estão os dados de jobs por componente (por mês):
 
 ${JSON.stringify(trendByComponent, null, 2)}
 
 Gere uma previsão dos próximos dois meses por componente e indique os mais críticos.`;
 
-    console.log("Calling OpenAI API for forecast generation");
+    console.log("Calling Lovable AI Gateway for forecast generation");
 
-    // Call OpenAI API
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Call Lovable AI Gateway
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
@@ -128,14 +141,28 @@ Gere uma previsão dos próximos dois meses por componente e indique os mais cr�
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("OpenAI API error:", errorText);
-      throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+      console.error("AI Gateway error:", errorText);
+      
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: "Payment required. Please add credits." }),
+          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      
+      throw new Error(`AI Gateway error: ${response.status} - ${errorText}`);
     }
 
-    const data = await response.json();
+    const data: AIResponse = await response.json();
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error("Invalid response format from OpenAI API");
+      throw new Error("Invalid response format from AI Gateway");
     }
     
     const forecast = data.choices[0].message.content;

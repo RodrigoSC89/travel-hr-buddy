@@ -1,11 +1,10 @@
-// @ts-nocheck
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase: SupabaseClient = createClient(supabaseUrl, supabaseServiceKey);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -20,7 +19,21 @@ interface CertificateAlert {
   alert_type: "expiring_soon" | "expired";
 }
 
-serve(async (req) => {
+interface Certificate {
+  id: string;
+  employee_id: string;
+  certificate_name: string;
+  expiry_date: string;
+  status: string;
+}
+
+interface AlertRecord {
+  certificate_id: string;
+  alert_type: string;
+  alert_date: string;
+}
+
+serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -39,13 +52,14 @@ serve(async (req) => {
       throw certificatesError;
     }
 
-    console.log(`Found ${certificates?.length || 0} certificates to check`);
+    const typedCertificates = (certificates ?? []) as Certificate[];
+    console.log(`Found ${typedCertificates.length} certificates to check`);
 
     const alertsToCreate: CertificateAlert[] = [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    for (const cert of certificates || []) {
+    for (const cert of typedCertificates) {
       const expiryDate = new Date(cert.expiry_date);
       expiryDate.setHours(0, 0, 0, 0);
       
@@ -94,7 +108,7 @@ serve(async (req) => {
 
     // Create alerts in batches
     if (alertsToCreate.length > 0) {
-      const alertRecords = alertsToCreate.map(alert => ({
+      const alertRecords: AlertRecord[] = alertsToCreate.map(alert => ({
         certificate_id: alert.certificate_id,
         alert_type: alert.alert_type,
         alert_date: today.toISOString().split("T")[0]
@@ -113,7 +127,7 @@ serve(async (req) => {
     // Update certificate statuses
     console.log("Updating certificate statuses...");
     
-    for (const cert of certificates || []) {
+    for (const cert of typedCertificates) {
       const expiryDate = new Date(cert.expiry_date);
       expiryDate.setHours(0, 0, 0, 0);
       
@@ -145,7 +159,7 @@ serve(async (req) => {
     }
 
     const summary = {
-      certificates_checked: certificates?.length || 0,
+      certificates_checked: typedCertificates.length,
       new_alerts_created: alertsToCreate.length,
       expired_certificates: alertsToCreate.filter(a => a.alert_type === "expired").length,
       expiring_soon_certificates: alertsToCreate.filter(a => a.alert_type === "expiring_soon").length,
@@ -165,11 +179,11 @@ serve(async (req) => {
       },
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in check-certificate-expiry function:", error);
     
     return new Response(JSON.stringify({ 
-      error: error.message,
+      error: error instanceof Error ? error.message : "Unknown error",
       timestamp: new Date().toISOString()
     }), {
       status: 500,

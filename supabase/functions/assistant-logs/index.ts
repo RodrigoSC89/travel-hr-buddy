@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
@@ -7,7 +6,24 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+interface Profile {
+  role: string;
+}
+
+interface AssistantLog {
+  id: string;
+  question: string;
+  answer: string;
+  created_at: string;
+  user_id: string;
+  profiles: { email: string } | null;
+}
+
+interface TransformedLog extends Omit<AssistantLog, 'profiles'> {
+  user_email: string;
+}
+
+serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -39,7 +55,7 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
     const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
-    const supabase = createClient(supabaseUrl, supabaseKey, {
+    const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey, {
       global: {
         headers: { Authorization: authHeader },
       },
@@ -58,11 +74,13 @@ serve(async (req) => {
       );
     }
 
+    const authenticatedUser: User = user;
+
     // Get user profile to check role
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("role")
-      .eq("id", user.id)
+      .eq("id", authenticatedUser.id)
       .single();
 
     if (profileError) {
@@ -76,7 +94,8 @@ serve(async (req) => {
       );
     }
 
-    const isAdmin = profile?.role === "admin";
+    const typedProfile = profile as Profile | null;
+    const isAdmin = typedProfile?.role === "admin";
 
     // Fetch logs with user profile information
     const { data, error } = await supabase
@@ -96,14 +115,20 @@ serve(async (req) => {
       );
     }
 
+    const typedData = data as AssistantLog[] | null;
+
     // Filter logs based on user role
     const filtered = isAdmin
-      ? data
-      : data.filter((log) => log.user_id === user.id);
+      ? typedData ?? []
+      : (typedData ?? []).filter((log) => log.user_id === authenticatedUser.id);
 
     // Transform logs to include user email
-    const logs = filtered.map((log) => ({
-      ...log,
+    const logs: TransformedLog[] = filtered.map((log) => ({
+      id: log.id,
+      question: log.question,
+      answer: log.answer,
+      created_at: log.created_at,
+      user_id: log.user_id,
       user_email: log.profiles?.email || "Anônimo",
     }));
 

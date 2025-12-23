@@ -1,7 +1,4 @@
-// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -40,7 +37,66 @@ const DP_MODULES = [
   "Operational Planning"
 ];
 
-function generatePrompt(input: any): string {
+interface AuditInput {
+  vesselName: string;
+  dpClass: string;
+  location: string;
+  auditObjective: string;
+  operationalData?: {
+    incidentDetails?: string;
+    environmentalConditions?: string;
+    systemStatus?: string;
+    crewQualifications?: string;
+    maintenanceHistory?: string;
+  };
+}
+
+interface ModuleEvaluation {
+  moduleName: string;
+  score: number;
+  complianceStatus: string;
+  findings: string[];
+  recommendations: string[];
+}
+
+interface NonConformity {
+  id: string;
+  module: string;
+  description: string;
+  riskLevel: string;
+  standard: string;
+  finding: string;
+  recommendation: string;
+}
+
+interface ActionItem {
+  id: string;
+  priority: string;
+  description: string;
+  responsibleParty: string;
+  relatedNonConformity: string;
+  deadline?: string;
+}
+
+interface AuditData {
+  overallScore: number;
+  standards: Array<{ code: string; name: string; description: string }>;
+  moduleEvaluations: ModuleEvaluation[];
+  nonConformities: NonConformity[];
+  actionPlan: ActionItem[];
+  summary: string;
+  conclusion: string;
+}
+
+interface AIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
+function generatePrompt(input: AuditInput): string {
   return `You are an expert IMCA DP (Dynamic Positioning) technical auditor conducting a comprehensive audit of a DP vessel.
 
 **Vessel Information:**
@@ -96,24 +152,30 @@ Return ONLY a valid JSON object with this exact structure (NO markdown, NO code 
 }`;
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const input = await req.json();
+    const input: AuditInput = await req.json();
 
     const prompt = generatePrompt(input);
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Use Lovable AI Gateway
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      throw new Error("LOVABLE_API_KEY is not configured");
+    }
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
@@ -129,13 +191,26 @@ serve(async (req) => {
       }),
     });
 
-    const data = await response.json();
-    
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${JSON.stringify(data)}`);
+      if (response.status === 429) {
+        return new Response(
+          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      if (response.status === 402) {
+        return new Response(
+          JSON.stringify({ error: "Payment required. Please add credits." }),
+          { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      const errorData = await response.text();
+      throw new Error(`AI Gateway error: ${errorData}`);
     }
 
-    let auditData;
+    const data: AIResponse = await response.json();
+    
+    let auditData: AuditData;
     try {
       const content = data.choices[0].message.content.trim();
       // Remove markdown code blocks if present
@@ -158,7 +233,7 @@ serve(async (req) => {
       standards: auditData.standards,
       moduleEvaluations: auditData.moduleEvaluations,
       nonConformities: auditData.nonConformities,
-      actionPlan: auditData.actionPlan.map((action: any) => {
+      actionPlan: auditData.actionPlan.map((action) => {
         // Calculate deadline based on priority
         const daysMap: Record<string, number> = {
           "Crítico": 7,
@@ -187,7 +262,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("Error in imca-audit-generator:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,
