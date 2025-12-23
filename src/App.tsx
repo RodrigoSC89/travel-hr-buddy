@@ -14,7 +14,7 @@ import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
 import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
-import { LegacyRedirects } from "@/config/legacy-redirects";
+import { legacyRedirectRoutes } from "@/config/legacy-redirects";
 
 // Simple loader component
 const OffshoreLoader = () => (
@@ -145,7 +145,7 @@ function App() {
                         <Route path="ai-modules" element={<AIEnhancedModules />} />
                         
                         {/* Legacy Redirects - Extracted */}
-                        <LegacyRedirects />
+                        {legacyRedirectRoutes}
                         
                         {/* 404 Route */}
                         <Route path="*" element={<NotFound />} />
