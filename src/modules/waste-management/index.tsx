@@ -18,6 +18,8 @@ import { GarbageRegistry } from "./components/GarbageRegistry";
 import { RecordBooks } from "./components/RecordBooks";
 import { WasteReports } from "./components/WasteReports";
 import { ESGAIChat } from "@/components/shared/ESGAIChat";
+import { AIAnalyzeButton } from "@/components/shared/AIAnalyzeButton";
+import { AIInsightsPanel } from "@/components/shared/AIInsightsPanel";
 
 interface WasteTank {
   id: string;
@@ -119,6 +121,20 @@ function WasteManagement() {
 
           <TabsContent value="dashboard">
             <div className="space-y-6">
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-2">
+                <AIAnalyzeButton 
+                  analysisType="waste" 
+                  data={{ tanks: mockTanks, records: mockRecords }}
+                  label="Classificar Resíduos"
+                />
+                <AIAnalyzeButton 
+                  analysisType="compliance" 
+                  data={{ tanks: mockTanks, regulations: ['MARPOL I', 'MARPOL IV', 'MARPOL V'] }}
+                  label="Check MARPOL"
+                />
+              </div>
+
               {/* KPI Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <Card className="border-l-4 border-l-teal-500">
@@ -288,6 +304,17 @@ function WasteManagement() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* AI Insights Panel */}
+              <AIInsightsPanel 
+                module="waste"
+                data={{
+                  tanks: mockTanks,
+                  records: mockRecords,
+                  criticalTanks,
+                  warningTanks
+                }}
+              />
             </div>
           </TabsContent>
 

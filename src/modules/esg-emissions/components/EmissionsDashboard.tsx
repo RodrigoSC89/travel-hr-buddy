@@ -32,6 +32,8 @@ import {
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { ESGAIChat } from "@/components/shared/ESGAIChat";
+import { AIAnalyzeButton } from "@/components/shared/AIAnalyzeButton";
+import { AIInsightsPanel } from "@/components/shared/AIInsightsPanel";
 
 interface VesselData {
   id: string;
@@ -117,6 +119,16 @@ export const EmissionsDashboard: React.FC = () => {
         </div>
 
         <div className="flex gap-2">
+          <AIAnalyzeButton 
+            analysisType="emissions" 
+            data={{ emissions: monthlyEmissions, vessels: vesselEmissions }}
+            label="Analisar Emissões"
+          />
+          <AIAnalyzeButton 
+            analysisType="compliance" 
+            data={{ emissions: monthlyEmissions, regulations: ['IMO DCS', 'EU MRV', 'CII'] }}
+            label="Check Compliance"
+          />
           <Button variant="outline">
             <FileText className="h-4 w-4 mr-2" />
             Relatório IMO DCS
@@ -447,6 +459,17 @@ export const EmissionsDashboard: React.FC = () => {
           }} 
         />
       </div>
+
+      {/* AI Insights Panel - Full Width */}
+      <AIInsightsPanel 
+        module="esg"
+        data={{
+          emissions: monthlyEmissions,
+          vessels: vesselEmissions,
+          fuelMix: fuelConsumption,
+          period: selectedPeriod
+        }}
+      />
     </div>
   );
 };
