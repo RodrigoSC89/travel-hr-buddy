@@ -1,6 +1,9 @@
-// GlobalBrainProvider - PATCH 850.5 - Fixed React hooks issue
-import * as React from "react";
-import { useState, useContext, createContext, type ReactNode, type FC, Suspense, lazy } from "react";
+/**
+ * GlobalBrainProvider - Central Brain Context Provider
+ * Uses only named imports to prevent multiple React instances
+ */
+import { useState, useContext, createContext, Suspense, lazy } from "react";
+import type { ReactNode, FC } from "react";
 
 interface BrainContextType {
   openBrain: (context?: string) => void;
@@ -23,7 +26,7 @@ interface GlobalBrainProviderProps {
   showTrigger?: boolean;
 }
 
-// Lazy import to avoid circular dependencies and reduce initial bundle
+// Lazy import to avoid circular dependencies
 const NautilusBrainGlobal = lazy(() => 
   import("./NautilusBrainGlobal").then(m => ({ default: m.NautilusBrainGlobal }))
 );
