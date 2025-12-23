@@ -65,7 +65,7 @@ serve(async (req: Request) => {
       throw new Error("Missing Supabase configuration");
     }
     
-    const supabase: SupabaseClient = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Try to fetch from quiz_templates first
     const { data: templates, error: templatesError } = await supabase
