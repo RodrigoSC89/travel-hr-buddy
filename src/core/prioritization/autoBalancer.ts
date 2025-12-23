@@ -1,7 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Internal logic uses different column names (module_id vs module_name) - needs full refactor
 /**
  * PATCH 232: Auto Priority Balancer
- * TODO PATCH 659: TypeScript fixes deferred (priority_shifts table schema missing)
+ * Table priority_shifts exists but internal logic needs refactoring to match schema
  * 
  * Dynamically adjusts priorities between modules and tasks based on global context.
  * Reads system state, applies intelligent rebalancing algorithms, and logs all changes.

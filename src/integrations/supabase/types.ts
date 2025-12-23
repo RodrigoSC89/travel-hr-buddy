@@ -3106,6 +3106,62 @@ export type Database = {
         }
         Relationships: []
       }
+      clone_registry: {
+        Row: {
+          capabilities: Json | null
+          clone_name: string
+          clone_type: string | null
+          context_limit: number | null
+          created_at: string | null
+          id: string
+          last_sync_at: string | null
+          memory_snapshot: Json | null
+          metadata: Json | null
+          organization_id: string | null
+          parent_id: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          capabilities?: Json | null
+          clone_name: string
+          clone_type?: string | null
+          context_limit?: number | null
+          created_at?: string | null
+          id?: string
+          last_sync_at?: string | null
+          memory_snapshot?: Json | null
+          metadata?: Json | null
+          organization_id?: string | null
+          parent_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          capabilities?: Json | null
+          clone_name?: string
+          clone_type?: string | null
+          context_limit?: number | null
+          created_at?: string | null
+          id?: string
+          last_sync_at?: string | null
+          memory_snapshot?: Json | null
+          metadata?: Json | null
+          organization_id?: string | null
+          parent_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clone_registry_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cognitive_feedback: {
         Row: {
           after_state: Json | null
@@ -7544,6 +7600,59 @@ export type Database = {
           },
         ]
       }
+      fuel_usage: {
+        Row: {
+          consumption_rate: number | null
+          cost_usd: number | null
+          created_at: string | null
+          efficiency_score: number | null
+          fuel_type: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          port_of_bunkering: string | null
+          quantity_liters: number
+          recorded_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          consumption_rate?: number | null
+          cost_usd?: number | null
+          created_at?: string | null
+          efficiency_score?: number | null
+          fuel_type?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          port_of_bunkering?: string | null
+          quantity_liters: number
+          recorded_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          consumption_rate?: number | null
+          cost_usd?: number | null
+          created_at?: string | null
+          efficiency_score?: number | null
+          fuel_type?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          port_of_bunkering?: string | null
+          quantity_liters?: number
+          recorded_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_usage_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       global_knowledge: {
         Row: {
           aggregated_data: Json
@@ -9132,6 +9241,65 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          component: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          recommended_action: string | null
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          component?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          recommended_action?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          component?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          recommended_action?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -11825,6 +11993,68 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string | null
+          current_value: number | null
+          id: string
+          message: string | null
+          metadata: Json | null
+          metric_name: string | null
+          module_name: string | null
+          organization_id: string | null
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+          threshold_value: number | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string | null
+          current_value?: number | null
+          id?: string
+          message?: string | null
+          metadata?: Json | null
+          metric_name?: string | null
+          module_name?: string | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          threshold_value?: number | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string | null
+          current_value?: number | null
+          id?: string
+          message?: string | null
+          metadata?: Json | null
+          metric_name?: string | null
+          module_name?: string | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          threshold_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       performance_metrics: {
         Row: {
           browser: string | null
@@ -12097,6 +12327,59 @@ export type Database = {
             columns: ["alert_id"]
             isOneToOne: false
             referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      priority_shifts: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          module_name: string
+          new_priority: number
+          old_priority: number
+          organization_id: string | null
+          reason: string | null
+          reverted_at: string | null
+          shift_type: string | null
+          triggered_by: string | null
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          module_name: string
+          new_priority: number
+          old_priority: number
+          organization_id?: string | null
+          reason?: string | null
+          reverted_at?: string | null
+          shift_type?: string | null
+          triggered_by?: string | null
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          module_name?: string
+          new_priority?: number
+          old_priority?: number
+          organization_id?: string | null
+          reason?: string | null
+          reverted_at?: string | null
+          shift_type?: string | null
+          triggered_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "priority_shifts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -16178,6 +16461,59 @@ export type Database = {
         }
         Relationships: []
       }
+      trust_compliance_logs: {
+        Row: {
+          action_type: string
+          compliance_score: number | null
+          created_at: string | null
+          details: Json | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          risk_indicators: Json | null
+          trust_level: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          compliance_score?: number | null
+          created_at?: string | null
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          risk_indicators?: Json | null
+          trust_level?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          compliance_score?: number | null
+          created_at?: string | null
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          risk_indicators?: Json | null
+          trust_level?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trust_compliance_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trust_events: {
         Row: {
           created_at: string
@@ -16804,6 +17140,77 @@ export type Database = {
             columns: ["route_segment_id"]
             isOneToOne: false
             referencedRelation: "route_segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_status: {
+        Row: {
+          alerts: Json | null
+          cargo_status: string | null
+          created_at: string | null
+          crew_count: number | null
+          engine_status: string | null
+          eta: string | null
+          fuel_level: number | null
+          heading: number | null
+          id: string
+          last_port: string | null
+          location: Json | null
+          next_port: string | null
+          recorded_at: string | null
+          sensors_data: Json | null
+          speed: number | null
+          status: string | null
+          vessel_id: string | null
+          weather_conditions: Json | null
+        }
+        Insert: {
+          alerts?: Json | null
+          cargo_status?: string | null
+          created_at?: string | null
+          crew_count?: number | null
+          engine_status?: string | null
+          eta?: string | null
+          fuel_level?: number | null
+          heading?: number | null
+          id?: string
+          last_port?: string | null
+          location?: Json | null
+          next_port?: string | null
+          recorded_at?: string | null
+          sensors_data?: Json | null
+          speed?: number | null
+          status?: string | null
+          vessel_id?: string | null
+          weather_conditions?: Json | null
+        }
+        Update: {
+          alerts?: Json | null
+          cargo_status?: string | null
+          created_at?: string | null
+          crew_count?: number | null
+          engine_status?: string | null
+          eta?: string | null
+          fuel_level?: number | null
+          heading?: number | null
+          id?: string
+          last_port?: string | null
+          location?: Json | null
+          next_port?: string | null
+          recorded_at?: string | null
+          sensors_data?: Json | null
+          speed?: number | null
+          status?: string | null
+          vessel_id?: string | null
+          weather_conditions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_status_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]

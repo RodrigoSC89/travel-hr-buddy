@@ -418,3 +418,71 @@ export interface UserAccessLog {
   metadata?: Record<string, any>;
   created_at: string;
 }
+
+// ============================================
+// CLONE & PRIORITY TYPES (for new tables)
+// ============================================
+
+export interface CloneRegistryEntry {
+  id: string;
+  organization_id?: string;
+  clone_name: string;
+  clone_type: string;
+  parent_id?: string;
+  status: "active" | "inactive" | "archived";
+  memory_snapshot?: Record<string, any>;
+  capabilities?: any[];
+  context_limit: number;
+  last_sync_at?: string;
+  created_at: string;
+  updated_at: string;
+  metadata?: Record<string, any>;
+}
+
+export interface PriorityShiftEntry {
+  id: string;
+  organization_id?: string;
+  module_name: string;
+  old_priority: number;
+  new_priority: number;
+  reason?: string;
+  triggered_by: string;
+  shift_type: string;
+  context?: Record<string, any>;
+  created_at: string;
+  reverted_at?: string;
+  is_active: boolean;
+}
+
+export interface TrustComplianceLog {
+  id: string;
+  organization_id?: string;
+  user_id?: string;
+  action_type: string;
+  entity_type?: string;
+  entity_id?: string;
+  compliance_score: number;
+  trust_level: string;
+  details?: Record<string, any>;
+  risk_indicators?: any[];
+  created_at: string;
+  metadata?: Record<string, any>;
+}
+
+export interface PerformanceAlertEntry {
+  id: string;
+  organization_id?: string;
+  alert_type: string;
+  severity: "info" | "warning" | "critical";
+  module_name?: string;
+  metric_name?: string;
+  current_value?: number;
+  threshold_value?: number;
+  message?: string;
+  status: "active" | "acknowledged" | "resolved";
+  acknowledged_by?: string;
+  acknowledged_at?: string;
+  resolved_at?: string;
+  created_at: string;
+  metadata?: Record<string, any>;
+}
