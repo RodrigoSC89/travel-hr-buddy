@@ -27,6 +27,7 @@ import {
   Zap
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface QualityMetrics {
   tests: {
@@ -144,7 +145,7 @@ export default function QualityDashboard() {
         };
       }
     } catch (error) {
-      console.warn("Could not load test results, using defaults");
+      logger.warn("Could not load test results, using defaults");
     }
     
     // Default values if file not found

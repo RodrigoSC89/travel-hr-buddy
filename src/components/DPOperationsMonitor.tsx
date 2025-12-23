@@ -24,6 +24,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSpaceWeather } from '@/hooks/useSpaceWeather';
+import { logger } from "@/lib/logger";
 
 // ============================================================================
 // Types
@@ -401,7 +402,7 @@ function playAlert(type: 'warning' | 'critical') {
       oscillator.stop(audioContext.currentTime + 0.3);
     }
   } catch (error) {
-    console.warn('[DPMonitor] Audio alert failed:', error);
+    logger.warn('[DPMonitor] Audio alert failed', error instanceof Error ? { message: error.message } : undefined);
   }
 }
 

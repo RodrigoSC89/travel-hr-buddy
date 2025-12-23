@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   Bot, 
   Send, 
@@ -287,7 +288,7 @@ Métricas de Sistema:
       let responseContent: string;
 
       if (error) {
-        console.warn("Edge function error, using fallback:", error);
+        logger.warn("Edge function error, using fallback", { error });
         responseContent = generateLocalFallback(textToSend);
         
         // Show toast for rate limit or payment errors

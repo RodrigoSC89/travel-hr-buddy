@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 import { 
   Lightbulb, 
   AlertTriangle, 
@@ -115,7 +116,7 @@ export const AISuggestionsPanel: React.FC = () => {
         .limit(20);
 
       if (error) {
-        console.warn("Error loading from database, using mock data:", error);
+        logger.warn("Error loading from database, using mock data", { error });
         // Use mock data if database fails
         setSuggestions(MOCK_SUGGESTIONS);
         return;

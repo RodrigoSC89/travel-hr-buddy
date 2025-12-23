@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { 
   Bot, 
   Send, 
@@ -229,7 +230,7 @@ Dados meteorológicos atuais:
       let responseContent: string;
 
       if (error || !data?.response) {
-        console.warn("Edge function failed, using local fallback:", error);
+        logger.warn("Edge function failed, using local fallback", { error });
         responseContent = generateLocalFallback(textToSend);
       } else {
         responseContent = data.response;
