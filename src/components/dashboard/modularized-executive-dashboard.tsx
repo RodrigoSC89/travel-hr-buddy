@@ -4,6 +4,7 @@
  */
 
 import React, { Suspense, useState } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -58,7 +59,7 @@ export function ModularizedExecutiveDashboard() {
     componentName: "ModularizedExecutiveDashboard",
     threshold: 3000,
     onSlowRender: (time) => {
-      console.warn(`Dashboard took ${time}ms to render - exceeds 3s threshold`);
+      logger.warn(`Dashboard took ${time}ms to render - exceeds 3s threshold`);
     }
   });
 

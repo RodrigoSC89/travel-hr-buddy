@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
+import { logger } from "@/lib/logger";
 
 // Initialize theme before rendering
 const initializeTheme = () => {
@@ -35,7 +36,7 @@ const initializeOptionalFeatures = async () => {
       webVitalsMonitor.initialize();
     }
   } catch (error) {
-    console.warn("Optional features init failed:", error);
+    logger.warn("Optional features init failed:", error instanceof Error ? { message: error.message } : undefined);
   }
 };
 
@@ -44,9 +45,9 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", async () => {
     try {
       await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-      console.log("✅ Service Worker registered");
+      logger.info("Service Worker registered");
     } catch (error) {
-      console.warn("Service worker registration failed:", error);
+      logger.warn("Service worker registration failed:", error instanceof Error ? { message: error.message } : undefined);
     }
   });
 }

@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState, memo } from 'react';
 import { resourceHints } from '@/lib/performance/resource-hints';
+import { logger } from "@/lib/logger";
 
 // Componente interno que usa os hooks de forma segura
 const PrefetchInitializer = memo(() => {
@@ -23,7 +24,7 @@ const PrefetchInitializer = memo(() => {
       
       setInitialized(true);
     } catch (error) {
-      console.warn('Prefetch initialization failed:', error);
+      logger.warn('Prefetch initialization failed:', error instanceof Error ? { message: error.message } : undefined);
     }
   }, [initialized]);
 
