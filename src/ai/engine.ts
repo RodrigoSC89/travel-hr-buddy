@@ -1,18 +1,17 @@
 /**
- * PATCH 536 - Core AI Engine
- * Central AI Engine with OpenAI Integration
+ * PATCH 852 - Core AI Engine with Lovable AI Gateway
+ * Unified AI Engine using Lovable AI for all AI operations
  * 
  * This engine provides AI capabilities with module-specific context awareness
  * for all Nautilus One modules.
  */
 
-import { openai } from "@/lib/ai/openai-client";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import { getModuleContext, ModuleContext } from "./contexts/moduleContext";
+import { ModuleContext } from "./contexts/moduleContext";
 
 export interface AIEngineRequest {
-  model?: "gpt-4o-mini" | "gpt-4o" | "gpt-3.5-turbo";
+  model?: string;
   messages: Array<{
     role: "system" | "user" | "assistant";
     content: string;
@@ -34,53 +33,65 @@ export interface AIEngineResponse {
 }
 
 /**
- * Run OpenAI completion with module context
+ * Run AI completion via Lovable AI Gateway (through Edge Function)
  */
 export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineResponse> => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  
-  if (!apiKey || apiKey === "your_openai_api_key_here") {
-    logger.warn("OpenAI API key not configured - returning mock response");
-    return {
-      content: "AI engine não configurado. Configure VITE_OPENAI_API_KEY para habilitar respostas da IA.",
-      model: "mock",
-      timestamp: new Date()
-    };
-  }
-
   try {
-    const response = await openai.chat.completions.create({
-      model: request.model || "gpt-4o-mini",
-      messages: request.messages,
-      temperature: request.temperature ?? 0.7,
-      max_tokens: request.maxTokens ?? 1000,
+    // Call the ai-advisor edge function which uses Lovable AI Gateway
+    const { data, error } = await supabase.functions.invoke("ai-advisor", {
+      body: {
+        question: request.messages.find(m => m.role === "user")?.content || "",
+        systemPrompt: request.messages.find(m => m.role === "system")?.content || generateSystemPrompt("general"),
+        profile: request.context?.moduleName || "general"
+      }
     });
 
-    const choice = response.choices[0];
-    
+    if (error) {
+      logger.warn("AI Gateway error, using fallback response", { error });
+      return getFallbackResponse(request);
+    }
+
     // Store context if provided
     if (request.context) {
-      await storeInteraction(request, choice.message.content || "");
+      await storeInteraction(request, data.response || "");
     }
 
     return {
-      content: choice.message.content || "",
-      usage: response.usage ? {
-        promptTokens: response.usage.prompt_tokens,
-        completionTokens: response.usage.completion_tokens,
-        totalTokens: response.usage.total_tokens,
-      } : undefined,
-      model: response.model,
+      content: data.response || data.evidence || data.justification || "",
+      usage: undefined,
+      model: request.model || "google/gemini-2.5-flash",
       timestamp: new Date()
     };
   } catch (error) {
-    logger.error("Error calling OpenAI API", { error });
-    throw new Error(`AI Engine Error: ${error instanceof Error ? error.message : "Unknown error"}`);
+    logger.warn("AI Engine error, using fallback", { error });
+    return getFallbackResponse(request);
   }
 };
 
 /**
- * PATCH 586: Store AI interaction for context building with Supabase persistence
+ * Fallback response when AI is unavailable
+ */
+const getFallbackResponse = (request: AIEngineRequest): AIEngineResponse => {
+  const userMessage = request.messages.find(m => m.role === "user")?.content || "";
+  const moduleName = request.context?.moduleName || "geral";
+  
+  const fallbackResponses: Record<string, string> = {
+    "maintenance": "Para manutenção, recomendo verificar o histórico de intervenções e consultar o plano de manutenção preventiva.",
+    "crew": "Para gestão de tripulação, acesse o módulo Maritime Command para visualizar escalas e certificações.",
+    "voyage": "Para planejamento de viagem, utilize o módulo Voyage Planner para otimizar rotas e consumo.",
+    "compliance": "Para compliance, consulte o Compliance Hub para verificar status de conformidade com MLC 2006 e STCW.",
+    "geral": "Estou em modo offline. Para assistência completa, verifique sua conexão de rede."
+  };
+
+  return {
+    content: fallbackResponses[moduleName] || fallbackResponses["geral"],
+    model: "fallback",
+    timestamp: new Date()
+  };
+};
+
+/**
+ * Store AI interaction for context building with Supabase persistence
  */
 const storeInteraction = async (request: AIEngineRequest, response: string): Promise<void> => {
   if (!request.context) return;
@@ -91,7 +102,7 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
       user_id: request.context.userId,
       input: request.messages[request.messages.length - 1]?.content,
       output: response,
-      model: request.model || "gpt-4o-mini",
+      model: request.model || "google/gemini-2.5-flash",
       temperature: request.temperature ?? 0.7,
       metadata: {
         messageCount: request.messages.length,
@@ -99,8 +110,7 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
       }
     };
     
-    // Store in Supabase ai_memory_events table for persistent learning and analytics
-    const { error } = await supabase
+    await supabase
       .from("ai_memory_events")
       .insert({
         event_type: "ai_interaction",
@@ -108,28 +118,22 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
         user_id: request.context.userId,
         metadata: contextData.metadata
       });
-    
-    if (error) {
-      logger.warn("Failed to persist AI interaction to Supabase", { error });
-    } else {
-      logger.debug("AI interaction logged to Supabase", { module: contextData.module_name });
-    }
   } catch (error) {
-    logger.warn("Failed to store AI interaction", { error });
+    logger.debug("Failed to store AI interaction");
   }
 };
 
 /**
  * Generate system prompt with module context
  */
-export const generateSystemPrompt = (moduleName: string, context?: Record<string, any>): string => {
-  const basePrompt = `Você é um assistente IA especializado no módulo ${moduleName} do sistema Nautilus One.`;
+export const generateSystemPrompt = (moduleName: string, context?: Record<string, unknown>): string => {
+  const basePrompt = `Você é um assistente IA especializado no módulo ${moduleName} do sistema Nautilus One - uma plataforma de gestão de RH marítimo.`;
   
   const contextPrompt = context ? `\n\nContexto adicional:\n${JSON.stringify(context, null, 2)}` : "";
   
   const behaviorPrompt = `\n\nComportamento esperado:
 - Forneça respostas práticas e acionáveis
-- Use terminologia marítima quando apropriado
+- Use terminologia marítima quando apropriado (MLC 2006, STCW, SOLAS)
 - Seja conciso mas informativo
 - Sugira próximos passos quando relevante
 - Indique nível de confiança nas recomendações`;
