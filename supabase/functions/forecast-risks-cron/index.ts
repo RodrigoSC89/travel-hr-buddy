@@ -1,11 +1,11 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 // ✅ Edge Function: forecast-risks-cron v1.0
 // Automated daily risk forecasting for all active vessels
 // Runs daily at 06:00 UTC to update tactical risk predictions
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
@@ -18,8 +18,7 @@ interface ForecastResponse {
   details?: string;
 }
 
-serve(async (req) => {
-  // Handle CORS preflight
+serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -27,7 +26,6 @@ serve(async (req) => {
   try {
     console.log('🚀 Starting automated risk forecast...');
 
-    // Get API base URL from environment
     const apiBaseUrl = Deno.env.get("API_BASE_URL") || Deno.env.get("VITE_APP_URL");
     
     if (!apiBaseUrl) {
@@ -44,7 +42,6 @@ serve(async (req) => {
       );
     }
 
-    // Call the forecast-risks API
     const forecastUrl = `${apiBaseUrl}/api/ai/forecast-risks`;
     console.log(`📡 Calling forecast API: ${forecastUrl}`);
 
@@ -91,13 +88,13 @@ serve(async (req) => {
       }
     );
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Forecast cron error:', error);
     return new Response(
       JSON.stringify({ 
         success: false, 
         error: 'Failed to run risk forecast',
-        details: error.message 
+        details: error instanceof Error ? error.message : String(error)
       }),
       {
         status: 500,
@@ -107,5 +104,4 @@ serve(async (req) => {
   }
 });
 
-// Log startup
 console.log('📅 Forecast Risks Cron Function initialized');

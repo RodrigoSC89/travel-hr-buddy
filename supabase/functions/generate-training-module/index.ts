@@ -1,40 +1,58 @@
-// @ts-nocheck
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+/// <reference path="../deno-ambient.d.ts" />
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface TrainingModuleRequest {
+  auditId?: string;
+  gapDetected: string;
+  normReference: string;
+  vessel?: string;
 }
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+interface QuizQuestion {
+  question: string;
+  options: string[];
+  correct_answer: number;
+}
+
+interface OpenAIResponse {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { auditId, gapDetected, normReference, vessel } = await req.json()
+    const body: TrainingModuleRequest = await req.json();
+    const { auditId, gapDetected, normReference, vessel } = body;
 
-    // Validate required fields
     if (!gapDetected || !normReference) {
       return new Response(
         JSON.stringify({ error: 'Campos obrigatórios: gapDetected, normReference' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
-    // Get OpenAI API key from environment
-    const openaiApiKey = Deno.env.get('VITE_OPENAI_API_KEY') || Deno.env.get('OPENAI_API_KEY')
+    const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openaiApiKey) {
-      console.error('OpenAI API key not configured')
+      console.error('OpenAI API key not configured');
       return new Response(
         JSON.stringify({ error: 'Configuração de IA não disponível' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
-    // Create prompt for training module generation
     const prompt = `Você é um especialista em treinamento técnico e normas IMCA para operações marítimas offshore.
 
 Contexto:
@@ -89,9 +107,8 @@ B) [Opção B]
 C) [Opção C]
 RESPOSTA_CORRETA: [A, B ou C]
 
-Mantenha tudo em português brasileiro, tom profissional e técnico.`
+Mantenha tudo em português brasileiro, tom profissional e técnico.`;
 
-    // Call OpenAI API
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -113,31 +130,29 @@ Mantenha tudo em português brasileiro, tom profissional e técnico.`
         temperature: 0.7,
         max_tokens: 1500
       })
-    })
+    });
 
     if (!openaiResponse.ok) {
-      const errorData = await openaiResponse.text()
-      console.error('OpenAI API error:', errorData)
+      const errorData = await openaiResponse.text();
+      console.error('OpenAI API error:', errorData);
       return new Response(
         JSON.stringify({ error: 'Erro ao gerar conteúdo de treinamento' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      );
     }
 
-    const data = await openaiResponse.json()
-    const generatedContent = data.choices[0]?.message?.content?.trim() || ''
+    const data: OpenAIResponse = await openaiResponse.json();
+    const generatedContent = data.choices?.[0]?.message?.content?.trim() || '';
 
-    // Parse the generated content
-    const titleMatch = generatedContent.match(/TÍTULO:\s*(.+)/i)
-    const contextMatch = generatedContent.match(/CONTEXTO:\s*\n([\s\S]+?)\n---/i)
-    const actionsMatch = generatedContent.match(/O QUE FAZER:\s*\n([\s\S]+?)\n---/i)
-    const quizMatch = generatedContent.match(/QUESTIONÁRIO:\s*\n([\s\S]+?)$/i)
+    const titleMatch = generatedContent.match(/TÍTULO:\s*(.+)/i);
+    const contextMatch = generatedContent.match(/CONTEXTO:\s*\n([\s\S]+?)\n---/i);
+    const actionsMatch = generatedContent.match(/O QUE FAZER:\s*\n([\s\S]+?)\n---/i);
+    const quizMatch = generatedContent.match(/QUESTIONÁRIO:\s*\n([\s\S]+?)$/i);
 
-    const title = titleMatch ? titleMatch[1].trim() : 'Módulo de Treinamento'
-    const context = contextMatch ? contextMatch[1].trim() : ''
-    const actions = actionsMatch ? actionsMatch[1].trim() : ''
+    const title = titleMatch ? titleMatch[1].trim() : 'Módulo de Treinamento';
+    const context = contextMatch ? contextMatch[1].trim() : '';
+    const actions = actionsMatch ? actionsMatch[1].trim() : '';
     
-    // Build training content
     const trainingContent = `## ${title}
 
 ### 💡 Contexto
@@ -148,17 +163,16 @@ ${actions}
 
 ### 📚 Norma de Referência
 ${normReference}
-`
+`;
 
-    // Parse quiz questions
-    const quiz = []
+    const quiz: QuizQuestion[] = [];
     if (quizMatch) {
-      const quizText = quizMatch[1]
-      const questionRegex = /(\d+)\.\s*(.+?)\?[\s\S]*?A\)\s*(.+?)[\s\S]*?B\)\s*(.+?)[\s\S]*?C\)\s*(.+?)[\s\S]*?RESPOSTA_CORRETA:\s*([ABC])/gi
+      const quizText = quizMatch[1];
+      const questionRegex = /(\d+)\.\s*(.+?)\?[\s\S]*?A\)\s*(.+?)[\s\S]*?B\)\s*(.+?)[\s\S]*?C\)\s*(.+?)[\s\S]*?RESPOSTA_CORRETA:\s*([ABC])/gi;
       
-      let match
+      let match;
       while ((match = questionRegex.exec(quizText)) !== null) {
-        const [, , question, optionA, optionB, optionC, correctAnswer] = match
+        const [, , question, optionA, optionB, optionC, correctAnswer] = match;
         quiz.push({
           question: question.trim(),
           options: [
@@ -167,25 +181,23 @@ ${normReference}
             optionC.trim()
           ],
           correct_answer: correctAnswer === 'A' ? 0 : correctAnswer === 'B' ? 1 : 2
-        })
+        });
       }
     }
 
-    // Save to database if Supabase credentials are available
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    const authHeader = req.headers.get('Authorization')
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const authHeader = req.headers.get('Authorization');
 
-    let savedModuleId = null
+    let savedModuleId: string | null = null;
 
     if (supabaseUrl && supabaseServiceKey && authHeader) {
-      const supabase = createClient(supabaseUrl, supabaseServiceKey)
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
       
-      // Get user from auth header
-      const token = authHeader.replace('Bearer ', '')
-      const { data: { user }, error: userError } = await supabase.auth.getUser(token)
+      const token = authHeader.replace('Bearer ', '');
+      const { data: userData, error: userError } = await supabase.auth.getUser(token);
 
-      if (!userError && user) {
+      if (!userError && userData?.user) {
         const { data: insertedModule, error: insertError } = await supabase
           .from('training_modules')
           .insert({
@@ -196,14 +208,14 @@ ${normReference}
             quiz,
             audit_id: auditId || null,
             vessel_id: vessel || null,
-            created_by: user.id,
+            created_by: userData.user.id,
             status: 'active'
           })
           .select()
-          .single()
+          .single();
 
         if (!insertError && insertedModule) {
-          savedModuleId = insertedModule.id
+          savedModuleId = insertedModule.id;
         }
       }
     }
@@ -221,13 +233,13 @@ ${normReference}
         }
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    );
 
   } catch (error) {
-    console.error('Error in generate-training-module function:', error)
+    console.error('Error in generate-training-module function:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Erro interno do servidor' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Erro interno do servidor' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+    );
   }
-})
+});

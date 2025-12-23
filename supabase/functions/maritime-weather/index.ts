@@ -1,14 +1,49 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+interface WeatherRequest {
+  location: {
+    lat: number;
+    lon: number;
+  };
+  vesselId?: string;
+}
+
+interface WeatherCondition {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+interface ForecastItem {
+  dt_txt: string;
+  main: {
+    temp: number;
+  };
+  wind?: {
+    speed?: number;
+    deg?: number;
+  };
+  weather: WeatherCondition[];
+  rain?: {
+    "3h"?: number;
+  };
+}
+
+interface WeatherAlert {
+  type: string;
+  severity: string;
+  message: string;
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -24,7 +59,8 @@ serve(async (req) => {
       }
     );
 
-    const { location, vesselId } = await req.json();
+    const body: WeatherRequest = await req.json();
+    const { location, vesselId } = body;
 
     if (!location || !location.lat || !location.lon) {
       throw new Error("Location coordinates are required");
@@ -35,7 +71,6 @@ serve(async (req) => {
       throw new Error("Weather API key not configured");
     }
 
-    // Fetch current weather data
     const weatherResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${weatherApiKey}&units=metric`
     );
@@ -46,14 +81,12 @@ serve(async (req) => {
 
     const weatherData = await weatherResponse.json();
 
-    // Fetch marine weather forecast
     const marineResponse = await fetch(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${location.lat}&lon=${location.lon}&appid=${weatherApiKey}&units=metric`
     );
 
     const marineData = marineResponse.ok ? await marineResponse.json() : null;
 
-    // Process weather data for maritime use
     const maritimeWeather = {
       current: {
         temperature: weatherData.main.temp,
@@ -66,14 +99,14 @@ serve(async (req) => {
         seaLevel: weatherData.main.sea_level || weatherData.main.pressure,
         feelsLike: weatherData.main.feels_like
       },
-      forecast: marineData?.list?.slice(0, 8).map((item: any) => ({
+      forecast: (marineData?.list as ForecastItem[] || []).slice(0, 8).map((item) => ({
         datetime: item.dt_txt,
         temperature: item.main.temp,
         windSpeed: item.wind?.speed || 0,
         windDirection: item.wind?.deg || 0,
         weather: item.weather[0],
         precipitation: item.rain?.["3h"] || 0
-      })) || [],
+      })),
       location: {
         name: weatherData.name,
         country: weatherData.sys.country,
@@ -82,14 +115,9 @@ serve(async (req) => {
           lon: weatherData.coord.lon
         }
       },
-      alerts: [] as Array<{
-        type: string;
-        severity: string;
-        message: string;
-      }>
+      alerts: [] as WeatherAlert[]
     };
 
-    // Generate maritime alerts based on weather conditions
     if (maritimeWeather.current.windSpeed > 25) {
       maritimeWeather.alerts.push({
         type: "high_wind",
@@ -114,7 +142,6 @@ serve(async (req) => {
       });
     }
 
-    // Update vessel weather data if vesselId provided
     if (vesselId) {
       const { error: updateError } = await supabaseClient
         .from("vessels")

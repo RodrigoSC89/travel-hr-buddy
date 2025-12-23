@@ -1,22 +1,21 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
-const corsHeaders = {
+const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-/**
- * Template suggestions based on workflow categories
- */
-const WORKFLOW_TEMPLATES: Record<string, Array<{
+interface WorkflowStep {
   title: string;
   description: string;
   priority: string;
   position: number;
   tags: string[];
-}>> = {
+}
+
+const WORKFLOW_TEMPLATES: Record<string, WorkflowStep[]> = {
   "default": [
     {
       title: "Planejamento inicial",
@@ -56,14 +55,20 @@ const WORKFLOW_TEMPLATES: Record<string, Array<{
   ],
 };
 
-serve(async (req) => {
-  // Handle CORS preflight requests
+interface CreateWorkflowRequest {
+  title: string;
+  description?: string;
+  category?: string;
+  tags?: string[];
+  config?: Record<string, unknown>;
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Get Supabase client with auth
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(
@@ -83,10 +88,9 @@ serve(async (req) => {
       },
     });
 
-    // Verify user is authenticated
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: userData, error: authError } = await supabase.auth.getUser();
 
-    if (authError || !user) {
+    if (authError || !userData?.user) {
       return new Response(
         JSON.stringify({ error: "Unauthorized: Invalid session" }),
         {
@@ -96,7 +100,6 @@ serve(async (req) => {
       );
     }
 
-    // Only handle POST requests
     if (req.method !== "POST") {
       return new Response(
         JSON.stringify({ error: "Method not allowed" }),
@@ -107,11 +110,9 @@ serve(async (req) => {
       );
     }
 
-    // Parse request body
-    const body = await req.json();
+    const body: CreateWorkflowRequest = await req.json();
     const { title, description, category, tags, config } = body;
 
-    // Validate required fields
     if (!title) {
       return new Response(
         JSON.stringify({ error: "Title is required" }),
@@ -122,7 +123,6 @@ serve(async (req) => {
       );
     }
 
-    // Create workflow
     const { data: workflow, error: workflowError } = await supabase
       .from("smart_workflows")
       .insert({
@@ -131,7 +131,7 @@ serve(async (req) => {
         category: category || null,
         tags: tags || [],
         config: config || {},
-        created_by: user.id,
+        created_by: userData.user.id,
         status: "draft",
       })
       .select()
@@ -148,10 +148,8 @@ serve(async (req) => {
       );
     }
 
-    // Seed suggestions based on template
     let template = WORKFLOW_TEMPLATES["default"];
     
-    // Try to match based on category or title
     if (category && WORKFLOW_TEMPLATES[category.toLowerCase()]) {
       template = WORKFLOW_TEMPLATES[category.toLowerCase()];
     } else {
@@ -167,7 +165,6 @@ serve(async (req) => {
       }
     }
 
-    // Create workflow steps from template (max 5 suggestions)
     const suggestionsToCreate = template.slice(0, 5);
     const stepsToInsert = suggestionsToCreate.map((suggestion) => ({
       workflow_id: workflow.id,
@@ -176,13 +173,12 @@ serve(async (req) => {
       status: "pendente",
       position: suggestion.position,
       priority: suggestion.priority,
-      assigned_to: user.id,
-      created_by: user.id,
+      assigned_to: userData.user.id,
+      created_by: userData.user.id,
       tags: suggestion.tags,
       metadata: {},
     }));
 
-    // Insert workflow steps
     const { data: steps, error: stepsError } = await supabase
       .from("smart_workflow_steps")
       .insert(stepsToInsert)
@@ -190,7 +186,6 @@ serve(async (req) => {
 
     if (stepsError) {
       console.warn("Error creating workflow steps:", stepsError);
-      // Return workflow even if steps failed
       return new Response(
         JSON.stringify({
           success: true,
@@ -205,7 +200,6 @@ serve(async (req) => {
       );
     }
 
-    // Return success response
     return new Response(
       JSON.stringify({
         success: true,
@@ -221,7 +215,7 @@ serve(async (req) => {
   } catch (error) {
     console.error("Unexpected error:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error", details: error.message }),
+      JSON.stringify({ error: "Internal server error", details: error instanceof Error ? error.message : String(error) }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
