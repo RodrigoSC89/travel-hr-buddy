@@ -1,10 +1,20 @@
 // Ambient declarations to satisfy TypeScript in the monorepo for Deno-based edge functions
 
-declare const Deno: any;
+declare const Deno: {
+  env: {
+    get(key: string): string | undefined;
+  };
+};
+
+// Standard Request/Response types for Edge Functions
+type EdgeRequest = Request;
 
 declare module 'https://deno.land/std@0.168.0/http/server.ts' {
-  // Minimal `serve` declaration used across functions
-  export function serve(handler: any, options?: any): any;
+  export function serve(handler: (req: Request) => Promise<Response> | Response, options?: any): void;
+}
+
+declare module 'https://deno.land/std@0.224.0/http/server.ts' {
+  export function serve(handler: (req: Request) => Promise<Response> | Response, options?: any): void;
 }
 
 declare module 'https://esm.sh/@supabase/supabase-js@2' {

@@ -1,6 +1,11 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+interface CopilotRequest {
+  messages?: Array<{ role: string; content: string }>;
+  prompt?: string;
+  context?: { vessel?: string; systems?: string[] };
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -37,7 +42,7 @@ Sempre explique o "porquê" das sugestões.
 - Indique quando uma OS deve ser aberta
 - Mencione se há peças em estoque ou se precisa requisição`;
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
