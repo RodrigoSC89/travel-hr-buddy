@@ -135,6 +135,9 @@ export { default as SmartMobility } from "./smart-mobility";
 export { default as ProcurementInventory } from "./procurement-inventory";
 
 // ============================================
-// REGISTRY
+// REGISTRY & UTILITIES
 // ============================================
 export { MODULE_REGISTRY, type ModuleDefinition } from "./registry";
+export { loadModule, preloadModule, getModuleMetadata, moduleExists } from "./loader";
+export { validateAllModules, runIntegrationCheck, getActiveModules, getNavigationRoutes } from "./integration-validator";
+export { MODULE_DOMAINS, getModulesByDomain, getDomainForModule, getDomainRoutes } from "./domain-index";
