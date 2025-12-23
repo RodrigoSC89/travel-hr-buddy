@@ -1,10 +1,8 @@
 /**
- * Project Timeline Export Component
- * PATCH 389 - PDF and ICS export functionality
- * PATCH 653 - Lazy loading for jsPDF
+ * Project Timeline Export Component - Uses named imports
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, FileDown, Calendar as CalendarIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -33,7 +31,7 @@ interface ExportActionsProps {
   tasks: Task[];
 }
 
-export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
+export const ExportActions: FC<ExportActionsProps> = ({ tasks }) => {
   const { toast } = useToast();
 
   const exportToPDF = async () => {

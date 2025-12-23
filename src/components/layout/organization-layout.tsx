@@ -1,15 +1,15 @@
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { MultiTenantWrapper } from "./multi-tenant-wrapper";
 import { BackToDashboard } from "@/components/ui/back-to-dashboard";
 
 interface OrganizationLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   title?: string;
   showBackButton?: boolean;
   requiresOrganization?: boolean;
 }
 
-export const OrganizationLayout: React.FC<OrganizationLayoutProps> = ({
+export const OrganizationLayout: FC<OrganizationLayoutProps> = ({
   children,
   title,
   showBackButton = true,

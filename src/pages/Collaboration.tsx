@@ -1,4 +1,3 @@
-import React from "react";
 import RealTimeWorkspace from "@/components/collaboration/real-time-workspace";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";

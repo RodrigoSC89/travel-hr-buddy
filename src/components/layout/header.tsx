@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -18,7 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export const Header: React.FC = () => {
+export const Header: FC = () => {
   const { isHighContrast, toggleHighContrast } = useHighContrastTheme();
   const navigate = useNavigate();
 

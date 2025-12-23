@@ -1,4 +1,3 @@
-import React from "react";
 import { AdvancedIntegrationsHub } from "@/components/integrations/advanced-integrations-hub";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 

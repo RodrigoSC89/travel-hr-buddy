@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
@@ -14,10 +15,10 @@ import GlobalSearch from "@/components/ui/global-search";
 import EnhancedNotifications from "@/components/ui/enhanced-notifications";
 import { FloatingActionButton } from "@/components/ui/floating-action-button";
 
-export const AppLayout: React.FC = () => {
+export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
-  const [isAssistantMinimized, setIsAssistantMinimized] = React.useState(true);
-  const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
+  const [isAssistantMinimized, setIsAssistantMinimized] = useState(true);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">

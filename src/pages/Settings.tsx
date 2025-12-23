@@ -1,4 +1,3 @@
-import React from "react";
 import { EnhancedSettingsHub } from "@/components/settings/enhanced-settings-hub";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";

@@ -1,4 +1,3 @@
-import React from "react";
 import { UserManagementHub } from "@/components/admin/UserManagementHub";
 
 export default function Users() {

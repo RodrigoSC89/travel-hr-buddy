@@ -1,8 +1,8 @@
 /**
- * Request Queue Manager - PATCH 832
- * Manages API requests with offline queue, retry logic, and prioritization
+ * Request Queue Manager - Uses named imports
  */
 
+import { useState, useEffect } from 'react';
 import { logger } from '@/lib/monitoring/structured-logging';
 
 type RequestPriority = 'high' | 'medium' | 'low';
@@ -301,9 +301,9 @@ export const requestQueue = new RequestQueueManager();
 
 // React hook
 export function useRequestQueue() {
-  const [status, setStatus] = React.useState(requestQueue.getStatus());
+  const [status, setStatus] = useState(requestQueue.getStatus());
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = requestQueue.subscribe(() => {
       setStatus(requestQueue.getStatus());
     });
@@ -321,5 +321,4 @@ export function useRequestQueue() {
   };
 }
 
-// Need React import for hook
-import React from 'react';
+// useState and useEffect are imported at the top of the file
