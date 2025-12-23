@@ -1,4 +1,4 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.7";
 
@@ -121,13 +121,13 @@ Vessel Information:
 - Flag: ${vessel.flag || "Unknown"}
 
 Recent Incidents (last 10):
-${incidents?.map((inc, i) => `${i + 1}. ${inc.incident_type || "Unknown"} - ${inc.description || "No description"} (Date: ${inc.incident_date || "Unknown"})`).join("\n") || "No incidents recorded"}
+${incidents?.map((inc: any, i: number) => `${i + 1}. ${inc.incident_type || "Unknown"} - ${inc.description || "No description"} (Date: ${inc.incident_date || "Unknown"})`).join("\n") || "No incidents recorded"}
 
 Compliance Evidences:
 ${evidences?.length ? `${evidences.length} validated evidences on file` : "No validated evidences"}
 
 Previous Audit Scores:
-${previousAudits?.map((audit, i) => `${i + 1}. ${audit.audit_type}: ${audit.overall_score}/100 (Date: ${audit.audit_date})`).join("\n") || "No previous audits"}
+${previousAudits?.map((audit: any, i: number) => `${i + 1}. ${audit.audit_type}: ${audit.overall_score}/100 (Date: ${audit.audit_date})`).join("\n") || "No previous audits"}
 
 Based on this information, generate a comprehensive audit simulation report in the following JSON format:
 {
@@ -254,11 +254,11 @@ Return ONLY the JSON object, no additional text.`;
         status: 200,
       }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error in audit-simulate function:", error);
     return new Response(
       JSON.stringify({
-        error: error.message || "An unexpected error occurred",
+        error: error instanceof Error ? error.message : "An unexpected error occurred",
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },

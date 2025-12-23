@@ -1,4 +1,4 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 // Deno Edge Function: log-incident
 // Recebe {module, severity, message, metadata?, timestamp?} e grava em public.incidents
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
@@ -34,7 +34,7 @@ serve(async (req) => {
     return new Response(JSON.stringify({ status: "ok" }), { 
       headers: { "Content-Type": "application/json" } 
     });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: String(err?.message ?? err) }), { status: 500 });
+  } catch (err: unknown) {
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }), { status: 500 });
   }
 });

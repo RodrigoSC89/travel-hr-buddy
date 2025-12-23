@@ -48,6 +48,12 @@ declare module 'https://esm.sh/@supabase/supabase-js@2.39.3' {
   export default supabase;
 }
 
+declare module 'https://esm.sh/@supabase/supabase-js@2.39.7' {
+  const supabase: any;
+  export function createClient(url: string, key: string, opts?: any): any;
+  export default supabase;
+}
+
 declare module 'https://esm.sh/@supabase/supabase-js@2.7.1' {
   const supabase: any;
   export function createClient(url: string, key: string, opts?: any): any;
