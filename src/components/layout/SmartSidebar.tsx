@@ -15,6 +15,7 @@ const groupedModules = [
     title: "🎯 Centro de Comando",
     items: [
       { label: "🚀 Command Center", path: "/command-center" },
+      { label: "📊 Dashboard Executivo", path: "/executive-dashboard" },
       { label: "🧠 Nautilus Command", path: "/nautilus-command" },
       { label: "🏢 Centro de Operações", path: "/system-hub" },
       { label: "📡 Telemetria", path: "/telemetry" },
