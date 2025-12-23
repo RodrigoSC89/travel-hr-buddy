@@ -17,8 +17,8 @@ interface LocalDeliveryLocation {
   shipment_number: string;
   origin: string;
   destination: string;
-  status: "pending" | "in_transit" | "delivered" | "delayed";
-  estimated_arrival: string | null;
+  status: string;
+  estimated_arrival: string | null | undefined;
   coordinates: {
     origin: [number, number];
     destination: [number, number];
@@ -41,7 +41,7 @@ const dynamicDb = supabase as unknown as {
 };
 
 const LogisticsHubDashboard = () => {
-  const [deliveryLocations, setDeliveryLocations] = React.useState<DeliveryLocation[]>([]);
+  const [deliveryLocations, setDeliveryLocations] = React.useState<LocalDeliveryLocation[]>([]);
 
   React.useEffect(() => {
     loadDeliveryData();
@@ -56,7 +56,7 @@ const LogisticsHubDashboard = () => {
 
     if (shipments) {
       // Transform shipments to delivery locations with mock coordinates
-      const locations: DeliveryLocation[] = (shipments as ShipmentData[]).map((shipment, idx) => ({
+      const locations: LocalDeliveryLocation[] = (shipments as ShipmentData[]).map((shipment, idx) => ({
         id: shipment.id,
         shipment_number: shipment.shipment_number,
         origin: shipment.origin,
@@ -117,7 +117,7 @@ const LogisticsHubDashboard = () => {
         </TabsContent>
 
         <TabsContent value="map" className="space-y-4">
-          <DeliveryMap deliveries={deliveryLocations} />
+          <DeliveryMap deliveries={deliveryLocations as unknown as Parameters<typeof DeliveryMap>[0]["deliveries"]} />
         </TabsContent>
 
         <TabsContent value="suppliers" className="space-y-4">
