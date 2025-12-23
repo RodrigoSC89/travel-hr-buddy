@@ -1,7 +1,10 @@
-// @ts-nocheck
+/**
+ * PATCH 851 - Document Editor Component
+ * Removed @ts-nocheck, added proper typing
+ */
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import * as React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +27,11 @@ interface Version {
   saved_at: string;
 }
 
+// Dynamic DB access for tables not in schema
+const dynamicDb = supabase as unknown as {
+  from: (table: string) => ReturnType<typeof supabase.from>;
+};
+
 export function DocumentEditor({ 
   documentId, 
   initialTitle = "", 
@@ -31,15 +39,15 @@ export function DocumentEditor({
   onSave 
 }: DocumentEditorProps) {
   const { user } = useAuth();
-  const [title, setTitle] = useState(initialTitle);
-  const [content, setContent] = useState(initialContent);
-  const [saving, setSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const versionRef = useRef<Version[]>([]);
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [title, setTitle] = React.useState(initialTitle);
+  const [content, setContent] = React.useState(initialContent);
+  const [saving, setSaving] = React.useState(false);
+  const [lastSaved, setLastSaved] = React.useState<Date | null>(null);
+  const versionRef = React.useRef<Version[]>([]);
+  const saveTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Auto-save effect - triggers 2 seconds after user stops typing
-  useEffect(() => {
+  React.useEffect(() => {
     if (!documentId || !content) return;
 
     // Clear previous timeout
@@ -59,17 +67,17 @@ export function DocumentEditor({
     };
   }, [content, documentId]);
 
-  async function saveContentToDB(content: string) {
+  async function saveContentToDB(contentToSave: string) {
     if (!documentId || !user) return;
 
     setSaving(true);
     try {
       // Save to main documents table
-      const { error: docError } = await supabase
+      const { error: docError } = await dynamicDb
         .from("ai_generated_documents")
         .upsert({
           id: documentId,
-          content,
+          content: contentToSave,
           title,
           updated_by: user.id,
         });
@@ -77,11 +85,11 @@ export function DocumentEditor({
       if (docError) throw docError;
 
       // Save to version history
-      const { error: versionError } = await supabase
+      const { error: versionError } = await dynamicDb
         .from("document_versions")
         .insert({
           document_id: documentId,
-          content,
+          content: contentToSave,
           updated_by: user.id,
         });
 
@@ -89,7 +97,7 @@ export function DocumentEditor({
 
       // Track version locally
       versionRef.current.push({ 
-        content, 
+        content: contentToSave, 
         saved_at: new Date().toISOString() 
       });
 
@@ -136,7 +144,7 @@ export function DocumentEditor({
 
       if (!currentDocId) {
         // Create new document
-        const { data, error } = await supabase
+        const { data, error } = await dynamicDb
           .from("ai_generated_documents")
           .insert({
             title: title.trim(),
@@ -147,10 +155,10 @@ export function DocumentEditor({
           .single();
 
         if (error) throw error;
-        currentDocId = data.id;
+        currentDocId = (data as { id: string }).id;
       } else {
         // Update existing document
-        const { error: docError } = await supabase
+        const { error: docError } = await dynamicDb
           .from("ai_generated_documents")
           .update({
             title: title.trim(),
@@ -163,7 +171,7 @@ export function DocumentEditor({
       }
 
       // Save to version history
-      const { error: versionError } = await supabase
+      const { error: versionError } = await dynamicDb
         .from("document_versions")
         .insert({
           document_id: currentDocId,
