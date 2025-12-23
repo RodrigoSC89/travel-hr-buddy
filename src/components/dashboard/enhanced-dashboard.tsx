@@ -272,13 +272,13 @@ export const EnhancedDashboard = () => {
     setIsLoaded(true);
   }, []);
 
-  const quickStats = [
+  const quickStats: InteractiveStatsCardProps[] = [
     {
       icon: DollarSign,
       title: "Receita Mensal",
       value: "R$ 285.000",
       change: "+12.5%",
-      trend: "up",
+      trend: "up" as const,
       description: "Crescimento consistente nos últimos 3 meses",
       color: "green"
     },
@@ -287,7 +287,7 @@ export const EnhancedDashboard = () => {
       title: "Usuários Ativos",
       value: "1.2k",
       change: "+8.3%",
-      trend: "up",
+      trend: "up" as const,
       description: "Maior engajamento da equipe",
       color: "blue"
     },
@@ -296,7 +296,7 @@ export const EnhancedDashboard = () => {
       title: "Produtividade",
       value: "94%",
       change: "+5.7%",
-      trend: "up",
+      trend: "up" as const,
       description: "Eficiência operacional melhorou",
       color: "purple"
     },
@@ -305,7 +305,7 @@ export const EnhancedDashboard = () => {
       title: "Metas Atingidas", 
       value: "87%",
       change: "-2.1%",
-      trend: "down",
+      trend: "down" as const,
       description: "Revisar estratégias de Q4",
       color: "orange"
     }
@@ -346,33 +346,33 @@ export const EnhancedDashboard = () => {
     }
   ];
 
-  const recentActivities = [
+  const recentActivities: PulsingNotificationCardProps[] = [
     {
       title: "Relatório de Vendas Gerado",
       description: "Análise automática de performance Q3 foi concluída com insights revolucionários",
       time: "há 5 minutos",
-      priority: "high",
+      priority: "high" as const,
       icon: BarChart3
     },
     {
       title: "Workflow de Aprovação Ativo",
       description: "3 documentos aguardando revisão executiva com IA de análise",
       time: "há 15 minutos", 
-      priority: "medium",
+      priority: "medium" as const,
       icon: CheckCircle
     },
     {
       title: "Sistema de IA Atualizado",
       description: "Nova versão do motor de IA com 25% mais precisão implementada",
       time: "há 1 hora",
-      priority: "high",
+      priority: "high" as const,
       icon: Brain
     },
     {
       title: "Certificados SSL Renovados",
       description: "Segurança aprimorada com criptografia quântica ativada",
       time: "há 2 horas",
-      priority: "low",
+      priority: "low" as const,
       icon: CheckCircle
     }
   ];
