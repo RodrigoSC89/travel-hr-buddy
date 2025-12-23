@@ -3,7 +3,7 @@
  * Wrapper para o NavigationAssistant com integração completa
  */
 
-import React from "react";
+import type { FC } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { MessageSquare, Bot, Sparkles, Zap } from "lucide-react";

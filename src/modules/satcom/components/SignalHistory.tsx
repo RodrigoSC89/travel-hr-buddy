@@ -4,7 +4,8 @@
  * Patch 142.0
  */
 
-import React from "react";
+import { useState } from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { History, WifiOff, Wifi, AlertTriangle, Settings } from "lucide-react";

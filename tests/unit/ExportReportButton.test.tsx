@@ -60,7 +60,7 @@ const MockExportReportButton = ({
   );
 };
 
-import React from "react";
+import { useState } from "react";
 
 describe("ExportReportButton Component", () => {
   const mockData = {

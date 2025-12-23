@@ -3,7 +3,7 @@
  * PATCH 838: Estados de carregamento melhorados com Framer Motion
  */
 
-import React from "react";
+import type { FC, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, RefreshCw, Wifi, WifiOff } from "lucide-react";
 import { cn } from "@/lib/utils";

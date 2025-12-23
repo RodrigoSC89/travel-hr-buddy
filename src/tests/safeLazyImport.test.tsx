@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
-import React from "react";
+import { Suspense } from "react";
 
 // Mock component for successful loading
 const MockComponent = ({ message = "Test Component" }: { message?: string }) => (

@@ -3,7 +3,8 @@
  * Beautiful, animated suggestion cards
  */
 
-import React from 'react';
+import { useState } from 'react';
+import type { FC } from 'react';
 import { X, Lightbulb, Zap, AlertTriangle, Info, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

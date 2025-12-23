@@ -1,7 +1,7 @@
 import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import React from "react";
+import { createElement } from "react";
 
 // Mock ResizeObserver for recharts and other chart libraries
 global.ResizeObserver = class ResizeObserver {

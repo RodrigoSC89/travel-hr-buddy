@@ -4,7 +4,7 @@
  * Patch 142.0
  */
 
-import React from "react";
+import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Satellite, Signal, Clock } from "lucide-react";

@@ -3,7 +3,7 @@
  * Cards de métricas principais do módulo de conformidade
  */
 
-import React from 'react';
+import type { FC } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 

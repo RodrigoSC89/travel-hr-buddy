@@ -3,7 +3,7 @@
  * Shows current connection quality to user
  */
 
-import React from "react";
+import type { FC } from "react";
 import { WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from "lucide-react";
 import { useConnectionAdaptive } from "@/hooks/useConnectionAdaptive";
 import { cn } from "@/lib/utils";
