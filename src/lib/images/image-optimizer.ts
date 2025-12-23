@@ -2,6 +2,7 @@
  * Image Optimization Utilities
  * PATCH 542 Preparation - WebP/AVIF conversion & blur placeholders
  */
+import { logger } from "@/lib/logger";
 
 export interface ImageOptimizationConfig {
   quality: number;
@@ -173,7 +174,7 @@ class ImageOptimizer {
       try {
         blurDataURL = await this.generateBlurPlaceholder(imageUrl);
       } catch (error) {
-        console.warn("Failed to generate blur placeholder:", error);
+        logger.warn("Failed to generate blur placeholder:", error instanceof Error ? { message: error.message } : undefined);
       }
     }
 

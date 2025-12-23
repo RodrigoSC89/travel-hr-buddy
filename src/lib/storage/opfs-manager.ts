@@ -2,6 +2,7 @@
  * OPFS (Origin Private File System) Manager
  * PATCH 850 - Armazenamento offline robusto com cache em camadas
  */
+import { logger } from "@/lib/logger";
 
 export interface OPFSFile {
   name: string;
@@ -90,7 +91,7 @@ class OPFSManager {
     if (this.initialized) return true;
 
     if (!('storage' in navigator) || !('getDirectory' in navigator.storage)) {
-      console.warn('OPFS not supported in this browser');
+      logger.warn('OPFS not supported in this browser');
       return false;
     }
 

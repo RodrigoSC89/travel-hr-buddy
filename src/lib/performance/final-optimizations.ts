@@ -2,6 +2,7 @@
  * Final Optimizations - Production Ready
  * Last-mile performance improvements for 2Mbps networks
  */
+import { logger } from "@/lib/logger";
 
 // Intersection Observer for lazy loading
 export function createLazyObserver(
@@ -113,7 +114,7 @@ export function measureTime<T>(fn: () => T, label?: string): T {
   const duration = performance.now() - start;
   
   if (label) {
-    console.debug(`[Performance] ${label}: ${duration.toFixed(2)}ms`);
+    logger.debug(`[Performance] ${label}: ${duration.toFixed(2)}ms`);
   }
   
   return result;
@@ -129,7 +130,7 @@ export async function measureTimeAsync<T>(
   const duration = performance.now() - start;
   
   if (label) {
-    console.debug(`[Performance] ${label}: ${duration.toFixed(2)}ms`);
+    logger.debug(`[Performance] ${label}: ${duration.toFixed(2)}ms`);
   }
   
   return result;

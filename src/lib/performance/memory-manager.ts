@@ -2,6 +2,7 @@
  * Memory Manager
  * Monitors and optimizes memory usage for low-end devices
  */
+import { logger } from "@/lib/logger";
 
 interface MemoryInfo {
   usedJSHeapSize: number;
@@ -79,7 +80,7 @@ class MemoryManager {
       try {
         cb();
       } catch (e) {
-        console.warn('[MemoryManager] Cleanup callback failed:', e);
+        logger.warn('[MemoryManager] Cleanup callback failed:', e instanceof Error ? { message: e.message } : undefined);
       }
     });
 

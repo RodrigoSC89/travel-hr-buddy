@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
+import { logger } from "@/lib/logger";
 
 interface BandwidthConfig {
   maxImageSize: number;
@@ -268,7 +269,7 @@ export function useBandwidthOptimizer() {
 
       return unsubscribe;
     } catch (error) {
-      console.warn('BandwidthOptimizer init failed:', error);
+      logger.warn('BandwidthOptimizer init failed:', error instanceof Error ? { message: error.message } : undefined);
     }
   }, []);
 

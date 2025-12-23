@@ -2,6 +2,7 @@
 import { lazy, createElement } from "react";
 import type { LazyExoticComponent, ComponentType, FC } from "react";
 import { getRoutableModules } from "@/modules/registry";
+import { logger } from "@/lib/logger";
 
 export type ModuleRoute = {
   id: string;
@@ -58,7 +59,7 @@ export function getModuleRoutes(): ModuleRoute[] {
       const resolvedPath = resolveModulePath(m.path);
       
       if (!resolvedPath || !allModules[resolvedPath]) {
-        console.warn(`[ModuleRoutes] Module not found: ${m.id} (path: ${m.path})`);
+        logger.warn(`[ModuleRoutes] Module not found: ${m.id} (path: ${m.path})`);
         return null;
       }
 
