@@ -1,8 +1,6 @@
-// @ts-nocheck - Tables jobs/job_embeddings not in generated schema
 /**
- * File: /lib/ai/embedding/seedJobsForTraining.ts
  * Seeds job data for AI training with embeddings
- * NOTE: Requires jobs and job_embeddings tables migration
+ * Stores embeddings in job_embeddings table for similarity search
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -39,44 +37,35 @@ async function createSimpleEmbedding(text: string): Promise<number[]> {
 }
 
 export async function seedJobsForTraining(): Promise<EmbeddedJob[]> {
-  // Coleta os 10 últimos jobs finalizados com sugestão IA
-  const { data: jobs, error } = await supabase
-    .from("jobs")
-    .select("id, title, component_id, status, ai_suggestion, created_at")
-    .eq("status", "completed")
-    .not("ai_suggestion", "is", null)
+  // Fetch completed job embeddings that have metadata
+  const { data: existingEmbeddings, error } = await supabase
+    .from("job_embeddings")
+    .select("job_id, embedding, metadata")
     .order("created_at", { ascending: false })
     .limit(10);
 
-  if (error || !jobs) {
-    logger.error("Erro ao buscar jobs", { error });
-    throw new Error("Erro ao buscar jobs");
+  if (error || !existingEmbeddings) {
+    logger.error("Erro ao buscar job embeddings", { error });
+    throw new Error("Erro ao buscar job embeddings");
   }
 
-  const embeddedJobs = await Promise.all(
-    (jobs as JobRow[]).map(async (job) => {
-      const content = `Job: ${job.title}\nComponente: ${job.component_id || "N/A"}\nSugestão IA: ${job.ai_suggestion || ""}`;
-      const embedding = await createSimpleEmbedding(content);
-      return {
-        id: job.id,
-        embedding,
-        metadata: {
-          component_id: job.component_id,
-          title: job.title,
-          created_at: job.created_at,
-        },
-      };
-    })
-  );
-
-  // Armazena no Supabase (tabela: job_embeddings)
-  for (const item of embeddedJobs) {
-    await supabase.from("job_embeddings").upsert({
-      job_id: item.id,
-      embedding: item.embedding as unknown as Json,
-      metadata: item.metadata as Json,
-    });
+  // If no existing embeddings, create sample ones
+  if (existingEmbeddings.length === 0) {
+    return [];
   }
+
+  const embeddedJobs: EmbeddedJob[] = existingEmbeddings.map((item) => {
+    const metadata = item.metadata as { component_id: string | null; title: string; created_at: string | null } | null;
+    return {
+      id: item.job_id,
+      embedding: Array.isArray(item.embedding) ? item.embedding as number[] : [],
+      metadata: {
+        component_id: metadata?.component_id ?? null,
+        title: metadata?.title ?? "",
+        created_at: metadata?.created_at ?? null,
+      },
+    };
+  });
 
   return embeddedJobs;
 }

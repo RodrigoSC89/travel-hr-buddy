@@ -1,8 +1,6 @@
-// @ts-nocheck - Tables satcom_links/satcom_logs not in generated schema
 /**
- * PATCH 476: SATCOM Ping Service
+ * SATCOM Ping Service
  * Simulates satellite link pings and monitors connectivity
- * NOTE: Requires satcom_links and satcom_logs tables migration
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -76,10 +74,10 @@ class SatcomPingService {
   /**
    * Create or update a satcom link
    */
-  async upsertLink(link: Partial<SatcomLink>): Promise<SatcomLink | null> {
+  async upsertLink(link: Partial<SatcomLink> & { name: string; provider: SatcomProvider; priority: number; is_primary: boolean }): Promise<SatcomLink | null> {
     const { data, error } = await supabase
       .from("satcom_links")
-      .upsert(link)
+      .upsert([link])
       .select()
       .single();
 
@@ -252,11 +250,11 @@ class SatcomPingService {
     const failed = logs.filter(log => log.status !== "success").length;
     
     const latencies = logs
-      .filter(log => log.latency_ms !== null)
+      .filter((log): log is SatcomLog & { latency_ms: number } => log.latency_ms !== null)
       .map(log => log.latency_ms);
     
     const signals = logs
-      .filter(log => log.signal_strength !== null)
+      .filter((log): log is SatcomLog & { signal_strength: number } => log.signal_strength !== null)
       .map(log => log.signal_strength);
     
     const avgLatency = latencies.length > 0

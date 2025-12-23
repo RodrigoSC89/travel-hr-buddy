@@ -1,8 +1,6 @@
-// @ts-nocheck - Requires compliance_audit_logs table migration and onnxruntime-web ambient types
 /**
  * AI Compliance Engine
  * ONNX-based compliance scoring for maritime regulations (IMCA, ISM, ISPS, NORMAM)
- * NOTE: Tables required: compliance_audit_logs
  */
 import * as ort from "onnxruntime-web";
 import { logger } from "@/lib/logger";
@@ -79,10 +77,19 @@ export async function runComplianceAudit(data: any) {
   return { score: weightedScore, complianceLevel };
 }
 
+interface IncidentData {
+  dpLoss?: boolean;
+  sensorMisalignment?: boolean;
+  ismNonCompliance?: boolean;
+  ispsNonCompliance?: boolean;
+  asogDeviations?: boolean;
+  fmeaDeviations?: boolean;
+}
+
 /**
  * Convert incident object data to array format for ONNX model
  */
-function convertIncidentDataToArray(data) {
+function convertIncidentDataToArray(data: IncidentData): number[] {
   return [
     data.dpLoss ? 0.0 : 1.0,
     data.sensorMisalignment ? 0.0 : 1.0,
