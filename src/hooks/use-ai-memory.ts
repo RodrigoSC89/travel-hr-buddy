@@ -5,6 +5,7 @@
 
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface AIMemoryEvent {
   context: string;
@@ -45,10 +46,10 @@ export function useAIMemory(): UseAIMemoryReturn {
         .insert([{
           event_type: memory.type,
           context: memory.context,
-          event_data: memory.data,
+          event_data: memory.data as Json,
           user_id: userData?.user?.id || null,
           confidence: 1.0,
-          metadata: { source: "useAIMemory" }
+          metadata: { source: "useAIMemory" } as Json
         }]);
 
       if (insertError) {
