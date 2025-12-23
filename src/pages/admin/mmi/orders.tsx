@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,7 +77,7 @@ export default function MMIOrdersPage() {
         throw new Error(data?.error || "Erro ao atualizar");
       }
     } catch (error) {
-      console.error("Error updating work order:", error);
+      logger.error("Error updating work order:", error);
       toast({
         title: "❌ Erro ao atualizar",
         description: error instanceof Error ? error.message : "Erro desconhecido",

@@ -50,7 +50,7 @@ class ServiceWorkerManager {
 
       return true;
     } catch (error) {
-      console.error('Service Worker registration failed:', error);
+      logger.error('Service Worker registration failed:', error);
       return false;
     }
   }
@@ -62,11 +62,11 @@ class ServiceWorkerManager {
       const success = await this.registration.unregister();
       if (success) {
         this.registration = null;
-        console.log('Service Worker unregistered');
+        logger.info('Service Worker unregistered');
       }
       return success;
     } catch (error) {
-      console.error('Service Worker unregistration failed:', error);
+      logger.error('Service Worker unregistration failed:', error);
       return false;
     }
   }
@@ -76,9 +76,9 @@ class ServiceWorkerManager {
 
     try {
       await this.registration.update();
-      console.log('Service Worker update check completed');
+      logger.info('Service Worker update check completed');
     } catch (error) {
-      console.error('Service Worker update failed:', error);
+      logger.error('Service Worker update failed:', error);
     }
   }
 
@@ -181,7 +181,7 @@ class ServiceWorkerManager {
 
     switch (type) {
       case 'CACHE_UPDATED':
-        console.log('Cache updated:', payload);
+        logger.info('Cache updated:', payload);
         break;
       case 'OFFLINE':
         this.config.onOffline?.();
