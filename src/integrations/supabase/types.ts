@@ -7954,6 +7954,39 @@ export type Database = {
         }
         Relationships: []
       }
+      incident_comments: {
+        Row: {
+          attachments: Json | null
+          comment_text: string
+          comment_type: string | null
+          created_at: string | null
+          created_by: string | null
+          has_attachments: boolean | null
+          id: string
+          incident_id: string
+        }
+        Insert: {
+          attachments?: Json | null
+          comment_text: string
+          comment_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          has_attachments?: boolean | null
+          id?: string
+          incident_id: string
+        }
+        Update: {
+          attachments?: Json | null
+          comment_text?: string
+          comment_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          has_attachments?: boolean | null
+          id?: string
+          incident_id?: string
+        }
+        Relationships: []
+      }
       incident_drills: {
         Row: {
           ai_generated: boolean | null
@@ -8095,6 +8128,51 @@ export type Database = {
           status?: string
           title?: string
           type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      incident_types: {
+        Row: {
+          auto_notify_roles: string[] | null
+          category: string
+          created_at: string | null
+          default_severity: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          requires_immediate_action: boolean | null
+          requires_investigation: boolean | null
+          response_sla_hours: number | null
+          type_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          auto_notify_roles?: string[] | null
+          category: string
+          created_at?: string | null
+          default_severity?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          requires_immediate_action?: boolean | null
+          requires_investigation?: boolean | null
+          response_sla_hours?: number | null
+          type_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          auto_notify_roles?: string[] | null
+          category?: string
+          created_at?: string | null
+          default_severity?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          requires_immediate_action?: boolean | null
+          requires_investigation?: boolean | null
+          response_sla_hours?: number | null
+          type_name?: string
           updated_at?: string | null
         }
         Relationships: []
@@ -12691,6 +12769,215 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      risk_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          action_required: boolean | null
+          alert_type: string
+          created_at: string | null
+          id: string
+          message: string | null
+          resolved: boolean | null
+          resolved_at: string | null
+          risk_assessment_id: string | null
+          severity: string
+          title: string
+          vessel_id: string | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          action_required?: boolean | null
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          risk_assessment_id?: string | null
+          severity: string
+          title: string
+          vessel_id?: string | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          action_required?: boolean | null
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          risk_assessment_id?: string | null
+          severity?: string
+          title?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "risk_alerts_risk_assessment_id_fkey"
+            columns: ["risk_assessment_id"]
+            isOneToOne: false
+            referencedRelation: "risk_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      risk_assessments: {
+        Row: {
+          affected_areas: string[] | null
+          ai_classification: Json | null
+          assessed_at: string | null
+          created_at: string | null
+          id: string
+          linked_findings: string[] | null
+          mitigation_actions: Json | null
+          module_type: string
+          risk_description: string | null
+          risk_level: string
+          risk_score: number
+          risk_title: string
+          risk_type: string
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          affected_areas?: string[] | null
+          ai_classification?: Json | null
+          assessed_at?: string | null
+          created_at?: string | null
+          id?: string
+          linked_findings?: string[] | null
+          mitigation_actions?: Json | null
+          module_type: string
+          risk_description?: string | null
+          risk_level: string
+          risk_score: number
+          risk_title: string
+          risk_type: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          affected_areas?: string[] | null
+          ai_classification?: Json | null
+          assessed_at?: string | null
+          created_at?: string | null
+          id?: string
+          linked_findings?: string[] | null
+          mitigation_actions?: Json | null
+          module_type?: string
+          risk_description?: string | null
+          risk_level?: string
+          risk_score?: number
+          risk_title?: string
+          risk_type?: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
+      risk_heatmap_data: {
+        Row: {
+          coordinates: Json | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          module_type: string
+          period_date: string | null
+          region: string | null
+          risk_count: number | null
+          risk_intensity: number
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          coordinates?: Json | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          module_type: string
+          period_date?: string | null
+          region?: string | null
+          risk_count?: number | null
+          risk_intensity: number
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          coordinates?: Json | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          module_type?: string
+          period_date?: string | null
+          region?: string | null
+          risk_count?: number | null
+          risk_intensity?: number
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
+      risk_trends: {
+        Row: {
+          average_risk_score: number | null
+          created_at: string | null
+          critical_risks_count: number | null
+          high_risks_count: number | null
+          id: string
+          key_issues: Json | null
+          low_risks_count: number | null
+          medium_risks_count: number | null
+          module_type: string
+          period_end: string
+          period_start: string
+          trend_direction: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          average_risk_score?: number | null
+          created_at?: string | null
+          critical_risks_count?: number | null
+          high_risks_count?: number | null
+          id?: string
+          key_issues?: Json | null
+          low_risks_count?: number | null
+          medium_risks_count?: number | null
+          module_type: string
+          period_end: string
+          period_start: string
+          trend_direction?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          average_risk_score?: number | null
+          created_at?: string | null
+          critical_risks_count?: number | null
+          high_risks_count?: number | null
+          id?: string
+          key_issues?: Json | null
+          low_risks_count?: number | null
+          medium_risks_count?: number | null
+          module_type?: string
+          period_end?: string
+          period_start?: string
+          trend_direction?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
       }
       rls_access_logs: {
         Row: {

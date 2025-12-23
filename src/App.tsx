@@ -61,16 +61,10 @@ import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
-// Lazy load context providers to avoid React instance issues
-const TenantProvider = React.lazy(() => 
-  import("./contexts/TenantContext").then(m => ({ default: m.TenantProvider }))
-);
-const OrganizationProvider = React.lazy(() => 
-  import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
-);
-const GlobalBrainProvider = React.lazy(() => 
-  import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
-);
+// Direct imports for context providers to avoid React instance issues with lazy loading
+import { TenantProvider } from "./contexts/TenantContext";
+import { OrganizationProvider } from "./contexts/OrganizationContext";
+import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
 
 // Core pages - Lazy loading
 const Index = React.lazy(() => import("@/pages/Index"));
