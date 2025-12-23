@@ -1,4 +1,9 @@
-// @ts-nocheck - Requires compliance_audit_logs table schema and onnxruntime-web types
+// @ts-nocheck - Requires compliance_audit_logs table migration and onnxruntime-web ambient types
+/**
+ * AI Compliance Engine
+ * ONNX-based compliance scoring for maritime regulations (IMCA, ISM, ISPS, NORMAM)
+ * NOTE: Tables required: compliance_audit_logs
+ */
 import * as ort from "onnxruntime-web";
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";

@@ -1,10 +1,21 @@
-// @ts-nocheck
 /**
  * PATCH 481 - AI Incident Replay Service
  * Provides AI-powered incident analysis, root cause identification, and recommendations
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
+
+interface IncidentData {
+  id: string;
+  title: string;
+  severity: string;
+  status: string;
+  reported_at: string;
+  updated_at?: string;
+  closed_at?: string;
+  assigned_to?: string;
+}
 
 export interface IncidentReplayRequest {
   incidentId: string;
@@ -46,6 +57,8 @@ export class AIIncidentReplayService {
 
       if (incidentError) throw incidentError;
       if (!incident) throw new Error("Incident not found");
+      
+      const incidentData = incident as IncidentData;
 
       // 2. Update replay status
       await supabase
@@ -58,16 +71,16 @@ export class AIIncidentReplayService {
 
       switch (request.replayType) {
       case "full":
-        result = await this.performFullAnalysis(incident);
+        result = await this.performFullAnalysis(incidentData);
         break;
       case "quick":
-        result = await this.performQuickAnalysis(incident);
+        result = await this.performQuickAnalysis(incidentData);
         break;
       case "root_cause":
-        result = await this.performRootCauseAnalysis(incident);
+        result = await this.performRootCauseAnalysis(incidentData);
         break;
       case "timeline":
-        result = await this.performTimelineAnalysis(incident);
+        result = await this.performTimelineAnalysis(incidentData);
         break;
       default:
         throw new Error(`Unknown replay type: ${request.replayType}`);
@@ -77,14 +90,14 @@ export class AIIncidentReplayService {
       await supabase
         .from("incident_reports")
         .update({
-          ai_analysis: result,
+          ai_analysis: JSON.parse(JSON.stringify(result)),
           replay_status: "completed"
         })
         .eq("id", request.incidentId);
 
       return result;
     } catch (error) {
-      console.error("Error replaying incident:", error);
+      logger.error("Error replaying incident:", { error });
       
       // Update status to failed
       await supabase
@@ -99,7 +112,7 @@ export class AIIncidentReplayService {
   /**
    * Perform full incident analysis
    */
-  private async performFullAnalysis(incident: any): Promise<IncidentReplayResult> {
+  private async performFullAnalysis(incident: IncidentData): Promise<IncidentReplayResult> {
     // Simulate AI analysis - in production, call actual AI service
     const result: IncidentReplayResult = {
       incidentId: incident.id,
@@ -110,7 +123,7 @@ export class AIIncidentReplayService {
       analysis: {
         summary: `Incident "${incident.title}" occurred on ${new Date(incident.reported_at).toLocaleDateString()}. Severity: ${incident.severity}.`,
         impactAssessment: this.assessImpact(incident),
-        preventiveMeasures: this.generatePreventiveMeasures(incident),
+        preventiveMeasures: this.generatePreventiveMeasures(),
         similarIncidents: await this.findSimilarIncidents(incident)
       },
       confidence: 85,
@@ -123,14 +136,14 @@ export class AIIncidentReplayService {
   /**
    * Perform quick analysis
    */
-  private async performQuickAnalysis(incident: any): Promise<IncidentReplayResult> {
+  private async performQuickAnalysis(incident: IncidentData): Promise<IncidentReplayResult> {
     return {
       incidentId: incident.id,
       replayType: "quick",
       analysis: {
         summary: `Quick analysis of incident "${incident.title}". Severity: ${incident.severity}.`,
         impactAssessment: this.assessImpact(incident),
-        preventiveMeasures: this.generatePreventiveMeasures(incident).slice(0, 3),
+        preventiveMeasures: this.generatePreventiveMeasures().slice(0, 3),
         similarIncidents: []
       },
       confidence: 75,
@@ -141,7 +154,7 @@ export class AIIncidentReplayService {
   /**
    * Perform root cause analysis
    */
-  private async performRootCauseAnalysis(incident: any): Promise<IncidentReplayResult> {
+  private async performRootCauseAnalysis(incident: IncidentData): Promise<IncidentReplayResult> {
     return {
       incidentId: incident.id,
       replayType: "root_cause",
@@ -155,7 +168,7 @@ export class AIIncidentReplayService {
   /**
    * Perform timeline analysis
    */
-  private async performTimelineAnalysis(incident: any): Promise<IncidentReplayResult> {
+  private async performTimelineAnalysis(incident: IncidentData): Promise<IncidentReplayResult> {
     return {
       incidentId: incident.id,
       replayType: "timeline",
@@ -168,7 +181,7 @@ export class AIIncidentReplayService {
   /**
    * Identify root cause based on incident data
    */
-  private identifyRootCause(incident: any): string {
+  private identifyRootCause(incident: IncidentData): string {
     // Simulate AI-based root cause identification
     const severityMap: Record<string, string> = {
       critical: "System failure or human error in critical operations",
@@ -183,7 +196,7 @@ export class AIIncidentReplayService {
   /**
    * Generate AI-based recommendations
    */
-  private generateRecommendations(incident: any): string[] {
+  private generateRecommendations(incident: IncidentData): string[] {
     const baseRecommendations = [
       "Conduct thorough investigation to confirm root cause",
       "Update relevant documentation and procedures",
@@ -205,7 +218,7 @@ export class AIIncidentReplayService {
   /**
    * Generate incident timeline
    */
-  private generateTimeline(incident: any): Array<{
+  private generateTimeline(incident: IncidentData): Array<{
     timestamp: string;
     event: string;
     severity: string;
@@ -240,7 +253,7 @@ export class AIIncidentReplayService {
   /**
    * Assess incident impact
    */
-  private assessImpact(incident: any): string {
+  private assessImpact(incident: IncidentData): string {
     const impactMap: Record<string, string> = {
       critical: "High impact - immediate attention required. Potential for significant operational disruption or safety concerns.",
       high: "Moderate to high impact - prompt response needed. May affect operational efficiency or safety protocols.",
@@ -254,7 +267,7 @@ export class AIIncidentReplayService {
   /**
    * Generate preventive measures
    */
-  private generatePreventiveMeasures(incident: any): string[] {
+  private generatePreventiveMeasures(): string[] {
     return [
       "Enhance monitoring and early warning systems",
       "Strengthen safety protocols and checklists",
@@ -268,7 +281,7 @@ export class AIIncidentReplayService {
   /**
    * Find similar incidents in the database
    */
-  private async findSimilarIncidents(incident: any): Promise<string[]> {
+  private async findSimilarIncidents(incident: IncidentData): Promise<string[]> {
     try {
       const { data, error } = await supabase
         .from("incident_reports")
@@ -279,9 +292,9 @@ export class AIIncidentReplayService {
 
       if (error) throw error;
 
-      return (data || []).map(i => `${i.title} (${i.severity})`);
+      return (data || []).map((i: { title: string; severity: string }) => `${i.title} (${i.severity})`);
     } catch (error) {
-      console.error("Error finding similar incidents:", error);
+      logger.error("Error finding similar incidents:", { error });
       return [];
     }
   }
@@ -300,7 +313,7 @@ export class AIIncidentReplayService {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error("Error fetching incident analysis:", error);
+      logger.error("Error fetching incident analysis:", { error });
       throw error;
     }
   }
