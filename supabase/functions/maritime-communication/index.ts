@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -7,19 +6,56 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+interface CommunicationRequest {
+  vessel_id: string;
+  message_type?: "general" | "emergency" | "weather_alert" | "maintenance";
+  content: string;
+  priority?: "normal" | "high" | "critical";
+  coordinates?: { lat: number; lng: number };
+}
+
+interface MaritimeMessage {
+  id: string;
+  vessel_id: string;
+  message_type: string;
+  content: string;
+  priority: string;
+  coordinates: { lat: number; lng: number } | null;
+  status: string;
+  sent_at: string;
+}
+
+interface Notification {
+  type: string;
+  title: string;
+  message: string;
+  priority: string;
+  metadata: Record<string, unknown>;
+}
+
+serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Missing Supabase configuration");
+    }
+    
+    const supabaseClient: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
-    const { vessel_id, message_type = "general", content, priority = "normal", coordinates } = await req.json();
+    const { 
+      vessel_id, 
+      message_type = "general", 
+      content, 
+      priority = "normal", 
+      coordinates 
+    }: CommunicationRequest = await req.json();
 
     console.log("Processing real-time maritime communication:", { vessel_id, message_type, priority });
 
@@ -43,8 +79,10 @@ serve(async (req) => {
       throw messageError;
     }
 
+    const typedMessage = message as MaritimeMessage;
+
     // Create notifications for relevant parties based on message type
-    const notifications = [];
+    const notifications: Notification[] = [];
     
     if (message_type === "emergency") {
       // Notify all fleet managers and coast guard
@@ -53,7 +91,7 @@ serve(async (req) => {
         title: "EMERGÊNCIA MARÍTIMA",
         message: `Emergência reportada pela embarcação ${vessel_id}: ${content}`,
         priority: "critical",
-        metadata: { vessel_id, coordinates, message_id: message.id }
+        metadata: { vessel_id, coordinates, message_id: typedMessage.id }
       });
     } else if (message_type === "weather_alert") {
       // Notify nearby vessels
@@ -62,7 +100,7 @@ serve(async (req) => {
         title: "Alerta Meteorológico",
         message: `Condições meteorológicas adversas reportadas: ${content}`,
         priority: "high",
-        metadata: { vessel_id, coordinates, message_id: message.id }
+        metadata: { vessel_id, coordinates, message_id: typedMessage.id }
       });
     } else if (message_type === "maintenance") {
       // Notify maintenance team
@@ -71,7 +109,7 @@ serve(async (req) => {
         title: "Solicitação de Manutenção",
         message: `Manutenção solicitada pela embarcação ${vessel_id}: ${content}`,
         priority: priority,
-        metadata: { vessel_id, message_id: message.id }
+        metadata: { vessel_id, message_id: typedMessage.id }
       });
     }
 
@@ -96,12 +134,12 @@ serve(async (req) => {
         timestamp: new Date().toISOString()
       });
 
-    console.log("Maritime communication processed successfully:", message.id);
+    console.log("Maritime communication processed successfully:", typedMessage.id);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message_id: message.id,
+        message_id: typedMessage.id,
         status: "delivered",
         notifications_created: notifications.length
       }),

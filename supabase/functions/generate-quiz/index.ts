@@ -1,7 +1,4 @@
-// @ts-nocheck
-// @ts-ignore: Deno types
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-// @ts-ignore: Deno types
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -23,6 +20,26 @@ interface Question {
   category?: string;
 }
 
+interface QuizTemplate {
+  id: string;
+  question: string;
+  options: string[];
+  correct_answer: string;
+  explanation: string | null;
+  category: string | null;
+  standard: string;
+  difficulty: string;
+  is_active: boolean;
+}
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
 serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -41,9 +58,14 @@ serve(async (req: Request) => {
     }
 
     // Initialize Supabase client
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error("Missing Supabase configuration");
+    }
+    
+    const supabase: SupabaseClient = createClient(supabaseUrl, supabaseServiceKey);
 
     // Try to fetch from quiz_templates first
     const { data: templates, error: templatesError } = await supabase
@@ -56,12 +78,12 @@ serve(async (req: Request) => {
 
     if (!templatesError && templates && templates.length >= count) {
       // Use existing templates
-      const questions: Question[] = templates.map((t: any) => ({
+      const questions: Question[] = (templates as QuizTemplate[]).map((t) => ({
         question: t.question,
         options: t.options,
         correct_answer: t.correct_answer,
-        explanation: t.explanation,
-        category: t.category,
+        explanation: t.explanation ?? undefined,
+        category: t.category ?? undefined,
       }));
 
       return new Response(
@@ -70,10 +92,10 @@ serve(async (req: Request) => {
       );
     }
 
-    // Try AI generation (GPT-4) if OpenAI key is available
-    const openaiKey = Deno.env.get("OPENAI_API_KEY");
+    // Try AI generation using Lovable AI Gateway
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
-    if (openaiKey) {
+    if (LOVABLE_API_KEY) {
       try {
         const prompt = `Generate ${count} multiple choice quiz questions about ${standard} at ${difficulty} difficulty level.
         
@@ -96,14 +118,14 @@ Format the response as a JSON array with this structure:
 
 Focus on real-world maritime compliance scenarios for ${standard}.`;
 
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${openaiKey}`,
+            "Authorization": `Bearer ${LOVABLE_API_KEY}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "gpt-4",
+            model: "google/gemini-2.5-flash",
             messages: [
               {
                 role: "system",
@@ -120,7 +142,7 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
         });
 
         if (response.ok) {
-          const data = await response.json();
+          const data: OpenAIResponse = await response.json();
           const content = data.choices[0].message.content;
           
           // Parse the JSON response
@@ -142,6 +164,10 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
               { headers: { ...corsHeaders, "Content-Type": "application/json" } }
             );
           }
+        } else if (response.status === 429) {
+          console.warn("AI rate limit exceeded, falling back to templates");
+        } else if (response.status === 402) {
+          console.warn("AI credits exhausted, falling back to templates");
         }
       } catch (aiError) {
         console.error("AI generation failed:", aiError);
@@ -159,7 +185,7 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
   } catch (error) {
     console.error("Error generating quiz:", error);
     return new Response(
-      JSON.stringify({ error: error.message || "Internal server error" }),
+      JSON.stringify({ error: error instanceof Error ? error.message : "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
@@ -168,7 +194,7 @@ Focus on real-world maritime compliance scenarios for ${standard}.`;
 function generateFallbackQuestions(standard: string, difficulty: string, count: number): Question[] {
   const questions: Question[] = [];
 
-  const questionTemplates = [
+  const questionTemplates: Question[] = [
     {
       question: `What is the primary purpose of ${standard}?`,
       options: [
