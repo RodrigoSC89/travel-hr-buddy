@@ -1,5 +1,8 @@
 project_id = "vnbptmixvwropvanyhdb"
 
+[functions.ai-lab-analyze]
+verify_jwt = false
+
 [functions.rule-engine-execute]
 verify_jwt = false
 
