@@ -2,10 +2,11 @@
  * Service Worker Registration
  * Registra e gerencia o Service Worker para cache offline
  */
+import { logger } from "@/lib/logger";
 
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!('serviceWorker' in navigator)) {
-    console.warn('[SW] Service Workers não suportados');
+    logger.warn('[SW] Service Workers não suportados');
     return null;
   }
 
@@ -14,7 +15,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
       scope: '/'
     });
 
-    console.log('[SW] Registrado com sucesso:', registration.scope);
+    logger.info('[SW] Registrado com sucesso:', registration.scope);
 
     // Verificar atualizações periodicamente
     setInterval(() => {

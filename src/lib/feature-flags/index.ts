@@ -2,6 +2,7 @@
  * Feature Flags System
  * Control feature rollout and A/B testing
  */
+import { logger } from "@/lib/logger";
 
 interface FeatureFlag {
   key: string;
@@ -115,7 +116,7 @@ class FeatureFlagsManager {
         this.notifyListeners();
       }
     } catch (error) {
-      console.warn('[FeatureFlags] Failed to fetch remote flags:', error);
+      logger.warn('[FeatureFlags] Failed to fetch remote flags:', error instanceof Error ? { message: error.message } : undefined);
     }
   }
 
