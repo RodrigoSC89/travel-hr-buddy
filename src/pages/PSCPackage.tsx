@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FC } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { Shield, AlertTriangle, Package, Download } from 'lucide-react';
 import { PSCPackagePanel } from '@/components/psc/PSCPackagePanel';
 
-const PSCPackagePage: React.FC = () => {
+const PSCPackagePage: FC = () => {
   return (
     <ModulePageWrapper gradient="orange">
       <ModuleHeader

@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FC } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { Brain, Shield, FileText, Activity } from 'lucide-react';
 import { AIAuditPanel } from '@/components/ai/AIAuditPanel';
 
-const AIAuditPage: React.FC = () => {
+const AIAuditPage: FC = () => {
   return (
     <ModulePageWrapper gradient="purple">
       <ModuleHeader

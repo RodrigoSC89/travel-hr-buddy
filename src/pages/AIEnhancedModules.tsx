@@ -1,8 +1,8 @@
 /**
- * AI Enhanced Modules - Página de demonstração de todos os módulos com IA
+ * AI Enhanced Modules - Uses named imports
  */
 
-import React from "react";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {

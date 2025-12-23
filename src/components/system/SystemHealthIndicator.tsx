@@ -1,9 +1,9 @@
 /**
- * System Health Indicator
- * PATCH 833: Compact system status display
+ * System Health Indicator - Uses named imports
  */
 
-import React from 'react';
+import { useState, useEffect } from 'react';
+import type { FC } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { 
   Tooltip, 

@@ -1,14 +1,14 @@
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { usePermissions } from "@/hooks/use-permissions";
 
 interface PermissionGuardProps {
   permission: "users" | "certificates" | "reports" | "system_settings" | "analytics";
   action?: "read" | "write" | "delete" | "manage";
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
+  children: ReactNode;
+  fallback?: ReactNode;
 }
 
-export const PermissionGuard: React.FC<PermissionGuardProps> = ({
+export const PermissionGuard: FC<PermissionGuardProps> = ({
   permission,
   action = "read",
   children,

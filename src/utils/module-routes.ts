@@ -1,11 +1,12 @@
-// PATCH 850.2 - Module Routes Loader (Simplified)
-import React from "react";
+// Module Routes Loader - Uses named imports
+import { lazy, createElement } from "react";
+import type { LazyExoticComponent, ComponentType, FC } from "react";
 import { getRoutableModules } from "@/modules/registry";
 
 export type ModuleRoute = {
   id: string;
   path: string;
-  component: React.LazyExoticComponent<React.ComponentType<unknown>>;
+  component: LazyExoticComponent<ComponentType<unknown>>;
 };
 
 // Glob import all pages - Vite handles this correctly
@@ -31,13 +32,13 @@ function resolveModulePath(registryPath: string): string {
 }
 
 // Fallback component for failed module loads
-const ModuleLoadError: React.FC<{ moduleId: string }> = ({ moduleId }) => {
-  return React.createElement(
+const ModuleLoadError: FC<{ moduleId: string }> = ({ moduleId }) => {
+  return createElement(
     'div',
     { className: 'p-8 text-center' },
-    React.createElement('h2', { className: 'text-xl font-bold text-destructive mb-2' }, 'Erro ao carregar módulo'),
-    React.createElement('p', { className: 'text-muted-foreground' }, `Módulo: ${moduleId}`),
-    React.createElement(
+    createElement('h2', { className: 'text-xl font-bold text-destructive mb-2' }, 'Erro ao carregar módulo'),
+    createElement('p', { className: 'text-muted-foreground' }, `Módulo: ${moduleId}`),
+    createElement(
       'button',
       { 
         className: 'mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md',
@@ -61,18 +62,18 @@ export function getModuleRoutes(): ModuleRoute[] {
         return null;
       }
 
-      const Component = React.lazy(async () => {
+      const Component = lazy(async () => {
         try {
           const mod = await (allModules[resolvedPath]() as Promise<Record<string, unknown>>);
           const exported = mod.default ?? Object.values(mod)[0];
           if (typeof exported === 'function') {
-            return { default: exported as React.ComponentType<unknown> };
+            return { default: exported as ComponentType<unknown> };
           }
           throw new Error('Invalid module export');
         } catch (err) {
           console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
           return { 
-            default: () => React.createElement(ModuleLoadError, { moduleId: m.id })
+            default: () => createElement(ModuleLoadError, { moduleId: m.id })
           };
         }
       });

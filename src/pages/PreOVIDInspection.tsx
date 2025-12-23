@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FC } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { Ship, FileCheck, Brain, ClipboardCheck } from 'lucide-react';
 import { OVIDInspectionDashboard } from '@/components/ovid/OVIDInspectionDashboard';
 
-const PreOVIDInspection: React.FC = () => {
+const PreOVIDInspection: FC = () => {
   return (
     <ModulePageWrapper gradient="blue">
       <ModuleHeader

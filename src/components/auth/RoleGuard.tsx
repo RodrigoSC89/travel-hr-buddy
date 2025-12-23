@@ -1,11 +1,8 @@
 /**
- * RoleGuard Component
- * PATCH 122.0 - RBAC Implementation
- * 
- * Protects routes and components based on user roles with fine-grained module permissions
+ * RoleGuard Component - Uses named imports
  */
 
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, AlertCircle } from "lucide-react";

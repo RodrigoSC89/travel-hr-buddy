@@ -1,10 +1,10 @@
-import React from 'react';
+import type { FC } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { FileText, Shield, History, Users } from 'lucide-react';
 import { DocumentWorkflowPanel } from '@/components/documents/DocumentWorkflowPanel';
 
-const DocumentWorkflowPage: React.FC = () => {
+const DocumentWorkflowPage: FC = () => {
   return (
     <ModulePageWrapper gradient="blue">
       <ModuleHeader
