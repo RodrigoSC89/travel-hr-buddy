@@ -242,6 +242,42 @@ function App() {
                         <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
                         <Route path="maintenance/planner" element={<Navigate to="/maintenance-planner" replace />} />
                         
+                        {/* Executive Dashboard - redirect to command center */}
+                        <Route path="executive-dashboard" element={
+                          <React.Suspense fallback={<OffshoreLoader />}>
+                            <Navigate to="/command-center" replace />
+                          </React.Suspense>
+                        } />
+                        
+                        {/* Additional Legacy Redirects */}
+                        <Route path="maritime" element={<Navigate to="/maritime-command" replace />} />
+                        <Route path="maritime-checklists" element={<Navigate to="/maritime-command" replace />} />
+                        <Route path="maritime-certifications" element={<Navigate to="/maritime-command" replace />} />
+                        <Route path="fleet" element={<Navigate to="/fleet-command" replace />} />
+                        <Route path="fleet-dashboard" element={<Navigate to="/fleet-command" replace />} />
+                        <Route path="fleet-tracking" element={<Navigate to="/fleet-command" replace />} />
+                        <Route path="operations-dashboard" element={<Navigate to="/operations-command" replace />} />
+                        <Route path="ai-insights" element={<Navigate to="/ai-command" replace />} />
+                        <Route path="intelligent-alerts" element={<Navigate to="/alerts-command" replace />} />
+                        <Route path="smart-mobility" element={<Navigate to="/travel-command" replace />} />
+                        <Route path="voyage-planner" element={<Navigate to="/voyage-command" replace />} />
+                        <Route path="mission-control" element={<Navigate to="/mission-command" replace />} />
+                        <Route path="maintenance-planner" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="intelligent-maintenance" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="mmi" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="mmi-tasks" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="mmi-forecast" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="mmi-history" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="mmi-jobs-panel" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="mmi-dashboard" element={<Navigate to="/maintenance-command" replace />} />
+                        <Route path="channel-manager" element={<Navigate to="/communication-command" replace />} />
+                        <Route path="weather-dashboard" element={<Navigate to="/weather-command" replace />} />
+                        <Route path="smart-workflow" element={<Navigate to="/workflow-command" replace />} />
+                        <Route path="workflow" element={<Navigate to="/workflow-command" replace />} />
+                        <Route path="finance" element={<Navigate to="/finance-command" replace />} />
+                        <Route path="reports" element={<Navigate to="/reports-command" replace />} />
+                        <Route path="incident-reports" element={<Navigate to="/reports-command" replace />} />
+                        
                         {/* 404 Route */}
                         <Route path="*" element={
                           <React.Suspense fallback={<OffshoreLoader />}>
