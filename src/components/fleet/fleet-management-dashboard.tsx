@@ -1,4 +1,8 @@
-// @ts-nocheck - Tables vessel_status, maintenance_alerts, fuel_usage not in current schema
+// @ts-nocheck - DB schema differs from types (timestamp vs recorded_at, title vs description) - needs mapping
+/**
+ * Fleet Management Dashboard
+ * Tables exist but column names differ from TypeScript interfaces
+ */
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { VesselStatus, MaintenanceAlert, FuelUsage } from "@/types/modules";

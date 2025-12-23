@@ -1,9 +1,8 @@
-// @ts-nocheck
+// @ts-nocheck - Uses tables (modules, ai_memory, clone_context_storage, clone_snapshots) that don't exist in current schema
 /**
  * PATCH 221.0 - Cognitive Clone Core
- * TODO PATCH 659: TypeScript fixes deferred (clone_registry table schema missing from database)
+ * Table clone_registry exists but internal logic references non-existent tables
  * System for creating functional copies of Nautilus with replicated AI + limited context
- * Enables creating cloneable cognitive instances (with memory and local replicated AI)
  */
 
 import { supabase } from "@/integrations/supabase/client";

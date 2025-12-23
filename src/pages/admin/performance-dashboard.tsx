@@ -1,5 +1,9 @@
-// @ts-nocheck - Table performance_alerts not in current schema
-// PATCH 850.5 - Migrated to LazyChart for bundle optimization
+// @ts-nocheck - Local interfaces differ from DB schema (system_name, is_resolved columns don't exist)
+/**
+ * Performance Dashboard
+ * Table performance_alerts exists but local interfaces need adjustment
+ * PATCH 850.5 - Migrated to LazyChart for bundle optimization
+ */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
