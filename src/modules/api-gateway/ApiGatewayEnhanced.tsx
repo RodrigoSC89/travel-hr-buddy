@@ -1,6 +1,7 @@
 /**
  * PATCH 300: Enhanced API Gateway
  * Added documentation generation and Markdown export
+ * NOTE: @ts-nocheck required due to dynamic API routes schema not in generated types
  */
 
 // @ts-nocheck
@@ -33,6 +34,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface APIRoute {
   id: string;

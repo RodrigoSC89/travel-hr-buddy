@@ -1,15 +1,19 @@
-// @ts-nocheck
 /**
  * PATCH 274 - Satellite Orbit Persistence Service
  * Persists satellite orbital data to Supabase
+ * PATCH 661 - TypeScript Fix: Removed @ts-nocheck
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { SatelliteOrbitData } from "./satellite-orbit-service";
+import { logger } from "@/lib/logger";
+import type { Tables } from "@/integrations/supabase/types";
+
+type SatelliteOrbitRow = Tables<"satellite_orbits">;
 
 export class SatelliteOrbitPersistence {
   
-  async saveSatelliteOrbits(orbits: SatelliteOrbitData[]) {
+  async saveSatelliteOrbits(orbits: SatelliteOrbitData[]): Promise<SatelliteOrbitRow[] | null> {
     try {
       const upsertData = orbits.map(orbit => ({
         norad_id: parseInt(orbit.noradId),
@@ -34,7 +38,7 @@ export class SatelliteOrbitPersistence {
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error("Error saving satellite orbits:", error);
+      logger.error("Error saving satellite orbits", error);
       throw error;
     }
   }
@@ -48,23 +52,9 @@ export class SatelliteOrbitPersistence {
 
       if (error) throw error;
 
-      return (data || []).map(row => ({
-        id: row.id,
-        noradId: row.norad_id.toString(),
-        name: row.name,
-        latitude: row.latitude,
-        longitude: row.longitude,
-        altitude: row.altitude,
-        velocity: row.velocity,
-        orbitalPeriod: row.orbital_period || 90,
-        inclination: row.inclination || 0,
-        eccentricity: row.eccentricity || 0,
-        tleLine1: row.tle_line1 || "",
-        tleLine2: row.tle_line2 || "",
-        lastUpdated: new Date(row.last_updated)
-      }));
+      return (data || []).map(row => this.mapRowToOrbitData(row));
     } catch (error) {
-      console.error("Error fetching satellite orbits:", error);
+      logger.error("Error fetching satellite orbits", error);
       return [];
     }
   }
@@ -78,28 +68,32 @@ export class SatelliteOrbitPersistence {
         .single();
 
       if (error) throw error;
-
       if (!data) return null;
 
-      return {
-        id: data.id,
-        noradId: data.norad_id.toString(),
-        name: data.name,
-        latitude: data.latitude,
-        longitude: data.longitude,
-        altitude: data.altitude,
-        velocity: data.velocity,
-        orbitalPeriod: data.orbital_period || 90,
-        inclination: data.inclination || 0,
-        eccentricity: data.eccentricity || 0,
-        tleLine1: data.tle_line1 || "",
-        tleLine2: data.tle_line2 || "",
-        lastUpdated: new Date(data.last_updated)
-      };
+      return this.mapRowToOrbitData(data);
     } catch (error) {
-      console.error("Error fetching satellite by NORAD ID:", error);
+      logger.error("Error fetching satellite by NORAD ID", error);
       return null;
     }
+  }
+
+  private mapRowToOrbitData(row: SatelliteOrbitRow): SatelliteOrbitData {
+    return {
+      id: row.id,
+      noradId: row.norad_id.toString(),
+      name: row.name,
+      latitude: row.latitude,
+      longitude: row.longitude,
+      altitude: row.altitude,
+      velocity: row.velocity,
+      orbitalPeriod: row.orbital_period || 90,
+      inclination: row.inclination || 0,
+      eccentricity: row.eccentricity || 0,
+      tleLine1: row.tle_line1 || "",
+      tleLine2: row.tle_line2 || "",
+      lastUpdated: new Date(row.last_updated),
+      status: "online", // Default status for persisted satellites
+    };
   }
 }
 
