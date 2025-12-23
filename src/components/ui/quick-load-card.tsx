@@ -1,4 +1,4 @@
-import React from "react";
+import type { ComponentType, FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,14 +7,14 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 interface QuickLoadCardProps {
   title: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   onClick: () => void;
   status?: string;
   isLoading?: boolean;
   badge?: string;
 }
 
-export const QuickLoadCard: React.FC<QuickLoadCardProps> = ({
+export const QuickLoadCard: FC<QuickLoadCardProps> = ({
   title,
   description,
   icon: Icon,

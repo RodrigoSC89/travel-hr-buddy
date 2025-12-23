@@ -1,13 +1,13 @@
-import * as React from "react";
-const { lazy, Suspense } = React;
+import { lazy, Suspense, createElement } from "react";
+import type { ComponentType, FC } from "react";
 
 /**
  * Utilitário de importação segura para módulos React,
  * com tratamento automático de erros de carregamento.
  */
 export function safeLazyImport(
-  importFn: () => Promise<{ default: React.ComponentType<any> }>
-): React.FC<any> {
+  importFn: () => Promise<{ default: ComponentType<any> }>
+): FC<any> {
   const LazyComponent = lazy(async () => {
     try {
       const module = await importFn();
@@ -15,14 +15,14 @@ export function safeLazyImport(
     } catch (error) {
       console.error("⚠️ Falha ao importar módulo:", error);
       return { 
-        default: () => React.createElement("div", { className: "p-4 text-red-500" }, "Erro ao carregar módulo.") 
+        default: () => createElement("div", { className: "p-4 text-red-500" }, "Erro ao carregar módulo.") 
       };
     }
   });
 
-  return (props: any) => React.createElement(
+  return (props: any) => createElement(
     Suspense,
-    { fallback: React.createElement("div", { className: "p-4 text-gray-400" }, "⏳ Carregando...") },
-    React.createElement(LazyComponent, props)
+    { fallback: createElement("div", { className: "p-4 text-gray-400" }, "⏳ Carregando...") },
+    createElement(LazyComponent, props)
   );
 }

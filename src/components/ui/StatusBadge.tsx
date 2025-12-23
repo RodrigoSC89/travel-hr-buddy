@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { getStatusColor, getStatusDot, getPriorityColor, getVesselStatusColor } from "@/lib/status-utils";
@@ -12,9 +12,8 @@ export interface StatusBadgeProps {
 
 /**
  * Unified StatusBadge component with semantic colors
- * Consolidates StatusBadge from enhanced-status-components.tsx
  */
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ 
+export const StatusBadge: FC<StatusBadgeProps> = ({ 
   status, 
   type = "default", 
   className,
@@ -51,9 +50,8 @@ export interface StatusIndicatorProps {
 
 /**
  * StatusIndicator with optional dot visualization
- * Consolidates StatusIndicator from enhanced-status-components.tsx
  */
-export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
+export const StatusIndicator: FC<StatusIndicatorProps> = ({
   status,
   label,
   showDot = true,

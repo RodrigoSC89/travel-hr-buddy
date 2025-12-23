@@ -1,10 +1,10 @@
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export interface EmptyStateProps {
-  icon: LucideIcon | React.ReactNode;
+  icon: LucideIcon | ReactNode;
   title: string;
   description: string;
   actionLabel?: string;
@@ -15,9 +15,8 @@ export interface EmptyStateProps {
 
 /**
  * Unified EmptyState component for displaying empty or no-data states
- * Consolidates empty-state.tsx and EmptyState from enhanced-status-components.tsx
  */
-export const EmptyState: React.FC<EmptyStateProps> = ({
+export const EmptyState: FC<EmptyStateProps> = ({
   icon,
   title,
   description,

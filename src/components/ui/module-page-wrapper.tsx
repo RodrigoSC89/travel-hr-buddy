@@ -1,8 +1,8 @@
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { cn } from "@/lib/utils";
 
 interface ModulePageWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
   gradient?: "blue" | "purple" | "green" | "orange" | "neutral";
   withBackButton?: boolean;
@@ -16,7 +16,7 @@ const gradientClasses = {
   neutral: "from-background via-muted/20 to-background",
 };
 
-export const ModulePageWrapper: React.FC<ModulePageWrapperProps> = ({
+export const ModulePageWrapper: FC<ModulePageWrapperProps> = ({
   children,
   className,
   gradient = "neutral",

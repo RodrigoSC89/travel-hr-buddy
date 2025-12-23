@@ -1,16 +1,16 @@
 /**
  * Professional Skeleton Loaders
- * PATCH 753 - Otimizado para conexões lentas
+ * Uses named imports to prevent multiple React instances
  */
-
-import React from "react";
+import { memo } from "react";
+import type { HTMLAttributes, FC } from "react";
 import { cn } from "@/lib/utils";
 
 // Base Skeleton com animação suave
-export const SkeletonBase = React.memo(({ 
+export const SkeletonBase = memo(({ 
   className, 
   ...props 
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "animate-pulse rounded-md bg-muted/50",
@@ -22,7 +22,7 @@ export const SkeletonBase = React.memo(({
 SkeletonBase.displayName = "SkeletonBase";
 
 // Skeleton para Cards de Métricas
-export const SkeletonMetricCard = React.memo(() => (
+export const SkeletonMetricCard = memo(() => (
   <div className="rounded-xl border border-border/50 bg-card p-6 space-y-4">
     <div className="flex items-center justify-between">
       <SkeletonBase className="h-4 w-24" />
@@ -35,7 +35,7 @@ export const SkeletonMetricCard = React.memo(() => (
 SkeletonMetricCard.displayName = "SkeletonMetricCard";
 
 // Skeleton para Tabelas
-export const SkeletonTable = React.memo(({ rows = 5 }: { rows?: number }) => (
+export const SkeletonTable = memo(({ rows = 5 }: { rows?: number }) => (
   <div className="rounded-xl border border-border/50 bg-card overflow-hidden">
     {/* Header */}
     <div className="border-b border-border/50 bg-muted/30 p-4">
@@ -62,7 +62,7 @@ export const SkeletonTable = React.memo(({ rows = 5 }: { rows?: number }) => (
 SkeletonTable.displayName = "SkeletonTable";
 
 // Skeleton para Charts
-export const SkeletonChart = React.memo(({ height = 200 }: { height?: number }) => (
+export const SkeletonChart = memo(({ height = 200 }: { height?: number }) => (
   <div className="rounded-xl border border-border/50 bg-card p-6 space-y-4">
     <div className="flex items-center justify-between">
       <SkeletonBase className="h-5 w-40" />
@@ -74,7 +74,7 @@ export const SkeletonChart = React.memo(({ height = 200 }: { height?: number }) 
 SkeletonChart.displayName = "SkeletonChart";
 
 // Skeleton para Lista de Items
-export const SkeletonList = React.memo(({ items = 4 }: { items?: number }) => (
+export const SkeletonList = memo(({ items = 4 }: { items?: number }) => (
   <div className="space-y-3">
     {Array.from({ length: items }).map((_, i) => (
       <div key={i} className="flex items-center gap-4 p-4 rounded-lg border border-border/30 bg-card">
@@ -91,7 +91,7 @@ export const SkeletonList = React.memo(({ items = 4 }: { items?: number }) => (
 SkeletonList.displayName = "SkeletonList";
 
 // Skeleton para Dashboard completo
-export const SkeletonDashboard = React.memo(() => (
+export const SkeletonDashboard = memo(() => (
   <div className="space-y-6 p-6">
     {/* Header */}
     <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export const SkeletonDashboard = React.memo(() => (
 SkeletonDashboard.displayName = "SkeletonDashboard";
 
 // Skeleton para Módulos
-export const SkeletonModule = React.memo(() => (
+export const SkeletonModule = memo(() => (
   <div className="space-y-6 p-6">
     {/* Module Header */}
     <div className="flex items-center gap-4">
@@ -153,7 +153,7 @@ export const SkeletonModule = React.memo(() => (
 SkeletonModule.displayName = "SkeletonModule";
 
 // Skeleton para Sidebar
-export const SkeletonSidebar = React.memo(() => (
+export const SkeletonSidebar = memo(() => (
   <div className="w-64 h-full bg-card border-r border-border/50 p-4 space-y-4">
     {/* Logo */}
     <div className="flex items-center gap-3 p-2">
@@ -175,7 +175,7 @@ export const SkeletonSidebar = React.memo(() => (
 SkeletonSidebar.displayName = "SkeletonSidebar";
 
 // Skeleton para Formulários
-export const SkeletonForm = React.memo(({ fields = 4 }: { fields?: number }) => (
+export const SkeletonForm = memo(({ fields = 4 }: { fields?: number }) => (
   <div className="space-y-6 p-6 rounded-xl border border-border/50 bg-card">
     <SkeletonBase className="h-6 w-48" />
     
@@ -197,7 +197,7 @@ export const SkeletonForm = React.memo(({ fields = 4 }: { fields?: number }) => 
 SkeletonForm.displayName = "SkeletonForm";
 
 // Connection-Aware Loading Message
-export const ConnectionAwareLoader = React.memo(({ 
+export const ConnectionAwareLoader = memo(({ 
   isSlowConnection = false,
   message = "Carregando..."
 }: { 

@@ -1,4 +1,4 @@
-import React from "react";
+import type { ReactNode, FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { cn } from "@/lib/utils";
@@ -7,26 +7,15 @@ export interface InfoCardProps {
   title: string;
   description?: string;
   status?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
   variant?: "default" | "success" | "warning" | "error" | "info";
   className?: string;
 }
 
 /**
  * Unified InfoCard component with proper contrast and variant styling
- * Extracted from enhanced-status-components.tsx
- * 
- * @example
- * <InfoCard
- *   title="System Status"
- *   description="All systems operational"
- *   variant="success"
- *   status="active"
- * >
- *   <p>Additional content here</p>
- * </InfoCard>
  */
-export const InfoCard: React.FC<InfoCardProps> = ({
+export const InfoCard: FC<InfoCardProps> = ({
   title,
   description,
   status,
