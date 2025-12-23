@@ -3223,6 +3223,59 @@ export type Database = {
           },
         ]
       }
+      compliance_audit_logs: {
+        Row: {
+          audit_type: string | null
+          created_at: string
+          id: string
+          level: string
+          metadata: Json | null
+          recommendations: Json | null
+          rules_evaluated: Json | null
+          score: number
+          timestamp: string
+          user_id: string | null
+          vessel_id: string | null
+          violations: Json | null
+        }
+        Insert: {
+          audit_type?: string | null
+          created_at?: string
+          id?: string
+          level: string
+          metadata?: Json | null
+          recommendations?: Json | null
+          rules_evaluated?: Json | null
+          score: number
+          timestamp?: string
+          user_id?: string | null
+          vessel_id?: string | null
+          violations?: Json | null
+        }
+        Update: {
+          audit_type?: string | null
+          created_at?: string
+          id?: string
+          level?: string
+          metadata?: Json | null
+          recommendations?: Json | null
+          rules_evaluated?: Json | null
+          score?: number
+          timestamp?: string
+          user_id?: string | null
+          vessel_id?: string | null
+          violations?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_audit_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       connected_integrations: {
         Row: {
           created_at: string | null
@@ -8487,6 +8540,33 @@ export type Database = {
         }
         Relationships: []
       }
+      job_embeddings: {
+        Row: {
+          created_at: string
+          embedding: Json
+          id: string
+          job_id: string
+          metadata: Json | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          embedding: Json
+          id?: string
+          job_id: string
+          metadata?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          embedding?: Json
+          id?: string
+          job_id?: string
+          metadata?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       joint_mission_log: {
         Row: {
           created_at: string
@@ -13317,6 +13397,124 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      satcom_links: {
+        Row: {
+          bandwidth_kbps: number | null
+          config: Json | null
+          created_at: string
+          failure_reason: string | null
+          id: string
+          is_primary: boolean
+          last_failure_at: string | null
+          last_ping_at: string | null
+          latency_ms: number | null
+          name: string
+          priority: number
+          provider: string
+          signal_strength: number | null
+          status: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          bandwidth_kbps?: number | null
+          config?: Json | null
+          created_at?: string
+          failure_reason?: string | null
+          id?: string
+          is_primary?: boolean
+          last_failure_at?: string | null
+          last_ping_at?: string | null
+          latency_ms?: number | null
+          name: string
+          priority?: number
+          provider: string
+          signal_strength?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          bandwidth_kbps?: number | null
+          config?: Json | null
+          created_at?: string
+          failure_reason?: string | null
+          id?: string
+          is_primary?: boolean
+          last_failure_at?: string | null
+          last_ping_at?: string | null
+          latency_ms?: number | null
+          name?: string
+          priority?: number
+          provider?: string
+          signal_strength?: number | null
+          status?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satcom_links_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      satcom_logs: {
+        Row: {
+          bandwidth_kbps: number | null
+          created_at: string
+          error_message: string | null
+          id: string
+          latency_ms: number | null
+          message_content: string | null
+          metadata: Json | null
+          provider: string
+          signal_strength: number | null
+          status: string
+          transmission_type: string
+          vessel_id: string | null
+        }
+        Insert: {
+          bandwidth_kbps?: number | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          latency_ms?: number | null
+          message_content?: string | null
+          metadata?: Json | null
+          provider: string
+          signal_strength?: number | null
+          status: string
+          transmission_type: string
+          vessel_id?: string | null
+        }
+        Update: {
+          bandwidth_kbps?: number | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          latency_ms?: number | null
+          message_content?: string | null
+          metadata?: Json | null
+          provider?: string
+          signal_strength?: number | null
+          status?: string
+          transmission_type?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satcom_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       satellite_events: {
         Row: {
