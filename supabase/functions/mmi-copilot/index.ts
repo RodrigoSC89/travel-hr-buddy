@@ -81,7 +81,7 @@ serve(async (req: Request) => {
     // Step 3: Build enriched prompt with historical context
     const historicalContext = similarJobs && similarJobs.length > 0
       ? similarJobs
-          .map((job, i) => 
+          .map((job: { title?: string; description?: string }, i: number) => 
             `Caso ${i + 1}: ${job.title} — ${job.description?.slice(0, 200) || 'Sem descrição'}...`
           )
           .join('\n')
