@@ -4,6 +4,7 @@
  * Valida todas as variáveis de ambiente necessárias
  * e fornece mensagens de erro claras
  */
+import { logger } from "@/lib/logger";
 
 interface EnvConfig {
   // Supabase
@@ -163,20 +164,16 @@ export function loadEnvConfig(): EnvConfig {
   // === PRINT RESULTS ===
   
   if (errors.length > 0) {
-    console.error('\n❌ CONFIGURATION ERRORS:\n');
-    errors.forEach(error => console.error(`  • ${error}`));
-    console.error('\n');
+    logger.error('CONFIGURATION ERRORS:', undefined, { errors });
     throw new Error('Invalid environment configuration. Please check .env file.');
   }
   
   if (warnings.length > 0) {
-    console.warn('\n⚠️  CONFIGURATION WARNINGS:\n');
-    warnings.forEach(warning => console.warn(`  • ${warning}`));
-    console.warn('\n');
+    logger.warn('CONFIGURATION WARNINGS:', { warnings });
   }
   
-  console.log('✅ Environment configuration validated successfully\n');
-  
+  logger.info('Environment configuration validated successfully');
+
   return {
     supabaseUrl,
     supabaseAnonKey,

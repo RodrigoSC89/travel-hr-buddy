@@ -4,6 +4,7 @@
  */
 
 import { lazy, ComponentType } from 'react';
+import { logger } from "@/lib/logger";
 
 // Wrapper para lazy loading com timeout e retry
 export const lazyWithRetry = <T extends ComponentType<any>>(
@@ -12,7 +13,7 @@ export const lazyWithRetry = <T extends ComponentType<any>>(
 ) => {
   return lazy(() =>
     importFn().catch((error) => {
-      console.error('Erro ao carregar módulo:', error);
+      logger.error('Erro ao carregar módulo', error);
       if (fallback) {
         return { default: fallback };
       }
@@ -52,7 +53,7 @@ export const preloadCriticalModules = () => {
       import('@/modules/intelligence/smart-workflow'),
     ];
     
-    Promise.all(criticalModules).catch(console.error);
+    Promise.all(criticalModules).catch((err) => logger.error('Failed to preload modules', err));
   }, 3000);
 };
 
@@ -62,7 +63,7 @@ export const shouldLoadHeavyModule = (moduleName: string): boolean => {
   const memory = (performance as any).memory;
   if (memory && memory.jsHeapSizeLimit < 2000000000) {
     // Menos de 2GB de heap: não carregar módulos pesados
-    console.warn(`Módulo ${moduleName} desabilitado: memória insuficiente`);
+    logger.warn(`Módulo ${moduleName} desabilitado: memória insuficiente`);
     return false;
   }
   

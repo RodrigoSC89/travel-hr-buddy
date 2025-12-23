@@ -4,6 +4,7 @@
  */
 
 import { lazy, ComponentType, LazyExoticComponent } from 'react';
+import { logger } from "@/lib/logger";
 
 interface ModuleConfig {
   id: string;
@@ -58,7 +59,7 @@ class ModuleLoader {
   getComponent(moduleId: string): LazyExoticComponent<ComponentType<any>> | null {
     const config = this.modules.get(moduleId);
     if (!config || !config.enabled) {
-      console.warn(`[ModuleLoader] Module "${moduleId}" not found or disabled`);
+      logger.warn(`[ModuleLoader] Module "${moduleId}" not found or disabled`);
       return null;
     }
     

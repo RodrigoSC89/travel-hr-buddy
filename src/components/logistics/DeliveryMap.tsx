@@ -4,12 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Truck, Package } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { logger } from "@/lib/logger";
 
 // Set your Mapbox access token (should be in environment variables)
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
 
 if (!MAPBOX_TOKEN) {
-  console.warn("Mapbox token not configured. Map functionality will be limited.");
+  logger.warn("Mapbox token not configured. Map functionality will be limited.");
 }
 
 interface DeliveryLocation {

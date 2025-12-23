@@ -2,6 +2,7 @@
  * PATCH 633: AI Plugin System Interface
  * Standardized interface for dynamically loadable AI plugins
  */
+import { logger } from "@/lib/logger";
 
 export interface AIPluginMetadata {
   name: string;
@@ -61,7 +62,7 @@ class AIPluginRegistry {
 
   register(plugin: AIPlugin): void {
     if (this.plugins.has(plugin.metadata.name)) {
-      console.warn(`Plugin ${plugin.metadata.name} already registered, overwriting`);
+      logger.warn(`Plugin ${plugin.metadata.name} already registered, overwriting`);
     }
     this.plugins.set(plugin.metadata.name, plugin);
   }

@@ -2,6 +2,7 @@
  * AI Response Cache - PATCH 975
  * Semantic caching for AI responses with fast lookup
  */
+import { logger } from "@/lib/logger";
 
 interface CachedResponse {
   query: string;
@@ -317,7 +318,7 @@ class AIResponseCache {
       const data = Array.from(this.cache.entries());
       localStorage.setItem('ai_response_cache', JSON.stringify(data));
     } catch (e) {
-      console.warn('[AICache] Failed to save to storage:', e);
+      logger.warn('[AICache] Failed to save to storage', e instanceof Error ? { message: e.message } : undefined);
     }
   }
   
