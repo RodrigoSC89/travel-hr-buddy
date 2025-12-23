@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import type { Checklist, ChecklistTemplate } from "@/components/maritime-checklists/checklist-types";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -142,7 +143,7 @@ const parseJsonContent = (value: unknown): Record<string, unknown> => {
     try {
       return JSON.parse(value) as Record<string, unknown>;
     } catch (err) {
-      console.warn("Unable to parse template content as JSON", err);
+      logger.warn("Unable to parse template content as JSON", err instanceof Error ? { message: err.message } : undefined);
       return {};
     }
   }

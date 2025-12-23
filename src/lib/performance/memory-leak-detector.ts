@@ -183,7 +183,7 @@ class MemoryLeakDetector {
   requestGC(): void {
     if ((window as any).gc) {
       (window as any).gc();
-      console.log('[MemoryLeakDetector] GC requested');
+      logger.info('[MemoryLeakDetector] GC requested');
     }
   }
   

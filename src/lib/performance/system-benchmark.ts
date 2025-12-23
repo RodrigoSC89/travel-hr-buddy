@@ -25,7 +25,7 @@ class SystemBenchmark {
   private readonly MAX_HISTORY = 10;
 
   async runFullBenchmark(): Promise<BenchmarkResult> {
-    console.log('[Benchmark] Starting full system benchmark...');
+    logger.info('[Benchmark] Starting full system benchmark...');
     
     const [
       diskRead,
@@ -64,7 +64,7 @@ class SystemBenchmark {
     };
 
     this.saveResult(result);
-    console.log('[Benchmark] Complete:', result);
+    logger.info('[Benchmark] Complete:', result);
     
     return result;
   }
