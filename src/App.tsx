@@ -7,6 +7,7 @@ import type { ReactNode, ErrorInfo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
+import { logger } from "@/lib/logger";
 
 // Import AuthProvider from contexts
 import { AuthProvider } from "./contexts/AuthContext";
@@ -98,7 +99,7 @@ function App() {
     try {
       return getModuleRoutes();
     } catch (e) {
-      console.warn("Failed to load module routes:", e);
+      logger.warn("Failed to load module routes:", { error: e });
       return [];
     }
   }, []);

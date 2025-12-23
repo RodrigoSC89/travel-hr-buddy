@@ -36,7 +36,7 @@ const AuthContext = createContext<AuthContextType>(defaultAuthValue);
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
-    console.warn("useAuth called outside of AuthProvider, returning default value");
+    Logger.warn("useAuth called outside of AuthProvider, returning default value");
     return defaultAuthValue;
   }
   return context;
