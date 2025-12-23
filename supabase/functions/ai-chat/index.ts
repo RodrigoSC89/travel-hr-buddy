@@ -1,4 +1,3 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -7,66 +6,34 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Retry configuration
-const MAX_RETRIES = 3;
-const INITIAL_RETRY_DELAY = 1000; // 1 second
-const MAX_RETRY_DELAY = 10000; // 10 seconds
-const REQUEST_TIMEOUT = 30000; // 30 seconds
-
-// Exponential backoff with jitter
-const getRetryDelay = (attempt: number): number => {
-  const exponentialDelay = Math.min(INITIAL_RETRY_DELAY * Math.pow(2, attempt), MAX_RETRY_DELAY);
-  const jitter = Math.random() * 0.3 * exponentialDelay; // 0-30% jitter
-  return exponentialDelay + jitter;
-};
-
-// Check if error is retryable
-const isRetryableError = (status?: number, error?: Error): boolean => {
-  if (!status && error) {
-    // Network errors are retryable
-    return error.message.includes("fetch") || error.message.includes("network");
-  }
-  // Retry on 429 (rate limit), 500s (server errors), and 503 (service unavailable)
-  return status === 429 || (status !== undefined && status >= 500 && status < 600);
-};
-
-// Timeout wrapper for fetch
-const fetchWithTimeout = async (url: string, options: RequestInit, timeoutMs: number): Promise<Response> => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    clearTimeout(timeoutId);
-    throw error;
-  }
-};
-
-serve(async (req) => {
-  // Handle CORS preflight requests
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, context } = await req.json();
+    const { message, context, messages } = await req.json();
     
-    if (!message) {
+    if (!message && (!messages || messages.length === 0)) {
       throw new Error("Message is required");
     }
 
+    // Usar Lovable AI Gateway (preferencial) ou OpenAI como fallback
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-    if (!OPENAI_API_KEY) {
-      throw new Error("OPENAI_API_KEY is not set");
+    
+    if (!LOVABLE_API_KEY && !OPENAI_API_KEY) {
+      throw new Error("No AI API key configured");
     }
 
-    console.log("Processing chat request:", message);
+    const apiUrl = LOVABLE_API_KEY 
+      ? "https://ai.gateway.lovable.dev/v1/chat/completions"
+      : "https://api.openai.com/v1/chat/completions";
+    
+    const apiKey = LOVABLE_API_KEY || OPENAI_API_KEY;
+    const model = LOVABLE_API_KEY ? "google/gemini-2.5-flash" : "gpt-4o-mini";
+
+    console.log("Processing chat request with model:", model);
 
     const systemPrompt = `Você é um assistente corporativo inteligente chamado Nautilus Assistant. 
 
@@ -88,76 +55,56 @@ serve(async (req) => {
 
     ${context ? `Contexto adicional: ${context}` : ""}`;
 
-    const requestBody = {
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: message }
-      ],
-      temperature: 0.7,
-      max_tokens: 1000,
-    };
+    // Support both single message and array of messages
+    const chatMessages = messages || [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: message }
+    ];
 
-    // Retry logic with exponential backoff
-    let lastError: Error | null = null;
-    let response: Response | null = null;
-
-    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-      try {
-        console.log(`API request attempt ${attempt + 1}/${MAX_RETRIES + 1}`);
-        
-        response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        }, REQUEST_TIMEOUT);
-
-        if (response.ok) {
-          break; // Success, exit retry loop
-        }
-
-        // Check if we should retry
-        if (!isRetryableError(response.status)) {
-          const errorText = await response.text();
-          console.error("OpenAI API non-retryable error:", errorText);
-          throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
-        }
-
-        lastError = new Error(`HTTP ${response.status}`);
-        
-        // Wait before retrying (except on last attempt)
-        if (attempt < MAX_RETRIES) {
-          const delay = getRetryDelay(attempt);
-          console.log(`Retrying after ${delay}ms...`);
-          await new Promise(resolve => setTimeout(resolve, delay));
-        }
-      } catch (error) {
-        lastError = error as Error;
-        console.error(`Attempt ${attempt + 1} failed:`, error);
-        
-        // Don't retry on timeout or network errors on last attempt
-        if (attempt === MAX_RETRIES) {
-          throw new Error(`OpenAI API failed after ${MAX_RETRIES + 1} attempts: ${lastError.message}`);
-        }
-        
-        // Wait before retrying
-        const delay = getRetryDelay(attempt);
-        console.log(`Retrying after ${delay}ms...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
+    // Ensure system prompt is included if using messages array
+    if (messages && !messages.some((m: {role: string}) => m.role === "system")) {
+      chatMessages.unshift({ role: "system", content: systemPrompt });
     }
 
-    if (!response || !response.ok) {
-      throw new Error(`OpenAI API failed: ${lastError?.message || "Unknown error"}`);
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: chatMessages,
+        temperature: 0.7,
+        max_tokens: 1000,
+      }),
+    });
+
+    // Tratar rate limits e erros de pagamento
+    if (response.status === 429) {
+      return new Response(
+        JSON.stringify({ error: "Rate limit excedido. Tente novamente em alguns segundos." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    if (response.status === 402) {
+      return new Response(
+        JSON.stringify({ error: "Créditos de IA esgotados. Recarregue seu plano." }),
+        { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("AI API error:", response.status, errorText);
+      throw new Error(`AI API error: ${response.status}`);
     }
 
     const data = await response.json();
     
     if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error("Invalid response format from OpenAI API");
+      throw new Error("Invalid response format from AI API");
     }
     
     const reply = data.choices[0].message.content;
@@ -166,7 +113,8 @@ serve(async (req) => {
 
     return new Response(JSON.stringify({ 
       reply,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      model
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Nautilus AI - Edge Function Unificada
  * Provê IA para todos os módulos do sistema via Lovable AI Gateway
@@ -15,11 +14,11 @@ const corsHeaders = {
 interface AIRequest {
   module: string;
   action: string;
-  context: any;
+  context: Record<string, unknown>;
   prompt?: string;
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }

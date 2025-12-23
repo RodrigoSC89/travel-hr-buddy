@@ -1,7 +1,5 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.47.10';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,11 +12,11 @@ interface NautilusLLMRequest {
   moduleId?: string;
   sessionId: string;
   mode?: 'deterministic' | 'creative' | 'safe';
-  systemPrompt?: string; // Custom system prompt from client
-  stream?: boolean; // Enable streaming
+  systemPrompt?: string;
+  stream?: boolean;
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -32,36 +30,21 @@ serve(async (req) => {
       throw new Error('No AI API key configured');
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
     const { prompt, contextId = 'global', moduleId, sessionId, mode = 'safe', systemPrompt: customSystemPrompt, stream = false }: NautilusLLMRequest = await req.json();
     
     const startTime = Date.now();
 
-    // Buscar contexto do sistema
-    const { data: contextData } = await supabase
-      .from('system_context_snapshots')
-      .select('*')
-      .eq('context_id', contextId)
-      .single();
-
-    const contextSummary = contextData?.summary || 'Sistema operacional normal';
-
     // Definir temperatura baseada no modo
-    const temperatureMap = {
+    const temperatureMap: Record<string, number> = {
       'deterministic': 0.1,
       'creative': 0.7,
       'safe': 0.3
     };
 
-    const temperature = temperatureMap[mode];
+    const temperature = temperatureMap[mode] || 0.3;
 
-    // System prompt específico do Nautilus (pode ser sobrescrito pelo cliente)
+    // System prompt específico do Nautilus
     const defaultSystemPrompt = `Você é a IA embarcada do Nautilus One, um sistema marítimo offshore avançado.
-
-CONTEXTO DO SISTEMA: ${contextSummary}
 
 DIRETRIZES:
 - Seja preciso e técnico em análises
@@ -81,133 +64,72 @@ CAPACIDADES:
 
     const systemPrompt = customSystemPrompt || defaultSystemPrompt;
 
-    // Verificar cache primeiro (fallback)
-    const promptHash = btoa(prompt).substring(0, 50);
-    const { data: cachedResponse } = await supabase
-      .from('ia_response_cache')
-      .select('*')
-      .eq('prompt_hash', promptHash)
-      .single();
+    // Usar Lovable AI Gateway (preferencial)
+    const apiUrl = LOVABLE_API_KEY 
+      ? 'https://ai.gateway.lovable.dev/v1/chat/completions'
+      : 'https://api.openai.com/v1/chat/completions';
+    
+    const apiKey = LOVABLE_API_KEY || OPENAI_API_KEY;
+    const model = LOVABLE_API_KEY ? 'google/gemini-2.5-flash' : 'gpt-4o-mini';
+    
+    const aiResponse = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt }
+        ],
+        temperature,
+        max_tokens: 1500,
+        stream,
+      }),
+    });
 
-    let response: string;
-    let usedCache = false;
-
-    try {
-      // Usar Lovable AI Gateway (preferencial)
-      const apiUrl = LOVABLE_API_KEY 
-        ? 'https://ai.gateway.lovable.dev/v1/chat/completions'
-        : 'https://api.openai.com/v1/chat/completions';
-      
-      const apiKey = LOVABLE_API_KEY || OPENAI_API_KEY;
-      const model = LOVABLE_API_KEY ? 'google/gemini-2.5-flash' : 'gpt-4o-mini';
-      
-      const aiResponse = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
+    // Handle streaming response
+    if (stream && aiResponse.ok && aiResponse.body) {
+      return new Response(aiResponse.body, {
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive'
         },
-        body: JSON.stringify({
-          model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          temperature,
-          max_tokens: 1500,
-          stream,
-        }),
       });
-
-      // Handle streaming response
-      if (stream && aiResponse.ok && aiResponse.body) {
-        return new Response(aiResponse.body, {
-          headers: { 
-            ...corsHeaders, 
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive'
-          },
-        });
-      }
-
-      // Tratar rate limits e erros de pagamento
-      if (aiResponse.status === 429) {
-        return new Response(
-          JSON.stringify({ error: 'Rate limit excedido. Tente novamente em alguns segundos.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-      
-      if (aiResponse.status === 402) {
-        return new Response(
-          JSON.stringify({ error: 'Créditos de IA esgotados. Recarregue seu plano.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      if (!aiResponse.ok) {
-        throw new Error('AI API error');
-      }
-
-      const data = await aiResponse.json();
-      response = data.choices[0].message.content;
-
-      // Atualizar cache
-      await supabase
-        .from('ia_response_cache')
-        .upsert({
-          prompt_hash: promptHash,
-          cached_response: response,
-          model_used: model,
-          usage_count: (cachedResponse?.usage_count || 0) + 1,
-          last_used_at: new Date().toISOString()
-        });
-
-    } catch (error) {
-      console.error('AI API error, using fallback:', error);
-      
-      if (cachedResponse) {
-        response = cachedResponse.cached_response;
-        usedCache = true;
-      } else {
-        response = 'Sistema em modo fallback. Por favor, reformule sua pergunta ou aguarde o restabelecimento da conexão com a IA principal.';
-      }
     }
+
+    // Tratar rate limits e erros de pagamento
+    if (aiResponse.status === 429) {
+      return new Response(
+        JSON.stringify({ error: 'Rate limit excedido. Tente novamente em alguns segundos.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (aiResponse.status === 402) {
+      return new Response(
+        JSON.stringify({ error: 'Créditos de IA esgotados. Recarregue seu plano.' }),
+        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!aiResponse.ok) {
+      const errorText = await aiResponse.text();
+      console.error('AI API error:', aiResponse.status, errorText);
+      throw new Error(`AI API error: ${aiResponse.status}`);
+    }
+
+    const data = await aiResponse.json();
+    const response = data.choices?.[0]?.message?.content || 'Sem resposta da IA';
 
     const executionTime = Date.now() - startTime;
+    const confidenceScore = 0.95;
 
-    // Calcular confidence score baseado no uso de cache e tempo de execução
-    const confidenceScore = usedCache ? 0.75 : 0.95;
-
-    // Obter user_id do token JWT
-    const authHeader = req.headers.get('authorization');
-    let userId = null;
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const { data: { user } } = await supabase.auth.getUser(token);
-      userId = user?.id;
-    }
-
-    // Registrar log da interação
-    await supabase
-      .from('ia_context_log')
-      .insert({
-        session_id: sessionId,
-        user_id: userId,
-        prompt,
-        response,
-        module_id: moduleId,
-        confidence_score: confidenceScore,
-        execution_time_ms: executionTime,
-        model_used: usedCache ? 'cache' : 'gpt-4o-mini',
-        context_snapshot: contextData,
-        metadata: {
-          mode,
-          used_cache: usedCache,
-          timestamp: new Date().toISOString()
-        }
-      });
+    console.log(`Nautilus LLM: ${prompt.substring(0, 50)}... -> ${response.substring(0, 50)}... (${executionTime}ms)`);
 
     return new Response(
       JSON.stringify({
@@ -215,8 +137,8 @@ CAPACIDADES:
         sessionId,
         executionTime,
         confidenceScore,
-        usedCache,
-        model: usedCache ? 'cache' : 'gpt-4o-mini'
+        usedCache: false,
+        model
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -228,7 +150,13 @@ CAPACIDADES:
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : 'Unknown error',
-        fallbackMessage: 'Sistema de IA temporariamente indisponível. Por favor, tente novamente.'
+        fallbackMessage: 'Sistema de IA temporariamente indisponível. Por favor, tente novamente.',
+        response: 'Sistema de IA temporariamente indisponível. Por favor, tente novamente.',
+        sessionId: crypto.randomUUID(),
+        executionTime: 0,
+        confidenceScore: 0.5,
+        usedCache: false,
+        model: 'fallback'
       }),
       {
         status: 500,
