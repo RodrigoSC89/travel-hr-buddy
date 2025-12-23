@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 638: Telemetry Tracking System
  * Capture user interactions for UX improvement suggestions
@@ -6,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 interface TelemetryEvent {
   eventType: string;
@@ -128,18 +128,22 @@ class TelemetryTracker {
     this.queue = [];
 
     try {
-      const { error } = await supabase.from("telemetry_events").insert(
+      // Store telemetry in analytics_events table
+      const { error } = await supabase.from("analytics_events").insert(
         events.map(event => ({
-          event_type: event.eventType,
-          element_id: event.elementId,
-          element_name: event.elementName,
-          action: event.action,
-          context: event.context || {},
-          session_id: this.sessionId,
+          event_name: event.eventType,
+          event_category: event.action,
+          properties: {
+            element_id: event.elementId,
+            element_name: event.elementName,
+            context: event.context || {},
+            session_id: this.sessionId,
+            is_error: event.isError || false,
+            error_message: event.errorMessage,
+          } as Json,
           page_url: window.location.href,
           user_agent: navigator.userAgent,
-          is_error: event.isError || false,
-          error_message: event.errorMessage,
+          session_id: this.sessionId,
         }))
       );
 

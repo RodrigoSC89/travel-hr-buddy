@@ -1,10 +1,9 @@
-// @ts-nocheck
 /**
  * PATCH 608: LLM Flight Advisor
  * AI-powered flight recommendations using OpenAI
  */
 
-import { FlightOffer } from '@/services/skyscanner';
+import type { FlightOffer } from '@/services/skyscanner';
 
 export interface FlightRecommendation {
   bestPrice: FlightOffer | null;
@@ -101,11 +100,12 @@ export async function analyzeFlightOffers(
 
   // Check for stops filter
   if (userPreferences?.maxStops !== undefined) {
-    const filteredOffers = offers.filter(o => o.stops <= userPreferences.maxStops);
+    const maxStops = userPreferences.maxStops;
+    const filteredOffers = offers.filter(o => o.stops <= maxStops);
     if (filteredOffers.length === 0) {
-      insights.push(`No flights found with ${userPreferences.maxStops} or fewer stops`);
+      insights.push(`No flights found with ${maxStops} or fewer stops`);
     } else {
-      insights.push(`${filteredOffers.length} flight(s) with ${userPreferences.maxStops} or fewer stops`);
+      insights.push(`${filteredOffers.length} flight(s) with ${maxStops} or fewer stops`);
     }
   }
 
