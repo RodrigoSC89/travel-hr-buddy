@@ -1,11 +1,13 @@
 /**
  * Realtime Sync Hook with Offline Fallback
  * PATCH 624 - Supabase offline/error fallback
+ * PATCH 852 - Removed console.log, using logger
  */
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { offlineCache } from "@/services/offlineCache";
+import { logger } from "@/lib/logger";
 
 interface UseRealtimeSyncOptions<T> {
   table: string;
@@ -44,7 +46,7 @@ export function useRealtimeSync<T>({
   });
 
   const retryTimeoutRef = useRef<NodeJS.Timeout>();
-  const subscriptionRef = useRef<any>(null);
+  const subscriptionRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   /**
    * Fetch data with exponential backoff retry
@@ -54,16 +56,16 @@ export function useRealtimeSync<T>({
       setLoading(true);
       
       // Build query with type assertions to bypass strict typing
-      const query: any = (supabase as any).from(table).select(select);
+      const query: ReturnType<typeof supabase.from> = (supabase as any).from(table).select(select);
       
       // Apply filters if provided
       if (filter) {
         Object.entries(filter).forEach(([key, value]) => {
-          query.eq(key, value);
+          (query as any).eq(key, value);
         });
       }
 
-      const { data: fetchedData, error: fetchError } = await query.maybeSingle();
+      const { data: fetchedData, error: fetchError } = await (query as any).maybeSingle();
 
       if (fetchError) throw fetchError;
 
@@ -82,13 +84,13 @@ export function useRealtimeSync<T>({
       setLoading(false);
 
     } catch (err) {
-      console.error(`[RealtimeSync] Error fetching ${table}:`, err);
+      logger.debug(`[RealtimeSync] Error fetching ${table}`);
 
       // Try to load from cache
       const cachedData = offlineCache.get<T>(cacheKey);
       
       if (cachedData) {
-        console.warn(`[RealtimeSync] Using cached data for ${table}`);
+        logger.debug(`[RealtimeSync] Using cached data for ${table}`);
         setData(cachedData);
         setSyncState({
           isOnline: false,
@@ -102,7 +104,7 @@ export function useRealtimeSync<T>({
         // Schedule retry with exponential backoff
         if (retryCount < maxRetries) {
           const delay = retryDelay * Math.pow(2, retryCount);
-          console.log(`[RealtimeSync] Retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})`);
+          logger.debug(`[RealtimeSync] Retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})`);
           
           retryTimeoutRef.current = setTimeout(() => {
             fetchData(retryCount + 1);
@@ -151,7 +153,7 @@ export function useRealtimeSync<T>({
           "postgres_changes",
           { event: "*", schema: "public", table },
           (payload) => {
-            console.log(`[RealtimeSync] Received update for ${table}:`, payload);
+            logger.debug(`[RealtimeSync] Received update for ${table}`);
             
             // Update data based on event type
             if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
@@ -167,7 +169,7 @@ export function useRealtimeSync<T>({
         )
         .subscribe();
     } catch (err) {
-      console.error("[RealtimeSync] Error setting up subscription:", err);
+      logger.debug("[RealtimeSync] Error setting up subscription");
     }
 
     // Cleanup

@@ -7,7 +7,9 @@ export const optimizeEventLoop = () => {
   const t0 = performance.now();
   requestIdleCallback(() => {
     const duration = performance.now() - t0;
-    if (duration > 16) console.warn(`⚙️ Evento pesado: ${duration.toFixed(2)}ms`);
+    if (duration > 16) {
+      logger.debug(`Evento pesado: ${duration.toFixed(2)}ms`);
+    }
   });
 };
 
@@ -16,7 +18,7 @@ export const optimizeEventLoop = () => {
  */
 export const forceGC = () => {
   if (globalThis.gc) {
-    logger.info("🧹 GC manual executado");
+    logger.debug("GC manual executado");
     globalThis.gc();
   }
 };

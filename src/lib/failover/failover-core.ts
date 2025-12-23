@@ -1,6 +1,5 @@
 import mqtt from "mqtt";
 import { logger } from "@/lib/logger";
-import { supabase } from "@/integrations/supabase/client";
 
 const HEARTBEAT_TOPIC = "nautilus/system/heartbeat";
 const STATUS_TOPIC = "nautilus/system/status";
@@ -13,43 +12,33 @@ export function initFailoverSystem() {
 
   client.on("connect", () => {
     connected = true;
-    logger.info("✅ MQTT conectado ao Failover Core");
+    logger.info("MQTT conectado ao Failover Core");
     client.subscribe(HEARTBEAT_TOPIC);
     client.publish(STATUS_TOPIC, JSON.stringify({ status: "online", timestamp: Date.now() }));
   });
 
-  client.on("message", (topic, message) => {
+  client.on("message", (topic) => {
     if (topic === HEARTBEAT_TOPIC) lastHeartbeat = Date.now();
   });
 
   // Watchdog interno
-  setInterval(async () => {
+  setInterval(() => {
     const diff = Date.now() - lastHeartbeat;
     if (diff > 8000) {
-      console.warn("⚠️ Falha detectada! Último heartbeat há", diff / 1000, "segundos.");
-      // Tabela failover_events não existe - comentado para evitar erros 404
-      // await (supabase as any).from("failover_events").insert({
-      //   event: "Loss of Heartbeat",
-      //   timestamp: new Date().toISOString(),
-      //   module: "DP-Sync",
-      // });
+      logger.warn(`Falha detectada! Último heartbeat há ${diff / 1000} segundos.`);
       client.publish(STATUS_TOPIC, JSON.stringify({ status: "failover", timestamp: Date.now() }));
       executeRecovery(client);
     }
   }, 5000);
+  
+  return { connected: () => connected };
 }
 
-async function executeRecovery(client: any) {
-  logger.info("🔁 Executando protocolo de failover...");
+async function executeRecovery(client: mqtt.MqttClient) {
+  logger.info("Executando protocolo de failover...");
   try {
     client.publish("nautilus/system/recovery", JSON.stringify({ action: "restart-dp-module" }));
-    // Tabela failover_events não existe - comentado para evitar erros 404
-    // await (supabase as any).from("failover_events").insert({
-    //   event: "Failover Executed",
-    //   timestamp: new Date().toISOString(),
-    //   module: "DP-Sync",
-    // });
   } catch (err) {
-    console.error("❌ Falha ao executar recuperação:", err);
+    logger.error("Falha ao executar recuperação", err);
   }
 }
