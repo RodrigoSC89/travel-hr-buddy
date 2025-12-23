@@ -87,13 +87,14 @@ const INTENT_PATTERNS: Array<{ pattern: RegExp; domain: string; subIntent: strin
 // Navigation intents (handled locally for instant response)
 const NAVIGATION_INTENTS: Array<{ patterns: RegExp[]; route: string; label: string }> = [
   { patterns: [/ir.*dashboard|abrir.*dashboard|mostrar.*dashboard/i], route: '/dashboard', label: 'Dashboard' },
-  { patterns: [/ir.*frota|abrir.*frota|mostrar.*embarca/i], route: '/fleet', label: 'Frota' },
-  { patterns: [/ir.*tripula[çc]/i], route: '/crew', label: 'Tripulação' },
-  { patterns: [/ir.*manuten[çc]/i], route: '/maintenance', label: 'Manutenção' },
+  { patterns: [/ir.*frota|abrir.*frota|mostrar.*embarca/i], route: '/fleet-command', label: 'Frota' },
+  { patterns: [/ir.*tripula[çc]/i], route: '/maritime-command', label: 'Tripulação' },
+  { patterns: [/ir.*manuten[çc]/i], route: '/maintenance-command', label: 'Manutenção' },
   { patterns: [/ir.*document/i], route: '/documents', label: 'Documentos' },
-  { patterns: [/ir.*relat[óo]rio/i], route: '/reports', label: 'Relatórios' },
-  { patterns: [/ir.*esg|sustentabilidade/i], route: '/esg', label: 'ESG' },
+  { patterns: [/ir.*relat[óo]rio/i], route: '/reports-command', label: 'Relatórios' },
+  { patterns: [/ir.*esg|sustentabilidade/i], route: '/esg-command', label: 'ESG' },
   { patterns: [/ir.*configura[çc]/i], route: '/settings', label: 'Configurações' },
+  { patterns: [/ir.*comando|abrir.*comando/i], route: '/nautilus-command', label: 'Centro de Comando' },
 ];
 
 // Cached responses from previous API calls
