@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -13,12 +13,12 @@ export interface UserWithRole extends Profile {
 export type { UserRole };
 
 export const useUsers = () => {
-  const [users, setUsers] = React.useState<UserWithRole[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
-  const isMountedRef = React.useRef(true);
+  const [users, setUsers] = useState<UserWithRole[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const isMountedRef = useRef(true);
 
-  const fetchUsers = React.useCallback(async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -64,7 +64,7 @@ export const useUsers = () => {
     }
   }, []);
 
-  const updateUserRole = React.useCallback(async (userId: string, newRole: UserRole) => {
+  const updateUserRole = useCallback(async (userId: string, newRole: UserRole) => {
     try {
       const { error } = await supabase
         .from("user_roles")
@@ -95,7 +95,7 @@ export const useUsers = () => {
     }
   }, []);
 
-  const updateUserProfile = React.useCallback(async (userId: string, profileData: Partial<UserWithRole>) => {
+  const updateUserProfile = useCallback(async (userId: string, profileData: Partial<UserWithRole>) => {
     try {
       const { error } = await supabase
         .from("profiles")
@@ -135,7 +135,7 @@ export const useUsers = () => {
     }
   }, [updateUserRole]);
 
-  const getRoleStats = React.useCallback(() => {
+  const getRoleStats = useCallback(() => {
     const stats = users.reduce((acc: Record<UserRole, number>, user: UserWithRole) => {
       acc[user.role] = (acc[user.role] || 0) + 1;
       return acc;
@@ -149,11 +149,11 @@ export const useUsers = () => {
     };
   }, [users]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       isMountedRef.current = false;
     };

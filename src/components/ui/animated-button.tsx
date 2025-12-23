@@ -16,15 +16,15 @@ interface AnimatedButtonProps extends ButtonProps {
   ripple?: boolean;
 }
 
-export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButtonProps>(
+export const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
   ({ loading, success, ripple = true, className, children, disabled, onClick, ...props }, ref) => {
-    const [rippleStyle, setRippleStyle] = React.useState<{
+    const [rippleStyle, setRippleStyle] = useState<{
       x: number;
       y: number;
       show: boolean;
     }>({ x: 0, y: 0, show: false });
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
       if (ripple && !disabled && !loading) {
         const rect = e.currentTarget.getBoundingClientRect();
         setRippleStyle({
