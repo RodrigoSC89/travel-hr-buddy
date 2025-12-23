@@ -90,15 +90,15 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Run Risk Management Tests
-        run: npx playwright test tests/e2e/critical-modules/risk-management.spec.ts --project=chromium
+        run: npx playwright test tests/e2e/critical-modules/risk.spec.ts --project=chromium
         continue-on-error: true
 
       - name: Run SGSO Audit Tests
-        run: npx playwright test tests/e2e/critical-modules/sgso-audit.spec.ts --project=chromium
+        run: npx playwright test tests/e2e/critical-modules/auditoria.spec.ts --project=chromium
         continue-on-error: true
 
       - name: Run Incident Management Tests
-        run: npx playwright test tests/e2e/critical-modules/incident-management.spec.ts --project=chromium
+        run: npx playwright test tests/e2e/critical-modules/incidentes.spec.ts --project=chromium
         continue-on-error: true
 
       - name: Upload Playwright Report
@@ -106,7 +106,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-critical
-          path: tests/coverage/playwright-report/
+          path: playwright-report/
           retention-days: 14
 
       - name: Upload Test Results
@@ -114,5 +114,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results-critical
-          path: tests/coverage/test-results.json
+          path: test-results.json
           retention-days: 14
