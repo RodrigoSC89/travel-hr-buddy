@@ -278,6 +278,20 @@ function App() {
                         <Route path="reports" element={<Navigate to="/reports-command" replace />} />
                         <Route path="incident-reports" element={<Navigate to="/reports-command" replace />} />
                         
+                        {/* Additional missing routes */}
+                        <Route path="procurement-inventory" element={<Navigate to="/procurement-command" replace />} />
+                        <Route path="crew" element={<Navigate to="/maritime-command" replace />} />
+                        <Route path="fleet-operations" element={<Navigate to="/fleet-command" replace />} />
+                        <Route path="logistics" element={<Navigate to="/logistics-command" replace />} />
+                        <Route path="procurement" element={<Navigate to="/procurement-command" replace />} />
+                        <Route path="inventory" element={<Navigate to="/procurement-command" replace />} />
+                        <Route path="crew-members" element={<Navigate to="/maritime-command" replace />} />
+                        <Route path="crew-schedule" element={<Navigate to="/maritime-command" replace />} />
+                        <Route path="fleet-management" element={<Navigate to="/fleet-command" replace />} />
+                        <Route path="fleet-status" element={<Navigate to="/fleet-command" replace />} />
+                        <Route path="operations" element={<Navigate to="/operations-command" replace />} />
+                        <Route path="monitoring" element={<Navigate to="/nautilus-command" replace />} />
+                        
                         {/* 404 Route */}
                         <Route path="*" element={
                           <React.Suspense fallback={<OffshoreLoader />}>
