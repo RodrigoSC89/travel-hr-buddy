@@ -15,7 +15,16 @@ const loadTF = async () => {
   }
   return tf;
 };
-import Tesseract from "tesseract.js";
+// Lazy load Tesseract (~500KB)
+import type TesseractType from "tesseract.js";
+let Tesseract: typeof TesseractType | null = null;
+const loadTesseract = async () => {
+  if (!Tesseract) {
+    const mod = await import("tesseract.js");
+    Tesseract = mod.default;
+  }
+  return Tesseract;
+};
 import { supabase } from "@/integrations/supabase/client";
 
 export interface VisualContext {
