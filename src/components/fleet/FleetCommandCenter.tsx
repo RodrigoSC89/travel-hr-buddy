@@ -56,37 +56,36 @@ export const FleetCommandCenter: React.FC = () => {
   // Fetch all vessels with their status
   const { data: vessels, isLoading: vesselsLoading, refetch: refetchVessels } = useQuery({
     queryKey: ["fleet-vessels", filterStatus],
-    queryFn: async () => {
-      let query = supabase
-        .from("vessels")
-        .select(`
-          *,
-          maintenance_records (
-            status,
-            priority,
-            next_due
-          ),
-          vessel_ai_contexts (
-            interaction_count,
-            last_sync
-          )
-        `)
-        .order("name");
+    queryFn: async (): Promise<VesselWithMission[]> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let data: any[] | null = null;
+      let error: Error | null = null;
 
       if (filterStatus !== "all") {
-        query = query.eq("status", filterStatus);
+        const result = await supabase
+          .from("vessels")
+          .select("*")
+          .eq("status", filterStatus)
+          .order("name");
+        data = result.data;
+        error = result.error;
+      } else {
+        const result = await supabase
+          .from("vessels")
+          .select("*")
+          .order("name");
+        data = result.data;
+        error = result.error;
       }
-
-      const { data, error } = await query;
 
       if (error) {
         logger.error("Error fetching vessels:", error);
         throw error;
       }
 
-      return data as VesselWithMission[];
+      return (data ?? []) as VesselWithMission[];
     },
-    refetchInterval: autoRefresh ? 30000 : false, // Refresh every 30 seconds if enabled
+    refetchInterval: autoRefresh ? 30000 : false,
   });
 
   // Fetch active missions
