@@ -37,7 +37,7 @@ export function QuickActionsGrid({
       toast.info("Abrindo comunicação...", {
         description: "Redirecionando para o centro de comunicação"
       });
-      navigate("/communication-center");
+      navigate("/communication-command");
     }
   };
 
@@ -48,7 +48,7 @@ export function QuickActionsGrid({
       toast.info("Solicitação de reposição", {
         description: "Abrindo formulário de reposição de estoque"
       });
-      navigate("/procurement-inventory");
+      navigate("/procurement-command");
     }
   };
 
@@ -59,7 +59,7 @@ export function QuickActionsGrid({
       toast.success("Criar pedido", {
         description: "Abrindo formulário de novo pedido"
       });
-      navigate("/procurement-inventory");
+      navigate("/procurement-command");
     }
   };
 
@@ -67,7 +67,7 @@ export function QuickActionsGrid({
     {
       icon: <Plus className="h-4 w-4" />,
       label: "Nova Requisição",
-      onClick: () => navigate("/procurement-inventory"),
+      onClick: () => navigate("/procurement-command"),
       color: "bg-green-500 hover:bg-green-600",
       badge: null
     },
@@ -85,7 +85,7 @@ export function QuickActionsGrid({
         toast.info("Gerando relatório...", {
           description: "Preparando relatório operacional"
         });
-        navigate("/analytics");
+        navigate("/analytics-command");
       },
       color: "bg-blue-500 hover:bg-blue-600",
       badge: null
@@ -100,14 +100,14 @@ export function QuickActionsGrid({
     {
       icon: <Users className="h-4 w-4" />,
       label: "Gestão Tripulação",
-      onClick: () => navigate("/crew-management"),
+      onClick: () => navigate("/maritime-command"),
       color: "bg-teal-500 hover:bg-teal-600",
       badge: context?.crew?.expiringCerts > 0 ? context.crew.expiringCerts : null
     },
     {
       icon: <Shield className="h-4 w-4" />,
       label: "Auditorias",
-      onClick: () => navigate("/audit-center"),
+      onClick: () => navigate("/compliance-hub"),
       color: "bg-cyan-500 hover:bg-cyan-600",
       badge: context?.compliance?.pendingAudits > 0 ? context.compliance.pendingAudits : null
     },
@@ -139,7 +139,7 @@ export function QuickActionsGrid({
         toast.info("Monitoramento ativo", {
           description: "Abrindo painel de monitoramento em tempo real"
         });
-        navigate("/fleet-operations");
+        navigate("/fleet-command");
       },
       color: "bg-slate-500 hover:bg-slate-600",
       badge: null
