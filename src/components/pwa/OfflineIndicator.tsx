@@ -3,7 +3,7 @@
  * Visual feedback for offline/sync status
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, Cloud, CloudOff, RefreshCw, Check, AlertTriangle } from 'lucide-react';
 import { useOfflineSync } from '@/lib/pwa/offline-sync';

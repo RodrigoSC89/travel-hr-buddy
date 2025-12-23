@@ -3,7 +3,7 @@
  * Encourage users to install the app
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Smartphone, Zap, WifiOff, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';

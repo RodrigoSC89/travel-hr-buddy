@@ -3,7 +3,7 @@
  * PATCH 860: UX Polimento Final - Cards com animações e feedback
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 

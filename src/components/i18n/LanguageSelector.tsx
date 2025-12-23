@@ -3,7 +3,7 @@
  * Easy language switching for global users
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion } from 'framer-motion';
 import { Globe, Check } from 'lucide-react';
 import {

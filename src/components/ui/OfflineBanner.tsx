@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from "react";
 import { WifiOff, RefreshCw } from 'lucide-react';
 import { useOfflineMode } from '@/hooks/useOfflineMode';
 import { Button } from '@/components/ui/button';

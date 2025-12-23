@@ -3,7 +3,7 @@
  * Shows appropriate loading states based on network quality
  */
 
-import React from 'react';
+import * as React from "react";
 import { useConnectionAware } from '@/hooks/use-connection-aware';
 import { Skeleton } from './skeleton';
 import { Wifi, WifiOff, Signal, SignalLow, SignalMedium, SignalHigh } from 'lucide-react';

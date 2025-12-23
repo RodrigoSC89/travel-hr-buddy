@@ -3,7 +3,7 @@
  * PATCH 860: UX Polimento Final - Botões com feedback tátil
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion, HTMLMotionProps } from 'framer-motion';
 import { Button, ButtonProps } from './button';
 import { cn } from '@/lib/utils';

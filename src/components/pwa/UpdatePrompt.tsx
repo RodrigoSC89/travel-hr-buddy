@@ -3,7 +3,7 @@
  * Prompt users to update the app
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw, X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';

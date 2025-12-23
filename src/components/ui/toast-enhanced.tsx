@@ -3,7 +3,7 @@
  * PATCH 860: UX Polimento Final - Toasts com animações
  */
 
-import React from 'react';
+import * as React from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, AlertTriangle, Info, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
