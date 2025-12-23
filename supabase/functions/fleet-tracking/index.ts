@@ -1,4 +1,4 @@
-// @ts-nocheck
+/// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 
@@ -120,14 +120,14 @@ serve(async (req) => {
         .not("current_location", "is", null);
 
       if (vessels) {
-        nearbyVessels = vessels.filter(vessel => {
+        nearbyVessels = vessels.filter((vessel: any) => {
           if (!vessel.current_location) return false;
           const distance = calculateDistance(
             location.lat, location.lon,
             vessel.current_location.lat, vessel.current_location.lon
           );
           return distance < 10; // Within 10km
-        }).map(vessel => ({
+        }).map((vessel: any) => ({
           id: vessel.id,
           name: vessel.name,
           location: vessel.current_location,
