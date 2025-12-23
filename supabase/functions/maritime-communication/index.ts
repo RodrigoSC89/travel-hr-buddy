@@ -47,7 +47,7 @@ serve(async (req: Request) => {
       throw new Error("Missing Supabase configuration");
     }
     
-    const supabaseClient: SupabaseClient = createClient(supabaseUrl, supabaseKey);
+    const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
     const { 
       vessel_id, 
