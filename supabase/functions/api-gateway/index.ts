@@ -1,7 +1,32 @@
-// @ts-nocheck
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+interface WeatherData {
+  temp: number;
+  conditions: string;
+  wind_speed: number;
+  visibility: number;
+}
+
+interface SatelliteData {
+  coverage: number;
+  active_satellites: number;
+  signal_strength: string;
+}
+
+interface AISData {
+  vessels_in_range: number;
+  last_update: string;
+}
+
+interface LogEntry {
+  user_id: string | null;
+  endpoint: string;
+  method: string;
+  status: string;
+  timestamp: string;
+}
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,7 +36,7 @@ const corsHeaders = {
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -51,7 +76,7 @@ serve(async (req) => {
     console.log(`[API Gateway] ${method} ${path} - User: ${userId || 'service'}`);
 
     // Route to appropriate handler
-    let response;
+    let response: Record<string, unknown>;
     switch (path) {
       case '/weather':
         response = await handleWeatherAPI(url.searchParams);
@@ -92,7 +117,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('[API Gateway] Error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

@@ -1,13 +1,24 @@
-// @ts-nocheck
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+interface AuditoriaIMCA {
+  id: string;
+  navio: string | null;
+  data: string;
+  status: string;
+}
+
+interface CronLog {
+  job_name: string;
+  executed_at: string;
+}
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
@@ -48,7 +59,7 @@ serve(async (req) => {
     }
 
     // Get unique fleet names (navios)
-    const frota = [...new Set(auditorias?.map(a => a.navio).filter(Boolean))] as string[]
+    const frota = [...new Set(auditorias?.map((a: AuditoriaIMCA) => a.navio).filter(Boolean))] as string[]
 
     // Get cron status (from cron_execution_logs table if exists)
     let cronStatus = 'Ativo'
@@ -88,7 +99,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in lista function:', error)
     return new Response(
-      JSON.stringify({ error: error.message || 'Erro interno do servidor' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Erro interno do servidor' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
