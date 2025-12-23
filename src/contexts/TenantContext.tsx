@@ -178,7 +178,7 @@ export const useTenant = (): TenantContextType => {
     const context = useContext(TenantContext);
     return context || defaultTenantValue;
   } catch (error) {
-    console.warn("useTenant called outside of provider, returning default value");
+    logger.warn("useTenant called outside of provider, returning default value");
     return defaultTenantValue;
   }
 };

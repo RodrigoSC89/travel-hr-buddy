@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
 
 /**
@@ -34,7 +35,7 @@ export function useFeatureFlag(key: string): boolean {
           .limit(5);
 
         if (error) {
-          console.warn(`Feature flag lookup error for "${key}":`, error);
+          logger.warn(`Feature flag lookup error for "${key}":`, { error });
           return false;
         }
 

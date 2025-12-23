@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import { logger } from '@/lib/logger';
 
 interface OfflineData {
   key: string;
@@ -21,7 +22,7 @@ export function useOfflineMode() {
   // Verificar itens pendentes de sync ao reconectar
   useEffect(() => {
     if (isOnline && pendingSync.length > 0) {
-      console.log('[Offline] Reconectado - itens pendentes:', pendingSync.length);
+      logger.info('[Offline] Reconectado - itens pendentes:', { count: pendingSync.length });
     }
   }, [isOnline, pendingSync]);
 
@@ -39,7 +40,7 @@ export function useOfflineMode() {
       localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(cacheItem));
       return true;
     } catch (error) {
-      console.warn('[Offline] Erro ao salvar cache:', error);
+      logger.warn('[Offline] Erro ao salvar cache:', { error });
       return false;
     }
   }, []);
