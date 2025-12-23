@@ -1,18 +1,14 @@
 /**
- * Protected Route Guard - PATCH 177.0
- * Authentication and role-based access control for routes
- * 
- * INTEGRATION STATUS: Ready for activation
- * Set ENABLE_AUTH_PROTECTION=true in environment to enable
+ * Protected Route Guard - Uses named imports to prevent multiple React instances
  */
-import * as React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";
 import { OffshoreLoader } from "@/components/LoadingStates";
+import type { ReactNode, FC } from "react";
 
 interface ProtectedRouteProps {
-  children: React.ReactNode;
+  children: ReactNode;
   /** Required roles to access this route (empty = any authenticated user) */
   requiredRoles?: UserRole[];
   /** Redirect path when unauthorized (default: /unauthorized) */
@@ -22,7 +18,7 @@ interface ProtectedRouteProps {
 // Feature flag for enabling authentication protection
 const AUTH_PROTECTION_ENABLED = import.meta.env.VITE_ENABLE_AUTH_PROTECTION === "true";
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
+export const ProtectedRoute: FC<ProtectedRouteProps> = ({ 
   children,
   requiredRoles = [],
   unauthorizedRedirect = "/unauthorized"
@@ -57,7 +53,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 /**
  * Admin-only route guard
  */
-export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const AdminRoute: FC<{ children: ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredRoles={["admin"]}>
     {children}
   </ProtectedRoute>
@@ -66,7 +62,7 @@ export const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }
 /**
  * HR route guard (admin or hr_manager)
  */
-export const HRRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const HRRoute: FC<{ children: ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredRoles={["admin", "hr_manager"]}>
     {children}
   </ProtectedRoute>
@@ -75,7 +71,7 @@ export const HRRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 /**
  * Manager route guard (admin, hr_manager, manager, supervisor)
  */
-export const ManagerRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const ManagerRoute: FC<{ children: ReactNode }> = ({ children }) => (
   <ProtectedRoute requiredRoles={["admin", "hr_manager", "manager", "supervisor", "department_manager"]}>
     {children}
   </ProtectedRoute>
