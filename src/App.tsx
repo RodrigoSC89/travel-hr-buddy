@@ -77,6 +77,7 @@ const Auth = React.lazy(() => import(/* webpackChunkName: "page-auth" */ "@/page
 const UserProfilePage = React.lazy(() => import(/* webpackChunkName: "page-profile" */ "@/pages/user/profile"));
 const RevolutionaryAI = React.lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/RevolutionaryAI"));
 const AIEnhancedModules = React.lazy(() => import(/* webpackChunkName: "page-ai-modules" */ "@/pages/AIEnhancedModules"));
+const SystemDebug = React.lazy(() => import(/* webpackChunkName: "page-debug" */ "@/pages/SystemDebug"));
 const SmartLayout = React.lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -141,6 +142,7 @@ function App() {
                         <Route path="settings" element={<Settings />} />
                         <Route path="profile" element={<UserProfilePage />} />
                         <Route path="health" element={<HealthCheck />} />
+                        <Route path="__debug__" element={<SystemDebug />} />
                         <Route path="revolutionary-ai/*" element={<RevolutionaryAI />} />
                         <Route path="ai-modules" element={<AIEnhancedModules />} />
                         
