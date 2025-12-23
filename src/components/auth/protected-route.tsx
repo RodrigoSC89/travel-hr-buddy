@@ -5,7 +5,7 @@
  * INTEGRATION STATUS: Ready for activation
  * Set ENABLE_AUTH_PROTECTION=true in environment to enable
  */
-import React from "react";
+import * as React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions, UserRole } from "@/hooks/use-permissions";

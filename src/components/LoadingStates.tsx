@@ -1,9 +1,9 @@
 /**
  * Loading States - Design Profissional para Conexões Lentas
- * PATCH 753 - Otimizado para conexões lentas com detecção de velocidade
+ * PATCH 850.4 - Fixed React import to prevent multiple instances
  */
 
-import React, { memo, useState, useEffect } from "react";
+import * as React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, Ship, Waves, Compass, Anchor } from "lucide-react";
@@ -114,7 +114,7 @@ export const OffshoreLoader: React.FC<{
   </div>
 );
 
-export const MinimalLoader = memo(function MinimalLoader() {
+export const MinimalLoader = React.memo(function MinimalLoader() {
   return (
     <div className="flex items-center justify-center p-12">
       <div className="flex items-center gap-3">
@@ -126,7 +126,7 @@ export const MinimalLoader = memo(function MinimalLoader() {
 });
 
 // Nautical Spinner - Compacto
-export const NauticalSpinner = memo(function NauticalSpinner({
+export const NauticalSpinner = React.memo(function NauticalSpinner({
   size = "default",
   className
 }: {
@@ -147,7 +147,7 @@ export const NauticalSpinner = memo(function NauticalSpinner({
 });
 
 // Anchor Loader - Alternativo
-export const AnchorLoader = memo(function AnchorLoader({
+export const AnchorLoader = React.memo(function AnchorLoader({
   message = "Ancorando dados..."
 }: {
   message?: string;
@@ -163,7 +163,7 @@ export const AnchorLoader = memo(function AnchorLoader({
 });
 
 // Page Loader - Full Page
-export const PageLoader = memo(function PageLoader({
+export const PageLoader = React.memo(function PageLoader({
   message = "Carregando página..."
 }: {
   message?: string;
@@ -176,14 +176,14 @@ export const PageLoader = memo(function PageLoader({
 });
 
 // Button Loader
-export const ButtonLoader = memo(function ButtonLoader() {
+export const ButtonLoader = React.memo(function ButtonLoader() {
   return (
     <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
   );
 });
 
 // Data Loader
-export const DataLoader = memo(function DataLoader({
+export const DataLoader = React.memo(function DataLoader({
   message = "Carregando dados...",
   progress
 }: {
@@ -210,8 +210,7 @@ export const DataLoader = memo(function DataLoader({
   );
 });
 
-// Module Loader
-export const ModuleLoader = memo(function ModuleLoader({
+export const ModuleLoader = React.memo(function ModuleLoader({
   moduleName = "módulo"
 }: {
   moduleName?: string;
