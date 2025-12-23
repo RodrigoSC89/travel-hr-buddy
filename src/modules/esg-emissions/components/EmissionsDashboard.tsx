@@ -4,7 +4,7 @@
  * Integrado com Supabase para dados de embarcações
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+import { ESGAIChat } from "@/components/shared/ESGAIChat";
 
 interface VesselData {
   id: string;
@@ -435,6 +436,16 @@ export const EmissionsDashboard: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* AI Chat Integration */}
+        <ESGAIChat 
+          module="esg" 
+          context={{ 
+            emissions: monthlyEmissions,
+            vessels: vesselEmissions,
+            fuelMix: fuelConsumption
+          }} 
+        />
       </div>
     </div>
   );

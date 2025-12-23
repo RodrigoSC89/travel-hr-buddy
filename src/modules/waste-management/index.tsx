@@ -1,16 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Recycle, LayoutDashboard, Droplets, Trash2, FileText, Brain } from "lucide-react";
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Input } from "@/components/ui/input";
 import {
   Leaf,
   AlertTriangle,
-  Sparkles,
-  Send,
   MapPin,
   Calendar,
   CheckCircle2,
@@ -22,6 +17,7 @@ import { TanksManagement } from "./components/TanksManagement";
 import { GarbageRegistry } from "./components/GarbageRegistry";
 import { RecordBooks } from "./components/RecordBooks";
 import { WasteReports } from "./components/WasteReports";
+import { ESGAIChat } from "@/components/shared/ESGAIChat";
 
 interface WasteTank {
   id: string;
@@ -59,34 +55,6 @@ const mockRecords: DischargeRecord[] = [
 ];
 
 function WasteManagement() {
-  const [chatMessage, setChatMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
-    { role: "assistant", content: "Olá! Sou o assistente ambiental do Nautilus. Posso ajudar com MARPOL, descarte de resíduos e relatórios ambientais. Como posso ajudar?" },
-  ]);
-
-  const handleSendMessage = () => {
-    if (!chatMessage.trim()) return;
-    setChatHistory(prev => [...prev, { role: "user", content: chatMessage }]);
-    
-    setTimeout(() => {
-      const responses: Record<string, string> = {
-        marpol: "MARPOL Anexo I (Óleo): Descarte em alto mar proibido dentro de 12mn da costa. Use separador de água e óleo (OWS) com alarme 15ppm. Registre no Oil Record Book. Anexo IV (Esgoto): Tratamento obrigatório ou descarte >12mn.",
-        descarte: "Procedimento de descarte: 1) Verificar nível do tanque, 2) Contactar agente portuário, 3) Solicitar caminhão credenciado, 4) Acompanhar operação, 5) Obter manifesto e certificado, 6) Registrar no Garbage Record Book.",
-        relatorio: "Relatórios disponíveis: Oil Record Book (atualizado), Garbage Record Book (atualizado), Sewage Log (atualizado). Próxima auditoria ambiental: 15/02/2024. Conformidade MARPOL: 100%.",
-        default: "Posso ajudar com regulamentos MARPOL, procedimentos de descarte, geração de relatórios ou verificar níveis dos tanques. O que precisa?",
-      };
-      
-      const key = chatMessage.toLowerCase().includes("marpol") ? "marpol" 
-        : chatMessage.toLowerCase().includes("descart") ? "descarte"
-        : chatMessage.toLowerCase().includes("relat") ? "relatorio"
-        : "default";
-        
-      setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
-    }, 1000);
-    
-    setChatMessage("");
-  };
-
   const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
   const warningTanks = mockTanks.filter(t => t.status === "warning").length;
 
@@ -256,45 +224,16 @@ function WasteManagement() {
                   </CardContent>
                 </Card>
 
-                {/* AI Assistant */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Brain className="h-5 w-5 text-purple-500" />
-                      Assistente Ambiental
-                      <Badge variant="secondary" className="ml-auto">
-                        <Sparkles className="h-3 w-3 mr-1" />
-                        IA
-                      </Badge>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="h-[200px] overflow-y-auto space-y-3 border rounded-lg p-3 bg-muted/30">
-                      {chatHistory.map((msg, i) => (
-                        <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                          <div className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
-                            msg.role === "user" 
-                              ? "bg-primary text-primary-foreground" 
-                              : "bg-muted"
-                          }`}>
-                            {msg.content}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Pergunte sobre MARPOL, descarte..."
-                        value={chatMessage}
-                        onChange={(e) => setChatMessage(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                      />
-                      <Button size="icon" onClick={handleSendMessage}>
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                {/* AI Assistant - Real AI Integration */}
+                <ESGAIChat 
+                  module="waste" 
+                  context={{ 
+                    tanks: mockTanks, 
+                    records: mockRecords,
+                    criticalTanks,
+                    warningTanks 
+                  }} 
+                />
               </div>
 
               {/* Recent Discharges */}
