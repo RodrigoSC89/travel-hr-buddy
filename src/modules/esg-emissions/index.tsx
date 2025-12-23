@@ -3,11 +3,14 @@
  * Monitoramento ambiental, carbon footprint e compliance regulatório
  */
 
-import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EmissionsDashboard } from "./components/EmissionsDashboard";
+import { EmissionsRegistry } from "./components/EmissionsRegistry";
+import { ComplianceManagement } from "./components/ComplianceManagement";
+import { ESGReports } from "./components/ESGReports";
+import { ESGSettings } from "./components/ESGSettings";
 import {
   Leaf,
   Factory,
@@ -16,10 +19,9 @@ import {
   Settings,
   Globe,
   Droplets,
-  Wind
 } from "lucide-react";
 
-const ESGEmissionsModule: React.FC = () => {
+const ESGEmissionsModule = () => {
   return (
     <ModulePageWrapper gradient="green">
       <ModuleHeader
@@ -64,31 +66,19 @@ const ESGEmissionsModule: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="emissions">
-          <div className="text-center py-12 text-muted-foreground">
-            <Factory className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Registro detalhado de emissões em desenvolvimento</p>
-          </div>
+          <EmissionsRegistry />
         </TabsContent>
 
         <TabsContent value="compliance">
-          <div className="text-center py-12 text-muted-foreground">
-            <Globe className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Gestão de compliance IMO/EU MRV em desenvolvimento</p>
-          </div>
+          <ComplianceManagement />
         </TabsContent>
 
         <TabsContent value="reports">
-          <div className="text-center py-12 text-muted-foreground">
-            <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Geração de relatórios DCS/MRV em desenvolvimento</p>
-          </div>
+          <ESGReports />
         </TabsContent>
 
         <TabsContent value="settings">
-          <div className="text-center py-12 text-muted-foreground">
-            <Settings className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Configurações de fatores de emissão em desenvolvimento</p>
-          </div>
+          <ESGSettings />
         </TabsContent>
       </Tabs>
     </ModulePageWrapper>
