@@ -44,21 +44,21 @@ export function QuickActionsPanel() {
       id: "add-crew",
       label: "Adicionar Tripulante",
       icon: Users,
-      action: () => navigate("/crew"),
+      action: () => navigate("/maritime-command"),
       color: "text-green-500"
     },
     {
       id: "new-maintenance",
       label: "Nova Manutenção",
       icon: Wrench,
-      action: () => navigate("/maintenance-planner"),
+      action: () => navigate("/maintenance-command"),
       color: "text-orange-500"
     },
     {
       id: "fleet-status",
       label: "Status da Frota",
       icon: Ship,
-      action: () => navigate("/fleet"),
+      action: () => navigate("/fleet-command"),
       color: "text-purple-500"
     },
     {
@@ -72,7 +72,7 @@ export function QuickActionsPanel() {
       id: "send-message",
       label: "Enviar Mensagem",
       icon: MessageSquare,
-      action: () => navigate("/communication-center"),
+      action: () => navigate("/communication-command"),
       color: "text-cyan-500"
     },
     {

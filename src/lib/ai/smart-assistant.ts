@@ -161,18 +161,19 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
     if (lowerInput.includes('ir para') || lowerInput.includes('abrir') || lowerInput.includes('navegar')) {
       const destinations: Record<string, { path: string; name: string }> = {
         'dashboard': { path: '/dashboard', name: 'Dashboard' },
-        'viagens': { path: '/travel', name: 'Viagens' },
-        'viagem': { path: '/travel', name: 'Viagens' },
-        'rh': { path: '/hr', name: 'Recursos Humanos' },
-        'recursos humanos': { path: '/hr', name: 'Recursos Humanos' },
-        'frota': { path: '/fleet', name: 'Frota' },
+        'viagens': { path: '/travel-command', name: 'Viagens' },
+        'viagem': { path: '/travel-command', name: 'Viagens' },
+        'rh': { path: '/people-command', name: 'Recursos Humanos' },
+        'recursos humanos': { path: '/people-command', name: 'Recursos Humanos' },
+        'frota': { path: '/fleet-command', name: 'Frota' },
         'documentos': { path: '/documents', name: 'Documentos' },
-        'manutenção': { path: '/mmi', name: 'Manutenção (MMI)' },
-        'mmi': { path: '/mmi', name: 'Manutenção (MMI)' },
+        'manutenção': { path: '/maintenance-command', name: 'Manutenção' },
+        'mmi': { path: '/maintenance-command', name: 'Manutenção' },
         'compliance': { path: '/compliance-hub', name: 'Compliance Hub' },
         'configurações': { path: '/settings', name: 'Configurações' },
-        'tripulação': { path: '/crew', name: 'Tripulação' },
-        'crew': { path: '/crew', name: 'Tripulação' },
+        'tripulação': { path: '/maritime-command', name: 'Tripulação' },
+        'crew': { path: '/maritime-command', name: 'Tripulação' },
+        'comando': { path: '/nautilus-command', name: 'Centro de Comando' },
       };
       
       for (const [key, dest] of Object.entries(destinations)) {

@@ -18,7 +18,7 @@ export const QuickActionsPanel: React.FC = () => {
     {
       icon: <Plus className="h-4 w-4" />,
       label: "Nova Requisição",
-      onClick: () => navigate("/procurement-inventory"),
+      onClick: () => navigate("/procurement-command"),
       color: "bg-green-500 hover:bg-green-600"
     },
     {
@@ -30,7 +30,7 @@ export const QuickActionsPanel: React.FC = () => {
     {
       icon: <FileText className="h-4 w-4" />,
       label: "Gerar Relatório",
-      onClick: () => {},
+      onClick: () => navigate("/analytics-command"),
       color: "bg-blue-500 hover:bg-blue-600"
     },
     {
@@ -42,13 +42,13 @@ export const QuickActionsPanel: React.FC = () => {
     {
       icon: <Users className="h-4 w-4" />,
       label: "Gestão de Tripulação",
-      onClick: () => navigate("/crew-management"),
+      onClick: () => navigate("/maritime-command"),
       color: "bg-teal-500 hover:bg-teal-600"
     },
     {
       icon: <Shield className="h-4 w-4" />,
       label: "Auditorias",
-      onClick: () => navigate("/audit-center"),
+      onClick: () => navigate("/compliance-hub"),
       color: "bg-cyan-500 hover:bg-cyan-600"
     }
   ];

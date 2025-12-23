@@ -147,7 +147,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       trend: "98% certificados válidos",
       icon: <Users className="w-6 h-6 text-primary-foreground" />,
       color: "blue" as const,
-      onClick: () => navigate("/maritime"),
+      onClick: () => navigate("/maritime-command"),
       actionLabel: "Ver Frota"
     },
     {
@@ -157,7 +157,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       trend: "Ação necessária",
       icon: <AlertTriangle className="w-6 h-6 text-primary-foreground" />,
       color: "yellow" as const,
-      onClick: () => navigate("/maritime-certifications"),
+      onClick: () => navigate("/maritime-command"),
       actionLabel: "Verificar"
     },
     {
