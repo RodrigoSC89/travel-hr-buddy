@@ -1,4 +1,7 @@
-// @ts-nocheck
+/**
+ * Enhanced Dashboard Component
+ * PATCH 851: Removed @ts-nocheck, added proper typing
+ */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
