@@ -25,7 +25,11 @@ const initializeOptionalFeatures = async () => {
   await new Promise(resolve => setTimeout(resolve, 2000));
   
   try {
-    // Only initialize in production
+    // Initialize route prefetching for better navigation
+    const { initRoutePrefetch } = await import("@/lib/performance/route-prefetch");
+    initRoutePrefetch();
+    
+    // Only initialize monitoring in production
     if (import.meta.env.PROD) {
       const { webVitalsMonitor } = await import("@/lib/web-vitals-monitor");
       webVitalsMonitor.initialize();
