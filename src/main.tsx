@@ -1,5 +1,5 @@
-// main.tsx - PATCH 850.1 - Cache invalidation
-import { StrictMode } from "react";
+// main.tsx - PATCH 850.2 - Fixed React import
+import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
@@ -58,10 +58,10 @@ if (typeof requestIdleCallback !== "undefined") {
 const container = document.getElementById("root");
 if (container) {
   createRoot(container).render(
-    <StrictMode>
+    <React.StrictMode>
       <HelmetProvider>
         <App />
       </HelmetProvider>
-    </StrictMode>
+    </React.StrictMode>
   );
 }

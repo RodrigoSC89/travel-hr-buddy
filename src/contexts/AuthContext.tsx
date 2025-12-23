@@ -1,6 +1,5 @@
-// AuthContext - PATCH 850.1 - Cache invalidation fix
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
-import type { ReactNode } from "react";
+// AuthContext - PATCH 850.2 - Fixed React import to use namespace
+import * as React from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -31,10 +30,10 @@ const defaultAuthValue: AuthContextType = {
   resetPassword: async () => ({ error: null }),
 };
 
-const AuthContext = createContext<AuthContextType>(defaultAuthValue);
+const AuthContext = React.createContext<AuthContextType>(defaultAuthValue);
 
 export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
+  const context = React.useContext(AuthContext);
   if (!context) {
     console.warn("useAuth called outside of AuthProvider, returning default value");
     return defaultAuthValue;
@@ -43,16 +42,16 @@ export const useAuth = (): AuthContextType => {
 };
 
 interface AuthProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isInitialized, setIsInitialized] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
 
@@ -123,7 +122,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     };
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, fullName: string) => {
+  const signUp = React.useCallback(async (email: string, password: string, fullName: string) => {
     setIsLoading(true);
     
     const redirectUrl = `${window.location.origin}/`;
@@ -162,7 +161,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signIn = useCallback(async (email: string, password: string) => {
+  const signIn = React.useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     
     try {
@@ -189,7 +188,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signInWithOAuth = useCallback(async (provider: OAuthProvider) => {
+  const signInWithOAuth = React.useCallback(async (provider: OAuthProvider) => {
     setIsLoading(true);
     
     const redirectUrl = `${window.location.origin}/`;
@@ -220,7 +219,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signOut = useCallback(async () => {
+  const signOut = React.useCallback(async () => {
     setIsLoading(true);
     try {
       await supabase.auth.signOut();
@@ -231,7 +230,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const resetPassword = useCallback(async (email: string) => {
+  const resetPassword = React.useCallback(async (email: string) => {
     const redirectUrl = `${window.location.origin}/auth?type=recovery`;
     
     try {
@@ -258,7 +257,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const value: AuthContextType = useMemo(() => ({
+  const value: AuthContextType = React.useMemo(() => ({
     user,
     session,
     isLoading,

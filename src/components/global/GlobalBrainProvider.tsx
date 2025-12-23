@@ -1,8 +1,4 @@
-/**
- * Global Brain Provider - Permite acesso ao Nautilus Brain de qualquer lugar
- */
-
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import * as React from "react";
 import { NautilusBrainGlobal, NautilusBrainTrigger } from "./NautilusBrainGlobal";
 
 interface BrainContextType {
@@ -11,10 +7,10 @@ interface BrainContextType {
   isOpen: boolean;
 }
 
-const BrainContext = createContext<BrainContextType | undefined>(undefined);
+const BrainContext = React.createContext<BrainContextType | undefined>(undefined);
 
 export const useBrain = () => {
-  const context = useContext(BrainContext);
+  const context = React.useContext(BrainContext);
   if (!context) {
     throw new Error("useBrain must be used within GlobalBrainProvider");
   }
@@ -22,7 +18,7 @@ export const useBrain = () => {
 };
 
 interface GlobalBrainProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
   showTrigger?: boolean;
 }
 
@@ -30,8 +26,8 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
   children, 
   showTrigger = true 
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [context, setContext] = useState("");
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [context, setContext] = React.useState("");
 
   const openBrain = (ctx?: string) => {
     setContext(ctx || "");
