@@ -3,7 +3,7 @@
  * PATCH 834: Optimized skeleton components for perceived performance
  */
 
-import React from 'react';
+import * as React from "react";
 import { cn } from '@/lib/utils';
 
 interface SkeletonProps {

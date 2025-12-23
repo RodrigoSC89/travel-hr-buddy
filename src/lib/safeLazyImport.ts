@@ -1,4 +1,5 @@
-import React, { lazy, Suspense } from "react";
+import * as React from "react";
+const { lazy, Suspense } = React;
 
 /**
  * Utilitário de importação segura para módulos React,

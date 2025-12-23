@@ -2,7 +2,7 @@
  * Offline Indicator - Shows sync status and pending actions
  */
 
-import React from 'react';
+import * as React from "react";
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';

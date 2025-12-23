@@ -3,7 +3,7 @@
  * Professional error handling with recovery options
  */
 
-import React from 'react';
+import * as React from "react";
 import { AlertTriangle, RefreshCw, Home, ArrowLeft, Bug } from 'lucide-react';
 import { Button } from './button';
 import { cn } from '@/lib/utils';
