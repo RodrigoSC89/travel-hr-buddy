@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - incident_reports table schema mismatch with local interface
 /**
  * PATCH 491 - Consolidated Incident Reports Module
  * Consolidates incident-reports/ and incidents/ into one unified system
@@ -22,7 +22,8 @@ import {
   Plus,
   AlertCircle,
   Eye,
-  Edit
+  Edit,
+  AlertTriangle
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -69,7 +70,7 @@ const IncidentReports = () => {
 
       if (error) throw error;
 
-      setIncidents(data || []);
+      setIncidents((data ?? []) as Incident[]);
     } catch (error) {
       console.error("Error fetching incidents:", error);
       toast({
