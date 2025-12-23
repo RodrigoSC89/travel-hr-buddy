@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AI Logger - Tracks all AI interactions across the system
  * Logs prompts, responses, performance metrics, and user context
@@ -6,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface AILogEntry {
   user_id?: string;
@@ -68,14 +68,14 @@ class AILogger {
     const startTime = Date.now();
     let status: "success" | "error" | "timeout" = "success";
     let errorMessage: string | undefined;
-    let response: T;
+    let responseData: T | undefined;
 
     try {
-      response = await aiCall();
-      return response;
-    } catch (error: any) {
+      responseData = await aiCall();
+      return responseData;
+    } catch (error: unknown) {
       status = "error";
-      errorMessage = error.message || "Unknown error";
+      errorMessage = error instanceof Error ? error.message : "Unknown error";
       throw error;
     } finally {
       const responseTime = Date.now() - startTime;
@@ -83,7 +83,7 @@ class AILogger {
       await this.log({
         service,
         prompt,
-        response: response ? JSON.stringify(response).slice(0, 1000) : undefined,
+        response: responseData ? JSON.stringify(responseData).slice(0, 1000) : undefined,
         response_time_ms: responseTime,
         model,
         status,

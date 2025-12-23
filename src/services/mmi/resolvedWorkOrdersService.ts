@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 653 - Service for managing resolved work orders (OS) for AI learning
  * Updated to match new mmi_os_resolvidas table schema
@@ -6,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface MmiOsResolvidasRow {
   id: string;
@@ -19,14 +19,14 @@ export interface MmiOsResolvidasRow {
   tempo_resolucao_horas: number | null;
   custo_estimado: number | null;
   tecnico_responsavel: string | null;
-  resolvido_em: string;
+  resolvido_em: string | null;
   resolvido_por: string | null;
   tags: string[] | null;
   criticidade: string | null;
   origem: string | null;
-  metadata: Record<string, any> | null;
-  created_at: string;
-  updated_at: string;
+  metadata: Json | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 export interface CreateResolvedWorkOrderInput {
@@ -43,7 +43,7 @@ export interface CreateResolvedWorkOrderInput {
   tags?: string[];
   criticidade?: string;
   origem?: string;
-  metadata?: Record<string, any>;
+  metadata?: Json;
 }
 
 /**
@@ -165,7 +165,7 @@ export const updateWorkOrderResult = async (
   tecnico_responsavel?: string
 ): Promise<{ data: MmiOsResolvidasRow | null; error: Error | null }> => {
   try {
-    const updateData: Partial<MmiOsResolvidasRow> = {
+    const updateData: { resultado: string; tecnico_responsavel?: string } = {
       resultado,
     };
 

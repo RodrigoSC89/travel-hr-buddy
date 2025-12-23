@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Centralized API module for template operations
  * Provides abstraction layer over Supabase calls for template management
@@ -7,15 +6,17 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
+import type { Json } from "@/integrations/supabase/types";
+
 export interface Template {
   id: string;
   title: string;
-  content: string | object;
-  created_by: string;
-  created_at: string;
-  updated_at: string;
-  is_favorite?: boolean;
-  is_private?: boolean;
+  content: Json;
+  created_by: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  is_favorite?: boolean | null;
+  is_private?: boolean | null;
 }
 
 export interface CreateTemplateData {
@@ -51,9 +52,18 @@ export async function fetchTemplates(): Promise<Template[]> {
 
     if (error) throw error;
 
-    return data || [];
+    return (data || []).map(d => ({
+      id: d.id,
+      title: d.title,
+      content: d.content,
+      created_by: d.created_by,
+      created_at: d.created_at,
+      updated_at: d.updated_at,
+      is_favorite: d.is_favorite,
+      is_private: d.is_private,
+    }));
   } catch (err) {
-    logger.error("Error fetching templates:", err);
+    logger.error("Error fetching templates:", { err });
     throw err;
   }
 }
@@ -71,9 +81,20 @@ export async function fetchTemplate(id: string): Promise<Template | null> {
 
     if (error) throw error;
 
-    return data;
+    if (!data) return null;
+    
+    return {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      created_by: data.created_by,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      is_favorite: data.is_favorite,
+      is_private: data.is_private,
+    };
   } catch (err) {
-    logger.error("Error fetching template:", err);
+    logger.error("Error fetching template:", { err });
     throw err;
   }
 }
@@ -91,21 +112,30 @@ export async function createTemplate(templateData: CreateTemplateData): Promise<
 
     const { data, error } = await supabase
       .from("templates")
-      .insert({
+      .insert([{
         title: templateData.title,
-        content: templateData.content,
+        content: templateData.content as string,
         is_favorite: templateData.is_favorite || false,
         is_private: templateData.is_private || false,
         created_by: user.id,
-      })
+      }])
       .select()
       .single();
 
     if (error) throw error;
 
-    return data;
+    return {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      created_by: data.created_by,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      is_favorite: data.is_favorite,
+      is_private: data.is_private,
+    };
   } catch (err) {
-    logger.error("Error creating template:", err);
+    logger.error("Error creating template:", { err });
     throw err;
   }
 }
@@ -115,7 +145,7 @@ export async function createTemplate(templateData: CreateTemplateData): Promise<
  */
 export async function updateTemplate(templateData: UpdateTemplateData): Promise<Template> {
   try {
-    const updateData: Record<string, any> = {};
+    const updateData: Record<string, unknown> = {};
     
     if (templateData.title !== undefined) updateData.title = templateData.title;
     if (templateData.content !== undefined) updateData.content = templateData.content;
@@ -131,9 +161,18 @@ export async function updateTemplate(templateData: UpdateTemplateData): Promise<
 
     if (error) throw error;
 
-    return data;
+    return {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      created_by: data.created_by,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      is_favorite: data.is_favorite,
+      is_private: data.is_private,
+    };
   } catch (err) {
-    logger.error("Error updating template:", err);
+    logger.error("Error updating template:", { err });
     throw err;
   }
 }
@@ -169,9 +208,18 @@ export async function toggleFavorite(id: string, isFavorite: boolean): Promise<T
 
     if (error) throw error;
 
-    return data;
+    return {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      created_by: data.created_by,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      is_favorite: data.is_favorite,
+      is_private: data.is_private,
+    };
   } catch (err) {
-    logger.error("Error toggling favorite:", err);
+    logger.error("Error toggling favorite:", { err });
     throw err;
   }
 }
@@ -190,9 +238,18 @@ export async function togglePrivate(id: string, isPrivate: boolean): Promise<Tem
 
     if (error) throw error;
 
-    return data;
+    return {
+      id: data.id,
+      title: data.title,
+      content: data.content,
+      created_by: data.created_by,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+      is_favorite: data.is_favorite,
+      is_private: data.is_private,
+    };
   } catch (err) {
-    logger.error("Error toggling private:", err);
+    logger.error("Error toggling private:", { err });
     throw err;
   }
 }
