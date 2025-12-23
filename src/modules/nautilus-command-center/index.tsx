@@ -1,22 +1,25 @@
 /**
- * NAUTILUS COMMAND CENTER - Módulo Unificado
+ * 🚀 NAUTILUS COMMAND CENTER - PREMIUM EDITION
  * Fusão de: Command Center, Dashboard Executivo, Nautilus Command, Centro de Operações
  * 
  * Central de Inteligência e Operações em Tempo Real
+ * PATCH PREMIUM-1.0 - Design extraordinário com IA autônoma
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   LayoutDashboard, Activity, TrendingUp, Brain, Bell, Settings,
-  RefreshCw, Sun, Moon, Maximize2, Download, Ship, Users, 
-  Wrench, DollarSign, Shield, AlertTriangle
+  RefreshCw, Sun, Moon, Maximize2, Ship, 
+  AlertTriangle, Zap, Shield, Mic, MicOff,
+  ChevronRight, Sparkles, Radio, Waves, Server
 } from "lucide-react";
 
 // Seções do módulo
@@ -26,9 +29,11 @@ import { ExecutivoSection } from "./sections/ExecutivoSection";
 import { IASection } from "./sections/IASection";
 import { AlertasSection } from "./sections/AlertasSection";
 import { ConfigSection } from "./sections/ConfigSection";
+import { ResilienciaSection } from "./sections/ResilienciaSection";
 
 // Hook de IA unificado
 import { useUnifiedCommandAI } from "./hooks/useUnifiedCommandAI";
+import { useVoiceCommands } from "./hooks/useVoiceCommands";
 
 export interface SystemStatus {
   fleet: { total: number; active: number; maintenance: number; alerts: number };
@@ -50,12 +55,13 @@ export interface Alert {
 }
 
 const tabs = [
-  { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
-  { id: "operations", label: "Operações", icon: Activity },
-  { id: "executive", label: "Executivo", icon: TrendingUp },
-  { id: "ai", label: "IA", icon: Brain },
-  { id: "alerts", label: "Alertas", icon: Bell },
-  { id: "settings", label: "Config", icon: Settings },
+  { id: "overview", label: "Visão Geral", icon: LayoutDashboard, gradient: "from-blue-500 to-cyan-500" },
+  { id: "operations", label: "Operações", icon: Activity, gradient: "from-emerald-500 to-teal-500" },
+  { id: "executive", label: "Executivo", icon: TrendingUp, gradient: "from-violet-500 to-purple-500" },
+  { id: "ai", label: "IA", icon: Brain, gradient: "from-pink-500 to-rose-500" },
+  { id: "resilience", label: "Resiliência", icon: Shield, gradient: "from-amber-500 to-orange-500" },
+  { id: "alerts", label: "Alertas", icon: Bell, gradient: "from-red-500 to-pink-500" },
+  { id: "settings", label: "Config", icon: Settings, gradient: "from-slate-500 to-zinc-500" },
 ];
 
 export default function NautilusCommandCenter() {
@@ -66,6 +72,7 @@ export default function NautilusCommandCenter() {
     document.documentElement.classList.contains("dark")
   );
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     fleet: { total: 12, active: 11, maintenance: 1, alerts: 3 },
     crew: { total: 247, onboard: 198, onLeave: 49, expiringCerts: 8 },
@@ -76,7 +83,13 @@ export default function NautilusCommandCenter() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [lastSync, setLastSync] = useState<Date>(new Date());
 
-  const { isConnected, aiStatus } = useUnifiedCommandAI();
+  const { isConnected, sendMessage, messages, isLoading: isAITyping } = useUnifiedCommandAI();
+  const { isListening, toggleVoice, transcript, isSupported: voiceSupported } = useVoiceCommands({
+    onCommand: (cmd: string) => {
+      toast.info(`Comando: ${cmd}`);
+      sendMessage(cmd);
+    }
+  });
 
   // Load data from database
   const loadSystemData = useCallback(async () => {
@@ -142,7 +155,7 @@ export default function NautilusCommandCenter() {
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await loadSystemData();
-    toast.success("Dados atualizados");
+    toast.success("Dados atualizados em tempo real");
     setIsRefreshing(false);
   };
 
@@ -163,145 +176,351 @@ export default function NautilusCommandCenter() {
     }
   };
 
-  const alertCounts = {
+  const alertCounts = useMemo(() => ({
     critical: alerts.filter(a => a.severity === "critical" && !a.resolved).length,
     high: alerts.filter(a => a.severity === "high" && !a.resolved).length,
     total: alerts.filter(a => !a.resolved).length
-  };
+  }), [alerts]);
+
+  const activeTabConfig = tabs.find(t => t.id === activeTab);
 
   return (
     <>
       <Helmet>
-        <title>Nautilus Command Center | Central de Inteligência</title>
-        <meta name="description" content="Central de Inteligência e Operações em Tempo Real - Dashboard unificado com IA" />
+        <title>Nautilus Command Center | Central de Inteligência Premium</title>
+        <meta name="description" content="Central de Inteligência e Operações em Tempo Real - Dashboard unificado com IA autônoma" />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
-        {/* Header Superior */}
-        <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="flex h-14 items-center justify-between px-4 lg:px-6">
-            {/* Logo e Título */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-gradient-to-br from-primary to-primary/60">
-                <Ship className="h-5 w-5 text-primary-foreground" />
-              </div>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+        {/* Animated Background Effect */}
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-1000" />
+        </div>
+
+        {/* Premium Header */}
+        <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+          <div className="flex h-16 items-center justify-between px-4 lg:px-6">
+            {/* Logo e Título Premium */}
+            <div className="flex items-center gap-4">
+              <motion.div 
+                className="relative"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-gradient-to-br from-primary via-primary/80 to-purple-600 shadow-lg shadow-primary/25">
+                  <Ship className="h-6 w-6 text-primary-foreground" />
+                </div>
+                <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
+                  <Sparkles className="h-2 w-2 text-white" />
+                </div>
+              </motion.div>
               <div>
-                <h1 className="text-lg font-bold tracking-tight">Nautilus Command Center</h1>
-                <p className="text-xs text-muted-foreground hidden sm:block">
+                <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                  Nautilus Command Center
+                </h1>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <Waves className="h-3 w-3" />
                   Central de Inteligência e Operações
                 </p>
               </div>
             </div>
 
-            {/* Status em tempo real */}
-            <div className="hidden md:flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className={`h-2 w-2 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
-                <span className="text-xs text-muted-foreground">
-                  {isConnected ? 'Sistema Online' : 'Conectando...'}
-                </span>
+            {/* Status Bar Premium */}
+            <div className="hidden lg:flex items-center gap-6">
+              {/* System Status */}
+              <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-muted/50 border">
+                <div className="flex items-center gap-2">
+                  <div className={`h-2 w-2 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-muted'}`} />
+                  <span className="text-xs font-medium">{isConnected ? 'Online' : 'Conectando...'}</span>
+                </div>
+                <div className="h-4 w-px bg-border" />
+                <div className="flex items-center gap-2">
+                  <Radio className="h-3 w-3 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">
+                    {lastSync.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                </div>
               </div>
-              <Badge variant="outline" className="text-xs">
-                Última sync: {lastSync.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
-              </Badge>
+
+              {/* Critical Alerts */}
               {alertCounts.critical > 0 && (
-                <Badge variant="destructive" className="animate-pulse">
-                  <AlertTriangle className="h-3 w-3 mr-1" />
-                  {alertCounts.critical} crítico(s)
-                </Badge>
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-destructive/10 border border-destructive/20"
+                >
+                  <AlertTriangle className="h-4 w-4 text-destructive animate-pulse" />
+                  <span className="text-xs font-semibold text-destructive">
+                    {alertCounts.critical} alertas críticos
+                  </span>
+                </motion.div>
               )}
             </div>
 
-            {/* Ações do header */}
+            {/* Action Buttons Premium */}
             <div className="flex items-center gap-2">
+              {/* Voice Command */}
+              {voiceSupported && (
+                <Button 
+                  variant={isListening ? "default" : "ghost"} 
+                  size="icon"
+                  onClick={toggleVoice}
+                  className={isListening ? "bg-red-500 hover:bg-red-600 animate-pulse" : ""}
+                >
+                  {isListening ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
+                </Button>
+              )}
+
               <Button 
                 variant="ghost" 
                 size="icon" 
                 onClick={handleRefresh}
                 disabled={isRefreshing}
+                className="relative"
               >
                 <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
+              
               <Button variant="ghost" size="icon" onClick={toggleTheme}>
                 {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
+              
               <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="hidden lg:flex">
                 <Maximize2 className="h-4 w-4" />
               </Button>
-              <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0">
-                <Brain className="h-3 w-3 mr-1" />
-                IA Ativa
-              </Badge>
+
+              {/* AI Status Badge Premium */}
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Badge 
+                  className="cursor-pointer bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 text-white border-0 shadow-lg shadow-purple-500/25 px-3 py-1"
+                  onClick={() => setShowAIPanel(!showAIPanel)}
+                >
+                  <Brain className="h-3 w-3 mr-1.5 animate-pulse" />
+                  IA Ativa
+                  <ChevronRight className={`h-3 w-3 ml-1 transition-transform ${showAIPanel ? 'rotate-90' : ''}`} />
+                </Badge>
+              </motion.div>
             </div>
           </div>
         </header>
 
-        {/* Conteúdo Principal */}
-        <main className="p-4 lg:p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-            {/* Navegação por Tabs */}
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 h-auto gap-1">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  key={tab.id}
-                  value={tab.id}
-                  className="flex items-center gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2"
+        {/* Voice Transcript Bar */}
+        <AnimatePresence>
+          {isListening && transcript && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="border-b bg-primary/5 px-4 py-2"
+            >
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                <span className="text-sm text-muted-foreground">Ouvindo:</span>
+                <span className="text-sm font-medium">{transcript}</span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Main Content with AI Side Panel */}
+        <div className="flex">
+          {/* Main Content Area */}
+          <main className={`flex-1 p-4 lg:p-6 transition-all duration-300 ${showAIPanel ? 'lg:pr-[380px]' : ''}`}>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              {/* Premium Tab Navigation */}
+              <div className="flex items-center gap-4 overflow-x-auto pb-2">
+                <TabsList className="inline-flex h-12 items-center justify-start gap-1 rounded-xl bg-muted/50 p-1 backdrop-blur">
+                  {tabs.map((tab) => (
+                    <TabsTrigger
+                      key={tab.id}
+                      value={tab.id}
+                      className={`
+                        relative flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all
+                        data-[state=active]:bg-background data-[state=active]:shadow-sm
+                        data-[state=active]:text-foreground
+                        hover:bg-background/50
+                      `}
+                    >
+                      <tab.icon className="h-4 w-4" />
+                      <span className="hidden sm:inline">{tab.label}</span>
+                      {tab.id === "alerts" && alertCounts.total > 0 && (
+                        <Badge variant="destructive" className="h-5 w-5 p-0 flex items-center justify-center text-[10px]">
+                          {alertCounts.total}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+
+              {/* Tab Content with Animations */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
-                  <tab.icon className="h-4 w-4" />
-                  <span className="hidden sm:inline">{tab.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+                  <TabsContent value="overview" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <VisaoGeralSection 
+                      systemStatus={systemStatus} 
+                      isLoading={isLoading}
+                      onNavigate={setActiveTab}
+                    />
+                  </TabsContent>
 
-            {/* Seções */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
+                  <TabsContent value="operations" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <OperacoesSection 
+                      systemStatus={systemStatus}
+                      isLoading={isLoading}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="executive" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <ExecutivoSection 
+                      systemStatus={systemStatus}
+                      isLoading={isLoading}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="ai" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <IASection />
+                  </TabsContent>
+
+                  <TabsContent value="resilience" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <ResilienciaSection />
+                  </TabsContent>
+
+                  <TabsContent value="alerts" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <AlertasSection 
+                      alerts={alerts}
+                      setAlerts={setAlerts}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="settings" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <ConfigSection />
+                  </TabsContent>
+                </motion.div>
+              </AnimatePresence>
+            </Tabs>
+          </main>
+
+          {/* AI Side Panel */}
+          <AnimatePresence>
+            {showAIPanel && (
+              <motion.aside
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 360, opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed right-0 top-16 bottom-0 z-40 border-l bg-background/95 backdrop-blur-xl overflow-hidden hidden lg:block"
               >
-                <TabsContent value="overview" className="mt-0">
-                  <VisaoGeralSection 
-                    systemStatus={systemStatus} 
-                    isLoading={isLoading}
-                    onNavigate={setActiveTab}
-                  />
-                </TabsContent>
+                <div className="h-full flex flex-col">
+                  {/* AI Panel Header */}
+                  <div className="p-4 border-b bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                          <Brain className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-semibold">Assistente IA</h3>
+                          <p className="text-xs text-muted-foreground">Nautilus Intelligence</p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        <Zap className="h-3 w-3 mr-1" />
+                        Gemini 2.5
+                      </Badge>
+                    </div>
+                  </div>
 
-                <TabsContent value="operations" className="mt-0">
-                  <OperacoesSection 
-                    systemStatus={systemStatus}
-                    isLoading={isLoading}
-                  />
-                </TabsContent>
+                  {/* Chat Messages */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    {messages.length === 0 ? (
+                      <div className="text-center py-8">
+                        <div className="h-16 w-16 mx-auto rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-4">
+                          <Sparkles className="h-8 w-8 text-purple-500" />
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Olá! Sou a IA do Nautilus Command Center.
+                        </p>
+                        <div className="space-y-2">
+                          {[
+                            "Mostrar status da frota",
+                            "Gerar relatório executivo",
+                            "Analisar riscos operacionais"
+                          ].map((suggestion, i) => (
+                            <Button
+                              key={i}
+                              variant="outline"
+                              size="sm"
+                              className="w-full justify-start text-xs"
+                              onClick={() => sendMessage(suggestion)}
+                            >
+                              <ChevronRight className="h-3 w-3 mr-2" />
+                              {suggestion}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      messages.map((msg, i) => (
+                        <div
+                          key={i}
+                          className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
+                              msg.role === 'user'
+                                ? 'bg-primary text-primary-foreground rounded-br-md'
+                                : 'bg-muted rounded-bl-md'
+                            }`}
+                          >
+                            {msg.content}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                    {isAITyping && (
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <div className="flex gap-1">
+                          <span className="h-2 w-2 rounded-full bg-current animate-bounce" />
+                          <span className="h-2 w-2 rounded-full bg-current animate-bounce delay-100" />
+                          <span className="h-2 w-2 rounded-full bg-current animate-bounce delay-200" />
+                        </div>
+                        <span className="text-xs">Pensando...</span>
+                      </div>
+                    )}
+                  </div>
 
-                <TabsContent value="executive" className="mt-0">
-                  <ExecutivoSection 
-                    systemStatus={systemStatus}
-                    isLoading={isLoading}
-                  />
-                </TabsContent>
-
-                <TabsContent value="ai" className="mt-0">
-                  <IASection />
-                </TabsContent>
-
-                <TabsContent value="alerts" className="mt-0">
-                  <AlertasSection 
-                    alerts={alerts}
-                    setAlerts={setAlerts}
-                  />
-                </TabsContent>
-
-                <TabsContent value="settings" className="mt-0">
-                  <ConfigSection />
-                </TabsContent>
-              </motion.div>
-            </AnimatePresence>
-          </Tabs>
-        </main>
+                  {/* Chat Input */}
+                  <div className="p-4 border-t bg-muted/30">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="Pergunte à IA..."
+                        className="flex-1 px-4 py-2 rounded-full bg-background border text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                            sendMessage(e.currentTarget.value);
+                            e.currentTarget.value = '';
+                          }
+                        }}
+                      />
+                      <Button size="icon" className="rounded-full">
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </motion.aside>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </>
   );
