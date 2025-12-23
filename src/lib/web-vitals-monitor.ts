@@ -4,6 +4,7 @@
  */
 
 import { onCLS, onLCP, onTTFB, onFCP, onINP, type Metric } from 'web-vitals';
+import { logger } from '@/lib/logger';
 
 export interface VitalMetric {
   name: string;
@@ -115,7 +116,7 @@ class WebVitalsMonitor {
     if (metric.value > threshold.poor) {
       const message = `${metric.name} is POOR: ${metric.value.toFixed(2)} (threshold: ${threshold.poor})`;
       this.alertCallbacks.forEach(cb => cb(metric, message));
-      console.warn(`[WebVitals Alert] ${message}`);
+      logger.warn(`[WebVitals Alert] ${message}`);
     }
   }
   
@@ -153,7 +154,7 @@ class WebVitalsMonitor {
         keepalive: true
       });
     } catch (error) {
-      console.error('[WebVitals] Failed to report metrics:', error);
+      logger.error('[WebVitals] Failed to report metrics:', error);
       // Re-queue failed metrics
       this.batchQueue.push(...batch);
     }
