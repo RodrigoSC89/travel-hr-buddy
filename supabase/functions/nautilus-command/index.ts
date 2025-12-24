@@ -153,16 +153,23 @@ ${JSON.stringify(enrichedContext, null, 2)}
 
     console.log("AI response received, streaming to client...");
 
-    // Log interaction asynchronously
+    // Log interaction asynchronously (fire and forget with proper error handling)
     const authHeader = req.headers.get("authorization");
     if (authHeader) {
-      supabase.from("ai_logs").insert({
-        service: "nautilus-command",
-        prompt_hash: btoa(messages[messages.length - 1]?.content?.slice(0, 50) || ""),
-        prompt_length: JSON.stringify(messages).length,
-        status: "success",
-        model: "google/gemini-2.5-flash"
-      }).catch((err: unknown) => console.error("Log error:", err));
+      (async () => {
+        try {
+          const { error: logError } = await supabase.from("ai_logs").insert({
+            service: "nautilus-command",
+            prompt_hash: btoa(messages[messages.length - 1]?.content?.slice(0, 50) || ""),
+            prompt_length: JSON.stringify(messages).length,
+            status: "success",
+            model: "google/gemini-2.5-flash"
+          });
+          if (logError) console.error("Log error:", logError);
+        } catch (err) {
+          console.error("Log error:", err);
+        }
+      })();
     }
 
     return new Response(response.body, {
