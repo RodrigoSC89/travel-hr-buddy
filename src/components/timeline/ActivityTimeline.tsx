@@ -138,7 +138,7 @@ export function ActivityTimeline() {
           type: "maintenance",
           title: "Manutenção",
           description: `Status: ${m.status}`,
-          timestamp: new Date(m.updated_at),
+          timestamp: new Date(m.updated_at || new Date()),
           severity: m.status === "overdue" ? "error" : "info",
         });
       });
