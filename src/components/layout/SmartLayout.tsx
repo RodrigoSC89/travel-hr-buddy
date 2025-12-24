@@ -4,6 +4,7 @@ import { SmartSidebar } from "@/components/layout/SmartSidebar";
 import { SmartHeader } from "@/components/layout/SmartHeader";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
@@ -24,35 +25,37 @@ export function SmartLayout() {
   
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
-      {/* Skip to content link for accessibility */}
-      <SkipToContent targetId="main-content" />
-      
-      <div className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}>
-        {/* Smart Sidebar - hidden on mobile by default */}
-        <div className={mobileClasses.hideOnMobile}>
-          <SmartSidebar />
+      <TooltipProvider>
+        {/* Skip to content link for accessibility */}
+        <SkipToContent targetId="main-content" />
+        
+        <div className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}>
+          {/* Smart Sidebar - hidden on mobile by default */}
+          <div className={mobileClasses.hideOnMobile}>
+            <SmartSidebar />
+          </div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Smart Header - responsive */}
+            <SmartHeader />
+
+            {/* Page Content - responsive padding */}
+            <main 
+              id="main-content"
+              tabIndex={-1}
+              className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding} focus:outline-none`}
+            >
+              <Suspense fallback={<LoadingFallback />}>
+                <Outlet />
+              </Suspense>
+            </main>
+          </div>
+
+          {/* Toast Notifications */}
+          <Toaster />
         </div>
-
-        {/* Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Smart Header - responsive */}
-          <SmartHeader />
-
-          {/* Page Content - responsive padding */}
-          <main 
-            id="main-content"
-            tabIndex={-1}
-            className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding} focus:outline-none`}
-          >
-            <Suspense fallback={<LoadingFallback />}>
-              <Outlet />
-            </Suspense>
-          </main>
-        </div>
-
-        {/* Toast Notifications */}
-        <Toaster />
-      </div>
+      </TooltipProvider>
     </ThemeProvider>
   );
 }
