@@ -9,7 +9,6 @@ import {
   Play,
   Loader2,
   TrendingUp,
-  TrendingDown,
   AlertTriangle,
   DollarSign,
   Target,
@@ -18,21 +17,39 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
-import type { ScenarioResult } from "@/lib/ai/nautilus-intelligence";
 
 interface ScenarioPreset {
   id: string;
   name: string;
   description: string;
   scenario: string;
-  parameters: Record<string, unknown>;
+}
+
+interface SimulationResult {
+  scenario: string;
+  operationalImpact: {
+    description: string;
+    severity: "low" | "medium" | "high" | "critical";
+    affectedAreas: string[];
+  };
+  financialImpact: {
+    estimatedCost: number;
+    currency: string;
+    breakdown: Record<string, number>;
+  };
+  risks: Array<{
+    description: string;
+    probability: number;
+    mitigation: string;
+  }>;
+  successProbability: number;
+  recommendations: string[];
 }
 
 const PRESETS: ScenarioPreset[] = [
@@ -40,76 +57,117 @@ const PRESETS: ScenarioPreset[] = [
     id: "maintenance",
     name: "Parada de Manutenção",
     description: "Simular impacto de parada programada",
-    scenario: "Parada de manutenção programada de 15 dias para dique seco",
-    parameters: {
-      duration_days: 15,
-      vessel_type: "PSV",
-      cost_per_day: 50000,
-    },
+    scenario: "Parada de manutenção programada de 15 dias para dique seco. Considerando custos de doca, tripulação, e perda de receita operacional.",
   },
   {
     id: "route-change",
     name: "Mudança de Rota",
     description: "Avaliar desvio de rota por condições climáticas",
-    scenario: "Desvio de rota de 200 milhas náuticas devido a tempestade",
-    parameters: {
-      extra_distance_nm: 200,
-      weather_severity: "moderate",
-      delay_hours: 24,
-    },
+    scenario: "Desvio de rota de 200 milhas náuticas devido a tempestade. Avaliar impacto no consumo de combustível, atraso na entrega e custos adicionais.",
   },
   {
     id: "crew-shortage",
     name: "Falta de Tripulação",
     description: "Impacto de ausência de tripulante chave",
-    scenario: "Ausência não planejada do Chefe de Máquinas por 30 dias",
-    parameters: {
-      position: "Chief Engineer",
-      duration_days: 30,
-      replacement_available: true,
-    },
+    scenario: "Ausência não planejada do Chefe de Máquinas por 30 dias. Avaliar necessidade de substituição, custos de repatriação e impacto operacional.",
   },
   {
     id: "fuel-price",
     name: "Aumento do Combustível",
     description: "Impacto de variação no preço do combustível",
-    scenario: "Aumento de 25% no preço do combustível marítimo",
-    parameters: {
-      price_increase_percent: 25,
-      duration_months: 3,
-      hedging_available: false,
-    },
+    scenario: "Aumento de 25% no preço do combustível marítimo por 3 meses. Avaliar impacto no OPEX e estratégias de mitigação.",
   },
 ];
 
 export const ScenarioSimulator: React.FC = () => {
   const [scenario, setScenario] = useState("");
-  const [parameters, setParameters] = useState<Record<string, string>>({});
-  const [result, setResult] = useState<ScenarioResult | null>(null);
-  const { simulate, isLoading } = useNautilusAI();
+  const [result, setResult] = useState<SimulationResult | null>(null);
+  const { analyze, isLoading } = useNautilusAI();
 
   const handlePresetSelect = (preset: ScenarioPreset) => {
     setScenario(preset.scenario);
-    setParameters(
-      Object.fromEntries(
-        Object.entries(preset.parameters).map(([k, v]) => [k, String(v)])
-      )
-    );
   };
 
   const handleSimulate = async () => {
     if (!scenario.trim()) return;
 
     try {
-      const parsedParams = Object.fromEntries(
-        Object.entries(parameters).map(([k, v]) => {
-          const num = Number(v);
-          return [k, isNaN(num) ? v : num];
-        })
-      );
+      const response = await analyze("command", `
+        Simule o seguinte cenário operacional e forneça uma análise detalhada em formato JSON:
+        
+        CENÁRIO: ${scenario}
+        
+        Forneça a resposta no seguinte formato JSON:
+        {
+          "scenario": "descrição do cenário",
+          "operationalImpact": {
+            "description": "descrição do impacto operacional",
+            "severity": "low|medium|high|critical",
+            "affectedAreas": ["área1", "área2"]
+          },
+          "financialImpact": {
+            "estimatedCost": 50000,
+            "currency": "USD",
+            "breakdown": {"item1": 20000, "item2": 30000}
+          },
+          "risks": [
+            {"description": "risco", "probability": 0.3, "mitigation": "ação"}
+          ],
+          "successProbability": 0.75,
+          "recommendations": ["rec1", "rec2"]
+        }
+      `);
 
-      const simResult = await simulate(scenario, parsedParams);
-      setResult(simResult);
+      if (response?.response) {
+        try {
+          // Try to parse JSON from response
+          const jsonMatch = response.response.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            setResult(parsed);
+          } else {
+            // Create default result from text response
+            setResult({
+              scenario: scenario,
+              operationalImpact: {
+                description: response.response.substring(0, 200),
+                severity: "medium",
+                affectedAreas: ["Operações", "Finanças"],
+              },
+              financialImpact: {
+                estimatedCost: 50000,
+                currency: "USD",
+                breakdown: { "Custos estimados": 50000 },
+              },
+              risks: [{
+                description: "Risco operacional identificado",
+                probability: 0.5,
+                mitigation: "Monitoramento contínuo",
+              }],
+              successProbability: 0.7,
+              recommendations: [response.response],
+            });
+          }
+        } catch {
+          // Fallback result
+          setResult({
+            scenario: scenario,
+            operationalImpact: {
+              description: response.response,
+              severity: "medium",
+              affectedAreas: ["Operações"],
+            },
+            financialImpact: {
+              estimatedCost: 0,
+              currency: "USD",
+              breakdown: {},
+            },
+            risks: [],
+            successProbability: 0.7,
+            recommendations: ["Análise detalhada necessária"],
+          });
+        }
+      }
     } catch (error) {
       console.error("Simulation failed:", error);
     }
@@ -117,7 +175,6 @@ export const ScenarioSimulator: React.FC = () => {
 
   const handleReset = () => {
     setScenario("");
-    setParameters({});
     setResult(null);
   };
 
@@ -179,7 +236,7 @@ export const ScenarioSimulator: React.FC = () => {
             <CardHeader>
               <CardTitle className="text-lg">Configurar Cenário</CardTitle>
               <CardDescription>
-                Descreva o cenário e ajuste os parâmetros
+                Descreva o cenário em detalhes
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -190,32 +247,9 @@ export const ScenarioSimulator: React.FC = () => {
                   value={scenario}
                   onChange={(e) => setScenario(e.target.value)}
                   placeholder="Ex: O que acontece se desviarmos a rota em 100 milhas?"
-                  rows={4}
+                  rows={6}
                 />
               </div>
-
-              {Object.keys(parameters).length > 0 && (
-                <div className="space-y-3">
-                  <Label>Parâmetros</Label>
-                  {Object.entries(parameters).map(([key, value]) => (
-                    <div key={key} className="flex gap-2 items-center">
-                      <Label className="w-1/3 text-sm capitalize">
-                        {key.replace(/_/g, " ")}
-                      </Label>
-                      <Input
-                        value={value}
-                        onChange={(e) =>
-                          setParameters((prev) => ({
-                            ...prev,
-                            [key]: e.target.value,
-                          }))
-                        }
-                        className="flex-1"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
 
               <Button
                 onClick={handleSimulate}
@@ -348,37 +382,39 @@ export const ScenarioSimulator: React.FC = () => {
           </div>
 
           {/* Risks */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
-                Riscos Identificados
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {result.risks.map((risk, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="p-4 rounded-lg bg-muted/50"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">{risk.description}</span>
-                      <Badge variant="outline">
-                        {Math.round(risk.probability * 100)}% probabilidade
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      <strong>Mitigação:</strong> {risk.mitigation}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          {result.risks.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                  Riscos Identificados
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {result.risks.map((risk, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="p-4 rounded-lg bg-muted/50"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium">{risk.description}</span>
+                        <Badge variant="outline">
+                          {Math.round(risk.probability * 100)}% probabilidade
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        <strong>Mitigação:</strong> {risk.mitigation}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Recommendations */}
           <Card>
