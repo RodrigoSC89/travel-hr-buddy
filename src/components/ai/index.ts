@@ -8,3 +8,5 @@ export { WorkflowAISuggestions } from "./WorkflowAISuggestions";
 export { PredictiveMaintenanceAI } from "./PredictiveMaintenanceAI";
 export { AutonomousProcurementAI } from "./AutonomousProcurementAI";
 export { IntelligentReportsAI } from "./IntelligentReportsAI";
+export { AICopilot } from "./AICopilot";
+export { ScenarioSimulator } from "./ScenarioSimulator";

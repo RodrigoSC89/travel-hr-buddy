@@ -1,6 +1,6 @@
 /**
  * AI Copilot - Proactive assistant that guides users
- * Features: contextual suggestions, natural language commands, scenario simulation
+ * Features: contextual suggestions, natural language commands
  */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -22,7 +22,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
@@ -46,68 +45,42 @@ export const AICopilot: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [streamingContent, setStreamingContent] = useState("");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [suggestions] = useState<Suggestion[]>([
+    {
+      id: "1",
+      title: "Analisar tendências",
+      action: "Mostre as tendências de manutenção da frota",
+      icon: <TrendingUp className="h-4 w-4" />,
+    },
+    {
+      id: "2",
+      title: "Detectar anomalias",
+      action: "Verifique anomalias nos dados operacionais",
+      icon: <AlertTriangle className="h-4 w-4" />,
+    },
+    {
+      id: "3",
+      title: "Gerar insights",
+      action: "Gere insights sobre a operação atual",
+      icon: <Lightbulb className="h-4 w-4" />,
+    },
+    {
+      id: "4",
+      title: "Simular cenário",
+      action: "Simule o impacto de uma parada de manutenção",
+      icon: <Play className="h-4 w-4" />,
+    },
+  ]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const {
-    streamingChat,
-    predict,
-    detectAnomalies,
-    generateInsights,
-    getCopilotHelp,
-    isLoading,
-  } = useNautilusAI();
-
-  // Load initial suggestions
-  useEffect(() => {
-    if (isOpen && suggestions.length === 0) {
-      loadSuggestions();
-    }
-  }, [isOpen]);
+  const { chat, analyze, predict, isLoading } = useNautilusAI();
 
   // Auto-scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, streamingContent]);
-
-  const loadSuggestions = async () => {
-    try {
-      const help = await getCopilotHelp();
-      // Parse suggestions from AI response
-      const defaultSuggestions: Suggestion[] = [
-        {
-          id: "1",
-          title: "Analisar tendências",
-          action: "Mostre as tendências de manutenção da frota",
-          icon: <TrendingUp className="h-4 w-4" />,
-        },
-        {
-          id: "2",
-          title: "Detectar anomalias",
-          action: "Verifique anomalias nos dados operacionais",
-          icon: <AlertTriangle className="h-4 w-4" />,
-        },
-        {
-          id: "3",
-          title: "Gerar insights",
-          action: "Gere insights sobre a operação atual",
-          icon: <Lightbulb className="h-4 w-4" />,
-        },
-        {
-          id: "4",
-          title: "Simular cenário",
-          action: "Simule o impacto de uma parada de manutenção",
-          icon: <Play className="h-4 w-4" />,
-        },
-      ];
-      setSuggestions(defaultSuggestions);
-    } catch (error) {
-      console.error("Failed to load suggestions:", error);
-    }
-  };
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -120,30 +93,36 @@ export const AICopilot: React.FC = () => {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = input;
     setInput("");
-    setStreamingContent("");
 
     try {
-      await streamingChat(
-        input,
-        {},
-        (delta) => {
-          setStreamingContent((prev) => prev + delta);
-        }
-      );
+      // Determine the best action based on input
+      let response;
+      if (currentInput.toLowerCase().includes("tendência") || currentInput.toLowerCase().includes("prever")) {
+        response = await predict("command", currentInput);
+      } else if (currentInput.toLowerCase().includes("analis") || currentInput.toLowerCase().includes("anomalia")) {
+        response = await analyze("command", currentInput);
+      } else {
+        response = await chat("command", currentInput);
+      }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: streamingContent || "...",
-          timestamp: new Date(),
-        },
-      ]);
-      setStreamingContent("");
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: response?.response || "Desculpe, não consegui processar sua solicitação.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Chat error:", error);
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "Ocorreu um erro ao processar sua mensagem. Tente novamente.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     }
   };
 
@@ -289,22 +268,7 @@ export const AICopilot: React.FC = () => {
                           </motion.div>
                         ))}
 
-                        {streamingContent && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="flex justify-start"
-                          >
-                            <div className="max-w-[80%] p-3 rounded-lg bg-muted">
-                              <p className="text-sm whitespace-pre-wrap">
-                                {streamingContent}
-                                <span className="animate-pulse">▊</span>
-                              </p>
-                            </div>
-                          </motion.div>
-                        )}
-
-                        {isLoading && !streamingContent && (
+                        {isLoading && (
                           <div className="flex justify-start">
                             <div className="p-3 rounded-lg bg-muted">
                               <Loader2 className="h-4 w-4 animate-spin" />

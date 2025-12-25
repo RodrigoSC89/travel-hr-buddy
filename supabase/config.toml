@@ -59,6 +59,10 @@ verify_jwt = false
 verify_jwt = false
 comment = "Nautilus Brain AI - Central intelligence with streaming LLM"
 
+[functions.nautilus-intelligence]
+verify_jwt = false
+comment = "Unified AI Gateway - chatWithAI, predictTrends, detectAnomalies, generateInsights"
+
 [functions.workflow-execute]
 verify_jwt = true
 
