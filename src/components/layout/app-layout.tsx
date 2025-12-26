@@ -14,10 +14,10 @@ import GlobalSearch from "@/components/ui/global-search";
 
 import EnhancedNotifications from "@/components/ui/enhanced-notifications";
 import { FloatingActionButton } from "@/components/ui/floating-action-button";
+import { AICopilot } from "@/components/ai/AICopilot";
 
 export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
-  const [isAssistantMinimized, setIsAssistantMinimized] = useState(true);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   return (
@@ -46,6 +46,9 @@ export const AppLayout: FC = () => {
             
             {/* Floating Action Button */}
             <FloatingActionButton />
+            
+            {/* AI Copilot - Global Assistant */}
+            <AICopilot />
             
             {/* Toast Notifications */}
             <Toaster />
