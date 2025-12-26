@@ -24,7 +24,8 @@ import {
   Settings,
   History as HistoryIcon,
   TrendingUp,
-  LayoutDashboard
+  LayoutDashboard,
+  Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutonomousAIPanel } from "./AutonomousAIPanel";
@@ -33,6 +34,7 @@ import { AIConfigurationPanel } from "./AIConfigurationPanel";
 import { AIDecisionHistory } from "./AIDecisionHistory";
 import { AIPerformanceComparison } from "./AIPerformanceComparison";
 import { AIExecutiveDashboard } from "./AIExecutiveDashboard";
+import { AIInsightsPanel } from "./AIInsightsPanel";
 import { useAINotifications } from "@/hooks/useAINotifications";
 import { useAutonomousAI } from "@/hooks/useAutonomousAI";
 import { useAIDecisionsSupabase } from "@/hooks/useAIDecisionsSupabase";
@@ -229,6 +231,10 @@ export function NOCModeLayout() {
             <TrendingUp className="h-4 w-4 mr-2" />
             Comparativo
           </TabsTrigger>
+          <TabsTrigger value="insights" className="data-[state=active]:bg-teal-500/20">
+            <Lightbulb className="h-4 w-4 mr-2" />
+            Insights
+          </TabsTrigger>
           <TabsTrigger value="config" className="data-[state=active]:bg-orange-500/20">
             <Settings className="h-4 w-4 mr-2" />
             Config
@@ -382,6 +388,12 @@ export function NOCModeLayout() {
         <TabsContent value="comparison" className="mt-0">
           <Card className="bg-[#12121a] border-gray-800 p-6">
             <AIPerformanceComparison />
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="insights" className="mt-0">
+          <Card className="bg-[#12121a] border-gray-800 p-6">
+            <AIInsightsPanel />
           </Card>
         </TabsContent>
 
