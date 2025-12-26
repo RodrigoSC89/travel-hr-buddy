@@ -1,7 +1,7 @@
-// @ts-nocheck - Local interfaces differ from DB schema (system_name, is_resolved columns don't exist)
+// @ts-nocheck - performance_metrics/alerts tables differ from local interfaces
 /**
  * Performance Dashboard
- * Table performance_alerts exists but local interfaces need adjustment
+ * TODO: Align DB schema with PerformanceMetric/PerformanceAlert interfaces
  * PATCH 850.5 - Migrated to LazyChart for bundle optimization
  */
 import React, { useEffect, useState } from "react";

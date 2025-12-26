@@ -1,11 +1,10 @@
-// @ts-nocheck - DB schema differs from types (timestamp vs recorded_at, title vs description) - needs mapping
+// @ts-nocheck - DB schema requires migration to match interfaces (speed_knots, fuel_level_percentage, etc)
 /**
  * Fleet Management Dashboard
- * Tables exist but column names differ from TypeScript interfaces
+ * TODO: Create migration to align DB schema with TypeScript interfaces
  */
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { VesselStatus, MaintenanceAlert, FuelUsage } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,10 +13,42 @@ import { Ship, MapPin, Fuel, AlertTriangle, Activity, TrendingUp } from "lucide-
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
+// Local interfaces that match DB schema
+interface VesselStatusDB {
+  id: string;
+  vessel_id: string;
+  status: string;
+  latitude?: number;
+  longitude?: number;
+  speed?: number;
+  heading?: number;
+  timestamp: string;
+  metadata?: Record<string, unknown>;
+}
+
+interface MaintenanceAlertDB {
+  id: string;
+  vessel_id?: string;
+  severity: string;
+  status: string;
+  description?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+interface FuelUsageDB {
+  id: string;
+  vessel_id: string;
+  fuel_type?: string;
+  quantity_liters?: number;
+  recorded_at: string;
+  metadata?: Record<string, unknown>;
+}
+
 export function FleetManagementDashboard() {
-  const [vesselStatuses, setVesselStatuses] = useState<VesselStatus[]>([]);
-  const [maintenanceAlerts, setMaintenanceAlerts] = useState<MaintenanceAlert[]>([]);
-  const [fuelUsage, setFuelUsage] = useState<FuelUsage[]>([]);
+  const [vesselStatuses, setVesselStatuses] = useState<VesselStatusDB[]>([]);
+  const [maintenanceAlerts, setMaintenanceAlerts] = useState<MaintenanceAlertDB[]>([]);
+  const [fuelUsage, setFuelUsage] = useState<FuelUsageDB[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadFleetData = useCallback(async () => {
@@ -46,9 +77,9 @@ export function FleetManagementDashboard() {
       if (alertsRes.error) throw alertsRes.error;
       if (fuelRes.error) throw fuelRes.error;
 
-      setVesselStatuses((statusRes.data ?? []) as VesselStatus[]);
-      setMaintenanceAlerts((alertsRes.data ?? []) as MaintenanceAlert[]);
-      setFuelUsage((fuelRes.data ?? []) as FuelUsage[]);
+      setVesselStatuses((statusRes.data ?? []) as VesselStatusDB[]);
+      setMaintenanceAlerts((alertsRes.data ?? []) as MaintenanceAlertDB[]);
+      setFuelUsage((fuelRes.data ?? []) as FuelUsageDB[]);
     } catch (error) {
       logger.error("Error loading fleet data", { error });
       toast.error("Failed to load fleet data");

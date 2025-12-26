@@ -1,4 +1,8 @@
-// @ts-nocheck
+// @ts-nocheck - mmi_os table needs migration, using work_orders instead
+/**
+ * MMI Orders Page
+ * TODO: Align mmi_os table with MMIOS interface
+ */
 import { useEffect, useState } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,13 +13,31 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { MMIOS } from "@/types/mmi";
 // Lazy import XLSX para não incluir ~2MB no bundle inicial
 const loadXLSX = () => import("xlsx").then(m => m);
 import html2pdf from "html2pdf.js";
 
+// Interface that matches the mmi_os table schema
+interface MMIOSRecord {
+  id: string;
+  order_number?: string;
+  title?: string;
+  description?: string;
+  status: string;
+  priority?: string;
+  assigned_to?: string;
+  vessel_id?: string;
+  equipment_id?: string;
+  scheduled_date?: string;
+  executed_at?: string;
+  technician_comment?: string;
+  created_at: string;
+  updated_at?: string;
+  metadata?: Record<string, unknown>;
+}
+
 export default function MMIOrdersPage() {
-  const [workOrders, setWorkOrders] = useState<MMIOS[]>([]);
+  const [workOrders, setWorkOrders] = useState<MMIOSRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
   const { toast } = useToast();
@@ -29,14 +51,14 @@ export default function MMIOrdersPage() {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from("mmi_os")
+        .from("mmi_work_orders")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setWorkOrders(data || []);
+      setWorkOrders((data || []) as MMIOSRecord[]);
     } catch (error) {
-      console.error("Error loading work orders:", error);
+      logger.error("Error loading work orders:", error);
       toast({
         title: "Erro ao carregar ordens de serviço",
         description: error instanceof Error ? error.message : "Erro desconhecido",
