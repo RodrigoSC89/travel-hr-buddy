@@ -1,4 +1,7 @@
-// @ts-nocheck
+/**
+ * Maintenance Calendar View Component
+ * PATCH 853 - Removed @ts-nocheck, using maintenance_schedules table
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
@@ -6,18 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format, isSameDay, startOfMonth, endOfMonth } from "date-fns";
+import type { Database } from "@/integrations/supabase/types";
 
-interface MaintenanceTask {
-  id: string;
-  task_name: string;
-  scheduled_date: string;
-  status: string;
-  priority: string;
-}
+type MaintenanceSchedule = Database["public"]["Tables"]["maintenance_schedules"]["Row"];
 
 export const MaintenanceCalendarView: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [tasks, setTasks] = useState<MaintenanceTask[]>([]);
+  const [tasks, setTasks] = useState<MaintenanceSchedule[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -34,7 +32,7 @@ export const MaintenanceCalendarView: React.FC = () => {
       const end = endOfMonth(date);
 
       const { data, error } = await supabase
-        .from("maintenance_tasks")
+        .from("maintenance_schedules")
         .select("*")
         .gte("scheduled_date", format(start, "yyyy-MM-dd"))
         .lte("scheduled_date", format(end, "yyyy-MM-dd"))
@@ -57,28 +55,29 @@ export const MaintenanceCalendarView: React.FC = () => {
 
   const getTasksForDate = (date: Date) => {
     return tasks.filter(task => 
-      isSameDay(new Date(task.scheduled_date), date)
+      task.scheduled_date && isSameDay(new Date(task.scheduled_date), date)
     );
   };
 
   const selectedDateTasks = selectedDate ? getTasksForDate(selectedDate) : [];
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-    case "urgent": return "bg-red-500";
-    case "high": return "bg-orange-500";
-    case "medium": return "bg-yellow-500";
-    case "low": return "bg-green-500";
+  const getTypeColor = (type: string | null) => {
+    switch (type) {
+    case "corrective": return "bg-red-500";
+    case "preventive": return "bg-blue-500";
+    case "predictive": return "bg-purple-500";
+    case "routine": return "bg-green-500";
     default: return "bg-gray-500";
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status) {
     case "completed": return "text-green-600";
     case "in_progress": return "text-blue-600";
     case "overdue": return "text-red-600";
     case "pending": return "text-yellow-600";
+    case "scheduled": return "text-purple-600";
     default: return "text-gray-600";
     }
   };
@@ -133,18 +132,23 @@ export const MaintenanceCalendarView: React.FC = () => {
                   className="border rounded-lg p-3 space-y-2"
                 >
                   <div className="flex items-start justify-between">
-                    <h4 className="font-medium text-sm">{task.task_name}</h4>
+                    <h4 className="font-medium text-sm">{task.description || "Maintenance Task"}</h4>
                     <Badge 
-                      className={`${getPriorityColor(task.priority)} text-xs`}
+                      className={`${getTypeColor(task.maintenance_type)} text-xs`}
                     >
-                      {task.priority}
+                      {task.maintenance_type || "General"}
                     </Badge>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs font-medium ${getStatusColor(task.status)}`}>
-                      {task.status.replace("_", " ").toUpperCase()}
+                      {(task.status || "pending").replace("_", " ").toUpperCase()}
                     </span>
                   </div>
+                  {task.vendor && (
+                    <div className="text-xs text-muted-foreground">
+                      Vendor: {task.vendor}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
