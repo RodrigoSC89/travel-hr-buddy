@@ -83,6 +83,7 @@ const UserProfilePage = lazy(() => import(/* webpackChunkName: "page-profile" */
 const RevolutionaryAI = lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/RevolutionaryAI"));
 const AIEnhancedModules = lazy(() => import(/* webpackChunkName: "page-ai-modules" */ "@/pages/AIEnhancedModules"));
 const SystemDebug = lazy(() => import(/* webpackChunkName: "page-debug" */ "@/pages/SystemDebug"));
+const NOCMode = lazy(() => import(/* webpackChunkName: "page-noc" */ "@/pages/NOCMode"));
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -150,6 +151,7 @@ function App() {
                         <Route path="__debug__" element={<SystemDebug />} />
                         <Route path="revolutionary-ai/*" element={<RevolutionaryAI />} />
                         <Route path="ai-modules" element={<AIEnhancedModules />} />
+                        <Route path="noc-mode" element={<NOCMode />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
