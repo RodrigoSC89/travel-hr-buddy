@@ -1,46 +1,63 @@
-// @ts-nocheck
+/**
+ * Crew Rotation Schedule Component
+ * PATCH 853 - Removed @ts-nocheck, using crew_embarkations table
+ */
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { CrewRotation } from "@/types/modules";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Ship, User, AlertCircle, CheckCircle, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import type { Database } from "@/integrations/supabase/types";
+
+type CrewEmbarkation = Database["public"]["Tables"]["crew_embarkations"]["Row"];
 
 export function CrewRotationSchedule() {
-  const [rotations, setRotations] = useState<CrewRotation[]>([]);
+  const [embarkations, setEmbarkations] = useState<CrewEmbarkation[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadRotations();
+    loadEmbarkations();
   }, []);
 
-  const loadRotations = async () => {
+  const loadEmbarkations = async () => {
     try {
       const { data, error } = await supabase
-        .from("crew_rotations")
+        .from("crew_embarkations")
         .select("*")
-        .order("scheduled_date", { ascending: true });
+        .order("embark_date", { ascending: true })
+        .limit(50);
 
       if (error) throw error;
-      setRotations(data || []);
+      setEmbarkations(data || []);
     } catch (error) {
-      console.error("Error loading rotations:", error);
-      toast.error("Failed to load crew rotations");
+      console.error("Error loading embarkations:", error);
+      toast.error("Failed to load crew embarkations");
     } finally {
       setLoading(false);
     }
   };
 
+  const getStatusFromDates = (embarkDate: string | null, disembarkDate: string | null): string => {
+    if (!embarkDate) return "pending";
+    const now = new Date();
+    const embark = new Date(embarkDate);
+    const disembark = disembarkDate ? new Date(disembarkDate) : null;
+    
+    if (disembark && now > disembark) return "completed";
+    if (now >= embark && (!disembark || now <= disembark)) return "active";
+    if (now < embark) return "scheduled";
+    return "pending";
+  };
+
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       scheduled: "secondary",
-      confirmed: "default",
+      active: "default",
       completed: "outline",
-      cancelled: "destructive",
-      delayed: "outline"
+      pending: "destructive"
     };
 
     return (
@@ -48,18 +65,6 @@ export function CrewRotationSchedule() {
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
-  };
-
-  const getRotationTypeIcon = (type: string) => {
-    const icons: Record<string, React.ReactNode> = {
-      embarkation: <Ship className="h-4 w-4" />,
-      disembarkation: <User className="h-4 w-4" />,
-      rotation: <Calendar className="h-4 w-4" />,
-      leave: <Clock className="h-4 w-4" />,
-      emergency: <AlertCircle className="h-4 w-4" />
-    };
-
-    return icons[type] || <Calendar className="h-4 w-4" />;
   };
 
   if (loading) {
@@ -86,7 +91,7 @@ export function CrewRotationSchedule() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {rotations.length === 0 ? (
+        {embarkations.length === 0 ? (
           <Card className="col-span-full">
             <CardContent className="flex flex-col items-center justify-center p-8">
               <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
@@ -97,56 +102,59 @@ export function CrewRotationSchedule() {
             </CardContent>
           </Card>
         ) : (
-          rotations.map((rotation) => (
-            <Card key={rotation.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    {getRotationTypeIcon(rotation.rotation_type)}
-                    <CardTitle className="text-lg">
-                      {rotation.rotation_type.charAt(0).toUpperCase() + rotation.rotation_type.slice(1)}
-                    </CardTitle>
-                  </div>
-                  {getStatusBadge(rotation.status)}
-                </div>
-                <CardDescription>
-                  {format(new Date(rotation.scheduled_date), "PPP")}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  {rotation.departure_port && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">From:</span>
-                      <span className="font-medium">{rotation.departure_port}</span>
+          embarkations.map((embarkation) => {
+            const status = getStatusFromDates(embarkation.embark_date, embarkation.disembark_date);
+            return (
+              <Card key={embarkation.id}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Ship className="h-4 w-4" />
+                      <CardTitle className="text-lg">
+                        {embarkation.vessel_name || "Unknown Vessel"}
+                      </CardTitle>
                     </div>
-                  )}
-                  {rotation.arrival_port && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">To:</span>
-                      <span className="font-medium">{rotation.arrival_port}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Medical:</span>
-                    <span className="flex items-center">
-                      {rotation.medical_clearance ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                      ) : (
-                        <AlertCircle className="h-4 w-4 text-yellow-500" />
-                      )}
-                    </span>
+                    {getStatusBadge(status)}
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Documents:</span>
-                    <Badge variant="outline" className="text-xs">
-                      {rotation.documentation_status}
-                    </Badge>
+                  <CardDescription>
+                    {embarkation.embark_date 
+                      ? format(new Date(embarkation.embark_date), "PPP")
+                      : "Date not set"}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 text-sm">
+                    {embarkation.embark_location && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">From:</span>
+                        <span className="font-medium">{embarkation.embark_location}</span>
+                      </div>
+                    )}
+                    {embarkation.disembark_location && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">To:</span>
+                        <span className="font-medium">{embarkation.disembark_location}</span>
+                      </div>
+                    )}
+                    {embarkation.function_role && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Role:</span>
+                        <span className="font-medium">{embarkation.function_role}</span>
+                      </div>
+                    )}
+                    {embarkation.hours_worked !== null && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Hours:</span>
+                        <Badge variant="outline" className="text-xs">
+                          {embarkation.hours_worked}h
+                        </Badge>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
+                </CardContent>
+              </Card>
+            );
+          })
         )}
       </div>
     </div>

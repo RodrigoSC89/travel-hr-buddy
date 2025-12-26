@@ -1,5 +1,7 @@
-// @ts-nocheck
-// PATCH 393 - Digital Signature Component using react-signature-canvas
+/**
+ * PATCH 393 - Digital Signature Component using react-signature-canvas
+ * PATCH 853 - Removed @ts-nocheck, added proper TypeScript types
+ */
 import React, { useRef, useState } from "react";
 import {
   Dialog,
