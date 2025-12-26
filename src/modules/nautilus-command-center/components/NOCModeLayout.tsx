@@ -23,7 +23,8 @@ import {
   BarChart3,
   Settings,
   History as HistoryIcon,
-  TrendingUp
+  TrendingUp,
+  LayoutDashboard
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutonomousAIPanel } from "./AutonomousAIPanel";
@@ -31,6 +32,7 @@ import { AILearningMetricsDashboard } from "./AILearningMetricsDashboard";
 import { AIConfigurationPanel } from "./AIConfigurationPanel";
 import { AIDecisionHistory } from "./AIDecisionHistory";
 import { AIPerformanceComparison } from "./AIPerformanceComparison";
+import { AIExecutiveDashboard } from "./AIExecutiveDashboard";
 import { useAINotifications } from "@/hooks/useAINotifications";
 import { useAutonomousAI } from "@/hooks/useAutonomousAI";
 import { useAIDecisionsSupabase } from "@/hooks/useAIDecisionsSupabase";
@@ -62,7 +64,7 @@ export function NOCModeLayout() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [activeTab, setActiveTab] = useState("monitoring");
+  const [activeTab, setActiveTab] = useState("executive");
   
   // AI integration
   const { statistics, isActive } = useAutonomousAI();
@@ -198,6 +200,10 @@ export function NOCModeLayout() {
       {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="bg-[#12121a] border border-gray-800">
+          <TabsTrigger value="executive" className="data-[state=active]:bg-emerald-500/20">
+            <LayoutDashboard className="h-4 w-4 mr-2" />
+            Executivo
+          </TabsTrigger>
           <TabsTrigger value="monitoring" className="data-[state=active]:bg-primary/20">
             <Monitor className="h-4 w-4 mr-2" />
             Monitoramento
@@ -228,6 +234,12 @@ export function NOCModeLayout() {
             Config
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="executive" className="mt-0">
+          <Card className="bg-[#12121a] border-gray-800 p-6">
+            <AIExecutiveDashboard />
+          </Card>
+        </TabsContent>
 
         <TabsContent value="monitoring" className="mt-0">
           <div className="grid grid-cols-12 gap-4">
