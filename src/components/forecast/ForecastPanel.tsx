@@ -1,15 +1,54 @@
-// @ts-nocheck
+/**
+ * Forecast Panel - Weather and Sea Conditions
+ * PATCH CLEANUP: Removed @ts-nocheck, added proper typing
+ */
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Wind, Waves, Thermometer, Cloud } from "lucide-react";
 import { subscribeForecast } from "@/lib/mqtt/publisher";
 
+interface ForecastData {
+  wind: number;
+  wave: number;
+  temp: number;
+  visibility: number;
+}
+
+interface MetricProps {
+  label: string;
+  value: string;
+  icon: React.ReactNode;
+}
+
+function Metric({ label, value, icon }: MetricProps) {
+  return (
+    <div className="flex items-center space-x-2 p-2 bg-muted rounded">
+      {icon}
+      <div>
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="text-lg font-bold text-foreground">{value}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function ForecastPanel() {
-  const [data, setData] = useState({ wind: 0, wave: 0, temp: 0, visibility: 0 });
+  const [data, setData] = useState<ForecastData>({ wind: 0, wave: 0, temp: 0, visibility: 0 });
 
   useEffect(() => {
-    const client = subscribeForecast((msg) => setData(msg));
-    return () => client.end();
+    const client = subscribeForecast((msg: Record<string, unknown>) => {
+      setData({
+        wind: typeof msg.wind === 'number' ? msg.wind : 0,
+        wave: typeof msg.wave === 'number' ? msg.wave : 0,
+        temp: typeof msg.temp === 'number' ? msg.temp : 0,
+        visibility: typeof msg.visibility === 'number' ? msg.visibility : 0,
+      });
+    });
+    return () => {
+      if (client && typeof client.end === 'function') {
+        client.end();
+      }
+    };
   }, []);
 
   return (
@@ -24,17 +63,5 @@ export default function ForecastPanel() {
         <Metric label="Visibilidade" value={`${data.visibility.toFixed(1)} km`} icon={<Cloud className="text-muted-foreground" />} />
       </CardContent>
     </Card>
-  );
-}
-
-function Metric({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
-  return (
-    <div className="flex items-center space-x-2 p-2 bg-muted rounded">
-      {icon}
-      <div>
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-lg font-bold text-foreground">{value}</p>
-      </div>
-    </div>
   );
 }

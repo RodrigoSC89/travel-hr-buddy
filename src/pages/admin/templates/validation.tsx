@@ -1,8 +1,7 @@
-// @ts-nocheck
 /**
- * Página de Validação do Editor de Templates
+ * Template Validation Page
+ * PATCH CLEANUP: Removed @ts-nocheck
  */
-
 import React from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import TemplateValidationReport from "@/modules/document-hub/templates/validation/TemplateValidationReport";

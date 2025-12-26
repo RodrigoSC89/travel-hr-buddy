@@ -5,6 +5,7 @@ import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
 import { createHtmlPlugin } from "vite-plugin-html";
+import compression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -211,7 +212,19 @@ export default defineConfig(({ mode }) => {
           enabled: false,
           type: "module"
         }
-      })
+      }),
+      // PATCH PERF: Gzip compression for production builds
+      mode === "production" && compression({
+        algorithm: "gzip",
+        ext: ".gz",
+        threshold: 1024, // Only compress files > 1KB
+      }),
+      // PATCH PERF: Brotli compression for modern browsers
+      mode === "production" && compression({
+        algorithm: "brotliCompress",
+        ext: ".br",
+        threshold: 1024,
+      }),
     ].filter(Boolean),
     resolve: {
       alias: {
