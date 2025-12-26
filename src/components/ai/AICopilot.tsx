@@ -3,7 +3,7 @@
  * Features: contextual suggestions, natural language commands
  */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot,
@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Minimize2,
   Maximize2,
+  Mic,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
+import { VoiceInput } from "./VoiceInput";
 
 interface Message {
   id: string;
@@ -136,6 +138,18 @@ export const AICopilot: React.FC = () => {
       handleSend();
     }
   };
+
+  // Handle voice transcription
+  const handleVoiceTranscription = useCallback((text: string) => {
+    setInput(text);
+    // Auto-send after voice input
+    setTimeout(() => {
+      const inputEl = document.querySelector('input[placeholder="Digite sua mensagem..."]') as HTMLInputElement;
+      if (inputEl) {
+        inputEl.form?.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      }
+    }, 100);
+  }, []);
 
   if (!isOpen) {
     return (
@@ -281,6 +295,10 @@ export const AICopilot: React.FC = () => {
                     {/* Input */}
                     <div className="p-4 border-t">
                       <div className="flex gap-2">
+                        <VoiceInput
+                          onTranscription={handleVoiceTranscription}
+                          disabled={isLoading}
+                        />
                         <Input
                           value={input}
                           onChange={(e) => setInput(e.target.value)}
