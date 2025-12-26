@@ -1,8 +1,11 @@
-// @ts-nocheck - performance_metrics/alerts tables differ from local interfaces
+// @ts-nocheck
 /**
  * Performance Dashboard
- * TODO: Align DB schema with PerformanceMetric/PerformanceAlert interfaces
+ * NOTE: @ts-nocheck required - component uses UI fields (page_url, rating, is_resolved)
+ * that don't match current performance_metrics/alerts DB schema.
+ * Needs schema alignment before removing @ts-nocheck.
  * PATCH 850.5 - Migrated to LazyChart for bundle optimization
+ * PATCH 856 - Documented schema requirements
  */
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

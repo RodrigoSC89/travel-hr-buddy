@@ -1,7 +1,10 @@
-// @ts-nocheck - DB schema requires migration to match interfaces (speed_knots, fuel_level_percentage, etc)
+// @ts-nocheck
 /**
  * Fleet Management Dashboard
- * TODO: Create migration to align DB schema with TypeScript interfaces
+ * NOTE: @ts-nocheck required - component uses UI fields (speed_knots, fuel_level_percentage, 
+ * latitude, longitude) that don't exist in current vessel_status DB schema.
+ * These fields need DB migration to be added before removing @ts-nocheck.
+ * PATCH 856 - Documented schema requirements
  */
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,38 +15,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Ship, MapPin, Fuel, AlertTriangle, Activity, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
-
-// Local interfaces that match DB schema
-interface VesselStatusDB {
-  id: string;
-  vessel_id: string;
-  status: string;
-  latitude?: number;
-  longitude?: number;
-  speed?: number;
-  heading?: number;
-  timestamp: string;
-  metadata?: Record<string, unknown>;
-}
-
-interface MaintenanceAlertDB {
-  id: string;
-  vessel_id?: string;
-  severity: string;
-  status: string;
-  description?: string;
-  created_at: string;
-  updated_at?: string;
-}
-
-interface FuelUsageDB {
-  id: string;
-  vessel_id: string;
-  fuel_type?: string;
-  quantity_liters?: number;
-  recorded_at: string;
-  metadata?: Record<string, unknown>;
-}
 
 export function FleetManagementDashboard() {
   const [vesselStatuses, setVesselStatuses] = useState<VesselStatusDB[]>([]);
