@@ -522,6 +522,117 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_configurations: {
+        Row: {
+          config_key: string
+          config_value: Json
+          created_at: string
+          description: string | null
+          id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      ai_decisions: {
+        Row: {
+          action_payload: Json | null
+          action_type: string | null
+          confidence: number
+          confidence_level: string
+          created_at: string
+          created_by: string | null
+          description: string
+          executed_at: string | null
+          feedback_actual_outcome: string | null
+          feedback_notes: string | null
+          feedback_provided_at: string | null
+          feedback_was_correct: boolean | null
+          id: string
+          impact: string
+          justification_evidence: Json | null
+          justification_expected_outcome: string | null
+          justification_reasoning: string
+          justification_risks: Json | null
+          rejected_reason: string | null
+          rolled_back_at: string | null
+          status: string
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          action_payload?: Json | null
+          action_type?: string | null
+          confidence: number
+          confidence_level: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          executed_at?: string | null
+          feedback_actual_outcome?: string | null
+          feedback_notes?: string | null
+          feedback_provided_at?: string | null
+          feedback_was_correct?: boolean | null
+          id?: string
+          impact: string
+          justification_evidence?: Json | null
+          justification_expected_outcome?: string | null
+          justification_reasoning: string
+          justification_risks?: Json | null
+          rejected_reason?: string | null
+          rolled_back_at?: string | null
+          status?: string
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          action_payload?: Json | null
+          action_type?: string | null
+          confidence?: number
+          confidence_level?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          executed_at?: string | null
+          feedback_actual_outcome?: string | null
+          feedback_notes?: string | null
+          feedback_provided_at?: string | null
+          feedback_was_correct?: boolean | null
+          id?: string
+          impact?: string
+          justification_evidence?: Json | null
+          justification_expected_outcome?: string | null
+          justification_reasoning?: string
+          justification_risks?: Json | null
+          rejected_reason?: string | null
+          rolled_back_at?: string | null
+          status?: string
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ai_document_templates: {
         Row: {
           content: string
@@ -719,6 +830,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ai_learning_metrics: {
+        Row: {
+          accuracy_rate: number | null
+          average_confidence: number | null
+          correct_decisions: number
+          created_at: string
+          decisions_by_confidence: Json | null
+          decisions_by_type: Json | null
+          id: string
+          period_end: string
+          period_start: string
+          total_decisions: number
+        }
+        Insert: {
+          accuracy_rate?: number | null
+          average_confidence?: number | null
+          correct_decisions?: number
+          created_at?: string
+          decisions_by_confidence?: Json | null
+          decisions_by_type?: Json | null
+          id?: string
+          period_end: string
+          period_start: string
+          total_decisions?: number
+        }
+        Update: {
+          accuracy_rate?: number | null
+          average_confidence?: number | null
+          correct_decisions?: number
+          created_at?: string
+          decisions_by_confidence?: Json | null
+          decisions_by_type?: Json | null
+          id?: string
+          period_end?: string
+          period_start?: string
+          total_decisions?: number
+        }
+        Relationships: []
       }
       ai_logs: {
         Row: {

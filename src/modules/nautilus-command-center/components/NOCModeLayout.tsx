@@ -20,13 +20,16 @@ import {
   Maximize2,
   RefreshCcw,
   Brain,
-  BarChart3
+  BarChart3,
+  Settings
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutonomousAIPanel } from "./AutonomousAIPanel";
 import { AILearningMetricsDashboard } from "./AILearningMetricsDashboard";
+import { AIConfigurationPanel } from "./AIConfigurationPanel";
 import { useAINotifications } from "@/hooks/useAINotifications";
 import { useAutonomousAI } from "@/hooks/useAutonomousAI";
+import { useAIDecisionsSupabase } from "@/hooks/useAIDecisionsSupabase";
 
 interface Alert {
   id: string;
@@ -208,6 +211,10 @@ export function NOCModeLayout() {
             <BarChart3 className="h-4 w-4 mr-2" />
             Métricas IA
           </TabsTrigger>
+          <TabsTrigger value="config" className="data-[state=active]:bg-orange-500/20">
+            <Settings className="h-4 w-4 mr-2" />
+            Configurações
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="monitoring" className="mt-0">
@@ -339,6 +346,12 @@ export function NOCModeLayout() {
         <TabsContent value="metrics" className="mt-0">
           <Card className="bg-[#12121a] border-gray-800 p-6">
             <AILearningMetricsDashboard />
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="config" className="mt-0">
+          <Card className="bg-[#12121a] border-gray-800 p-6">
+            <AIConfigurationPanel />
           </Card>
         </TabsContent>
       </Tabs>
