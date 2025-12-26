@@ -47,6 +47,28 @@ test.describe('Module Redirects', () => {
     await page.goto('/ocean-sonar');
     await expect(page).toHaveURL(/subsea-operations/);
   });
+
+  // PATCH UNIFIED: Novos redirects para o Command Center unificado
+  test('executive-dashboard redirects to nautilus-command', async ({ page }) => {
+    await page.goto('/executive-dashboard');
+    await page.waitForLoadState('networkidle');
+    const url = page.url();
+    expect(url).toContain('nautilus-command');
+  });
+
+  test('command-center redirects to nautilus-command', async ({ page }) => {
+    await page.goto('/command-center');
+    await page.waitForLoadState('networkidle');
+    const url = page.url();
+    expect(url).toContain('nautilus-command');
+  });
+
+  test('dashboard-executivo redirects to nautilus-command', async ({ page }) => {
+    await page.goto('/dashboard-executivo');
+    await page.waitForLoadState('networkidle');
+    const url = page.url();
+    expect(url).toContain('nautilus-command');
+  });
 });
 
 test.describe('Unified Modules Load', () => {
