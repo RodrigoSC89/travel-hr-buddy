@@ -109,8 +109,12 @@ const redirects: Array<[string, string]> = [
   ["mmi-jobs-panel", "/maintenance-command"],
   ["mmi-dashboard", "/maintenance-command"],
   
-  // Executive Routes
-  ["executive-dashboard", "/command-center"],
+  // Executive Routes - All redirect to unified Command Center
+  ["executive-dashboard", "/nautilus-command"],
+  ["command-center", "/nautilus-command"],
+  ["dashboard-executivo", "/nautilus-command"],
+  ["centro-operacoes", "/nautilus-command"],
+  ["operations-center", "/nautilus-command"],
   
   // Maritime Routes
   ["maritime", "/maritime-command"],
