@@ -1,12 +1,13 @@
 /**
  * NOC Mode Layout - 24/7 Operations Center
- * Optimized for operators with real-time monitoring
+ * PATCH 852: Integrated with AutonomousAIPanel and notifications
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Monitor, 
   Bell, 
@@ -17,9 +18,15 @@ import {
   Volume2, 
   VolumeX,
   Maximize2,
-  RefreshCcw
+  RefreshCcw,
+  Brain,
+  BarChart3
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AutonomousAIPanel } from "./AutonomousAIPanel";
+import { AILearningMetricsDashboard } from "./AILearningMetricsDashboard";
+import { useAINotifications } from "@/hooks/useAINotifications";
+import { useAutonomousAI } from "@/hooks/useAutonomousAI";
 
 interface Alert {
   id: string;
@@ -176,140 +183,160 @@ export function NOCModeLayout() {
         </div>
       </div>
 
-      <div className="grid grid-cols-12 gap-4">
-        {/* Systems Status Panel */}
-        <Card className="col-span-3 bg-[#12121a] border-gray-800">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Activity className="h-4 w-4 text-success" />
-              Status dos Sistemas
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {systems.map((system) => (
-              <div key={system.name} className="flex items-center justify-between p-2 rounded bg-[#1a1a24]">
-                <div className="flex items-center gap-2">
-                  <div className={cn("w-2 h-2 rounded-full", getStatusColor(system.status))} />
-                  <span className="text-sm">{system.name}</span>
-                </div>
-                {system.latency && (
-                  <span className="text-xs text-muted-foreground font-mono">{system.latency}ms</span>
-                )}
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+      {/* Tab Navigation */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="bg-[#12121a] border border-gray-800">
+          <TabsTrigger value="monitoring" className="data-[state=active]:bg-primary/20">
+            <Monitor className="h-4 w-4 mr-2" />
+            Monitoramento
+          </TabsTrigger>
+          <TabsTrigger value="ai" className="data-[state=active]:bg-purple-500/20">
+            <Brain className="h-4 w-4 mr-2" />
+            IA Autônoma
+            {statistics.pending > 0 && (
+              <Badge className="ml-2 bg-yellow-500 text-black h-5 w-5 p-0 flex items-center justify-center text-[10px]">
+                {statistics.pending}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="metrics" className="data-[state=active]:bg-blue-500/20">
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Métricas IA
+          </TabsTrigger>
+        </TabsList>
 
-        {/* Main Metrics Dashboard */}
-        <div className="col-span-6 space-y-4">
-          <div className="grid grid-cols-4 gap-3">
-            <Card className="bg-[#12121a] border-gray-800">
-              <CardContent className="pt-4 text-center">
-                <div className="text-3xl font-bold text-success">99.9%</div>
-                <div className="text-xs text-muted-foreground">Uptime</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#12121a] border-gray-800">
-              <CardContent className="pt-4 text-center">
-                <div className="text-3xl font-bold text-info">1,234</div>
-                <div className="text-xs text-muted-foreground">Req/min</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#12121a] border-gray-800">
-              <CardContent className="pt-4 text-center">
-                <div className="text-3xl font-bold text-warning">45ms</div>
-                <div className="text-xs text-muted-foreground">Avg Latency</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-[#12121a] border-gray-800">
-              <CardContent className="pt-4 text-center">
-                <div className="text-3xl font-bold text-primary">12</div>
-                <div className="text-xs text-muted-foreground">Active Users</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Activity Feed */}
-          <Card className="bg-[#12121a] border-gray-800 h-[400px]">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
+        <TabsContent value="monitoring" className="mt-0">
+          <div className="grid grid-cols-12 gap-4">
+            {/* Systems Status Panel */}
+            <Card className="col-span-3 bg-[#12121a] border-gray-800">
+              <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <RefreshCcw className="h-4 w-4 text-primary animate-spin" />
-                  Feed de Atividades (Tempo Real)
+                  <Activity className="h-4 w-4 text-success" />
+                  Status dos Sistemas
                 </CardTitle>
-                <Wifi className="h-4 w-4 text-success" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[320px] pr-4">
-                <div className="space-y-2 font-mono text-xs">
-                  {[...Array(20)].map((_, i) => (
-                    <div key={i} className="flex items-start gap-2 p-2 rounded bg-[#1a1a24] hover:bg-[#22222e] transition-colors">
-                      <span className="text-muted-foreground whitespace-nowrap">
-                        {new Date(Date.now() - i * 30000).toLocaleTimeString('pt-BR')}
-                      </span>
-                      <span className="text-success">[INFO]</span>
-                      <span className="text-gray-300">
-                        {i % 3 === 0 ? "API request completed successfully" : 
-                         i % 3 === 1 ? "Database query executed in 12ms" : 
-                         "User session validated"}
-                      </span>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {systems.map((system) => (
+                  <div key={system.name} className="flex items-center justify-between p-2 rounded bg-[#1a1a24]">
+                    <div className="flex items-center gap-2">
+                      <div className={cn("w-2 h-2 rounded-full", getStatusColor(system.status))} />
+                      <span className="text-sm">{system.name}</span>
                     </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Alerts Panel */}
-        <Card className="col-span-3 bg-[#12121a] border-gray-800">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2">
-              <Bell className="h-4 w-4 text-warning" />
-              Alertas Ativos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[500px] pr-2">
-              <div className="space-y-2">
-                {alerts.map((alert) => (
-                  <div 
-                    key={alert.id} 
-                    className={cn(
-                      "p-3 rounded-lg border transition-all",
-                      alert.acknowledged 
-                        ? "bg-[#1a1a24] border-gray-800 opacity-60" 
-                        : "bg-[#1a1a24] border-gray-700"
-                    )}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <Badge className={getSeverityColor(alert.severity)}>
-                        {alert.severity.toUpperCase()}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {Math.round((Date.now() - alert.timestamp.getTime()) / 60000)}m ago
-                      </span>
-                    </div>
-                    <div className="text-sm font-medium mb-1">{alert.title}</div>
-                    <div className="text-xs text-muted-foreground mb-2">{alert.message}</div>
-                    {!alert.acknowledged && (
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="w-full h-7 text-xs"
-                        onClick={() => acknowledgeAlert(alert.id)}
-                      >
-                        Reconhecer
-                      </Button>
+                    {system.latency && (
+                      <span className="text-xs text-muted-foreground font-mono">{system.latency}ms</span>
                     )}
                   </div>
                 ))}
+              </CardContent>
+            </Card>
+
+            {/* Main Metrics */}
+            <div className="col-span-6 space-y-4">
+              <div className="grid grid-cols-4 gap-3">
+                <Card className="bg-[#12121a] border-gray-800">
+                  <CardContent className="pt-4 text-center">
+                    <div className="text-3xl font-bold text-success">99.9%</div>
+                    <div className="text-xs text-muted-foreground">Uptime</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-[#12121a] border-gray-800">
+                  <CardContent className="pt-4 text-center">
+                    <div className="text-3xl font-bold text-info">1,234</div>
+                    <div className="text-xs text-muted-foreground">Req/min</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-[#12121a] border-gray-800">
+                  <CardContent className="pt-4 text-center">
+                    <div className="text-3xl font-bold text-warning">45ms</div>
+                    <div className="text-xs text-muted-foreground">Latência</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-[#12121a] border-gray-800">
+                  <CardContent className="pt-4 text-center">
+                    <div className={cn("text-3xl font-bold", isActive ? "text-green-400" : "text-muted-foreground")}>
+                      {isActive ? "ON" : "OFF"}
+                    </div>
+                    <div className="text-xs text-muted-foreground">IA Autônoma</div>
+                  </CardContent>
+                </Card>
               </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </div>
+
+              {/* Activity Feed */}
+              <Card className="bg-[#12121a] border-gray-800 h-[400px]">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <RefreshCcw className="h-4 w-4 text-primary animate-spin" />
+                      Feed de Atividades
+                    </CardTitle>
+                    <Wifi className="h-4 w-4 text-success" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[320px] pr-4">
+                    <div className="space-y-2 font-mono text-xs">
+                      {[...Array(15)].map((_, i) => (
+                        <div key={i} className="flex items-start gap-2 p-2 rounded bg-[#1a1a24]">
+                          <span className="text-muted-foreground whitespace-nowrap">
+                            {new Date(Date.now() - i * 30000).toLocaleTimeString('pt-BR')}
+                          </span>
+                          <span className="text-success">[INFO]</span>
+                          <span className="text-gray-300">
+                            {i % 3 === 0 ? "API request OK" : i % 3 === 1 ? "DB query 12ms" : "Session validated"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Alerts Panel */}
+            <Card className="col-span-3 bg-[#12121a] border-gray-800">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Bell className="h-4 w-4 text-warning" />
+                  Alertas Ativos
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[500px] pr-2">
+                  <div className="space-y-2">
+                    {alerts.map((alert) => (
+                      <div key={alert.id} className={cn("p-3 rounded-lg border", alert.acknowledged ? "opacity-60 border-gray-800" : "border-gray-700")}>
+                        <div className="flex items-start justify-between mb-2">
+                          <Badge className={getSeverityColor(alert.severity)}>{alert.severity.toUpperCase()}</Badge>
+                          <span className="text-xs text-muted-foreground">{Math.round((Date.now() - alert.timestamp.getTime()) / 60000)}m</span>
+                        </div>
+                        <div className="text-sm font-medium mb-1">{alert.title}</div>
+                        <div className="text-xs text-muted-foreground mb-2">{alert.message}</div>
+                        {!alert.acknowledged && (
+                          <Button size="sm" variant="outline" className="w-full h-7 text-xs" onClick={() => acknowledgeAlert(alert.id)}>
+                            Reconhecer
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="ai" className="mt-0">
+          <Card className="bg-[#12121a] border-gray-800 p-6">
+            <AutonomousAIPanel />
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="metrics" className="mt-0">
+          <Card className="bg-[#12121a] border-gray-800 p-6">
+            <AILearningMetricsDashboard />
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
