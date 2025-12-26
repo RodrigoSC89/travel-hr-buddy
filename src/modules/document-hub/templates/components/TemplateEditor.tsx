@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 417: Document Templates WYSIWYG Editor
+ * PATCH 854 - Removed @ts-nocheck, added proper TypeScript types
  * TipTap-based rich text editor with dynamic placeholders
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type ReactNode } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -81,7 +81,15 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
     return <div>Loading editor...</div>;
   }
 
-  const MenuButton = ({ onClick, active, children, title }: any) => (
+  interface MenuButtonProps {
+    onClick: () => void;
+    active?: boolean;
+    children: ReactNode;
+    title: string;
+    disabled?: boolean;
+  }
+
+  const MenuButton = ({ onClick, active, children, title, disabled }: MenuButtonProps) => (
     <Button
       variant={active ? "default" : "ghost"}
       size="sm"
@@ -89,6 +97,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       title={title}
       type="button"
       className="h-8 w-8 p-0"
+      disabled={disabled}
     >
       {children}
     </Button>
