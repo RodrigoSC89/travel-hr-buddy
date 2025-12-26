@@ -1,10 +1,23 @@
-// @ts-nocheck
+/**
+ * DP Sync Dashboard - Dynamic Positioning and Forecast Sync
+ * PATCH CLEANUP: Removed @ts-nocheck, added proper typing
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, Brain } from "lucide-react";
 import { publishEvent, subscribeForecast } from "@/lib/mqtt/publisher";
-let ort: any = null;
+import { logger } from "@/lib/logger";
+
+interface ForecastData {
+  wind?: number;
+  wave?: number;
+  temp?: number;
+  [key: string]: unknown;
+}
+
+let ort: typeof import("onnxruntime-web") | null = null;
+
 const loadORT = async () => {
   if (!ort) {
     ort = await import("onnxruntime-web");
@@ -16,20 +29,28 @@ export default function DPSyncDashboard() {
   const [sync, setSync] = useState("Sincronizando...");
   const [prediction, setPrediction] = useState<number | null>(null);
 
-  const runAIModel = async (forecast: Record<string, unknown>) => {
+  const runAIModel = async (forecast: ForecastData): Promise<number> => {
     try {
+      await loadORT();
+      if (!ort) return 0;
+      
       const session = await ort.InferenceSession.create("/models/dp-predict.onnx");
-      const input = new ort.Tensor("float32", Float32Array.from([forecast.wind || 0, forecast.wave || 0, forecast.temp || 0]), [1, 3]);
+      const input = new ort.Tensor(
+        "float32", 
+        Float32Array.from([forecast.wind || 0, forecast.wave || 0, forecast.temp || 0]), 
+        [1, 3]
+      );
       const output = await session.run({ input });
-      return output.result.data[0];
+      const result = output.result?.data?.[0];
+      return typeof result === 'number' ? result : 0;
     } catch (error) {
-      console.error("❌ Failed to run AI model:", error);
+      logger.error("Failed to run AI model:", error);
       return 0;
     }
   };
 
   useEffect(() => {
-    const client = subscribeForecast(async (data) => {
+    const client = subscribeForecast(async (data: ForecastData) => {
       const risk = await runAIModel(data);
       setPrediction(risk);
       if (risk > 0.8) {
@@ -37,14 +58,18 @@ export default function DPSyncDashboard() {
       }
       setSync("Última sync: " + new Date().toLocaleTimeString());
     });
-    return () => client.end();
+    return () => {
+      if (client && typeof client.end === 'function') {
+        client.end();
+      }
+    };
   }, []);
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Brain className="text-[var(--nautilus-primary)]" /> Sincronização DP ↔ Forecast
+          <Brain className="text-primary" /> Sincronização DP ↔ Forecast
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -53,15 +78,15 @@ export default function DPSyncDashboard() {
             onClick={() =>
               publishEvent("nautilus/dp/manual-sync", { timestamp: new Date().toISOString() })
             }
-            className="bg-[var(--nautilus-primary)] text-white"
+            className="bg-primary text-primary-foreground"
           >
             <RefreshCcw className="mr-2 h-4 w-4" /> Forçar Sincronização
           </Button>
         </div>
-        <div className="text-gray-300">
+        <div className="text-muted-foreground">
           <p>{sync}</p>
           {prediction !== null && (
-            <p className={`mt-2 font-semibold ${prediction > 0.8 ? "text-red-400" : "text-green-400"}`}>
+            <p className={`mt-2 font-semibold ${prediction > 0.8 ? "text-destructive" : "text-success"}`}>
               Risco previsto de perda de posição: {(prediction * 100).toFixed(1)}%
             </p>
           )}

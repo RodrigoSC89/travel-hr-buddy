@@ -17,10 +17,37 @@ interface ConnectionInfo {
 
 class ConnectionAdaptiveService {
   private listeners: Set<(info: ConnectionInfo) => void> = new Set();
-  private currentInfo: ConnectionInfo = this.detectConnection();
+  private currentInfo: ConnectionInfo;
+  private initialized = false;
 
   constructor() {
+    // Safe initialization - defer until DOM is ready
+    this.currentInfo = this.getDefaultInfo();
+    if (typeof window !== 'undefined') {
+      if (document.readyState === 'complete') {
+        this.initialize();
+      } else {
+        window.addEventListener('load', () => this.initialize(), { once: true });
+      }
+    }
+  }
+
+  private initialize() {
+    if (this.initialized) return;
+    this.initialized = true;
+    this.currentInfo = this.detectConnection();
     this.setupListeners();
+    this.notifyListeners();
+  }
+
+  private getDefaultInfo(): ConnectionInfo {
+    return {
+      quality: 'moderate',
+      effectiveType: '4g',
+      downlink: 5,
+      rtt: 100,
+      saveData: false,
+    };
   }
 
   private detectConnection(): ConnectionInfo {
