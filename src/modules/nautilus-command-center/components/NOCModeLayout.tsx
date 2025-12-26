@@ -21,12 +21,14 @@ import {
   RefreshCcw,
   Brain,
   BarChart3,
-  Settings
+  Settings,
+  History as HistoryIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutonomousAIPanel } from "./AutonomousAIPanel";
 import { AILearningMetricsDashboard } from "./AILearningMetricsDashboard";
 import { AIConfigurationPanel } from "./AIConfigurationPanel";
+import { AIDecisionHistory } from "./AIDecisionHistory";
 import { useAINotifications } from "@/hooks/useAINotifications";
 import { useAutonomousAI } from "@/hooks/useAutonomousAI";
 import { useAIDecisionsSupabase } from "@/hooks/useAIDecisionsSupabase";
@@ -211,6 +213,10 @@ export function NOCModeLayout() {
             <BarChart3 className="h-4 w-4 mr-2" />
             Métricas IA
           </TabsTrigger>
+          <TabsTrigger value="history" className="data-[state=active]:bg-cyan-500/20">
+            <HistoryIcon className="h-4 w-4 mr-2" />
+            Histórico
+          </TabsTrigger>
           <TabsTrigger value="config" className="data-[state=active]:bg-orange-500/20">
             <Settings className="h-4 w-4 mr-2" />
             Configurações
@@ -346,6 +352,12 @@ export function NOCModeLayout() {
         <TabsContent value="metrics" className="mt-0">
           <Card className="bg-[#12121a] border-gray-800 p-6">
             <AILearningMetricsDashboard />
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-0">
+          <Card className="bg-[#12121a] border-gray-800 p-6">
+            <AIDecisionHistory />
           </Card>
         </TabsContent>
 
