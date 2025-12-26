@@ -55,6 +55,11 @@ export function NOCModeLayout() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [activeTab, setActiveTab] = useState("monitoring");
+  
+  // AI integration
+  const { statistics, isActive } = useAutonomousAI();
+  useAINotifications({ enabled: soundEnabled });
 
   // Update clock every second
   useEffect(() => {
