@@ -289,8 +289,8 @@ const navigationItems = [
     icon: Bell,
   },
   {
-    title: "Hub de Integrações",
-    url: "/integrations",
+    title: "Central de Integrações",
+    url: "/integracoes",
     icon: Globe,
   },
   {
@@ -567,6 +567,41 @@ const navigationItems = [
         title: "Centro Notificações",
         url: "/notifications-center",
         icon: Bell,
+      },
+      {
+        title: "AI Operations Center",
+        url: "/ai-operations-center",
+        icon: Brain,
+      },
+      {
+        title: "Security Center",
+        url: "/security-center",
+        icon: Shield,
+      },
+      {
+        title: "Telemetria Preditiva",
+        url: "/predictive-telemetry",
+        icon: Activity,
+      },
+      {
+        title: "Simulador Incidentes",
+        url: "/simulador",
+        icon: Target,
+      },
+      {
+        title: "Central Integrações",
+        url: "/integracoes",
+        icon: Globe,
+      },
+      {
+        title: "Documentação",
+        url: "/docs",
+        icon: FileText,
+      },
+      {
+        title: "NOC 24/7",
+        url: "/noc",
+        icon: Activity,
       },
     ],
   },
