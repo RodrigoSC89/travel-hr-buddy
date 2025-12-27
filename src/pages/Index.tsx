@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Wrench, Users, Brain, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-// Lazy load onboarding
+// Lazy load onboarding and launch celebration
 const WelcomeOnboarding = lazy(() => import("@/components/onboarding/WelcomeOnboarding").then(m => ({ default: m.WelcomeOnboarding })));
+const LaunchCelebration = lazy(() => import("@/components/onboarding/LaunchCelebration").then(m => ({ default: m.LaunchCelebration })));
 
 // PATCH 584: Split Index into optimized subcomponents - Lazy loaded
 const KPIGrid = lazy(() => import("@/components/dashboard/index/KPIGrid").then(m => ({ default: m.KPIGrid })));
@@ -244,6 +245,11 @@ const Index = () => {
       {/* PATCH 850: PWA Offline Status */}
       <Suspense fallback={null}>
         <OfflineStatusBar />
+      </Suspense>
+      
+      {/* Launch Celebration - First time experience */}
+      <Suspense fallback={null}>
+        <LaunchCelebration />
       </Suspense>
       
       {/* Onboarding para novos usuários */}
