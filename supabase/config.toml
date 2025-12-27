@@ -1,5 +1,26 @@
 project_id = "vnbptmixvwropvanyhdb"
 
+# ============================================
+# NEW: Proactive Operations & Security Functions
+# Added: 2025-12-27
+# ============================================
+
+[functions.proactive-alerts]
+verify_jwt = false
+comment = "Proactive alerts management with webhook notifications"
+
+[functions.security-audit]
+verify_jwt = false
+comment = "Security audit logging, compliance reports and security scans"
+
+[functions.executive-kpis]
+verify_jwt = false
+comment = "Executive KPIs dashboard with analysis and trends"
+
+[functions.webhook-dispatcher]
+verify_jwt = false
+comment = "Webhook dispatcher for external integrations"
+
 [functions.ai-lab-analyze]
 verify_jwt = false
 

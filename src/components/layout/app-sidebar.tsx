@@ -100,6 +100,56 @@ const navigationItems = [
     icon: LayoutDashboard,
     alwaysVisible: true
   },
+  // ============ OPERAÇÕES & SEGURANÇA - Sempre visíveis ============
+  {
+    title: "Operações & Segurança",
+    icon: Shield,
+    alwaysVisible: true,
+    items: [
+      {
+        title: "Security Center",
+        url: "/security-center",
+        icon: Shield,
+        alwaysVisible: true,
+      },
+      {
+        title: "AI Operations Center",
+        url: "/ai-operations-center",
+        icon: Brain,
+        alwaysVisible: true,
+      },
+      {
+        title: "Telemetria Preditiva",
+        url: "/predictive-telemetry",
+        icon: Activity,
+        alwaysVisible: true,
+      },
+      {
+        title: "Simulador Incidentes",
+        url: "/simulador",
+        icon: Target,
+        alwaysVisible: true,
+      },
+      {
+        title: "Central Integrações",
+        url: "/integracoes",
+        icon: Globe,
+        alwaysVisible: true,
+      },
+      {
+        title: "NOC 24/7",
+        url: "/noc",
+        icon: Activity,
+        alwaysVisible: true,
+      },
+      {
+        title: "Auditoria de Segurança",
+        url: "/auditoria-seguranca",
+        icon: Shield,
+        alwaysVisible: true,
+      },
+    ],
+  },
   {
     title: "Dashboard Executivo",
     url: "/executive-dashboard",
