@@ -104,6 +104,7 @@ const navigationItems = [
   // ============ OPERAÇÕES & SEGURANÇA - Sempre visíveis e expandida por padrão ============
   {
     title: "🛡️ Operações & Segurança",
+    url: "#operations-security", // URL única para evitar deduplicação
     icon: Shield,
     alwaysVisible: true,
     defaultOpen: true,
@@ -859,7 +860,10 @@ function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
 
   const dedupeItem = (item: NavigationItem): NavigationItem | null => {
     const canonicalUrl = canonicalizeUrl(item.url);
-    const key = canonicalUrl || item.title;
+    // Para seções com itens (grupos), usar o título como chave para evitar conflitos
+    const isGroup = item.items && item.items.length > 0;
+    const key = isGroup ? `group:${item.title}` : (canonicalUrl || item.title);
+    
     if (key && seen.has(key)) return null;
     if (key) seen.add(key);
 
@@ -868,7 +872,15 @@ function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
       const filtered = item.items
         .map(dedupeItem)
         .filter(Boolean) as NavigationItem[];
-      if (filtered.length) children = filtered;
+      // Manter o grupo mesmo se todos os filhos foram filtrados, se tiver alwaysVisible
+      if (filtered.length || item.alwaysVisible) {
+        children = filtered.length ? filtered : undefined;
+      }
+    }
+
+    // Preservar grupos com alwaysVisible mesmo sem filhos
+    if (isGroup && item.alwaysVisible && (!children || children.length === 0)) {
+      return null; // Remover grupos vazios
     }
 
     return { ...item, ...(canonicalUrl ? { url: canonicalUrl } : {}), ...(children ? { items: children } : {}) };
@@ -893,9 +905,10 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
         defaultOpenItems.push(item.url || item.title);
       }
     });
-    // Sempre incluir "🛡️ Operações & Segurança" para garantir visibilidade
-    if (!defaultOpenItems.includes("🛡️ Operações & Segurança")) {
-      defaultOpenItems.push("🛡️ Operações & Segurança");
+    // Sempre incluir "Operações & Segurança" para garantir visibilidade
+    const operationsKey = "#operations-security";
+    if (!defaultOpenItems.includes(operationsKey)) {
+      defaultOpenItems.push(operationsKey);
     }
     return defaultOpenItems;
   });
