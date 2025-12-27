@@ -17,11 +17,13 @@ import {
   Settings,
   Maximize2,
   RefreshCw,
+  Waves,
 } from "lucide-react";
 import { TelemetryMap3D } from "./TelemetryMap3D";
 import { TelemetryAIInsights } from "./TelemetryAIInsights";
 import { TelemetrySensorGrid } from "./TelemetrySensorGrid";
 import { TelemetryAlertsTimeline } from "./TelemetryAlertsTimeline";
+import { TelemetryTideChart } from "./TelemetryTideChart";
 import { toast } from "sonner";
 
 interface TelemetryDashboard360Props {
@@ -84,10 +86,14 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl grid-cols-4 mx-auto">
+          <TabsList className="grid w-full max-w-3xl grid-cols-5 mx-auto">
             <TabsTrigger value="overview" className="gap-2">
               <Globe className="h-4 w-4" />
               Mapa Global
+            </TabsTrigger>
+            <TabsTrigger value="tides" className="gap-2">
+              <Waves className="h-4 w-4" />
+              Marés
             </TabsTrigger>
             <TabsTrigger value="ai" className="gap-2">
               <Brain className="h-4 w-4" />
@@ -111,6 +117,26 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
               <div className="space-y-6">
                 <TelemetryAIInsights className="h-[600px]" />
               </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="tides" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <TelemetryTideChart 
+                lat={-22.9068} 
+                lon={-43.1729} 
+                locationName="Rio de Janeiro"
+              />
+              <TelemetryTideChart 
+                lat={-23.9548} 
+                lon={-46.3329} 
+                locationName="Santos"
+              />
+              <TelemetryTideChart 
+                lat={-25.4284} 
+                lon={-49.2733} 
+                locationName="Paranaguá"
+              />
             </div>
           </TabsContent>
 
