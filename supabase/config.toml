@@ -21,6 +21,10 @@ comment = "Executive KPIs dashboard with analysis and trends"
 verify_jwt = false
 comment = "Webhook dispatcher for external integrations"
 
+[functions.stormglass-weather]
+verify_jwt = false
+comment = "StormGlass marine weather API - fallback for OpenWeatherMap and Windy"
+
 [functions.ai-lab-analyze]
 verify_jwt = false
 
