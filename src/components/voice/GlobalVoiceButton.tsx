@@ -44,7 +44,7 @@ export function GlobalVoiceButton() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [showPanel, setShowPanel] = useState(false);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  const [recognition, setRecognition] = useState<any>(null);
 
   // Initialize Speech Recognition
   useEffect(() => {
@@ -56,7 +56,7 @@ export function GlobalVoiceButton() {
       recognitionInstance.interimResults = true;
       recognitionInstance.lang = "pt-BR";
 
-      recognitionInstance.onresult = (event) => {
+      recognitionInstance.onresult = (event: any) => {
         const current = event.resultIndex;
         const transcriptText = event.results[current][0].transcript;
         setTranscript(transcriptText);
@@ -66,7 +66,7 @@ export function GlobalVoiceButton() {
         }
       };
 
-      recognitionInstance.onerror = (event) => {
+      recognitionInstance.onerror = (event: any) => {
         console.error("Speech recognition error:", event.error);
         setIsListening(false);
         if (event.error === "not-allowed") {
