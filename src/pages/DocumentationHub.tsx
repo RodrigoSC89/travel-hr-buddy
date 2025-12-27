@@ -153,13 +153,13 @@ export default function DocumentationHub() {
           <h1 className="text-4xl font-bold text-foreground">
             📘 Documentação Nautilus One
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-foreground/80 max-w-2xl mx-auto font-medium">
             Documentação técnica completa do sistema de gestão marítima com IA
           </p>
           
           {/* Search */}
           <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground/60" />
             <Input
               placeholder="Buscar na documentação..."
               className="pl-10"
@@ -207,8 +207,8 @@ export default function DocumentationHub() {
                           <section.icon className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg">{section.title}</CardTitle>
-                          <CardDescription>{section.description}</CardDescription>
+                          <CardTitle className="text-lg text-foreground">{section.title}</CardTitle>
+                          <CardDescription className="text-foreground/70 font-medium">{section.description}</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
@@ -218,7 +218,7 @@ export default function DocumentationHub() {
                           <li key={article.path}>
                             <a 
                               href={article.path}
-                              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                              className="flex items-center gap-2 text-sm text-foreground/80 hover:text-primary transition-colors font-medium"
                             >
                               <ChevronRight className="h-3 w-3" />
                               {article.title}
@@ -237,8 +237,8 @@ export default function DocumentationHub() {
           <TabsContent value="hooks">
             <Card>
               <CardHeader>
-                <CardTitle>Hooks de Inteligência Artificial</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-foreground">Hooks de Inteligência Artificial</CardTitle>
+                <CardDescription className="text-foreground/70 font-medium">
                   React hooks para integração com o sistema de IA do Nautilus One
                 </CardDescription>
               </CardHeader>
@@ -255,7 +255,7 @@ export default function DocumentationHub() {
                         </div>
                         <div>
                           <code className="font-mono text-sm font-semibold text-primary">{hook.name}</code>
-                          <p className="text-sm text-muted-foreground">{hook.description}</p>
+                          <p className="text-sm text-foreground/80 font-medium">{hook.description}</p>
                         </div>
                       </div>
                       <Badge variant="outline" className="text-success border-success">
@@ -294,8 +294,8 @@ function MyComponent() {
           <TabsContent value="api">
             <Card>
               <CardHeader>
-                <CardTitle>Edge Functions (Supabase)</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-foreground">Edge Functions (Supabase)</CardTitle>
+                <CardDescription className="text-foreground/70 font-medium">
                   Funções serverless para backend e integrações
                 </CardDescription>
               </CardHeader>
@@ -311,8 +311,8 @@ function MyComponent() {
                           <FileCode className="h-5 w-5 text-accent-foreground" />
                         </div>
                         <div>
-                          <code className="font-mono text-sm font-semibold">{fn.name}</code>
-                          <p className="text-sm text-muted-foreground">{fn.description}</p>
+                          <code className="font-mono text-sm font-semibold text-foreground">{fn.name}</code>
+                          <p className="text-sm text-foreground/80 font-medium">{fn.description}</p>
                         </div>
                       </div>
                       <Badge variant={fn.jwt ? "default" : "secondary"}>
@@ -336,16 +336,16 @@ function MyComponent() {
           <TabsContent value="changelog">
             <Card>
               <CardHeader>
-                <CardTitle>Changelog</CardTitle>
-                <CardDescription>Histórico de atualizações do sistema</CardDescription>
+                <CardTitle className="text-foreground">Changelog</CardTitle>
+                <CardDescription className="text-foreground/70 font-medium">Histórico de atualizações do sistema</CardDescription>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-6">
                     <div className="border-l-2 border-primary pl-4">
                       <Badge className="mb-2">v2.0.0 - PATCH 853</Badge>
-                      <h4 className="font-semibold">Ativação Completa do Sistema</h4>
-                      <ul className="text-sm text-muted-foreground space-y-1 mt-2">
+                      <h4 className="font-semibold text-foreground">Ativação Completa do Sistema</h4>
+                      <ul className="text-sm text-foreground/80 space-y-1 mt-2 font-medium">
                         <li>✅ IA Autônoma com painel de decisões</li>
                         <li>✅ Comando de Voz com ElevenLabs</li>
                         <li>✅ Telemetria Preditiva com IA</li>
@@ -359,8 +359,8 @@ function MyComponent() {
 
                     <div className="border-l-2 border-muted pl-4">
                       <Badge variant="secondary" className="mb-2">v1.9.0 - PATCH 852</Badge>
-                      <h4 className="font-semibold">AI Operations Center</h4>
-                      <ul className="text-sm text-muted-foreground space-y-1 mt-2">
+                      <h4 className="font-semibold text-foreground">AI Operations Center</h4>
+                      <ul className="text-sm text-foreground/80 space-y-1 mt-2 font-medium">
                         <li>• Painel de IA Autônoma</li>
                         <li>• Telemetria Preditiva</li>
                         <li>• Security Center inicial</li>
@@ -369,8 +369,8 @@ function MyComponent() {
 
                     <div className="border-l-2 border-muted pl-4">
                       <Badge variant="secondary" className="mb-2">v1.8.0</Badge>
-                      <h4 className="font-semibold">Revolutionary Features</h4>
-                      <ul className="text-sm text-muted-foreground space-y-1 mt-2">
+                      <h4 className="font-semibold text-foreground">Revolutionary Features</h4>
+                      <ul className="text-sm text-foreground/80 space-y-1 mt-2 font-medium">
                         <li>• Vision AI para documentos</li>
                         <li>• AIS Tracking global</li>
                         <li>• Certificate Blockchain</li>

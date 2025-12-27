@@ -19058,6 +19058,7 @@ export type Database = {
             }[]
           }
       get_training_stats: { Args: { p_organization_id: string }; Returns: Json }
+      get_user_organization: { Args: never; Returns: string }
       get_user_organization_role: {
         Args: { org_id: string; user_uuid?: string }
         Returns: string
@@ -19070,6 +19071,15 @@ export type Database = {
           organization_name: string
           role: string
           status: string
+        }[]
+      }
+      get_user_profile: {
+        Args: { user_uuid: string }
+        Returns: {
+          avatar_url: string
+          full_name: string
+          id: string
+          role: string
         }[]
       }
       get_user_role: {
@@ -19094,6 +19104,10 @@ export type Database = {
           permission_type?: string
           user_uuid?: string
         }
+        Returns: boolean
+      }
+      has_role: {
+        Args: { check_role: string; check_user_id: string }
         Returns: boolean
       }
       increment_api_rate_limit: {
