@@ -110,6 +110,10 @@ const OfflinePage = lazy(() => import(/* webpackChunkName: "page-offline" */ "@/
 const IntegrationsCenter = lazy(() => import(/* webpackChunkName: "page-integrations" */ "@/pages/IntegrationsCenter"));
 const DocumentationHub = lazy(() => import(/* webpackChunkName: "page-docs" */ "@/pages/DocumentationHub"));
 
+// Executive & NOC - PATCH 855
+const ExecutiveBIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-bi" */ "@/pages/ExecutiveBIDashboard"));
+const NOCMonitoring = lazy(() => import(/* webpackChunkName: "page-noc-monitoring" */ "@/pages/NOCMonitoring"));
+
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -202,6 +206,10 @@ function App() {
                         {/* Integrations & Docs - PATCH 854 */}
                         <Route path="integracoes" element={<IntegrationsCenter />} />
                         <Route path="docs" element={<DocumentationHub />} />
+                        
+                        {/* NEW: Executive & NOC Routes - PATCH 855 */}
+                        <Route path="executive-bi" element={<ExecutiveBIDashboard />} />
+                        <Route path="noc-monitoring" element={<NOCMonitoring />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}

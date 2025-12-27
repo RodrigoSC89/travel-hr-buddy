@@ -78,6 +78,7 @@ interface NavigationItem {
   requiresRole?: readonly string[];
   permission?: string;
   items?: NavigationItem[];
+  defaultOpen?: boolean; // Nova propriedade para expandir por padrão
 }
 
 // Navigation items with improved structure
@@ -100,11 +101,12 @@ const navigationItems = [
     icon: LayoutDashboard,
     alwaysVisible: true
   },
-  // ============ OPERAÇÕES & SEGURANÇA - Sempre visíveis ============
+  // ============ OPERAÇÕES & SEGURANÇA - Sempre visíveis e expandida por padrão ============
   {
-    title: "Operações & Segurança",
+    title: "🛡️ Operações & Segurança",
     icon: Shield,
     alwaysVisible: true,
+    defaultOpen: true,
     items: [
       {
         title: "Security Center",
@@ -146,6 +148,30 @@ const navigationItems = [
         title: "Auditoria de Segurança",
         url: "/auditoria-seguranca",
         icon: Shield,
+        alwaysVisible: true,
+      },
+      {
+        title: "Executive BI Dashboard",
+        url: "/executive-bi",
+        icon: TrendingUp,
+        alwaysVisible: true,
+      },
+      {
+        title: "NOC Monitoring Center",
+        url: "/noc-monitoring",
+        icon: Eye,
+        alwaysVisible: true,
+      },
+      {
+        title: "Voice Assistant IA",
+        url: "/voice-assistant",
+        icon: Mic,
+        alwaysVisible: true,
+      },
+      {
+        title: "Telemetria 360°",
+        url: "/telemetria",
+        icon: Satellite,
         alwaysVisible: true,
       },
     ],
@@ -858,7 +884,12 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
-  const [openItems, setOpenItems] = useState<string[]>([]);
+  // Inicializar com seções que têm defaultOpen como expandidas
+  const [openItems, setOpenItems] = useState<string[]>(() => {
+    return navigationItems
+      .filter(item => item.defaultOpen && item.items)
+      .map(item => item.url || item.title);
+  });
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
