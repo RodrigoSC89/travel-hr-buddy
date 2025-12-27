@@ -1,5 +1,5 @@
 /**
- * Autonomy Module Index - PATCH 851
+ * Autonomy Module Index - PATCH 852
  * Central export for autonomous systems
  */
 
@@ -16,3 +16,13 @@ export {
   type DecisionStatus,
   type ConfidenceLevel
 } from './AutonomousAI';
+
+// AI Ops Executor (PATCH 852)
+export {
+  autonomousExecutor,
+  type ExecutionType,
+  type ExecutionRule,
+  type ExecutionLog,
+  type AIExplanation,
+  type ExecutionOutcome
+} from './AutonomousExecutor';
