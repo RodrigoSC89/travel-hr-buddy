@@ -121,22 +121,13 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
           </TabsContent>
 
           <TabsContent value="tides" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <TelemetryTideChart 
-                lat={-22.9068} 
-                lon={-43.1729} 
-                locationName="Rio de Janeiro"
-              />
-              <TelemetryTideChart 
-                lat={-23.9548} 
-                lon={-46.3329} 
-                locationName="Santos"
-              />
-              <TelemetryTideChart 
-                lat={-25.4284} 
-                lon={-49.2733} 
-                locationName="Paranaguá"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <TelemetryTideChart lat={-22.9068} lon={-43.1729} locationName="Rio de Janeiro" />
+              <TelemetryTideChart lat={-23.9548} lon={-46.3329} locationName="Santos" />
+              <TelemetryTideChart lat={-25.5163} lon={-48.5225} locationName="Paranaguá" />
+              <TelemetryTideChart lat={-8.0476} lon={-34.8770} locationName="Recife" />
+              <TelemetryTideChart lat={-12.9714} lon={-38.5014} locationName="Salvador" />
+              <TelemetryTideChart lat={-3.1190} lon={-60.0217} locationName="Manaus" />
             </div>
           </TabsContent>
 
