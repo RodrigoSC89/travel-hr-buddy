@@ -61,13 +61,108 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isTTSEnabled, setIsTTSEnabled] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Voice commands integration
+  const { isListening, isSupported, transcript, toggleVoice, stopListening } = useVoiceCommands({
+    onCommand: (command) => {
+      if (command.trim()) {
+        sendMessage(command);
+        stopListening();
+      }
+    }
+  });
+
+  // Update input when transcript changes
+  useEffect(() => {
+    if (transcript) {
+      setInput(transcript);
+    }
+  }, [transcript]);
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
+
+  // Text-to-Speech using ElevenLabs
+  const speakText = useCallback(async (text: string) => {
+    if (!isTTSEnabled || isSpeaking) return;
+
+    try {
+      setIsSpeaking(true);
+      
+      // Try ElevenLabs first
+      const { data, error } = await supabase.functions.invoke("eleven-labs-voice", {
+        body: {
+          text: text.replace(/\*\*/g, "").replace(/[📊🔧📈🛡️🤖⚠️✅🎯]/g, ""), // Clean markdown and emojis
+          voice_id: "EXAVITQu4vr4xnSDxMaL", // Sarah voice
+          model_id: "eleven_multilingual_v2",
+        },
+      });
+
+      if (!error && data?.audioContent) {
+        const audioSrc = `data:audio/mpeg;base64,${data.audioContent}`;
+        const audio = new Audio(audioSrc);
+        audioRef.current = audio;
+        audio.onended = () => setIsSpeaking(false);
+        audio.onerror = () => {
+          setIsSpeaking(false);
+          fallbackSpeak(text);
+        };
+        await audio.play();
+        return;
+      }
+
+      // Fallback to browser TTS
+      fallbackSpeak(text);
+    } catch (err) {
+      console.error("TTS error:", err);
+      fallbackSpeak(text);
+    }
+  }, [isTTSEnabled, isSpeaking]);
+
+  // Browser native TTS fallback
+  const fallbackSpeak = (text: string) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(
+        text.replace(/\*\*/g, "").replace(/[📊🔧📈🛡️🤖⚠️✅🎯]/g, "")
+      );
+      utterance.lang = "pt-BR";
+      utterance.rate = 1.0;
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      speechSynthesis.speak(utterance);
+    } else {
+      setIsSpeaking(false);
+    }
+  };
+
+  // Stop speaking
+  const stopSpeaking = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  };
 
   const generateLocalResponse = (userMessage: string): string => {
     const msg = userMessage.toLowerCase();
@@ -116,21 +211,34 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
         }
       });
 
+      let responseText: string;
       if (error || !data?.response) {
         // Fallback to local response
-        const localResponse = generateLocalResponse(text);
-        setMessages(prev => [...prev, { role: "assistant", content: localResponse }]);
+        responseText = generateLocalResponse(text);
       } else {
-        setMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+        responseText = data.response;
+      }
+
+      setMessages(prev => [...prev, { role: "assistant", content: responseText }]);
+      
+      // Speak the response if TTS is enabled
+      if (isTTSEnabled) {
+        // Extract first sentence for TTS to keep it concise
+        const firstSentence = responseText.split(/[.!?]/)[0] + ".";
+        speakText(firstSentence);
       }
     } catch (err) {
       // Fallback to local response on any error
       const localResponse = generateLocalResponse(text);
       setMessages(prev => [...prev, { role: "assistant", content: localResponse }]);
+      
+      if (isTTSEnabled) {
+        speakText(localResponse.split(/[.!?]/)[0] + ".");
+      }
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages]);
+  }, [input, isLoading, messages, isTTSEnabled, speakText]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -150,8 +258,28 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
             <span>Copiloto Nautilus</span>
             <Badge variant="secondary" className="ml-2">
               <Sparkles className="h-3 w-3 mr-1" />
-              IA
+              IA + Voz
             </Badge>
+            
+            {/* Voice Controls */}
+            <div className="ml-auto flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => {
+                  setIsTTSEnabled(!isTTSEnabled);
+                  if (isSpeaking) stopSpeaking();
+                }}
+                title={isTTSEnabled ? "Desativar voz" : "Ativar voz"}
+              >
+                {isTTSEnabled ? (
+                  <Volume2 className={cn("h-4 w-4", isSpeaking && "text-primary animate-pulse")} />
+                ) : (
+                  <VolumeX className="h-4 w-4 text-muted-foreground" />
+                )}
+              </Button>
+            </div>
           </DialogTitle>
         </DialogHeader>
 
@@ -204,15 +332,30 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
           </div>
         </ScrollArea>
 
-        {/* Input */}
+        {/* Input with Voice */}
         <div className="flex gap-2 pt-2 border-t">
+          {isSupported && (
+            <Button
+              variant={isListening ? "destructive" : "outline"}
+              size="icon"
+              onClick={toggleVoice}
+              className={cn(isListening && "animate-pulse")}
+              title={isListening ? "Parar" : "Falar"}
+            >
+              {isListening ? (
+                <MicOff className="h-4 w-4" />
+              ) : (
+                <Mic className="h-4 w-4" />
+              )}
+            </Button>
+          )}
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Digite sua pergunta..."
+            placeholder={isListening ? "Escutando..." : "Digite ou fale sua pergunta..."}
             disabled={isLoading}
-            className="flex-1"
+            className={cn("flex-1", isListening && "border-red-500")}
           />
           <Button 
             onClick={() => sendMessage()} 

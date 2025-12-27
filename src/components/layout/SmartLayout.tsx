@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
 import { SmartSidebar } from "@/components/layout/SmartSidebar";
 import { SmartHeader } from "@/components/layout/SmartHeader";
@@ -8,6 +8,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
+
+// Lazy load notification prompt
+const NotificationPrompt = lazy(() => import("@/components/notifications/NotificationPrompt"));
 
 // Simple loading fallback component
 const LoadingFallback = () => (
@@ -54,6 +57,11 @@ export function SmartLayout() {
 
           {/* Toast Notifications */}
           <Toaster />
+          
+          {/* Push Notification Prompt */}
+          <Suspense fallback={null}>
+            <NotificationPrompt />
+          </Suspense>
         </div>
       </TooltipProvider>
     </ThemeProvider>
