@@ -1,6 +1,6 @@
 /**
  * Quick Copilot Dialog Component
- * Assistente IA rápido no header
+ * PATCH VOICE-1.0: Assistente IA rápido no header com suporte a voz e TTS
  */
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -23,9 +23,16 @@ import {
   Wrench,
   BarChart3,
   Shield,
-  HelpCircle
+  HelpCircle,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useVoiceCommands } from "@/modules/nautilus-command-center/hooks/useVoiceCommands";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Message {
   role: "user" | "assistant";
