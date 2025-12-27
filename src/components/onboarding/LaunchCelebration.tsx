@@ -66,6 +66,18 @@ export const LaunchCelebration: React.FC = () => {
     }
   }, []);
 
+  // Keyboard support for ESC and DEL to close
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (isVisible && (event.key === 'Escape' || event.key === 'Delete')) {
+        handleClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible]);
+
   const handleClose = () => {
     localStorage.setItem(LAUNCH_CELEBRATION_KEY, "true");
     setIsVisible(false);

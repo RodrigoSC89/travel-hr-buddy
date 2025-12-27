@@ -77,6 +77,18 @@ export const WelcomeOnboarding: React.FC = () => {
     }
   }, []);
 
+  // Keyboard support for ESC and DEL to close
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (isVisible && (event.key === 'Escape' || event.key === 'Delete')) {
+        handleComplete();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible]);
+
   const handleNext = () => {
     if (currentStep < ONBOARDING_STEPS.length - 1) {
       setCurrentStep(prev => prev + 1);
