@@ -1,4 +1,8 @@
 // @ts-nocheck
+/**
+ * PATCH 660: SGSO Audits
+ * Note: @ts-nocheck required due to schema mismatch with interface
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
