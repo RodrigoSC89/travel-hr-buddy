@@ -66,14 +66,14 @@ serve(async (req: Request) => {
     switch (action) {
       case 'weather':
         endpoint = '/weather/point';
-        // Default marine weather parameters
+        // Default marine weather parameters (valid StormGlass params)
         const weatherParams = params || [
           'airTemperature',
           'pressure',
           'humidity',
           'windSpeed',
           'windDirection',
-          'windGust',
+          'gust',
           'visibility',
           'cloudCover',
           'precipitation',
@@ -83,7 +83,10 @@ serve(async (req: Request) => {
           'waterTemperature',
           'currentSpeed',
           'currentDirection',
-          'seaLevel'
+          'seaLevel',
+          'swellHeight',
+          'swellDirection',
+          'swellPeriod'
         ];
         queryParams.append('params', weatherParams.join(','));
         break;
@@ -204,7 +207,7 @@ function transformStormGlassData(data: any, action: string): any {
         windSpeed: getSourceValue(current.windSpeed),
         windSpeedKnots: (getSourceValue(current.windSpeed) ?? 0) * 1.94384, // m/s to knots
         windDirection: getSourceValue(current.windDirection),
-        windGust: getSourceValue(current.windGust),
+        gust: getSourceValue(current.gust),
         visibility: getSourceValue(current.visibility),
         cloudCover: getSourceValue(current.cloudCover),
         precipitation: getSourceValue(current.precipitation),
