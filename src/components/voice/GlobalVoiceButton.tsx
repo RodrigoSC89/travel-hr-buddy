@@ -140,7 +140,7 @@ export function GlobalVoiceButton() {
     setIsSpeaking(true);
 
     try {
-      // Try ElevenLabs first
+      // Use ElevenLabs via edge function
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-voice`,
         {
@@ -151,9 +151,9 @@ export function GlobalVoiceButton() {
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
-            operation: "text-to-speech",
+            operation: "tts",
             text,
-            voiceId: "JBFqnCBsd6RMkjVDRZzb" // George voice
+            voiceId: "JBFqnCBsd6RMkjVDRZzb", // George voice - professional
           })
         }
       );
@@ -164,15 +164,25 @@ export function GlobalVoiceButton() {
           const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
           const audio = new Audio(audioUrl);
           audio.onended = () => setIsSpeaking(false);
+          audio.onerror = () => {
+            console.error("Audio playback error");
+            setIsSpeaking(false);
+            // Fallback to Web Speech API
+            speakWithWebAPI(text);
+          };
           await audio.play();
           return;
         }
       }
     } catch (error) {
-      console.log("ElevenLabs failed, falling back to Web Speech API");
+      console.log("ElevenLabs TTS failed, falling back to Web Speech API:", error);
     }
 
     // Fallback to Web Speech API
+    speakWithWebAPI(text);
+  }, []);
+
+  const speakWithWebAPI = useCallback((text: string) => {
     if ("speechSynthesis" in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "pt-BR";
