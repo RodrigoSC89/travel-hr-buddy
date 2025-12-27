@@ -724,3 +724,23 @@ comment = "Safety AI - Incident analysis, training, DDS generation via Lovable A
 [functions.esg-waste-ai]
 verify_jwt = false
 comment = "ESG & Waste Management AI - Emissions analysis, waste classification, compliance via Lovable AI"
+
+# ============================================
+# REVOLUTIONARY FEATURES - PATCH FINAL
+# ============================================
+
+[functions.nautilus-vision]
+verify_jwt = false
+comment = "Multimodal AI - Image/document analysis with OCR using Gemini Vision"
+
+[functions.ais-tracking]
+verify_jwt = false
+comment = "AIS Tracking - Real-time vessel position tracking via satellite"
+
+[functions.certificate-blockchain]
+verify_jwt = false
+comment = "Blockchain certificates - Immutable maritime certificates with QR verification"
+
+[functions.elevenlabs-voice]
+verify_jwt = false
+comment = "ElevenLabs Voice Assistant - TTS, STT, and voice commands"

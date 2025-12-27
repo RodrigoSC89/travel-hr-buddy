@@ -87,6 +87,13 @@ const NOCMode = lazy(() => import(/* webpackChunkName: "page-noc" */ "@/pages/NO
 const AuditoriaTecnica = lazy(() => import(/* webpackChunkName: "page-auditoria" */ "@/pages/AuditoriaTecnica"));
 const SecurityAudit = lazy(() => import(/* webpackChunkName: "page-security-audit" */ "@/pages/SecurityAudit"));
 const TelemetriaCommand = lazy(() => import(/* webpackChunkName: "page-telemetria" */ "@/pages/TelemetriaCommand"));
+
+// Revolutionary Features - PATCH FINAL
+const VisionAI = lazy(() => import(/* webpackChunkName: "page-vision-ai" */ "@/pages/VisionAI"));
+const AISTracking = lazy(() => import(/* webpackChunkName: "page-ais-tracking" */ "@/pages/AISTracking"));
+const CertificateBlockchain = lazy(() => import(/* webpackChunkName: "page-cert-blockchain" */ "@/pages/CertificateBlockchain"));
+const VoiceAssistant = lazy(() => import(/* webpackChunkName: "page-voice-assistant" */ "@/pages/VoiceAssistant"));
+
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -160,6 +167,12 @@ function App() {
                         <Route path="auditoria-tecnica" element={<AuditoriaTecnica />} />
                         <Route path="auditoria-seguranca" element={<SecurityAudit />} />
                         <Route path="telemetria" element={<TelemetriaCommand />} />
+                        
+                        {/* Revolutionary Features - PATCH FINAL */}
+                        <Route path="vision-ai" element={<VisionAI />} />
+                        <Route path="ais-tracking" element={<AISTracking />} />
+                        <Route path="certificate-blockchain" element={<CertificateBlockchain />} />
+                        <Route path="voice-assistant" element={<VoiceAssistant />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
