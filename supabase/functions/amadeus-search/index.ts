@@ -59,7 +59,7 @@ async function getAmadeusToken(): Promise<string> {
   
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const tokenResponse = await fetch("https://test.api.amadeus.com/v1/security/oauth2/token", {
+      const tokenResponse = await fetch("https://api.amadeus.com/v1/security/oauth2/token", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -107,7 +107,7 @@ async function searchFlights(searchParams: FlightSearchParams): Promise<unknown>
     max: "10",
   });
 
-  const response = await fetch(`https://test.api.amadeus.com/v2/shopping/flight-offers?${params}`, {
+  const response = await fetch(`https://api.amadeus.com/v2/shopping/flight-offers?${params}`, {
     headers: {
       "Authorization": `Bearer ${token}`,
     },
@@ -123,7 +123,7 @@ async function searchFlights(searchParams: FlightSearchParams): Promise<unknown>
 async function searchHotels(searchParams: HotelSearchParams): Promise<unknown> {
   const token = await getAmadeusToken();
   
-  const cityResponse = await fetch(`https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword=${encodeURIComponent(searchParams.cityName)}&max=1`, {
+  const cityResponse = await fetch(`https://api.amadeus.com/v1/reference-data/locations/cities?keyword=${encodeURIComponent(searchParams.cityName)}&max=1`, {
     headers: {
       "Authorization": `Bearer ${token}`,
     },
@@ -150,7 +150,7 @@ async function searchHotels(searchParams: HotelSearchParams): Promise<unknown> {
     hotelSource: "ALL",
   });
 
-  const hotelResponse = await fetch(`https://test.api.amadeus.com/v3/shopping/hotel-offers?${params}`, {
+  const hotelResponse = await fetch(`https://api.amadeus.com/v3/shopping/hotel-offers?${params}`, {
     headers: {
       "Authorization": `Bearer ${token}`,
     },

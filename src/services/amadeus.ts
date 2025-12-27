@@ -31,7 +31,7 @@ export async function testAmadeusConnection(): Promise<AmadeusTestResult> {
   try {
     // Test OAuth2 token endpoint
     const response = await fetch(
-      "https://test.api.amadeus.com/v1/security/oauth2/token",
+      "https://api.amadeus.com/v1/security/oauth2/token",
       {
         method: "POST",
         headers: {
