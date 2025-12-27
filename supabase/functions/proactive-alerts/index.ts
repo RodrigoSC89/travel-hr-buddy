@@ -17,6 +17,17 @@ interface AlertPayload {
   limit?: number;
 }
 
+interface AlertRecord {
+  id: string;
+  alert_type: string;
+  severity: string;
+  status: string;
+  title: string;
+  description?: string;
+  metadata?: Record<string, unknown>;
+  detected_at?: string;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -34,7 +45,6 @@ serve(async (req) => {
       case "create": {
         const { alert_type, severity, title, description, metadata } = payload;
         
-        // Create alert
         const { data: alert, error } = await supabase
           .from("proactive_alerts")
           .insert({
@@ -51,7 +61,6 @@ serve(async (req) => {
 
         if (error) throw error;
 
-        // Log to audit
         await supabase.from("security_audit_logs").insert({
           event_type: "alert_created",
           severity: severity || "medium",
@@ -59,7 +68,6 @@ serve(async (req) => {
           metadata: { alert_id: alert.id, alert_type },
         });
 
-        // Check if needs webhook notification
         if (severity === "critical" || severity === "high") {
           const { data: webhooks } = await supabase
             .from("webhook_configurations")
@@ -190,7 +198,6 @@ serve(async (req) => {
       }
 
       case "analyze": {
-        // AI-powered analysis of alerts
         const { data: recentAlerts, error } = await supabase
           .from("proactive_alerts")
           .select("*")
@@ -199,27 +206,28 @@ serve(async (req) => {
 
         if (error) throw error;
 
+        const alerts = (recentAlerts || []) as AlertRecord[];
+
         const analysis = {
-          total_alerts: recentAlerts?.length || 0,
+          total_alerts: alerts.length,
           by_severity: {
-            critical: recentAlerts?.filter(a => a.severity === "critical").length || 0,
-            high: recentAlerts?.filter(a => a.severity === "high").length || 0,
-            medium: recentAlerts?.filter(a => a.severity === "medium").length || 0,
-            low: recentAlerts?.filter(a => a.severity === "low").length || 0,
+            critical: alerts.filter((a: AlertRecord) => a.severity === "critical").length,
+            high: alerts.filter((a: AlertRecord) => a.severity === "high").length,
+            medium: alerts.filter((a: AlertRecord) => a.severity === "medium").length,
+            low: alerts.filter((a: AlertRecord) => a.severity === "low").length,
           },
           by_status: {
-            active: recentAlerts?.filter(a => a.status === "active").length || 0,
-            resolved: recentAlerts?.filter(a => a.status === "resolved").length || 0,
-            acknowledged: recentAlerts?.filter(a => a.status === "acknowledged").length || 0,
+            active: alerts.filter((a: AlertRecord) => a.status === "active").length,
+            resolved: alerts.filter((a: AlertRecord) => a.status === "resolved").length,
+            acknowledged: alerts.filter((a: AlertRecord) => a.status === "acknowledged").length,
           },
-          patterns: [],
-          recommendations: [],
+          patterns: [] as Array<{ type: string; count: number; pattern: string }>,
+          recommendations: [] as string[],
         };
 
-        // Pattern detection
-        const alertTypes = recentAlerts?.map(a => a.alert_type) || [];
+        const alertTypes = alerts.map((a: AlertRecord) => a.alert_type);
         const typeCounts: Record<string, number> = {};
-        alertTypes.forEach(type => {
+        alertTypes.forEach((type: string) => {
           typeCounts[type] = (typeCounts[type] || 0) + 1;
         });
 
@@ -231,17 +239,16 @@ serve(async (req) => {
             pattern: `Recurring ${type} alerts (${count} in 24h)`,
           }));
 
-        analysis.patterns = patterns as never[];
+        analysis.patterns = patterns;
 
-        // Generate recommendations
         if (analysis.by_severity.critical > 0) {
-          analysis.recommendations.push("Immediate attention required for critical alerts" as never);
+          analysis.recommendations.push("Immediate attention required for critical alerts");
         }
         if (patterns.length > 0) {
-          analysis.recommendations.push("Investigate recurring alert patterns" as never);
+          analysis.recommendations.push("Investigate recurring alert patterns");
         }
         if (analysis.by_status.active > 10) {
-          analysis.recommendations.push("High volume of active alerts - consider prioritization" as never);
+          analysis.recommendations.push("High volume of active alerts - consider prioritization");
         }
 
         return new Response(JSON.stringify({ success: true, analysis }), {

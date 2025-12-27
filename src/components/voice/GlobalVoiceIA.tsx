@@ -13,6 +13,43 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+// Web Speech API types
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionResultItem {
+  isFinal: boolean;
+  length: number;
+  [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: SpeechRecognitionResultItem;
+}
+
+interface SpeechRecognitionEventType {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEventType {
+  error: string;
+}
+
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEventType) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventType) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+}
+
 interface VoiceState {
   isListening: boolean;
   isProcessing: boolean;
@@ -38,31 +75,33 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
     error: null,
   });
   
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const synthRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Initialize Web Speech API
   useEffect(() => {
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      const SpeechRecognitionClass = (window as unknown as { webkitSpeechRecognition: new () => SpeechRecognition }).webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognitionClass();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const SpeechRecognitionClass = (window as any).webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognitionClass() as SpeechRecognitionInstance;
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = "pt-BR";
 
-      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
-        const transcript = Array.from(event.results)
-          .map((result: SpeechRecognitionResult) => result[0].transcript)
-          .join("");
+      recognitionRef.current.onresult = (event: SpeechRecognitionEventType) => {
+        let transcript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
         
         setVoiceState(prev => ({ ...prev, transcript }));
 
-        if (event.results[0].isFinal) {
+        if (event.results[0]?.isFinal) {
           processCommand(transcript);
         }
       };
 
-      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+      recognitionRef.current.onerror = (event: SpeechRecognitionErrorEventType) => {
         console.error("Speech recognition error:", event.error);
         setVoiceState(prev => ({
           ...prev,

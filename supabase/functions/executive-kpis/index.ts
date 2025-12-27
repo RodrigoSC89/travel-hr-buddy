@@ -16,6 +16,24 @@ interface KPIPayload {
   end_date?: string;
 }
 
+interface KPIRecord {
+  id: string;
+  name: string;
+  category?: string;
+  current_value: number;
+  target: number;
+  unit?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface MetricRecord {
+  id: string;
+  metric_name: string;
+  value: number;
+  recorded_at: string;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -38,28 +56,28 @@ serve(async (req) => {
 
         if (error) throw error;
 
-        // Group by category
-        const grouped: Record<string, typeof kpis> = {};
-        kpis?.forEach(kpi => {
+        const kpiList = (kpis || []) as KPIRecord[];
+
+        const grouped: Record<string, KPIRecord[]> = {};
+        kpiList.forEach((kpi: KPIRecord) => {
           const category = kpi.category || "general";
           if (!grouped[category]) grouped[category] = [];
           grouped[category].push(kpi);
         });
 
-        // Calculate overall health score
-        const healthScore = kpis?.reduce((acc, kpi) => {
+        const healthScore = kpiList.reduce((acc: number, kpi: KPIRecord) => {
           if (kpi.target && kpi.current_value) {
             const ratio = kpi.current_value / kpi.target;
             return acc + (ratio >= 1 ? 100 : ratio * 100);
           }
           return acc;
-        }, 0) || 0;
+        }, 0);
 
-        const avgHealth = kpis && kpis.length > 0 ? healthScore / kpis.length : 100;
+        const avgHealth = kpiList.length > 0 ? healthScore / kpiList.length : 100;
 
         return new Response(JSON.stringify({ 
           success: true, 
-          kpis, 
+          kpis: kpiList, 
           grouped,
           health_score: Math.round(avgHealth),
         }), {
@@ -90,7 +108,6 @@ serve(async (req) => {
 
         if (error) throw error;
 
-        // Log KPI update
         await supabase.from("security_audit_logs").insert({
           event_type: "kpi_updated",
           severity: "info",
@@ -106,7 +123,6 @@ serve(async (req) => {
       case "history": {
         const { kpi_name, start_date, end_date } = payload;
 
-        // Get historical data from system_metrics
         let query = supabase
           .from("system_metrics")
           .select("*")
@@ -126,9 +142,10 @@ serve(async (req) => {
 
         if (error) throw error;
 
-        // Group by metric name for chart data
+        const metrics = (data || []) as MetricRecord[];
+
         const chartData: Record<string, Array<{ date: string; value: number }>> = {};
-        data?.forEach(metric => {
+        metrics.forEach((metric: MetricRecord) => {
           const name = metric.metric_name;
           if (!chartData[name]) chartData[name] = [];
           chartData[name].push({
@@ -137,41 +154,40 @@ serve(async (req) => {
           });
         });
 
-        return new Response(JSON.stringify({ success: true, history: data, chartData }), {
+        return new Response(JSON.stringify({ success: true, history: metrics, chartData }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
       case "analyze": {
-        // AI-powered KPI analysis
         const { data: kpis, error } = await supabase
           .from("executive_kpis")
           .select("*");
 
         if (error) throw error;
 
+        const kpiList = (kpis || []) as KPIRecord[];
+
         const analysis = {
           timestamp: new Date().toISOString(),
-          kpi_count: kpis?.length || 0,
+          kpi_count: kpiList.length,
           performance: {
-            exceeding_target: kpis?.filter(k => k.current_value >= k.target).length || 0,
-            below_target: kpis?.filter(k => k.current_value < k.target).length || 0,
-            critical: kpis?.filter(k => k.current_value < k.target * 0.7).length || 0,
+            exceeding_target: kpiList.filter((k: KPIRecord) => k.current_value >= k.target).length,
+            below_target: kpiList.filter((k: KPIRecord) => k.current_value < k.target).length,
+            critical: kpiList.filter((k: KPIRecord) => k.current_value < k.target * 0.7).length,
           },
           insights: [] as string[],
           recommendations: [] as string[],
           trends: [] as Array<{ kpi: string; trend: string; change: number }>,
         };
 
-        // Generate insights
-        kpis?.forEach(kpi => {
+        kpiList.forEach((kpi: KPIRecord) => {
           if (kpi.current_value >= kpi.target) {
             analysis.insights.push(`${kpi.name}: Exceeding target by ${((kpi.current_value / kpi.target - 1) * 100).toFixed(1)}%`);
           } else if (kpi.current_value < kpi.target * 0.7) {
             analysis.recommendations.push(`${kpi.name}: Critical - needs immediate attention (${((kpi.current_value / kpi.target) * 100).toFixed(1)}% of target)`);
           }
 
-          // Calculate trend (mock - would use historical data in production)
           const trendChange = Math.random() * 20 - 10;
           analysis.trends.push({
             kpi: kpi.name,
