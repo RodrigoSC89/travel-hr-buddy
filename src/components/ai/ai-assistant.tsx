@@ -18,34 +18,51 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-// Extend the global Window interface to include webkitSpeechRecognition
-declare global {
-  interface Window {
-    webkitSpeechRecognition: new () => SpeechRecognition;
-  }
+// Local Speech Recognition types (avoid global declaration conflicts)
+interface LocalSpeechRecognitionEvent extends Event {
+  readonly results: LocalSpeechRecognitionResultList;
 }
 
-interface SpeechRecognition extends EventTarget {
+interface LocalSpeechRecognitionResultList {
+  readonly length: number;
+  item(index: number): LocalSpeechRecognitionResult;
+  [index: number]: LocalSpeechRecognitionResult;
+}
+
+interface LocalSpeechRecognitionResult {
+  readonly length: number;
+  readonly isFinal: boolean;
+  item(index: number): LocalSpeechRecognitionAlternative;
+  [index: number]: LocalSpeechRecognitionAlternative;
+}
+
+interface LocalSpeechRecognitionAlternative {
+  readonly transcript: string;
+  readonly confidence: number;
+}
+
+interface LocalSpeechRecognition extends EventTarget {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
   start(): void;
   stop(): void;
-  onresult: (event: SpeechRecognitionEvent) => void;
-  onerror: (event: Event) => void;
-  onend: () => void;
+  abort(): void;
+  onresult: ((event: LocalSpeechRecognitionEvent) => void) | null;
+  onerror: ((event: Event) => void) | null;
+  onend: (() => void) | null;
 }
 
-interface SpeechRecognitionEvent extends Event {
-  results: SpeechRecognitionResultList;
-}
+// Helper to get SpeechRecognition constructor
+const getSpeechRecognition = (): (new () => LocalSpeechRecognition) | null => {
+  const w = window as typeof window & { 
+    SpeechRecognition?: new () => LocalSpeechRecognition; 
+    webkitSpeechRecognition?: new () => LocalSpeechRecognition;
+  };
+  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
+};
 
-interface SpeechRecognitionResultList {
-  length: number;
-  item(index: number): SpeechRecognitionResult;
-  [index: number]: SpeechRecognitionResult;
-}
-
+// Keep old interfaces for backward compatibility
 interface SpeechRecognitionResult {
   length: number;
   item(index: number): SpeechRecognitionAlternative;
@@ -87,26 +104,27 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
+  const [recognition, setRecognition] = useState<LocalSpeechRecognition | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const { user } = useAuth();
 
   useEffect(() => {
     // Initialize speech recognition
-    if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
-      const recognition = new window.webkitSpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = "pt-BR";
+    const SpeechRecognitionConstructor = getSpeechRecognition();
+    if (typeof window !== "undefined" && SpeechRecognitionConstructor) {
+      const recog = new SpeechRecognitionConstructor();
+      recog.continuous = false;
+      recog.interimResults = false;
+      recog.lang = "pt-BR";
 
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
+      recog.onresult = (event: LocalSpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
       };
 
-      recognition.onerror = () => {
+      recog.onerror = () => {
         setIsListening(false);
         toast({
           title: "Erro no reconhecimento de voz",
@@ -115,11 +133,11 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         });
       };
 
-      recognition.onend = () => {
+      recog.onend = () => {
         setIsListening(false);
       };
 
-      setRecognition(recognition);
+      setRecognition(recog);
     }
 
     // Add welcome message

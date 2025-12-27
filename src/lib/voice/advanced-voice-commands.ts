@@ -23,10 +23,30 @@ interface VoiceState {
   confidence: number;
 }
 
-type SpeechRecognitionType = typeof window.SpeechRecognition;
+// Local Speech Recognition interface to avoid conflicts
+interface LocalSpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  abort(): void;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onresult: ((event: { results: SpeechRecognitionResultList }) => void) | null;
+  onerror: ((event: { error: string }) => void) | null;
+}
+
+const getSpeechRecognitionConstructor = (): (new () => LocalSpeechRecognition) | null => {
+  const w = window as typeof window & { 
+    SpeechRecognition?: new () => LocalSpeechRecognition; 
+    webkitSpeechRecognition?: new () => LocalSpeechRecognition;
+  };
+  return w.SpeechRecognition || w.webkitSpeechRecognition || null;
+};
 
 class AdvancedVoiceEngine {
-  private recognition: InstanceType<SpeechRecognitionType> | null = null;
+  private recognition: LocalSpeechRecognition | null = null;
   private commands: VoiceCommand[] = [];
   private state: VoiceState = {
     isListening: false,
@@ -45,19 +65,18 @@ class AdvancedVoiceEngine {
   }
   
   private initRecognition(): void {
-    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionConstructor = getSpeechRecognitionConstructor();
     
-    if (!SpeechRecognition) {
+    if (!SpeechRecognitionConstructor) {
       this.isSupported = false;
       return;
     }
     
     this.isSupported = true;
-    this.recognition = new SpeechRecognition();
+    this.recognition = new SpeechRecognitionConstructor();
     this.recognition.continuous = false;
     this.recognition.interimResults = true;
     this.recognition.lang = 'pt-BR';
-    this.recognition.maxAlternatives = 3;
     
     this.recognition.onstart = () => {
       this.updateState({ isListening: true, error: null });
