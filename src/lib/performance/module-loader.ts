@@ -127,7 +127,7 @@ class ModuleLoader {
     try {
       await this.loadModule(moduleId);
     } catch (e) {
-      console.warn(`[ModuleLoader] Preload failed for "${moduleId}":`, e);
+      logger.warn(`[ModuleLoader] Preload failed for "${moduleId}"`, { error: e });
     }
   }
   

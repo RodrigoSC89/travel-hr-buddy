@@ -1,10 +1,12 @@
 /**
  * Module Integration Service
  * Central service for cross-module communication and integration
+ * PATCH 855 - Added logger integration
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export interface ModuleAction {
   module: string;
@@ -68,10 +70,10 @@ class ModuleIntegrationService {
     this.actionHandlers.set(name, handler);
   }
 
-  async executeAction(action: ModuleAction): Promise<any> {
+  async executeAction(action: ModuleAction): Promise<Record<string, unknown>> {
     const handler = this.actionHandlers.get(action.action);
     if (!handler) {
-      console.warn(`No handler for action: ${action.action}`);
+      logger.warn(`No handler for action: ${action.action}`);
       return { success: false, error: "Action not found" };
     }
 
@@ -82,7 +84,7 @@ class ModuleIntegrationService {
       }
       return result;
     } catch (error) {
-      console.error(`Error executing action ${action.action}:`, error);
+      logger.error(`Error executing action ${action.action}`, { error });
       return { success: false, error };
     }
   }

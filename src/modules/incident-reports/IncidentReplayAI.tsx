@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 472 - Incident Replay AI Main Panel
  * Lists incidents and allows replay with AI analysis
+ * PATCH 855 - Removed @ts-nocheck, added proper typing
  */
 
 import React, { useState, useEffect } from "react";
@@ -22,6 +22,7 @@ import {
 } from "./services/incidentReplayService";
 import { IncidentReplay } from "./components/IncidentReplay";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export const IncidentReplayAI: React.FC = () => {
   const [incidents, setIncidents] = useState<IncidentData[]>([]);
@@ -59,7 +60,7 @@ export const IncidentReplayAI: React.FC = () => {
       setIncidents(incidentList);
       setFilteredIncidents(incidentList);
     } catch (error) {
-      console.error("Failed to load incidents:", error);
+      logger.error("Failed to load incidents", { error });
       toast.error("Falha ao carregar incidentes");
     } finally {
       setIsLoading(false);

@@ -342,10 +342,10 @@ class AIResponseCache {
           }
         }
         
-        console.log(`[AICache] Loaded ${this.cache.size} cached responses`);
+        logger.info(`[AICache] Loaded ${this.cache.size} cached responses`);
       }
     } catch (e) {
-      console.warn('[AICache] Failed to load from storage:', e);
+      logger.warn('[AICache] Failed to load from storage', { error: e });
     }
   }
   
