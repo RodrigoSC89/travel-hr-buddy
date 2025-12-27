@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,11 +8,11 @@ import {
   Shield, 
   Users, 
   BarChart3, 
-  Settings, 
   CheckCircle2,
   ArrowRight,
   Sparkles,
-  Rocket
+  Rocket,
+  X
 } from "lucide-react";
 
 interface OnboardingStep {
@@ -68,6 +68,12 @@ export const WelcomeOnboarding: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
 
+  const handleComplete = useCallback(() => {
+    localStorage.setItem(STORAGE_KEY, "true");
+    setIsVisible(false);
+    setIsCompleted(true);
+  }, []);
+
   useEffect(() => {
     const completed = localStorage.getItem(STORAGE_KEY);
     if (!completed) {
@@ -81,13 +87,15 @@ export const WelcomeOnboarding: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (isVisible && (event.key === 'Escape' || event.key === 'Delete')) {
+        event.preventDefault();
+        event.stopPropagation();
         handleComplete();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isVisible]);
+    document.addEventListener('keydown', handleKeyDown, true);
+    return () => document.removeEventListener('keydown', handleKeyDown, true);
+  }, [isVisible, handleComplete]);
 
   const handleNext = () => {
     if (currentStep < ONBOARDING_STEPS.length - 1) {
@@ -101,10 +109,11 @@ export const WelcomeOnboarding: React.FC = () => {
     handleComplete();
   };
 
-  const handleComplete = () => {
-    localStorage.setItem(STORAGE_KEY, "true");
-    setIsVisible(false);
-    setIsCompleted(true);
+  // Close when clicking the backdrop
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleComplete();
+    }
   };
 
   if (isCompleted || !isVisible) return null;
@@ -120,20 +129,39 @@ export const WelcomeOnboarding: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm"
+          onClick={handleBackdropClick}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/95 backdrop-blur-sm"
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="w-full max-w-lg mx-4"
+            className="w-full max-w-lg mx-4 relative"
           >
+            {/* Close Button - Always visible and accessible */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleComplete}
+              className="absolute -top-2 -right-2 z-10 h-10 w-10 rounded-full bg-background border-2 border-border shadow-lg hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-colors"
+              aria-label="Fechar onboarding"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+
             <Card className="border-primary/20 shadow-2xl overflow-hidden">
               {/* Header gradient */}
               <div className={`h-2 bg-gradient-to-r ${step.color}`} />
               
               <CardContent className="p-8">
+                {/* Close hint */}
+                <div className="flex justify-end mb-2">
+                  <span className="text-xs text-muted-foreground">
+                    Pressione ESC para fechar
+                  </span>
+                </div>
+
                 {/* Progress */}
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
@@ -193,18 +221,17 @@ export const WelcomeOnboarding: React.FC = () => {
 
                 {/* Actions */}
                 <div className="flex gap-3">
-                  {currentStep < ONBOARDING_STEPS.length - 1 && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={handleSkip}
-                      className="flex-1"
-                    >
-                      Pular
-                    </Button>
-                  )}
+                  <Button 
+                    variant="outline" 
+                    onClick={handleSkip}
+                    className="flex-1"
+                  >
+                    <X className="h-4 w-4 mr-2" />
+                    Fechar
+                  </Button>
                   <Button 
                     onClick={handleNext}
-                    className={`flex-1 bg-gradient-to-r ${step.color} hover:opacity-90`}
+                    className={`flex-1 bg-gradient-to-r ${step.color} hover:opacity-90 text-white`}
                   >
                     {currentStep === ONBOARDING_STEPS.length - 1 ? (
                       <>
