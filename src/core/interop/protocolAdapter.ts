@@ -1,7 +1,5 @@
-// @ts-nocheck
 /**
- * PATCH 226 - Protocol Adapter
- * TODO PATCH 659: TypeScript fixes deferred (interop_log table schema missing)
+ * PATCH 659 - Protocol Adapter (TypeScript Fixed)
  * Interoperability adapter for input/output with external systems via multiple protocols
  * Supports: JSON-RPC 2.0, GraphQL, AIS/GMDSS (simulated), NATO STANAG (simulated)
  */
@@ -19,17 +17,17 @@ export type ProcessingStatus = "pending" | "processing" | "completed" | "failed"
 export interface JsonRpcRequest {
   jsonrpc: "2.0";
   method: string;
-  params?: any;
+  params?: Record<string, unknown>;
   id: string | number;
 }
 
 export interface JsonRpcResponse {
   jsonrpc: "2.0";
-  result?: any;
+  result?: unknown;
   error?: {
     code: number;
     message: string;
-    data?: any;
+    data?: unknown;
   };
   id: string | number | null;
 }
@@ -37,12 +35,12 @@ export interface JsonRpcResponse {
 // GraphQL Interfaces
 export interface GraphQLQuery {
   query: string;
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
   operationName?: string;
 }
 
 export interface GraphQLResponse {
-  data?: any;
+  data?: unknown;
   errors?: Array<{
     message: string;
     locations?: Array<{ line: number; column: number }>;
@@ -71,8 +69,17 @@ export interface StanagMessage {
   originUnit: string;
   destinationUnit: string;
   messageType: string;
-  content: Record<string, any>;
+  content: Record<string, unknown>;
   timestamp: Date;
+}
+
+// GMDSS Message Interface
+export interface GmdssMessage {
+  messageType: string;
+  mmsi?: string;
+  distressType?: string;
+  position?: { latitude: number; longitude: number };
+  timestamp?: Date;
 }
 
 // Protocol Message
@@ -81,7 +88,7 @@ export interface ProtocolMessage {
   direction: Direction;
   sourceSystem: string;
   targetSystem?: string;
-  payload: any;
+  payload: unknown;
   timestamp?: Date;
   trustScore?: number;
 }
@@ -90,9 +97,9 @@ export interface ProtocolMessage {
 export interface ParsedMessage {
   protocol: ProtocolType;
   isValid: boolean;
-  data: any;
+  data: unknown;
   errors: string[];
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 // Validation Result
@@ -108,7 +115,7 @@ export interface RouteResult {
   success: boolean;
   routedTo: string;
   latencyMs: number;
-  response?: any;
+  response?: unknown;
   error?: string;
 }
 
@@ -119,9 +126,9 @@ export async function parse(message: ProtocolMessage): Promise<ParsedMessage> {
   logger.info(`[ProtocolAdapter] Parsing ${message.protocol} message from ${message.sourceSystem}`);
   
   const errors: string[] = [];
-  let data: any = null;
+  let data: unknown = null;
   let isValid = false;
-  const metadata: Record<string, any> = {
+  const metadata: Record<string, unknown> = {
     receivedAt: new Date().toISOString(),
     protocol: message.protocol,
     sourceSystem: message.sourceSystem,
@@ -169,7 +176,7 @@ export async function parse(message: ProtocolMessage): Promise<ParsedMessage> {
     }
   } catch (error) {
     errors.push(`Parse error: ${error instanceof Error ? error.message : String(error)}`);
-    logger.error("[ProtocolAdapter] Parse error:", error);
+    logger.error("[ProtocolAdapter] Parse error:", error as Error);
   }
 
   return {
@@ -224,7 +231,7 @@ export async function validate(
   } catch (error) {
     errors.push(`Validation error: ${error instanceof Error ? error.message : String(error)}`);
     status = "error";
-    logger.error("[ProtocolAdapter] Validation error:", error);
+    logger.error("[ProtocolAdapter] Validation error:", error as Error);
   }
 
   return {
@@ -280,7 +287,7 @@ export async function route(
     
     await logInteropEvent(message, parsedMessage, validationResult, null, "failed", null, latencyMs, errorMessage);
     
-    logger.error("[ProtocolAdapter] Routing error:", error);
+    logger.error("[ProtocolAdapter] Routing error:", error as Error);
     return {
       success: false,
       routedTo: "error",
@@ -292,7 +299,13 @@ export async function route(
 
 // Internal parsing functions
 
-function parseJsonRpc(payload: any): { data: any; isValid: boolean; errors: string[] } {
+interface ParseResult {
+  data: unknown;
+  isValid: boolean;
+  errors: string[];
+}
+
+function parseJsonRpc(payload: unknown): ParseResult {
   const errors: string[] = [];
   
   if (typeof payload !== "object" || payload === null) {
@@ -320,7 +333,7 @@ function parseJsonRpc(payload: any): { data: any; isValid: boolean; errors: stri
   };
 }
 
-function parseGraphQL(payload: any): { data: any; isValid: boolean; errors: string[] } {
+function parseGraphQL(payload: unknown): ParseResult {
   const errors: string[] = [];
   
   if (typeof payload !== "object" || payload === null) {
@@ -340,7 +353,7 @@ function parseGraphQL(payload: any): { data: any; isValid: boolean; errors: stri
   };
 }
 
-function parseAIS(payload: any): { data: any; isValid: boolean; errors: string[] } {
+function parseAIS(payload: unknown): ParseResult {
   const errors: string[] = [];
   
   if (typeof payload !== "object" || payload === null) {
@@ -368,7 +381,7 @@ function parseAIS(payload: any): { data: any; isValid: boolean; errors: string[]
   };
 }
 
-function parseGMDSS(payload: any): { data: any; isValid: boolean; errors: string[] } {
+function parseGMDSS(payload: unknown): ParseResult {
   const errors: string[] = [];
   
   // GMDSS is similar to AIS but includes distress signaling
@@ -377,7 +390,7 @@ function parseGMDSS(payload: any): { data: any; isValid: boolean; errors: string
   }
 
   // Simulate GMDSS-specific validation
-  const gmdss = payload as any;
+  const gmdss = payload as Partial<GmdssMessage>;
   
   if (!gmdss.messageType) {
     errors.push("Missing GMDSS message type");
@@ -390,7 +403,7 @@ function parseGMDSS(payload: any): { data: any; isValid: boolean; errors: string
   };
 }
 
-function parseStanag(payload: any): { data: any; isValid: boolean; errors: string[] } {
+function parseStanag(payload: unknown): ParseResult {
   const errors: string[] = [];
   
   if (typeof payload !== "object" || payload === null) {
@@ -422,7 +435,7 @@ function parseStanag(payload: any): { data: any; isValid: boolean; errors: strin
   };
 }
 
-function validateSchema(protocol: ProtocolType, data: any): string[] {
+function validateSchema(protocol: ProtocolType, data: unknown): string[] {
   const errors: string[] = [];
   
   // Protocol-specific schema validation
@@ -457,7 +470,7 @@ function validateSchema(protocol: ProtocolType, data: any): string[] {
   return errors;
 }
 
-function determineRouteDestination(protocol: ProtocolType, data: any): string {
+function determineRouteDestination(protocol: ProtocolType, data: unknown): string {
   // Route based on protocol and data content
   switch (protocol) {
   case "json-rpc":
@@ -475,7 +488,7 @@ function determineRouteDestination(protocol: ProtocolType, data: any): string {
   }
 }
 
-async function simulateRouteToHandler(destination: string, data: any): Promise<any> {
+async function simulateRouteToHandler(destination: string, data: unknown): Promise<unknown> {
   // Simulate processing delay
   await new Promise(resolve => setTimeout(resolve, 50));
   
@@ -484,6 +497,7 @@ async function simulateRouteToHandler(destination: string, data: any): Promise<a
     destination,
     processedAt: new Date().toISOString(),
     acknowledgment: `Message routed to ${destination}`,
+    dataReceived: !!data,
   };
 }
 
@@ -493,12 +507,17 @@ async function logInteropEvent(
   validationResult: ValidationResult,
   routedTo: string | null,
   status: ProcessingStatus,
-  response?: any,
+  response?: unknown,
   latencyMs?: number,
   errorMessage?: string
 ): Promise<void> {
   try {
-    const { error } = await supabase.from("interop_log").insert({
+    // Use type assertion for table that may not exist in types yet
+    const { error } = await (supabase as unknown as {
+      from: (table: string) => {
+        insert: (data: Record<string, unknown>) => Promise<{ error: Error | null }>;
+      };
+    }).from("interop_log").insert({
       protocol: message.protocol,
       direction: message.direction,
       source_system: message.sourceSystem,
@@ -520,7 +539,7 @@ async function logInteropEvent(
       logger.error("[ProtocolAdapter] Failed to log interop event:", error);
     }
   } catch (error) {
-    logger.error("[ProtocolAdapter] Error logging interop event:", error);
+    logger.error("[ProtocolAdapter] Error logging interop event:", error as Error);
   }
 }
 
