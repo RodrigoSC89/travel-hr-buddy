@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -38,25 +37,29 @@ export default function PersonalRestoreDashboard() {
         return;
       }
 
-      const { data: trendData } = await supabase.rpc("get_restore_count_by_day_with_email", {
+      // Use type assertion for RPC functions not in generated types
+      const { data: trendData } = await supabase.rpc("get_restore_count_by_day_with_email" as never, {
         email_input: email,
-      });
+      } as never);
 
-      const { data: summaryData } = await supabase.rpc("get_restore_summary", {
+      const { data: summaryData } = await supabase.rpc("get_restore_summary" as never, {
         email_input: email,
-      });
+      } as never);
 
-      setTrend(trendData || []);
-      setSummary(summaryData?.[0] || null);
+      const typedTrendData = (trendData as RestoreDataPoint[] | null) || [];
+      const typedSummaryData = (summaryData as RestoreSummary[] | null);
+      
+      setTrend(typedTrendData);
+      setSummary(typedSummaryData?.[0] || null);
       setLastUpdate(new Date());
       
       // Calculate trend indicator
-      if (trendData && trendData.length >= 2) {
-        const recent = trendData.slice(-3);
-        const earlier = trendData.slice(-6, -3);
+      if (typedTrendData && typedTrendData.length >= 2) {
+        const recent = typedTrendData.slice(-3);
+        const earlier = typedTrendData.slice(-6, -3);
         if (earlier.length > 0 && recent.length > 0) {
-          const recentAvg = recent.reduce((sum, d) => sum + d.count, 0) / recent.length;
-          const earlierAvg = earlier.reduce((sum, d) => sum + d.count, 0) / earlier.length;
+          const recentAvg = recent.reduce((sum: number, d: RestoreDataPoint) => sum + d.count, 0) / recent.length;
+          const earlierAvg = earlier.reduce((sum: number, d: RestoreDataPoint) => sum + d.count, 0) / earlier.length;
           if (recentAvg > earlierAvg * 1.1) setTrendIndicator("up");
           else if (recentAvg < earlierAvg * 0.9) setTrendIndicator("down");
           else setTrendIndicator("stable");
