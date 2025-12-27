@@ -109,12 +109,16 @@ const redirects: Array<[string, string]> = [
   ["mmi-jobs-panel", "/maintenance-command"],
   ["mmi-dashboard", "/maintenance-command"],
   
-  // Executive Routes - All redirect to unified Command Center
+  // Executive Routes - All redirect to unified Nautilus Command Center
+  // PATCH UNIFY-FINAL: Fusão completa de todos os dashboards executivos
   ["executive-dashboard", "/nautilus-command"],
   ["command-center", "/nautilus-command"],
   ["dashboard-executivo", "/nautilus-command"],
   ["centro-operacoes", "/nautilus-command"],
   ["operations-center", "/nautilus-command"],
+  ["dashboard", "/nautilus-command"],
+  ["index", "/nautilus-command"],
+  ["home", "/nautilus-command"],
   
   // Maritime Routes
   ["maritime", "/maritime-command"],

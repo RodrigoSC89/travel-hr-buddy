@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-// Redirect para o Command Center unificado
+// PATCH UNIFY-FINAL: Redirect para o Nautilus Command Center unificado
 export default function Dashboard() {
-  return <Navigate to="/command-center" replace />;
+  return <Navigate to="/nautilus-command" replace />;
 }

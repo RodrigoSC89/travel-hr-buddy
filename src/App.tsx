@@ -125,7 +125,8 @@ function App() {
                           <SmartLayout />
                         </ProtectedRoute>
                       }>
-                        <Route index element={<Index />} />
+                        {/* PATCH UNIFY-FINAL: Rota principal "/" redireciona para Nautilus Command Center */}
+                        <Route index element={<Navigate to="/nautilus-command" replace />} />
                         <Route path="dashboard" element={<Dashboard />} />
                         
                         {/* Module Routes from Registry */}

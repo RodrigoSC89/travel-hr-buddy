@@ -1,8 +1,9 @@
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Navegação principal do Nautilus One
+// PATCH UNIFY-FINAL: Nautilus Command Center é o ponto de entrada principal
 export const NAVIGATION = [
-  { name: "Command Center", path: "/command-center", component: safeLazyImport(() => import("@/pages/CommandCenter"), "Command Center") },
+  { name: "Nautilus Command Center", path: "/nautilus-command", component: safeLazyImport(() => import("@/pages/NautilusCommand"), "Nautilus Command Center") },
   // PATCH 192.0: Unified Fleet Command Center (fusão de 3 módulos)
   { name: "Fleet Command Center", path: "/fleet-command", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
   { name: "Sistema Marítimo", path: "/sistema-maritimo", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
