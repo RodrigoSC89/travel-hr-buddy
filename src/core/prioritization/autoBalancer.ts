@@ -1,7 +1,5 @@
-// @ts-nocheck - Internal logic uses different column names (module_id vs module_name) - needs full refactor
 /**
  * PATCH 232: Auto Priority Balancer
- * Table priority_shifts exists but internal logic needs refactoring to match schema
  * 
  * Dynamically adjusts priorities between modules and tasks based on global context.
  * Reads system state, applies intelligent rebalancing algorithms, and logs all changes.
@@ -140,14 +138,13 @@ export class AutoPriorityBalancer {
     if (shifts.length === 0) return;
 
     try {
+      // Map to match priority_shifts table schema (uses module_name instead of module_id)
       const records = shifts.map(shift => ({
-        module_id: shift.moduleId,
-        task_id: shift.taskId,
+        module_name: shift.moduleId,
         old_priority: shift.oldPriority,
         new_priority: shift.newPriority,
         reason: shift.reason,
-        confidence: shift.confidence,
-        timestamp: shift.timestamp,
+        context: { task_id: shift.taskId, confidence: shift.confidence },
       }));
 
       await supabase.from("priority_shifts").insert(records);
@@ -353,15 +350,16 @@ export class AutoPriorityBalancer {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      const { data, error } = await supabase
-        .from("jobs")
+      // Using type assertion for newly created jobs table
+      const { data, error } = await (supabase
+        .from("jobs" as never) as ReturnType<typeof supabase.from>)
         .select("id")
         .lte("due_date", tomorrow.toISOString())
         .eq("status", "pending");
 
       if (error) throw error;
 
-      return data?.length || 0;
+      return (data as { id: string }[] | null)?.length || 0;
     } catch (error) {
       logger.error("Failed to count deadlines:", error);
       return 0;
@@ -379,20 +377,20 @@ export class AutoPriorityBalancer {
       const { data, error } = await supabase
         .from("priority_shifts")
         .select("*")
-        .eq("module_id", moduleId)
-        .order("timestamp", { ascending: false })
+        .eq("module_name", moduleId)
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return data?.map(d => ({
-        moduleId: d.module_id,
-        taskId: d.task_id,
+        moduleId: d.module_name,
+        taskId: (d.context as { task_id?: string } | null)?.task_id,
         oldPriority: d.old_priority,
         newPriority: d.new_priority,
-        reason: d.reason,
-        confidence: d.confidence,
-        timestamp: d.timestamp,
+        reason: d.reason || "",
+        confidence: (d.context as { confidence?: number } | null)?.confidence || 0.7,
+        timestamp: d.created_at || new Date().toISOString(),
       })) || [];
     } catch (error) {
       logger.error("Failed to fetch priority history:", error);
