@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,19 +5,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, Ship, User, FileSearch } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface Audit {
-  id: string
-  audit_date: string
-  vessel_id: string
-  auditor_id: string
+  id: string;
+  audit_date: string;
+  vessel_id: string | null;
+  auditor_id: string | null;
   vessels?: {
-    name: string
-  }
-  users?: {
-    full_name: string
-  }
+    name: string;
+  } | null;
 }
 
 export default function SGSOAuditHistoryPage() {
@@ -36,18 +33,17 @@ export default function SGSOAuditHistoryPage() {
             audit_date,
             vessel_id,
             auditor_id,
-            vessels ( name ),
-            users:auditor_id ( full_name )
+            vessels ( name )
           `)
           .order("audit_date", { ascending: false });
 
         if (error) {
-          console.error("Error fetching audits:", error);
+          logger.error("Error fetching SGSO audits", { error: error.message });
         } else if (data) {
-          setAudits(data as Audit[]);
+          setAudits(data as unknown as Audit[]);
         }
       } catch (err) {
-        console.error("Error:", err);
+        logger.error("SGSO History fetch error", { error: String(err) });
       } finally {
         setLoading(false);
       }
@@ -59,7 +55,7 @@ export default function SGSOAuditHistoryPage() {
   return (
     <div className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">🗂️ Histórico de Auditorias SGSO</h1>
+        <h1 className="text-2xl font-bold text-foreground">Histórico de Auditorias SGSO</h1>
         <Link to="/admin/sgso">
           <Button variant="outline" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -77,20 +73,30 @@ export default function SGSOAuditHistoryPage() {
           Nenhuma auditoria encontrada
         </Card>
       ) : (
-        audits.map((audit) => (
-          <Card key={audit.id} className="p-4 space-y-2">
-            <p><strong>Navio:</strong> {audit.vessels?.name || "---"}</p>
-            <p><strong>Auditor:</strong> {audit.users?.full_name || "---"}</p>
-            <p><strong>Data:</strong> {new Date(audit.audit_date).toLocaleDateString("pt-BR")}</p>
+        <div className="grid gap-4">
+          {audits.map((audit) => (
+            <Card key={audit.id} className="p-4 space-y-3 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 text-foreground">
+                <Ship className="h-4 w-4 text-primary" />
+                <span className="font-medium">Navio:</span>
+                <span>{audit.vessels?.name || "Não especificado"}</span>
+              </div>
+              <div className="flex items-center gap-2 text-foreground">
+                <Calendar className="h-4 w-4 text-primary" />
+                <span className="font-medium">Data:</span>
+                <span>{new Date(audit.audit_date).toLocaleDateString("pt-BR")}</span>
+              </div>
 
-            <Link
-              to={`/admin/sgso/review/${audit.id}`}
-              className="text-blue-600 underline text-sm inline-block mt-2"
-            >
-              🔍 Reabrir Auditoria
-            </Link>
-          </Card>
-        ))
+              <Link
+                to={`/admin/sgso/review/${audit.id}`}
+                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 text-sm mt-2 font-medium"
+              >
+                <FileSearch className="h-4 w-4" />
+                Reabrir Auditoria
+              </Link>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );

@@ -97,12 +97,95 @@ table td {
 }
 
 /* ======================================
+   CARDS E PAINÉIS - CONTRASTE GARANTIDO
+   ====================================== */
+
+/* Força contraste em cards com fundo colorido */
+.bg-green-500\/10,
+.bg-yellow-500\/10,
+.bg-red-500\/10,
+.bg-blue-500\/10,
+.bg-primary\/10 {
+  color: hsl(var(--foreground));
+}
+
+/* Dark mode card text fixes */
+.dark .bg-green-500\/10 p,
+.dark .bg-yellow-500\/10 p,
+.dark .bg-red-500\/10 p,
+.dark .bg-blue-500\/10 p {
+  color: hsl(var(--foreground));
+}
+
+/* Ensure text in status cards is readable */
+.text-green-500,
+.text-yellow-500,
+.text-red-500 {
+  font-weight: 600;
+}
+
+/* ======================================
+   SIDEBAR NAVIGATION FIXES
+   ====================================== */
+
+[data-sidebar] a,
+[data-sidebar] button {
+  color: hsl(var(--sidebar-foreground));
+}
+
+[data-sidebar] a:hover,
+[data-sidebar] button:hover {
+  background-color: hsl(var(--sidebar-accent));
+  color: hsl(var(--sidebar-accent-foreground));
+}
+
+/* ======================================
+   TABLE ROW HOVER STATES
+   ====================================== */
+
+tr:hover td {
+  background-color: hsl(var(--muted) / 0.5);
+}
+
+.dark tr:hover td {
+  background-color: hsl(var(--muted));
+}
+
+/* ======================================
    FOCUS STATES
    ====================================== */
 
 :focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
+}
+
+/* ======================================
+   BUTTON TEXT VISIBILITY
+   ====================================== */
+
+.btn-ghost,
+button[variant="ghost"] {
+  color: hsl(var(--foreground));
+}
+
+/* Outline button in dark mode */
+.dark button[variant="outline"] {
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
+}
+
+/* ======================================
+   MUTED TEXT VISIBILITY
+   ====================================== */
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Ensure muted text is visible in light mode */
+:root:not(.dark) .text-muted-foreground {
+  color: hsl(220 20% 35%) !important;
 }
 
 /* ======================================
