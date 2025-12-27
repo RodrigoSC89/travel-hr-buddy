@@ -94,6 +94,11 @@ const AISTracking = lazy(() => import(/* webpackChunkName: "page-ais-tracking" *
 const CertificateBlockchain = lazy(() => import(/* webpackChunkName: "page-cert-blockchain" */ "@/pages/CertificateBlockchain"));
 const VoiceAssistant = lazy(() => import(/* webpackChunkName: "page-voice-assistant" */ "@/pages/VoiceAssistant"));
 
+// AI Ops & Security - PATCH 852
+const AIOperationsCenter = lazy(() => import(/* webpackChunkName: "page-ai-ops" */ "@/pages/AIOperationsCenter"));
+const SecurityCenter = lazy(() => import(/* webpackChunkName: "page-security-center" */ "@/pages/SecurityCenter"));
+const PredictiveTelemetry = lazy(() => import(/* webpackChunkName: "page-predictive-telemetry" */ "@/pages/PredictiveTelemetry"));
+
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -173,6 +178,11 @@ function App() {
                         <Route path="ais-tracking" element={<AISTracking />} />
                         <Route path="certificate-blockchain" element={<CertificateBlockchain />} />
                         <Route path="voice-assistant" element={<VoiceAssistant />} />
+                        
+                        {/* AI Ops & Security - PATCH 852 */}
+                        <Route path="ai-operations-center" element={<AIOperationsCenter />} />
+                        <Route path="security-center" element={<SecurityCenter />} />
+                        <Route path="predictive-telemetry" element={<PredictiveTelemetry />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}

@@ -8,3 +8,6 @@ export { default as JobFormWithExamples } from "./JobFormWithExamples";
 export { default as SimilarExamples } from "./SimilarExamples";
 export { default as SimilarExamplesDemo } from "./SimilarExamplesDemo";
 export { default as CopilotJobFormExample } from "./CopilotJobFormExample";
+
+// Contextual Copilot (PATCH 852)
+export { ContextualCopilot, useCopilot } from './ContextualCopilot';
