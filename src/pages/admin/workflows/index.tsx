@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -15,15 +14,15 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { WorkflowAIScoreCard } from "@/components/workflows";
 
 interface SmartWorkflow {
-  id: string
-  title: string
-  description?: string
-  status: string
-  created_at: string
-  updated_at: string
-  created_by?: string
-  category?: string
-  tags?: string[]
+  id: string;
+  title: string;
+  description: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+  category: string | null;
+  tags: string[] | null;
 }
 
 export default function SmartWorkflowPage() {
@@ -36,13 +35,14 @@ export default function SmartWorkflowPage() {
   async function fetchWorkflows() {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from("smart_workflows")
+      // Use type assertion for tables not in generated types yet
+      const { data, error } = await (supabase
+        .from("smart_workflows" as never) as ReturnType<typeof supabase.from>)
         .select("*")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
-      setWorkflows(data || []);
+      setWorkflows((data as SmartWorkflow[]) || []);
     } catch (error) {
       console.error("Error fetching workflows:", error);
       toast({
@@ -67,14 +67,14 @@ export default function SmartWorkflowPage() {
 
     try {
       setIsCreating(true);
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: userData } = await supabase.auth.getUser();
       
-      const { error } = await supabase
-        .from("smart_workflows")
+      const { error } = await (supabase
+        .from("smart_workflows" as never) as ReturnType<typeof supabase.from>)
         .insert({ 
           title: newTitle,
-          created_by: user?.id 
-        });
+          created_by: userData.user?.id 
+        } as never);
       
       if (error) throw error;
       

@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -27,7 +26,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
-
 interface RestoreReportLog {
   id: string;
   executed_at: string;
@@ -92,8 +90,9 @@ export default function RestoreReportLogsPage() {
       const from = pageToFetch * 20;
       const to = from + 19;
 
-      let query = supabase
-        .from("restore_report_logs")
+      // Use type assertion for tables not in generated types yet
+      let query = (supabase
+        .from("restore_report_logs" as never) as ReturnType<typeof supabase.from>)
         .select("*", { count: "exact" });
 
       // Apply status filter
@@ -118,7 +117,7 @@ export default function RestoreReportLogsPage() {
 
       if (fetchError) throw fetchError;
       
-      const newLogs = data || [];
+      const newLogs = (data as RestoreReportLog[]) || [];
       
       if (reset) {
         setLogs(newLogs);
