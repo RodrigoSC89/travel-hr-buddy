@@ -15,6 +15,9 @@ import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
 
+// Global Voice Button
+import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
+
 // Performance utilities
 import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
@@ -201,6 +204,7 @@ function App() {
                     </Routes>
                     
                     <Toaster />
+                    <GlobalVoiceButton />
                   </GlobalBrainProvider>
                 </RouterType>
               </OrganizationProvider>
