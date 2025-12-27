@@ -1,0 +1,27 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 1,
+      "settings": {
+        "onlyCategories": ["accessibility", "best-practices"],
+        "skipAudits": ["uses-http2"]
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "color-contrast": "error",
+        "document-title": "warn",
+        "html-has-lang": "error",
+        "meta-viewport": "error",
+        "image-alt": "error",
+        "button-name": "error",
+        "link-name": "error",
+        "label": "error"
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
