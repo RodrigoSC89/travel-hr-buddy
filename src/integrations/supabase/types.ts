@@ -2761,6 +2761,36 @@ export type Database = {
           },
         ]
       }
+      certificate_blockchain: {
+        Row: {
+          block_id: string
+          certificate_data: Json
+          created_at: string | null
+          hash: string
+          id: string
+          previous_hash: string
+          signature: string
+        }
+        Insert: {
+          block_id: string
+          certificate_data: Json
+          created_at?: string | null
+          hash: string
+          id?: string
+          previous_hash: string
+          signature: string
+        }
+        Update: {
+          block_id?: string
+          certificate_data?: Json
+          created_at?: string | null
+          hash?: string
+          id?: string
+          previous_hash?: string
+          signature?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string
