@@ -200,14 +200,14 @@ export default function DocumentationHub() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Card className="h-full hover:border-primary/50 transition-colors cursor-pointer">
+                  <Card className="h-full hover:border-primary/50 transition-colors cursor-pointer bg-card">
                     <CardHeader>
                       <div className="flex items-center gap-3">
                         <div className="p-2 rounded-lg bg-primary/10">
                           <section.icon className="h-5 w-5 text-primary" />
                         </div>
                         <div>
-                          <CardTitle className="text-lg text-foreground">{section.title}</CardTitle>
+                          <CardTitle className="text-lg text-foreground font-semibold">{section.title}</CardTitle>
                           <CardDescription className="text-foreground/70 font-medium">{section.description}</CardDescription>
                         </div>
                       </div>
@@ -218,9 +218,9 @@ export default function DocumentationHub() {
                           <li key={article.path}>
                             <a 
                               href={article.path}
-                              className="flex items-center gap-2 text-sm text-foreground/80 hover:text-primary transition-colors font-medium"
+                              className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors font-medium"
                             >
-                              <ChevronRight className="h-3 w-3" />
+                              <ChevronRight className="h-3 w-3 text-primary" />
                               {article.title}
                             </a>
                           </li>
