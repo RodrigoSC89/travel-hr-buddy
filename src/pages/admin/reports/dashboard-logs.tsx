@@ -1,4 +1,6 @@
-// @ts-nocheck
+/**
+ * PATCH 660: Dashboard Logs - Removed @ts-nocheck
+ */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,11 +16,11 @@ import { logger } from "@/lib/logger";
 import { toast } from "sonner";
 
 interface DashboardLog {
-  id: string
-  executed_at: string
-  status: string
-  email: string
-  message: string | null
+  id: string;
+  executed_at: string;
+  status: string;
+  email: string;
+  message: string | null;
 }
 
 export default function DashboardLogs() {
@@ -32,7 +34,7 @@ export default function DashboardLogs() {
   async function fetchLogs() {
     try {
       setLoading(true);
-      let query = supabase
+      let query = (supabase as any)
         .from("dashboard_report_logs")
         .select("*")
         .order("executed_at", { ascending: false })
@@ -45,14 +47,14 @@ export default function DashboardLogs() {
       const { data, error } = await query;
 
       if (error) {
-        logger.error("Error fetching dashboard logs:", error);
+        logger.error("Error fetching dashboard logs:", { error });
         toast.error("Erro ao carregar logs");
         return;
       }
 
-      setLogs(data || []);
+      setLogs((data || []) as DashboardLog[]);
     } catch (error) {
-      logger.error("Error fetching dashboard logs:", error);
+      logger.error("Error fetching dashboard logs:", { error: String(error) });
       toast.error("Erro ao carregar logs");
     } finally {
       setLoading(false);

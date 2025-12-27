@@ -1,8 +1,10 @@
-// @ts-nocheck
+/**
+ * PATCH 660: Removed @ts-nocheck with type assertions
+ */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { EventTimeline, TimelineEvent } from "@/components/timeline/EventTimeline";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Clock } from "lucide-react";
 
@@ -14,14 +16,14 @@ export default function EventTimelinePage() {
   const { data: events, isLoading } = useQuery({
     queryKey: ["system-logs"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("system_logs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);
 
       if (error) throw error;
-      return data as TimelineEvent[];
+      return (data || []) as TimelineEvent[];
     },
     refetchInterval: 30000, // Refresh every 30 seconds
   });
