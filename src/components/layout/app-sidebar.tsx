@@ -884,11 +884,20 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
-  // Inicializar com seções que têm defaultOpen como expandidas
+  // Inicializar com seções que têm defaultOpen como expandidas - usando a mesma lógica do toggle
   const [openItems, setOpenItems] = useState<string[]>(() => {
-    return navigationItems
-      .filter(item => item.defaultOpen && item.items)
-      .map(item => item.url || item.title);
+    const defaultOpenItems: string[] = [];
+    navigationItems.forEach(item => {
+      if (item.defaultOpen && item.items) {
+        // Usar exatamente a mesma chave que o Collapsible usa: item.url || item.title
+        defaultOpenItems.push(item.url || item.title);
+      }
+    });
+    // Sempre incluir "🛡️ Operações & Segurança" para garantir visibilidade
+    if (!defaultOpenItems.includes("🛡️ Operações & Segurança")) {
+      defaultOpenItems.push("🛡️ Operações & Segurança");
+    }
+    return defaultOpenItems;
   });
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
