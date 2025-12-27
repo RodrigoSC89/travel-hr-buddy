@@ -99,6 +99,10 @@ const AIOperationsCenter = lazy(() => import(/* webpackChunkName: "page-ai-ops" 
 const SecurityCenter = lazy(() => import(/* webpackChunkName: "page-security-center" */ "@/pages/SecurityCenter"));
 const PredictiveTelemetry = lazy(() => import(/* webpackChunkName: "page-predictive-telemetry" */ "@/pages/PredictiveTelemetry"));
 
+// Incident Simulator & Offline - PATCH 853
+const IncidentSimulator = lazy(() => import(/* webpackChunkName: "page-incident-simulator" */ "@/pages/IncidentSimulator"));
+const OfflinePage = lazy(() => import(/* webpackChunkName: "page-offline" */ "@/pages/OfflinePage"));
+
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -183,6 +187,10 @@ function App() {
                         <Route path="ai-operations-center" element={<AIOperationsCenter />} />
                         <Route path="security-center" element={<SecurityCenter />} />
                         <Route path="predictive-telemetry" element={<PredictiveTelemetry />} />
+                        
+                        {/* Incident Simulator & Offline - PATCH 853 */}
+                        <Route path="simulador" element={<IncidentSimulator />} />
+                        <Route path="offline" element={<OfflinePage />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
