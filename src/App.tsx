@@ -153,6 +153,7 @@ function App() {
                         <Route path="revolutionary-ai/*" element={<RevolutionaryAI />} />
                         <Route path="ai-modules" element={<AIEnhancedModules />} />
                         <Route path="noc-mode" element={<NOCMode />} />
+                        <Route path="noc" element={<NOCMode />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
