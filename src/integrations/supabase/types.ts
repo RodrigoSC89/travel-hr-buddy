@@ -8916,6 +8916,59 @@ export type Database = {
         }
         Relationships: []
       }
+      iot_sensor_data: {
+        Row: {
+          created_at: string
+          id: string
+          location: string | null
+          metadata: Json | null
+          sensor_id: string
+          sensor_type: string
+          status: string | null
+          timestamp: string
+          unit: string | null
+          updated_at: string
+          value: number
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          sensor_id: string
+          sensor_type: string
+          status?: string | null
+          timestamp?: string
+          unit?: string | null
+          updated_at?: string
+          value: number
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          sensor_id?: string
+          sensor_type?: string
+          status?: string | null
+          timestamp?: string
+          unit?: string | null
+          updated_at?: string
+          value?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iot_sensor_data_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_embeddings: {
         Row: {
           created_at: string
