@@ -12,6 +12,23 @@ import { cn } from "@/lib/utils";
 // Grouped modules by category - PATCH UNIFY-COMMAND: Fusão realizada
 const groupedModules = [
   {
+    title: "🛡️ Operações & Segurança",
+    defaultOpen: true,
+    items: [
+      { label: "🔒 Security Center", path: "/security-center" },
+      { label: "🤖 AI Operations Center", path: "/ai-operations-center" },
+      { label: "📊 Telemetria Preditiva", path: "/predictive-telemetry" },
+      { label: "⚠️ Simulador Incidentes", path: "/simulador" },
+      { label: "🔗 Central Integrações", path: "/integracoes" },
+      { label: "🖥️ NOC 24/7", path: "/noc" },
+      { label: "📋 Auditoria de Segurança", path: "/auditoria-seguranca" },
+      { label: "📈 Executive BI Dashboard", path: "/executive-bi" },
+      { label: "📡 NOC Monitoring Center", path: "/noc-monitoring" },
+      { label: "🎙️ Voice Assistant IA", path: "/voice-assistant" },
+      { label: "🛰️ Telemetria 360°", path: "/telemetria" },
+    ],
+  },
+  {
     title: "🎯 Centro de Comando",
     items: [
       { label: "🧠 Nautilus Command Center", path: "/nautilus-command" },
@@ -152,7 +169,11 @@ interface SmartSidebarProps {
 }
 
 export function SmartSidebar({ className }: SmartSidebarProps) {
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  // Inicializar com seção que tem defaultOpen: true
+  const [openSection, setOpenSection] = useState<string | null>(() => {
+    const defaultSection = groupedModules.find(g => g.defaultOpen);
+    return defaultSection?.title || null;
+  });
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
 
@@ -168,13 +189,19 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
     setIsMobileOpen(false);
   };
 
-  // Auto-open section containing current route
+  // Auto-open section containing current route (mas preservar Operações & Segurança se nenhuma rota ativa)
   useEffect(() => {
     const currentGroup = groupedModules.find(group => 
       group.items.some(item => item.path === location.pathname)
     );
-    if (currentGroup && openSection !== currentGroup.title) {
+    if (currentGroup) {
       setOpenSection(currentGroup.title);
+    } else {
+      // Se não houver rota ativa, abrir a seção padrão
+      const defaultSection = groupedModules.find(g => g.defaultOpen);
+      if (defaultSection && !openSection) {
+        setOpenSection(defaultSection.title);
+      }
     }
   }, [location.pathname]);
 
