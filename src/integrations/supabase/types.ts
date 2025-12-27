@@ -15804,6 +15804,152 @@ export type Database = {
           },
         ]
       }
+      telemetry_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string
+          id: string
+          message: string
+          metadata: Json | null
+          recommended_action: string | null
+          resolved: boolean | null
+          resolved_at: string | null
+          sensor_id: string
+          severity: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          recommended_action?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          sensor_id: string
+          severity: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          recommended_action?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          sensor_id?: string
+          severity?: string
+        }
+        Relationships: []
+      }
+      telemetry_insights: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          description: string
+          expires_at: string | null
+          id: string
+          insight_type: string
+          metadata: Json | null
+          predicted_issue: string | null
+          priority: number | null
+          recommended_action: string | null
+          sensor_id: string | null
+          status: string | null
+          title: string
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          description: string
+          expires_at?: string | null
+          id?: string
+          insight_type: string
+          metadata?: Json | null
+          predicted_issue?: string | null
+          priority?: number | null
+          recommended_action?: string | null
+          sensor_id?: string | null
+          status?: string | null
+          title: string
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          description?: string
+          expires_at?: string | null
+          id?: string
+          insight_type?: string
+          metadata?: Json | null
+          predicted_issue?: string | null
+          priority?: number | null
+          recommended_action?: string | null
+          sensor_id?: string | null
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      telemetry_logs: {
+        Row: {
+          created_at: string
+          id: string
+          location: string | null
+          metadata: Json | null
+          sensor_id: string
+          sensor_type: string
+          status: string | null
+          timestamp: string
+          unit: string | null
+          value: number
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          sensor_id: string
+          sensor_type: string
+          status?: string | null
+          timestamp?: string
+          unit?: string | null
+          value: number
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location?: string | null
+          metadata?: Json | null
+          sensor_id?: string
+          sensor_type?: string
+          status?: string | null
+          timestamp?: string
+          unit?: string | null
+          value?: number
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telemetry_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       template_placeholders: {
         Row: {
           created_at: string | null
