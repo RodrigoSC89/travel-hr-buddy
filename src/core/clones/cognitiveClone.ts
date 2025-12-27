@@ -1,12 +1,11 @@
-// @ts-nocheck - Uses tables (modules, ai_memory, clone_context_storage, clone_snapshots) that don't exist in current schema
 /**
  * PATCH 221.0 - Cognitive Clone Core
- * Table clone_registry exists but internal logic references non-existent tables
  * System for creating functional copies of Nautilus with replicated AI + limited context
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface CloneConfiguration {
   id: string;
@@ -97,22 +96,22 @@ class CognitiveClone {
     logger.info("[CognitiveClone] Creating configuration snapshot...");
 
     try {
-      // Capture current module state
-      const { data: modules } = await supabase
-        .from("modules")
+      // Capture current module state - using type assertion for newly created table
+      const { data: modules } = await (supabase
+        .from("modules" as never) as ReturnType<typeof supabase.from>)
         .select("*")
         .eq("active", true);
 
-      // Capture AI context
-      const { data: memories } = await supabase
-        .from("ai_memory")
+      // Capture AI context - using type assertion for newly created table
+      const { data: memories } = await (supabase
+        .from("ai_memory" as never) as ReturnType<typeof supabase.from>)
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);
 
-      // Capture preferences and settings
-      const { data: settings } = await supabase
-        .from("user_settings")
+      // Capture preferences and settings - using type assertion for newly created table
+      const { data: settings } = await (supabase
+        .from("user_settings" as never) as ReturnType<typeof supabase.from>)
         .select("*")
         .limit(1)
         .single();
@@ -120,10 +119,10 @@ class CognitiveClone {
       const snapshot: CloneSnapshot = {
         configurationId: this.generateId(),
         timestamp: new Date(),
-        modules: modules || [],
+        modules: (modules as Record<string, unknown>[]) || [],
         context: {
-          memories: memories || [],
-          settings: settings || {},
+          memories: (memories as Record<string, unknown>[]) || [],
+          settings: (settings as Record<string, unknown>) || {},
           capabilities: this.getCurrentCapabilities(),
         },
         llmState: {
@@ -223,14 +222,14 @@ class CognitiveClone {
       // Save to local storage for offline access
       localStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
 
-      // Also save to Supabase for backup
-      await supabase
-        .from("clone_context_storage")
+      // Also save to Supabase for backup - using type assertion for newly created table
+      await (supabase
+        .from("clone_context_storage" as never) as ReturnType<typeof supabase.from>)
         .insert({
           clone_id: config.id,
           context_data: contextData,
           created_at: new Date().toISOString(),
-        });
+        } as never);
 
       logger.info("[CognitiveClone] Clone data persisted successfully");
     } catch (error) {
@@ -247,17 +246,17 @@ class CognitiveClone {
       const { error } = await supabase
         .from("clone_registry")
         .insert({
-          id: config.id,
-          name: config.name,
-          modules: config.modules,
-          ai_context: config.aiContext,
-          llm_config: config.llmConfig,
+          clone_name: config.name,
+          clone_type: "cognitive",
+          capabilities: config.capabilities as unknown as Json,
           context_limit: config.contextLimit,
-          capabilities: config.capabilities,
-          restrictions: config.restrictions,
-          parent_instance_id: config.parentInstanceId,
+          memory_snapshot: config.aiContext as unknown as Json,
+          metadata: {
+            llm_config: config.llmConfig,
+            restrictions: config.restrictions,
+            parent_instance_id: config.parentInstanceId,
+          } as unknown as Json,
           status: "active",
-          created_at: config.createdAt.toISOString(),
         });
 
       if (error) throw error;
@@ -274,8 +273,9 @@ class CognitiveClone {
    */
   private async saveSnapshot(snapshot: CloneSnapshot): Promise<void> {
     try {
-      const { error } = await supabase
-        .from("clone_snapshots")
+      // Using type assertion for newly created table
+      const { error } = await (supabase
+        .from("clone_snapshots" as never) as ReturnType<typeof supabase.from>)
         .insert({
           id: snapshot.configurationId,
           timestamp: snapshot.timestamp.toISOString(),
@@ -283,7 +283,7 @@ class CognitiveClone {
           context: snapshot.context,
           llm_state: snapshot.llmState,
           metadata: snapshot.metadata,
-        });
+        } as never);
 
       if (error) throw error;
     } catch (error) {

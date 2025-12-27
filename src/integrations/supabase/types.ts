@@ -918,6 +918,50 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_memory: {
+        Row: {
+          content: Json
+          created_at: string
+          embedding: string | null
+          id: string
+          importance: number | null
+          memory_type: string
+          organization_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          importance?: number | null
+          memory_type: string
+          organization_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          embedding?: string | null
+          id?: string
+          importance?: number | null
+          memory_type?: string
+          organization_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_memory_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_memory_events: {
         Row: {
           confidence: number | null
@@ -3256,6 +3300,38 @@ export type Database = {
         }
         Relationships: []
       }
+      clone_context_storage: {
+        Row: {
+          clone_id: string
+          context_data: Json
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          clone_id: string
+          context_data?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          clone_id?: string
+          context_data?: Json
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clone_context_storage_clone_id_fkey"
+            columns: ["clone_id"]
+            isOneToOne: false
+            referencedRelation: "clone_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clone_registry: {
         Row: {
           capabilities: Json | null
@@ -3305,6 +3381,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "clone_registry_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clone_snapshots: {
+        Row: {
+          context: Json | null
+          created_at: string
+          id: string
+          llm_state: Json | null
+          metadata: Json | null
+          modules: Json | null
+          organization_id: string | null
+          timestamp: string
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          llm_state?: Json | null
+          metadata?: Json | null
+          modules?: Json | null
+          organization_id?: string | null
+          timestamp?: string
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          llm_state?: Json | null
+          metadata?: Json | null
+          modules?: Json | null
+          organization_id?: string | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clone_snapshots_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -8826,6 +8943,56 @@ export type Database = {
         }
         Relationships: []
       }
+      jobs: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       joint_mission_log: {
         Row: {
           created_at: string
@@ -10669,6 +10836,50 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      modules: {
+        Row: {
+          active: boolean | null
+          config: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          organization_id: string | null
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          config?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          organization_id?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          config?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          organization_id?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       nautilus_conversations: {
         Row: {
@@ -16947,6 +17158,33 @@ export type Database = {
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_settings: {
+        Row: {
+          created_at: string
+          id: string
+          settings_key: string
+          settings_value: Json | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          settings_key: string
+          settings_value?: Json | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          settings_key?: string
+          settings_value?: Json | null
+          updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }

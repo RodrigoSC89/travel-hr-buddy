@@ -1,7 +1,6 @@
-// @ts-nocheck - mmi_os table needs migration, using work_orders instead
 /**
  * MMI Orders Page
- * TODO: Align mmi_os table with MMIOS interface
+ * Manages work orders for MMI maintenance operations
  */
 import { useEffect, useState } from "react";
 import { logger } from "@/lib/logger";
@@ -34,14 +33,17 @@ interface MMIOSRecord {
   created_at: string;
   updated_at?: string;
   metadata?: Record<string, unknown>;
+  notes?: string;
 }
+
+// Alias for component props
+type MMIOS = MMIOSRecord;
 
 export default function MMIOrdersPage() {
   const [workOrders, setWorkOrders] = useState<MMIOSRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState<string | null>(null);
   const { toast } = useToast();
-
   // Load work orders from database
   useEffect(() => {
     loadWorkOrders();
@@ -50,13 +52,14 @@ export default function MMIOrdersPage() {
   const loadWorkOrders = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("mmi_work_orders")
+      // Use type assertion for table not in generated types
+      const { data, error } = await (supabase
+        .from("mmi_work_orders" as never) as ReturnType<typeof supabase.from>)
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setWorkOrders((data || []) as MMIOSRecord[]);
+      setWorkOrders((data as MMIOSRecord[]) || []);
     } catch (error) {
       logger.error("Error loading work orders:", error);
       toast({
