@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Tables not in Supabase schema: smart_workflows, smart_workflow_steps
+// Schema mismatch: title vs name, position column
 /**
  * Workflow Detail Page
  * Kanban-style workflow step management

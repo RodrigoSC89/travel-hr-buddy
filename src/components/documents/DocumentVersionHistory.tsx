@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Tables document_versions and ai_generated_documents have different schemas than local interface
+// Schema mismatch: content column missing
 /**
  * Document Version History Component
  * Displays and allows restoration of document versions

@@ -2752,6 +2752,142 @@ export type Database = {
           },
         ]
       }
+      autonomous_tasks: {
+        Row: {
+          actions: Json | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          equipment_id: string | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          mission_id: string | null
+          name: string
+          organization_id: string | null
+          priority: string
+          result: Json | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string
+          task_name: string | null
+          task_type: string
+          trigger_conditions: Json | null
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          equipment_id?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          name: string
+          organization_id?: string | null
+          priority?: string
+          result?: Json | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          task_name?: string | null
+          task_type: string
+          trigger_conditions?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          equipment_id?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          mission_id?: string | null
+          name?: string
+          organization_id?: string | null
+          priority?: string
+          result?: Json | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          task_name?: string | null
+          task_type?: string
+          trigger_conditions?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autonomous_tasks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      autonomy_rules: {
+        Row: {
+          actions: Json
+          conditions: Json
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          priority: number
+          rule_type: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          priority?: number
+          rule_type: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          priority?: number
+          rule_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autonomy_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beta_feedback: {
         Row: {
           attachments: Json | null
@@ -11904,6 +12040,80 @@ export type Database = {
           },
         ]
       }
+      onnx_models: {
+        Row: {
+          accuracy_score: number | null
+          created_at: string
+          description: string | null
+          file_path: string | null
+          file_size_bytes: number | null
+          id: string
+          input_schema: Json | null
+          is_active: boolean | null
+          metadata: Json | null
+          model_name: string
+          model_type: string
+          model_version: string
+          name: string | null
+          organization_id: string | null
+          output_schema: Json | null
+          performance_metrics: Json | null
+          status: string | null
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          created_at?: string
+          description?: string | null
+          file_path?: string | null
+          file_size_bytes?: number | null
+          id?: string
+          input_schema?: Json | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          model_name: string
+          model_type: string
+          model_version?: string
+          name?: string | null
+          organization_id?: string | null
+          output_schema?: Json | null
+          performance_metrics?: Json | null
+          status?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          created_at?: string
+          description?: string | null
+          file_path?: string | null
+          file_size_bytes?: number | null
+          id?: string
+          input_schema?: Json | null
+          is_active?: boolean | null
+          metadata?: Json | null
+          model_name?: string
+          model_type?: string
+          model_version?: string
+          name?: string | null
+          organization_id?: string | null
+          output_schema?: Json | null
+          performance_metrics?: Json | null
+          status?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onnx_models_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       operational_alerts: {
         Row: {
           action_required: string | null
@@ -14324,6 +14534,69 @@ export type Database = {
           vessel_id?: string | null
         }
         Relationships: []
+      }
+      risk_forecast: {
+        Row: {
+          created_at: string
+          description: string | null
+          factors: Json | null
+          forecast_type: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          recommendations: Json | null
+          risk_level: string
+          risk_score: number
+          valid_from: string
+          valid_until: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          factors?: Json | null
+          forecast_type: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          risk_level: string
+          risk_score: number
+          valid_from?: string
+          valid_until?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          factors?: Json | null
+          forecast_type?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          risk_level?: string
+          risk_score?: number
+          valid_from?: string
+          valid_until?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "risk_forecast_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "risk_forecast_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       risk_heatmap_data: {
         Row: {

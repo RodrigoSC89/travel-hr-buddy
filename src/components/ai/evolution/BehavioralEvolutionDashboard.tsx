@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Tables not in Supabase schema: ia_performance_log, watchdog_behavior_alerts
+// Schema mismatch: precision_score column missing
 /**
  * Behavioral Evolution Dashboard
  * Real-time AI behavior tracking with System Watchdog integration

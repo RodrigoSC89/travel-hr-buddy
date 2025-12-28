@@ -1,7 +1,6 @@
-// @ts-nocheck
-// Tables not in Supabase schema: satellites, satellite_alerts, satellite_positions, satellite_telemetry, satellite_passes, satellite_mission_links
 /**
  * PATCH 350: Satellite Tracker v2 - Service Layer
+ * PATCH 661: Satellite tables created
  * Service for satellite tracking, alerts, and mission integration
  */
 

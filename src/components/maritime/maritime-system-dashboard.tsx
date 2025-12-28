@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Tables not in Supabase schema: iot_sensor_data schema mismatch, checklist_records
+// Schema mismatch with IoTSensorData interface
 /**
  * Maritime System Dashboard
  * IoT sensor monitoring and operational checklists

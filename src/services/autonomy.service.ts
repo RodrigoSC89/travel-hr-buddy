@@ -1,7 +1,6 @@
-// @ts-nocheck
-// Tables not in Supabase schema: autonomous_tasks, autonomy_rules, autonomy_configs, autonomy_decision_logs, autonomy_metrics
 /**
  * PATCH 348: Mission Control v2 - Autonomy Service Layer
+ * PATCH 661: Tables autonomous_tasks, autonomy_rules created
  * Service for managing autonomous tasks and decision engine
  */
 
