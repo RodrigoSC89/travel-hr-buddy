@@ -121,6 +121,8 @@ const PortAPI = lazy(() => import(/* webpackChunkName: "page-port-api" */ "@/pag
 const FlightTracker = lazy(() => import(/* webpackChunkName: "page-flight-tracker" */ "@/pages/FlightTracker"));
 const SecurityScanner = lazy(() => import(/* webpackChunkName: "page-security-scanner" */ "@/pages/SecurityScanner"));
 const EarthquakeMonitor = lazy(() => import(/* webpackChunkName: "page-earthquake-monitor" */ "@/pages/EarthquakeMonitor"));
+const NOAAWeather = lazy(() => import(/* webpackChunkName: "page-noaa-weather" */ "@/pages/NOAAWeather"));
+const OpenSkyFlights = lazy(() => import(/* webpackChunkName: "page-opensky-flights" */ "@/pages/OpenSkyFlights"));
 
 // Executive & NOC - PATCH 855
 const ExecutiveBIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-bi" */ "@/pages/ExecutiveBIDashboard"));
@@ -230,6 +232,8 @@ function App() {
                         <Route path="flight-tracker" element={<FlightTracker />} />
                         <Route path="security-scanner" element={<SecurityScanner />} />
                         <Route path="earthquake-monitor" element={<EarthquakeMonitor />} />
+                        <Route path="noaa-weather" element={<NOAAWeather />} />
+                        <Route path="opensky-flights" element={<OpenSkyFlights />} />
                         
                         {/* NEW: Executive & NOC Routes - PATCH 855 */}
                         <Route path="executive-bi" element={<ExecutiveBIDashboard />} />
