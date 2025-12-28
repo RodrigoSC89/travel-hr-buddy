@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
  * Compliance Reporter Component
  * Real-time incident tracking with Supabase Realtime subscriptions
+ * PATCH 856 - Removed @ts-nocheck, added proper typing
  */
 
 import React, { useEffect, useState } from "react";
@@ -21,13 +21,13 @@ import { AlertCircle } from "lucide-react";
 
 interface IncidentRecord {
   id: string;
-  timestamp: string;
-  module: string;
-  type: string;
-  severity: string;
-  message: string;
-  riskScore: number;
-  compliance: string[];
+  timestamp?: string | null;
+  module?: string | null;
+  type?: string | null;
+  severity?: string | null;
+  message?: string | null;
+  riskScore?: number | null;
+  compliance?: string[] | null;
 }
 
 export default function ComplianceReporter() {
@@ -126,28 +126,28 @@ export default function ComplianceReporter() {
                 incidents.map((incident) => (
                   <TableRow key={incident.id} className="border-primary/20 hover:bg-muted">
                     <TableCell className="text-foreground">
-                      {new Date(incident.timestamp).toLocaleString()}
+                      {incident.timestamp ? new Date(incident.timestamp).toLocaleString() : 'N/A'}
                     </TableCell>
-                    <TableCell className="text-foreground">{incident.module}</TableCell>
-                    <TableCell className="text-foreground">{incident.type}</TableCell>
+                    <TableCell className="text-foreground">{incident.module || 'N/A'}</TableCell>
+                    <TableCell className="text-foreground">{incident.type || 'N/A'}</TableCell>
                     <TableCell>
-                      <Badge variant={getSeverityColor(incident.severity)}>
-                        {incident.severity}
+                      <Badge variant={getSeverityColor(incident.severity || 'Minor')}>
+                        {incident.severity || 'Minor'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-foreground font-mono">
-                      {incident.riskScore.toFixed(2)}
+                      {(incident.riskScore ?? 0).toFixed(2)}
                     </TableCell>
                     <TableCell className="text-foreground">
                       <div className="flex flex-wrap gap-1">
-                        {incident.compliance?.slice(0, 3).map((std, idx) => (
+                        {(incident.compliance || []).slice(0, 3).map((std, idx) => (
                           <Badge key={idx} variant="outline" className="text-xs">
                             {std}
                           </Badge>
                         ))}
-                        {incident.compliance?.length > 3 && (
+                        {(incident.compliance?.length ?? 0) > 3 && (
                           <Badge variant="outline" className="text-xs">
-                            +{incident.compliance.length - 3}
+                            +{(incident.compliance?.length ?? 0) - 3}
                           </Badge>
                         )}
                       </div>

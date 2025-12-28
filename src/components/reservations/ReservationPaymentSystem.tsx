@@ -39,23 +39,22 @@ import { format, parseISO } from "date-fns";
 
 interface Reservation {
   id: string;
-  user_id: string;
-  title: string;
-  description?: string;
-  reservation_type: string;
-  start_date: string;
-  end_date: string;
-  location?: string;
-  status: "pending" | "confirmed" | "cancelled";
-  total_amount?: number;
-  currency?: string;
-  payment_status?: "pending" | "paid" | "refunded" | "failed";
-  payment_method?: string;
-  payment_transaction_id?: string;
-  confirmation_number?: string;
-  calendar_event_id?: string;
-  notes?: string;
-  created_at: string;
+  user_id?: string | null;
+  title?: string | null;
+  description?: string | null;
+  reservation_type?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  location?: string | null;
+  status?: string | null;
+  total_amount?: number | null;
+  currency?: string | null;
+  payment_status?: string | null;
+  payment_method?: string | null;
+  payment_transaction_id?: string | null;
+  confirmation_number?: string | null;
+  notes?: string | null;
+  created_at?: string | null;
 }
 
 interface PaymentIntent {
@@ -347,29 +346,31 @@ END:VCALENDAR`;
     toast.success("Reservation history exported");
   };
 
-  const getPaymentStatusBadge = (status: string) => {
-    const variants = {
+  const getPaymentStatusBadge = (status?: string | null) => {
+    const variants: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
       paid: "default",
       pending: "secondary",
       refunded: "outline",
       failed: "destructive",
     };
+    const variant = status ? variants[status] || "secondary" : "secondary";
     return (
-      <Badge variant={variants[status] || "secondary"}>
+      <Badge variant={variant}>
         {status?.toUpperCase() || "PENDING"}
       </Badge>
     );
   };
 
-  const getStatusBadge = (status: string) => {
-    const variants = {
+  const getStatusBadge = (status?: string | null) => {
+    const variants: Record<string, "default" | "secondary" | "destructive"> = {
       confirmed: "default",
       pending: "secondary",
       cancelled: "destructive",
     };
+    const variant = status ? variants[status] || "secondary" : "secondary";
     return (
-      <Badge variant={variants[status] || "secondary"}>
-        {status.toUpperCase()}
+      <Badge variant={variant}>
+        {(status || "pending").toUpperCase()}
       </Badge>
     );
   };
