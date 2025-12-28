@@ -1,36 +1,57 @@
-// @ts-nocheck
-// Interface mismatch: SensorLog types differ from schema
 /**
  * PATCH 538 - Sensors Hub Service
  * Real-time sensor monitoring with MQTT/HTTP ingestion
+ * Schema-aligned version
  */
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type {
-  SensorLog,
-  SensorConfiguration,
-  SensorAlert,
-  SensorType,
-  SensorStatus,
-} from "@/types/patches-536-540";
+
+// Types aligned with database schema
+type SensorType = "temperature" | "pressure" | "humidity" | "motion" | "gps" | "depth" | "speed" | "wind" | "wave" | "current" | "other";
+type SensorStatus = "normal" | "warning" | "critical" | "offline";
+
+interface SensorLogDB {
+  id: string;
+  sensor_id: string;
+  sensor_type: string;
+  value: number;
+  unit: string | null;
+  timestamp: string;
+  vessel_id: string | null;
+  organization_id: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+}
+
+interface SensorAlertDB {
+  id: string;
+  sensor_id: string;
+  sensor_type: string;
+  alert_type: string;
+  severity: string;
+  message: string;
+  value: number | null;
+  threshold: number | null;
+  acknowledged: boolean;
+  acknowledged_by: string | null;
+  acknowledged_at: string | null;
+  vessel_id: string | null;
+  organization_id: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+  resolved_at: string | null;
+}
 
 class SensorsHubService {
-  private simulationInterval: NodeJS.Timeout | null = null;
+  private simulationInterval: ReturnType<typeof setInterval> | null = null;
 
-  /**
-   * Start simulated sensor data ingestion
-   */
   startSimulation(): void {
     if (this.simulationInterval) return;
-
-    // Simulate sensor readings every 2 seconds
     this.simulationInterval = setInterval(() => {
       this.ingestSimulatedData();
     }, 2000);
   }
 
-  /**
-   * Stop sensor simulation
-   */
   stopSimulation(): void {
     if (this.simulationInterval) {
       clearInterval(this.simulationInterval);
@@ -38,9 +59,6 @@ class SensorsHubService {
     }
   }
 
-  /**
-   * Ingest simulated sensor data (replaces MQTT/HTTP in production)
-   */
   private async ingestSimulatedData(): Promise<void> {
     const sensorTypes: Array<{ id: string; name: string; type: SensorType; unit: string }> = [
       { id: "temp-001", name: "Engine Temperature", type: "temperature", unit: "°C" },
@@ -58,107 +76,68 @@ class SensorsHubService {
 
       return {
         sensor_id: sensor.id,
-        sensor_name: sensor.name,
         sensor_type: sensor.type,
-        reading_value: Math.round(value * 100) / 100,
-        reading_unit: sensor.unit,
-        status,
-        metadata: {
-          simulation: true,
-          timestamp: new Date().toISOString(),
-        },
+        value: Math.round(value * 100) / 100,
+        unit: sensor.unit,
+        metadata: { simulation: true, sensor_name: sensor.name, status },
       };
     });
 
     await supabase.from("sensor_logs").insert(logs);
 
-    // Check for alerts
     for (const log of logs) {
-      if (log.status === "warning" || log.status === "critical") {
-        await this.createAlert(log);
+      const status = (log.metadata as { status: SensorStatus }).status;
+      if (status === "warning" || status === "critical") {
+        await this.createAlert(log, status);
       }
     }
   }
 
-  /**
-   * Get base value for sensor type
-   */
   private getBaseValue(type: SensorType): number {
     const baseValues: Record<SensorType, number> = {
-      temperature: 75,
-      pressure: 150,
-      humidity: 60,
-      motion: 5,
-      gps: 0,
-      depth: 50,
-      speed: 15,
-      wind: 20,
-      wave: 2.5,
-      current: 1.5,
-      other: 50,
+      temperature: 75, pressure: 150, humidity: 60, motion: 5, gps: 0,
+      depth: 50, speed: 15, wind: 20, wave: 2.5, current: 1.5, other: 50,
     };
     return baseValues[type] || 50;
   }
 
-  /**
-   * Determine sensor status based on value
-   */
   private getSensorStatus(type: SensorType, value: number): SensorStatus {
-    // Simple threshold-based status determination
     const thresholds: Record<SensorType, { warning: number; critical: number }> = {
-      temperature: { warning: 85, critical: 95 },
-      pressure: { warning: 180, critical: 200 },
-      humidity: { warning: 80, critical: 90 },
-      motion: { warning: 7, critical: 9 },
-      gps: { warning: 10, critical: 20 },
-      depth: { warning: 80, critical: 100 },
-      speed: { warning: 25, critical: 30 },
-      wind: { warning: 30, critical: 40 },
-      wave: { warning: 4, critical: 6 },
-      current: { warning: 3, critical: 4 },
+      temperature: { warning: 85, critical: 95 }, pressure: { warning: 180, critical: 200 },
+      humidity: { warning: 80, critical: 90 }, motion: { warning: 7, critical: 9 },
+      gps: { warning: 10, critical: 20 }, depth: { warning: 80, critical: 100 },
+      speed: { warning: 25, critical: 30 }, wind: { warning: 30, critical: 40 },
+      wave: { warning: 4, critical: 6 }, current: { warning: 3, critical: 4 },
       other: { warning: 80, critical: 95 },
     };
-
     const threshold = thresholds[type];
     if (value >= threshold.critical) return "critical";
     if (value >= threshold.warning) return "warning";
     return "normal";
   }
 
-  /**
-   * Create alert for abnormal sensor reading
-   */
-  private async createAlert(log: {
-    sensor_id: string;
-    sensor_name: string;
-    sensor_type: SensorType;
-    reading_value: number;
-    reading_unit: string;
-    status: SensorStatus;
-  }): Promise<void> {
+  private async createAlert(log: { sensor_id: string; sensor_type: string; value: number; unit: string }, status: SensorStatus): Promise<void> {
     const { data: existingAlert } = await supabase
       .from("sensor_alerts")
       .select("*")
       .eq("sensor_id", log.sensor_id)
-      .eq("status", "active")
-      .single();
+      .eq("acknowledged", false)
+      .maybeSingle();
 
-    if (existingAlert) return; // Don't duplicate active alerts
+    if (existingAlert) return;
 
     await supabase.from("sensor_alerts").insert([{
       sensor_id: log.sensor_id,
+      sensor_type: log.sensor_type,
       alert_type: `${log.sensor_type}_threshold`,
-      severity: log.status === "critical" ? "critical" : "warning",
-      message: `${log.sensor_name} reading ${log.reading_value} ${log.reading_unit} is ${log.status}`,
-      reading_value: log.reading_value,
-      status: "active",
+      severity: status === "critical" ? "critical" : "warning",
+      message: `Sensor ${log.sensor_id} reading ${log.value} ${log.unit} is ${status}`,
+      value: log.value,
+      acknowledged: false,
     }]);
   }
 
-  /**
-   * Get recent sensor logs
-   */
-  async getSensorLogs(limit = 100, sensorType?: SensorType): Promise<SensorLog[]> {
+  async getSensorLogs(limit = 100, sensorType?: SensorType): Promise<SensorLogDB[]> {
     let query = supabase
       .from("sensor_logs")
       .select("*")
@@ -170,54 +149,40 @@ class SensorsHubService {
     }
 
     const { data, error } = await query;
-
     if (error) {
-      logger.error("Error fetching sensor logs", error as Error, { vesselId, sensorType, limit });
+      logger.error("Error fetching sensor logs", error as Error, { sensorType, limit });
       return [];
     }
-
-    return data || [];
+    return (data || []) as SensorLogDB[];
   }
 
-  /**
-   * Get active sensor alerts
-   */
-  async getActiveAlerts(): Promise<SensorAlert[]> {
+  async getActiveAlerts(): Promise<SensorAlertDB[]> {
     const { data, error } = await supabase
       .from("sensor_alerts")
       .select("*")
-      .eq("status", "active")
+      .eq("acknowledged", false)
       .order("created_at", { ascending: false });
 
     if (error) {
       logger.error("Error fetching alerts", error as Error);
       return [];
     }
-
-    return data || [];
+    return (data || []) as SensorAlertDB[];
   }
 
-  /**
-   * Acknowledge alert
-   */
   async acknowledgeAlert(alertId: string): Promise<boolean> {
     const { data: userData } = await supabase.auth.getUser();
-
     const { error } = await supabase
       .from("sensor_alerts")
       .update({
-        status: "acknowledged",
+        acknowledged: true,
         acknowledged_by: userData?.user?.id,
         acknowledged_at: new Date().toISOString(),
       })
       .eq("id", alertId);
-
     return !error;
   }
 
-  /**
-   * Get sensor statistics
-   */
   async getStatistics(): Promise<{
     totalSensors: number;
     activeSensors: number;
@@ -229,23 +194,17 @@ class SensorsHubService {
       this.getSensorLogs(1000),
       this.getActiveAlerts(),
     ]);
-
-    // Count unique sensors
     const uniqueSensors = new Set(logs.map(l => l.sensor_id));
-
     return {
       totalSensors: uniqueSensors.size,
-      activeSensors: uniqueSensors.size, // All sensors with recent readings are active
+      activeSensors: uniqueSensors.size,
       totalReadings: logs.length,
       activeAlerts: alerts.length,
       criticalAlerts: alerts.filter(a => a.severity === "critical").length,
     };
   }
 
-  /**
-   * Get latest reading for each sensor
-   */
-  async getLatestReadings(): Promise<SensorLog[]> {
+  async getLatestReadings(): Promise<SensorLogDB[]> {
     const { data, error } = await supabase
       .from("sensor_logs")
       .select("*")
@@ -257,14 +216,12 @@ class SensorsHubService {
       return [];
     }
 
-    // Get unique sensors (latest reading for each)
-    const uniqueSensors = new Map<string, SensorLog>();
-    (data || []).forEach((log: SensorLog) => {
+    const uniqueSensors = new Map<string, SensorLogDB>();
+    ((data || []) as SensorLogDB[]).forEach((log) => {
       if (!uniqueSensors.has(log.sensor_id)) {
         uniqueSensors.set(log.sensor_id, log);
       }
     });
-
     return Array.from(uniqueSensors.values());
   }
 }

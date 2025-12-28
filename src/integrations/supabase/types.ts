@@ -2755,12 +2755,18 @@ export type Database = {
       autonomous_tasks: {
         Row: {
           actions: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          autonomy_level: number | null
           completed_at: string | null
           created_at: string
           created_by: string | null
+          decision_confidence: number | null
+          decision_logic: Json | null
           description: string | null
           equipment_id: string | null
           error_message: string | null
+          execution_logs: Json | null
           id: string
           metadata: Json | null
           mission_id: string | null
@@ -2778,12 +2784,18 @@ export type Database = {
         }
         Insert: {
           actions?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          autonomy_level?: number | null
           completed_at?: string | null
           created_at?: string
           created_by?: string | null
+          decision_confidence?: number | null
+          decision_logic?: Json | null
           description?: string | null
           equipment_id?: string | null
           error_message?: string | null
+          execution_logs?: Json | null
           id?: string
           metadata?: Json | null
           mission_id?: string | null
@@ -2801,12 +2813,18 @@ export type Database = {
         }
         Update: {
           actions?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          autonomy_level?: number | null
           completed_at?: string | null
           created_at?: string
           created_by?: string | null
+          decision_confidence?: number | null
+          decision_logic?: Json | null
           description?: string | null
           equipment_id?: string | null
           error_message?: string | null
+          execution_logs?: Json | null
           id?: string
           metadata?: Json | null
           mission_id?: string | null
@@ -2831,6 +2849,122 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      autonomy_configs: {
+        Row: {
+          allowed_task_types: string[] | null
+          auto_approve_low_risk: boolean | null
+          autonomy_level: number | null
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+          is_enabled: boolean | null
+          notification_preferences: Json | null
+          require_approval_threshold: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          allowed_task_types?: string[] | null
+          auto_approve_low_risk?: boolean | null
+          autonomy_level?: number | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          is_enabled?: boolean | null
+          notification_preferences?: Json | null
+          require_approval_threshold?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          allowed_task_types?: string[] | null
+          auto_approve_low_risk?: boolean | null
+          autonomy_level?: number | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          is_enabled?: boolean | null
+          notification_preferences?: Json | null
+          require_approval_threshold?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      autonomy_decision_logs: {
+        Row: {
+          confidence_score: number | null
+          decision_data: Json | null
+          decision_type: string
+          id: string
+          reasoning: string | null
+          task_id: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          decision_data?: Json | null
+          decision_type: string
+          id?: string
+          reasoning?: string | null
+          task_id?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          decision_data?: Json | null
+          decision_type?: string
+          id?: string
+          reasoning?: string | null
+          task_id?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autonomy_decision_logs_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "autonomous_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      autonomy_metrics: {
+        Row: {
+          approved_tasks: number | null
+          avg_completion_time_minutes: number | null
+          avg_confidence_score: number | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          metric_date: string
+          rejected_tasks: number | null
+          total_tasks: number | null
+        }
+        Insert: {
+          approved_tasks?: number | null
+          avg_completion_time_minutes?: number | null
+          avg_confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_date: string
+          rejected_tasks?: number | null
+          total_tasks?: number | null
+        }
+        Update: {
+          approved_tasks?: number | null
+          avg_completion_time_minutes?: number | null
+          avg_confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_date?: string
+          rejected_tasks?: number | null
+          total_tasks?: number | null
+        }
+        Relationships: []
       }
       autonomy_rules: {
         Row: {
@@ -15199,6 +15333,53 @@ export type Database = {
           },
         ]
       }
+      satellite_coverage_maps: {
+        Row: {
+          coverage_geojson: Json
+          coverage_radius_km: number | null
+          created_at: string | null
+          elevation_angle_degrees: number | null
+          id: string
+          metadata: Json | null
+          next_pass_at: string | null
+          quality_score: number | null
+          satellite_id: string | null
+          visibility_duration_minutes: number | null
+        }
+        Insert: {
+          coverage_geojson?: Json
+          coverage_radius_km?: number | null
+          created_at?: string | null
+          elevation_angle_degrees?: number | null
+          id?: string
+          metadata?: Json | null
+          next_pass_at?: string | null
+          quality_score?: number | null
+          satellite_id?: string | null
+          visibility_duration_minutes?: number | null
+        }
+        Update: {
+          coverage_geojson?: Json
+          coverage_radius_km?: number | null
+          created_at?: string | null
+          elevation_angle_degrees?: number | null
+          id?: string
+          metadata?: Json | null
+          next_pass_at?: string | null
+          quality_score?: number | null
+          satellite_id?: string | null
+          visibility_duration_minutes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "satellite_coverage_maps_satellite_id_fkey"
+            columns: ["satellite_id"]
+            isOneToOne: false
+            referencedRelation: "satellites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       satellite_events: {
         Row: {
           altitude: number | null
@@ -20805,6 +20986,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_autonomous_task: {
+        Args: { p_approved: boolean; p_task_id: string }
+        Returns: boolean
+      }
       auto_mark_overdue_tasks: { Args: never; Returns: undefined }
       calculate_checklist_compliance_score: {
         Args: { checklist_items: Json }
@@ -20823,6 +21008,15 @@ export type Database = {
         Args: { audit_uuid: string }
         Returns: number
       }
+      calculate_satellite_passes: {
+        Args: {
+          p_hours_ahead?: number
+          p_location_lat: number
+          p_location_lon: number
+          p_satellite_id: string
+        }
+        Returns: Json[]
+      }
       calculate_starfix_risk_rating: {
         Args: { p_period_days?: number; p_vessel_id: string }
         Returns: string
@@ -20838,6 +21032,10 @@ export type Database = {
       check_log_rate_limit: { Args: never; Returns: boolean }
       check_organization_limits: {
         Args: { limit_type: string; org_id: string }
+        Returns: boolean
+      }
+      check_satellite_coverage: {
+        Args: { p_critical_area: Json; p_satellite_id: string }
         Returns: boolean
       }
       check_tenant_limits: {
@@ -20858,6 +21056,18 @@ export type Database = {
       }
       cleanup_expired_cache: { Args: never; Returns: number }
       cleanup_old_logs: { Args: never; Returns: undefined }
+      create_autonomous_task: {
+        Args: {
+          p_autonomy_level?: number
+          p_decision_logic?: Json
+          p_description?: string
+          p_equipment_id?: string
+          p_mission_id?: string
+          p_task_name: string
+          p_task_type: string
+        }
+        Returns: string
+      }
       create_sample_peotram_audit: { Args: never; Returns: string }
       create_session_token:
         | {
@@ -21126,6 +21336,16 @@ export type Database = {
           p_ttl_minutes?: number
         }
         Returns: undefined
+      }
+      update_satellite_position: {
+        Args: {
+          p_altitude_km: number
+          p_latitude: number
+          p_longitude: number
+          p_satellite_id: string
+          p_velocity_kmh?: number
+        }
+        Returns: string
       }
       user_belongs_to_org: {
         Args: { _org_id: string; _user_id: string }
