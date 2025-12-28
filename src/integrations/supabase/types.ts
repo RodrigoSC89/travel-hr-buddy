@@ -20059,15 +20059,24 @@ export type Database = {
         }
         Returns: boolean
       }
-      has_role: {
-        Args: { check_role: string; check_user_id: string }
-        Returns: boolean
-      }
+      has_role:
+        | {
+            Args: {
+              _role: Database["public"]["Enums"]["user_role"]
+              _user_id: string
+            }
+            Returns: boolean
+          }
+        | {
+            Args: { check_role: string; check_user_id: string }
+            Returns: boolean
+          }
       increment_api_rate_limit: {
         Args: { p_api_key_id: string; p_window_type: string }
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_hr: { Args: { _user_id: string }; Returns: boolean }
       jobs_trend_by_month: {
         Args: never
         Returns: {
