@@ -1,12 +1,15 @@
+/**
+ * AppSidebar Component
+ * REFACTORED: Now consumes centralized routes from src/config/sidebar-routes.ts
+ * 
+ * Uses shadcn/ui Sidebar components with unified navigation data source.
+ */
 import React, { useState, useMemo } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
   LayoutDashboard, 
   Users, 
-  Plane, 
-  Hotel, 
   BarChart3,
-  Calendar,
   Database,
   FileText, 
   Settings,
@@ -15,28 +18,11 @@ import {
   UserCog,
   Building2,
   Ship,
-  Anchor,
-  Bot,
   Zap,
-  Target,
-  Mic,
-  Eye,
-  Shield,
-  Smartphone,
-  Trophy,
-  User,
   Activity,
-  Globe,
-  HelpCircle,
-  TrendingUp,
   Brain,
   MessageSquare,
-  Workflow,
-  TestTube,
-  MapPin,
-  CheckCircle,
-  Scan,
-  Satellite
+  TestTube
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import nautilusLogo from "@/assets/nautilus-logo.png";
@@ -57,7 +43,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 
@@ -69,826 +54,36 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-// Navigation item interface
-interface NavigationItem {
-  title: string;
-  url?: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  alwaysVisible?: boolean;
-  requiresRole?: readonly string[];
-  permission?: string;
-  items?: NavigationItem[];
-  defaultOpen?: boolean; // Nova propriedade para expandir por padrão
-}
+// Import centralized sidebar routes
+import { SIDEBAR_ROUTES, type SidebarGroup as SidebarRouteGroup } from "@/config/sidebar-routes";
 
-// Navigation items with improved structure
-const navigationItems = [
+// Quick access items that appear at the top
+const quickAccessItems = [
   {
     title: "Nautilus Command",
     url: "/nautilus-command",
     icon: Brain,
-    alwaysVisible: true
   },
   {
     title: "IA Revolucionária",
     url: "/revolutionary-ai",
     icon: Zap,
-    alwaysVisible: true
   },
   {
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
-    alwaysVisible: true
   },
-  // ============ OPERAÇÕES & SEGURANÇA - Sempre visíveis e expandida por padrão ============
-  {
-    title: "🛡️ Operações & Segurança",
-    url: "#operations-security", // URL única para evitar deduplicação
-    icon: Shield,
-    alwaysVisible: true,
-    defaultOpen: true,
-    items: [
-      {
-        title: "Security Center",
-        url: "/security-center",
-        icon: Shield,
-        alwaysVisible: true,
-      },
-      {
-        title: "AI Operations Center",
-        url: "/ai-operations-center",
-        icon: Brain,
-        alwaysVisible: true,
-      },
-      {
-        title: "Telemetria Preditiva",
-        url: "/predictive-telemetry",
-        icon: Activity,
-        alwaysVisible: true,
-      },
-      {
-        title: "Simulador Incidentes",
-        url: "/simulador",
-        icon: Target,
-        alwaysVisible: true,
-      },
-      {
-        title: "Central Integrações",
-        url: "/integracoes",
-        icon: Globe,
-        alwaysVisible: true,
-      },
-      {
-        title: "NOC 24/7",
-        url: "/noc",
-        icon: Activity,
-        alwaysVisible: true,
-      },
-      {
-        title: "Auditoria de Segurança",
-        url: "/auditoria-seguranca",
-        icon: Shield,
-        alwaysVisible: true,
-      },
-      {
-        title: "Executive BI Dashboard",
-        url: "/executive-bi",
-        icon: TrendingUp,
-        alwaysVisible: true,
-      },
-      {
-        title: "NOC Monitoring Center",
-        url: "/noc-monitoring",
-        icon: Eye,
-        alwaysVisible: true,
-      },
-      {
-        title: "Voice Assistant IA",
-        url: "/voice-assistant",
-        icon: Mic,
-        alwaysVisible: true,
-      },
-      {
-        title: "Telemetria 360°",
-        url: "/telemetria",
-        icon: Satellite,
-        alwaysVisible: true,
-      },
-    ],
-  },
-  {
-    title: "Dashboard Executivo",
-    url: "/executive-dashboard",
-    icon: TrendingUp,
-    requiresRole: ["admin", "owner"] as const,
-  },
-  {
-    title: "Administração",
-    url: "/admin",
-    icon: UserCog,
-    requiresRole: ["admin", "hr_manager"] as const,
-  },
-  {
-    title: "Super Admin",
-    url: "/super-admin",
-    icon: Shield,
-    requiresRole: ["admin"] as const,
-  },
-  {
-    title: "Configurações da Organização",
-    url: "/organization-settings",
-    icon: Settings,
-    requiresRole: ["admin", "owner"] as const,
-  },
-  {
-    title: "RH",
-    url: "/hr", 
-    icon: Users,
-    permission: "certificates" as const,
-  },
-  {
-    title: "Sistema Marítimo",
-    url: "/maritime",
-    icon: Ship,
-    items: [
-      {
-        title: "Dashboard Marítimo",
-        url: "/maritime",
-        icon: Ship,
-      },
-      {
-        title: "Dashboard da Frota",
-        url: "/fleet-dashboard",
-        icon: Anchor,
-      },
-      {
-        title: "Gestão de Frota",
-        url: "/fleet-management",
-        icon: Ship,
-      },
-      {
-        title: "Rastreamento",
-        url: "/fleet-tracking",
-        icon: MapPin,
-      },
-      {
-        title: "Colaboração",
-        url: "/collaboration",
-        icon: Users,
-      },
-      {
-        title: "Tripulação",
-        url: "/crew",
-        icon: Users,
-      },
-      {
-        title: "Certificações",
-        url: "/maritime-certifications",
-        icon: UserCog,
-      },
-      {
-        title: "Gestão de Tarefas",
-        url: "/task-management",
-        icon: Target,
-      },
-      {
-        title: "Documentos",
-        url: "/document-management",
-        icon: FileText,
-      },
-      {
-        title: "Scanner IA",
-        url: "/advanced-documents",
-        icon: Scan,
-      },
-    ],
-  },
-  {
-    title: "IA & Inovação",
-    url: "/innovation",
-    icon: Bot,
-    items: [
-      {
-        title: "Dashboard IA",
-        url: "/ai-dashboard",
-        icon: Brain,
-      },
-      {
-        title: "Sugestões Workflow",
-        url: "/workflow-suggestions",
-        icon: Workflow,
-      },
-      {
-        title: "Métricas de Adoção",
-        url: "/ai-adoption",
-        icon: TrendingUp,
-      },
-      {
-        title: "Assistente IA",
-        url: "/innovation",
-        icon: Bot,
-      },
-      {
-        title: "AI Insights",
-        url: "/ai-insights",
-        icon: Brain,
-      },
-      {
-        title: "Análise Preditiva",
-        url: "/predictive-analytics",
-        icon: Brain,
-      },
-      {
-        title: "Gamificação",
-        url: "/gamification",
-        icon: Trophy,
-      },
-      {
-        title: "IoT Dashboard",
-        url: "/iot",
-        icon: Smartphone,
-      },
-    ],
-  },
-  {
-    title: "Treinamentos",
-    url: "/nautilus-academy",
-    icon: Trophy,
-    items: [
-      {
-        title: "Nautilus Academy",
-        url: "/nautilus-academy",
-        icon: Trophy,
-      },
-      {
-        title: "SOLAS, ISPS & ISM Training",
-        url: "/solas-isps-training",
-        icon: Shield,
-      },
-      {
-        title: "Mentor DP",
-        url: "/mentor-dp",
-        icon: Anchor,
-      },
-      {
-        title: "DP Intelligence",
-        url: "/dp-intelligence",
-        icon: Brain,
-      },
-    ],
-  },
-  {
-    title: "Portal do Funcionário",
-    url: "/portal",
-    icon: User,
-  },
-  {
-    title: "Viagens",
-    url: "/travel",
-    icon: Plane,
-    items: [
-      {
-        title: "Voos",
-        url: "/travel",
-        icon: Plane,
-      },
-      {
-        title: "Hotéis",
-        url: "/travel", 
-        icon: Hotel,
-      },
-    ],
-  },
-  {
-    title: "Alertas de Preços",
-    url: "/price-alerts",
-    icon: Bell,
-  },
-  {
-    title: "Central de Integrações",
-    url: "/integracoes",
-    icon: Globe,
-  },
-  {
-    title: "Analytics",
-    url: "/analytics",
-    icon: BarChart3,
-    permission: "analytics" as const,
-    items: [
-      {
-        title: "Analytics Básico",
-        url: "/analytics",
-        icon: BarChart3,
-      },
-      {
-        title: "Métricas Avançadas",
-        url: "/enhanced-metrics",
-        icon: Activity,
-      },
-      {
-        title: "IA Insights",
-        url: "/ai-insights",
-        icon: Brain,
-      },
-      {
-        title: "Analytics Avançado",
-        url: "/advanced-analytics",
-        icon: TrendingUp,
-      },
-      {
-        title: "Alertas Inteligentes",
-        url: "/intelligent-alerts",
-        icon: Zap,
-      },
-    ],
-  },
-  {
-    title: "Reservas",
-    url: "/reservations",
-    icon: Calendar,
-  },
-  {
-    title: "Relatórios",
-    url: "/reports",
-    icon: FileText,
-    permission: "reports" as const,
-    items: [
-      {
-        title: "Relatórios Básicos",
-        url: "/reports",
-        icon: FileText,
-      },
-      {
-        title: "Relatórios Avançados",
-        url: "/advanced-reports",
-        icon: BarChart3,
-      },
-    ],
-  },
-  {
-    title: "Módulos do Sistema",
-    icon: Database,
-    items: [
-      {
-        title: "Comunicação",
-        url: "/comunicacao",
-        icon: MessageSquare,
-      },
-      {
-        title: "Tripulação",
-        url: "/crew",
-        icon: Users,
-      },
-      {
-        title: "Documentos",
-        url: "/documentos",
-        icon: FileText,
-      },
-      {
-        title: "Feedback",
-        url: "/feedback",
-        icon: MessageSquare,
-      },
-      {
-        title: "Feedback",
-        url: "/feedback",
-        icon: MessageSquare,
-      },
-      {
-        title: "Gestão de Frota",
-        url: "/fleet",
-        icon: Ship,
-      },
-      {
-        title: "Performance",
-        url: "/performance",
-        icon: TrendingUp,
-      },
-      {
-        title: "Portal Funcionário",
-        url: "/portal-funcionario",
-        icon: User,
-      },
-      {
-        title: "Alertas Preços",
-        url: "/alertas-precos",
-        icon: Bell,
-      },
-      {
-        title: "Relatórios",
-        url: "/reports-module",
-        icon: FileText,
-      },
-      {
-        title: "Automação",
-        url: "/automation",
-        icon: Zap,
-      },
-      {
-        title: "Workspace Tempo Real",
-        url: "/real-time-workspace",
-        icon: Activity,
-      },
-      {
-        title: "Gerenciador Canais",
-        url: "/channel-manager",
-        icon: MessageSquare,
-      },
-      {
-        title: "Checklists",
-        url: "/checklists-inteligentes",
-        icon: CheckCircle,
-      },
-      {
-        title: "Gestão de Riscos",
-        url: "/risk-management",
-        icon: Shield,
-      },
-      {
-        title: "Gestão de Riscos",
-        url: "/risk-management",
-        icon: Shield,
-      },
-      {
-        title: "Planejador Manutenção",
-        url: "/maintenance-planner",
-        icon: Target,
-      },
-      {
-        title: "Logs de Missões",
-        url: "/mission-engine",
-        icon: FileText,
-      },
-      {
-        title: "Relatórios Incidentes",
-        url: "/incident-reports",
-        icon: Bell,
-      },
-      {
-        title: "Otimizador Combustível",
-        url: "/fuel-optimizer",
-        icon: Activity,
-      },
-      {
-        title: "Dashboard Meteorológico",
-        url: "/weather-dashboard",
-        icon: Globe,
-      },
-      {
-        title: "Planejador Viagens",
-        url: "/voyage-planner",
-        icon: MapPin,
-      },
-      {
-        title: "Automação Tarefas",
-        url: "/automation",
-        icon: Zap,
-      },
-      {
-        title: "Centro Auditoria",
-        url: "/audit-center",
-        icon: Shield,
-      },
-      {
-        title: "Hub Compliance",
-        url: "/compliance-hub",
-        icon: Shield,
-      },
-      {
-        title: "AI Insights",
-        url: "/ai-insights",
-        icon: Brain,
-      },
-      {
-        title: "AI Insights",
-        url: "/ai-insights",
-        icon: Brain,
-      },
-      {
-        title: "Hub Logística",
-        url: "/logistics-hub",
-        icon: Database,
-      },
-      {
-        title: "Bem-estar Tripulação",
-        url: "/crew-wellbeing",
-        icon: Users,
-      },
-      {
-        title: "Rastreador Satélite",
-        url: "/satellite-tracker",
-        icon: Globe,
-      },
-      {
-        title: "Timeline Projetos",
-        url: "/project-timeline",
-        icon: Calendar,
-      },
-      {
-        title: "Gestão Usuários",
-        url: "/user-management",
-        icon: UserCog,
-      },
-      {
-        title: "Procurement & Inventory AI",
-        url: "/procurement-inventory",
-        icon: Database,
-      },
-      {
-        title: "Controle Missão",
-        url: "/mission-engine",
-        icon: Target,
-      },
-      {
-        title: "Underwater Drone",
-        url: "/underwater-drone",
-        icon: Plane,
-      },
-      {
-        title: "Sensors Hub",
-        url: "/sensors-hub",
-        icon: Activity,
-      },
-      {
-        title: "Satcom",
-        url: "/satcom",
-        icon: Satellite,
-      },
-      {
-        title: "Hub Financeiro",
-        url: "/finance-hub",
-        icon: BarChart3,
-      },
-      {
-        title: "API Gateway",
-        url: "/api-gateway",
-        icon: Globe,
-      },
-      {
-        title: "Analytics Core",
-        url: "/analytics-core",
-        icon: BarChart3,
-      },
-      {
-        title: "Documentos IA",
-        url: "/documents",
-        icon: Brain,
-      },
-      {
-        title: "Assistente Voz",
-        url: "/assistant/voice",
-        icon: Mic,
-      },
-      {
-        title: "Centro Notificações",
-        url: "/notifications-center",
-        icon: Bell,
-      },
-      {
-        title: "AI Operations Center",
-        url: "/ai-operations-center",
-        icon: Brain,
-      },
-      {
-        title: "Security Center",
-        url: "/security-center",
-        icon: Shield,
-      },
-      {
-        title: "Telemetria Preditiva",
-        url: "/predictive-telemetry",
-        icon: Activity,
-      },
-      {
-        title: "Simulador Incidentes",
-        url: "/simulador",
-        icon: Target,
-      },
-      {
-        title: "Central Integrações",
-        url: "/integracoes",
-        icon: Globe,
-      },
-      {
-        title: "Documentação",
-        url: "/docs",
-        icon: FileText,
-      },
-      {
-        title: "NOC 24/7",
-        url: "/noc",
-        icon: Activity,
-      },
-    ],
-  },
-  {
-    title: "Comunicação",
-    url: "/communication",
-    icon: MessageSquare,
-  },
-  {
-    title: "Configurações",
-    url: "/settings",
-    icon: Settings,
-  },
-  {
-    title: "Otimização",
-    url: "optimization",
-    icon: Zap,
-    items: [
-      {
-        title: "Otimização Geral",
-        url: "optimization-general",
-        icon: Zap,
-      },
-      {
-        title: "Performance",
-        url: "performance-optimizer",
-        icon: Target,
-      },
-    ],
-  },
-  {
-    title: "Centro Estratégico",
-    url: "strategic",
-    icon: Target,
-    permission: "analytics" as const,
-  },
-  {
-    title: "Assistente de Voz",
-    url: "voice",
-    icon: Mic,
-  },
-  {
-    title: "Centro de Notificações",
-    url: "notification-center",
-    icon: Bell,
-  },
-  {
-    title: "Monitor de Sistema",
-    url: "system-monitor",
-    icon: Activity,
-  },
-  {
-    title: "Administração",
-    items: [
-      { title: "Painel Admin", url: "/admin", icon: Settings },
-      { title: "Backup & Auditoria", url: "/backup-audit", icon: Database },
-      { title: "Segurança", url: "/security", icon: Shield },
-      { title: "Usuários", url: "/users", icon: Users },
-      { title: "Testes & Homologação", url: "/testing", icon: TestTube },
-      { title: "Feedback Sistema", url: "/feedback", icon: MessageSquare },
-      { title: "Sync Offline", url: "/offline-sync", icon: Database },
-    ],
-    requiresRole: ["admin"]
-  },
-  {
-    title: "Documentos",
-    url: "/documents",
-    icon: FileText
-  },
-  {
-    title: "Colaboração",
-    url: "/collaboration",
-    icon: Users
-  },
-  {
-    title: "Otimização Mobile",
-    url: "/mobile-optimization",
-    icon: Smartphone
-  },
-  {
-    title: "Checklists Inteligentes",
-    url: "/checklists-inteligentes", 
-    icon: CheckCircle
-  },
-  {
-    title: "Auditorias",
-    icon: Shield,
-    items: [
-      { title: "PEO-DP", url: "/peo-dp", icon: Anchor },
-      { title: "PEOTRAM", url: "/peotram", icon: FileText },
-      { title: "SGSO", url: "/sgso", icon: Shield },
-      { title: "IMCA Audit", url: "/imca-audit", icon: CheckCircle },
-      { title: "Pre-OVID Inspection", url: "/pre-ovid-inspection", icon: Scan },
-      { title: "MLC Inspection", url: "/mlc-inspection", icon: Shield },
-      { title: "Workflow Documentos ISM/MLC", url: "/document-workflow", icon: FileText },
-      { title: "Gerador Pacotes PSC", url: "/psc-package", icon: Shield },
-      { title: "Auditoria de IA", url: "/ai-audit", icon: Brain },
-    ],
-  },
-  {
-    title: "Templates",
-    url: "/templates",
-    icon: FileText,
-  },
-  {
-    title: "Analytics Avançado",
-    url: "/advanced-analytics",
-    icon: TrendingUp
-  },
-  {
-    title: "Analytics Tempo Real", 
-    url: "/real-time-analytics",
-    icon: Activity
-  },
-  {
-    title: "Monitor Avançado",
-    url: "/advanced-system-monitor",
-    icon: Activity
-  },
-  {
-    title: "Assistente IA",
-    url: "/ai-assistant",
-    icon: MessageSquare
-  },
-  {
-    title: "Business Intelligence",
-    url: "/business-intelligence",
-    icon: BarChart3
-  },
-  {
-    title: "Smart Workflow",
-    url: "/smart-workflow",
-    icon: Workflow
-  },
-  {
-    title: "Centro de Ajuda",
-    url: "/help",
-    icon: HelpCircle,
-  },
-]; 
+];
 
-// Helper: canonicalize URLs (aliases -> canonical)
-const URL_ALIASES: Record<string, string> = {
-  "/forecast/global": "/forecast-global",
-  "/compliance-hub": "/compliance-hub", // keep
-  "/logistics": "/logistics-hub",
-  "/wellbeing": "/crew-wellbeing",
-  "/weather": "/weather-dashboard",
-  "/voyage": "/voyage-planner",
-  "/risk": "/risk-management",
-  "/notifications": "/notifications-center",
-  "/portal-funcionario": "/portal",
-  "/comunicacao": "/communication",
-  "/documentos": "/documents",
-  "/documentos-ia": "/documents",
-  "/intelligent-documents": "/documents",
-  "/document-ai": "/documents",
-  "/emergency": "/emergency-response",
-  "/voice-assistant-new": "/voice-assistant",
-  "/peo-tram": "/peotram",
-  "/patch-66": "/patch66",
-  "/users": "/user-management",
-  // New aliases to consolidate duplicates after reorg
-  "/sistema-maritimo": "/maritime",
-  "/alertas-precos": "/price-alerts",
-  "/reservas": "/reservations",
-  "/viagens": "/travel",
-};
-
-function canonicalizeUrl(url?: string): string | undefined {
-  if (!url) return url;
-  const absolute = url.startsWith("/") ? url : `/${url}`;
-  return URL_ALIASES[absolute] || absolute;
-}
-
-// Helper: deduplicate navigation items by URL to avoid duplicates in the sidebar
-function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
-  const seen = new Set<string>();
-
-  const dedupeItem = (item: NavigationItem): NavigationItem | null => {
-    const canonicalUrl = canonicalizeUrl(item.url);
-    // Para seções com itens (grupos), usar o título como chave para evitar conflitos
-    const isGroup = item.items && item.items.length > 0;
-    const key = isGroup ? `group:${item.title}` : (canonicalUrl || item.title);
-    
-    if (key && seen.has(key)) return null;
-    if (key) seen.add(key);
-
-    let children: NavigationItem[] | undefined;
-    if (item.items && item.items.length) {
-      const filtered = item.items
-        .map(dedupeItem)
-        .filter(Boolean) as NavigationItem[];
-      // Manter o grupo mesmo se todos os filhos foram filtrados, se tiver alwaysVisible
-      if (filtered.length || item.alwaysVisible) {
-        children = filtered.length ? filtered : undefined;
-      }
-    }
-
-    // Preservar grupos com alwaysVisible mesmo sem filhos
-    if (isGroup && item.alwaysVisible && (!children || children.length === 0)) {
-      return null; // Remover grupos vazios
-    }
-
-    return { ...item, ...(canonicalUrl ? { url: canonicalUrl } : {}), ...(children ? { items: children } : {}) };
-  };
-
-  return items.map(dedupeItem).filter(Boolean) as NavigationItem[];
-}
-
+// Admin-only items
+const adminItems = [
+  { title: "Painel Admin", url: "/admin", icon: Settings },
+  { title: "Backup & Auditoria", url: "/backup-audit", icon: Database },
+  { title: "Usuários", url: "/users", icon: Users },
+  { title: "Testes & Homologação", url: "/testing", icon: TestTube },
+  { title: "Feedback Sistema", url: "/feedback", icon: MessageSquare },
+];
 
 interface AppSidebarProps {
   activeItem?: string;
@@ -896,22 +91,13 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
-  // Inicializar com seções que têm defaultOpen como expandidas - usando a mesma lógica do toggle
+  // Initialize with sections that have defaultOpen
   const [openItems, setOpenItems] = useState<string[]>(() => {
-    const defaultOpenItems: string[] = [];
-    navigationItems.forEach(item => {
-      if (item.defaultOpen && item.items) {
-        // Usar exatamente a mesma chave que o Collapsible usa: item.url || item.title
-        defaultOpenItems.push(item.url || item.title);
-      }
-    });
-    // Sempre incluir "Operações & Segurança" para garantir visibilidade
-    const operationsKey = "#operations-security";
-    if (!defaultOpenItems.includes(operationsKey)) {
-      defaultOpenItems.push(operationsKey);
-    }
-    return defaultOpenItems;
+    return SIDEBAR_ROUTES
+      .filter(group => group.defaultOpen)
+      .map(group => group.title);
   });
+  
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
@@ -920,69 +106,35 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const { handleNavigation } = useSidebarActions();
   const { currentBranding } = useOrganization();
   const logoSrc = currentBranding?.logo_url || nautilusLogo;
-  // Build a de-duplicated navigation list once
-  const dedupedNav = useMemo(() => dedupeNavigation(navigationItems), []);
 
-  // Build a Set of existing URLs to prevent duplicates when adding extra items
-  const navUrlSet = useMemo(() => {
-    const set = new Set<string>();
-    const add = (items: NavigationItem[]) => {
-      for (const it of items) {
-        const u = canonicalizeUrl(it.url);
-        if (u) set.add(u);
-        if (it.items) add(it.items);
-      }
-    };
-    add(dedupedNav);
-    return set;
-  }, [dedupedNav]);
-
-  const hasUrl = (url: string) => {
-    const u = canonicalizeUrl(url);
-    return u ? navUrlSet.has(u) : false;
-  };
-
-  const toggleItem = (itemUrl: string) => {
+  const toggleItem = (groupTitle: string) => {
     setOpenItems(prev => 
-      prev.includes(itemUrl) 
-        ? prev.filter(item => item !== itemUrl)
-        : [...prev, itemUrl]
+      prev.includes(groupTitle) 
+        ? prev.filter(item => item !== groupTitle)
+        : [...prev, groupTitle]
     );
   };
 
-  const isItemActive = (moduleKey: string) => {
-    return activeItem === moduleKey;
+  const isItemActive = (path: string) => {
+    return location.pathname === path;
   };
 
-  const canAccessItem = (item: NavigationItem) => {
-    if (item.alwaysVisible) return true;
-    
-    // Verificar se requer role específico
-    if (item.requiresRole) {
-      return userRole && item.requiresRole.includes(userRole);
+  const handleItemClick = (url: string) => {
+    handleNavigation(url);
+    onItemChange?.(url);
+  };
+
+  // Render label with emoji
+  const renderLabel = (item: { label: string; emoji?: string }) => {
+    if (item.emoji) {
+      return `${item.emoji} ${item.label}`;
     }
-    
-    // Verificar permissão específica
-    if (item.permission) {
-      return hasPermission(item.permission as Permission, "read");
-    }
-    
-    return true;
+    return item.label;
   };
-
-  const handleItemClick = (item: string) => {
-    handleNavigation(item);
-    onItemChange?.(item);
-  };
-
-  // Determinar se o grupo de navegação principal deve estar aberto
-  const isMainGroupOpen = dedupedNav.some(item => 
-    item.items ? item.items.some(subItem => isItemActive(subItem.url ?? "")) : isItemActive(item.url ?? "")
-  );
 
   return (
     <Sidebar 
-      className={"border-r transition-all duration-300"}
+      className="border-r transition-all duration-300"
       collapsible="icon"
     >
       {/* Header */}
@@ -1011,133 +163,125 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
       {/* Content */}
       <SidebarContent>
         <ScrollArea className="flex-1 overflow-hidden">
+          {/* Quick Access Section */}
+          <SidebarGroup>
+            {!collapsed && <SidebarGroupLabel>Acesso Rápido</SidebarGroupLabel>}
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {quickAccessItems.map((item) => (
+                  <SidebarMenuItem key={item.url}>
+                    <SidebarMenuButton 
+                      onClick={() => handleItemClick(item.url)}
+                      isActive={isItemActive(item.url)}
+                      className="w-full justify-start focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      title={collapsed ? item.title : undefined}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+
+          {/* Main Navigation from SIDEBAR_ROUTES */}
           <SidebarGroup>
             {!collapsed && <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>}
             <SidebarGroupContent>
               <SidebarMenu>
-                {dedupedNav.map((item) => {
-                // Verificar permissões para exibir o item
-                  if (!canAccessItem(item)) {
-                    return null;
-                  }
-
-                  // Item com subitens
-                  if (item.items) {
-                    return (
-                      <Collapsible 
-                        key={item.url || item.title}
-                        open={openItems.includes(item.url || item.title)}
-                        onOpenChange={() => toggleItem(item.url || item.title)}
-                      >
-                        <SidebarMenuItem>
-                          <CollapsibleTrigger asChild>
-                            <SidebarMenuButton 
-                              className="w-full justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
-                              tabIndex={0}
-                              role="button"
-                              aria-label={`Expandir ${item.title}`}
-                            >
-                              <div className="flex items-center">
-                                {item.icon && <item.icon className="h-4 w-4" />}
-                                {!collapsed && <span className="ml-2">{item.title}</span>}
-                              </div>
-                              {!collapsed && (
-                                <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                              )}
-                            </SidebarMenuButton>
-                          </CollapsibleTrigger>
+                {SIDEBAR_ROUTES.map((group: SidebarRouteGroup) => (
+                  <Collapsible 
+                    key={group.title}
+                    open={openItems.includes(group.title)}
+                    onOpenChange={() => toggleItem(group.title)}
+                  >
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton 
+                          className="w-full justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                          aria-label={`Expandir ${group.title}`}
+                        >
+                          <div className="flex items-center">
+                            <span className={collapsed ? "text-xs" : ""}>{group.title}</span>
+                          </div>
                           {!collapsed && (
-                            <CollapsibleContent>
-                              <SidebarMenuSub>
-                                {item.items.map((subItem) => (
-                                  <SidebarMenuSubItem key={subItem.url || subItem.title}>
-                                    <SidebarMenuSubButton 
-                                      onClick={() => handleItemClick(subItem.url || "")}
-                                      isActive={isItemActive(subItem.url || "")}
-                                      className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
-                                      tabIndex={0}
-                                      role="link"
-                                      aria-label={`Navegar para ${subItem.title}`}
-                                    >
-                                      {subItem.icon && <subItem.icon className="h-4 w-4" />}
-                                      <span className="ml-2">{subItem.title}</span>
-                                    </SidebarMenuSubButton>
-                                  </SidebarMenuSubItem>
-                                ))}
-                              </SidebarMenuSub>
-                            </CollapsibleContent>
+                            <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                           )}
-                        </SidebarMenuItem>
-                      </Collapsible>
-                    );
-                  }
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      {!collapsed && (
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {group.items.map((item) => (
+                              <SidebarMenuSubItem key={`${group.title}-${item.path}`}>
+                                <SidebarMenuSubButton 
+                                  onClick={() => handleItemClick(item.path)}
+                                  isActive={isItemActive(item.path)}
+                                  className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                  aria-label={`Navegar para ${item.label}`}
+                                  aria-current={isItemActive(item.path) ? "page" : undefined}
+                                >
+                                  {item.icon && <item.icon className="h-4 w-4" />}
+                                  <span className="ml-2">{renderLabel(item)}</span>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      )}
+                    </SidebarMenuItem>
+                  </Collapsible>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
 
-                  // Item simples
-                  return (
-                    <SidebarMenuItem key={item.url || item.title}>
+          {/* Admin Section */}
+          {canAccessModule("admin") && (
+            <SidebarGroup>
+              {!collapsed && <SidebarGroupLabel>Administração</SidebarGroupLabel>}
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {adminItems.map((item) => (
+                    <SidebarMenuItem key={item.url}>
                       <SidebarMenuButton 
-                        onClick={() => handleItemClick(item.url ?? "")}
-                        isActive={isItemActive(item.url ?? "")}
-                        className="w-full justify-start focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
+                        onClick={() => handleItemClick(item.url)}
+                        isActive={isItemActive(item.url)}
+                        className="w-full justify-start"
                         title={collapsed ? item.title : undefined}
-                        tabIndex={0}
-                        role="link"
-                        aria-label={`Navegar para ${item.title}`}
                       >
-                        {item.icon && <item.icon className="h-4 w-4" />}
+                        <item.icon className="h-4 w-4" />
                         {!collapsed && <span className="ml-2">{item.title}</span>}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                  );
-                })}
+                  ))}
+                  
+                  {/* SaaS Manager - Super Admin Only */}
+                  {userRole === "admin" && (
+                    <SidebarMenuItem>
+                      <SidebarMenuButton 
+                        onClick={() => navigate("/saas-manager")}
+                        isActive={location.pathname === "/saas-manager"}
+                        className="w-full justify-start"
+                        title={collapsed ? "SaaS Manager" : undefined}
+                      >
+                        <Building2 className="h-4 w-4" />
+                        {!collapsed && <span className="ml-2">SaaS Manager</span>}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
 
-                {/* Administração - Apenas para admins e gerentes de RH */}
-                {canAccessModule("admin") && !hasUrl("/admin") && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton 
-                      onClick={() => handleItemClick("/admin")}
-                      isActive={isItemActive("/admin")}
-                      className="w-full justify-start"
-                      title={collapsed ? "Administração" : undefined}
-                    >
-                      <UserCog className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">Administração</span>}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-
-                {/* Automação IA - Para todos os usuários */}
-                {!hasUrl("/automation") && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton 
-                      onClick={() => handleItemClick("/automation")}
-                      isActive={isItemActive("/automation")}
-                      className="w-full justify-start"
-                      title={collapsed ? "Automação IA" : undefined}
-                    >
-                      <Zap className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">Automação IA</span>}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-
-                {/* SaaS Manager - Para super admins */}
-                {userRole === "admin" && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton 
-                      onClick={() => navigate("/saas-manager")}
-                      isActive={location.pathname === "/saas-manager"}
-                      className="w-full justify-start"
-                      title={collapsed ? "SaaS Manager" : undefined}
-                    >
-                      <Building2 className="h-4 w-4" />
-                      {!collapsed && <span className="ml-2">SaaS Manager</span>}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-
-                {/* Dashboard Executivo - Para admins e gerentes */}
-                {(userRole === "admin" || userRole === "hr_manager" || userRole === "department_manager") && !hasUrl("/executive-dashboard") && (
+          {/* Executive Dashboard - Managers */}
+          {(userRole === "admin" || userRole === "hr_manager" || userRole === "department_manager") && (
+            <SidebarGroup>
+              {!collapsed && <SidebarGroupLabel>Executivo</SidebarGroupLabel>}
+              <SidebarGroupContent>
+                <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton 
                       onClick={() => handleItemClick("/executive-dashboard")}
@@ -1149,23 +293,21 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                       {!collapsed && <span className="ml-2">Dashboard Executivo</span>}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                )}
-
-                {/* Visão Geral do Sistema */}
-                <SidebarMenuItem>
-                  <SidebarMenuButton 
-                    onClick={() => handleItemClick("system-overview")}
-                    isActive={isItemActive("system-overview")}
-                    className="w-full justify-start"
-                    title={collapsed ? "Visão Geral" : undefined}
-                  >
-                    <Activity className="h-4 w-4" />
-                    {!collapsed && <span className="ml-2">Visão Geral</span>}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton 
+                      onClick={() => handleItemClick("/system-overview")}
+                      isActive={isItemActive("/system-overview")}
+                      className="w-full justify-start"
+                      title={collapsed ? "Visão Geral" : undefined}
+                    >
+                      <Activity className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">Visão Geral</span>}
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
         </ScrollArea>
       </SidebarContent>
 
@@ -1177,8 +319,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
               <p className="font-medium">Você é: {getRoleDisplayName(userRole || "employee")}</p>
             </div>
             <div className="text-xs text-muted-foreground text-center">
-              <p>Versão 2.1.0</p>
-              <p className="mt-1">© 2024 Nautilus</p>
+              <p>Versão 3.0.2</p>
+              <p className="mt-1">© 2024-2025 Nautilus</p>
             </div>
           </div>
         )}
