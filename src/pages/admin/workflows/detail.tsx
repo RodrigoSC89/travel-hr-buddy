@@ -24,53 +24,57 @@ import { Label } from "@/components/ui/label";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { exportSuggestionsToPDF, Suggestion } from "@/components/workflows";
 
+// Flexible interfaces that work with current DB schema
 interface SmartWorkflow {
-  id: string
-  title: string
-  description?: string
-  status: string
-  created_at: string
-  updated_at: string
-  created_by?: string
-  category?: string
-  tags?: string[]
+  id: string;
+  name?: string | null;
+  title?: string | null;
+  description?: string | null;
+  status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  created_by?: string | null;
+  category?: string | null;
+  tags?: string[] | null;
 }
 
 interface Profile {
-  id: string
-  full_name: string
+  id: string;
+  full_name?: string | null;
 }
 
 interface WorkflowStep {
-  id: string
-  workflow_id: string
-  title: string
-  description?: string
-  status: "pendente" | "em_progresso" | "concluido"
-  position: number
-  assigned_to?: string
-  due_date?: string
-  priority?: string
-  created_at: string
-  updated_at: string
-  created_by?: string
-  tags?: string[]
-  metadata?: Record<string, unknown>
+  id: string;
+  workflow_id?: string | null;
+  name?: string | null;
+  title?: string | null;
+  description?: string | null;
+  status?: string | null;
+  step_number?: number | null;
+  position?: number | null;
+  assigned_to?: string | null;
+  due_date?: string | null;
+  priority?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  created_by?: string | null;
+  tags?: string[] | null;
+  metadata?: Record<string, unknown> | null;
   profiles?: {
-    full_name: string
-  }
+    full_name: string | null;
+  } | null;
 }
 
 interface TaskFormData {
-  title: string
-  description: string
-  status: WorkflowStep["status"]
-  assigned_to: string
-  due_date: string
-  priority: string
+  title: string;
+  description: string;
+  status: string;
+  assigned_to: string;
+  due_date: string;
+  priority: string;
 }
 
-const STATUS_COLUMNS: Array<{ value: WorkflowStep["status"]; label: string; color: string }> = [
+const STATUS_COLUMNS: Array<{ value: string; label: string; color: string }> = [
   { value: "pendente", label: "Pendente", color: "bg-yellow-50 border-yellow-200" },
   { value: "em_progresso", label: "Em Progresso", color: "bg-blue-50 border-blue-200" },
   { value: "concluido", label: "Concluído", color: "bg-green-50 border-green-200" },

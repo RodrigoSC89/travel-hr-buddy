@@ -6,11 +6,49 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type {
-  SeedSuggestionsOptions,
-  SeedSuggestionsResult,
-  WorkflowSuggestion,
-} from "@/types/workflow";
+import type { Json } from "@/integrations/supabase/types";
+
+// Local types for workflow suggestions (independent of DB schema)
+export type WorkflowStepPriority = "low" | "medium" | "high" | "critical";
+
+export interface WorkflowSuggestion {
+  title: string;
+  description?: string;
+  priority: WorkflowStepPriority;
+  position: number;
+  tags?: string[];
+}
+
+export interface SeedSuggestionsOptions {
+  workflowId: string;
+  category?: string;
+  userId?: string;
+  useAI?: boolean;
+}
+
+export interface SeedSuggestionsResult {
+  success: boolean;
+  stepsCreated: number;
+  error?: string;
+}
+
+export interface WorkflowStep {
+  id: string;
+  workflow_id?: string | null;
+  name?: string | null;
+  title?: string | null;
+  description?: string | null;
+  status?: string | null;
+  step_number?: number | null;
+  position?: number | null;
+  priority?: string | null;
+  assigned_to?: string | null;
+  created_by?: string | null;
+  tags?: string[] | null;
+  metadata?: Json | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
 
 /**
  * Template suggestions based on workflow categories

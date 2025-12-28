@@ -8,69 +8,71 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export type MissionType = "sar" | "evacuation" | "transport" | "patrol" | "training" | "emergency" | "custom";
 export type MissionStatus = "planned" | "active" | "completed" | "cancelled" | "failed";
 export type MissionPriority = "low" | "normal" | "high" | "critical";
 export type VesselRole = "primary" | "support" | "backup" | "observer";
 
+// Flexible interface that works with current DB schema
 export interface Mission {
   id: string;
-  name: string;
-  mission_type: MissionType;
-  status: MissionStatus;
-  priority: MissionPriority;
-  description?: string;
-  start_time?: string;
-  end_time?: string;
-  estimated_duration?: string;
-  actual_duration?: string;
-  coordination_data?: Record<string, any>;
-  ai_recommendations?: Record<string, any>;
-  created_by?: string;
-  created_at: string;
-  updated_at: string;
+  name: string | null;
+  mission_type?: string | null;
+  status?: string | null;
+  priority?: string | null;
+  description?: string | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  estimated_duration?: string | null;
+  actual_duration?: string | null;
+  coordination_data?: Record<string, unknown> | null;
+  ai_recommendations?: Record<string, unknown> | null;
+  created_by?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface MissionVessel {
   id: string;
-  mission_id: string;
-  vessel_id: string;
-  role: VesselRole;
-  assigned_at: string;
-  status: "assigned" | "active" | "completed" | "withdrawn";
-  notes?: string;
-  created_at: string;
-  updated_at: string;
+  mission_id?: string | null;
+  vessel_id?: string | null;
+  role?: string | null;
+  assigned_at?: string | null;
+  status?: string | null;
+  notes?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface MissionLog {
   id: string;
-  mission_id: string;
-  vessel_id?: string;
-  log_type: "info" | "warning" | "error" | "status_change" | "coordination" | "ai_decision";
-  message: string;
-  metadata?: Record<string, any>;
-  created_by?: string;
-  created_at: string;
+  mission_id?: string | null;
+  vessel_id?: string | null;
+  log_type?: string | null;
+  message?: string | null;
+  metadata?: Record<string, unknown> | null;
+  created_by?: string | null;
+  created_at?: string | null;
 }
 
 export interface Vessel {
   id: string;
-  name: string;
-  imo_code?: string;
-  status: string;
+  name?: string | null;
+  imo_code?: string | null;
+  status?: string | null;
   last_known_position?: {
     lat: number;
     lng: number;
     course?: number;
     speed?: number;
-  };
-  vessel_type?: string;
-  flag?: string;
-  built_year?: number;
-  gross_tonnage?: number;
-  maintenance_status?: string;
+  } | null;
+  vessel_type?: string | null;
+  flag?: string | null;
+  built_year?: number | null;
+  gross_tonnage?: number | null;
+  maintenance_status?: string | null;
 }
 
 /**
