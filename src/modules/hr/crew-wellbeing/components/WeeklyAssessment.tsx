@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,8 +9,21 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle, Brain, Heart, Moon, Battery, AlertCircle } from "lucide-react";
 
+interface FormData {
+  sleep_hours: number;
+  sleep_quality: number;
+  mood_rating: number;
+  stress_level: number;
+  energy_level: number;
+  nutrition_rating: number;
+  exercise_minutes: number;
+  water_intake_liters: number;
+  notes: string;
+  concerns: string;
+}
+
 export const WeeklyAssessment: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     sleep_hours: 7,
     sleep_quality: 3,
     mood_rating: 3,
@@ -45,7 +57,7 @@ export const WeeklyAssessment: React.FC = () => {
         ? formData.concerns.split(",").map((c) => c.trim()).filter((c) => c)
         : [];
 
-      const { error } = await supabase.from("health_checkins").insert({
+      const { error } = await (supabase.from("health_checkins" as any).insert({
         user_id: user.id,
         sleep_hours: formData.sleep_hours,
         sleep_quality: formData.sleep_quality,
@@ -57,7 +69,7 @@ export const WeeklyAssessment: React.FC = () => {
         water_intake_liters: formData.water_intake_liters,
         notes: formData.notes,
         concerns: concerns.length > 0 ? concerns : null,
-      });
+      }) as unknown as Promise<{ error: Error | null }>);
 
       if (error) throw error;
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +15,19 @@ interface HistoryData {
   wellbeing_score: number;
 }
 
+interface HealthCheckin {
+  checkin_date: string;
+  mood_rating?: number;
+  stress_level?: number;
+  energy_level?: number;
+  sleep_hours?: number;
+}
+
+interface WellbeingLog {
+  created_at: string;
+  wellbeing_score?: number;
+}
+
 export const WellbeingHistory: React.FC = () => {
   const [historyData, setHistoryData] = useState<HistoryData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,22 +43,22 @@ export const WellbeingHistory: React.FC = () => {
       if (!user) return;
 
       // Fetch health check-ins for the last 30 days
-      const { data: checkins, error } = await supabase
-        .from("health_checkins")
+      const { data: checkins, error } = await (supabase
+        .from("health_checkins" as any)
         .select("*")
         .eq("user_id", user.id)
         .gte("checkin_date", new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-        .order("checkin_date", { ascending: true });
+        .order("checkin_date", { ascending: true }) as unknown as Promise<{ data: HealthCheckin[] | null; error: Error | null }>);
 
       if (error) throw error;
 
       // Fetch wellbeing logs
-      const { data: logs } = await supabase
-        .from("crew_wellbeing_logs")
+      const { data: logs } = await (supabase
+        .from("crew_wellbeing_logs" as any)
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: true })
-        .limit(30);
+        .limit(30) as unknown as Promise<{ data: WellbeingLog[] | null }>);
 
       // Transform data for chart
       const chartData: HistoryData[] = (checkins || []).map((checkin) => {
