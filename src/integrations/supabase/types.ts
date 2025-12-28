@@ -6381,6 +6381,7 @@ export type Database = {
           root_cause: string | null
           severity: string | null
           source: string | null
+          status: string | null
           summary: string | null
           tags: string[] | null
           title: string
@@ -6397,6 +6398,7 @@ export type Database = {
           root_cause?: string | null
           severity?: string | null
           source?: string | null
+          status?: string | null
           summary?: string | null
           tags?: string[] | null
           title: string
@@ -6413,6 +6415,7 @@ export type Database = {
           root_cause?: string | null
           severity?: string | null
           source?: string | null
+          status?: string | null
           summary?: string | null
           tags?: string[] | null
           title?: string
@@ -8970,6 +8973,7 @@ export type Database = {
           description: string
           evidence: Json | null
           id: string
+          incident_date: string | null
           location: string
           metadata: Json | null
           replay_status: string | null
@@ -8990,6 +8994,7 @@ export type Database = {
           description: string
           evidence?: Json | null
           id?: string
+          incident_date?: string | null
           location: string
           metadata?: Json | null
           replay_status?: string | null
@@ -9010,6 +9015,7 @@ export type Database = {
           description?: string
           evidence?: Json | null
           id?: string
+          incident_date?: string | null
           location?: string
           metadata?: Json | null
           replay_status?: string | null
@@ -20031,7 +20037,9 @@ export type Database = {
             }[]
           }
       get_training_stats: { Args: { p_organization_id: string }; Returns: Json }
-      get_user_organization: { Args: never; Returns: string }
+      get_user_organization:
+        | { Args: never; Returns: string }
+        | { Args: { _user_id: string }; Returns: string }
       get_user_organization_role: {
         Args: { org_id: string; user_uuid?: string }
         Returns: string
@@ -20084,15 +20092,12 @@ export type Database = {
         Returns: boolean
       }
       has_role:
+        | { Args: { _role: string; _user_id: string }; Returns: boolean }
         | {
             Args: {
               _role: Database["public"]["Enums"]["user_role"]
               _user_id: string
             }
-            Returns: boolean
-          }
-        | {
-            Args: { check_role: string; check_user_id: string }
             Returns: boolean
           }
       increment_api_rate_limit: {
