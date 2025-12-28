@@ -122,7 +122,7 @@ export const FleetCommandCenter: React.FC = () => {
 
   // Filter vessels by search query
   const filteredVessels = vessels?.filter(vessel => 
-    vessel.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (vessel.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
     vessel.imo_code?.toLowerCase().includes(searchQuery.toLowerCase())
   ) || [];
 
