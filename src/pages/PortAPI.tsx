@@ -1,65 +1,104 @@
 /**
  * Port API Page
- * Real-time port information and vessel schedules
+ * Real-time port information via Edge Function
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Anchor, Ship, Clock, MapPin, RefreshCw, Search, Calendar, Loader2 } from "lucide-react";
+import { Anchor, Ship, Clock, MapPin, RefreshCw, Search, Calendar, Loader2, Waves, Phone } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PortInfo {
+  code: string;
   name: string;
   country: string;
-  code: string;
-  timezone: string;
-  vessels_in_port: number;
-  expected_arrivals: number;
+  lat: number;
+  lng: number;
+  type: string;
+  status?: string;
+  waitTime?: string;
+  currentVessels?: number;
+  maxDraft?: number;
+  terminals?: any[];
+  services?: string[];
+  contacts?: any;
 }
-
-const mockPorts: PortInfo[] = [
-  { name: "Port of Santos", country: "Brazil", code: "BRSSZ", timezone: "UTC-3", vessels_in_port: 42, expected_arrivals: 15 },
-  { name: "Port of Rotterdam", country: "Netherlands", code: "NLRTM", timezone: "UTC+1", vessels_in_port: 128, expected_arrivals: 34 },
-  { name: "Port of Singapore", country: "Singapore", code: "SGSIN", timezone: "UTC+8", vessels_in_port: 256, expected_arrivals: 67 },
-  { name: "Port of Hamburg", country: "Germany", code: "DEHAM", timezone: "UTC+1", vessels_in_port: 89, expected_arrivals: 22 },
-];
 
 export default function PortAPI() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [ports, setPorts] = useState<PortInfo[]>([]);
   const [selectedPort, setSelectedPort] = useState<PortInfo | null>(null);
+  const [portDetails, setPortDetails] = useState<any>(null);
 
-  const handleSearch = () => {
-    if (!searchQuery.trim()) {
-      toast.error("Digite o nome ou código do porto");
-      return;
-    }
-    
+  const fetchPorts = async (query?: string) => {
     setIsLoading(true);
-    setTimeout(() => {
-      const found = mockPorts.find(
-        p => p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             p.code.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      
-      if (found) {
-        setSelectedPort(found);
-        toast.success(`Porto encontrado: ${found.name}`);
-      } else {
-        toast.error("Porto não encontrado");
+    try {
+      const { data, error } = await supabase.functions.invoke("port-api", {
+        body: { 
+          operation: "search",
+          query: query || undefined
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.ports) {
+        setPorts(data.ports);
+        if (!query) {
+          toast.success(`${data.ports.length} portos carregados`);
+        }
       }
+    } catch (err) {
+      console.error("Error fetching ports:", err);
+      toast.error("Erro ao carregar portos");
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
-  const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Dados atualizados");
-    }, 800);
+  const fetchPortDetails = async (portCode: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke("port-api", {
+        body: { 
+          operation: "details",
+          portCode
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.port) {
+        setPortDetails(data.port);
+      }
+    } catch (err) {
+      console.error("Error fetching port details:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPorts();
+  }, []);
+
+  const handleSearch = () => {
+    fetchPorts(searchQuery);
+  };
+
+  const handleSelectPort = (port: PortInfo) => {
+    setSelectedPort(port);
+    fetchPortDetails(port.code);
+  };
+
+  const getStatusColor = (status?: string) => {
+    switch (status) {
+      case "Operational": return "bg-green-500";
+      case "Congested": return "bg-orange-500";
+      case "Weather Alert": return "bg-yellow-500";
+      default: return "bg-gray-500";
+    }
   };
 
   return (
@@ -75,7 +114,7 @@ export default function PortAPI() {
             <p className="text-muted-foreground">Informações portuárias em tempo real</p>
           </div>
         </div>
-        <Button onClick={handleRefresh} variant="outline" disabled={isLoading}>
+        <Button onClick={() => fetchPorts()} variant="outline" disabled={isLoading}>
           <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
           Atualizar
         </Button>
@@ -109,15 +148,12 @@ export default function PortAPI() {
           <div className="mt-4">
             <p className="text-sm text-muted-foreground mb-2">Portos populares:</p>
             <div className="flex flex-wrap gap-2">
-              {mockPorts.map((port) => (
+              {ports.slice(0, 6).map((port) => (
                 <Badge
                   key={port.code}
                   variant="secondary"
                   className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                  onClick={() => {
-                    setSearchQuery(port.code);
-                    setSelectedPort(port);
-                  }}
+                  onClick={() => handleSelectPort(port)}
                 >
                   <Anchor className="h-3 w-3 mr-1" />
                   {port.code}
@@ -129,68 +165,153 @@ export default function PortAPI() {
       </Card>
 
       {/* Selected Port Details */}
-      {selectedPort && (
+      {selectedPort && portDetails && (
         <Card className="border-primary/50">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-primary" />
-                {selectedPort.name}
+                {portDetails.name}
               </CardTitle>
-              <Badge variant="outline">{selectedPort.code}</Badge>
+              <div className="flex gap-2">
+                <Badge className={getStatusColor(portDetails.status)}>
+                  {portDetails.status}
+                </Badge>
+                <Badge variant="outline">{portDetails.code}</Badge>
+              </div>
             </div>
-            <CardDescription>{selectedPort.country} • {selectedPort.timezone}</CardDescription>
+            <CardDescription>{portDetails.type} • {portDetails.country}</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <CardContent className="space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Ship className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <p className="text-2xl font-bold">{selectedPort.vessels_in_port}</p>
+                <Ship className="h-6 w-6 mx-auto mb-2 text-primary" />
+                <p className="text-2xl font-bold">{portDetails.currentVessels || "N/A"}</p>
                 <p className="text-sm text-muted-foreground">Navios no Porto</p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Calendar className="h-8 w-8 mx-auto mb-2 text-orange-500" />
-                <p className="text-2xl font-bold">{selectedPort.expected_arrivals}</p>
-                <p className="text-sm text-muted-foreground">Chegadas Previstas</p>
+                <Clock className="h-6 w-6 mx-auto mb-2 text-orange-500" />
+                <p className="text-2xl font-bold">{portDetails.averageWaitTime || "N/A"}</p>
+                <p className="text-sm text-muted-foreground">Tempo Médio Espera</p>
               </div>
               <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Clock className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                <p className="text-2xl font-bold">24/7</p>
-                <p className="text-sm text-muted-foreground">Operação</p>
+                <Waves className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                <p className="text-2xl font-bold">{portDetails.maxDraft}m</p>
+                <p className="text-sm text-muted-foreground">Calado Máximo</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50 text-center">
+                <Anchor className="h-6 w-6 mx-auto mb-2 text-purple-500" />
+                <p className="text-2xl font-bold">{portDetails.maxLOA}m</p>
+                <p className="text-sm text-muted-foreground">LOA Máximo</p>
               </div>
             </div>
+
+            {/* Terminals */}
+            {portDetails.terminals && (
+              <div>
+                <h4 className="font-medium mb-3">Terminais</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {portDetails.terminals.map((terminal: any, idx: number) => (
+                    <div key={idx} className="p-3 rounded-lg border bg-card">
+                      <p className="font-medium">{terminal.name}</p>
+                      <p className="text-sm text-muted-foreground">{terminal.type}</p>
+                      <Badge variant="outline" className="mt-2">{terminal.berths} berços</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Services */}
+            {portDetails.services && (
+              <div>
+                <h4 className="font-medium mb-3">Serviços Disponíveis</h4>
+                <div className="flex flex-wrap gap-2">
+                  {portDetails.services.map((service: string, idx: number) => (
+                    <Badge key={idx} variant="secondary">{service}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Contacts */}
+            {portDetails.contacts && (
+              <div>
+                <h4 className="font-medium mb-3">Contatos</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {Object.entries(portDetails.contacts).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-2 p-3 rounded-lg border">
+                      <Phone className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <p className="text-sm text-muted-foreground capitalize">{key}</p>
+                        <p className="font-medium">{value as string}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
 
       {/* Ports Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {mockPorts.map((port) => (
-          <Card 
-            key={port.code} 
-            className="cursor-pointer hover:border-primary/50 transition-colors"
-            onClick={() => setSelectedPort(port)}
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Anchor className="h-4 w-4" />
-                {port.code}
-              </CardTitle>
-              <CardDescription>{port.name}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Navios:</span>
-                <span className="font-medium">{port.vessels_in_port}</span>
-              </div>
-              <div className="flex justify-between text-sm mt-1">
-                <span className="text-muted-foreground">País:</span>
-                <span>{port.country}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mr-2" />
+          <span>Carregando portos...</span>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {ports.map((port) => (
+            <Card 
+              key={port.code} 
+              className={`cursor-pointer hover:border-primary/50 transition-colors ${
+                selectedPort?.code === port.code ? "ring-2 ring-primary" : ""
+              }`}
+              onClick={() => handleSelectPort(port)}
+            >
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Anchor className="h-4 w-4" />
+                    {port.code}
+                  </CardTitle>
+                  <Badge className={`${getStatusColor(port.status)} text-white text-xs`}>
+                    {port.status}
+                  </Badge>
+                </div>
+                <CardDescription>{port.name}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-muted-foreground">Tipo:</span>
+                  <span className="truncate ml-2">{port.type}</span>
+                </div>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-muted-foreground">País:</span>
+                  <span>{port.country}</span>
+                </div>
+                {port.waitTime && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Espera:</span>
+                    <span className="font-medium text-orange-500">{port.waitTime}</span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {ports.length === 0 && !isLoading && (
+        <Card className="text-center py-12">
+          <Anchor className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+          <p className="text-lg font-medium">Nenhum porto encontrado</p>
+          <p className="text-muted-foreground">Tente buscar por outro nome ou código</p>
+        </Card>
+      )}
     </div>
   );
 }

@@ -1,82 +1,127 @@
 /**
  * Flight Tracker Page
- * Real-time flight tracking via OpenSky Network API
+ * Real-time flight tracking via Edge Function
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plane, Search, RefreshCw, MapPin, Clock, Gauge, ArrowUp, Loader2 } from "lucide-react";
+import { Plane, Search, RefreshCw, MapPin, Clock, Gauge, ArrowUp, Loader2, Navigation } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FlightInfo {
-  callsign: string;
-  origin: string;
-  destination: string;
-  altitude: number;
-  velocity: number;
-  heading: number;
-  status: "on_ground" | "climbing" | "cruising" | "descending";
+  flightNumber: string;
+  airline: string;
+  origin: { code: string; name: string; city: string };
+  destination: { code: string; name: string; city: string };
+  status: string;
+  scheduledDeparture: string;
+  scheduledArrival: string;
   aircraft: string;
+  position?: {
+    latitude: number;
+    longitude: number;
+    altitude: number;
+    speed: number;
+    heading: number;
+  };
+  gate?: {
+    departure: string;
+    arrival: string;
+  };
 }
 
-const mockFlights: FlightInfo[] = [
-  { callsign: "TAM3456", origin: "GRU", destination: "MIA", altitude: 35000, velocity: 520, heading: 320, status: "cruising", aircraft: "Boeing 777-300ER" },
-  { callsign: "GLO1234", origin: "CGH", destination: "SDU", altitude: 8000, velocity: 280, heading: 45, status: "descending", aircraft: "Boeing 737-800" },
-  { callsign: "AZU5678", origin: "VCP", destination: "LIS", altitude: 41000, velocity: 540, heading: 85, status: "cruising", aircraft: "Airbus A350-900" },
-  { callsign: "TAM8901", origin: "GIG", destination: "EZE", altitude: 2500, velocity: 180, heading: 210, status: "climbing", aircraft: "Airbus A320neo" },
-];
-
-const statusColors = {
-  on_ground: "bg-gray-500",
-  climbing: "bg-green-500",
-  cruising: "bg-blue-500",
-  descending: "bg-orange-500",
+const statusColors: Record<string, string> = {
+  "Scheduled": "bg-gray-500",
+  "Departed": "bg-green-500",
+  "En Route": "bg-blue-500",
+  "Landed": "bg-purple-500",
+  "Delayed": "bg-orange-500",
+  "Cancelled": "bg-red-500",
 };
 
-const statusLabels = {
-  on_ground: "Em Solo",
-  climbing: "Subindo",
-  cruising: "Cruzeiro",
-  descending: "Descendo",
+const statusLabels: Record<string, string> = {
+  "Scheduled": "Programado",
+  "Departed": "Decolou",
+  "En Route": "Em Voo",
+  "Landed": "Pousou",
+  "Delayed": "Atrasado",
+  "Cancelled": "Cancelado",
 };
 
 export default function FlightTracker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFlight, setSelectedFlight] = useState<FlightInfo | null>(null);
-  const [flights, setFlights] = useState<FlightInfo[]>(mockFlights);
+  const [flight, setFlight] = useState<FlightInfo | null>(null);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [origin, setOrigin] = useState("GRU");
+  const [destination, setDestination] = useState("JFK");
 
-  const handleSearch = () => {
+  const handleTrackFlight = async () => {
     if (!searchQuery.trim()) {
-      setFlights(mockFlights);
+      toast.error("Digite o número do voo");
       return;
     }
     
     setIsLoading(true);
-    setTimeout(() => {
-      const filtered = mockFlights.filter(
-        f => f.callsign.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             f.origin.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             f.destination.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFlights(filtered);
-      if (filtered.length === 0) {
-        toast.error("Nenhum voo encontrado");
+    try {
+      const { data, error } = await supabase.functions.invoke("flight-tracker", {
+        body: { 
+          operation: "track-flight",
+          flightNumber: searchQuery.toUpperCase()
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.flight) {
+        setFlight(data.flight);
+        toast.success(`Voo ${data.flight.flightNumber} encontrado`);
       } else {
-        toast.success(`${filtered.length} voo(s) encontrado(s)`);
+        toast.error("Voo não encontrado");
       }
+    } catch (err) {
+      console.error("Error tracking flight:", err);
+      toast.error("Erro ao rastrear voo");
+    } finally {
       setIsLoading(false);
-    }, 800);
+    }
+  };
+
+  const handleSearchFlights = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("flight-tracker", {
+        body: { 
+          operation: "search-flights",
+          origin,
+          destination,
+          date: new Date().toISOString().split("T")[0]
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.flights) {
+        setSearchResults(data.flights);
+        toast.success(`${data.flights.length} voos encontrados`);
+      }
+    } catch (err) {
+      console.error("Error searching flights:", err);
+      toast.error("Erro ao buscar voos");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Dados de voos atualizados");
-    }, 1000);
+    if (flight) {
+      handleTrackFlight();
+    } else {
+      handleSearchFlights();
+    }
   };
 
   return (
@@ -89,7 +134,7 @@ export default function FlightTracker() {
           </div>
           <div>
             <h1 className="text-3xl font-bold">Flight Tracker</h1>
-            <p className="text-muted-foreground">Rastreamento de voos em tempo real via OpenSky</p>
+            <p className="text-muted-foreground">Rastreamento de voos em tempo real</p>
           </div>
         </div>
         <Button onClick={handleRefresh} variant="outline" disabled={isLoading}>
@@ -98,25 +143,151 @@ export default function FlightTracker() {
         </Button>
       </div>
 
-      {/* Search */}
+      {/* Track Flight */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Search className="h-5 w-5" />
-            Buscar Voo
+            Rastrear Voo
           </CardTitle>
-          <CardDescription>Digite o callsign, origem ou destino do voo</CardDescription>
+          <CardDescription>Digite o número do voo para rastrear em tempo real</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex gap-3">
             <Input
-              placeholder="Ex: TAM3456, GRU, MIA..."
+              placeholder="Ex: LA8084, G31234..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              onKeyDown={(e) => e.key === "Enter" && handleTrackFlight()}
               className="flex-1"
             />
-            <Button onClick={handleSearch} disabled={isLoading}>
+            <Button onClick={handleTrackFlight} disabled={isLoading}>
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+              <span className="ml-2">Rastrear</span>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Flight Details */}
+      {flight && (
+        <Card className="border-primary/50">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Plane className="h-5 w-5 text-primary" />
+                {flight.flightNumber}
+              </CardTitle>
+              <Badge className={statusColors[flight.status] || "bg-gray-500"}>
+                {statusLabels[flight.status] || flight.status}
+              </Badge>
+            </div>
+            <CardDescription>{flight.airline} • {flight.aircraft}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Route */}
+            <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+              <div className="text-center">
+                <p className="text-2xl font-bold">{flight.origin.code}</p>
+                <p className="text-sm text-muted-foreground">{flight.origin.city}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {new Date(flight.scheduledDeparture).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                </p>
+              </div>
+              <div className="flex-1 flex items-center justify-center px-4">
+                <div className="h-px bg-border flex-1" />
+                <Plane className="h-5 w-5 mx-2 text-primary" />
+                <div className="h-px bg-border flex-1" />
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold">{flight.destination.code}</p>
+                <p className="text-sm text-muted-foreground">{flight.destination.city}</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {new Date(flight.scheduledArrival).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                </p>
+              </div>
+            </div>
+
+            {/* Position Data */}
+            {flight.position && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                  <ArrowUp className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                  <p className="text-lg font-bold">{flight.position.altitude.toLocaleString()} ft</p>
+                  <p className="text-sm text-muted-foreground">Altitude</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                  <Gauge className="h-6 w-6 mx-auto mb-2 text-orange-500" />
+                  <p className="text-lg font-bold">{flight.position.speed} kts</p>
+                  <p className="text-sm text-muted-foreground">Velocidade</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                  <Navigation className="h-6 w-6 mx-auto mb-2 text-purple-500" />
+                  <p className="text-lg font-bold">{flight.position.heading}°</p>
+                  <p className="text-sm text-muted-foreground">Heading</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                  <MapPin className="h-6 w-6 mx-auto mb-2 text-green-500" />
+                  <p className="text-sm font-medium">
+                    {flight.position.latitude.toFixed(2)}°, {flight.position.longitude.toFixed(2)}°
+                  </p>
+                  <p className="text-sm text-muted-foreground">Posição</p>
+                </div>
+              </div>
+            )}
+
+            {/* Gates */}
+            {flight.gate && (
+              <div className="flex justify-center gap-8">
+                <div className="text-center">
+                  <Badge variant="outline" className="text-lg px-4 py-2">
+                    Gate {flight.gate.departure}
+                  </Badge>
+                  <p className="text-xs text-muted-foreground mt-1">Embarque</p>
+                </div>
+                <div className="text-center">
+                  <Badge variant="outline" className="text-lg px-4 py-2">
+                    Gate {flight.gate.arrival}
+                  </Badge>
+                  <p className="text-xs text-muted-foreground mt-1">Desembarque</p>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Search Flights */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="h-5 w-5" />
+            Buscar Voos por Rota
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3 items-end">
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Origem</label>
+              <Input
+                placeholder="GRU"
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value.toUpperCase())}
+                className="w-24"
+                maxLength={3}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-muted-foreground">Destino</label>
+              <Input
+                placeholder="JFK"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value.toUpperCase())}
+                className="w-24"
+                maxLength={3}
+              />
+            </div>
+            <Button onClick={handleSearchFlights} disabled={isLoading}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
               <span className="ml-2">Buscar</span>
             </Button>
@@ -124,92 +295,49 @@ export default function FlightTracker() {
         </CardContent>
       </Card>
 
-      {/* Selected Flight Details */}
-      {selectedFlight && (
-        <Card className="border-primary/50">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Plane className="h-5 w-5 text-primary" />
-                {selectedFlight.callsign}
-              </CardTitle>
-              <Badge className={statusColors[selectedFlight.status]}>
-                {statusLabels[selectedFlight.status]}
-              </Badge>
-            </div>
-            <CardDescription>{selectedFlight.aircraft}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <MapPin className="h-6 w-6 mx-auto mb-2 text-green-500" />
-                <p className="text-lg font-bold">{selectedFlight.origin} → {selectedFlight.destination}</p>
-                <p className="text-sm text-muted-foreground">Rota</p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <ArrowUp className="h-6 w-6 mx-auto mb-2 text-blue-500" />
-                <p className="text-lg font-bold">{selectedFlight.altitude.toLocaleString()} ft</p>
-                <p className="text-sm text-muted-foreground">Altitude</p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Gauge className="h-6 w-6 mx-auto mb-2 text-orange-500" />
-                <p className="text-lg font-bold">{selectedFlight.velocity} kts</p>
-                <p className="text-sm text-muted-foreground">Velocidade</p>
-              </div>
-              <div className="p-4 rounded-lg bg-muted/50 text-center">
-                <Clock className="h-6 w-6 mx-auto mb-2 text-purple-500" />
-                <p className="text-lg font-bold">{selectedFlight.heading}°</p>
-                <p className="text-sm text-muted-foreground">Heading</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Flights Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {flights.map((flight) => (
-          <Card 
-            key={flight.callsign} 
-            className="cursor-pointer hover:border-primary/50 transition-colors"
-            onClick={() => setSelectedFlight(flight)}
-          >
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Plane className="h-4 w-4" />
-                  {flight.callsign}
-                </CardTitle>
-                <Badge variant="outline" className={`${statusColors[flight.status]} text-white`}>
-                  {statusLabels[flight.status]}
-                </Badge>
-              </div>
-              <CardDescription>{flight.origin} → {flight.destination}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Altitude:</span>
-                <span className="font-medium">{flight.altitude.toLocaleString()} ft</span>
-              </div>
-              <div className="flex justify-between text-sm mt-1">
-                <span className="text-muted-foreground">Velocidade:</span>
-                <span>{flight.velocity} kts</span>
-              </div>
-              <div className="flex justify-between text-sm mt-1">
-                <span className="text-muted-foreground">Aeronave:</span>
-                <span className="truncate ml-2">{flight.aircraft}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {flights.length === 0 && (
-        <Card className="text-center py-12">
-          <Plane className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <p className="text-lg font-medium">Nenhum voo encontrado</p>
-          <p className="text-muted-foreground">Tente buscar por outro callsign ou aeroporto</p>
-        </Card>
+      {/* Search Results */}
+      {searchResults.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {searchResults.map((result, idx) => (
+            <Card 
+              key={idx} 
+              className="cursor-pointer hover:border-primary/50 transition-colors"
+              onClick={() => {
+                setSearchQuery(result.flightNumber);
+                handleTrackFlight();
+              }}
+            >
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Plane className="h-4 w-4" />
+                    {result.flightNumber}
+                  </CardTitle>
+                  <Badge variant="outline">
+                    {result.stops === 0 ? "Direto" : `${result.stops} parada(s)`}
+                  </Badge>
+                </div>
+                <CardDescription>{result.duration}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground">Partida:</span>
+                  <span>{new Date(result.departure).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="text-muted-foreground">Chegada:</span>
+                  <span>{new Date(result.arrival).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Preço:</span>
+                  <span className="font-medium text-green-500">
+                    R$ {result.price?.economy?.toLocaleString() || "---"}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );
