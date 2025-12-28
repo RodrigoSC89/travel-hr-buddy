@@ -1,44 +1,55 @@
 /**
  * PATCH 348: Mission Control v2 - Autonomy Layer Type Definitions
- * Types for autonomous task management and decision engine
+ * PATCH 661: Types aligned with Supabase schema
  */
 
-export type TaskType = "maintenance" | "logistics" | "satellite" | "mission";
-export type TaskStatus = "pending" | "approved" | "executing" | "completed" | "failed" | "cancelled";
-export type TaskPriority = "low" | "medium" | "high" | "critical";
-export type RuleType = "threshold" | "pattern" | "prediction" | "schedule";
+import type { Json } from "@/integrations/supabase/types";
+
+export type TaskType = "maintenance" | "logistics" | "satellite" | "mission" | string;
+export type TaskStatus = "pending" | "approved" | "executing" | "completed" | "failed" | "cancelled" | string;
+export type TaskPriority = "low" | "medium" | "high" | "critical" | string;
+export type RuleType = "threshold" | "pattern" | "prediction" | "schedule" | "condition" | string;
 export type DecisionType = "create" | "approve" | "reject" | "execute" | "complete";
 export type DecisionMaker = "system" | "user" | "ai";
 export type EntityType = "mission" | "equipment" | "satellite" | "global";
 
+/**
+ * Autonomous Task - Aligned with Supabase schema
+ */
 export interface AutonomousTask {
   id: string;
-  task_type: TaskType;
-  task_name: string;
-  description?: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  autonomy_level: number; // 1-5
-  requires_approval: boolean;
+  name: string;
+  task_name?: string | null;
+  task_type: string;
+  description?: string | null;
+  status: string;
+  priority: string;
+  actions?: Json | null;
+  trigger_conditions?: Json | null;
+  result?: Json | null;
+  error_message?: string | null;
+  mission_id?: string | null;
+  equipment_id?: string | null;
+  scheduled_at?: string | null;
+  started_at?: string | null;
+  completed_at?: string | null;
+  organization_id?: string | null;
+  created_by?: string | null;
+  metadata?: Json | null;
+  created_at: string;
+  updated_at: string;
+  // Optional extended fields for UI compatibility
+  autonomy_level?: number;
+  requires_approval?: boolean;
   approved_by?: string;
   approved_at?: string;
-  mission_id?: string;
-  equipment_id?: string;
   satellite_id?: string;
-  decision_logic: Record<string, unknown>;
-  decision_confidence?: number; // 0-1
+  decision_logic?: Record<string, unknown>;
+  decision_confidence?: number;
   predicted_outcome?: Record<string, unknown>;
   actual_outcome?: Record<string, unknown>;
   execution_plan?: ExecutionStep[];
   execution_logs?: ExecutionLog[];
-  scheduled_at?: string;
-  started_at?: string;
-  completed_at?: string;
-  error_message?: string;
-  created_by?: string;
-  created_at: string;
-  updated_at: string;
-  metadata?: Record<string, unknown>;
 }
 
 export interface ExecutionStep {
@@ -58,24 +69,31 @@ export interface ExecutionLog {
   data?: Record<string, unknown>;
 }
 
+/**
+ * Autonomy Rule - Aligned with Supabase schema
+ */
 export interface AutonomyRule {
   id: string;
   name: string;
-  description?: string;
-  rule_type: RuleType;
-  task_type: TaskType;
-  conditions: RuleConditions;
-  actions: RuleActions;
-  autonomy_level: number;
-  is_enabled: boolean;
+  description?: string | null;
+  rule_type: string;
+  conditions: Json;
+  actions: Json;
   priority: number;
-  requires_approval: boolean;
-  success_count: number;
-  failure_count: number;
-  last_triggered_at?: string;
-  created_by?: string;
+  is_active?: boolean | null;
+  organization_id?: string | null;
+  created_by?: string | null;
+  metadata?: Json | null;
   created_at: string;
   updated_at: string;
+  // Optional extended fields for UI compatibility
+  task_type?: string;
+  autonomy_level?: number;
+  is_enabled?: boolean;
+  requires_approval?: boolean;
+  success_count?: number;
+  failure_count?: number;
+  last_triggered_at?: string;
 }
 
 export interface RuleConditions {
@@ -85,13 +103,13 @@ export interface RuleConditions {
   event?: string;
   duration_minutes?: number;
   pattern?: string;
-  additional?: Record<string, unknown>;
+  additional?: Json;
 }
 
 export interface RuleActions {
-  action: string;
-  priority: TaskPriority;
-  parameters?: Record<string, unknown>;
+  action?: string;
+  priority?: TaskPriority;
+  parameters?: Json;
   notify?: string[];
 }
 
@@ -110,18 +128,23 @@ export interface AutonomyDecisionLog {
 
 export interface AutonomyConfig {
   id: string;
-  entity_type: EntityType;
+  config_key: string;
+  config_value: Json;
+  description?: string | null;
+  organization_id?: string | null;
+  created_at: string;
+  updated_at: string;
+  // Extended fields for UI compatibility
+  entity_type?: EntityType;
   entity_id?: string;
-  is_enabled: boolean;
-  autonomy_level: number; // Max allowed level
-  allowed_task_types: TaskType[];
-  require_approval_threshold: number;
-  auto_approve_low_risk: boolean;
+  is_enabled?: boolean;
+  autonomy_level?: number;
+  allowed_task_types?: TaskType[];
+  require_approval_threshold?: number;
+  auto_approve_low_risk?: boolean;
   safety_constraints?: SafetyConstraints;
   notification_channels?: string[];
   created_by?: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface SafetyConstraints {
@@ -133,9 +156,9 @@ export interface SafetyConstraints {
 }
 
 export interface BlackoutPeriod {
-  start_time: string; // HH:MM format
-  end_time: string; // HH:MM format
-  days?: number[]; // 0-6 (Sunday-Saturday)
+  start_time: string;
+  end_time: string;
+  days?: number[];
   reason?: string;
 }
 
