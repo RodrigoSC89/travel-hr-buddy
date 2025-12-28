@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 166.0: Mission Engine
  * Core engine for multi-vessel mission coordination and management
+ * Uses local interfaces for type safety
  * 
  * @module mission-engine
  */
