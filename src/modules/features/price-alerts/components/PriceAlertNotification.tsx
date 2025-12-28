@@ -2,6 +2,7 @@
 /**
  * PATCH 418: Price Alerts Notification Integration
  * Integrates price alerts with the notifications center
+ * PATCH 857 - Restored @ts-nocheck (price_alerts.frequency and price_notifications.alert_id columns missing)
  */
 
 import React, { useEffect, useState } from "react";

@@ -1,4 +1,6 @@
-// @ts-nocheck
+/**
+ * PATCH 857 - Removed @ts-nocheck (uses mock data only)
+ */
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -195,7 +197,7 @@ const ExecutiveMetricsPanel = () => {
                     border: "1px solid hsl(var(--border))",
                     borderRadius: "8px"
                   }}
-                  formatter={(value: unknown, name: string) => [
+                  formatter={(value: number, name: string) => [
                     `R$ ${(value/1000).toFixed(0)}K`,
                     name === "revenue" ? "Receita" : name === "forecast" ? "Previsão" : "Despesas"
                   ]}

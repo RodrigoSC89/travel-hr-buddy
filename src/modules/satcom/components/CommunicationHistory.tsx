@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 420: Satcom Communication History
  * Visualizes transmission history over time
+ * PATCH 857 - Removed @ts-nocheck
  */
 
 import React, { useState, useEffect } from "react";
