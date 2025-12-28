@@ -1,5 +1,4 @@
 // @ts-nocheck
-// Schema mismatch: precision_score column missing
 /**
  * Behavioral Evolution Dashboard
  * Real-time AI behavior tracking with System Watchdog integration
