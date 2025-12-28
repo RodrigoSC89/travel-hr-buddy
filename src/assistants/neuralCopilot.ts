@@ -8,6 +8,25 @@ import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 
+// Web Speech API types
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
 export interface CopilotMessage {
   id: string;
   role: "user" | "assistant" | "system";
@@ -64,7 +83,7 @@ interface CopilotSessionRow {
 
 class NeuralCopilotEngine {
   private activeSessions: Map<string, CopilotSession> = new Map();
-  private speechRecognition: SpeechRecognition | null = null;
+  private speechRecognition: SpeechRecognitionInstance | null = null;
   private speechSynthesis: SpeechSynthesis | null = null;
   private isListening = false;
 
@@ -79,10 +98,11 @@ class NeuralCopilotEngine {
   private initializeSpeechAPIs(): void {
     if (typeof window !== "undefined") {
       // Speech Recognition (input) - use any to avoid complex Web Speech API types
-      const SpeechRecognitionAPI = (window as unknown as Record<string, unknown>).SpeechRecognition || 
-        (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+      const windowAny = window as unknown as Record<string, unknown>;
+      const SpeechRecognitionAPI = windowAny.SpeechRecognition || windowAny.webkitSpeechRecognition;
       if (SpeechRecognitionAPI) {
-        this.speechRecognition = new (SpeechRecognitionAPI as new () => SpeechRecognition)();
+        const SpeechRecognitionConstructor = SpeechRecognitionAPI as new () => SpeechRecognitionInstance;
+        this.speechRecognition = new SpeechRecognitionConstructor();
         this.speechRecognition.continuous = true;
         this.speechRecognition.interimResults = false;
         this.speechRecognition.lang = "pt-BR";
@@ -375,16 +395,15 @@ class NeuralCopilotEngine {
 
     logger.info("[NeuralCopilot] Starting voice input", { sessionId });
 
-    this.speechRecognition.onresult = (event: Event) => {
-      const speechEvent = event as unknown as { results: SpeechRecognitionResultList };
-      const transcript = speechEvent.results[speechEvent.results.length - 1][0].transcript;
+    this.speechRecognition.onresult = (event: SpeechRecognitionEvent) => {
+      const results = event.results;
+      const transcript = results[results.length - 1][0].transcript;
       logger.info("[NeuralCopilot] Voice input received", { transcript });
       onResult(transcript);
     };
 
-    this.speechRecognition.onerror = (event: Event) => {
-      const errorEvent = event as unknown as { error: string };
-      logger.error("[NeuralCopilot] Speech recognition error", { error: errorEvent.error });
+    this.speechRecognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      logger.error("[NeuralCopilot] Speech recognition error", { error: event.error });
     };
 
     this.speechRecognition.start();
@@ -518,34 +537,42 @@ class NeuralCopilotEngine {
    * End a session
    */
   async endSession(sessionId: string): Promise<void> {
-    const session = await this.getSession(sessionId);
-    if (session) {
+    try {
+      const session = await this.getSession(sessionId);
+      if (!session) {
+        throw new Error(`Session ${sessionId} not found`);
+      }
+
       session.status = "completed";
       await this.updateSession(session);
+
       this.activeSessions.delete(sessionId);
+
+      logger.info("[NeuralCopilot] Session ended", { sessionId });
+    } catch (error) {
+      logger.error("[NeuralCopilot] Failed to end session", { error });
+      throw error;
     }
   }
 
   /**
-   * Resume a paused session
+   * Delete a session
    */
-  async resumeSession(sessionId: string): Promise<CopilotSession | null> {
-    const session = await this.getSession(sessionId);
-    if (session && session.status === "paused") {
-      session.status = "active";
-      await this.updateSession(session);
-    }
-    return session;
-  }
+  async deleteSession(sessionId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from("copilot_sessions")
+        .delete()
+        .eq("id", sessionId);
 
-  /**
-   * Pause an active session
-   */
-  async pauseSession(sessionId: string): Promise<void> {
-    const session = await this.getSession(sessionId);
-    if (session && session.status === "active") {
-      session.status = "paused";
-      await this.updateSession(session);
+      if (error) throw error;
+
+      this.activeSessions.delete(sessionId);
+
+      logger.info("[NeuralCopilot] Session deleted", { sessionId });
+    } catch (error) {
+      logger.error("[NeuralCopilot] Failed to delete session", { error });
+      throw error;
     }
   }
 }

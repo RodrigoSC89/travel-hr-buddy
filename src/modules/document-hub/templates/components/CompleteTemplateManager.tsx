@@ -60,18 +60,19 @@ export const CompleteTemplateManager = () => {
       const variables = extractTemplateVariables(templateContent);
 
       // Use document_templates table which exists in schema
-      const { error } = await supabase.from("document_templates").insert({
-        template_name: templateName,
-        template_type: templateCategory,
+      // Schema: name, description, content, variables, is_public, category, tags, metadata
+      const { error } = await supabase.from("document_templates").insert([{
+        name: templateName,
+        category: templateCategory,
         content: templateContent,
-        variables: variables as Json,
-        is_active: true,
+        variables: variables,
+        is_public: false,
+        description: templateDescription,
         metadata: {
-          description: templateDescription,
           created_with: "template_editor_v1",
           patch: "417"
         } as Json
-      });
+      }]);
 
       if (error) throw error;
 

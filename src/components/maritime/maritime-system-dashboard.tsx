@@ -12,27 +12,28 @@ import { Activity, Thermometer, Gauge, Zap, CheckSquare, AlertCircle } from "luc
 import { toast } from "sonner";
 import type { Json } from "@/integrations/supabase/types";
 
-// Types aligned with database schema
+// Types aligned with database schema (iot_sensor_data)
 interface IoTSensorData {
   id: string;
   sensor_id: string;
   sensor_type: string;
-  sensor_location: string | null;
+  location: string | null;
   value: number;
-  unit: string;
-  status: string;
-  is_alert: boolean | null;
-  threshold_min: number | null;
-  threshold_max: number | null;
-  reading_timestamp: string | null;
+  unit: string | null;
+  status: string | null;
+  timestamp: string;
+  vessel_id: string | null;
+  metadata: Json;
 }
 
+// Types aligned with database schema (checklist_records)
 interface ChecklistRecord {
   id: string;
-  checklist_name: string;
+  name: string;
   checklist_type: string;
-  status: string;
-  completion_percentage: number | null;
+  status: string | null;
+  completed_items: number | null;
+  total_items: number | null;
   assigned_to: string | null;
   due_date: string | null;
   items: Json | null;
@@ -74,7 +75,7 @@ export function MaritimeSystemDashboard() {
         supabase
           .from("iot_sensor_data")
           .select("*")
-          .order("reading_timestamp", { ascending: false })
+          .order("timestamp", { ascending: false })
           .limit(50),
         supabase
           .from("checklist_records")
@@ -85,8 +86,8 @@ export function MaritimeSystemDashboard() {
       if (sensorsRes.error) throw sensorsRes.error;
       if (checklistsRes.error) throw checklistsRes.error;
 
-      setSensorData((sensorsRes.data || []) as IoTSensorData[]);
-      setChecklists((checklistsRes.data || []) as ChecklistRecord[]);
+      setSensorData(sensorsRes.data || []);
+      setChecklists(checklistsRes.data || []);
     } catch (error) {
       console.error("Error loading maritime data:", error);
       toast.error("Failed to load maritime system data");
@@ -107,7 +108,7 @@ export function MaritimeSystemDashboard() {
     return icons[type] || <Activity className="h-4 w-4" />;
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     const colors: Record<string, string> = {
       normal: "text-green-500",
       warning: "text-yellow-500",
@@ -115,10 +116,10 @@ export function MaritimeSystemDashboard() {
       offline: "text-gray-500"
     };
 
-    return colors[status] || "text-gray-500";
+    return colors[status || ""] || "text-gray-500";
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       pending: "secondary",
       in_progress: "default",
@@ -128,8 +129,8 @@ export function MaritimeSystemDashboard() {
     };
 
     return (
-      <Badge variant={variants[status] || "default"}>
-        {status.replace("_", " ").toUpperCase()}
+      <Badge variant={variants[status || ""] || "default"}>
+        {(status || "unknown").replace("_", " ").toUpperCase()}
       </Badge>
     );
   };
@@ -145,6 +146,19 @@ export function MaritimeSystemDashboard() {
     return grouped;
   };
 
+  // Check if sensor is in alert state based on metadata
+  const isAlertSensor = (sensor: IoTSensorData): boolean => {
+    if (!sensor.metadata) return false;
+    const meta = sensor.metadata as Record<string, unknown>;
+    return meta.is_alert === true || sensor.status === "critical" || sensor.status === "warning";
+  };
+
+  // Get completion percentage from completed/total items
+  const getCompletionPercentage = (checklist: ChecklistRecord): number => {
+    if (!checklist.total_items || checklist.total_items === 0) return 0;
+    return Math.round(((checklist.completed_items || 0) / checklist.total_items) * 100);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -154,6 +168,7 @@ export function MaritimeSystemDashboard() {
   }
 
   const groupedSensors = groupSensorsByType(sensorData);
+  const alertSensors = sensorData.filter(isAlertSensor);
 
   return (
     <div className="space-y-4">
@@ -209,16 +224,16 @@ export function MaritimeSystemDashboard() {
                           <div className="flex-1">
                             <p className="text-sm font-medium">{sensor.sensor_id}</p>
                             <p className="text-xs text-muted-foreground">
-                              {sensor.sensor_location || "Unknown location"}
+                              {sensor.location || "Unknown location"}
                             </p>
                           </div>
                           <div className="text-right">
                             <p className="text-lg font-bold">
-                              {sensor.value} {sensor.unit}
+                              {sensor.value} {sensor.unit || ""}
                             </p>
                             <div className={`flex items-center justify-end ${getStatusColor(sensor.status)}`}>
                               <Activity className="h-3 w-3 mr-1" />
-                              <span className="text-xs capitalize">{sensor.status}</span>
+                              <span className="text-xs capitalize">{sensor.status || "unknown"}</span>
                             </div>
                           </div>
                         </div>
@@ -236,7 +251,7 @@ export function MaritimeSystemDashboard() {
           )}
 
           {/* Active Alerts */}
-          {sensorData.filter(s => s.is_alert).length > 0 && (
+          {alertSensors.length > 0 && (
             <Card className="border-yellow-500">
               <CardHeader>
                 <CardTitle className="flex items-center text-yellow-600">
@@ -246,23 +261,19 @@ export function MaritimeSystemDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {sensorData
-                    .filter(s => s.is_alert)
+                  {alertSensors
                     .slice(0, 5)
                     .map((sensor) => (
                       <div key={sensor.id} className="flex items-center justify-between p-2 bg-yellow-50 rounded">
                         <div>
                           <p className="font-medium text-sm">{sensor.sensor_id}</p>
                           <p className="text-xs text-muted-foreground">
-                            {sensor.sensor_type} - {sensor.sensor_location}
+                            {sensor.sensor_type} - {sensor.location || "Unknown"}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-bold text-yellow-600">
-                            {sensor.value} {sensor.unit}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            Threshold: {sensor.threshold_min} - {sensor.threshold_max}
+                            {sensor.value} {sensor.unit || ""}
                           </p>
                         </div>
                       </div>
@@ -286,69 +297,72 @@ export function MaritimeSystemDashboard() {
                 </CardContent>
               </Card>
             ) : (
-              checklists.map((checklist) => (
-                <Card key={checklist.id}>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg capitalize">
-                        {checklist.checklist_name}
-                      </CardTitle>
-                      {getStatusBadge(checklist.status)}
-                    </div>
-                    <CardDescription>
-                      {checklist.checklist_type.replace("_", " ").toUpperCase()}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {/* Progress Bar */}
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-muted-foreground">Progress</span>
-                          <span className="font-medium">{checklist.completion_percentage || 0}%</span>
-                        </div>
-                        <div className="w-full h-2 bg-secondary rounded-full">
-                          <div
-                            className="h-full bg-primary rounded-full transition-all"
-                            style={{ width: `${checklist.completion_percentage || 0}%` }}
-                          />
-                        </div>
+              checklists.map((checklist) => {
+                const completionPercentage = getCompletionPercentage(checklist);
+                return (
+                  <Card key={checklist.id}>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg capitalize">
+                          {checklist.name}
+                        </CardTitle>
+                        {getStatusBadge(checklist.status)}
                       </div>
-
-                      {/* Checklist Info */}
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        {checklist.assigned_to && (
-                          <div>
-                            <span className="text-muted-foreground">Assigned to:</span>
-                            <p className="font-medium">User {checklist.assigned_to.substring(0, 8)}</p>
-                          </div>
-                        )}
-                        {checklist.due_date && (
-                          <div>
-                            <span className="text-muted-foreground">Due date:</span>
-                            <p className="font-medium">{new Date(checklist.due_date).toLocaleDateString()}</p>
-                          </div>
-                        )}
-                      </div>
-
-                      {checklist.items && Array.isArray(checklist.items) && (
+                      <CardDescription>
+                        {checklist.checklist_type.replace("_", " ").toUpperCase()}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {/* Progress Bar */}
                         <div>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {(checklist.items as unknown[]).length} item{(checklist.items as unknown[]).length !== 1 ? "s" : ""}
-                          </p>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-muted-foreground">Progress</span>
+                            <span className="font-medium">{completionPercentage}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-secondary rounded-full">
+                            <div
+                              className="h-full bg-primary rounded-full transition-all"
+                              style={{ width: `${completionPercentage}%` }}
+                            />
+                          </div>
                         </div>
-                      )}
 
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline">View Details</Button>
-                        {checklist.status === "in_progress" && (
-                          <Button size="sm">Continue</Button>
+                        {/* Checklist Info */}
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          {checklist.assigned_to && (
+                            <div>
+                              <span className="text-muted-foreground">Assigned to:</span>
+                              <p className="font-medium">User {checklist.assigned_to.substring(0, 8)}</p>
+                            </div>
+                          )}
+                          {checklist.due_date && (
+                            <div>
+                              <span className="text-muted-foreground">Due date:</span>
+                              <p className="font-medium">{new Date(checklist.due_date).toLocaleDateString()}</p>
+                            </div>
+                          )}
+                        </div>
+
+                        {checklist.items && Array.isArray(checklist.items) && (
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {(checklist.items as unknown[]).length} item{(checklist.items as unknown[]).length !== 1 ? "s" : ""}
+                            </p>
+                          </div>
                         )}
+
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline">View Details</Button>
+                          {checklist.status === "in_progress" && (
+                            <Button size="sm">Continue</Button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
+                    </CardContent>
+                  </Card>
+                );
+              })
             )}
           </div>
         </TabsContent>
