@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -121,7 +120,18 @@ export function PerformanceMonitor() {
       .limit(50);
 
     if (!error && data) {
-      setWatchdogAlerts(data);
+      // Map database columns to interface
+      const mappedAlerts: WatchdogAlert[] = data.map((item) => ({
+        id: item.id,
+        created_at: item.created_at || "",
+        alert_type: item.alert_type,
+        severity: item.severity,
+        module_name: item.component_name || "",
+        behavior_mutation: item.actual_behavior || null,
+        tactical_deviation: item.expected_behavior || null,
+        resolved: item.auto_resolved || false,
+      }));
+      setWatchdogAlerts(mappedAlerts);
     }
   };
 
