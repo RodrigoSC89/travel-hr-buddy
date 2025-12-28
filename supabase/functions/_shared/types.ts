@@ -1,13 +1,22 @@
-// Tipos compartilhados para todas as Edge Functions
-// @ts-nocheck - Deno runtime types not available in VS Code
+/**
+ * Shared Types for Supabase Edge Functions
+ * Provides type definitions for Deno runtime
+ */
+
+// Deno global types for VS Code compatibility
+declare const Deno: {
+  env: {
+    get(key: string): string | undefined;
+  };
+};
 
 /**
  * Base request structure for edge functions
  */
 export interface BaseRequest {
-  method: string
-  headers: Record<string, string>
-  body?: unknown
+  method: string;
+  headers: Record<string, string>;
+  body?: unknown;
 }
 
 /**
@@ -15,18 +24,18 @@ export interface BaseRequest {
  * Provides consistent error handling and metadata
  */
 export interface BaseResponse<T = unknown> {
-  success: boolean
-  data?: T
+  success: boolean;
+  data?: T;
   error?: {
-    code: string
-    message: string
-    details?: unknown
-  }
+    code: string;
+    message: string;
+    details?: unknown;
+  };
   metadata?: {
-    timestamp: string
-    version: string
-    requestId?: string
-  }
+    timestamp: string;
+    version: string;
+    requestId?: string;
+  };
 }
 
 /**
@@ -34,14 +43,21 @@ export interface BaseResponse<T = unknown> {
  * Provides structured error handling with status codes
  */
 export class EdgeFunctionError extends Error {
+  code: string;
+  statusCode: number;
+  details?: unknown;
+
   constructor(
-    public code: string,
+    code: string,
     message: string,
-    public statusCode: number = 400,
-    public details?: unknown
+    statusCode: number = 400,
+    details?: unknown
   ) {
-    super(message)
-    this.name = 'EdgeFunctionError'
+    super(message);
+    this.name = 'EdgeFunctionError';
+    this.code = code;
+    this.statusCode = statusCode;
+    this.details = details;
   }
 }
 
@@ -70,7 +86,7 @@ export function createResponse<T>(
       version: '3.2',
       requestId
     }
-  }
+  };
   
   return new Response(JSON.stringify(body), {
     status: error?.statusCode || 200,
@@ -78,23 +94,23 @@ export function createResponse<T>(
       'Content-Type': 'application/json',
       'X-Request-ID': requestId || crypto.randomUUID()
     }
-  })
+  });
 }
 
 /**
  * CORS headers for edge functions
  */
-export const corsHeaders = {
+export const corsHeaders: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
-}
+};
 
 /**
  * Handle OPTIONS preflight requests
  */
 export function handleCORS(): Response {
-  return new Response('ok', { headers: corsHeaders })
+  return new Response('ok', { headers: corsHeaders });
 }
 
 /**
@@ -104,15 +120,15 @@ export function handleCORS(): Response {
  * @throws EdgeFunctionError if variable is missing and no default provided
  */
 export function getEnvVar(key: string, defaultValue?: string): string {
-  const value = Deno.env.get(key)
+  const value = Deno.env.get(key);
   if (!value && !defaultValue) {
     throw new EdgeFunctionError(
       'ENV_VAR_MISSING',
       `Environment variable ${key} is not configured`,
       500
-    )
+    );
   }
-  return value || defaultValue!
+  return value || defaultValue!;
 }
 
 /**
@@ -122,14 +138,15 @@ export function getEnvVar(key: string, defaultValue?: string): string {
  */
 export function safeJSONParse<T = unknown>(text: string): T {
   try {
-    return JSON.parse(text) as T
-  } catch (error) {
+    return JSON.parse(text) as T;
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : String(err);
     throw new EdgeFunctionError(
       'INVALID_JSON',
       'Failed to parse JSON response',
       400,
-      { originalError: error instanceof Error ? error.message : String(error) }
-    )
+      { originalError: errorMessage }
+    );
   }
 }
 
@@ -143,7 +160,7 @@ export function validateRequestBody(
   body: Record<string, unknown>,
   requiredFields: string[]
 ): void {
-  const missingFields = requiredFields.filter(field => !(field in body))
+  const missingFields = requiredFields.filter(field => !(field in body));
   
   if (missingFields.length > 0) {
     throw new EdgeFunctionError(
@@ -151,53 +168,46 @@ export function validateRequestBody(
       `Missing required fields: ${missingFields.join(', ')}`,
       400,
       { missingFields }
-    )
+    );
   }
 }
 
 /**
  * Rate limiting helper
- * @param identifier - User/IP identifier
- * @param limit - Max requests per window
- * @param windowMs - Time window in milliseconds
- * @returns true if request is allowed
  */
 export interface RateLimitResult {
-  allowed: boolean
-  remaining: number
-  resetAt: number
+  allowed: boolean;
+  remaining: number;
+  resetAt: number;
 }
 
 // Simple in-memory rate limiter (for production, use Redis)
-const rateLimitStore = new Map<string, { count: number, resetAt: number }>()
+const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
 export function checkRateLimit(
   identifier: string,
   limit: number = 10,
   windowMs: number = 60000
 ): RateLimitResult {
-  const now = Date.now()
-  const record = rateLimitStore.get(identifier)
+  const now = Date.now();
+  const record = rateLimitStore.get(identifier);
   
   if (!record || now > record.resetAt) {
-    const resetAt = now + windowMs
-    rateLimitStore.set(identifier, { count: 1, resetAt })
-    return { allowed: true, remaining: limit - 1, resetAt }
+    const resetAt = now + windowMs;
+    rateLimitStore.set(identifier, { count: 1, resetAt });
+    return { allowed: true, remaining: limit - 1, resetAt };
   }
   
   if (record.count >= limit) {
-    return { allowed: false, remaining: 0, resetAt: record.resetAt }
+    return { allowed: false, remaining: 0, resetAt: record.resetAt };
   }
   
-  record.count++
-  return { allowed: true, remaining: limit - record.count, resetAt: record.resetAt }
+  record.count++;
+  return { allowed: true, remaining: limit - record.count, resetAt: record.resetAt };
 }
 
 /**
  * Log function for edge functions
- * @param level - Log level
- * @param message - Log message
- * @param data - Additional data to log
  */
 export function log(
   level: 'info' | 'warn' | 'error',
@@ -209,13 +219,39 @@ export function log(
     message,
     timestamp: new Date().toISOString(),
     data
-  }
+  };
   
   if (level === 'error') {
-    console.error(JSON.stringify(logEntry))
+    console.error(JSON.stringify(logEntry));
   } else if (level === 'warn') {
-    console.warn(JSON.stringify(logEntry))
+    console.warn(JSON.stringify(logEntry));
   } else {
-    console.log(JSON.stringify(logEntry))
+    console.log(JSON.stringify(logEntry));
   }
+}
+
+/**
+ * Supabase client creation helper types
+ */
+export interface SupabaseConfig {
+  url: string;
+  anonKey: string;
+  serviceRoleKey?: string;
+}
+
+/**
+ * Common API response types
+ */
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+}
+
+export interface ApiError {
+  code: string;
+  message: string;
+  status: number;
 }
