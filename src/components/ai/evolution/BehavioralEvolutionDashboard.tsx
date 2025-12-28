@@ -1,4 +1,9 @@
 // @ts-nocheck
+// Tables not in Supabase schema: ia_performance_log, watchdog_behavior_alerts
+/**
+ * Behavioral Evolution Dashboard
+ * Real-time AI behavior tracking with System Watchdog integration
+ */
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 568 - AI Evolution Dashboard Component
  * Visualizes AI learning progress and performance metrics
@@ -82,7 +81,7 @@ export const AIEvolutionDashboard: React.FC = () => {
     a.click();
     URL.revokeObjectURL(url);
 
-    logger.info("[AIEvolution] Exported", snapshots.length, "snapshots to CSV");
+    logger.info("[AIEvolution] Exported " + snapshots.length + " snapshots to CSV");
   };
 
   // Prepare chart data

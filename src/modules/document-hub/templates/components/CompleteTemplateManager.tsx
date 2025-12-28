@@ -1,4 +1,5 @@
 // @ts-nocheck
+// Table 'templates' schema mismatch (name vs title)
 /**
  * PATCH 417: Complete Template Management Page
  * Integrates WYSIWYG editor, preview, and template management

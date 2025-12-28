@@ -1,4 +1,9 @@
 // @ts-nocheck
+// Table ai_generated_documents not in Supabase schema
+/**
+ * Semantic Document Search Component
+ * AI-powered document search by meaning and context
+ */
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
