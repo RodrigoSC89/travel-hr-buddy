@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 353: Employee Benefits Management Component
  * View and manage employee benefits
@@ -20,7 +19,8 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  LucideIcon
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -34,7 +34,7 @@ interface Benefit {
   start_date: string;
   end_date?: string;
   status: string;
-  details: any;
+  details: Record<string, unknown> | null;
   created_at: string;
 }
 
@@ -53,19 +53,21 @@ export const EmployeeBenefits: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase
+      // Use type assertion for table not in generated types
+      const { data, error } = await (supabase as any)
         .from("employee_benefits")
         .select("*")
         .eq("employee_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setBenefits(data || []);
-    } catch (error: any) {
+      setBenefits((data as Benefit[]) || []);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       console.error("Error loading benefits:", error);
       toast({
         title: "Error loading benefits",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -73,27 +75,27 @@ export const EmployeeBenefits: React.FC = () => {
     }
   };
 
-  const getBenefitIcon = (type: string) => {
+  const getBenefitIcon = (type: string): LucideIcon => {
     switch (type) {
-    case "health_insurance":
-      return Heart;
-    case "dental":
-    case "vision":
-      return Eye;
-    case "life_insurance":
-      return Shield;
-    case "retirement":
-      return DollarSign;
-    case "vacation":
-    case "sick_leave":
-      return Calendar;
-    default:
-      return Briefcase;
+      case "health_insurance":
+        return Heart;
+      case "dental":
+      case "vision":
+        return Eye;
+      case "life_insurance":
+        return Shield;
+      case "retirement":
+        return DollarSign;
+      case "vacation":
+      case "sick_leave":
+        return Calendar;
+      default:
+        return Briefcase;
     }
   };
 
   const getStatusBadge = (status: string) => {
-    const config: Record<string, { label: string; className: string; icon: any }> = {
+    const config: Record<string, { label: string; className: string; icon: LucideIcon }> = {
       active: { label: "Active", className: "bg-green-500", icon: CheckCircle },
       pending: { label: "Pending", className: "bg-yellow-500", icon: Clock },
       suspended: { label: "Suspended", className: "bg-orange-500", icon: AlertCircle },
