@@ -42,8 +42,9 @@ export default function DocumentHub() {
   const loadDocuments = useCallback(async () => {
     try {
       logger.info("Loading document history");
+      // Use ai_documents table which exists in the schema
       const { data, error } = await supabase
-        .from("documents")
+        .from("ai_documents")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
@@ -55,13 +56,13 @@ export default function DocumentHub() {
       }
 
       if (data) {
-        const mappedDocs = data.map((doc: any) => ({
+        const mappedDocs = data.map((doc) => ({
           id: doc.id,
-          name: doc.name || "Unnamed Document",
-          type: doc.type || "unknown",
-          size: doc.size || 0,
+          name: doc.file_name || "Unnamed Document",
+          type: doc.file_type || "unknown",
+          size: doc.file_size || 0,
           uploadedAt: doc.created_at,
-          aiAnalysis: doc.ai_analysis,
+          aiAnalysis: undefined,
         }));
         setDocuments(mappedDocs);
         logger.info("Documents loaded successfully", { count: mappedDocs.length });

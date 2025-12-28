@@ -36,6 +36,14 @@ interface SystemStatus {
   evolution_trend: "improving" | "stable" | "degrading";
 }
 
+// Flexible DB record type
+interface PerformanceLogRecord {
+  module_name?: string | null;
+  precision_score?: number | null;
+  recall_score?: number | null;
+  created_at?: string | null;
+}
+
 export function BehavioralEvolutionDashboard() {
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     total_modules: 0,
