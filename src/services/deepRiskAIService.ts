@@ -6,6 +6,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 type RiskLevel = "low" | "medium" | "high" | "critical";
 
@@ -22,19 +23,37 @@ interface Recommendation {
   description: string;
 }
 
-interface RiskForecastDB {
+// Interface aligned with actual database schema
+export interface RiskForecastDB {
+  id: string;
+  forecast_type: string;
+  risk_level: string | null;
+  risk_score: number;
+  description: string | null;
+  factors: Json;
+  recommendations: Json;
+  vessel_id: string | null;
+  organization_id: string | null;
+  valid_from: string | null;
+  valid_until: string | null;
+  metadata: Json;
+  created_at: string;
+}
+
+// Extended interface for service usage
+export interface RiskForecast {
   id: string;
   forecast_name: string;
   risk_score: number;
-  risk_level: string | null;
+  risk_level: RiskLevel;
   risk_factors: RiskFactor[];
   input_data: Record<string, unknown>;
-  model_version: string | null;
-  model_confidence: number | null;
-  inference_time_ms: number | null;
+  model_version: string;
+  model_confidence: number;
+  inference_time_ms: number;
   recommendations: Recommendation[];
   metadata: Record<string, unknown>;
-  created_by: string | null;
+  created_by?: string;
   created_at: string;
 }
 
@@ -54,11 +73,12 @@ class DeepRiskAIService {
         model_version: "1.0.0",
         model_type: "risk_prediction",
         status: "active",
+        is_active: true,
         performance_metrics: {
           avg_inference_time_ms: 45,
           accuracy: 0.87,
           last_updated: new Date().toISOString(),
-        },
+        } as unknown as Json,
       });
 
       return true;
@@ -74,7 +94,8 @@ class DeepRiskAIService {
     model_version: string;
     model_type: string;
     status: string;
-    performance_metrics: Record<string, unknown>;
+    is_active: boolean;
+    performance_metrics: Json;
   }): Promise<void> {
     const { data: existing } = await supabase
       .from("onnx_models")
@@ -88,12 +109,22 @@ class DeepRiskAIService {
         .update({
           model_version: model.model_version,
           status: model.status,
+          is_active: model.is_active,
           performance_metrics: model.performance_metrics,
           updated_at: new Date().toISOString(),
         })
         .eq("model_name", model.model_name);
     } else {
-      await supabase.from("onnx_models").insert([model]);
+      await supabase.from("onnx_models").insert([{
+        model_name: model.model_name,
+        name: model.model_name,
+        model_version: model.model_version,
+        version: model.model_version,
+        model_type: model.model_type,
+        status: model.status,
+        is_active: model.is_active,
+        performance_metrics: model.performance_metrics,
+      }]);
     }
   }
 
@@ -183,26 +214,34 @@ class DeepRiskAIService {
     return recommendations;
   }
 
-  async createRiskForecast(name: string, inputData: Record<string, unknown>): Promise<RiskForecastDB | null> {
+  async createRiskForecast(name: string, inputData: Record<string, unknown>): Promise<RiskForecast | null> {
     try {
       const result = await this.calculateRiskScore(inputData as Parameters<typeof this.calculateRiskScore>[0]);
       const recommendations = this.generateRecommendations(result.score, result.level, result.factors);
       const { data: userData } = await supabase.auth.getUser();
 
+      const now = new Date();
+      const validUntil = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours
+
       const { data, error } = await supabase
         .from("risk_forecast")
         .insert([{
-          forecast_name: name,
+          forecast_type: name,
           risk_score: result.score,
           risk_level: result.level,
-          risk_factors: result.factors,
-          input_data: inputData,
-          model_version: "1.0.0",
-          model_confidence: result.confidence,
-          inference_time_ms: result.inferenceTime,
-          recommendations,
-          metadata: { timestamp: new Date().toISOString(), model_name: this.modelName },
-          created_by: userData?.user?.id,
+          description: `AI-generated risk forecast: ${name}`,
+          factors: result.factors as unknown as Json,
+          recommendations: recommendations as unknown as Json,
+          valid_from: now.toISOString(),
+          valid_until: validUntil.toISOString(),
+          metadata: {
+            input_data: inputData,
+            model_version: "1.0.0",
+            model_confidence: result.confidence,
+            inference_time_ms: result.inferenceTime,
+            model_name: this.modelName,
+            created_by: userData?.user?.id,
+          } as unknown as Json,
         }])
         .select()
         .single();
@@ -212,14 +251,42 @@ class DeepRiskAIService {
         return null;
       }
 
-      return data as RiskForecastDB;
+      // Convert DB format to service format
+      return this.convertToRiskForecast(data, inputData, result.confidence, result.inferenceTime);
     } catch (error) {
       logger.error("Error creating risk forecast", error as Error, { name });
       return null;
     }
   }
 
-  async getRiskForecasts(limit = 20): Promise<RiskForecastDB[]> {
+  private convertToRiskForecast(
+    dbData: RiskForecastDB,
+    inputData?: Record<string, unknown>,
+    confidence?: number,
+    inferenceTime?: number
+  ): RiskForecast {
+    const metadata = (dbData.metadata || {}) as Record<string, unknown>;
+    const factors = (dbData.factors || []) as unknown as RiskFactor[];
+    const recommendations = (dbData.recommendations || []) as unknown as Recommendation[];
+    
+    return {
+      id: dbData.id,
+      forecast_name: dbData.forecast_type,
+      risk_score: dbData.risk_score,
+      risk_level: (dbData.risk_level as RiskLevel) || "low",
+      risk_factors: factors,
+      input_data: inputData || (metadata.input_data as Record<string, unknown>) || {},
+      model_version: (metadata.model_version as string) || "1.0.0",
+      model_confidence: confidence || (metadata.model_confidence as number) || 85,
+      inference_time_ms: inferenceTime || (metadata.inference_time_ms as number) || 0,
+      recommendations,
+      metadata,
+      created_by: metadata.created_by as string | undefined,
+      created_at: dbData.created_at,
+    };
+  }
+
+  async getRiskForecasts(limit = 20): Promise<RiskForecast[]> {
     const { data, error } = await supabase
       .from("risk_forecast")
       .select("*")
@@ -231,7 +298,7 @@ class DeepRiskAIService {
       return [];
     }
 
-    return (data || []) as RiskForecastDB[];
+    return (data || []).map(d => this.convertToRiskForecast(d as RiskForecastDB));
   }
 
   async getRiskStatistics(): Promise<{
