@@ -1,23 +1,27 @@
 // @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability
+// Tables not in Supabase schema: onnx_models, risk_forecast
 /**
  * PATCH 537 - Deep Risk AI Service with ONNX Runtime
  * Browser-based AI risk analysis using ONNX Runtime Web
  */
 
-let ort: any = null;
-const loadORT = async () => {
-  if (!ort) {
-    ort = await import("onnxruntime-web");
-  }
-  return ort;
-};
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { RiskForecast, ONNXModel, RiskLevel } from "@/types/patches-536-540";
 
+// ONNX Runtime Web types and lazy loader
+type ORTModule = typeof import("onnxruntime-web");
+let ortModule: ORTModule | null = null;
+
+const loadORT = async (): Promise<ORTModule> => {
+  if (!ortModule) {
+    ortModule = await import("onnxruntime-web");
+  }
+  return ortModule;
+};
+
 class DeepRiskAIService {
-  private session: ort.InferenceSession | null = null;
+  private session: unknown = null;
   private modelLoaded = false;
   private modelName = "risk-prediction-v1";
 
