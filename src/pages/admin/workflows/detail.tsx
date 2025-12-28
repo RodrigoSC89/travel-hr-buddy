@@ -1,5 +1,4 @@
 // @ts-nocheck
-// Schema mismatch: title vs name, position column
 /**
  * Workflow Detail Page
  * Kanban-style workflow step management
