@@ -1,6 +1,5 @@
-// @ts-nocheck
 /**
- * PATCH 857 - Restored @ts-nocheck (maintenance_tasks table missing)
+ * PATCH 858 - TypeScript fixed: maintenance_tasks table now exists
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,12 +11,13 @@ import { Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 interface MaintenanceTask {
   id: string;
-  task_name?: string | null;
+  title?: string | null;
   scheduled_date?: string | null;
-  deadline_date?: string | null;
+  due_date?: string | null;
   status?: string | null;
   priority?: string | null;
   assigned_to?: string | null;
+  description?: string | null;
 }
 
 export const MaintenanceTimelineView: React.FC = () => {
@@ -53,7 +53,7 @@ export const MaintenanceTimelineView: React.FC = () => {
     }
   };
 
-  const getTaskIcon = (status: string) => {
+  const getTaskIcon = (status?: string | null) => {
     switch (status) {
     case "completed":
       return <CheckCircle className="h-5 w-5 text-green-500" />;
@@ -64,7 +64,8 @@ export const MaintenanceTimelineView: React.FC = () => {
     }
   };
 
-  const getDaysUntil = (date: string) => {
+  const getDaysUntil = (date?: string | null) => {
+    if (!date) return "Not scheduled";
     const days = differenceInDays(new Date(date), new Date());
     if (days < 0) return `${Math.abs(days)} days overdue`;
     if (days === 0) return "Today";
@@ -72,9 +73,9 @@ export const MaintenanceTimelineView: React.FC = () => {
     return `In ${days} days`;
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority?: string | null) => {
     switch (priority) {
-    case "urgent": return "bg-red-500";
+    case "urgent": case "critical": return "bg-red-500";
     case "high": return "bg-orange-500";
     case "medium": return "bg-yellow-500";
     case "low": return "bg-green-500";
@@ -128,13 +129,13 @@ export const MaintenanceTimelineView: React.FC = () => {
                       <CardContent className="pt-4">
                         <div className="flex items-start justify-between mb-2">
                           <div className="space-y-1">
-                            <h4 className="font-semibold">{task.task_name}</h4>
+                            <h4 className="font-semibold">{task.title || "Untitled Task"}</h4>
                             <p className="text-sm text-muted-foreground">
-                              {format(new Date(task.scheduled_date), "MMM dd, yyyy")}
+                              {task.scheduled_date ? format(new Date(task.scheduled_date), "MMM dd, yyyy") : "Not scheduled"}
                             </p>
                           </div>
                           <Badge className={`${getPriorityColor(task.priority)} text-xs`}>
-                            {task.priority}
+                            {task.priority || "medium"}
                           </Badge>
                         </div>
                         
@@ -143,13 +144,13 @@ export const MaintenanceTimelineView: React.FC = () => {
                             {getDaysUntil(task.scheduled_date)}
                           </span>
                           <span className="font-medium">
-                            Status: {task.status.replace("_", " ")}
+                            Status: {(task.status || "pending").replace("_", " ")}
                           </span>
                         </div>
                         
-                        {task.deadline_date && (
+                        {task.due_date && (
                           <div className="mt-2 text-sm text-muted-foreground">
-                            Deadline: {format(new Date(task.deadline_date), "MMM dd, yyyy")}
+                            Due: {format(new Date(task.due_date), "MMM dd, yyyy")}
                           </div>
                         )}
                       </CardContent>
