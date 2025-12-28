@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,8 +8,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { generateCertificatePDF } from "../services/generateCertificatePDF";
 
+interface Certificate {
+  id: string;
+  certificate_number: string;
+  issued_date: string;
+  final_score: number;
+  is_valid: boolean;
+  academy_courses?: {
+    title: string;
+  } | null;
+}
+
 export const MyCertificates: React.FC = () => {
-  const [certificates, setCertificates] = useState<any[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -23,18 +33,19 @@ export const MyCertificates: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
-        .from("academy_certificates")
+      const { data, error } = await (supabase
+        .from("academy_certificates" as any)
         .select("*, academy_courses(title)")
         .eq("user_id", user.id)
-        .order("issued_date", { ascending: false });
+        .order("issued_date", { ascending: false }) as unknown as Promise<{ data: Certificate[] | null; error: Error | null }>);
 
       if (error) throw error;
       setCertificates(data || []);
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading certificates",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -42,7 +53,7 @@ export const MyCertificates: React.FC = () => {
     }
   };
 
-  const handleDownload = async (cert: any) => {
+  const handleDownload = async (cert: Certificate) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
@@ -73,10 +84,11 @@ export const MyCertificates: React.FC = () => {
         title: "Certificate downloaded",
         description: "Your certificate has been downloaded.",
       });
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error downloading certificate",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     }

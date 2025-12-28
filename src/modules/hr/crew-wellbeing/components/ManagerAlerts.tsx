@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,14 +31,13 @@ export const ManagerAlerts: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
-        .from("wellbeing_alerts")
+      const { data, error } = await (supabase
+        .from("wellbeing_alerts" as any)
         .select("*")
         .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false }) as unknown as Promise<{ data: WellbeingAlert[] | null; error: Error | null }>);
 
       if (error) throw error;
-
       setAlerts(data || []);
     } catch (error) {
       console.error("Error fetching alerts:", error);
@@ -55,13 +53,13 @@ export const ManagerAlerts: React.FC = () => {
 
   const acknowledgeAlert = async (alertId: string) => {
     try {
-      const { error } = await supabase
-        .from("wellbeing_alerts")
+      const { error } = await (supabase
+        .from("wellbeing_alerts" as any)
         .update({
           status: "acknowledged",
           acknowledged_at: new Date().toISOString(),
         })
-        .eq("id", alertId);
+        .eq("id", alertId) as unknown as Promise<{ error: Error | null }>);
 
       if (error) throw error;
 
@@ -83,13 +81,13 @@ export const ManagerAlerts: React.FC = () => {
 
   const resolveAlert = async (alertId: string) => {
     try {
-      const { error } = await supabase
-        .from("wellbeing_alerts")
+      const { error } = await (supabase
+        .from("wellbeing_alerts" as any)
         .update({
           status: "resolved",
           resolved_at: new Date().toISOString(),
         })
-        .eq("id", alertId);
+        .eq("id", alertId) as unknown as Promise<{ error: Error | null }>);
 
       if (error) throw error;
 

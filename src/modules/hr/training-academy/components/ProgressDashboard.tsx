@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -8,13 +7,26 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
+interface ProgressDataPoint {
+  name: string;
+  score: number;
+}
+
+interface ProgressStats {
+  totalCourses: number;
+  completedCourses: number;
+  totalCertificates: number;
+  averageScore: number;
+  progressData: ProgressDataPoint[];
+}
+
 export const ProgressDashboard: React.FC = () => {
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<ProgressStats>({
     totalCourses: 0,
     completedCourses: 0,
     totalCertificates: 0,
     averageScore: 0,
-    progressData: [] as any[],
+    progressData: [],
   });
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -29,26 +41,26 @@ export const ProgressDashboard: React.FC = () => {
       if (!user) return;
 
       // Get enrolled courses
-      const { data: progress } = await supabase
-        .from("academy_progress")
+      const { data: progress } = await (supabase
+        .from("academy_progress" as any)
         .select("course_id, is_completed, score, updated_at")
-        .eq("user_id", user.id);
+        .eq("user_id", user.id) as unknown as Promise<{ data: Array<{ course_id: string; is_completed: boolean; score: number | null }> | null }>);
 
       const uniqueCourses = new Set(progress?.map(p => p.course_id) || []);
       const completedCourses = progress?.filter(p => p.is_completed) || [];
-      const scores = progress?.map(p => p.score).filter(Boolean) || [];
+      const scores = progress?.map(p => p.score).filter((s): s is number => s !== null) || [];
       const avgScore = scores.length > 0
         ? scores.reduce((a, b) => a + b, 0) / scores.length
         : 0;
 
       // Get certificates
-      const { data: certificates } = await supabase
-        .from("academy_certificates")
+      const { data: certificates } = await (supabase
+        .from("academy_certificates" as any)
         .select("id")
-        .eq("user_id", user.id);
+        .eq("user_id", user.id) as unknown as Promise<{ data: Array<{ id: string }> | null }>);
 
       // Create progress chart data
-      const progressData = progress
+      const progressData: ProgressDataPoint[] = progress
         ?.slice(0, 10)
         .map((p, idx) => ({
           name: `Lesson ${idx + 1}`,
@@ -62,10 +74,11 @@ export const ProgressDashboard: React.FC = () => {
         averageScore: Math.round(avgScore),
         progressData,
       });
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading progress",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
