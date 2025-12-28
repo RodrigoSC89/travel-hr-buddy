@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +6,33 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
+interface HealthMetric {
+  recorded_at: string;
+  mood_score?: number;
+  sleep_hours?: number;
+  stress_level?: number;
+  heart_rate?: number;
+}
+
+interface HealthAnomaly {
+  id: string;
+  severity: string;
+  description: string;
+  created_at: string;
+  is_resolved: boolean;
+}
+
+interface Stats {
+  avgMood: number;
+  avgSleep: number;
+  avgStress: number;
+  avgHeartRate: number;
+}
+
 export const HealthMetricsDashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<any[]>([]);
-  const [anomalies, setAnomalies] = useState<any[]>([]);
-  const [stats, setStats] = useState({
+  const [metrics, setMetrics] = useState<HealthMetric[]>([]);
+  const [anomalies, setAnomalies] = useState<HealthAnomaly[]>([]);
+  const [stats, setStats] = useState<Stats>({
     avgMood: 0,
     avgSleep: 0,
     avgStress: 0,
@@ -32,12 +54,12 @@ export const HealthMetricsDashboard: React.FC = () => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const { data: metricsData, error: metricsError } = await supabase
-        .from("crew_health_metrics")
+      const { data: metricsData, error: metricsError } = await (supabase
+        .from("crew_health_metrics" as any)
         .select("*")
         .eq("user_id", user.id)
         .gte("recorded_at", thirtyDaysAgo.toISOString())
-        .order("recorded_at", { ascending: true });
+        .order("recorded_at", { ascending: true }) as unknown as Promise<{ data: HealthMetric[] | null; error: Error | null }>);
 
       if (metricsError) throw metricsError;
 
@@ -48,7 +70,7 @@ export const HealthMetricsDashboard: React.FC = () => {
         const avgMood = metricsData.reduce((sum, m) => sum + (m.mood_score || 0), 0) / metricsData.length;
         const avgSleep = metricsData.reduce((sum, m) => sum + (m.sleep_hours || 0), 0) / metricsData.length;
         const avgStress = metricsData.reduce((sum, m) => sum + (m.stress_level || 0), 0) / metricsData.length;
-        const heartRates = metricsData.filter(m => m.heart_rate).map(m => m.heart_rate);
+        const heartRates = metricsData.filter(m => m.heart_rate).map(m => m.heart_rate as number);
         const avgHeartRate = heartRates.length > 0
           ? heartRates.reduce((sum, hr) => sum + hr, 0) / heartRates.length
           : 0;
@@ -62,20 +84,21 @@ export const HealthMetricsDashboard: React.FC = () => {
       }
 
       // Load recent anomalies
-      const { data: anomaliesData, error: anomaliesError } = await supabase
-        .from("health_anomalies")
+      const { data: anomaliesData, error: anomaliesError } = await (supabase
+        .from("health_anomalies" as any)
         .select("*")
         .eq("user_id", user.id)
         .eq("is_resolved", false)
         .order("created_at", { ascending: false })
-        .limit(5);
+        .limit(5) as unknown as Promise<{ data: HealthAnomaly[] | null; error: Error | null }>);
 
       if (anomaliesError) throw anomaliesError;
       setAnomalies(anomaliesData || []);
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading health data",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {

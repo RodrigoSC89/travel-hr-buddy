@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 353: Employee Personal Documents Component
  * Upload and manage personal documents
@@ -45,6 +44,16 @@ interface PersonalDocument {
   created_at: string;
 }
 
+interface FormData {
+  document_type: string;
+  document_name: string;
+  document_number: string;
+  issue_date: string;
+  expiry_date: string;
+  issuing_authority: string;
+  file: File | null;
+}
+
 export const EmployeePersonalDocuments: React.FC = () => {
   const [documents, setDocuments] = useState<PersonalDocument[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,14 +61,14 @@ export const EmployeePersonalDocuments: React.FC = () => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     document_type: "id_card",
     document_name: "",
     document_number: "",
     issue_date: "",
     expiry_date: "",
     issuing_authority: "",
-    file: null as File | null
+    file: null
   });
 
   useEffect(() => {
@@ -72,19 +81,20 @@ export const EmployeePersonalDocuments: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { data, error } = await supabase
-        .from("employee_personal_documents")
+      const { data, error } = await (supabase
+        .from("employee_personal_documents" as any)
         .select("*")
         .eq("employee_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false }) as unknown as Promise<{ data: PersonalDocument[] | null; error: Error | null }>);
 
       if (error) throw error;
       setDocuments(data || []);
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       console.error("Error loading documents:", error);
       toast({
         title: "Error loading documents",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -131,8 +141,8 @@ export const EmployeePersonalDocuments: React.FC = () => {
         }
       }
 
-      const { error } = await supabase
-        .from("employee_personal_documents")
+      const { error } = await (supabase
+        .from("employee_personal_documents" as any)
         .insert({
           employee_id: user.id,
           document_type: formData.document_type,
@@ -145,7 +155,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
           file_size: fileSize,
           mime_type: mimeType,
           status
-        });
+        }) as unknown as Promise<{ error: Error | null }>);
 
       if (error) throw error;
 
@@ -157,10 +167,11 @@ export const EmployeePersonalDocuments: React.FC = () => {
       setIsUploadOpen(false);
       resetForm();
       loadDocuments();
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error uploading document",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -172,10 +183,10 @@ export const EmployeePersonalDocuments: React.FC = () => {
     if (!confirm("Are you sure you want to delete this document?")) return;
 
     try {
-      const { error } = await supabase
-        .from("employee_personal_documents")
+      const { error } = await (supabase
+        .from("employee_personal_documents" as any)
         .delete()
-        .eq("id", documentId);
+        .eq("id", documentId) as unknown as Promise<{ error: Error | null }>);
 
       if (error) throw error;
 
@@ -185,10 +196,11 @@ export const EmployeePersonalDocuments: React.FC = () => {
       });
 
       loadDocuments();
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error deleting document",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     }

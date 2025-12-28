@@ -1,15 +1,9 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Activity, Users, TrendingUp, Brain, AlertCircle, MessageCircle, Calendar, Plus } from "lucide-react";
-import { HealthCheckIn } from "./components/HealthCheckIn";
-import { AIInsights } from "./components/AIInsights";
-import { MoodDashboard } from "./components/MoodDashboard";
-import { HealthCheckin } from "./components/HealthCheckin";
-import { HealthCheckInForm } from "./components/HealthCheckInForm";
 import { HealthMetricsDashboard } from "./components/HealthMetricsDashboard";
 
 const CrewWellbeing = () => {
@@ -69,7 +63,6 @@ const CrewWellbeing = () => {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="checkin">Health Check-in</TabsTrigger>
           <TabsTrigger value="dashboard">My Health Dashboard</TabsTrigger>
           <TabsTrigger value="alerts">Alerts</TabsTrigger>
           <TabsTrigger value="support">Support</TabsTrigger>
@@ -79,8 +72,9 @@ const CrewWellbeing = () => {
           <HealthMetricsDashboard />
         </TabsContent>
 
-        <TabsContent value="checkin" className="space-y-6">
-          <HealthCheckInForm onSuccess={() => setActiveTab("dashboard")} />
+        <TabsContent value="dashboard" className="space-y-6">
+          <HealthMetricsDashboard />
+        </TabsContent>
         </TabsContent>
 
         <TabsContent value="dashboard" className="space-y-6">
