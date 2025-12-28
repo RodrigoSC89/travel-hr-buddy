@@ -801,3 +801,19 @@ comment = "FlightAware/AviationStack - Flight tracking for crew logistics"
 [functions.security-scanner]
 verify_jwt = false
 comment = "VirusTotal - Security scanning for files, URLs and threat intel"
+
+[functions.assemblyai-transcribe]
+verify_jwt = false
+comment = "AssemblyAI - Voice transcription and audio analysis"
+
+[functions.sendgrid-email]
+verify_jwt = false
+comment = "SendGrid - Technical and administrative email notifications"
+
+[functions.usgs-earthquake]
+verify_jwt = false
+comment = "USGS - Earthquake monitoring and tsunami risk assessment"
+
+[functions.nasa-api]
+verify_jwt = false
+comment = "NASA Open API - Earth observation, space weather, satellite data"
