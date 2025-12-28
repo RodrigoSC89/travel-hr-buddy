@@ -1,12 +1,17 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ValidationChecks {
+  templateEditable: boolean;
+  variablesRendered: boolean;
+  pdfExport: boolean;
+}
+
 export default function Patch554Validation() {
-  const [checks, setChecks] = useState({
+  const [checks, setChecks] = useState<ValidationChecks>({
     templateEditable: false,
     variablesRendered: false,
     pdfExport: false,
@@ -20,16 +25,10 @@ export default function Patch554Validation() {
   const validatePatch = async () => {
     try {
       // Check if templates table exists and has editable templates
-      const { data: templates, error: templatesError } = await supabase
-        .from("templates")
-        .select("*")
-        .limit(1);
+      const { error: templatesError } = await supabase.from("templates").select("id").limit(1);
 
       // Check if AI document templates exist
-      const { data: aiTemplates, error: aiTemplatesError } = await supabase
-        .from("ai_document_templates")
-        .select("*")
-        .limit(1);
+      const { error: aiTemplatesError } = await supabase.from("ai_document_templates").select("id").limit(1);
 
       setChecks({
         templateEditable: !templatesError || !aiTemplatesError,
@@ -81,7 +80,13 @@ export default function Patch554Validation() {
   );
 }
 
-function ValidationCheck({ label, passed, description }: { label: string; passed: boolean; description: string }) {
+interface ValidationCheckProps {
+  label: string;
+  passed: boolean;
+  description: string;
+}
+
+function ValidationCheck({ label, passed, description }: ValidationCheckProps) {
   return (
     <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
       {passed ? (
