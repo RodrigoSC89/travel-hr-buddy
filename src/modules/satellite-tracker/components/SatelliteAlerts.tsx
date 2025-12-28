@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 501: Satellite Alerts Component
  * Displays alerts and warnings for satellites
@@ -16,9 +15,11 @@ interface Alert {
   id: string;
   alert_type: string;
   severity: string;
-  title: string;
-  description?: string;
-  is_resolved: boolean;
+  title?: string | null;
+  message?: string | null;
+  description?: string | null;
+  is_resolved?: boolean | null;
+  acknowledged?: boolean | null;
   created_at: string;
 }
 
@@ -112,25 +113,25 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
                   {getSeverityIcon(alert.severity)}
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium">{alert.title}</span>
+                      <span className="font-medium">{alert.title || alert.message || 'Alerta'}</span>
                       <Badge className={getSeverityColor(alert.severity)}>
                         {alert.severity}
                       </Badge>
-                      {alert.is_resolved && (
+                      {(alert.is_resolved || alert.acknowledged) && (
                         <Badge variant="outline" className="bg-green-50">
                           Resolvido
                         </Badge>
                       )}
                     </div>
-                    {alert.description && (
-                      <p className="text-sm text-muted-foreground">{alert.description}</p>
+                    {(alert.description || alert.message) && (
+                      <p className="text-sm text-muted-foreground">{alert.description || alert.message}</p>
                     )}
                     <p className="text-xs text-muted-foreground mt-1">
                       {new Date(alert.created_at).toLocaleString()}
                     </p>
                   </div>
                 </div>
-                {!alert.is_resolved && (
+                {!(alert.is_resolved || alert.acknowledged) && (
                   <Button
                     size="sm"
                     variant="outline"

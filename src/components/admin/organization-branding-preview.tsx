@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,17 +47,17 @@ export const OrganizationBrandingPreview: React.FC = () => {
             <div className="flex gap-2">
               <div 
                 className="w-6 h-6 rounded-full border"
-                style={{ backgroundColor: currentBranding.primary_color }}
+                style={{ backgroundColor: currentBranding.primary_color || '#000000' }}
                 title="Cor Primária"
               />
               <div 
                 className="w-6 h-6 rounded-full border"
-                style={{ backgroundColor: currentBranding.secondary_color }}
+                style={{ backgroundColor: currentBranding.secondary_color || '#666666' }}
                 title="Cor Secundária"
               />
               <div 
                 className="w-6 h-6 rounded-full border"
-                style={{ backgroundColor: currentBranding.accent_color }}
+                style={{ backgroundColor: currentBranding.accent_color || '#0066cc' }}
                 title="Cor de Destaque"
               />
             </div>
@@ -95,11 +94,11 @@ export const OrganizationBrandingPreview: React.FC = () => {
             <span className="text-sm font-medium">Módulos Habilitados</span>
             <div className="flex flex-wrap gap-1">
               {(Array.isArray(currentBranding.enabled_modules) 
-                ? currentBranding.enabled_modules 
+                ? (currentBranding.enabled_modules as string[])
                 : []
               ).map((module) => (
-                <Badge key={module} variant="secondary" className="text-xs">
-                  {module}
+                <Badge key={String(module)} variant="secondary" className="text-xs">
+                  {String(module)}
                 </Badge>
               ))}
             </div>
