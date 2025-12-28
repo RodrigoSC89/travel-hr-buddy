@@ -1,4 +1,6 @@
-// @ts-nocheck
+/**
+ * PATCH 857 - Removed @ts-nocheck
+ */
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -9,7 +11,8 @@ import {
   Droplets,
   Clock,
   Award,
-  AlertTriangle
+  AlertTriangle,
+  LucideIcon
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
@@ -22,7 +25,7 @@ interface MetricData {
   trend: "up" | "down" | "stable";
   trendValue: number;
   status: "excellent" | "good" | "warning" | "critical";
-  icon: React.ComponentType<unknown>;
+  icon: LucideIcon;
   color: string;
 }
 
@@ -258,7 +261,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
           {["24h", "7d", "30d"].map((period) => (
             <button
               key={period}
-              onClick={() => setSelectedPeriod(period as unknown)}
+              onClick={() => setSelectedPeriod(period as "24h" | "7d" | "30d")}
               className={cn(
                 "px-3 py-1 rounded-lg text-sm font-medium transition-colors",
                 selectedPeriod === period

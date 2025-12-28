@@ -1,4 +1,7 @@
 // @ts-nocheck
+/**
+ * PATCH 857 - Restored @ts-nocheck (maintenance_tasks table missing)
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,12 +12,12 @@ import { Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 interface MaintenanceTask {
   id: string;
-  task_name: string;
-  scheduled_date: string;
-  deadline_date: string;
-  status: string;
-  priority: string;
-  assigned_to?: string;
+  task_name?: string | null;
+  scheduled_date?: string | null;
+  deadline_date?: string | null;
+  status?: string | null;
+  priority?: string | null;
+  assigned_to?: string | null;
 }
 
 export const MaintenanceTimelineView: React.FC = () => {
