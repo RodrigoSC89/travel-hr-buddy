@@ -1,13 +1,33 @@
-// @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 /**
  * MMI History Service
  * Service layer for MMI maintenance history operations
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type { MMIHistory } from "@/types/mmi";
 import { logger } from "@/lib/logger";
+
+// Local type definition for MMI History (independent of Supabase types)
+export interface MMIHistory {
+  id: string;
+  vessel_id?: string | null;
+  task_description: string;
+  system_name?: string | null;
+  component_name?: string | null;
+  status?: "pendente" | "executado" | "atrasado" | "cancelado" | null;
+  priority?: "low" | "medium" | "high" | "critical" | null;
+  scheduled_date?: string | null;
+  completed_date?: string | null;
+  technician_id?: string | null;
+  ai_recommendation?: string | null;
+  maintenance_type?: string | null;
+  estimated_hours?: number | null;
+  actual_hours?: number | null;
+  notes?: string | null;
+  metadata?: Record<string, unknown> | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  vessel?: { id: string; name: string } | null;
+}
 
 export interface MMIHistoryFilters {
   status?: "executado" | "pendente" | "atrasado";
@@ -48,7 +68,7 @@ export async function fetchMMIHistory(filters?: MMIHistoryFilters): Promise<MMIH
     throw new Error(`Failed to fetch MMI history: ${error.message}`);
   }
 
-  return data || [];
+  return (data as unknown as MMIHistory[]) || [];
 }
 
 /**
@@ -100,7 +120,7 @@ export async function createMMIHistory(
     throw new Error(`Failed to create MMI history: ${error.message}`);
   }
 
-  return data;
+  return data as unknown as MMIHistory;
 }
 
 /**
@@ -125,7 +145,7 @@ export async function updateMMIHistory(
     throw new Error(`Failed to update MMI history: ${error.message}`);
   }
 
-  return data;
+  return data as unknown as MMIHistory;
 }
 
 /**
