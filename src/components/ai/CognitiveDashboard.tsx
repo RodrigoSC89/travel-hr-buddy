@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 210.0 - Cognitive Dashboard
  * Visualizes AI engine evolution, decisions, and predictions
@@ -26,15 +25,17 @@ import { adaptiveMetricsEngine } from "@/ai/adaptiveMetrics";
 import { evoAIConnector, EvolutionReport } from "@/ai/evoAIConnector";
 import { logger } from "@/lib/logger";
 
+type TimeRange = "1h" | "24h" | "7d" | "30d";
+
 export const CognitiveDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("predictions");
   const [predictions, setPredictions] = useState<ModuleRiskScore[]>([]);
   const [decisions, setDecisions] = useState<TacticalDecision[]>([]);
-  const [parameters, setParameters] = useState<any>(null);
+  const [parameters, setParameters] = useState<unknown>(null);
   const [evolutionReport, setEvolutionReport] = useState<EvolutionReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [filterModule, setFilterModule] = useState<string>("all");
-  const [filterTimeRange, setFilterTimeRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
+  const [filterTimeRange, setFilterTimeRange] = useState<TimeRange>("24h");
 
   useEffect(() => {
     let isMounted = true;
@@ -115,9 +116,12 @@ export const CognitiveDashboard: React.FC = () => {
   };
 
   const filteredPredictions = predictions.filter(p => {
-    if (filterModule !== "all" && p.module_name !== filterModule) return false;
+    const pred = p as unknown as { module_name?: string; moduleName?: string; predicted_at?: string; predictedAt?: string };
+    const moduleName = pred.module_name || pred.moduleName;
+    const predictedAt = pred.predicted_at || pred.predictedAt;
+    if (filterModule !== "all" && moduleName !== filterModule) return false;
     // Filter by time range
-    const predTime = new Date(p.predicted_at).getTime();
+    const predTime = new Date(predictedAt || "").getTime();
     const now = Date.now();
     const ranges = {
       "1h": 60 * 60 * 1000,
@@ -142,7 +146,10 @@ export const CognitiveDashboard: React.FC = () => {
   });
 
   const uniqueModules = Array.from(new Set([
-    ...predictions.map(p => p.module_name),
+    ...predictions.map(p => {
+      const pred = p as unknown as { module_name?: string; moduleName?: string };
+      return pred.module_name || pred.moduleName || "";
+    }),
     ...decisions.map(d => d.moduleName)
   ]));
 
@@ -248,18 +255,18 @@ export const CognitiveDashboard: React.FC = () => {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold">{pred.module_name}</h3>
-                            <Badge className={getRiskColor(pred.risk_level)}>
-                              {pred.risk_level}
+                            <h3 className="font-semibold">{(pred as any).module_name || pred.moduleName}</h3>
+                            <Badge className={getRiskColor((pred as any).risk_level || pred.riskLevel)}>
+                              {(pred as any).risk_level || pred.riskLevel}
                             </Badge>
                             <Badge variant="outline">
-                              {pred.forecast_event}
+                              {(pred as any).forecast_event || pred.forecastEvent}
                             </Badge>
                           </div>
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 text-sm">
                               <span className="text-muted-foreground">Risk Score:</span>
-                              <span className="font-medium">{pred.risk_score}/100</span>
+                              <span className="font-medium">{(pred as any).risk_score || pred.riskScore}/100</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm">
                               <span className="text-muted-foreground">Confidence:</span>
@@ -281,7 +288,7 @@ export const CognitiveDashboard: React.FC = () => {
                         </div>
                         <div className="text-right text-sm text-muted-foreground">
                           <Clock className="h-4 w-4 inline mr-1" />
-                          {formatTimestamp(pred.predicted_at)}
+                          {formatTimestamp((pred as any).predicted_at || pred.predictedAt)}
                         </div>
                       </div>
                     </div>
