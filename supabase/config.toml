@@ -769,3 +769,19 @@ comment = "Blockchain certificates - Immutable maritime certificates with QR ver
 [functions.elevenlabs-voice]
 verify_jwt = false
 comment = "ElevenLabs Voice Assistant - TTS, STT, and voice commands"
+
+# ============================================
+# API INTEGRATIONS - EXTERNAL SERVICES
+# ============================================
+
+[functions.twilio-alerts]
+verify_jwt = false
+comment = "Twilio SMS/WhatsApp alerts for maritime operations and NOC"
+
+[functions.marine-traffic]
+verify_jwt = false
+comment = "MarineTraffic API - Vessel positions, port calls, voyage forecasts"
+
+[functions.api-health-monitor]
+verify_jwt = false
+comment = "API Health Monitor - Check status of all external API integrations"
