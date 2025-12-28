@@ -39,7 +39,8 @@ export function FindingsManager() {
   const loadFindings = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      // Use type assertion for table not in generated types
+      const { data, error } = await (supabase as any)
         .from("non_conformities")
         .select("id, nc_number, nc_type, source, description, status, created_at")
         .order("created_at", { ascending: false })

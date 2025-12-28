@@ -1,13 +1,39 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { CrewHealthRecord, WellbeingAlert } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Activity, AlertTriangle, TrendingUp, Brain } from "lucide-react";
+import { Heart, Activity, AlertTriangle, Brain } from "lucide-react";
 import { toast } from "sonner";
+
+interface CrewHealthRecord {
+  id: string;
+  record_type: string;
+  record_date: string;
+  overall_health_status?: string;
+  fatigue_level?: number;
+  stress_level?: number;
+  sleep_hours?: number;
+  sleep_quality?: string;
+  heart_rate_bpm?: number;
+  is_fit_for_duty?: boolean;
+}
+
+interface WellbeingAlert {
+  id: string;
+  title: string;
+  description: string;
+  severity: string;
+  alert_type: string;
+  status: string;
+  ai_generated?: boolean;
+  ai_confidence_score?: number;
+  recommended_actions?: string[];
+  detected_at: string;
+}
+
+type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
 
 export function CrewWellbeingDashboard() {
   const [healthRecords, setHealthRecords] = useState<CrewHealthRecord[]>([]);
@@ -20,13 +46,14 @@ export function CrewWellbeingDashboard() {
 
   const loadWellbeingData = async () => {
     try {
+      // Use type assertion for tables not in generated types
       const [recordsRes, alertsRes] = await Promise.all([
-        supabase
+        (supabase as any)
           .from("crew_health_records")
           .select("*")
           .order("record_date", { ascending: false })
           .limit(20),
-        supabase
+        (supabase as any)
           .from("wellbeing_alerts")
           .select("*")
           .eq("status", "active")
@@ -37,8 +64,8 @@ export function CrewWellbeingDashboard() {
       if (recordsRes.error) throw recordsRes.error;
       if (alertsRes.error) throw alertsRes.error;
 
-      setHealthRecords(recordsRes.data || []);
-      setAlerts(alertsRes.data || []);
+      setHealthRecords((recordsRes.data as CrewHealthRecord[]) || []);
+      setAlerts((alertsRes.data as WellbeingAlert[]) || []);
     } catch (error) {
       console.error("Error loading wellbeing data:", error);
       toast.error("Failed to load wellbeing data");
@@ -48,7 +75,7 @@ export function CrewWellbeingDashboard() {
   };
 
   const getSeverityBadge = (severity: string) => {
-    const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+    const variants: Record<string, BadgeVariant> = {
       low: "outline",
       medium: "secondary",
       high: "default",
@@ -211,7 +238,7 @@ export function CrewWellbeingDashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2 text-sm">
-                      {record.fatigue_level && (
+                      {record.fatigue_level !== undefined && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Fatigue Level:</span>
                           <div className="flex items-center gap-2">
@@ -229,21 +256,21 @@ export function CrewWellbeingDashboard() {
                         </div>
                       )}
                       
-                      {record.stress_level && (
+                      {record.stress_level !== undefined && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Stress Level:</span>
                           <span className="font-medium">{record.stress_level}/10</span>
                         </div>
                       )}
                       
-                      {record.sleep_hours && (
+                      {record.sleep_hours !== undefined && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Sleep:</span>
                           <span className="font-medium">{record.sleep_hours}h ({record.sleep_quality})</span>
                         </div>
                       )}
                       
-                      {record.heart_rate_bpm && (
+                      {record.heart_rate_bpm !== undefined && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Heart Rate:</span>
                           <span className="font-medium">{record.heart_rate_bpm} bpm</span>

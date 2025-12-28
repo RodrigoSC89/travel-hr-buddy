@@ -1,11 +1,8 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,7 +14,6 @@ import {
   Search,
   Plus,
   Edit,
-  Trash2,
   Download,
   RefreshCw
 } from "lucide-react";
@@ -37,6 +33,8 @@ interface InventoryItem {
   location: string;
 }
 
+type BadgeVariant = "default" | "destructive" | "secondary" | "outline";
+
 export const InventoryManagement = () => {
   const { toast } = useToast();
   const [items, setItems] = useState<InventoryItem[]>([]);
@@ -52,17 +50,19 @@ export const InventoryManagement = () => {
   const loadInventoryItems = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      // Use type assertion for table not in generated types
+      const { data, error } = await (supabase as any)
         .from("inventory_items")
         .select("*")
         .order("name");
 
       if (error) throw error;
-      setItems(data || []);
-    } catch (error: any) {
+      setItems((data as InventoryItem[]) || []);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading inventory",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -90,7 +90,7 @@ export const InventoryManagement = () => {
   });
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, "default" | "destructive" | "secondary" | "outline"> = {
+    const variants: Record<string, BadgeVariant> = {
       active: "default",
       low_stock: "secondary",
       out_of_stock: "destructive",

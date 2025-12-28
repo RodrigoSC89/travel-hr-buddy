@@ -1,10 +1,9 @@
-// @ts-nocheck
 // PATCH 284: Mission Control - Mission Planner Component
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Target, Play, Clock, AlertCircle, Users, TrendingUp } from "lucide-react";
+import { Target, Play, Clock, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -50,7 +49,22 @@ export const MissionPlanner: React.FC = () => {
         .limit(20);
 
       if (error) throw error;
-      setMissions(data || []);
+      
+      // Map database fields to component interface
+      const mappedMissions: Mission[] = (data || []).map((m) => ({
+        id: m.id,
+        mission_code: m.code || m.mission_code || "",
+        name: m.name || "",
+        description: m.description || "",
+        mission_type: m.type || m.mission_type || "general",
+        priority: m.priority || "normal",
+        status: m.status || "planning",
+        progress_percentage: m.progress_percentage || 0,
+        estimated_start: m.start_date || m.actual_start || "",
+        estimated_end: m.end_date || m.actual_end || "",
+      }));
+      
+      setMissions(mappedMissions);
     } catch (error) {
       console.error("Error fetching missions:", error);
       toast({
@@ -66,28 +80,30 @@ export const MissionPlanner: React.FC = () => {
   const activateMission = async (missionId: string) => {
     setActivating(missionId);
     try {
-      const { data, error } = await supabase.rpc("activate_mission", {
+      // Use type assertion for RPC not in generated types
+      const { data, error } = await (supabase.rpc as any)("activate_mission", {
         p_mission_id: missionId,
       });
 
       if (error) throw error;
 
-      const result = data as MissionActivationResult;
+      const result = data as unknown as MissionActivationResult;
       
       if (result.success) {
         toast({
           title: "Mission Activated",
           description: `${result.mission_name} is now active`,
         });
-        fetchMissions(); // Refresh missions list
+        fetchMissions();
       } else {
         throw new Error(result.error || "Activation failed");
       }
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to activate mission";
       console.error("Activation error:", error);
       toast({
         title: "Activation Failed",
-        description: error.message || "Failed to activate mission",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -97,36 +113,36 @@ export const MissionPlanner: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active":
-      return "bg-green-600";
-    case "completed":
-      return "bg-blue-600";
-    case "ready":
-      return "bg-yellow-600";
-    case "planning":
-      return "bg-gray-600";
-    case "paused":
-      return "bg-orange-600";
-    case "cancelled":
-    case "failed":
-      return "bg-red-600";
-    default:
-      return "bg-gray-600";
+      case "active":
+        return "bg-green-600";
+      case "completed":
+        return "bg-blue-600";
+      case "ready":
+        return "bg-yellow-600";
+      case "planning":
+        return "bg-gray-600";
+      case "paused":
+        return "bg-orange-600";
+      case "cancelled":
+      case "failed":
+        return "bg-red-600";
+      default:
+        return "bg-gray-600";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical":
-      return "border-red-600 bg-red-50";
-    case "high":
-      return "border-orange-600 bg-orange-50";
-    case "normal":
-      return "border-blue-600 bg-blue-50";
-    case "low":
-      return "border-gray-600 bg-gray-50";
-    default:
-      return "border-gray-600 bg-gray-50";
+      case "critical":
+        return "border-red-600 bg-red-50";
+      case "high":
+        return "border-orange-600 bg-orange-50";
+      case "normal":
+        return "border-blue-600 bg-blue-50";
+      case "low":
+        return "border-gray-600 bg-gray-50";
+      default:
+        return "border-gray-600 bg-gray-50";
     }
   };
 
