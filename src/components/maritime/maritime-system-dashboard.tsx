@@ -1,18 +1,43 @@
-// @ts-nocheck
-// Schema mismatch with IoTSensorData interface
 /**
  * Maritime System Dashboard
  * IoT sensor monitoring and operational checklists
  */
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { IoTSensorData, ChecklistRecord } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, Thermometer, Gauge, Zap, CheckSquare, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import type { Json } from "@/integrations/supabase/types";
+
+// Types aligned with database schema
+interface IoTSensorData {
+  id: string;
+  sensor_id: string;
+  sensor_type: string;
+  sensor_location: string | null;
+  value: number;
+  unit: string;
+  status: string;
+  is_alert: boolean | null;
+  threshold_min: number | null;
+  threshold_max: number | null;
+  reading_timestamp: string | null;
+}
+
+interface ChecklistRecord {
+  id: string;
+  checklist_name: string;
+  checklist_type: string;
+  status: string;
+  completion_percentage: number | null;
+  assigned_to: string | null;
+  due_date: string | null;
+  items: Json | null;
+  created_at: string | null;
+}
 
 export function MaritimeSystemDashboard() {
   const [sensorData, setSensorData] = useState<IoTSensorData[]>([]);
@@ -60,8 +85,8 @@ export function MaritimeSystemDashboard() {
       if (sensorsRes.error) throw sensorsRes.error;
       if (checklistsRes.error) throw checklistsRes.error;
 
-      setSensorData(sensorsRes.data || []);
-      setChecklists(checklistsRes.data || []);
+      setSensorData((sensorsRes.data || []) as IoTSensorData[]);
+      setChecklists((checklistsRes.data || []) as ChecklistRecord[]);
     } catch (error) {
       console.error("Error loading maritime data:", error);
       toast.error("Failed to load maritime system data");
@@ -280,12 +305,12 @@ export function MaritimeSystemDashboard() {
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span className="text-muted-foreground">Progress</span>
-                          <span className="font-medium">{checklist.completion_percentage}%</span>
+                          <span className="font-medium">{checklist.completion_percentage || 0}%</span>
                         </div>
                         <div className="w-full h-2 bg-secondary rounded-full">
                           <div
                             className="h-full bg-primary rounded-full transition-all"
-                            style={{ width: `${checklist.completion_percentage}%` }}
+                            style={{ width: `${checklist.completion_percentage || 0}%` }}
                           />
                         </div>
                       </div>
@@ -309,7 +334,7 @@ export function MaritimeSystemDashboard() {
                       {checklist.items && Array.isArray(checklist.items) && (
                         <div>
                           <p className="text-sm text-muted-foreground mb-2">
-                            {checklist.items.length} item{checklist.items.length !== 1 ? "s" : ""}
+                            {(checklist.items as unknown[]).length} item{(checklist.items as unknown[]).length !== 1 ? "s" : ""}
                           </p>
                         </div>
                       )}

@@ -1,23 +1,22 @@
-// @ts-nocheck
-// Schema mismatch: name vs title column
 /**
  * PATCH 417: Complete Template Management Page
  * Integrates WYSIWYG editor, preview, and template management
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Plus, Save, Eye } from "lucide-react";
+import { FileText, Save, Eye } from "lucide-react";
 import { TemplateEditor } from "./TemplateEditor";
 import { TemplatePreview } from "./TemplatePreview";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { extractTemplateVariables } from "../services/template-utils";
+import type { Json } from "@/integrations/supabase/types";
 
 const commonVariables = [
   "company_name",
@@ -41,7 +40,6 @@ export const CompleteTemplateManager = () => {
   const [templateDescription, setTemplateDescription] = useState("");
   const [templateCategory, setTemplateCategory] = useState("report");
   const [templateContent, setTemplateContent] = useState("");
-  const [selectedVariables, setSelectedVariables] = useState<string[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
@@ -61,18 +59,18 @@ export const CompleteTemplateManager = () => {
       // Extract variables from content using utility function
       const variables = extractTemplateVariables(templateContent);
 
-      const { error } = await supabase.from("templates").insert({
-        name: templateName,
-        description: templateDescription,
-        category: templateCategory,
+      // Use document_templates table which exists in schema
+      const { error } = await supabase.from("document_templates").insert({
+        template_name: templateName,
+        template_type: templateCategory,
         content: templateContent,
-        format: "html",
-        status: "active",
-        variables: variables,
+        variables: variables as Json,
+        is_active: true,
         metadata: {
+          description: templateDescription,
           created_with: "template_editor_v1",
           patch: "417"
-        }
+        } as Json
       });
 
       if (error) throw error;
