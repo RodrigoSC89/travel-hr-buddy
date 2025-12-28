@@ -147,15 +147,40 @@ async function checkAPIHealth(name: string): Promise<APIStatus> {
       case "twilio": {
         const accountSid = Deno.env.get("TWILIO_ACCOUNT_SID");
         const authToken = Deno.env.get("TWILIO_AUTH_TOKEN");
-        status = (accountSid && authToken) ? "healthy" : "degraded";
-        responseTime = 20;
-        environment = "demo";
-        message = (accountSid && authToken) ? "Messaging ready" : "Demo mode - Configure for production";
+        const phoneNumber = Deno.env.get("TWILIO_PHONE_NUMBER");
+        
+        if (accountSid && authToken && phoneNumber) {
+          // Verificar credenciais com API real
+          try {
+            const twilioResp = await fetch(
+              `https://api.twilio.com/2010-04-01/Accounts/${accountSid}.json`,
+              {
+                headers: {
+                  "Authorization": "Basic " + btoa(`${accountSid}:${authToken}`)
+                }
+              }
+            );
+            responseTime = Date.now() - startTime;
+            status = twilioResp.ok ? "healthy" : "degraded";
+            environment = twilioResp.ok ? "production" : "demo";
+            message = twilioResp.ok ? "Messaging ready" : `Auth failed: ${twilioResp.status}`;
+          } catch {
+            status = "degraded";
+            environment = "demo";
+            message = "Connection failed";
+          }
+        } else {
+          status = "degraded";
+          responseTime = 20;
+          environment = "demo";
+          message = "Demo mode - Configure TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER";
+        }
         break;
       }
 
       case "marine-traffic": {
-        const apiKey = Deno.env.get("MARINE_TRAFFIC_API_KEY");
+        // Corrigido: usar MARINETRAFFIC_API_KEY (sem underscore entre MARINE e TRAFFIC)
+        const apiKey = Deno.env.get("MARINETRAFFIC_API_KEY");
         status = apiKey ? "healthy" : "degraded";
         responseTime = 30;
         environment = apiKey ? "production" : "demo";
