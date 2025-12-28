@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,12 +12,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AlertTriangle, CheckCircle, Eye } from "lucide-react";
+import { AlertTriangle, Eye } from "lucide-react";
 import { format } from "date-fns";
+
+interface Finding {
+  id: string;
+  nc_number: string;
+  nc_type: string;
+  source: string;
+  description: string | null;
+  status: string;
+  created_at: string | null;
+}
+
+type BadgeVariant = "default" | "destructive" | "outline" | "secondary";
 
 export function FindingsManager() {
   const { toast } = useToast();
-  const [findings, setFindings] = useState<any[]>([]);
+  const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,16 +41,17 @@ export function FindingsManager() {
       setLoading(true);
       const { data, error } = await supabase
         .from("non_conformities")
-        .select("*")
+        .select("id, nc_number, nc_type, source, description, status, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
-      setFindings(data || []);
-    } catch (error: any) {
+      setFindings((data as Finding[]) || []);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading findings",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -48,37 +60,29 @@ export function FindingsManager() {
   };
 
   const getSeverityBadge = (type: string) => {
-    const severityConfig: Record<string, { variant: any; color: string }> = {
-      "major": { variant: "destructive", color: "text-red-600" },
-      "minor": { variant: "default", color: "text-yellow-600" },
-      "observation": { variant: "outline", color: "text-blue-600" },
+    const severityConfig: Record<string, { variant: BadgeVariant }> = {
+      major: { variant: "destructive" },
+      minor: { variant: "default" },
+      observation: { variant: "outline" },
     };
 
     const config = severityConfig[type] || severityConfig["observation"];
 
-    return (
-      <Badge variant={config.variant}>
-        {type}
-      </Badge>
-    );
+    return <Badge variant={config.variant}>{type}</Badge>;
   };
 
   const getStatusBadge = (status: string) => {
-    const statusConfig: Record<string, { variant: any }> = {
-      "open": { variant: "destructive" },
-      "investigating": { variant: "default" },
-      "action_planned": { variant: "secondary" },
-      "resolved": { variant: "outline" },
-      "closed": { variant: "outline" },
+    const statusConfig: Record<string, { variant: BadgeVariant }> = {
+      open: { variant: "destructive" },
+      investigating: { variant: "default" },
+      action_planned: { variant: "secondary" },
+      resolved: { variant: "outline" },
+      closed: { variant: "outline" },
     };
 
     const config = statusConfig[status] || statusConfig["open"];
 
-    return (
-      <Badge variant={config.variant}>
-        {status.replace("_", " ")}
-      </Badge>
-    );
+    return <Badge variant={config.variant}>{status.replace("_", " ")}</Badge>;
   };
 
   if (loading) {

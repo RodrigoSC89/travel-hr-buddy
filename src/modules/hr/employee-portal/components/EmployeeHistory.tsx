@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -11,28 +10,35 @@ interface HistoryEvent {
   description: string;
   timestamp: string;
   status: "success" | "pending" | "error";
-  metadata?: any;
+  metadata?: Record<string, unknown>;
+}
+
+interface EmployeeRequest {
+  id: string;
+  request_type: string;
+  title: string;
+  created_at: string;
+  status: string;
+  metadata?: Record<string, unknown>;
 }
 
 export function EmployeeHistory() {
   const { data: history, isLoading } = useQuery({
     queryKey: ["employee-history"],
-    queryFn: async () => {
+    queryFn: async (): Promise<HistoryEvent[]> => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      // Get employee requests as history events
       const { data: requests, error } = await supabase
         .from("employee_requests")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
-        .limit(20) as any;
+        .limit(20);
 
       if (error) throw error;
 
-      // Transform to history events
-      const events: HistoryEvent[] = requests.map((req) => ({
+      const events: HistoryEvent[] = (requests as EmployeeRequest[] || []).map((req) => ({
         id: req.id,
         action: `Solicitação de ${req.request_type}`,
         description: req.title,
@@ -45,25 +51,25 @@ export function EmployeeHistory() {
     },
   });
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: HistoryEvent["status"]) => {
     switch (status) {
-    case "success":
-      return <CheckCircle className="h-5 w-5 text-green-500" />;
-    case "error":
-      return <XCircle className="h-5 w-5 text-red-500" />;
-    default:
-      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+      case "success":
+        return <CheckCircle className="h-5 w-5 text-green-500" />;
+      case "error":
+        return <XCircle className="h-5 w-5 text-red-500" />;
+      default:
+        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: HistoryEvent["status"]) => {
     switch (status) {
-    case "success":
-      return <Badge variant="default">Concluído</Badge>;
-    case "error":
-      return <Badge variant="destructive">Erro</Badge>;
-    default:
-      return <Badge variant="secondary">Pendente</Badge>;
+      case "success":
+        return <Badge variant="default">Concluído</Badge>;
+      case "error":
+        return <Badge variant="destructive">Erro</Badge>;
+      default:
+        return <Badge variant="secondary">Pendente</Badge>;
     }
   };
 
