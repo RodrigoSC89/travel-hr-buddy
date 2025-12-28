@@ -17999,6 +17999,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_organizations: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_primary: boolean | null
+          organization_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          organization_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          organization_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_recommendations: {
         Row: {
           context: string
