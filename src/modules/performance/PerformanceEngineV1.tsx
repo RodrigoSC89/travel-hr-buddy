@@ -1,6 +1,5 @@
-// @ts-nocheck
 /**
- * PATCH 857 - Restored @ts-nocheck (vessel_performance, crew_performance, performance_outliers tables missing)
+ * PATCH 858 - TypeScript fixed: Tables vessel_performance, crew_performance, performance_outliers now exist
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -110,7 +109,7 @@ export const PerformanceEngineV1: React.FC = () => {
     }
   };
 
-  const getTrendIcon = (trend: string) => {
+  const getTrendIcon = (trend?: string | null) => {
     switch (trend) {
     case "improving":
       return <TrendingUp className="h-4 w-4 text-green-500" />;
