@@ -76,7 +76,7 @@ export interface AutonomyConfig {
 export interface AutonomyDecisionLog {
   id: string;
   task_id: string | null;
-  decision_type: string | null;
+  decision_type: string;
   decision_data: Json | null;
   reasoning: string | null;
   confidence_score: number | null;
@@ -169,8 +169,8 @@ export class AutonomyService {
       p_description: request.description || "",
       p_decision_logic: request.decision_logic,
       p_autonomy_level: request.autonomy_level || 1,
-      p_mission_id: request.mission_id ?? null,
-      p_equipment_id: request.equipment_id ?? null,
+      p_mission_id: request.mission_id || undefined,
+      p_equipment_id: request.equipment_id || undefined,
     });
 
     if (error) throw error;
@@ -243,10 +243,23 @@ export class AutonomyService {
     return (data || []) as AutonomyRule[];
   }
 
-  static async createRule(rule: Partial<AutonomyRule>): Promise<AutonomyRule> {
+  static async createRule(rule: Partial<AutonomyRule> & { name: string }): Promise<AutonomyRule> {
+    const insertData = {
+      name: rule.name,
+      description: rule.description ?? null,
+      rule_type: rule.rule_type ?? 'general',
+      conditions: rule.conditions ?? {},
+      actions: rule.actions ?? {},
+      priority: rule.priority ?? 0,
+      is_active: rule.is_active ?? true,
+      organization_id: rule.organization_id ?? null,
+      created_by: rule.created_by ?? null,
+      metadata: rule.metadata ?? null,
+    };
+    
     const { data, error } = await supabase
       .from("autonomy_rules")
-      .insert([rule])
+      .insert([insertData])
       .select()
       .single();
 
@@ -307,15 +320,25 @@ export class AutonomyService {
     return this.getConfig("mission", missionId);
   }
 
-  static async saveConfig(config: Partial<AutonomyConfig>): Promise<AutonomyConfig> {
+  static async saveConfig(config: Partial<AutonomyConfig> & { entity_type: string }): Promise<AutonomyConfig> {
+    const upsertData = {
+      entity_type: config.entity_type,
+      entity_id: config.entity_id ?? null,
+      is_enabled: config.is_enabled ?? false,
+      autonomy_level: config.autonomy_level ?? 1,
+      allowed_task_types: config.allowed_task_types ?? null,
+      require_approval_threshold: config.require_approval_threshold ?? null,
+      auto_approve_low_risk: config.auto_approve_low_risk ?? false,
+    };
+    
     const { data, error } = await supabase
       .from("autonomy_configs")
-      .upsert([config])
+      .upsert([upsertData])
       .select()
       .single();
 
     if (error) throw error;
-    return data as AutonomyConfig;
+    return { ...data, organization_id: null } as AutonomyConfig;
   }
 
   static async toggleAutonomy(
@@ -357,8 +380,17 @@ export class AutonomyService {
     return (data || []) as AutonomyDecisionLog[];
   }
 
-  static async logDecision(log: Partial<AutonomyDecisionLog>): Promise<void> {
-    const { error } = await supabase.from("autonomy_decision_logs").insert([log]);
+  static async logDecision(log: Partial<AutonomyDecisionLog> & { decision_type: string }): Promise<void> {
+    const insertData = {
+      task_id: log.task_id ?? null,
+      decision_type: log.decision_type,
+      decision_data: log.decision_data ?? null,
+      reasoning: log.reasoning ?? null,
+      confidence_score: log.confidence_score ?? null,
+      timestamp: log.timestamp ?? new Date().toISOString(),
+    };
+    
+    const { error } = await supabase.from("autonomy_decision_logs").insert([insertData]);
     if (error) throw error;
   }
 

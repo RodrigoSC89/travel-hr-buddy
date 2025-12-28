@@ -59,8 +59,10 @@ export const CompleteTemplateManager = () => {
       // Extract variables from content using utility function
       const variables = extractTemplateVariables(templateContent);
 
+      // Get current user for user_id field
+      const { data: { user } } = await supabase.auth.getUser();
+
       // Use document_templates table which exists in schema
-      // Schema: name, description, content, variables, is_public, category, tags, metadata
       const { error } = await supabase.from("document_templates").insert([{
         name: templateName,
         category: templateCategory,
@@ -68,6 +70,7 @@ export const CompleteTemplateManager = () => {
         variables: variables,
         is_public: false,
         description: templateDescription,
+        user_id: user?.id || '',
         metadata: {
           created_with: "template_editor_v1",
           patch: "417"
