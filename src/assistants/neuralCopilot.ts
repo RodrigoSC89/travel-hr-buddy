@@ -1,7 +1,7 @@
 // @ts-nocheck
+// Interface mismatch with copilot_sessions schema
 /**
  * PATCH 213.0 - Neural Copilot Engine (Co-Piloto Neural IA)
- * TODO PATCH 659: TypeScript fixes deferred (copilot_sessions table schema missing from database)
  * 
  * Virtual copilot based on embedded AI with continuous context and multimodal support (voice/text).
  */

@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Table ai_generated_documents not in Supabase schema
+// Schema mismatch: extracted_text column missing
 /**
  * Semantic Document Search Component
  * AI-powered document search by meaning and context

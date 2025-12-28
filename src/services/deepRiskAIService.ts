@@ -1,7 +1,6 @@
-// @ts-nocheck
-// Tables not in Supabase schema: onnx_models, risk_forecast
 /**
  * PATCH 537 - Deep Risk AI Service with ONNX Runtime
+ * PATCH 661: Tables onnx_models, risk_forecast created
  * Browser-based AI risk analysis using ONNX Runtime Web
  */
 
