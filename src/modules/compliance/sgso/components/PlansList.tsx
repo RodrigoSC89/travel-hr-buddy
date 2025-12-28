@@ -69,26 +69,29 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
       const metadata = plan.metadata as Record<string, unknown> | null;
       const description = metadata?.description as string || "";
 
-      // Transform plan and actions to expected format for PDF generator
+      // Transform plan to expected format for PDF generator
+      // Schema: action_title, action_description, priority, status, due_date, assigned_to
       const planForPdf = {
         id: plan.id,
         title: plan.plan_name,
-        version: plan.plan_version || "1.0",
-        status: plan.status || "draft",
         description: description,
-        created_at: plan.created_at,
+        status: plan.status || "draft",
+        version: parseInt(plan.plan_version || "1", 10),
+        created_at: plan.created_at || new Date().toISOString(),
+        updated_at: plan.created_at || new Date().toISOString(),
       };
 
-      // Transform actions to expected format
+      // Transform actions to expected format (using action_title instead of action_name)
       const actionsForPdf = (actions || []).map(action => ({
         id: action.id as string,
-        action_name: action.action_name as string,
-        action_type: action.action_type as string,
+        plan_id: action.plan_id as string,
+        action_type: (action.priority as string) || "standard",
+        title: action.action_title as string,
+        description: (action.action_description as string) || "",
+        priority: (action.priority as string) || "medium",
         status: action.status as string,
-        priority: action.priority as string | null,
-        due_date: action.due_date as string | null,
-        assigned_to: action.assigned_to as string | null,
-        description: action.description as string | null,
+        due_date: action.due_date as string | undefined,
+        responsible_user_id: action.assigned_to as string | undefined,
       }));
 
       const blob = await generateSgsoReportPDF(planForPdf, actionsForPdf);

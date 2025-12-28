@@ -29,15 +29,20 @@ export interface ContextSubscription {
 
 type EventHandler = (message: ContextMessage) => void;
 
-// Database row type aligned with Supabase schema
+// Database row type aligned with Supabase schema (context_history)
 interface ContextHistoryRow {
   id: string;
-  module_name: string;
   context_type: string;
-  context_data: Json;
-  timestamp: string;
-  source: string;
-  sync_status: string | null;
+  context_key: string;
+  context_value: Json;
+  source_module: string | null;
+  confidence_score: number | null;
+  metadata: Json;
+  organization_id: string | null;
+  user_id: string | null;
+  created_at: string;
+  updated_at: string;
+  expires_at: string | null;
 }
 
 class ContextMesh {
@@ -63,11 +68,11 @@ class ContextMesh {
     try {
       const { error } = await supabase.from("context_history").select("id").limit(1);
       if (error) {
-        logger.warn("[ContextMesh] Supabase not available, using local storage", error);
+        logger.warn("[ContextMesh] Supabase not available, using local storage", { error: error.message });
         this.useLocalStorage = true;
       }
     } catch (err) {
-      logger.warn("[ContextMesh] Failed to connect to Supabase, using local storage", err);
+      logger.warn("[ContextMesh] Failed to connect to Supabase, using local storage", { error: String(err) });
       this.useLocalStorage = true;
     }
 
@@ -102,7 +107,7 @@ class ContextMesh {
 
       logger.debug(`[ContextMesh] Published ${message.contextType} context from ${message.moduleName}`);
     } catch (error) {
-      logger.error("[ContextMesh] Failed to publish context message", error);
+      logger.error("[ContextMesh] Failed to publish context message", { error: String(error) });
       // Add to pending queue for retry
       this.pendingSync.push(message);
     }
@@ -168,8 +173,8 @@ class ContextMesh {
       let query = supabase
         .from("context_history")
         .select("*")
-        .eq("module_name", moduleName)
-        .order("timestamp", { ascending: false })
+        .eq("source_module", moduleName)
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (contextType) {
@@ -179,21 +184,21 @@ class ContextMesh {
       const { data, error } = await query;
 
       if (error) {
-        logger.error("[ContextMesh] Failed to get context history", error);
+        logger.error("[ContextMesh] Failed to get context history", { error: error.message });
         return [];
       }
 
       return ((data || []) as ContextHistoryRow[]).map(row => ({
         id: row.id,
-        moduleName: row.module_name,
+        moduleName: row.source_module || "",
         contextType: row.context_type as ContextType,
-        contextData: row.context_data as Record<string, unknown>,
-        timestamp: new Date(row.timestamp),
-        source: row.source,
-        syncStatus: row.sync_status as SyncStatus
+        contextData: row.context_value as Record<string, unknown>,
+        timestamp: new Date(row.created_at),
+        source: row.source_module || "unknown",
+        syncStatus: "synced" as SyncStatus
       }));
     } catch (error) {
-      logger.error("[ContextMesh] Error getting context history", error);
+      logger.error("[ContextMesh] Error getting context history", { error: String(error) });
       return [];
     }
   }
@@ -225,7 +230,7 @@ class ContextMesh {
 
       logger.debug(`[ContextMesh] Synced ${contextType} context from ${fromModule} to ${toModule}`);
     } catch (error) {
-      logger.error(`[ContextMesh] Failed to sync context from ${fromModule} to ${toModule}`, error);
+      logger.error(`[ContextMesh] Failed to sync context from ${fromModule} to ${toModule}`, { error: String(error) });
     }
   }
 
@@ -253,16 +258,16 @@ class ContextMesh {
         const { error } = await supabase
           .from("context_history")
           .delete()
-          .lt("timestamp", cutoffDate.toISOString());
+          .lt("created_at", cutoffDate.toISOString());
 
         if (error) {
-          logger.error("[ContextMesh] Failed to cleanup old context", error);
+          logger.error("[ContextMesh] Failed to cleanup old context", { error: error.message });
         }
       }
 
       logger.info(`[ContextMesh] Cleaned up context data older than ${olderThanDays} days`);
     } catch (error) {
-      logger.error("[ContextMesh] Error during cleanup", error);
+      logger.error("[ContextMesh] Error during cleanup", { error: String(error) });
     }
   }
 
@@ -291,7 +296,7 @@ class ContextMesh {
         try {
           handler(message);
         } catch (error) {
-          logger.error(`[ContextMesh] Error in subscriber handler for ${message.contextType}`, error);
+          logger.error(`[ContextMesh] Error in subscriber handler for ${message.contextType}`, { error: String(error) });
         }
       });
     }
@@ -301,16 +306,15 @@ class ContextMesh {
     const { error } = await supabase
       .from("context_history")
       .insert({
-        module_name: message.moduleName,
         context_type: message.contextType,
-        context_data: message.contextData as Json,
-        timestamp: message.timestamp?.toISOString(),
-        source: message.source,
-        sync_status: message.syncStatus || "synced"
+        context_key: `${message.moduleName}_${Date.now()}`,
+        context_value: message.contextData as Json,
+        source_module: message.source,
+        metadata: { syncStatus: message.syncStatus || "synced" } as Json
       });
 
     if (error) {
-      logger.error("[ContextMesh] Failed to save to Supabase", error);
+      logger.error("[ContextMesh] Failed to save to Supabase", { error: error.message });
       throw error;
     }
   }
@@ -331,13 +335,13 @@ class ContextMesh {
       const trimmed = history.slice(0, 1000);
       localStorage.setItem(key, JSON.stringify(trimmed));
     } catch (error) {
-      logger.error("[ContextMesh] Failed to save to localStorage", error);
+      logger.error("[ContextMesh] Failed to save to localStorage", { error: String(error) });
       
       // Try IndexedDB as fallback
       try {
         await this.saveToIndexedDB(message);
       } catch (idbError) {
-        logger.error("[ContextMesh] Failed to save to IndexedDB", idbError);
+        logger.error("[ContextMesh] Failed to save to IndexedDB", { error: String(idbError) });
       }
     }
   }
@@ -391,7 +395,7 @@ class ContextMesh {
       
       return filtered.slice(0, limit);
     } catch (error) {
-      logger.error("[ContextMesh] Error reading from localStorage", error);
+      logger.error("[ContextMesh] Error reading from localStorage", { error: String(error) });
       return [];
     }
   }
@@ -406,7 +410,7 @@ class ContextMesh {
       try {
         await this.publish(message);
       } catch (error) {
-        logger.error("[ContextMesh] Failed to sync pending message", error);
+        logger.error("[ContextMesh] Failed to sync pending message", { error: String(error) });
         // Re-add to queue if still failing
         if (this.pendingSync.length < 100) {
           this.pendingSync.push(message);
