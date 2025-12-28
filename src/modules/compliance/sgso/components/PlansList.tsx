@@ -1,4 +1,7 @@
-// @ts-nocheck - SGSOPlan/SGSOAction type mismatch with generateSgsoReportPDF expected types
+/**
+ * SGSO Plans List Component
+ * Displays and manages SGSO plans
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -62,17 +65,33 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
         .select("*")
         .eq("plan_id", plan.id);
 
-      // Transform plan to expected format for PDF generator
+      // Get metadata description
+      const metadata = plan.metadata as Record<string, unknown> | null;
+      const description = metadata?.description as string || "";
+
+      // Transform plan and actions to expected format for PDF generator
       const planForPdf = {
         id: plan.id,
         title: plan.plan_name,
         version: plan.plan_version || "1.0",
         status: plan.status || "draft",
-        description: (plan.metadata as Record<string, unknown>)?.description as string || "",
+        description: description,
         created_at: plan.created_at,
-      } as Parameters<typeof generateSgsoReportPDF>[0];
+      };
 
-      const blob = await generateSgsoReportPDF(planForPdf, actions || []);
+      // Transform actions to expected format
+      const actionsForPdf = (actions || []).map(action => ({
+        id: action.id as string,
+        action_name: action.action_name as string,
+        action_type: action.action_type as string,
+        status: action.status as string,
+        priority: action.priority as string | null,
+        due_date: action.due_date as string | null,
+        assigned_to: action.assigned_to as string | null,
+        description: action.description as string | null,
+      }));
+
+      const blob = await generateSgsoReportPDF(planForPdf, actionsForPdf);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

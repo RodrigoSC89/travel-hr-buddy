@@ -1,5 +1,3 @@
-// @ts-nocheck
-// html2pdf.js type incompatibility with strict options
 /**
  * MMI PDF Report Service v1.1.0
  * Generates professional PDF reports with AI recommendations
@@ -13,6 +11,15 @@ interface ReportOptions {
   includeAIRecommendations?: boolean;
   title?: string;
   subtitle?: string;
+}
+
+// Type for html2pdf options
+interface Html2PdfOptions {
+  margin: number;
+  filename: string;
+  image: { type: string; quality: number };
+  html2canvas: { scale: number; useCORS: boolean };
+  jsPDF: { unit: string; format: string; orientation: string };
 }
 
 /**
@@ -283,7 +290,7 @@ export const generatePDFReport = async (
     container.style.left = "-9999px";
     document.body.appendChild(container);
 
-    const pdfOptions = {
+    const pdfOptions: Html2PdfOptions = {
       margin: 10,
       filename: `MMI_Report_${new Date().toISOString().split("T")[0]}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
@@ -291,7 +298,11 @@ export const generatePDFReport = async (
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
     };
 
-    await html2pdf().set(pdfOptions).from(container).save();
+    // html2pdf has dynamic typing - use type assertion
+    await (html2pdf() as { set: (opts: Html2PdfOptions) => { from: (el: HTMLElement) => { save: () => Promise<void> } } })
+      .set(pdfOptions)
+      .from(container)
+      .save();
     
     // Cleanup
     document.body.removeChild(container);
@@ -325,7 +336,7 @@ export const generateJobReport = async (
     container.style.left = "-9999px";
     document.body.appendChild(container);
 
-    const pdfOptions = {
+    const pdfOptions: Html2PdfOptions = {
       margin: 10,
       filename: `Job_${jobTitle}_${date}.pdf`,
       image: { type: "jpeg", quality: 0.98 },
@@ -333,7 +344,11 @@ export const generateJobReport = async (
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
     };
 
-    await html2pdf().set(pdfOptions).from(container).save();
+    // html2pdf has dynamic typing - use type assertion
+    await (html2pdf() as { set: (opts: Html2PdfOptions) => { from: (el: HTMLElement) => { save: () => Promise<void> } } })
+      .set(pdfOptions)
+      .from(container)
+      .save();
     
     // Cleanup
     document.body.removeChild(container);

@@ -1,21 +1,98 @@
-// @ts-nocheck - Local interfaces differ from Supabase schema (null vs undefined, Json casting)
 /**
  * PATCH 348: Mission Control v2 - Autonomy Service Layer
  * Service for managing autonomous tasks and decision engine
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type {
-  AutonomousTask,
-  AutonomyRule,
-  AutonomyConfig,
-  AutonomyDecisionLog,
-  AutonomyDashboardStats,
-  CreateTaskRequest,
-  ApproveTaskRequest,
-  TaskType,
-  EntityType,
-} from "@/types/autonomy";
+import type { Json } from "@/integrations/supabase/types";
+
+// Type definitions aligned with Supabase schema
+export type TaskType = "maintenance" | "logistics" | "crew" | "safety" | "compliance" | "reporting";
+export type EntityType = "global" | "mission" | "vessel" | "equipment";
+export type TaskStatus = "pending" | "approved" | "rejected" | "executing" | "completed" | "failed" | "cancelled";
+
+export interface AutonomousTask {
+  id: string;
+  task_type: string;
+  task_name: string;
+  description: string | null;
+  status: string;
+  priority: number | null;
+  autonomy_level: number | null;
+  decision_logic: Json | null;
+  decision_confidence: number | null;
+  mission_id: string | null;
+  equipment_id: string | null;
+  created_at: string;
+  started_at: string | null;
+  completed_at: string | null;
+  execution_logs: Json | null;
+  organization_id: string | null;
+}
+
+export interface AutonomyRule {
+  id: string;
+  rule_name: string;
+  task_type: string | null;
+  conditions: Json | null;
+  actions: Json | null;
+  priority: number | null;
+  is_enabled: boolean | null;
+  created_at: string | null;
+  updated_at: string | null;
+  organization_id: string | null;
+}
+
+export interface AutonomyConfig {
+  id: string;
+  entity_type: string;
+  entity_id: string | null;
+  is_enabled: boolean | null;
+  autonomy_level: number | null;
+  allowed_task_types: string[] | null;
+  require_approval_threshold: number | null;
+  auto_approve_low_risk: boolean | null;
+  created_at: string | null;
+  updated_at: string | null;
+  organization_id: string | null;
+}
+
+export interface AutonomyDecisionLog {
+  id: string;
+  task_id: string | null;
+  decision_type: string | null;
+  input_data: Json | null;
+  output_data: Json | null;
+  confidence: number | null;
+  timestamp: string | null;
+  approved_by: string | null;
+  organization_id: string | null;
+}
+
+export interface AutonomyDashboardStats {
+  active_tasks: number;
+  pending_approval: number;
+  completed_today: number;
+  success_rate: number;
+  avg_confidence: number;
+  recent_tasks: AutonomousTask[];
+  recent_decisions: AutonomyDecisionLog[];
+}
+
+export interface CreateTaskRequest {
+  task_type: string;
+  task_name: string;
+  description?: string;
+  decision_logic: Json;
+  autonomy_level?: number;
+  mission_id?: string;
+  equipment_id?: string;
+}
+
+export interface ApproveTaskRequest {
+  task_id: string;
+  approved: boolean;
+}
 
 export class AutonomyService {
   // Autonomous Tasks
@@ -31,7 +108,7 @@ export class AutonomyService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    return (data || []) as AutonomousTask[];
   }
 
   static async getTask(id: string): Promise<AutonomousTask | null> {
@@ -42,7 +119,7 @@ export class AutonomyService {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AutonomousTask | null;
   }
 
   static async getPendingTasks(): Promise<AutonomousTask[]> {
@@ -57,7 +134,7 @@ export class AutonomyService {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as AutonomousTask[];
   }
 
   static async getTasksByEquipment(
@@ -70,7 +147,7 @@ export class AutonomyService {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as AutonomousTask[];
   }
 
   static async createTask(request: CreateTaskRequest): Promise<string> {
@@ -85,7 +162,7 @@ export class AutonomyService {
     });
 
     if (error) throw error;
-    return data;
+    return data as string;
   }
 
   static async approveTask(request: ApproveTaskRequest): Promise<boolean> {
@@ -95,7 +172,7 @@ export class AutonomyService {
     });
 
     if (error) throw error;
-    return data;
+    return data as boolean;
   }
 
   static async updateTaskStatus(
@@ -103,7 +180,7 @@ export class AutonomyService {
     status: string,
     executionLogs?: unknown[]
   ): Promise<void> {
-    const updates: Partial<AutonomousTask> = { status };
+    const updates: Record<string, unknown> = { status };
 
     if (status === "executing") {
       updates.started_at = new Date().toISOString();
@@ -112,7 +189,7 @@ export class AutonomyService {
     }
 
     if (executionLogs) {
-      updates.execution_logs = executionLogs;
+      updates.execution_logs = executionLogs as Json;
     }
 
     const { error } = await supabase
@@ -140,7 +217,7 @@ export class AutonomyService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    return (data || []) as AutonomyRule[];
   }
 
   static async getEnabledRules(): Promise<AutonomyRule[]> {
@@ -151,18 +228,18 @@ export class AutonomyService {
       .order("priority", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as AutonomyRule[];
   }
 
   static async createRule(rule: Partial<AutonomyRule>): Promise<AutonomyRule> {
     const { data, error } = await supabase
       .from("autonomy_rules")
-      .insert(rule)
+      .insert(rule as Record<string, unknown>)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AutonomyRule;
   }
 
   static async updateRule(
@@ -171,13 +248,13 @@ export class AutonomyService {
   ): Promise<AutonomyRule> {
     const { data, error } = await supabase
       .from("autonomy_rules")
-      .update(updates)
+      .update(updates as Record<string, unknown>)
       .eq("id", id)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AutonomyRule;
   }
 
   static async toggleRule(id: string, enabled: boolean): Promise<void> {
@@ -211,7 +288,7 @@ export class AutonomyService {
 
     const { data, error } = await query.maybeSingle();
     if (error) throw error;
-    return data;
+    return data as AutonomyConfig | null;
   }
 
   static async getGlobalConfig(): Promise<AutonomyConfig | null> {
@@ -227,12 +304,12 @@ export class AutonomyService {
   ): Promise<AutonomyConfig> {
     const { data, error } = await supabase
       .from("autonomy_configs")
-      .upsert(config)
+      .upsert(config as Record<string, unknown>)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as AutonomyConfig;
   }
 
   static async toggleAutonomy(
@@ -274,13 +351,13 @@ export class AutonomyService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    return (data || []) as AutonomyDecisionLog[];
   }
 
   static async logDecision(
     log: Partial<AutonomyDecisionLog>
   ): Promise<void> {
-    const { error } = await supabase.from("autonomy_decision_logs").insert(log);
+    const { error } = await supabase.from("autonomy_decision_logs").insert(log as Record<string, unknown>);
     if (error) throw error;
   }
 

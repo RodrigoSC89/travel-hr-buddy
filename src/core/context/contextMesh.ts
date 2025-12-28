@@ -1,12 +1,11 @@
-// @ts-nocheck
 /**
  * PATCH 216 - Context Mesh Core
- * TODO PATCH 659: TypeScript fixes deferred (context_history table schema missing from database)
  * Distributed context mesh for sharing state, decisions, and learning between modules
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export type ContextType = "mission" | "risk" | "ai" | "prediction" | "telemetry";
 export type SyncStatus = "pending" | "synced" | "failed";
@@ -15,7 +14,7 @@ export interface ContextMessage {
   id?: string;
   moduleName: string;
   contextType: ContextType;
-  contextData: Record<string, any>;
+  contextData: Record<string, unknown>;
   timestamp?: Date;
   source: string;
   syncStatus?: SyncStatus;
@@ -30,11 +29,22 @@ export interface ContextSubscription {
 
 type EventHandler = (message: ContextMessage) => void;
 
+// Database row type aligned with Supabase schema
+interface ContextHistoryRow {
+  id: string;
+  module_name: string;
+  context_type: string;
+  context_data: Json;
+  timestamp: string;
+  source: string;
+  sync_status: string | null;
+}
+
 class ContextMesh {
   private subscribers: Map<string, ContextSubscription> = new Map();
   private eventBus: Map<ContextType, Set<EventHandler>> = new Map();
   private pendingSync: ContextMessage[] = [];
-  private syncInterval: NodeJS.Timeout | null = null;
+  private syncInterval: ReturnType<typeof setInterval> | null = null;
   private useLocalStorage = false;
   private isInitialized = false;
 
@@ -173,11 +183,11 @@ class ContextMesh {
         return [];
       }
 
-      return (data || []).map(row => ({
+      return ((data || []) as ContextHistoryRow[]).map(row => ({
         id: row.id,
         moduleName: row.module_name,
         contextType: row.context_type as ContextType,
-        contextData: row.context_data as Record<string, any>,
+        contextData: row.context_data as Record<string, unknown>,
         timestamp: new Date(row.timestamp),
         source: row.source,
         syncStatus: row.sync_status as SyncStatus
@@ -293,7 +303,7 @@ class ContextMesh {
       .insert({
         module_name: message.moduleName,
         context_type: message.contextType,
-        context_data: message.contextData,
+        context_data: message.contextData as Json,
         timestamp: message.timestamp?.toISOString(),
         source: message.source,
         sync_status: message.syncStatus || "synced"

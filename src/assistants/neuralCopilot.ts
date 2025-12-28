@@ -1,4 +1,3 @@
-// @ts-nocheck - copilot_sessions schema uses user_id but types.ts generated doesn't include it
 /**
  * PATCH 213.0 - Neural Copilot Engine (Co-Piloto Neural IA)
  * 
@@ -7,6 +6,7 @@
 
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface CopilotMessage {
   id: string;
@@ -27,14 +27,14 @@ export interface TacticalRecommendation {
 }
 
 export interface CopilotContext {
-  mission_logs: any[];
-  telemetry_data: any[];
+  mission_logs: unknown[];
+  telemetry_data: unknown[];
   current_location?: {
     latitude: number;
     longitude: number;
   };
-  vessel_status?: any;
-  weather_conditions?: any;
+  vessel_status?: unknown;
+  weather_conditions?: unknown;
 }
 
 export interface CopilotSession {
@@ -49,10 +49,23 @@ export interface CopilotSession {
   updated_at: Date;
 }
 
+// Database row type aligned with Supabase schema
+interface CopilotSessionRow {
+  id: string;
+  user_id: string | null;
+  session_name: string | null;
+  context: Json | null;
+  messages: Json | null;
+  recommendations: Json | null;
+  status: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 class NeuralCopilotEngine {
   private activeSessions: Map<string, CopilotSession> = new Map();
-  private speechRecognition: any = null;
-  private speechSynthesis: any = null;
+  private speechRecognition: SpeechRecognition | null = null;
+  private speechSynthesis: SpeechSynthesis | null = null;
   private isListening = false;
 
   constructor() {
@@ -65,10 +78,11 @@ class NeuralCopilotEngine {
    */
   private initializeSpeechAPIs(): void {
     if (typeof window !== "undefined") {
-      // Speech Recognition (input)
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        this.speechRecognition = new SpeechRecognition();
+      // Speech Recognition (input) - use any to avoid complex Web Speech API types
+      const SpeechRecognitionAPI = (window as unknown as Record<string, unknown>).SpeechRecognition || 
+        (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
+      if (SpeechRecognitionAPI) {
+        this.speechRecognition = new (SpeechRecognitionAPI as new () => SpeechRecognition)();
         this.speechRecognition.continuous = true;
         this.speechRecognition.interimResults = false;
         this.speechRecognition.lang = "pt-BR";
@@ -111,9 +125,9 @@ class NeuralCopilotEngine {
         .insert({
           user_id: userId,
           session_name: sessionName,
-          context: context as unknown as Record<string, unknown>,
-          messages: [systemMessage] as unknown as Record<string, unknown>,
-          recommendations: [] as unknown as Record<string, unknown>,
+          context: context as unknown as Json,
+          messages: [systemMessage] as unknown as Json,
+          recommendations: [] as unknown as Json,
           status: "active",
         })
         .select()
@@ -121,16 +135,17 @@ class NeuralCopilotEngine {
 
       if (error) throw error;
 
+      const row = data as CopilotSessionRow;
       const session: CopilotSession = {
-        id: data.id,
+        id: row.id,
         user_id: userId,
         session_name: sessionName,
         context: context,
         messages: [systemMessage],
         recommendations: [],
         status: "active",
-        created_at: new Date(data.created_at),
-        updated_at: new Date(data.updated_at),
+        created_at: new Date(row.created_at),
+        updated_at: new Date(row.updated_at),
       };
 
       this.activeSessions.set(session.id, session);
@@ -360,15 +375,15 @@ class NeuralCopilotEngine {
 
     logger.info("[NeuralCopilot] Starting voice input", { sessionId });
 
-    this.speechRecognition.onresult = (event: unknown) => {
-      const speechEvent = event as { results: Array<Array<{ transcript: string }>> };
+    this.speechRecognition.onresult = (event: Event) => {
+      const speechEvent = event as unknown as { results: SpeechRecognitionResultList };
       const transcript = speechEvent.results[speechEvent.results.length - 1][0].transcript;
       logger.info("[NeuralCopilot] Voice input received", { transcript });
       onResult(transcript);
     };
 
-    this.speechRecognition.onerror = (event: unknown) => {
-      const errorEvent = event as { error: string };
+    this.speechRecognition.onerror = (event: Event) => {
+      const errorEvent = event as unknown as { error: string };
       logger.error("[NeuralCopilot] Speech recognition error", { error: errorEvent.error });
     };
 
@@ -424,16 +439,17 @@ class NeuralCopilotEngine {
       if (error) throw error;
       if (!data) return null;
 
+      const row = data as CopilotSessionRow;
       const session: CopilotSession = {
-        id: data.id,
-        user_id: data.user_id as string,
-        session_name: data.session_name as string,
-        context: data.context as unknown as CopilotContext,
-        messages: data.messages as unknown as CopilotMessage[],
-        recommendations: data.recommendations as unknown as TacticalRecommendation[],
-        status: (data.status as string || "active") as "active" | "paused" | "completed",
-        created_at: new Date(data.created_at as string),
-        updated_at: new Date(data.updated_at as string),
+        id: row.id,
+        user_id: row.user_id || "",
+        session_name: row.session_name || "",
+        context: (row.context as unknown as CopilotContext) || { mission_logs: [], telemetry_data: [] },
+        messages: (row.messages as unknown as CopilotMessage[]) || [],
+        recommendations: (row.recommendations as unknown as TacticalRecommendation[]) || [],
+        status: (row.status as CopilotSession["status"]) || "active",
+        created_at: new Date(row.created_at),
+        updated_at: new Date(row.updated_at),
       };
 
       this.activeSessions.set(sessionId, session);
@@ -452,9 +468,9 @@ class NeuralCopilotEngine {
       const { error } = await supabase
         .from("copilot_sessions")
         .update({
-          messages: session.messages as unknown as Record<string, unknown>,
-          recommendations: session.recommendations as unknown as Record<string, unknown>,
-          context: session.context as unknown as Record<string, unknown>,
+          messages: session.messages as unknown as Json,
+          recommendations: session.recommendations as unknown as Json,
+          context: session.context as unknown as Json,
           status: session.status,
         })
         .eq("id", session.id);
@@ -481,16 +497,16 @@ class NeuralCopilotEngine {
 
       if (error) throw error;
 
-      return (data || []).map(d => ({
-        id: d.id as string,
-        user_id: d.user_id as string,
-        session_name: d.session_name as string,
-        context: d.context as unknown as CopilotContext,
-        messages: d.messages as unknown as CopilotMessage[],
-        recommendations: d.recommendations as unknown as TacticalRecommendation[],
-        status: (d.status as string || "active") as "active" | "paused" | "completed",
-        created_at: new Date(d.created_at as string),
-        updated_at: new Date(d.updated_at as string),
+      return ((data || []) as CopilotSessionRow[]).map(row => ({
+        id: row.id,
+        user_id: row.user_id || "",
+        session_name: row.session_name || "",
+        context: (row.context as unknown as CopilotContext) || { mission_logs: [], telemetry_data: [] },
+        messages: (row.messages as unknown as CopilotMessage[]) || [],
+        recommendations: (row.recommendations as unknown as TacticalRecommendation[]) || [],
+        status: (row.status as CopilotSession["status"]) || "active",
+        created_at: new Date(row.created_at),
+        updated_at: new Date(row.updated_at),
       }));
     } catch (error) {
       logger.error("[NeuralCopilot] Failed to list sessions", { error });
@@ -499,25 +515,40 @@ class NeuralCopilotEngine {
   }
 
   /**
-   * End session
+   * End a session
    */
   async endSession(sessionId: string): Promise<void> {
-    try {
-      const { error } = await supabase
-        .from("copilot_sessions")
-        .update({ status: "completed" })
-        .eq("id", sessionId);
-
-      if (error) throw error;
-
+    const session = await this.getSession(sessionId);
+    if (session) {
+      session.status = "completed";
+      await this.updateSession(session);
       this.activeSessions.delete(sessionId);
+    }
+  }
 
-      logger.info("[NeuralCopilot] Session ended", { sessionId });
-    } catch (error) {
-      logger.error("[NeuralCopilot] Failed to end session", { error });
-      throw error;
+  /**
+   * Resume a paused session
+   */
+  async resumeSession(sessionId: string): Promise<CopilotSession | null> {
+    const session = await this.getSession(sessionId);
+    if (session && session.status === "paused") {
+      session.status = "active";
+      await this.updateSession(session);
+    }
+    return session;
+  }
+
+  /**
+   * Pause an active session
+   */
+  async pauseSession(sessionId: string): Promise<void> {
+    const session = await this.getSession(sessionId);
+    if (session && session.status === "active") {
+      session.status = "paused";
+      await this.updateSession(session);
     }
   }
 }
 
+// Export singleton instance
 export const neuralCopilot = new NeuralCopilotEngine();

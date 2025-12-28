@@ -468,6 +468,74 @@ export type Database = {
           },
         ]
       }
+      ai_behavior_snapshots: {
+        Row: {
+          accuracy_score: number | null
+          anomalies_detected: number | null
+          behavior_type: string | null
+          confidence_avg: number | null
+          correct_decisions: number | null
+          created_at: string
+          decisions_count: number | null
+          f1_score: number | null
+          id: string
+          learning_rate: number | null
+          metadata: Json | null
+          model_version: string | null
+          module_name: string
+          organization_id: string | null
+          precision_score: number | null
+          recall_score: number | null
+          snapshot_date: string
+        }
+        Insert: {
+          accuracy_score?: number | null
+          anomalies_detected?: number | null
+          behavior_type?: string | null
+          confidence_avg?: number | null
+          correct_decisions?: number | null
+          created_at?: string
+          decisions_count?: number | null
+          f1_score?: number | null
+          id?: string
+          learning_rate?: number | null
+          metadata?: Json | null
+          model_version?: string | null
+          module_name: string
+          organization_id?: string | null
+          precision_score?: number | null
+          recall_score?: number | null
+          snapshot_date?: string
+        }
+        Update: {
+          accuracy_score?: number | null
+          anomalies_detected?: number | null
+          behavior_type?: string | null
+          confidence_avg?: number | null
+          correct_decisions?: number | null
+          created_at?: string
+          decisions_count?: number | null
+          f1_score?: number | null
+          id?: string
+          learning_rate?: number | null
+          metadata?: Json | null
+          model_version?: string | null
+          module_name?: string
+          organization_id?: string | null
+          precision_score?: number | null
+          recall_score?: number | null
+          snapshot_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_behavior_snapshots_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_commands: {
         Row: {
           command_hash: string
@@ -4383,6 +4451,59 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      context_history: {
+        Row: {
+          confidence_score: number | null
+          context_key: string
+          context_type: string
+          context_value: Json | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          source_module: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          context_key: string
+          context_type: string
+          context_value?: Json | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          source_module?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          context_key?: string
+          context_type?: string
+          context_value?: Json | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          source_module?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "context_history_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       context_snapshots: {
         Row: {
@@ -9847,6 +9968,72 @@ export type Database = {
           },
         ]
       }
+      iot_sensors: {
+        Row: {
+          created_at: string
+          current_value: number | null
+          id: string
+          last_reading_at: string | null
+          location: string | null
+          metadata: Json | null
+          organization_id: string | null
+          sensor_id: string
+          sensor_type: string
+          status: string | null
+          thresholds: Json | null
+          unit: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          current_value?: number | null
+          id?: string
+          last_reading_at?: string | null
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          sensor_id: string
+          sensor_type: string
+          status?: string | null
+          thresholds?: Json | null
+          unit?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          current_value?: number | null
+          id?: string
+          last_reading_at?: string | null
+          location?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          sensor_id?: string
+          sensor_type?: string
+          status?: string | null
+          thresholds?: Json | null
+          unit?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iot_sensors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "iot_sensors_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_embeddings: {
         Row: {
           created_at: string
@@ -14278,6 +14465,77 @@ export type Database = {
             columns: ["reservation_id"]
             isOneToOne: false
             referencedRelation: "reservations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reservation_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          payer_email: string | null
+          payer_name: string | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_status: string | null
+          receipt_url: string | null
+          refund_amount: number | null
+          refund_date: string | null
+          reservation_id: string | null
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          payer_email?: string | null
+          payer_name?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          receipt_url?: string | null
+          refund_amount?: number | null
+          refund_date?: string | null
+          reservation_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          payer_email?: string | null
+          payer_name?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          receipt_url?: string | null
+          refund_amount?: number | null
+          refund_date?: string | null
+          reservation_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservation_payments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -20657,6 +20915,125 @@ export type Database = {
             columns: ["workflow_id"]
             isOneToOne: false
             referencedRelation: "nautilus_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_steps: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          position: number
+          priority: string | null
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          workflow_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          position?: number
+          priority?: string | null
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          workflow_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          position?: number
+          priority?: string | null
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          workflow_id?: string
+        }
+        Relationships: []
+      }
+      workflow_suggestions: {
+        Row: {
+          action_data: Json | null
+          applied_at: string | null
+          applied_by: string | null
+          confidence_score: number | null
+          created_at: string
+          description: string | null
+          dismissed_at: string | null
+          dismissed_by: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          priority: string | null
+          source: string | null
+          status: string | null
+          suggestion_type: string
+          title: string
+          workflow_id: string | null
+        }
+        Insert: {
+          action_data?: Json | null
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          dismissed_at?: string | null
+          dismissed_by?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          source?: string | null
+          status?: string | null
+          suggestion_type: string
+          title: string
+          workflow_id?: string | null
+        }
+        Update: {
+          action_data?: Json | null
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          dismissed_at?: string | null
+          dismissed_by?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          source?: string | null
+          status?: string | null
+          suggestion_type?: string
+          title?: string
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_suggestions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
