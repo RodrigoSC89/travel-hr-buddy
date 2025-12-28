@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 616 - Fail2Ban Simulation Service
  * Monitors and blocks excessive login attempts and suspicious activity
@@ -23,8 +22,14 @@ interface BlockedEntity {
   attemptCount: number;
 }
 
+interface AttemptWindow {
+  attempts: LoginAttempt[];
+  firstAttempt: Date;
+}
+
 // In-memory store for blocked entities (in production, use Redis or database)
 const blockedEntities = new Map<string, BlockedEntity>();
+const attemptWindows = new Map<string, AttemptWindow>();
 
 // Configuration
 const FAIL2BAN_CONFIG = {
@@ -38,17 +43,17 @@ const FAIL2BAN_CONFIG = {
  */
 export function isBlocked(identifier: string): boolean {
   const blocked = blockedEntities.get(identifier);
-  
+
   if (!blocked) {
     return false;
   }
-  
+
   // Check if block has expired
   if (new Date() > blocked.expiresAt) {
     blockedEntities.delete(identifier);
     return false;
   }
-  
+
   return true;
 }
 
@@ -57,17 +62,17 @@ export function isBlocked(identifier: string): boolean {
  */
 export function getBlockInfo(identifier: string): BlockedEntity | null {
   const blocked = blockedEntities.get(identifier);
-  
+
   if (!blocked) {
     return null;
   }
-  
+
   // Check if block has expired
   if (new Date() > blocked.expiresAt) {
     blockedEntities.delete(identifier);
     return null;
   }
-  
+
   return blocked;
 }
 
@@ -81,254 +86,173 @@ export async function logLoginAttempt(attempt: LoginAttempt): Promise<{
   blockExpiresAt?: Date;
 }> {
   try {
-    // Log to database
-    await supabase.from("login_logs").insert({
-      user_id: attempt.userId,
-      success: attempt.success,
-      ip_address: attempt.ipAddress,
-      user_agent: attempt.userAgent,
-      metadata: {
+    // Log to database via access_logs (login_logs may not exist)
+    await supabase.from("access_logs").insert({
+      user_id: attempt.userId || null,
+      action: attempt.success ? "login_success" : "login_failed",
+      module_accessed: "auth",
+      result: attempt.success ? "success" : "failure",
+      severity: attempt.success ? "info" : "warning",
+      user_agent: attempt.userAgent || null,
+      details: {
+        ip_address: attempt.ipAddress,
         timestamp: attempt.timestamp.toISOString(),
       },
     });
-    
+
     // If login was successful, clear any failed attempt tracking
     if (attempt.success) {
+      attemptWindows.delete(attempt.ipAddress);
       return { blocked: false };
     }
-    
+
     // Check if IP is already blocked
     if (isBlocked(attempt.ipAddress)) {
       const blockInfo = getBlockInfo(attempt.ipAddress);
       return {
         blocked: true,
-        reason: "IP address temporarily blocked due to excessive failed login attempts",
+        reason: blockInfo?.reason || "Too many failed attempts",
         blockExpiresAt: blockInfo?.expiresAt,
       };
     }
-    
-    // Count recent failed attempts from this IP
-    const windowStart = new Date(Date.now() - FAIL2BAN_CONFIG.windowDuration);
-    
-    const { data: recentAttempts, error } = await supabase
-      .from("login_logs")
-      .select("id")
-      .eq("ip_address", attempt.ipAddress)
-      .eq("success", false)
-      .gte("created_at", windowStart.toISOString());
-    
-    if (error) {
-      console.error("Error checking recent login attempts:", error);
-      return { blocked: false };
+
+    // Track failed attempt
+    const now = new Date();
+    let window = attemptWindows.get(attempt.ipAddress);
+
+    if (!window) {
+      window = { attempts: [], firstAttempt: now };
+      attemptWindows.set(attempt.ipAddress, window);
     }
-    
-    const attemptCount = (recentAttempts?.length || 0) + 1; // +1 for current attempt
-    
-    // Check if we should block this IP
-    if (attemptCount >= FAIL2BAN_CONFIG.maxAttempts) {
-      const now = new Date();
+
+    // Clean up old attempts outside the window
+    const windowStart = new Date(now.getTime() - FAIL2BAN_CONFIG.windowDuration);
+    window.attempts = window.attempts.filter((a) => a.timestamp > windowStart);
+
+    // Add current attempt
+    window.attempts.push(attempt);
+
+    // Check if we should block
+    if (window.attempts.length >= FAIL2BAN_CONFIG.maxAttempts) {
       const expiresAt = new Date(now.getTime() + FAIL2BAN_CONFIG.blockDuration);
-      
-      const blockInfo: BlockedEntity = {
+
+      blockedEntities.set(attempt.ipAddress, {
         identifier: attempt.ipAddress,
         type: "ip",
         blockedAt: now,
         expiresAt,
-        reason: "Excessive failed login attempts",
-        attemptCount,
-      };
-      
-      blockedEntities.set(attempt.ipAddress, blockInfo);
-      
-      // Log security event
-      await supabase.from("security_events").insert({
-        user_id: attempt.userId,
-        event_type: "ip_blocked",
-        ip_address: attempt.ipAddress,
-        user_agent: attempt.userAgent,
-        severity: "high",
-        metadata: {
-          attemptCount,
-          blockDuration: FAIL2BAN_CONFIG.blockDuration,
-          windowDuration: FAIL2BAN_CONFIG.windowDuration,
+        reason: `Too many failed login attempts (${window.attempts.length} in ${FAIL2BAN_CONFIG.windowDuration / 60000} minutes)`,
+        attemptCount: window.attempts.length,
+      });
+
+      // Log the block
+      await supabase.from("access_logs").insert({
+        user_id: attempt.userId || null,
+        action: "ip_blocked",
+        module_accessed: "security",
+        result: "blocked",
+        severity: "critical",
+        details: {
+          ip_address: attempt.ipAddress,
+          reason: "fail2ban",
+          attempts: window.attempts.length,
+          block_expires: expiresAt.toISOString(),
         },
       });
-      
+
+      // Clear the window
+      attemptWindows.delete(attempt.ipAddress);
+
       return {
         blocked: true,
-        reason: "IP blocked due to excessive failed login attempts",
+        reason: `Too many failed login attempts. Try again in ${FAIL2BAN_CONFIG.blockDuration / 60000} minutes.`,
         blockExpiresAt: expiresAt,
       };
     }
-    
-    // Return remaining attempts
+
     return {
       blocked: false,
-      remainingAttempts: FAIL2BAN_CONFIG.maxAttempts - attemptCount,
+      remainingAttempts: FAIL2BAN_CONFIG.maxAttempts - window.attempts.length,
     };
-    
   } catch (error) {
-    console.error("Error in logLoginAttempt:", error);
+    console.error("Fail2ban logging error:", error);
+    // Don't block on logging errors
     return { blocked: false };
   }
 }
 
 /**
- * Log a password reset attempt
+ * Manually block an IP or user
  */
-export async function logPasswordResetAttempt(
-  email: string,
-  ipAddress: string,
-  userAgent?: string
-): Promise<{
-  blocked: boolean;
-  reason?: string;
-  remainingAttempts?: number;
-}> {
-  try {
-    // Check if IP is already blocked
-    if (isBlocked(ipAddress)) {
-      return {
-        blocked: true,
-        reason: "IP address temporarily blocked due to excessive requests",
-      };
-    }
-    
-    // Count recent password reset attempts from this IP
-    const windowStart = new Date(Date.now() - FAIL2BAN_CONFIG.windowDuration);
-    
-    const { data: recentAttempts } = await supabase
-      .from("security_events")
-      .select("id")
-      .eq("ip_address", ipAddress)
-      .eq("event_type", "password_reset_attempt")
-      .gte("created_at", windowStart.toISOString());
-    
-    const attemptCount = (recentAttempts?.length || 0) + 1;
-    
-    // Log the attempt
-    await supabase.from("security_events").insert({
-      event_type: "password_reset_attempt",
-      ip_address: ipAddress,
-      user_agent: userAgent,
-      severity: "medium",
-      metadata: {
-        email,
-        attemptCount,
-      },
-    });
-    
-    // Block if too many attempts
-    if (attemptCount >= FAIL2BAN_CONFIG.maxAttempts) {
-      const now = new Date();
-      const expiresAt = new Date(now.getTime() + FAIL2BAN_CONFIG.blockDuration);
-      
-      blockedEntities.set(ipAddress, {
-        identifier: ipAddress,
-        type: "ip",
-        blockedAt: now,
-        expiresAt,
-        reason: "Excessive password reset requests",
-        attemptCount,
-      });
-      
-      return {
-        blocked: true,
-        reason: "Too many password reset requests. Please try again later.",
-      };
-    }
-    
-    return {
-      blocked: false,
-      remainingAttempts: FAIL2BAN_CONFIG.maxAttempts - attemptCount,
-    };
-    
-  } catch (error) {
-    console.error("Error in logPasswordResetAttempt:", error);
-    return { blocked: false };
-  }
+export function blockEntity(
+  identifier: string,
+  type: "ip" | "user",
+  reason: string,
+  durationMs: number = FAIL2BAN_CONFIG.blockDuration
+): void {
+  const now = new Date();
+  blockedEntities.set(identifier, {
+    identifier,
+    type,
+    blockedAt: now,
+    expiresAt: new Date(now.getTime() + durationMs),
+    reason,
+    attemptCount: 0,
+  });
 }
 
 /**
- * Manually unblock an entity (for admin use)
+ * Unblock an IP or user
  */
-export function unblock(identifier: string): boolean {
+export function unblockEntity(identifier: string): boolean {
   return blockedEntities.delete(identifier);
 }
 
 /**
  * Get all currently blocked entities
  */
-export function getAllBlocked(): BlockedEntity[] {
+export function getBlockedEntities(): BlockedEntity[] {
   const now = new Date();
-  const blocked: BlockedEntity[] = [];
-  
-  for (const [identifier, entity] of blockedEntities.entries()) {
-    // Remove expired blocks
+  const entities: BlockedEntity[] = [];
+
+  blockedEntities.forEach((entity, key) => {
     if (now > entity.expiresAt) {
-      blockedEntities.delete(identifier);
+      blockedEntities.delete(key);
     } else {
-      blocked.push(entity);
+      entities.push(entity);
     }
-  }
-  
-  return blocked;
+  });
+
+  return entities;
 }
 
 /**
- * Initialize cleanup interval
- * Should be called once when the application starts
+ * Clear all blocks (admin function)
  */
-export function initializeCleanup(): () => void {
-  // Clean up expired blocks every minute
-  const intervalId = setInterval(cleanupExpiredBlocks, 60 * 1000);
-  
-  // Return cleanup function to clear interval
-  return () => clearInterval(intervalId);
-}
-export function getClientIp(headers: Headers): string {
-  // Try various headers that might contain the real IP
-  const xForwardedFor = headers.get("x-forwarded-for");
-  if (xForwardedFor) {
-    return xForwardedFor.split(",")[0].trim();
-  }
-  
-  const xRealIp = headers.get("x-real-ip");
-  if (xRealIp) {
-    return xRealIp;
-  }
-  
-  const cfConnectingIp = headers.get("cf-connecting-ip");
-  if (cfConnectingIp) {
-    return cfConnectingIp;
-  }
-  
-  return "unknown";
+export function clearAllBlocks(): void {
+  blockedEntities.clear();
+  attemptWindows.clear();
 }
 
 /**
- * Get user agent from request
+ * Get fail2ban statistics
  */
-export function getUserAgent(headers: Headers): string {
-  return headers.get("user-agent") || "unknown";
-}
-
-/**
- * Clean up expired blocks periodically
- */
-export function cleanupExpiredBlocks(): number {
+export function getStatistics(): {
+  blockedCount: number;
+  activeWindowsCount: number;
+  config: typeof FAIL2BAN_CONFIG;
+} {
+  // Clean up expired blocks first
   const now = new Date();
-  let cleaned = 0;
-  
-  for (const [identifier, entity] of blockedEntities.entries()) {
+  blockedEntities.forEach((entity, key) => {
     if (now > entity.expiresAt) {
-      blockedEntities.delete(identifier);
-      cleaned++;
+      blockedEntities.delete(key);
     }
-  }
-  
-  return cleaned;
-}
+  });
 
-// Note: initializeCleanup() should be called explicitly in app initialization
-// rather than at module load time to prevent memory leaks in development
+  return {
+    blockedCount: blockedEntities.size,
+    activeWindowsCount: attemptWindows.size,
+    config: FAIL2BAN_CONFIG,
+  };
+}

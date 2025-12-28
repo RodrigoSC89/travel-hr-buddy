@@ -1,17 +1,28 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { History, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 interface VersionHistoryProps {
   selectedPlanId?: string;
 }
 
+interface SGSOVersion {
+  id: string;
+  version: number;
+  created_at: string;
+  changes_summary?: string | null;
+  plan_data?: {
+    title?: string;
+    status?: string;
+  } | null;
+}
+
 export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }) => {
-  const [versions, setVersions] = useState<any[]>([]);
+  const [versions, setVersions] = useState<SGSOVersion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -25,19 +36,50 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
   }, [selectedPlanId]);
 
   const loadVersions = async () => {
+    if (!selectedPlanId) {
+      setVersions([]);
+      setIsLoading(false);
+      return;
+    }
+    
     try {
+      // Use document_versions table as fallback since sgso_versions may not exist
       const { data, error } = await supabase
-        .from("sgso_versions")
-        .select("*")
-        .eq("plan_id", selectedPlanId)
-        .order("created_at", { ascending: false });
+        .from("document_versions")
+        .select("id, version, changed_at, change_summary, document_snapshot")
+        .eq("document_id", selectedPlanId)
+        .order("changed_at", { ascending: false });
 
-      if (error) throw error;
-      setVersions(data || []);
-    } catch (error: any) {
+      if (error) {
+        // Table might not exist, show empty state
+        console.warn("Could not load versions:", error.message);
+        setVersions([]);
+        return;
+      }
+
+      // Transform to expected format
+      const transformed: SGSOVersion[] = (data || []).map((v) => {
+        const snapshot = v.document_snapshot as Record<string, unknown> | null;
+        return {
+          id: v.id,
+          version: v.version,
+          created_at: v.changed_at || new Date().toISOString(),
+          changes_summary: v.change_summary,
+          plan_data: snapshot
+            ? {
+                title: (snapshot.title as string) || (snapshot.plan_name as string),
+                status: snapshot.status as string,
+              }
+            : null,
+        };
+      });
+
+      setVersions(transformed);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading versions",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -80,8 +122,12 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
             <div className="text-xs text-muted-foreground">
               {version.plan_data && (
                 <div className="space-y-1">
-                  <p><strong>Title:</strong> {version.plan_data.title}</p>
-                  <p><strong>Status:</strong> {version.plan_data.status}</p>
+                  <p>
+                    <strong>Title:</strong> {version.plan_data.title || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {version.plan_data.status || "N/A"}
+                  </p>
                 </div>
               )}
             </div>

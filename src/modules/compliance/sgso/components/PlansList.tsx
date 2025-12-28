@@ -1,20 +1,32 @@
-// @ts-nocheck
+// @ts-nocheck - SGSOPlan/SGSOAction type mismatch with generateSgsoReportPDF expected types
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, Eye, Trash2 } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { generateSgsoReportPDF } from "../services/generateSgsoReportPDF";
+import type { Json } from "@/integrations/supabase/types";
+
+// Aligned with sgso_plans schema
+interface SGSOPlan {
+  id: string;
+  plan_name: string;
+  plan_version: string | null;
+  status: string | null;
+  content: Json | null;
+  metadata: Json | null;
+  created_at: string | null;
+}
 
 interface PlansListProps {
-  onSelectPlan: (plan: any) => void;
+  onSelectPlan: (plan: SGSOPlan) => void;
   onRefresh: () => void;
 }
 
 export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh }) => {
-  const [plans, setPlans] = useState<any[]>([]);
+  const [plans, setPlans] = useState<SGSOPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -26,15 +38,16 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
     try {
       const { data, error } = await supabase
         .from("sgso_plans")
-        .select("*")
+        .select("id, plan_name, plan_version, status, content, metadata, created_at")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setPlans(data || []);
-    } catch (error: any) {
+      setPlans((data || []) as SGSOPlan[]);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading plans",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -42,14 +55,24 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
     }
   };
 
-  const handleExportPDF = async (plan: any) => {
+  const handleExportPDF = async (plan: SGSOPlan) => {
     try {
       const { data: actions } = await supabase
         .from("sgso_actions")
         .select("*")
         .eq("plan_id", plan.id);
 
-      const blob = await generateSgsoReportPDF(plan, actions || []);
+      // Transform plan to expected format for PDF generator
+      const planForPdf = {
+        id: plan.id,
+        title: plan.plan_name,
+        version: plan.plan_version || "1.0",
+        status: plan.status || "draft",
+        description: (plan.metadata as Record<string, unknown>)?.description as string || "",
+        created_at: plan.created_at,
+      } as Parameters<typeof generateSgsoReportPDF>[0];
+
+      const blob = await generateSgsoReportPDF(planForPdf, actions || []);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -61,13 +84,21 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
         title: "PDF generated",
         description: "SGSO report has been downloaded.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error generating PDF",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     }
+  };
+
+  // Get description from metadata
+  const getDescription = (plan: SGSOPlan): string => {
+    if (!plan.metadata) return "No description";
+    const meta = plan.metadata as Record<string, unknown>;
+    return (meta.description as string) || "No description";
   };
 
   if (isLoading) {
@@ -81,34 +112,22 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
           <CardHeader>
             <div className="flex items-start justify-between">
               <div>
-                <CardTitle className="text-lg">{plan.title}</CardTitle>
-                <CardDescription className="mt-1">
-                  Version {plan.version}
-                </CardDescription>
+                <CardTitle className="text-lg">{plan.plan_name}</CardTitle>
+                <CardDescription className="mt-1">Version {plan.plan_version || "1.0"}</CardDescription>
               </div>
               <Badge variant={plan.status === "active" ? "default" : "secondary"}>
-                {plan.status}
+                {plan.status || "draft"}
               </Badge>
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-              {plan.description || "No description"}
-            </p>
+            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{getDescription(plan)}</p>
             <div className="flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onSelectPlan(plan)}
-              >
+              <Button size="sm" variant="outline" onClick={() => onSelectPlan(plan)}>
                 <Eye className="h-4 w-4 mr-1" />
                 View
               </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleExportPDF(plan)}
-              >
+              <Button size="sm" variant="outline" onClick={() => handleExportPDF(plan)}>
                 <Download className="h-4 w-4 mr-1" />
                 PDF
               </Button>
