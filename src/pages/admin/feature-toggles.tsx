@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -50,7 +49,7 @@ export default function FeatureToggles() {
     );
   }
 
-  const enabledCount = flags?.filter(f => f.enabled).length || 0;
+  const enabledCount = flags?.filter((f: { enabled: boolean }) => f.enabled).length || 0;
   const totalCount = flags?.length || 0;
 
   return (
@@ -107,14 +106,14 @@ export default function FeatureToggles() {
 
         <TabsContent value="enabled" className="space-y-4">
           <FeatureFlagsList 
-            flags={flags?.filter(f => f.enabled) || []} 
+            flags={flags?.filter((f: { enabled: boolean }) => f.enabled) || []} 
             onToggle={handleToggle} 
           />
         </TabsContent>
 
         <TabsContent value="disabled" className="space-y-4">
           <FeatureFlagsList 
-            flags={flags?.filter(f => !f.enabled) || []} 
+            flags={flags?.filter((f: { enabled: boolean }) => !f.enabled) || []} 
             onToggle={handleToggle} 
           />
         </TabsContent>

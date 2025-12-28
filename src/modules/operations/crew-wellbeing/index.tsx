@@ -75,11 +75,6 @@ const CrewWellbeing = () => {
         <TabsContent value="dashboard" className="space-y-6">
           <HealthMetricsDashboard />
         </TabsContent>
-        </TabsContent>
-
-        <TabsContent value="dashboard" className="space-y-6">
-          <HealthMetricsDashboard />
-        </TabsContent>
 
         <TabsContent value="alerts" className="mt-6">
 
