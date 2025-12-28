@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Complete crew rotation system with conflict detection and notifications
@@ -49,6 +48,27 @@ interface RotationConflict {
   severity: "warning" | "error";
 }
 
+interface CrewMember {
+  name: string;
+}
+
+interface Vessel {
+  name: string;
+}
+
+interface RotationData {
+  id: string;
+  crew_member_id: string;
+  crew_member?: CrewMember;
+  vessel_id?: string;
+  vessel?: Vessel;
+  rotation_start: string;
+  rotation_end: string;
+  status: string;
+  conflicts?: string[];
+  created_at: string;
+}
+
 export default function CrewRotationModule() {
   const { toast } = useToast();
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
@@ -71,18 +91,18 @@ export default function CrewRotationModule() {
   const loadRotations = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("crew_rotations")
+      const { data, error } = await (supabase
+        .from("crew_rotations" as any)
         .select(`
           *,
           crew_member:crew_members(name),
           vessel:vessels(name)
         `)
-        .order("rotation_start", { ascending: true });
+        .order("rotation_start", { ascending: true }) as unknown as Promise<{ data: RotationData[] | null; error: Error | null }>);
 
       if (error) throw error;
 
-      const formattedRotations = data?.map(r => ({
+      const formattedRotations: CrewRotation[] = data?.map(r => ({
         id: r.id,
         crew_member_id: r.crew_member_id,
         crew_member_name: r.crew_member?.name || "Unknown",
@@ -90,7 +110,7 @@ export default function CrewRotationModule() {
         vessel_name: r.vessel?.name || "Unassigned",
         rotation_start: r.rotation_start,
         rotation_end: r.rotation_end,
-        status: r.status,
+        status: r.status as CrewRotation["status"],
         conflicts: r.conflicts,
         created_at: r.created_at
       })) || [];
@@ -190,8 +210,8 @@ export default function CrewRotationModule() {
     }
 
     try {
-      const { error } = await supabase
-        .from("crew_rotations")
+      const { error } = await (supabase
+        .from("crew_rotations" as any)
         .insert({
           crew_member_id: newRotation.crew_member_id,
           vessel_id: newRotation.vessel_id || null,
@@ -199,7 +219,7 @@ export default function CrewRotationModule() {
           rotation_end: newRotation.end_date,
           status: "scheduled",
           conflicts: conflicts.map(c => c.message)
-        });
+        }) as unknown as Promise<{ error: Error | null }>);
 
       if (error) throw error;
 

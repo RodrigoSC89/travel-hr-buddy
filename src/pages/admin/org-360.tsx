@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -33,14 +32,14 @@ export default function Org360Dashboard() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, last_active_at");
+        .select("id, updated_at");
       
       if (error) throw error;
 
       const now = new Date();
-      const activeToday = data?.filter(u => {
-        if (!u.last_active_at) return false;
-        const lastActive = new Date(u.last_active_at);
+      const activeToday = data?.filter((u) => {
+        if (!u.updated_at) return false;
+        const lastActive = new Date(u.updated_at);
         return (now.getTime() - lastActive.getTime()) < 24 * 60 * 60 * 1000;
       }).length || 0;
 
