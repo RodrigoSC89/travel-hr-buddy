@@ -1,6 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 562 - Beta Feedback System
+ * PATCH 856 - Removed @ts-nocheck, added proper typing
  * 
  * Integrated feedback form component for collecting user feedback
  * during the closed beta testing phase
@@ -63,25 +63,26 @@ export function BetaFeedbackForm() {
         sessionDuration,
       };
 
-      // Store in Supabase
+      // Store in Supabase using the correct schema fields
       const { error } = await supabase
         .from("beta_feedback")
-        .insert([feedbackData]);
+        .insert([{
+          title: `Feedback from ${formData.userName}`,
+          description: formData.comments || 'No comments',
+          feature_name: formData.module || 'General',
+          feedback_type: 'beta_feedback',
+          status: 'pending',
+          rating: parseInt(formData.rating) || 3,
+          metadata: JSON.parse(JSON.stringify(feedbackData)),
+        }]);
 
       if (error) throw error;
 
       // Also store locally for CSV/JSON export
-      await fetch("/api/feedback/store", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(feedbackData),
-      }).catch(() => {
-        // Local storage fallback
-        const existing = localStorage.getItem("beta_feedback") || "[]";
-        const feedbacks = JSON.parse(existing);
-        feedbacks.push(feedbackData);
-        localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
-      });
+      const existing = localStorage.getItem("beta_feedback") || "[]";
+      const feedbacks = JSON.parse(existing);
+      feedbacks.push(feedbackData);
+      localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
 
       toast({
         title: "Feedback Enviado!",
