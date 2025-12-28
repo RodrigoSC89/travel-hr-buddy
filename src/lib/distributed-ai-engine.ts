@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 167.0: Distributed AI Engine
  * Distributed AI engine with vessel-specific contexts and global synchronization
  * 
  * Each vessel runs local AI with fallback to central AI
  * Global sync occurs every 12 hours to share learnings
+ * Uses local interfaces for type safety
  * 
  * @module distributed-ai-engine
  */
