@@ -785,3 +785,19 @@ comment = "MarineTraffic API - Vessel positions, port calls, voyage forecasts"
 [functions.api-health-monitor]
 verify_jwt = false
 comment = "API Health Monitor - Check status of all external API integrations"
+
+[functions.meteomatics-weather]
+verify_jwt = false
+comment = "Meteomatics API - High-precision weather forecasts for maritime"
+
+[functions.port-api]
+verify_jwt = false
+comment = "PortAPI - Global port information, schedules and facilities"
+
+[functions.flight-tracker]
+verify_jwt = false
+comment = "FlightAware/AviationStack - Flight tracking for crew logistics"
+
+[functions.security-scanner]
+verify_jwt = false
+comment = "VirusTotal - Security scanning for files, URLs and threat intel"

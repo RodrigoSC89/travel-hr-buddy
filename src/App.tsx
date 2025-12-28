@@ -109,6 +109,7 @@ const OfflinePage = lazy(() => import(/* webpackChunkName: "page-offline" */ "@/
 // Integrations & Docs - PATCH 854
 const IntegrationsCenter = lazy(() => import(/* webpackChunkName: "page-integrations" */ "@/pages/IntegrationsCenter"));
 const DocumentationHub = lazy(() => import(/* webpackChunkName: "page-docs" */ "@/pages/DocumentationHub"));
+const APIMonitor = lazy(() => import(/* webpackChunkName: "page-api-monitor" */ "@/pages/APIMonitor"));
 
 // Executive & NOC - PATCH 855
 const ExecutiveBIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-bi" */ "@/pages/ExecutiveBIDashboard"));
@@ -203,8 +204,9 @@ function App() {
                         <Route path="simulador" element={<IncidentSimulator />} />
                         <Route path="offline" element={<OfflinePage />} />
                         
-                        {/* Integrations & Docs - PATCH 854 */}
+{/* Integrations & Docs - PATCH 854 */}
                         <Route path="integracoes" element={<IntegrationsCenter />} />
+                        <Route path="integracoes/api-monitor" element={<APIMonitor />} />
                         <Route path="docs" element={<DocumentationHub />} />
                         
                         {/* NEW: Executive & NOC Routes - PATCH 855 */}
