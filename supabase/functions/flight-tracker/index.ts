@@ -6,17 +6,38 @@ const corsHeaders = {
 };
 
 /**
- * Flight Tracker - FlightAware/AviationStack integration
+ * Flight Tracker - OpenSky Network + FlightAware/AviationStack integration
  * Real-time flight tracking for crew logistics
  */
 
 interface FlightRequest {
-  operation: "track-flight" | "search-flights" | "airport-info" | "crew-travel";
+  operation: "track-flight" | "search-flights" | "airport-info" | "crew-travel" | "live-aircraft";
   flightNumber?: string;
   origin?: string;
   destination?: string;
   date?: string;
   crewMembers?: string[];
+  bounds?: { minLat: number; maxLat: number; minLon: number; maxLon: number };
+}
+
+interface OpenSkyState {
+  icao24: string;
+  callsign: string | null;
+  origin_country: string;
+  time_position: number | null;
+  last_contact: number;
+  longitude: number | null;
+  latitude: number | null;
+  baro_altitude: number | null;
+  on_ground: boolean;
+  velocity: number | null;
+  true_track: number | null;
+  vertical_rate: number | null;
+  sensors: number[] | null;
+  geo_altitude: number | null;
+  squawk: string | null;
+  spi: boolean;
+  position_source: number;
 }
 
 const AIRLINES = [
@@ -31,17 +52,82 @@ const AIRLINES = [
 ];
 
 const AIRPORTS = [
-  { code: "GRU", name: "São Paulo Guarulhos", city: "São Paulo", country: "BR" },
-  { code: "GIG", name: "Rio de Janeiro Galeão", city: "Rio de Janeiro", country: "BR" },
-  { code: "SSA", name: "Salvador", city: "Salvador", country: "BR" },
-  { code: "REC", name: "Recife", city: "Recife", country: "BR" },
-  { code: "JFK", name: "John F. Kennedy", city: "New York", country: "US" },
-  { code: "LHR", name: "Heathrow", city: "London", country: "UK" },
-  { code: "CDG", name: "Charles de Gaulle", city: "Paris", country: "FR" },
-  { code: "FRA", name: "Frankfurt", city: "Frankfurt", country: "DE" },
-  { code: "SIN", name: "Changi", city: "Singapore", country: "SG" },
-  { code: "DXB", name: "Dubai International", city: "Dubai", country: "AE" },
+  { code: "GRU", name: "São Paulo Guarulhos", city: "São Paulo", country: "BR", lat: -23.4356, lon: -46.4731 },
+  { code: "GIG", name: "Rio de Janeiro Galeão", city: "Rio de Janeiro", country: "BR", lat: -22.8099, lon: -43.2505 },
+  { code: "SSA", name: "Salvador", city: "Salvador", country: "BR", lat: -12.9086, lon: -38.3225 },
+  { code: "REC", name: "Recife", city: "Recife", country: "BR", lat: -8.1264, lon: -34.9236 },
+  { code: "JFK", name: "John F. Kennedy", city: "New York", country: "US", lat: 40.6413, lon: -73.7781 },
+  { code: "LHR", name: "Heathrow", city: "London", country: "UK", lat: 51.4700, lon: -0.4543 },
+  { code: "CDG", name: "Charles de Gaulle", city: "Paris", country: "FR", lat: 49.0097, lon: 2.5479 },
+  { code: "FRA", name: "Frankfurt", city: "Frankfurt", country: "DE", lat: 50.0379, lon: 8.5622 },
+  { code: "SIN", name: "Changi", city: "Singapore", country: "SG", lat: 1.3644, lon: 103.9915 },
+  { code: "DXB", name: "Dubai International", city: "Dubai", country: "AE", lat: 25.2532, lon: 55.3657 },
 ];
+
+/**
+ * Fetch live aircraft data from OpenSky Network API
+ * API is free and doesn't require authentication for anonymous access
+ * Rate limit: 400 requests/day for anonymous, 4000/day with account
+ */
+async function fetchOpenSkyData(bounds?: { minLat: number; maxLat: number; minLon: number; maxLon: number }) {
+  const username = Deno.env.get("OPENSKY_USERNAME");
+  const password = Deno.env.get("OPENSKY_PASSWORD");
+  
+  let url = "https://opensky-network.org/api/states/all";
+  
+  // Add bounding box if provided (reduces data and improves performance)
+  if (bounds) {
+    url += `?lamin=${bounds.minLat}&lomin=${bounds.minLon}&lamax=${bounds.maxLat}&lomax=${bounds.maxLon}`;
+  }
+  
+  const headers: HeadersInit = {};
+  
+  // Add authentication if credentials are available
+  if (username && password) {
+    headers["Authorization"] = `Basic ${btoa(`${username}:${password}`)}`;
+  }
+  
+  try {
+    console.log(`[flight-tracker] Fetching OpenSky data from: ${url}`);
+    const response = await fetch(url, { headers });
+    
+    if (!response.ok) {
+      console.error(`[flight-tracker] OpenSky API error: ${response.status}`);
+      return null;
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("[flight-tracker] OpenSky fetch error:", error);
+    return null;
+  }
+}
+
+/**
+ * Parse OpenSky state vector array into structured object
+ */
+function parseOpenSkyState(stateArray: any[]): OpenSkyState {
+  return {
+    icao24: stateArray[0],
+    callsign: stateArray[1]?.trim() || null,
+    origin_country: stateArray[2],
+    time_position: stateArray[3],
+    last_contact: stateArray[4],
+    longitude: stateArray[5],
+    latitude: stateArray[6],
+    baro_altitude: stateArray[7],
+    on_ground: stateArray[8],
+    velocity: stateArray[9],
+    true_track: stateArray[10],
+    vertical_rate: stateArray[11],
+    sensors: stateArray[12],
+    geo_altitude: stateArray[13],
+    squawk: stateArray[14],
+    spi: stateArray[15],
+    position_source: stateArray[16],
+  };
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -50,13 +136,74 @@ serve(async (req) => {
 
   try {
     const payload: FlightRequest = await req.json();
-    const { operation, flightNumber, origin, destination, date, crewMembers } = payload;
+    const { operation, flightNumber, origin, destination, date, crewMembers, bounds } = payload;
 
     const apiKey = Deno.env.get("FLIGHTAWARE_API_KEY") || Deno.env.get("AVIATIONSTACK_API_KEY");
     
     console.log(`[flight-tracker] Operation: ${operation}`);
 
     switch (operation) {
+      // NEW: Live aircraft tracking with OpenSky Network
+      case "live-aircraft": {
+        const openSkyData = await fetchOpenSkyData(bounds);
+        
+        if (!openSkyData || !openSkyData.states) {
+          // Return demo data if OpenSky is unavailable
+          const demoAircraft = Array.from({ length: 25 }, (_, i) => ({
+            icao24: `demo${i.toString().padStart(4, '0')}`,
+            callsign: `${AIRLINES[i % AIRLINES.length].code}${1000 + i}`,
+            origin_country: ["Brazil", "USA", "UK", "Germany", "France"][i % 5],
+            latitude: -23.43 + (Math.random() - 0.5) * 30,
+            longitude: -46.47 + (Math.random() - 0.5) * 60,
+            altitude: 9000 + Math.random() * 3000, // meters
+            velocity: 200 + Math.random() * 100, // m/s
+            heading: Math.random() * 360,
+            on_ground: false,
+            vertical_rate: (Math.random() - 0.5) * 20,
+          }));
+          
+          return new Response(
+            JSON.stringify({
+              success: true,
+              source: "demo",
+              aircraft: demoAircraft,
+              count: demoAircraft.length,
+              timestamp: new Date().toISOString(),
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        
+        // Parse real OpenSky data
+        const aircraft = openSkyData.states
+          .map((state: any[]) => parseOpenSkyState(state))
+          .filter((a: OpenSkyState) => a.latitude !== null && a.longitude !== null)
+          .slice(0, 500) // Limit to 500 aircraft for performance
+          .map((a: OpenSkyState) => ({
+            icao24: a.icao24,
+            callsign: a.callsign || "N/A",
+            origin_country: a.origin_country,
+            latitude: a.latitude,
+            longitude: a.longitude,
+            altitude: a.geo_altitude || a.baro_altitude || 0,
+            velocity: a.velocity || 0,
+            heading: a.true_track || 0,
+            on_ground: a.on_ground,
+            vertical_rate: a.vertical_rate || 0,
+          }));
+        
+        return new Response(
+          JSON.stringify({
+            success: true,
+            source: "opensky",
+            aircraft,
+            count: aircraft.length,
+            timestamp: new Date().toISOString(),
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       case "track-flight": {
         if (!flightNumber) {
           return new Response(
@@ -65,6 +212,46 @@ serve(async (req) => {
           );
         }
 
+        // Try to find flight in OpenSky data
+        const openSkyData = await fetchOpenSkyData();
+        let realFlight = null;
+        
+        if (openSkyData?.states) {
+          const callsignSearch = flightNumber.toUpperCase().replace(/\s/g, '');
+          realFlight = openSkyData.states.find((state: any[]) => {
+            const callsign = state[1]?.trim()?.toUpperCase();
+            return callsign && callsign.includes(callsignSearch);
+          });
+        }
+        
+        if (realFlight) {
+          const parsed = parseOpenSkyState(realFlight);
+          return new Response(
+            JSON.stringify({
+              success: true,
+              source: "opensky",
+              flight: {
+                flightNumber: parsed.callsign || flightNumber,
+                airline: parsed.origin_country,
+                status: parsed.on_ground ? "On Ground" : "En Route",
+                aircraft: "Unknown",
+                position: {
+                  latitude: parsed.latitude,
+                  longitude: parsed.longitude,
+                  altitude: Math.round((parsed.geo_altitude || parsed.baro_altitude || 0) * 3.281), // Convert to feet
+                  speed: Math.round((parsed.velocity || 0) * 1.944), // Convert m/s to knots
+                  heading: Math.round(parsed.true_track || 0),
+                },
+                verticalRate: parsed.vertical_rate,
+                icao24: parsed.icao24,
+              },
+              timestamp: new Date().toISOString(),
+            }),
+            { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+
+        // Fallback to demo data
         const airline = AIRLINES[Math.floor(Math.random() * AIRLINES.length)];
         const originAirport = AIRPORTS[Math.floor(Math.random() * AIRPORTS.length)];
         const destAirport = AIRPORTS.filter(a => a.code !== originAirport.code)[Math.floor(Math.random() * (AIRPORTS.length - 1))];
@@ -85,8 +272,8 @@ serve(async (req) => {
           estimatedArrival: new Date(arrivalTime.getTime() + Math.random() * 30 * 60 * 1000).toISOString(),
           aircraft: ["Boeing 737-800", "Airbus A320", "Boeing 777-300", "Airbus A350"][Math.floor(Math.random() * 4)],
           position: {
-            latitude: (originAirport.code === "GRU" ? -23.43 : 0) + (Math.random() - 0.5) * 20,
-            longitude: (originAirport.code === "GRU" ? -46.47 : 0) + (Math.random() - 0.5) * 40,
+            latitude: originAirport.lat + (destAirport.lat - originAirport.lat) * 0.5 + (Math.random() - 0.5) * 5,
+            longitude: originAirport.lon + (destAirport.lon - originAirport.lon) * 0.5 + (Math.random() - 0.5) * 5,
             altitude: 35000 + Math.floor(Math.random() * 6000),
             speed: 450 + Math.floor(Math.random() * 100),
             heading: Math.floor(Math.random() * 360),

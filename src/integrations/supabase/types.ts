@@ -1741,6 +1741,66 @@ export type Database = {
           },
         ]
       }
+      api_configurations: {
+        Row: {
+          api_name: string
+          avg_response_time_ms: number | null
+          base_url: string
+          created_at: string | null
+          current_usage_today: number | null
+          display_name: string
+          error_rate_percent: number | null
+          id: string
+          is_active: boolean | null
+          is_production: boolean | null
+          last_health_check: string | null
+          last_health_status: string | null
+          last_usage_reset: string | null
+          metadata: Json | null
+          rate_limit_per_day: number | null
+          rate_limit_per_minute: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_name: string
+          avg_response_time_ms?: number | null
+          base_url: string
+          created_at?: string | null
+          current_usage_today?: number | null
+          display_name: string
+          error_rate_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_production?: boolean | null
+          last_health_check?: string | null
+          last_health_status?: string | null
+          last_usage_reset?: string | null
+          metadata?: Json | null
+          rate_limit_per_day?: number | null
+          rate_limit_per_minute?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_name?: string
+          avg_response_time_ms?: number | null
+          base_url?: string
+          created_at?: string | null
+          current_usage_today?: number | null
+          display_name?: string
+          error_rate_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_production?: boolean | null
+          last_health_check?: string | null
+          last_health_status?: string | null
+          last_usage_reset?: string | null
+          metadata?: Json | null
+          rate_limit_per_day?: number | null
+          rate_limit_per_minute?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       api_gateway_requests: {
         Row: {
           api_key_id: string | null
@@ -2048,6 +2108,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      api_request_logs: {
+        Row: {
+          api_name: string
+          created_at: string | null
+          endpoint: string
+          error_message: string | null
+          id: string
+          method: string | null
+          organization_id: string | null
+          request_params: Json | null
+          response_preview: string | null
+          response_time_ms: number | null
+          status_code: number | null
+          success: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          api_name: string
+          created_at?: string | null
+          endpoint: string
+          error_message?: string | null
+          id?: string
+          method?: string | null
+          organization_id?: string | null
+          request_params?: Json | null
+          response_preview?: string | null
+          response_time_ms?: number | null
+          status_code?: number | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          api_name?: string
+          created_at?: string | null
+          endpoint?: string
+          error_message?: string | null
+          id?: string
+          method?: string | null
+          organization_id?: string | null
+          request_params?: Json | null
+          response_preview?: string | null
+          response_time_ms?: number | null
+          status_code?: number | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       audit_center_logs: {
         Row: {
@@ -2561,6 +2669,54 @@ export type Database = {
           title?: string
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      brazilian_ports: {
+        Row: {
+          city: string
+          created_at: string | null
+          high_tide_threshold: number | null
+          id: string
+          is_monitored: boolean | null
+          latitude: number
+          longitude: number
+          low_tide_threshold: number | null
+          metadata: Json | null
+          port_code: string
+          port_name: string
+          state: string
+          timezone: string | null
+        }
+        Insert: {
+          city: string
+          created_at?: string | null
+          high_tide_threshold?: number | null
+          id?: string
+          is_monitored?: boolean | null
+          latitude: number
+          longitude: number
+          low_tide_threshold?: number | null
+          metadata?: Json | null
+          port_code: string
+          port_name: string
+          state: string
+          timezone?: string | null
+        }
+        Update: {
+          city?: string
+          created_at?: string | null
+          high_tide_threshold?: number | null
+          id?: string
+          is_monitored?: boolean | null
+          latitude?: number
+          longitude?: number
+          low_tide_threshold?: number | null
+          metadata?: Json | null
+          port_code?: string
+          port_name?: string
+          state?: string
+          timezone?: string | null
         }
         Relationships: []
       }
@@ -7384,6 +7540,51 @@ export type Database = {
           pattern?: string
           recommendation?: string
           tenant_id?: string | null
+        }
+        Relationships: []
+      }
+      executive_kpis: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          kpi_name: string
+          kpi_target: number | null
+          kpi_unit: string | null
+          kpi_value: number
+          metadata: Json | null
+          period_end: string | null
+          period_start: string | null
+          trend: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          kpi_name: string
+          kpi_target?: number | null
+          kpi_unit?: string | null
+          kpi_value: number
+          metadata?: Json | null
+          period_end?: string | null
+          period_start?: string | null
+          trend?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          kpi_name?: string
+          kpi_target?: number | null
+          kpi_unit?: string | null
+          kpi_value?: number
+          metadata?: Json | null
+          period_end?: string | null
+          period_start?: string | null
+          trend?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -12828,6 +13029,60 @@ export type Database = {
           },
         ]
       }
+      proactive_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          ai_suggestion: string | null
+          alert_type: string
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          resolved_at: string | null
+          severity: string
+          source: string
+          status: string
+          title: string
+          vessel_id: string | null
+          webhook_sent: boolean | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          ai_suggestion?: string | null
+          alert_type: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          source: string
+          status?: string
+          title: string
+          vessel_id?: string | null
+          webhook_sent?: boolean | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          ai_suggestion?: string | null
+          alert_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          source?: string
+          status?: string
+          title?: string
+          vessel_id?: string | null
+          webhook_sent?: boolean | null
+        }
+        Relationships: []
+      }
       processed_documents: {
         Row: {
           category: string | null
@@ -14596,6 +14851,51 @@ export type Database = {
           },
         ]
       }
+      security_audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          event_type: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          resource_id: string | null
+          resource_type: string | null
+          severity: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       session_tokens: {
         Row: {
           created_at: string
@@ -15519,6 +15819,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      system_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          created_at: string
+          id: string
+          message: string
+          metadata: Json | null
+          severity: string
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          severity?: string
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          severity?: string
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       system_backups: {
         Row: {
@@ -16658,6 +17000,102 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tide_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string | null
+          id: string
+          is_acknowledged: boolean | null
+          message: string
+          metadata: Json | null
+          organization_id: string | null
+          port_id: string
+          port_name: string
+          severity: string
+          threshold_exceeded: number | null
+          tide_height: number | null
+          tide_time: string | null
+          title: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          message: string
+          metadata?: Json | null
+          organization_id?: string | null
+          port_id: string
+          port_name: string
+          severity: string
+          threshold_exceeded?: number | null
+          tide_height?: number | null
+          tide_time?: string | null
+          title: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          message?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          port_id?: string
+          port_name?: string
+          severity?: string
+          threshold_exceeded?: number | null
+          tide_height?: number | null
+          tide_time?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      tide_cache: {
+        Row: {
+          api_source: string | null
+          created_at: string | null
+          expires_at: string
+          id: string
+          latitude: number
+          longitude: number
+          port_id: string
+          port_name: string
+          tide_data: Json
+          valid_date: string
+        }
+        Insert: {
+          api_source?: string | null
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          latitude: number
+          longitude: number
+          port_id: string
+          port_name: string
+          tide_data: Json
+          valid_date: string
+        }
+        Update: {
+          api_source?: string | null
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          port_id?: string
+          port_name?: string
+          tide_data?: Json
+          valid_date?: string
+        }
+        Relationships: []
       }
       training_deltas: {
         Row: {
@@ -18403,6 +18841,93 @@ export type Database = {
         }
         Relationships: []
       }
+      weather_cache: {
+        Row: {
+          api_source: string
+          cache_key: string
+          created_at: string | null
+          data: Json
+          expires_at: string
+          id: string
+          latitude: number
+          longitude: number
+          updated_at: string | null
+        }
+        Insert: {
+          api_source: string
+          cache_key: string
+          created_at?: string | null
+          data: Json
+          expires_at: string
+          id?: string
+          latitude: number
+          longitude: number
+          updated_at?: string | null
+        }
+        Update: {
+          api_source?: string
+          cache_key?: string
+          created_at?: string | null
+          data?: Json
+          expires_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      webhook_configurations: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          event_types: string[]
+          headers: Json | null
+          id: string
+          is_active: boolean | null
+          last_status: number | null
+          last_triggered_at: string | null
+          method: string
+          name: string
+          retry_count: number | null
+          secret_key: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          event_types: string[]
+          headers?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_status?: number | null
+          last_triggered_at?: string | null
+          method?: string
+          name: string
+          retry_count?: number | null
+          secret_key?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          event_types?: string[]
+          headers?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_status?: number | null
+          last_triggered_at?: string | null
+          method?: string
+          name?: string
+          retry_count?: number | null
+          secret_key?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       webhook_events: {
         Row: {
           created_at: string | null
@@ -18511,6 +19036,53 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhook_logs: {
+        Row: {
+          created_at: string
+          duration_ms: number | null
+          error_message: string | null
+          event_type: string
+          id: string
+          payload: Json
+          response_body: string | null
+          response_status: number | null
+          success: boolean | null
+          webhook_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          event_type: string
+          id?: string
+          payload: Json
+          response_body?: string | null
+          response_status?: number | null
+          success?: boolean | null
+          webhook_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          response_body?: string | null
+          response_status?: number | null
+          success?: boolean | null
+          webhook_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_logs_webhook_id_fkey"
+            columns: ["webhook_id"]
+            isOneToOne: false
+            referencedRelation: "webhook_configurations"
             referencedColumns: ["id"]
           },
         ]
@@ -18973,6 +19545,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      cleanup_expired_cache: { Args: never; Returns: number }
       cleanup_old_logs: { Args: never; Returns: undefined }
       create_sample_peotram_audit: { Args: never; Returns: string }
       create_session_token:
@@ -18985,6 +19558,20 @@ export type Database = {
             }[]
           }
         | { Args: { p_user_id: string }; Returns: string }
+      create_tide_alert: {
+        Args: {
+          p_alert_type: string
+          p_message: string
+          p_port_id: string
+          p_port_name: string
+          p_severity: string
+          p_threshold_exceeded?: number
+          p_tide_height?: number
+          p_tide_time?: string
+          p_title: string
+        }
+        Returns: string
+      }
       detect_reservation_conflicts: {
         Args: {
           p_end_date: string
@@ -19090,6 +19677,10 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: string
       }
+      get_weather_cache: {
+        Args: { p_api_source?: string; p_lat: number; p_lng: number }
+        Returns: Json
+      }
       has_feature_permission: {
         Args: {
           feature_name: string
@@ -19121,6 +19712,30 @@ export type Database = {
           count: number
           month: string
         }[]
+      }
+      log_api_request: {
+        Args: {
+          p_api_name: string
+          p_endpoint: string
+          p_error_message?: string
+          p_method?: string
+          p_request_params?: Json
+          p_response_time_ms?: number
+          p_status_code?: number
+          p_success?: boolean
+        }
+        Returns: string
+      }
+      log_security_event: {
+        Args: {
+          p_action: string
+          p_details?: Json
+          p_event_type: string
+          p_resource_id?: string
+          p_resource_type?: string
+          p_severity?: string
+        }
+        Returns: string
       }
       log_user_action: {
         Args: {
@@ -19175,6 +19790,16 @@ export type Database = {
       revoke_session_token:
         | { Args: { p_token: string }; Returns: undefined }
         | { Args: { p_reason?: string; p_token_id: string }; Returns: boolean }
+      set_weather_cache: {
+        Args: {
+          p_api_source: string
+          p_data: Json
+          p_lat: number
+          p_lng: number
+          p_ttl_minutes?: number
+        }
+        Returns: undefined
+      }
       user_belongs_to_org: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean
