@@ -107,6 +107,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
+      { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
       { label: "Workflow Command", path: "/workflow-command", icon: Zap, emoji: "🔄" },
       { label: "Calendário Operacional", path: "/operational-calendar", icon: Activity, emoji: "📅" },
       { label: "Modo Emergência", path: "/emergency-mode", icon: AlertTriangle, emoji: "🚨" },

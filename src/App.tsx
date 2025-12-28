@@ -91,6 +91,7 @@ const NOCMode = lazy(() => import(/* webpackChunkName: "page-noc" */ "@/pages/NO
 const AuditoriaTecnica = lazy(() => import(/* webpackChunkName: "page-auditoria" */ "@/pages/AuditoriaTecnica"));
 const SecurityAudit = lazy(() => import(/* webpackChunkName: "page-security-audit" */ "@/pages/SecurityAudit"));
 const TelemetriaCommand = lazy(() => import(/* webpackChunkName: "page-telemetria" */ "@/pages/TelemetriaCommand"));
+const AIObservabilityDashboard = lazy(() => import(/* webpackChunkName: "page-ai-observability" */ "@/pages/AIObservabilityDashboard"));
 
 // Revolutionary Features - PATCH FINAL
 const VisionAI = lazy(() => import(/* webpackChunkName: "page-vision-ai" */ "@/pages/VisionAI"));
@@ -240,6 +241,9 @@ function App() {
                         {/* NEW: Executive & NOC Routes - PATCH 855 */}
                         <Route path="executive-bi" element={<ExecutiveBIDashboard />} />
                         <Route path="noc-monitoring" element={<NOCMonitoring />} />
+                        
+                        {/* AI Observability - PATCH 860 */}
+                        <Route path="ai-observability" element={<AIObservabilityDashboard />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
