@@ -817,3 +817,19 @@ comment = "USGS - Earthquake monitoring and tsunami risk assessment"
 [functions.nasa-api]
 verify_jwt = false
 comment = "NASA Open API - Earth observation, space weather, satellite data"
+
+[functions.stormglass-forecast]
+verify_jwt = false
+comment = "StormGlass API - Marine weather forecast with wave, wind, temperature data"
+
+[functions.marinetraffic-ais]
+verify_jwt = false
+comment = "MarineTraffic AIS - Real-time vessel tracking and position data"
+
+[functions.noaa-earthquake]
+verify_jwt = false
+comment = "NOAA/USGS Earthquake - Seismic data and alerts for maritime safety"
+
+[functions.notify-slack]
+verify_jwt = false
+comment = "Slack notifications - Real-time alerts and operational messages"
