@@ -1,4 +1,7 @@
-// @ts-nocheck
+/**
+ * MMI History Admin Page
+ * Lists maintenance history with filters and PDF export
+ */
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -128,9 +131,9 @@ export default function MMIHistoryAdminPage() {
       const opt = {
         margin: 10,
         filename: `mmi-historico-admin-${format(new Date(), "yyyyMMdd")}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
+        image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        jsPDF: { unit: "mm" as const, format: "a4" as const, orientation: "portrait" as const },
       };
 
       await html2pdf().set(opt).from(element).save();

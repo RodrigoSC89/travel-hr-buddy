@@ -1,4 +1,9 @@
 // @ts-nocheck
+// Tables not in Supabase schema: smart_workflows, smart_workflow_steps
+/**
+ * Workflow Detail Page
+ * Kanban-style workflow step management
+ */
 "use client";
 
 import { useEffect, useState } from "react";

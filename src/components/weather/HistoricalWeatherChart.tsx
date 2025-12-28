@@ -1,4 +1,7 @@
-// @ts-nocheck
+/**
+ * Historical Weather Chart Component
+ * Displays weather metrics with Chart.js
+ */
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -150,8 +153,9 @@ export const HistoricalWeatherChart: React.FC<HistoricalWeatherChartProps> = ({
       },
       tooltip: {
         callbacks: {
-          label: (context: { dataset: { label: string }; parsed: { y: number } }) => {
-            return `${context.dataset.label}: ${context.parsed.y} ${config.unit}`;
+          label: (context: { dataset: { label?: string }; parsed: { y: number | null } }) => {
+            const value = context.parsed.y ?? 0;
+            return `${context.dataset.label || "Value"}: ${value} ${config.unit}`;
           },
         },
       },

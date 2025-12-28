@@ -1,4 +1,9 @@
 // @ts-nocheck
+// Tables not in Supabase schema: iot_sensor_data schema mismatch, checklist_records
+/**
+ * Maritime System Dashboard
+ * IoT sensor monitoring and operational checklists
+ */
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { IoTSensorData, ChecklistRecord } from "@/types/modules";
