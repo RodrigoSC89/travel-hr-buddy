@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// html2pdf.js type incompatibility with strict options
 /**
  * MMI PDF Report Service v1.1.0
  * Generates professional PDF reports with AI recommendations

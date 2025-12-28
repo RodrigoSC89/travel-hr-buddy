@@ -1,11 +1,10 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// Tables not in Supabase schema: sensor_logs, sensor_alerts
 /**
  * PATCH 538 - Sensors Hub Service
  * Real-time sensor monitoring with MQTT/HTTP ingestion
  */
-
-import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   SensorLog,
   SensorConfiguration,

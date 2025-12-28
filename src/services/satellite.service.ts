@@ -1,11 +1,12 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// Tables not in Supabase schema: satellites, satellite_alerts, satellite_positions, satellite_telemetry, satellite_passes, satellite_mission_links
 /**
  * PATCH 350: Satellite Tracker v2 - Service Layer
  * Service for satellite tracking, alerts, and mission integration
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   Satellite,
   SatellitePosition,
