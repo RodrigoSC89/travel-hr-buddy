@@ -1,5 +1,4 @@
-// @ts-nocheck
-// PATCH 661: Types updated but RPC functions missing from schema
+// @ts-nocheck - Local interfaces differ from Supabase schema (null vs undefined, Json casting)
 /**
  * PATCH 348: Mission Control v2 - Autonomy Service Layer
  * Service for managing autonomous tasks and decision engine

@@ -1,5 +1,4 @@
-// @ts-nocheck
-// Interface mismatch with copilot_sessions schema
+// @ts-nocheck - copilot_sessions schema uses user_id but types.ts generated doesn't include it
 /**
  * PATCH 213.0 - Neural Copilot Engine (Co-Piloto Neural IA)
  * 
