@@ -14,6 +14,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
+import { LiteModeProvider } from "./components/performance/LiteMode";
 
 // Global Voice Button
 import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
@@ -157,7 +158,8 @@ function App() {
             <TenantProvider>
               <OrganizationProvider>
                 <RouterType>
-                  <GlobalBrainProvider showTrigger={true}>
+                  <LiteModeProvider autoEnable={true}>
+                    <GlobalBrainProvider showTrigger={true}>
                     <Routes>
                       {/* Public Routes */}
                       <Route path="/auth" element={<Auth />} />
@@ -250,6 +252,7 @@ function App() {
                     <Toaster />
                     <GlobalVoiceButton />
                   </GlobalBrainProvider>
+                  </LiteModeProvider>
                 </RouterType>
               </OrganizationProvider>
             </TenantProvider>
