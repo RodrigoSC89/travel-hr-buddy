@@ -1,0 +1,291 @@
+import { useState } from "react";
+import { useStormGlass, getCurrentWeather } from "@/hooks/useStormGlass";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2, Wind, Waves, Thermometer, Droplets, Eye, Compass, RefreshCw, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export default function WeatherMaritime() {
+  const [coordinates, setCoordinates] = useState({ lat: -23.55, lng: -46.63 }); // São Paulo default
+  const [inputLat, setInputLat] = useState("-23.55");
+  const [inputLng, setInputLng] = useState("-46.63");
+
+  const { data, isLoading, isError, error, refetch, isFetching } = useStormGlass(
+    coordinates.lat,
+    coordinates.lng
+  );
+
+  const weather = getCurrentWeather(data);
+
+  const handleSearch = () => {
+    const lat = parseFloat(inputLat);
+    const lng = parseFloat(inputLng);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      setCoordinates({ lat, lng });
+    }
+  };
+
+  const getWindDescription = (speed: number | null) => {
+    if (speed === null) return "—";
+    if (speed < 5) return "Calmo";
+    if (speed < 15) return "Moderado";
+    if (speed < 25) return "Forte";
+    return "Muito Forte";
+  };
+
+  const getWaveDescription = (height: number | null) => {
+    if (height === null) return "—";
+    if (height < 0.5) return "Calmo";
+    if (height < 1.5) return "Moderado";
+    if (height < 3) return "Agitado";
+    return "Muito Agitado";
+  };
+
+  return (
+    <div className="container mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
+            🌊 Clima Marítimo
+          </h1>
+          <p className="text-muted-foreground">
+            Previsão meteorológica marítima em tempo real via StormGlass API
+          </p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={() => refetch()} 
+          disabled={isFetching}
+          className="gap-2"
+        >
+          <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} />
+          Atualizar
+        </Button>
+      </div>
+
+      {/* Coordinates Input */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="h-5 w-5" />
+            Localização
+          </CardTitle>
+          <CardDescription>
+            Insira as coordenadas para obter a previsão marítima
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4 items-end">
+            <div className="space-y-2">
+              <Label htmlFor="lat">Latitude</Label>
+              <Input
+                id="lat"
+                type="number"
+                step="0.01"
+                value={inputLat}
+                onChange={(e) => setInputLat(e.target.value)}
+                placeholder="-23.55"
+                className="w-32"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lng">Longitude</Label>
+              <Input
+                id="lng"
+                type="number"
+                step="0.01"
+                value={inputLng}
+                onChange={(e) => setInputLng(e.target.value)}
+                placeholder="-46.63"
+                className="w-32"
+              />
+            </div>
+            <Button onClick={handleSearch} disabled={isLoading}>
+              Buscar
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2 text-muted-foreground">Carregando dados climáticos...</span>
+        </div>
+      )}
+
+      {/* Error State */}
+      {isError && (
+        <Card className="border-destructive">
+          <CardContent className="pt-6">
+            <p className="text-destructive">
+              Erro ao carregar dados: {error instanceof Error ? error.message : "Erro desconhecido"}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Weather Data */}
+      {weather && !isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Wave Height */}
+          <Card className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-blue-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Altura das Ondas</p>
+                  <p className="text-3xl font-bold text-blue-500">
+                    {weather.waveHeight?.toFixed(1) ?? "—"} m
+                  </p>
+                  <Badge variant="outline" className="mt-2">
+                    {getWaveDescription(weather.waveHeight)}
+                  </Badge>
+                </div>
+                <Waves className="h-12 w-12 text-blue-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Wind Speed */}
+          <Card className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Velocidade do Vento</p>
+                  <p className="text-3xl font-bold text-emerald-500">
+                    {weather.windSpeed?.toFixed(1) ?? "—"} m/s
+                  </p>
+                  <Badge variant="outline" className="mt-2">
+                    {getWindDescription(weather.windSpeed)}
+                  </Badge>
+                </div>
+                <Wind className="h-12 w-12 text-emerald-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Water Temperature */}
+          <Card className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border-cyan-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Temp. Água</p>
+                  <p className="text-3xl font-bold text-cyan-500">
+                    {weather.waterTemperature?.toFixed(1) ?? "—"} °C
+                  </p>
+                </div>
+                <Thermometer className="h-12 w-12 text-cyan-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Air Temperature */}
+          <Card className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 border-orange-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Temp. Ar</p>
+                  <p className="text-3xl font-bold text-orange-500">
+                    {weather.airTemperature?.toFixed(1) ?? "—"} °C
+                  </p>
+                </div>
+                <Thermometer className="h-12 w-12 text-orange-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Humidity */}
+          <Card className="bg-gradient-to-br from-sky-500/10 to-indigo-500/10 border-sky-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Umidade</p>
+                  <p className="text-3xl font-bold text-sky-500">
+                    {weather.humidity?.toFixed(0) ?? "—"} %
+                  </p>
+                </div>
+                <Droplets className="h-12 w-12 text-sky-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Visibility */}
+          <Card className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Visibilidade</p>
+                  <p className="text-3xl font-bold text-purple-500">
+                    {weather.visibility?.toFixed(1) ?? "—"} km
+                  </p>
+                </div>
+                <Eye className="h-12 w-12 text-purple-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Current Speed */}
+          <Card className="bg-gradient-to-br from-indigo-500/10 to-violet-500/10 border-indigo-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Corrente</p>
+                  <p className="text-3xl font-bold text-indigo-500">
+                    {weather.currentSpeed?.toFixed(2) ?? "—"} m/s
+                  </p>
+                </div>
+                <Compass className="h-12 w-12 text-indigo-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pressure */}
+          <Card className="bg-gradient-to-br from-slate-500/10 to-gray-500/10 border-slate-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Pressão</p>
+                  <p className="text-3xl font-bold text-slate-500">
+                    {weather.pressure?.toFixed(0) ?? "—"} hPa
+                  </p>
+                </div>
+                <div className="h-12 w-12 rounded-full bg-slate-500/20 flex items-center justify-center">
+                  <span className="text-2xl">📊</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Cloud Cover */}
+          <Card className="bg-gradient-to-br from-gray-500/10 to-zinc-500/10 border-gray-500/20">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Cobertura de Nuvens</p>
+                  <p className="text-3xl font-bold text-gray-500">
+                    {weather.cloudCover?.toFixed(0) ?? "—"} %
+                  </p>
+                </div>
+                <div className="h-12 w-12 rounded-full bg-gray-500/20 flex items-center justify-center">
+                  <span className="text-2xl">☁️</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Last Update */}
+      {weather?.time && (
+        <p className="text-center text-sm text-muted-foreground">
+          Última atualização: {new Date(weather.time).toLocaleString("pt-BR")}
+        </p>
+      )}
+    </div>
+  );
+}

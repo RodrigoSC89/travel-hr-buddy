@@ -34,8 +34,9 @@ const groupedModules = [
     defaultOpen: false,
     items: [
       { label: "📡 API Monitor", path: "/integracoes/api-monitor" },
-      { label: "🌊 StormGlass Weather", path: "/weather-command" },
-      { label: "🚢 AIS Tracking", path: "/ais-tracking" },
+      { label: "🌊 Clima Marítimo", path: "/weather-maritime" },
+      { label: "🚢 AIS Tracker", path: "/ais-tracker-page" },
+      { label: "🎙️ IA de Voz", path: "/voice-transcriber" },
       { label: "⚓ Port API", path: "/integracoes" },
       { label: "✈️ Flight Tracker", path: "/integracoes" },
       { label: "🔐 Security Scanner", path: "/security-center" },

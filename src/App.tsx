@@ -111,6 +111,11 @@ const IntegrationsCenter = lazy(() => import(/* webpackChunkName: "page-integrat
 const DocumentationHub = lazy(() => import(/* webpackChunkName: "page-docs" */ "@/pages/DocumentationHub"));
 const APIMonitor = lazy(() => import(/* webpackChunkName: "page-api-monitor" */ "@/pages/APIMonitor"));
 
+// New API Integration Pages - PATCH 856
+const WeatherMaritime = lazy(() => import(/* webpackChunkName: "page-weather-maritime" */ "@/pages/WeatherMaritime"));
+const AISTrackerPage = lazy(() => import(/* webpackChunkName: "page-ais-tracker" */ "@/pages/AISTrackerPage"));
+const VoiceTranscriber = lazy(() => import(/* webpackChunkName: "page-voice-transcriber" */ "@/pages/VoiceTranscriber"));
+
 // Executive & NOC - PATCH 855
 const ExecutiveBIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-bi" */ "@/pages/ExecutiveBIDashboard"));
 const NOCMonitoring = lazy(() => import(/* webpackChunkName: "page-noc-monitoring" */ "@/pages/NOCMonitoring"));
@@ -208,6 +213,11 @@ function App() {
                         <Route path="integracoes" element={<IntegrationsCenter />} />
                         <Route path="integracoes/api-monitor" element={<APIMonitor />} />
                         <Route path="docs" element={<DocumentationHub />} />
+                        
+                        {/* NEW: API Integration Routes - PATCH 856 */}
+                        <Route path="weather-maritime" element={<WeatherMaritime />} />
+                        <Route path="ais-tracker-page" element={<AISTrackerPage />} />
+                        <Route path="voice-transcriber" element={<VoiceTranscriber />} />
                         
                         {/* NEW: Executive & NOC Routes - PATCH 855 */}
                         <Route path="executive-bi" element={<ExecutiveBIDashboard />} />
