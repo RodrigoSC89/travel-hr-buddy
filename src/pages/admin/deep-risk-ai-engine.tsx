@@ -21,8 +21,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
-import { deepRiskAIService } from "@/services/deepRiskAIService";
-import type { RiskForecast, RiskLevel } from "@/types/patches-536-540";
+import { deepRiskAIService, type RiskForecast } from "@/services/deepRiskAIService";
+import type { RiskLevel } from "@/types/patches-536-540";
 import { logger } from "@/lib/logger";
 
 const DeepRiskAIPage: React.FC = () => {
