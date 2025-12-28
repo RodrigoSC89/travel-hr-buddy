@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.1"
   }
   public: {
     Tables: {
@@ -1316,6 +1316,69 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ais_events: {
+        Row: {
+          course: number | null
+          created_at: string | null
+          destination: string | null
+          eta: string | null
+          event_type: string
+          id: string
+          mmsi: string | null
+          organization_id: string | null
+          position: Json | null
+          raw_data: Json | null
+          recorded_at: string | null
+          speed: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          course?: number | null
+          created_at?: string | null
+          destination?: string | null
+          eta?: string | null
+          event_type: string
+          id?: string
+          mmsi?: string | null
+          organization_id?: string | null
+          position?: Json | null
+          raw_data?: Json | null
+          recorded_at?: string | null
+          speed?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          course?: number | null
+          created_at?: string | null
+          destination?: string | null
+          eta?: string | null
+          event_type?: string
+          id?: string
+          mmsi?: string | null
+          organization_id?: string | null
+          position?: Json | null
+          raw_data?: Json | null
+          recorded_at?: string | null
+          speed?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ais_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ais_events_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -3785,6 +3848,81 @@ export type Database = {
           },
         ]
       }
+      compliance_items: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          evidence_urls: string[] | null
+          id: string
+          item_type: string
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          priority: string | null
+          regulation: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          item_type: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          regulation?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          item_type?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          regulation?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_items_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_items_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       connected_integrations: {
         Row: {
           created_at: string | null
@@ -5522,6 +5660,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      cron_execution_logs: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          duration_ms: number | null
+          error_message: string | null
+          id: string
+          job_name: string
+          result: Json | null
+          started_at: string | null
+          status: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          job_name: string
+          result?: Json | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          job_name?: string
+          result?: Json | null
+          started_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
       }
       dashboard_activities: {
         Row: {
@@ -8186,6 +8360,63 @@ export type Database = {
           version?: number | null
         }
         Relationships: []
+      }
+      health_checkins: {
+        Row: {
+          checked_by: string | null
+          checkin_type: string | null
+          created_at: string | null
+          crew_member_id: string | null
+          id: string
+          location: string | null
+          notes: string | null
+          organization_id: string | null
+          status: string | null
+          symptoms: string[] | null
+          temperature: number | null
+        }
+        Insert: {
+          checked_by?: string | null
+          checkin_type?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          status?: string | null
+          symptoms?: string[] | null
+          temperature?: number | null
+        }
+        Update: {
+          checked_by?: string | null
+          checkin_type?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          status?: string | null
+          symptoms?: string[] | null
+          temperature?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_checkins_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "health_checkins_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       help_center_analytics: {
         Row: {
@@ -18676,6 +18907,59 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_transcripts: {
+        Row: {
+          audio_url: string | null
+          confidence: number | null
+          created_at: string | null
+          duration_seconds: number | null
+          id: string
+          language: string | null
+          metadata: Json | null
+          organization_id: string | null
+          status: string | null
+          transcript: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          language?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          status?: string | null
+          transcript?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          language?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          status?: string | null
+          transcript?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voice_transcripts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       voyages: {
         Row: {
           actual_arrival: string | null
@@ -18876,6 +19160,84 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      weather_conditions: {
+        Row: {
+          conditions: string | null
+          created_at: string | null
+          forecast: Json | null
+          humidity: number | null
+          id: string
+          latitude: number | null
+          location_name: string | null
+          longitude: number | null
+          organization_id: string | null
+          pressure: number | null
+          recorded_at: string | null
+          source: string | null
+          temperature: number | null
+          vessel_id: string | null
+          visibility: number | null
+          wave_height: number | null
+          wind_direction: number | null
+          wind_speed: number | null
+        }
+        Insert: {
+          conditions?: string | null
+          created_at?: string | null
+          forecast?: Json | null
+          humidity?: number | null
+          id?: string
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          organization_id?: string | null
+          pressure?: number | null
+          recorded_at?: string | null
+          source?: string | null
+          temperature?: number | null
+          vessel_id?: string | null
+          visibility?: number | null
+          wave_height?: number | null
+          wind_direction?: number | null
+          wind_speed?: number | null
+        }
+        Update: {
+          conditions?: string | null
+          created_at?: string | null
+          forecast?: Json | null
+          humidity?: number | null
+          id?: string
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          organization_id?: string | null
+          pressure?: number | null
+          recorded_at?: string | null
+          source?: string | null
+          temperature?: number | null
+          vessel_id?: string | null
+          visibility?: number | null
+          wave_height?: number | null
+          wind_direction?: number | null
+          wind_speed?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weather_conditions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "weather_conditions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       webhook_configurations: {
         Row: {
