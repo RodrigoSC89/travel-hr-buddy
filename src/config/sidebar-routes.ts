@@ -1,11 +1,36 @@
 /**
- * PATCH 861: Sidebar Routes Configuration - AUDITED & OPTIMIZED
- * UNIFIED NAVIGATION - Single source of truth for all sidebar routes
+ * ⚠️ ATENÇÃO DESENVOLVEDORES - ESTRUTURA PROTEGIDA ⚠️
+ * =========================================================
+ * Esta estrutura de sidebar foi VALIDADA pela diretoria do Nautilus One.
  * 
- * @description This file centralizes all sidebar navigation routes.
- * Audited and reorganized for better UX and discoverability.
+ * ❌ NÃO remover, sobrescrever ou simplificar os grupos abaixo
+ * ❌ NÃO reduzir a versão "mínima" ou simplificada
+ * ❌ NÃO remover seções como IA, ESG, Viagens, Auditorias, etc.
+ * ✅ Adicionar novos módulos DENTRO dessas categorias, não fora
+ * ✅ Manter 100% dos grupos e ordem estabelecida
  * 
- * TOTAL: 17 categories, 100+ modules
+ * Versão oficial: v3.2.0 - Dezembro 2025
+ * TOTAL: 16 categorias principais, 100+ módulos
+ * =========================================================
+ * 
+ * GRUPOS OBRIGATÓRIOS (16):
+ * 1. 🛰️ Centro de Comando
+ * 2. 🚢 Operações Marítimas
+ * 3. 🔧 Manutenção
+ * 4. 🤿 Operações Submarinas
+ * 5. 🤖 IA & Automação
+ * 6. 📶 Telemetria & Monitoramento
+ * 7. 🌐 APIs & Integrações
+ * 8. 📂 Relatórios & Documentos
+ * 9. 📢 Comunicação & Alertas
+ * 10. 🔍 Auditorias
+ * 11. 👥 RH & Pessoas
+ * 12. 🎓 Treinamentos
+ * 13. 💰 Finanças & Procurement
+ * 14. 🌱 ESG & Sustentabilidade
+ * 15. ✈️ Viagens & Logística
+ * 16. ⚙️ Sistema & Configurações
+ * =========================================================
  */
 
 import {
@@ -53,15 +78,15 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
 };
 
 /**
- * MASTER SIDEBAR ROUTES - AUDITED & OPTIMIZED
- * Reorganized for better discoverability and UX
+ * MASTER SIDEBAR ROUTES - v3.2.0 OFFICIAL STRUCTURE
+ * Ordem oficial conforme aprovado pela diretoria
  */
 export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
-  // 🏠 COMMAND CENTER (Principal)
+  // 🛰️ CENTRO DE COMANDO (1/16)
   // ============================================
   {
-    title: "🏠 Centro de Comando",
+    title: "🛰️ Centro de Comando",
     defaultOpen: true,
     items: [
       { label: "Nautilus Command Center", path: "/nautilus-command", icon: Compass, emoji: "🧠", status: "active" },
@@ -73,27 +98,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 🔒 SEGURANÇA & COMPLIANCE
+  // 🚢 OPERAÇÕES MARÍTIMAS (2/16)
   // ============================================
   {
-    title: "🔒 Segurança & Compliance",
-    defaultOpen: false,
-    requiredRoles: ['admin', 'auditor', 'manager', 'hr_manager'],
-    items: [
-      { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", status: "active", requiredRoles: ['admin'] },
-      { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖", requiredRoles: ['admin'], badgeType: 'alerts' },
-      { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋", requiredRoles: ['admin', 'auditor'] },
-      { label: "Security Scanner", path: "/security-scanner", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
-      { label: "Compliance Hub", path: "/compliance-hub", icon: Shield, emoji: "✅", requiredRoles: ['admin', 'auditor', 'manager'] },
-      { label: "Safety Guardian", path: "/safety-guardian", icon: Shield, emoji: "⛑️" },
-    ],
-  },
-
-  // ============================================
-  // 🚢 OPERAÇÕES MARÍTIMAS
-  // ============================================
-  {
-    title: "⚓ Operações Marítimas",
+    title: "🚢 Operações Marítimas",
     defaultOpen: false,
     items: [
       { label: "Maritime Command", path: "/maritime-command", icon: Anchor, emoji: "⚓" },
@@ -219,12 +227,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 🔍 AUDITORIAS (ISM/MLC/SOLAS)
+  // 🔍 AUDITORIAS & COMPLIANCE (10/16)
   // ============================================
   {
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
+      // Auditorias Marítimas
       { label: "PEO-DP", path: "/peo-dp", icon: FileText, emoji: "📋" },
       { label: "PEOTRAM", path: "/peotram", icon: FileText, emoji: "📋" },
       { label: "SGSO", path: "/sgso", icon: FileText, emoji: "📋" },
@@ -232,6 +241,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Pre-OVID Inspection", path: "/pre-ovid-inspection", icon: Eye, emoji: "🔍" },
       { label: "MLC Inspection", path: "/mlc-inspection", icon: Shield, emoji: "🔍" },
       { label: "Gerador Pacotes PSC", path: "/psc-package", icon: Shield, emoji: "🛡️" },
+      // Segurança & Compliance (movido aqui)
+      { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", requiredRoles: ['admin'] },
+      { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖", requiredRoles: ['admin'], badgeType: 'alerts' },
+      { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋", requiredRoles: ['admin', 'auditor'] },
+      { label: "Security Scanner", path: "/security-scanner", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
+      { label: "Compliance Hub", path: "/compliance-hub", icon: Shield, emoji: "✅", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Safety Guardian", path: "/safety-guardian", icon: Shield, emoji: "⛑️" },
     ],
   },
 
