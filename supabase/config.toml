@@ -833,3 +833,20 @@ comment = "NOAA/USGS Earthquake - Seismic data and alerts for maritime safety"
 [functions.notify-slack]
 verify_jwt = false
 comment = "Slack notifications - Real-time alerts and operational messages"
+
+# ============================================
+# SECURITY & COMPLIANCE APIS (v3.2.0)
+# Added: 2025-12-29
+# ============================================
+
+[functions.shodan-security]
+verify_jwt = true
+comment = "Shodan - Network device scanning, vulnerability detection, maritime IoT security"
+
+[functions.haveibeenpwned]
+verify_jwt = false
+comment = "HaveIBeenPwned - Breach detection, password checking, credential leak monitoring"
+
+[functions.nist-nvd]
+verify_jwt = false
+comment = "NIST NVD - CVE vulnerability database, security advisories, CPE matching"

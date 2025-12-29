@@ -1,7 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 166.0: Mission Engine
- * TODO PATCH 659: Awaiting Supabase tables (mission_vessels)
+ * Tables: mission_vessels (created in migration)
  * Core engine for multi-vessel mission coordination and management
  * 
  * @module mission-engine
