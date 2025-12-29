@@ -10203,6 +10203,350 @@ export type Database = {
         }
         Relationships: []
       }
+      gnss_ai_recommendations: {
+        Row: {
+          applied_at: string | null
+          applied_by: string | null
+          confidence: number | null
+          created_at: string | null
+          description: string | null
+          device_id: string | null
+          id: string
+          is_applied: boolean | null
+          metadata: Json | null
+          org_id: string | null
+          predicted_trajectory: Json | null
+          recommendation_type: string
+          suggested_action: string | null
+          title: string
+          vessel_id: string | null
+        }
+        Insert: {
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          description?: string | null
+          device_id?: string | null
+          id?: string
+          is_applied?: boolean | null
+          metadata?: Json | null
+          org_id?: string | null
+          predicted_trajectory?: Json | null
+          recommendation_type: string
+          suggested_action?: string | null
+          title: string
+          vessel_id?: string | null
+        }
+        Update: {
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          description?: string | null
+          device_id?: string | null
+          id?: string
+          is_applied?: boolean | null
+          metadata?: Json | null
+          org_id?: string | null
+          predicted_trajectory?: Json | null
+          recommendation_type?: string
+          suggested_action?: string | null
+          title?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gnss_ai_recommendations_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "gnss_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gnss_ai_recommendations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gnss_ai_recommendations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gnss_alerts: {
+        Row: {
+          actual_value: number | null
+          alert_type: string
+          created_at: string | null
+          description: string | null
+          device_id: string | null
+          id: string
+          is_resolved: boolean | null
+          latitude: number | null
+          longitude: number | null
+          metadata: Json | null
+          org_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          threshold_value: number | null
+          title: string
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_value?: number | null
+          alert_type: string
+          created_at?: string | null
+          description?: string | null
+          device_id?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          metadata?: Json | null
+          org_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          threshold_value?: number | null
+          title: string
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_value?: number | null
+          alert_type?: string
+          created_at?: string | null
+          description?: string | null
+          device_id?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          metadata?: Json | null
+          org_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          threshold_value?: number | null
+          title?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gnss_alerts_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "gnss_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gnss_alerts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gnss_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gnss_correction_stations: {
+        Row: {
+          altitude: number | null
+          created_at: string | null
+          data_quality: number | null
+          id: string
+          is_active: boolean | null
+          last_data_at: string | null
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          provider: string
+          station_code: string
+          station_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          altitude?: number | null
+          created_at?: string | null
+          data_quality?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_data_at?: string | null
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          provider: string
+          station_code: string
+          station_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          altitude?: number | null
+          created_at?: string | null
+          data_quality?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_data_at?: string | null
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          provider?: string
+          station_code?: string
+          station_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      gnss_devices: {
+        Row: {
+          configuration: Json | null
+          created_at: string | null
+          device_name: string
+          device_type: string | null
+          firmware_version: string | null
+          id: string
+          is_active: boolean | null
+          is_online: boolean | null
+          last_seen_at: string | null
+          manufacturer: string | null
+          metadata: Json | null
+          model: string | null
+          org_id: string | null
+          serial_number: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          configuration?: Json | null
+          created_at?: string | null
+          device_name: string
+          device_type?: string | null
+          firmware_version?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_online?: boolean | null
+          last_seen_at?: string | null
+          manufacturer?: string | null
+          metadata?: Json | null
+          model?: string | null
+          org_id?: string | null
+          serial_number?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          configuration?: Json | null
+          created_at?: string | null
+          device_name?: string
+          device_type?: string | null
+          firmware_version?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_online?: boolean | null
+          last_seen_at?: string | null
+          manufacturer?: string | null
+          metadata?: Json | null
+          model?: string | null
+          org_id?: string | null
+          serial_number?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gnss_devices_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gnss_devices_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gnss_waypoints: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          latitude: number
+          longitude: number
+          metadata: Json | null
+          name: string
+          org_id: string | null
+          radius_meters: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          waypoint_type: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          latitude: number
+          longitude: number
+          metadata?: Json | null
+          name: string
+          org_id?: string | null
+          radius_meters?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          waypoint_type?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          latitude?: number
+          longitude?: number
+          metadata?: Json | null
+          name?: string
+          org_id?: string | null
+          radius_meters?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          waypoint_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gnss_waypoints_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gnss_waypoints_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       health_checkins: {
         Row: {
           checked_by: string | null
@@ -21370,6 +21714,100 @@ export type Database = {
           valid_date?: string
         }
         Relationships: []
+      }
+      tracking_gnss_logs: {
+        Row: {
+          accuracy: number | null
+          altitude: number | null
+          correction_age_ms: number | null
+          correction_source: string | null
+          created_at: string | null
+          device_id: string | null
+          fix_type: string | null
+          hdop: number | null
+          heading: number | null
+          id: string
+          latitude: number
+          longitude: number
+          org_id: string | null
+          pdop: number | null
+          raw_data: Json | null
+          recorded_at: string
+          satellites_used: number | null
+          signal_quality: number | null
+          speed: number | null
+          vdop: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          accuracy?: number | null
+          altitude?: number | null
+          correction_age_ms?: number | null
+          correction_source?: string | null
+          created_at?: string | null
+          device_id?: string | null
+          fix_type?: string | null
+          hdop?: number | null
+          heading?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          org_id?: string | null
+          pdop?: number | null
+          raw_data?: Json | null
+          recorded_at?: string
+          satellites_used?: number | null
+          signal_quality?: number | null
+          speed?: number | null
+          vdop?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          accuracy?: number | null
+          altitude?: number | null
+          correction_age_ms?: number | null
+          correction_source?: string | null
+          created_at?: string | null
+          device_id?: string | null
+          fix_type?: string | null
+          hdop?: number | null
+          heading?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          org_id?: string | null
+          pdop?: number | null
+          raw_data?: Json | null
+          recorded_at?: string
+          satellites_used?: number | null
+          signal_quality?: number | null
+          speed?: number | null
+          vdop?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracking_gnss_logs_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "gnss_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tracking_gnss_logs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tracking_gnss_logs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tracking_sessions: {
         Row: {
