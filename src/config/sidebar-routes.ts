@@ -43,6 +43,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📊" },
       { label: "Simulador Incidentes", path: "/simulador", icon: Target, emoji: "⚠️" },
       { label: "Central Integrações", path: "/integracoes", icon: Globe, emoji: "🔗" },
+      { label: "API Center", path: "/integracoes/api-center", icon: Radio, emoji: "🌐" },
       { label: "API Monitor", path: "/integracoes/api-monitor", icon: Radio, emoji: "📡" },
       { label: "NOC 24/7", path: "/noc", icon: Activity, emoji: "🖥️" },
       { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: Shield, emoji: "📋" },
