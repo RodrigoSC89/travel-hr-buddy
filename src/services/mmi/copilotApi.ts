@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// TODO: Remove after migration adds match_mmi_job_history RPC function
 /**
  * MMI Copilot Service v1.1.0
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings
