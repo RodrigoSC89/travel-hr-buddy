@@ -1,8 +1,6 @@
-// @ts-nocheck
 /**
- * PATCH 860: Training Module Service
- * @ts-nocheck mantido: Schema Supabase training_modules/training_completions não alinhado com tipos locais
- * TODO: Alinhar schema DB (quiz_score, quiz_answers, etc) com interface TrainingCompletion
+ * PATCH 861: Training Module Service - Schema aligned
+ * Uses score (DB) mapped to quiz_score (interface)
  */
 import { supabase } from "@/integrations/supabase/client";
 import type {
@@ -15,36 +13,69 @@ import type {
   QuizQuestion
 } from "../types/training";
 
-// Helper to safely cast Supabase responses
-function mapToTrainingModule(row: Record<string, unknown>): TrainingModule {
+// DB row type for training_modules
+interface TrainingModuleRow {
+  id: string;
+  title?: string;
+  description?: string;
+  content?: string;
+  gap_detected?: string;
+  training_content?: string;
+  norm_reference?: string;
+  quiz?: unknown;
+  vessel_id?: string;
+  audit_id?: string;
+  status?: string;
+  created_by?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// DB row type for training_completions  
+interface TrainingCompletionRow {
+  id: string;
+  training_module_id?: string;
+  course_id?: string;
+  user_id: string;
+  vessel_id?: string;
+  completion_date?: string;
+  completed_at?: string;
+  score?: number;
+  quiz_answers?: number[];
+  passed?: boolean;
+  notes?: string;
+  created_at?: string;
+}
+
+function mapToTrainingModule(row: TrainingModuleRow): TrainingModule {
   return {
-    id: String(row.id || ''),
-    title: String(row.title || ''),
-    gap_detected: String(row.gap_detected || row.description || ''),
-    norm_reference: String(row.norm_reference || ''),
-    training_content: String(row.training_content || row.content || ''),
+    id: row.id,
+    title: row.title || '',
+    gap_detected: row.gap_detected || row.description || '',
+    norm_reference: row.norm_reference || '',
+    training_content: row.training_content || row.content || '',
     quiz: (row.quiz || []) as QuizQuestion[],
-    vessel_id: row.vessel_id as string | undefined,
-    audit_id: row.audit_id as string | undefined,
+    vessel_id: row.vessel_id,
+    audit_id: row.audit_id,
     status: (row.status as "active" | "archived" | "draft") || "active",
-    created_by: row.created_by as string | undefined,
-    created_at: String(row.created_at || new Date().toISOString()),
-    updated_at: String(row.updated_at || new Date().toISOString()),
+    created_by: row.created_by,
+    created_at: row.created_at || new Date().toISOString(),
+    updated_at: row.updated_at || new Date().toISOString(),
   };
 }
 
-function mapToTrainingCompletion(row: Record<string, unknown>): TrainingCompletion {
+function mapToTrainingCompletion(row: TrainingCompletionRow): TrainingCompletion {
   return {
-    id: String(row.id || ''),
-    training_module_id: String(row.training_module_id || row.course_id || ''),
-    user_id: String(row.user_id || ''),
-    vessel_id: row.vessel_id as string | undefined,
-    completed_at: String(row.completed_at || row.completion_date || new Date().toISOString()),
-    quiz_score: Number(row.quiz_score || row.score || 0),
-    quiz_answers: (row.quiz_answers || []) as number[],
-    passed: Boolean(row.passed),
-    notes: row.notes as string | undefined,
-    created_at: String(row.created_at || new Date().toISOString()),
+    id: row.id,
+    training_module_id: row.training_module_id || row.course_id || '',
+    user_id: row.user_id,
+    vessel_id: row.vessel_id,
+    completed_at: row.completed_at || row.completion_date || new Date().toISOString(),
+    quiz_score: row.score || 0,
+    quiz_answers: row.quiz_answers || [],
+    passed: row.passed || false,
+    notes: row.notes,
+    created_at: row.created_at || new Date().toISOString(),
   };
 }
 
