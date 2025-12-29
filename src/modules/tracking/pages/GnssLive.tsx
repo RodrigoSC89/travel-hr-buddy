@@ -1,25 +1,17 @@
 /**
- * GNSS Live Tracking - Real-time positioning with Mapbox
- * PATCH TRACK-2.0
+ * GNSS Live Tracking - Simplified
  */
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { 
-  MapPin, Satellite, Navigation, Signal, Radio, RefreshCw,
-  Crosshair, Compass, Activity, Zap, Eye, Map, Target, Waves
+  MapPin, Satellite, Navigation, Signal, 
+  Crosshair, Activity, Eye, Map, Target
 } from "lucide-react";
-import { useGnssLogs } from "../hooks/useTrackingData";
-import { motion } from "framer-motion";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 
-// Mapbox token from env
-const MAPBOX_TOKEN = "pk.eyJ1IjoibmF1dGlsdXMtb25lIiwiYSI6ImNsdHB3eG95OTA0YXMyanBxejZ4anVsbmsifQ.placeholder";
-
-// Simulated real-time positions
+// Simulated positions
 const DEMO_POSITIONS = [
   { id: 1, name: "DGPS Alpha", lat: -23.5505, lng: -46.6333, accuracy: 0.8, type: "dgps", speed: 12.5 },
   { id: 2, name: "RTK Beta", lat: -22.9068, lng: -43.1729, accuracy: 0.02, type: "rtk", speed: 8.2 },
@@ -35,85 +27,15 @@ const DEMO_LOGS = [
 ];
 
 export default function GnssLive() {
-  const { data: realLogs, isLoading } = useGnssLogs(undefined, 20);
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const markers = useRef<mapboxgl.Marker[]>([]);
-  
   const [selectedPosition, setSelectedPosition] = useState<typeof DEMO_POSITIONS[0] | null>(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Use demo data if no real logs
-  const logs = realLogs?.length ? realLogs : DEMO_LOGS;
   const positions = DEMO_POSITIONS;
+  const logs = DEMO_LOGS;
 
-  // Update time every second
   useEffect(() => {
     const interval = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(interval);
-  }, []);
-
-  // Initialize map
-  useEffect(() => {
-    if (!mapContainer.current || map.current) return;
-
-    try {
-      mapboxgl.accessToken = MAPBOX_TOKEN;
-      
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/dark-v11",
-        center: [-46.6333, -23.5505],
-        zoom: 4,
-        pitch: 30,
-      });
-
-      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-      map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
-
-      map.current.on("load", () => {
-        setIsMapLoaded(true);
-        
-        // Add markers for each position
-        positions.forEach((pos) => {
-          const el = document.createElement("div");
-          el.className = "gnss-marker";
-          el.innerHTML = `
-            <div class="relative">
-              <div class="absolute -inset-2 rounded-full ${pos.type === 'rtk' ? 'bg-emerald-500/30' : pos.type === 'ppp' ? 'bg-purple-500/30' : 'bg-blue-500/30'} animate-ping"></div>
-              <div class="relative h-4 w-4 rounded-full ${pos.type === 'rtk' ? 'bg-emerald-500' : pos.type === 'ppp' ? 'bg-purple-500' : 'bg-blue-500'} border-2 border-white shadow-lg"></div>
-            </div>
-          `;
-
-          const marker = new mapboxgl.Marker(el)
-            .setLngLat([pos.lng, pos.lat])
-            .setPopup(
-              new mapboxgl.Popup({ offset: 25 }).setHTML(`
-                <div class="p-2">
-                  <h3 class="font-bold text-sm">${pos.name}</h3>
-                  <p class="text-xs text-gray-600">Tipo: ${pos.type.toUpperCase()}</p>
-                  <p class="text-xs text-gray-600">Precisão: ±${pos.accuracy}m</p>
-                  <p class="text-xs text-gray-600">Velocidade: ${pos.speed} nós</p>
-                </div>
-              `)
-            )
-            .addTo(map.current!);
-
-          markers.current.push(marker);
-
-          el.addEventListener("click", () => setSelectedPosition(pos));
-        });
-      });
-    } catch (error) {
-      console.error("Error initializing map:", error);
-    }
-
-    return () => {
-      markers.current.forEach((m) => m.remove());
-      map.current?.remove();
-      map.current = null;
-    };
   }, []);
 
   const getSignalQuality = (accuracy: number) => {
@@ -123,30 +45,16 @@ export default function GnssLive() {
     return { level: "Regular", color: "text-red-500", percent: 40 };
   };
 
-  const centerOnPosition = (pos: typeof DEMO_POSITIONS[0]) => {
-    map.current?.flyTo({
-      center: [pos.lng, pos.lat],
-      zoom: 12,
-      duration: 1500,
-    });
-    setSelectedPosition(pos);
-  };
-
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <motion.div 
-            className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
+          <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg">
             <Navigation className="h-8 w-8 text-white" />
-          </motion.div>
+          </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              GNSS Live Tracking
-            </h1>
+            <h1 className="text-3xl font-bold">GNSS Live Tracking</h1>
             <p className="text-muted-foreground">Posicionamento em Tempo Real</p>
           </div>
         </div>
@@ -165,7 +73,7 @@ export default function GnssLive() {
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Map - Takes 2 columns */}
+        {/* Map Placeholder */}
         <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
@@ -174,29 +82,37 @@ export default function GnssLive() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div 
-              ref={mapContainer} 
-              className="h-[500px] rounded-lg overflow-hidden border"
-              style={{ background: '#1a1a2e' }}
-            >
-              {!isMapLoaded && (
-                <div className="h-full flex items-center justify-center bg-muted/50">
-                  <div className="text-center">
-                    <Satellite className="h-12 w-12 mx-auto mb-3 text-muted-foreground animate-pulse" />
-                    <p className="text-sm text-muted-foreground">Carregando mapa...</p>
+            <div className="h-[400px] rounded-lg overflow-hidden border bg-muted/30 flex items-center justify-center">
+              {selectedPosition ? (
+                <div className="text-center space-y-4">
+                  <MapPin className="h-16 w-16 mx-auto text-primary" />
+                  <div>
+                    <p className="font-bold text-xl">{selectedPosition.name}</p>
+                    <p className="text-muted-foreground font-mono">
+                      {selectedPosition.lat.toFixed(6)}°, {selectedPosition.lng.toFixed(6)}°
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Velocidade: {selectedPosition.speed} nós | Precisão: ±{selectedPosition.accuracy}m
+                    </p>
                   </div>
+                  <Badge variant="secondary" className="uppercase">{selectedPosition.type}</Badge>
+                </div>
+              ) : (
+                <div className="text-center space-y-2">
+                  <Satellite className="h-16 w-16 mx-auto text-muted-foreground" />
+                  <p className="text-muted-foreground">Selecione um dispositivo abaixo</p>
                 </div>
               )}
             </div>
             
-            {/* Quick position buttons */}
+            {/* Position buttons */}
             <div className="flex flex-wrap gap-2 mt-4">
               {positions.map((pos) => (
                 <Button 
                   key={pos.id} 
                   size="sm" 
                   variant={selectedPosition?.id === pos.id ? "default" : "outline"}
-                  onClick={() => centerOnPosition(pos)}
+                  onClick={() => setSelectedPosition(pos)}
                 >
                   <Crosshair className="h-3 w-3 mr-1" />
                   {pos.name}
@@ -208,62 +124,56 @@ export default function GnssLive() {
 
         {/* Side Panel */}
         <div className="space-y-4">
-          {/* Selected Position Details */}
           {selectedPosition ? (
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              <Card className="border-primary/30">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Target className="h-5 w-5 text-primary" />
-                    {selectedPosition.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Latitude</p>
-                      <p className="font-mono font-semibold">{selectedPosition.lat.toFixed(6)}°</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Longitude</p>
-                      <p className="font-mono font-semibold">{selectedPosition.lng.toFixed(6)}°</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Precisão</p>
-                      <p className={`font-semibold ${getSignalQuality(selectedPosition.accuracy).color}`}>
-                        ±{selectedPosition.accuracy}m
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Velocidade</p>
-                      <p className="font-semibold">{selectedPosition.speed} nós</p>
-                    </div>
-                  </div>
-                  
+            <Card className="border-primary/30">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Target className="h-5 w-5 text-primary" />
+                  {selectedPosition.name}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span>Qualidade do Sinal</span>
-                      <span className={getSignalQuality(selectedPosition.accuracy).color}>
-                        {getSignalQuality(selectedPosition.accuracy).level}
-                      </span>
-                    </div>
-                    <Progress value={getSignalQuality(selectedPosition.accuracy).percent} className="h-2" />
+                    <p className="text-xs text-muted-foreground">Latitude</p>
+                    <p className="font-mono font-semibold">{selectedPosition.lat.toFixed(6)}°</p>
                   </div>
-                  
-                  <Badge variant="secondary" className="w-full justify-center">
-                    {selectedPosition.type.toUpperCase()}
-                  </Badge>
-                </CardContent>
-              </Card>
-            </motion.div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Longitude</p>
+                    <p className="font-mono font-semibold">{selectedPosition.lng.toFixed(6)}°</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Precisão</p>
+                    <p className={`font-semibold ${getSignalQuality(selectedPosition.accuracy).color}`}>
+                      ±{selectedPosition.accuracy}m
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Velocidade</p>
+                    <p className="font-semibold">{selectedPosition.speed} nós</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span>Qualidade do Sinal</span>
+                    <span className={getSignalQuality(selectedPosition.accuracy).color}>
+                      {getSignalQuality(selectedPosition.accuracy).level}
+                    </span>
+                  </div>
+                  <Progress value={getSignalQuality(selectedPosition.accuracy).percent} className="h-2" />
+                </div>
+                
+                <Badge variant="secondary" className="w-full justify-center uppercase">
+                  {selectedPosition.type}
+                </Badge>
+              </CardContent>
+            </Card>
           ) : (
             <Card className="border-dashed">
               <CardContent className="py-8 text-center text-muted-foreground">
                 <Eye className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Selecione um dispositivo no mapa</p>
+                <p className="text-sm">Selecione um dispositivo</p>
               </CardContent>
             </Card>
           )}
@@ -278,13 +188,10 @@ export default function GnssLive() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2 max-h-[300px] overflow-y-auto">
-                {logs.map((log, i) => (
-                  <motion.div 
+                {logs.map((log) => (
+                  <div 
                     key={log.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="text-sm p-3 border rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
+                    className="text-sm p-3 border rounded-lg bg-muted/30 hover:bg-muted/50"
                   >
                     <div className="flex justify-between items-start">
                       <div>
@@ -304,7 +211,7 @@ export default function GnssLive() {
                         ±{log.accuracy.toFixed(2)}m
                       </span>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </CardContent>
@@ -321,19 +228,19 @@ export default function GnssLive() {
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm">Satélites Visíveis</span>
-                <Badge>{logs?.[0]?.satellites_used || 14}</Badge>
+                <Badge>{logs[0]?.satellites_used ?? 14}</Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">HDOP</span>
-                <Badge variant="outline">{logs?.[0]?.hdop?.toFixed(2) || '0.80'}</Badge>
+                <Badge variant="outline">{logs[0]?.hdop?.toFixed(2) ?? '0.80'}</Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Fonte de Correção</span>
-                <Badge variant="secondary">{logs?.[0]?.correction_source || 'RBMC'}</Badge>
+                <Badge variant="secondary">{logs[0]?.correction_source ?? 'RBMC'}</Badge>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm">Fix Type</span>
-                <Badge className="bg-emerald-500">{logs?.[0]?.fix_type || 'RTK_FIXED'}</Badge>
+                <Badge className="bg-emerald-500">{logs[0]?.fix_type ?? 'RTK_FIXED'}</Badge>
               </div>
             </CardContent>
           </Card>
