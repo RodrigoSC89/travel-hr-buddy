@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability
+// TODO: Remove after migration adds ai_document_insights, document_processing_queue tables
 /**
  * PATCH 297: AI Document Service
  * Tesseract.js integration for OCR with entity extraction

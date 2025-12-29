@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// TODO: Remove after migration adds sonar_ai_analysis, sonar_detection_logs tables
 /**
  * PATCH 539 - Ocean Sonar AI Service
  * AI-assisted sonar pattern interpretation with LLM
