@@ -142,6 +142,15 @@ const SidebarCheck = lazy(() => import(/* webpackChunkName: "page-sidebar-check"
 // Compliance One Module - PATCH 863
 const ComplianceCenter = lazy(() => import(/* webpackChunkName: "module-compliance" */ "@/modules/compliance/pages/ComplianceCenter"));
 
+// DGNSS Tracking Module - PATCH 864
+const TrackingCenter = lazy(() => import(/* webpackChunkName: "module-tracking" */ "@/modules/tracking/pages/TrackingCenter"));
+
+// API Center - PATCH 865
+const APICenter = lazy(() => import(/* webpackChunkName: "page-api-center" */ "@/pages/APICenter"));
+
+// MMI Jobs Direct Route - PATCH 866
+const MMIJobsPanel = lazy(() => import(/* webpackChunkName: "page-mmi-jobs" */ "@/pages/MMIJobsPanel"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -268,6 +277,15 @@ function App() {
 
                         {/* Compliance One Module - PATCH 863 */}
                         <Route path="compliance-center/*" element={<ComplianceCenter />} />
+
+                        {/* DGNSS Tracking Module - PATCH 864 */}
+                        <Route path="tracking/*" element={<TrackingCenter />} />
+
+                        {/* API Center - PATCH 865 */}
+                        <Route path="integracoes/api-center" element={<APICenter />} />
+
+                        {/* MMI Jobs Direct Route - PATCH 866 */}
+                        <Route path="mmi-jobs" element={<MMIJobsPanel />} />
 
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
