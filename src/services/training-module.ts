@@ -1,6 +1,6 @@
 /**
  * PATCH 861: Training Module Service - Schema aligned
- * Uses score (DB) mapped to quiz_score (interface)
+ * Uses DB field names: score, completion_date, mapped to interface fields
  */
 import { supabase } from "@/integrations/supabase/client";
 import type {
@@ -13,69 +13,43 @@ import type {
   QuizQuestion
 } from "../types/training";
 
-// DB row type for training_modules
-interface TrainingModuleRow {
-  id: string;
-  title?: string;
-  description?: string;
-  content?: string;
-  gap_detected?: string;
-  training_content?: string;
-  norm_reference?: string;
-  quiz?: unknown;
-  vessel_id?: string;
-  audit_id?: string;
-  status?: string;
-  created_by?: string;
-  created_at?: string;
-  updated_at?: string;
-}
-
-// DB row type for training_completions  
-interface TrainingCompletionRow {
-  id: string;
-  training_module_id?: string;
-  course_id?: string;
-  user_id: string;
-  vessel_id?: string;
-  completion_date?: string;
-  completed_at?: string;
-  score?: number;
-  quiz_answers?: number[];
-  passed?: boolean;
-  notes?: string;
-  created_at?: string;
-}
-
-function mapToTrainingModule(row: TrainingModuleRow): TrainingModule {
+/**
+ * Map DB row to TrainingModule interface
+ */
+function mapToTrainingModule(row: Record<string, unknown>): TrainingModule {
   return {
-    id: row.id,
-    title: row.title || '',
-    gap_detected: row.gap_detected || row.description || '',
-    norm_reference: row.norm_reference || '',
-    training_content: row.training_content || row.content || '',
-    quiz: (row.quiz || []) as QuizQuestion[],
-    vessel_id: row.vessel_id,
-    audit_id: row.audit_id,
+    id: String(row.id || ''),
+    title: String(row.title || ''),
+    gap_detected: String(row.gap_detected || row.description || ''),
+    norm_reference: String(row.norm_reference || ''),
+    training_content: String(row.training_content || row.content || ''),
+    quiz: Array.isArray(row.quiz) ? row.quiz as QuizQuestion[] : [],
+    vessel_id: row.vessel_id as string | undefined,
+    audit_id: row.audit_id as string | undefined,
     status: (row.status as "active" | "archived" | "draft") || "active",
-    created_by: row.created_by,
-    created_at: row.created_at || new Date().toISOString(),
-    updated_at: row.updated_at || new Date().toISOString(),
+    created_by: row.created_by as string | undefined,
+    created_at: String(row.created_at || new Date().toISOString()),
+    updated_at: String(row.updated_at || new Date().toISOString()),
   };
 }
 
-function mapToTrainingCompletion(row: TrainingCompletionRow): TrainingCompletion {
+/**
+ * Map DB row to TrainingCompletion interface
+ * DB uses: score, completion_date
+ * Interface uses: quiz_score, completed_at
+ */
+function mapToTrainingCompletion(row: Record<string, unknown>): TrainingCompletion {
   return {
-    id: row.id,
-    training_module_id: row.training_module_id || row.course_id || '',
-    user_id: row.user_id,
-    vessel_id: row.vessel_id,
-    completed_at: row.completed_at || row.completion_date || new Date().toISOString(),
-    quiz_score: row.score || 0,
-    quiz_answers: row.quiz_answers || [],
-    passed: row.passed || false,
-    notes: row.notes,
-    created_at: row.created_at || new Date().toISOString(),
+    id: String(row.id || ''),
+    training_module_id: String(row.training_module_id || row.course_id || ''),
+    user_id: String(row.user_id || ''),
+    vessel_id: row.vessel_id as string | undefined,
+    completed_at: String(row.completed_at || row.completion_date || new Date().toISOString()),
+    quiz_score: Number(row.score || 0),
+    quiz_answers: Array.isArray(row.quiz_answers) ? row.quiz_answers as number[] : [],
+    passed: Boolean(row.passed),
+    notes: row.notes as string | undefined,
+    created_at: String(row.created_at || new Date().toISOString()),
   };
 }
 
@@ -83,7 +57,6 @@ function mapToTrainingCompletion(row: TrainingCompletionRow): TrainingCompletion
  * Training Module Service
  * Handles operations for micro training modules based on audit gaps
  */
-
 export class TrainingModuleService {
   /**
    * Generate a new training module from an audit gap using AI
@@ -98,7 +71,7 @@ export class TrainingModuleService {
     }
 
     const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-training-module`,
+      `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-training-module`,
       {
         method: "POST",
         headers: {
@@ -137,7 +110,7 @@ export class TrainingModuleService {
       throw new Error(`Erro ao buscar módulos de treinamento: ${error.message}`);
     }
 
-    return data as TrainingModule[];
+    return (data || []).map(row => mapToTrainingModule(row as Record<string, unknown>));
   }
 
   /**
@@ -155,11 +128,12 @@ export class TrainingModuleService {
       return null;
     }
 
-    return data as TrainingModule;
+    return mapToTrainingModule(data as Record<string, unknown>);
   }
 
   /**
    * Record a training completion
+   * Writes to DB fields: score, completion_date
    */
   static async recordCompletion(
     moduleId: string,
@@ -181,7 +155,7 @@ export class TrainingModuleService {
 
     // Calculate score
     let correctAnswers = 0;
-    const quizQuestions = module.quiz as QuizQuestion[];
+    const quizQuestions = module.quiz;
     
     quizQuestions.forEach((question, index) => {
       if (quizAnswers[index] === question.correct_answer) {
@@ -193,19 +167,19 @@ export class TrainingModuleService {
       ? Math.round((correctAnswers / quizQuestions.length) * 100)
       : 0;
     
-    const passed = score >= 70; // 70% is passing grade
+    const passed = score >= 70;
 
+    // Use DB column names: score, completion_date
     const { data, error } = await supabase
       .from("training_completions")
       .upsert({
         training_module_id: moduleId,
         user_id: session.user.id,
         vessel_id: vesselId,
-        quiz_answers: quizAnswers,
-        quiz_score: score,
+        score: score,
         passed,
-        notes,
-        completed_at: new Date().toISOString()
+        metadata: { quiz_answers: quizAnswers, notes },
+        completion_date: new Date().toISOString()
       })
       .select()
       .single();
@@ -214,7 +188,7 @@ export class TrainingModuleService {
       throw new Error(`Erro ao registrar conclusão: ${error.message}`);
     }
 
-    return data as TrainingCompletion;
+    return mapToTrainingCompletion(data as Record<string, unknown>);
   }
 
   /**
@@ -231,12 +205,16 @@ export class TrainingModuleService {
     }
 
     const targetUserId = userId || session?.user.id;
+    
+    if (!targetUserId) {
+      throw new Error("ID de usuário não disponível");
+    }
 
     let query = supabase
       .from("training_completions")
       .select("*")
       .eq("user_id", targetUserId)
-      .order("completed_at", { ascending: false });
+      .order("completion_date", { ascending: false });
 
     if (vesselId) {
       query = query.eq("vessel_id", vesselId);
@@ -248,27 +226,28 @@ export class TrainingModuleService {
       throw new Error(`Erro ao buscar conclusões: ${error.message}`);
     }
 
-    return data as TrainingCompletion[];
+    return (data || []).map(row => mapToTrainingCompletion(row as Record<string, unknown>));
   }
 
   /**
    * Get completion statistics for a training module
+   * Uses DB field: score
    */
   static async getModuleStatistics(moduleId: string) {
     const { data, error } = await supabase
       .from("training_completions")
-      .select("quiz_score, passed")
+      .select("score, passed")
       .eq("training_module_id", moduleId);
 
     if (error) {
       throw new Error(`Erro ao buscar estatísticas: ${error.message}`);
     }
 
-    const completions = data as TrainingCompletion[];
+    const completions = (data || []) as Array<{ score: number | null; passed: boolean | null }>;
     const totalCompletions = completions.length;
     const passedCount = completions.filter(c => c.passed).length;
     const averageScore = totalCompletions > 0
-      ? completions.reduce((sum, c) => sum + c.quiz_score, 0) / totalCompletions
+      ? completions.reduce((sum, c) => sum + (c.score || 0), 0) / totalCompletions
       : 0;
 
     return {
@@ -292,7 +271,7 @@ export class TrainingModuleService {
     }
 
     const response = await fetch(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-audit-bundle`,
+      `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/export-audit-bundle`,
       {
         method: "POST",
         headers: {

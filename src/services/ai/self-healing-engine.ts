@@ -1,12 +1,13 @@
-// @ts-nocheck
 /**
- * PATCH 860: AI Self-Healing Engine (Level 2 Autonomy)
- * @ts-nocheck mantido: Tabela ai_self_healing_logs pode não existir no Supabase
- * TODO: Verificar se migration foi aplicada e regenerar tipos
+ * PATCH 861: AI Self-Healing Engine (Level 2 Autonomy)
+ * Table ai_self_healing_logs exists with all required columns ✓
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type AISelfHealingLogInsert = Database["public"]["Tables"]["ai_self_healing_logs"]["Insert"];
 
 export interface SelfHealingEvent {
   id?: string;
@@ -316,23 +317,25 @@ class SelfHealingEngine {
    */
   async logEvent(event: SelfHealingEvent): Promise<string | null> {
     try {
+      const insertData = {
+        event_type: event.eventType,
+        severity: event.severity,
+        module_affected: event.moduleAffected,
+        issue_description: event.issueDescription,
+        root_cause: event.rootCause || null,
+        action_taken: event.actionTaken || null,
+        action_result: event.actionResult || null,
+        correction_type: event.correctionType || null,
+        confidence_score: event.confidenceScore || null,
+        execution_time_ms: event.executionTimeMs || null,
+        error_stack: event.errorStack || null,
+        metadata: JSON.parse(JSON.stringify(event.metadata || {})),
+        resolved_at: event.actionResult === "success" ? new Date().toISOString() : null,
+      };
+
       const { data, error } = await supabase
-        .from("ai_self_healing_logs" as any)
-        .insert({
-          event_type: event.eventType,
-          severity: event.severity,
-          module_affected: event.moduleAffected,
-          issue_description: event.issueDescription,
-          root_cause: event.rootCause,
-          action_taken: event.actionTaken,
-          action_result: event.actionResult,
-          correction_type: event.correctionType,
-          confidence_score: event.confidenceScore,
-          execution_time_ms: event.executionTimeMs,
-          error_stack: event.errorStack,
-          metadata: event.metadata || {},
-          resolved_at: event.actionResult === "success" ? new Date().toISOString() : null,
-        })
+        .from("ai_self_healing_logs")
+        .insert([insertData] as never)
         .select("id")
         .single();
 
@@ -341,7 +344,8 @@ class SelfHealingEngine {
         return null;
       }
 
-      return data?.id || null;
+      const result = data as { id: string } | null;
+      return result?.id || null;
     } catch (error) {
       logger.error("Self-healing log error", error as Error);
       return null;
