@@ -1,9 +1,10 @@
 // @ts-nocheck
-// PATCH-860: Aguardando alinhamento schema incident_reports
 /**
  * PATCH 393 - Incident Reports: Enhanced with photo upload, GPS, and unique IDs
+ * @ts-nocheck mantido: Schema incident_reports não tem incident_number (usa code)
+ * TODO: Alinhar campos incident_number, photo_urls com schema DB
  */
-import React, { useState, useRef } from "react";
+import { useState, useRef, type FC, type FormEvent, type ChangeEvent } from "react";
 import {
   Dialog,
   DialogContent,
