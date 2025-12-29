@@ -151,6 +151,9 @@ const APICenter = lazy(() => import(/* webpackChunkName: "page-api-center" */ "@
 // MMI Jobs Direct Route - PATCH 866
 const MMIJobsPanel = lazy(() => import(/* webpackChunkName: "page-mmi-jobs" */ "@/pages/MMIJobsPanel"));
 
+// Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
+const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -193,9 +196,12 @@ function App() {
                           <SmartLayout />
                         </ProtectedRoute>
                       }>
-                        {/* PATCH UNIFY-FINAL: Rota principal "/" redireciona para Nautilus Command Center */}
-                        <Route index element={<Navigate to="/nautilus-command" replace />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        {/* PATCH UNIFY-4.0: Rota principal "/" redireciona para Central de Comando */}
+                        <Route index element={<Navigate to="/central-comando" replace />} />
+                        <Route path="dashboard" element={<Navigate to="/central-comando/visao-geral" replace />} />
+                        
+                        {/* Central de Comando - Módulo Unificado */}
+                        <Route path="central-comando/*" element={<CentralComando />} />
                         
                         {/* Module Routes from Registry */}
                         {moduleRoutes.map((route) => (

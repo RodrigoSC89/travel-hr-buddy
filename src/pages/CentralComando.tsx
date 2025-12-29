@@ -419,7 +419,7 @@ function CentralComandoContent() {
                       <h3 className="font-semibold">Assistente IA</h3>
                     </div>
                     <Badge variant="outline" className="text-xs">
-                      {globalBrain?.isProcessing ? "Processando..." : "Pronto"}
+                      {isAITyping ? "Processando..." : "Pronto"}
                     </Badge>
                   </div>
                 </div>

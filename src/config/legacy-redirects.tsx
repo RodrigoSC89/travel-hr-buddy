@@ -109,16 +109,16 @@ const redirects: Array<[string, string]> = [
   ["mmi-jobs-panel", "/maintenance-command"],
   ["mmi-dashboard", "/maintenance-command"],
   
-  // Executive Routes - All redirect to unified Nautilus Command Center
-  // PATCH UNIFY-FINAL: Fusão completa de todos os dashboards executivos
-  ["executive-dashboard", "/nautilus-command"],
-  ["command-center", "/nautilus-command"],
-  ["dashboard-executivo", "/nautilus-command"],
-  ["centro-operacoes", "/nautilus-command"],
-  ["operations-center", "/nautilus-command"],
-  ["dashboard", "/nautilus-command"],
-  ["index", "/nautilus-command"],
-  ["home", "/nautilus-command"],
+  // Executive Routes - All redirect to unified Central de Comando
+  // PATCH UNIFY-4.0: Fusão completa de todos os dashboards executivos
+  ["executive-dashboard", "/central-comando"],
+  ["command-center", "/central-comando"],
+  ["dashboard-executivo", "/central-comando"],
+  ["centro-operacoes", "/central-comando/operacoes"],
+  ["operations-center", "/central-comando/operacoes"],
+  ["nautilus-command", "/central-comando"],
+  ["index", "/central-comando"],
+  ["home", "/central-comando"],
   
   // Maritime Routes
   ["maritime", "/maritime-command"],
@@ -148,7 +148,7 @@ const redirects: Array<[string, string]> = [
   ["inventory", "/procurement-command"],
   
   // Monitoring Routes
-  ["monitoring", "/nautilus-command"],
+  ["monitoring", "/central-comando"],
 ];
 
 // Generate Route elements from configuration
