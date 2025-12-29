@@ -1,6 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 483 - Satellite Tracking Service
+ * Tables: satellite_tracking (created in migration)
  * Real satellite tracking with TLE data, position calculation, and coordinate validation
  */
 

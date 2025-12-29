@@ -1,6 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 407: Sonar AI Service
+ * Tables: sonar_inputs (created in migration)
  * Service layer for CRUD operations on sonar data, analysis, and alerts
  */
 

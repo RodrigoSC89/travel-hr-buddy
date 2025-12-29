@@ -1,7 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 167.0: Distributed AI Engine
- * TODO PATCH 659: Awaiting Supabase tables (vessel_ai_contexts)
+ * Tables: vessel_ai_contexts (created in migration)
  * Distributed AI engine with vessel-specific contexts and global synchronization
  * 
  * Each vessel runs local AI with fallback to central AI
@@ -14,23 +14,25 @@ import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { runOpenAI, AIEngineRequest, AIEngineResponse } from "@/ai/engine";
 
+import type { Json } from "@/integrations/supabase/types";
+
 export interface VesselAIContext {
   vessel_id: string;
   context_id: string;
-  local_data: Record<string, any>;
-  global_data: Record<string, any>;
-  last_sync: string;
-  model_version: string;
-  interaction_count: number;
-  created_at: string;
-  updated_at: string;
+  local_data: Json;
+  global_data: Json;
+  last_sync: string | null;
+  model_version: string | null;
+  interaction_count: number | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 export interface AIDecision {
   vessel_id: string;
   decision_type: string;
-  input_data: Record<string, any>;
-  output_data: Record<string, any>;
+  input_data: Record<string, unknown>;
+  output_data: Record<string, unknown>;
   confidence: number;
   reasoning: string;
   timestamp: string;

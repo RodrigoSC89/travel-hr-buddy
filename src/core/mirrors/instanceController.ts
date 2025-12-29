@@ -1,7 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 225.0 - Mirror Instance Controller
- * TODO PATCH 659: Awaiting Supabase tables (mirror_instances, clone_sync_log)
+ * Tables: mirror_instances, clone_sync_log (created in migration)
  * Orchestrates multiple clones in the field and synchronizes states
  * Creates control and synchronization system between remote instances (Nautilus copies)
  */
@@ -361,8 +361,9 @@ class InstanceController {
    * Perform actual sync
    */
   private async performSync(operation: SyncOperation): Promise<void> {
-    const categories = operation.dataCategories.includes("all")
-      ? ["config", "ai_memory", "logs", "user_data"]
+    const allCategories: DataCategory[] = ["config", "ai_memory", "logs", "user_data"];
+    const categories: DataCategory[] = operation.dataCategories.includes("all")
+      ? allCategories
       : operation.dataCategories;
 
     let totalItems = 0;
@@ -386,7 +387,7 @@ class InstanceController {
   /**
    * Fetch data for category
    */
-  private async fetchDataForCategory(instanceId: string, category: DataCategory): Promise<any[]> {
+  private async fetchDataForCategory(instanceId: string, category: DataCategory): Promise<unknown[]> {
     // Simulate fetching data
     // In production, this would fetch from the actual instance
     return Array(10).fill({ category, instanceId, data: {} });
@@ -395,7 +396,7 @@ class InstanceController {
   /**
    * Sync individual item
    */
-  private async syncItem(targetId: string, category: DataCategory, item: any): Promise<void> {
+  private async syncItem(targetId: string, category: DataCategory, item: unknown): Promise<void> {
     // Simulate syncing item
     await new Promise(resolve => setTimeout(resolve, 100));
   }
@@ -506,16 +507,20 @@ class InstanceController {
         .from("mirror_instances")
         .upsert({
           id: instance.id,
-          name: instance.name,
-          endpoint: instance.endpoint,
+          instance_name: instance.name,
+          region: instance.location?.name || null,
           status: instance.status,
-          last_seen: instance.lastSeen.toISOString(),
-          sync_status: instance.syncStatus,
-          capabilities: instance.capabilities,
-          location: instance.location,
-          metrics: instance.metrics,
-          version: instance.version,
-          parent_instance_id: instance.parentInstanceId,
+          config: {
+            endpoint: instance.endpoint,
+            lastSeen: instance.lastSeen.toISOString(),
+            syncStatus: instance.syncStatus,
+            capabilities: instance.capabilities,
+            location: instance.location,
+            metrics: instance.metrics,
+            version: instance.version,
+            parentInstanceId: instance.parentInstanceId,
+          } as Json,
+          last_sync: instance.syncStatus.lastSync?.toISOString() || null,
           updated_at: new Date().toISOString(),
         });
 

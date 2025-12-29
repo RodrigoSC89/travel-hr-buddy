@@ -1,7 +1,7 @@
-// @ts-nocheck
+// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 625 - Adaptive LLM Layer
- * TODO PATCH 659: Awaiting Supabase tables (ai_inspection_feedback, inspector_profiles)
+ * Tables: ai_inspection_feedback, inspector_profiles (created in migration)
  * Inteligência Contextual Aprimorada com Aprendizado Contínuo
  * 
  * Sistema de IA adaptativa que aprende com interações reais,
