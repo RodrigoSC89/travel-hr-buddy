@@ -259,6 +259,9 @@ function App() {
                         {/* AI Self-Healing - PATCH 860 */}
                         <Route path="ai-ops/logs" element={<SelfHealingLogs />} />
                         
+                        {/* Sidebar Diagnostic - PATCH 862 */}
+                        <Route path="dev/sidebar-check" element={<SidebarCheck />} />
+
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
                         
