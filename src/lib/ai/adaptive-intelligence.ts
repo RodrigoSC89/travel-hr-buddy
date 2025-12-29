@@ -1,4 +1,3 @@
-// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 625 - Adaptive LLM Layer
  * Tables: ai_inspection_feedback, inspector_profiles (created in migration)
@@ -10,6 +9,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
+import type { Database } from "@/integrations/supabase/types";
 
 export type InspectionType = 'PSC' | 'ISM' | 'MLC' | 'OVID' | 'LSA';
 

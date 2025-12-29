@@ -1,4 +1,3 @@
-// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 166.0: Mission Engine
  * Tables: mission_vessels (created in migration)
@@ -9,7 +8,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type { Json } from "@/integrations/supabase/types";
+import type { Json, Database } from "@/integrations/supabase/types";
+
+type MissionVesselRow = Database["public"]["Tables"]["mission_vessels"]["Row"];
 
 export type MissionType = "sar" | "evacuation" | "transport" | "patrol" | "training" | "emergency" | "custom";
 export type MissionStatus = "planned" | "active" | "completed" | "cancelled" | "failed";
@@ -86,18 +87,18 @@ export class MissionEngine {
    */
   static async createMission(mission: Partial<Mission>): Promise<Mission | null> {
     try {
+      const insertData = {
+        title: mission.name || "Untitled Mission",
+        mission_type: mission.mission_type,
+        status: mission.status || "planned",
+        priority: mission.priority || "normal",
+        description: mission.description,
+        scheduled_start: mission.start_time,
+      } as Record<string, unknown>;
+
       const { data, error } = await supabase
         .from("missions")
-        .insert({
-          name: mission.name,
-          mission_type: mission.mission_type,
-          status: mission.status || "planned",
-          priority: mission.priority || "normal",
-          description: mission.description,
-          start_time: mission.start_time,
-          coordination_data: mission.coordination_data || {},
-          ai_recommendations: mission.ai_recommendations || {}
-        })
+        .insert(insertData)
         .select()
         .single();
 
@@ -107,7 +108,11 @@ export class MissionEngine {
       }
 
       logger.info("Mission created:", data);
-      return data;
+      return {
+        id: data.id,
+        name: data.title,
+        ...data
+      } as unknown as Mission;
     } catch (error) {
       logger.error("Error in createMission:", error);
       return null;
@@ -273,19 +278,19 @@ export class MissionEngine {
       log_type: MissionLog["log_type"];
       message: string;
       vessel_id?: string;
-      metadata?: Record<string, any>;
+      metadata?: Record<string, unknown>;
     }
   ): Promise<MissionLog | null> {
     try {
+      const insertData = {
+        title: log.message,
+        log_type: log.log_type,
+        description: log.message,
+      } as Record<string, unknown>;
+
       const { data, error } = await supabase
         .from("mission_logs")
-        .insert({
-          mission_id: missionId,
-          vessel_id: log.vessel_id,
-          log_type: log.log_type,
-          message: log.message,
-          metadata: log.metadata || {}
-        })
+        .insert(insertData)
         .select()
         .single();
 
@@ -294,7 +299,15 @@ export class MissionEngine {
         return null;
       }
 
-      return data;
+      return {
+        id: data.id,
+        mission_id: missionId,
+        vessel_id: log.vessel_id,
+        log_type: log.log_type,
+        message: log.message,
+        metadata: log.metadata,
+        created_at: data.created_at,
+      } as MissionLog;
     } catch (error) {
       logger.error("Error in logMissionEvent:", error);
       return null;
@@ -336,11 +349,16 @@ export class MissionEngine {
         return [];
       }
 
-      return data || [];
+      return (data || []).map(d => ({
+        id: d.id,
+        mission_id: d.id,
+        log_type: d.log_type,
+        message: d.message || d.description,
+        created_at: d.created_at,
+      })) as MissionLog[];
     } catch (error) {
       logger.error("Error in getMissionLogs:", error);
       return [];
-    }
   }
 
   /**

@@ -1,4 +1,3 @@
-// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 225.0 - Mirror Instance Controller
  * Tables: mirror_instances, clone_sync_log (created in migration)
@@ -8,6 +7,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json, Database } from "@/integrations/supabase/types";
+
+type MirrorInstanceRow = Database["public"]["Tables"]["mirror_instances"]["Row"];
+type MirrorInstanceInsert = Database["public"]["Tables"]["mirror_instances"]["Insert"];
 
 export type InstanceStatus = "active" | "inactive" | "syncing" | "error" | "offline";
 export type SyncDirection = "pull" | "push" | "bidirectional";
@@ -503,6 +506,22 @@ class InstanceController {
    */
   private async saveInstance(instance: MirrorInstance): Promise<void> {
     try {
+      const configData = {
+        endpoint: instance.endpoint,
+        lastSeen: instance.lastSeen.toISOString(),
+        syncStatus: {
+          percentage: instance.syncStatus.percentage,
+          lastSync: instance.syncStatus.lastSync?.toISOString() || null,
+          nextSync: instance.syncStatus.nextSync?.toISOString() || null,
+          inProgress: instance.syncStatus.inProgress,
+        },
+        capabilities: instance.capabilities,
+        location: instance.location || null,
+        metrics: instance.metrics,
+        version: instance.version,
+        parentInstanceId: instance.parentInstanceId || null,
+      };
+
       const { error } = await supabase
         .from("mirror_instances")
         .upsert({
@@ -510,19 +529,10 @@ class InstanceController {
           instance_name: instance.name,
           region: instance.location?.name || null,
           status: instance.status,
-          config: {
-            endpoint: instance.endpoint,
-            lastSeen: instance.lastSeen.toISOString(),
-            syncStatus: instance.syncStatus,
-            capabilities: instance.capabilities,
-            location: instance.location,
-            metrics: instance.metrics,
-            version: instance.version,
-            parentInstanceId: instance.parentInstanceId,
-          } as Json,
+          config: configData as unknown as Json,
           last_sync: instance.syncStatus.lastSync?.toISOString() || null,
           updated_at: new Date().toISOString(),
-        });
+        } as MirrorInstanceInsert);
 
       if (error) throw error;
     } catch (error) {

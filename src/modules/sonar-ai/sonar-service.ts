@@ -1,4 +1,3 @@
-// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 407: Sonar AI Service
  * Tables: sonar_inputs (created in migration)
@@ -7,6 +6,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type SonarInputRow = Database["public"]["Tables"]["sonar_inputs"]["Row"];
 
 export interface SonarInput {
   id?: string;
