@@ -19796,68 +19796,6 @@ export type Database = {
           },
         ]
       }
-      task_assignments: {
-        Row: {
-          assigned_by: string | null
-          completed_at: string | null
-          created_at: string
-          description: string | null
-          due_date: string | null
-          id: string
-          metadata: Json | null
-          organization_id: string | null
-          priority: string
-          related_entity_id: string | null
-          related_entity_type: string | null
-          status: string
-          title: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          assigned_by?: string | null
-          completed_at?: string | null
-          created_at?: string
-          description?: string | null
-          due_date?: string | null
-          id?: string
-          metadata?: Json | null
-          organization_id?: string | null
-          priority?: string
-          related_entity_id?: string | null
-          related_entity_type?: string | null
-          status?: string
-          title: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          assigned_by?: string | null
-          completed_at?: string | null
-          created_at?: string
-          description?: string | null
-          due_date?: string | null
-          id?: string
-          metadata?: Json | null
-          organization_id?: string | null
-          priority?: string
-          related_entity_id?: string | null
-          related_entity_type?: string | null
-          status?: string
-          title?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "task_assignments_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       telemetry_alerts: {
         Row: {
           acknowledged: boolean | null
