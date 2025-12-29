@@ -701,6 +701,69 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_document_insights: {
+        Row: {
+          classification: string | null
+          confidence: number | null
+          created_at: string
+          created_by: string | null
+          dates: Json | null
+          document_id: string
+          entities: Json | null
+          extracted_text: string | null
+          highlights: Json | null
+          id: string
+          keywords: string[] | null
+          language: string | null
+          ocr_engine: string | null
+          organization_id: string | null
+          processing_time_ms: number | null
+          summary: string | null
+          tables_detected: Json | null
+          updated_at: string
+        }
+        Insert: {
+          classification?: string | null
+          confidence?: number | null
+          created_at?: string
+          created_by?: string | null
+          dates?: Json | null
+          document_id: string
+          entities?: Json | null
+          extracted_text?: string | null
+          highlights?: Json | null
+          id?: string
+          keywords?: string[] | null
+          language?: string | null
+          ocr_engine?: string | null
+          organization_id?: string | null
+          processing_time_ms?: number | null
+          summary?: string | null
+          tables_detected?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          classification?: string | null
+          confidence?: number | null
+          created_at?: string
+          created_by?: string | null
+          dates?: Json | null
+          document_id?: string
+          entities?: Json | null
+          extracted_text?: string | null
+          highlights?: Json | null
+          id?: string
+          keywords?: string[] | null
+          language?: string | null
+          ocr_engine?: string | null
+          organization_id?: string | null
+          processing_time_ms?: number | null
+          summary?: string | null
+          tables_detected?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ai_document_templates: {
         Row: {
           content: string
@@ -7004,6 +7067,78 @@ export type Database = {
           },
         ]
       }
+      document_processing_queue: {
+        Row: {
+          attempts: number | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          document_id: string
+          error_message: string | null
+          file_name: string
+          file_path: string | null
+          file_size: number | null
+          file_type: string | null
+          id: string
+          max_attempts: number | null
+          options: Json | null
+          organization_id: string | null
+          priority: number | null
+          processor_type: string | null
+          result: Json | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id: string
+          error_message?: string | null
+          file_name: string
+          file_path?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          max_attempts?: number | null
+          options?: Json | null
+          organization_id?: string | null
+          priority?: number | null
+          processor_type?: string | null
+          result?: Json | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          document_id?: string
+          error_message?: string | null
+          file_name?: string
+          file_path?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          max_attempts?: number | null
+          options?: Json | null
+          organization_id?: string | null
+          priority?: number | null
+          processor_type?: string | null
+          result?: Json | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       document_registry: {
         Row: {
           category: Database["public"]["Enums"]["document_category"]
@@ -12661,6 +12796,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mmi_job_history: {
+        Row: {
+          action: string | null
+          component: string | null
+          created_at: string
+          description: string | null
+          embedding: string | null
+          id: string
+          job_id: string
+          metadata: Json | null
+          organization_id: string | null
+          outcome: string | null
+        }
+        Insert: {
+          action?: string | null
+          component?: string | null
+          created_at?: string
+          description?: string | null
+          embedding?: string | null
+          id?: string
+          job_id: string
+          metadata?: Json | null
+          organization_id?: string | null
+          outcome?: string | null
+        }
+        Update: {
+          action?: string | null
+          component?: string | null
+          created_at?: string
+          description?: string | null
+          embedding?: string | null
+          id?: string
+          job_id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          outcome?: string | null
+        }
+        Relationships: []
       }
       mmi_maintenance_jobs: {
         Row: {
@@ -18366,6 +18540,59 @@ export type Database = {
           },
         ]
       }
+      sonar_ai_analysis: {
+        Row: {
+          anomalies: Json | null
+          confidence_score: number | null
+          created_at: string
+          id: string
+          interpretation: string | null
+          model_version: string | null
+          patterns_detected: Json | null
+          processing_time_ms: number | null
+          recommendations: string[] | null
+          scan_id: string
+          sonar_data_id: string | null
+          zones_of_interest: Json | null
+        }
+        Insert: {
+          anomalies?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          interpretation?: string | null
+          model_version?: string | null
+          patterns_detected?: Json | null
+          processing_time_ms?: number | null
+          recommendations?: string[] | null
+          scan_id: string
+          sonar_data_id?: string | null
+          zones_of_interest?: Json | null
+        }
+        Update: {
+          anomalies?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          interpretation?: string | null
+          model_version?: string | null
+          patterns_detected?: Json | null
+          processing_time_ms?: number | null
+          recommendations?: string[] | null
+          scan_id?: string
+          sonar_data_id?: string | null
+          zones_of_interest?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sonar_ai_analysis_sonar_data_id_fkey"
+            columns: ["sonar_data_id"]
+            isOneToOne: false
+            referencedRelation: "sonar_data"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sonar_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -18630,6 +18857,74 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sonar_detection_logs: {
+        Row: {
+          bearing_degrees: number | null
+          classification: string | null
+          confidence: number | null
+          created_at: string
+          depth_meters: number | null
+          detection_type: string
+          frequency_khz: number | null
+          id: string
+          is_threat: boolean | null
+          is_verified: boolean | null
+          location: Json | null
+          metadata: Json | null
+          range_meters: number | null
+          signal_strength: number | null
+          sonar_data_id: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          bearing_degrees?: number | null
+          classification?: string | null
+          confidence?: number | null
+          created_at?: string
+          depth_meters?: number | null
+          detection_type: string
+          frequency_khz?: number | null
+          id?: string
+          is_threat?: boolean | null
+          is_verified?: boolean | null
+          location?: Json | null
+          metadata?: Json | null
+          range_meters?: number | null
+          signal_strength?: number | null
+          sonar_data_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          bearing_degrees?: number | null
+          classification?: string | null
+          confidence?: number | null
+          created_at?: string
+          depth_meters?: number | null
+          detection_type?: string
+          frequency_khz?: number | null
+          id?: string
+          is_threat?: boolean | null
+          is_verified?: boolean | null
+          location?: Json | null
+          metadata?: Json | null
+          range_meters?: number | null
+          signal_strength?: number | null
+          sonar_data_id?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sonar_detection_logs_sonar_data_id_fkey"
+            columns: ["sonar_data_id"]
+            isOneToOne: false
+            referencedRelation: "sonar_data"
             referencedColumns: ["id"]
           },
         ]
@@ -23624,6 +23919,20 @@ export type Database = {
           p_task_id: string
         }
         Returns: undefined
+      }
+      match_mmi_job_history: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          action: string
+          created_at: string
+          job_id: string
+          outcome: string
+          similarity: number
+        }[]
       }
       match_mmi_jobs: {
         Args: {
