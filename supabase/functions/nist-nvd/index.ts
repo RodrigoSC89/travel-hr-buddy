@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const NIST_API_KEY = Deno.env.get('NIST_NVD_API_KEY');
+const NIST_API_KEY = Deno.env.get('NIST_API_KEY');
 const NVD_BASE_URL = 'https://services.nvd.nist.gov/rest/json';
 
 interface NISTRequest {
