@@ -10228,10 +10228,13 @@ export type Database = {
           created_at: string | null
           description: string
           evidence: Json | null
+          gps_coordinates: string | null
           id: string
           incident_date: string | null
+          incident_number: string | null
           location: string
           metadata: Json | null
+          photo_urls: string[] | null
           replay_status: string | null
           reported_at: string
           reported_by: string | null
@@ -10249,10 +10252,13 @@ export type Database = {
           created_at?: string | null
           description: string
           evidence?: Json | null
+          gps_coordinates?: string | null
           id?: string
           incident_date?: string | null
+          incident_number?: string | null
           location: string
           metadata?: Json | null
+          photo_urls?: string[] | null
           replay_status?: string | null
           reported_at?: string
           reported_by?: string | null
@@ -10270,10 +10276,13 @@ export type Database = {
           created_at?: string | null
           description?: string
           evidence?: Json | null
+          gps_coordinates?: string | null
           id?: string
           incident_date?: string | null
+          incident_number?: string | null
           location?: string
           metadata?: Json | null
+          photo_urls?: string[] | null
           replay_status?: string | null
           reported_at?: string
           reported_by?: string | null
@@ -19796,6 +19805,68 @@ export type Database = {
           },
         ]
       }
+      task_assignments: {
+        Row: {
+          assigned_by: string | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          priority: string
+          related_entity_id: string | null
+          related_entity_type: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_assignments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       telemetry_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -20782,48 +20853,71 @@ export type Database = {
           attempts: number | null
           certificate_issued: boolean | null
           certificate_url: string | null
+          completed_at: string | null
           completion_date: string | null
           course_id: string | null
           created_at: string
           id: string
           metadata: Json | null
+          notes: string | null
           passed: boolean | null
+          quiz_answers: Json | null
+          quiz_score: number | null
           score: number | null
           time_spent_minutes: number | null
           training_module_id: string | null
           user_id: string
+          vessel_id: string | null
         }
         Insert: {
           attempts?: number | null
           certificate_issued?: boolean | null
           certificate_url?: string | null
+          completed_at?: string | null
           completion_date?: string | null
           course_id?: string | null
           created_at?: string
           id?: string
           metadata?: Json | null
+          notes?: string | null
           passed?: boolean | null
+          quiz_answers?: Json | null
+          quiz_score?: number | null
           score?: number | null
           time_spent_minutes?: number | null
           training_module_id?: string | null
           user_id: string
+          vessel_id?: string | null
         }
         Update: {
           attempts?: number | null
           certificate_issued?: boolean | null
           certificate_url?: string | null
+          completed_at?: string | null
           completion_date?: string | null
           course_id?: string | null
           created_at?: string
           id?: string
           metadata?: Json | null
+          notes?: string | null
           passed?: boolean | null
+          quiz_answers?: Json | null
+          quiz_score?: number | null
           score?: number | null
           time_spent_minutes?: number | null
           training_module_id?: string | null
           user_id?: string
+          vessel_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "training_completions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       training_deltas: {
         Row: {
