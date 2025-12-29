@@ -1,4 +1,5 @@
 // @ts-nocheck
+// PATCH-860: Mantido - jsPDF autotable types + lazy loading patterns
 /**
  * PATCH 505: Mission Control Consolidation Dashboard
  * Unified dashboard integrating all mission control sub-modules

@@ -1,9 +1,9 @@
+// @ts-nocheck
+// PATCH-860: Mantido temporariamente - interfaces locais bem definidas, baixa prioridade
 /**
  * PATCH 368 - Reservations - Payment & Calendar Integration
  * Complete reservation system with payment processing and calendar sync
  */
-
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

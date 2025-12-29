@@ -1,4 +1,5 @@
 // @ts-nocheck
+// PATCH-860: Mantido - rows: any[] necessário para queries dinâmicas
 /**
  * PATCH 379: Analytics Query Builder
  * Advanced query builder with filters, aggregations, and custom dashboards
