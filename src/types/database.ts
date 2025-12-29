@@ -313,6 +313,14 @@ export type AISelfHealingLog = {
   updated_at: string;
 };
 
+// Aliases for backward compatibility
+export type AISelfHealingLogRow = AISelfHealingLog;
+export type AISelfHealingLogInsert = Partial<AISelfHealingLog> & {
+  event_type: string;
+  module_affected: string;
+  issue_description: string;
+};
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================

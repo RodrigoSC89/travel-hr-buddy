@@ -1,6 +1,9 @@
 // @ts-nocheck
-// PATCH-860: Aguardando regeneração de tipos Supabase (tabelas training_modules/training_completions criadas)
-// Execute: npx supabase gen types typescript --project-id vnbptmixvwropvanyhdb > src/integrations/supabase/types.ts
+/**
+ * PATCH 860: Training Module Service
+ * @ts-nocheck mantido: Schema Supabase training_modules/training_completions não alinhado com tipos locais
+ * TODO: Alinhar schema DB (quiz_score, quiz_answers, etc) com interface TrainingCompletion
+ */
 import { supabase } from "@/integrations/supabase/client";
 import type {
   TrainingModule,
@@ -11,6 +14,39 @@ import type {
   ExportAuditBundleResponse,
   QuizQuestion
 } from "../types/training";
+
+// Helper to safely cast Supabase responses
+function mapToTrainingModule(row: Record<string, unknown>): TrainingModule {
+  return {
+    id: String(row.id || ''),
+    title: String(row.title || ''),
+    gap_detected: String(row.gap_detected || row.description || ''),
+    norm_reference: String(row.norm_reference || ''),
+    training_content: String(row.training_content || row.content || ''),
+    quiz: (row.quiz || []) as QuizQuestion[],
+    vessel_id: row.vessel_id as string | undefined,
+    audit_id: row.audit_id as string | undefined,
+    status: (row.status as "active" | "archived" | "draft") || "active",
+    created_by: row.created_by as string | undefined,
+    created_at: String(row.created_at || new Date().toISOString()),
+    updated_at: String(row.updated_at || new Date().toISOString()),
+  };
+}
+
+function mapToTrainingCompletion(row: Record<string, unknown>): TrainingCompletion {
+  return {
+    id: String(row.id || ''),
+    training_module_id: String(row.training_module_id || row.course_id || ''),
+    user_id: String(row.user_id || ''),
+    vessel_id: row.vessel_id as string | undefined,
+    completed_at: String(row.completed_at || row.completion_date || new Date().toISOString()),
+    quiz_score: Number(row.quiz_score || row.score || 0),
+    quiz_answers: (row.quiz_answers || []) as number[],
+    passed: Boolean(row.passed),
+    notes: row.notes as string | undefined,
+    created_at: String(row.created_at || new Date().toISOString()),
+  };
+}
 
 /**
  * Training Module Service

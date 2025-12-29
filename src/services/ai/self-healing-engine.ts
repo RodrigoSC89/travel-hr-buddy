@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
  * PATCH 860: AI Self-Healing Engine (Level 2 Autonomy)
- * Autonomous detection, analysis, and correction of system failures
+ * @ts-nocheck mantido: Tabela ai_self_healing_logs pode não existir no Supabase
+ * TODO: Verificar se migration foi aplicada e regenerar tipos
  */
 
 import { supabase } from "@/integrations/supabase/client";
