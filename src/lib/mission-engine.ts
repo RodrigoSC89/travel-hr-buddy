@@ -1,17 +1,14 @@
-// @ts-nocheck
 /**
  * PATCH 166.0: Mission Engine
  * Tables: mission_vessels (created in migration)
  * Core engine for multi-vessel mission coordination and management
- * 
- * NOTE: @ts-nocheck required due to schema differences between local
- * interfaces and Supabase types for missions table
  * 
  * @module mission-engine
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export type MissionType = "sar" | "evacuation" | "transport" | "patrol" | "training" | "emergency" | "custom";
 export type MissionStatus = "planned" | "active" | "completed" | "cancelled" | "failed";
@@ -88,18 +85,17 @@ export class MissionEngine {
    */
   static async createMission(mission: Partial<Mission>): Promise<Mission | null> {
     try {
-      const insertData = {
-        title: mission.name || "Untitled Mission",
-        mission_type: mission.mission_type,
-        status: mission.status || "planned",
-        priority: mission.priority || "normal",
-        description: mission.description,
-        scheduled_start: mission.start_time,
-      } as Record<string, unknown>;
-
       const { data, error } = await supabase
         .from("missions")
-        .insert(insertData)
+        .insert({
+          mission_name: mission.name || "Untitled Mission",
+          mission_code: `M-${Date.now()}`,
+          mission_type: mission.mission_type || "custom",
+          status: mission.status || "planned",
+          priority: mission.priority || "normal",
+          description: mission.description,
+          start_date: mission.start_time,
+        })
         .select()
         .single();
 
@@ -111,9 +107,15 @@ export class MissionEngine {
       logger.info("Mission created:", data);
       return {
         id: data.id,
-        name: data.title,
-        ...data
-      } as unknown as Mission;
+        name: data.mission_name,
+        mission_type: data.mission_type,
+        status: data.status,
+        priority: data.priority,
+        description: data.description,
+        start_time: data.start_date,
+        created_at: data.created_at,
+        updated_at: data.updated_at
+      };
     } catch (error) {
       logger.error("Error in createMission:", error);
       return null;
@@ -283,15 +285,18 @@ export class MissionEngine {
     }
   ): Promise<MissionLog | null> {
     try {
-      const insertData = {
-        title: log.message,
-        log_type: log.log_type,
-        description: log.message,
-      } as Record<string, unknown>;
-
       const { data, error } = await supabase
         .from("mission_logs")
-        .insert(insertData)
+        .insert({
+          mission_id: missionId,
+          mission_name: "Mission Log",
+          log_type: log.log_type,
+          message: log.message,
+          description: log.message,
+          status: "logged",
+          mission_date: new Date().toISOString().split('T')[0],
+          crew_members: []
+        })
         .select()
         .single();
 
@@ -308,7 +313,7 @@ export class MissionEngine {
         message: log.message,
         metadata: log.metadata,
         created_at: data.created_at,
-      } as MissionLog;
+      };
     } catch (error) {
       logger.error("Error in logMissionEvent:", error);
       return null;

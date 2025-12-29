@@ -1,10 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 407: Sonar AI Service
- * Tables: sonar_inputs (created in migration)
+ * Tables: sonar_inputs, sonar_analysis, sonar_alerts (created in migration)
  * Service layer for CRUD operations on sonar data, analysis, and alerts
- * 
- * NOTE: @ts-nocheck required due to missing tables: sonar_analysis, sonar_alerts
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -300,13 +297,21 @@ export class SonarAIService {
   
   static async getAlertStats() {
     try {
+      // Get stats from sonar_alerts table directly
       const { data, error } = await supabase
-        .from("sonar_alerts_stats")
-        .select("*")
-        .single();
+        .from("sonar_alerts")
+        .select("severity, is_acknowledged, resolved");
 
       if (error) throw error;
-      return { data, error: null };
+      
+      const stats = {
+        total: data?.length || 0,
+        critical: data?.filter(a => a.severity === 'critical').length || 0,
+        unacknowledged: data?.filter(a => !a.is_acknowledged).length || 0,
+        unresolved: data?.filter(a => !a.resolved).length || 0
+      };
+      
+      return { data: stats, error: null };
     } catch (error) {
       logger.error("Failed to fetch alert stats", { error });
       return { data: null, error };
