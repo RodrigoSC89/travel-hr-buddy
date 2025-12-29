@@ -10183,9 +10183,12 @@ export type Database = {
         Row: {
           accuracy_score: number | null
           created_at: string | null
+          expertise: string[] | null
+          historical_focus_areas: string[] | null
           id: string
           inspection_count: number | null
           name: string | null
+          preferences: Json | null
           specializations: string[] | null
           updated_at: string | null
           user_id: string | null
@@ -10193,9 +10196,12 @@ export type Database = {
         Insert: {
           accuracy_score?: number | null
           created_at?: string | null
+          expertise?: string[] | null
+          historical_focus_areas?: string[] | null
           id?: string
           inspection_count?: number | null
           name?: string | null
+          preferences?: Json | null
           specializations?: string[] | null
           updated_at?: string | null
           user_id?: string | null
@@ -10203,9 +10209,12 @@ export type Database = {
         Update: {
           accuracy_score?: number | null
           created_at?: string | null
+          expertise?: string[] | null
+          historical_focus_areas?: string[] | null
           id?: string
           inspection_count?: number | null
           name?: string | null
+          preferences?: Json | null
           specializations?: string[] | null
           updated_at?: string | null
           user_id?: string | null
@@ -16790,34 +16799,46 @@ export type Database = {
           acknowledged: boolean | null
           alert_type: string
           created_at: string
+          description: string | null
           id: string
+          is_resolved: boolean | null
           message: string
           metadata: Json | null
           organization_id: string | null
+          resolved_at: string | null
           satellite_id: string | null
           severity: string
+          title: string | null
         }
         Insert: {
           acknowledged?: boolean | null
           alert_type: string
           created_at?: string
+          description?: string | null
           id?: string
+          is_resolved?: boolean | null
           message: string
           metadata?: Json | null
           organization_id?: string | null
+          resolved_at?: string | null
           satellite_id?: string | null
           severity?: string
+          title?: string | null
         }
         Update: {
           acknowledged?: boolean | null
           alert_type?: string
           created_at?: string
+          description?: string | null
           id?: string
+          is_resolved?: boolean | null
           message?: string
           metadata?: Json | null
           organization_id?: string | null
+          resolved_at?: string | null
           satellite_id?: string | null
           severity?: string
+          title?: string | null
         }
         Relationships: [
           {
@@ -17075,8 +17096,11 @@ export type Database = {
       satellite_positions: {
         Row: {
           altitude: number
+          azimuth: number | null
+          calculated_at: string | null
           created_at: string | null
           eccentricity: number | null
+          elevation: number | null
           id: string
           inclination: number | null
           last_updated: string | null
@@ -17085,6 +17109,7 @@ export type Database = {
           name: string
           norad_id: string
           orbital_period: number | null
+          satellite_id: string | null
           status: string | null
           tle_line1: string | null
           tle_line2: string | null
@@ -17092,8 +17117,11 @@ export type Database = {
         }
         Insert: {
           altitude: number
+          azimuth?: number | null
+          calculated_at?: string | null
           created_at?: string | null
           eccentricity?: number | null
+          elevation?: number | null
           id?: string
           inclination?: number | null
           last_updated?: string | null
@@ -17102,6 +17130,7 @@ export type Database = {
           name: string
           norad_id: string
           orbital_period?: number | null
+          satellite_id?: string | null
           status?: string | null
           tle_line1?: string | null
           tle_line2?: string | null
@@ -17109,8 +17138,11 @@ export type Database = {
         }
         Update: {
           altitude?: number
+          azimuth?: number | null
+          calculated_at?: string | null
           created_at?: string | null
           eccentricity?: number | null
+          elevation?: number | null
           id?: string
           inclination?: number | null
           last_updated?: string | null
@@ -17119,12 +17151,21 @@ export type Database = {
           name?: string
           norad_id?: string
           orbital_period?: number | null
+          satellite_id?: string | null
           status?: string | null
           tle_line1?: string | null
           tle_line2?: string | null
           velocity?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "satellite_positions_satellite_id_fkey"
+            columns: ["satellite_id"]
+            isOneToOne: false
+            referencedRelation: "satellites"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       satellite_telemetry: {
         Row: {
@@ -18325,6 +18366,84 @@ export type Database = {
           },
         ]
       }
+      sonar_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          analysis_id: string | null
+          created_at: string | null
+          description: string | null
+          frequency_range: string | null
+          id: string
+          is_acknowledged: boolean | null
+          location: Json | null
+          metadata: Json | null
+          mission_id: string | null
+          organization_id: string | null
+          resolved: boolean | null
+          resolved_at: string | null
+          severity: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          analysis_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          frequency_range?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          location?: Json | null
+          metadata?: Json | null
+          mission_id?: string | null
+          organization_id?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          analysis_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          frequency_range?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          location?: Json | null
+          metadata?: Json | null
+          mission_id?: string | null
+          organization_id?: string | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          severity?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sonar_alerts_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "sonar_analysis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sonar_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sonar_analyses: {
         Row: {
           ai_summary: string | null
@@ -18375,6 +18494,81 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "sonar_data"
             referencedColumns: ["scan_id"]
+          },
+        ]
+      }
+      sonar_analysis: {
+        Row: {
+          ai_model: string | null
+          analysis_type: string
+          anomalies: Json | null
+          confidence_score: number | null
+          created_at: string | null
+          created_by: string | null
+          frequency_data: Json | null
+          id: string
+          input_id: string | null
+          metadata: Json | null
+          mission_id: string | null
+          organization_id: string | null
+          patterns_detected: Json | null
+          processed_at: string | null
+          recommendations: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ai_model?: string | null
+          analysis_type: string
+          anomalies?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          frequency_data?: Json | null
+          id?: string
+          input_id?: string | null
+          metadata?: Json | null
+          mission_id?: string | null
+          organization_id?: string | null
+          patterns_detected?: Json | null
+          processed_at?: string | null
+          recommendations?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ai_model?: string | null
+          analysis_type?: string
+          anomalies?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          frequency_data?: Json | null
+          id?: string
+          input_id?: string | null
+          metadata?: Json | null
+          mission_id?: string | null
+          organization_id?: string | null
+          patterns_detected?: Json | null
+          processed_at?: string | null
+          recommendations?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sonar_analysis_input_id_fkey"
+            columns: ["input_id"]
+            isOneToOne: false
+            referencedRelation: "sonar_inputs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sonar_analysis_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -20143,6 +20337,66 @@ export type Database = {
           valid_date?: string
         }
         Relationships: []
+      }
+      tracking_sessions: {
+        Row: {
+          created_at: string | null
+          ended_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          satellite_id: string | null
+          session_data: Json | null
+          started_at: string | null
+          status: string | null
+          tracking_mode: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          satellite_id?: string | null
+          session_data?: Json | null
+          started_at?: string | null
+          status?: string | null
+          tracking_mode?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          satellite_id?: string | null
+          session_data?: Json | null
+          started_at?: string | null
+          status?: string | null
+          tracking_mode?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracking_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tracking_sessions_satellite_id_fkey"
+            columns: ["satellite_id"]
+            isOneToOne: false
+            referencedRelation: "satellites"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       training_completions: {
         Row: {
