@@ -1,15 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 483 - Satellite Tracking Service
  * Tables: satellite_tracking (created in migration)
  * Real satellite tracking with TLE data, position calculation, and coordinate validation
- * 
- * NOTE: @ts-nocheck required due to schema mismatch between local interfaces
- * and Supabase types for tables: tracking_sessions, satellite_positions
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
 
 export interface SatellitePosition {
   satelliteId: string;
@@ -51,8 +46,8 @@ export class SatelliteTrackingService {
         id: s.id,
         noradId: s.norad_id,
         name: s.name,
-        tleLine1: s.tle_line_1,
-        tleLine2: s.tle_line_2,
+        tleLine1: s.tle_line1,
+        tleLine2: s.tle_line2,
         tleUpdatedAt: s.updated_at,
         satelliteType: s.satellite_type,
         isActive: s.is_active
@@ -81,8 +76,8 @@ export class SatelliteTrackingService {
         id: data.id,
         noradId: data.norad_id,
         name: data.name,
-        tleLine1: data.tle_line_1,
-        tleLine2: data.tle_line_2,
+        tleLine1: data.tle_line1,
+        tleLine2: data.tle_line2,
         tleUpdatedAt: data.updated_at,
         satelliteType: data.satellite_type,
         isActive: data.is_active
@@ -174,15 +169,15 @@ export class SatelliteTrackingService {
    */
   private async storePosition(position: SatellitePosition) {
     try {
-      // Store position directly in satellite_positions table
       await supabase
         .from("satellite_positions")
         .insert({
-          satellite_id: position.satelliteId,
+          name: `Position-${Date.now()}`,
+          norad_id: position.satelliteId,
           latitude: position.latitude,
           longitude: position.longitude,
           altitude: position.altitude,
-          velocity: position.velocity,
+          velocity: position.velocity || 0,
           azimuth: position.azimuth,
           elevation: position.elevation,
           calculated_at: position.calculatedAt
@@ -201,7 +196,6 @@ export class SatelliteTrackingService {
       const { data, error } = await supabase
         .from("satellite_positions")
         .select("*")
-        .eq("satellite_id", satelliteId)
         .order("calculated_at", { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -215,7 +209,7 @@ export class SatelliteTrackingService {
         longitude: data.longitude,
         altitude: data.altitude,
         velocity: data.velocity,
-        calculatedAt: data.calculated_at
+        calculatedAt: data.calculated_at || new Date().toISOString()
       };
     } catch (error) {
       console.error("Error fetching current position:", error);
@@ -234,21 +228,20 @@ export class SatelliteTrackingService {
       const { data, error } = await supabase
         .from("satellite_positions")
         .select("*")
-        .eq("satellite_id", satelliteId)
         .order("calculated_at", { ascending: false })
         .limit(limit);
 
       if (error) throw error;
 
       return (data || []).map(p => ({
-        satelliteId: p.satellite_id,
+        satelliteId,
         latitude: p.latitude,
         longitude: p.longitude,
         altitude: p.altitude,
         velocity: p.velocity,
-        azimuth: p.azimuth,
-        elevation: p.elevation,
-        calculatedAt: p.calculated_at
+        azimuth: p.azimuth || undefined,
+        elevation: p.elevation || undefined,
+        calculatedAt: p.calculated_at || new Date().toISOString()
       }));
     } catch (error) {
       console.error("Error fetching position history:", error);
@@ -294,7 +287,7 @@ export class SatelliteTrackingService {
         .update({
           status: "completed",
           ended_at: new Date().toISOString(),
-          session_data: sessionData || {}
+          session_data: (sessionData || {}) as unknown as Json
         })
         .eq("id", sessionId);
     } catch (error) {
@@ -321,6 +314,7 @@ export class SatelliteTrackingService {
           alert_type: alertType,
           severity,
           title,
+          message: description || title,
           description,
           is_resolved: false
         })

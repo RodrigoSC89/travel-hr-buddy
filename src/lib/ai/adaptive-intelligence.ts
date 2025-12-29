@@ -1,11 +1,7 @@
-// @ts-nocheck
 /**
  * PATCH 625 - Adaptive LLM Layer
  * Tables: ai_inspection_feedback, inspector_profiles (created in migration)
  * Inteligência Contextual Aprimorada com Aprendizado Contínuo
- * 
- * NOTE: @ts-nocheck required due to schema differences between
- * local interfaces and Supabase types for feedback tables
  */
 
 import { supabase } from '@/integrations/supabase/client';
@@ -111,7 +107,8 @@ export class FeedbackStorage {
 
     const frequency: Record<string, number> = {};
     nonConformities.forEach((nc) => {
-      const key = nc.feedback_text.substring(0, 50); // Use first 50 chars as key
+      const text = nc.feedback_text || '';
+      const key = text.substring(0, 50); // Use first 50 chars as key
       frequency[key] = (frequency[key] || 0) + 1;
     });
 

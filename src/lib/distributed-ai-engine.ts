@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 167.0: Distributed AI Engine
  * Tables: vessel_ai_contexts (created in migration)
@@ -7,15 +6,13 @@
  * Each vessel runs local AI with fallback to central AI
  * Global sync occurs every 12 hours to share learnings
  * 
- * NOTE: @ts-nocheck required due to schema differences between
- * local interfaces and Supabase types for ai_decisions table
- * 
  * @module distributed-ai-engine
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { runOpenAI, AIEngineRequest, AIEngineResponse } from "@/ai/engine";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface VesselAIContext {
   vessel_id: string;
@@ -291,20 +288,22 @@ Expected Behavior:
    */
   private static async storeDecision(decision: AIDecision): Promise<void> {
     try {
+      const insertData = {
+        title: `Decision for vessel ${decision.vessel_id}`,
+        description: decision.reasoning.substring(0, 500),
+        type: decision.decision_type,
+        confidence: decision.confidence,
+        confidence_level: decision.confidence > 0.8 ? "high" : decision.confidence > 0.5 ? "medium" : "low",
+        impact: "medium",
+        justification_reasoning: decision.reasoning,
+        justification_evidence: decision.input_data as Json,
+        status: "executed",
+        created_at: decision.timestamp
+      };
+
       const { error } = await supabase
         .from("ai_decisions")
-        .insert({
-          title: `Decision for vessel ${decision.vessel_id}`,
-          description: decision.reasoning.substring(0, 500),
-          type: decision.decision_type,
-          confidence: decision.confidence,
-          confidence_level: decision.confidence > 0.8 ? "high" : decision.confidence > 0.5 ? "medium" : "low",
-          impact: "medium",
-          justification_reasoning: decision.reasoning,
-          justification_evidence: decision.input_data,
-          status: "executed",
-          created_at: decision.timestamp
-        });
+        .insert(insertData);
 
       if (error) {
         logger.error("Error storing AI decision:", error);
@@ -379,7 +378,7 @@ Expected Behavior:
           const { error: updateError } = await supabase
             .from("vessel_ai_contexts")
             .update({
-              global_data: globalData,
+              global_data: globalData as Json,
               last_sync: new Date().toISOString(),
               updated_at: new Date().toISOString()
             })
@@ -392,7 +391,7 @@ Expected Behavior:
             // Update cache
             this.CONTEXT_CACHE.set(context.vessel_id, {
               ...context,
-              global_data: globalData,
+              global_data: globalData as Json,
               last_sync: new Date().toISOString()
             });
             synced++;
