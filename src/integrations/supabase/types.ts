@@ -11976,9 +11976,11 @@ export type Database = {
         Row: {
           config: Json | null
           created_at: string | null
+          endpoint: string | null
           id: string
           instance_name: string
           last_sync: string | null
+          name: string | null
           region: string | null
           status: string | null
           updated_at: string | null
@@ -11986,9 +11988,11 @@ export type Database = {
         Insert: {
           config?: Json | null
           created_at?: string | null
+          endpoint?: string | null
           id?: string
           instance_name: string
           last_sync?: string | null
+          name?: string | null
           region?: string | null
           status?: string | null
           updated_at?: string | null
@@ -11996,9 +12000,11 @@ export type Database = {
         Update: {
           config?: Json | null
           created_at?: string | null
+          endpoint?: string | null
           id?: string
           instance_name?: string
           last_sync?: string | null
+          name?: string | null
           region?: string | null
           status?: string | null
           updated_at?: string | null
@@ -12295,6 +12301,7 @@ export type Database = {
           notes: string | null
           role: string | null
           status: string | null
+          updated_at: string | null
           vessel_id: string | null
         }
         Insert: {
@@ -12304,6 +12311,7 @@ export type Database = {
           notes?: string | null
           role?: string | null
           status?: string | null
+          updated_at?: string | null
           vessel_id?: string | null
         }
         Update: {
@@ -12313,6 +12321,7 @@ export type Database = {
           notes?: string | null
           role?: string | null
           status?: string | null
+          updated_at?: string | null
           vessel_id?: string | null
         }
         Relationships: [
