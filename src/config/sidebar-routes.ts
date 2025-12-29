@@ -170,6 +170,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "Telemetria 360°", path: "/telemetria", icon: Satellite, emoji: "🛰️" },
       { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📈" },
+      { label: "DGNSS Tracking", path: "/tracking", icon: Satellite, emoji: "📍", badge: "NEW" },
+      { label: "GNSS Live", path: "/tracking/gnss-live", icon: Radio, emoji: "📡" },
+      { label: "Tracking Alerts", path: "/tracking/alerts", icon: AlertTriangle, emoji: "🚨" },
       { label: "Simulador Incidentes", path: "/simulador", icon: Target, emoji: "⚠️" },
       { label: "Modo Emergência", path: "/emergency-mode", icon: AlertTriangle, emoji: "🚨" },
       { label: "Calendário Operacional", path: "/operational-calendar", icon: Calendar, emoji: "📅" },

@@ -1,17 +1,345 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText } from "lucide-react";
+/**
+ * Compliance Regulamentos - Gestão de Regulamentos e Regras Legais
+ * ISO 37301 Compliance Management
+ */
+
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useComplianceRules } from "../hooks/useComplianceData";
+import { 
+  FileText, Search, Plus, Filter, Calendar, AlertTriangle, 
+  CheckCircle2, Clock, BookOpen, Scale, Globe, Building2,
+  Brain, TrendingUp, Shield
+} from "lucide-react";
+import { toast } from "sonner";
+
+interface Regulation {
+  id: string;
+  name: string;
+  code: string;
+  category: "maritime" | "labor" | "environmental" | "financial" | "safety";
+  jurisdiction: string;
+  status: "active" | "pending" | "expired" | "draft";
+  effectiveDate: string;
+  expiryDate?: string;
+  complianceLevel: number;
+  requirements: number;
+  completedRequirements: number;
+  aiRecommendations: number;
+}
+
+const mockRegulations: Regulation[] = [
+  {
+    id: "1",
+    name: "MLC 2006 - Maritime Labour Convention",
+    code: "MLC-2006",
+    category: "labor",
+    jurisdiction: "Internacional (IMO)",
+    status: "active",
+    effectiveDate: "2013-08-20",
+    complianceLevel: 92,
+    requirements: 48,
+    completedRequirements: 44,
+    aiRecommendations: 3,
+  },
+  {
+    id: "2",
+    name: "STCW - Standards of Training, Certification and Watchkeeping",
+    code: "STCW-78/10",
+    category: "safety",
+    jurisdiction: "Internacional (IMO)",
+    status: "active",
+    effectiveDate: "2010-01-01",
+    complianceLevel: 88,
+    requirements: 35,
+    completedRequirements: 31,
+    aiRecommendations: 2,
+  },
+  {
+    id: "3",
+    name: "SOLAS - Safety of Life at Sea",
+    code: "SOLAS-74",
+    category: "safety",
+    jurisdiction: "Internacional (IMO)",
+    status: "active",
+    effectiveDate: "1980-05-25",
+    complianceLevel: 95,
+    requirements: 62,
+    completedRequirements: 59,
+    aiRecommendations: 1,
+  },
+  {
+    id: "4",
+    name: "MARPOL - Marine Pollution",
+    code: "MARPOL-73/78",
+    category: "environmental",
+    jurisdiction: "Internacional (IMO)",
+    status: "active",
+    effectiveDate: "1983-10-02",
+    complianceLevel: 78,
+    requirements: 28,
+    completedRequirements: 22,
+    aiRecommendations: 4,
+  },
+  {
+    id: "5",
+    name: "LGPD - Lei Geral de Proteção de Dados",
+    code: "LGPD-BR",
+    category: "financial",
+    jurisdiction: "Brasil",
+    status: "active",
+    effectiveDate: "2020-09-18",
+    complianceLevel: 85,
+    requirements: 15,
+    completedRequirements: 13,
+    aiRecommendations: 2,
+  },
+  {
+    id: "6",
+    name: "NR-30 - Segurança em Aquaviários",
+    code: "NR-30",
+    category: "labor",
+    jurisdiction: "Brasil (MTE)",
+    status: "active",
+    effectiveDate: "2002-01-01",
+    complianceLevel: 90,
+    requirements: 22,
+    completedRequirements: 20,
+    aiRecommendations: 1,
+  },
+];
 
 export default function ComplianceRegulamentos() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const { data: rules, isLoading } = useComplianceRules();
+
+  const regulations = mockRegulations;
+
+  const filteredRegulations = regulations.filter(reg => {
+    const matchesSearch = reg.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          reg.code.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = categoryFilter === "all" || reg.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  const stats = {
+    total: regulations.length,
+    active: regulations.filter(r => r.status === "active").length,
+    avgCompliance: Math.round(regulations.reduce((a, b) => a + b.complianceLevel, 0) / regulations.length),
+    pendingAI: regulations.reduce((a, b) => a + b.aiRecommendations, 0),
+  };
+
+  const getCategoryBadge = (category: string) => {
+    const colors: Record<string, string> = {
+      maritime: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      labor: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+      environmental: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+      financial: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      safety: "bg-red-500/20 text-red-400 border-red-500/30",
+    };
+    const labels: Record<string, string> = {
+      maritime: "Marítimo",
+      labor: "Trabalhista",
+      environmental: "Ambiental",
+      financial: "Financeiro",
+      safety: "Segurança",
+    };
+    return <Badge className={colors[category] || ""}>{labels[category] || category}</Badge>;
+  };
+
+  const getComplianceColor = (level: number) => {
+    if (level >= 90) return "text-emerald-400";
+    if (level >= 70) return "text-amber-400";
+    return "text-red-400";
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold flex items-center gap-2 mb-6">
-        <FileText className="h-6 w-6" />
-        Regulamentos & Regras Legais
-      </h1>
-      <Card>
-        <CardHeader><CardTitle>Em Desenvolvimento</CardTitle></CardHeader>
-        <CardContent><p className="text-muted-foreground">Módulo de regulamentos será implementado na próxima fase.</p></CardContent>
-      </Card>
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Scale className="h-7 w-7 text-primary" />
+            Regulamentos & Regras Legais
+          </h1>
+          <p className="text-muted-foreground mt-1">Gestão de conformidade regulatória ISO 37301</p>
+        </div>
+        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Regulamento
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Adicionar Regulamento</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Nome do Regulamento</Label>
+                <Input placeholder="Ex: MLC 2006 - Maritime Labour Convention" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Código</Label>
+                  <Input placeholder="Ex: MLC-2006" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Categoria</Label>
+                  <Select>
+                    <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="maritime">Marítimo</SelectItem>
+                      <SelectItem value="labor">Trabalhista</SelectItem>
+                      <SelectItem value="environmental">Ambiental</SelectItem>
+                      <SelectItem value="financial">Financeiro</SelectItem>
+                      <SelectItem value="safety">Segurança</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Jurisdição</Label>
+                <Input placeholder="Ex: Internacional (IMO)" />
+              </div>
+              <div className="space-y-2">
+                <Label>Descrição</Label>
+                <Textarea placeholder="Descrição do regulamento e seus requisitos principais..." rows={3} />
+              </div>
+              <Button className="w-full" onClick={() => { setShowAddDialog(false); toast.success("Regulamento adicionado!"); }}>
+                Salvar Regulamento
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="bg-card/50">
+          <CardContent className="p-4 text-center">
+            <BookOpen className="h-6 w-6 mx-auto text-primary mb-2" />
+            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-xs text-muted-foreground">Total Regulamentos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-emerald-500/10 border-emerald-500/30">
+          <CardContent className="p-4 text-center">
+            <CheckCircle2 className="h-6 w-6 mx-auto text-emerald-400 mb-2" />
+            <div className="text-2xl font-bold text-emerald-400">{stats.active}</div>
+            <div className="text-xs text-muted-foreground">Ativos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-blue-500/10 border-blue-500/30">
+          <CardContent className="p-4 text-center">
+            <TrendingUp className="h-6 w-6 mx-auto text-blue-400 mb-2" />
+            <div className="text-2xl font-bold text-blue-400">{stats.avgCompliance}%</div>
+            <div className="text-xs text-muted-foreground">Conformidade Média</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-purple-500/10 border-purple-500/30">
+          <CardContent className="p-4 text-center">
+            <Brain className="h-6 w-6 mx-auto text-purple-400 mb-2" />
+            <div className="text-2xl font-bold text-purple-400">{stats.pendingAI}</div>
+            <div className="text-xs text-muted-foreground">Recomendações IA</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Buscar regulamentos..." 
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-[200px]">
+            <Filter className="h-4 w-4 mr-2" />
+            <SelectValue placeholder="Categoria" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas Categorias</SelectItem>
+            <SelectItem value="maritime">Marítimo</SelectItem>
+            <SelectItem value="labor">Trabalhista</SelectItem>
+            <SelectItem value="environmental">Ambiental</SelectItem>
+            <SelectItem value="financial">Financeiro</SelectItem>
+            <SelectItem value="safety">Segurança</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Regulations List */}
+      <div className="space-y-4">
+        {filteredRegulations.map(reg => (
+          <Card key={reg.id} className="hover:border-primary/30 transition-colors">
+            <CardContent className="p-5">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-2 flex-1">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <h3 className="font-semibold text-lg">{reg.name}</h3>
+                    {getCategoryBadge(reg.category)}
+                    {reg.aiRecommendations > 0 && (
+                      <Badge className="bg-purple-500/20 text-purple-400">
+                        <Brain className="h-3 w-3 mr-1" />
+                        {reg.aiRecommendations} IA
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Shield className="h-4 w-4" />
+                      {reg.code}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Globe className="h-4 w-4" />
+                      {reg.jurisdiction}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      Desde {new Date(reg.effectiveDate).toLocaleDateString("pt-BR")}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="text-center">
+                    <div className={`text-2xl font-bold ${getComplianceColor(reg.complianceLevel)}`}>
+                      {reg.complianceLevel}%
+                    </div>
+                    <div className="text-xs text-muted-foreground">Conformidade</div>
+                    <Progress value={reg.complianceLevel} className="h-1 w-24 mt-1" />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-lg font-semibold">
+                      {reg.completedRequirements}/{reg.requirements}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Requisitos</div>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    <FileText className="h-4 w-4 mr-1" />
+                    Detalhes
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

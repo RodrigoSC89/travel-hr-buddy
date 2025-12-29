@@ -1,17 +1,398 @@
+/**
+ * Compliance Due Diligence - Gestão de Terceiros
+ * Verificação e monitoramento de fornecedores e parceiros
+ */
+
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useComplianceThirdParties } from "../hooks/useComplianceData";
+import { 
+  Users, Search, Plus, Building2, AlertTriangle, CheckCircle2,
+  XCircle, Clock, Filter, Globe, Phone, Mail, FileSearch,
+  Brain, Shield, TrendingUp, Ban, Eye, RefreshCw
+} from "lucide-react";
+import { toast } from "sonner";
+
+interface ThirdParty {
+  id: string;
+  name: string;
+  type: "supplier" | "contractor" | "partner" | "agent" | "service_provider";
+  country: string;
+  riskLevel: "low" | "medium" | "high" | "critical";
+  status: "approved" | "pending" | "under_review" | "blocked";
+  dueDiligenceScore: number;
+  lastReview: string;
+  nextReview: string;
+  documentsComplete: number;
+  documentsRequired: number;
+  aiRiskFlags: string[];
+  isBlocked: boolean;
+}
+
+const mockThirdParties: ThirdParty[] = [
+  {
+    id: "1",
+    name: "Maritime Solutions Ltd",
+    type: "supplier",
+    country: "Brasil",
+    riskLevel: "low",
+    status: "approved",
+    dueDiligenceScore: 95,
+    lastReview: "2024-11-15",
+    nextReview: "2025-11-15",
+    documentsComplete: 12,
+    documentsRequired: 12,
+    aiRiskFlags: [],
+    isBlocked: false,
+  },
+  {
+    id: "2",
+    name: "Global Shipping Co",
+    type: "contractor",
+    country: "Singapura",
+    riskLevel: "medium",
+    status: "approved",
+    dueDiligenceScore: 78,
+    lastReview: "2024-08-20",
+    nextReview: "2025-02-20",
+    documentsComplete: 9,
+    documentsRequired: 10,
+    aiRiskFlags: ["Documentação pendente"],
+    isBlocked: false,
+  },
+  {
+    id: "3",
+    name: "Oceanic Services SA",
+    type: "service_provider",
+    country: "Panamá",
+    riskLevel: "high",
+    status: "under_review",
+    dueDiligenceScore: 52,
+    lastReview: "2024-06-10",
+    nextReview: "2024-12-10",
+    documentsComplete: 5,
+    documentsRequired: 12,
+    aiRiskFlags: ["País de alto risco", "Documentação incompleta", "PEP associado"],
+    isBlocked: false,
+  },
+  {
+    id: "4",
+    name: "TechNav Systems",
+    type: "partner",
+    country: "EUA",
+    riskLevel: "low",
+    status: "approved",
+    dueDiligenceScore: 92,
+    lastReview: "2024-10-01",
+    nextReview: "2025-10-01",
+    documentsComplete: 8,
+    documentsRequired: 8,
+    aiRiskFlags: [],
+    isBlocked: false,
+  },
+  {
+    id: "5",
+    name: "Offshore Contractors ME",
+    type: "contractor",
+    country: "Emirados Árabes",
+    riskLevel: "critical",
+    status: "blocked",
+    dueDiligenceScore: 25,
+    lastReview: "2024-03-15",
+    nextReview: "2024-09-15",
+    documentsComplete: 2,
+    documentsRequired: 15,
+    aiRiskFlags: ["Sanções internacionais", "Fraude identificada", "Lista negra OFAC"],
+    isBlocked: true,
+  },
+  {
+    id: "6",
+    name: "Port Logistics Brazil",
+    type: "agent",
+    country: "Brasil",
+    riskLevel: "low",
+    status: "pending",
+    dueDiligenceScore: 0,
+    lastReview: "",
+    nextReview: "2025-01-15",
+    documentsComplete: 0,
+    documentsRequired: 10,
+    aiRiskFlags: [],
+    isBlocked: false,
+  },
+];
 
 export default function ComplianceTerceiros() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [riskFilter, setRiskFilter] = useState<string>("all");
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const { data: thirdParties, isLoading } = useComplianceThirdParties();
+
+  const displayData = mockThirdParties;
+
+  const filteredData = displayData.filter(tp => {
+    const matchesSearch = tp.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRisk = riskFilter === "all" || tp.riskLevel === riskFilter;
+    return matchesSearch && matchesRisk;
+  });
+
+  const stats = {
+    total: displayData.length,
+    approved: displayData.filter(t => t.status === "approved").length,
+    pending: displayData.filter(t => t.status === "pending" || t.status === "under_review").length,
+    blocked: displayData.filter(t => t.isBlocked).length,
+    avgScore: Math.round(displayData.filter(t => t.dueDiligenceScore > 0).reduce((a, b) => a + b.dueDiligenceScore, 0) / displayData.filter(t => t.dueDiligenceScore > 0).length),
+  };
+
+  const getRiskBadge = (level: string) => {
+    switch (level) {
+      case "low": return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Baixo</Badge>;
+      case "medium": return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Médio</Badge>;
+      case "high": return <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30">Alto</Badge>;
+      case "critical": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Crítico</Badge>;
+      default: return <Badge variant="outline">{level}</Badge>;
+    }
+  };
+
+  const getStatusBadge = (status: string, isBlocked: boolean) => {
+    if (isBlocked) return <Badge variant="destructive"><Ban className="h-3 w-3 mr-1" />Bloqueado</Badge>;
+    switch (status) {
+      case "approved": return <Badge className="bg-emerald-500/20 text-emerald-400"><CheckCircle2 className="h-3 w-3 mr-1" />Aprovado</Badge>;
+      case "pending": return <Badge className="bg-blue-500/20 text-blue-400"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
+      case "under_review": return <Badge className="bg-amber-500/20 text-amber-400"><Eye className="h-3 w-3 mr-1" />Em Análise</Badge>;
+      default: return <Badge variant="outline">{status}</Badge>;
+    }
+  };
+
+  const getTypeLabel = (type: string) => {
+    const labels: Record<string, string> = {
+      supplier: "Fornecedor",
+      contractor: "Contratado",
+      partner: "Parceiro",
+      agent: "Agente",
+      service_provider: "Prestador de Serviço",
+    };
+    return labels[type] || type;
+  };
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-emerald-400";
+    if (score >= 50) return "text-amber-400";
+    if (score > 0) return "text-red-400";
+    return "text-muted-foreground";
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold flex items-center gap-2 mb-6">
-        <Users className="h-6 w-6" />
-        Due Diligence - Terceiros
-      </h1>
-      <Card>
-        <CardHeader><CardTitle>Em Desenvolvimento</CardTitle></CardHeader>
-        <CardContent><p className="text-muted-foreground">Verificação de terceiros será implementada na próxima fase.</p></CardContent>
-      </Card>
+    <div className="container mx-auto p-6 space-y-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <Users className="h-7 w-7 text-primary" />
+            Due Diligence - Terceiros
+          </h1>
+          <p className="text-muted-foreground mt-1">Gestão e verificação de fornecedores e parceiros</p>
+        </div>
+        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Terceiro
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Cadastrar Terceiro</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Nome da Empresa</Label>
+                <Input placeholder="Ex: Maritime Solutions Ltd" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Tipo</Label>
+                  <Select>
+                    <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="supplier">Fornecedor</SelectItem>
+                      <SelectItem value="contractor">Contratado</SelectItem>
+                      <SelectItem value="partner">Parceiro</SelectItem>
+                      <SelectItem value="agent">Agente</SelectItem>
+                      <SelectItem value="service_provider">Prestador de Serviço</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>País</Label>
+                  <Input placeholder="Ex: Brasil" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>CNPJ/Tax ID</Label>
+                  <Input placeholder="00.000.000/0001-00" />
+                </div>
+                <div className="space-y-2">
+                  <Label>Contato</Label>
+                  <Input placeholder="nome@empresa.com" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Descrição do Serviço</Label>
+                <Textarea placeholder="Descreva os serviços prestados..." rows={2} />
+              </div>
+              <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                <Brain className="h-5 w-5 text-purple-400" />
+                <span className="text-sm">IA irá analisar riscos automaticamente após cadastro</span>
+              </div>
+              <Button className="w-full" onClick={() => { setShowAddDialog(false); toast.success("Terceiro cadastrado para análise!"); }}>
+                Iniciar Due Diligence
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <Card className="bg-card/50">
+          <CardContent className="p-4 text-center">
+            <Building2 className="h-6 w-6 mx-auto text-primary mb-2" />
+            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-xs text-muted-foreground">Total Terceiros</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-emerald-500/10 border-emerald-500/30">
+          <CardContent className="p-4 text-center">
+            <CheckCircle2 className="h-6 w-6 mx-auto text-emerald-400 mb-2" />
+            <div className="text-2xl font-bold text-emerald-400">{stats.approved}</div>
+            <div className="text-xs text-muted-foreground">Aprovados</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-amber-500/10 border-amber-500/30">
+          <CardContent className="p-4 text-center">
+            <Clock className="h-6 w-6 mx-auto text-amber-400 mb-2" />
+            <div className="text-2xl font-bold text-amber-400">{stats.pending}</div>
+            <div className="text-xs text-muted-foreground">Pendentes</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-red-500/10 border-red-500/30">
+          <CardContent className="p-4 text-center">
+            <Ban className="h-6 w-6 mx-auto text-red-400 mb-2" />
+            <div className="text-2xl font-bold text-red-400">{stats.blocked}</div>
+            <div className="text-xs text-muted-foreground">Bloqueados</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-blue-500/10 border-blue-500/30">
+          <CardContent className="p-4 text-center">
+            <TrendingUp className="h-6 w-6 mx-auto text-blue-400 mb-2" />
+            <div className="text-2xl font-bold text-blue-400">{stats.avgScore}%</div>
+            <div className="text-xs text-muted-foreground">Score Médio</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Buscar terceiros..." 
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Select value={riskFilter} onValueChange={setRiskFilter}>
+          <SelectTrigger className="w-[180px]">
+            <Filter className="h-4 w-4 mr-2" />
+            <SelectValue placeholder="Risco" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos Níveis</SelectItem>
+            <SelectItem value="low">Baixo Risco</SelectItem>
+            <SelectItem value="medium">Médio Risco</SelectItem>
+            <SelectItem value="high">Alto Risco</SelectItem>
+            <SelectItem value="critical">Crítico</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Third Parties List */}
+      <div className="space-y-4">
+        {filteredData.map(tp => (
+          <Card key={tp.id} className={`hover:border-primary/30 transition-colors ${tp.isBlocked ? "border-red-500/30 bg-red-500/5" : ""}`}>
+            <CardContent className="p-5">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-2 flex-1">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <h3 className="font-semibold text-lg">{tp.name}</h3>
+                    {getStatusBadge(tp.status, tp.isBlocked)}
+                    {getRiskBadge(tp.riskLevel)}
+                    <Badge variant="outline">{getTypeLabel(tp.type)}</Badge>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Globe className="h-4 w-4" />
+                      {tp.country}
+                    </span>
+                    {tp.lastReview && (
+                      <span className="flex items-center gap-1">
+                        <FileSearch className="h-4 w-4" />
+                        Última análise: {new Date(tp.lastReview).toLocaleDateString("pt-BR")}
+                      </span>
+                    )}
+                  </div>
+                  {tp.aiRiskFlags.length > 0 && (
+                    <div className="flex items-center gap-2 flex-wrap mt-2">
+                      <Brain className="h-4 w-4 text-purple-400" />
+                      {tp.aiRiskFlags.map((flag, i) => (
+                        <Badge key={i} variant="outline" className="text-xs bg-purple-500/10 text-purple-400 border-purple-500/30">
+                          {flag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="text-center">
+                    <div className={`text-2xl font-bold ${getScoreColor(tp.dueDiligenceScore)}`}>
+                      {tp.dueDiligenceScore > 0 ? `${tp.dueDiligenceScore}%` : "N/A"}
+                    </div>
+                    <div className="text-xs text-muted-foreground">DD Score</div>
+                    {tp.dueDiligenceScore > 0 && (
+                      <Progress value={tp.dueDiligenceScore} className="h-1 w-20 mt-1" />
+                    )}
+                  </div>
+                  <div className="text-center">
+                    <div className="text-lg font-semibold">
+                      {tp.documentsComplete}/{tp.documentsRequired}
+                    </div>
+                    <div className="text-xs text-muted-foreground">Documentos</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      <Eye className="h-4 w-4 mr-1" />
+                      Analisar
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
