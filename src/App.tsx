@@ -138,7 +138,11 @@ const SelfHealingLogs = lazy(() => import(/* webpackChunkName: "page-self-healin
 
 // Sidebar Diagnostic - PATCH 862
 const SidebarCheck = lazy(() => import(/* webpackChunkName: "page-sidebar-check" */ "@/pages/dev/SidebarCheck"));
-const SmartLayout = lazy(() => 
+
+// Compliance One Module - PATCH 863
+const ComplianceCenter = lazy(() => import(/* webpackChunkName: "module-compliance" */ "@/modules/compliance/pages/ComplianceCenter"));
+
+const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
 
@@ -261,6 +265,9 @@ function App() {
                         
                         {/* Sidebar Diagnostic - PATCH 862 */}
                         <Route path="dev/sidebar-check" element={<SidebarCheck />} />
+
+                        {/* Compliance One Module - PATCH 863 */}
+                        <Route path="compliance-center/*" element={<ComplianceCenter />} />
 
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}

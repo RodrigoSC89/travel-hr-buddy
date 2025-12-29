@@ -241,7 +241,16 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Pre-OVID Inspection", path: "/pre-ovid-inspection", icon: Eye, emoji: "🔍" },
       { label: "MLC Inspection", path: "/mlc-inspection", icon: Shield, emoji: "🔍" },
       { label: "Gerador Pacotes PSC", path: "/psc-package", icon: Shield, emoji: "🛡️" },
-      // Segurança & Compliance (movido aqui)
+      // Compliance One - ISO 37301
+      { label: "Compliance One", path: "/compliance-center", icon: Shield, emoji: "🛡️", status: "new", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Compliance Dashboard", path: "/compliance-center/dashboard", icon: BarChart3, emoji: "📊", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Regulamentos", path: "/compliance-center/regulamentos", icon: FileText, emoji: "📜", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Matriz de Riscos", path: "/compliance-center/riscos", icon: AlertTriangle, emoji: "⚠️", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Evidências", path: "/compliance-center/evidencias", icon: FileText, emoji: "📁", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Due Diligence", path: "/compliance-center/terceiros", icon: Users, emoji: "🔍", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "Canal de Denúncias", path: "/compliance-center/denuncias", icon: Bell, emoji: "📢", requiredRoles: ['admin', 'auditor', 'manager'] },
+      { label: "IA Compliance", path: "/compliance-center/ia-recommendations", icon: Brain, emoji: "🤖", requiredRoles: ['admin', 'auditor', 'manager'] },
+      // Segurança & Compliance (existentes)
       { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", requiredRoles: ['admin'] },
       { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖", requiredRoles: ['admin'], badgeType: 'alerts' },
       { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋", requiredRoles: ['admin', 'auditor'] },
