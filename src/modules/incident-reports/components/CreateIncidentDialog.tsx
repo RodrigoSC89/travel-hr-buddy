@@ -1,8 +1,6 @@
-// @ts-nocheck
 /**
- * PATCH 393 - Incident Reports: Enhanced with photo upload, GPS, and unique IDs
- * @ts-nocheck mantido: Schema incident_reports não tem incident_number (usa code)
- * TODO: Alinhar campos incident_number, photo_urls com schema DB
+ * PATCH 861 - Incident Reports: Schema aligned
+ * DB has: incident_number, photo_urls, gps_coordinates ✓
  */
 import { useState, useRef, type FC, type FormEvent, type ChangeEvent } from "react";
 import {
@@ -181,13 +179,22 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         }
       }
 
+      // Use code field (incident_number is generated from it)
       const { error } = await supabase.from("incident_reports").insert({
-        ...formData,
-        incident_number: incidentNumber,
+        code: incidentNumber,
+        title: formData.title,
+        description: formData.description,
+        type: formData.incident_type,
+        severity: formData.severity,
+        location: formData.incident_location || "N/A",
         reported_by: user.id,
         incident_date: new Date().toISOString(),
-        status: "new",
-        photo_urls: photoUrls.length > 0 ? photoUrls : null,
+        status: "open",
+        metadata: { 
+          gps_coordinates: formData.gps_coordinates,
+          photo_urls: photoUrls.length > 0 ? photoUrls : [],
+          category: formData.category
+        },
       });
 
       if (error) throw error;
