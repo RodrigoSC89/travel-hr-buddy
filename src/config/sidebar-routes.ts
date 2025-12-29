@@ -83,15 +83,19 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
  */
 export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // ============================================
-  // 🛰️ CENTRO DE COMANDO (1/16)
+  // 🧠 CENTRAL DE COMANDO - MÓDULO UNIFICADO (1/16)
+  // PATCH UNIFY-4.0: Fusão Nautilus Command + Dashboard
   // ============================================
   {
-    title: "🛰️ Centro de Comando",
+    title: "🧠 Central de Comando",
     defaultOpen: true,
     items: [
-      { label: "Nautilus Command Center", path: "/nautilus-command", icon: Compass, emoji: "🧠", status: "active" },
-      { label: "Dashboard Principal", path: "/dashboard", icon: BarChart3, emoji: "📊" },
-      { label: "Executive BI", path: "/executive-bi", icon: TrendingUp, emoji: "📈", requiredRoles: ['admin', 'manager', 'department_manager'] },
+      { label: "Visão Geral", path: "/central-comando/visao-geral", icon: Compass, emoji: "📊", status: "active" },
+      { label: "Operações", path: "/central-comando/operacoes", icon: Activity, emoji: "⚡" },
+      { label: "Executivo", path: "/central-comando/executivo", icon: TrendingUp, emoji: "📈", requiredRoles: ['admin', 'manager', 'department_manager'] },
+      { label: "IA Central", path: "/central-comando/ia", icon: Brain, emoji: "🤖" },
+      { label: "Resiliência", path: "/central-comando/resiliencia", icon: Shield, emoji: "🛡️" },
+      { label: "Alertas", path: "/central-comando/alertas", icon: Bell, emoji: "🚨", badgeType: 'alerts' },
       { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️", requiredRoles: ['admin', 'supervisor', 'manager'] },
       { label: "NOC Monitoring", path: "/noc-monitoring", icon: Activity, emoji: "📡", requiredRoles: ['admin', 'supervisor', 'manager'] },
     ],
@@ -114,17 +118,19 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   },
 
   // ============================================
-  // 🔧 MANUTENÇÃO
+  // 🔧 MANUTENÇÃO - MÓDULO UNIFICADO
+  // PATCH UNIFY-4.0: Fusão de todos MMI em Maintenance Command
   // ============================================
   {
     title: "🔧 Manutenção",
     defaultOpen: false,
     items: [
-      { label: "Maintenance Command", path: "/maintenance-command", icon: Wrench, emoji: "🔧" },
-      { label: "Manutenção Inteligente (MMI)", path: "/mmi", icon: Cpu, emoji: "🤖" },
-      { label: "MMI Dashboard", path: "/mmi-dashboard", icon: BarChart3, emoji: "📊" },
-      { label: "MMI Jobs", path: "/mmi-jobs", icon: Briefcase, emoji: "📋" },
-      { label: "MMI Forecast", path: "/mmi-forecast", icon: TrendingUp, emoji: "📈" },
+      { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧", status: "active" },
+      { label: "Saúde da Frota", path: "/maintenance-command?tab=health", icon: Activity, emoji: "💚" },
+      { label: "IA Copilot", path: "/maintenance-command?tab=copilot", icon: Brain, emoji: "🤖" },
+      { label: "Jobs & Ordens", path: "/maintenance-command?tab=jobs", icon: Briefcase, emoji: "📋" },
+      { label: "Forecast IA", path: "/maintenance-command?tab=forecast", icon: TrendingUp, emoji: "📈" },
+      { label: "Digital Twin 3D", path: "/maintenance-command?tab=twin", icon: Cpu, emoji: "🎮" },
     ],
   },
 
