@@ -1,5 +1,6 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
+// PATCH-860: @ts-nocheck mantido - tabelas training_modules/training_completions não existem no schema Supabase
+// TODO: Criar migração para essas tabelas antes de remover este comentário
 import { supabase } from "@/integrations/supabase/client";
 import type {
   TrainingModule,

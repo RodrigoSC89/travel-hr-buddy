@@ -1,4 +1,5 @@
 // @ts-nocheck
+// PATCH-860: @ts-nocheck mantido - schema smart_workflow_steps incompatível
 /**
  * Workflow Suggestions Seeder
  * 
