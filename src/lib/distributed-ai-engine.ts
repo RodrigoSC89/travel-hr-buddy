@@ -1,4 +1,3 @@
-// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 167.0: Distributed AI Engine
  * Tables: vessel_ai_contexts (created in migration)
@@ -13,8 +12,9 @@
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { runOpenAI, AIEngineRequest, AIEngineResponse } from "@/ai/engine";
+import type { Json, Database } from "@/integrations/supabase/types";
 
-import type { Json } from "@/integrations/supabase/types";
+type VesselAIContextRow = Database["public"]["Tables"]["vessel_ai_contexts"]["Row"];
 
 export interface VesselAIContext {
   vessel_id: string;

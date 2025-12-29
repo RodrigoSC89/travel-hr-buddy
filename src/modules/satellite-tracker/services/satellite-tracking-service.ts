@@ -1,4 +1,3 @@
-// @ts-nocheck - Tables exist but schema mismatch needs migration update
 /**
  * PATCH 483 - Satellite Tracking Service
  * Tables: satellite_tracking (created in migration)
@@ -6,6 +5,9 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type SatelliteRow = Database["public"]["Tables"]["satellites"]["Row"];
 
 export interface SatellitePosition {
   satelliteId: string;
