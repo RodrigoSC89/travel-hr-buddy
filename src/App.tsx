@@ -130,6 +130,9 @@ const OpenSkyFlights = lazy(() => import(/* webpackChunkName: "page-opensky-flig
 const ExecutiveBIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-bi" */ "@/pages/ExecutiveBIDashboard"));
 const NOCMonitoring = lazy(() => import(/* webpackChunkName: "page-noc-monitoring" */ "@/pages/NOCMonitoring"));
 
+// Roadmap - PATCH 859
+const Roadmap = lazy(() => import(/* webpackChunkName: "page-roadmap" */ "@/pages/Roadmap"));
+
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -242,8 +245,11 @@ function App() {
                         <Route path="executive-bi" element={<ExecutiveBIDashboard />} />
                         <Route path="noc-monitoring" element={<NOCMonitoring />} />
                         
-                        {/* AI Observability - PATCH 860 */}
+{/* AI Observability - PATCH 860 */}
                         <Route path="ai-observability" element={<AIObservabilityDashboard />} />
+                        
+                        {/* Roadmap - PATCH 859 */}
+                        <Route path="roadmap" element={<Roadmap />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}

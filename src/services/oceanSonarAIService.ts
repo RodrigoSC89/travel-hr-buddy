@@ -1,5 +1,5 @@
 // @ts-nocheck
-// TODO: Remove after migration adds sonar_ai_analysis, sonar_detection_logs tables
+// PATCH 859: Awaiting Supabase type regeneration for sonar tables
 /**
  * PATCH 539 - Ocean Sonar AI Service
  * AI-assisted sonar pattern interpretation with LLM
