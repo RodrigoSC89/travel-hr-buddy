@@ -18,21 +18,39 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+export type UserRole = 'admin' | 'hr_manager' | 'hr_analyst' | 'department_manager' | 'supervisor' | 'coordinator' | 'manager' | 'employee' | 'auditor';
+
 export interface SidebarRoute {
   label: string;
   path: string;
   icon?: LucideIcon;
   emoji?: string;
   badge?: string;
-  requiredRole?: string[];
+  badgeType?: 'alerts' | 'notifications' | 'tasks' | 'static'; // Dynamic badge types
+  requiredRoles?: UserRole[]; // Roles that can access this route
+  minRole?: UserRole; // Minimum role level (hierarchical)
   status?: 'active' | 'beta' | 'new' | 'deprecated';
 }
 
 export interface SidebarGroup {
   title: string;
   defaultOpen?: boolean;
+  requiredRoles?: UserRole[]; // Roles that can see this group
   items: SidebarRoute[];
 }
+
+// Role hierarchy for minRole checks
+export const ROLE_HIERARCHY: Record<UserRole, number> = {
+  admin: 100,
+  hr_manager: 80,
+  department_manager: 70,
+  manager: 60,
+  supervisor: 50,
+  coordinator: 40,
+  hr_analyst: 30,
+  auditor: 20,
+  employee: 10,
+};
 
 /**
  * MASTER SIDEBAR ROUTES - AUDITED & OPTIMIZED
@@ -48,9 +66,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "Nautilus Command Center", path: "/nautilus-command", icon: Compass, emoji: "🧠", status: "active" },
       { label: "Dashboard Principal", path: "/dashboard", icon: BarChart3, emoji: "📊" },
-      { label: "Executive BI", path: "/executive-bi", icon: TrendingUp, emoji: "📈" },
-      { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️" },
-      { label: "NOC Monitoring", path: "/noc-monitoring", icon: Activity, emoji: "📡" },
+      { label: "Executive BI", path: "/executive-bi", icon: TrendingUp, emoji: "📈", requiredRoles: ['admin', 'manager', 'department_manager'] },
+      { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️", requiredRoles: ['admin', 'supervisor', 'manager'] },
+      { label: "NOC Monitoring", path: "/noc-monitoring", icon: Activity, emoji: "📡", requiredRoles: ['admin', 'supervisor', 'manager'] },
     ],
   },
 
@@ -60,12 +78,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   {
     title: "🔒 Segurança & Compliance",
     defaultOpen: false,
+    requiredRoles: ['admin', 'auditor', 'manager', 'hr_manager'],
     items: [
-      { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", status: "active" },
-      { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖" },
-      { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋" },
-      { label: "Security Scanner", path: "/security-scanner", icon: Lock, emoji: "🔐" },
-      { label: "Compliance Hub", path: "/compliance-hub", icon: Shield, emoji: "✅" },
+      { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", status: "active", requiredRoles: ['admin'] },
+      { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖", requiredRoles: ['admin'], badgeType: 'alerts' },
+      { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋", requiredRoles: ['admin', 'auditor'] },
+      { label: "Security Scanner", path: "/security-scanner", icon: Lock, emoji: "🔐", requiredRoles: ['admin'] },
+      { label: "Compliance Hub", path: "/compliance-hub", icon: Shield, emoji: "✅", requiredRoles: ['admin', 'auditor', 'manager'] },
       { label: "Safety Guardian", path: "/safety-guardian", icon: Shield, emoji: "⛑️" },
     ],
   },
