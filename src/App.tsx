@@ -136,6 +136,8 @@ const Roadmap = lazy(() => import(/* webpackChunkName: "page-roadmap" */ "@/page
 // AI Self-Healing - PATCH 860
 const SelfHealingLogs = lazy(() => import(/* webpackChunkName: "page-self-healing" */ "@/pages/ai/SelfHealingLogs"));
 
+// Sidebar Diagnostic - PATCH 862
+const SidebarCheck = lazy(() => import(/* webpackChunkName: "page-sidebar-check" */ "@/pages/dev/SidebarCheck"));
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
