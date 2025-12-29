@@ -4577,6 +4577,80 @@ export type Database = {
           },
         ]
       }
+      compliance_ai_recommendations: {
+        Row: {
+          action_type: string | null
+          applied_at: string | null
+          applied_by: string | null
+          category: string | null
+          confidence: number | null
+          created_at: string | null
+          dismissed_reason: string | null
+          expires_at: string | null
+          generated_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          priority: string | null
+          reasoning: string | null
+          recommendation: string
+          status: string | null
+          suggested_action: Json | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action_type?: string | null
+          applied_at?: string | null
+          applied_by?: string | null
+          category?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          dismissed_reason?: string | null
+          expires_at?: string | null
+          generated_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          reasoning?: string | null
+          recommendation: string
+          status?: string | null
+          suggested_action?: Json | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action_type?: string | null
+          applied_at?: string | null
+          applied_by?: string | null
+          category?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          dismissed_reason?: string | null
+          expires_at?: string | null
+          generated_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          reasoning?: string | null
+          recommendation?: string
+          status?: string | null
+          suggested_action?: Json | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_ai_recommendations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_audit_logs: {
         Row: {
           audit_type: string | null
@@ -4626,6 +4700,156 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_audit_trail: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          new_values: Json | null
+          old_values: Json | null
+          organization_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          new_values?: Json | null
+          old_values?: Json | null
+          organization_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          new_values?: Json | null
+          old_values?: Json | null
+          organization_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_audit_trail_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_evidences: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          file_hash: string | null
+          file_name: string | null
+          file_size: number | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          organization_id: string | null
+          related_risk_id: string | null
+          related_rule_id: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          uploader_id: string | null
+          validity_end: string | null
+          validity_start: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          file_hash?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          organization_id?: string | null
+          related_risk_id?: string | null
+          related_rule_id?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          uploader_id?: string | null
+          validity_end?: string | null
+          validity_start?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          file_hash?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          organization_id?: string | null
+          related_risk_id?: string | null
+          related_rule_id?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          uploader_id?: string | null
+          validity_end?: string | null
+          validity_start?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_evidences_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_evidences_related_risk_id_fkey"
+            columns: ["related_risk_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_risks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_evidences_related_rule_id_fkey"
+            columns: ["related_rule_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_rules"
             referencedColumns: ["id"]
           },
         ]
@@ -4701,6 +4925,365 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_reports: {
+        Row: {
+          assigned_to: string | null
+          attachments: Json | null
+          category: string | null
+          created_at: string | null
+          description: string
+          id: string
+          is_anonymous: boolean | null
+          metadata: Json | null
+          organization_id: string | null
+          report_number: string | null
+          reporter_email: string | null
+          reporter_name: string | null
+          resolution: string | null
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          attachments?: Json | null
+          category?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          is_anonymous?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          report_number?: string | null
+          reporter_email?: string | null
+          reporter_name?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          attachments?: Json | null
+          category?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          is_anonymous?: boolean | null
+          metadata?: Json | null
+          organization_id?: string | null
+          report_number?: string | null
+          reporter_email?: string | null
+          reporter_name?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_risks: {
+        Row: {
+          associated_rule_id: string | null
+          category: string | null
+          control_measures: Json | null
+          created_at: string | null
+          department: string | null
+          description: string | null
+          id: string
+          impact: number | null
+          mitigation: string | null
+          organization_id: string | null
+          owner_id: string | null
+          probability: number | null
+          review_date: string | null
+          risk_score: number | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          associated_rule_id?: string | null
+          category?: string | null
+          control_measures?: Json | null
+          created_at?: string | null
+          department?: string | null
+          description?: string | null
+          id?: string
+          impact?: number | null
+          mitigation?: string | null
+          organization_id?: string | null
+          owner_id?: string | null
+          probability?: number | null
+          review_date?: string | null
+          risk_score?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          associated_rule_id?: string | null
+          category?: string | null
+          control_measures?: Json | null
+          created_at?: string | null
+          department?: string | null
+          description?: string | null
+          id?: string
+          impact?: number | null
+          mitigation?: string | null
+          organization_id?: string | null
+          owner_id?: string | null
+          probability?: number | null
+          review_date?: string | null
+          risk_score?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_risks_associated_rule_id_fkey"
+            columns: ["associated_rule_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_risks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_rules: {
+        Row: {
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          effective_date: string | null
+          expiry_date: string | null
+          id: string
+          jurisdiction: string | null
+          legal_reference: string | null
+          metadata: Json | null
+          organization_id: string | null
+          priority: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          effective_date?: string | null
+          expiry_date?: string | null
+          id?: string
+          jurisdiction?: string | null
+          legal_reference?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          effective_date?: string | null
+          expiry_date?: string | null
+          id?: string
+          jurisdiction?: string | null
+          legal_reference?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_thirdparties: {
+        Row: {
+          adverse_media: boolean | null
+          blocked_at: string | null
+          blocked_reason: string | null
+          check_results: Json | null
+          country: string | null
+          created_at: string | null
+          document_number: string | null
+          document_type: string | null
+          id: string
+          last_check_at: string | null
+          legal_name: string | null
+          name: string
+          next_check_at: string | null
+          notes: string | null
+          organization_id: string | null
+          pep_hit: boolean | null
+          risk_level: string | null
+          risk_score: number | null
+          sanctions_hit: boolean | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          adverse_media?: boolean | null
+          blocked_at?: string | null
+          blocked_reason?: string | null
+          check_results?: Json | null
+          country?: string | null
+          created_at?: string | null
+          document_number?: string | null
+          document_type?: string | null
+          id?: string
+          last_check_at?: string | null
+          legal_name?: string | null
+          name: string
+          next_check_at?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          pep_hit?: boolean | null
+          risk_level?: string | null
+          risk_score?: number | null
+          sanctions_hit?: boolean | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          adverse_media?: boolean | null
+          blocked_at?: string | null
+          blocked_reason?: string | null
+          check_results?: Json | null
+          country?: string | null
+          created_at?: string | null
+          document_number?: string | null
+          document_type?: string | null
+          id?: string
+          last_check_at?: string | null
+          legal_name?: string | null
+          name?: string
+          next_check_at?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          pep_hit?: boolean | null
+          risk_level?: string | null
+          risk_score?: number | null
+          sanctions_hit?: boolean | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_thirdparties_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_workflows: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          current_step: number | null
+          description: string | null
+          due_date: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          started_at: string | null
+          status: string | null
+          steps: Json | null
+          trigger_config: Json | null
+          trigger_type: string | null
+          updated_at: string | null
+          workflow_type: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_step?: number | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          started_at?: string | null
+          status?: string | null
+          steps?: Json | null
+          trigger_config?: Json | null
+          trigger_type?: string | null
+          updated_at?: string | null
+          workflow_type?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_step?: number | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          started_at?: string | null
+          status?: string | null
+          steps?: Json | null
+          trigger_config?: Json | null
+          trigger_type?: string | null
+          updated_at?: string | null
+          workflow_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_workflows_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
