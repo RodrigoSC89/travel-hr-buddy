@@ -18493,51 +18493,69 @@ export type Database = {
       }
       smart_workflow_steps: {
         Row: {
+          assigned_to: string | null
           completed_at: string | null
           conditions: Json | null
           config: Json | null
           created_at: string
+          created_by: string | null
           description: string | null
           id: string
           metadata: Json | null
           name: string
+          position: number | null
+          priority: string | null
           result: Json | null
           started_at: string | null
           status: string
           step_number: number
           step_type: string
+          tags: string[] | null
+          title: string | null
           workflow_id: string | null
         }
         Insert: {
+          assigned_to?: string | null
           completed_at?: string | null
           conditions?: Json | null
           config?: Json | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           id?: string
           metadata?: Json | null
           name: string
+          position?: number | null
+          priority?: string | null
           result?: Json | null
           started_at?: string | null
           status?: string
           step_number: number
           step_type: string
+          tags?: string[] | null
+          title?: string | null
           workflow_id?: string | null
         }
         Update: {
+          assigned_to?: string | null
           completed_at?: string | null
           conditions?: Json | null
           config?: Json | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           id?: string
           metadata?: Json | null
           name?: string
+          position?: number | null
+          priority?: string | null
           result?: Json | null
           started_at?: string | null
           status?: string
           step_number?: number
           step_type?: string
+          tags?: string[] | null
+          title?: string | null
           workflow_id?: string | null
         }
         Relationships: [
@@ -20941,6 +20959,84 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      training_modules: {
+        Row: {
+          audit_id: string | null
+          category: string | null
+          content: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          duration_hours: number | null
+          expiration_months: number | null
+          gap_detected: string | null
+          id: string
+          norm_reference: string | null
+          organization_id: string | null
+          quiz: Json | null
+          status: string | null
+          title: string
+          training_content: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          audit_id?: string | null
+          category?: string | null
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          duration_hours?: number | null
+          expiration_months?: number | null
+          gap_detected?: string | null
+          id?: string
+          norm_reference?: string | null
+          organization_id?: string | null
+          quiz?: Json | null
+          status?: string | null
+          title: string
+          training_content?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          audit_id?: string | null
+          category?: string | null
+          content?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          duration_hours?: number | null
+          expiration_months?: number | null
+          gap_detected?: string | null
+          id?: string
+          norm_reference?: string | null
+          organization_id?: string | null
+          quiz?: Json | null
+          status?: string | null
+          title?: string
+          training_content?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_modules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "training_modules_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
