@@ -1,5 +1,5 @@
 // @ts-nocheck
-// TODO: Remove after migration adds ai_document_insights, document_processing_queue tables
+// PATCH 859: Awaiting Supabase type regeneration for document tables
 /**
  * PATCH 297: AI Document Service
  * Tesseract.js integration for OCR with entity extraction

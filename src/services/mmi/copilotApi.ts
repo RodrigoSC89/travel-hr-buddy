@@ -1,5 +1,5 @@
 // @ts-nocheck
-// TODO: Remove after migration adds match_mmi_job_history RPC function
+// PATCH 859: Awaiting Supabase type regeneration for match_mmi_job_history RPC
 /**
  * MMI Copilot Service v1.1.0
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings
