@@ -1,4 +1,5 @@
 // @ts-nocheck
+// PATCH-860: Aguardando alinhamento schema communication_channels/messages
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time
  * Complete WebSocket integration, permissions management, and communication logs

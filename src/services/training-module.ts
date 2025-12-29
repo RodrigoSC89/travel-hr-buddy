@@ -1,6 +1,6 @@
 // @ts-nocheck
-// PATCH-860: @ts-nocheck mantido - tabelas training_modules/training_completions não existem no schema Supabase
-// TODO: Criar migração para essas tabelas antes de remover este comentário
+// PATCH-860: Aguardando regeneração de tipos Supabase (tabelas training_modules/training_completions criadas)
+// Execute: npx supabase gen types typescript --project-id vnbptmixvwropvanyhdb > src/integrations/supabase/types.ts
 import { supabase } from "@/integrations/supabase/client";
 import type {
   TrainingModule,
