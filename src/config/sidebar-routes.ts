@@ -103,11 +103,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Deep Risk AI", path: "/deep-risk-ai", icon: AlertTriangle, emoji: "⚠️" },
     ],
   },
-  {
+{
     title: "🧠 IA & Inovação",
     defaultOpen: false,
     items: [
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
+      { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
       { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
       { label: "Workflow Command", path: "/workflow-command", icon: Zap, emoji: "🔄" },
       { label: "Calendário Operacional", path: "/operational-calendar", icon: Activity, emoji: "📅" },
