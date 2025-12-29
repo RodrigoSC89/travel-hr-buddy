@@ -205,7 +205,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Procurement Command", path: "/procurement-command", icon: ShoppingCart, emoji: "🛒" },
     ],
   },
-  {
+{
     title: "⚙️ Integrações & Sistema",
     defaultOpen: false,
     items: [
@@ -217,6 +217,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Configurações", path: "/settings", icon: Settings, emoji: "⚙️" },
       { label: "QA Preview", path: "/qa/preview", icon: Eye, emoji: "🧪" },
       { label: "Production Deploy", path: "/production-deploy", icon: Zap, emoji: "🚀" },
+      { label: "Roadmap v3.2", path: "/roadmap", icon: Map, emoji: "🗺️" },
     ],
   },
 ];

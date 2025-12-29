@@ -133,6 +133,9 @@ const NOCMonitoring = lazy(() => import(/* webpackChunkName: "page-noc-monitorin
 // Roadmap - PATCH 859
 const Roadmap = lazy(() => import(/* webpackChunkName: "page-roadmap" */ "@/pages/Roadmap"));
 
+// AI Self-Healing - PATCH 860
+const SelfHealingLogs = lazy(() => import(/* webpackChunkName: "page-self-healing" */ "@/pages/ai/SelfHealingLogs"));
+
 const SmartLayout = lazy(() => 
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -248,8 +251,11 @@ function App() {
 {/* AI Observability - PATCH 860 */}
                         <Route path="ai-observability" element={<AIObservabilityDashboard />} />
                         
-                        {/* Roadmap - PATCH 859 */}
+{/* Roadmap - PATCH 859 */}
                         <Route path="roadmap" element={<Roadmap />} />
+                        
+                        {/* AI Self-Healing - PATCH 860 */}
+                        <Route path="ai-ops/logs" element={<SelfHealingLogs />} />
                         
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
