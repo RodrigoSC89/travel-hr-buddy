@@ -1332,6 +1332,72 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_self_healing_logs: {
+        Row: {
+          action_result: string | null
+          action_taken: string | null
+          ai_model: string | null
+          confidence_score: number | null
+          correction_type: string | null
+          created_at: string
+          error_stack: string | null
+          event_type: string
+          execution_time_ms: number | null
+          id: string
+          issue_description: string
+          metadata: Json | null
+          module_affected: string
+          organization_id: string | null
+          resolved_at: string | null
+          root_cause: string | null
+          severity: string
+          triggered_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          action_result?: string | null
+          action_taken?: string | null
+          ai_model?: string | null
+          confidence_score?: number | null
+          correction_type?: string | null
+          created_at?: string
+          error_stack?: string | null
+          event_type: string
+          execution_time_ms?: number | null
+          id?: string
+          issue_description: string
+          metadata?: Json | null
+          module_affected: string
+          organization_id?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          severity?: string
+          triggered_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          action_result?: string | null
+          action_taken?: string | null
+          ai_model?: string | null
+          confidence_score?: number | null
+          correction_type?: string | null
+          created_at?: string
+          error_stack?: string | null
+          event_type?: string
+          execution_time_ms?: number | null
+          id?: string
+          issue_description?: string
+          metadata?: Json | null
+          module_affected?: string
+          organization_id?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          severity?: string
+          triggered_by?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ai_suggestions: {
         Row: {
           applied_at: string | null

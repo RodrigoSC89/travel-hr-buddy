@@ -1,4 +1,6 @@
 // @ts-nocheck
+// PATCH-860: @ts-nocheck mantido - schema missions incompatível com tipo local Mission
+// TODO: Alinhar schema Supabase missions com interface Mission local
 /**
  * PATCH 548 - Mission Control Mobile Sync Service
  * Auto-sync with Supabase when online with network state monitoring
