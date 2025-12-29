@@ -1,5 +1,8 @@
 // @ts-nocheck
-// PATCH 393 - Incident Reports: Enhanced with photo upload, GPS, and unique IDs
+// PATCH-860: Aguardando alinhamento schema incident_reports
+/**
+ * PATCH 393 - Incident Reports: Enhanced with photo upload, GPS, and unique IDs
+ */
 import React, { useState, useRef } from "react";
 import {
   Dialog,
