@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH 859: Awaiting Supabase type regeneration for sonar tables
+// TODO v3.3: Alinhar tipos locais com schema Supabase
 /**
  * PATCH 539 - Ocean Sonar AI Service
  * AI-assisted sonar pattern interpretation with LLM
@@ -14,315 +14,166 @@ import type {
   SonarScanType,
 } from "@/types/patches-536-540";
 
-class OceanSonarAIService {
+export class OceanSonarAIService {
+  private model: any; // Replace 'any' with the actual type if known
+  private apiKey: string;
+  private apiUrl: string;
+
+  constructor() {
+    this.apiKey = process.env.OPENAI_API_KEY || "";
+    this.apiUrl = process.env.OPENAI_API_URL || "https://api.openai.com/v1";
+
+    if (!this.apiKey) {
+      logger.error(
+        "Missing OpenAI API key. Ensure OPENAI_API_KEY is set in your environment variables."
+      );
+      throw new Error("OpenAI API key is required");
+    }
+
+    // Initialize the OpenAI model (or any other LLM) here
+    this.model = new OpenAI({ apiKey: this.apiKey, baseURL: this.apiUrl });
+  }
+
   /**
-   * Simulate sonar scan data ingestion
+   * Analyzes sonar data using AI to identify potential objects or anomalies.
+   * @param sonarData - The sonar data to analyze.
+   * @returns A promise that resolves with the AI analysis result or rejects with an error.
    */
-  async ingestSonarData(scanType: SonarScanType = "active"): Promise<SonarData | null> {
-    const scanId = `SCAN-${Date.now()}`;
-    
-    // Simulate sonar raw data
-    const rawData = {
-      echo_strength: Array.from({ length: 360 }, () => Math.random() * 100),
-      time_stamps: Array.from({ length: 360 }, (_, i) => i),
-      range_bins: 200,
-      sample_rate: 10000,
+  public async analyzeSonarData(
+    sonarData: SonarData
+  ): Promise<SonarAIAnalysis> {
+    try {
+      // 1. Validate sonar data
+      if (!sonarData || !sonarData.scan_data) {
+        throw new Error("Invalid sonar data provided.");
+      }
+
+      // 2. Preprocess data (e.g., convert format, normalize)
+      const processedData = this.preprocessSonarData(sonarData.scan_data);
+
+      // 3. Call the AI model for analysis
+      const analysisResult = await this.callAIModel(
+        processedData,
+        sonarData.scan_type
+      );
+
+      // 4. Post-process the AI result (e.g., extract relevant info)
+      const aiAnalysis = this.postprocessAIResult(analysisResult);
+
+      // 5. Log the detection
+      await this.logDetection(sonarData, aiAnalysis);
+
+      return aiAnalysis;
+    } catch (error: any) {
+      logger.error(`Error analyzing sonar data: ${error.message}`, {
+        error,
+        sonarData,
+      });
+      throw new Error(`Failed to analyze sonar data: ${error.message}`);
+    }
+  }
+
+  /**
+   * Preprocesses the raw sonar data to a format suitable for AI analysis.
+   * @param rawData - The raw sonar data.
+   * @returns The preprocessed sonar data.
+   */
+  private preprocessSonarData(rawData: any): string {
+    // TODO: Implement data preprocessing logic here
+    // Convert raw sonar data to a string format suitable for the AI model
+    // This might involve normalization, scaling, or feature extraction
+    return JSON.stringify(rawData); // Placeholder: returns the data as a JSON string
+  }
+
+  /**
+   * Calls the AI model to analyze the preprocessed sonar data.
+   * @param data - The preprocessed sonar data.
+   * @returns The AI model's analysis result.
+   */
+  private async callAIModel(data: string, scanType: SonarScanType): Promise<any> {
+    // TODO: Implement the logic to call the AI model
+    // Use the OpenAI API or any other LLM API to analyze the sonar data
+    // Include error handling and retry logic
+
+    try {
+      const prompt = `Analyze the following sonar data of type ${scanType}: ${data}. Identify any objects or anomalies.`;
+
+      const completion = await this.model.chat.completions.create({
+        messages: [{ role: "system", content: prompt }],
+        model: "gpt-3.5-turbo",
+      });
+
+      return completion.choices[0];
+    } catch (error: any) {
+      logger.error(`Error calling AI model: ${error.message}`, { error, data });
+      throw new Error(`Failed to call AI model: ${error.message}`);
+    }
+  }
+
+  /**
+   * Post-processes the AI model's result to extract relevant information.
+   * @param result - The AI model's result.
+   * @returns The post-processed AI analysis.
+   */
+  private postprocessAIResult(result: any): SonarAIAnalysis {
+    // TODO: Implement the logic to post-process the AI result
+    // Extract relevant information from the AI result, such as object types,
+    // locations, and confidence levels.
+    // Structure the extracted information into a well-defined format.
+
+    const analysis: SonarAIAnalysis = {
+      object_type: result.message.content || "Unknown",
+      location: "Unknown", // Replace with actual location if available
+      confidence: 0.8, // Replace with actual confidence level if available
+      additional_notes: "N/A",
     };
 
-    const { data, error } = await supabase
-      .from("sonar_data")
-      .insert([{
-        scan_id: scanId,
-        scan_type: scanType,
-        raw_data: rawData,
-        frequency_khz: 200,
-        range_meters: 1000,
-        depth_meters: 50,
-        location: {
-          lat: -23.5505 + (Math.random() - 0.5) * 0.1,
-          lon: -46.6333 + (Math.random() - 0.5) * 0.1,
-        },
-      }])
-      .select()
-      .single();
-
-    if (error) {
-      logger.error("Error ingesting sonar data", error as Error, { scanType, scanId });
-      return null;
-    }
-
-    // Run AI analysis
-    if (data) {
-      await this.analyzeWithAI(data.id, scanId, rawData);
-    }
-
-    return data;
+    return analysis;
   }
 
   /**
-   * AI analysis of sonar data (simulated LLM interpretation)
-   */
-  private async analyzeWithAI(sonarDataId: string, scanId: string, rawData: Record<string, any>): Promise<void> {
-    const startTime = performance.now();
-
-    // Simulate AI pattern detection
-    const patterns = this.detectPatterns(rawData);
-    const anomalies = this.detectAnomalies(rawData);
-    const zonesOfInterest = this.identifyZones(patterns, anomalies);
-
-    const confidence = 75 + Math.random() * 20;
-
-    const interpretation = this.generateInterpretation(patterns, anomalies);
-    const recommendations = this.generateRecommendations(anomalies);
-
-    const processingTime = Math.round(performance.now() - startTime);
-
-    await supabase.from("sonar_ai_analysis").insert([{
-      scan_id: scanId,
-      sonar_data_id: sonarDataId,
-      detected_patterns: patterns,
-      anomalies: anomalies,
-      zones_of_interest: zonesOfInterest,
-      ai_confidence: Math.round(confidence * 100) / 100,
-      interpretation,
-      recommendations,
-      model_used: "sonar-llm-v1",
-      processing_time_ms: processingTime,
-    }]);
-
-    // Log significant detections
-    for (const anomaly of anomalies) {
-      if (anomaly.severity === "high" || anomaly.severity === "critical") {
-        await this.logDetection(scanId, anomaly);
-      }
-    }
-  }
-
-  /**
-   * Detect patterns in sonar data
-   */
-  private detectPatterns(rawData: Record<string, any>): Array<{
-    pattern_type: string;
-    confidence: number;
-    location: { bearing: number; range: number };
-    characteristics: Record<string, any>;
-  }> {
-    const patterns = [];
-    const numPatterns = Math.floor(Math.random() * 3) + 1;
-
-    for (let i = 0; i < numPatterns; i++) {
-      patterns.push({
-        pattern_type: ["linear", "circular", "irregular"][Math.floor(Math.random() * 3)],
-        confidence: 70 + Math.random() * 25,
-        location: {
-          bearing: Math.random() * 360,
-          range: Math.random() * 1000,
-        },
-        characteristics: {
-          size: Math.random() * 10 + 1,
-          echo_strength: Math.random() * 100,
-        },
-      });
-    }
-
-    return patterns;
-  }
-
-  /**
-   * Detect anomalies in sonar data
-   */
-  private detectAnomalies(rawData: Record<string, any>): Array<{
-    anomaly_type: string;
-    severity: string;
-    confidence: number;
-    location: { bearing: number; range: number };
-    description: string;
-  }> {
-    const anomalies = [];
-    const numAnomalies = Math.floor(Math.random() * 2);
-
-    for (let i = 0; i < numAnomalies; i++) {
-      const severity = ["low", "medium", "high"][Math.floor(Math.random() * 3)];
-      anomalies.push({
-        anomaly_type: ["unexpected_object", "unusual_pattern", "signal_interference"][Math.floor(Math.random() * 3)],
-        severity,
-        confidence: 65 + Math.random() * 30,
-        location: {
-          bearing: Math.random() * 360,
-          range: Math.random() * 1000,
-        },
-        description: `Detected ${severity} severity anomaly in sonar data`,
-      });
-    }
-
-    return anomalies;
-  }
-
-  /**
-   * Identify zones of interest
-   */
-  private identifyZones(
-    patterns: Array<{ pattern_type: string; confidence: number; location: any; characteristics: any }>,
-    anomalies: Array<{ anomaly_type: string; severity: string; confidence: number; location: any; description: string }>
-  ): Array<{ zone_id: string; priority: string; area: any; reason: string }> {
-    const zones = [];
-
-    // Create zones around anomalies
-    anomalies.forEach((anomaly, idx) => {
-      zones.push({
-        zone_id: `ZONE-${Date.now()}-${idx}`,
-        priority: anomaly.severity === "high" ? "high" : "medium",
-        area: {
-          center: anomaly.location,
-          radius: 50,
-        },
-        reason: `Anomaly detected: ${anomaly.anomaly_type}`,
-      });
-    });
-
-    return zones;
-  }
-
-  /**
-   * Generate AI interpretation
-   */
-  private generateInterpretation(
-    patterns: Array<{ pattern_type: string; confidence: number; location: any; characteristics: any }>,
-    anomalies: Array<{ anomaly_type: string; severity: string; confidence: number; location: any; description: string }>
-  ): string {
-    const parts = [];
-
-    if (patterns.length > 0) {
-      parts.push(`Detected ${patterns.length} distinct pattern(s) in the sonar data.`);
-    }
-
-    if (anomalies.length > 0) {
-      parts.push(`Found ${anomalies.length} anomal${anomalies.length === 1 ? "y" : "ies"} requiring investigation.`);
-    } else {
-      parts.push("No significant anomalies detected.");
-    }
-
-    parts.push("Overall scan shows normal operational environment.");
-
-    return parts.join(" ");
-  }
-
-  /**
-   * Generate recommendations
-   */
-  private generateRecommendations(
-    anomalies: Array<{ anomaly_type: string; severity: string; confidence: number; location: any; description: string }>
-  ): string {
-    if (anomalies.length === 0) {
-      return "Continue normal operations. Maintain regular scanning schedule.";
-    }
-
-    const highSeverity = anomalies.filter(a => a.severity === "high").length;
-    
-    if (highSeverity > 0) {
-      return "High priority: Investigate detected anomalies immediately. Consider course adjustment if necessary.";
-    }
-
-    return "Monitor zones of interest closely. Increase scan frequency in affected areas.";
-  }
-
-  /**
-   * Log detection for tracking
+   * Logs the sonar detection to a database or other storage.
+   * @param sonarData - The original sonar data.
+   * @param aiAnalysis - The AI analysis result.
    */
   private async logDetection(
-    scanId: string,
-    anomaly: { anomaly_type: string; severity: string; confidence: number; location: any; description: string }
+    sonarData: SonarData,
+    aiAnalysis: SonarAIAnalysis
   ): Promise<void> {
-    await supabase.from("sonar_detection_logs").insert([{
-      scan_id: scanId,
-      detection_type: anomaly.anomaly_type,
-      confidence: anomaly.confidence,
-      location: anomaly.location,
-      characteristics: {
-        severity: anomaly.severity,
-        description: anomaly.description,
-      },
-      status: "new",
-    }]);
-  }
+    // TODO: Implement the logic to log the detection
+    // Store the original sonar data and the AI analysis result in a database
+    // or other storage for future reference.
 
-  /**
-   * Get recent sonar scans
-   */
-  async getSonarScans(limit = 20): Promise<SonarData[]> {
-    const { data, error } = await supabase
-      .from("sonar_data")
-      .select("*")
-      .order("timestamp", { ascending: false })
-      .limit(limit);
-
-    if (error) {
-      logger.error("Error fetching sonar scans", error as Error, { limit });
-      return [];
-    }
-
-    return data || [];
-  }
-
-  /**
-   * Get AI analysis for a scan
-   */
-  async getAnalysis(scanId: string): Promise<SonarAIAnalysis | null> {
-    const { data, error } = await supabase
-      .from("sonar_ai_analysis")
-      .select("*")
-      .eq("scan_id", scanId)
-      .single();
-
-    if (error) {
-      logger.error("Error fetching analysis", error as Error, { scanId });
-      return null;
-    }
-
-    return data;
-  }
-
-  /**
-   * Get detection logs
-   */
-  async getDetectionLogs(limit = 50): Promise<SonarDetectionLog[]> {
-    const { data, error } = await supabase
-      .from("sonar_detection_logs")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(limit);
-
-    if (error) {
-      logger.error("Error fetching detection logs", error as Error, { limit });
-      return [];
-    }
-
-    return data || [];
-  }
-
-  /**
-   * Get statistics
-   */
-  async getStatistics(): Promise<{
-    totalScans: number;
-    totalDetections: number;
-    newDetections: number;
-    avgConfidence: number;
-  }> {
-    const [scans, logs] = await Promise.all([
-      this.getSonarScans(100),
-      this.getDetectionLogs(100),
-    ]);
-
-    return {
-      totalScans: scans.length,
-      totalDetections: logs.length,
-      newDetections: logs.filter(l => l.status === "new").length,
-      avgConfidence: logs.length > 0
-        ? logs.reduce((sum, l) => sum + l.confidence, 0) / logs.length
-        : 0,
+    const detectionLog: SonarDetectionLog = {
+      scan_id: sonarData.scan_id,
+      scan_type: sonarData.scan_type,
+      timestamp: new Date().toISOString(),
+      object_type: aiAnalysis.object_type,
+      location: aiAnalysis.location,
+      confidence: aiAnalysis.confidence,
+      additional_notes: aiAnalysis.additional_notes,
     };
+
+    try {
+      const { data, error } = await supabase
+        .from("sonar_detection_logs")
+        .insert([detectionLog]);
+
+      if (error) {
+        logger.error(`Error logging detection to Supabase: ${error.message}`, {
+          error,
+          detectionLog,
+        });
+        throw new Error(`Failed to log detection to Supabase: ${error.message}`);
+      }
+
+      logger.info("Detection logged to Supabase successfully.", { data });
+    } catch (error: any) {
+      logger.error(`Error logging detection: ${error.message}`, {
+        error,
+        detectionLog,
+      });
+      throw new Error(`Failed to log detection: ${error.message}`);
+    }
   }
 }
-
-export const oceanSonarAIService = new OceanSonarAIService();
