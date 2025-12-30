@@ -29,7 +29,7 @@ interface HistoryEvent {
   event_date: string;
   title: string;
   description?: string | null;
-  documents: any[] | null;
+  documents: any;
   relevance_score: number | null;
 }
 
@@ -362,7 +362,7 @@ const VesselHistory = () => {
                       <div>
                         <p className="font-medium">{manual.title}</p>
                         <p className="text-sm text-muted-foreground">
-                          Versão {manual.version} | {new Date(manual.upload_date).toLocaleDateString('pt-BR')}
+                          Versão {manual.version} | {manual.upload_date ? new Date(manual.upload_date).toLocaleDateString('pt-BR') : '-'}
                         </p>
                       </div>
                     </div>
