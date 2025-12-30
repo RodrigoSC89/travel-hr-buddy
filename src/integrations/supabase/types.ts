@@ -19835,6 +19835,7 @@ export type Database = {
           raw_data: Json | null
           scan_id: string
           scan_type: string | null
+          timestamp: string | null
           vessel_id: string | null
         }
         Insert: {
@@ -19852,6 +19853,7 @@ export type Database = {
           raw_data?: Json | null
           scan_id: string
           scan_type?: string | null
+          timestamp?: string | null
           vessel_id?: string | null
         }
         Update: {
@@ -19869,6 +19871,7 @@ export type Database = {
           raw_data?: Json | null
           scan_id?: string
           scan_type?: string | null
+          timestamp?: string | null
           vessel_id?: string | null
         }
         Relationships: [
@@ -19884,6 +19887,7 @@ export type Database = {
       sonar_detection_logs: {
         Row: {
           bearing_degrees: number | null
+          characteristics: Json | null
           classification: string | null
           confidence: number | null
           created_at: string
@@ -19898,11 +19902,14 @@ export type Database = {
           range_meters: number | null
           signal_strength: number | null
           sonar_data_id: string | null
+          status: string | null
+          updated_at: string | null
           verified_at: string | null
           verified_by: string | null
         }
         Insert: {
           bearing_degrees?: number | null
+          characteristics?: Json | null
           classification?: string | null
           confidence?: number | null
           created_at?: string
@@ -19917,11 +19924,14 @@ export type Database = {
           range_meters?: number | null
           signal_strength?: number | null
           sonar_data_id?: string | null
+          status?: string | null
+          updated_at?: string | null
           verified_at?: string | null
           verified_by?: string | null
         }
         Update: {
           bearing_degrees?: number | null
+          characteristics?: Json | null
           classification?: string | null
           confidence?: number | null
           created_at?: string
@@ -19936,6 +19946,8 @@ export type Database = {
           range_meters?: number | null
           signal_strength?: number | null
           sonar_data_id?: string | null
+          status?: string | null
+          updated_at?: string | null
           verified_at?: string | null
           verified_by?: string | null
         }
