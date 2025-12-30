@@ -151,6 +151,15 @@ const APICenter = lazy(() => import(/* webpackChunkName: "page-api-center" */ "@
 // MMI Jobs Direct Route - PATCH 866
 const MMIJobsPanel = lazy(() => import(/* webpackChunkName: "page-mmi-jobs" */ "@/pages/MMIJobsPanel"));
 
+// V3.2.0 Advanced Modules
+const VesselContracts = lazy(() => import(/* webpackChunkName: "page-vessel-contracts" */ "@/pages/VesselContracts"));
+const VesselCTS = lazy(() => import(/* webpackChunkName: "page-vessel-cts" */ "@/pages/VesselCTS"));
+const VesselHistory = lazy(() => import(/* webpackChunkName: "page-vessel-history" */ "@/pages/VesselHistory"));
+const GMUD = lazy(() => import(/* webpackChunkName: "page-gmud" */ "@/pages/GMUD"));
+const ResponsibilityMatrix = lazy(() => import(/* webpackChunkName: "page-responsibility-matrix" */ "@/pages/ResponsibilityMatrix"));
+const SafetyHumanFactors = lazy(() => import(/* webpackChunkName: "page-safety-human-factors" */ "@/pages/SafetyHumanFactors"));
+const SafetyIMCA = lazy(() => import(/* webpackChunkName: "page-safety-imca" */ "@/pages/SafetyIMCA"));
+
 // Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
 const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
 
@@ -292,6 +301,15 @@ function App() {
 
                         {/* MMI Jobs Direct Route - PATCH 866 */}
                         <Route path="mmi-jobs" element={<MMIJobsPanel />} />
+
+                        {/* V3.2.0 Advanced Modules */}
+                        <Route path="vessel-contracts" element={<VesselContracts />} />
+                        <Route path="vessel-cts" element={<VesselCTS />} />
+                        <Route path="vessel-history" element={<VesselHistory />} />
+                        <Route path="gmud" element={<GMUD />} />
+                        <Route path="responsibility-matrix" element={<ResponsibilityMatrix />} />
+                        <Route path="safety-human-factors" element={<SafetyHumanFactors />} />
+                        <Route path="safety-imca" element={<SafetyIMCA />} />
 
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
