@@ -63,7 +63,9 @@ import {
   Activity,
   Leaf,
   Brain,
-  MessageSquare
+  MessageSquare,
+  Mic,
+  FileCheck as FileCheckIcon
 } from "lucide-react";
 
 interface PeotramAudit {
@@ -331,7 +333,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-8 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-10 bg-muted/50">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -342,11 +344,19 @@ export const EnhancedPeotramManager: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="ai-assistant" className="flex items-center gap-2 bg-gradient-to-r from-orange-500/10 to-yellow-500/10">
             <Brain className="w-4 h-4 text-orange-500" />
-            IA Assistant
+            IA Chat
+          </TabsTrigger>
+          <TabsTrigger value="voice-chat" className="flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+            <Mic className="w-4 h-4 text-purple-500" />
+            Voz IA
+          </TabsTrigger>
+          <TabsTrigger value="evidence-gen" className="flex items-center gap-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10">
+            <FileCheckIcon className="w-4 h-4 text-green-500" />
+            Evidências
           </TabsTrigger>
           <TabsTrigger value="cnpj-history" className="flex items-center gap-2">
             <Building className="w-4 h-4" />
-            Histórico CNPJ
+            CNPJ
           </TabsTrigger>
           <TabsTrigger value="ocr" className="flex items-center gap-2">
             <Upload className="w-4 h-4" />
@@ -358,7 +368,7 @@ export const EnhancedPeotramManager: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="monitoring" className="flex items-center gap-2">
             <Activity className="w-4 h-4" />
-            Monitoramento
+            Monitor
           </TabsTrigger>
           <TabsTrigger value="management" className="flex items-center gap-2">
             <Settings className="w-4 h-4" />
@@ -638,6 +648,20 @@ export const EnhancedPeotramManager: React.FC = () => {
         <TabsContent value="ai-assistant" className="space-y-6">
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando assistente IA...</div>}>
             <PeotramAIAssistant />
+          </Suspense>
+        </TabsContent>
+
+        {/* Voice Chat Tab - NEW */}
+        <TabsContent value="voice-chat" className="space-y-6">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando chat de voz...</div>}>
+            <PeotramVoiceChat />
+          </Suspense>
+        </TabsContent>
+
+        {/* Evidence Generator Tab - NEW */}
+        <TabsContent value="evidence-gen" className="space-y-6">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando gerador de evidências...</div>}>
+            <PeotramEvidenceGenerator />
           </Suspense>
         </TabsContent>
 
