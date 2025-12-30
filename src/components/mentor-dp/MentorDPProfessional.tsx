@@ -80,12 +80,12 @@ interface RepositoryQuestion {
 
 // Default Academy Modules
 const DEFAULT_ACADEMY_MODULES: AcademyModule[] = [
-  { id: "dp-fundamentals", name: "Fundamentos de DP", category: "fundamentals", description: "Princípios básicos de Posicionamento Dinâmico, forças atuantes e modos de controle", lessons: 8, duration: "4h", difficulty: "beginner", icon: <Anchor className="h-5 w-5" /> },
-  { id: "sensors-references", name: "Sensores e Referências", category: "sensors", description: "GNSS, DGPS, MRU, giroscópio, anemômetro, sistemas acústicos e laser", lessons: 12, duration: "6h", difficulty: "intermediate", icon: <Radar className="h-5 w-5" /> },
-  { id: "thrusters-propulsion", name: "Propulsores e Propulsão", category: "thrusters", description: "Azimuth thrusters, túnel, vetorização de empuxo e eficiência energética", lessons: 10, duration: "5h", difficulty: "intermediate", icon: <Navigation className="h-5 w-5" /> },
-  { id: "redundancy-safety", name: "Redundância e Segurança", category: "redundancy", description: "Classes DP, WCFDI, FMEA, CAMO/CAMS, sistemas de fallback", lessons: 14, duration: "7h", difficulty: "advanced", icon: <Cpu className="h-5 w-5" /> },
-  { id: "operations-planning", name: "Planejamento Operacional", category: "operations", description: "Análise de footprint, capability plots, janelas operacionais, handover", lessons: 10, duration: "5h", difficulty: "advanced", icon: <Target className="h-5 w-5" /> },
-  { id: "emergency-procedures", name: "Procedimentos de Emergência", category: "emergency", description: "Drive-off, drift-off, EDS, blackout recovery, zonas operacionais", lessons: 8, duration: "4h", difficulty: "expert", icon: <AlertTriangle className="h-5 w-5" /> },
+  { id: "dp-fundamentals", name: "Fundamentos de DP", category: "fundamentals", description: "Princípios básicos de Posicionamento Dinâmico, 6 graus de liberdade, forças ambientais e modos de controle", lessons: 8, duration: "4h", difficulty: "beginner", icon: <Anchor className="h-5 w-5" /> },
+  { id: "sensors-references", name: "Sensores e Referências", category: "sensors", description: "GNSS, DGPS, RTK, MRU, giroscópio, anemômetro, sistemas acústicos (HPR, USBL, LBL) e laser (Fanbeam, CyScan)", lessons: 12, duration: "6h", difficulty: "intermediate", icon: <Radar className="h-5 w-5" /> },
+  { id: "thrusters-propulsion", name: "Propulsores e Propulsão", category: "thrusters", description: "Azimuth thrusters (L-drive, Z-drive), túnel, vetorização de empuxo e alocação de thrust", lessons: 10, duration: "5h", difficulty: "intermediate", icon: <Navigation className="h-5 w-5" /> },
+  { id: "redundancy-safety", name: "Redundância e Segurança", category: "redundancy", description: "Classes DP (DP1/DP2/DP3), WCFDI, FMEA/FMECA, CAMO vs TAM, ASOG e sistemas de fallback", lessons: 14, duration: "7h", difficulty: "advanced", icon: <Cpu className="h-5 w-5" /> },
+  { id: "operations-planning", name: "Planejamento Operacional", category: "operations", description: "Footprint analysis, capability plots, ASOG, janelas operacionais, handover e zonas 500m", lessons: 10, duration: "5h", difficulty: "advanced", icon: <Target className="h-5 w-5" /> },
+  { id: "emergency-procedures", name: "Procedimentos de Emergência", category: "emergency", description: "Drive-off, drift-off, EDS, blackout recovery, zonas Verde/Amarelo/Vermelho e desconexão de riser", lessons: 8, duration: "4h", difficulty: "expert", icon: <AlertTriangle className="h-5 w-5" /> },
 ];
 
 // Default Simulation Scenarios
@@ -99,11 +99,13 @@ const DEFAULT_SIMULATION_SCENARIOS: SimulationScenario[] = [
 
 // Default Repository Questions
 const DEFAULT_REPOSITORY_QUESTIONS: RepositoryQuestion[] = [
-  { id: "q1", question: "Qual a diferença entre DGPS e DGNSS?", category: "Sensores", votes: 45, answers: 3 },
-  { id: "q2", question: "Como interpretar um capability plot?", category: "Operações", votes: 38, answers: 2 },
-  { id: "q3", question: "O que é WCFDI e como é aplicado?", category: "Redundância", votes: 32, answers: 4 },
-  { id: "q4", question: "Quais são os procedimentos de drive-off?", category: "Emergência", votes: 28, answers: 2 },
-  { id: "q5", question: "Como funciona o sistema CAMO/CAMS?", category: "Redundância", votes: 25, answers: 1 },
+  { id: "q1", question: "Qual a diferença entre DGPS e DGNSS/RTK?", category: "Sensores", votes: 45, answers: 3 },
+  { id: "q2", question: "Como interpretar um capability plot e footprint analysis?", category: "Operações", votes: 38, answers: 2 },
+  { id: "q3", question: "O que é WCFDI (Worst Case Failure Design Intent) e como é aplicado?", category: "Redundância", votes: 32, answers: 4 },
+  { id: "q4", question: "Quais são os procedimentos de drive-off e drift-off?", category: "Emergência", votes: 28, answers: 2 },
+  { id: "q5", question: "Qual a diferença entre CAMO (Critical Activity Mode) e TAM (Task Appropriate Mode)?", category: "Redundância", votes: 25, answers: 1 },
+  { id: "q6", question: "Como elaborar e interpretar uma ASOG (Activity Specific Operating Guidelines)?", category: "Operações", votes: 22, answers: 2 },
+  { id: "q7", question: "Quais são as diferenças entre DP1, DP2 e DP3?", category: "Redundância", votes: 40, answers: 3 },
 ];
 
 // Stats Card Component
