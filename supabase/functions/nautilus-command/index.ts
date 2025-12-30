@@ -39,7 +39,7 @@ serve(async (req: Request) => {
     
     try {
       const [vesselsRes, crewRes, maintenanceRes, certsRes] = await Promise.all([
-        supabase.from("vessels").select("id, vessel_name, status, vessel_type").limit(20),
+        supabase.from("vessels").select("id, name, status, vessel_type").limit(20),
         supabase.from("crew_members").select("id, full_name, rank, status").limit(50),
         supabase.from("maintenance_schedules").select("id, title, status, priority, due_date").limit(30),
         supabase.from("employee_certificates").select("id, certificate_name, expiry_date").limit(30)
