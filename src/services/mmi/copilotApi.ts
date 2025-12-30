@@ -1,5 +1,3 @@
-// @ts-nocheck
-// TODO v3.3: RPC espera string para embedding
 /**
  * MMI Copilot Service v1.1.0
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings
@@ -27,21 +25,26 @@ export interface CopilotSuggestion {
 
 /**
  * Get similar historical cases using vector similarity search
+ * Note: The RPC expects embedding as a string (serialized vector)
  */
 const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchCount = 5): Promise<SimilarCase[]> => {
   try {
+    // Convert number[] to string format expected by PostgreSQL vector type
+    const embeddingString = `[${embedding.join(",")}]`;
+    
     const { data, error } = await supabase.rpc("match_mmi_job_history", {
-      query_embedding: embedding,
+      query_embedding: embeddingString,
       match_threshold: matchThreshold,
       match_count: matchCount,
-    }) as { data: MatchJobHistoryResult[] | null; error: Error | null };
+    });
 
     if (error) {
       logger.warn("Error fetching similar cases from database", { error, matchThreshold, matchCount });
       return [];
     }
 
-    return (data || []).map((item) => ({
+    const results = data as MatchJobHistoryResult[] | null;
+    return (results || []).map((item) => ({
       job_id: item.job_id || "UNKNOWN",
       similarity: item.similarity || 0,
       action: item.action || "No action recorded",
