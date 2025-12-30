@@ -174,6 +174,112 @@ export type Database = {
         }
         Relationships: []
       }
+      action_items: {
+        Row: {
+          assigned_to: string | null
+          assigned_to_email: string | null
+          assigned_to_name: string | null
+          assigned_to_phone: string | null
+          comments: Json | null
+          completion_date: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          evidence_files: Json | null
+          id: string
+          notification_sent_at: string | null
+          organization_id: string | null
+          priority: string | null
+          reminder_count: number | null
+          responsibility_matrix_id: string | null
+          source_module: string | null
+          source_reference_id: string | null
+          start_date: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+          zapier_webhook_url: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          assigned_to_email?: string | null
+          assigned_to_name?: string | null
+          assigned_to_phone?: string | null
+          comments?: Json | null
+          completion_date?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_files?: Json | null
+          id?: string
+          notification_sent_at?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          reminder_count?: number | null
+          responsibility_matrix_id?: string | null
+          source_module?: string | null
+          source_reference_id?: string | null
+          start_date?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          zapier_webhook_url?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          assigned_to_email?: string | null
+          assigned_to_name?: string | null
+          assigned_to_phone?: string | null
+          comments?: Json | null
+          completion_date?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          due_date?: string | null
+          evidence_files?: Json | null
+          id?: string
+          notification_sent_at?: string | null
+          organization_id?: string | null
+          priority?: string | null
+          reminder_count?: number | null
+          responsibility_matrix_id?: string | null
+          source_module?: string | null
+          source_reference_id?: string | null
+          start_date?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          zapier_webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "action_items_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_items_responsibility_matrix_id_fkey"
+            columns: ["responsibility_matrix_id"]
+            isOneToOne: false
+            referencedRelation: "responsibility_matrices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_items_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       active_sessions: {
         Row: {
           created_at: string
@@ -3340,6 +3446,82 @@ export type Database = {
           },
         ]
       }
+      behavioral_risk_assessments: {
+        Row: {
+          assessment_date: string | null
+          behavior_score: number | null
+          created_at: string | null
+          created_by: string | null
+          crew_member_id: string | null
+          emotional_score: number | null
+          id: string
+          incident_history_score: number | null
+          next_assessment_date: string | null
+          organization_id: string | null
+          recommendations: Json | null
+          risk_level: string | null
+          stress_fatigue_score: number | null
+          total_risk_score: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assessment_date?: string | null
+          behavior_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          emotional_score?: number | null
+          id?: string
+          incident_history_score?: number | null
+          next_assessment_date?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          risk_level?: string | null
+          stress_fatigue_score?: number | null
+          total_risk_score?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assessment_date?: string | null
+          behavior_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          emotional_score?: number | null
+          id?: string
+          incident_history_score?: number | null
+          next_assessment_date?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          risk_level?: string | null
+          stress_fatigue_score?: number | null
+          total_risk_score?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "behavioral_risk_assessments_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "behavioral_risk_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "behavioral_risk_assessments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beta_feedback: {
         Row: {
           attachments: Json | null
@@ -3435,6 +3617,100 @@ export type Database = {
           timezone?: string | null
         }
         Relationships: []
+      }
+      broa_records: {
+        Row: {
+          affected_equipment: Json | null
+          ai_cause_analysis: string | null
+          broa_number: string
+          cause_analysis: string | null
+          corrective_actions: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string
+          downtime_event_id: string | null
+          id: string
+          occurrence_date: string
+          occurrence_time: string
+          organization_id: string | null
+          pdf_path: string | null
+          preventive_actions: string | null
+          sent_to_authorities_at: string | null
+          signatures: Json | null
+          status: string | null
+          technical_analysis: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          affected_equipment?: Json | null
+          ai_cause_analysis?: string | null
+          broa_number: string
+          cause_analysis?: string | null
+          corrective_actions?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          downtime_event_id?: string | null
+          id?: string
+          occurrence_date: string
+          occurrence_time: string
+          organization_id?: string | null
+          pdf_path?: string | null
+          preventive_actions?: string | null
+          sent_to_authorities_at?: string | null
+          signatures?: Json | null
+          status?: string | null
+          technical_analysis?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          affected_equipment?: Json | null
+          ai_cause_analysis?: string | null
+          broa_number?: string
+          cause_analysis?: string | null
+          corrective_actions?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          downtime_event_id?: string | null
+          id?: string
+          occurrence_date?: string
+          occurrence_time?: string
+          organization_id?: string | null
+          pdf_path?: string | null
+          preventive_actions?: string | null
+          sent_to_authorities_at?: string | null
+          signatures?: Json | null
+          status?: string | null
+          technical_analysis?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broa_records_downtime_event_id_fkey"
+            columns: ["downtime_event_id"]
+            isOneToOne: false
+            referencedRelation: "downtime_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broa_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "broa_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cbt_courses: {
         Row: {
@@ -6534,6 +6810,85 @@ export type Database = {
           },
         ]
       }
+      crew_emotional_intelligence: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          crew_member_id: string | null
+          empathy_score: number | null
+          id: string
+          motivation_score: number | null
+          organization_id: string | null
+          recommendations: Json | null
+          self_awareness_score: number | null
+          self_regulation_score: number | null
+          social_skills_score: number | null
+          test_date: string | null
+          total_eq_score: number | null
+          trend: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          empathy_score?: number | null
+          id?: string
+          motivation_score?: number | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          self_awareness_score?: number | null
+          self_regulation_score?: number | null
+          social_skills_score?: number | null
+          test_date?: string | null
+          total_eq_score?: number | null
+          trend?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          empathy_score?: number | null
+          id?: string
+          motivation_score?: number | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          self_awareness_score?: number | null
+          self_regulation_score?: number | null
+          social_skills_score?: number | null
+          test_date?: string | null
+          total_eq_score?: number | null
+          trend?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_emotional_intelligence_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_emotional_intelligence_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_emotional_intelligence_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_evaluations: {
         Row: {
           behavioral_score: number
@@ -7376,6 +7731,154 @@ export type Database = {
         }
         Relationships: []
       }
+      cts_conformity_checks: {
+        Row: {
+          ai_analysis: Json | null
+          check_date: string | null
+          checked_by: string | null
+          corrective_actions: Json | null
+          corrective_actions_required: boolean | null
+          created_at: string | null
+          cts_record_id: string | null
+          id: string
+          next_check_date: string | null
+          non_conformities: Json | null
+          organization_id: string | null
+          overall_status: string | null
+          risk_level: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          check_date?: string | null
+          checked_by?: string | null
+          corrective_actions?: Json | null
+          corrective_actions_required?: boolean | null
+          created_at?: string | null
+          cts_record_id?: string | null
+          id?: string
+          next_check_date?: string | null
+          non_conformities?: Json | null
+          organization_id?: string | null
+          overall_status?: string | null
+          risk_level?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          check_date?: string | null
+          checked_by?: string | null
+          corrective_actions?: Json | null
+          corrective_actions_required?: boolean | null
+          created_at?: string | null
+          cts_record_id?: string | null
+          id?: string
+          next_check_date?: string | null
+          non_conformities?: Json | null
+          organization_id?: string | null
+          overall_status?: string | null
+          risk_level?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cts_conformity_checks_cts_record_id_fkey"
+            columns: ["cts_record_id"]
+            isOneToOne: false
+            referencedRelation: "cts_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cts_conformity_checks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cts_conformity_checks_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cts_records: {
+        Row: {
+          certification_docs: Json | null
+          certified_equipment: Json | null
+          classification_society: string | null
+          created_at: string | null
+          created_by: string | null
+          cts_number: string
+          expiry_date: string
+          flag_state: string
+          id: string
+          issue_date: string
+          organization_id: string | null
+          required_positions: Json | null
+          status: string | null
+          updated_at: string | null
+          vessel_categories: Json | null
+          vessel_id: string | null
+        }
+        Insert: {
+          certification_docs?: Json | null
+          certified_equipment?: Json | null
+          classification_society?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cts_number: string
+          expiry_date: string
+          flag_state: string
+          id?: string
+          issue_date: string
+          organization_id?: string | null
+          required_positions?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_categories?: Json | null
+          vessel_id?: string | null
+        }
+        Update: {
+          certification_docs?: Json | null
+          certified_equipment?: Json | null
+          classification_society?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cts_number?: string
+          expiry_date?: string
+          flag_state?: string
+          id?: string
+          issue_date?: string
+          organization_id?: string | null
+          required_positions?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_categories?: Json | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cts_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cts_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dashboard_activities: {
         Row: {
           activity_type: string
@@ -8052,6 +8555,100 @@ export type Database = {
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      downtime_events: {
+        Row: {
+          ai_analysis: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          contract_id: string | null
+          created_at: string | null
+          created_by: string | null
+          duration_hours: number | null
+          end_time: string | null
+          evidence_files: Json | null
+          id: string
+          impact_level: string | null
+          justification_required: boolean | null
+          justification_status: string | null
+          justification_text: string | null
+          organization_id: string | null
+          reason: string
+          reason_category: string | null
+          start_time: string
+          system_affected: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          contract_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          duration_hours?: number | null
+          end_time?: string | null
+          evidence_files?: Json | null
+          id?: string
+          impact_level?: string | null
+          justification_required?: boolean | null
+          justification_status?: string | null
+          justification_text?: string | null
+          organization_id?: string | null
+          reason: string
+          reason_category?: string | null
+          start_time: string
+          system_affected?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          contract_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          duration_hours?: number | null
+          end_time?: string | null
+          evidence_files?: Json | null
+          id?: string
+          impact_level?: string | null
+          justification_required?: boolean | null
+          justification_status?: string | null
+          justification_text?: string | null
+          organization_id?: string | null
+          reason?: string
+          reason_category?: string | null
+          start_time?: string
+          system_affected?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "downtime_events_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "vessel_contracts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "downtime_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "downtime_events_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -10203,6 +10800,228 @@ export type Database = {
         }
         Relationships: []
       }
+      gmud_implementation: {
+        Row: {
+          actual_implementation_date: string | null
+          checklist_items: Json | null
+          created_at: string | null
+          evidence_files: Json | null
+          gmud_request_id: string | null
+          id: string
+          implemented_by: string | null
+          lessons_learned: string | null
+          status: string | null
+          test_passed: boolean | null
+          test_results: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_implementation_date?: string | null
+          checklist_items?: Json | null
+          created_at?: string | null
+          evidence_files?: Json | null
+          gmud_request_id?: string | null
+          id?: string
+          implemented_by?: string | null
+          lessons_learned?: string | null
+          status?: string | null
+          test_passed?: boolean | null
+          test_results?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_implementation_date?: string | null
+          checklist_items?: Json | null
+          created_at?: string | null
+          evidence_files?: Json | null
+          gmud_request_id?: string | null
+          id?: string
+          implemented_by?: string | null
+          lessons_learned?: string | null
+          status?: string | null
+          test_passed?: boolean | null
+          test_results?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gmud_implementation_gmud_request_id_fkey"
+            columns: ["gmud_request_id"]
+            isOneToOne: false
+            referencedRelation: "gmud_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gmud_requests: {
+        Row: {
+          change_type: string
+          created_at: string | null
+          created_by: string | null
+          current_approver_role: string | null
+          description: string
+          gmud_number: string
+          id: string
+          impact_areas: Json | null
+          impact_assessment: string | null
+          implementation_date: string | null
+          justification: string
+          organization_id: string | null
+          risk_level: string | null
+          rollback_plan: string | null
+          status: string | null
+          technical_docs: Json | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          change_type: string
+          created_at?: string | null
+          created_by?: string | null
+          current_approver_role?: string | null
+          description: string
+          gmud_number: string
+          id?: string
+          impact_areas?: Json | null
+          impact_assessment?: string | null
+          implementation_date?: string | null
+          justification: string
+          organization_id?: string | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          status?: string | null
+          technical_docs?: Json | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          change_type?: string
+          created_at?: string | null
+          created_by?: string | null
+          current_approver_role?: string | null
+          description?: string
+          gmud_number?: string
+          id?: string
+          impact_areas?: Json | null
+          impact_assessment?: string | null
+          implementation_date?: string | null
+          justification?: string
+          organization_id?: string | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          status?: string | null
+          technical_docs?: Json | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gmud_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gmud_requests_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gmud_responsibility_matrix: {
+        Row: {
+          created_at: string | null
+          gmud_request_id: string | null
+          id: string
+          raci_matrix: Json | null
+          roles: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          gmud_request_id?: string | null
+          id?: string
+          raci_matrix?: Json | null
+          roles?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          gmud_request_id?: string | null
+          id?: string
+          raci_matrix?: Json | null
+          roles?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gmud_responsibility_matrix_gmud_request_id_fkey"
+            columns: ["gmud_request_id"]
+            isOneToOne: false
+            referencedRelation: "gmud_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gmud_signatures: {
+        Row: {
+          comments: string | null
+          created_at: string | null
+          deadline: string | null
+          gmud_request_id: string | null
+          id: string
+          notification_sent_at: string | null
+          reminder_sent_at: string | null
+          role: string
+          role_order: number
+          signed_at: string | null
+          signed_by: string | null
+          signed_by_name: string | null
+          status: string | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          gmud_request_id?: string | null
+          id?: string
+          notification_sent_at?: string | null
+          reminder_sent_at?: string | null
+          role: string
+          role_order: number
+          signed_at?: string | null
+          signed_by?: string | null
+          signed_by_name?: string | null
+          status?: string | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          gmud_request_id?: string | null
+          id?: string
+          notification_sent_at?: string | null
+          reminder_sent_at?: string | null
+          role?: string
+          role_order?: number
+          signed_at?: string | null
+          signed_by?: string | null
+          signed_by_name?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gmud_signatures_gmud_request_id_fkey"
+            columns: ["gmud_request_id"]
+            isOneToOne: false
+            referencedRelation: "gmud_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gnss_ai_recommendations: {
         Row: {
           applied_at: string | null
@@ -10804,6 +11623,91 @@ export type Database = {
           },
         ]
       }
+      human_factors_incidents: {
+        Row: {
+          ai_analysis: Json | null
+          attention_lapse: boolean | null
+          communication_issue: boolean | null
+          created_at: string | null
+          created_by: string | null
+          crew_member_id: string | null
+          fatigue_level: number | null
+          id: string
+          incident_id: string | null
+          organization_id: string | null
+          other_factors: Json | null
+          overconfidence: boolean | null
+          personal_issues: boolean | null
+          procedure_violation: boolean | null
+          risk_taking: boolean | null
+          stress_level: number | null
+          substance_related: boolean | null
+          vessel_id: string | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          attention_lapse?: boolean | null
+          communication_issue?: boolean | null
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          fatigue_level?: number | null
+          id?: string
+          incident_id?: string | null
+          organization_id?: string | null
+          other_factors?: Json | null
+          overconfidence?: boolean | null
+          personal_issues?: boolean | null
+          procedure_violation?: boolean | null
+          risk_taking?: boolean | null
+          stress_level?: number | null
+          substance_related?: boolean | null
+          vessel_id?: string | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          attention_lapse?: boolean | null
+          communication_issue?: boolean | null
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          fatigue_level?: number | null
+          id?: string
+          incident_id?: string | null
+          organization_id?: string | null
+          other_factors?: Json | null
+          overconfidence?: boolean | null
+          personal_issues?: boolean | null
+          procedure_violation?: boolean | null
+          risk_taking?: boolean | null
+          stress_level?: number | null
+          substance_related?: boolean | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "human_factors_incidents_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "human_factors_incidents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "human_factors_incidents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ia_adoption_metrics: {
         Row: {
           accepted_suggestions: number | null
@@ -11030,6 +11934,84 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      imca_incidents: {
+        Row: {
+          category: string
+          created_at: string | null
+          created_by: string | null
+          description: string
+          id: string
+          imca_reference: string | null
+          incident_date: string | null
+          is_imca_official: boolean | null
+          lessons_learned: string | null
+          organization_id: string | null
+          recommendations: Json | null
+          related_vessel_id: string | null
+          root_cause: string | null
+          severity: string | null
+          source_url: string | null
+          tags: Json | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          id?: string
+          imca_reference?: string | null
+          incident_date?: string | null
+          is_imca_official?: boolean | null
+          lessons_learned?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          related_vessel_id?: string | null
+          root_cause?: string | null
+          severity?: string | null
+          source_url?: string | null
+          tags?: Json | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          id?: string
+          imca_reference?: string | null
+          incident_date?: string | null
+          is_imca_official?: boolean | null
+          lessons_learned?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          related_vessel_id?: string | null
+          root_cause?: string | null
+          severity?: string | null
+          source_url?: string | null
+          tags?: Json | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "imca_incidents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "imca_incidents_related_vessel_id_fkey"
+            columns: ["related_vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       incident_comments: {
         Row: {
@@ -15558,6 +16540,188 @@ export type Database = {
           },
         ]
       }
+      peotram_elements: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          element_name: string
+          element_number: number
+          id: string
+          is_critical: boolean | null
+          items: Json | null
+          peotram_audit_id: string | null
+          score: number | null
+          status: string | null
+          updated_at: string | null
+          weight_percentage: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          element_name: string
+          element_number: number
+          id?: string
+          is_critical?: boolean | null
+          items?: Json | null
+          peotram_audit_id?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          weight_percentage?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          element_name?: string
+          element_number?: number
+          id?: string
+          is_critical?: boolean | null
+          items?: Json | null
+          peotram_audit_id?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          weight_percentage?: number | null
+        }
+        Relationships: []
+      }
+      peotram_evidences: {
+        Row: {
+          ai_confidence: number | null
+          corrective_action: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          evidence_type: string | null
+          file_path: string | null
+          generated_at: string | null
+          generated_by_ai: boolean | null
+          id: string
+          norm_reference: string | null
+          organization_id: string | null
+          peotram_item_id: string | null
+          recommendations: string | null
+          risk_identified: string | null
+          signature_data: Json | null
+          signature_path: string | null
+          signed_at: string | null
+          technical_analysis: string | null
+          title: string
+        }
+        Insert: {
+          ai_confidence?: number | null
+          corrective_action?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          evidence_type?: string | null
+          file_path?: string | null
+          generated_at?: string | null
+          generated_by_ai?: boolean | null
+          id?: string
+          norm_reference?: string | null
+          organization_id?: string | null
+          peotram_item_id?: string | null
+          recommendations?: string | null
+          risk_identified?: string | null
+          signature_data?: Json | null
+          signature_path?: string | null
+          signed_at?: string | null
+          technical_analysis?: string | null
+          title: string
+        }
+        Update: {
+          ai_confidence?: number | null
+          corrective_action?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          evidence_type?: string | null
+          file_path?: string | null
+          generated_at?: string | null
+          generated_by_ai?: boolean | null
+          id?: string
+          norm_reference?: string | null
+          organization_id?: string | null
+          peotram_item_id?: string | null
+          recommendations?: string | null
+          risk_identified?: string | null
+          signature_data?: Json | null
+          signature_path?: string | null
+          signed_at?: string | null
+          technical_analysis?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_evidences_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peotram_evidences_peotram_item_id_fkey"
+            columns: ["peotram_item_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_items: {
+        Row: {
+          auditor_notes: string | null
+          created_at: string | null
+          evidence_required: Json | null
+          id: string
+          item_description: string
+          item_number: string
+          norm_reference: string | null
+          peotram_element_id: string | null
+          requirement: string | null
+          score: number | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auditor_notes?: string | null
+          created_at?: string | null
+          evidence_required?: Json | null
+          id?: string
+          item_description: string
+          item_number: string
+          norm_reference?: string | null
+          peotram_element_id?: string | null
+          requirement?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auditor_notes?: string | null
+          created_at?: string | null
+          evidence_required?: Json | null
+          id?: string
+          item_description?: string
+          item_number?: string
+          norm_reference?: string | null
+          peotram_element_id?: string | null
+          requirement?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_items_peotram_element_id_fkey"
+            columns: ["peotram_element_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_elements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_non_conformities: {
         Row: {
           area_department: string | null
@@ -15721,6 +16885,59 @@ export type Database = {
           year?: number
         }
         Relationships: []
+      }
+      peotram_voice_chats: {
+        Row: {
+          ai_response_audio_path: string | null
+          ai_response_text: string | null
+          context_element: number | null
+          context_item: string | null
+          created_at: string | null
+          duration_seconds: number | null
+          id: string
+          language: string | null
+          organization_id: string | null
+          peotram_audit_id: string | null
+          question: string
+          user_id: string | null
+        }
+        Insert: {
+          ai_response_audio_path?: string | null
+          ai_response_text?: string | null
+          context_element?: number | null
+          context_item?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          language?: string | null
+          organization_id?: string | null
+          peotram_audit_id?: string | null
+          question: string
+          user_id?: string | null
+        }
+        Update: {
+          ai_response_audio_path?: string | null
+          ai_response_text?: string | null
+          context_element?: number | null
+          context_item?: string | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          language?: string | null
+          organization_id?: string | null
+          peotram_audit_id?: string | null
+          question?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_voice_chats_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       performance_alerts: {
         Row: {
@@ -16985,6 +18202,66 @@ export type Database = {
         }
         Relationships: []
       }
+      responsibility_matrices: {
+        Row: {
+          activities: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          matrix_data: Json | null
+          name: string
+          organization_id: string | null
+          people_roles: Json | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          activities?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          matrix_data?: Json | null
+          name: string
+          organization_id?: string | null
+          people_roles?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          activities?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          matrix_data?: Json | null
+          name?: string
+          organization_id?: string | null
+          people_roles?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "responsibility_matrices_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "responsibility_matrices_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rfq_quotations: {
         Row: {
           attachments: string[] | null
@@ -17761,6 +19038,82 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      safety_briefings: {
+        Row: {
+          briefing_date: string | null
+          content: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          imca_incident_id: string | null
+          organization_id: string | null
+          participants: Json | null
+          presenter_id: string | null
+          quiz_questions: Json | null
+          quiz_results: Json | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          briefing_date?: string | null
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          imca_incident_id?: string | null
+          organization_id?: string | null
+          participants?: Json | null
+          presenter_id?: string | null
+          quiz_questions?: Json | null
+          quiz_results?: Json | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          briefing_date?: string | null
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          imca_incident_id?: string | null
+          organization_id?: string | null
+          participants?: Json | null
+          presenter_id?: string | null
+          quiz_questions?: Json | null
+          quiz_results?: Json | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "safety_briefings_imca_incident_id_fkey"
+            columns: ["imca_incident_id"]
+            isOneToOne: false
+            referencedRelation: "imca_incidents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "safety_briefings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "safety_briefings_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       safety_incidents: {
         Row: {
@@ -20806,6 +22159,72 @@ export type Database = {
           },
         ]
       }
+      team_dynamics: {
+        Row: {
+          assessment_date: string | null
+          cohesion_score: number | null
+          communication_score: number | null
+          conflict_resolution_score: number | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          leadership_score: number | null
+          organization_id: string | null
+          overall_team_health: number | null
+          recommendations: Json | null
+          team_building_activities: Json | null
+          trust_score: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assessment_date?: string | null
+          cohesion_score?: number | null
+          communication_score?: number | null
+          conflict_resolution_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          leadership_score?: number | null
+          organization_id?: string | null
+          overall_team_health?: number | null
+          recommendations?: Json | null
+          team_building_activities?: Json | null
+          trust_score?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assessment_date?: string | null
+          cohesion_score?: number | null
+          communication_score?: number | null
+          conflict_resolution_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          leadership_score?: number | null
+          organization_id?: string | null
+          overall_team_health?: number | null
+          recommendations?: Json | null
+          team_building_activities?: Json | null
+          trust_score?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_dynamics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_dynamics_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       telemetry_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -23194,6 +24613,213 @@ export type Database = {
           },
         ]
       }
+      vessel_contracts: {
+        Row: {
+          client_name: string
+          contract_number: string
+          created_at: string | null
+          created_by: string | null
+          end_date: string
+          id: string
+          operator_name: string | null
+          organization_id: string | null
+          penalty_currency: string | null
+          penalty_per_hour: number | null
+          sla_downtime_percent: number | null
+          start_date: string
+          status: string | null
+          terms_conditions: Json | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          client_name: string
+          contract_number: string
+          created_at?: string | null
+          created_by?: string | null
+          end_date: string
+          id?: string
+          operator_name?: string | null
+          organization_id?: string | null
+          penalty_currency?: string | null
+          penalty_per_hour?: number | null
+          sla_downtime_percent?: number | null
+          start_date: string
+          status?: string | null
+          terms_conditions?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          client_name?: string
+          contract_number?: string
+          created_at?: string | null
+          created_by?: string | null
+          end_date?: string
+          id?: string
+          operator_name?: string | null
+          organization_id?: string | null
+          penalty_currency?: string | null
+          penalty_per_hour?: number | null
+          sla_downtime_percent?: number | null
+          start_date?: string
+          status?: string | null
+          terms_conditions?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_contracts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_contracts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_history: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          documents: Json | null
+          event_date: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          relevance_score: number | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          documents?: Json | null
+          event_date: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          relevance_score?: number | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          documents?: Json | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          relevance_score?: number | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_history_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_history_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_manuals: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          file_path: string
+          file_size: number | null
+          id: string
+          manual_type: string
+          metadata: Json | null
+          ocr_processed: boolean | null
+          organization_id: string | null
+          searchable_text: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          upload_date: string | null
+          version: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          file_path: string
+          file_size?: number | null
+          id?: string
+          manual_type: string
+          metadata?: Json | null
+          ocr_processed?: boolean | null
+          organization_id?: string | null
+          searchable_text?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          upload_date?: string | null
+          version?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          manual_type?: string
+          metadata?: Json | null
+          ocr_processed?: boolean | null
+          organization_id?: string | null
+          searchable_text?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          upload_date?: string | null
+          version?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_manuals_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_manuals_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_performance: {
         Row: {
           created_at: string
@@ -24372,6 +25998,69 @@ export type Database = {
             columns: ["webhook_id"]
             isOneToOne: false
             referencedRelation: "webhook_configurations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wellness_plans: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          crew_member_id: string | null
+          follow_up_schedule: Json | null
+          id: string
+          identified_risks: Json | null
+          mental_health_resources: Json | null
+          organization_id: string | null
+          psychological_assessment: string | null
+          recommended_breaks: Json | null
+          relaxation_exercises: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          follow_up_schedule?: Json | null
+          id?: string
+          identified_risks?: Json | null
+          mental_health_resources?: Json | null
+          organization_id?: string | null
+          psychological_assessment?: string | null
+          recommended_breaks?: Json | null
+          relaxation_exercises?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          follow_up_schedule?: Json | null
+          id?: string
+          identified_risks?: Json | null
+          mental_health_resources?: Json | null
+          organization_id?: string | null
+          psychological_assessment?: string | null
+          recommended_breaks?: Json | null
+          relaxation_exercises?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_plans_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wellness_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
