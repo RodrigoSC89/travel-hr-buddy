@@ -41,10 +41,10 @@ interface DowntimeEvent {
   start_time: string;
   end_time?: string | null;
   duration_hours?: number | null;
-  reason: string;
+  reason: string | null;
   reason_category: string | null;
   impact_level: string | null;
-  justification_status: string;
+  justification_status: string | null;
   ai_analysis?: any;
 }
 
@@ -121,18 +121,20 @@ const VesselContracts = () => {
     const totalHours = contractDowntime.reduce((acc, d) => acc + (d.duration_hours || 0), 0);
     const contractDuration = (new Date(contract.end_date).getTime() - new Date(contract.start_date).getTime()) / (1000 * 60 * 60);
     const downtimePercent = (totalHours / contractDuration) * 100;
+    const slaPercent = contract.sla_downtime_percent ?? 0;
+    const penaltyRate = contract.penalty_per_hour ?? 0;
     
     return {
       totalDowntime: totalHours,
       downtimePercent,
-      slaStatus: downtimePercent <= contract.sla_downtime_percent ? 'ok' : 'exceeded',
-      estimatedPenalty: downtimePercent > contract.sla_downtime_percent 
-        ? (totalHours * contract.penalty_per_hour) 
+      slaStatus: downtimePercent <= slaPercent ? 'ok' : 'exceeded',
+      estimatedPenalty: downtimePercent > slaPercent 
+        ? (totalHours * penaltyRate) 
         : 0
     };
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status) {
       case 'active': return 'bg-success/20 text-success';
       case 'expired': return 'bg-destructive/20 text-destructive';
@@ -386,9 +388,9 @@ const VesselContracts = () => {
                       <div className="space-y-2">
                         <div className="flex items-center gap-3">
                           <Clock className="h-5 w-5 text-warning" />
-                          <span className="font-medium">{event.reason}</span>
-                          <Badge className={getImpactColor(event.impact_level)}>
-                            {event.impact_level}
+                          <span className="font-medium">{event.reason || 'Sem motivo'}</span>
+                          <Badge className={getImpactColor(event.impact_level || 'low')}>
+                            {event.impact_level || 'N/A'}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">

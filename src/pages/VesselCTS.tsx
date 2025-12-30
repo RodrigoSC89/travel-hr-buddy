@@ -26,11 +26,11 @@ interface CTSRecord {
   id: string;
   cts_number: string;
   vessel_id?: string | null;
-  flag_state: string;
+  flag_state: string | null;
   classification_society?: string | null;
-  issue_date: string;
-  expiry_date: string;
-  required_positions: any[] | null;
+  issue_date: string | null;
+  expiry_date: string | null;
+  required_positions: any;
   status: string | null;
 }
 
@@ -41,7 +41,7 @@ interface CrewCertification {
   certificate_category?: string | null;
   certificate_number: string | null;
   issue_date: string | null;
-  expiry_date: string;
+  expiry_date: string | null;
   status: string | null;
 }
 
@@ -154,7 +154,7 @@ const VesselCTS = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status) {
       case 'valid': return 'bg-success/20 text-success';
       case 'expired': return 'bg-destructive/20 text-destructive';
@@ -163,7 +163,8 @@ const VesselCTS = () => {
     }
   };
 
-  const getDaysUntilExpiry = (expiryDate: string) => {
+  const getDaysUntilExpiry = (expiryDate: string | null) => {
+    if (!expiryDate) return 999;
     const days = Math.ceil((new Date(expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
     return days;
   };
@@ -267,11 +268,11 @@ const VesselCTS = () => {
                         <div className="flex gap-4 text-sm">
                           <span className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
-                            Emissão: {new Date(cts.issue_date).toLocaleDateString('pt-BR')}
+                            Emissão: {cts.issue_date ? new Date(cts.issue_date).toLocaleDateString('pt-BR') : '-'}
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="h-4 w-4" />
-                            Vencimento: {new Date(cts.expiry_date).toLocaleDateString('pt-BR')}
+                            Vencimento: {cts.expiry_date ? new Date(cts.expiry_date).toLocaleDateString('pt-BR') : '-'}
                           </span>
                         </div>
                       </div>
@@ -359,7 +360,7 @@ const VesselCTS = () => {
                             {daysUntil > 0 ? `Vence em ${daysUntil} dias` : 'Vencido'}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {new Date(cert.expiry_date).toLocaleDateString('pt-BR')}
+                            {cert.expiry_date ? new Date(cert.expiry_date).toLocaleDateString('pt-BR') : '-'}
                           </p>
                         </div>
                         <Badge className={getStatusColor(cert.status)}>
