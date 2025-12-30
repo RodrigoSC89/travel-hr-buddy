@@ -29,6 +29,8 @@ const PeotramAdvancedAnalytics = lazy(() => import("./peotram-advanced-analytics
 const PeotramPredictiveAnalytics = lazy(() => import("./peotram-predictive-analytics").then(m => ({ default: m.PeotramPredictiveAnalytics })));
 const PeotramCNPJHistory = lazy(() => import("./peotram-cnpj-history").then(m => ({ default: m.PeotramCNPJHistory })));
 const PeotramAIAssistant = lazy(() => import("./peotram-ai-assistant").then(m => ({ default: m.PeotramAIAssistant })));
+const PeotramVoiceChat = lazy(() => import("./peotram-voice-chat").then(m => ({ default: m.PeotramVoiceChat })));
+const PeotramEvidenceGenerator = lazy(() => import("./peotram-evidence-generator").then(m => ({ default: m.PeotramEvidenceGenerator })));
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
