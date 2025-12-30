@@ -95,7 +95,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
   return (
     <div className="space-y-6">
       {/* Métricas Principais */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-tour="metrics">
         {metrics.map((metric, index) => (
           <motion.div
             key={metric.title}

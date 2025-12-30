@@ -28,8 +28,11 @@ import {
   RefreshCw, Sun, Moon, Maximize2, Ship, 
   AlertTriangle, Zap, Shield, Mic, MicOff,
   ChevronRight, Sparkles, Radio, Waves, Compass, Eye,
-  BarChart3, Building2, Filter
+  BarChart3, Building2, Filter, HelpCircle
 } from "lucide-react";
+
+// Tour guiado
+import { GuidedTour, tourStyles } from "@/components/onboarding/GuidedTour";
 
 // Seções do módulo unificado
 import { VisaoGeralSection } from "@/modules/nautilus-command-center/sections/VisaoGeralSection";
@@ -305,7 +308,10 @@ function CentralComandoContent() {
                 <Maximize2 className="h-4 w-4" />
               </Button>
 
-              <motion.div whileHover={{ scale: 1.05 }}>
+              {/* Tour Guiado */}
+              <GuidedTour autoStart={false} />
+
+              <motion.div whileHover={{ scale: 1.05 }} data-tour="ia-button">
                 <Badge 
                   className="cursor-pointer bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 text-white border-0 shadow-lg shadow-purple-500/25 px-3 py-1"
                   onClick={() => setShowAIPanel(!showAIPanel)}
@@ -316,6 +322,9 @@ function CentralComandoContent() {
                 </Badge>
               </motion.div>
             </div>
+            
+            {/* Tour Styles */}
+            <style dangerouslySetInnerHTML={{ __html: tourStyles }} />
           </div>
         </header>
 
@@ -342,7 +351,7 @@ function CentralComandoContent() {
           <main className={`flex-1 p-4 lg:p-6 transition-all duration-300 ${showAIPanel ? 'lg:pr-[380px]' : ''}`}>
             <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
               {/* Tab Navigation */}
-              <div className="flex items-center gap-4 overflow-x-auto pb-2">
+              <div className="flex items-center gap-4 overflow-x-auto pb-2" data-tour="tabs">
                 <TabsList className="inline-flex h-12 items-center justify-start gap-1 rounded-xl bg-muted/50 p-1 backdrop-blur">
                   {tabs.map((tab) => (
                     <TabsTrigger
