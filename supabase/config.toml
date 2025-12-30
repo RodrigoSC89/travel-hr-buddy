@@ -850,3 +850,40 @@ comment = "HaveIBeenPwned - Breach detection, password checking, credential leak
 [functions.nist-nvd]
 verify_jwt = false
 comment = "NIST NVD - CVE vulnerability database, security advisories, CPE matching"
+
+# ============================================
+# V3.2.0 ADVANCED MODULES - EDGE FUNCTIONS
+# Added: 2025-12-30
+# ============================================
+
+[functions.analyze-downtime]
+verify_jwt = false
+comment = "AI analysis of vessel downtime events against SLA contracts"
+
+[functions.cts-conformity]
+verify_jwt = false
+comment = "CTS conformity checker - STCW crew certification validation"
+
+[functions.generate-broa]
+verify_jwt = false
+comment = "Generate BROA (Boletim de Registro de Ocorrências e Avarias) documents"
+
+[functions.peotram-voice-chat]
+verify_jwt = false
+comment = "PEOTRAM voice chat AI for audit element explanations"
+
+[functions.peotram-generate-evidence]
+verify_jwt = false
+comment = "Generate AI evidence for PEOTRAM non-conformities"
+
+[functions.human-factors-assessment]
+verify_jwt = false
+comment = "Human factors and emotional intelligence assessment for crew safety"
+
+[functions.gmud-workflow]
+verify_jwt = false
+comment = "GMUD change management workflow with automated signatures"
+
+[functions.responsibility-matrix-dispatch]
+verify_jwt = false
+comment = "Dispatch action items from responsibility matrix via Zapier/Twilio"
