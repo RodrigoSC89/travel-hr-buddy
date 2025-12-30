@@ -184,70 +184,53 @@ export interface SensorAlert {
 export type SonarScanType = "active" | "passive" | "side-scan" | "multi-beam";
 export type DetectionStatus = "new" | "investigating" | "classified" | "dismissed";
 
+// Aligned with Supabase schema - PATCH v3.2.1
 export interface SonarData {
   id: string;
   scan_id: string;
-  scan_type?: SonarScanType;
-  raw_data: Record<string, any>;
-  frequency_khz?: number;
-  range_meters?: number;
-  depth_meters?: number;
-  location?: {
-    lat: number;
-    lon: number;
-    depth?: number;
-  };
-  timestamp: string;
+  scan_type?: string | null;
+  raw_data: Record<string, unknown> | null;
+  frequency_khz?: number | null;
+  range_meters?: number | null;
+  depth_meters?: number | null;
+  location?: Record<string, unknown> | null;
+  vessel_id?: string | null;
+  operator_id?: string | null;
+  ai_analysis?: Record<string, unknown> | null;
+  anomalies_detected?: number | null;
+  quality_score?: number | null;
+  processed_at?: string | null;
   created_at: string;
 }
 
+// Aligned with Supabase schema - uses patterns_detected, confidence_score
 export interface SonarAIAnalysis {
   id: string;
   scan_id: string;
-  sonar_data_id?: string;
-  detected_patterns: Array<{
-    pattern_type: string;
-    confidence: number;
-    location: any;
-    characteristics: Record<string, any>;
-  }>;
-  anomalies: Array<{
-    anomaly_type: string;
-    severity: string;
-    confidence: number;
-    location: any;
-    description: string;
-  }>;
-  zones_of_interest: Array<{
-    zone_id: string;
-    priority: string;
-    area: any;
-    reason: string;
-  }>;
-  ai_confidence?: number;
-  interpretation?: string;
-  recommendations?: string;
-  model_used?: string;
-  processing_time_ms?: number;
+  sonar_data_id?: string | null;
+  patterns_detected?: Record<string, unknown> | null;
+  anomalies?: Record<string, unknown> | null;
+  zones_of_interest?: Record<string, unknown> | null;
+  confidence_score?: number | null;
+  interpretation?: string | null;
+  recommendations?: string[] | null;
+  model_version?: string | null;
+  processing_time_ms?: number | null;
   created_at: string;
 }
 
 export interface SonarDetectionLog {
   id: string;
-  scan_id: string;
+  scan_id?: string;
   detection_type: string;
-  confidence: number;
-  location: {
-    lat: number;
-    lon: number;
-    depth?: number;
-  };
-  characteristics: Record<string, any>;
-  status: DetectionStatus;
-  notes?: string;
-  created_by?: string;
+  confidence?: number | null;
+  location?: Record<string, unknown> | null;
+  characteristics?: Record<string, unknown> | null;
+  status?: string | null;
+  notes?: string | null;
+  created_by?: string | null;
   created_at: string;
-  updated_at: string;
+  updated_at?: string;
 }
 
 // ============================================================================
