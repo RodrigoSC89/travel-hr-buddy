@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH 859: Awaiting Supabase type regeneration for match_mmi_job_history RPC
+// TODO v3.3: RPC espera string para embedding
 /**
  * MMI Copilot Service v1.1.0
  * Provides AI-powered maintenance suggestions based on historical data with vector embeddings
@@ -10,6 +10,15 @@ import { generateEmbedding } from "./embeddingService";
 import { AIRecommendation, SimilarCase } from "@/types/mmi";
 import OpenAI from "openai";
 import { logger } from "@/lib/logger";
+
+// RPC response type for match_mmi_job_history
+interface MatchJobHistoryResult {
+  job_id: string;
+  similarity: number;
+  action: string | null;
+  outcome: string | null;
+  created_at: string;
+}
 
 export interface CopilotSuggestion {
   text: string;
@@ -25,20 +34,14 @@ const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchC
       query_embedding: embedding,
       match_threshold: matchThreshold,
       match_count: matchCount,
-    });
+    }) as { data: MatchJobHistoryResult[] | null; error: Error | null };
 
     if (error) {
       logger.warn("Error fetching similar cases from database", { error, matchThreshold, matchCount });
       return [];
     }
 
-    return (data || []).map((item: {
-      job_id?: string;
-      similarity?: number;
-      action?: string;
-      outcome?: string;
-      created_at?: string;
-    }) => ({
+    return (data || []).map((item) => ({
       job_id: item.job_id || "UNKNOWN",
       similarity: item.similarity || 0,
       action: item.action || "No action recorded",
