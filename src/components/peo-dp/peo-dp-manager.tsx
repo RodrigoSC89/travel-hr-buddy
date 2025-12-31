@@ -66,7 +66,9 @@ import {
   Anchor,
   Award,
   Clock,
-  Layers
+  Layers,
+  Sparkles,
+  Mic
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -459,6 +461,12 @@ export const PeoDpManager: React.FC = () => {
             <TabsTrigger value="ai-chat" className="flex items-center gap-1 text-xs px-2 py-1">
               <MessageSquare className="h-3 w-3" />AI Chat
             </TabsTrigger>
+            <TabsTrigger value="ai-evidence" className="flex items-center gap-1 text-xs px-2 py-1 bg-green-500/10">
+              <Sparkles className="h-3 w-3" />IA Evidências
+            </TabsTrigger>
+            <TabsTrigger value="voice-assistant" className="flex items-center gap-1 text-xs px-2 py-1 bg-green-500/10">
+              <Mic className="h-3 w-3" />Assistente Voz
+            </TabsTrigger>
             {/* New Competitive Analysis Tabs */}
             <TabsTrigger value="class-surveys" className="flex items-center gap-1 text-xs px-2 py-1 bg-primary/10">
               <Anchor className="h-3 w-3" />Classificadora
@@ -830,6 +838,43 @@ export const PeoDpManager: React.FC = () => {
         {/* PEO-DP AI Chat */}
         <TabsContent value="ai-chat" className="space-y-4">
           <PEODPAIChat />
+        </TabsContent>
+
+        {/* NEW: AI Evidence Generator */}
+        <TabsContent value="ai-evidence" className="space-y-4">
+          <PeodpEvidenceGenerator />
+        </TabsContent>
+
+        {/* NEW: Voice Assistant */}
+        <TabsContent value="voice-assistant" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <PeodpVoiceChat />
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5" />
+                  Dicas do Assistente PEO-DP
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="p-3 bg-muted rounded-lg">
+                  <p className="font-medium text-sm">Perguntas sugeridas:</p>
+                  <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+                    <li>• "O que é IPCLV e qual a meta?"</li>
+                    <li>• "Quais são as seções críticas do PEO-DP?"</li>
+                    <li>• "Explique a diferença entre Drift Off e Drive Off"</li>
+                    <li>• "Quais documentos são obrigatórios na seção 3.2?"</li>
+                    <li>• "Como calcular o indicador IPCLV?"</li>
+                  </ul>
+                </div>
+                <div className="p-3 bg-primary/5 rounded-lg border border-primary/20">
+                  <p className="text-sm">
+                    <strong>Dica:</strong> Selecione uma seção específica para respostas mais contextualizadas.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         {/* NEW: Class Survey Management */}
