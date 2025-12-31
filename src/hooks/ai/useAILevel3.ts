@@ -97,25 +97,28 @@ export function useAILevel3(options: UseAILevel3Options) {
     }
   }, [enableMemory]);
 
-  // Store memory entry
+  // Store memory entry (using local state for now, can be extended to Supabase)
   const storeMemory = useCallback(async (entry: Omit<AIMemoryEntry, 'id' | 'timestamp'>) => {
     if (!enableMemory) return;
 
     try {
-      const { error } = await supabase
-        .from('ai_memory')
-        .insert({
-          memory_type: entry.type,
-          content: entry.context as unknown as Record<string, unknown>,
-          importance: entry.importance,
-        } as Parameters<typeof supabase.from<'ai_memory'>>[0]);
-
-      if (error) throw error;
-      await loadMemory();
+      const newEntry: AIMemoryEntry = {
+        ...entry,
+        id: crypto.randomUUID(),
+        timestamp: new Date(),
+      };
+      
+      setMemory(prev => [newEntry, ...prev].slice(0, 100));
+      
+      // Optional: persist to localStorage
+      const stored = localStorage.getItem('ai_memory') || '[]';
+      const memories = JSON.parse(stored);
+      memories.unshift(newEntry);
+      localStorage.setItem('ai_memory', JSON.stringify(memories.slice(0, 100)));
     } catch (error) {
       console.error('Failed to store AI memory:', error);
     }
-  }, [enableMemory, loadMemory]);
+  }, [enableMemory]);
 
   // Proactive analysis - runs periodically
   const runProactiveAnalysis = useCallback(async () => {

@@ -224,6 +224,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Templates", path: "/templates", icon: FileText, emoji: "📋" },
       { label: "Checklists Inteligentes", path: "/admin/checklists", icon: ClipboardList, emoji: "✅" },
       { label: "Workflow Documentos ISM/MLC", path: "/document-workflow", icon: FileText, emoji: "📄" },
+      { label: "Centro de Exportação", path: "/export-center", icon: BarChart3, emoji: "📤", badge: "NEW" },
+      { label: "Busca Avançada", path: "/advanced-search", icon: Target, emoji: "🔍", badge: "NEW" },
     ],
   },
 
@@ -261,6 +263,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Matriz de Responsabilidades", path: "/responsibility-matrix", icon: Users, emoji: "📊", badge: "NEW" },
       { label: "Safety Human Factors", path: "/safety-human-factors", icon: Brain, emoji: "🧠", badge: "NEW" },
       { label: "Safety IMCA", path: "/safety-imca", icon: Shield, emoji: "🛡️", badge: "NEW" },
+      // ISPS & Drills
+      { label: "ISPS Security & Cyber", path: "/isps-security", icon: Lock, emoji: "🔐", badge: "NEW" },
+      { label: "Drill Simulator", path: "/drill-simulator", icon: Target, emoji: "🎯", badge: "NEW" },
       // Compliance One - ISO 37301
       { label: "Compliance One", path: "/compliance-center", icon: Shield, emoji: "🛡️" },
       { label: "Compliance Dashboard", path: "/compliance-center/dashboard", icon: BarChart3, emoji: "📊" },
@@ -334,6 +339,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "ESG & Emissões", path: "/esg-emissions", icon: Leaf, emoji: "🌱" },
       { label: "Gestão de Resíduos", path: "/waste-management", icon: Leaf, emoji: "♻️" },
+      { label: "Sustainability Score", path: "/sustainability-score", icon: TrendingUp, emoji: "📊", badge: "NEW" },
     ],
   },
 
