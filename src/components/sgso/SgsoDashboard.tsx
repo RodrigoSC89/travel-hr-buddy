@@ -46,6 +46,8 @@ import { ANPDossierExport } from "./ANPDossierExport";
 import { SGSOAuditTrail } from "./SGSOAuditTrail";
 import { SGSOMaturityCurve } from "./SGSOMaturityCurve";
 import { SGSOKnowledgeBase } from "./SGSOKnowledgeBase";
+import { SGSOEvidenceManager } from "./SGSOEvidenceManager";
+import { SGSOPDFReportGenerator } from "./SGSOPDFReportGenerator";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
