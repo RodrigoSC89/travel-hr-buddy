@@ -114,7 +114,7 @@ interface PeotramTemplate {
 
 export const EnhancedPeotramManager: React.FC = () => {
   const { hasFeature } = useOrganizationPermissions();
-  const [activeView, setActiveView] = useState("dashboard");
+  const [activeView, setActiveView] = useState("13-elements");
   const [managementSubView, setManagementSubView] = useState("non-conformities");
   const [isNewAuditOpen, setIsNewAuditOpen] = useState(false);
   const [selectedAudit, setSelectedAudit] = useState<PeotramAudit | null>(null);
@@ -336,7 +336,11 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-10 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-11 bg-muted/50">
+          <TabsTrigger value="13-elements" className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-orange-500/10">
+            <Target className="w-4 h-4 text-amber-500" />
+            13 Elementos
+          </TabsTrigger>
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -524,9 +528,24 @@ export const EnhancedPeotramManager: React.FC = () => {
           </div>
         )}
 
+        {/* NEW: 13 Elements Tab - Primary View */}
+        <TabsContent value="13-elements" className="space-y-0">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando 13 Elementos...</div>}>
+            <Peotram13ElementsTabs 
+              onElementSelect={(num) => console.log('Element selected:', num)}
+              onItemSelect={(elemNum, itemId) => console.log('Item selected:', elemNum, itemId)}
+            />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="dashboard" className="space-y-0">
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando dashboard...</div>}>
-            <EnhancedPeotramDashboard />
+            <Peotram13Dashboard 
+              onElementClick={(num) => {
+                setActiveView("13-elements");
+              }}
+              onGenerateReport={() => setActiveView("reports")}
+            />
           </Suspense>
         </TabsContent>
 
