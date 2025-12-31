@@ -1,0 +1,14 @@
+-- Itens Elemento 3 - Gestão de Riscos (10 itens)
+INSERT INTO public.peotram_items_2024 (element_id, item_number, item_name, description, requirement, verification_criteria_compliant, verification_criteria_non_compliant, evidence_required, norm_reference, criticality_level)
+VALUES 
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 1, 'Procedimento APR', 'Procedimento de Análise Preliminar de Riscos', 'APR para atividades críticas', 'APR atualizada e implementada', 'Ausência de APR', ARRAY['Procedimento APR'], 'NR-37', 'critical'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 2, 'Matriz de Riscos', 'Matriz de riscos operacionais atualizada', 'Matriz revisada anualmente', 'Riscos identificados e classificados', 'Matriz desatualizada', ARRAY['Matriz riscos'], 'ISM Code 1.2.2', 'critical'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 3, 'Permissão Trabalho', 'Sistema de Permissão de Trabalho implementado', 'PT para trabalhos críticos', 'PT emitidas corretamente', 'PT não implementado', ARRAY['Modelo PT'], 'NR-34', 'critical'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 4, 'HAZOP/HAZID', 'Estudos HAZOP/HAZID realizados', 'Estudos para operações críticas', 'Estudos atualizados', 'Estudos inexistentes', ARRAY['Relatório HAZOP'], 'N-2782', 'major'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 5, 'Bow-Tie Analysis', 'Análise Bow-Tie para riscos críticos', 'Análises para Top 10 riscos', 'Barreiras identificadas', 'Sem análise Bow-Tie', ARRAY['Diagramas Bow-Tie'], 'IMCA', 'major'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 6, 'JSA/ART', 'Job Safety Analysis implementada', 'JSA para tarefas rotineiras', 'JSA revisadas periodicamente', 'JSA desatualizadas', ARRAY['Modelos JSA'], 'IMCA M 117', 'major'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 7, 'Barreiras Críticas', 'Identificação de barreiras críticas', 'Barreiras mapeadas', 'Monitoramento de barreiras', 'Barreiras não identificadas', ARRAY['Lista barreiras'], 'Petrobras', 'critical'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 8, 'SWA/TRA', 'Simultaneous Work Analysis', 'Análise trabalhos simultâneos', 'Conflitos identificados', 'SWA não realizada', ARRAY['Análise SWA'], 'NR-37', 'major'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 9, 'Gestão Mudanças Risco', 'Reavaliação de riscos em mudanças', 'MOC inclui análise riscos', 'Riscos reavaliados em MOC', 'Riscos não reavaliados', ARRAY['Formulário MOC'], 'ISM Code', 'major'),
+  ('e6e85d2b-9837-4189-aa2f-a75a49072a0a', 10, 'Indicadores Risco', 'Indicadores de risco monitorados', 'KPIs de risco definidos', 'Tendências monitoradas', 'Sem indicadores', ARRAY['Dashboard riscos'], 'IMCA', 'minor')
+ON CONFLICT (element_id, item_number) DO NOTHING;

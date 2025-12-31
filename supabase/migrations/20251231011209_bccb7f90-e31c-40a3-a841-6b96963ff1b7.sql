@@ -1,0 +1,14 @@
+-- Itens Elemento 2 - Conformidade Legal (10 itens principais)
+INSERT INTO public.peotram_items_2024 (element_id, item_number, item_name, description, requirement, verification_criteria_compliant, verification_criteria_non_compliant, evidence_required, norm_reference, criticality_level)
+VALUES 
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 1, 'Lista Requisitos Legais', 'Lista de requisitos legais aplicáveis atualizada', 'Lista completa e atualizada', 'Lista revisada nos últimos 12 meses', 'Lista desatualizada ou incompleta', ARRAY['Lista requisitos legais'], 'NORMAM', 'critical'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 2, 'Certificados Estatutários', 'Certificados estatutários válidos e disponíveis', 'Todos certificados válidos', 'Certificados válidos e atualizados', 'Certificados vencidos ou ausentes', ARRAY['Cópias certificados'], 'SOLAS', 'critical'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 3, 'Certificado SMC', 'Safety Management Certificate válido', 'SMC válido e afixado', 'SMC dentro da validade', 'SMC vencido ou não disponível', ARRAY['SMC original'], 'ISM Code', 'critical'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 4, 'DOC Companhia', 'Document of Compliance da companhia', 'DOC válido e disponível', 'DOC atualizado', 'DOC vencido', ARRAY['DOC cópia'], 'ISM Code', 'critical'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 5, 'Registro NRs', 'Atendimento às NRs aplicáveis', 'Registro de conformidade NRs', 'Evidências de atendimento NR-34, NR-37', 'Não conformidades com NRs', ARRAY['Check-list NRs'], 'NR-34, NR-37', 'major'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 6, 'STCW Tripulação', 'Certificados STCW da tripulação válidos', 'Todos certificados STCW válidos', 'Matriz STCW atualizada', 'Certificados STCW vencidos', ARRAY['Matriz STCW'], 'STCW', 'critical'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 7, 'Inspeções Bandeira', 'Registros de inspeções de bandeira', 'Inspeções em dia', 'Sem observações pendentes', 'Observações não tratadas', ARRAY['Relatórios inspeção'], 'NORMAM', 'major'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 8, 'PSC Records', 'Registros de Port State Control', 'Registros atualizados', 'Sem detenções últimos 24 meses', 'Detenções ou observações graves', ARRAY['Relatórios PSC'], 'Paris MOU', 'major'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 9, 'Seguros Marítimos', 'Apólices de seguros válidas', 'P&I e H&M válidos', 'Coberturas adequadas', 'Seguros vencidos', ARRAY['Apólices seguros'], 'Contrato', 'critical'),
+  ('934f985d-a2d3-4c0c-a2de-13066269eefb', 10, 'Licenças Operação', 'Licenças de operação válidas', 'Todas licenças válidas', 'Licenças atualizadas', 'Licenças vencidas', ARRAY['Licenças'], 'NORMAM', 'critical')
+ON CONFLICT (element_id, item_number) DO NOTHING;
