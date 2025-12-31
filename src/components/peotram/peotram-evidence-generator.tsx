@@ -105,11 +105,16 @@ export function PeotramEvidenceGenerator() {
       const { data, error } = await supabase.functions.invoke('peotram-generate-evidence', {
         body: {
           element_number: input.element_number,
+          element_name: PEOTRAM_ELEMENTS.find(e => e.number === input.element_number)?.name,
+          item_number: `${input.element_number}.1`,
           item_description: input.item_description,
-          non_conformity_type: input.non_conformity_type,
-          observed_condition: input.observed_condition,
+          non_conformity_reason: input.observed_condition,
+          nc_classification: input.non_conformity_type === 'critical' ? 'A' : 
+                            input.non_conformity_type === 'major' ? 'B' : 
+                            input.non_conformity_type === 'minor' ? 'C' : 'D',
           vessel_name: input.vessel_name,
-          auditor_name: input.auditor_name
+          auditor_name: input.auditor_name,
+          audit_date: new Date().toISOString().split('T')[0]
         }
       });
 
