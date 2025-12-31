@@ -114,6 +114,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Mission Command", path: "/mission-command", icon: Target, emoji: "🎯" },
       { label: "Bridge Link", path: "/bridge-link", icon: Link, emoji: "🌉" },
       { label: "Drydock Management", path: "/drydock-management", icon: Anchor, emoji: "🏗️" },
+      { label: "Contratos de Embarcação", path: "/vessel-contracts", icon: FileText, emoji: "📝", badge: "NEW" },
+      { label: "CTS Tripulação", path: "/vessel-cts", icon: Users, emoji: "👥" },
+      { label: "Histórico de Embarcações", path: "/vessel-history", icon: Activity, emoji: "📊" },
     ],
   },
 
@@ -250,8 +253,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Pre-OVID Inspection", path: "/pre-ovid-inspection", icon: Eye, emoji: "🔍" },
       { label: "MLC Inspection", path: "/mlc-inspection", icon: Shield, emoji: "🔍" },
       { label: "Gerador Pacotes PSC", path: "/psc-package", icon: Shield, emoji: "🛡️" },
+      // V3.2.0 - Novos Módulos de Gestão
+      { label: "GMUD - Gestão de Mudanças", path: "/gmud", icon: Settings, emoji: "🔄", badge: "NEW" },
+      { label: "Matriz de Responsabilidades", path: "/responsibility-matrix", icon: Users, emoji: "📊", badge: "NEW" },
+      { label: "Safety Human Factors", path: "/safety-human-factors", icon: Brain, emoji: "🧠", badge: "NEW" },
+      { label: "Safety IMCA", path: "/safety-imca", icon: Shield, emoji: "🛡️", badge: "NEW" },
       // Compliance One - ISO 37301
-      { label: "Compliance One", path: "/compliance-center", icon: Shield, emoji: "🛡️", badge: "NEW" },
+      { label: "Compliance One", path: "/compliance-center", icon: Shield, emoji: "🛡️" },
       { label: "Compliance Dashboard", path: "/compliance-center/dashboard", icon: BarChart3, emoji: "📊" },
       { label: "Regulamentos", path: "/compliance-center/regulamentos", icon: FileText, emoji: "📜" },
       { label: "Matriz de Riscos", path: "/compliance-center/riscos", icon: AlertTriangle, emoji: "⚠️" },
