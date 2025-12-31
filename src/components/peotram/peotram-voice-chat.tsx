@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -18,14 +20,10 @@ import {
   VolumeX,
   Brain,
   Sparkles,
-  Play,
-  Pause,
   RotateCcw,
-  Download,
-  AlertTriangle,
-  CheckCircle,
   Star,
-  HelpCircle
+  HelpCircle,
+  Zap
 } from "lucide-react";
 
 interface VoiceMessage {
@@ -60,8 +58,10 @@ export function PeotramVoiceChat() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [selectedElement, setSelectedElement] = useState<number | null>(null);
   const [transcript, setTranscript] = useState("");
+  const [useElevenLabs, setUseElevenLabs] = useState(true); // ElevenLabs por padrão
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
   const recognitionRef = useRef<any>(null);
-  const synthRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -166,9 +166,74 @@ export function PeotramVoiceChat() {
     }
   };
 
-  const speak = useCallback((text: string) => {
+  // ElevenLabs TTS - High quality voice
+  const speakWithElevenLabs = useCallback(async (text: string) => {
+    setIsLoadingAudio(true);
+    setIsSpeaking(true);
+    
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/eleven-labs-voice`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({ 
+            text, 
+            voice_name: "george", // Clear voice for Portuguese
+            model_id: "eleven_multilingual_v2"
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`ElevenLabs error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.audioContent) {
+        // Use data URI for playback - browser handles base64 decoding natively
+        const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
+        
+        // Stop any previous audio
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+        
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
+        
+        audio.onended = () => {
+          setIsSpeaking(false);
+          audioRef.current = null;
+        };
+        audio.onerror = () => {
+          setIsSpeaking(false);
+          audioRef.current = null;
+          toast.error("Erro ao reproduzir áudio");
+        };
+        
+        setIsLoadingAudio(false);
+        await audio.play();
+      }
+    } catch (error) {
+      console.error("ElevenLabs TTS error:", error);
+      setIsLoadingAudio(false);
+      setIsSpeaking(false);
+      toast.error("Erro no ElevenLabs, usando voz nativa");
+      // Fallback to browser TTS
+      speakWithBrowser(text);
+    }
+  }, []);
+
+  // Browser native TTS - Fallback
+  const speakWithBrowser = useCallback((text: string) => {
     if ('speechSynthesis' in window) {
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
@@ -180,16 +245,31 @@ export function PeotramVoiceChat() {
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);
 
-      synthRef.current = utterance;
       window.speechSynthesis.speak(utterance);
     }
   }, []);
 
+  // Main speak function - chooses between ElevenLabs and Browser
+  const speak = useCallback((text: string) => {
+    if (useElevenLabs) {
+      speakWithElevenLabs(text);
+    } else {
+      speakWithBrowser(text);
+    }
+  }, [useElevenLabs, speakWithElevenLabs, speakWithBrowser]);
+
   const stopSpeaking = useCallback(() => {
+    // Stop ElevenLabs audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    // Stop browser TTS
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      setIsSpeaking(false);
     }
+    setIsSpeaking(false);
+    setIsLoadingAudio(false);
   }, []);
 
   const handleElementSelect = (elementNumber: number) => {
@@ -252,7 +332,7 @@ export function PeotramVoiceChat() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg">
             <Mic className="h-6 w-6 text-purple-500" />
@@ -260,18 +340,35 @@ export function PeotramVoiceChat() {
           <div>
             <h3 className="font-semibold flex items-center gap-2">
               Voice Chat PEOTRAM
-              <Badge variant="outline" className="text-xs">
+              <Badge variant="outline" className="text-xs bg-gradient-to-r from-purple-500/10 to-pink-500/10">
                 <Sparkles className="h-3 w-3 mr-1" /> IA de Voz
               </Badge>
+              {useElevenLabs && (
+                <Badge className="text-xs bg-gradient-to-r from-emerald-500 to-teal-500">
+                  <Zap className="h-3 w-3 mr-1" /> ElevenLabs HD
+                </Badge>
+              )}
             </h3>
             <p className="text-sm text-muted-foreground">
               Pergunte sobre elementos críticos 4 e 6
             </p>
           </div>
         </div>
-        <Button variant="outline" size="sm" onClick={clearChat}>
-          <RotateCcw className="h-4 w-4 mr-2" /> Limpar
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="elevenlabs-toggle"
+              checked={useElevenLabs}
+              onCheckedChange={setUseElevenLabs}
+            />
+            <Label htmlFor="elevenlabs-toggle" className="text-xs cursor-pointer">
+              {useElevenLabs ? "ElevenLabs HD" : "Voz Nativa"}
+            </Label>
+          </div>
+          <Button variant="outline" size="sm" onClick={clearChat}>
+            <RotateCcw className="h-4 w-4 mr-2" /> Limpar
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
