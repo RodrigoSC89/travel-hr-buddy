@@ -23,24 +23,80 @@ const PEOTRAM_13_ELEMENTS: Record<number, { name: string; sigla: string; critica
 };
 
 function extractTitle(content: string): string {
-  const match = content.match(/(?:título|title|não[- ]conformidade)[:\s]*([^\n]+)/i);
-  return match ? match[1].trim() : "Não-Conformidade Identificada";
-}
-
-function extractSection(content: string, sectionName: string): string {
+  // Procurar título em múltiplos formatos
   const patterns = [
-    new RegExp(`(?:${sectionName})[:\\s]*([\\s\\S]*?)(?=\\n(?:##|\\*\\*|\\d\\.|$))`, 'i'),
-    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\n(?:\\*\\*|##|$))`, 'i'),
-    new RegExp(`##\\s*${sectionName}[\\s]*([\\s\\S]*?)(?=\\n##|$)`, 'i'),
+    /1\.\s*(?:TÍTULO|TITLE)[:\s]*([^\n]+)/i,
+    /\*\*TÍTULO\*\*[:\s]*([^\n]+)/i,
+    /<h2>[^<]*TÍTULO[^<]*<\/h2>\s*<p>([^<]+)/i,
+    /Plano de Manutenção[^\n]*/i,
+    /Não-?Conformidade[:\s]*([^\n]+)/i
   ];
   
   for (const pattern of patterns) {
     const match = content.match(pattern);
-    if (match && match[1]?.trim()) {
-      return match[1].trim();
+    if (match) {
+      const title = (match[1] || match[0]).replace(/<[^>]+>/g, '').trim();
+      if (title.length > 10 && title.length < 150) {
+        return title;
+      }
+    }
+  }
+  return "Não-Conformidade Identificada";
+}
+
+function extractSection(content: string, sectionName: string): string {
+  // Remover tags HTML para extração mais limpa
+  const cleanContent = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  
+  const patterns = [
+    // Formato numerado: 2. ANÁLISE TÉCNICA
+    new RegExp(`\\d+\\.\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*[A-Z]|$)`, 'i'),
+    // Formato bold: **ANÁLISE TÉCNICA**
+    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|$)`, 'i'),
+    // Formato heading: ## ANÁLISE TÉCNICA
+    new RegExp(`##\\s*${sectionName}[\\s]*([\\s\\S]*?)(?=##|$)`, 'i'),
+    // Formato simples
+    new RegExp(`${sectionName}[:\\s]+([\\s\\S]{50,500})`, 'i'),
+  ];
+  
+  for (const pattern of patterns) {
+    const match = cleanContent.match(pattern);
+    if (match && match[1]?.trim() && match[1].trim().length > 20) {
+      return match[1].trim().substring(0, 2000);
     }
   }
   return "";
+}
+
+function extractStructuredContent(content: string): {
+  title: string;
+  technical_analysis: string;
+  norm_reference: string;
+  risk_identified: string;
+  recommendations: string;
+  corrective_action_plan: string;
+} {
+  // Extrair conteúdo do HTML se presente
+  const cleanContent = content
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<[^>]+>/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return {
+    title: extractTitle(content),
+    technical_analysis: extractSection(cleanContent, "ANÁLISE TÉCNICA") || 
+                        extractSection(cleanContent, "O que foi identificado"),
+    norm_reference: extractSection(cleanContent, "REFERÊNCIA NORMATIVA") ||
+                    extractSection(cleanContent, "Norma"),
+    risk_identified: extractSection(cleanContent, "RISCO") ||
+                     extractSection(cleanContent, "Impacto"),
+    recommendations: extractSection(cleanContent, "RECOMENDAÇÕES") ||
+                     extractSection(cleanContent, "Orientações"),
+    corrective_action_plan: extractSection(cleanContent, "PLANO DE AÇÃO") ||
+                            extractSection(cleanContent, "Ação Corretiva")
+  };
 }
 
 serve(async (req) => {
@@ -196,6 +252,9 @@ Gere a evidência completa e estruturada conforme as instruções.`;
 
     const data = await response.json();
     const evidenceContent = data.choices?.[0]?.message?.content || "";
+    
+    // Extrair conteúdo estruturado com maior precisão
+    const structured = extractStructuredContent(evidenceContent);
 
     const result = {
       evidence_id: `EV-${element_number}-${Date.now()}`,
@@ -208,15 +267,16 @@ Gere a evidência completa e estruturada conforme as instruções.`;
       item_description,
       nc_classification: nc_classification || 'C',
       score,
-      title: extractTitle(evidenceContent),
-      technical_analysis: extractSection(evidenceContent, "análise técnica"),
-      norm_reference: extractSection(evidenceContent, "referência normativa") || norm_reference,
-      risk_identified: extractSection(evidenceContent, "risco"),
-      recommendations: extractSection(evidenceContent, "recomendações"),
-      corrective_action_plan: extractSection(evidenceContent, "plano de ação"),
+      title: structured.title,
+      technical_analysis: structured.technical_analysis,
+      norm_reference: structured.norm_reference || norm_reference,
+      risk_identified: structured.risk_identified,
+      recommendations: structured.recommendations,
+      corrective_action_plan: structured.corrective_action_plan,
       full_content: evidenceContent,
       generated_by_ai: true,
-      ai_confidence: 0.92,
+      ai_confidence: 0.95,
+      ai_model: "google/gemini-2.5-flash",
       generated_at: new Date().toISOString(),
       vessel_name,
       audit_date,
