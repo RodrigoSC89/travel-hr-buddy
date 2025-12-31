@@ -30,6 +30,7 @@ export { CrewHealthIntelligence } from './components/CrewHealthIntelligence';
 export { VRARTrainingCenter } from './components/VRARTrainingCenter';
 export { GlobalMaritimeNetwork } from './components/GlobalMaritimeNetwork';
 export { SelfHealingSystem } from './components/SelfHealingSystem';
+export { EmotionalAISystem } from './components/EmotionalAISystem';
 
 // Feature Descriptions for Navigation
 export const REVOLUTIONARY_FEATURES = [
