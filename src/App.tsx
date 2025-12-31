@@ -169,6 +169,14 @@ const CharterPartyPage = lazy(() => import(/* webpackChunkName: "page-charter-pa
 const PortCallOptimizationPage = lazy(() => import(/* webpackChunkName: "page-port-call-optimization" */ "@/pages/PortCallOptimizationPage"));
 const VoyageAccountingPage = lazy(() => import(/* webpackChunkName: "page-voyage-accounting" */ "@/pages/VoyageAccountingPage"));
 
+// Q1 2025 Quick Wins & New Modules
+const ExportCenterPage = lazy(() => import(/* webpackChunkName: "page-export-center" */ "@/pages/ExportCenterPage"));
+const AdvancedSearchPage = lazy(() => import(/* webpackChunkName: "page-advanced-search" */ "@/pages/AdvancedSearchPage"));
+const ISPSPage = lazy(() => import(/* webpackChunkName: "page-isps" */ "@/pages/ISPSPage"));
+const DrillSimulatorPage = lazy(() => import(/* webpackChunkName: "page-drill-simulator" */ "@/pages/DrillSimulatorPage"));
+const SustainabilityScorePage = lazy(() => import(/* webpackChunkName: "page-sustainability-score" */ "@/pages/SustainabilityScorePage"));
+const Gamification = lazy(() => import(/* webpackChunkName: "page-gamification" */ "@/pages/Gamification"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -322,6 +330,14 @@ function App() {
                         <Route path="charter-party" element={<CharterPartyPage />} />
                         <Route path="port-call-optimization" element={<PortCallOptimizationPage />} />
                         <Route path="voyage-accounting" element={<VoyageAccountingPage />} />
+                        
+                        {/* Q1 2025 Quick Wins & New Modules */}
+                        <Route path="export-center" element={<ExportCenterPage />} />
+                        <Route path="advanced-search" element={<AdvancedSearchPage />} />
+                        <Route path="isps-security" element={<ISPSPage />} />
+                        <Route path="drill-simulator" element={<DrillSimulatorPage />} />
+                        <Route path="sustainability-score" element={<SustainabilityScorePage />} />
+                        <Route path="gamification" element={<Gamification />} />
 
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
