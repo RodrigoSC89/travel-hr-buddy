@@ -16266,6 +16266,279 @@ export type Database = {
           },
         ]
       }
+      peo_dp_ai_evidences: {
+        Row: {
+          ai_corrective_plan: string | null
+          ai_normative_reference: string | null
+          ai_risk_assessment: string | null
+          ai_technical_analysis: string | null
+          audit_id: string | null
+          created_at: string | null
+          id: string
+          non_conformity_description: string | null
+          requirement_id: string | null
+          requirement_number: string | null
+          section: string | null
+        }
+        Insert: {
+          ai_corrective_plan?: string | null
+          ai_normative_reference?: string | null
+          ai_risk_assessment?: string | null
+          ai_technical_analysis?: string | null
+          audit_id?: string | null
+          created_at?: string | null
+          id?: string
+          non_conformity_description?: string | null
+          requirement_id?: string | null
+          requirement_number?: string | null
+          section?: string | null
+        }
+        Update: {
+          ai_corrective_plan?: string | null
+          ai_normative_reference?: string | null
+          ai_risk_assessment?: string | null
+          ai_technical_analysis?: string | null
+          audit_id?: string | null
+          created_at?: string | null
+          id?: string
+          non_conformity_description?: string | null
+          requirement_id?: string | null
+          requirement_number?: string | null
+          section?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peo_dp_ai_evidences_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peo_dp_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peo_dp_ai_evidences_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "peo_dp_requirements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peo_dp_audits: {
+        Row: {
+          audit_date: string | null
+          audit_status: string | null
+          auditor_name: string | null
+          company_name: string | null
+          created_at: string | null
+          id: string
+          organization_id: string | null
+          overall_conformity: number | null
+          program_id: string | null
+          section_31_conformity: number | null
+          section_32_conformity: number | null
+          section_33_conformity: number | null
+          section_34_conformity: number | null
+          section_35_conformity: number | null
+          section_36_conformity: number | null
+          section_37_conformity: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          audit_date?: string | null
+          audit_status?: string | null
+          auditor_name?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          id?: string
+          organization_id?: string | null
+          overall_conformity?: number | null
+          program_id?: string | null
+          section_31_conformity?: number | null
+          section_32_conformity?: number | null
+          section_33_conformity?: number | null
+          section_34_conformity?: number | null
+          section_35_conformity?: number | null
+          section_36_conformity?: number | null
+          section_37_conformity?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          audit_date?: string | null
+          audit_status?: string | null
+          auditor_name?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          id?: string
+          organization_id?: string | null
+          overall_conformity?: number | null
+          program_id?: string | null
+          section_31_conformity?: number | null
+          section_32_conformity?: number | null
+          section_33_conformity?: number | null
+          section_34_conformity?: number | null
+          section_35_conformity?: number | null
+          section_36_conformity?: number | null
+          section_37_conformity?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peo_dp_audits_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peo_dp_audits_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "peo_dp_program"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peo_dp_audits_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peo_dp_program: {
+        Row: {
+          created_at: string | null
+          id: string
+          publication_date: string | null
+          total_requirements: number | null
+          total_sections: number | null
+          version: string | null
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          publication_date?: string | null
+          total_requirements?: number | null
+          total_sections?: number | null
+          version?: string | null
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          publication_date?: string | null
+          total_requirements?: number | null
+          total_sections?: number | null
+          version?: string | null
+          year?: number
+        }
+        Relationships: []
+      }
+      peo_dp_requirements: {
+        Row: {
+          created_at: string | null
+          criticality_level: string | null
+          evidence_required: string[] | null
+          frequency: string | null
+          id: string
+          program_id: string | null
+          requirement_description: string | null
+          requirement_number: string
+          requirement_title: string
+          section: string
+          section_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          criticality_level?: string | null
+          evidence_required?: string[] | null
+          frequency?: string | null
+          id?: string
+          program_id?: string | null
+          requirement_description?: string | null
+          requirement_number: string
+          requirement_title: string
+          section: string
+          section_name: string
+        }
+        Update: {
+          created_at?: string | null
+          criticality_level?: string | null
+          evidence_required?: string[] | null
+          frequency?: string | null
+          id?: string
+          program_id?: string | null
+          requirement_description?: string | null
+          requirement_number?: string
+          requirement_title?: string
+          section?: string
+          section_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peo_dp_requirements_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "peo_dp_program"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peo_dp_responses: {
+        Row: {
+          ai_analysis: string | null
+          ai_corrective_plan: string | null
+          audit_id: string | null
+          auditor_notes: string | null
+          evidence_files: string[] | null
+          id: string
+          requirement_id: string | null
+          response_date: string | null
+          status: string
+        }
+        Insert: {
+          ai_analysis?: string | null
+          ai_corrective_plan?: string | null
+          audit_id?: string | null
+          auditor_notes?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          requirement_id?: string | null
+          response_date?: string | null
+          status: string
+        }
+        Update: {
+          ai_analysis?: string | null
+          ai_corrective_plan?: string | null
+          audit_id?: string | null
+          auditor_notes?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          requirement_id?: string | null
+          response_date?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peo_dp_responses_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peo_dp_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peo_dp_responses_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "peo_dp_requirements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peodp_plans: {
         Row: {
           approved_at: string | null
