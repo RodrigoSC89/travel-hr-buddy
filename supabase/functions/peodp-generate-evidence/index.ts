@@ -24,20 +24,77 @@ const PEODP_INDICATORS = {
   LARGE_EXCURSION: { name: "Large Excursion", description: "Retorno com desvio inaceitável" }
 };
 
-function extractSection(content: string, sectionName: string): string {
+function extractTitle(content: string): string {
   const patterns = [
-    new RegExp(`(?:${sectionName})[:\\s]*([\\s\\S]*?)(?=\\n(?:##|\\*\\*|\\d\\.|$))`, 'i'),
-    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\n(?:\\*\\*|##|$))`, 'i'),
-    new RegExp(`##\\s*${sectionName}[\\s]*([\\s\\S]*?)(?=\\n##|$)`, 'i'),
+    /1\.\s*(?:TÍTULO|TITLE)[:\s]*([^\n]+)/i,
+    /\*\*TÍTULO[^*]*\*\*[:\s]*([^\n]+)/i,
+    /<h2>[^<]*TÍTULO[^<]*<\/h2>\s*<p>([^<]+)/i,
+    /NC[:\s]*([^\n]{20,100})/i,
+    /Não-?Conformidade[:\s]*([^\n]+)/i
   ];
   
   for (const pattern of patterns) {
     const match = content.match(pattern);
-    if (match && match[1]?.trim()) {
-      return match[1].trim();
+    if (match) {
+      const title = (match[1] || match[0]).replace(/<[^>]+>/g, '').trim();
+      if (title.length > 10 && title.length < 150) {
+        return title;
+      }
+    }
+  }
+  return "Não-Conformidade PEO-DP";
+}
+
+function extractSection(content: string, sectionName: string): string {
+  const cleanContent = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+  
+  const patterns = [
+    new RegExp(`\\d+\\.\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*[A-Z]|$)`, 'i'),
+    new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|$)`, 'i'),
+    new RegExp(`##\\s*${sectionName}[\\s]*([\\s\\S]*?)(?=##|$)`, 'i'),
+    new RegExp(`${sectionName}[:\\s]+([\\s\\S]{50,500})`, 'i'),
+  ];
+  
+  for (const pattern of patterns) {
+    const match = cleanContent.match(pattern);
+    if (match && match[1]?.trim() && match[1].trim().length > 20) {
+      return match[1].trim().substring(0, 2000);
     }
   }
   return "";
+}
+
+function extractStructuredContent(content: string): {
+  title: string;
+  technical_analysis: string;
+  normative_reference: string;
+  risk_assessment: string;
+  recommendations: string;
+  corrective_action_plan: string;
+} {
+  const cleanContent = content
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<[^>]+>/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return {
+    title: extractTitle(content),
+    technical_analysis: extractSection(cleanContent, "ANÁLISE TÉCNICA") || 
+                        extractSection(cleanContent, "O que foi identificado"),
+    normative_reference: extractSection(cleanContent, "REFERÊNCIA NORMATIVA") ||
+                         extractSection(cleanContent, "Norma") ||
+                         extractSection(cleanContent, "PEO-DP"),
+    risk_assessment: extractSection(cleanContent, "RISCO") ||
+                     extractSection(cleanContent, "Impacto") ||
+                     extractSection(cleanContent, "Avaliação"),
+    recommendations: extractSection(cleanContent, "RECOMENDAÇÕES") ||
+                     extractSection(cleanContent, "Orientações"),
+    corrective_action_plan: extractSection(cleanContent, "PLANO DE AÇÃO") ||
+                            extractSection(cleanContent, "Ação Corretiva") ||
+                            extractSection(cleanContent, "PAC")
+  };
 }
 
 serve(async (req) => {
@@ -208,6 +265,9 @@ Gere a análise completa de não-conformidade conforme as instruções.`;
 
     const data = await response.json();
     const evidenceContent = data.choices?.[0]?.message?.content || "";
+    
+    // Extrair conteúdo estruturado com maior precisão
+    const structured = extractStructuredContent(evidenceContent);
 
     const result = {
       evidence_id: `PEODP-${section.replace('.', '')}-${Date.now()}`,
@@ -219,15 +279,16 @@ Gere a análise completa de não-conformidade conforme as instruções.`;
       requirement_title,
       requirement_description,
       status,
-      title: extractSection(evidenceContent, "título") || `NC: ${requirement_title}`,
-      technical_analysis: extractSection(evidenceContent, "análise técnica"),
-      normative_reference: extractSection(evidenceContent, "referência normativa"),
-      risk_assessment: extractSection(evidenceContent, "risco"),
-      recommendations: extractSection(evidenceContent, "recomendações"),
-      corrective_action_plan: extractSection(evidenceContent, "plano de ação"),
+      title: structured.title || `NC: ${requirement_title}`,
+      technical_analysis: structured.technical_analysis,
+      normative_reference: structured.normative_reference,
+      risk_assessment: structured.risk_assessment,
+      recommendations: structured.recommendations,
+      corrective_action_plan: structured.corrective_action_plan,
       full_content: evidenceContent,
       generated_by_ai: true,
-      ai_confidence: 0.94,
+      ai_confidence: 0.95,
+      ai_model: "google/gemini-2.5-flash",
       generated_at: new Date().toISOString(),
       vessel_name,
       dp_class,
@@ -236,7 +297,7 @@ Gere a análise completa de não-conformidade conforme as instruções.`;
       auditor_name,
       peodp_version: "2021",
       total_sections: 7,
-      total_requirements: 54
+      total_requirements: 61
     };
 
     console.log(`PEO-DP Evidence generated - Section ${section}/${sectionInfo.code}, Requirement ${requirement_number}`);
