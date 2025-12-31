@@ -34,6 +34,8 @@ const PeotramEvidenceGenerator = lazy(() => import("./peotram-evidence-generator
 // NEW: 13 Elements Components
 const Peotram13ElementsTabs = lazy(() => import("./peotram-13-elements-tabs"));
 const Peotram13Dashboard = lazy(() => import("./peotram-13-elements-dashboard"));
+const PeotramEvidenceUploader = lazy(() => import("./peotram-evidence-uploader"));
+const PeotramPdfReport = lazy(() => import("./peotram-pdf-report"));
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -361,6 +363,10 @@ export const EnhancedPeotramManager: React.FC = () => {
             <FileCheckIcon className="w-4 h-4 text-green-500" />
             Evidências
           </TabsTrigger>
+          <TabsTrigger value="pdf-report" className="flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+            <Download className="w-4 h-4 text-blue-500" />
+            Relatório PDF
+          </TabsTrigger>
           <TabsTrigger value="cnpj-history" className="flex items-center gap-2">
             <Building className="w-4 h-4" />
             CNPJ
@@ -683,9 +689,48 @@ export const EnhancedPeotramManager: React.FC = () => {
         {/* Evidence Generator Tab - NEW */}
         <TabsContent value="evidence-gen" className="space-y-6">
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando gerador de evidências...</div>}>
-            <PeotramEvidenceGenerator />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <PeotramEvidenceGenerator />
+              <PeotramEvidenceUploader
+                auditId="demo-audit"
+                itemNumber="1.1.1"
+                elementNumber={1}
+              />
+            </div>
           </Suspense>
         </TabsContent>
+
+        {/* PDF Report Tab - NEW */}
+        <TabsContent value="pdf-report" className="space-y-6">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando relatório PDF...</div>}>
+            <PeotramPdfReport
+              auditData={{
+                id: "AUDIT-2024-001",
+                vesselName: "MV Atlantic Explorer",
+                vesselImo: "9876543",
+                auditorName: "Auditor PEOTRAM",
+                auditDate: new Date().toLocaleDateString('pt-BR'),
+                overallScore: 78.5,
+                elements: [
+                  { number: 1, name: "Liderança", sigla: "LGR", isCritical: false, score: 85, totalItems: 6, conformantItems: 5, nonConformantItems: 1 },
+                  { number: 2, name: "Conformidade Legal", sigla: "CL", isCritical: false, score: 75, totalItems: 24, conformantItems: 18, nonConformantItems: 6 },
+                  { number: 3, name: "Gestão de Riscos", sigla: "GR", isCritical: false, score: 80, totalItems: 14, conformantItems: 11, nonConformantItems: 3 },
+                  { number: 4, name: "Operação", sigla: "OP", isCritical: true, score: 70, totalItems: 28, conformantItems: 20, nonConformantItems: 8 },
+                  { number: 5, name: "Seg. Técnica", sigla: "ST", isCritical: false, score: 82, totalItems: 14, conformantItems: 11, nonConformantItems: 3 },
+                  { number: 6, name: "Manutenção", sigla: "MN", isCritical: true, score: 65, totalItems: 24, conformantItems: 16, nonConformantItems: 8 },
+                  { number: 7, name: "Mudanças", sigla: "GM", isCritical: false, score: 88, totalItems: 14, conformantItems: 12, nonConformantItems: 2 },
+                  { number: 8, name: "Aquisição", sigla: "AQ", isCritical: false, score: 90, totalItems: 11, conformantItems: 10, nonConformantItems: 1 },
+                  { number: 9, name: "RH", sigla: "RH", isCritical: false, score: 78, totalItems: 18, conformantItems: 14, nonConformantItems: 4 },
+                  { number: 10, name: "Informação", sigla: "GI", isCritical: false, score: 85, totalItems: 7, conformantItems: 6, nonConformantItems: 1 },
+                  { number: 11, name: "Emergências", sigla: "PE", isCritical: true, score: 72, totalItems: 12, conformantItems: 9, nonConformantItems: 3 },
+                  { number: 12, name: "Acidentes", sigla: "AI", isCritical: true, score: 68, totalItems: 13, conformantItems: 9, nonConformantItems: 4 },
+                  { number: 13, name: "Melhoria", sigla: "MC", isCritical: false, score: 82, totalItems: 9, conformantItems: 7, nonConformantItems: 2 },
+                ]
+              }}
+            />
+          </Suspense>
+        </TabsContent>
+
 
         <TabsContent value="cnpj-history" className="space-y-6">
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando histórico...</div>}>
