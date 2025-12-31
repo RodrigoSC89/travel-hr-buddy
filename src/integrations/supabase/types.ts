@@ -16601,6 +16601,51 @@ export type Database = {
           },
         ]
       }
+      peodp_requirements_2021: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          criticality: string | null
+          element_name: string
+          element_number: number
+          evidence_required: string[] | null
+          id: string
+          reference_document: string | null
+          requirement_code: string
+          requirement_text: string
+          updated_at: string | null
+          verification_method: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          criticality?: string | null
+          element_name: string
+          element_number: number
+          evidence_required?: string[] | null
+          id?: string
+          reference_document?: string | null
+          requirement_code: string
+          requirement_text: string
+          updated_at?: string | null
+          verification_method?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          criticality?: string | null
+          element_name?: string
+          element_number?: number
+          evidence_required?: string[] | null
+          id?: string
+          reference_document?: string | null
+          requirement_code?: string
+          requirement_text?: string
+          updated_at?: string | null
+          verification_method?: string | null
+        }
+        Relationships: []
+      }
       peotram_ai_analysis: {
         Row: {
           ai_model_used: string
