@@ -178,6 +178,9 @@ const DrillSimulatorPage = lazy(() => import(/* webpackChunkName: "page-drill-si
 const SustainabilityScorePage = lazy(() => import(/* webpackChunkName: "page-sustainability-score" */ "@/pages/SustainabilityScorePage"));
 const Gamification = lazy(() => import(/* webpackChunkName: "page-gamification" */ "@/pages/Gamification"));
 
+// Revolutionary Features Hub - PATCH REVOLUTION v1.0
+const RevolutionaryFeaturesPage = lazy(() => import(/* webpackChunkName: "page-revolutionary-features" */ "@/pages/RevolutionaryFeaturesPage"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -298,6 +301,9 @@ function App() {
                         
 {/* Roadmap - PATCH 859 */}
                         <Route path="roadmap" element={<Roadmap />} />
+
+                        {/* Revolutionary Features Hub - PATCH REVOLUTION v1.0 */}
+                        <Route path="revolutionary-features" element={<RevolutionaryFeaturesPage />} />
                         
                         {/* AI Self-Healing - PATCH 860 */}
                         <Route path="ai-ops/logs" element={<SelfHealingLogs />} />
