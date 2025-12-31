@@ -31,6 +31,9 @@ const PeotramCNPJHistory = lazy(() => import("./peotram-cnpj-history").then(m =>
 const PeotramAIAssistant = lazy(() => import("./peotram-ai-assistant").then(m => ({ default: m.PeotramAIAssistant })));
 const PeotramVoiceChat = lazy(() => import("./peotram-voice-chat").then(m => ({ default: m.PeotramVoiceChat })));
 const PeotramEvidenceGenerator = lazy(() => import("./peotram-evidence-generator").then(m => ({ default: m.PeotramEvidenceGenerator })));
+// NEW: 13 Elements Components
+const Peotram13ElementsTabs = lazy(() => import("./peotram-13-elements-tabs"));
+const Peotram13Dashboard = lazy(() => import("./peotram-13-elements-dashboard"));
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
