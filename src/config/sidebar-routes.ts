@@ -317,6 +317,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Finance Command", path: "/finance-command", icon: DollarSign, emoji: "💰" },
+      { label: "Voyage Accounting", path: "/voyage-accounting", icon: DollarSign, emoji: "📊", badge: "NEW" },
       { label: "Analytics Command", path: "/analytics-command", icon: BarChart3, emoji: "📊" },
       { label: "Operations Command", path: "/operations-command", icon: Settings, emoji: "⚙️" },
       { label: "Procurement Command", path: "/procurement-command", icon: ShoppingCart, emoji: "🛒" },

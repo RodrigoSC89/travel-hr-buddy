@@ -163,6 +163,12 @@ const SafetyIMCA = lazy(() => import(/* webpackChunkName: "page-safety-imca" */ 
 // Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
 const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
 
+// Q1 2025 Critical Modules - Cargo, Charter, Port Optimization
+const CargoManagementPage = lazy(() => import(/* webpackChunkName: "page-cargo-management" */ "@/pages/CargoManagementPage"));
+const CharterPartyPage = lazy(() => import(/* webpackChunkName: "page-charter-party" */ "@/pages/CharterPartyPage"));
+const PortCallOptimizationPage = lazy(() => import(/* webpackChunkName: "page-port-call-optimization" */ "@/pages/PortCallOptimizationPage"));
+const VoyageAccountingPage = lazy(() => import(/* webpackChunkName: "page-voyage-accounting" */ "@/pages/VoyageAccountingPage"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -310,6 +316,12 @@ function App() {
                         <Route path="responsibility-matrix" element={<ResponsibilityMatrix />} />
                         <Route path="safety-human-factors" element={<SafetyHumanFactors />} />
                         <Route path="safety-imca" element={<SafetyIMCA />} />
+
+                        {/* Q1 2025 Critical Modules */}
+                        <Route path="cargo-management" element={<CargoManagementPage />} />
+                        <Route path="charter-party" element={<CharterPartyPage />} />
+                        <Route path="port-call-optimization" element={<PortCallOptimizationPage />} />
+                        <Route path="voyage-accounting" element={<VoyageAccountingPage />} />
 
                         {/* Legacy Redirects - Extracted */}
                         {legacyRedirectRoutes}
