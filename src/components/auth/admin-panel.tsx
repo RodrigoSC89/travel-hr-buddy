@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserManagementDashboard from "@/components/admin/user-management-dashboard";
 import { HealthStatusDashboard } from "@/components/admin/health-status-dashboard";
+import { PermissionsManager } from "@/components/admin/PermissionsManager";
 import { RoleBasedAccess } from "./role-based-access";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -146,23 +147,7 @@ export const AdminPanel: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="permissions" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Gerenciamento de Permissões</CardTitle>
-                <CardDescription>
-                  Configure permissões por role e módulo do sistema
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Em Desenvolvimento</h3>
-                  <p className="text-muted-foreground">
-                    Interface de gerenciamento de permissões será implementada em breve
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <PermissionsManager />
           </TabsContent>
 
           <TabsContent value="system" className="space-y-4">

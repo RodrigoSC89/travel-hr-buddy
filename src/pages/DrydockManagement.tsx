@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Ship, Wrench, DollarSign, FileText, Plus, AlertTriangle, CheckCircle2, Clock, Anchor } from "lucide-react";
+import { GanttSchedule } from "@/components/drydock/GanttSchedule";
 import { format, differenceInDays, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Progress } from "@/components/ui/progress";
@@ -313,20 +314,7 @@ export default function DrydockManagement() {
           </TabsContent>
 
           <TabsContent value="schedule">
-            <Card className="border-border/50 bg-card/50 backdrop-blur">
-              <CardHeader>
-                <CardTitle>Cronograma de Docagens</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <Calendar className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground">Calendário Gantt em desenvolvimento</p>
-                  <p className="text-sm text-muted-foreground/70 mt-1">
-                    Visualização timeline será implementada com integração de IA para otimização
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+            <GanttSchedule />
           </TabsContent>
 
           <TabsContent value="hull">
