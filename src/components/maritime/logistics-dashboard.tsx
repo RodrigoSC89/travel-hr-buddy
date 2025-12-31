@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PortOperationsModule } from "./PortOperationsModule";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -619,20 +620,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="operations">
-          <Card>
-            <CardHeader>
-              <CardTitle>Operações Portuárias</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12">
-                <Container className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Gestão de Operações</h3>
-                <p className="text-muted-foreground">
-                  Módulo de operações portuárias em desenvolvimento
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <PortOperationsModule />
         </TabsContent>
 
         <TabsContent value="intelligence">
