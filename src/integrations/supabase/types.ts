@@ -16394,6 +16394,147 @@ export type Database = {
           },
         ]
       }
+      peotram_ai_evidences_2024: {
+        Row: {
+          ai_confidence: number | null
+          audit_id: string | null
+          audit_response_id: string | null
+          corrective_action_plan: string | null
+          docx_file_path: string | null
+          element_number: number | null
+          evidence_title: string
+          full_content: string | null
+          generated_at: string | null
+          generated_by_ai: boolean | null
+          id: string
+          item_number: string | null
+          norm_reference: string | null
+          pdf_file_path: string | null
+          recommendations: string | null
+          risk_identified: string | null
+          technical_analysis: string | null
+        }
+        Insert: {
+          ai_confidence?: number | null
+          audit_id?: string | null
+          audit_response_id?: string | null
+          corrective_action_plan?: string | null
+          docx_file_path?: string | null
+          element_number?: number | null
+          evidence_title: string
+          full_content?: string | null
+          generated_at?: string | null
+          generated_by_ai?: boolean | null
+          id?: string
+          item_number?: string | null
+          norm_reference?: string | null
+          pdf_file_path?: string | null
+          recommendations?: string | null
+          risk_identified?: string | null
+          technical_analysis?: string | null
+        }
+        Update: {
+          ai_confidence?: number | null
+          audit_id?: string | null
+          audit_response_id?: string | null
+          corrective_action_plan?: string | null
+          docx_file_path?: string | null
+          element_number?: number | null
+          evidence_title?: string
+          full_content?: string | null
+          generated_at?: string | null
+          generated_by_ai?: boolean | null
+          id?: string
+          item_number?: string | null
+          norm_reference?: string | null
+          pdf_file_path?: string | null
+          recommendations?: string | null
+          risk_identified?: string | null
+          technical_analysis?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_ai_evidences_2024_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits_2024"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peotram_ai_evidences_2024_audit_response_id_fkey"
+            columns: ["audit_response_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audit_responses_2024"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_audit_responses_2024: {
+        Row: {
+          audit_id: string | null
+          auditor_notes: string | null
+          documentary_evidence: string[] | null
+          element_number: number
+          id: string
+          item_id: string | null
+          item_number: string
+          nc_classification: string | null
+          observed_condition: string | null
+          photographic_evidence: string[] | null
+          response_date: string | null
+          score: number | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          audit_id?: string | null
+          auditor_notes?: string | null
+          documentary_evidence?: string[] | null
+          element_number: number
+          id?: string
+          item_id?: string | null
+          item_number: string
+          nc_classification?: string | null
+          observed_condition?: string | null
+          photographic_evidence?: string[] | null
+          response_date?: string | null
+          score?: number | null
+          status: string
+          updated_at?: string | null
+        }
+        Update: {
+          audit_id?: string | null
+          auditor_notes?: string | null
+          documentary_evidence?: string[] | null
+          element_number?: number
+          id?: string
+          item_id?: string | null
+          item_number?: string
+          nc_classification?: string | null
+          observed_condition?: string | null
+          photographic_evidence?: string[] | null
+          response_date?: string | null
+          score?: number | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_audit_responses_2024_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits_2024"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peotram_audit_responses_2024_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_items_2024"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_audits: {
         Row: {
           audit_date: string
@@ -16468,6 +16609,128 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_audits_2024: {
+        Row: {
+          audit_date: string
+          audit_status: string | null
+          auditor_id: string | null
+          auditor_name: string | null
+          conformant_items: number | null
+          created_at: string | null
+          element_1_score: number | null
+          element_10_score: number | null
+          element_11_score: number | null
+          element_12_score: number | null
+          element_13_score: number | null
+          element_2_score: number | null
+          element_3_score: number | null
+          element_4_score: number | null
+          element_5_score: number | null
+          element_6_score: number | null
+          element_7_score: number | null
+          element_8_score: number | null
+          element_9_score: number | null
+          end_date: string | null
+          id: string
+          non_conformant_items: number | null
+          notes: string | null
+          observations_items: number | null
+          organization_id: string | null
+          overall_score: number | null
+          report_docx_path: string | null
+          report_pdf_path: string | null
+          start_date: string | null
+          structure_id: string | null
+          total_items_evaluated: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_imo: string | null
+          vessel_name: string | null
+        }
+        Insert: {
+          audit_date?: string
+          audit_status?: string | null
+          auditor_id?: string | null
+          auditor_name?: string | null
+          conformant_items?: number | null
+          created_at?: string | null
+          element_1_score?: number | null
+          element_10_score?: number | null
+          element_11_score?: number | null
+          element_12_score?: number | null
+          element_13_score?: number | null
+          element_2_score?: number | null
+          element_3_score?: number | null
+          element_4_score?: number | null
+          element_5_score?: number | null
+          element_6_score?: number | null
+          element_7_score?: number | null
+          element_8_score?: number | null
+          element_9_score?: number | null
+          end_date?: string | null
+          id?: string
+          non_conformant_items?: number | null
+          notes?: string | null
+          observations_items?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          report_docx_path?: string | null
+          report_pdf_path?: string | null
+          start_date?: string | null
+          structure_id?: string | null
+          total_items_evaluated?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_imo?: string | null
+          vessel_name?: string | null
+        }
+        Update: {
+          audit_date?: string
+          audit_status?: string | null
+          auditor_id?: string | null
+          auditor_name?: string | null
+          conformant_items?: number | null
+          created_at?: string | null
+          element_1_score?: number | null
+          element_10_score?: number | null
+          element_11_score?: number | null
+          element_12_score?: number | null
+          element_13_score?: number | null
+          element_2_score?: number | null
+          element_3_score?: number | null
+          element_4_score?: number | null
+          element_5_score?: number | null
+          element_6_score?: number | null
+          element_7_score?: number | null
+          element_8_score?: number | null
+          element_9_score?: number | null
+          end_date?: string | null
+          id?: string
+          non_conformant_items?: number | null
+          notes?: string | null
+          observations_items?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          report_docx_path?: string | null
+          report_pdf_path?: string | null
+          start_date?: string | null
+          structure_id?: string | null
+          total_items_evaluated?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_imo?: string | null
+          vessel_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_audits_2024_structure_id_fkey"
+            columns: ["structure_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_structures"
             referencedColumns: ["id"]
           },
         ]
@@ -16584,6 +16847,62 @@ export type Database = {
           weight_percentage?: number | null
         }
         Relationships: []
+      }
+      peotram_elements_2024: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          documentation_required: Json | null
+          element_name: string
+          element_number: number
+          element_sigla: string | null
+          id: string
+          importance_level: string | null
+          is_critical: boolean | null
+          norms_referenced: string[] | null
+          structure_id: string | null
+          total_items: number | null
+          weight_percentage: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          documentation_required?: Json | null
+          element_name: string
+          element_number: number
+          element_sigla?: string | null
+          id?: string
+          importance_level?: string | null
+          is_critical?: boolean | null
+          norms_referenced?: string[] | null
+          structure_id?: string | null
+          total_items?: number | null
+          weight_percentage?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          documentation_required?: Json | null
+          element_name?: string
+          element_number?: number
+          element_sigla?: string | null
+          id?: string
+          importance_level?: string | null
+          is_critical?: boolean | null
+          norms_referenced?: string[] | null
+          structure_id?: string | null
+          total_items?: number | null
+          weight_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_elements_2024_structure_id_fkey"
+            columns: ["structure_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_structures"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       peotram_evidences: {
         Row: {
@@ -16722,6 +17041,72 @@ export type Database = {
           },
         ]
       }
+      peotram_items_2024: {
+        Row: {
+          created_at: string | null
+          criticality_level: string | null
+          description: string | null
+          element_id: string | null
+          evidence_required: string[] | null
+          id: string
+          item_name: string
+          item_number: string
+          norm_reference: string | null
+          possible_non_conformities: string[] | null
+          requirement: string | null
+          section_id: string | null
+          verification_criteria_compliant: string | null
+          verification_criteria_non_compliant: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          criticality_level?: string | null
+          description?: string | null
+          element_id?: string | null
+          evidence_required?: string[] | null
+          id?: string
+          item_name: string
+          item_number: string
+          norm_reference?: string | null
+          possible_non_conformities?: string[] | null
+          requirement?: string | null
+          section_id?: string | null
+          verification_criteria_compliant?: string | null
+          verification_criteria_non_compliant?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          criticality_level?: string | null
+          description?: string | null
+          element_id?: string | null
+          evidence_required?: string[] | null
+          id?: string
+          item_name?: string
+          item_number?: string
+          norm_reference?: string | null
+          possible_non_conformities?: string[] | null
+          requirement?: string | null
+          section_id?: string | null
+          verification_criteria_compliant?: string | null
+          verification_criteria_non_compliant?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_items_2024_element_id_fkey"
+            columns: ["element_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_elements_2024"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "peotram_items_2024_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peotram_non_conformities: {
         Row: {
           area_department: string | null
@@ -16849,6 +17234,118 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      peotram_sections: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          element_id: string | null
+          id: string
+          section_name: string
+          section_number: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          element_id?: string | null
+          id?: string
+          section_name: string
+          section_number: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          element_id?: string | null
+          id?: string
+          section_name?: string
+          section_number?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_sections_element_id_fkey"
+            columns: ["element_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_elements_2024"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_signatures: {
+        Row: {
+          audit_id: string | null
+          id: string
+          ip_address: string | null
+          signature_data: string | null
+          signature_image_path: string | null
+          signed_at: string | null
+          signer_email: string | null
+          signer_name: string
+          signer_role: string
+        }
+        Insert: {
+          audit_id?: string | null
+          id?: string
+          ip_address?: string | null
+          signature_data?: string | null
+          signature_image_path?: string | null
+          signed_at?: string | null
+          signer_email?: string | null
+          signer_name: string
+          signer_role: string
+        }
+        Update: {
+          audit_id?: string | null
+          id?: string
+          ip_address?: string | null
+          signature_data?: string | null
+          signature_image_path?: string | null
+          signed_at?: string | null
+          signer_email?: string | null
+          signer_name?: string
+          signer_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peotram_signatures_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "peotram_audits_2024"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peotram_structures: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          cycle: string
+          id: string
+          total_elements: number | null
+          total_items: number | null
+          updated_at: string | null
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          cycle: string
+          id?: string
+          total_elements?: number | null
+          total_items?: number | null
+          updated_at?: string | null
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          cycle?: string
+          id?: string
+          total_elements?: number | null
+          total_items?: number | null
+          updated_at?: string | null
+          year?: number
+        }
+        Relationships: []
       }
       peotram_templates: {
         Row: {
