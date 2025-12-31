@@ -159,7 +159,7 @@ async function checkSTCWCompliance(): Promise<ComplianceModuleStatus> {
           detectedAt: now.toISOString(),
         });
 
-        if (severity === 'high' || severity === 'critical') {
+        if (severity === 'high') {
           alerts.push({
             id: `alert-stcw-${cert.crewId}-${cert.certType}`,
             standard: 'STCW',

@@ -2,10 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { SgsoDashboard } from "@/components/sgso/SgsoDashboard";
+import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import {
   Shield,
@@ -19,7 +21,8 @@ import {
   Activity,
   Plus,
   RefreshCw,
-  Download
+  Download,
+  Eye
 } from "lucide-react";
 
 const SGSO = () => {
@@ -35,12 +38,32 @@ const SGSO = () => {
         badges={[
           { icon: FileCheck, label: "Compliance ANP" },
           { icon: Target, label: "17 Práticas" },
-          { icon: Shield, label: "Segurança Total" }
+          { icon: Shield, label: "Segurança Total" },
+          { icon: Eye, label: "Monitor Proativo" }
         ]}
       />
 
-      {/* SGSO Dashboard */}
-      <SgsoDashboard />
+      {/* Tabs for Dashboard and Compliance Monitor */}
+      <Tabs defaultValue="dashboard" className="w-full">
+        <TabsList className="mb-4">
+          <TabsTrigger value="dashboard" className="gap-2">
+            <Activity className="h-4 w-4" />
+            Dashboard SGSO
+          </TabsTrigger>
+          <TabsTrigger value="compliance" className="gap-2">
+            <Shield className="h-4 w-4" />
+            Monitor de Conformidade
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dashboard">
+          <SgsoDashboard />
+        </TabsContent>
+
+        <TabsContent value="compliance">
+          <ProactiveComplianceMonitor />
+        </TabsContent>
+      </Tabs>
 
       {/* Module Action Button */}
       <ModuleActionButton
