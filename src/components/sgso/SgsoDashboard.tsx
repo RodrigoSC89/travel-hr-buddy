@@ -27,7 +27,8 @@ import {
   MessageSquare,
   Plus,
   Save,
-  BookOpen
+  BookOpen,
+  FileCheck
 } from "lucide-react";
 import { AnpPracticesManager } from "./AnpPracticesManager";
 import { RiskAssessmentMatrix } from "./RiskAssessmentMatrix";
@@ -416,7 +417,7 @@ export const SgsoDashboard: React.FC = () => {
             </TabsList>
 
             {/* Advanced SGSO Tabs */}
-            <TabsList className="grid grid-cols-3 lg:grid-cols-3 w-full h-auto gap-2 bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20 p-2 border border-red-200 dark:border-red-800">
+            <TabsList className="grid grid-cols-3 lg:grid-cols-5 w-full h-auto gap-2 bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20 p-2 border border-red-200 dark:border-red-800">
               <TabsTrigger 
                 value="audit-trail"
                 className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
@@ -437,6 +438,20 @@ export const SgsoDashboard: React.FC = () => {
               >
                 <BookOpen className="h-4 w-4 mr-2" />
                 Base Conhecimento
+              </TabsTrigger>
+              <TabsTrigger 
+                value="evidence"
+                className="data-[state=active]:bg-background data-[state=active]:text-indigo-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <FileCheck className="h-4 w-4 mr-2" />
+                Evidências
+              </TabsTrigger>
+              <TabsTrigger 
+                value="pdf-report"
+                className="data-[state=active]:bg-background data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Relatório PDF
               </TabsTrigger>
             </TabsList>
 
@@ -871,6 +886,14 @@ export const SgsoDashboard: React.FC = () => {
 
             <TabsContent value="knowledge">
               <SGSOKnowledgeBase />
+            </TabsContent>
+
+            <TabsContent value="evidence">
+              <SGSOEvidenceManager />
+            </TabsContent>
+
+            <TabsContent value="pdf-report">
+              <SGSOPDFReportGenerator />
             </TabsContent>
           </Tabs>
         </CardContent>

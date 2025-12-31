@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,6 +66,7 @@ const ANP_PRACTICES = [
 export const SGSOEvidenceManager: React.FC = () => {
   const { toast } = useToast();
   const [evidences, setEvidences] = useState<Evidence[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [isProcessingOCR, setIsProcessingOCR] = useState(false);
   const [selectedPractice, setSelectedPractice] = useState<string>("");
@@ -84,6 +85,48 @@ export const SGSOEvidenceManager: React.FC = () => {
 
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [ocrResult, setOcrResult] = useState<{ text: string; confidence: number } | null>(null);
+
+  // Load evidences from Supabase on mount
+  const loadEvidences = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('sgso_evidence')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      setEvidences((data || []).map(e => ({
+        id: e.id,
+        practice_number: e.practice_number,
+        practice_name: e.practice_name,
+        evidence_type: e.evidence_type || 'document',
+        title: e.title,
+        description: e.description || undefined,
+        file_url: e.file_url || undefined,
+        file_name: e.file_name || undefined,
+        ocr_text: e.ocr_text || undefined,
+        ocr_confidence: e.ocr_confidence ? Number(e.ocr_confidence) : undefined,
+        compliance_status: e.compliance_status || undefined,
+        justification: e.justification || undefined,
+        created_at: e.created_at || new Date().toISOString()
+      })));
+    } catch (error) {
+      console.error("Error loading evidences:", error);
+      toast({
+        title: "Erro ao carregar evidências",
+        description: "Não foi possível carregar as evidências do banco de dados",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [toast]);
+
+  React.useEffect(() => {
+    loadEvidences();
+  }, [loadEvidences]);
 
   const processOCR = async (file: File): Promise<{ text: string; confidence: number }> => {
     setIsProcessingOCR(true);
@@ -159,9 +202,9 @@ export const SGSOEvidenceManager: React.FC = () => {
     try {
       let fileUrl = null;
       let fileName = null;
+      let fileSize = null;
 
       if (uploadedFile) {
-        const fileExt = uploadedFile.name.split('.').pop();
         const filePath = `${Date.now()}_${uploadedFile.name}`;
 
         const { error: uploadError } = await supabase.storage
@@ -176,16 +219,57 @@ export const SGSOEvidenceManager: React.FC = () => {
 
         fileUrl = urlData.publicUrl;
         fileName = uploadedFile.name;
+        fileSize = uploadedFile.size;
       }
 
+      // Get current user and organization
+      const { data: { user } } = await supabase.auth.getUser();
+      const orgId = await supabase
+        .from('organization_users')
+        .select('organization_id')
+        .eq('user_id', user?.id || '')
+        .eq('status', 'active')
+        .single();
+
+      // Insert into Supabase
+      const { data: insertedEvidence, error: insertError } = await supabase
+        .from('sgso_evidence')
+        .insert({
+          organization_id: orgId.data?.organization_id || null,
+          practice_number: newEvidence.practice_number,
+          practice_name: newEvidence.practice_name,
+          evidence_type: newEvidence.evidence_type,
+          title: newEvidence.title,
+          description: newEvidence.description || null,
+          file_url: fileUrl,
+          file_name: fileName,
+          file_size: fileSize,
+          ocr_text: ocrResult?.text || null,
+          ocr_confidence: ocrResult?.confidence || null,
+          compliance_status: newEvidence.compliance_status,
+          justification: newEvidence.justification || null,
+          created_by: user?.id || null
+        })
+        .select()
+        .single();
+
+      if (insertError) throw insertError;
+
+      // Add to local state
       const newEvidenceData: Evidence = {
-        id: crypto.randomUUID(),
-        ...newEvidence,
-        file_url: fileUrl || undefined,
-        file_name: fileName || undefined,
-        ocr_text: ocrResult?.text,
-        ocr_confidence: ocrResult?.confidence,
-        created_at: new Date().toISOString()
+        id: insertedEvidence.id,
+        practice_number: insertedEvidence.practice_number,
+        practice_name: insertedEvidence.practice_name,
+        evidence_type: insertedEvidence.evidence_type || 'document',
+        title: insertedEvidence.title,
+        description: insertedEvidence.description || undefined,
+        file_url: insertedEvidence.file_url || undefined,
+        file_name: insertedEvidence.file_name || undefined,
+        ocr_text: insertedEvidence.ocr_text || undefined,
+        ocr_confidence: insertedEvidence.ocr_confidence ? Number(insertedEvidence.ocr_confidence) : undefined,
+        compliance_status: insertedEvidence.compliance_status || undefined,
+        justification: insertedEvidence.justification || undefined,
+        created_at: insertedEvidence.created_at || new Date().toISOString()
       };
 
       setEvidences(prev => [newEvidenceData, ...prev]);
@@ -218,6 +302,30 @@ export const SGSOEvidenceManager: React.FC = () => {
       });
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const deleteEvidence = async (evidenceId: string) => {
+    try {
+      const { error } = await supabase
+        .from('sgso_evidence')
+        .delete()
+        .eq('id', evidenceId);
+
+      if (error) throw error;
+
+      setEvidences(prev => prev.filter(e => e.id !== evidenceId));
+      toast({
+        title: "Evidência removida",
+        description: "A evidência foi excluída com sucesso"
+      });
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast({
+        title: "Erro ao excluir",
+        description: "Não foi possível excluir a evidência",
+        variant: "destructive"
+      });
     }
   };
 
