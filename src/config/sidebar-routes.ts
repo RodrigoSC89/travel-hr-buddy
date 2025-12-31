@@ -162,8 +162,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🧠 IA & Automação",
     defaultOpen: false,
     items: [
+      { label: "🚀 Features Revolucionárias", path: "/revolutionary-features", icon: Zap, emoji: "🚀", badge: "NEW", status: "new" },
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
-      { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖", badge: "NEW" },
+      { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
       { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
       { label: "Workflow Command", path: "/workflow-command", icon: Zap, emoji: "🔄" },
       { label: "Journaling IA", path: "/ai-journaling", icon: FileText, emoji: "📝" },

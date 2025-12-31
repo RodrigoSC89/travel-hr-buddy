@@ -1,5 +1,6 @@
 /**
  * Revolutionary Features Hub - Central de Funcionalidades Revolucionárias
+ * PATCH REVOLUTION v1.0
  * Consolida todas as 9 funcionalidades revolucionárias do Nautilus One
  */
 import React, { useState } from "react";
@@ -9,11 +10,22 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Brain, Blocks, Glasses, Heart, Globe2, Smile,
   Atom, Trophy, Wrench, Sparkles, TrendingUp, Shield,
   Zap, Users, Ship, Activity, Target, BarChart3
 } from "lucide-react";
+
+// Import revolutionary components
+import { AutonomousOperationsCenter } from "./AutonomousOperationsCenter";
+import { MaritimeBlockchainNetwork } from "./MaritimeBlockchainNetwork";
+import { GamificationExtreme } from "./GamificationExtreme";
+import { CrewHealthIntelligence } from "./CrewHealthIntelligence";
+import { VRARTrainingCenter } from "./VRARTrainingCenter";
+import { GlobalMaritimeNetwork } from "./GlobalMaritimeNetwork";
+import { SelfHealingSystem } from "./SelfHealingSystem";
+import { EmotionalAISystem } from "./EmotionalAISystem";
 
 // Feature configurations
 const REVOLUTIONARY_FEATURES = [
@@ -25,7 +37,8 @@ const REVOLUTIONARY_FEATURES = [
     progress: 75,
     color: "from-violet-500 to-purple-600",
     description: "IA que opera com ZERO intervenção humana em operações rotineiras",
-    stats: { decisions: "12,458", accuracy: "97.3%", savings: "$2.3M" }
+    stats: { decisions: "12,458", accuracy: "97.3%", savings: "$2.3M" },
+    component: "autonomous"
   },
   {
     id: "blockchain",
@@ -35,7 +48,8 @@ const REVOLUTIONARY_FEATURES = [
     progress: 60,
     color: "from-blue-500 to-cyan-600",
     description: "Smart contracts e certificados imutáveis na blockchain",
-    stats: { contracts: "847", verified: "100%", disputes: "0" }
+    stats: { contracts: "847", verified: "100%", disputes: "0" },
+    component: "blockchain"
   },
   {
     id: "vr-ar",
@@ -45,7 +59,8 @@ const REVOLUTIONARY_FEATURES = [
     progress: 85,
     color: "from-green-500 to-emerald-600",
     description: "Treinamento imersivo e suporte remoto com realidade aumentada",
-    stats: { trained: "1,247", scenarios: "45", retention: "+60%" }
+    stats: { trained: "1,247", scenarios: "45", retention: "+60%" },
+    component: "vrar"
   },
   {
     id: "biometrics",
@@ -55,7 +70,8 @@ const REVOLUTIONARY_FEATURES = [
     progress: 80,
     color: "from-red-500 to-pink-600",
     description: "Monitoramento 24/7 de saúde e prevenção preditiva",
-    stats: { monitored: "847", prevented: "23", satisfaction: "94%" }
+    stats: { monitored: "847", prevented: "23", satisfaction: "94%" },
+    component: "health"
   },
   {
     id: "global-network",
@@ -65,27 +81,8 @@ const REVOLUTIONARY_FEATURES = [
     progress: 45,
     color: "from-indigo-500 to-blue-600",
     description: "Rede global de inteligência coletiva entre 10,000+ navios",
-    stats: { vessels: "3,847", dataPoints: "1.2B", savings: "$1.8M" }
-  },
-  {
-    id: "emotional-ai",
-    name: "Emotional AI",
-    icon: Smile,
-    status: "active",
-    progress: 70,
-    color: "from-yellow-500 to-orange-600",
-    description: "IA que entende emoções e otimiza dinâmica de equipe",
-    stats: { conflicts: "-80%", satisfaction: "+50%", turnover: "-40%" }
-  },
-  {
-    id: "quantum",
-    name: "Quantum Computing",
-    icon: Atom,
-    status: "roadmap",
-    progress: 15,
-    color: "from-purple-500 to-pink-600",
-    description: "Otimização quântica para problemas de complexidade exponencial",
-    stats: { eta: "2030", speedup: "1000x", precision: "∞" }
+    stats: { vessels: "3,847", dataPoints: "1.2B", savings: "$1.8M" },
+    component: "network"
   },
   {
     id: "gamification",
@@ -95,7 +92,8 @@ const REVOLUTIONARY_FEATURES = [
     progress: 95,
     color: "from-amber-500 to-yellow-600",
     description: "Sistema de pontos, níveis e recompensas para engagement máximo",
-    stats: { users: "2,847", engagement: "95%", performance: "+40%" }
+    stats: { users: "2,847", engagement: "95%", performance: "+40%" },
+    component: "gamification"
   },
   {
     id: "self-healing",
@@ -105,7 +103,30 @@ const REVOLUTIONARY_FEATURES = [
     progress: 82,
     color: "from-teal-500 to-cyan-600",
     description: "Infraestrutura que detecta e corrige problemas automaticamente",
-    stats: { uptime: "99.99%", mttr: "36s", prevented: "847" }
+    stats: { uptime: "99.99%", mttr: "36s", prevented: "847" },
+    component: "selfhealing"
+  },
+  {
+    id: "emotional-ai",
+    name: "Emotional AI",
+    icon: Smile,
+    status: "active",
+    progress: 70,
+    color: "from-yellow-500 to-orange-600",
+    description: "IA que entende emoções e otimiza dinâmica de equipe",
+    stats: { conflicts: "-80%", satisfaction: "+50%", turnover: "-40%" },
+    component: "emotional"
+  },
+  {
+    id: "quantum",
+    name: "Quantum Computing",
+    icon: Atom,
+    status: "roadmap",
+    progress: 15,
+    color: "from-purple-500 to-pink-600",
+    description: "Otimização quântica para problemas de complexidade exponencial",
+    stats: { eta: "2030", speedup: "1000x", precision: "∞" },
+    component: "quantum"
   }
 ];
 
@@ -119,7 +140,38 @@ const getStatusBadge = (status: string) => {
 };
 
 export function RevolutionaryFeaturesHub() {
-  const [selectedFeature, setSelectedFeature] = useState(REVOLUTIONARY_FEATURES[0]);
+  const [selectedTab, setSelectedTab] = useState("overview");
+
+  const renderFeatureComponent = (componentId: string) => {
+    switch (componentId) {
+      case "autonomous":
+        return <AutonomousOperationsCenter />;
+      case "blockchain":
+        return <MaritimeBlockchainNetwork />;
+      case "vrar":
+        return <VRARTrainingCenter />;
+      case "health":
+        return <CrewHealthIntelligence />;
+      case "network":
+        return <GlobalMaritimeNetwork />;
+      case "gamification":
+        return <GamificationExtreme />;
+      case "selfhealing":
+        return <SelfHealingSystem />;
+      case "emotional":
+        return <EmotionalAISystem />;
+      default:
+        return (
+          <Card className="p-8 text-center">
+            <Atom className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-xl font-bold mb-2">Em Desenvolvimento</h3>
+            <p className="text-muted-foreground">
+              Esta funcionalidade está no roadmap para 2027-2030
+            </p>
+          </Card>
+        );
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -170,103 +222,86 @@ export function RevolutionaryFeaturesHub() {
         ))}
       </div>
 
-      {/* Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {REVOLUTIONARY_FEATURES.map((feature, i) => {
-          const status = getStatusBadge(feature.status);
-          const isSelected = selectedFeature.id === feature.id;
-          
-          return (
-            <motion.div
-              key={feature.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              onClick={() => setSelectedFeature(feature)}
-              className="cursor-pointer"
-            >
-              <Card className={`transition-all hover:shadow-lg ${isSelected ? 'ring-2 ring-primary' : ''}`}>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <div className={`p-2 rounded-lg bg-gradient-to-br ${feature.color}`}>
-                      <feature.icon className="h-5 w-5 text-white" />
-                    </div>
-                    <Badge variant={status.variant}>{status.label}</Badge>
-                  </div>
-                  <CardTitle className="text-lg mt-2">{feature.name}</CardTitle>
-                  <CardDescription className="text-xs line-clamp-2">
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-muted-foreground">Progresso</span>
-                      <span className="font-medium">{feature.progress}%</span>
-                    </div>
-                    <Progress value={feature.progress} className="h-1.5" />
-                    
-                    <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t">
-                      {Object.entries(feature.stats).map(([key, value]) => (
-                        <div key={key} className="text-center">
-                          <p className="text-sm font-bold">{value}</p>
-                          <p className="text-[10px] text-muted-foreground capitalize">{key}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          );
-        })}
-      </div>
+      {/* Main Tabs */}
+      <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <ScrollArea className="w-full">
+          <TabsList className="inline-flex w-full justify-start gap-1 bg-muted/50 p-1">
+            <TabsTrigger value="overview" className="flex items-center gap-1">
+              <Sparkles className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            {REVOLUTIONARY_FEATURES.slice(0, 7).map((feature) => (
+              <TabsTrigger 
+                key={feature.id} 
+                value={feature.component}
+                className="flex items-center gap-1"
+              >
+                <feature.icon className="h-4 w-4" />
+                <span className="hidden md:inline">{feature.name.split(" ")[0]}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </ScrollArea>
 
-      {/* Selected Feature Detail */}
-      <motion.div
-        key={selectedFeature.id}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <Card className={`bg-gradient-to-br ${selectedFeature.color} text-white`}>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <selectedFeature.icon className="h-8 w-8" />
-              <div>
-                <CardTitle className="text-2xl text-white">{selectedFeature.name}</CardTitle>
-                <CardDescription className="text-white/80">
-                  {selectedFeature.description}
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-4">
-              {Object.entries(selectedFeature.stats).map(([key, value]) => (
-                <div key={key} className="bg-white/10 rounded-lg p-4 text-center backdrop-blur-sm">
-                  <p className="text-3xl font-bold">{value}</p>
-                  <p className="text-sm text-white/70 capitalize">{key}</p>
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-6 flex gap-3">
-              <Button variant="secondary" className="flex-1">
-                <Activity className="h-4 w-4 mr-2" />
-                Ver Métricas
-              </Button>
-              <Button variant="secondary" className="flex-1">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Dashboard
-              </Button>
-              <Button variant="secondary" className="flex-1">
-                <Target className="h-4 w-4 mr-2" />
-                Configurar
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+        <TabsContent value="overview" className="mt-6">
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {REVOLUTIONARY_FEATURES.map((feature, i) => {
+              const status = getStatusBadge(feature.status);
+              
+              return (
+                <motion.div
+                  key={feature.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  onClick={() => feature.status !== "roadmap" && setSelectedTab(feature.component)}
+                  className={feature.status !== "roadmap" ? "cursor-pointer" : ""}
+                >
+                  <Card className={`transition-all hover:shadow-lg ${feature.status !== "roadmap" ? "hover:ring-2 hover:ring-primary/50" : "opacity-70"}`}>
+                    <CardHeader className="pb-2">
+                      <div className="flex items-center justify-between">
+                        <div className={`p-2 rounded-lg bg-gradient-to-br ${feature.color}`}>
+                          <feature.icon className="h-5 w-5 text-white" />
+                        </div>
+                        <Badge variant={status.variant}>{status.label}</Badge>
+                      </div>
+                      <CardTitle className="text-lg mt-2">{feature.name}</CardTitle>
+                      <CardDescription className="text-xs line-clamp-2">
+                        {feature.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-muted-foreground">Progresso</span>
+                          <span className="font-medium">{feature.progress}%</span>
+                        </div>
+                        <Progress value={feature.progress} className="h-1.5" />
+                        
+                        <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t">
+                          {Object.entries(feature.stats).map(([key, value]) => (
+                            <div key={key} className="text-center">
+                              <p className="text-sm font-bold">{value}</p>
+                              <p className="text-[10px] text-muted-foreground capitalize">{key}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </TabsContent>
+
+        {REVOLUTIONARY_FEATURES.map((feature) => (
+          <TabsContent key={feature.id} value={feature.component} className="mt-6">
+            {renderFeatureComponent(feature.component)}
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   );
 }
