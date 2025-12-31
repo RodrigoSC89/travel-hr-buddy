@@ -1,6 +1,18 @@
 project_id = "vnbptmixvwropvanyhdb"
 
 # ============================================
+# PEO-DP AI Functions - Added 2025-12-31
+# ============================================
+
+[functions.peodp-generate-evidence]
+verify_jwt = false
+comment = "PEO-DP AI evidence generator for non-conformity analysis Petrobras 2021"
+
+[functions.peodp-voice-chat]
+verify_jwt = false
+comment = "PEO-DP voice chat assistant for audit queries and compliance"
+
+# ============================================
 # NEW: Proactive Operations & Security Functions
 # Added: 2025-12-27
 # ============================================
