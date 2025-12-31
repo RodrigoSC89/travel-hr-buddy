@@ -21566,6 +21566,97 @@ export type Database = {
         }
         Relationships: []
       }
+      sgso_action_plans: {
+        Row: {
+          action_type: string | null
+          audit_id: string | null
+          code: string
+          created_at: string | null
+          created_by: string | null
+          deadline: string
+          description: string | null
+          evidence_ids: string[] | null
+          finding_id: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          progress: number | null
+          responsible: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          verification_date: string | null
+          verification_method: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          action_type?: string | null
+          audit_id?: string | null
+          code: string
+          created_at?: string | null
+          created_by?: string | null
+          deadline: string
+          description?: string | null
+          evidence_ids?: string[] | null
+          finding_id?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          progress?: number | null
+          responsible: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          verification_date?: string | null
+          verification_method?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          action_type?: string | null
+          audit_id?: string | null
+          code?: string
+          created_at?: string | null
+          created_by?: string | null
+          deadline?: string
+          description?: string | null
+          evidence_ids?: string[] | null
+          finding_id?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          progress?: number | null
+          responsible?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          verification_date?: string | null
+          verification_method?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_action_plans_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "sgso_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sgso_action_plans_finding_id_fkey"
+            columns: ["finding_id"]
+            isOneToOne: false
+            referencedRelation: "sgso_findings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sgso_action_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sgso_actions: {
         Row: {
           action_description: string | null
@@ -21728,6 +21819,162 @@ export type Database = {
           vessel_id?: string | null
         }
         Relationships: []
+      }
+      sgso_evidence: {
+        Row: {
+          audit_id: string | null
+          compliance_status: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          evidence_type: string | null
+          file_name: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          justification: string | null
+          ocr_confidence: number | null
+          ocr_text: string | null
+          organization_id: string | null
+          practice_name: string
+          practice_number: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          audit_id?: string | null
+          compliance_status?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          evidence_type?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          justification?: string | null
+          ocr_confidence?: number | null
+          ocr_text?: string | null
+          organization_id?: string | null
+          practice_name: string
+          practice_number: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          audit_id?: string | null
+          compliance_status?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          evidence_type?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          justification?: string | null
+          ocr_confidence?: number | null
+          ocr_text?: string | null
+          organization_id?: string | null
+          practice_name?: string
+          practice_number?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_evidence_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "sgso_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sgso_evidence_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sgso_findings: {
+        Row: {
+          audit_id: string | null
+          closed_at: string | null
+          closed_by: string | null
+          code: string
+          created_at: string | null
+          created_by: string | null
+          deadline: string | null
+          description: string | null
+          evidence_ids: string[] | null
+          id: string
+          organization_id: string | null
+          practice_number: string
+          responsible: string | null
+          root_cause: string | null
+          severity: string
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          audit_id?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
+          code: string
+          created_at?: string | null
+          created_by?: string | null
+          deadline?: string | null
+          description?: string | null
+          evidence_ids?: string[] | null
+          id?: string
+          organization_id?: string | null
+          practice_number: string
+          responsible?: string | null
+          root_cause?: string | null
+          severity: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          audit_id?: string | null
+          closed_at?: string | null
+          closed_by?: string | null
+          code?: string
+          created_at?: string | null
+          created_by?: string | null
+          deadline?: string | null
+          description?: string | null
+          evidence_ids?: string[] | null
+          id?: string
+          organization_id?: string | null
+          practice_number?: string
+          responsible?: string | null
+          root_cause?: string | null
+          severity?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_findings_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "sgso_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sgso_findings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sgso_plans: {
         Row: {

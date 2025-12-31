@@ -18,3 +18,8 @@ export { SGSOHistoryTable } from "./SGSOHistoryTable";
 export { CAPAManager } from "./CAPAManager";
 export { SGSOAssistant } from "./SGSOAssistant";
 export { ANPDossierExport } from "./ANPDossierExport";
+export { SGSOAuditTrail } from "./SGSOAuditTrail";
+export { SGSOMaturityCurve } from "./SGSOMaturityCurve";
+export { SGSOKnowledgeBase } from "./SGSOKnowledgeBase";
+export { SGSOEvidenceManager } from "./SGSOEvidenceManager";
+export { SGSOPDFReportGenerator } from "./SGSOPDFReportGenerator";
