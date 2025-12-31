@@ -20,16 +20,8 @@ const PRACTICE_OPTIONS = [
   { id: "PG-16", name: "Auditorias e Verificações" },
 ];
 
-interface Evidence {
-  id: string;
-  file_name: string;
-  practice_id: string;
-  ocr_text?: string;
-  created_at: string;
-}
-
 export const SGSOEvidenceManager: React.FC = () => {
-  const [evidences, setEvidences] = useState<Evidence[]>([]);
+  const [evidences, setEvidences] = useState<any[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedPractice, setSelectedPractice] = useState("");
   const { toast } = useToast();
@@ -43,7 +35,7 @@ export const SGSOEvidenceManager: React.FC = () => {
       .from("sgso_evidence")
       .select("*")
       .order("created_at", { ascending: false });
-    setEvidences((data as Evidence[]) || []);
+    setEvidences(data || []);
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +46,7 @@ export const SGSOEvidenceManager: React.FC = () => {
 
     setIsUploading(true);
     const file = e.target.files[0];
+    const practice = PRACTICE_OPTIONS.find(p => p.id === selectedPractice);
 
     try {
       const filePath = `${Date.now()}_${file.name}`;
@@ -63,12 +56,18 @@ export const SGSOEvidenceManager: React.FC = () => {
 
       if (uploadError) throw uploadError;
 
+      const { data: urlData } = supabase.storage
+        .from("sgso-evidence")
+        .getPublicUrl(filePath);
+
       await supabase.from("sgso_evidence").insert({
+        practice_number: selectedPractice,
+        practice_name: practice?.name || "",
+        title: file.name,
         file_name: file.name,
-        file_path: filePath,
-        practice_id: selectedPractice,
-        file_type: file.type,
+        file_url: urlData.publicUrl,
         file_size: file.size,
+        evidence_type: file.type.includes("pdf") ? "document" : "image",
       });
 
       toast({ title: "Evidência enviada com sucesso" });
@@ -123,8 +122,8 @@ export const SGSOEvidenceManager: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <FileText className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-medium">{ev.file_name}</p>
-                    <Badge variant="outline">{ev.practice_id}</Badge>
+                    <p className="font-medium">{ev.title || ev.file_name}</p>
+                    <Badge variant="outline">{ev.practice_number}</Badge>
                   </div>
                 </div>
                 <Button variant="ghost" size="icon" onClick={() => handleDelete(ev.id)}>
