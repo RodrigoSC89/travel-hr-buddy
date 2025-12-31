@@ -40,6 +40,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { PredictiveMaintenanceAI } from "@/components/maintenance/PredictiveMaintenanceAI";
+import { IoTSensorMonitor } from "@/components/maintenance/IoTSensorMonitor";
+import { Predictive30_60_90 } from "@/components/maintenance/Predictive30_60_90";
 
 // Core maintenance components
 import { MaintenanceCalendarView } from "@/modules/maintenance-planner/components/MaintenanceCalendarView";
