@@ -1,0 +1,10 @@
+-- Itens Elemento 1 - LGR (6 itens)
+INSERT INTO public.peotram_items_2024 (element_id, item_number, item_name, description, requirement, verification_criteria_compliant, verification_criteria_non_compliant, evidence_required, norm_reference, criticality_level)
+VALUES 
+  ('56f8141d-4265-4d73-b1b8-b3bdb0f574fe', 1, 'Política SMS', 'Política de SMS documentada e aprovada pela alta administração', 'Documento assinado pela alta direção', 'Política atualizada, assinada e divulgada', 'Ausência de política ou desatualizada', ARRAY['Política SMS assinada'], 'ISM Code 2', 'critical'),
+  ('56f8141d-4265-4d73-b1b8-b3bdb0f574fe', 2, 'Organograma SMS', 'Organograma com responsabilidades SMS definidas', 'Organograma formal com funções SMS', 'Organograma atualizado e divulgado', 'Organograma inexistente ou desatualizado', ARRAY['Organograma atualizado'], 'ISM Code 3', 'major'),
+  ('56f8141d-4265-4d73-b1b8-b3bdb0f574fe', 3, 'Matriz RACI', 'Matriz RACI de responsabilidades SMS', 'Matriz de responsabilidades documentada', 'RACI definida para processos SMS', 'Ausência de matriz de responsabilidades', ARRAY['Matriz RACI'], 'IMCA M 117', 'minor'),
+  ('56f8141d-4265-4d73-b1b8-b3bdb0f574fe', 4, 'Representante SMS', 'Representante da Direção designado para SMS', 'Nomeação formal do DPA/CSO', 'DPA/CSO nomeado e qualificado', 'Ausência de representante designado', ARRAY['Carta nomeação DPA'], 'ISM Code 4', 'critical'),
+  ('56f8141d-4265-4d73-b1b8-b3bdb0f574fe', 5, 'Análise Crítica', 'Análise crítica pela direção realizada anualmente', 'Reunião anual de análise crítica', 'Atas com decisões e acompanhamento', 'Sem evidência de análise crítica', ARRAY['Ata reunião análise crítica'], 'ISM Code 12.1', 'major'),
+  ('56f8141d-4265-4d73-b1b8-b3bdb0f574fe', 6, 'Recursos SMS', 'Recursos adequados alocados para SMS', 'Orçamento e recursos definidos', 'Recursos adequados disponíveis', 'Recursos insuficientes ou não alocados', ARRAY['Orçamento SMS'], 'ISM Code 3.3', 'major')
+ON CONFLICT (element_id, item_number) DO NOTHING;
