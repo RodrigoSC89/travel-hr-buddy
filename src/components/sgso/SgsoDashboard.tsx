@@ -26,7 +26,8 @@ import {
   Download,
   MessageSquare,
   Plus,
-  Save
+  Save,
+  BookOpen
 } from "lucide-react";
 import { AnpPracticesManager } from "./AnpPracticesManager";
 import { RiskAssessmentMatrix } from "./RiskAssessmentMatrix";
@@ -42,6 +43,9 @@ import { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
 import { CAPAManager } from "./CAPAManager";
 import { SGSOEnhancedAssistant } from "./SGSOEnhancedAssistant";
 import { ANPDossierExport } from "./ANPDossierExport";
+import { SGSOAuditTrail } from "./SGSOAuditTrail";
+import { SGSOMaturityCurve } from "./SGSOMaturityCurve";
+import { SGSOKnowledgeBase } from "./SGSOKnowledgeBase";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -406,6 +410,31 @@ export const SgsoDashboard: React.FC = () => {
               >
                 <Activity className="h-4 w-4 mr-2" />
                 Painel
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Advanced SGSO Tabs */}
+            <TabsList className="grid grid-cols-3 lg:grid-cols-3 w-full h-auto gap-2 bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20 p-2 border border-red-200 dark:border-red-800">
+              <TabsTrigger 
+                value="audit-trail"
+                className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Trilha Auditoria
+              </TabsTrigger>
+              <TabsTrigger 
+                value="maturity"
+                className="data-[state=active]:bg-background data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Maturidade
+              </TabsTrigger>
+              <TabsTrigger 
+                value="knowledge"
+                className="data-[state=active]:bg-background data-[state=active]:text-blue-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <BookOpen className="h-4 w-4 mr-2" />
+                Base Conhecimento
               </TabsTrigger>
             </TabsList>
 
@@ -828,6 +857,18 @@ export const SgsoDashboard: React.FC = () => {
 
             <TabsContent value="painel">
               <PainelSGSO />
+            </TabsContent>
+
+            <TabsContent value="audit-trail">
+              <SGSOAuditTrail />
+            </TabsContent>
+
+            <TabsContent value="maturity">
+              <SGSOMaturityCurve />
+            </TabsContent>
+
+            <TabsContent value="knowledge">
+              <SGSOKnowledgeBase />
             </TabsContent>
           </Tabs>
         </CardContent>
