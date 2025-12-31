@@ -52,13 +52,21 @@ interface NonConformityInput {
   auditor_name?: string;
 }
 
+// 13 ELEMENTOS REAIS DO PEOTRAM 2024 - PETROBRAS
 const PEOTRAM_ELEMENTS = [
-  { number: 1, name: "Pessoal e Organização", critical: false },
-  { number: 2, name: "Documentação", critical: false },
-  { number: 3, name: "Planejamento e Rotina", critical: false },
-  { number: 4, name: "Execução Operacional", critical: true },
-  { number: 5, name: "Continuidade", critical: false },
-  { number: 6, name: "Gestão de Risco", critical: true },
+  { number: 1, name: "Liderança, Gerenciamento e Responsabilidade", critical: false },
+  { number: 2, name: "Conformidade Legal", critical: false },
+  { number: 3, name: "Avaliação e Gestão de Riscos", critical: false },
+  { number: 4, name: "Informação, Documentação e Controle", critical: true },
+  { number: 5, name: "Pessoal, Capacitação e Competência", critical: false },
+  { number: 6, name: "Integridade Mecânica e Qualidade", critical: true },
+  { number: 7, name: "Gestão de Contratadas", critical: false },
+  { number: 8, name: "Gestão de Operações", critical: false },
+  { number: 9, name: "Gestão de Mudanças", critical: false },
+  { number: 10, name: "Tratamento de Anomalias", critical: false },
+  { number: 11, name: "Preparação e Resposta a Emergências", critical: true },
+  { number: 12, name: "Comunicação e Consulta", critical: true },
+  { number: 13, name: "Auditoria e Melhoria Contínua", critical: false },
 ];
 
 const NC_TYPES = [

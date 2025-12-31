@@ -42,13 +42,21 @@ interface PeotramElement {
   description: string;
 }
 
+// 13 ELEMENTOS REAIS DO PEOTRAM 2024 - PETROBRAS
 const PEOTRAM_ELEMENTS: PeotramElement[] = [
-  { number: 1, name: "Pessoal e Organização", critical: false, description: "Estrutura organizacional, responsabilidades e competências" },
-  { number: 2, name: "Documentação", critical: false, description: "Sistema de gestão documental, controle de versões, procedimentos" },
-  { number: 3, name: "Planejamento e Rotina", critical: false, description: "Planejamento operacional, programação de atividades, rotinas" },
-  { number: 4, name: "Execução Operacional", critical: true, description: "Execução de atividades operacionais, controle de processos, qualidade" },
-  { number: 5, name: "Continuidade", critical: false, description: "Planos de continuidade, backup, recuperação de desastres" },
-  { number: 6, name: "Gestão de Risco", critical: true, description: "Identificação, análise e tratamento de riscos operacionais" },
+  { number: 1, name: "Liderança, Gerenciamento e Responsabilidade", critical: false, description: "Compromisso da alta administração e gestão de SMS" },
+  { number: 2, name: "Conformidade Legal", critical: false, description: "Requisitos legais, normativos e contratuais" },
+  { number: 3, name: "Avaliação e Gestão de Riscos", critical: false, description: "Identificação, análise e controle de riscos" },
+  { number: 4, name: "Informação, Documentação e Controle", critical: true, description: "Gestão de documentos e registros do SGI" },
+  { number: 5, name: "Pessoal, Capacitação e Competência", critical: false, description: "Gestão de pessoas, treinamento STCW" },
+  { number: 6, name: "Integridade Mecânica e Qualidade", critical: true, description: "Manutenção de equipamentos críticos e PMS" },
+  { number: 7, name: "Gestão de Contratadas", critical: false, description: "Qualificação e monitoramento de contratadas" },
+  { number: 8, name: "Gestão de Operações", critical: false, description: "Procedimentos e controles operacionais" },
+  { number: 9, name: "Gestão de Mudanças", critical: false, description: "Controle de mudanças em processos" },
+  { number: 10, name: "Tratamento de Anomalias", critical: false, description: "Registro e investigação de incidentes" },
+  { number: 11, name: "Preparação e Resposta a Emergências", critical: true, description: "Planos de emergência e exercícios" },
+  { number: 12, name: "Comunicação e Consulta", critical: true, description: "Comunicação interna e externa de SMS" },
+  { number: 13, name: "Auditoria e Melhoria Contínua", critical: false, description: "Programa de auditorias e análise crítica" },
 ];
 
 export function PeotramVoiceChat() {
