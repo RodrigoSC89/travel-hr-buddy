@@ -16,8 +16,9 @@ import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
 import { LiteModeProvider } from "./components/performance/LiteMode";
 
-// Global Voice Button
+// Global Voice Button & AI Level 3
 import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
+import { GlobalAILevel3Button } from "./components/ai/GlobalAILevel3Button";
 
 // Performance utilities
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -349,6 +350,7 @@ function App() {
                     
                     <Toaster />
                     <GlobalVoiceButton />
+                    <GlobalAILevel3Button />
                   </GlobalBrainProvider>
                   </LiteModeProvider>
                 </RouterType>
