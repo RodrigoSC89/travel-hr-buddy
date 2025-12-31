@@ -899,3 +899,24 @@ comment = "GMUD change management workflow with automated signatures"
 [functions.responsibility-matrix-dispatch]
 verify_jwt = false
 comment = "Dispatch action items from responsibility matrix via Zapier/Twilio"
+
+# ============================================
+# NOVOS MÓDULOS - Gap Implementation
+# Added: 2025-12-31
+# ============================================
+
+[functions.bunker-ai]
+verify_jwt = false
+comment = "Bunker Management AI - consumption prediction, price comparison, route optimization"
+
+[functions.voyage-accounting-ai]
+verify_jwt = false
+comment = "Voyage Accounting AI - P&L calculation, cost optimization, freight forecast"
+
+[functions.cargo-management-ai]
+verify_jwt = false
+comment = "Cargo Management AI - loading optimization, stability check, anomaly detection"
+
+[functions.charter-party-ai]
+verify_jwt = false
+comment = "Charter Party AI - hire calculation, demurrage, contract analysis"
