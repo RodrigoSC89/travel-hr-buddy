@@ -30,6 +30,8 @@ import { AISSimopsIntegration } from "./ais-simops-integration";
 import { DPIntelCenter } from "./dp-intel-center";
 import { ASOGStatusDisplay } from "./asog-status-display";
 import { PEODPAIChat } from "./peodp-ai-chat";
+import { PeodpEvidenceGenerator } from "./peodp-evidence-generator";
+import { PeodpVoiceChat } from "./peodp-voice-chat";
 // New competitive analysis components
 import { ClassSurveyDashboard } from "@/components/compliance/ClassSurveyDashboard";
 import { STCWCompetencyMatrix } from "@/components/crew/STCWCompetencyMatrix";
