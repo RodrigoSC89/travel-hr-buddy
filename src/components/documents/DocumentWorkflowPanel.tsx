@@ -318,10 +318,10 @@ export const DocumentWorkflowPanel: React.FC = () => {
                             )}
                           </div>
                           <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" onClick={() => toast.success(`Visualizando documento: ${doc.title}`)}>
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" onClick={() => toast.info(`Editando documento: ${doc.title}`)}>
                               <Edit className="h-4 w-4" />
                             </Button>
                             {doc.status === 'draft' && (

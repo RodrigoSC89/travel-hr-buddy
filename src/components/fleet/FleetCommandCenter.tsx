@@ -374,7 +374,10 @@ export const FleetCommandCenter: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Active Missions</CardTitle>
-                <Button size="sm">
+                <Button size="sm" onClick={() => {
+                  logger.info("Creating new mission");
+                  // TODO: Open create mission dialog
+                }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create Mission
                 </Button>
