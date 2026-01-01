@@ -86,7 +86,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
   // 🧠 CENTRAL DE COMANDO - MÓDULO UNIFICADO (1/16)
   // PATCH UNIFY-4.0: Fusão Nautilus Command + Dashboard
   // ============================================
-{
+  {
     title: "🧠 Central de Comando",
     defaultOpen: true,
     items: [
@@ -98,12 +98,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Alertas", path: "/central-comando/alertas", icon: Bell, emoji: "🚨", badgeType: 'alerts' },
       { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️", requiredRoles: ['admin', 'supervisor', 'manager'] },
       { label: "NOC Monitoring", path: "/noc-monitoring", icon: Activity, emoji: "📡", requiredRoles: ['admin', 'supervisor', 'manager'] },
-      { label: "Central Comando V2", path: "/central-comando-v2", icon: Compass, emoji: "✨", badge: "V2" },
-      { label: "SGSO V2", path: "/sgso-v2", icon: Shield, emoji: "✨", badge: "V2" },
-      { label: "PEOTRAM V2", path: "/peotram-v2", icon: FileText, emoji: "✨", badge: "V2" },
-      { label: "PEO-DP V2", path: "/peo-dp-v2", icon: Anchor, emoji: "✨", badge: "V2" },
-      { label: "Fleet Tracking V2", path: "/fleet-tracking-v2", icon: Ship, emoji: "✨", badge: "V2" },
-      { label: "Crew Management V2", path: "/crew-management-v2", icon: Users, emoji: "✨", badge: "V2" },
     ],
   },
 
