@@ -929,3 +929,11 @@ comment = "Charter Party AI - hire calculation, demurrage, contract analysis"
 [functions.ai-hub-chat]
 verify_jwt = false
 comment = "AI Hub Central - Unified chat interface for all 16 specialized AI modules"
+
+[functions.ai-hub-voice]
+verify_jwt = false
+comment = "AI Hub Voice - ElevenLabs HD voice synthesis for all AI modules"
+
+[functions.ai-analytics]
+verify_jwt = false
+comment = "AI Analytics - Usage tracking and statistics for AI Hub"

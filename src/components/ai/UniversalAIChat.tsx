@@ -97,7 +97,39 @@ export function UniversalAIChat({
     }
   }, [welcomeMessage, messages.length]);
 
-  const speak = useCallback((text: string) => {
+  const speak = useCallback(async (text: string) => {
+    // Try ElevenLabs HD first, fallback to browser TTS
+    try {
+      setIsSpeaking(true);
+      
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-hub-voice`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ text: text.slice(0, 500), module }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.audioContent) {
+          const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
+          const audio = new Audio(audioUrl);
+          audio.onended = () => setIsSpeaking(false);
+          audio.onerror = () => setIsSpeaking(false);
+          await audio.play();
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('ElevenLabs HD failed, falling back to browser TTS:', error);
+    }
+
+    // Fallback to browser TTS
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
@@ -105,8 +137,10 @@ export function UniversalAIChat({
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
       window.speechSynthesis.speak(utterance);
+    } else {
+      setIsSpeaking(false);
     }
-  }, []);
+  }, [module]);
 
   const stopSpeaking = useCallback(() => {
     if ('speechSynthesis' in window) {
