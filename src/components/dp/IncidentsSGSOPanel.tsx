@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DPIncident, SGSO_CATEGORIES, RISK_LEVEL_COLORS, SGSORiskLevel } from "@/types/incident";
 import { FileDown, Filter, X } from "lucide-react";
 import { saveAs } from "file-saver";
+import { toast } from "sonner";
 
 // Mock data for incidents with SGSO classification
 const MOCK_INCIDENTS: DPIncident[] = [
@@ -156,7 +157,7 @@ export function IncidentsSGSOPanel() {
 
   // Export to PDF (placeholder - requires html2pdf.js)
   const exportToPDF = () => {
-    alert("Funcionalidade de exportação PDF será implementada em breve!");
+    toast.info("Funcionalidade de exportação PDF será implementada em breve!");
   };
 
   return (

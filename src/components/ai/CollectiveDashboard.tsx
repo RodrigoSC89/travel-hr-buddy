@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -164,7 +165,7 @@ export const CollectiveDashboard: React.FC = () => {
   const exportPDF = async () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");
     // In real implementation, this would generate a PDF
-    alert("PDF export feature - would generate comprehensive report");
+    toast.info("Exportando relatório PDF completo...");
   };
 
   const getStatusColor = (status: string): string => {

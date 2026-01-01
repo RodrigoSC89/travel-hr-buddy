@@ -234,7 +234,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
 
   const handleComplete = async () => {
     if (overallProgress < 100) {
-      alert("Todas as avaliações devem ser completadas antes de finalizar a auditoria.");
+      toast({ title: "Atenção", description: "Todas as avaliações devem ser completadas antes de finalizar a auditoria.", variant: "destructive" });
       return;
     }
     
