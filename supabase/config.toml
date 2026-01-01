@@ -920,3 +920,12 @@ comment = "Cargo Management AI - loading optimization, stability check, anomaly 
 [functions.charter-party-ai]
 verify_jwt = false
 comment = "Charter Party AI - hire calculation, demurrage, contract analysis"
+
+# ============================================
+# AI HUB CENTRAL - Revolutionary AI System
+# Added: 2025-01-01
+# ============================================
+
+[functions.ai-hub-chat]
+verify_jwt = false
+comment = "AI Hub Central - Unified chat interface for all 16 specialized AI modules"

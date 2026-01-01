@@ -128,8 +128,9 @@ export class UnifiedAIService {
     try {
       const systemPrompt = await getSystemPrompt(request.module);
       
+      // Use ai-hub-chat for unified routing
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${module.edgeFunction}`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-hub-chat`,
         {
           method: 'POST',
           headers: {
@@ -137,9 +138,9 @@ export class UnifiedAIService {
             'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
-            message: request.message,
+            module: request.module,
+            messages: request.conversationHistory || [],
             context: request.context,
-            systemPrompt,
             stream: true
           })
         }

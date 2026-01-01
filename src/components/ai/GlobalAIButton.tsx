@@ -201,7 +201,7 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
                 className="w-full justify-start text-muted-foreground"
                 onClick={() => {
                   setIsOpen(false);
-                  // Navigate to AI hub
+                  window.location.href = '/ai-hub';
                 }}
               >
                 <ChevronUp className="h-4 w-4 mr-2" />

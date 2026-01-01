@@ -19,6 +19,7 @@ import { LiteModeProvider } from "./components/performance/LiteMode";
 // Global Voice Button & AI Level 3
 import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
 import { GlobalAILevel3Button } from "./components/ai/GlobalAILevel3Button";
+import { GlobalAIButton } from "./components/ai/GlobalAIButton";
 
 // Performance utilities
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -181,6 +182,9 @@ const Gamification = lazy(() => import(/* webpackChunkName: "page-gamification" 
 // Revolutionary Features Hub - PATCH REVOLUTION v1.0
 const RevolutionaryFeaturesPage = lazy(() => import(/* webpackChunkName: "page-revolutionary-features" */ "@/pages/RevolutionaryFeaturesPage"));
 
+// AI Hub Central - PATCH AI-REVOLUTION
+const AIHubPage = lazy(() => import(/* webpackChunkName: "page-ai-hub" */ "@/pages/AIHubPage"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -305,6 +309,9 @@ function App() {
                         {/* Revolutionary Features Hub - PATCH REVOLUTION v1.0 */}
                         <Route path="revolutionary-features" element={<RevolutionaryFeaturesPage />} />
                         
+                        {/* AI Hub Central - PATCH AI-REVOLUTION */}
+                        <Route path="ai-hub" element={<AIHubPage />} />
+                        
                         {/* AI Self-Healing - PATCH 860 */}
                         <Route path="ai-ops/logs" element={<SelfHealingLogs />} />
                         
@@ -357,6 +364,7 @@ function App() {
                     <Toaster />
                     <GlobalVoiceButton />
                     <GlobalAILevel3Button />
+                    <GlobalAIButton />
                   </GlobalBrainProvider>
                   </LiteModeProvider>
                 </RouterType>
