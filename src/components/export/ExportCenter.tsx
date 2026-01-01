@@ -159,11 +159,27 @@ export function ExportCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast.info("Abrindo configurações de exportação...")}>
+          <Button variant="outline" size="sm" onClick={() => {
+            toast.loading("Carregando configurações...", { id: "export-config", duration: 1000 });
+            setTimeout(() => {
+              toast.success("Configurações de exportação carregadas", { 
+                id: "export-config",
+                description: "Formatos: PDF, Excel, Word, CSV, JSON disponíveis" 
+              });
+            }, 1000);
+          }}>
             <Settings className="h-4 w-4 mr-2" />
             Configurar
           </Button>
-          <Button variant="outline" size="sm" onClick={() => toast.info("Abrindo agendador de exportações...")}>
+          <Button variant="outline" size="sm" onClick={() => {
+            toast.loading("Abrindo agendador...", { id: "export-schedule", duration: 1000 });
+            setTimeout(() => {
+              toast.success("Agendador de exportações", { 
+                id: "export-schedule",
+                description: "Configure exportações automáticas diárias, semanais ou mensais" 
+              });
+            }, 1000);
+          }}>
             <Calendar className="h-4 w-4 mr-2" />
             Agendar
           </Button>

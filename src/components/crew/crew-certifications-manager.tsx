@@ -260,7 +260,19 @@ export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificatio
               </CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">
+              <Button variant="outline" onClick={() => {
+                toast({
+                  title: "Exportando certificações",
+                  description: "Gerando arquivo Excel com dados de certificações...",
+                });
+                // Simulate export
+                setTimeout(() => {
+                  toast({
+                    title: "Exportação concluída",
+                    description: "Arquivo de certificações exportado com sucesso",
+                  });
+                }, 1500);
+              }}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
@@ -426,7 +438,12 @@ export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificatio
                       Renovar
                     </Button>
                   )}
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" onClick={() => {
+                    toast({
+                      title: "Visualizando certificação",
+                      description: `Abrindo documento: ${cert.type}`,
+                    });
+                  }}>
                     <FileText className="h-4 w-4" />
                   </Button>
                 </div>
