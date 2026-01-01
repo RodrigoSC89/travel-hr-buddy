@@ -1,6 +1,6 @@
 /**
- * AI Prompts Index - Central export for all AI system prompts
- * Nautilus One Maritime HR Management Platform
+ * AI Prompts Index - Central Registry - PATCH AI-TRAINING v2.0
+ * 16 IAs Especializadas com System Prompts Completos
  */
 
 // Core AI Prompts
@@ -9,97 +9,181 @@ export { PEODP_AI_CONFIG } from './peodp-ai-prompt';
 export { COMMAND_AI_CONFIG } from './command-ai-prompt';
 export { VOICE_AI_CONFIG } from './voice-ai-prompt';
 
-// AI Module Registry
+// Operational AI Prompts
+export { BUNKER_AI_CONFIG } from './bunker-ai-prompt';
+export { SAFETY_AI_CONFIG } from './safety-ai-prompt';
+export { COMPLIANCE_AI_CONFIG } from './compliance-ai-prompt';
+export { FLEET_AI_CONFIG } from './fleet-ai-prompt';
+export { CREW_AI_CONFIG } from './crew-ai-prompt';
+export { WEATHER_AI_CONFIG } from './weather-ai-prompt';
+export { MAINTENANCE_AI_CONFIG } from './maintenance-ai-prompt';
+export { CARGO_AI_CONFIG } from './cargo-ai-prompt';
+export { TRAINING_AI_CONFIG } from './training-ai-prompt';
+export { VOYAGE_AI_CONFIG } from './voyage-ai-prompt';
+export { CHARTER_AI_CONFIG } from './charter-ai-prompt';
+export { MLC_AI_CONFIG } from './mlc-ai-prompt';
+
+// Type definitions
+export interface AIModuleConfig {
+  name: string;
+  description: string;
+  model: string;
+  temperature: number;
+  maxTokens: number;
+  systemPrompt: string;
+  contextBuilder?: string;
+  examples?: Array<{
+    user: string;
+    context?: Record<string, unknown>;
+    response: string;
+  }>;
+}
+
+// AI Module Registry with Edge Functions
 export const AI_MODULES = {
   peotram: {
     name: 'PEOTRAM Assistant',
-    description: 'Especialista em auditorias PEOTRAM Petrobras',
+    description: 'Especialista em auditorias PEOTRAM Petrobras - 13 Elementos',
+    icon: '📋',
+    color: 'emerald',
     edgeFunction: 'peotram-ai-chat',
-    capabilities: ['generate_evidence', 'explain_element', 'create_action_plan', 'simulate_audit']
+    configImport: () => import('./peotram-ai-prompt'),
+    capabilities: ['generate_evidence', 'explain_element', 'create_action_plan', 'simulate_audit', 'voice_chat']
   },
   peodp: {
-    name: 'PEO-DP Assistant', 
+    name: 'PEO-DP Assistant',
     description: 'Especialista em Posicionamento Dinâmico',
+    icon: '⚓',
+    color: 'blue',
     edgeFunction: 'peodp-ai-chat',
-    capabilities: ['generate_evidence', 'analyze_redundancy', 'troubleshoot', 'check_asog']
+    configImport: () => import('./peodp-ai-prompt'),
+    capabilities: ['generate_evidence', 'analyze_redundancy', 'troubleshoot', 'check_asog', 'fmea_analysis']
   },
   command: {
     name: 'Nautilus Brain',
-    description: 'Central de Comando Inteligente',
+    description: 'Central de Comando Inteligente - 5 Níveis de Autonomia',
+    icon: '🤖',
+    color: 'purple',
     edgeFunction: 'nautilus-brain',
-    capabilities: ['status', 'analyze', 'recommend', 'execute', 'coordinate']
+    configImport: () => import('./command-ai-prompt'),
+    capabilities: ['status', 'analyze', 'recommend', 'execute', 'coordinate', 'autonomous_decision']
   },
   voice: {
     name: 'ARIA',
-    description: 'Assistente de Voz',
+    description: 'Assistente de Voz Marítimo',
+    icon: '🎙️',
+    color: 'pink',
     edgeFunction: 'voice-assistant-chat',
-    capabilities: ['navigate', 'status', 'create', 'search']
+    configImport: () => import('./voice-ai-prompt'),
+    capabilities: ['navigate', 'status', 'create', 'search', 'hands_free']
   },
   bunker: {
     name: 'BunkerBot',
-    description: 'Gestão de Combustível',
+    description: 'Gestão de Combustível e Eficiência Energética',
+    icon: '⛽',
+    color: 'orange',
     edgeFunction: 'bunker-ai',
-    capabilities: ['predict_consumption', 'compare_prices', 'optimize_route', 'efficiency_report']
+    configImport: () => import('./bunker-ai-prompt'),
+    capabilities: ['predict_consumption', 'compare_prices', 'optimize_route', 'efficiency_report', 'eexi_cii']
   },
   safety: {
-    name: 'Safety AI',
-    description: 'Segurança Operacional',
+    name: 'SafetyGuard',
+    description: 'Segurança Marítima e HSEQ',
+    icon: '🛡️',
+    color: 'red',
     edgeFunction: 'safety-ai',
-    capabilities: ['analyze_incident', 'generate_recommendations', 'predictive_insights', 'dds_generate']
+    configImport: () => import('./safety-ai-prompt'),
+    capabilities: ['analyze_incident', 'risk_assessment', 'generate_tbt', 'near_miss', 'permit_to_work']
   },
   compliance: {
-    name: 'Compliance AI',
-    description: 'Conformidade Regulatória',
+    name: 'ComplianceGuard',
+    description: 'Conformidade Regulatória Marítima',
+    icon: '📋',
+    color: 'indigo',
     edgeFunction: 'compliance-ai',
-    capabilities: ['analyze_compliance', 'generate_checklist', 'predict_risks', 'analyze_document']
+    configImport: () => import('./compliance-ai-prompt'),
+    capabilities: ['certificate_check', 'audit_preparation', 'psc_readiness', 'sire_preparation', 'vetting']
   },
   fleet: {
-    name: 'Fleet Copilot',
-    description: 'Gestão de Frota',
+    name: 'FleetMaster',
+    description: 'Gestão de Frota Marítima',
+    icon: '🚢',
+    color: 'cyan',
     edgeFunction: 'fleet-ai-copilot',
-    capabilities: ['maintenance_prediction', 'route_optimization', 'fuel_analysis', 'fleet_insights']
+    configImport: () => import('./fleet-ai-prompt'),
+    capabilities: ['fleet_overview', 'performance_benchmark', 'drydock_planning', 'utilization', 'tce_analysis']
   },
   crew: {
-    name: 'Crew Copilot',
-    description: 'Gestão de Tripulação',
+    name: 'CrewMaster',
+    description: 'Gestão de Tripulação e STCW',
+    icon: '👥',
+    color: 'teal',
     edgeFunction: 'crew-ai-copilot',
-    capabilities: ['fatigue_analysis', 'competency_analysis', 'schedule_optimization', 'certification_alerts']
-  },
-  training: {
-    name: 'Training AI',
-    description: 'Treinamento e Capacitação',
-    edgeFunction: 'training-ai-assistant',
-    capabilities: ['generate_recommendations', 'analyze_gaps', 'predictive_insights', 'generate_quiz']
+    configImport: () => import('./crew-ai-prompt'),
+    capabilities: ['crew_planning', 'certification_tracking', 'mlc_hours', 'rotation_planning', 'gap_analysis']
   },
   weather: {
-    name: 'Weather Copilot',
-    description: 'Meteorologia Marítima',
+    name: 'WeatherNav',
+    description: 'Meteorologia Marítima e Otimização de Rotas',
+    icon: '🌊',
+    color: 'sky',
     edgeFunction: 'weather-ai-copilot',
-    capabilities: ['analyze_conditions', 'route_planning', 'safety_alerts']
+    configImport: () => import('./weather-ai-prompt'),
+    capabilities: ['forecast', 'route_optimization', 'tropical_tracking', 'sea_state', 'weather_routing']
   },
-  voyage: {
-    name: 'Voyage Copilot',
-    description: 'Viagens Marítimas',
-    edgeFunction: 'voyage-ai-copilot',
-    capabilities: ['optimize_route', 'calculate_eta', 'fuel_efficiency']
+  maintenance: {
+    name: 'MaintenancePro',
+    description: 'Manutenção Preditiva e PMS',
+    icon: '🔧',
+    color: 'amber',
+    edgeFunction: 'ai-predictive-maintenance',
+    configImport: () => import('./maintenance-ai-prompt'),
+    capabilities: ['predictive_analysis', 'troubleshooting', 'spare_parts', 'pms_compliance', 'condition_monitoring']
   },
   cargo: {
-    name: 'Cargo AI',
-    description: 'Gestão de Carga',
+    name: 'CargoMaster',
+    description: 'Gestão de Carga e Estabilidade',
+    icon: '📦',
+    color: 'lime',
     edgeFunction: 'cargo-management-ai',
-    capabilities: ['optimize_loading', 'predict_operations_time', 'detect_anomalies', 'stability_check']
+    configImport: () => import('./cargo-ai-prompt'),
+    capabilities: ['stability_check', 'loading_plan', 'imdg_segregation', 'draft_survey', 'stowage']
+  },
+  training: {
+    name: 'TrainingMentor',
+    description: 'Treinamento Marítimo e Drills SOLAS',
+    icon: '📚',
+    color: 'violet',
+    edgeFunction: 'training-ai-assistant',
+    configImport: () => import('./training-ai-prompt'),
+    capabilities: ['drill_planning', 'competency_assessment', 'gap_analysis', 'stcw_tracking', 'e_learning']
+  },
+  voyage: {
+    name: 'VoyagePlanner',
+    description: 'Planejamento de Viagens e Voyage Estimate',
+    icon: '🗺️',
+    color: 'emerald',
+    edgeFunction: 'voyage-ai-copilot',
+    configImport: () => import('./voyage-ai-prompt'),
+    capabilities: ['voyage_planning', 'eta_calculation', 'voyage_estimate', 'port_costs', 'tce_projection']
   },
   charter: {
-    name: 'Charter Party AI',
-    description: 'Afretamento Marítimo',
+    name: 'CharterPro',
+    description: 'Charter Party e Contratos Marítimos',
+    icon: '📄',
+    color: 'slate',
     edgeFunction: 'charter-party-ai',
-    capabilities: ['calculate_hire', 'calculate_demurrage', 'analyze_contract', 'market_rate_check']
+    configImport: () => import('./charter-ai-prompt'),
+    capabilities: ['demurrage_calculation', 'contract_analysis', 'laytime_calc', 'hire_calculation', 'claim_support']
   },
   mlc: {
-    name: 'MLC Assistant',
-    description: 'Maritime Labour Convention',
+    name: 'MLCGuard',
+    description: 'Maritime Labour Convention 2006',
+    icon: '⚖️',
+    color: 'rose',
     edgeFunction: 'mlc-assistant',
-    capabilities: ['checklist', 'evidence', 'corrective', 'risk', 'explain']
+    configImport: () => import('./mlc-ai-prompt'),
+    capabilities: ['hours_verification', 'sea_compliance', 'inspection_prep', 'complaint_handling', 'welfare']
   }
 } as const;
 
@@ -110,10 +194,28 @@ export function getAIModule(key: AIModuleKey) {
   return AI_MODULES[key];
 }
 
+// Get system prompt for a module
+export async function getSystemPrompt(key: AIModuleKey): Promise<string> {
+  const module = AI_MODULES[key];
+  if (!module) return '';
+  
+  try {
+    const config = await module.configImport();
+    return config.default?.systemPrompt || '';
+  } catch {
+    return '';
+  }
+}
+
 // List all available AI modules
 export function listAIModules() {
   return Object.entries(AI_MODULES).map(([key, config]) => ({
-    key,
+    key: key as AIModuleKey,
     ...config
   }));
+}
+
+// Get modules by capability
+export function getModulesByCapability(capability: string) {
+  return listAIModules().filter(m => m.capabilities.includes(capability as never));
 }
