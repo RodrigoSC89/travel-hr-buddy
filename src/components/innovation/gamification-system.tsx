@@ -425,6 +425,15 @@ export const GamificationSystem: React.FC = () => {
                   <Button 
                     disabled={!reward.available || userPoints < reward.points}
                     className="w-full"
+                    onClick={() => {
+                      if (userPoints >= reward.points) {
+                        setUserPoints(prev => prev - reward.points);
+                        toast({
+                          title: "Recompensa resgatada!",
+                          description: `Você resgatou: ${reward.title}`,
+                        });
+                      }
+                    }}
                   >
                     {userPoints >= reward.points ? "Resgatar" : "Pontos Insuficientes"}
                   </Button>

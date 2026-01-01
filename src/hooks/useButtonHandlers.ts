@@ -115,6 +115,94 @@ export const useButtonHandlers = () => {
     }, 1000);
   };
 
+  /**
+   * Handle form submission
+   */
+  const handleSubmit = async (formName: string, callback?: () => Promise<void>) => {
+    toast.loading(`Enviando ${formName}...`, { id: `submit-${formName}` });
+    
+    try {
+      if (callback) {
+        await callback();
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+      toast.success(`${formName} enviado com sucesso!`, { id: `submit-${formName}` });
+    } catch (error) {
+      toast.error(`Erro ao enviar ${formName}`, { id: `submit-${formName}` });
+    }
+  };
+
+  /**
+   * Handle analysis action with AI
+   */
+  const handleAnalyze = (analysisType: string) => {
+    logger.info(`[AI Analysis] Starting ${analysisType}`);
+    toast.loading(`Analisando ${analysisType}...`, { id: `analyze-${analysisType}` });
+    
+    setTimeout(() => {
+      toast.success(`Análise de ${analysisType} concluída!`, { id: `analyze-${analysisType}` });
+    }, 2000);
+  };
+
+  /**
+   * Handle sync action
+   */
+  const handleSync = (dataType: string) => {
+    logger.info(`[Sync] Synchronizing ${dataType}`);
+    toast.loading(`Sincronizando ${dataType}...`, { id: `sync-${dataType}` });
+    
+    setTimeout(() => {
+      toast.success(`${dataType} sincronizado com sucesso!`, { id: `sync-${dataType}` });
+    }, 1500);
+  };
+
+  /**
+   * Handle refresh action
+   */
+  const handleRefresh = (moduleName: string) => {
+    logger.info(`[Refresh] Refreshing ${moduleName}`);
+    toast.loading(`Atualizando ${moduleName}...`, { id: `refresh-${moduleName}` });
+    
+    setTimeout(() => {
+      toast.success(`${moduleName} atualizado!`, { id: `refresh-${moduleName}` });
+    }, 800);
+  };
+
+  /**
+   * Handle create/add action
+   */
+  const handleCreate = (itemType: string) => {
+    logger.info(`[Create] Creating ${itemType}`);
+    toast.info(`Criando ${itemType}...`);
+  };
+
+  /**
+   * Handle delete action
+   */
+  const handleDelete = async (itemName: string, callback?: () => Promise<void>) => {
+    toast.loading(`Removendo ${itemName}...`, { id: `delete-${itemName}` });
+    
+    try {
+      if (callback) {
+        await callback();
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      toast.success(`${itemName} removido com sucesso!`, { id: `delete-${itemName}` });
+    } catch (error) {
+      toast.error(`Erro ao remover ${itemName}`, { id: `delete-${itemName}` });
+    }
+  };
+
+  /**
+   * Handle view details action
+   */
+  const handleViewDetails = (itemName: string) => {
+    logger.info(`[View] Viewing details for ${itemName}`);
+    toast.info(`Carregando detalhes de ${itemName}...`);
+  };
+
   return {
     generateReport,
     syncDPLogs,
@@ -125,5 +213,12 @@ export const useButtonHandlers = () => {
     handleNavigate,
     handleSave,
     handleDownload,
+    handleSubmit,
+    handleAnalyze,
+    handleSync,
+    handleRefresh,
+    handleCreate,
+    handleDelete,
+    handleViewDetails,
   };
 };

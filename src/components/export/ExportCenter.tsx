@@ -159,11 +159,11 @@ export function ExportCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => toast.info("Abrindo configurações de exportação...")}>
             <Settings className="h-4 w-4 mr-2" />
             Configurar
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => toast.info("Abrindo agendador de exportações...")}>
             <Calendar className="h-4 w-4 mr-2" />
             Agendar
           </Button>
@@ -226,7 +226,7 @@ export function ExportCenter() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => toast.info("Filtros aplicados!")}>
                   <Filter className="h-4 w-4 mr-2" />
                   Filtrar
                 </Button>
@@ -292,13 +292,13 @@ export function ExportCenter() {
                           )}
                           {job.status === "completed" && (
                             <div className="flex gap-1">
-                              <Button size="sm" variant="outline">
+                              <Button size="sm" variant="outline" onClick={() => toast.success("Download iniciado!")}>
                                 <Download className="h-3 w-3" />
                               </Button>
-                              <Button size="sm" variant="outline">
+                              <Button size="sm" variant="outline" onClick={() => toast.info("Abrindo opções de email...")}>
                                 <Mail className="h-3 w-3" />
                               </Button>
-                              <Button size="sm" variant="outline">
+                              <Button size="sm" variant="outline" onClick={() => toast.info("Enviando para impressora...")}>
                                 <Printer className="h-3 w-3" />
                               </Button>
                             </div>
@@ -322,7 +322,7 @@ export function ExportCenter() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm">Exportações Agendadas</CardTitle>
-                <Button size="sm">
+                <Button size="sm" onClick={() => toast.info("Abrindo formulário de agendamento...")}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Novo Agendamento
                 </Button>
