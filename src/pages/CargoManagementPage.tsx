@@ -474,7 +474,7 @@ const CargoManagementPage = () => {
 
         <TabsContent value="loading-plans" className="space-y-4">
           <div className="flex justify-end">
-            <Button>
+            <Button onClick={() => toast({ title: "📦 Novo Plano", description: "Abrindo criação de plano de carga..." })}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Plano de Carga
             </Button>
@@ -520,11 +520,11 @@ const CargoManagementPage = () => {
                     </div>
                   )}
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => toast({ title: "📋 Plano de Carga", description: `Visualizando plano de ${plan.vessel_name}...` })}>
                       <FileText className="h-4 w-4 mr-2" />
                       Ver Plano
                     </Button>
-                    <Button size="sm" className="flex-1">
+                    <Button size="sm" className="flex-1" onClick={() => toast({ title: "🤖 Otimizando", description: `Iniciando otimização IA para ${plan.vessel_name}...` })}>
                       <Brain className="h-4 w-4 mr-2" />
                       Otimizar
                     </Button>
@@ -546,15 +546,15 @@ const CargoManagementPage = () => {
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-3">
-                <Button variant="outline" className="h-24 flex flex-col gap-2">
+                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => toast({ title: "📄 Gerando B/L", description: "Iniciando geração do Bill of Lading..." })}>
                   <FileText className="h-6 w-6" />
                   <span>Gerar B/L</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex flex-col gap-2">
+                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => toast({ title: "📦 Cargo Manifest", description: "Gerando manifesto de carga..." })}>
                   <Package className="h-6 w-6" />
                   <span>Cargo Manifest</span>
                 </Button>
-                <Button variant="outline" className="h-24 flex flex-col gap-2">
+                <Button variant="outline" className="h-24 flex flex-col gap-2" onClick={() => toast({ title: "⚠️ DG Declaration", description: "Abrindo declaração de carga perigosa..." })}>
                   <AlertTriangle className="h-6 w-6" />
                   <span>DG Declaration</span>
                 </Button>

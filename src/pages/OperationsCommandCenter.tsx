@@ -816,8 +816,8 @@ export default function OperationsCommandCenter() {
                         </div>
                       </div>
                       <div className="flex gap-2 mt-4">
-                        <Button size="sm">Analisar</Button>
-                        <Button size="sm" variant="outline">Implementar</Button>
+                        <Button size="sm" onClick={() => toast({ title: "📊 Analisando", description: `Iniciando análise do insight "${insight.title}"...` })}>Analisar</Button>
+                        <Button size="sm" variant="outline" onClick={() => toast({ title: "🚀 Implementando", description: `Iniciando implementação do insight "${insight.title}"...` })}>Implementar</Button>
                       </div>
                     </div>
                   </div>

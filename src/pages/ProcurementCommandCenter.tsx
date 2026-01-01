@@ -397,11 +397,11 @@ export default function ProcurementCommandCenter() {
               <RefreshCw className={cn("h-4 w-4", isAnalyzing && "animate-spin")} />
               Analisar
             </Button>
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => toast({ title: "📝 Novo Fornecedor", description: "Abrindo formulário de cadastro de fornecedor..." })}>
               <Plus className="h-4 w-4" />
               Novo Fornecedor
             </Button>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => toast({ title: "📄 Nova RFQ", description: "Iniciando nova solicitação de cotação..." })}>
               <FileText className="h-4 w-4" />
               Nova RFQ
             </Button>
@@ -713,7 +713,7 @@ export default function ProcurementCommandCenter() {
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           {rec.urgency === 'immediate' ? 'Comprar Agora' : 'Aprovar Compra'}
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => toast({ title: "🔍 Alternativas", description: "Buscando fornecedores alternativos..." })}>
                           Ver Alternativas
                         </Button>
                       </div>
@@ -815,7 +815,7 @@ export default function ProcurementCommandCenter() {
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Atualizar
               </Button>
-              <Button>
+              <Button onClick={() => toast({ title: "➕ Novo Item", description: "Abrindo formulário de cadastro de item..." })}>
                 <Plus className="h-4 w-4 mr-2" />
                 Adicionar Item
               </Button>
@@ -875,7 +875,7 @@ export default function ProcurementCommandCenter() {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={() => toast({ title: "✏️ Editar Item", description: "Abrindo item para edição..." })}>
                             <Edit className="h-4 w-4" />
                           </Button>
                         </div>
@@ -899,7 +899,7 @@ export default function ProcurementCommandCenter() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2" onClick={() => toast({ title: "🔍 Filtros", description: "Abrindo opções de filtro..." })}>
                 <Filter className="h-4 w-4" />
                 Filtros
               </Button>
@@ -912,7 +912,7 @@ export default function ProcurementCommandCenter() {
                 <div className="col-span-full text-center py-12">
                   <Store className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
                   <p className="text-muted-foreground">Nenhum fornecedor encontrado</p>
-                  <Button variant="link" className="mt-2">
+                  <Button variant="link" className="mt-2" onClick={() => toast({ title: "➕ Adicionar Fornecedor", description: "Abrindo formulário de cadastro..." })}>
                     <Plus className="h-4 w-4 mr-1" />
                     Adicionar Fornecedor
                   </Button>
@@ -985,7 +985,7 @@ export default function ProcurementCommandCenter() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Solicitações de Cotação (RFQ)</CardTitle>
-                <Button size="sm" className="gap-2">
+                <Button size="sm" className="gap-2" onClick={() => toast({ title: "📄 Nova RFQ", description: "Criando nova solicitação de cotação..." })}>
                   <Plus className="h-4 w-4" />
                   Nova RFQ
                 </Button>
@@ -997,7 +997,7 @@ export default function ProcurementCommandCenter() {
                   <div className="text-center py-12">
                     <FileText className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
                     <p className="text-muted-foreground">Nenhuma RFQ criada</p>
-                    <Button variant="link" className="mt-2">
+                    <Button variant="link" className="mt-2" onClick={() => toast({ title: "📄 Criar RFQ", description: "Iniciando criação da primeira RFQ..." })}>
                       <Plus className="h-4 w-4 mr-1" />
                       Criar Primeira RFQ
                     </Button>
