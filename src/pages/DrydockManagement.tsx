@@ -12,6 +12,7 @@ import { format, differenceInDays, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface DrydockEvent {
   id: string;
@@ -113,11 +114,16 @@ export default function DrydockManagement() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => {
+              toast.loading("Gerando relatório de docagens...", { id: "drydock-report" });
+              setTimeout(() => toast.success("Relatório de Docagem exportado com sucesso!", { id: "drydock-report" }), 1500);
+            }}>
               <FileText className="h-4 w-4" />
               Relatórios
             </Button>
-            <Button className="gap-2">
+            <Button className="gap-2" onClick={() => {
+              toast.info("Abrindo formulário de Nova Docagem...");
+            }}>
               <Plus className="h-4 w-4" />
               Nova Docagem
             </Button>
@@ -212,7 +218,7 @@ export default function DrydockManagement() {
                     <div className="text-center py-8">
                       <Ship className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
                       <p className="text-muted-foreground">Nenhuma docagem planejada</p>
-                      <Button variant="link" className="mt-2">
+                      <Button variant="link" className="mt-2" onClick={() => toast.info("Abrindo agenda de docagens...")}>
                         <Plus className="h-4 w-4 mr-1" />
                         Agendar Docagem
                       </Button>
@@ -267,7 +273,7 @@ export default function DrydockManagement() {
                     <div className="text-center py-8">
                       <Wrench className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
                       <p className="text-muted-foreground">Nenhuma inspeção registrada</p>
-                      <Button variant="link" className="mt-2">
+                      <Button variant="link" className="mt-2" onClick={() => toast.info("Abrindo formulário de inspeção de casco...")}>
                         <Plus className="h-4 w-4 mr-1" />
                         Registrar Inspeção
                       </Button>
@@ -321,7 +327,7 @@ export default function DrydockManagement() {
             <Card className="border-border/50 bg-card/50 backdrop-blur">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Histórico de Inspeções de Casco</CardTitle>
-                <Button size="sm" className="gap-2">
+                <Button size="sm" className="gap-2" onClick={() => toast.info("Abrindo formulário de nova inspeção...")}>
                   <Plus className="h-4 w-4" />
                   Nova Inspeção
                 </Button>

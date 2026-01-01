@@ -376,7 +376,9 @@ const AnalyticsCommandCenter: React.FC = () => {
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => {
+            toast({ title: "📊 Exportando Analytics", description: "Gerando relatório de analytics..." });
+          }}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>

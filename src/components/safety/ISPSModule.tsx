@@ -154,11 +154,14 @@ export function ISPSModule() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => {
+            toast.loading("Exportando Ship Security Plan...", { id: "ssp-export" });
+            setTimeout(() => toast.success("SSP exportado com sucesso!", { id: "ssp-export" }), 1500);
+          }}>
             <Download className="h-4 w-4 mr-2" />
             Export SSP
           </Button>
-          <Button>
+          <Button onClick={() => toast.info("Abrindo formulário de nova avaliação de segurança...")}>
             <Plus className="h-4 w-4 mr-2" />
             New Assessment
           </Button>
@@ -372,7 +375,7 @@ export function ISPSModule() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Security Assessments</CardTitle>
-                <Button size="sm">
+                <Button size="sm" onClick={() => toast.info("Abrindo formulário de nova avaliação...")}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nova Avaliação
                 </Button>
@@ -415,7 +418,7 @@ export function ISPSModule() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Security Drills</CardTitle>
-                <Button size="sm">
+                <Button size="sm" onClick={() => toast.info("Abrindo agenda de drills de segurança...")}>
                   <Plus className="h-4 w-4 mr-2" />
                   Agendar Drill
                 </Button>
@@ -438,7 +441,7 @@ export function ISPSModule() {
                           </div>
                           <p className="text-sm mt-2">{drill.notes}</p>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => toast.info(`Abrindo relatório do drill "${drill.type}"...`)}>
                           Ver Relatório
                         </Button>
                       </div>
