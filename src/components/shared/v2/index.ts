@@ -9,6 +9,7 @@
 // Layout
 export { PageLayoutV2, type PageLayoutV2Props } from './PageLayoutV2';
 export { ModuleHeaderV2, type ModuleHeaderV2Props } from './ModuleHeaderV2';
+export { StandardModuleWrapper, type StandardModuleWrapperProps } from './StandardModuleWrapper';
 
 // Cards
 export { 
