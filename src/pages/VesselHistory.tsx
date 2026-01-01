@@ -255,7 +255,7 @@ const VesselHistory = () => {
                     <Label>Título</Label>
                     <Input placeholder="Descrição breve do evento" />
                   </div>
-                  <Button className="w-full">Registrar Evento</Button>
+                  <Button className="w-full" onClick={() => toast.success('Evento histórico registrado com sucesso')}>Registrar Evento</Button>
                 </div>
               </DialogContent>
             </Dialog>
@@ -320,7 +320,7 @@ const VesselHistory = () => {
         <TabsContent value="manuals" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Manuais e Documentação</h2>
-            <Button>
+            <Button onClick={() => toast.info('Sistema de upload de manuais ativado')}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Manual
             </Button>
@@ -366,7 +366,7 @@ const VesselHistory = () => {
                         </p>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" onClick={() => toast.success(`Baixando ${manual.title}...`)}>
                       <Download className="h-4 w-4" />
                     </Button>
                   </div>

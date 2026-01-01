@@ -238,7 +238,7 @@ const VesselCTS = () => {
         <TabsContent value="cts" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Certificados Técnicos da Embarcação</h2>
-            <Button>
+            <Button onClick={() => toast.success('Formulário de novo CTS será implementado em breve')}>
               <Plus className="h-4 w-4 mr-2" />
               Novo CTS
             </Button>
@@ -276,7 +276,7 @@ const VesselCTS = () => {
                           </span>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => toast.info(`Detalhes do CTS ${cts.cts_number}`)}>
                         <FileText className="h-4 w-4 mr-2" />
                         Detalhes
                       </Button>
@@ -292,7 +292,7 @@ const VesselCTS = () => {
         <TabsContent value="certifications" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Certificações da Tripulação</h2>
-            <Button>
+            <Button onClick={() => toast.success('Formulário de nova certificação será implementado em breve')}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Certificação
             </Button>

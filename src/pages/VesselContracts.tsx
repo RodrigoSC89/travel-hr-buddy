@@ -230,7 +230,7 @@ const VesselContracts = () => {
                       <Label>Termos e Condições</Label>
                       <Textarea placeholder="Descreva os termos principais do contrato..." rows={4} />
                     </div>
-                    <Button className="w-full">Registrar Contrato</Button>
+                    <Button className="w-full" onClick={() => { toast.success('Contrato registrado com sucesso!'); setShowNewContract(false); }}>Registrar Contrato</Button>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -368,7 +368,7 @@ const VesselContracts = () => {
                     <Label>Descrição do Motivo</Label>
                     <Textarea placeholder="Descreva detalhadamente o motivo da parada..." rows={4} />
                   </div>
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={() => { toast.success('Evento de downtime registrado e análise IA iniciada'); setShowNewDowntime(false); }}>
                     <Brain className="h-4 w-4 mr-2" />
                     Registrar e Analisar com IA
                   </Button>

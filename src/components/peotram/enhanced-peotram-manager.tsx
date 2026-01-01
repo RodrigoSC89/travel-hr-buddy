@@ -324,12 +324,24 @@ export const EnhancedPeotramManager: React.FC = () => {
             </DialogContent>
           </Dialog>
           
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => { 
+            const blob = new Blob([JSON.stringify({ audits, nonConformities }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'peotram-export.json';
+            a.click();
+          }}>
             <Download className="w-4 h-4 mr-2" />
             Exportar Dados
           </Button>
           
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json,.csv';
+            input.click();
+          }}>
             <Upload className="w-4 h-4 mr-2" />
             Importar
           </Button>
