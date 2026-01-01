@@ -1,6 +1,7 @@
 /**
- * AI Module Index - PATCH 960
+ * AI Module Index - v3.2.0 Final
  * Central export for all AI-powered functionalities
+ * 16 Specialized AIs + Voice HD + Analytics
  */
 
 // Smart Assistant
@@ -65,7 +66,7 @@ export {
   type ComplianceReport,
 } from './compliance-checker';
 
-// AI Audit Logger (PATCH 850)
+// AI Audit Logger
 export {
   logAIInteraction,
   searchAuditLogs,
@@ -75,7 +76,7 @@ export {
   type AuditSearchFilters,
 } from './audit-logger';
 
-// Predictive Engine (PHASE 1 - PATCH 851)
+// Predictive Engine
 export {
   generateMaintenancePredictions,
   analyzeCrewTrainingGaps,
@@ -85,3 +86,28 @@ export {
   type PredictiveRecommendation,
   type PredictiveAnalysis
 } from './predictive-engine';
+
+/**
+ * AI Hub Configuration v3.2.0
+ * 16 Specialized Maritime AIs
+ */
+export const AI_MODULES = [
+  { id: 'command', name: 'Command Center AI', icon: '🎯' },
+  { id: 'peotram', name: 'PEOTRAM AI', icon: '📋' },
+  { id: 'peodp', name: 'PEO-DP AI', icon: '🎛️' },
+  { id: 'aria', name: 'ARIA Voice', icon: '🎤' },
+  { id: 'bunker', name: 'Bunker AI', icon: '⛽' },
+  { id: 'safety', name: 'Safety AI', icon: '🛡️' },
+  { id: 'compliance', name: 'Compliance AI', icon: '✅' },
+  { id: 'fleet', name: 'Fleet AI', icon: '🚢' },
+  { id: 'crew', name: 'Crew AI', icon: '👥' },
+  { id: 'weather', name: 'Weather AI', icon: '🌤️' },
+  { id: 'maintenance', name: 'Maintenance AI', icon: '🔧' },
+  { id: 'cargo', name: 'Cargo AI', icon: '📦' },
+  { id: 'training', name: 'Training AI', icon: '🎓' },
+  { id: 'voyage', name: 'Voyage AI', icon: '🗺️' },
+  { id: 'charter', name: 'Charter AI', icon: '📝' },
+  { id: 'mlc', name: 'MLC AI', icon: '⚓' },
+] as const;
+
+export type AIModuleId = typeof AI_MODULES[number]['id'];
