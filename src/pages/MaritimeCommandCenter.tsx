@@ -545,7 +545,10 @@ export default function MaritimeCommandCenter() {
                       <p className="font-medium text-sm">{stats.criticalIssues} Issues Críticos</p>
                       <p className="text-xs text-muted-foreground">Ação imediata necessária</p>
                     </div>
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" variant="outline" onClick={() => {
+                      toast.info("Abrindo painel de resolução de issues críticos...");
+                      setActiveTab("crew-intelligence");
+                    }}>
                       Resolver
                     </Button>
                   </div>
@@ -718,7 +721,10 @@ export default function MaritimeCommandCenter() {
                       <Badge variant="secondary">
                         {getStatusLabel(member.status)}
                       </Badge>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" onClick={() => {
+                        toast.info(`Visualizando documentos de ${member.full_name}`);
+                        showInfo(`Documentos do tripulante ${member.full_name}`, "Abrindo pasta de documentos...");
+                      }}>
                         <FileText className="h-4 w-4" />
                       </Button>
                     </div>
