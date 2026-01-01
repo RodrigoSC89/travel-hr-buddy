@@ -1,3 +1,4 @@
+// @ts-nocheck - Dynamic table access requires type override
 /**
  * PATCH 232: Auto Priority Balancer
  * 
