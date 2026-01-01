@@ -35,7 +35,7 @@ interface VoiceMessage {
 }
 
 const PEODP_SECTIONS = [
-  { id: "", name: "Geral (todas as seções)" },
+  { id: "all", name: "Geral (todas as seções)", critical: false },
   { id: "3.1", name: "3.1 - Regras Gerais", critical: false },
   { id: "3.2", name: "3.2 - Gestão ⭐", critical: true },
   { id: "3.3", name: "3.3 - Treinamentos", critical: false },
@@ -50,7 +50,7 @@ export function PeodpVoiceChat() {
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [selectedSection, setSelectedSection] = useState<string>("");
+  const [selectedSection, setSelectedSection] = useState<string>("all");
   const [transcript, setTranscript] = useState("");
   const [textInput, setTextInput] = useState("");
   const recognitionRef = useRef<any>(null);
@@ -150,7 +150,7 @@ export function PeodpVoiceChat() {
       const { data, error } = await supabase.functions.invoke('peodp-voice-chat', {
         body: {
           question: text,
-          section: selectedSection || null,
+          section: selectedSection === "all" ? null : selectedSection,
           context: messages.slice(-5).map(m => ({ role: m.role, content: m.content })),
           language: "pt"
         }
