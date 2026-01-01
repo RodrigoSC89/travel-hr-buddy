@@ -1721,6 +1721,71 @@ export type Database = {
           },
         ]
       }
+      ai_usage_logs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          message_count: number | null
+          metadata: Json | null
+          module_id: string
+          module_name: string
+          organization_id: string | null
+          response_time_ms: number | null
+          session_id: string | null
+          success: boolean | null
+          tokens_input: number | null
+          tokens_output: number | null
+          user_id: string | null
+          voice_duration_seconds: number | null
+          voice_enabled: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          message_count?: number | null
+          metadata?: Json | null
+          module_id: string
+          module_name: string
+          organization_id?: string | null
+          response_time_ms?: number | null
+          session_id?: string | null
+          success?: boolean | null
+          tokens_input?: number | null
+          tokens_output?: number | null
+          user_id?: string | null
+          voice_duration_seconds?: number | null
+          voice_enabled?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          message_count?: number | null
+          metadata?: Json | null
+          module_id?: string
+          module_name?: string
+          organization_id?: string | null
+          response_time_ms?: number | null
+          session_id?: string | null
+          success?: boolean | null
+          tokens_input?: number | null
+          tokens_output?: number | null
+          user_id?: string | null
+          voice_duration_seconds?: number | null
+          voice_enabled?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ais_events: {
         Row: {
           course: number | null
@@ -28263,7 +28328,31 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      ai_usage_daily_stats: {
+        Row: {
+          avg_response_time_ms: number | null
+          failed_requests: number | null
+          module_id: string | null
+          module_name: string | null
+          organization_id: string | null
+          successful_requests: number | null
+          total_messages: number | null
+          total_requests: number | null
+          total_tokens_input: number | null
+          total_tokens_output: number | null
+          usage_date: string | null
+          voice_requests: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       approve_autonomous_task: {
