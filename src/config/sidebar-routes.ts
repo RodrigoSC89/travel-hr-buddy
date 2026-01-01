@@ -162,6 +162,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🧠 IA & Automação",
     defaultOpen: false,
     items: [
+      { label: "🌟 AI Hub Central", path: "/ai-hub", icon: Brain, emoji: "🌟", badge: "REVOLUTION", status: "new" },
       { label: "🚀 Features Revolucionárias", path: "/revolutionary-features", icon: Zap, emoji: "🚀", badge: "NEW", status: "new" },
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
       { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
