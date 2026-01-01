@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 import { 
   Wifi, 
   WifiOff, 
@@ -320,10 +321,10 @@ export const IoTDashboard: React.FC = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => toast.info(`Abrindo configurações de ${device.name}...`)}>
                       Configurar
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => toast.loading(`Executando diagnóstico de ${device.name}...`, { id: `diag-${device.id}`, duration: 2000 })}>
                       Diagnóstico
                     </Button>
                   </div>
@@ -363,8 +364,8 @@ export const IoTDashboard: React.FC = () => {
                   Sensor de umidade com bateria em 45%. Recomenda-se substituição.
                 </p>
                 <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm">Marcar como Resolvido</Button>
-                  <Button variant="outline" size="sm">Ver Detalhes</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.success("Alerta de bateria baixa marcado como resolvido")}>Marcar como Resolvido</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Abrindo detalhes do sensor de umidade...")}>Ver Detalhes</Button>
                 </div>
               </CardContent>
             </Card>
@@ -381,8 +382,8 @@ export const IoTDashboard: React.FC = () => {
                   Sensor Node A não responde há 2 horas. Verificar conectividade.
                 </p>
                 <div className="flex gap-2 mt-3">
-                  <Button variant="outline" size="sm">Reiniciar Dispositivo</Button>
-                  <Button variant="outline" size="sm">Diagnosticar</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.loading("Reiniciando Sensor Node A...", { id: "restart-node", duration: 3000 })}>Reiniciar Dispositivo</Button>
+                  <Button variant="outline" size="sm" onClick={() => toast.info("Iniciando diagnóstico de conectividade...")}>Diagnosticar</Button>
                 </div>
               </CardContent>
             </Card>
