@@ -7,6 +7,7 @@ import * as React from "react";
 import { AlertTriangle, RefreshCw, Home, ArrowLeft, Bug } from 'lucide-react';
 import { Button } from './button';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface ErrorFallbackProps {
   error?: Error;
@@ -40,7 +41,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   const handleReport = () => {
     // Could integrate with error reporting service
     console.error('Error reported:', error);
-    alert('Erro reportado. Obrigado pelo feedback!');
+    toast.success('Erro reportado. Obrigado pelo feedback!');
   };
 
   return (

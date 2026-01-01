@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 import { 
   Shield, Search, AlertTriangle, FileText, TrendingUp,
   ExternalLink, BookOpen, Users, Calendar
@@ -326,11 +327,11 @@ const SafetyIMCA = () => {
                     Este briefing aborda práticas de prevenção de dropped objects durante operações de mergulho...
                   </p>
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={() => alert('Briefing aplicado com sucesso!')}>
+                    <Button size="sm" onClick={() => toast.success('Briefing de segurança aplicado com sucesso à tripulação!')}>
                       <Users className="h-4 w-4 mr-1" />
                       Aplicar Briefing
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => alert('Conteúdo do briefing: Prevenção de queda de objetos durante operações de mergulho')}>
+                    <Button variant="outline" size="sm" onClick={() => toast.info('Briefing: Prevenção de queda de objetos durante operações de mergulho - Técnicas de amarração e zonas de exclusão')}>
                       <FileText className="h-4 w-4 mr-1" />
                       Ver Conteúdo
                     </Button>

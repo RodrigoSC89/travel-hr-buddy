@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -192,9 +193,9 @@ export const ResponsiveDashboard: React.FC = () => {
         <Button 
           className="hover-scale w-full sm:w-auto"
           onClick={() => {
-            // Simular geração de relatório
+            toast.info("Gerando relatório...");
             setTimeout(() => {
-              window.alert("Relatório gerado com sucesso!");
+              toast.success("Relatório gerado com sucesso!");
             }, 1000);
           }}
         >

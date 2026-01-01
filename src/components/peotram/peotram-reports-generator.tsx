@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "sonner";
 import { 
   FileText, 
   Download, 
@@ -184,11 +185,11 @@ export const PeotramReportsGenerator: React.FC = () => {
   };
 
   const scheduleReport = () => {
-    alert("Funcionalidade de agendamento de relatórios será implementada em breve.");
+    toast.info("Funcionalidade de agendamento de relatórios será implementada em breve.");
   };
 
   const previewReport = () => {
-    alert("Visualização do relatório será implementada em breve.");
+    toast.info("Visualização do relatório será implementada em breve.");
   };
 
   return (
