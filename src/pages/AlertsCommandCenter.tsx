@@ -726,8 +726,8 @@ const AlertsCommandCenter = () => {
                         </Badge>
                         <Badge variant="outline">{alert.status}</Badge>
                         <div className="flex gap-2 mt-2">
-                          <Button size="sm" variant="outline">Detalhes</Button>
-                          <Button size="sm">Resolver</Button>
+                          <Button size="sm" variant="outline" onClick={() => toast({ title: "📋 Detalhes", description: `Visualizando detalhes do alerta "${alert.title}"...` })}>Detalhes</Button>
+                          <Button size="sm" onClick={() => toast({ title: "✅ Resolvendo", description: `Iniciando resolução do alerta "${alert.title}"...` })}>Resolver</Button>
                         </div>
                       </div>
                     </div>

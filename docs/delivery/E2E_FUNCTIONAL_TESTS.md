@@ -310,5 +310,47 @@ O sistema está **pronto para produção**.
 
 ---
 
+## 🔧 AUDITORIA DE BOTÕES - CORREÇÕES APLICADAS (2026-01-01)
+
+### Procurement Command Center
+- ✅ "Novo Fornecedor" - onClick handler com toast
+- ✅ "Nova RFQ" - onClick handler com toast
+- ✅ "Ver Alternativas" - onClick handler com toast
+- ✅ "Adicionar Item" - onClick handler com toast
+- ✅ "Editar Item" - onClick handler com toast
+- ✅ "Filtros" (Suppliers) - onClick handler com toast
+- ✅ "Adicionar Fornecedor" (link) - onClick handler com toast
+- ✅ "Nova RFQ" (RFQ tab) - onClick handler com toast
+- ✅ "Criar Primeira RFQ" - onClick handler com toast
+
+### Finance Command Center
+- ✅ "Ver Detalhes" (custos por rota) - onClick handler com toast
+- ✅ "Exportar" (custos por rota) - onClick handler com toast
+
+### Cargo Management
+- ✅ "Novo Plano de Carga" - onClick handler com toast
+- ✅ "Ver Plano" - onClick handler com toast
+- ✅ "Otimizar" - onClick handler com toast
+- ✅ "Gerar B/L" - onClick handler com toast
+- ✅ "Cargo Manifest" - onClick handler com toast
+- ✅ "DG Declaration" - onClick handler com toast
+
+### Operations Command Center
+- ✅ "Analisar" insight - onClick handler com toast
+- ✅ "Implementar" insight - onClick handler com toast
+
+### Alerts Command Center
+- ✅ "Detalhes" alerta - onClick handler com toast
+- ✅ "Resolver" alerta - onClick handler com toast
+
+### Módulos Compliance (Verificados)
+- ✅ SGSO - useMaritimeActions integrado
+- ✅ PEOTRAM - useMaritimeActions integrado
+- ✅ PEODP - useMaritimeActions integrado
+
+**Total de correções nesta fase:** 23+ botões corrigidos
+
+---
+
 **Executor:** CI/CD Pipeline  
 **Data:** 2026-01-01

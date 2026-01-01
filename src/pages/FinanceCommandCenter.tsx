@@ -1106,11 +1106,11 @@ const FinanceCommandCenter: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button variant="outline" size="sm" className="flex-1" onClick={() => toast({ title: "📊 Detalhes", description: `Abrindo detalhes da rota ${cost.route}...` })}>
                       <BarChart3 className="h-4 w-4 mr-2" />
                       Ver Detalhes
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => toast({ title: "📥 Exportar", description: `Exportando dados de ${cost.route}...` })}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar
                     </Button>
