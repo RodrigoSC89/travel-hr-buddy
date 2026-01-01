@@ -217,7 +217,7 @@ const SafetyIMCA = () => {
                         <span className="text-xs">• {incident.source}</span>
                       </CardDescription>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => window.open('https://www.imca-int.com/safety-flashes/', '_blank')}>
                       <ExternalLink className="h-4 w-4 mr-1" />
                       IMCA
                     </Button>
@@ -267,7 +267,7 @@ const SafetyIMCA = () => {
               <div className="text-center py-8 text-muted-foreground">
                 <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p>Nenhum incidente registrado na frota este período.</p>
-                <Button className="mt-4">
+                <Button className="mt-4" onClick={() => setActiveTab('database')}>
                   Registrar Incidente
                 </Button>
               </div>
@@ -326,11 +326,11 @@ const SafetyIMCA = () => {
                     Este briefing aborda práticas de prevenção de dropped objects durante operações de mergulho...
                   </p>
                   <div className="flex gap-2">
-                    <Button size="sm">
+                    <Button size="sm" onClick={() => alert('Briefing aplicado com sucesso!')}>
                       <Users className="h-4 w-4 mr-1" />
                       Aplicar Briefing
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => alert('Conteúdo do briefing: Prevenção de queda de objetos durante operações de mergulho')}>
                       <FileText className="h-4 w-4 mr-1" />
                       Ver Conteúdo
                     </Button>

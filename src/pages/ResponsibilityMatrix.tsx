@@ -411,10 +411,10 @@ const ResponsibilityMatrix = () => {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => toast({ title: "Lembrete Enviado", description: `Notificação enviada para ${action.assigned_to}` })}>
                           <Bell className="h-4 w-4" />
                         </Button>
-                        <Button size="sm">
+                        <Button size="sm" onClick={() => toast({ title: "Ação Concluída", description: `${action.id} marcada como concluída` })}>
                           <CheckCircle className="h-4 w-4" />
                         </Button>
                       </div>

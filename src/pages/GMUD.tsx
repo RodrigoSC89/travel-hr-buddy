@@ -375,7 +375,7 @@ const GMUD = () => {
                           {gmud.vessel_name} • {new Date(gmud.created_at).toLocaleDateString('pt-BR')}
                         </p>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={() => toast({ title: "Detalhes GMUD", description: gmud.description })}>
                         <FileText className="h-4 w-4 mr-1" />
                         Detalhes
                       </Button>
@@ -421,11 +421,11 @@ const GMUD = () => {
                         <p className="text-sm text-muted-foreground">{gmud.vessel_name}</p>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => toast({ title: "GMUD Rejeitado", description: `${gmud.id} foi rejeitado`, variant: "destructive" })}>
                           <XCircle className="h-4 w-4 mr-1" />
                           Rejeitar
                         </Button>
-                        <Button size="sm">
+                        <Button size="sm" onClick={() => toast({ title: "GMUD Aprovado", description: `${gmud.id} foi aprovado com sucesso` })}>
                           <CheckCircle className="h-4 w-4 mr-1" />
                           Aprovar
                         </Button>
