@@ -155,7 +155,7 @@ const Innovation = () => {
                   <Badge className="bg-green-100 text-green-700">Online</Badge>
                   <span className="text-xs text-muted-foreground">98.7% precisão</span>
                 </div>
-                <Button className="w-full">Acessar Assistente</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/ai-assistant")}>Acessar Assistente</Button>
               </CardContent>
             </Card>
 
@@ -176,7 +176,7 @@ const Innovation = () => {
                   <Badge className="bg-blue-100 text-blue-700">Ativo</Badge>
                   <span className="text-xs text-muted-foreground">247 predições</span>
                 </div>
-                <Button className="w-full">Ver Predições</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/predictive-analytics")}>Ver Predições</Button>
               </CardContent>
             </Card>
 
@@ -197,7 +197,7 @@ const Innovation = () => {
                   <Badge className="bg-green-100 text-green-700">24 workflows</Badge>
                   <span className="text-xs text-muted-foreground">89% eficiência</span>
                 </div>
-                <Button className="w-full">Gerenciar Automações</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/smart-automation")}>Gerenciar Automações</Button>
               </CardContent>
             </Card>
 
@@ -218,7 +218,7 @@ const Innovation = () => {
                   <Badge className="bg-orange-100 text-orange-700">12 modelos</Badge>
                   <span className="text-xs text-muted-foreground">6 em treinamento</span>
                 </div>
-                <Button className="w-full">Acessar Lab</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/models-lab")}>Acessar Lab</Button>
               </CardContent>
             </Card>
 
@@ -239,7 +239,7 @@ const Innovation = () => {
                   <Badge className="bg-red-100 text-red-700">GPU Acelerado</Badge>
                   <span className="text-xs text-muted-foreground">1.2TB processados</span>
                 </div>
-                <Button className="w-full">Ver Status</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/ai-processing")}>Ver Status</Button>
               </CardContent>
             </Card>
 
@@ -260,7 +260,7 @@ const Innovation = () => {
                   <Badge className="bg-cyan-100 text-cyan-700">45.7TB</Badge>
                   <span className="text-xs text-muted-foreground">Estruturado</span>
                 </div>
-                <Button className="w-full">Explorar Dados</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/data-lake")}>Explorar Dados</Button>
               </CardContent>
             </Card>
           </div>
@@ -285,7 +285,7 @@ const Innovation = () => {
                   <Badge className="bg-indigo-100 text-indigo-700">Beta</Badge>
                   <span className="text-xs text-muted-foreground">3 aplicações</span>
                 </div>
-                <Button className="w-full">Explorar AR</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/ar")}>Explorar AR</Button>
               </CardContent>
             </Card>
 
@@ -306,7 +306,7 @@ const Innovation = () => {
                   <Badge className="bg-emerald-100 text-emerald-700">Seguro</Badge>
                   <span className="text-xs text-muted-foreground">1,247 transações</span>
                 </div>
-                <Button className="w-full">Acessar Blockchain</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/blockchain")}>Acessar Blockchain</Button>
               </CardContent>
             </Card>
 
@@ -327,7 +327,7 @@ const Innovation = () => {
                   <Badge className="bg-blue-100 text-blue-700">342 dispositivos</Badge>
                   <span className="text-xs text-muted-foreground">99.2% online</span>
                 </div>
-                <Button className="w-full">Ver Dashboard</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/iot")}>Ver Dashboard</Button>
               </CardContent>
             </Card>
 
@@ -348,7 +348,7 @@ const Innovation = () => {
                   <Badge className="bg-purple-100 text-purple-700">15 nós</Badge>
                   <span className="text-xs text-muted-foreground">4ms latência</span>
                 </div>
-                <Button className="w-full">Gerenciar Nós</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/edge-computing")}>Gerenciar Nós</Button>
               </CardContent>
             </Card>
 
@@ -369,7 +369,7 @@ const Innovation = () => {
                   <Badge className="bg-pink-100 text-pink-700">Experimental</Badge>
                   <span className="text-xs text-muted-foreground">Em pesquisa</span>
                 </div>
-                <Button className="w-full">Ver Projetos</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/quantum-computing")}>Ver Projetos</Button>
               </CardContent>
             </Card>
 
@@ -390,7 +390,7 @@ const Innovation = () => {
                   <Badge className="bg-yellow-100 text-yellow-700">GPT-4</Badge>
                   <span className="text-xs text-muted-foreground">156 docs gerados</span>
                 </div>
-                <Button className="w-full">Criar Conteúdo</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/generative-ai")}>Criar Conteúdo</Button>
               </CardContent>
             </Card>
           </div>
@@ -415,7 +415,7 @@ const Innovation = () => {
                   <Badge className="bg-yellow-100 text-yellow-700">96.8% eficiência</Badge>
                   <span className="text-xs text-muted-foreground">12 otimizações ativas</span>
                 </div>
-                <Button className="w-full">Otimizar Sistema</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/performance-optimizer")}>Otimizar Sistema</Button>
               </CardContent>
             </Card>
 
@@ -436,7 +436,7 @@ const Innovation = () => {
                   <Badge className="bg-orange-100 text-orange-700">247 usuários ativos</Badge>
                   <span className="text-xs text-muted-foreground">8 conquistas</span>
                 </div>
-                <Button className="w-full">Ver Gamificação</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/gamification")}>Ver Gamificação</Button>
               </CardContent>
             </Card>
           </div>
@@ -461,7 +461,7 @@ const Innovation = () => {
                   <Badge className="bg-blue-100 text-blue-700">47 dashboards</Badge>
                   <span className="text-xs text-muted-foreground">Real-time</span>
                 </div>
-                <Button className="w-full">Ver Analytics</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/advanced-analytics")}>Ver Analytics</Button>
               </CardContent>
             </Card>
 
@@ -482,7 +482,7 @@ const Innovation = () => {
                   <Badge className="bg-green-100 text-green-700">342 insights</Badge>
                   <span className="text-xs text-muted-foreground">AI-powered</span>
                 </div>
-                <Button className="w-full">Ver Insights</Button>
+                <Button className="w-full" onClick={() => handleModuleAccess("/business-insights")}>Ver Insights</Button>
               </CardContent>
             </Card>
           </div>
@@ -507,7 +507,7 @@ const Innovation = () => {
                   <Badge className="bg-purple-100 text-purple-700">24 workflows</Badge>
                   <span className="text-xs text-muted-foreground">89% automação</span>
                 </div>
-                <Button className="w-full" variant="outline">Gerenciar</Button>
+                <Button className="w-full" variant="outline" onClick={() => handleModuleAccess("/automation/workflows")}>Gerenciar</Button>
               </CardContent>
             </Card>
 
@@ -528,7 +528,7 @@ const Innovation = () => {
                   <Badge className="bg-red-100 text-red-700">12 bots ativos</Badge>
                   <span className="text-xs text-muted-foreground">345 tarefas/dia</span>
                 </div>
-                <Button className="w-full" variant="outline">Configurar</Button>
+                <Button className="w-full" variant="outline" onClick={() => handleModuleAccess("/automation/rpa")}>Configurar</Button>
               </CardContent>
             </Card>
 
@@ -549,7 +549,7 @@ const Innovation = () => {
                   <Badge className="bg-yellow-100 text-yellow-700">67 triggers</Badge>
                   <span className="text-xs text-muted-foreground">99.8% precisão</span>
                 </div>
-                <Button className="w-full" variant="outline">Configurar Triggers</Button>
+                <Button className="w-full" variant="outline" onClick={() => handleModuleAccess("/automation/triggers")}>Configurar Triggers</Button>
               </CardContent>
             </Card>
           </div>

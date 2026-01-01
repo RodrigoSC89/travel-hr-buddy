@@ -415,7 +415,7 @@ export default function IntegrationsCenter() {
                   </div>
                 </div>
 
-                <Button className="w-full">
+                <Button className="w-full" onClick={() => toast.success("Notificação de teste enviada com sucesso!")}>
                   <Send className="h-4 w-4 mr-2" />
                   Enviar Notificação de Teste
                 </Button>
