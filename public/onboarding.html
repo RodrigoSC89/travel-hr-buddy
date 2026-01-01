@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nautilus One - Guia de Onboarding</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #3b82f6;
+      --accent: #10b981;
+      --background: #f8fafc;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .step {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    
+    .step h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    
+    .step p {
+      color: var(--muted);
+      margin-bottom: 15px;
+    }
+    
+    .step ul {
+      margin-left: 20px;
+      color: var(--text);
+    }
+    
+    .step li {
+      margin-bottom: 8px;
+    }
+    
+    .highlight {
+      background: #dbeafe;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    
+    .highlight strong {
+      color: var(--secondary);
+    }
+    
+    .cta {
+      background: var(--accent);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    
+    .cta:hover {
+      background: #059669;
+    }
+    
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .module-card {
+      background: var(--background);
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .module-card .icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .footer {
+      background: var(--primary);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🚀 Bem-vindo ao Nautilus One</h1>
+    <p>Seu guia completo para começar a usar a plataforma</p>
+  </div>
+  
+  <div class="container">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h2>Acesso Inicial</h2>
+      <p>Faça login com as credenciais fornecidas pelo administrador.</p>
+      <ul>
+        <li>Acesse: <strong>https://app.nautilus.one</strong></li>
+        <li>Digite seu email corporativo</li>
+        <li>Insira a senha temporária</li>
+        <li>Configure sua nova senha no primeiro acesso</li>
+      </ul>
+      <div class="highlight">
+        <strong>💡 Dica:</strong> Ative a autenticação de dois fatores para maior segurança.
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">2</div>
+      <h2>Navegação Principal</h2>
+      <p>Conheça as principais áreas do sistema:</p>
+      <div class="modules-grid">
+        <div class="module-card">
+          <div class="icon">🎯</div>
+          <strong>Central de Comando</strong>
+          <p>Dashboard principal</p>
+        </div>
+        <div class="module-card">
+          <div class="icon">🚢</div>
+          <strong>Frota</strong>
+          <p>Gestão de embarcações</p>
+        </div>
+        <div class="module-card">
+          <div class="icon">👥</div>
+          <strong>Tripulação</strong>
+          <p>RH marítimo</p>
+        </div>
+        <div class="module-card">
+          <div class="icon">📋</div>
+          <strong>Compliance</strong>
+          <p>SGSO, PEOTRAM, PEO-DP</p>
+        </div>
+        <div class="module-card">
+          <div class="icon">🧠</div>
+          <strong>AI Hub</strong>
+          <p>16 IAs especializadas</p>
+        </div>
+        <div class="module-card">
+          <div class="icon">📊</div>
+          <strong>Relatórios</strong>
+          <p>Analytics e exports</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">3</div>
+      <h2>Primeiras Configurações</h2>
+      <p>Configure sua organização:</p>
+      <ul>
+        <li><strong>Perfil:</strong> Complete seus dados e foto</li>
+        <li><strong>Notificações:</strong> Configure alertas por email/push</li>
+        <li><strong>Embarcações:</strong> Cadastre sua frota</li>
+        <li><strong>Tripulantes:</strong> Importe ou cadastre a tripulação</li>
+        <li><strong>Documentos:</strong> Configure tipos e categorias</li>
+      </ul>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">4</div>
+      <h2>Usando o AI Hub</h2>
+      <p>Aproveite as 16 IAs especializadas:</p>
+      <ul>
+        <li><strong>Command AI:</strong> Perguntas gerais sobre o sistema</li>
+        <li><strong>PEOTRAM AI:</strong> Auxílio em auditorias Petrobras</li>
+        <li><strong>Safety AI:</strong> Análise de incidentes e safety flashes</li>
+        <li><strong>Crew AI:</strong> Gestão de escalas e certificações</li>
+        <li><strong>Voice:</strong> Comandos por voz em português</li>
+      </ul>
+      <div class="highlight">
+        <strong>🎤 Voz HD:</strong> Todas as IAs suportam resposta por voz com ElevenLabs.
+      </div>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">5</div>
+      <h2>Modo Offline</h2>
+      <p>O sistema funciona mesmo sem internet:</p>
+      <ul>
+        <li>Dados são salvos localmente no dispositivo</li>
+        <li>Sincronização automática ao reconectar</li>
+        <li>Indicador visual de status offline</li>
+        <li>Ideal para operações embarcadas</li>
+      </ul>
+    </div>
+    
+    <div class="step">
+      <div class="step-number">6</div>
+      <h2>Suporte e Ajuda</h2>
+      <p>Estamos aqui para ajudar:</p>
+      <ul>
+        <li><strong>Documentação:</strong> docs.nautilus.one</li>
+        <li><strong>Suporte:</strong> support@nautilus.one</li>
+        <li><strong>Chat:</strong> Use o botão de ajuda no sistema</li>
+        <li><strong>Tour Guiado:</strong> Clique no ícone "?" para iniciar</li>
+      </ul>
+      <a href="https://docs.nautilus.one" class="cta">Acessar Documentação</a>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>© 2026 Nautilus One - Maritime HR Management Platform</p>
+    <p>
+      <a href="https://nautilus.one">Site</a> | 
+      <a href="https://docs.nautilus.one">Docs</a> | 
+      <a href="mailto:support@nautilus.one">Suporte</a>
+    </p>
+  </div>
+</body>
+</html>
