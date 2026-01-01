@@ -234,7 +234,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: any) => {
 };
 
 // AI Copilot Component
-const FleetAICopilot = ({ vessels }: { vessels: any[] }) => {
+const FleetAICopilot = ({ vessels, onToast }: { vessels: any[]; onToast: (opts: { title: string; description?: string }) => void }) => {
   const [query, setQuery] = useState("");
   const [thinking, setThinking] = useState(false);
 
@@ -276,19 +276,27 @@ const FleetAICopilot = ({ vessels }: { vessels: any[] }) => {
         <div className="space-y-2">
           <Label className="text-xs text-muted-foreground">Ações Rápidas</Label>
           <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" size="sm" className="justify-start">
+            <Button variant="outline" size="sm" className="justify-start" onClick={() => {
+              onToast({ title: "🛣️ Otimizando Rotas", description: "Análise de rotas marítimas iniciada..." });
+            }}>
               <Route className="h-3 w-3 mr-2" />
               Otimizar Rotas
             </Button>
-            <Button variant="outline" size="sm" className="justify-start">
+            <Button variant="outline" size="sm" className="justify-start" onClick={() => {
+              onToast({ title: "⛽ Análise Combustível", description: "Relatório de consumo sendo gerado..." });
+            }}>
               <Fuel className="h-3 w-3 mr-2" />
               Análise Combustível
             </Button>
-            <Button variant="outline" size="sm" className="justify-start">
+            <Button variant="outline" size="sm" className="justify-start" onClick={() => {
+              onToast({ title: "🔧 Manutenção Preditiva", description: "Executando análise preditiva de manutenção..." });
+            }}>
               <Wrench className="h-3 w-3 mr-2" />
               Pred. Manutenção
             </Button>
-            <Button variant="outline" size="sm" className="justify-start">
+            <Button variant="outline" size="sm" className="justify-start" onClick={() => {
+              onToast({ title: "📊 Gerando Relatório", description: "Relatório executivo sendo preparado..." });
+            }}>
               <BarChart3 className="h-3 w-3 mr-2" />
               Relatório
             </Button>
@@ -493,7 +501,7 @@ export default function FleetCommandCenter() {
               </div>
             </div>
             <div className="xl:col-span-1">
-              <FleetAICopilot vessels={vessels} />
+              <FleetAICopilot vessels={vessels} onToast={toast} />
             </div>
           </div>
         </TabsContent>
