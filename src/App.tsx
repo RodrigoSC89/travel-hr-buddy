@@ -188,6 +188,11 @@ const AIHubPage = lazy(() => import(/* webpackChunkName: "page-ai-hub" */ "@/pag
 // AI Analytics Dashboard - PATCH AI-REVOLUTION
 const AIAnalyticsDashboard = lazy(() => import(/* webpackChunkName: "page-ai-analytics" */ "@/pages/AIAnalyticsDashboard"));
 
+// V2 Modules - PATCH ELEVATION v2.0 (Módulos Melhorados - Originais Preservados)
+const SGSO_V2 = lazy(() => import(/* webpackChunkName: "page-sgso-v2" */ "@/pages/SGSO_V2"));
+const PEOTRAM_V2 = lazy(() => import(/* webpackChunkName: "page-peotram-v2" */ "@/pages/PEOTRAM_V2"));
+const PEODP_V2 = lazy(() => import(/* webpackChunkName: "page-peodp-v2" */ "@/pages/PEODP_V2"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -355,6 +360,12 @@ function App() {
                         <Route path="isps-security" element={<ISPSPage />} />
                         <Route path="drill-simulator" element={<DrillSimulatorPage />} />
                         <Route path="sustainability-score" element={<SustainabilityScorePage />} />
+                        <Route path="gamification" element={<Gamification />} />
+
+                        {/* V2 Modules - PATCH ELEVATION v2.0 (Versões Melhoradas - Originais Preservados) */}
+                        <Route path="sgso-v2" element={<SGSO_V2 />} />
+                        <Route path="peotram-v2" element={<PEOTRAM_V2 />} />
+                        <Route path="peo-dp-v2" element={<PEODP_V2 />} />
                         <Route path="gamification" element={<Gamification />} />
 
                         {/* Legacy Redirects - Extracted */}
