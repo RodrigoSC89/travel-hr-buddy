@@ -624,7 +624,7 @@ export default function TravelCommandCenter() {
                               {trip.carbonFootprint} kg CO₂
                             </span>
                           </div>
-                          <Button variant="outline" size="sm">Detalhes</Button>
+                          <Button variant="outline" size="sm" onClick={() => toast({ title: "Detalhes da Viagem", description: `Visualizando viagem de ${trip.crewMember}` })}>Detalhes</Button>
                         </div>
                       </div>
                     ))}
@@ -650,7 +650,7 @@ export default function TravelCommandCenter() {
                     <p className="text-2xl font-bold text-green-600">R$ 4.850</p>
                     <p className="text-sm text-muted-foreground">economia potencial</p>
                   </div>
-                  <Button>
+                  <Button onClick={() => toast({ title: "Sugestões de IA", description: "3 oportunidades identificadas para otimização de custos" })}>
                     <Sparkles className="h-4 w-4 mr-2" />
                     Ver Sugestões
                   </Button>
@@ -754,11 +754,11 @@ export default function TravelCommandCenter() {
                         </span>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" onClick={() => toast({ title: "Check-in Online", description: "Abrindo formulário de check-in..." })}>
                           <QrCode className="h-4 w-4 mr-1" />
                           Check-in
                         </Button>
-                        <Button variant="outline" size="sm">Detalhes</Button>
+                        <Button variant="outline" size="sm" onClick={() => toast({ title: "Detalhes", description: `Visualizando detalhes de ${trip.crewMember}` })}>Detalhes</Button>
                       </div>
                     </div>
                   </CardContent>

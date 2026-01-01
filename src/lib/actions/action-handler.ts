@@ -269,6 +269,38 @@ export const commonActions = {
     URL.revokeObjectURL(url);
     
     return { success: true, message: 'Exportação CSV concluída' };
+  },
+
+  /**
+   * Create action handler with toast feedback
+   */
+  createActionHandler: (title: string, description: string, variant: 'default' | 'destructive' = 'default') => {
+    return () => {
+      toast({ title, description, variant });
+    };
+  },
+
+  /**
+   * Common quick actions
+   */
+  quickAction: {
+    viewDetails: (itemName: string) => () => toast({ title: "Visualizar Detalhes", description: `Abrindo detalhes de: ${itemName}` }),
+    edit: (itemName: string) => () => toast({ title: "Editar", description: `Editando: ${itemName}` }),
+    delete: (itemName: string) => () => toast({ title: "Excluir", description: `Item "${itemName}" removido` }),
+    save: () => () => toast({ title: "Salvo", description: "Alterações salvas com sucesso" }),
+    export: (format: string = "Excel") => () => toast({ title: "Exportar", description: `Gerando arquivo ${format}...` }),
+    download: (fileName: string) => () => toast({ title: "Download", description: `Baixando: ${fileName}` }),
+    sync: () => () => toast({ title: "Sincronizar", description: "Sincronização iniciada..." }),
+    approve: (itemName: string) => () => toast({ title: "Aprovado", description: `"${itemName}" foi aprovado` }),
+    reject: (itemName: string) => () => toast({ title: "Rejeitado", description: `"${itemName}" foi rejeitado`, variant: "destructive" }),
+    create: (itemType: string) => () => toast({ title: "Criar", description: `Abrindo formulário de criação de ${itemType}` }),
+    analyze: (itemName: string) => () => toast({ title: "Analisar", description: `Analisando: ${itemName} com IA...` }),
+    generate: (itemType: string) => () => toast({ title: "Gerar", description: `Gerando ${itemType} com IA...` }),
+    configure: (itemName: string) => () => toast({ title: "Configurar", description: `Abrindo configurações de: ${itemName}` }),
+    schedule: (itemName: string) => () => toast({ title: "Agendar", description: `Agendando: ${itemName}` }),
+    complete: (itemName: string) => () => toast({ title: "Concluir", description: `"${itemName}" marcado como concluído` }),
+    start: (itemName: string) => () => toast({ title: "Iniciar", description: `"${itemName}" iniciado` }),
+    pause: (itemName: string) => () => toast({ title: "Pausar", description: `"${itemName}" pausado` }),
   }
 };
 
