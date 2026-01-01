@@ -1,9 +1,10 @@
 /**
- * Global Action Handler - PATCH 750
- * Centralized handler for common actions across the system
+ * Global Action Handler - PATCH 850
+ * Centralized handler with Sentry error tracking for production monitoring
  */
 
 import { toast } from '@/hooks/use-toast';
+import { trackButtonError, trackButtonPerformance } from '@/lib/monitoring/button-error-tracker';
 
 export type ActionType = 
   | 'navigate'
@@ -83,7 +84,15 @@ export async function executeAction(
 
     return result;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Erro desconhecido';
+    const errorObj = error instanceof Error ? error : new Error(String(error));
+    const message = errorObj.message;
+    
+    // Track error with Sentry
+    trackButtonError(errorObj, {
+      buttonText: label,
+      action: config.type,
+      route: window.location.pathname,
+    });
     
     toast({
       title: 'Erro',

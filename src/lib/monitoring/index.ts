@@ -24,3 +24,13 @@ export {
   type APMSpan,
   type APMError,
 } from './apm';
+
+// Button Error Tracking (Sentry Integration)
+export { 
+  trackButtonError,
+  trackNonFunctionalButton,
+  createTrackedHandler,
+  withButtonTracking,
+  trackButtonPerformance,
+  type ButtonErrorContext,
+} from './button-error-tracker';
