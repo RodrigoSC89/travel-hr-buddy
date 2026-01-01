@@ -4,7 +4,7 @@
  * PATCH AI-TRAINING v2.0
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Bot, 
@@ -13,8 +13,10 @@ import {
   ChevronUp,
   MessageSquare,
   Mic,
+  MicOff,
   Zap
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { 
   Popover, 
@@ -57,6 +59,56 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
   const [selectedModule, setSelectedModule] = useState<AIModuleKey>(defaultModule);
   const [chatOpen, setChatOpen] = useState(false);
   const [quickInput, setQuickInput] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+
+  // Voice recognition handler
+  const handleVoiceInput = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    
+    if (!SpeechRecognitionAPI) {
+      toast.error("Reconhecimento de voz não suportado neste navegador");
+      return;
+    }
+
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+      return;
+    }
+
+    recognitionRef.current = new SpeechRecognitionAPI();
+    recognitionRef.current.lang = 'pt-BR';
+    recognitionRef.current.continuous = false;
+    recognitionRef.current.interimResults = false;
+
+    recognitionRef.current.onstart = () => {
+      setIsListening(true);
+      toast.info("🎤 Ouvindo... Fale sua pergunta");
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognitionRef.current.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setQuickInput(transcript);
+      toast.success(`Capturado: "${transcript}"`);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognitionRef.current.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      toast.error("Erro no reconhecimento de voz");
+    };
+
+    recognitionRef.current.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current.start();
+  }, [isListening]);
 
   const modules = Object.entries(AI_MODULES).slice(0, 8).map(([key, config]) => ({
     key: key as AIModuleKey,
@@ -147,11 +199,12 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
               <div className="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1">
                 <Button 
                   size="icon" 
-                  variant="ghost" 
-                  className="h-7 w-7"
-                  onClick={() => {}}
+                  variant={isListening ? "destructive" : "ghost"} 
+                  className={`h-7 w-7 ${isListening ? 'animate-pulse' : ''}`}
+                  onClick={handleVoiceInput}
+                  title={isListening ? "Parar gravação" : "Falar"}
                 >
-                  <Mic className="h-4 w-4" />
+                  {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                 </Button>
                 <Button 
                   size="icon" 
