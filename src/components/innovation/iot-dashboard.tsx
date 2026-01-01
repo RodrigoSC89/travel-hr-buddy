@@ -321,10 +321,33 @@ export const IoTDashboard: React.FC = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => toast.info(`Abrindo configurações de ${device.name}...`)}>
+                    <Button variant="outline" size="sm" onClick={() => {
+                      toast.loading(`Carregando configurações de ${device.name}...`, { id: `config-${device.id}` });
+                      setTimeout(() => {
+                        toast.success(`Configurações de ${device.name} carregadas`, { 
+                          id: `config-${device.id}`,
+                          description: `Tipo: ${device.type} | Local: ${device.location}` 
+                        });
+                      }, 1500);
+                    }}>
                       Configurar
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => toast.loading(`Executando diagnóstico de ${device.name}...`, { id: `diag-${device.id}`, duration: 2000 })}>
+                    <Button variant="outline" size="sm" onClick={() => {
+                      toast.loading(`Executando diagnóstico de ${device.name}...`, { id: `diag-${device.id}` });
+                      setTimeout(() => {
+                        if (device.status === "online") {
+                          toast.success(`Diagnóstico de ${device.name} concluído`, { 
+                            id: `diag-${device.id}`,
+                            description: `Sinal: ${device.signalStrength}% | Status: Operacional` 
+                          });
+                        } else {
+                          toast.error(`Diagnóstico de ${device.name}: Problemas detectados`, { 
+                            id: `diag-${device.id}`,
+                            description: "Verificar conexão física e reiniciar dispositivo" 
+                          });
+                        }
+                      }, 2500);
+                    }}>
                       Diagnóstico
                     </Button>
                   </div>
