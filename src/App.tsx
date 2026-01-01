@@ -185,6 +185,9 @@ const RevolutionaryFeaturesPage = lazy(() => import(/* webpackChunkName: "page-r
 // AI Hub Central - PATCH AI-REVOLUTION
 const AIHubPage = lazy(() => import(/* webpackChunkName: "page-ai-hub" */ "@/pages/AIHubPage"));
 
+// AI Analytics Dashboard - PATCH AI-REVOLUTION
+const AIAnalyticsDashboard = lazy(() => import(/* webpackChunkName: "page-ai-analytics" */ "@/pages/AIAnalyticsDashboard"));
+
 const SmartLayout = lazy(() =>
   import(/* webpackChunkName: "layout-smart" */ "./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
@@ -311,6 +314,7 @@ function App() {
                         
                         {/* AI Hub Central - PATCH AI-REVOLUTION */}
                         <Route path="ai-hub" element={<AIHubPage />} />
+                        <Route path="ai-analytics" element={<AIAnalyticsDashboard />} />
                         
                         {/* AI Self-Healing - PATCH 860 */}
                         <Route path="ai-ops/logs" element={<SelfHealingLogs />} />
