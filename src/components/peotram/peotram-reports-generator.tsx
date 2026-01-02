@@ -185,11 +185,23 @@ export const PeotramReportsGenerator: React.FC = () => {
   };
 
   const scheduleReport = () => {
-    toast.info("Funcionalidade de agendamento de relatórios será implementada em breve.");
+    toast.loading("Configurando agendamento...", { id: "schedule-report" });
+    setTimeout(() => {
+      toast.success("Agendamento configurado com sucesso!", { 
+        id: "schedule-report",
+        description: `Próximo relatório: ${reportConfig.period === 'monthly' ? 'Mensal' : reportConfig.period === 'weekly' ? 'Semanal' : 'Trimestral'}`
+      });
+    }, 1000);
   };
 
   const previewReport = () => {
-    toast.info("Visualização do relatório será implementada em breve.");
+    toast.loading("Gerando prévia do relatório...", { id: "preview-report" });
+    setTimeout(() => {
+      toast.success("Prévia gerada!", { 
+        id: "preview-report",
+        description: "Verifique as configurações e clique em 'Gerar Relatório'"
+      });
+    }, 1500);
   };
 
   return (

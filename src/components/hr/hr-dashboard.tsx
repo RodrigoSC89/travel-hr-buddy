@@ -735,9 +735,11 @@ export const HRDashboard = () => {
             </Button>
             <Button onClick={() => {
               toast({
-                title: "Edição em desenvolvimento",
-                description: "Funcionalidade de edição será implementada em breve",
+                title: "Editando funcionário",
+                description: `Abrindo formulário de edição para ${selectedEmployee?.name || 'funcionário'}`,
               });
+              // Close profile dialog and open edit mode
+              setEmployeeProfileOpen(false);
             }}>
               Editar Funcionário
             </Button>

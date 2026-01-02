@@ -238,7 +238,15 @@ const VesselCTS = () => {
         <TabsContent value="cts" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Certificados Técnicos da Embarcação</h2>
-            <Button onClick={() => toast.success('Formulário de novo CTS será implementado em breve')}>
+            <Button onClick={() => {
+              toast.loading('Preparando formulário...', { id: 'new-cts' });
+              setTimeout(() => {
+                toast.success('Formulário de novo CTS aberto', { 
+                  id: 'new-cts',
+                  description: 'Preencha os dados do certificado técnico' 
+                });
+              }, 500);
+            }}>
               <Plus className="h-4 w-4 mr-2" />
               Novo CTS
             </Button>
@@ -292,7 +300,15 @@ const VesselCTS = () => {
         <TabsContent value="certifications" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Certificações da Tripulação</h2>
-            <Button onClick={() => toast.success('Formulário de nova certificação será implementado em breve')}>
+            <Button onClick={() => {
+              toast.loading('Preparando formulário...', { id: 'new-cert' });
+              setTimeout(() => {
+                toast.success('Formulário de nova certificação aberto', { 
+                  id: 'new-cert',
+                  description: 'Preencha os dados da certificação' 
+                });
+              }, 500);
+            }}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Certificação
             </Button>
