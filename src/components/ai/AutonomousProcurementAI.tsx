@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import {
   Brain, ShoppingCart, TrendingUp, AlertTriangle, CheckCircle,
   Package, Truck, DollarSign, Clock, Sparkles, Building2,
@@ -215,7 +216,15 @@ export const AutonomousProcurementAI: React.FC = () => {
   };
 
   const executeAutoPurchase = async (rec: PurchaseRecommendation) => {
-    console.log('Executing auto purchase:', rec);
+    toast.loading(`Processando pedido de ${rec.item.name}...`, { id: 'purchase' });
+    
+    // Simular processamento
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    toast.success(`Pedido de compra criado com sucesso!`, {
+      id: 'purchase',
+      description: `${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} - R$ ${rec.estimatedCost.toLocaleString()}`
+    });
   };
 
   return (

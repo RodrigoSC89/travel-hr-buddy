@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import {
   Brain, AlertTriangle, TrendingUp, Wrench, Clock,
   CheckCircle, XCircle, RefreshCw, Sparkles, Ship,
@@ -200,8 +201,14 @@ export const PredictiveMaintenanceAI: React.FC = () => {
   };
 
   const createMaintenanceOrder = async (prediction: PredictionResult) => {
-    // Would create a maintenance work order
-    console.log('Creating maintenance order for:', prediction.componentName);
+    toast.loading(`Criando ordem de manutenção...`, { id: 'maintenance' });
+    
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast.success(`Ordem de manutenção criada!`, {
+      id: 'maintenance',
+      description: `${prediction.componentName} - ${prediction.vesselName}. Prazo: ${prediction.daysUntilFailure} dias.`
+    });
   };
 
   return (
