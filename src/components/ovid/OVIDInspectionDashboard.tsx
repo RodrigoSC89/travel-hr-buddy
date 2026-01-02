@@ -743,6 +743,16 @@ export const OVIDInspectionDashboard: React.FC = () => {
           <OVIDAnalyticsDashboard />
         </TabsContent>
 
+        {/* Evolution Tab - Historical Score Analysis */}
+        <TabsContent value="evolution">
+          <OVIDHistoricalEvolution />
+        </TabsContent>
+
+        {/* Compare Tab - Side by Side Inspection Comparison */}
+        <TabsContent value="compare">
+          <OVIDInspectionComparison />
+        </TabsContent>
+
         {/* Finalize Section in Reports or as separate card */}
         {inspectionStarted && currentInspectionId && (
           <div className="mt-6">
