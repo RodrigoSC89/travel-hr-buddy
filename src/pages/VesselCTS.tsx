@@ -284,7 +284,7 @@ const VesselCTS = () => {
                           </span>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm" onClick={() => toast.info(`Detalhes do CTS ${cts.cts_number}`)}>
+                      <Button variant="outline" size="sm" onClick={() => toast.success(`CTS ${cts.cts_number}`, { description: `Flag: ${cts.flag_state} | Status: ${cts.status}` })}>
                         <FileText className="h-4 w-4 mr-2" />
                         Detalhes
                       </Button>

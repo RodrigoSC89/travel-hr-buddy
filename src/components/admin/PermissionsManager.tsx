@@ -112,7 +112,7 @@ export function PermissionsManager() {
   };
 
   const handleReset = () => {
-    toast.info('Permissões resetadas para padrão');
+    toast.success('Permissões resetadas para padrão');
     setHasChanges(false);
   };
 
