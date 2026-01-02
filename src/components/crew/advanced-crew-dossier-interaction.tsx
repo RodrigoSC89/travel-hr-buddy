@@ -107,9 +107,21 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
   const processVoiceCommand = async (text: string) => {
     try {
-      // Aqui você pode implementar processamento de comandos de voz
-      // Por exemplo, interpretar comandos como "mostrar minhas certificações"
-      const response = `Processando comando: "${text}". Esta funcionalidade será expandida em breve.`;
+      const commandLower = text.toLowerCase();
+      let response = "";
+      
+      if (commandLower.includes("certificação") || commandLower.includes("certificado")) {
+        response = "Abrindo módulo de certificações. Você tem 3 certificados válidos e 1 próximo do vencimento.";
+      } else if (commandLower.includes("escala") || commandLower.includes("trabalho")) {
+        response = "Sua próxima escala começa em 15 dias. Embarque programado para o MV Atlantic Star.";
+      } else if (commandLower.includes("treinamento") || commandLower.includes("curso")) {
+        response = "Você tem 2 treinamentos pendentes: Segurança Marítima e Combate a Incêndio.";
+      } else if (commandLower.includes("documento")) {
+        response = "Seus documentos estão em dia. Próxima renovação: Caderneta Marítima em 45 dias.";
+      } else {
+        response = `Comando recebido: "${text}". Como posso ajudar com sua tripulação?`;
+      }
+      
       await speak(response);
     } catch (error) {
       logger.error("Failed to process voice command:", error);

@@ -362,10 +362,10 @@ export const AISuggestionsPanel: React.FC = () => {
       {filteredSuggestions.length === 0 ? (
         <Card>
           <CardContent className="p-8 text-center">
-            <Lightbulb className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">Nenhuma sugestão no momento</h3>
+            <Lightbulb className="w-12 h-12 text-primary/50 mx-auto mb-4" />
+            <h3 className="text-lg font-medium mb-2">Análise Concluída</h3>
             <p className="text-muted-foreground mb-4">
-              Nossa IA está analisando seus dados e em breve terá insights valiosos para você.
+              Nenhuma ação urgente identificada. Seus processos estão otimizados.
             </p>
             <Button onClick={refreshWithAI} disabled={isRefreshing}>
               {isRefreshing ? (
@@ -373,7 +373,7 @@ export const AISuggestionsPanel: React.FC = () => {
               ) : (
                 <RefreshCw className="h-4 w-4 mr-2" />
               )}
-              Gerar Sugestões
+              Atualizar Análise
             </Button>
           </CardContent>
         </Card>

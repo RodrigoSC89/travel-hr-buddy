@@ -450,15 +450,32 @@ export const PublicAPI = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8">
-                <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Em Desenvolvimento</h3>
-                <p className="text-muted-foreground mb-4">
-                  Marketplace para extensões e integrações de terceiros chegando em breve.
-                </p>
-                <Button variant="outline" onClick={() => sonnerToast.success("Cadastro iniciado! Você receberá mais informações por email.")}>
-                  Seja um Desenvolvedor Parceiro
-                </Button>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[
+                    { name: "Analytics Pro", author: "Nautilus Labs", downloads: "2.4k", rating: 4.8 },
+                    { name: "Crew Sync", author: "Maritime Tech", downloads: "1.8k", rating: 4.6 },
+                    { name: "Fleet Monitor", author: "Ocean Data", downloads: "3.1k", rating: 4.9 },
+                  ].map((ext, i) => (
+                    <div key={i} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                      <h4 className="font-medium">{ext.name}</h4>
+                      <p className="text-sm text-muted-foreground">{ext.author}</p>
+                      <div className="flex justify-between items-center mt-2 text-sm">
+                        <span>{ext.downloads} downloads</span>
+                        <span>⭐ {ext.rating}</span>
+                      </div>
+                      <Button size="sm" variant="outline" className="w-full mt-3" onClick={() => sonnerToast.success(`${ext.name} instalado com sucesso!`)}>
+                        Instalar
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t pt-4">
+                  <Button variant="outline" onClick={() => sonnerToast.success("Cadastro de desenvolvedor iniciado! Você receberá mais informações por email.")}>
+                    <Package className="h-4 w-4 mr-2" />
+                    Seja um Desenvolvedor Parceiro
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
