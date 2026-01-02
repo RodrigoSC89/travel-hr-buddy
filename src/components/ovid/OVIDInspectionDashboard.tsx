@@ -13,7 +13,7 @@ import {
   Ship, FileText, CheckCircle, AlertTriangle, XCircle, 
   Plus, Download, Filter, Calendar, User, 
   ClipboardCheck, BarChart3, Settings,
-  Brain, FileCheck, Clock, Target, Shield, Loader2, History, TrendingUp
+  Brain, FileCheck, Clock, Target, Shield, Loader2, History, TrendingUp, GitCompare
 } from 'lucide-react';
 import { OVIQ4_SECTIONS, VESSEL_TYPES, getTotalQuestions } from '@/data/oviq4-checklist';
 import { OVIDChecklist } from './OVIDChecklist';
@@ -29,6 +29,8 @@ import { PreOVIDCompleteChecklist } from './PreOVIDCompleteChecklist';
 import { OVIDInspectionHistory } from './OVIDInspectionHistory';
 import { OVIDAnalyticsDashboard } from './OVIDAnalyticsDashboard';
 import { OVIDFinalizeInspection } from './OVIDFinalizeInspection';
+import { OVIDInspectionComparison } from './OVIDInspectionComparison';
+import { OVIDHistoricalEvolution } from './OVIDHistoricalEvolution';
 import { OVIQ4_CHAPTERS as COMPLETE_CHAPTERS } from '@/data/oviq4-complete-data';
 import { useOVIDInspection } from '@/hooks/useOVIDInspection';
 
@@ -346,10 +348,10 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-9 w-full">
+        <TabsList className="grid grid-cols-11 w-full">
           <TabsTrigger value="overview" className="flex items-center gap-1">
             <BarChart3 className="w-4 h-4" />
-            <span className="hidden sm:inline">Visão Geral</span>
+            <span className="hidden sm:inline">Visão</span>
           </TabsTrigger>
           <TabsTrigger value="new" className="flex items-center gap-1">
             <Plus className="w-4 h-4" />
@@ -357,7 +359,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="checklist" className="flex items-center gap-1">
             <ClipboardCheck className="w-4 h-4" />
-            <span className="hidden sm:inline">Checklist</span>
+            <span className="hidden sm:inline">Check</span>
           </TabsTrigger>
           <TabsTrigger value="ncs" className="flex items-center gap-1">
             <AlertTriangle className="w-4 h-4" />
@@ -365,7 +367,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="reports" className="flex items-center gap-1">
             <FileText className="w-4 h-4" />
-            <span className="hidden sm:inline">Relatórios</span>
+            <span className="hidden sm:inline">PDF</span>
           </TabsTrigger>
           <TabsTrigger value="ai" className="flex items-center gap-1">
             <Brain className="w-4 h-4" />
@@ -373,7 +375,15 @@ export const OVIDInspectionDashboard: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="analytics" className="flex items-center gap-1">
             <TrendingUp className="w-4 h-4" />
-            <span className="hidden sm:inline">Analytics</span>
+            <span className="hidden sm:inline">Stats</span>
+          </TabsTrigger>
+          <TabsTrigger value="evolution" className="flex items-center gap-1">
+            <Target className="w-4 h-4" />
+            <span className="hidden sm:inline">Evolução</span>
+          </TabsTrigger>
+          <TabsTrigger value="compare" className="flex items-center gap-1">
+            <GitCompare className="w-4 h-4" />
+            <span className="hidden sm:inline">Comparar</span>
           </TabsTrigger>
           <TabsTrigger value="history" className="flex items-center gap-1">
             <History className="w-4 h-4" />
