@@ -163,6 +163,7 @@ const GMUD = lazy(() => import(/* webpackChunkName: "page-gmud" */ "@/pages/GMUD
 const ResponsibilityMatrix = lazy(() => import(/* webpackChunkName: "page-responsibility-matrix" */ "@/pages/ResponsibilityMatrix"));
 const SafetyHumanFactors = lazy(() => import(/* webpackChunkName: "page-safety-human-factors" */ "@/pages/SafetyHumanFactors"));
 const SafetyIMCA = lazy(() => import(/* webpackChunkName: "page-safety-imca" */ "@/pages/SafetyIMCA"));
+const PreOVIDInspection = lazy(() => import(/* webpackChunkName: "page-pre-ovid" */ "@/pages/PreOVIDInspection"));
 
 // Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
 const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
