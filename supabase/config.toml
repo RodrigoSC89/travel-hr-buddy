@@ -937,3 +937,7 @@ comment = "AI Hub Voice - ElevenLabs HD voice synthesis for all AI modules"
 [functions.ai-analytics]
 verify_jwt = false
 comment = "AI Analytics - Usage tracking and statistics for AI Hub"
+
+[functions.preovid-ai-chat]
+verify_jwt = false
+comment = "Pre-OVID AI Chat - OVIQ4 inspection assistant with evidence generation and voice support"
