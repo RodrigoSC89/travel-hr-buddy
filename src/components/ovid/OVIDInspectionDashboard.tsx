@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,13 +14,18 @@ import {
   Ship, FileText, CheckCircle, AlertTriangle, XCircle, 
   Plus, Download, Filter, Search, Calendar, User, 
   ClipboardCheck, BarChart3, MessageSquare, Settings,
-  Brain, FileCheck, Clock, Target, Shield, Anchor
+  Brain, FileCheck, Clock, Target, Shield, Anchor, Mic
 } from 'lucide-react';
 import { OVIQ4_SECTIONS, VESSEL_TYPES, getTotalQuestions } from '@/data/oviq4-checklist';
 import { OVIDChecklist } from './OVIDChecklist';
 import { OVIDNonConformities } from './OVIDNonConformities';
 import { OVIDAIAssistant } from './OVIDAIAssistant';
 import { OVIDReports } from './OVIDReports';
+import { PreOVIDChapterTabs, OVIQ4_CHAPTERS, ChapterProgress } from './PreOVIDChapterTabs';
+import { PreOVIDAIChat } from './PreOVIDAIChat';
+import { PreOVIDVoiceChat } from './PreOVIDVoiceChat';
+import { PreOVIDEvidenceGenerator } from './PreOVIDEvidenceGenerator';
+import { PreOVIDReportGenerator } from './PreOVIDReportGenerator';
 
 interface InspectionStatus {
   compliant: number;
@@ -499,7 +504,16 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
         {/* AI Assistant Tab */}
         <TabsContent value="ai">
-          <OVIDAIAssistant vesselType={selectedVesselType} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <PreOVIDAIChat 
+              vesselType={selectedVesselType}
+              mode="chat"
+            />
+            <PreOVIDVoiceChat 
+              vesselType={selectedVesselType}
+              chapterName="OVIQ4 Assistant"
+            />
+          </div>
         </TabsContent>
 
         {/* Settings Tab */}
