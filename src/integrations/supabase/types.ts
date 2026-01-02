@@ -18736,6 +18736,108 @@ export type Database = {
         }
         Relationships: []
       }
+      preovid_audits: {
+        Row: {
+          answered_questions: number | null
+          audit_date: string
+          completed_at: string | null
+          compliant_count: number | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          inspector_company: string | null
+          inspector_name: string
+          metadata: Json | null
+          non_compliant_count: number | null
+          not_applicable_count: number | null
+          notes: string | null
+          observation_count: number | null
+          organization_id: string | null
+          overall_score: number | null
+          port_location: string | null
+          started_at: string | null
+          status: string
+          submitted_at: string | null
+          total_questions: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_imo: string | null
+          vessel_name: string
+          vessel_type: string | null
+        }
+        Insert: {
+          answered_questions?: number | null
+          audit_date?: string
+          completed_at?: string | null
+          compliant_count?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          inspector_company?: string | null
+          inspector_name: string
+          metadata?: Json | null
+          non_compliant_count?: number | null
+          not_applicable_count?: number | null
+          notes?: string | null
+          observation_count?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          port_location?: string | null
+          started_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          total_questions?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_imo?: string | null
+          vessel_name: string
+          vessel_type?: string | null
+        }
+        Update: {
+          answered_questions?: number | null
+          audit_date?: string
+          completed_at?: string | null
+          compliant_count?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          inspector_company?: string | null
+          inspector_name?: string
+          metadata?: Json | null
+          non_compliant_count?: number | null
+          not_applicable_count?: number | null
+          notes?: string | null
+          observation_count?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          port_location?: string | null
+          started_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          total_questions?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_imo?: string | null
+          vessel_name?: string
+          vessel_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "preovid_audits_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "preovid_audits_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       preovid_blocks: {
         Row: {
           block_number: number
@@ -18774,6 +18876,162 @@ export type Database = {
           total_items?: number | null
         }
         Relationships: []
+      }
+      preovid_items: {
+        Row: {
+          block_id: string | null
+          category: string | null
+          chapter_number: string
+          created_at: string | null
+          guidance_notes: string | null
+          id: string
+          is_active: boolean | null
+          is_critical: boolean | null
+          order_index: number | null
+          question_code: string
+          question_text: string
+          regulatory_reference: string | null
+          risk_level: string | null
+          updated_at: string | null
+          vessel_types: string[] | null
+        }
+        Insert: {
+          block_id?: string | null
+          category?: string | null
+          chapter_number: string
+          created_at?: string | null
+          guidance_notes?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          order_index?: number | null
+          question_code: string
+          question_text: string
+          regulatory_reference?: string | null
+          risk_level?: string | null
+          updated_at?: string | null
+          vessel_types?: string[] | null
+        }
+        Update: {
+          block_id?: string | null
+          category?: string | null
+          chapter_number?: string
+          created_at?: string | null
+          guidance_notes?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          order_index?: number | null
+          question_code?: string
+          question_text?: string
+          regulatory_reference?: string | null
+          risk_level?: string | null
+          updated_at?: string | null
+          vessel_types?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "preovid_items_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "preovid_blocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      preovid_responses: {
+        Row: {
+          ai_suggestion: string | null
+          answered_at: string | null
+          answered_by: string | null
+          assigned_to: string | null
+          audit_id: string
+          block_id: string | null
+          chapter_number: string
+          corrective_action: string | null
+          corrective_action_deadline: string | null
+          created_at: string | null
+          evidence_photos: Json | null
+          evidence_text: string | null
+          id: string
+          inspector_notes: string | null
+          is_flagged: boolean | null
+          item_id: string | null
+          priority: string | null
+          question_code: string
+          question_text: string
+          response_status: string
+          updated_at: string | null
+        }
+        Insert: {
+          ai_suggestion?: string | null
+          answered_at?: string | null
+          answered_by?: string | null
+          assigned_to?: string | null
+          audit_id: string
+          block_id?: string | null
+          chapter_number: string
+          corrective_action?: string | null
+          corrective_action_deadline?: string | null
+          created_at?: string | null
+          evidence_photos?: Json | null
+          evidence_text?: string | null
+          id?: string
+          inspector_notes?: string | null
+          is_flagged?: boolean | null
+          item_id?: string | null
+          priority?: string | null
+          question_code: string
+          question_text: string
+          response_status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          ai_suggestion?: string | null
+          answered_at?: string | null
+          answered_by?: string | null
+          assigned_to?: string | null
+          audit_id?: string
+          block_id?: string | null
+          chapter_number?: string
+          corrective_action?: string | null
+          corrective_action_deadline?: string | null
+          created_at?: string | null
+          evidence_photos?: Json | null
+          evidence_text?: string | null
+          id?: string
+          inspector_notes?: string | null
+          is_flagged?: boolean | null
+          item_id?: string | null
+          priority?: string | null
+          question_code?: string
+          question_text?: string
+          response_status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "preovid_responses_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "preovid_audits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "preovid_responses_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "preovid_blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "preovid_responses_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "preovid_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       price_alerts: {
         Row: {
@@ -28584,6 +28842,10 @@ export type Database = {
       calculate_next_execution: { Args: { task_id: string }; Returns: string }
       calculate_peotram_compliance_score: {
         Args: { audit_uuid: string }
+        Returns: number
+      }
+      calculate_preovid_audit_score: {
+        Args: { p_audit_id: string }
         Returns: number
       }
       calculate_satellite_passes: {
