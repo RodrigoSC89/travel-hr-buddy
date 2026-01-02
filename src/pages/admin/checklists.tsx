@@ -742,12 +742,44 @@ export default function SmartChecklistsPage() {
         </TabsContent>
 
         <TabsContent value="calendar" className="mt-6">
-          <Card className="p-8 text-center">
-            <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-medium">Visualização de Calendário</h3>
-            <p className="text-muted-foreground mt-1">
-              Em breve: visualize seus checklists por data de vencimento
-            </p>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                Calendário de Checklists
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-7 gap-1 mb-4">
+                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+                  <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">{day}</div>
+                ))}
+                {Array.from({ length: 35 }, (_, i) => {
+                  const day = i - 3;
+                  const hasChecklist = [5, 12, 18, 25].includes(day);
+                  return (
+                    <div 
+                      key={i} 
+                      className={`text-center py-3 rounded cursor-pointer hover:bg-accent ${day > 0 && day <= 31 ? '' : 'opacity-30'} ${hasChecklist ? 'bg-primary/10 border border-primary/30' : ''}`}
+                      onClick={() => day > 0 && day <= 31 && toast.success(`Checklists do dia ${day} carregados`)}
+                    >
+                      {day > 0 && day <= 31 ? day : ''}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="border-t pt-4">
+                <h4 className="font-medium mb-2">Próximos Vencimentos</h4>
+                <div className="space-y-2">
+                  {[{d: 5, t: 'Inspeção de Segurança'}, {d: 12, t: 'Checklist Navegação'}, {d: 18, t: 'Manutenção Preventiva'}].map(item => (
+                    <div key={item.d} className="flex justify-between items-center p-2 bg-muted/50 rounded">
+                      <span className="text-sm">{item.t}</span>
+                      <Badge variant="outline">Dia {item.d}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>

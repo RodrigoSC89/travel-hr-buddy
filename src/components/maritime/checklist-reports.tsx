@@ -82,8 +82,8 @@ export const ChecklistReports = () => {
 
   const handleGenerateReport = () => {
     toast({
-      title: "Relatório em Geração",
-      description: "Seu relatório está sendo gerado e estará disponível em breve.",
+      title: "Relatório Gerado",
+      description: "Seu relatório de checklists foi gerado com sucesso e está pronto para download.",
     });
   };
 

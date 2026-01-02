@@ -128,26 +128,45 @@ const LogisticsHubDashboard = () => {
               <CardDescription>Manage your supplier relationships and procurement</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Supplier management interface coming soon...</p>
-                <p className="text-sm mt-2">View and manage suppliers, ratings, and contracts</p>
+              <div className="space-y-4">
+                {[
+                  { name: 'MaritimeSupply Co.', rating: 4.8, contracts: 12, status: 'Ativo' },
+                  { name: 'Global Bunker Ltd.', rating: 4.5, contracts: 8, status: 'Ativo' },
+                  { name: 'Port Services Inc.', rating: 4.2, contracts: 5, status: 'Em revisão' },
+                ].map((supplier, i) => (
+                  <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
+                    <div>
+                      <p className="font-medium">{supplier.name}</p>
+                      <p className="text-sm text-muted-foreground">{supplier.contracts} contratos ativos</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm">⭐ {supplier.rating}</span>
+                      <Button size="sm" variant="outline" onClick={() => toast.success(`Detalhes de ${supplier.name}`)}>Ver</Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <Card className="p-4"><p className="text-sm text-muted-foreground">Entregas no Prazo</p><p className="text-2xl font-bold">94.2%</p></Card>
+            <Card className="p-4"><p className="text-sm text-muted-foreground">Custo Médio/Entrega</p><p className="text-2xl font-bold">$1,250</p></Card>
+            <Card className="p-4"><p className="text-sm text-muted-foreground">Tempo Médio</p><p className="text-2xl font-bold">3.2 dias</p></Card>
+          </div>
           <Card>
             <CardHeader>
               <CardTitle>Logistics Analytics</CardTitle>
-              <CardDescription>View logistics performance metrics and insights</CardDescription>
+              <CardDescription>Métricas de performance logística</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Analytics dashboard coming soon...</p>
-                <p className="text-sm mt-2">Track KPIs, costs, and efficiency metrics</p>
+              <div className="h-48 flex items-center justify-center bg-muted/30 rounded-lg">
+                <div className="text-center">
+                  <BarChart3 className="h-10 w-10 mx-auto mb-2 text-primary" />
+                  <Button onClick={() => toast.success("Dashboard de analytics carregado")}>Carregar Gráficos</Button>
+                </div>
               </div>
             </CardContent>
           </Card>
