@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import { 
   Bell, 
   Mail, 
@@ -17,8 +18,15 @@ import {
   Users,
   Ship,
   Award,
-  MessageSquare
+  MessageSquare,
+  ClipboardCheck,
+  AlertTriangle,
+  CalendarClock,
+  CheckCircle2,
+  ShieldCheck
 } from "lucide-react";
+import { useInspectionNotifications } from "@/hooks/useInspectionNotifications";
+import { toast } from "sonner";
 
 interface NotificationSettings {
   emailAlerts: boolean;
@@ -289,6 +297,9 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
         </CardContent>
       </Card>
 
+      {/* Inspection Alerts - Pre-OVID */}
+      <InspectionAlertsSection settings={settings} onUpdate={onUpdate} />
+
       {/* Test Notifications */}
       <Card>
         <CardHeader>
@@ -315,5 +326,219 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
         </CardContent>
       </Card>
     </div>
+  );
+};
+
+// Inspection Alerts Section Component
+interface InspectionAlertSettings {
+  overdue: boolean;
+  dueToday: boolean;
+  due3Days: boolean;
+  due7Days: boolean;
+  pendingItems: boolean;
+}
+
+const InspectionAlertsSection: React.FC<{
+  settings: NotificationSettings;
+  onUpdate: (updates: Partial<NotificationSettings>) => void;
+}> = ({ settings, onUpdate }) => {
+  const { 
+    isInitialized, 
+    permissionGranted, 
+    requestPermissions,
+    checkDeadlines 
+  } = useInspectionNotifications();
+
+  const [inspectionAlerts, setInspectionAlerts] = useState<InspectionAlertSettings>(() => {
+    const saved = localStorage.getItem('inspection-alert-settings');
+    return saved ? JSON.parse(saved) : {
+      overdue: true,
+      dueToday: true,
+      due3Days: true,
+      due7Days: false,
+      pendingItems: true
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('inspection-alert-settings', JSON.stringify(inspectionAlerts));
+  }, [inspectionAlerts]);
+
+  const updateInspectionAlert = (key: keyof InspectionAlertSettings, value: boolean) => {
+    setInspectionAlerts(prev => ({ ...prev, [key]: value }));
+    
+    // Also update in moduleSettings for persistence
+    onUpdate({
+      moduleSettings: {
+        ...settings.moduleSettings,
+        [`inspection_${key}`]: value
+      }
+    });
+  };
+
+  const handleRequestPermission = async () => {
+    const granted = await requestPermissions();
+    if (granted) {
+      toast.success("Permissão concedida!", {
+        description: "Você receberá alertas de prazos de inspeção"
+      });
+    }
+  };
+
+  const handleTestDeadlines = async () => {
+    toast.info("Verificando prazos...");
+    const count = await checkDeadlines();
+    if (count > 0) {
+      toast.success(`${count} alerta(s) enviado(s)`, {
+        description: "Verifique suas notificações"
+      });
+    } else {
+      toast.info("Nenhum prazo crítico encontrado");
+    }
+  };
+
+  const inspectionAlertTypes = [
+    {
+      id: "overdue" as keyof InspectionAlertSettings,
+      title: "Inspeções Atrasadas",
+      description: "Alertas para inspeções que já passaram do prazo",
+      icon: AlertTriangle,
+      color: "text-red-600",
+      badgeColor: "bg-red-100 text-red-800",
+      priority: "Crítico"
+    },
+    {
+      id: "dueToday" as keyof InspectionAlertSettings,
+      title: "Vencem Hoje",
+      description: "Alertas para inspeções que vencem hoje",
+      icon: CalendarClock,
+      color: "text-orange-600",
+      badgeColor: "bg-orange-100 text-orange-800",
+      priority: "Alto"
+    },
+    {
+      id: "due3Days" as keyof InspectionAlertSettings,
+      title: "Próximos 3 Dias",
+      description: "Alertas antecipados para prazos em 3 dias",
+      icon: Clock,
+      color: "text-yellow-600",
+      badgeColor: "bg-yellow-100 text-yellow-800",
+      priority: "Médio"
+    },
+    {
+      id: "due7Days" as keyof InspectionAlertSettings,
+      title: "Próximos 7 Dias",
+      description: "Alertas antecipados para prazos em 7 dias",
+      icon: CalendarClock,
+      color: "text-blue-600",
+      badgeColor: "bg-blue-100 text-blue-800",
+      priority: "Baixo"
+    },
+    {
+      id: "pendingItems" as keyof InspectionAlertSettings,
+      title: "Itens Pendentes",
+      description: "Alertas sobre itens de checklist não concluídos",
+      icon: ClipboardCheck,
+      color: "text-purple-600",
+      badgeColor: "bg-purple-100 text-purple-800",
+      priority: "Médio"
+    }
+  ];
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-primary" />
+          Alertas de Inspeção (Pre-OVID)
+        </CardTitle>
+        <CardDescription>
+          Configure notificações push para prazos de inspeção e compliance
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Permission Status */}
+        <div className={`p-4 rounded-lg border ${permissionGranted ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'}`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {permissionGranted ? (
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+              ) : (
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+              )}
+              <div>
+                <p className={`font-medium ${permissionGranted ? 'text-green-800' : 'text-yellow-800'}`}>
+                  {permissionGranted ? 'Notificações Push Ativadas' : 'Permissão Necessária'}
+                </p>
+                <p className={`text-sm ${permissionGranted ? 'text-green-700' : 'text-yellow-700'}`}>
+                  {permissionGranted 
+                    ? 'Você receberá alertas de prazos de inspeção' 
+                    : 'Ative as notificações para receber alertas'}
+                </p>
+              </div>
+            </div>
+            {!permissionGranted && (
+              <Button 
+                variant="outline" 
+                onClick={handleRequestPermission}
+                className="border-yellow-400 text-yellow-700 hover:bg-yellow-100"
+              >
+                <Bell className="w-4 h-4 mr-2" />
+                Ativar
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Alert Types */}
+        <div className="space-y-4">
+          {inspectionAlertTypes.map((alert, index) => {
+            const Icon = alert.icon;
+            return (
+              <div key={alert.id}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg bg-muted/50`}>
+                      <Icon className={`w-5 h-5 ${alert.color}`} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <Label className="text-base font-medium">{alert.title}</Label>
+                        <Badge className={alert.badgeColor} variant="secondary">
+                          {alert.priority}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{alert.description}</p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={inspectionAlerts[alert.id]}
+                    onCheckedChange={(enabled) => updateInspectionAlert(alert.id, enabled)}
+                    disabled={!permissionGranted && !isInitialized}
+                  />
+                </div>
+                {index < inspectionAlertTypes.length - 1 && <Separator className="mt-4" />}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Test Button */}
+        <div className="pt-4 border-t">
+          <Button
+            variant="outline"
+            onClick={handleTestDeadlines}
+            disabled={!permissionGranted}
+            className="w-full"
+          >
+            <ClipboardCheck className="w-4 h-4 mr-2" />
+            Verificar Prazos e Enviar Alertas
+          </Button>
+          <p className="text-xs text-muted-foreground text-center mt-2">
+            Verifica inspeções pendentes e envia notificações de acordo com as configurações acima
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
