@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   FileText, Download, Loader2, CheckCircle, XCircle, 
-  AlertTriangle, Ship, Calendar, User, BarChart3
+  AlertTriangle, Ship, Calendar, User, BarChart3, Image, FileCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
@@ -34,14 +34,23 @@ interface ChapterResult {
     questionId: string;
     question: string;
     observation: string;
+    evidence?: string[];
   }>;
+}
+
+interface EvidencePhoto {
+  questionId: string;
+  fileName: string;
+  caption?: string;
 }
 
 interface PreOVIDReportGeneratorProps {
   inspectionData: InspectionData;
   chapterResults: ChapterResult[];
   totalQuestions: number;
-  answers: Record<string, { answer: 'yes' | 'no' | 'na' | null; observation: string }>;
+  answers: Record<string, { answer: 'yes' | 'no' | 'na' | null; observation: string; evidence?: string[] }>;
+  evidencePhotos?: EvidencePhoto[];
+  inspectionId?: string;
 }
 
 export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
@@ -49,6 +58,8 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
   chapterResults,
   totalQuestions,
   answers,
+  evidencePhotos = [],
+  inspectionId,
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -224,24 +235,113 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
         });
       }
 
+      // Evidence Photos Summary (if any)
+      if (evidencePhotos.length > 0) {
+        pdf.addPage();
+        y = 20;
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('EVIDENCE PHOTOS', margin, y);
+
+        y += 10;
+        const photoData = evidencePhotos.map((photo, i) => [
+          (i + 1).toString(),
+          photo.questionId,
+          photo.fileName,
+          photo.caption || '-',
+        ]);
+
+        autoTable(pdf, {
+          startY: y,
+          head: [['#', 'Question', 'File', 'Caption']],
+          body: photoData,
+          theme: 'striped',
+          styles: { fontSize: 8 },
+          headStyles: { fillColor: [0, 102, 51] },
+          margin: { left: margin, right: margin },
+        });
+      }
+
+      // Detailed Chapter Breakdown (all questions)
+      pdf.addPage();
+      y = 20;
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('DETAILED RESPONSES', margin, y);
+      
+      y += 5;
+      pdf.setFontSize(8);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(100);
+      pdf.text('Complete listing of all inspection responses', margin, y + 5);
+      pdf.setTextColor(0);
+
+      y += 15;
+      
+      // Group answers by chapter for detailed view
+      const detailedData: string[][] = [];
+      Object.entries(answers).forEach(([questionId, data]) => {
+        if (data.answer) {
+          const statusText = data.answer === 'yes' ? 'OK' : data.answer === 'no' ? 'NC' : 'N/A';
+          detailedData.push([
+            questionId,
+            statusText,
+            data.observation ? data.observation.substring(0, 60) + (data.observation.length > 60 ? '...' : '') : '-',
+          ]);
+        }
+      });
+
+      if (detailedData.length > 0) {
+        autoTable(pdf, {
+          startY: y,
+          head: [['Question ID', 'Status', 'Observation']],
+          body: detailedData,
+          theme: 'striped',
+          styles: { fontSize: 7 },
+          headStyles: { fillColor: [51, 51, 51] },
+          columnStyles: {
+            0: { cellWidth: 30 },
+            1: { cellWidth: 15 },
+            2: { cellWidth: 120 },
+          },
+          margin: { left: margin, right: margin },
+        });
+      }
+
       // Signatures
       pdf.addPage();
       y = 20;
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('SIGNATURES', margin, y);
+      pdf.text('SIGNATURES & CERTIFICATION', margin, y);
 
-      y += 20;
+      y += 15;
       pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
+      pdf.text('This report represents a pre-inspection assessment based on OVIQ4 (7300) questionnaire.', margin, y);
+      pdf.text('Final OVID inspection must be conducted by an accredited OCIMF inspector.', margin, y + 6);
 
+      y += 25;
       const signatureY = y;
-      pdf.line(margin, signatureY + 30, margin + 70, signatureY + 30);
-      pdf.text('Inspector', margin, signatureY + 38);
-      pdf.text(inspectionData.inspectorName, margin, signatureY + 45);
+      
+      // Inspector signature box
+      pdf.setDrawColor(200);
+      pdf.rect(margin, signatureY, 80, 35);
+      pdf.setFontSize(8);
+      pdf.text('Inspector Signature:', margin + 2, signatureY + 5);
+      pdf.line(margin + 5, signatureY + 25, margin + 75, signatureY + 25);
+      pdf.text(`Name: ${inspectionData.inspectorName}`, margin + 2, signatureY + 32);
 
-      pdf.line(pageWidth - margin - 70, signatureY + 30, pageWidth - margin, signatureY + 30);
-      pdf.text('Master', pageWidth - margin - 70, signatureY + 38);
+      // Master signature box
+      pdf.rect(pageWidth - margin - 80, signatureY, 80, 35);
+      pdf.text('Master Signature:', pageWidth - margin - 78, signatureY + 5);
+      pdf.line(pageWidth - margin - 75, signatureY + 25, pageWidth - margin - 5, signatureY + 25);
+      pdf.text('Name: ________________________', pageWidth - margin - 78, signatureY + 32);
+
+      // Date & Location
+      y = signatureY + 45;
+      pdf.text(`Date: ${inspectionData.inspectionDate}`, margin, y);
+      pdf.text(`Location: ${inspectionData.location || 'N/A'}`, pageWidth - margin - 80, y);
 
       // Footer
       const pageCount = pdf.getNumberOfPages();
@@ -394,25 +494,79 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
           </ScrollArea>
         </div>
 
+        {/* PDF Content Preview */}
+        <div className="p-3 rounded-lg bg-muted/30 space-y-2">
+          <h4 className="text-sm font-medium flex items-center gap-2">
+            <FileCheck className="w-4 h-4" />
+            Conteúdo do Relatório PDF
+          </h4>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Dados da Embarcação</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Sumário de Conformidade</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Resultados por Capítulo</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Não-Conformidades</span>
+            </div>
+            <div className="flex items-center gap-1">
+              {evidencePhotos.length > 0 ? (
+                <CheckCircle className="w-3 h-3 text-green-500" />
+              ) : (
+                <AlertTriangle className="w-3 h-3 text-yellow-500" />
+              )}
+              <span>Fotos de Evidência ({evidencePhotos.length})</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Respostas Detalhadas</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Seção de Assinaturas</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              <span>Certificação OCIMF</span>
+            </div>
+          </div>
+        </div>
+
         {/* Generate Button */}
-        <Button 
-          onClick={generatePDF} 
-          disabled={isGenerating || totals.answered === 0}
-          className="w-full"
-          size="lg"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Gerando Relatório...
-            </>
-          ) : (
-            <>
-              <Download className="w-4 h-4 mr-2" />
-              Gerar Relatório PDF
-            </>
-          )}
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            onClick={generatePDF} 
+            disabled={isGenerating || totals.answered === 0}
+            className="flex-1"
+            size="lg"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Gerando Relatório...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4 mr-2" />
+                Gerar Relatório PDF Completo
+              </>
+            )}
+          </Button>
+        </div>
+        
+        {totals.answered === 0 && (
+          <p className="text-xs text-center text-muted-foreground">
+            Responda pelo menos uma questão para habilitar a geração do relatório
+          </p>
+        )}
       </CardContent>
     </Card>
   );
