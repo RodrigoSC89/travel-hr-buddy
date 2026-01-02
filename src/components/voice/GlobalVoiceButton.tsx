@@ -213,13 +213,8 @@ export function GlobalVoiceButton() {
 
   return (
     <>
-      {/* Floating Voice Button */}
-      <motion.div
-        className="fixed bottom-24 right-6 z-50"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      >
+      {/* Floating Voice Button - Now uses relative positioning in container */}
+      <div className="relative">
         <Button
           size="lg"
           className={`rounded-full h-14 w-14 shadow-lg transition-all ${
@@ -239,16 +234,16 @@ export function GlobalVoiceButton() {
             <Mic className="h-6 w-6" />
           )}
         </Button>
-      </motion.div>
+      </div>
 
       {/* Voice Panel */}
       <AnimatePresence>
         {showPanel && (
           <motion.div
-            initial={{ opacity: 0, y: 50, x: 50 }}
-            animate={{ opacity: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, y: 50, x: 50 }}
-            className="fixed bottom-40 right-6 z-50 w-80"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-32 right-6 z-[60] w-80"
           >
             <Card className="shadow-2xl border-primary/20">
               <CardContent className="p-4">

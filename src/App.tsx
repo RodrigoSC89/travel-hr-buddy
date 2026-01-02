@@ -20,6 +20,7 @@ import { LiteModeProvider } from "./components/performance/LiteMode";
 import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
 import { GlobalAILevel3Button } from "./components/ai/GlobalAILevel3Button";
 import { GlobalAIButton } from "./components/ai/GlobalAIButton";
+import { FloatingButtonsContainer } from "./components/global/FloatingButtonsContainer";
 
 // Performance utilities
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -366,9 +367,11 @@ function App() {
                     </Routes>
                     
                     <Toaster />
-                    <GlobalVoiceButton />
-                    <GlobalAILevel3Button />
-                    <GlobalAIButton />
+                    <FloatingButtonsContainer>
+                      <GlobalAIButton />
+                      <GlobalAILevel3Button />
+                      <GlobalVoiceButton />
+                    </FloatingButtonsContainer>
                   </GlobalBrainProvider>
                   </LiteModeProvider>
                 </RouterType>

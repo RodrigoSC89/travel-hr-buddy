@@ -124,7 +124,7 @@ export const FloatingActionButton: React.FC = () => {
   }, [focusedIndex]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="relative">
       {/* Action buttons */}
       <div className={cn(
         "flex flex-col-reverse gap-3 mb-3 transition-all duration-300",
