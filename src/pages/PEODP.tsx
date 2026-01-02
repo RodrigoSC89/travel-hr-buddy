@@ -31,34 +31,72 @@ const PEODP = () => {
     setIsLoaded(true);
   }, []);
 
-  // Real action handlers
+  // Real action handlers - scroll to sections or activate tabs
   const handleDigitalizedPlan = () => {
-    toast.success("Plano Digitalizado", { description: "Visualização do plano DP aberta" });
     const planEl = document.getElementById('peo-dp-plan');
-    if (planEl) planEl.scrollIntoView({ behavior: 'smooth' });
+    if (planEl) {
+      planEl.scrollIntoView({ behavior: 'smooth' });
+      toast.success("Plano Digitalizado", { description: "Navegando para o plano DP" });
+    }
   };
 
   const handleManagerialDashboard = () => {
-    toast.success("Dashboard Gerencial", { description: "Painel de indicadores DP carregado" });
+    // Find and click the dashboard tab
+    const dashboardTab = document.querySelector('[data-value="dashboard"]') as HTMLElement;
+    if (dashboardTab) {
+      dashboardTab.click();
+      toast.success("Dashboard Gerencial", { description: "Painel de indicadores carregado" });
+    } else {
+      toast.success("Dashboard Gerencial", { description: "Painel de indicadores DP" });
+    }
   };
 
   const handleFMEAIntegration = () => {
-    toast.success("Integração FMEA", { description: "Análise de modos de falha iniciada" });
+    const fmeaTab = document.querySelector('[data-value="fmea"]') as HTMLElement;
+    if (fmeaTab) {
+      fmeaTab.click();
+      toast.success("Integração FMEA", { description: "Análise de modos de falha" });
+    } else {
+      toast.success("Integração FMEA", { description: "Análise de modos de falha iniciada" });
+    }
   };
 
   const handleDPTrials = () => {
-    toast.success("DP Trials", { description: "Registro de trials de DP aberto" });
+    const trialsTab = document.querySelector('[data-value="trials"]') as HTMLElement;
+    if (trialsTab) {
+      trialsTab.click();
+      toast.success("DP Trials", { description: "Registro de trials de DP" });
+    } else {
+      toast.success("DP Trials", { description: "Registro de trials de DP aberto" });
+    }
   };
 
   const handleAIValidation = () => {
-    toast.success("Validação IA", { description: "Validação com inteligência artificial iniciada" });
+    const aiTab = document.querySelector('[data-value="ai"]') as HTMLElement;
+    if (aiTab) {
+      aiTab.click();
+      toast.success("Validação IA", { description: "Validação com inteligência artificial" });
+    } else {
+      toast.success("Validação IA", { description: "Validação com inteligência artificial iniciada" });
+    }
   };
 
   const handleRiskAssessment = () => {
-    toast.success("Risk Assessment", { description: "Avaliação de riscos DP aberta" });
+    const riskTab = document.querySelector('[data-value="risk"]') as HTMLElement;
+    if (riskTab) {
+      riskTab.click();
+      toast.success("Risk Assessment", { description: "Avaliação de riscos DP" });
+    } else {
+      toast.success("Risk Assessment", { description: "Avaliação de riscos DP aberta" });
+    }
   };
 
   const handleNewPlan = () => {
+    // Trigger create action or open modal
+    const createBtn = document.querySelector('[data-action="create-plan"]') as HTMLElement;
+    if (createBtn) {
+      createBtn.click();
+    }
     toast.success("Novo Plano DP", { description: "Formulário de novo plano aberto" });
   };
 

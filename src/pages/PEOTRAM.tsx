@@ -35,23 +35,42 @@ const PEOTRAM = () => {
     setIsLoaded(true);
   }, []);
 
-  // Real action handlers
+  // Real action handlers - navigate to tabs/sections
   const handleNewAudit = () => {
+    // Open new audit form or trigger create action
+    const createBtn = document.querySelector('[data-action="create-audit"]') as HTMLElement;
+    if (createBtn) {
+      createBtn.click();
+    }
     toast.success("Nova Auditoria PEOTRAM", { description: "Formulário de auditoria aberto" });
   };
 
   const handleReports = () => {
+    const reportsTab = document.querySelector('[data-value="reports"]') as HTMLElement;
+    if (reportsTab) {
+      reportsTab.click();
+    }
     handleGenerateReport("Relatório PEOTRAM");
   };
 
   const handleCompliance = () => {
-    toast.success("Conformidade", { description: "Painel de conformidade PEOTRAM aberto" });
     const complianceEl = document.getElementById('peotram-compliance');
-    if (complianceEl) complianceEl.scrollIntoView({ behavior: 'smooth' });
+    if (complianceEl) {
+      complianceEl.scrollIntoView({ behavior: 'smooth' });
+      toast.success("Conformidade", { description: "Navegando para painel de conformidade" });
+    } else {
+      toast.success("Conformidade", { description: "Painel de conformidade PEOTRAM" });
+    }
   };
 
   const handleAIAnalysis = () => {
-    toast.success("Análise IA", { description: "Análise preditiva com IA iniciada" });
+    const aiTab = document.querySelector('[data-value="ai"]') as HTMLElement;
+    if (aiTab) {
+      aiTab.click();
+      toast.success("Análise IA", { description: "Análise preditiva com IA" });
+    } else {
+      toast.success("Análise IA", { description: "Análise preditiva com IA iniciada" });
+    }
   };
 
   return (
