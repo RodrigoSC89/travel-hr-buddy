@@ -141,7 +141,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
           {/* Info */}
           <div className="border-t pt-3">
             <div className="text-xs text-muted-foreground">
-              Arraste para reposicionar • <Badge variant="outline" className="text-xs">ESC</Badge> para minimizar
+              <Badge variant="outline" className="text-xs">ESC</Badge> para minimizar
             </div>
           </div>
         </div>

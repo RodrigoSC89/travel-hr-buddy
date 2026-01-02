@@ -164,6 +164,7 @@ const ResponsibilityMatrix = lazy(() => import(/* webpackChunkName: "page-respon
 const SafetyHumanFactors = lazy(() => import(/* webpackChunkName: "page-safety-human-factors" */ "@/pages/SafetyHumanFactors"));
 const SafetyIMCA = lazy(() => import(/* webpackChunkName: "page-safety-imca" */ "@/pages/SafetyIMCA"));
 const PreOVIDInspection = lazy(() => import(/* webpackChunkName: "page-pre-ovid" */ "@/pages/PreOVIDInspection"));
+const SGSOReportPage = lazy(() => import(/* webpackChunkName: "page-sgso-report" */ "@/pages/SGSOReport"));
 
 // Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
 const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
@@ -346,6 +347,7 @@ function App() {
                         <Route path="safety-human-factors" element={<SafetyHumanFactors />} />
                         <Route path="safety-imca" element={<SafetyIMCA />} />
                         <Route path="pre-ovid" element={<PreOVIDInspection />} />
+                        <Route path="sgso/report" element={<SGSOReportPage />} />
                         {/* Q1 2025 Critical Modules */}
                         <Route path="cargo-management" element={<CargoManagementPage />} />
                         <Route path="charter-party" element={<CharterPartyPage />} />
