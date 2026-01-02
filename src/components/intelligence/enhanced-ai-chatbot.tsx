@@ -414,7 +414,7 @@ const EnhancedAIChatbot: React.FC = () => {
                         <p className="text-xs text-muted-foreground hidden lg:block">{capability.shortcut}</p>
                       </div>
                       {!capability.active && (
-                        <Badge variant="secondary" className="text-xs">Em breve</Badge>
+                        <Badge variant="outline" className="text-xs">Beta</Badge>
                       )}
                     </CardContent>
                   </Card>
