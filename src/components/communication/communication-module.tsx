@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChatInterface } from "./chat-interface";
+import { NotificationsCenter } from "./NotificationsCenter";
+import { CommunicationSettings } from "./CommunicationSettings";
 import { 
   MessageSquare, 
   Users, 
@@ -388,43 +390,11 @@ export const CommunicationModule = () => {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <Card>
-            <CardHeader>
-              <CardTitle>Centro de Notificações</CardTitle>
-              <CardDescription>
-                Gerencie alertas e notificações do sistema
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12">
-                <Bell className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">Funcionalidade em Desenvolvimento</h3>
-                <p className="text-muted-foreground">
-                  O centro de notificações será implementado em breve
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <NotificationsCenter />
         </TabsContent>
 
         <TabsContent value="settings">
-          <Card>
-            <CardHeader>
-              <CardTitle>Configurações de Comunicação</CardTitle>
-              <CardDescription>
-                Personalize suas preferências de comunicação
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12">
-                <Settings className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">Configurações em Desenvolvimento</h3>
-                <p className="text-muted-foreground">
-                  As configurações avançadas serão implementadas em breve
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <CommunicationSettings />
         </TabsContent>
       </Tabs>
     </div>
