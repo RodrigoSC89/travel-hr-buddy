@@ -4,17 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
-  Mic, MicOff, Volume2, VolumeX, Brain, 
-  Phone, PhoneOff, Loader2, Wifi, WifiOff,
-  MessageSquare, Wand2, AlertTriangle
+  Mic, Volume2, Brain, Camera, FileText,
+  Phone, PhoneOff, Loader2, Wifi,
+  MessageSquare, Wand2, AlertTriangle, Navigation,
+  ChevronRight, ChevronLeft, CheckCircle, XCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { PreOVIDRealtimeChat, RealtimeMessage } from '@/utils/PreOVIDRealtimeAudio';
+import { AnimatedAudioWaveform, PulseIndicator } from '@/components/ui/audio-waveform';
 
 interface VoiceMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  command?: string;
 }
 
 interface PreOVIDRealtimeVoiceProps {
@@ -33,9 +36,11 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const [messages, setMessages] = useState<VoiceMessage[]>([]);
   const [currentTranscript, setCurrentTranscript] = useState('');
   const [assistantResponse, setAssistantResponse] = useState('');
+  const [lastCommand, setLastCommand] = useState<string | null>(null);
   
   const chatRef = useRef<PreOVIDRealtimeChat | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -47,21 +52,77 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
     }
   }, [messages, currentTranscript, assistantResponse]);
 
+  // Voice commands mapping with patterns
+  const voiceCommands = [
+    { patterns: ['próximo item', 'próxima questão', 'próximo', 'avançar'], command: 'next', label: 'Próximo' },
+    { patterns: ['item anterior', 'voltar', 'anterior', 'retornar'], command: 'previous', label: 'Anterior' },
+    { patterns: ['marcar conforme', 'está conforme', 'ok', 'aprovado'], command: 'mark_compliant', label: 'Conforme' },
+    { patterns: ['não conforme', 'reprovado', 'falhou'], command: 'mark_non_compliant', label: 'Não Conforme' },
+    { patterns: ['gerar evidência', 'criar evidência', 'evidência'], command: 'generate_evidence', label: 'Evidência' },
+    { patterns: ['tirar foto', 'capturar foto', 'fotografar', 'foto'], command: 'take_photo', label: 'Foto' },
+    { patterns: ['adicionar observação', 'observação', 'nota', 'comentário'], command: 'add_observation', label: 'Observação' },
+    { patterns: ['ir para capítulo', 'capítulo', 'abrir capítulo'], command: 'goto_chapter', label: 'Ir para Capítulo' },
+    { patterns: ['não aplicável', 'n/a', 'não se aplica'], command: 'mark_na', label: 'N/A' },
+    { patterns: ['salvar', 'gravar', 'guardar'], command: 'save', label: 'Salvar' },
+    { patterns: ['ajuda', 'comandos', 'o que posso falar'], command: 'help', label: 'Ajuda' },
+  ];
+
+  const parseVoiceCommand = (transcript: string): { command: string; params?: Record<string, string> } | null => {
+    const lower = transcript.toLowerCase().trim();
+    
+    for (const cmd of voiceCommands) {
+      for (const pattern of cmd.patterns) {
+        if (lower.includes(pattern)) {
+          // Extract chapter number if going to chapter
+          if (cmd.command === 'goto_chapter') {
+            const match = lower.match(/cap[íi]tulo\s*(\d+)/i);
+            if (match) {
+              return { command: cmd.command, params: { chapter: match[1] } };
+            }
+          }
+          return { command: cmd.command };
+        }
+      }
+    }
+    
+    return null;
+  };
+
   const handleMessage = useCallback((event: RealtimeMessage) => {
     console.log('Realtime message:', event.type);
+    
+    // Update listening state
+    if (event.type === 'input_audio_buffer.speech_started') {
+      setIsListening(true);
+    }
+    if (event.type === 'input_audio_buffer.speech_stopped') {
+      setIsListening(false);
+    }
     
     // Parse voice commands from transcript
     if (event.type === 'conversation.item.input_audio_transcription.completed') {
       const transcript = event.transcript as string;
+      const parsedCommand = parseVoiceCommand(transcript);
+      
       setMessages(prev => [...prev, {
         role: 'user',
         content: transcript,
-        timestamp: new Date()
+        timestamp: new Date(),
+        command: parsedCommand?.command
       }]);
       setCurrentTranscript('');
       
-      // Check for navigation commands
-      parseVoiceCommand(transcript);
+      // Execute command if recognized
+      if (parsedCommand) {
+        setLastCommand(parsedCommand.command);
+        onCommand?.(parsedCommand.command, parsedCommand.params);
+        
+        // Show feedback toast
+        const cmdInfo = voiceCommands.find(c => c.command === parsedCommand.command);
+        if (cmdInfo) {
+          toast.success(`Comando: ${cmdInfo.label}`, { duration: 2000 });
+        }
+      }
     }
     
     // Collect assistant response
@@ -82,24 +143,6 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
       setAssistantResponse('');
     }
   }, [assistantResponse, onCommand]);
-
-  const parseVoiceCommand = (transcript: string) => {
-    const lower = transcript.toLowerCase();
-    
-    if (lower.includes('próximo item') || lower.includes('próxima questão')) {
-      onCommand?.('next');
-    } else if (lower.includes('item anterior') || lower.includes('voltar')) {
-      onCommand?.('previous');
-    } else if (lower.includes('marcar conforme') || lower.includes('está conforme')) {
-      onCommand?.('mark_compliant');
-    } else if (lower.includes('não conforme') || lower.includes('não está conforme')) {
-      onCommand?.('mark_non_compliant');
-    } else if (lower.includes('gerar evidência') || lower.includes('criar evidência')) {
-      onCommand?.('generate_evidence');
-    } else if (lower.includes('salvar') || lower.includes('gravar')) {
-      onCommand?.('save');
-    }
-  };
 
   const startConversation = async () => {
     setIsConnecting(true);
@@ -124,7 +167,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
       
       await chatRef.current.init();
       setIsConnected(true);
-      toast.success('Assistente de voz conectado!');
+      toast.success('ARIA conectada! Fale seus comandos.');
       
     } catch (error) {
       console.error('Failed to start conversation:', error);
@@ -139,9 +182,11 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
     chatRef.current = null;
     setIsConnected(false);
     setIsSpeaking(false);
+    setIsListening(false);
     setCurrentTranscript('');
     setAssistantResponse('');
-    toast.info('Assistente de voz desconectado');
+    setLastCommand(null);
+    toast.info('ARIA desconectada');
   };
 
   // Cleanup on unmount
@@ -152,14 +197,16 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
   }, []);
 
   const quickCommands = [
-    { icon: Wand2, label: 'Gerar Evidência', command: 'Gere uma evidência objetiva para este item' },
-    { icon: AlertTriangle, label: 'Riscos', command: 'Quais são os principais riscos deste capítulo?' },
-    { icon: MessageSquare, label: 'Referência', command: 'Qual a referência normativa deste item?' },
+    { icon: ChevronRight, label: 'Próximo', command: 'Próximo item' },
+    { icon: CheckCircle, label: 'Conforme', command: 'Marcar conforme' },
+    { icon: XCircle, label: 'NC', command: 'Não conforme' },
+    { icon: Camera, label: 'Foto', command: 'Tirar foto' },
+    { icon: Wand2, label: 'Evidência', command: 'Gerar evidência' },
   ];
 
   const sendQuickCommand = async (text: string) => {
     if (!chatRef.current?.isConnected()) {
-      toast.error('Assistente não conectado');
+      toast.error('ARIA não conectada');
       return;
     }
     
@@ -176,17 +223,31 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
     }
   };
 
+  const getCommandIcon = (command?: string) => {
+    const icons: Record<string, React.ReactNode> = {
+      next: <ChevronRight className="w-3 h-3" />,
+      previous: <ChevronLeft className="w-3 h-3" />,
+      mark_compliant: <CheckCircle className="w-3 h-3 text-green-500" />,
+      mark_non_compliant: <XCircle className="w-3 h-3 text-red-500" />,
+      take_photo: <Camera className="w-3 h-3" />,
+      generate_evidence: <Wand2 className="w-3 h-3" />,
+      add_observation: <FileText className="w-3 h-3" />,
+      goto_chapter: <Navigation className="w-3 h-3" />,
+    };
+    return command ? icons[command] : null;
+  };
+
   return (
-    <Card className="h-[500px] flex flex-col">
+    <Card className="h-[600px] flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Brain className="w-5 h-5 text-primary" />
-            <span className="text-base">ARIA Voice</span>
+            <span className="text-base">ARIA Realtime</span>
             {isConnected && (
-              <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/30">
+              <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/30 text-xs">
                 <Wifi className="w-3 h-3 mr-1" />
-                Conectado
+                WebRTC
               </Badge>
             )}
           </div>
@@ -199,15 +260,38 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
       </CardHeader>
       
       <CardContent className="flex-1 flex flex-col gap-3">
+        {/* Audio Visualization */}
+        {isConnected && (
+          <div className="flex items-center justify-center gap-4 p-3 rounded-lg bg-muted/50 border">
+            <div className="flex items-center gap-2">
+              <PulseIndicator isActive={isListening} type="input" size="sm" />
+              <div className="w-24">
+                <AnimatedAudioWaveform isActive={isListening} type="input" barCount={5} />
+              </div>
+              <span className="text-xs text-muted-foreground">Você</span>
+            </div>
+            
+            <div className="w-px h-8 bg-border" />
+            
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">ARIA</span>
+              <div className="w-24">
+                <AnimatedAudioWaveform isActive={isSpeaking} type="output" barCount={5} />
+              </div>
+              <PulseIndicator isActive={isSpeaking} type="output" size="sm" />
+            </div>
+          </div>
+        )}
+
         {/* Quick Commands */}
         {isConnected && (
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-1.5 flex-wrap justify-center">
             {quickCommands.map((cmd, i) => (
               <Button
                 key={i}
                 variant="outline"
                 size="sm"
-                className="text-xs"
+                className="text-xs h-7 px-2"
                 onClick={() => sendQuickCommand(cmd.command)}
               >
                 <cmd.icon className="w-3 h-3 mr-1" />
@@ -222,18 +306,25 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
           {messages.length === 0 && !isConnected ? (
             <div className="text-center text-muted-foreground py-8">
               <Mic className="w-10 h-10 mx-auto mb-3 opacity-50" />
-              <p className="text-sm font-medium">Assistente de Voz OVID</p>
+              <p className="text-sm font-medium">ARIA Voice - Inspeção OVID</p>
               <p className="text-xs mt-2">
-                Clique em "Iniciar" para conversar com a ARIA
+                Clique em "Iniciar" para ativar comandos de voz
               </p>
-              <p className="text-xs mt-1 text-primary">
-                Suporte: {vesselType}
-              </p>
+              <div className="mt-4 text-left max-w-xs mx-auto">
+                <p className="text-xs font-medium mb-2">Comandos disponíveis:</p>
+                <ul className="text-xs space-y-1 text-muted-foreground">
+                  <li>• "Próximo item" / "Voltar"</li>
+                  <li>• "Marcar conforme" / "Não conforme"</li>
+                  <li>• "Tirar foto" / "Adicionar observação"</li>
+                  <li>• "Ir para capítulo 5"</li>
+                  <li>• "Gerar evidência"</li>
+                </ul>
+              </div>
             </div>
           ) : messages.length === 0 && isConnected ? (
             <div className="text-center text-muted-foreground py-8">
               <Volume2 className="w-10 h-10 mx-auto mb-3 opacity-50 animate-pulse" />
-              <p className="text-sm">Fale sua pergunta...</p>
+              <p className="text-sm">Fale sua pergunta ou comando...</p>
               <p className="text-xs mt-2">
                 ARIA está ouvindo
               </p>
@@ -250,7 +341,15 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
                       ? 'bg-primary text-primary-foreground' 
                       : 'bg-muted'
                   }`}>
-                    <p className="text-sm">{msg.content}</p>
+                    <div className="flex items-center gap-1.5">
+                      {msg.command && getCommandIcon(msg.command)}
+                      <p className="text-sm">{msg.content}</p>
+                    </div>
+                    {msg.command && (
+                      <Badge variant="secondary" className="text-[10px] mt-1 h-4">
+                        {voiceCommands.find(c => c.command === msg.command)?.label}
+                      </Badge>
+                    )}
                     <p className="text-[10px] opacity-70 mt-1">
                       {msg.timestamp.toLocaleTimeString()}
                     </p>
@@ -285,7 +384,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
               onClick={startConversation}
               disabled={isConnecting}
               size="lg"
-              className="w-40"
+              className="w-44"
             >
               {isConnecting ? (
                 <>
@@ -295,7 +394,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
               ) : (
                 <>
                   <Phone className="w-4 h-4 mr-2" />
-                  Iniciar
+                  Iniciar ARIA
                 </>
               )}
             </Button>
@@ -304,7 +403,7 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
               onClick={endConversation}
               variant="destructive"
               size="lg"
-              className="w-40"
+              className="w-44"
             >
               <PhoneOff className="w-4 h-4 mr-2" />
               Encerrar
@@ -312,18 +411,29 @@ export const PreOVIDRealtimeVoice: React.FC<PreOVIDRealtimeVoiceProps> = ({
           )}
         </div>
 
-        {/* Status */}
-        <div className="text-center">
-          {isSpeaking && (
-            <Badge variant="default" className="animate-pulse">
-              <Volume2 className="w-3 h-3 mr-1" />
-              ARIA está falando...
+        {/* Status Bar */}
+        <div className="flex items-center justify-center gap-3 text-xs">
+          {isListening && (
+            <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/30 animate-pulse">
+              <Mic className="w-3 h-3 mr-1" />
+              Ouvindo...
             </Badge>
           )}
-          {isConnected && !isSpeaking && (
+          {isSpeaking && (
+            <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/30 animate-pulse">
+              <Volume2 className="w-3 h-3 mr-1" />
+              ARIA falando...
+            </Badge>
+          )}
+          {isConnected && !isListening && !isSpeaking && (
             <Badge variant="outline" className="text-muted-foreground">
               <Mic className="w-3 h-3 mr-1" />
-              Aguardando sua voz...
+              Aguardando comando...
+            </Badge>
+          )}
+          {lastCommand && (
+            <Badge variant="secondary" className="text-xs">
+              Último: {voiceCommands.find(c => c.command === lastCommand)?.label}
             </Badge>
           )}
         </div>
