@@ -54,14 +54,10 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
 
   if (isMinimized) {
     return (
-      <DraggableFloating
-        storageKey={`${finalStorageKey}_toggle`}
-        defaultPosition={() => ({
-          x: Math.max(8, window.innerWidth - 48 - 16),
-          y: Math.max(8, window.innerHeight - 48 - 96),
-        })}
-        zIndex={10050}
-        ariaLabel={`Botão de Ações ${moduleName}`}
+      <div 
+        className="fixed bottom-6 left-6 z-40"
+        role="button"
+        aria-label={`Botão de Ações ${moduleName}`}
       >
         <FloatingShortcutButton
           icon={moduleIcon}
@@ -73,19 +69,15 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
           ariaLabel={`Abrir ações do módulo ${moduleName}`}
           tabIndex={0}
         />
-      </DraggableFloating>
+      </div>
     );
   }
 
   return (
-    <DraggableFloating
-      storageKey={`${finalStorageKey}_panel`}
-      defaultPosition={() => ({
-        x: Math.max(8, window.innerWidth - 300 - 16),
-        y: Math.max(8, window.innerHeight - 200 - 120),
-      })}
-      zIndex={10050}
-      ariaLabel={`Painel de Ações ${moduleName}`}
+    <div 
+      className="fixed bottom-6 left-6 z-40"
+      role="dialog"
+      aria-label={`Painel de Ações ${moduleName}`}
     >
       <Card className="p-4 shadow-lg border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 max-w-sm">
         <div className="flex items-center gap-2 mb-4">
@@ -154,7 +146,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
           </div>
         </div>
       </Card>
-    </DraggableFloating>
+    </div>
   );
 };
 

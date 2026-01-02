@@ -345,7 +345,7 @@ function App() {
                         <Route path="responsibility-matrix" element={<ResponsibilityMatrix />} />
                         <Route path="safety-human-factors" element={<SafetyHumanFactors />} />
                         <Route path="safety-imca" element={<SafetyIMCA />} />
-
+                        <Route path="pre-ovid" element={<PreOVIDInspection />} />
                         {/* Q1 2025 Critical Modules */}
                         <Route path="cargo-management" element={<CargoManagementPage />} />
                         <Route path="charter-party" element={<CharterPartyPage />} />
