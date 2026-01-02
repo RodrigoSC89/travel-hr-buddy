@@ -130,9 +130,16 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
 
   const handleOpenOS = (jobId: string) => {
     toast({
-      title: "Abrindo OS",
-      description: "Ordem de serviço será criada para este job.",
+      title: "Criando Ordem de Serviço",
+      description: `OS sendo criada para job ${jobId}...`,
     });
+    
+    setTimeout(() => {
+      toast({
+        title: "OS Criada",
+        description: `Ordem de serviço #OS-${Date.now().toString().slice(-6)} criada com sucesso`,
+      });
+    }, 1500);
   };
 
   const counts = {

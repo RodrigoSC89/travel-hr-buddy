@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { 
   Globe, Ship, AlertTriangle, Activity, 
@@ -170,7 +171,11 @@ export function CommandCockpit() {
             <Globe3D 
               markers={markers} 
               autoRotate={state.autoRotate}
-              onMarkerClick={(marker) => console.log('Clicked:', marker)}
+              onMarkerClick={(marker) => {
+                toast.info(`Selecionado: ${marker.label || 'Marcador'}`, {
+                  description: `Localização: ${marker.lat?.toFixed(2) || 0}°, ${marker.lng?.toFixed(2) || 0}°`
+                });
+              }}
             />
           </div>
           
