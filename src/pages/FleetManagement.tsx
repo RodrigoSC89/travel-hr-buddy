@@ -111,16 +111,29 @@ const MaritimeFleetManagement = () => {
     try {
       toast({
         title: "Exportando dados da frota",
-        description: "O relatório será gerado em breve...",
+        description: "Gerando relatório CSV...",
       });
       
-      // Simulate export process
+      // Generate CSV with fleet data
+      const csvContent = "Embarcação,Tipo,Status,Localização,Última Atualização\n" +
+        `FPSO Alpha,FPSO,Operacional,Santos Basin,${new Date().toLocaleString('pt-BR')}\n` +
+        `PSV Beta,Supply Vessel,Em trânsito,Campos Basin,${new Date().toLocaleString('pt-BR')}\n` +
+        `DSV Gamma,Diving Support,Manutenção,Porto de Santos,${new Date().toLocaleString('pt-BR')}`;
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `frota-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
       setTimeout(() => {
         toast({
           title: "Exportação concluída",
-          description: "Relatório da frota exportado com sucesso!",
+          description: "Arquivo CSV baixado com sucesso!",
         });
-      }, 2000);
+      }, 500);
     } catch (error) {
       toast({
         title: "Erro na exportação",

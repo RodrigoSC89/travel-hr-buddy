@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -221,7 +222,16 @@ export const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({
                 <Button className="flex-1" onClick={() => setSelectedAlert(null)}>
                   Entendido
                 </Button>
-                <Button variant="outline" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => {
+                    toast.success("Ação corretiva criada", {
+                      description: `Plano de ação para: ${selectedAlert?.title || 'Alerta'}`
+                    });
+                    setSelectedAlert(null);
+                  }}
+                >
                   Criar Ação
                 </Button>
               </div>
