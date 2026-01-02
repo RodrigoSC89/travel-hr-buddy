@@ -155,9 +155,35 @@ export function IncidentsSGSOPanel() {
     saveAs(blob, `incidentes-sgso-${new Date().toISOString().split("T")[0]}.csv`);
   };
 
-  // Export to PDF (placeholder - requires html2pdf.js)
-  const exportToPDF = () => {
-    toast.info("Funcionalidade de exportação PDF será implementada em breve!");
+  // Export to PDF using jsPDF
+  const exportToPDF = async () => {
+    toast.loading("Gerando PDF...", { id: "export-pdf" });
+    try {
+      const { jsPDF } = await import("jspdf");
+      const doc = new jsPDF();
+      
+      doc.setFontSize(16);
+      doc.text("Relatório de Incidentes DP - SGSO", 20, 20);
+      doc.setFontSize(10);
+      doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, 30);
+      doc.text(`Total de incidentes: ${filteredIncidents.length}`, 20, 40);
+      
+      let y = 55;
+      filteredIncidents.slice(0, 20).forEach((incident, idx) => {
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.text(`${idx + 1}. ${incident.description?.substring(0, 60) || "Sem descrição"}...`, 20, y);
+        doc.text(`   Severidade: ${incident.severity} | Data: ${new Date(incident.incident_date).toLocaleDateString("pt-BR")}`, 20, y + 5);
+        y += 15;
+      });
+      
+      doc.save(`incidentes-sgso-${new Date().toISOString().split("T")[0]}.pdf`);
+      toast.success("PDF exportado com sucesso!", { id: "export-pdf" });
+    } catch (error) {
+      toast.error("Erro ao gerar PDF", { id: "export-pdf" });
+    }
   };
 
   return (

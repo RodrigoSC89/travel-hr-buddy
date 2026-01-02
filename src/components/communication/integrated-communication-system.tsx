@@ -263,11 +263,47 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
   const startVoiceRecording = () => {
     setIsRecording(true);
-    // Implement voice recording logic here
     toast({
-      title: "Gravação de voz",
-      description: "Funcionalidade de voz será implementada em breve",
+      title: "Gravação iniciada",
+      description: "Fale sua mensagem. Clique novamente para parar.",
     });
+    
+    // Use Web Speech API for voice recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'pt-BR';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setNewMessage(transcript);
+        setIsRecording(false);
+        toast({
+          title: "Mensagem capturada",
+          description: `"${transcript.substring(0, 50)}${transcript.length > 50 ? '...' : ''}"`,
+        });
+      };
+      
+      recognition.onerror = () => {
+        setIsRecording(false);
+        toast({
+          title: "Erro na gravação",
+          description: "Não foi possível capturar o áudio. Tente novamente.",
+          variant: "destructive",
+        });
+      };
+      
+      recognition.start();
+    } else {
+      toast({
+        title: "Não suportado",
+        description: "Seu navegador não suporta reconhecimento de voz.",
+        variant: "destructive",
+      });
+      setIsRecording(false);
+    }
   };
 
   const stopVoiceRecording = () => {
