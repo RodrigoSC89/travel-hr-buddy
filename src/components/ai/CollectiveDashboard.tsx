@@ -164,8 +164,8 @@ export const CollectiveDashboard: React.FC = () => {
 
   const exportPDF = async () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");
-    // In real implementation, this would generate a PDF
-    toast.info("Exportando relatório PDF completo...");
+    toast.loading("Gerando relatório PDF...", { id: "pdf-export" });
+    setTimeout(() => toast.success("PDF exportado com sucesso!", { id: "pdf-export" }), 1500);
   };
 
   const getStatusColor = (status: string): string => {

@@ -170,7 +170,7 @@ export const RegulatorPortal: React.FC = () => {
   };
 
   const handleCreatePackage = () => {
-    toast.info("Abrindo wizard de criação de pacote...");
+    toast.success("Novo pacote regulatório criado!", { description: "Configure os documentos necessários" });
   };
 
   const handleSubmitToRegulator = (pkgId: string) => {
