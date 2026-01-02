@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { TaskKanbanBoard } from "./TaskKanbanBoard";
+import { TaskCalendarView } from "./TaskCalendarView";
 import { 
   CheckSquare, 
   Plus, 
@@ -19,7 +21,8 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle2,
-  Settings
+  Settings,
+  LayoutGrid
 } from "lucide-react";
 
 interface Task {
@@ -645,25 +648,18 @@ export const TaskManagement: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="kanban">
-          <Card>
-            <CardContent className="p-8 text-center">
-              <CheckSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">
-                Visualização Kanban será implementada em breve
-              </p>
-            </CardContent>
-          </Card>
+          <TaskKanbanBoard 
+            tasks={filteredTasks}
+            onUpdateTaskStatus={updateTaskStatus}
+            onSelectTask={setSelectedTask}
+          />
         </TabsContent>
 
         <TabsContent value="calendar">
-          <Card>
-            <CardContent className="p-8 text-center">
-              <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">
-                Visualização de Calendário será implementada em breve
-              </p>
-            </CardContent>
-          </Card>
+          <TaskCalendarView 
+            tasks={tasks}
+            onSelectTask={setSelectedTask}
+          />
         </TabsContent>
       </Tabs>
     </div>
