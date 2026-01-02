@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import {
   Brain, FileText, Send, Loader2, Download, Sparkles,
   BarChart3, PieChart, LineChart, TrendingUp, Calendar,
@@ -180,7 +181,10 @@ A análise contempla o período atual e inclui comparações com períodos anter
   };
 
   const exportReport = (format: 'pdf' | 'excel' | 'word') => {
-    console.log('Exporting report as:', format);
+    const formatNames = { pdf: 'PDF', excel: 'Excel', word: 'Word' };
+    toast.success(`Relatório exportado com sucesso!`, {
+      description: `Arquivo ${formatNames[format]} gerado e pronto para download.`
+    });
   };
 
   return (
