@@ -31,27 +31,58 @@ const SGSO = () => {
   const navigate = useNavigate();
   const [incidentDialogOpen, setIncidentDialogOpen] = useState(false);
 
-  // Real action handlers
+  // Real action handlers - navigate to tabs/sections in SgsoDashboard
   const handleViewPractices = () => {
-    toast.success("17 Práticas ANP", { description: "Abrindo gestão das 17 práticas obrigatórias" });
-    const practicesEl = document.getElementById('sgso-practices');
-    if (practicesEl) practicesEl.scrollIntoView({ behavior: 'smooth' });
+    // Click practices tab in SgsoDashboard
+    const practicesTab = document.querySelector('[value="practices"]') as HTMLElement;
+    if (practicesTab) {
+      practicesTab.click();
+      toast.success("17 Práticas ANP", { description: "Navegando para gestão das práticas" });
+    } else {
+      const practicesEl = document.getElementById('sgso-practices');
+      if (practicesEl) practicesEl.scrollIntoView({ behavior: 'smooth' });
+      toast.success("17 Práticas ANP", { description: "Gestão das 17 práticas obrigatórias" });
+    }
   };
 
   const handleViewRiskMatrix = () => {
-    toast.success("Matriz de Riscos", { description: "Abrindo matriz de riscos 5x5" });
+    const risksTab = document.querySelector('[value="risks"]') as HTMLElement;
+    if (risksTab) {
+      risksTab.click();
+      toast.success("Matriz de Riscos", { description: "Navegando para matriz de riscos 5x5" });
+    } else {
+      toast.success("Matriz de Riscos", { description: "Matriz de riscos 5x5" });
+    }
   };
 
   const handleViewIncidents = () => {
-    toast.success("Gestão de Incidentes", { description: "Abrindo sistema de gestão de incidentes" });
+    const incidentsTab = document.querySelector('[value="incidents"]') as HTMLElement;
+    if (incidentsTab) {
+      incidentsTab.click();
+      toast.success("Gestão de Incidentes", { description: "Navegando para gestão de incidentes" });
+    } else {
+      toast.success("Gestão de Incidentes", { description: "Sistema de gestão de incidentes" });
+    }
   };
 
   const handleViewAudits = () => {
-    toast.success("Auditorias", { description: "Abrindo planejamento de auditorias" });
+    const auditsTab = document.querySelector('[value="audits"]') as HTMLElement;
+    if (auditsTab) {
+      auditsTab.click();
+      toast.success("Auditorias", { description: "Navegando para planejamento de auditorias" });
+    } else {
+      toast.success("Auditorias", { description: "Planejamento de auditorias" });
+    }
   };
 
   const handleViewTraining = () => {
-    toast.success("Treinamentos", { description: "Abrindo gestão de treinamentos" });
+    const trainingTab = document.querySelector('[value="training"]') as HTMLElement;
+    if (trainingTab) {
+      trainingTab.click();
+      toast.success("Treinamentos", { description: "Navegando para gestão de treinamentos" });
+    } else {
+      toast.success("Treinamentos", { description: "Gestão de treinamentos" });
+    }
   };
 
   const handleANPReports = () => {

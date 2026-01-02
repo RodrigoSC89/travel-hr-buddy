@@ -49,6 +49,7 @@ import { SGSOMaturityCurve } from "./SGSOMaturityCurve";
 import { SGSOKnowledgeBase } from "./SGSOKnowledgeBase";
 import { SGSOEvidenceManager } from "./SGSOEvidenceManager";
 import { SGSOPDFReportGenerator } from "./SGSOPDFReportGenerator";
+import { SGSOIncidentsList } from "./SGSOIncidentsList";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -830,7 +831,10 @@ export const SgsoDashboard: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="incidents">
-              <IncidentReporting />
+              <div className="space-y-6">
+                <SGSOIncidentsList />
+                <IncidentReporting />
+              </div>
             </TabsContent>
 
             <TabsContent value="emergency">
