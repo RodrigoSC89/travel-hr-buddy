@@ -155,7 +155,25 @@ const RealTimeAnalytics = () => {
   const exportData = () => {
     toast({
       title: "Exportando dados",
-      description: "Relatório será enviado por email"
+      description: "Gerando arquivo de exportação..."
+    });
+    
+    // Generate CSV content from metrics array
+    const headers = "Métrica,Valor,Tendência";
+    const rows = metrics.map(m => `${m.title},${m.value},${m.trend}`).join('\n');
+    const csvContent = `${headers}\n${rows}`;
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `analytics-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Exportação concluída",
+      description: "Arquivo CSV baixado com sucesso"
     });
   };
 

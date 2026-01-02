@@ -230,13 +230,28 @@ export const IntelligentHelpCenter: React.FC = () => {
       description: `Preparando ${type.toUpperCase()} para download...`,
     });
     
-    // Implementar exportação real
-    setTimeout(() => {
-      toast({
-        title: "Download iniciado",
-        description: "O arquivo será baixado em breve",
-      });
-    }, 2000);
+    // Generate text content for export
+    const exportContent = `
+# ${'title' in content ? content.title : content.question}
+
+${'description' in content ? content.description : content.answer}
+
+Módulo: ${content.module}
+Exportado em: ${new Date().toLocaleString('pt-BR')}
+    `.trim();
+    
+    const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `material-${'title' in content ? content.title.toLowerCase().replace(/\s+/g, '-') : 'faq'}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Download concluído",
+      description: `Arquivo ${type.toUpperCase()} baixado com sucesso`,
+    });
   };
 
   const filteredContent = <T extends { module: string }>(content: T[]): T[] => {
