@@ -568,8 +568,25 @@ export default function TrainingAcademyAdmin() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-muted-foreground">
-                Funcionalidade de visualização de certificados em desenvolvimento
+              <div className="space-y-4">
+                {[
+                  { name: 'João Silva', course: 'STCW Básico', date: '2025-12-15', status: 'válido' },
+                  { name: 'Maria Santos', course: 'Combate a Incêndio', date: '2025-11-20', status: 'válido' },
+                  { name: 'Pedro Costa', course: 'Primeiros Socorros', date: '2025-10-05', status: 'expirado' },
+                ].map((cert, i) => (
+                  <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
+                    <div>
+                      <p className="font-medium">{cert.name}</p>
+                      <p className="text-sm text-muted-foreground">{cert.course}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={cert.status === 'válido' ? 'default' : 'destructive'}>{cert.status}</Badge>
+                      <Button size="sm" variant="outline" onClick={() => toast.success(`Certificado de ${cert.name} baixado`)}>
+                        Download
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
