@@ -1,6 +1,6 @@
 /**
- * AI Prompts Index - Central Registry - PATCH AI-TRAINING v2.0
- * 16 IAs Especializadas com System Prompts Completos
+ * AI Prompts Index - Central Registry - PATCH AI-TRAINING v2.1
+ * 17 IAs Especializadas com System Prompts Completos
  */
 
 // Core AI Prompts
@@ -22,6 +22,9 @@ export { TRAINING_AI_CONFIG } from './training-ai-prompt';
 export { VOYAGE_AI_CONFIG } from './voyage-ai-prompt';
 export { CHARTER_AI_CONFIG } from './charter-ai-prompt';
 export { MLC_AI_CONFIG } from './mlc-ai-prompt';
+
+// Pre-OVID AI Prompt
+export { PREOVID_AI_CONFIG } from './preovid-ai-prompt';
 
 // Type definitions
 export interface AIModuleConfig {
