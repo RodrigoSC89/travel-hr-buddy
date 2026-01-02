@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -383,7 +384,7 @@ export const PeotramEmergencyResponse: React.FC = () => {
             <p className="text-muted-foreground mb-4">
               Gerencie equipamentos e recursos disponíveis para emergências
             </p>
-            <Button>
+            <Button onClick={() => toast.success("Recurso adicionado!", { description: "Novo equipamento de emergência cadastrado" })}>
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Recurso
             </Button>

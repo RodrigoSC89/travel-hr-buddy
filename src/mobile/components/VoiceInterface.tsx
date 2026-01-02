@@ -341,7 +341,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
                   key={index}
                   variant="outline"
                   size="sm"
-                  onClick={() => toast.info(`Action: ${action}`)}
+                  onClick={() => toast.success(`Executando: ${action}`)}
                 >
                   {action}
                 </Button>

@@ -195,7 +195,7 @@ export function NotificationsPanel({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs"
-                              onClick={() => toast.info("Ver detalhes")}
+                              onClick={() => toast.success(`Notificação: ${notification.title}`, { description: notification.description })}
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               Ver

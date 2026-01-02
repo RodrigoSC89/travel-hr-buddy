@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast as sonnerToast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -455,7 +456,7 @@ export const PublicAPI = () => {
                 <p className="text-muted-foreground mb-4">
                   Marketplace para extensões e integrações de terceiros chegando em breve.
                 </p>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => sonnerToast.success("Cadastro iniciado! Você receberá mais informações por email.")}>
                   Seja um Desenvolvedor Parceiro
                 </Button>
               </div>

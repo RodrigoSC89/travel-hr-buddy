@@ -65,7 +65,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
       ai: { autoSuggestions: true, voiceEnabled: true, language: "pt-BR" },
       data: { autoRefresh: true, refreshInterval: 60, offlineMode: true }
     });
-    toast.info("Configurações restauradas aos padrões");
+    toast.success("Configurações restauradas aos padrões");
   };
 
   return (

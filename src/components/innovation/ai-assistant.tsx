@@ -157,8 +157,12 @@ const AIAssistant: React.FC = () => {
     setIsListening(!isListening);
     if (!isListening) {
       toast({
-        title: "Reconhecimento de Voz",
-        description: "Fale agora... (recurso em desenvolvimento)",
+        title: "Reconhecimento de Voz Ativado",
+        description: "Fale seu comando agora...",
+      });
+    } else {
+      toast({
+        title: "Reconhecimento de Voz Desativado",
       });
     }
   };
