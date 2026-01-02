@@ -24,6 +24,7 @@ import {
 import { MLC_2022_TITLES, getTotalMLC2022Items, getCriticalMLC2022Items, type MLCCheckItem } from '@/data/mlc-2022-checklist';
 import { MLCEvidenceGenerator } from './MLCEvidenceGenerator';
 import { MLCVoiceChat } from './MLCVoiceChat';
+import { MLCReportGenerator } from './MLCReportGenerator';
 
 type ChecklistStatus = 'compliant' | 'non-compliant' | 'na' | null;
 
@@ -706,82 +707,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
 
         {/* Report Tab */}
         <TabsContent value="report" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-500" />
-                Relatório da Inspeção MLC
-              </CardTitle>
-              <CardDescription>
-                Resumo executivo e exportação
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Summary */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 bg-muted rounded-lg text-center">
-                  <p className="text-3xl font-bold">{complianceScore}%</p>
-                  <p className="text-sm text-muted-foreground">Score Geral</p>
-                </div>
-                <div className="p-4 bg-green-500/10 rounded-lg text-center">
-                  <p className="text-3xl font-bold text-green-500">{compliantItems}</p>
-                  <p className="text-sm text-muted-foreground">Conformes</p>
-                </div>
-                <div className="p-4 bg-red-500/10 rounded-lg text-center">
-                  <p className="text-3xl font-bold text-red-500">{nonCompliantItems}</p>
-                  <p className="text-sm text-muted-foreground">Não Conformes</p>
-                </div>
-                <div className="p-4 bg-muted rounded-lg text-center">
-                  <p className="text-3xl font-bold">{progressPercent}%</p>
-                  <p className="text-sm text-muted-foreground">Progresso</p>
-                </div>
-              </div>
-
-              {/* Vessel Info */}
-              {inspectionStarted && (
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium mb-3 flex items-center gap-2">
-                    <Ship className="h-4 w-4" />
-                    Informações da Embarcação
-                  </h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div>
-                      <p className="text-muted-foreground">Nome</p>
-                      <p className="font-medium">{inspectionData.vesselName || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">IMO</p>
-                      <p className="font-medium">{inspectionData.imo || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Bandeira</p>
-                      <p className="font-medium">{inspectionData.flag || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">Porto</p>
-                      <p className="font-medium">{inspectionData.port || 'N/A'}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Export Options */}
-              <div className="flex flex-wrap gap-3">
-                <Button onClick={exportReport}>
-                  <FileDown className="h-4 w-4 mr-2" />
-                  Exportar PDF
-                </Button>
-                <Button variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Exportar Excel
-                </Button>
-                <Button variant="outline">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Visualizar Completo
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <MLCReportGenerator inspectionData={inspectionData} />
         </TabsContent>
       </Tabs>
     </div>
