@@ -258,7 +258,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "PEOTRAM", path: "/peotram", icon: FileText, emoji: "📋" },
       { label: "SGSO", path: "/sgso", icon: FileText, emoji: "📋" },
       { label: "IMCA Audit", path: "/imca-audit", icon: Shield, emoji: "🔍" },
-      { label: "Pre-OVID Inspection", path: "/pre-ovid-inspection", icon: Eye, emoji: "🔍" },
+      { label: "Pre-OVID Inspection", path: "/pre-ovid", icon: Eye, emoji: "🚢", badge: "NEW" },
       { label: "MLC Inspection", path: "/mlc-inspection", icon: Shield, emoji: "🔍" },
       { label: "Gerador Pacotes PSC", path: "/psc-package", icon: Shield, emoji: "🛡️" },
       // V3.2.0 - Novos Módulos de Gestão
