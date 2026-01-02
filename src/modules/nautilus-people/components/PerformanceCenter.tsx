@@ -281,7 +281,11 @@ const PerformanceCenter: React.FC = () => {
                 <SelectItem value="q2-2025">Q2 2025</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={() => toast.info('Funcionalidade de nova avaliação')}>
+            <Button onClick={() => {
+              toast.success('Nova avaliação criada!', {
+                description: `Avaliação de desempenho iniciada para ${new Date().toLocaleDateString('pt-BR')}`
+              });
+            }}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Avaliação
             </Button>

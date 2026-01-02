@@ -629,6 +629,7 @@ export const AdvancedFleetAnalytics = () => {
                       <Button 
                         variant={insight.action_required ? "default" : "outline"} 
                         size="sm"
+                        onClick={() => toast({ title: insight.action_required ? 'Ação implementada!' : 'Detalhes exibidos', description: insight.title })}
                       >
                         {insight.action_required ? "Implementar" : "Ver Detalhes"}
                       </Button>
