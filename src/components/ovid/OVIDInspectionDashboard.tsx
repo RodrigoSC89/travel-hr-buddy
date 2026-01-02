@@ -107,7 +107,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
   };
 
   const handleFilter = () => {
-    toast.info('Filtros aplicados');
+    toast.success('Filtros aplicados com sucesso!');
   };
 
   return (

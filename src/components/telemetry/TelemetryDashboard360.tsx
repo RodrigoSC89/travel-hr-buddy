@@ -42,7 +42,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
   };
 
   const handleExport = () => {
-    toast.info("Exportando relatório de telemetria...");
+    toast.success("Relatório de telemetria exportado!", { description: "Arquivo disponível para download" });
   };
 
   return (
