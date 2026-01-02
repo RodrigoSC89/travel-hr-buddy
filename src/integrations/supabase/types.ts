@@ -16599,6 +16599,176 @@ export type Database = {
         }
         Relationships: []
       }
+      ovid_answers: {
+        Row: {
+          answer: string | null
+          chapter_id: string
+          created_at: string
+          id: string
+          inspection_id: string
+          observation: string | null
+          question_id: string
+          updated_at: string
+        }
+        Insert: {
+          answer?: string | null
+          chapter_id: string
+          created_at?: string
+          id?: string
+          inspection_id: string
+          observation?: string | null
+          question_id: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string | null
+          chapter_id?: string
+          created_at?: string
+          id?: string
+          inspection_id?: string
+          observation?: string | null
+          question_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ovid_answers_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "ovid_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ovid_evidence_photos: {
+        Row: {
+          answer_id: string | null
+          caption: string | null
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          inspection_id: string
+          latitude: number | null
+          longitude: number | null
+          mime_type: string | null
+          question_id: string
+          taken_at: string | null
+        }
+        Insert: {
+          answer_id?: string | null
+          caption?: string | null
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          inspection_id: string
+          latitude?: number | null
+          longitude?: number | null
+          mime_type?: string | null
+          question_id: string
+          taken_at?: string | null
+        }
+        Update: {
+          answer_id?: string | null
+          caption?: string | null
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          inspection_id?: string
+          latitude?: number | null
+          longitude?: number | null
+          mime_type?: string | null
+          question_id?: string
+          taken_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ovid_evidence_photos_answer_id_fkey"
+            columns: ["answer_id"]
+            isOneToOne: false
+            referencedRelation: "ovid_answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ovid_evidence_photos_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "ovid_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ovid_inspections: {
+        Row: {
+          completed_at: string | null
+          compliance_score: number | null
+          compliant_count: number | null
+          created_at: string
+          id: string
+          imo_number: string
+          inspection_date: string
+          inspector_name: string
+          location: string | null
+          non_compliant_count: number | null
+          not_applicable_count: number | null
+          notes: string | null
+          operator: string | null
+          status: string
+          total_questions: number | null
+          updated_at: string
+          user_id: string | null
+          vessel_name: string
+          vessel_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          compliance_score?: number | null
+          compliant_count?: number | null
+          created_at?: string
+          id?: string
+          imo_number: string
+          inspection_date: string
+          inspector_name: string
+          location?: string | null
+          non_compliant_count?: number | null
+          not_applicable_count?: number | null
+          notes?: string | null
+          operator?: string | null
+          status?: string
+          total_questions?: number | null
+          updated_at?: string
+          user_id?: string | null
+          vessel_name: string
+          vessel_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          compliance_score?: number | null
+          compliant_count?: number | null
+          created_at?: string
+          id?: string
+          imo_number?: string
+          inspection_date?: string
+          inspector_name?: string
+          location?: string | null
+          non_compliant_count?: number | null
+          not_applicable_count?: number | null
+          notes?: string | null
+          operator?: string | null
+          status?: string
+          total_questions?: number | null
+          updated_at?: string
+          user_id?: string | null
+          vessel_name?: string
+          vessel_type?: string
+        }
+        Relationships: []
+      }
       parameter_adjustments: {
         Row: {
           adjusted_by: string | null
@@ -18563,6 +18733,45 @@ export type Database = {
           name?: string
           timezone?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      preovid_blocks: {
+        Row: {
+          block_number: number
+          code: string
+          created_at: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          name_pt: string | null
+          order_index: number
+          total_items: number | null
+        }
+        Insert: {
+          block_number: number
+          code: string
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          name_pt?: string | null
+          order_index: number
+          total_items?: number | null
+        }
+        Update: {
+          block_number?: number
+          code?: string
+          created_at?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          name_pt?: string | null
+          order_index?: number
+          total_items?: number | null
         }
         Relationships: []
       }
