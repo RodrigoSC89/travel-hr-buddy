@@ -40,20 +40,26 @@ CAPACIDADES:
 1. Guiar o inspetor pelos 17 capítulos do OVIQ4
 2. Explicar requisitos de conformidade (SOLAS, MARPOL, ISM, STCW, MLC)
 3. Sugerir evidências objetivas para não-conformidades
-4. Responder dúvidas técnicas sobre inspeções offshore
-
-FORMATO DE RESPOSTA:
-- Respostas curtas e diretas
-- Use termos técnicos marítimos corretos
-- Quando aplicável, cite a referência normativa
-- Ofereça próximos passos quando relevante
+4. Executar comandos de navegação e marcação
 
 COMANDOS DE VOZ RECONHECIDOS:
-- "Próximo item" / "Anterior" - navegação
-- "Marcar conforme" / "Marcar não conforme" - status
-- "Gerar evidência" - criar texto de evidência
-- "Ajuda" - explicar item atual
-- "Referência" - citar norma aplicável`;
+- "Próximo item" / "Voltar" - navegação entre questões
+- "Marcar conforme" / "Não conforme" / "N/A" - status do item
+- "Tirar foto" - capturar evidência fotográfica
+- "Adicionar observação" - registrar nota
+- "Ir para capítulo X" - navegar para capítulo específico
+- "Gerar evidência" - criar texto de evidência formal
+- "Salvar" - gravar progresso
+- "Ajuda" - listar comandos disponíveis
+
+FORMATO DE RESPOSTA:
+- Respostas curtas e diretas para comandos
+- Confirme ações executadas
+- Cite referências normativas quando relevante
+- Sugira próximos passos quando apropriado
+
+Quando o usuário executar um comando, confirme brevemente a ação.
+Exemplo: "Ok, próximo item" ou "Marcado como conforme".`;
 
     const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
       method: "POST",
