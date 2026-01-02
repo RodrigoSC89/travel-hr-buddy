@@ -150,7 +150,7 @@ export function FilterPanel({
               <SelectValue placeholder="Todas" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas</SelectItem>
+              <SelectItem value="all">Todas</SelectItem>
               {vessels.map((vessel) => (
                 <SelectItem key={vessel.id} value={vessel.id}>
                   {vessel.name}
@@ -171,7 +171,7 @@ export function FilterPanel({
               <SelectValue placeholder="Todos" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               {regulations.map((reg) => (
                 <SelectItem key={reg.id} value={reg.id}>
                   {reg.name}
