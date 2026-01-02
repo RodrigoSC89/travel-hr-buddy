@@ -27,7 +27,9 @@ import { PreOVIDVoiceChat } from './PreOVIDVoiceChat';
 import { PreOVIDEvidenceGenerator } from './PreOVIDEvidenceGenerator';
 import { PreOVIDReportGenerator } from './PreOVIDReportGenerator';
 import { PreOVIDCompleteChecklist } from './PreOVIDCompleteChecklist';
+import { OVIDInspectionHistory } from './OVIDInspectionHistory';
 import { OVIQ4_CHAPTERS as COMPLETE_CHAPTERS } from '@/data/oviq4-complete-data';
+import { History } from 'lucide-react';
 
 interface InspectionStatus {
   compliant: number;
@@ -280,7 +282,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-7 w-full">
+        <TabsList className="grid grid-cols-8 w-full">
           <TabsTrigger value="overview" className="flex items-center gap-1">
             <BarChart3 className="w-4 h-4" />
             <span className="hidden sm:inline">Visão Geral</span>
@@ -304,6 +306,10 @@ export const OVIDInspectionDashboard: React.FC = () => {
           <TabsTrigger value="ai" className="flex items-center gap-1">
             <Brain className="w-4 h-4" />
             <span className="hidden sm:inline">IA</span>
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-1">
+            <History className="w-4 h-4" />
+            <span className="hidden sm:inline">Histórico</span>
           </TabsTrigger>
           <TabsTrigger value="settings" className="flex items-center gap-1">
             <Settings className="w-4 h-4" />
@@ -569,6 +575,17 @@ export const OVIDInspectionDashboard: React.FC = () => {
               />
             </div>
           </div>
+        </TabsContent>
+
+        {/* History Tab */}
+        <TabsContent value="history">
+          <OVIDInspectionHistory
+            onSelectInspection={(id) => {
+              toast.info(`Carregando inspeção ${id}...`);
+              // TODO: Load inspection by ID
+            }}
+            onNewInspection={() => setActiveTab('new')}
+          />
         </TabsContent>
 
         {/* Settings Tab */}

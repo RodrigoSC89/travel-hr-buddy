@@ -19,6 +19,7 @@ export interface OVIDInspection {
   not_applicable_count: number;
   total_questions: number;
   created_at: string;
+  updated_at?: string;
 }
 
 export interface OVIDAnswer {
@@ -28,9 +29,18 @@ export interface OVIDAnswer {
   observation: string;
 }
 
+export interface OVIDPhoto {
+  id: string;
+  question_id: string;
+  file_path: string;
+  file_name: string;
+  caption?: string;
+}
+
 export function useOVIDInspection(inspectionId?: string) {
   const [inspection, setInspection] = useState<OVIDInspection | null>(null);
   const [answers, setAnswers] = useState<Record<string, OVIDAnswer>>({});
+  const [photos, setPhotos] = useState<OVIDPhoto[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [pendingUpdates, setPendingUpdates] = useState<Record<string, OVIDAnswer>>({});
@@ -41,19 +51,20 @@ export function useOVIDInspection(inspectionId?: string) {
   const loadInspection = useCallback(async (id: string) => {
     setIsLoading(true);
     try {
-      const { data: inspData, error: inspError } = await supabase
-        .from('ovid_inspections')
+      // Use type assertion to bypass missing types
+      const { data: inspData, error: inspError } = await (supabase
+        .from('ovid_inspections' as any)
         .select('*')
         .eq('id', id)
-        .single();
+        .single() as any);
 
       if (inspError) throw inspError;
       setInspection(inspData as OVIDInspection);
 
-      const { data: ansData, error: ansError } = await supabase
-        .from('ovid_answers')
+      const { data: ansData, error: ansError } = await (supabase
+        .from('ovid_answers' as any)
         .select('*')
-        .eq('inspection_id', id);
+        .eq('inspection_id', id) as any);
 
       if (ansError) throw ansError;
       
@@ -67,6 +78,14 @@ export function useOVIDInspection(inspectionId?: string) {
         };
       });
       setAnswers(answersMap);
+
+      // Load photos
+      const { data: photoData } = await (supabase
+        .from('ovid_evidence_photos' as any)
+        .select('*')
+        .eq('inspection_id', id) as any);
+      
+      setPhotos((photoData || []) as OVIDPhoto[]);
     } catch (error) {
       console.error('Error loading inspection:', error);
       toast.error('Erro ao carregar inspeção');
@@ -85,26 +104,26 @@ export function useOVIDInspection(inspectionId?: string) {
     operator?: string;
     location?: string;
     total_questions: number;
-  }) => {
+  }): Promise<string | null> => {
     setIsLoading(true);
     try {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) throw new Error('User not authenticated');
 
-      const { data: newInsp, error } = await supabase
-        .from('ovid_inspections')
+      const { data: newInsp, error } = await (supabase
+        .from('ovid_inspections' as any)
         .insert({
           ...data,
           user_id: user.user.id,
           status: 'in_progress',
         })
         .select()
-        .single();
+        .single() as any);
 
       if (error) throw error;
       setInspection(newInsp as OVIDInspection);
       toast.success('Inspeção criada com sucesso');
-      return newInsp.id;
+      return newInsp?.id || null;
     } catch (error) {
       console.error('Error creating inspection:', error);
       toast.error('Erro ao criar inspeção');
@@ -135,9 +154,9 @@ export function useOVIDInspection(inspectionId?: string) {
           observation: ans.observation,
         }));
 
-        const { error } = await supabase
-          .from('ovid_answers')
-          .upsert(updates, { onConflict: 'inspection_id,question_id' });
+        const { error } = await (supabase
+          .from('ovid_answers' as any)
+          .upsert(updates, { onConflict: 'inspection_id,question_id' }) as any);
 
         if (error) throw error;
         
@@ -148,15 +167,15 @@ export function useOVIDInspection(inspectionId?: string) {
         const answered = compliant + nonCompliant + notApplicable;
         const score = answered > 0 ? Math.round(((compliant + notApplicable) / answered) * 100) : 0;
 
-        await supabase
-          .from('ovid_inspections')
+        await (supabase
+          .from('ovid_inspections' as any)
           .update({
             compliant_count: compliant,
             non_compliant_count: nonCompliant,
             not_applicable_count: notApplicable,
             compliance_score: score,
           })
-          .eq('id', inspection.id);
+          .eq('id', inspection.id) as any);
 
         setPendingUpdates({});
       } catch (error) {
@@ -169,17 +188,41 @@ export function useOVIDInspection(inspectionId?: string) {
     saveAnswers();
   }, [debouncedUpdates, inspection?.id, answers]);
 
-  // Load inspection history
-  const loadHistory = useCallback(async () => {
+  // Complete inspection
+  const completeInspection = useCallback(async () => {
+    if (!inspection?.id) return false;
+    
     try {
-      const { data, error } = await supabase
-        .from('ovid_inspections')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
+      const { error } = await (supabase
+        .from('ovid_inspections' as any)
+        .update({
+          status: 'completed',
+          completed_at: new Date().toISOString(),
+        })
+        .eq('id', inspection.id) as any);
 
       if (error) throw error;
-      return data as OVIDInspection[];
+      setInspection(prev => prev ? { ...prev, status: 'completed' } : null);
+      toast.success('Inspeção finalizada!');
+      return true;
+    } catch (error) {
+      console.error('Error completing inspection:', error);
+      toast.error('Erro ao finalizar inspeção');
+      return false;
+    }
+  }, [inspection?.id]);
+
+  // Load inspection history
+  const loadHistory = useCallback(async (): Promise<OVIDInspection[]> => {
+    try {
+      const { data, error } = await (supabase
+        .from('ovid_inspections' as any)
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50) as any);
+
+      if (error) throw error;
+      return (data || []) as OVIDInspection[];
     } catch (error) {
       console.error('Error loading history:', error);
       return [];
@@ -187,7 +230,7 @@ export function useOVIDInspection(inspectionId?: string) {
   }, []);
 
   // Upload photo evidence
-  const uploadPhoto = useCallback(async (questionId: string, file: File) => {
+  const uploadPhoto = useCallback(async (questionId: string, file: File): Promise<string | null> => {
     if (!inspection?.id) return null;
 
     try {
@@ -202,16 +245,24 @@ export function useOVIDInspection(inspectionId?: string) {
 
       if (uploadError) throw uploadError;
 
-      const { error: dbError } = await supabase
-        .from('ovid_evidence_photos')
+      const { error: dbError } = await (supabase
+        .from('ovid_evidence_photos' as any)
         .insert({
           inspection_id: inspection.id,
           question_id: questionId,
           file_path: filePath,
           file_name: file.name,
-        });
+        }) as any);
 
       if (dbError) throw dbError;
+      
+      setPhotos(prev => [...prev, {
+        id: Date.now().toString(),
+        question_id: questionId,
+        file_path: filePath,
+        file_name: file.name,
+      }]);
+      
       toast.success('Foto anexada');
       return filePath;
     } catch (error) {
@@ -221,15 +272,30 @@ export function useOVIDInspection(inspectionId?: string) {
     }
   }, [inspection?.id]);
 
+  // Get photos for question
+  const getPhotosForQuestion = useCallback((questionId: string): OVIDPhoto[] => {
+    return photos.filter(p => p.question_id === questionId);
+  }, [photos]);
+
+  // Load on mount if ID provided
+  useEffect(() => {
+    if (inspectionId) {
+      loadInspection(inspectionId);
+    }
+  }, [inspectionId, loadInspection]);
+
   return {
     inspection,
     answers,
+    photos,
     isLoading,
     isSaving,
     loadInspection,
     createInspection,
     updateAnswer,
+    completeInspection,
     loadHistory,
     uploadPhoto,
+    getPhotosForQuestion,
   };
 }
