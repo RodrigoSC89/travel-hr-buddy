@@ -194,19 +194,50 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
     { 
       icon: AlertTriangle, 
       label: 'Analisar Risco', 
-      prompt: `Analise os riscos do capítulo ${chapterId || 'atual'} e priorize os itens críticos.` 
+      prompt: chapterId 
+        ? `Analise os riscos do capítulo ${chapterId} e priorize os itens críticos para um ${vesselType}.`
+        : `Analise os principais riscos de inspeção OVIQ4 para um ${vesselType}.`
     },
     { 
       icon: ClipboardList, 
       label: 'Checklist Pré-Inspeção', 
-      prompt: `Gere um checklist de preparação pré-inspeção OVID para ${vesselType}` 
+      prompt: `Gere um checklist de preparação pré-inspeção OVID para ${vesselType}. Inclua os itens críticos que devem ser verificados antes da chegada do inspetor.` 
     },
     { 
       icon: Book, 
-      label: 'Referências', 
-      prompt: 'Quais são as principais referências normativas para este capítulo? (SOLAS, MARPOL, ISM, STCW, MLC, GOMO)' 
+      label: 'Referências Normativas', 
+      prompt: chapterId 
+        ? `Quais são as referências normativas aplicáveis ao capítulo ${chapterId} do OVIQ4? Inclua SOLAS, MARPOL, ISM, ISPS, STCW, MLC e GOMO.`
+        : 'Quais são as principais referências normativas para uma inspeção OVID? (SOLAS, MARPOL, ISM, STCW, MLC, GOMO)' 
     },
   ];
+
+  // Contextual suggestions based on current chapter
+  const getContextualSuggestion = () => {
+    if (!chapterId) return null;
+    
+    const suggestions: Record<string, string> = {
+      '1': 'Verifique se todos os dados de identificação do navio estão corretos e atualizados.',
+      '2': 'Confirme a validade de todos os certificados estatutários antes da inspeção.',
+      '3': 'Verifique as horas de descanso e certificações STCW de toda a tripulação.',
+      '4': 'Confirme que todas as cartas náuticas estão atualizadas e o ECDIS operacional.',
+      '5': 'Verifique os registros de treinamentos e exercícios dos últimos 3 meses.',
+      '6': 'Inspecione visualmente todos os equipamentos de salvatagem e datas de serviço.',
+      '7': 'Teste os sistemas de detecção de incêndio e verifique validade dos extintores.',
+      '8': 'Confirme que o SOPEP está atualizado e a tripulação conhece os procedimentos.',
+      '9': 'Verifique as recomendações de classe pendentes e condições estruturais.',
+      '10': 'Confirme que os procedimentos operacionais específicos estão disponíveis.',
+      '11': 'Verifique a condição dos cabos de amarração e equipamentos.',
+      '12': 'Teste todos os equipamentos GMDSS e verifique certificações.',
+      '13': 'Revise os registros de manutenção planejada e estado das máquinas.',
+      '14': 'Faça uma inspeção visual geral da aparência e organização do navio.',
+      '15': 'Verifique equipamentos de winterização e procedimentos de gelo.',
+      '16': 'Confirme certificação do helideck e treinamento da equipe.',
+      '17': 'Verifique FMEA, trials anuais e qualificação dos DPOs.',
+    };
+    
+    return suggestions[chapterId] || null;
+  };
 
   return (
     <Card className="h-[600px] flex flex-col">
@@ -243,12 +274,25 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
           ))}
         </div>
 
+        {/* Contextual Suggestion */}
+        {getContextualSuggestion() && messages.length === 0 && (
+          <div className="mb-3 p-2 rounded-lg bg-primary/10 border border-primary/20">
+            <p className="text-xs text-primary flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" />
+              <strong>Dica:</strong> {getContextualSuggestion()}
+            </p>
+          </div>
+        )}
+
         <ScrollArea className="flex-1 border rounded-lg p-4 mb-3">
           {messages.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
               <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p className="text-sm">Pergunte sobre OVIQ4, evidências, normas ou procedimentos de inspeção</p>
               <p className="text-xs mt-2">Contexto: {vesselType}</p>
+              {chapterId && (
+                <p className="text-xs mt-1 text-primary">Capítulo {chapterId} selecionado</p>
+              )}
             </div>
           ) : (
             <div className="space-y-4">
