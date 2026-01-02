@@ -12,6 +12,10 @@ comment = "MLC 2006 AI evidence generator for non-conformity analysis with legal
 verify_jwt = false
 comment = "MLC 2006 voice chat assistant for maritime labour convention compliance"
 
+[functions.mlc-voice-tts]
+verify_jwt = false
+comment = "MLC 2006 ElevenLabs HD text-to-speech for voice responses"
+
 # ============================================
 # PEO-DP AI Functions - Added 2025-12-31
 # ============================================

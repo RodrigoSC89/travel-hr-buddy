@@ -1,7 +1,7 @@
 /**
  * MLC Voice Chat Component
  * AI-powered voice assistant for MLC 2006 inspections
- * Integrates with ElevenLabs for HD voice and OpenAI for conversation
+ * Integrates with ElevenLabs for HD voice and Lovable AI for conversation
  */
 
 import React, { useState, useRef, useEffect } from "react";
@@ -10,8 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import {
   Mic,
   MicOff,
@@ -19,12 +20,12 @@ import {
   VolumeX,
   Send,
   Brain,
-  MessageSquare,
   Sparkles,
   RefreshCw,
   Scale,
   HelpCircle,
-  Loader2
+  Loader2,
+  Headphones
 } from "lucide-react";
 
 interface Message {
@@ -54,9 +55,11 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [useElevenLabs, setUseElevenLabs] = useState(true);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   
   const recognitionRef = useRef<any>(null);
-  const synthRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Initialize speech recognition
@@ -72,6 +75,10 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
+        // Auto-send after voice input
+        if (transcript.trim()) {
+          setTimeout(() => sendMessage(transcript), 300);
+        }
       };
 
       recognitionRef.current.onerror = () => {
@@ -87,6 +94,9 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.abort();
+      }
+      if (audioRef.current) {
+        audioRef.current.pause();
       }
     };
   }, []);
@@ -110,15 +120,78 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
     } else {
       recognitionRef.current.start();
       setIsListening(true);
+      toast.info("🎤 Fale sua pergunta sobre MLC...");
     }
   };
 
-  const speakText = (text: string) => {
+  // ElevenLabs HD TTS
+  const speakWithElevenLabs = async (text: string) => {
+    if (!voiceEnabled || !text) return;
+    
+    setIsPlayingAudio(true);
+    
+    try {
+      // Limit text for voice (60 words for natural speech)
+      const words = text.split(/\s+/);
+      const limitedText = words.slice(0, 60).join(' ') + (words.length > 60 ? '...' : '');
+      
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mlc-voice-tts`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ text: limitedText }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('TTS request failed');
+      }
+
+      const data = await response.json();
+      
+      if (data.audioContent) {
+        // Play audio using data URI
+        const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
+        
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        
+        audioRef.current = new Audio(audioUrl);
+        audioRef.current.onended = () => {
+          setIsPlayingAudio(false);
+          setIsSpeaking(false);
+        };
+        audioRef.current.onerror = () => {
+          setIsPlayingAudio(false);
+          setIsSpeaking(false);
+          // Fallback to browser TTS
+          speakWithBrowserTTS(text);
+        };
+        
+        setIsSpeaking(true);
+        await audioRef.current.play();
+      }
+    } catch (error) {
+      console.error('ElevenLabs TTS error:', error);
+      setIsPlayingAudio(false);
+      // Fallback to browser TTS
+      speakWithBrowserTTS(text);
+    }
+  };
+
+  // Browser TTS fallback
+  const speakWithBrowserTTS = (text: string) => {
     if (!voiceEnabled) return;
     
     window.speechSynthesis.cancel();
     
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(text.substring(0, 500));
     utterance.lang = 'pt-BR';
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
@@ -127,13 +200,17 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     
-    synthRef.current = utterance;
     window.speechSynthesis.speak(utterance);
   };
 
   const stopSpeaking = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
+    setIsPlayingAudio(false);
   };
 
   const sendMessage = async (messageText?: string) => {
@@ -212,9 +289,13 @@ export function MLCVoiceChat({ onQuestionAsked }: MLCVoiceChatProps) {
         }
       }
 
-      // Speak response if voice enabled
+      // Speak response if voice enabled (use ElevenLabs or browser TTS)
       if (voiceEnabled && assistantContent) {
-        speakText(assistantContent.substring(0, 500)); // Limit for voice
+        if (useElevenLabs) {
+          speakWithElevenLabs(assistantContent);
+        } else {
+          speakWithBrowserTTS(assistantContent);
+        }
       }
 
       // Callback for parent component
@@ -272,13 +353,30 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
           </div>
           
           <div className="flex items-center gap-2">
+            {/* ElevenLabs HD Toggle */}
+            {voiceEnabled && (
+              <div className="flex items-center gap-1 mr-2">
+                <Headphones className={`h-3 w-3 ${useElevenLabs ? 'text-blue-500' : 'text-muted-foreground'}`} />
+                <Switch
+                  checked={useElevenLabs}
+                  onCheckedChange={setUseElevenLabs}
+                  className="scale-75"
+                />
+                <span className="text-xs text-muted-foreground">HD</span>
+              </div>
+            )}
+            
             <Button
               variant={voiceEnabled ? "default" : "outline"}
               size="sm"
               onClick={() => {
                 setVoiceEnabled(!voiceEnabled);
                 if (isSpeaking) stopSpeaking();
+                if (!voiceEnabled) {
+                  toast.success("Voz ativada", { description: useElevenLabs ? "ElevenLabs HD" : "Browser TTS" });
+                }
               }}
+              className={isSpeaking ? "animate-pulse" : ""}
             >
               {voiceEnabled ? (
                 <Volume2 className="h-4 w-4" />
@@ -286,6 +384,12 @@ A Maritime Labour Convention 2006 estabelece direitos e condições mínimas de 
                 <VolumeX className="h-4 w-4" />
               )}
             </Button>
+            
+            {isSpeaking && (
+              <Button variant="destructive" size="sm" onClick={stopSpeaking}>
+                Parar
+              </Button>
+            )}
             
             {messages.length > 0 && (
               <Button
