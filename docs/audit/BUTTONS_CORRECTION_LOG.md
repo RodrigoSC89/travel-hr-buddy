@@ -43,6 +43,12 @@
 | 22 | **SGSO Admin** | Envio Email Auto | ❌ "Em Breve" | ✅ ATIVO | Botão de agendamento funcional |
 | 23 | **Task Management** | Kanban View | ❌ Placeholder | ✅ ATIVO | Drag-and-drop completo, 4 colunas |
 | 24 | **Task Management** | Calendar View | ❌ Placeholder | ✅ ATIVO | Navegação mensal, visualização de tarefas |
+| 25 | **Logistics Dashboard** | Smart Routes Map | ❌ "Em Breve" | ✅ ATIVO | Mapbox com rotas marítimas interativas |
+| 26 | **Employee Portal** | Training Portal | ❌ Placeholder | ✅ ATIVO | Cursos, progresso, certificados |
+| 27 | **Employee Portal** | Payments History | ❌ Placeholder | ✅ ATIVO | Histórico financeiro completo |
+| 28 | **Communication Module** | Notifications Center | ❌ Placeholder | ✅ ATIVO | Centro de notificações completo |
+| 29 | **Communication Module** | Settings | ❌ Placeholder | ✅ ATIVO | Configurações de canais e preferências |
+| 30 | **Logistics Dashboard** | Analytics Dashboard | ❌ Placeholder | ✅ ATIVO | KPIs, gráficos Recharts, métricas
 
 ### Detalhes das Implementações:
 

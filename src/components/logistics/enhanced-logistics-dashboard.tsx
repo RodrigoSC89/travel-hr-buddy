@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { LogisticsAIInsights } from "./logistics-ai-insights";
 import { SmartRoutesMap } from "./SmartRoutesMap";
+import { LogisticsAnalyticsDashboard } from "./LogisticsAnalyticsDashboard";
 import type { LogisticsOperation } from "@/hooks/use-logistics-ai";
 
 interface LogisticsData {
@@ -424,41 +425,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
-            <Card className="bg-gradient-to-br from-card via-card/95 to-warning/5 hover:shadow-2xl transition-all duration-700 backdrop-blur-sm border border-border/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-2xl">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-warning/20 to-warning/10">
-                    <Activity className="w-6 h-6 text-warning" />
-                  </div>
-                  <span className="text-gradient">Analytics Avançado</span>
-                  <Star className="w-6 h-6 text-warning animate-pulse" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-warning/10 to-warning/5 inline-block mb-6">
-                    <Activity className="h-16 w-16 text-warning mx-auto animate-bounce" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-gradient">
-                    Analytics em Desenvolvimento
-                  </h3>
-                  <p className="text-muted-foreground text-lg mb-6 max-w-md mx-auto">
-                    Dashboard analítico completo com métricas avançadas e insights de performance
-                  </p>
-                  <div className="flex justify-center gap-2">
-                    <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-                      KPIs em Tempo Real
-                    </Badge>
-                    <Badge variant="outline" className="bg-info/10 text-info border-info/30">
-                      Previsões IA
-                    </Badge>
-                    <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-                      Relatórios Automáticos
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <LogisticsAnalyticsDashboard />
           </TabsContent>
         </Tabs>
       </div>
