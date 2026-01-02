@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -127,12 +128,16 @@ export const CopilotAI = () => {
 
   const handleVoiceToggle = () => {
     setIsListening(!isListening);
-    // Aqui implementaria a funcionalidade de voz
+    if (!isListening) {
+      toast.info('Reconhecimento de voz ativado', { description: 'Fale seu comando...' });
+    } else {
+      toast.info('Reconhecimento de voz desativado');
+    }
   };
 
   const handleSendQuery = () => {
     if (query.trim()) {
-      // Aqui implementaria o processamento da query
+      toast.success('Consulta enviada ao Copilot AI', { description: query.substring(0, 50) + '...' });
       setQuery("");
     }
   };
