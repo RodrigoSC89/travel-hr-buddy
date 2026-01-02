@@ -38,6 +38,7 @@ import {
   Brain
 } from "lucide-react";
 import { LogisticsAIInsights } from "./logistics-ai-insights";
+import { SmartRoutesMap } from "./SmartRoutesMap";
 import type { LogisticsOperation } from "@/hooks/use-logistics-ai";
 
 interface LogisticsData {
@@ -419,41 +420,7 @@ const EnhancedLogisticsDashboard: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="routes" className="space-y-6">
-            <Card className="bg-gradient-to-br from-card via-card/95 to-success/5 hover:shadow-2xl transition-all duration-700 backdrop-blur-sm border border-border/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-2xl">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-success/20 to-success/10">
-                    <MapPin className="w-6 h-6 text-success" />
-                  </div>
-                  <span className="text-gradient">Otimização de Rotas</span>
-                  <Star className="w-6 h-6 text-warning animate-pulse" />
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-success/10 to-success/5 inline-block mb-6">
-                    <MapPin className="h-16 w-16 text-success mx-auto animate-bounce" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-gradient">
-                    Sistema de Rotas Inteligente
-                  </h3>
-                  <p className="text-muted-foreground text-lg mb-6 max-w-md mx-auto">
-                    Mapa interativo com otimização de rotas em tempo real será disponibilizado em breve
-                  </p>
-                  <div className="flex justify-center gap-2">
-                    <Badge variant="outline" className="bg-success/10 text-success border-success/30">
-                      IA Preditiva
-                    </Badge>
-                    <Badge variant="outline" className="bg-info/10 text-info border-info/30">
-                      Tempo Real
-                    </Badge>
-                    <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
-                      Otimização Automática
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <SmartRoutesMap />
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">

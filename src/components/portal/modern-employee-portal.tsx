@@ -1,5 +1,7 @@
 // @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { EmployeeTrainingPortal } from "./EmployeeTrainingPortal";
+import { EmployeePaymentsHistory } from "./EmployeePaymentsHistory";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -825,13 +827,7 @@ export const ModernEmployeePortal: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <BookOpen className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Em Desenvolvimento</h3>
-                  <p className="text-muted-foreground">
-                    A área de treinamentos estará disponível em breve
-                  </p>
-                </div>
+                <EmployeeTrainingPortal />
               </CardContent>
             </Card>
           </TabsContent>
@@ -849,13 +845,7 @@ export const ModernEmployeePortal: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <CreditCard className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">Em Desenvolvimento</h3>
-                  <p className="text-muted-foreground">
-                    O histórico de pagamentos estará disponível em breve
-                  </p>
-                </div>
+                <EmployeePaymentsHistory />
               </CardContent>
             </Card>
           </TabsContent>
