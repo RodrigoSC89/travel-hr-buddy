@@ -26,6 +26,8 @@ import { PreOVIDAIChat } from './PreOVIDAIChat';
 import { PreOVIDVoiceChat } from './PreOVIDVoiceChat';
 import { PreOVIDEvidenceGenerator } from './PreOVIDEvidenceGenerator';
 import { PreOVIDReportGenerator } from './PreOVIDReportGenerator';
+import { PreOVIDCompleteChecklist } from './PreOVIDCompleteChecklist';
+import { OVIQ4_CHAPTERS as COMPLETE_CHAPTERS } from '@/data/oviq4-complete-data';
 
 interface InspectionStatus {
   compliant: number;
@@ -472,12 +474,33 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
         {/* Checklist Tab */}
         <TabsContent value="checklist">
-          <OVIDChecklist 
-            vesselType={selectedVesselType}
-            answers={checklistAnswers}
-            onAnswerChange={handleAnswerChange}
-            inspectionStarted={inspectionStarted}
-          />
+          {inspectionStarted ? (
+            <PreOVIDCompleteChecklist
+              vesselType={selectedVesselType}
+              onProgressChange={(progress) => {
+                // Update global progress
+                let compliant = 0, nonCompliant = 0, notApplicable = 0, pending = 0;
+                Object.values(progress).forEach(p => {
+                  compliant += p.compliant;
+                  nonCompliant += p.nonCompliant;
+                  pending += (p.total - p.completed);
+                });
+                setStatus({ compliant, nonCompliant, notApplicable, pending });
+              }}
+            />
+          ) : (
+            <Card className="p-8 text-center">
+              <Ship className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
+              <h3 className="text-lg font-medium mb-2">Nenhuma Inspeção Ativa</h3>
+              <p className="text-muted-foreground mb-4">
+                Inicie uma nova inspeção para acessar o checklist OVIQ4 completo
+              </p>
+              <Button onClick={() => setActiveTab('new')}>
+                <Plus className="w-4 h-4 mr-2" />
+                Iniciar Nova Inspeção
+              </Button>
+            </Card>
+          )}
         </TabsContent>
 
         {/* Non-Conformities Tab */}
@@ -492,27 +515,59 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
         {/* Reports Tab */}
         <TabsContent value="reports">
-          <OVIDReports 
-            vesselName={vesselName}
-            imoNumber={imoNumber}
-            inspectorName={inspectorName}
-            inspectionDate={inspectionDate}
-            status={status}
-            answers={checklistAnswers}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <OVIDReports 
+              vesselName={vesselName}
+              imoNumber={imoNumber}
+              inspectorName={inspectorName}
+              inspectionDate={inspectionDate}
+              status={status}
+              answers={checklistAnswers}
+            />
+            <PreOVIDReportGenerator
+              inspectionData={{
+                vesselName: vesselName || 'N/A',
+                imoNumber: imoNumber || 'N/A',
+                vesselType: selectedVesselType,
+                inspectorName: inspectorName || 'N/A',
+                inspectionDate: inspectionDate,
+              }}
+              chapterResults={COMPLETE_CHAPTERS.map(ch => ({
+                id: ch.id.toString(),
+                name: ch.name,
+                total: ch.questions.length,
+                compliant: 0,
+                nonCompliant: 0,
+                notApplicable: 0,
+                observations: [],
+              }))}
+              totalQuestions={COMPLETE_CHAPTERS.reduce((acc, ch) => acc + ch.questions.length, 0)}
+              answers={checklistAnswers}
+            />
+          </div>
         </TabsContent>
 
         {/* AI Assistant Tab */}
         <TabsContent value="ai">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <PreOVIDAIChat 
-              vesselType={selectedVesselType}
-              mode="chat"
-            />
-            <PreOVIDVoiceChat 
-              vesselType={selectedVesselType}
-              chapterName="OVIQ4 Assistant"
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <PreOVIDAIChat 
+                vesselType={selectedVesselType}
+                mode="chat"
+              />
+            </div>
+            <div className="space-y-6">
+              <PreOVIDVoiceChat 
+                vesselType={selectedVesselType}
+                chapterName="OVIQ4 Assistant"
+              />
+              <PreOVIDEvidenceGenerator
+                questionId="Geral"
+                questionText="Geração de evidências para itens de inspeção OVID"
+                vesselType={selectedVesselType}
+                chapterId="1"
+              />
+            </div>
           </div>
         </TabsContent>
 
