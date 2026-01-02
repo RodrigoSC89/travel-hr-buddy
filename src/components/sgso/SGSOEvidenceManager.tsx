@@ -574,7 +574,7 @@ export const SGSOEvidenceManager: React.FC = () => {
                 <SelectValue placeholder="Filtrar por Prática" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as Práticas</SelectItem>
+                <SelectItem value="all">Todas as Práticas</SelectItem>
                 {ANP_PRACTICES.map(p => (
                   <SelectItem key={p.number} value={p.number}>
                     {p.number} - {p.name}
