@@ -1,8 +1,8 @@
 import type { FC } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Users, FileCheck, Brain, Scale, Globe } from 'lucide-react';
-import { MLCInspectionDashboard } from '@/components/mlc/MLCInspectionDashboard';
+import { Shield, Brain, Scale, Globe } from 'lucide-react';
+import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 
 const MLCInspection: FC = () => {
   return (
@@ -18,7 +18,7 @@ const MLCInspection: FC = () => {
           { icon: Brain, label: 'IA Integrada' },
         ]}
       />
-      <MLCInspectionDashboard />
+      <MLCInspectionDashboardV2 />
     </ModulePageWrapper>
   );
 };
