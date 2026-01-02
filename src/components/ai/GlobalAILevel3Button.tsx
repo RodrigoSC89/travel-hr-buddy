@@ -54,12 +54,7 @@ export function GlobalAILevel3Button() {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 1, type: "spring" }}
-          className="fixed bottom-20 right-4 z-40"
-        >
+        <div className="relative">
           <Button
             className="rounded-full h-12 w-12 shadow-xl bg-gradient-to-br from-violet-600 to-purple-700 hover:from-violet-500 hover:to-purple-600 border border-white/20"
           >
@@ -76,7 +71,7 @@ export function GlobalAILevel3Button() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-3 w-3 bg-violet-500" />
           </span>
-        </motion.div>
+        </div>
       </SheetTrigger>
 
       <SheetContent side="right" className="w-[420px] sm:w-[480px] overflow-y-auto">
