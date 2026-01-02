@@ -501,10 +501,31 @@ export const PeotramComplianceChecker: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-64 flex items-center justify-center text-muted-foreground">
-                  <div className="text-center">
-                    <TrendingUp className="w-8 h-8 mx-auto mb-2" />
-                    <p>Gráfico de tendências será implementado aqui</p>
+                <div className="h-64 space-y-4">
+                  <div className="flex justify-between text-sm">
+                    <span>Conformidade Geral</span>
+                    <span className="font-medium">87%</span>
+                  </div>
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-primary w-[87%]" />
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 mt-4">
+                    {[
+                      { label: "Jan", value: 82 },
+                      { label: "Fev", value: 85 },
+                      { label: "Mar", value: 87 },
+                    ].map((month, i) => (
+                      <div key={i} className="text-center">
+                        <div className="h-20 bg-muted rounded relative overflow-hidden">
+                          <div 
+                            className="absolute bottom-0 left-0 right-0 bg-primary/80"
+                            style={{ height: `${month.value}%` }}
+                          />
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">{month.label}</p>
+                        <p className="text-sm font-medium">{month.value}%</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </CardContent>

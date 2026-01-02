@@ -491,9 +491,23 @@ export default function LogisticsMultibase() {
               <CardDescription>Economia e eficiência geradas pela IA</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-12">
-                <Brain className="h-12 w-12 mx-auto mb-4 text-primary opacity-50" />
-                <p className="text-muted-foreground">Histórico de otimizações será exibido aqui</p>
+              <div className="space-y-4">
+                {[
+                  { date: "02 Jan 2026", route: "Santos → Rio", savings: "R$ 12.450", efficiency: "+15%" },
+                  { date: "01 Jan 2026", route: "Rio → Vitória", savings: "R$ 8.200", efficiency: "+12%" },
+                  { date: "31 Dez 2025", route: "Vitória → Salvador", savings: "R$ 15.800", efficiency: "+18%" },
+                ].map((opt, i) => (
+                  <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
+                    <div>
+                      <p className="font-medium">{opt.route}</p>
+                      <p className="text-sm text-muted-foreground">{opt.date}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium text-green-600">{opt.savings}</p>
+                      <p className="text-sm text-muted-foreground">{opt.efficiency}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

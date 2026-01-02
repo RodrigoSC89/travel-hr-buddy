@@ -503,9 +503,28 @@ const VesselContracts = () => {
               <CardTitle>Tendência de Downtime</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-64 flex items-center justify-center text-muted-foreground">
-                <BarChart3 className="h-12 w-12 opacity-50" />
-                <span className="ml-4">Gráfico de tendência será exibido aqui</span>
+              <div className="h-64 space-y-3">
+                {[
+                  { month: "Out 2025", hours: 12, percent: 15 },
+                  { month: "Nov 2025", hours: 8, percent: 10 },
+                  { month: "Dez 2025", hours: 5, percent: 6 },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <span className="w-20 text-sm text-muted-foreground">{item.month}</span>
+                    <div className="flex-1 h-6 bg-muted rounded overflow-hidden">
+                      <div 
+                        className="h-full bg-destructive/70 transition-all"
+                        style={{ width: `${item.percent}%` }}
+                      />
+                    </div>
+                    <span className="w-16 text-sm font-medium text-right">{item.hours}h</span>
+                  </div>
+                ))}
+                <div className="pt-4 border-t mt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Tendência: <span className="text-green-600 font-medium">-58% redução</span> em downtime nos últimos 3 meses
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>

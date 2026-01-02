@@ -363,11 +363,34 @@ export const IoTDashboard: React.FC = () => {
               <CardTitle>Mapa de Dispositivos</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-muted rounded-lg p-8 text-center">
-                <MapPin className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground">
-                  Visualização do mapa será implementada com integração de mapas interativos
-                </p>
+              <div className="h-64 bg-gradient-to-br from-blue-900 to-slate-900 rounded-lg relative overflow-hidden">
+                {/* Simulated device positions */}
+                {[
+                  { name: "Sensor Temp", x: 20, y: 30, status: "online" },
+                  { name: "Sensor Umidade", x: 50, y: 45, status: "warning" },
+                  { name: "Node A", x: 75, y: 25, status: "offline" },
+                  { name: "Gateway", x: 40, y: 70, status: "online" },
+                ].map((device, i) => (
+                  <div
+                    key={i}
+                    className="absolute cursor-pointer group"
+                    style={{ left: `${device.x}%`, top: `${device.y}%` }}
+                    onClick={() => toast.info(`${device.name} - Status: ${device.status}`)}
+                  >
+                    <div className={`w-4 h-4 rounded-full ${
+                      device.status === "online" ? "bg-green-500" : 
+                      device.status === "warning" ? "bg-yellow-500" : "bg-red-500"
+                    } animate-pulse`} />
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      {device.name}
+                    </div>
+                  </div>
+                ))}
+                <div className="absolute bottom-3 left-3 bg-black/60 text-white p-2 rounded text-xs">
+                  <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500" /> Online</div>
+                  <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-yellow-500" /> Alerta</div>
+                  <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-red-500" /> Offline</div>
+                </div>
               </div>
             </CardContent>
           </Card>
