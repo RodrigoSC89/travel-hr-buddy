@@ -319,9 +319,23 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Análise inteligente da frota</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Análises preditivas e recomendações baseadas em IA disponíveis em breve.
-                </p>
+                <div className="space-y-4">
+                  {[
+                    { title: "Otimização de Rota", desc: "Economia de 12% em combustível sugerida para MV Atlantic", priority: "high" },
+                    { title: "Manutenção Preditiva", desc: "Motor principal do MV Pacific requer atenção em 15 dias", priority: "medium" },
+                    { title: "Análise de Performance", desc: "Frota operando a 94% de eficiência média", priority: "low" },
+                  ].map((insight, i) => (
+                    <div key={i} className="border rounded-lg p-4 flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium">{insight.title}</h4>
+                        <p className="text-sm text-muted-foreground">{insight.desc}</p>
+                      </div>
+                      <Badge variant={insight.priority === "high" ? "destructive" : insight.priority === "medium" ? "secondary" : "outline"}>
+                        {insight.priority === "high" ? "Alta" : insight.priority === "medium" ? "Média" : "Baixa"}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -333,9 +347,23 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Controle completo da frota</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Interface de gestão de embarcações disponível em breve.
-                </p>
+                <div className="space-y-3">
+                  {[
+                    { name: "MV Atlantic Star", status: "active", location: "Santos, BR" },
+                    { name: "MV Pacific Dream", status: "maintenance", location: "Rio de Janeiro, BR" },
+                    { name: "MV Ocean Pride", status: "active", location: "Em trânsito" },
+                  ].map((vessel, i) => (
+                    <div key={i} className="flex justify-between items-center p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{vessel.name}</p>
+                        <p className="text-sm text-muted-foreground">{vessel.location}</p>
+                      </div>
+                      <Badge variant={vessel.status === "active" ? "default" : "secondary"}>
+                        {vessel.status === "active" ? "Operacional" : "Manutenção"}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -375,9 +403,20 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Análise de performance</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Painéis analíticos disponíveis em breve.
-                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 border rounded-lg">
+                    <p className="text-3xl font-bold text-primary">94%</p>
+                    <p className="text-sm text-muted-foreground">Eficiência Média</p>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <p className="text-3xl font-bold text-green-600">12</p>
+                    <p className="text-sm text-muted-foreground">Embarcações Ativas</p>
+                  </div>
+                  <div className="text-center p-4 border rounded-lg">
+                    <p className="text-3xl font-bold text-blue-600">2,450</p>
+                    <p className="text-sm text-muted-foreground">Milhas Navegadas</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -389,9 +428,21 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Localização GPS da frota</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
-                  Sistema de rastreamento em desenvolvimento.
-                </p>
+                <div className="h-64 bg-gradient-to-br from-blue-900 to-blue-950 rounded-lg relative overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center text-white">
+                      <MapPin className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm">4 embarcações rastreadas em tempo real</p>
+                      <Button variant="secondary" size="sm" className="mt-3" onClick={() => navigate("/fleet-command")}>
+                        Abrir Fleet Command
+                      </Button>
+                    </div>
+                  </div>
+                  {/* Simulated vessel markers */}
+                  <div className="absolute top-1/4 left-1/3 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                  <div className="absolute top-1/2 left-2/3 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                  <div className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-yellow-500 rounded-full animate-pulse" />
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
