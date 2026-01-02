@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +8,7 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { SgsoDashboard } from "@/components/sgso/SgsoDashboard";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
+import { CreateSGSOIncidentDialog } from "@/components/sgso/CreateSGSOIncidentDialog";
 import { toast } from "sonner";
 import {
   Shield,
@@ -28,11 +29,11 @@ import {
 const SGSO = () => {
   const { handleCreate, handleGenerateReport, handleExport, handleRefresh } = useMaritimeActions();
   const navigate = useNavigate();
+  const [incidentDialogOpen, setIncidentDialogOpen] = useState(false);
 
   // Real action handlers
   const handleViewPractices = () => {
     toast.success("17 Práticas ANP", { description: "Abrindo gestão das 17 práticas obrigatórias" });
-    // Scroll to practices section or navigate
     const practicesEl = document.getElementById('sgso-practices');
     if (practicesEl) practicesEl.scrollIntoView({ behavior: 'smooth' });
   };
@@ -62,7 +63,7 @@ const SGSO = () => {
   };
 
   const handleNewIncident = () => {
-    toast.success("Novo Incidente", { description: "Formulário de registro de incidente aberto" });
+    setIncidentDialogOpen(true);
   };
 
   return (
@@ -174,6 +175,16 @@ const SGSO = () => {
             action: () => handleExport("SGSO")
           }
         ]}
+      />
+
+      {/* Incident Creation Dialog */}
+      <CreateSGSOIncidentDialog
+        open={incidentDialogOpen}
+        onOpenChange={setIncidentDialogOpen}
+        onSuccess={() => {
+          // Could trigger a refresh of the dashboard
+          toast.success("Dashboard atualizado");
+        }}
       />
     </ModulePageWrapper>
   );
