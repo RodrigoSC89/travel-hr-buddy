@@ -1,6 +1,18 @@
 project_id = "vnbptmixvwropvanyhdb"
 
 # ============================================
+# MLC Inspection AI Functions - Added 2026-01-02
+# ============================================
+
+[functions.mlc-generate-evidence]
+verify_jwt = false
+comment = "MLC 2006 AI evidence generator for non-conformity analysis with legal references"
+
+[functions.mlc-voice-chat]
+verify_jwt = false
+comment = "MLC 2006 voice chat assistant for maritime labour convention compliance"
+
+# ============================================
 # PEO-DP AI Functions - Added 2025-12-31
 # ============================================
 
