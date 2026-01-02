@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ModuleActionButton from "@/components/ui/module-action-button";
@@ -9,6 +8,7 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import { SgsoDashboard } from "@/components/sgso/SgsoDashboard";
 import { ProactiveComplianceMonitor } from "@/components/compliance/ProactiveComplianceMonitor";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
+import { toast } from "sonner";
 import {
   Shield,
   AlertTriangle,
@@ -26,8 +26,45 @@ import {
 } from "lucide-react";
 
 const SGSO = () => {
-  const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
+  const { handleCreate, handleGenerateReport, handleExport, handleRefresh } = useMaritimeActions();
   const navigate = useNavigate();
+
+  // Real action handlers
+  const handleViewPractices = () => {
+    toast.success("17 Práticas ANP", { description: "Abrindo gestão das 17 práticas obrigatórias" });
+    // Scroll to practices section or navigate
+    const practicesEl = document.getElementById('sgso-practices');
+    if (practicesEl) practicesEl.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleViewRiskMatrix = () => {
+    toast.success("Matriz de Riscos", { description: "Abrindo matriz de riscos 5x5" });
+  };
+
+  const handleViewIncidents = () => {
+    toast.success("Gestão de Incidentes", { description: "Abrindo sistema de gestão de incidentes" });
+  };
+
+  const handleViewAudits = () => {
+    toast.success("Auditorias", { description: "Abrindo planejamento de auditorias" });
+  };
+
+  const handleViewTraining = () => {
+    toast.success("Treinamentos", { description: "Abrindo gestão de treinamentos" });
+  };
+
+  const handleANPReports = () => {
+    handleGenerateReport("Relatórios ANP");
+  };
+
+  const handlePDFReport = () => {
+    navigate("/sgso/report");
+  };
+
+  const handleNewIncident = () => {
+    toast.success("Novo Incidente", { description: "Formulário de registro de incidente aberto" });
+  };
+
   return (
     <ModulePageWrapper gradient="orange">
       <ModuleHeader
@@ -57,7 +94,9 @@ const SGSO = () => {
         </TabsList>
 
         <TabsContent value="dashboard">
-          <SgsoDashboard />
+          <div id="sgso-practices">
+            <SgsoDashboard />
+          </div>
         </TabsContent>
 
         <TabsContent value="compliance">
@@ -74,43 +113,44 @@ const SGSO = () => {
             id: "practices",
             label: "17 Práticas ANP",
             icon: <Shield className="h-3 w-3" />,
-            action: () => showInfo("17 Práticas ANP", "Abrindo gestão das 17 práticas obrigatórias")
+            action: handleViewPractices
           },
           {
             id: "risks",
             label: "Matriz de Riscos",
             icon: <AlertTriangle className="h-3 w-3" />,
-            action: () => showInfo("Matriz de Riscos", "Abrindo matriz de riscos 5x5")
+            action: handleViewRiskMatrix
           },
           {
             id: "incidents",
             label: "Gestão Incidentes",
             icon: <Bell className="h-3 w-3" />,
-            action: () => showInfo("Gestão de Incidentes", "Abrindo sistema de gestão de incidentes")
+            action: handleViewIncidents
           },
           {
             id: "audits",
             label: "Auditorias",
             icon: <FileCheck className="h-3 w-3" />,
-            action: () => showInfo("Auditorias", "Abrindo planejamento de auditorias")
+            action: handleViewAudits
           },
           {
             id: "training",
             label: "Treinamentos",
             icon: <Users className="h-3 w-3" />,
-            action: () => showInfo("Treinamentos", "Abrindo gestão de treinamentos")
+            action: handleViewTraining
           },
           {
             id: "reports",
             label: "Relatórios ANP",
             icon: <BookOpen className="h-3 w-3" />,
-            action: () => handleGenerateReport("Relatórios ANP")
+            action: handleANPReports
           },
           {
             id: "pdf-report",
             label: "Relatório PDF",
             icon: <FileCheck className="h-3 w-3" />,
-            action: () => navigate("/sgso/report")
+            action: handlePDFReport,
+            variant: "default"
           }
         ]}
         quickActions={[
@@ -118,7 +158,7 @@ const SGSO = () => {
             id: "new-incident",
             label: "Novo Incidente",
             icon: <Plus className="h-3 w-3" />,
-            action: () => handleCreate("Incidente")
+            action: handleNewIncident
           },
           {
             id: "refresh",

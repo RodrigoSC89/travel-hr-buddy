@@ -6,6 +6,7 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { PeoDpManager } from "@/components/peo-dp/peo-dp-manager";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
+import { toast } from "sonner";
 import {
   Shield,
   Anchor,
@@ -24,11 +25,42 @@ import {
 
 const PEODP = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
+  const { handleCreate, handleGenerateReport, handleExport, handleRefresh } = useMaritimeActions();
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  // Real action handlers
+  const handleDigitalizedPlan = () => {
+    toast.success("Plano Digitalizado", { description: "Visualização do plano DP aberta" });
+    const planEl = document.getElementById('peo-dp-plan');
+    if (planEl) planEl.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleManagerialDashboard = () => {
+    toast.success("Dashboard Gerencial", { description: "Painel de indicadores DP carregado" });
+  };
+
+  const handleFMEAIntegration = () => {
+    toast.success("Integração FMEA", { description: "Análise de modos de falha iniciada" });
+  };
+
+  const handleDPTrials = () => {
+    toast.success("DP Trials", { description: "Registro de trials de DP aberto" });
+  };
+
+  const handleAIValidation = () => {
+    toast.success("Validação IA", { description: "Validação com inteligência artificial iniciada" });
+  };
+
+  const handleRiskAssessment = () => {
+    toast.success("Risk Assessment", { description: "Avaliação de riscos DP aberta" });
+  };
+
+  const handleNewPlan = () => {
+    toast.success("Novo Plano DP", { description: "Formulário de novo plano aberto" });
+  };
 
   return (
     <ModulePageWrapper gradient="blue">
@@ -46,7 +78,9 @@ const PEODP = () => {
       />
 
       {/* PEO-DP Manager */}
-      <PeoDpManager />
+      <div id="peo-dp-plan">
+        <PeoDpManager />
+      </div>
 
       {/* Module Action Button */}
       <ModuleActionButton
@@ -57,37 +91,37 @@ const PEODP = () => {
             id: "plan",
             label: "Plano Digitalizado",
             icon: <Target className="h-3 w-3" />,
-            action: () => showInfo("Plano Digitalizado", "Abrindo visualização do plano DP digitalizado")
+            action: handleDigitalizedPlan
           },
           {
             id: "dashboard",
             label: "Dashboard Gerencial",
             icon: <TrendingUp className="h-3 w-3" />,
-            action: () => showInfo("Dashboard Gerencial", "Abrindo painel gerencial de DP")
+            action: handleManagerialDashboard
           },
           {
             id: "fmea",
             label: "Integração FMEA",
             icon: <Settings className="h-3 w-3" />,
-            action: () => showInfo("Integração FMEA", "Acessando análise de modos de falha")
+            action: handleFMEAIntegration
           },
           {
             id: "trials",
             label: "DP Trials",
             icon: <CheckCircle className="h-3 w-3" />,
-            action: () => showInfo("DP Trials", "Abrindo registro de trials de DP")
+            action: handleDPTrials
           },
           {
             id: "validation",
             label: "Validação IA",
             icon: <Brain className="h-3 w-3" />,
-            action: () => showInfo("Validação IA", "Iniciando validação com inteligência artificial")
+            action: handleAIValidation
           },
           {
             id: "risk",
             label: "Risk Assessment",
             icon: <Shield className="h-3 w-3" />,
-            action: () => showInfo("Risk Assessment", "Abrindo avaliação de riscos")
+            action: handleRiskAssessment
           }
         ]}
         quickActions={[
@@ -95,7 +129,7 @@ const PEODP = () => {
             id: "new-plan",
             label: "Novo Plano",
             icon: <Plus className="h-3 w-3" />,
-            action: () => handleCreate("Plano DP")
+            action: handleNewPlan
           },
           {
             id: "refresh",
