@@ -13,7 +13,7 @@ import {
   Ship, FileText, CheckCircle, AlertTriangle, XCircle, 
   Plus, Download, Filter, Calendar, User, 
   ClipboardCheck, BarChart3, Settings,
-  Brain, FileCheck, Clock, Target, Shield, Loader2, History
+  Brain, FileCheck, Clock, Target, Shield, Loader2, History, TrendingUp
 } from 'lucide-react';
 import { OVIQ4_SECTIONS, VESSEL_TYPES, getTotalQuestions } from '@/data/oviq4-checklist';
 import { OVIDChecklist } from './OVIDChecklist';
@@ -27,6 +27,8 @@ import { PreOVIDEvidenceGenerator } from './PreOVIDEvidenceGenerator';
 import { PreOVIDReportGenerator } from './PreOVIDReportGenerator';
 import { PreOVIDCompleteChecklist } from './PreOVIDCompleteChecklist';
 import { OVIDInspectionHistory } from './OVIDInspectionHistory';
+import { OVIDAnalyticsDashboard } from './OVIDAnalyticsDashboard';
+import { OVIDFinalizeInspection } from './OVIDFinalizeInspection';
 import { OVIQ4_CHAPTERS as COMPLETE_CHAPTERS } from '@/data/oviq4-complete-data';
 import { useOVIDInspection } from '@/hooks/useOVIDInspection';
 
@@ -50,7 +52,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
   const [operator, setOperator] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   
-  const { createInspection, loadInspection, inspection } = useOVIDInspection();
+  const { createInspection, loadInspection, inspection, answers, completeInspection } = useOVIDInspection();
   
   const totalQuestions = COMPLETE_CHAPTERS.reduce((acc, ch) => acc + ch.questions.length, 0);
   
@@ -344,7 +346,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-8 w-full">
+        <TabsList className="grid grid-cols-9 w-full">
           <TabsTrigger value="overview" className="flex items-center gap-1">
             <BarChart3 className="w-4 h-4" />
             <span className="hidden sm:inline">Visão Geral</span>
@@ -368,6 +370,10 @@ export const OVIDInspectionDashboard: React.FC = () => {
           <TabsTrigger value="ai" className="flex items-center gap-1">
             <Brain className="w-4 h-4" />
             <span className="hidden sm:inline">IA</span>
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-1">
+            <TrendingUp className="w-4 h-4" />
+            <span className="hidden sm:inline">Analytics</span>
           </TabsTrigger>
           <TabsTrigger value="history" className="flex items-center gap-1">
             <History className="w-4 h-4" />
@@ -721,6 +727,23 @@ export const OVIDInspectionDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Analytics Tab */}
+        <TabsContent value="analytics">
+          <OVIDAnalyticsDashboard />
+        </TabsContent>
+
+        {/* Finalize Section in Reports or as separate card */}
+        {inspectionStarted && currentInspectionId && (
+          <div className="mt-6">
+            <OVIDFinalizeInspection 
+              inspection={inspection}
+              answers={answers}
+              onFinalize={completeInspection}
+              isFinalized={inspection?.status === 'completed'}
+            />
+          </div>
+        )}
       </Tabs>
     </div>
   );
