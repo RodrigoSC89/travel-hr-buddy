@@ -13,8 +13,6 @@ import { OfflineIndicator } from "@/components/ui/offline-indicator";
 import GlobalSearch from "@/components/ui/global-search";
 
 import EnhancedNotifications from "@/components/ui/enhanced-notifications";
-import { FloatingActionButton } from "@/components/ui/floating-action-button";
-import { AICopilot } from "@/components/ai/AICopilot";
 
 export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
@@ -44,11 +42,7 @@ export const AppLayout: FC = () => {
               onClose={() => setIsNotificationsOpen(false)}
             />
             
-            {/* Floating Action Button */}
-            <FloatingActionButton />
-            
-            {/* AI Copilot - Global Assistant */}
-            <AICopilot />
+            {/* Floating buttons are now in App.tsx FloatingButtonsContainer */}
             
             {/* Toast Notifications */}
             <Toaster />
