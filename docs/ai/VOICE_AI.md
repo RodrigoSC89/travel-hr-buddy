@@ -4,8 +4,22 @@
 
 **Nome:** ARIA (Artificial Real-time Interactive Assistant)  
 **Módulo:** Voice  
-**Edge Function:** `voice-assistant-chat`  
-**Especialização:** Assistente de Voz Marítimo
+**Edge Functions:** `realtime-voice-session`, `voice-assistant-chat`  
+**Especialização:** Assistente de Voz Marítimo com WebRTC
+
+## Arquitetura de Voz
+
+### OpenAI Realtime API (WebRTC)
+- **Componente:** `PreOVIDRealtimeVoice`
+- **Edge Function:** `realtime-voice-session`
+- **Conexão:** WebRTC peer-to-peer com OpenAI
+- **Latência:** Ultra-baixa (<500ms)
+- **VAD:** Server-side Voice Activity Detection
+
+### Web Speech API (Fallback)
+- **Componente:** `PreOVIDVoiceChat`
+- **Compatibilidade:** Browsers sem suporte WebRTC
+- **TTS:** SpeechSynthesis nativo
 
 ## Capacidades
 
@@ -16,25 +30,7 @@
 | `create` | Criação de registros |
 | `search` | Busca por voz |
 | `hands_free` | Operação totalmente hands-free |
-
-## Características
-
-- **STT:** Reconhecimento de voz (PT-BR, EN, ES)
-- **TTS:** Síntese de voz ElevenLabs HD
-- **Tolerância:** Sotaques e ruído de fundo
-- **Termos:** Reconhece vocabulário marítimo
-- **Limite:** Respostas até 60 palavras
-
-## Comandos de Voz
-
-### Status
-```
-"Status" / "Como está tudo?" → Overview geral
-"Combustível" → ROB atual
-"Alertas" → Pending alerts
-"Tempo" / "Weather" → Forecast
-"Posição" → Coordenadas atuais
-```
+| `realtime` | Conversa em tempo real via WebRTC |
 
 ### Ações
 ```

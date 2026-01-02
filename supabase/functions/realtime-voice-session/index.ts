@@ -1,5 +1,6 @@
 /// <reference path="../deno-ambient.d.ts" />
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -17,7 +18,42 @@ serve(async (req: Request): Promise<Response> => {
       throw new Error("OPENAI_API_KEY is not set");
     }
 
-    console.log("Creating OpenAI Realtime session...");
+    const body = await req.json().catch(() => ({}));
+    const vesselType = body.vesselType || "OSV";
+    const chapterId = body.chapterId || null;
+
+    console.log("Creating OpenAI Realtime session for Pre-OVID...");
+    console.log("Vessel type:", vesselType, "Chapter:", chapterId);
+
+    const chapterContext = chapterId 
+      ? `O inspetor está atualmente no Capítulo ${chapterId} do OVIQ4.` 
+      : "";
+
+    const systemPrompt = `Você é ARIA, assistente de voz especializado em inspeções OVID/OVIQ4 marítimas.
+Responda SEMPRE em português brasileiro de forma concisa (máximo 60 palavras).
+
+CONTEXTO ATUAL:
+- Tipo de embarcação: ${vesselType}
+${chapterContext}
+
+CAPACIDADES:
+1. Guiar o inspetor pelos 17 capítulos do OVIQ4
+2. Explicar requisitos de conformidade (SOLAS, MARPOL, ISM, STCW, MLC)
+3. Sugerir evidências objetivas para não-conformidades
+4. Responder dúvidas técnicas sobre inspeções offshore
+
+FORMATO DE RESPOSTA:
+- Respostas curtas e diretas
+- Use termos técnicos marítimos corretos
+- Quando aplicável, cite a referência normativa
+- Ofereça próximos passos quando relevante
+
+COMANDOS DE VOZ RECONHECIDOS:
+- "Próximo item" / "Anterior" - navegação
+- "Marcar conforme" / "Marcar não conforme" - status
+- "Gerar evidência" - criar texto de evidência
+- "Ajuda" - explicar item atual
+- "Referência" - citar norma aplicável`;
 
     const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
       method: "POST",
@@ -28,19 +64,16 @@ serve(async (req: Request): Promise<Response> => {
       body: JSON.stringify({
         model: "gpt-4o-realtime-preview-2024-12-17",
         voice: "alloy",
-        instructions: `Você é um assistente inteligente para o sistema Nautilus One. 
-        Ajude os usuários com navegação, consultas de dados, relatórios e análises.
-        Seja conciso e útil. Responda sempre em português brasileiro.
-        
-        Funcionalidades disponíveis:
-        - Dashboard e Analytics
-        - Relatórios
-        - Gestão Marítima 
-        - Recursos Humanos
-        - Comunicação
-        - Configurações
-        
-        Quando o usuário solicitar navegação, confirme antes de executar.`
+        instructions: systemPrompt,
+        input_audio_transcription: {
+          model: "whisper-1"
+        },
+        turn_detection: {
+          type: "server_vad",
+          threshold: 0.5,
+          prefix_padding_ms: 300,
+          silence_duration_ms: 800
+        }
       }),
     });
 
@@ -51,7 +84,7 @@ serve(async (req: Request): Promise<Response> => {
     }
 
     const data = await response.json();
-    console.log("Session created successfully:", data);
+    console.log("Realtime session created successfully");
 
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
