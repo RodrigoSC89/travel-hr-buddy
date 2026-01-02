@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,14 +7,13 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import {
   Ship, FileText, CheckCircle, AlertTriangle, XCircle, 
-  Plus, Download, Filter, Search, Calendar, User, 
-  ClipboardCheck, BarChart3, MessageSquare, Settings,
-  Brain, FileCheck, Clock, Target, Shield, Anchor, Mic
+  Plus, Download, Filter, Calendar, User, 
+  ClipboardCheck, BarChart3, Settings,
+  Brain, FileCheck, Clock, Target, Shield, Loader2, History
 } from 'lucide-react';
 import { OVIQ4_SECTIONS, VESSEL_TYPES, getTotalQuestions } from '@/data/oviq4-checklist';
 import { OVIDChecklist } from './OVIDChecklist';
@@ -29,7 +28,7 @@ import { PreOVIDReportGenerator } from './PreOVIDReportGenerator';
 import { PreOVIDCompleteChecklist } from './PreOVIDCompleteChecklist';
 import { OVIDInspectionHistory } from './OVIDInspectionHistory';
 import { OVIQ4_CHAPTERS as COMPLETE_CHAPTERS } from '@/data/oviq4-complete-data';
-import { History } from 'lucide-react';
+import { useOVIDInspection } from '@/hooks/useOVIDInspection';
 
 interface InspectionStatus {
   compliant: number;
@@ -42,16 +41,24 @@ export const OVIDInspectionDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedVesselType, setSelectedVesselType] = useState<string>('Offshore Supply Vessel (OSV)');
   const [inspectionStarted, setInspectionStarted] = useState(false);
+  const [currentInspectionId, setCurrentInspectionId] = useState<string | null>(null);
   const [vesselName, setVesselName] = useState('');
   const [imoNumber, setImoNumber] = useState('');
   const [inspectorName, setInspectorName] = useState('');
   const [inspectionDate, setInspectionDate] = useState(new Date().toISOString().split('T')[0]);
+  const [location, setLocation] = useState('');
+  const [operator, setOperator] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  
+  const { createInspection, loadInspection, inspection } = useOVIDInspection();
+  
+  const totalQuestions = COMPLETE_CHAPTERS.reduce((acc, ch) => acc + ch.questions.length, 0);
   
   const [status, setStatus] = useState<InspectionStatus>({
     compliant: 0,
     nonCompliant: 0,
     notApplicable: 0,
-    pending: getTotalQuestions(),
+    pending: totalQuestions,
   });
 
   const [checklistAnswers, setChecklistAnswers] = useState<Record<string, { 
@@ -60,7 +67,6 @@ export const OVIDInspectionDashboard: React.FC = () => {
     evidence: string[];
   }>>({});
 
-  const totalQuestions = getTotalQuestions();
   const answeredQuestions = status.compliant + status.nonCompliant + status.notApplicable;
   const progressPercent = totalQuestions > 0 ? Math.round((answeredQuestions / totalQuestions) * 100) : 0;
   
@@ -68,15 +74,75 @@ export const OVIDInspectionDashboard: React.FC = () => {
     ? Math.round(((status.compliant + status.notApplicable) / answeredQuestions) * 100) 
     : 0;
 
-  const handleStartInspection = () => {
+  // Create new inspection in Supabase
+  const handleStartInspection = async () => {
     if (!vesselName || !imoNumber || !inspectorName) {
       toast.error('Preencha todos os campos obrigatórios');
       return;
     }
-    setInspectionStarted(true);
-    setActiveTab('checklist');
-    toast.success('Inspeção OVID iniciada');
+    
+    setIsCreating(true);
+    
+    try {
+      const newId = await createInspection({
+        vessel_name: vesselName,
+        imo_number: imoNumber,
+        vessel_type: selectedVesselType,
+        inspector_name: inspectorName,
+        inspection_date: inspectionDate,
+        operator: operator || undefined,
+        location: location || undefined,
+        total_questions: totalQuestions,
+      });
+      
+      if (newId) {
+        setCurrentInspectionId(newId);
+        setInspectionStarted(true);
+        setActiveTab('checklist');
+        toast.success('Inspeção OVID criada e salva no banco');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Erro ao criar inspeção');
+    } finally {
+      setIsCreating(false);
+    }
   };
+
+  // Resume inspection from history
+  const handleResumeInspection = useCallback(async (inspectionId: string) => {
+    setIsCreating(true);
+    
+    try {
+      await loadInspection(inspectionId);
+      setCurrentInspectionId(inspectionId);
+      setInspectionStarted(true);
+      setActiveTab('checklist');
+      toast.success('Inspeção retomada com sucesso');
+    } catch (error) {
+      console.error(error);
+      toast.error('Erro ao carregar inspeção');
+    } finally {
+      setIsCreating(false);
+    }
+  }, [loadInspection]);
+
+  // Update status from inspection data
+  React.useEffect(() => {
+    if (inspection) {
+      setVesselName(inspection.vessel_name);
+      setImoNumber(inspection.imo_number);
+      setInspectorName(inspection.inspector_name);
+      setInspectionDate(inspection.inspection_date);
+      setSelectedVesselType(inspection.vessel_type);
+      setStatus({
+        compliant: inspection.compliant_count,
+        nonCompliant: inspection.non_compliant_count,
+        notApplicable: inspection.not_applicable_count,
+        pending: totalQuestions - (inspection.compliant_count + inspection.non_compliant_count + inspection.not_applicable_count),
+      });
+    }
+  }, [inspection, totalQuestions]);
 
   const handleAnswerChange = (questionId: string, answer: 'yes' | 'no' | 'na', observation?: string) => {
     const prevAnswer = checklistAnswers[questionId]?.answer;
@@ -91,17 +157,14 @@ export const OVIDInspectionDashboard: React.FC = () => {
       }
     }));
 
-    // Update status counts
     setStatus(prev => {
       const newStatus = { ...prev };
       
-      // Decrement previous count
       if (prevAnswer === 'yes') newStatus.compliant--;
       else if (prevAnswer === 'no') newStatus.nonCompliant--;
       else if (prevAnswer === 'na') newStatus.notApplicable--;
       else newStatus.pending--;
       
-      // Increment new count
       if (answer === 'yes') newStatus.compliant++;
       else if (answer === 'no') newStatus.nonCompliant++;
       else if (answer === 'na') newStatus.notApplicable++;
@@ -112,7 +175,6 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
   const handleExport = () => {
     toast.success('Exportando relatório OVID...');
-    // Export logic would go here
   };
 
   const handleFilter = () => {
@@ -437,6 +499,8 @@ export const OVIDInspectionDashboard: React.FC = () => {
                     <Input 
                       id="operator"
                       placeholder="Nome do operador"
+                      value={operator}
+                      onChange={(e) => setOperator(e.target.value)}
                     />
                   </div>
                 </div>
@@ -464,14 +528,29 @@ export const OVIDInspectionDashboard: React.FC = () => {
                     <Input 
                       id="port"
                       placeholder="Porto e país"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
-              <div className="mt-6 flex justify-end">
-                <Button size="lg" onClick={handleStartInspection}>
-                  <ClipboardCheck className="w-4 h-4 mr-2" />
-                  Iniciar Inspeção
+              <div className="mt-6 flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setActiveTab('history')}>
+                  <History className="w-4 h-4 mr-2" />
+                  Ver Histórico
+                </Button>
+                <Button size="lg" onClick={handleStartInspection} disabled={isCreating}>
+                  {isCreating ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Criando...
+                    </>
+                  ) : (
+                    <>
+                      <ClipboardCheck className="w-4 h-4 mr-2" />
+                      Iniciar Inspeção
+                    </>
+                  )}
                 </Button>
               </div>
             </CardContent>
@@ -483,8 +562,8 @@ export const OVIDInspectionDashboard: React.FC = () => {
           {inspectionStarted ? (
             <PreOVIDCompleteChecklist
               vesselType={selectedVesselType}
+              inspectionId={currentInspectionId || undefined}
               onProgressChange={(progress) => {
-                // Update global progress
                 let compliant = 0, nonCompliant = 0, notApplicable = 0, pending = 0;
                 Object.values(progress).forEach(p => {
                   compliant += p.compliant;
@@ -499,12 +578,18 @@ export const OVIDInspectionDashboard: React.FC = () => {
               <Ship className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-50" />
               <h3 className="text-lg font-medium mb-2">Nenhuma Inspeção Ativa</h3>
               <p className="text-muted-foreground mb-4">
-                Inicie uma nova inspeção para acessar o checklist OVIQ4 completo
+                Inicie uma nova inspeção ou retome uma existente do histórico
               </p>
-              <Button onClick={() => setActiveTab('new')}>
-                <Plus className="w-4 h-4 mr-2" />
-                Iniciar Nova Inspeção
-              </Button>
+              <div className="flex justify-center gap-3">
+                <Button variant="outline" onClick={() => setActiveTab('history')}>
+                  <History className="w-4 h-4 mr-2" />
+                  Ver Histórico
+                </Button>
+                <Button onClick={() => setActiveTab('new')}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Inspeção
+                </Button>
+              </div>
             </Card>
           )}
         </TabsContent>
@@ -580,10 +665,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         {/* History Tab */}
         <TabsContent value="history">
           <OVIDInspectionHistory
-            onSelectInspection={(id) => {
-              toast.info(`Carregando inspeção ${id}...`);
-              // TODO: Load inspection by ID
-            }}
+            onSelectInspection={handleResumeInspection}
             onNewInspection={() => setActiveTab('new')}
           />
         </TabsContent>

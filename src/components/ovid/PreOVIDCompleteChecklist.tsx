@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,59 +7,59 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { 
-  CheckCircle, XCircle, AlertTriangle, ChevronRight,
+  CheckCircle, XCircle, AlertTriangle, ChevronRight, Save, Loader2,
   Ship, FileText, Users, Navigation, Shield, LifeBuoy,
   Flame, Droplets, Building2, Anchor, Radio, Settings,
-  Eye, Snowflake, Plane, Target, Wrench, Brain, Camera, Sparkles
+  Eye, Snowflake, Plane, Target, Wrench, Camera, Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { OVIQ4_CHAPTERS, OVIQQuestion } from '@/data/oviq4-complete-data';
 import { PreOVIDChapterTabs, ChapterProgress } from './PreOVIDChapterTabs';
+import { useOVIDInspection, OVIDAnswer } from '@/hooks/useOVIDInspection';
+import { OVIDPhotoEvidence } from './OVIDPhotoEvidence';
 
 const CHAPTER_ICONS: Record<number, React.FC<any>> = {
-  1: Ship,
-  2: FileText,
-  3: Users,
-  4: Navigation,
-  5: Shield,
-  6: LifeBuoy,
-  7: Flame,
-  8: Droplets,
-  9: Building2,
-  10: Wrench,
-  11: Anchor,
-  12: Radio,
-  13: Settings,
-  14: Eye,
-  15: Snowflake,
-  16: Plane,
-  17: Target,
+  1: Ship, 2: FileText, 3: Users, 4: Navigation, 5: Shield, 6: LifeBuoy,
+  7: Flame, 8: Droplets, 9: Building2, 10: Wrench, 11: Anchor, 12: Radio,
+  13: Settings, 14: Eye, 15: Snowflake, 16: Plane, 17: Target,
 };
-
-interface QuestionAnswer {
-  answer: 'yes' | 'no' | 'na' | null;
-  observation: string;
-  evidence?: string[];
-  photos?: string[];
-}
 
 interface PreOVIDCompleteChecklistProps {
   vesselType: string;
+  inspectionId?: string;
   onProgressChange?: (progress: Record<string, ChapterProgress>) => void;
-  onAnswerUpdate?: (questionId: string, answer: QuestionAnswer) => void;
+  onInspectionCreated?: (id: string) => void;
 }
 
 export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> = ({
   vesselType,
+  inspectionId,
   onProgressChange,
-  onAnswerUpdate,
+  onInspectionCreated,
 }) => {
   const [activeChapter, setActiveChapter] = useState('1');
-  const [answers, setAnswers] = useState<Record<string, QuestionAnswer>>({});
   const [expandedQuestions, setExpandedQuestions] = useState<string[]>([]);
+  
+  const { 
+    inspection, 
+    answers, 
+    photos,
+    isLoading, 
+    isSaving,
+    loadInspection,
+    updateAnswer,
+    uploadPhoto,
+    getPhotosForQuestion,
+  } = useOVIDInspection(inspectionId);
+
+  // Load inspection if ID provided
+  useEffect(() => {
+    if (inspectionId) {
+      loadInspection(inspectionId);
+    }
+  }, [inspectionId, loadInspection]);
 
   // Calculate progress for each chapter
   const chapterProgress = useMemo(() => {
@@ -75,37 +75,29 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
       const compliant = chapterAnswers.filter(([, a]) => a.answer === 'yes').length;
       const nonCompliant = chapterAnswers.filter(([, a]) => a.answer === 'no').length;
       
-      progress[chapter.id.toString()] = {
-        total,
-        completed,
-        compliant,
-        nonCompliant,
-      };
+      progress[chapter.id.toString()] = { total, completed, compliant, nonCompliant };
     });
     
     return progress;
   }, [answers]);
 
   // Notify parent of progress changes
-  React.useEffect(() => {
+  useEffect(() => {
     onProgressChange?.(chapterProgress);
   }, [chapterProgress, onProgressChange]);
 
-  const handleAnswerChange = (questionId: string, value: 'yes' | 'no' | 'na') => {
-    setAnswers(prev => {
-      const newAnswer: QuestionAnswer = {
-        ...prev[questionId],
-        answer: value,
-        observation: prev[questionId]?.observation || '',
-      };
-      
-      onAnswerUpdate?.(questionId, newAnswer);
-      
-      return {
-        ...prev,
-        [questionId]: newAnswer,
-      };
-    });
+  const handleAnswerChange = useCallback((questionId: string, value: 'yes' | 'no' | 'na') => {
+    const chapterId = questionId.split('.')[0];
+    const currentAnswer = answers[questionId];
+    
+    const newAnswer: OVIDAnswer = {
+      question_id: questionId,
+      chapter_id: chapterId,
+      answer: value,
+      observation: currentAnswer?.observation || '',
+    };
+    
+    updateAnswer(questionId, chapterId, newAnswer);
 
     if (value === 'no') {
       toast.info('Não conformidade registrada. Adicione uma observação.');
@@ -113,24 +105,25 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
         setExpandedQuestions(prev => [...prev, questionId]);
       }
     }
-  };
+  }, [answers, updateAnswer, expandedQuestions]);
 
-  const handleObservationChange = (questionId: string, observation: string) => {
-    setAnswers(prev => {
-      const newAnswer: QuestionAnswer = {
-        ...prev[questionId],
-        answer: prev[questionId]?.answer || null,
-        observation,
-      };
-      
-      onAnswerUpdate?.(questionId, newAnswer);
-      
-      return {
-        ...prev,
-        [questionId]: newAnswer,
-      };
-    });
-  };
+  const handleObservationChange = useCallback((questionId: string, observation: string) => {
+    const chapterId = questionId.split('.')[0];
+    const currentAnswer = answers[questionId];
+    
+    const newAnswer: OVIDAnswer = {
+      question_id: questionId,
+      chapter_id: chapterId,
+      answer: currentAnswer?.answer || null,
+      observation,
+    };
+    
+    updateAnswer(questionId, chapterId, newAnswer);
+  }, [answers, updateAnswer]);
+
+  const handlePhotoUpload = useCallback(async (questionId: string, file: File) => {
+    await uploadPhoto(questionId, file);
+  }, [uploadPhoto]);
 
   const currentChapter = OVIQ4_CHAPTERS.find(c => c.id.toString() === activeChapter);
   const currentProgress = chapterProgress[activeChapter] || { total: 0, completed: 0, compliant: 0, nonCompliant: 0 };
@@ -140,21 +133,36 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'critical':
-        return <Badge variant="destructive" className="text-xs">Crítico</Badge>;
-      case 'high':
-        return <Badge className="bg-orange-500 text-xs">Alto</Badge>;
-      case 'medium':
-        return <Badge variant="secondary" className="text-xs">Médio</Badge>;
-      default:
-        return <Badge variant="outline" className="text-xs">Baixo</Badge>;
+      case 'critical': return <Badge variant="destructive" className="text-xs">Crítico</Badge>;
+      case 'high': return <Badge className="bg-orange-500 text-xs">Alto</Badge>;
+      case 'medium': return <Badge variant="secondary" className="text-xs">Médio</Badge>;
+      default: return <Badge variant="outline" className="text-xs">Baixo</Badge>;
     }
   };
 
   const ChapterIcon = CHAPTER_ICONS[parseInt(activeChapter)] || Ship;
 
+  if (isLoading) {
+    return (
+      <Card className="p-8">
+        <div className="flex items-center justify-center gap-3">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          <span>Carregando inspeção...</span>
+        </div>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-4">
+      {/* Saving indicator */}
+      {isSaving && (
+        <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          <span className="text-sm">Salvando...</span>
+        </div>
+      )}
+
       {/* Chapter Navigation */}
       <PreOVIDChapterTabs
         activeChapter={activeChapter}
@@ -203,9 +211,10 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
               onValueChange={setExpandedQuestions}
               className="space-y-3"
             >
-              {currentChapter?.questions.map((question, index) => {
+              {currentChapter?.questions.map((question) => {
                 const answer = answers[question.id];
                 const hasAnswer = answer?.answer !== null && answer?.answer !== undefined;
+                const questionPhotos = getPhotosForQuestion(question.id);
                 
                 return (
                   <AccordionItem 
@@ -241,8 +250,14 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                           <div className="flex items-center gap-2 mt-1">
                             {getPriorityBadge(question.priority)}
                             {question.mandatoryComment && (
-                              <Badge variant="outline" className="text-xs bg-yellow-50">
+                              <Badge variant="outline" className="text-xs bg-yellow-50 dark:bg-yellow-950">
                                 Comentário obrigatório
+                              </Badge>
+                            )}
+                            {questionPhotos.length > 0 && (
+                              <Badge variant="secondary" className="text-xs">
+                                <Camera className="w-3 h-3 mr-1" />
+                                {questionPhotos.length}
                               </Badge>
                             )}
                           </div>
@@ -258,9 +273,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                           {question.references && question.references.length > 0 && (
                             <div className="flex flex-wrap gap-1 mt-2">
                               {question.references.map((ref, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs">
-                                  {ref}
-                                </Badge>
+                                <Badge key={i} variant="secondary" className="text-xs">{ref}</Badge>
                               ))}
                             </div>
                           )}
@@ -312,12 +325,14 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                           />
                         </div>
 
-                        {/* Action Buttons */}
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Camera className="w-4 h-4 mr-1" />
-                            Foto
-                          </Button>
+                        {/* Photo Evidence */}
+                        <div className="flex items-center gap-2">
+                          <OVIDPhotoEvidence
+                            inspectionId={inspectionId}
+                            questionId={question.id}
+                            photos={questionPhotos}
+                            onPhotoUploaded={() => {}}
+                          />
                           <Button variant="outline" size="sm">
                             <Sparkles className="w-4 h-4 mr-1" />
                             Gerar Evidência IA
@@ -349,8 +364,11 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
           Capítulo Anterior
         </Button>
         
-        <div className="text-sm text-muted-foreground">
-          Capítulo {activeChapter} de {OVIQ4_CHAPTERS.length}
+        <div className="flex items-center gap-2">
+          {isSaving && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
+          <span className="text-sm text-muted-foreground">
+            Capítulo {activeChapter} de {OVIQ4_CHAPTERS.length}
+          </span>
         </div>
         
         <Button
