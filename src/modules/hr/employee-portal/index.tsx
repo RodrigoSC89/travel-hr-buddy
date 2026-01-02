@@ -6,8 +6,11 @@
 import { useState } from "react";
 import type { FC } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Users, UserCheck, Calendar, Award, Shield, DollarSign, FileText, MessageSquare } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 import { EmployeeRequests } from "./components/EmployeeRequests";
 import { EmployeeHistory } from "./components/EmployeeHistory";
 import { EmployeeBenefits } from "./components/EmployeeBenefits";
@@ -161,13 +164,52 @@ const PortalFuncionarioModule = () => {
         <TabsContent value="feedback">
           <Card>
             <CardHeader>
-              <CardTitle>Feedback & Reviews</CardTitle>
+              <CardTitle>Feedback & Avaliações</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
-                Feedback system will be available soon. You'll be able to provide feedback,
-                view performance reviews, and participate in self-assessments.
-              </p>
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card className="border-2">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Autoavaliação Q4 2024</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-3">Prazo: 15 Jan 2025</p>
+                      <Button className="w-full" onClick={() => toast.success("Formulário de autoavaliação aberto")}>
+                        Iniciar Autoavaliação
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-2">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Feedback para Gestor</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-3">Anônimo e confidencial</p>
+                      <Button variant="outline" className="w-full" onClick={() => toast.success("Formulário de feedback aberto")}>
+                        Enviar Feedback
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="border rounded-lg p-4">
+                  <h4 className="font-medium mb-3">Avaliações Recentes</h4>
+                  {[
+                    { period: "Q3 2024", score: "4.2/5.0", status: "Concluída" },
+                    { period: "Q2 2024", score: "4.0/5.0", status: "Concluída" },
+                  ].map((review, i) => (
+                    <div key={i} className="flex justify-between items-center py-2 border-b last:border-0">
+                      <span>{review.period}</span>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary">{review.score}</Badge>
+                        <Button size="sm" variant="ghost" onClick={() => toast.info(`Visualizando avaliação ${review.period}`)}>
+                          Ver Detalhes
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

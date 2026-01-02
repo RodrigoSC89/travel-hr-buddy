@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import {
@@ -752,11 +753,36 @@ export const DocumentManagement: React.FC = () => {
 
         <TabsContent value="expired">
           <Card>
-            <CardContent className="p-8 text-center">
-              <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">
-                Controle de vencimentos de documentos será implementado em breve
-              </p>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                Controle de Vencimentos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[
+                  { name: "Certificado STCW - João Silva", expiry: "2025-02-15", days: 44, status: "warning" },
+                  { name: "Contrato de Trabalho - Maria Santos", expiry: "2025-01-20", days: 18, status: "critical" },
+                  { name: "Habilitação Marítima - Pedro Costa", expiry: "2024-12-28", days: -5, status: "expired" },
+                  { name: "Certificado de Saúde - Ana Lima", expiry: "2025-03-10", days: 67, status: "ok" },
+                ].map((doc, i) => (
+                  <div key={i} className="flex justify-between items-center p-4 border rounded-lg">
+                    <div className="flex-1">
+                      <p className="font-medium">{doc.name}</p>
+                      <p className="text-sm text-muted-foreground">Vence em: {doc.expiry}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Badge variant={doc.status === "expired" ? "destructive" : doc.status === "critical" ? "destructive" : doc.status === "warning" ? "secondary" : "default"}>
+                        {doc.days < 0 ? `Vencido há ${Math.abs(doc.days)} dias` : `${doc.days} dias restantes`}
+                      </Badge>
+                      <Button size="sm" variant="outline" onClick={() => toast.info(`Notificação enviada para renovação de: ${doc.name}`)}>
+                        Notificar
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

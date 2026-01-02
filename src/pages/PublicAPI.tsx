@@ -7,9 +7,11 @@ import { useState } from "react";
 import type { FC } from "react";
 import { Helmet } from "react-helmet-async";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { ApiKeyManagement } from "@/components/api/ApiKeyManagement";
 import { ApiDocumentation } from "@/components/api/ApiDocumentation";
 import { Key, Book, Activity } from "lucide-react";
+import { toast } from "sonner";
 
 const PublicAPI: React.FC = () => {
   return (

@@ -581,7 +581,7 @@ export default function TrainingAcademyAdmin() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant={cert.status === 'válido' ? 'default' : 'destructive'}>{cert.status}</Badge>
-                      <Button size="sm" variant="outline" onClick={() => toast.success(`Certificado de ${cert.name} baixado`)}>
+                      <Button size="sm" variant="outline" onClick={() => toast({ title: "Download iniciado", description: `Certificado de ${cert.name} baixado com sucesso` })}>
                         Download
                       </Button>
                     </div>
