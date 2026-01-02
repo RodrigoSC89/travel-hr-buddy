@@ -277,7 +277,7 @@ export const SGSOAuditTrail: React.FC = () => {
                           <div>
                             <label className="text-sm font-medium mb-1 block">Avaliação</label>
                             <Select
-                              value={item?.status || ""}
+                              value={item?.status || "pending"}
                               onValueChange={(value) => updateAuditItem(practice.id, "status", value as AuditStatus)}
                             >
                               <SelectTrigger>
