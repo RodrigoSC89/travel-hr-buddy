@@ -21,6 +21,7 @@ import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
 import { GlobalAILevel3Button } from "./components/ai/GlobalAILevel3Button";
 import { GlobalAIButton } from "./components/ai/GlobalAIButton";
 import { FloatingButtonsContainer } from "./components/global/FloatingButtonsContainer";
+import { NautilusBrainButton } from "./components/global/NautilusBrainButton";
 
 // Performance utilities
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -219,7 +220,7 @@ function App() {
               <OrganizationProvider>
                 <RouterType>
                   <LiteModeProvider autoEnable={true}>
-                    <GlobalBrainProvider showTrigger={true}>
+                    <GlobalBrainProvider showTrigger={false}>
                     <Routes>
                       {/* Public Routes */}
                       <Route path="/auth" element={<Auth />} />
@@ -371,6 +372,7 @@ function App() {
                       <GlobalAIButton />
                       <GlobalAILevel3Button />
                       <GlobalVoiceButton />
+                      <NautilusBrainButton />
                     </FloatingButtonsContainer>
                   </GlobalBrainProvider>
                   </LiteModeProvider>
