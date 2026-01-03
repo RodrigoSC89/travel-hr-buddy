@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -7,14 +7,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, Ship, Anchor, FileCheck, Brain, 
   TrendingUp, AlertTriangle, CheckCircle, XCircle,
-  Clock, RefreshCw, ExternalLink, Activity, BarChart3
+  Clock, RefreshCw, ExternalLink, Activity, BarChart3,
+  Download, Bell, BellRing, MapPin, FileText, Users
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import jsPDF from 'jspdf';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
-  ResponsiveContainer, AreaChart, Area, BarChart, Bar 
+  ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell
 } from 'recharts';
 
 interface ModuleStatus {
@@ -158,10 +161,43 @@ const generateHistoricalData = () => {
   });
 };
 
+// Realtime alerts hook
+const useComplianceAlerts = (modules: ModuleStatus[]) => {
+  const [alerts, setAlerts] = useState<Array<{id: string; module: string; message: string; type: 'critical' | 'warning' | 'info'; timestamp: Date}>>([]);
+  const previousModulesRef = useRef<ModuleStatus[]>([]);
+
+  useEffect(() => {
+    if (previousModulesRef.current.length > 0) {
+      modules.forEach(current => {
+        const previous = previousModulesRef.current.find(p => p.id === current.id);
+        if (previous && previous.status !== 'critical' && current.status === 'critical') {
+          const newAlert = {
+            id: `${current.id}-${Date.now()}`,
+            module: current.shortName,
+            message: `${current.shortName} entrou em status CRÍTICO! Score: ${current.score}%`,
+            type: 'critical' as const,
+            timestamp: new Date()
+          };
+          setAlerts(prev => [newAlert, ...prev].slice(0, 10));
+          toast.error(`⚠️ Alerta Crítico: ${current.shortName}`, {
+            description: `Score caiu para ${current.score}%. Ação imediata necessária.`,
+            duration: 10000,
+          });
+        }
+      });
+    }
+    previousModulesRef.current = modules;
+  }, [modules]);
+
+  return { alerts, clearAlerts: () => setAlerts([]) };
+};
+
 export function UnifiedComplianceDashboard() {
   const { data: modules = [], isLoading, refetch } = useUnifiedComplianceData();
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [activeView, setActiveView] = useState<'cards' | 'charts'>('cards');
+  const [showAlerts, setShowAlerts] = useState(false);
+  const { alerts, clearAlerts } = useComplianceAlerts(modules);
 
   // Memoize historical data
   const historicalData = useMemo(() => generateHistoricalData(), []);
@@ -173,6 +209,106 @@ export function UnifiedComplianceDashboard() {
     openItems: m.openItems,
     criticalItems: m.criticalItems,
   })), [modules]);
+
+  // Status distribution for pie chart
+  const statusDistribution = useMemo(() => {
+    const compliant = modules.filter(m => m.status === 'compliant').length;
+    const warning = modules.filter(m => m.status === 'warning').length;
+    const critical = modules.filter(m => m.status === 'critical').length;
+    return [
+      { name: 'Conformes', value: compliant, color: '#22c55e' },
+      { name: 'Atenção', value: warning, color: '#f59e0b' },
+      { name: 'Críticos', value: critical, color: '#ef4444' },
+    ].filter(d => d.value > 0);
+  }, [modules]);
+
+  // PDF Export function
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    
+    // Header with gradient-like styling
+    doc.setFillColor(30, 64, 175);
+    doc.rect(0, 0, pageWidth, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.text('COMPLIANCE DASHBOARD', pageWidth / 2, 20, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text(`Relatório Consolidado - ${new Date().toLocaleDateString('pt-BR')}`, pageWidth / 2, 32, { align: 'center' });
+    
+    // Reset text color
+    doc.setTextColor(0, 0, 0);
+    
+    // Overall Score
+    doc.setFontSize(16);
+    doc.text('Score Geral de Compliance', 14, 55);
+    doc.setFontSize(32);
+    const overallScore = modules.length > 0 
+      ? Math.round(modules.reduce((sum, m) => sum + m.score, 0) / modules.length)
+      : 0;
+    doc.setTextColor(overallScore >= 85 ? 34 : overallScore >= 60 ? 245 : 239, 
+                     overallScore >= 85 ? 197 : overallScore >= 60 ? 158 : 68, 
+                     overallScore >= 85 ? 94 : overallScore >= 60 ? 11 : 68);
+    doc.text(`${overallScore}%`, 14, 72);
+    
+    // Status summary
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(12);
+    const compliant = modules.filter(m => m.status === 'compliant').length;
+    const warning = modules.filter(m => m.status === 'warning').length;
+    const critical = modules.filter(m => m.status === 'critical').length;
+    doc.text(`Conformes: ${compliant} | Atenção: ${warning} | Críticos: ${critical}`, 14, 82);
+    
+    // Module details table
+    doc.setFontSize(14);
+    doc.text('Detalhes por Módulo', 14, 100);
+    
+    let yPos = 110;
+    doc.setFontSize(10);
+    
+    // Table header
+    doc.setFillColor(240, 240, 240);
+    doc.rect(14, yPos - 6, pageWidth - 28, 10, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.text('Módulo', 16, yPos);
+    doc.text('Score', 60, yPos);
+    doc.text('Status', 85, yPos);
+    doc.text('Itens Abertos', 115, yPos);
+    doc.text('Críticos', 150, yPos);
+    doc.text('Última Auditoria', 175, yPos);
+    
+    yPos += 10;
+    doc.setFont('helvetica', 'normal');
+    
+    modules.forEach((module) => {
+      doc.text(module.shortName, 16, yPos);
+      doc.text(`${module.score}%`, 60, yPos);
+      doc.text(module.status === 'compliant' ? 'OK' : module.status === 'warning' ? 'Atenção' : 'Crítico', 85, yPos);
+      doc.text(String(module.openItems), 115, yPos);
+      doc.text(String(module.criticalItems), 150, yPos);
+      doc.text(module.lastAudit ? new Date(module.lastAudit).toLocaleDateString('pt-BR') : 'N/A', 175, yPos);
+      yPos += 8;
+    });
+    
+    // Historical trend summary
+    yPos += 10;
+    doc.setFontSize(14);
+    doc.text('Tendência Histórica (6 Meses)', 14, yPos);
+    yPos += 10;
+    doc.setFontSize(10);
+    historicalData.forEach((data, index) => {
+      doc.text(`${data.month}: MLC ${data.MLC}% | PEOTRAM ${data.PEOTRAM}% | PEO-DP ${data['PEO-DP']}% | SGSO ${data.SGSO}%`, 16, yPos);
+      yPos += 6;
+    });
+    
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(128, 128, 128);
+    doc.text(`Gerado por Nautilus One - ${new Date().toLocaleString('pt-BR')}`, pageWidth / 2, 285, { align: 'center' });
+    
+    doc.save(`compliance-dashboard-${new Date().toISOString().split('T')[0]}.pdf`);
+    toast.success("PDF exportado", { description: "Relatório de compliance salvo com sucesso" });
+  };
 
   const handleRefresh = async () => {
     await refetch();
@@ -225,7 +361,7 @@ export function UnifiedComplianceDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Header - Inspired by MLC Inspection design */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -236,7 +372,21 @@ export function UnifiedComplianceDashboard() {
             Visão consolidada em tempo real • Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => setShowAlerts(!showAlerts)}
+            className="relative"
+          >
+            {alerts.length > 0 ? <BellRing className="h-4 w-4 mr-2 text-red-500" /> : <Bell className="h-4 w-4 mr-2" />}
+            Alertas
+            {alerts.length > 0 && (
+              <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                {alerts.length}
+              </Badge>
+            )}
+          </Button>
           <Button 
             variant={activeView === 'cards' ? 'default' : 'outline'} 
             size="sm"
@@ -253,11 +403,92 @@ export function UnifiedComplianceDashboard() {
             <BarChart3 className="h-4 w-4 mr-2" />
             Gráficos
           </Button>
+          <Button onClick={handleExportPDF} variant="outline" size="sm">
+            <Download className="h-4 w-4 mr-2" />
+            PDF
+          </Button>
           <Button onClick={handleRefresh} variant="outline" size="sm">
             <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
         </div>
+      </div>
+
+      {/* Alerts Panel */}
+      {showAlerts && (
+        <Card className="border-red-500/30 bg-red-500/5">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2 text-red-500">
+                <BellRing className="h-5 w-5" />
+                Alertas de Compliance ({alerts.length})
+              </CardTitle>
+              <Button variant="ghost" size="sm" onClick={clearAlerts}>
+                Limpar
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {alerts.length > 0 ? (
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {alerts.map(alert => (
+                  <div key={alert.id} className="flex items-center justify-between p-2 rounded bg-background border">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className={`h-4 w-4 ${alert.type === 'critical' ? 'text-red-500' : 'text-yellow-500'}`} />
+                      <span className="text-sm">{alert.message}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {alert.timestamp.toLocaleTimeString('pt-BR')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                Nenhum alerta ativo. O sistema monitora mudanças críticas em tempo real.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Quick Stats Bar - Inspired by MLC design */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <Card className="p-3 flex items-center gap-3">
+          <FileText className="h-5 w-5 text-blue-500" />
+          <div>
+            <div className="text-lg font-bold">{modules.reduce((sum, m) => sum + m.totalItems, 0)}</div>
+            <p className="text-xs text-muted-foreground">Itens Totais</p>
+          </div>
+        </Card>
+        <Card className="p-3 flex items-center gap-3">
+          <Ship className="h-5 w-5 text-cyan-500" />
+          <div>
+            <div className="text-lg font-bold">{modules.length}</div>
+            <p className="text-xs text-muted-foreground">Módulos Ativos</p>
+          </div>
+        </Card>
+        <Card className="p-3 flex items-center gap-3">
+          <CheckCircle className="h-5 w-5 text-green-500" />
+          <div>
+            <div className="text-lg font-bold text-green-500">{compliantCount}</div>
+            <p className="text-xs text-muted-foreground">Conformes</p>
+          </div>
+        </Card>
+        <Card className="p-3 flex items-center gap-3">
+          <AlertTriangle className="h-5 w-5 text-yellow-500" />
+          <div>
+            <div className="text-lg font-bold text-yellow-500">{modules.reduce((sum, m) => sum + m.openItems, 0)}</div>
+            <p className="text-xs text-muted-foreground">Pendências</p>
+          </div>
+        </Card>
+        <Card className="p-3 flex items-center gap-3">
+          <XCircle className="h-5 w-5 text-red-500" />
+          <div>
+            <div className="text-lg font-bold text-red-500">{modules.reduce((sum, m) => sum + m.criticalItems, 0)}</div>
+            <p className="text-xs text-muted-foreground">Críticos</p>
+          </div>
+        </Card>
       </div>
 
       {/* Overall Score Card */}
@@ -275,21 +506,45 @@ export function UnifiedComplianceDashboard() {
               <Progress value={overallScore} className="mt-3 h-2" />
             </div>
             
-            <div className="md:col-span-3 grid grid-cols-3 gap-4">
-              <div className="text-center p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-green-500">{compliantCount}</div>
-                <p className="text-xs text-muted-foreground">Conformes</p>
+            <div className="md:col-span-2">
+              {/* Mini pie chart for status distribution */}
+              <div className="h-32">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={statusDistribution}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={30}
+                      outerRadius={50}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {statusDistribution.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-              <div className="text-center p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                <AlertTriangle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-yellow-500">{warningCount}</div>
-                <p className="text-xs text-muted-foreground">Atenção</p>
+            </div>
+            
+            <div className="md:col-span-1 flex flex-col justify-center gap-2">
+              <div className="flex items-center justify-between p-2 rounded bg-green-500/10">
+                <span className="text-sm">Meta</span>
+                <Badge variant="outline">85%</Badge>
               </div>
-              <div className="text-center p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-                <XCircle className="h-8 w-8 text-red-500 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-red-500">{criticalCount}</div>
-                <p className="text-xs text-muted-foreground">Críticos</p>
+              <div className="flex items-center justify-between p-2 rounded bg-muted">
+                <span className="text-sm">Atual</span>
+                <Badge variant={overallScore >= 85 ? 'default' : 'secondary'}>{overallScore}%</Badge>
+              </div>
+              <div className="flex items-center justify-between p-2 rounded bg-muted">
+                <span className="text-sm">Diferença</span>
+                <Badge variant={overallScore >= 85 ? 'default' : 'destructive'}>
+                  {overallScore >= 85 ? '+' : ''}{overallScore - 85}%
+                </Badge>
               </div>
             </div>
           </div>
