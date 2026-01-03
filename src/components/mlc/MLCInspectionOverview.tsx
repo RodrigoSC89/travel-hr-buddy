@@ -1,7 +1,7 @@
 /**
  * MLC Inspection Overview Component
  * Inspired by professional maritime inspection dashboard design
- * Features: World map, quick stats, inspection details, findings table
+ * Features: Interactive Mapbox map, quick stats, inspection details, findings table
  */
 
 import React, { useState } from 'react';
@@ -14,10 +14,12 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ComplianceInspectionMap } from '@/components/compliance/ComplianceInspectionMap';
+import { useCompliancePushNotifications } from '@/hooks/use-compliance-push-notifications';
 import { 
   Ship, MapPin, Calendar, User, Flag, FileText, Plus,
   CheckCircle, XCircle, AlertTriangle, Clock, ChevronDown,
-  Globe, Users, ClipboardCheck, FileCheck, MoreHorizontal
+  Globe, Users, ClipboardCheck, FileCheck, MoreHorizontal, Bell, BellOff
 } from 'lucide-react';
 
 interface Finding {
@@ -82,6 +84,15 @@ export function MLCInspectionOverview({
     crewList: true,
     healthSafetyManual: true,
   });
+  
+  // Push notifications hook
+  const { 
+    isSupported: pushSupported, 
+    isSubscribed, 
+    isLoading: pushLoading, 
+    subscribe: subscribePush,
+    sendTestNotification 
+  } = useCompliancePushNotifications();
 
   // Survey results (mock data)
   const surveyResults = {
@@ -120,6 +131,26 @@ export function MLCInspectionOverview({
 
   return (
     <div className="space-y-6">
+      {/* Push Notifications Banner */}
+      {pushSupported && !isSubscribed && (
+        <Card className="p-4 bg-primary/5 border-primary/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Bell className="h-5 w-5 text-primary" />
+              <div>
+                <p className="font-medium">Ativar Alertas de Compliance</p>
+                <p className="text-xs text-muted-foreground">
+                  Receba notificações push mesmo quando não estiver na página
+                </p>
+              </div>
+            </div>
+            <Button onClick={subscribePush} disabled={pushLoading} size="sm">
+              {pushLoading ? 'Ativando...' : 'Ativar Notificações'}
+            </Button>
+          </div>
+        </Card>
+      )}
+
       {/* Quick Stats Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-3 flex items-center gap-3 bg-primary/5 border-primary/20">
@@ -152,82 +183,46 @@ export function MLCInspectionOverview({
         </Card>
       </div>
 
-      {/* Inspection Overview with Map */}
-      <Card>
-        <CardHeader className="pb-2 border-b">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Globe className="h-4 w-4" />
-            INSPECTION OVERVIEW
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="pt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* World Map Placeholder */}
-            <div className="relative h-48 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <Globe className="h-12 w-12 text-blue-500/50 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">Inspection Locations</p>
-                </div>
-              </div>
-              {/* Map pins */}
-              <div className="absolute top-1/4 left-1/3">
-                <MapPin className="h-5 w-5 text-primary fill-primary/20" />
-              </div>
-              <div className="absolute top-1/2 left-1/2">
-                <MapPin className="h-5 w-5 text-green-500 fill-green-500/20" />
-              </div>
-              <div className="absolute bottom-1/3 right-1/4">
-                <MapPin className="h-5 w-5 text-orange-500 fill-orange-500/20" />
-              </div>
-              {/* Dropdown overlay */}
-              <div className="absolute top-2 right-2">
-                <Select defaultValue="upcoming">
-                  <SelectTrigger className="w-40 h-8 text-xs bg-background/80 backdrop-blur">
-                    <SelectValue placeholder="View" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="upcoming">Upcoming Inspections</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {/* Stats on map */}
-              <div className="absolute bottom-2 left-2 text-xs space-y-1">
-                <div><span className="font-semibold">20</span> Scheduled</div>
-                <div><span className="font-semibold">10</span> Completed</div>
-                <div><span className="font-semibold">2</span> Reports Pending</div>
-              </div>
-            </div>
+      {/* Interactive Mapbox Map */}
+      <ComplianceInspectionMap 
+        height="h-80"
+        showControls={true}
+        onVesselClick={(vessel) => {
+          console.log('Vessel clicked:', vessel);
+        }}
+      />
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-2 gap-4">
-              <Card className="p-4 flex items-center gap-3">
-                <Calendar className="h-5 w-5 text-blue-500" />
-                <div>
-                  <div className="text-2xl font-bold">{stats.upcomingInspections}</div>
-                  <p className="text-xs text-muted-foreground">Upcoming Inspections</p>
-                </div>
-              </Card>
-              <Card className="p-4 flex items-center gap-3">
-                <ClipboardCheck className="h-5 w-5 text-green-500" />
-                <div>
-                  <div className="text-2xl font-bold">{stats.completedInspections}</div>
-                  <p className="text-xs text-muted-foreground">Completed Inspections</p>
-                </div>
-              </Card>
-              <Card className="p-4 flex items-center gap-3 col-span-2">
-                <FileText className="h-5 w-5 text-orange-500" />
-                <div>
-                  <div className="text-2xl font-bold">{stats.reportsPending}</div>
-                  <p className="text-xs text-muted-foreground">Pending Reports</p>
-                </div>
-              </Card>
-            </div>
+      {/* Stats Cards Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="p-4 flex items-center gap-3">
+          <Calendar className="h-5 w-5 text-blue-500" />
+          <div>
+            <div className="text-2xl font-bold">{stats.upcomingInspections}</div>
+            <p className="text-xs text-muted-foreground">Próximas Inspeções</p>
           </div>
-        </CardContent>
-      </Card>
+        </Card>
+        <Card className="p-4 flex items-center gap-3">
+          <ClipboardCheck className="h-5 w-5 text-green-500" />
+          <div>
+            <div className="text-2xl font-bold">{stats.completedInspections}</div>
+            <p className="text-xs text-muted-foreground">Concluídas</p>
+          </div>
+        </Card>
+        <Card className="p-4 flex items-center gap-3">
+          <FileText className="h-5 w-5 text-orange-500" />
+          <div>
+            <div className="text-2xl font-bold">{stats.reportsPending}</div>
+            <p className="text-xs text-muted-foreground">Relatórios Pendentes</p>
+          </div>
+        </Card>
+        <Card className="p-4 flex items-center gap-3">
+          <Bell className="h-5 w-5 text-primary" />
+          <div>
+            <div className="text-2xl font-bold">{isSubscribed ? '✓' : '—'}</div>
+            <p className="text-xs text-muted-foreground">Push Ativo</p>
+          </div>
+        </Card>
+      </div>
 
       {/* Inspection Details */}
       <Card>
