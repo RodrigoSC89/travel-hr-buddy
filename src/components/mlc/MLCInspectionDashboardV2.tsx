@@ -27,6 +27,8 @@ import { MLCVoiceChat } from './MLCVoiceChat';
 import { MLCReportGenerator } from './MLCReportGenerator';
 import { MLCOfflineIndicator } from './MLCOfflineIndicator';
 import { MLCInspectionOverview } from './MLCInspectionOverview';
+import { ComplianceMapWithGeofencing } from '@/components/compliance/ComplianceMapWithGeofencing';
+import { PushNotificationSettingsPanel } from '@/components/notifications/PushNotificationSettingsPanel';
 import { useMLCOffline } from '@/hooks/use-mlc-offline';
 
 type ChecklistStatus = 'compliant' | 'non-compliant' | 'na' | null;
@@ -289,7 +291,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-6 w-full">
+        <TabsList className="grid grid-cols-7 w-full">
           <TabsTrigger value="overview" className="gap-2">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Visão Geral</span>
@@ -314,103 +316,164 @@ export const MLCInspectionDashboardV2: React.FC = () => {
             <FileText className="h-4 w-4" />
             <span className="hidden sm:inline">Relatório</span>
           </TabsTrigger>
+          <TabsTrigger value="settings" className="gap-2">
+            <Settings className="h-4 w-4" />
+            <span className="hidden sm:inline">Config</span>
+          </TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab - New Design Inspired by Image */}
-        <TabsContent value="overview" className="space-y-4">
-          {!inspectionStarted ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* About MLC */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Scale className="h-5 w-5 text-blue-500" />
-                    Sobre a MLC 2006
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    A Convenção do Trabalho Marítimo (MLC) 2006 da OIT estabelece direitos e 
-                    condições mínimas de trabalho para marítimos, garantindo trabalho digno e 
-                    concorrência justa entre armadores.
-                  </p>
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Emendas 2022 incluídas:</h4>
-                    <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
-                      <li>Proteção reforçada contra taxas de recrutamento</li>
-                      <li>Garantias financeiras atualizadas</li>
-                      <li>Requisitos de bem-estar melhorados</li>
-                      <li>Procedimentos de reclamação aprimorados</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
+        {/* Overview Tab - Always show map and dashboard */}
+        <TabsContent value="overview" className="space-y-6">
+          {/* Interactive Map with Geofencing - Always visible */}
+          <ComplianceMapWithGeofencing 
+            height="h-[400px]"
+            showControls={true}
+            onVesselClick={(vessel) => {
+              toast.info(`Embarcação: ${vessel.vesselName}`, {
+                description: `Status: ${vessel.status} | Próxima inspeção: ${new Date(vessel.dueDate).toLocaleDateString('pt-BR')}`
+              });
+            }}
+            onGeofenceAlert={(vessel, geofence) => {
+              toast.warning(`${vessel.vesselName} entrou na zona: ${geofence.name}`, {
+                description: geofence.type === 'inspection-required' 
+                  ? 'Inspeção MLC obrigatória nesta região'
+                  : 'Atenção: área com restrições'
+              });
+            }}
+          />
 
-              {/* Start Inspection Form */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Ship className="h-5 w-5 text-blue-500" />
-                    Nova Inspeção MLC
-                  </CardTitle>
-                  <CardDescription>
-                    Preencha os dados para iniciar a inspeção
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Nome da Embarcação *</label>
-                      <Input
-                        placeholder="M/V Example"
-                        value={inspectionData.vesselName}
-                        onChange={(e) => setInspectionData(prev => ({ ...prev, vesselName: e.target.value }))}
-                      />
+          {/* Start Inspection or Continue */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* About MLC */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Scale className="h-5 w-5 text-blue-500" />
+                  Sobre a MLC 2006
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  A Convenção do Trabalho Marítimo (MLC) 2006 da OIT estabelece direitos e 
+                  condições mínimas de trabalho para marítimos, garantindo trabalho digno e 
+                  concorrência justa entre armadores.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Emendas 2022 incluídas:</h4>
+                  <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
+                    <li>Proteção reforçada contra taxas de recrutamento</li>
+                    <li>Garantias financeiras atualizadas</li>
+                    <li>Requisitos de bem-estar melhorados</li>
+                    <li>Procedimentos de reclamação aprimorados</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Start Inspection Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Ship className="h-5 w-5 text-blue-500" />
+                  {inspectionStarted ? 'Inspeção em Andamento' : 'Nova Inspeção MLC'}
+                </CardTitle>
+                <CardDescription>
+                  {inspectionStarted 
+                    ? `${inspectionData.vesselName} - ${progressPercent}% concluído`
+                    : 'Preencha os dados para iniciar a inspeção'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {!inspectionStarted ? (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Nome da Embarcação *</label>
+                        <Input
+                          placeholder="M/V Example"
+                          value={inspectionData.vesselName}
+                          onChange={(e) => setInspectionData(prev => ({ ...prev, vesselName: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">IMO</label>
+                        <Input
+                          placeholder="1234567"
+                          value={inspectionData.imo}
+                          onChange={(e) => setInspectionData(prev => ({ ...prev, imo: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Bandeira</label>
+                        <Input
+                          placeholder="Estado de bandeira"
+                          value={inspectionData.flag}
+                          onChange={(e) => setInspectionData(prev => ({ ...prev, flag: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Porto</label>
+                        <Input
+                          placeholder="Porto de inspeção"
+                          value={inspectionData.port}
+                          onChange={(e) => setInspectionData(prev => ({ ...prev, port: e.target.value }))}
+                        />
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium">IMO</label>
+                      <label className="text-sm font-medium">Inspetor</label>
                       <Input
-                        placeholder="1234567"
-                        value={inspectionData.imo}
-                        onChange={(e) => setInspectionData(prev => ({ ...prev, imo: e.target.value }))}
+                        placeholder="Nome do inspetor"
+                        value={inspectionData.inspectorName}
+                        onChange={(e) => setInspectionData(prev => ({ ...prev, inspectorName: e.target.value }))}
                       />
+                    </div>
+                    <Button className="w-full" onClick={startInspection}>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Iniciar Inspeção
+                    </Button>
+                  </>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-muted-foreground">Embarcação</p>
+                        <p className="font-medium">{inspectionData.vesselName}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">IMO</p>
+                        <p className="font-medium">{inspectionData.imo || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Bandeira</p>
+                        <p className="font-medium">{inspectionData.flag || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Porto</p>
+                        <p className="font-medium">{inspectionData.port || 'N/A'}</p>
+                      </div>
+                    </div>
+                    <Progress value={progressPercent} className="h-2" />
+                    <div className="flex gap-2">
+                      <Button className="flex-1" onClick={() => setActiveTab('checklist')}>
+                        <ClipboardCheck className="h-4 w-4 mr-2" />
+                        Continuar Checklist
+                      </Button>
+                      <Button variant="outline" onClick={() => setActiveTab('report')}>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Relatório
+                      </Button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Bandeira</label>
-                      <Input
-                        placeholder="Estado de bandeira"
-                        value={inspectionData.flag}
-                        onChange={(e) => setInspectionData(prev => ({ ...prev, flag: e.target.value }))}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Porto</label>
-                      <Input
-                        placeholder="Porto de inspeção"
-                        value={inspectionData.port}
-                        onChange={(e) => setInspectionData(prev => ({ ...prev, port: e.target.value }))}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Inspetor</label>
-                    <Input
-                      placeholder="Nome do inspetor"
-                      value={inspectionData.inspectorName}
-                      onChange={(e) => setInspectionData(prev => ({ ...prev, inspectorName: e.target.value }))}
-                    />
-                  </div>
-                  <Button className="w-full" onClick={startInspection}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Iniciar Inspeção
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          ) : (
-            /* New Professional Overview Design */
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Stats if inspection started */}
+          {inspectionStarted && (
             <MLCInspectionOverview 
               vesselName={inspectionData.vesselName}
               imoNumber={inspectionData.imo}
@@ -722,6 +785,11 @@ export const MLCInspectionDashboardV2: React.FC = () => {
         {/* Report Tab */}
         <TabsContent value="report" className="space-y-4">
           <MLCReportGenerator inspectionData={inspectionData} />
+        </TabsContent>
+
+        {/* Settings Tab - Push Notifications */}
+        <TabsContent value="settings" className="space-y-4">
+          <PushNotificationSettingsPanel />
         </TabsContent>
       </Tabs>
     </div>
