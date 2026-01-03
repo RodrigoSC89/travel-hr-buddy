@@ -1,6 +1,19 @@
 project_id = "vnbptmixvwropvanyhdb"
 
 # ============================================
+# V2 MODULES AI FUNCTIONS - Added 2026-01-03
+# Unified AI chat and evidence generation for all V2 modules
+# ============================================
+
+[functions.module-ai-chat]
+verify_jwt = false
+comment = "Unified AI chat for all V2 modules - Lovable AI gateway streaming"
+
+[functions.module-generate-evidence]
+verify_jwt = false
+comment = "Unified AI evidence generator for all V2 modules - non-conformity analysis"
+
+# ============================================
 # MLC Inspection AI Functions - Added 2026-01-02
 # ============================================
 

@@ -166,6 +166,26 @@ const SafetyIMCA = lazy(() => import(/* webpackChunkName: "page-safety-imca" */ 
 const PreOVIDInspection = lazy(() => import(/* webpackChunkName: "page-pre-ovid" */ "@/pages/PreOVIDInspection"));
 const SGSOReportPage = lazy(() => import(/* webpackChunkName: "page-sgso-report" */ "@/pages/SGSOReport"));
 
+// V2 ELEVATED MODULES - PATCH V2-UPGRADE
+const VesselContractsV2 = lazy(() => import(/* webpackChunkName: "page-vessel-contracts-v2" */ "@/pages/VesselContractsV2"));
+const CharterPartyV2 = lazy(() => import(/* webpackChunkName: "page-charter-party-v2" */ "@/pages/CharterPartyV2"));
+const CargoManagementV2 = lazy(() => import(/* webpackChunkName: "page-cargo-management-v2" */ "@/pages/CargoManagementV2"));
+const PortCallOptimizationV2 = lazy(() => import(/* webpackChunkName: "page-port-call-v2" */ "@/pages/PortCallOptimizationV2"));
+const VesselCTSV2 = lazy(() => import(/* webpackChunkName: "page-vessel-cts-v2" */ "@/pages/VesselCTSV2"));
+const VesselHistoryV2 = lazy(() => import(/* webpackChunkName: "page-vessel-history-v2" */ "@/pages/VesselHistoryV2"));
+const GMUDV2 = lazy(() => import(/* webpackChunkName: "page-gmud-v2" */ "@/pages/GMUDV2"));
+const ResponsibilityMatrixV2 = lazy(() => import(/* webpackChunkName: "page-responsibility-matrix-v2" */ "@/pages/ResponsibilityMatrixV2"));
+const SafetyHumanFactorsV2 = lazy(() => import(/* webpackChunkName: "page-safety-hf-v2" */ "@/pages/SafetyHumanFactorsV2"));
+const SafetyIMCAV2 = lazy(() => import(/* webpackChunkName: "page-safety-imca-v2" */ "@/pages/SafetyIMCAV2"));
+const ISPSSecurityV2 = lazy(() => import(/* webpackChunkName: "page-isps-v2" */ "@/pages/ISPSSecurityV2"));
+const DrillSimulatorV2 = lazy(() => import(/* webpackChunkName: "page-drill-simulator-v2" */ "@/pages/DrillSimulatorV2"));
+const ComplianceOneV2 = lazy(() => import(/* webpackChunkName: "page-compliance-one-v2" */ "@/pages/ComplianceOneV2"));
+const RegulationsV2 = lazy(() => import(/* webpackChunkName: "page-regulations-v2" */ "@/pages/RegulationsV2"));
+const RiskMatrixV2 = lazy(() => import(/* webpackChunkName: "page-risk-matrix-v2" */ "@/pages/RiskMatrixV2"));
+const EvidencesV2 = lazy(() => import(/* webpackChunkName: "page-evidences-v2" */ "@/pages/EvidencesV2"));
+const DueDiligenceV2 = lazy(() => import(/* webpackChunkName: "page-due-diligence-v2" */ "@/pages/DueDiligenceV2"));
+const WhistleblowerV2 = lazy(() => import(/* webpackChunkName: "page-whistleblower-v2" */ "@/pages/WhistleblowerV2"));
+
 // Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
 const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
 
@@ -338,7 +358,7 @@ function App() {
                         {/* MMI Jobs Direct Route - PATCH 866 */}
                         <Route path="mmi-jobs" element={<MMIJobsPanel />} />
 
-                        {/* V3.2.0 Advanced Modules */}
+{/* V3.2.0 Advanced Modules */}
                         <Route path="vessel-contracts" element={<VesselContracts />} />
                         <Route path="vessel-cts" element={<VesselCTS />} />
                         <Route path="vessel-history" element={<VesselHistory />} />
@@ -348,6 +368,27 @@ function App() {
                         <Route path="safety-imca" element={<SafetyIMCA />} />
                         <Route path="pre-ovid" element={<PreOVIDInspection />} />
                         <Route path="sgso/report" element={<SGSOReportPage />} />
+                        
+                        {/* V2 ELEVATED MODULES - PATCH V2-UPGRADE */}
+                        <Route path="vessel-contracts-v2" element={<VesselContractsV2 />} />
+                        <Route path="charter-party-v2" element={<CharterPartyV2 />} />
+                        <Route path="cargo-management-v2" element={<CargoManagementV2 />} />
+                        <Route path="port-call-v2" element={<PortCallOptimizationV2 />} />
+                        <Route path="vessel-cts-v2" element={<VesselCTSV2 />} />
+                        <Route path="vessel-history-v2" element={<VesselHistoryV2 />} />
+                        <Route path="gmud-v2" element={<GMUDV2 />} />
+                        <Route path="responsibility-matrix-v2" element={<ResponsibilityMatrixV2 />} />
+                        <Route path="safety-human-factors-v2" element={<SafetyHumanFactorsV2 />} />
+                        <Route path="safety-imca-v2" element={<SafetyIMCAV2 />} />
+                        <Route path="isps-security-v2" element={<ISPSSecurityV2 />} />
+                        <Route path="drill-simulator-v2" element={<DrillSimulatorV2 />} />
+                        <Route path="compliance-one-v2" element={<ComplianceOneV2 />} />
+                        <Route path="regulations-v2" element={<RegulationsV2 />} />
+                        <Route path="risk-matrix-v2" element={<RiskMatrixV2 />} />
+                        <Route path="evidences-v2" element={<EvidencesV2 />} />
+                        <Route path="due-diligence-v2" element={<DueDiligenceV2 />} />
+                        <Route path="whistleblower-v2" element={<WhistleblowerV2 />} />
+                        
                         {/* Q1 2025 Critical Modules */}
                         <Route path="cargo-management" element={<CargoManagementPage />} />
                         <Route path="charter-party" element={<CharterPartyPage />} />
