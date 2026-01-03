@@ -537,7 +537,97 @@ The undersigned parties hereby confirm that:
     }
   };
 
-  // Send report via email
+  // Generate PDF and return base64
+  const generatePDFBase64 = async (): Promise<string> => {
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 15;
+    const contentWidth = pageWidth - (margin * 2);
+
+    // Simplified cover page for email attachment
+    pdf.setFillColor(0, 82, 147);
+    pdf.rect(0, 0, pageWidth, 60, 'F');
+    pdf.setFillColor(0, 123, 193);
+    pdf.rect(0, 55, pageWidth, 5, 'F');
+
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(24);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('MLC 2006 INSPECTION REPORT', pageWidth / 2, 25, { align: 'center' });
+    
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Maritime Labour Convention 2006 (as amended 2022)', pageWidth / 2, 38, { align: 'center' });
+    pdf.setFontSize(10);
+    pdf.text(`Generated: ${new Date().toLocaleString('pt-BR')}`, pageWidth / 2, 52, { align: 'center' });
+
+    // Vessel info
+    let y = 75;
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFillColor(245, 245, 245);
+    pdf.roundedRect(margin, y - 5, contentWidth, 45, 3, 3, 'F');
+    
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(0, 82, 147);
+    pdf.text('VESSEL INFORMATION', margin + 5, y + 5);
+    
+    y += 15;
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Vessel: ${inspectionData.vesselName || 'N/A'}`, margin + 5, y);
+    pdf.text(`IMO: ${inspectionData.imo || 'N/A'}`, pageWidth / 2, y);
+    y += 8;
+    pdf.text(`Flag: ${inspectionData.flag || 'N/A'}`, margin + 5, y);
+    pdf.text(`Port: ${inspectionData.port || 'N/A'}`, pageWidth / 2, y);
+    y += 8;
+    pdf.text(`Inspector: ${inspectionData.inspectorName || 'N/A'}`, margin + 5, y);
+    pdf.text(`Date: ${inspectionData.startDate}`, pageWidth / 2, y);
+
+    // Compliance score
+    y = 135;
+    const scoreColor = complianceScore >= 90 ? [34, 139, 34] : complianceScore >= 70 ? [255, 165, 0] : [220, 53, 69];
+    pdf.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
+    pdf.roundedRect(pageWidth / 2 - 30, y, 60, 35, 5, 5, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(28);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(`${complianceScore}%`, pageWidth / 2, y + 22, { align: 'center' });
+    pdf.setFontSize(10);
+    pdf.text('COMPLIANCE', pageWidth / 2, y + 32, { align: 'center' });
+
+    // Summary table
+    y = 185;
+    pdf.setTextColor(0, 0, 0);
+    autoTable(pdf, {
+      startY: y,
+      head: [['Metric', 'Count']],
+      body: [
+        ['Total Items', totalItems.toString()],
+        ['Compliant', compliantItems.toString()],
+        ['Non-Compliant', nonCompliantItems.toString()],
+        ['N/A', naItems.toString()],
+      ],
+      theme: 'grid',
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 82, 147] },
+      margin: { left: margin, right: margin },
+    });
+
+    // Footer
+    pdf.setFontSize(8);
+    pdf.setTextColor(100, 100, 100);
+    pdf.text('MLC 2006 Inspection Report - Nautilus One Maritime HR Platform', margin, pageHeight - 10);
+    pdf.text('Page 1 of 1', pageWidth - margin, pageHeight - 10, { align: 'right' });
+
+    // Return base64 without data URI prefix
+    const pdfBase64 = pdf.output('datauristring').split(',')[1];
+    return pdfBase64;
+  };
+
+  // Send report via email with PDF attachment
   const sendReportByEmail = async () => {
     if (!shipownerEmail) {
       toast.error('Informe o email do armador');
@@ -547,10 +637,15 @@ The undersigned parties hereby confirm that:
     setIsSendingEmail(true);
 
     try {
+      // Generate PDF first
+      toast.info('Gerando PDF para anexo...');
+      const pdfBase64 = await generatePDFBase64();
+      const filename = `MLC-Report-${inspectionData.vesselName?.replace(/\s+/g, '-') || 'Vessel'}-${new Date().toISOString().split('T')[0]}.pdf`;
+
       // Build non-conformities list
       const ncsFromAnswers = Object.entries(inspectionData.answers)
         .filter(([_, answer]) => answer.status === 'non-compliant')
-        .map(([itemId, answer]) => {
+        .map(([itemId]) => {
           const item = getItemById(itemId);
           return {
             itemId,
@@ -567,8 +662,8 @@ The undersigned parties hereby confirm that:
         .map(e => e.trim())
         .filter(e => e.includes('@'));
 
-      // Call edge function
-      const { data, error } = await supabase.functions.invoke('send-mlc-report', {
+      // Call edge function with PDF attachment
+      const { error } = await supabase.functions.invoke('send-mlc-report', {
         body: {
           shipownerEmail,
           shipownerName: shipownerName || 'Ship Owner',
@@ -587,12 +682,15 @@ The undersigned parties hereby confirm that:
           naItems,
           nonConformities: ncsFromAnswers,
           additionalNotes: executiveSummary || undefined,
+          // PDF attachment
+          pdfAttachment: pdfBase64,
+          pdfFilename: filename,
         },
       });
 
       if (error) throw error;
 
-      toast.success('Relatório enviado por email!', {
+      toast.success('Relatório enviado por email com PDF anexo!', {
         description: `Enviado para ${shipownerEmail}${flagStateEmail ? ` e ${flagStateEmail}` : ''}`,
       });
 
