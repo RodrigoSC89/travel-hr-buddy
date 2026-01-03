@@ -7,13 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, AlertTriangle, FileCheck, Users, 
   TrendingUp, Clock, Brain, ChevronRight,
-  CheckCircle, XCircle, AlertCircle
+  CheckCircle, XCircle, AlertCircle, LayoutDashboard
 } from "lucide-react";
 import { useComplianceDashboardStats, useComplianceRisks, useComplianceRecommendations } from "../hooks/useComplianceData";
 import { Link } from "react-router-dom";
+import { UnifiedComplianceDashboard } from "@/components/compliance/UnifiedComplianceDashboard";
 
 export default function ComplianceDashboard() {
   const { data: stats, isLoading: statsLoading } = useComplianceDashboardStats();
@@ -62,6 +64,25 @@ export default function ComplianceDashboard() {
           </Button>
         </div>
       </div>
+
+      {/* Tabs for different views */}
+      <Tabs defaultValue="unified" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 max-w-md">
+          <TabsTrigger value="unified" className="flex items-center gap-2">
+            <LayoutDashboard className="h-4 w-4" />
+            Status Unificado
+          </TabsTrigger>
+          <TabsTrigger value="grc" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            GRC ISO 37301
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="unified" className="mt-6">
+          <UnifiedComplianceDashboard />
+        </TabsContent>
+
+        <TabsContent value="grc" className="mt-6 space-y-6">
 
       {/* Compliance Score Card */}
       <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
@@ -279,8 +300,10 @@ export default function ComplianceDashboard() {
               </Link>
             </Button>
           </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
