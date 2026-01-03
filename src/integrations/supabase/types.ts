@@ -9761,6 +9761,78 @@ export type Database = {
           },
         ]
       }
+      drill_simulations: {
+        Row: {
+          actual_date: string | null
+          ai_analysis: Json | null
+          coordinator_id: string | null
+          created_at: string
+          description: string | null
+          drill_code: string
+          drill_status: string | null
+          drill_type: string
+          duration_minutes: number | null
+          id: string
+          lessons_learned: string | null
+          objectives: string[] | null
+          participants_count: number | null
+          pass_fail: string | null
+          results: Json | null
+          scenario: string | null
+          scheduled_date: string | null
+          score: number | null
+          title: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_date?: string | null
+          ai_analysis?: Json | null
+          coordinator_id?: string | null
+          created_at?: string
+          description?: string | null
+          drill_code: string
+          drill_status?: string | null
+          drill_type: string
+          duration_minutes?: number | null
+          id?: string
+          lessons_learned?: string | null
+          objectives?: string[] | null
+          participants_count?: number | null
+          pass_fail?: string | null
+          results?: Json | null
+          scenario?: string | null
+          scheduled_date?: string | null
+          score?: number | null
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_date?: string | null
+          ai_analysis?: Json | null
+          coordinator_id?: string | null
+          created_at?: string
+          description?: string | null
+          drill_code?: string
+          drill_status?: string | null
+          drill_type?: string
+          duration_minutes?: number | null
+          id?: string
+          lessons_learned?: string | null
+          objectives?: string[] | null
+          participants_count?: number | null
+          pass_fail?: string | null
+          results?: Json | null
+          scenario?: string | null
+          scheduled_date?: string | null
+          score?: number | null
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       drone_missions: {
         Row: {
           actual_trajectory: Json | null
@@ -9981,6 +10053,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      due_diligence_reports: {
+        Row: {
+          adverse_media: Json | null
+          ai_analysis: Json | null
+          created_at: string
+          findings: Json | null
+          id: string
+          pep_check: Json | null
+          recommendations: string | null
+          report_code: string
+          report_status: string | null
+          report_type: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_level: string | null
+          risk_score: number | null
+          sanctions_check: Json | null
+          screening_sources: string[] | null
+          subject_details: Json | null
+          subject_id: string | null
+          subject_name: string
+          subject_type: string
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          adverse_media?: Json | null
+          ai_analysis?: Json | null
+          created_at?: string
+          findings?: Json | null
+          id?: string
+          pep_check?: Json | null
+          recommendations?: string | null
+          report_code: string
+          report_status?: string | null
+          report_type: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_level?: string | null
+          risk_score?: number | null
+          sanctions_check?: Json | null
+          screening_sources?: string[] | null
+          subject_details?: Json | null
+          subject_id?: string | null
+          subject_name: string
+          subject_type: string
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          adverse_media?: Json | null
+          ai_analysis?: Json | null
+          created_at?: string
+          findings?: Json | null
+          id?: string
+          pep_check?: Json | null
+          recommendations?: string | null
+          report_code?: string
+          report_status?: string | null
+          report_type?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_level?: string | null
+          risk_score?: number | null
+          sanctions_check?: Json | null
+          screening_sources?: string[] | null
+          subject_details?: Json | null
+          subject_id?: string | null
+          subject_name?: string
+          subject_type?: string
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: []
       }
       ecdis_data: {
         Row: {
@@ -10344,6 +10491,75 @@ export type Database = {
           url?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      evidences: {
+        Row: {
+          ai_analysis: Json | null
+          ai_generated: boolean | null
+          collected_at: string
+          collected_by: string | null
+          created_at: string
+          description: string | null
+          evidence_code: string
+          evidence_status: string | null
+          evidence_type: string
+          file_name: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          module_source: string
+          related_audit_id: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          ai_generated?: boolean | null
+          collected_at?: string
+          collected_by?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_code: string
+          evidence_status?: string | null
+          evidence_type: string
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          module_source: string
+          related_audit_id?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          ai_generated?: boolean | null
+          collected_at?: string
+          collected_by?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_code?: string
+          evidence_status?: string | null
+          evidence_type?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          module_source?: string
+          related_audit_id?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -11085,6 +11301,59 @@ export type Database = {
           },
         ]
       }
+      geofence_zones: {
+        Row: {
+          active: boolean
+          center_lat: number
+          center_lng: number
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+          organization_id: string | null
+          radius_km: number
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          center_lat: number
+          center_lng: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          organization_id?: string | null
+          radius_km?: number
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          center_lat?: number
+          center_lng?: number
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          organization_id?: string | null
+          radius_km?: number
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geofence_zones_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       global_knowledge: {
         Row: {
           aggregated_data: Json
@@ -11118,6 +11387,72 @@ export type Database = {
           source_count?: number | null
           updated_at?: string | null
           version?: number | null
+        }
+        Relationships: []
+      }
+      gmud_changes: {
+        Row: {
+          actual_end: string | null
+          actual_start: string | null
+          ai_analysis: Json | null
+          approver_id: string | null
+          change_number: string
+          change_status: string
+          change_type: string
+          created_at: string
+          description: string | null
+          id: string
+          impact_assessment: string | null
+          planned_end: string | null
+          planned_start: string | null
+          priority: string
+          requester_id: string | null
+          risk_level: string | null
+          rollback_plan: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          actual_end?: string | null
+          actual_start?: string | null
+          ai_analysis?: Json | null
+          approver_id?: string | null
+          change_number: string
+          change_status?: string
+          change_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          impact_assessment?: string | null
+          planned_end?: string | null
+          planned_start?: string | null
+          priority?: string
+          requester_id?: string | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          actual_end?: string | null
+          actual_start?: string | null
+          ai_analysis?: Json | null
+          approver_id?: string | null
+          change_number?: string
+          change_status?: string
+          change_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          impact_assessment?: string | null
+          planned_end?: string | null
+          planned_start?: string | null
+          priority?: string
+          requester_id?: string | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -15016,6 +15351,333 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mlc_evidence: {
+        Row: {
+          captured_at: string | null
+          captured_by: string | null
+          created_at: string
+          description: string | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          file_url: string
+          geolocation: Json | null
+          id: string
+          inspection_id: string
+          item_id: string | null
+          nc_id: string | null
+        }
+        Insert: {
+          captured_at?: string | null
+          captured_by?: string | null
+          created_at?: string
+          description?: string | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url: string
+          geolocation?: Json | null
+          id?: string
+          inspection_id: string
+          item_id?: string | null
+          nc_id?: string | null
+        }
+        Update: {
+          captured_at?: string | null
+          captured_by?: string | null
+          created_at?: string
+          description?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string
+          geolocation?: Json | null
+          id?: string
+          inspection_id?: string
+          item_id?: string | null
+          nc_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_evidence_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "mlc_inspections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mlc_evidence_nc_id_fkey"
+            columns: ["nc_id"]
+            isOneToOne: false
+            referencedRelation: "mlc_non_conformities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mlc_inspection_items: {
+        Row: {
+          ai_assisted: boolean | null
+          answered_at: string | null
+          created_at: string
+          evidence_notes: string | null
+          id: string
+          inspection_id: string
+          item_id: string
+          observation: string | null
+          regulation_code: string
+          status: string | null
+          title_number: number
+          updated_at: string
+        }
+        Insert: {
+          ai_assisted?: boolean | null
+          answered_at?: string | null
+          created_at?: string
+          evidence_notes?: string | null
+          id?: string
+          inspection_id: string
+          item_id: string
+          observation?: string | null
+          regulation_code: string
+          status?: string | null
+          title_number: number
+          updated_at?: string
+        }
+        Update: {
+          ai_assisted?: boolean | null
+          answered_at?: string | null
+          created_at?: string
+          evidence_notes?: string | null
+          id?: string
+          inspection_id?: string
+          item_id?: string
+          observation?: string | null
+          regulation_code?: string
+          status?: string | null
+          title_number?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_inspection_items_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "mlc_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mlc_inspections: {
+        Row: {
+          compliance_score: number | null
+          compliant_items: number | null
+          created_at: string
+          end_date: string | null
+          gross_tonnage: number | null
+          id: string
+          inspection_type: string | null
+          inspector_name: string | null
+          inspector_organization: string | null
+          na_items: number | null
+          non_compliant_items: number | null
+          notes: string | null
+          port: string | null
+          port_country: string | null
+          start_date: string
+          status: string | null
+          total_items: number | null
+          updated_at: string
+          user_id: string | null
+          vessel_flag: string | null
+          vessel_imo: string | null
+          vessel_name: string
+          vessel_type: string | null
+        }
+        Insert: {
+          compliance_score?: number | null
+          compliant_items?: number | null
+          created_at?: string
+          end_date?: string | null
+          gross_tonnage?: number | null
+          id?: string
+          inspection_type?: string | null
+          inspector_name?: string | null
+          inspector_organization?: string | null
+          na_items?: number | null
+          non_compliant_items?: number | null
+          notes?: string | null
+          port?: string | null
+          port_country?: string | null
+          start_date?: string
+          status?: string | null
+          total_items?: number | null
+          updated_at?: string
+          user_id?: string | null
+          vessel_flag?: string | null
+          vessel_imo?: string | null
+          vessel_name: string
+          vessel_type?: string | null
+        }
+        Update: {
+          compliance_score?: number | null
+          compliant_items?: number | null
+          created_at?: string
+          end_date?: string | null
+          gross_tonnage?: number | null
+          id?: string
+          inspection_type?: string | null
+          inspector_name?: string | null
+          inspector_organization?: string | null
+          na_items?: number | null
+          non_compliant_items?: number | null
+          notes?: string | null
+          port?: string | null
+          port_country?: string | null
+          start_date?: string
+          status?: string | null
+          total_items?: number | null
+          updated_at?: string
+          user_id?: string | null
+          vessel_flag?: string | null
+          vessel_imo?: string | null
+          vessel_name?: string
+          vessel_type?: string | null
+        }
+        Relationships: []
+      }
+      mlc_non_conformities: {
+        Row: {
+          ai_confidence: number | null
+          closed_at: string | null
+          closed_by: string | null
+          corrective_action: string | null
+          created_at: string
+          deadline: string | null
+          id: string
+          inspection_id: string
+          item_id: string
+          legal_reference: string | null
+          mlc_standard: string | null
+          nc_type: string
+          observed_condition: string
+          responsible_party: string | null
+          risk_assessment: string | null
+          severity: string | null
+          status: string | null
+          technical_analysis: string | null
+          updated_at: string
+        }
+        Insert: {
+          ai_confidence?: number | null
+          closed_at?: string | null
+          closed_by?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          deadline?: string | null
+          id?: string
+          inspection_id: string
+          item_id: string
+          legal_reference?: string | null
+          mlc_standard?: string | null
+          nc_type: string
+          observed_condition: string
+          responsible_party?: string | null
+          risk_assessment?: string | null
+          severity?: string | null
+          status?: string | null
+          technical_analysis?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ai_confidence?: number | null
+          closed_at?: string | null
+          closed_by?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          deadline?: string | null
+          id?: string
+          inspection_id?: string
+          item_id?: string
+          legal_reference?: string | null
+          mlc_standard?: string | null
+          nc_type?: string
+          observed_condition?: string
+          responsible_party?: string | null
+          risk_assessment?: string | null
+          severity?: string | null
+          status?: string | null
+          technical_analysis?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_non_conformities_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "mlc_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mlc_reports: {
+        Row: {
+          action_plan_json: Json | null
+          created_at: string
+          executive_summary: string | null
+          file_format: string | null
+          file_url: string | null
+          findings_json: Json | null
+          generated_at: string
+          id: string
+          inspection_id: string
+          inspector_signature: string | null
+          master_signature: string | null
+          report_number: string | null
+          report_type: string | null
+          signed_at: string | null
+        }
+        Insert: {
+          action_plan_json?: Json | null
+          created_at?: string
+          executive_summary?: string | null
+          file_format?: string | null
+          file_url?: string | null
+          findings_json?: Json | null
+          generated_at?: string
+          id?: string
+          inspection_id: string
+          inspector_signature?: string | null
+          master_signature?: string | null
+          report_number?: string | null
+          report_type?: string | null
+          signed_at?: string | null
+        }
+        Update: {
+          action_plan_json?: Json | null
+          created_at?: string
+          executive_summary?: string | null
+          file_format?: string | null
+          file_url?: string | null
+          findings_json?: Json | null
+          generated_at?: string
+          id?: string
+          inspection_id?: string
+          inspector_signature?: string | null
+          master_signature?: string | null
+          report_number?: string | null
+          report_type?: string | null
+          signed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_reports_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "mlc_inspections"
             referencedColumns: ["id"]
           },
         ]
@@ -19766,6 +20428,81 @@ export type Database = {
           },
         ]
       }
+      regulations: {
+        Row: {
+          ai_summary: Json | null
+          applies_to: Json | null
+          authority: string
+          category: string
+          compliance_deadline: string | null
+          created_at: string
+          description: string | null
+          documentation_required: string[] | null
+          effective_date: string | null
+          full_text: string | null
+          id: string
+          is_mandatory: boolean | null
+          penalties: string | null
+          reg_code: string
+          reg_status: string | null
+          related_regulations: string[] | null
+          requirements: Json | null
+          revision_date: string | null
+          source_url: string | null
+          subcategory: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_summary?: Json | null
+          applies_to?: Json | null
+          authority: string
+          category: string
+          compliance_deadline?: string | null
+          created_at?: string
+          description?: string | null
+          documentation_required?: string[] | null
+          effective_date?: string | null
+          full_text?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          penalties?: string | null
+          reg_code: string
+          reg_status?: string | null
+          related_regulations?: string[] | null
+          requirements?: Json | null
+          revision_date?: string | null
+          source_url?: string | null
+          subcategory?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_summary?: Json | null
+          applies_to?: Json | null
+          authority?: string
+          category?: string
+          compliance_deadline?: string | null
+          created_at?: string
+          description?: string | null
+          documentation_required?: string[] | null
+          effective_date?: string | null
+          full_text?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          penalties?: string | null
+          reg_code?: string
+          reg_status?: string | null
+          related_regulations?: string[] | null
+          requirements?: Json | null
+          revision_date?: string | null
+          source_url?: string | null
+          subcategory?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       rendered_documents: {
         Row: {
           created_at: string | null
@@ -20466,6 +21203,60 @@ export type Database = {
           risk_intensity?: number
           updated_at?: string | null
           vessel_id?: string | null
+        }
+        Relationships: []
+      }
+      risk_matrix: {
+        Row: {
+          ai_analysis: Json | null
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          impact: number
+          likelihood: number
+          mitigation_plan: string | null
+          owner_id: string | null
+          residual_risk: number | null
+          review_date: string | null
+          risk_code: string
+          risk_status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          impact: number
+          likelihood: number
+          mitigation_plan?: string | null
+          owner_id?: string | null
+          residual_risk?: number | null
+          review_date?: string | null
+          risk_code: string
+          risk_status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          impact?: number
+          likelihood?: number
+          mitigation_plan?: string | null
+          owner_id?: string | null
+          residual_risk?: number | null
+          review_date?: string | null
+          risk_code?: string
+          risk_status?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -28271,6 +29062,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      whistleblower_reports: {
+        Row: {
+          ai_classification: Json | null
+          assigned_investigator_id: string | null
+          category: string
+          created_at: string
+          description: string
+          id: string
+          investigation_notes: string | null
+          is_anonymous: boolean | null
+          report_code: string
+          report_status: string
+          reporter_contact: string | null
+          resolution: string | null
+          resolution_date: string | null
+          severity: string
+          updated_at: string
+        }
+        Insert: {
+          ai_classification?: Json | null
+          assigned_investigator_id?: string | null
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          investigation_notes?: string | null
+          is_anonymous?: boolean | null
+          report_code: string
+          report_status?: string
+          reporter_contact?: string | null
+          resolution?: string | null
+          resolution_date?: string | null
+          severity?: string
+          updated_at?: string
+        }
+        Update: {
+          ai_classification?: Json | null
+          assigned_investigator_id?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          investigation_notes?: string | null
+          is_anonymous?: boolean | null
+          report_code?: string
+          report_status?: string
+          reporter_contact?: string | null
+          resolution?: string | null
+          resolution_date?: string | null
+          severity?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       workflow_execution_logs: {
         Row: {

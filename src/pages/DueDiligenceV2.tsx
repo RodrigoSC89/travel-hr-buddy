@@ -3,26 +3,16 @@
  * Verificação de terceiros com IA
  */
 
-import { useState } from "react";
-import { PageLayoutV2, CardV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
+import { PageLayoutV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Search, Brain, Shield, CheckCircle, AlertTriangle, 
-  Building2, Users, FileCheck, Sparkles
+  Building2, FileCheck, Sparkles
 } from "lucide-react";
-
-interface ThirdParty {
-  id: string;
-  name: string;
-  type: string;
-  risk_level: string;
-  score: number;
-  last_review: string;
-  status: string;
-}
+import { useDueDiligenceReports, DueDiligenceReport } from "@/hooks/useDueDiligence";
 
 const QUICK_QUESTIONS = [
   "O que é due diligence?",
@@ -45,41 +35,39 @@ const EVIDENCE_FIELDS = [
 ];
 
 export default function DueDiligenceV2() {
-  const [thirdParties] = useState<ThirdParty[]>([
-    { id: "1", name: "Global Shipping Agency", type: "agent", risk_level: "low", score: 92, last_review: "2024-12-15", status: "approved" },
-    { id: "2", name: "Marine Supplies Ltd", type: "supplier", risk_level: "medium", score: 75, last_review: "2024-11-20", status: "review" },
-    { id: "3", name: "Port Services Inc", type: "contractor", risk_level: "low", score: 88, last_review: "2024-12-01", status: "approved" },
-  ]);
+  const { data: reports = [], isLoading, refetch } = useDueDiligenceReports();
 
-  const approved = thirdParties.filter(t => t.status === 'approved').length;
-  const underReview = thirdParties.filter(t => t.status === 'review').length;
-  const avgScore = thirdParties.length > 0 ? (thirdParties.reduce((a, t) => a + t.score, 0) / thirdParties.length).toFixed(0) : 0;
+  const completed = reports.filter(r => r.report_status === 'completed').length;
+  const pending = reports.filter(r => r.report_status === 'pending').length;
+  const avgScore = reports.length > 0 
+    ? (reports.reduce((a, r) => a + (r.risk_score || 0), 0) / reports.length).toFixed(0) 
+    : 0;
 
   const stats = [
-    { label: "Total Terceiros", value: thirdParties.length, icon: Building2, color: "blue" as const },
-    { label: "Aprovados", value: approved, icon: CheckCircle, color: "green" as const },
-    { label: "Em Revisão", value: underReview, icon: AlertTriangle, color: "orange" as const },
+    { label: "Total Relatórios", value: reports.length, icon: Building2, color: "blue" as const },
+    { label: "Concluídos", value: completed, icon: CheckCircle, color: "green" as const },
+    { label: "Pendentes", value: pending, icon: AlertTriangle, color: "orange" as const },
     { label: "Score Médio", value: `${avgScore}%`, icon: Shield, color: "purple" as const },
   ];
 
   const columns = [
-    { key: "name", label: "Nome", sortable: true },
-    { key: "type", label: "Tipo", render: (item: ThirdParty) => <Badge variant="secondary">{item.type}</Badge> },
-    { key: "risk_level", label: "Risco", render: (item: ThirdParty) => (
+    { key: "report_code", label: "Código", sortable: true },
+    { key: "subject_name", label: "Sujeito", sortable: true },
+    { key: "subject_type", label: "Tipo", render: (item: DueDiligenceReport) => <Badge variant="secondary">{item.subject_type}</Badge> },
+    { key: "risk_level", label: "Risco", render: (item: DueDiligenceReport) => (
       <Badge variant={item.risk_level === 'high' ? 'destructive' : item.risk_level === 'medium' ? 'secondary' : 'outline'}>
         {item.risk_level === 'high' ? 'Alto' : item.risk_level === 'medium' ? 'Médio' : 'Baixo'}
       </Badge>
     )},
-    { key: "score", label: "Score", render: (item: ThirdParty) => (
+    { key: "risk_score", label: "Score", render: (item: DueDiligenceReport) => (
       <div className="flex items-center gap-2">
-        <Progress value={item.score} className="w-16 h-2" />
-        <span className="text-sm">{item.score}%</span>
+        <Progress value={item.risk_score || 0} className="w-16 h-2" />
+        <span className="text-sm">{item.risk_score || 0}%</span>
       </div>
     )},
-    { key: "last_review", label: "Última Revisão", render: (item: ThirdParty) => new Date(item.last_review).toLocaleDateString('pt-BR') },
-    { key: "status", label: "Status", render: (item: ThirdParty) => (
-      <Badge variant={item.status === 'approved' ? 'default' : 'secondary'}>
-        {item.status === 'approved' ? 'Aprovado' : 'Em Revisão'}
+    { key: "report_status", label: "Status", render: (item: DueDiligenceReport) => (
+      <Badge variant={item.report_status === 'completed' ? 'default' : 'secondary'}>
+        {item.report_status === 'completed' ? 'Concluído' : item.report_status === 'pending' ? 'Pendente' : 'Ação Requerida'}
       </Badge>
     )},
   ];
@@ -108,15 +96,19 @@ export default function DueDiligenceV2() {
 
         <TabsContent value="third-parties">
           <DataTableV2
-            data={thirdParties}
+            data={reports}
             columns={columns}
-            title="Cadastro de Terceiros"
+            title="Relatórios de Due Diligence"
             icon={Building2}
             searchable
-            onRefresh={() => toast.success("Dados atualizados")}
+            loading={isLoading}
+            onRefresh={() => {
+              refetch();
+              toast.success("Dados atualizados");
+            }}
             actions={[
-              { label: "Analisar IA", icon: Brain, onClick: (item) => toast.success(`Analisando ${item.name}`) },
-              { label: "Aprovar", icon: CheckCircle, onClick: (item) => toast.success(`Terceiro aprovado`) },
+              { label: "Analisar IA", icon: Brain, onClick: (item) => toast.success(`Analisando ${item.subject_name}`) },
+              { label: "Concluir", icon: CheckCircle, onClick: (item) => toast.success(`Relatório concluído`) },
             ]}
           />
         </TabsContent>
