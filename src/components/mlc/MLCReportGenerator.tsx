@@ -2,6 +2,7 @@
  * MLC Report Generator Component
  * Professional PDF export with logo, digital signature, and action plan
  * Based on ILO MLC 2006 inspection standards
+ * PATCH 861: Added email sending via Resend
  */
 
 import React, { useState, useRef } from 'react';
@@ -17,9 +18,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import {
   FileDown, Download, FileText, CheckCircle, XCircle, AlertTriangle,
-  Pen, RefreshCw, Ship, Calendar, User, MapPin, Shield, Scale
+  Pen, RefreshCw, Ship, Calendar, User, MapPin, Shield, Scale,
+  Mail, Send, Loader2
 } from 'lucide-react';
 import { MLC_2022_TITLES, getItemById, type MLCCheckItem } from '@/data/mlc-2022-checklist';
 
@@ -62,11 +65,19 @@ export const MLCReportGenerator: React.FC<MLCReportGeneratorProps> = ({
   nonConformities = []
 }) => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [showSignatureDialog, setShowSignatureDialog] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [inspectorSignature, setInspectorSignature] = useState<string | null>(null);
   const [masterSignature, setMasterSignature] = useState<string | null>(null);
   const [executiveSummary, setExecutiveSummary] = useState('');
   const [actionPlanNotes, setActionPlanNotes] = useState('');
+  
+  // Email form state
+  const [shipownerEmail, setShipownerEmail] = useState('');
+  const [shipownerName, setShipownerName] = useState('');
+  const [flagStateEmail, setFlagStateEmail] = useState('');
+  const [additionalEmails, setAdditionalEmails] = useState('');
   
   const inspectorSigRef = useRef<SignatureCanvas>(null);
   const masterSigRef = useRef<SignatureCanvas>(null);
@@ -526,6 +537,76 @@ The undersigned parties hereby confirm that:
     }
   };
 
+  // Send report via email
+  const sendReportByEmail = async () => {
+    if (!shipownerEmail) {
+      toast.error('Informe o email do armador');
+      return;
+    }
+
+    setIsSendingEmail(true);
+
+    try {
+      // Build non-conformities list
+      const ncsFromAnswers = Object.entries(inspectionData.answers)
+        .filter(([_, answer]) => answer.status === 'non-compliant')
+        .map(([itemId, answer]) => {
+          const item = getItemById(itemId);
+          return {
+            itemId,
+            title: item?.title || itemId,
+            severity: 'medium' as const,
+            correctiveAction: 'Immediate verification required',
+            deadline: '14 days',
+          };
+        });
+
+      // Parse additional emails
+      const additionalRecipients = additionalEmails
+        .split(',')
+        .map(e => e.trim())
+        .filter(e => e.includes('@'));
+
+      // Call edge function
+      const { data, error } = await supabase.functions.invoke('send-mlc-report', {
+        body: {
+          shipownerEmail,
+          shipownerName: shipownerName || 'Ship Owner',
+          flagStateEmail: flagStateEmail || undefined,
+          additionalRecipients: additionalRecipients.length > 0 ? additionalRecipients : undefined,
+          vesselName: inspectionData.vesselName,
+          imoNumber: inspectionData.imo,
+          flagState: inspectionData.flag,
+          portOfInspection: inspectionData.port,
+          inspectorName: inspectionData.inspectorName,
+          inspectionDate: inspectionData.startDate,
+          complianceScore,
+          totalItems,
+          compliantItems,
+          nonCompliantItems,
+          naItems,
+          nonConformities: ncsFromAnswers,
+          additionalNotes: executiveSummary || undefined,
+        },
+      });
+
+      if (error) throw error;
+
+      toast.success('Relatório enviado por email!', {
+        description: `Enviado para ${shipownerEmail}${flagStateEmail ? ` e ${flagStateEmail}` : ''}`,
+      });
+
+      setShowEmailDialog(false);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast.error('Erro ao enviar email', {
+        description: 'Verifique os endereços e tente novamente.',
+      });
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <Card>
@@ -688,23 +769,118 @@ The undersigned parties hereby confirm that:
           <Separator />
 
           {/* Generate Button */}
-          <Button 
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
-            onClick={generatePDF}
-            disabled={isGenerating}
-          >
-            {isGenerating ? (
-              <>
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Gerando Relatório...
-              </>
-            ) : (
-              <>
-                <FileDown className="h-4 w-4 mr-2" />
-                Gerar Relatório PDF
-              </>
-            )}
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700"
+              onClick={generatePDF}
+              disabled={isGenerating}
+            >
+              {isGenerating ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Gerando...
+                </>
+              ) : (
+                <>
+                  <FileDown className="h-4 w-4 mr-2" />
+                  Baixar PDF
+                </>
+              )}
+            </Button>
+
+            {/* Email Button */}
+            <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <Mail className="h-4 w-4" />
+                  Enviar por Email
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-blue-500" />
+                    Enviar Relatório MLC por Email
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="shipownerEmail">Email do Armador *</Label>
+                    <Input
+                      id="shipownerEmail"
+                      type="email"
+                      placeholder="armador@empresa.com"
+                      value={shipownerEmail}
+                      onChange={(e) => setShipownerEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="shipownerName">Nome do Armador</Label>
+                    <Input
+                      id="shipownerName"
+                      placeholder="Nome do Armador"
+                      value={shipownerName}
+                      onChange={(e) => setShipownerName(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="flagStateEmail">Email do Flag State (opcional)</Label>
+                    <Input
+                      id="flagStateEmail"
+                      type="email"
+                      placeholder="flagstate@maritime.gov"
+                      value={flagStateEmail}
+                      onChange={(e) => setFlagStateEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="additionalEmails">Emails Adicionais (separados por vírgula)</Label>
+                    <Input
+                      id="additionalEmails"
+                      placeholder="email1@example.com, email2@example.com"
+                      value={additionalEmails}
+                      onChange={(e) => setAdditionalEmails(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="p-3 bg-muted/50 rounded-lg text-sm space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Embarcação:</span>
+                      <span className="font-medium">{inspectionData.vesselName || 'N/A'}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Score:</span>
+                      <span className={`font-medium ${complianceScore >= 90 ? 'text-green-500' : complianceScore >= 70 ? 'text-orange-500' : 'text-red-500'}`}>
+                        {complianceScore}%
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Não Conformidades:</span>
+                      <span className="font-medium text-red-500">{nonCompliantItems}</span>
+                    </div>
+                  </div>
+
+                  <Button 
+                    className="w-full" 
+                    onClick={sendReportByEmail}
+                    disabled={isSendingEmail || !shipownerEmail}
+                  >
+                    {isSendingEmail ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" />
+                        Enviar Relatório
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </CardContent>
       </Card>
     </div>
