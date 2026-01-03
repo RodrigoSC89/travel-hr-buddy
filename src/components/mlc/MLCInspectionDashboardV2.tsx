@@ -29,6 +29,8 @@ import { MLCOfflineIndicator } from './MLCOfflineIndicator';
 import { MLCInspectionOverview } from './MLCInspectionOverview';
 import { ComplianceMapWithGeofencing } from '@/components/compliance/ComplianceMapWithGeofencing';
 import { PushNotificationSettingsPanel } from '@/components/notifications/PushNotificationSettingsPanel';
+import { ComplianceAlertHistory } from '@/components/compliance/ComplianceAlertHistory';
+import { GeofenceEditor } from '@/components/compliance/GeofenceEditor';
 import { useMLCOffline } from '@/hooks/use-mlc-offline';
 
 type ChecklistStatus = 'compliant' | 'non-compliant' | 'na' | null;
@@ -787,9 +789,44 @@ export const MLCInspectionDashboardV2: React.FC = () => {
           <MLCReportGenerator inspectionData={inspectionData} />
         </TabsContent>
 
-        {/* Settings Tab - Push Notifications */}
-        <TabsContent value="settings" className="space-y-4">
-          <PushNotificationSettingsPanel />
+        {/* Settings Tab - Push Notifications, Alert History, Geofence Editor */}
+        <TabsContent value="settings" className="space-y-6">
+          <Tabs defaultValue="notifications" className="w-full">
+            <TabsList className="grid grid-cols-3 w-full max-w-md">
+              <TabsTrigger value="notifications">Notificações</TabsTrigger>
+              <TabsTrigger value="alerts">Histórico</TabsTrigger>
+              <TabsTrigger value="geofences">Geofencing</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="notifications" className="mt-4">
+              <PushNotificationSettingsPanel />
+            </TabsContent>
+            
+            <TabsContent value="alerts" className="mt-4">
+              <ComplianceAlertHistory 
+                onAlertClick={(alert) => {
+                  toast.info(`Alerta: ${alert.title}`, {
+                    description: alert.message
+                  });
+                }}
+              />
+            </TabsContent>
+            
+            <TabsContent value="geofences" className="mt-4">
+              <GeofenceEditor 
+                geofences={[]}
+                onGeofencesChange={(zones) => {
+                  console.log('Geofences updated:', zones);
+                  toast.success(`${zones.length} zonas de geofencing configuradas`);
+                }}
+                onSelectGeofence={(zone) => {
+                  toast.info(`Zona selecionada: ${zone.name}`, {
+                    description: `Lat: ${zone.center[1]}, Lng: ${zone.center[0]}, Raio: ${zone.radiusKm}km`
+                  });
+                }}
+              />
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </div>

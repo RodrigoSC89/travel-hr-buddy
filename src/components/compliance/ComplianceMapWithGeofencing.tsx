@@ -67,6 +67,7 @@ export function ComplianceMapWithGeofencing({
   const map = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const geofenceLayersRef = useRef<string[]>([]);
+  const geofenceInitializedRef = useRef(false);
   const [mapboxToken, setMapboxToken] = useState<string | null>(null);
   const [mapboxgl, setMapboxgl] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -250,10 +251,16 @@ export function ComplianceMapWithGeofencing({
 
         mapInstance.on('load', async () => {
           if (mounted) {
-            setIsLoading(false);
             const fetchedVessels = await fetchVessels();
-            addGeofenceZones(mapInstance);
+            
+            // Only add geofences once
+            if (!geofenceInitializedRef.current) {
+              geofenceInitializedRef.current = true;
+              addGeofenceZones(mapInstance);
+            }
+            
             addVesselMarkers(mapInstance, mb, fetchedVessels);
+            setIsLoading(false);
           }
         });
       } catch (err) {
@@ -269,22 +276,37 @@ export function ComplianceMapWithGeofencing({
 
     return () => {
       mounted = false;
+      geofenceInitializedRef.current = false;
       markersRef.current.forEach(marker => marker.remove());
+      geofenceLayersRef.current = [];
       map.current?.remove();
+      map.current = null;
     };
   }, [mapboxToken, fetchVessels]);
 
   // Add geofence zones to map
   const addGeofenceZones = useCallback((mapInstance: any) => {
-    if (!showGeofences) return;
+    if (!showGeofences || !mapInstance) return;
 
-    // Remove existing geofence layers
-    geofenceLayersRef.current.forEach(layerId => {
-      if (mapInstance.getLayer(layerId)) {
-        mapInstance.removeLayer(layerId);
+    // Remove existing geofence layers first
+    geofenceLayersRef.current.forEach(id => {
+      try {
+        if (mapInstance.getLayer(id)) {
+          mapInstance.removeLayer(id);
+        }
+      } catch (e) {
+        // Ignore errors
       }
-      if (mapInstance.getSource(layerId)) {
-        mapInstance.removeSource(layerId);
+    });
+    
+    // Remove sources after layers
+    geofenceLayersRef.current.forEach(id => {
+      try {
+        if (mapInstance.getSource(id)) {
+          mapInstance.removeSource(id);
+        }
+      } catch (e) {
+        // Ignore errors
       }
     });
     geofenceLayersRef.current = [];
@@ -294,55 +316,64 @@ export function ComplianceMapWithGeofencing({
       const layerId = `geofence-layer-${geofence.id}`;
       const outlineId = `geofence-outline-${geofence.id}`;
 
-      // Create circle polygon
-      const circlePoints = createCirclePolygon(geofence.center, geofence.radiusKm);
+      // Skip if source already exists
+      if (mapInstance.getSource(sourceId)) {
+        return;
+      }
 
-      mapInstance.addSource(sourceId, {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          geometry: {
-            type: 'Polygon',
-            coordinates: [circlePoints]
-          },
-          properties: { name: geofence.name, type: geofence.type }
-        }
-      });
+      try {
+        // Create circle polygon
+        const circlePoints = createCirclePolygon(geofence.center, geofence.radiusKm);
 
-      const colors = {
-        'inspection-required': 'rgba(59, 130, 246, 0.2)',
-        'restricted': 'rgba(239, 68, 68, 0.2)',
-        'warning': 'rgba(245, 158, 11, 0.2)'
-      };
+        mapInstance.addSource(sourceId, {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: {
+              type: 'Polygon',
+              coordinates: [circlePoints]
+            },
+            properties: { name: geofence.name, type: geofence.type }
+          }
+        });
 
-      const outlineColors = {
-        'inspection-required': 'rgba(59, 130, 246, 0.8)',
-        'restricted': 'rgba(239, 68, 68, 0.8)',
-        'warning': 'rgba(245, 158, 11, 0.8)'
-      };
+        const colors: Record<string, string> = {
+          'inspection-required': 'rgba(59, 130, 246, 0.2)',
+          'restricted': 'rgba(239, 68, 68, 0.2)',
+          'warning': 'rgba(245, 158, 11, 0.2)'
+        };
 
-      mapInstance.addLayer({
-        id: layerId,
-        type: 'fill',
-        source: sourceId,
-        paint: {
-          'fill-color': colors[geofence.type],
-          'fill-opacity': 0.6
-        }
-      });
+        const outlineColors: Record<string, string> = {
+          'inspection-required': 'rgba(59, 130, 246, 0.8)',
+          'restricted': 'rgba(239, 68, 68, 0.8)',
+          'warning': 'rgba(245, 158, 11, 0.8)'
+        };
 
-      mapInstance.addLayer({
-        id: outlineId,
-        type: 'line',
-        source: sourceId,
-        paint: {
-          'line-color': outlineColors[geofence.type],
-          'line-width': 2,
-          'line-dasharray': [2, 2]
-        }
-      });
+        mapInstance.addLayer({
+          id: layerId,
+          type: 'fill',
+          source: sourceId,
+          paint: {
+            'fill-color': colors[geofence.type],
+            'fill-opacity': 0.6
+          }
+        });
 
-      geofenceLayersRef.current.push(sourceId, layerId, outlineId);
+        mapInstance.addLayer({
+          id: outlineId,
+          type: 'line',
+          source: sourceId,
+          paint: {
+            'line-color': outlineColors[geofence.type],
+            'line-width': 2,
+            'line-dasharray': [2, 2]
+          }
+        });
+
+        geofenceLayersRef.current.push(sourceId, layerId, outlineId);
+      } catch (e) {
+        console.warn('Error adding geofence:', geofence.id, e);
+      }
     });
   }, [geofences, showGeofences]);
 
@@ -451,13 +482,28 @@ export function ComplianceMapWithGeofencing({
     });
   }, [filter, checkGeofenceViolation, onVesselClick, onGeofenceAlert]);
 
-  // Update map when filter or geofences change
+  // Update markers when filter or vessels change (not geofences - those are added on map load)
   useEffect(() => {
-    if (map.current && mapboxgl && vessels.length > 0) {
-      addGeofenceZones(map.current);
+    if (map.current && mapboxgl && vessels.length > 0 && !isLoading) {
       addVesselMarkers(map.current, mapboxgl, vessels);
     }
-  }, [filter, vessels, showGeofences, mapboxgl, addVesselMarkers, addGeofenceZones]);
+  }, [filter, vessels, mapboxgl, addVesselMarkers, isLoading]);
+
+  // Toggle geofences visibility
+  useEffect(() => {
+    if (!map.current || !mapboxgl || isLoading) return;
+    
+    // When showGeofences changes, we need to update the visibility
+    geofenceLayersRef.current.forEach(id => {
+      try {
+        if (map.current.getLayer(id)) {
+          map.current.setLayoutProperty(id, 'visibility', showGeofences ? 'visible' : 'none');
+        }
+      } catch (e) {
+        // Ignore
+      }
+    });
+  }, [showGeofences, mapboxgl, isLoading]);
 
   const getMarkerHTML = (status: VesselInspection['status'], inGeofence: boolean): string => {
     const colors = {
