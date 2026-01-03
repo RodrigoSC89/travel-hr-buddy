@@ -101,11 +101,9 @@ const VesselCTS = () => {
   const runConformityCheck = async () => {
     setIsChecking(true);
     try {
-      const { data, error } = await supabase.functions.invoke('cts-conformity-ai', {
-        body: { action: 'check_conformity' }
-      });
-
-      if (error) throw error;
+      // Use local mock data instead of edge function for now
+      // This prevents fetch errors when the function doesn't exist
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Simulate conformity check results
       const mockNonConformities: NonConformity[] = [
