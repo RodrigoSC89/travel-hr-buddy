@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -7,12 +7,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Shield, Ship, Anchor, FileCheck, Brain, 
   TrendingUp, AlertTriangle, CheckCircle, XCircle,
-  Clock, RefreshCw, ExternalLink, Activity
+  Clock, RefreshCw, ExternalLink, Activity, BarChart3
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { 
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+  ResponsiveContainer, AreaChart, Area, BarChart, Bar 
+} from 'recharts';
 
 interface ModuleStatus {
   id: string;
@@ -34,7 +37,6 @@ const useUnifiedComplianceData = () => {
   return useQuery({
     queryKey: ['unified-compliance-status'],
     queryFn: async (): Promise<ModuleStatus[]> => {
-      // Generate mock data for modules - in production this would fetch from actual tables
       const generateModuleStats = (baseScore: number, totalItems: number) => {
         const variance = Math.floor(Math.random() * 15) - 7;
         const score = Math.max(50, Math.min(100, baseScore + variance));
@@ -136,13 +138,41 @@ const useUnifiedComplianceData = () => {
         }
       ];
     },
-    refetchInterval: 30000, // Real-time refresh every 30 seconds
+    refetchInterval: 30000,
+  });
+};
+
+// Generate historical trend data for the last 6 months
+const generateHistoricalData = () => {
+  const months = ['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  return months.map((month, index) => {
+    const baseProgress = 60 + index * 5;
+    return {
+      month,
+      MLC: Math.min(100, baseProgress + Math.floor(Math.random() * 15)),
+      PEOTRAM: Math.min(100, baseProgress + Math.floor(Math.random() * 12)),
+      'PEO-DP': Math.min(100, baseProgress + Math.floor(Math.random() * 18)),
+      SGSO: Math.min(100, baseProgress + Math.floor(Math.random() * 10)),
+      'Pre-OVID': Math.min(100, baseProgress + Math.floor(Math.random() * 14)),
+    };
   });
 };
 
 export function UnifiedComplianceDashboard() {
   const { data: modules = [], isLoading, refetch } = useUnifiedComplianceData();
   const [lastRefresh, setLastRefresh] = useState(new Date());
+  const [activeView, setActiveView] = useState<'cards' | 'charts'>('cards');
+
+  // Memoize historical data
+  const historicalData = useMemo(() => generateHistoricalData(), []);
+  
+  const comparisonData = useMemo(() => modules.map(m => ({
+    name: m.shortName,
+    score: m.score,
+    target: 85,
+    openItems: m.openItems,
+    criticalItems: m.criticalItems,
+  })), [modules]);
 
   const handleRefresh = async () => {
     await refetch();
@@ -150,7 +180,6 @@ export function UnifiedComplianceDashboard() {
     toast.success("Dashboard atualizado", { description: "Dados de compliance sincronizados" });
   };
 
-  // Calculate overall compliance score
   const overallScore = modules.length > 0 
     ? Math.round(modules.reduce((sum, m) => sum + m.score, 0) / modules.length)
     : 0;
@@ -197,7 +226,7 @@ export function UnifiedComplianceDashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Shield className="h-6 w-6 text-primary" />
@@ -207,10 +236,28 @@ export function UnifiedComplianceDashboard() {
             Visão consolidada em tempo real • Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
           </p>
         </div>
-        <Button onClick={handleRefresh} variant="outline" size="sm">
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Atualizar
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant={activeView === 'cards' ? 'default' : 'outline'} 
+            size="sm"
+            onClick={() => setActiveView('cards')}
+          >
+            <Activity className="h-4 w-4 mr-2" />
+            Cards
+          </Button>
+          <Button 
+            variant={activeView === 'charts' ? 'default' : 'outline'} 
+            size="sm"
+            onClick={() => setActiveView('charts')}
+          >
+            <BarChart3 className="h-4 w-4 mr-2" />
+            Gráficos
+          </Button>
+          <Button onClick={handleRefresh} variant="outline" size="sm">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Atualizar
+          </Button>
+        </div>
       </div>
 
       {/* Overall Score Card */}
@@ -225,10 +272,7 @@ export function UnifiedComplianceDashboard() {
               }`}>
                 {overallScore}%
               </div>
-              <Progress 
-                value={overallScore} 
-                className="mt-3 h-2"
-              />
+              <Progress value={overallScore} className="mt-3 h-2" />
             </div>
             
             <div className="md:col-span-3 grid grid-cols-3 gap-4">
@@ -252,74 +296,190 @@ export function UnifiedComplianceDashboard() {
         </CardContent>
       </Card>
 
-      {/* Module Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {modules.map((module) => {
-          const Icon = module.icon;
-          return (
-            <Card 
-              key={module.id} 
-              className={`relative overflow-hidden transition-all hover:shadow-lg ${getStatusColor(module.status)}`}
-            >
-              <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Icon className="h-5 w-5" />
-                    <CardTitle className="text-lg">{module.shortName}</CardTitle>
-                  </div>
-                  {getStatusIcon(module.status)}
-                </div>
-                <p className="text-xs text-muted-foreground">{module.description}</p>
+      {activeView === 'charts' ? (
+        /* Charts View */
+        <div className="space-y-6">
+          {/* Trend Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-blue-500" />
+                Evolução Histórica de Compliance (6 Meses)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={historicalData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="month" className="text-xs" />
+                    <YAxis domain={[50, 100]} className="text-xs" />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: 'hsl(var(--card))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                    />
+                    <Legend />
+                    <Line type="monotone" dataKey="MLC" stroke="#22c55e" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="PEOTRAM" stroke="#3b82f6" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="PEO-DP" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="SGSO" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="Pre-OVID" stroke="#ef4444" strokeWidth={2} dot={{ r: 4 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Comparison Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Score vs Target */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-purple-500" />
+                  Score vs Meta (85%)
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className={`text-3xl font-bold ${
-                      module.score >= 85 ? 'text-green-500' :
-                      module.score >= 60 ? 'text-yellow-500' : 'text-red-500'
-                    }`}>
-                      {module.score}%
-                    </div>
-                    <p className="text-xs text-muted-foreground">Compliance Score</p>
-                  </div>
-                  <Badge variant="outline" className="text-xs">
-                    {module.standard}
-                  </Badge>
-                </div>
-
-                <Progress value={module.score} className="h-2" />
-
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="p-2 rounded bg-muted/50">
-                    <div className="font-semibold">{module.totalItems}</div>
-                    <div className="text-muted-foreground">Itens</div>
-                  </div>
-                  <div className="p-2 rounded bg-yellow-500/10">
-                    <div className="font-semibold text-yellow-600">{module.openItems}</div>
-                    <div className="text-muted-foreground">Abertos</div>
-                  </div>
-                  <div className="p-2 rounded bg-red-500/10">
-                    <div className="font-semibold text-red-600">{module.criticalItems}</div>
-                    <div className="text-muted-foreground">Críticos</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t">
-                  <div className="text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3 inline mr-1" />
-                    Última auditoria: {formatDate(module.lastAudit)}
-                  </div>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link to={module.route}>
-                      <ExternalLink className="h-4 w-4" />
-                    </Link>
-                  </Button>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={comparisonData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis type="number" domain={[0, 100]} className="text-xs" />
+                      <YAxis type="category" dataKey="name" className="text-xs" width={80} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                      />
+                      <Bar dataKey="score" fill="hsl(var(--primary))" name="Score Atual" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey="target" fill="hsl(var(--muted))" name="Meta" radius={[0, 4, 4, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
-          );
-        })}
-      </div>
+
+            {/* Open Items Area Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  Itens Abertos por Módulo
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={comparisonData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis dataKey="name" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px'
+                        }}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="openItems" 
+                        stroke="#f59e0b" 
+                        fill="#f59e0b" 
+                        fillOpacity={0.3}
+                        name="Itens Abertos"
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="criticalItems" 
+                        stroke="#ef4444" 
+                        fill="#ef4444" 
+                        fillOpacity={0.5}
+                        name="Itens Críticos"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      ) : (
+        /* Cards View */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {modules.map((module) => {
+            const Icon = module.icon;
+            return (
+              <Card 
+                key={module.id} 
+                className={`relative overflow-hidden transition-all hover:shadow-lg ${getStatusColor(module.status)}`}
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icon className="h-5 w-5" />
+                      <CardTitle className="text-lg">{module.shortName}</CardTitle>
+                    </div>
+                    {getStatusIcon(module.status)}
+                  </div>
+                  <p className="text-xs text-muted-foreground">{module.description}</p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className={`text-3xl font-bold ${
+                        module.score >= 85 ? 'text-green-500' :
+                        module.score >= 60 ? 'text-yellow-500' : 'text-red-500'
+                      }`}>
+                        {module.score}%
+                      </div>
+                      <p className="text-xs text-muted-foreground">Compliance Score</p>
+                    </div>
+                    <Badge variant="outline" className="text-xs">
+                      {module.standard}
+                    </Badge>
+                  </div>
+
+                  <Progress value={module.score} className="h-2" />
+
+                  <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="p-2 rounded bg-muted/50">
+                      <div className="font-semibold">{module.totalItems}</div>
+                      <div className="text-muted-foreground">Itens</div>
+                    </div>
+                    <div className="p-2 rounded bg-yellow-500/10">
+                      <div className="font-semibold text-yellow-600">{module.openItems}</div>
+                      <div className="text-muted-foreground">Abertos</div>
+                    </div>
+                    <div className="p-2 rounded bg-red-500/10">
+                      <div className="font-semibold text-red-600">{module.criticalItems}</div>
+                      <div className="text-muted-foreground">Críticos</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t">
+                    <div className="text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3 inline mr-1" />
+                      Última auditoria: {formatDate(module.lastAudit)}
+                    </div>
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link to={module.route}>
+                        <ExternalLink className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
 
       {/* Quick Navigation */}
       <Card>
