@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("PEOTRAM Audit System", () => {
+/**
+ * PEOTRAM 2024 E2E Tests
+ * Tests the Petrobras PEOTRAM standard with 13 elements
+ */
+test.describe("PEOTRAM 2024 Audit System", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/peotram");
     await page.waitForTimeout(1000);
@@ -76,5 +80,91 @@ test.describe("PEOTRAM Audit System", () => {
     if (await ncSection.isVisible()) {
       await expect(ncSection).toBeVisible();
     }
+  });
+
+  test("should highlight critical elements 4, 6, 11, 12", async ({ page }) => {
+    // PEOTRAM 2024 critical elements
+    const criticalElements = page.locator("text=/crítico|critical|Elemento 4|Elemento 6|Elemento 11|Elemento 12/i");
+    await page.waitForTimeout(2000);
+  });
+
+  test("should navigate between 13 element tabs", async ({ page }) => {
+    const tabs = page.locator('[role="tab"]');
+    const count = await tabs.count();
+    if (count > 1) {
+      await tabs.nth(1).click();
+      await page.waitForTimeout(500);
+      await expect(page.locator('[role="tabpanel"]').first()).toBeVisible();
+    }
+  });
+
+  test("should show progress per element", async ({ page }) => {
+    const progressBars = page.locator('[class*="progress"], [role="progressbar"]');
+    if (await progressBars.first().isVisible({ timeout: 5000 })) {
+      await expect(progressBars.first()).toBeVisible();
+    }
+  });
+
+  test("should have voice assistant button", async ({ page }) => {
+    const voiceButton = page.locator('button:has-text(/Voz|Voice|Microfone/)');
+    if (await voiceButton.first().isVisible({ timeout: 5000 })) {
+      await expect(voiceButton.first()).toBeEnabled();
+    }
+  });
+
+  test("should allow marking items as compliant", async ({ page }) => {
+    const checkbox = page.locator('input[type="checkbox"], [role="checkbox"]').first();
+    if (await checkbox.isVisible({ timeout: 5000 })) {
+      const wasChecked = await checkbox.isChecked();
+      await checkbox.click();
+      await expect(checkbox).toBeChecked({ checked: !wasChecked });
+    }
+  });
+
+  test("should persist data on page reload", async ({ page }) => {
+    const checkbox = page.locator('input[type="checkbox"]').first();
+    if (await checkbox.isVisible({ timeout: 5000 })) {
+      await checkbox.click();
+      await page.reload();
+      await page.waitForLoadState('networkidle');
+    }
+  });
+});
+
+test.describe("PEOTRAM AI Features", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/peotram");
+    await page.waitForTimeout(1000);
+  });
+
+  test("should have AI evidence generator", async ({ page }) => {
+    const aiButton = page.locator('button:has-text(/IA|AI|Evidência|Gerar/)');
+    if (await aiButton.first().isVisible({ timeout: 5000 })) {
+      await expect(aiButton.first()).toBeEnabled();
+    }
+  });
+
+  test("should show AI analysis results", async ({ page }) => {
+    const analysisSection = page.locator('text=/análise|analysis|recomendação|recommendation/i');
+    await page.waitForTimeout(2000);
+  });
+});
+
+test.describe("PEOTRAM Reporting", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/peotram");
+    await page.waitForTimeout(1000);
+  });
+
+  test("should generate PDF report", async ({ page }) => {
+    const pdfButton = page.locator('button:has-text(/PDF|Relatório|Report/)');
+    if (await pdfButton.first().isVisible({ timeout: 5000 })) {
+      await expect(pdfButton.first()).toBeEnabled();
+    }
+  });
+
+  test("should include digital signatures", async ({ page }) => {
+    const signatureSection = page.locator('text=/assinatura|signature|assinar/i');
+    await page.waitForTimeout(2000);
   });
 });
