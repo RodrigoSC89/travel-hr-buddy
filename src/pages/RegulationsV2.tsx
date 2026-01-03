@@ -3,25 +3,15 @@
  * Base de conhecimento regulatório com IA
  */
 
-import { useState } from "react";
-import { PageLayoutV2, CardV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
+import { PageLayoutV2, StatsGridV2, DataTableV2, ModuleAIChat, ModuleEvidenceGenerator } from "@/components/v2";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
-  BookOpen, Brain, FileText, Search, AlertTriangle, CheckCircle, 
-  Globe, Calendar, Sparkles
+  BookOpen, Brain, FileText, Search, AlertTriangle, 
+  Globe, Calendar, Sparkles, RefreshCw
 } from "lucide-react";
-
-interface Regulation {
-  id: string;
-  code: string;
-  title: string;
-  category: string;
-  issuer: string;
-  effective_date: string;
-  status: string;
-}
+import { useRegulations, Regulation } from "@/hooks/useRegulations";
 
 const QUICK_QUESTIONS = [
   "Quais são os principais regulamentos IMO?",
@@ -44,28 +34,23 @@ const EVIDENCE_FIELDS = [
 ];
 
 export default function RegulationsV2() {
-  const [regulations] = useState<Regulation[]>([
-    { id: "1", code: "SOLAS", title: "Safety of Life at Sea", category: "Safety", issuer: "IMO", effective_date: "1974-11-01", status: "active" },
-    { id: "2", code: "MARPOL", title: "Marine Pollution Convention", category: "Environmental", issuer: "IMO", effective_date: "1973-02-17", status: "active" },
-    { id: "3", code: "MLC 2006", title: "Maritime Labour Convention", category: "Labour", issuer: "ILO", effective_date: "2006-02-23", status: "active" },
-    { id: "4", code: "STCW", title: "Standards of Training, Certification and Watchkeeping", category: "Training", issuer: "IMO", effective_date: "1978-07-07", status: "active" },
-  ]);
+  const { data: regulations = [], isLoading, refetch } = useRegulations();
 
   const stats = [
     { label: "Total Regulamentos", value: regulations.length, icon: BookOpen, color: "blue" as const },
-    { label: "IMO", value: regulations.filter(r => r.issuer === 'IMO').length, icon: Globe, color: "green" as const },
-    { label: "Atualizações (30d)", value: 3, icon: Calendar, color: "orange" as const },
-    { label: "Alertas", value: 1, icon: AlertTriangle, color: "red" as const },
+    { label: "IMO", value: regulations.filter(r => r.authority === 'IMO').length, icon: Globe, color: "green" as const },
+    { label: "ILO", value: regulations.filter(r => r.authority === 'ILO').length, icon: Calendar, color: "orange" as const },
+    { label: "Mandatórios", value: regulations.filter(r => r.is_mandatory).length, icon: AlertTriangle, color: "red" as const },
   ];
 
   const columns = [
-    { key: "code", label: "Código", sortable: true },
+    { key: "reg_code", label: "Código", sortable: true },
     { key: "title", label: "Título", sortable: true },
     { key: "category", label: "Categoria", render: (item: Regulation) => <Badge variant="secondary">{item.category}</Badge> },
-    { key: "issuer", label: "Emissor" },
-    { key: "status", label: "Status", render: (item: Regulation) => (
-      <Badge variant={item.status === 'active' ? 'default' : 'secondary'}>
-        {item.status === 'active' ? 'Vigente' : item.status}
+    { key: "authority", label: "Autoridade" },
+    { key: "reg_status", label: "Status", render: (item: Regulation) => (
+      <Badge variant={item.reg_status === 'active' ? 'default' : 'secondary'}>
+        {item.reg_status === 'active' ? 'Vigente' : item.reg_status}
       </Badge>
     )},
   ];
@@ -100,16 +85,20 @@ export default function RegulationsV2() {
             icon={BookOpen}
             searchable
             searchPlaceholder="Buscar regulamentos..."
-            onRefresh={() => toast.success("Dados atualizados")}
+            loading={isLoading}
+            onRefresh={() => {
+              refetch();
+              toast.success("Dados atualizados");
+            }}
             actions={[
-              { label: "Consultar IA", icon: Brain, onClick: (item) => toast.success(`Consultando ${item.code}`) },
+              { label: "Consultar IA", icon: Brain, onClick: (item) => toast.success(`Consultando ${item.reg_code}`) },
               { label: "Ver Detalhes", icon: FileText, onClick: (item) => toast.info(`Abrindo ${item.title}`) },
             ]}
             filters={[
               { key: "category", label: "Categoria", options: [
-                { value: "Safety", label: "Safety" },
-                { value: "Environmental", label: "Environmental" },
-                { value: "Labour", label: "Labour" }
+                { value: "safety", label: "Safety" },
+                { value: "labor", label: "Labour" },
+                { value: "environmental", label: "Environmental" }
               ]}
             ]}
           />
