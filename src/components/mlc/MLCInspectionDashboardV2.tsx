@@ -25,6 +25,8 @@ import { MLC_2022_TITLES, getTotalMLC2022Items, getCriticalMLC2022Items, type ML
 import { MLCEvidenceGenerator } from './MLCEvidenceGenerator';
 import { MLCVoiceChat } from './MLCVoiceChat';
 import { MLCReportGenerator } from './MLCReportGenerator';
+import { MLCOfflineIndicator } from './MLCOfflineIndicator';
+import { useMLCOffline } from '@/hooks/use-mlc-offline';
 
 type ChecklistStatus = 'compliant' | 'non-compliant' | 'na' | null;
 
@@ -63,6 +65,9 @@ export const MLCInspectionDashboardV2: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCritical, setFilterCritical] = useState(false);
 
+  // Offline storage hook
+  const { isOnline, saveInspection, pendingSyncCount } = useMLCOffline();
+
   // Statistics
   const totalItems = getTotalMLC2022Items();
   const criticalItems = getCriticalMLC2022Items();
@@ -97,14 +102,31 @@ export const MLCInspectionDashboardV2: React.FC = () => {
     setExpandedRegs(prev => ({ ...prev, [regId]: !prev[regId] }));
   };
 
-  const startInspection = () => {
+  const startInspection = async () => {
     if (!inspectionData.vesselName) {
       toast.error('Informe o nome da embarcação');
       return;
     }
+    
+    // Save to offline storage
+    const inspectionId = `mlc-${Date.now()}`;
+    await saveInspection({
+      id: inspectionId,
+      vesselName: inspectionData.vesselName,
+      imo: inspectionData.imo,
+      flag: inspectionData.flag,
+      port: inspectionData.port,
+      inspectorName: inspectionData.inspectorName,
+      startDate: inspectionData.startDate,
+      status: 'in_progress',
+      answers: inspectionData.answers,
+    });
+    
     setInspectionStarted(true);
     setActiveTab('checklist');
-    toast.success('Inspeção MLC iniciada!');
+    toast.success('Inspeção MLC iniciada!', {
+      description: isOnline ? 'Dados sincronizados' : 'Salvo localmente (offline)',
+    });
   };
 
   const getStatusIcon = (status: ChecklistStatus) => {
@@ -147,7 +169,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* AI Banner */}
+      {/* AI Banner with Offline Indicator */}
       <Card className="bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 border-blue-500/20">
         <CardContent className="py-3">
           <div className="flex items-center justify-between">
@@ -167,7 +189,10 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                 </p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
+              {/* Offline Status Indicator */}
+              <MLCOfflineIndicator />
+              
               <Button variant="outline" size="sm" onClick={() => setActiveTab('ai')}>
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Chat IA

@@ -16,6 +16,10 @@ comment = "MLC 2006 voice chat assistant for maritime labour convention complian
 verify_jwt = false
 comment = "MLC 2006 ElevenLabs HD text-to-speech for voice responses"
 
+[functions.send-mlc-report]
+verify_jwt = false
+comment = "Send MLC inspection reports via Resend email to shipowner and Flag State"
+
 # ============================================
 # PEO-DP AI Functions - Added 2025-12-31
 # ============================================
