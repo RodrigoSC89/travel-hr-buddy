@@ -8,13 +8,13 @@ import {
   Shield, Ship, Anchor, FileCheck, Brain, 
   TrendingUp, AlertTriangle, CheckCircle, XCircle,
   Clock, RefreshCw, ExternalLink, Activity, BarChart3,
-  Download, Bell, BellRing, MapPin, FileText, Users
+  Download, Bell, BellRing, MapPin, FileText, Users, Wifi
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import jsPDF from 'jspdf';
+import { useComplianceRealtimeAlerts } from '@/hooks/use-compliance-realtime-alerts';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell
@@ -161,43 +161,33 @@ const generateHistoricalData = () => {
   });
 };
 
-// Realtime alerts hook
-const useComplianceAlerts = (modules: ModuleStatus[]) => {
-  const [alerts, setAlerts] = useState<Array<{id: string; module: string; message: string; type: 'critical' | 'warning' | 'info'; timestamp: Date}>>([]);
-  const previousModulesRef = useRef<ModuleStatus[]>([]);
-
-  useEffect(() => {
-    if (previousModulesRef.current.length > 0) {
-      modules.forEach(current => {
-        const previous = previousModulesRef.current.find(p => p.id === current.id);
-        if (previous && previous.status !== 'critical' && current.status === 'critical') {
-          const newAlert = {
-            id: `${current.id}-${Date.now()}`,
-            module: current.shortName,
-            message: `${current.shortName} entrou em status CRÍTICO! Score: ${current.score}%`,
-            type: 'critical' as const,
-            timestamp: new Date()
-          };
-          setAlerts(prev => [newAlert, ...prev].slice(0, 10));
-          toast.error(`⚠️ Alerta Crítico: ${current.shortName}`, {
-            description: `Score caiu para ${current.score}%. Ação imediata necessária.`,
-            duration: 10000,
-          });
-        }
-      });
-    }
-    previousModulesRef.current = modules;
-  }, [modules]);
-
-  return { alerts, clearAlerts: () => setAlerts([]) };
-};
-
 export function UnifiedComplianceDashboard() {
   const { data: modules = [], isLoading, refetch } = useUnifiedComplianceData();
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [activeView, setActiveView] = useState<'cards' | 'charts'>('cards');
   const [showAlerts, setShowAlerts] = useState(false);
-  const { alerts, clearAlerts } = useComplianceAlerts(modules);
+  
+  // Supabase Realtime alerts - synced across multiple users
+  const { alerts, isConnected, sendAlert, clearAlerts, onlineUsers } = useComplianceRealtimeAlerts();
+
+  // Monitor for critical status changes and broadcast to all connected users
+  const previousModulesRef = useRef<ModuleStatus[]>([]);
+  useEffect(() => {
+    if (previousModulesRef.current.length > 0 && isConnected) {
+      modules.forEach(current => {
+        const previous = previousModulesRef.current.find(p => p.id === current.id);
+        if (previous && previous.status !== 'critical' && current.status === 'critical') {
+          // Broadcast alert to all connected users via Supabase Realtime
+          sendAlert({
+            module: current.shortName,
+            message: `${current.shortName} entrou em status CRÍTICO! Score: ${current.score}%`,
+            type: 'critical',
+          });
+        }
+      });
+    }
+    previousModulesRef.current = modules;
+  }, [modules, isConnected, sendAlert]);
 
   // Memoize historical data
   const historicalData = useMemo(() => generateHistoricalData(), []);
@@ -368,9 +358,19 @@ export function UnifiedComplianceDashboard() {
             <Shield className="h-6 w-6 text-primary" />
             Status Unificado de Compliance
           </h2>
-          <p className="text-muted-foreground text-sm">
-            Visão consolidada em tempo real • Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}
-          </p>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>Visão consolidada em tempo real • Última atualização: {lastRefresh.toLocaleTimeString('pt-BR')}</span>
+            <div className="flex items-center gap-1">
+              <Wifi className={`h-3 w-3 ${isConnected ? 'text-green-500' : 'text-red-500'}`} />
+              <span className="text-xs">{isConnected ? 'Conectado' : 'Desconectado'}</span>
+              {onlineUsers > 0 && (
+                <Badge variant="outline" className="text-xs ml-1">
+                  <Users className="h-3 w-3 mr-1" />
+                  {onlineUsers}
+                </Badge>
+              )}
+            </div>
+          </div>
         </div>
         <div className="flex gap-2 flex-wrap">
           <Button 
@@ -438,7 +438,7 @@ export function UnifiedComplianceDashboard() {
                       <span className="text-sm">{alert.message}</span>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                      {alert.timestamp.toLocaleTimeString('pt-BR')}
+                      {new Date(alert.timestamp).toLocaleTimeString('pt-BR')}
                     </span>
                   </div>
                 ))}
