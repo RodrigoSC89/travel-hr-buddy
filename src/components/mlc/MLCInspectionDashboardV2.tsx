@@ -26,6 +26,7 @@ import { MLCEvidenceGenerator } from './MLCEvidenceGenerator';
 import { MLCVoiceChat } from './MLCVoiceChat';
 import { MLCReportGenerator } from './MLCReportGenerator';
 import { MLCOfflineIndicator } from './MLCOfflineIndicator';
+import { MLCInspectionOverview } from './MLCInspectionOverview';
 import { useMLCOffline } from '@/hooks/use-mlc-offline';
 
 type ChecklistStatus = 'compliant' | 'non-compliant' | 'na' | null;
@@ -315,37 +316,37 @@ export const MLCInspectionDashboardV2: React.FC = () => {
           </TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab */}
+        {/* Overview Tab - New Design Inspired by Image */}
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* About MLC */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Scale className="h-5 w-5 text-blue-500" />
-                  Sobre a MLC 2006
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  A Convenção do Trabalho Marítimo (MLC) 2006 da OIT estabelece direitos e 
-                  condições mínimas de trabalho para marítimos, garantindo trabalho digno e 
-                  concorrência justa entre armadores.
-                </p>
-                <div className="space-y-2">
-                  <h4 className="font-medium text-sm">Emendas 2022 incluídas:</h4>
-                  <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
-                    <li>Proteção reforçada contra taxas de recrutamento</li>
-                    <li>Garantias financeiras atualizadas</li>
-                    <li>Requisitos de bem-estar melhorados</li>
-                    <li>Procedimentos de reclamação aprimorados</li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
+          {!inspectionStarted ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* About MLC */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Scale className="h-5 w-5 text-blue-500" />
+                    Sobre a MLC 2006
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    A Convenção do Trabalho Marítimo (MLC) 2006 da OIT estabelece direitos e 
+                    condições mínimas de trabalho para marítimos, garantindo trabalho digno e 
+                    concorrência justa entre armadores.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium text-sm">Emendas 2022 incluídas:</h4>
+                    <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
+                      <li>Proteção reforçada contra taxas de recrutamento</li>
+                      <li>Garantias financeiras atualizadas</li>
+                      <li>Requisitos de bem-estar melhorados</li>
+                      <li>Procedimentos de reclamação aprimorados</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
 
-            {/* Start Inspection */}
-            {!inspectionStarted ? (
+              {/* Start Inspection Form */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -407,48 +408,36 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                   </Button>
                 </CardContent>
               </Card>
-            ) : (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Globe className="h-5 w-5 text-blue-500" />
-                    Estrutura MLC 2006
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[280px]">
-                    {MLC_2022_TITLES.map(title => {
-                      const titleItems = title.regulations.reduce((acc, reg) => acc + reg.items.length, 0);
-                      const titleAnswered = title.regulations.reduce((acc, reg) => 
-                        acc + reg.items.filter(item => inspectionData.answers[item.id]?.status).length, 0
-                      );
-                      const titleProgress = titleItems > 0 ? (titleAnswered / titleItems) * 100 : 0;
-
-                      return (
-                        <div key={title.id} className="mb-3 p-3 rounded-lg border bg-card">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <Badge variant="outline">T{title.number}</Badge>
-                              <span className="text-sm font-medium">{title.title}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-muted-foreground">{titleAnswered}/{titleItems}</span>
-                              <div className="w-16 h-2 bg-muted rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-primary transition-all"
-                                  style={{ width: `${titleProgress}%` }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </ScrollArea>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+            </div>
+          ) : (
+            /* New Professional Overview Design */
+            <MLCInspectionOverview 
+              vesselName={inspectionData.vesselName}
+              imoNumber={inspectionData.imo}
+              inspectionDate={inspectionData.startDate}
+              flagState={inspectionData.flag}
+              inspector={inspectionData.inspectorName}
+              stats={{
+                inspectionsConducted: answeredItems,
+                shipsInspected: 1,
+                deficienciesFound: nonCompliantItems,
+                reportsPending: totalItems - answeredItems > 0 ? 1 : 0,
+                upcomingInspections: totalItems - answeredItems,
+                completedInspections: answeredItems,
+              }}
+              findings={Object.entries(inspectionData.answers)
+                .filter(([_, answer]) => answer.status === 'non-compliant')
+                .slice(0, 5)
+                .map(([id, answer], index) => ({
+                  id,
+                  name: `Finding ${index + 1}`,
+                  category: 'Labor Standards',
+                  status: 'open' as const,
+                  correctiveAction: answer.observation || 'Action required',
+                }))}
+              onAddFinding={() => setActiveTab('checklist')}
+            />
+          )}
         </TabsContent>
 
         {/* Checklist Tab */}
