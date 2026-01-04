@@ -77,14 +77,14 @@ const roadmapItems: RoadmapItem[] = [
     title: "Type Safety Completo",
     description: "Remoção de @ts-nocheck e tipagem estrita",
     status: "in-progress",
-    progress: 85,
+    progress: 90,
     version: "v3.2.0",
     icon: FileText,
     features: [
-      "5 arquivos críticos tipados",
-      "Migrations para tabelas faltantes",
-      "CI bloqueando @ts-nocheck",
-      "~30 arquivos restantes"
+      "Workflows tipado ✓",
+      "Core services tipados",
+      "Edge Functions mantidos",
+      "~20 arquivos restantes"
     ]
   },
   {
@@ -92,14 +92,14 @@ const roadmapItems: RoadmapItem[] = [
     title: "Performance Otimizada",
     description: "Lazy loading, cache trimming, modo lite",
     status: "in-progress",
-    progress: 80,
+    progress: 90,
     version: "v3.2.0",
     icon: Zap,
     features: [
-      "100% lazy loading",
-      "Bundle < 1.5MB",
-      "Cache automático",
-      "Modo 2 Mbps"
+      "usePerformanceMonitor hook ✓",
+      "Core Web Vitals tracking ✓",
+      "Lighthouse config ✓",
+      "Bundle optimization ✓"
     ]
   },
   {
@@ -107,14 +107,14 @@ const roadmapItems: RoadmapItem[] = [
     title: "PWA & Mobile Ready",
     description: "TWA Android, Expo iOS, offline completo",
     status: "in-progress",
-    progress: 75,
+    progress: 85,
     version: "v3.2.0",
     icon: Smartphone,
     features: [
-      "Push notifications",
-      "Background sync",
-      "Offline full",
-      "Service Worker v4"
+      "usePWAStatus hook ✓",
+      "Background sync worker ✓",
+      "Offline detection ✓",
+      "Install prompt ✓"
     ]
   },
   {
@@ -167,16 +167,15 @@ const roadmapItems: RoadmapItem[] = [
     title: "Testes E2E Playwright",
     description: "Cobertura completa de módulos críticos",
     status: "in-progress",
-    progress: 55,
+    progress: 70,
     version: "v3.2.0",
     icon: TestTube,
     features: [
-      "/ai-operations-center ✓",
-      "/security-center ✓",
-      "/integracoes ✓",
-      "/beta-feedback ✓",
-      "/status ✓",
-      "IA de Voz ✓"
+      "Beta Program ✓",
+      "Voice AI ✓",
+      "Performance/PWA ✓",
+      "Critical Features ✓",
+      "12+ spec files"
     ]
   },
   {
