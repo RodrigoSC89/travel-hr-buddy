@@ -8,6 +8,8 @@ import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "re
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { logger } from "@/lib/logger";
+import { reportCriticalError } from "@/lib/alerts/slack-error-reporter";
+import * as Sentry from "@sentry/react";
 
 // Import AuthProvider from contexts
 import { AuthProvider } from "./contexts/AuthContext";
@@ -40,8 +42,6 @@ const OffshoreLoader = () => (
 );
 
 // Global error boundary with Slack/Discord integration
-import { reportCriticalError } from "@/lib/alerts/slack-error-reporter";
-import * as Sentry from "@sentry/react";
 
 class ErrorBoundary extends Component<
   { children: ReactNode },
