@@ -113,7 +113,16 @@ const element = document.getElementById('root')!;
 
 ---
 
-## Fase 3: Habilitar Globalmente
+## Serviços Validados (Fase 2+)
+
+| Arquivo | Status | Notas |
+|---------|--------|-------|
+| `src/services/enhanced-auth-service.ts` | ✅ | Já null-safe com type guards |
+| `src/modules/mission-control/mobile/syncService.ts` | ✅ | Type-safe com mapeamento Supabase |
+
+---
+
+## Fase 4: Habilitar Globalmente
 
 ### 3.1 Atualizar tsconfig.json
 ```json
