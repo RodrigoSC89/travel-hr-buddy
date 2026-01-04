@@ -221,14 +221,44 @@ const roadmapItems: RoadmapItem[] = [
     title: "Mobile App v3.3.0",
     description: "Capacitor para iOS e Android",
     status: "in-progress",
-    progress: 30,
+    progress: 50,
     version: "v3.3.0",
     icon: Smartphone,
     features: [
-      "Capacitor configurado",
-      "iOS/Android suporte",
-      "Push notifications",
-      "Camera/Haptics"
+      "Capacitor configurado ✓",
+      "iOS/Android config ✓",
+      "Push notifications (FCM)",
+      "Camera/Haptics ✓"
+    ]
+  },
+  {
+    id: "native-features",
+    title: "Native Features",
+    description: "Biometria, geolocalização, NFC",
+    status: "planned",
+    progress: 0,
+    version: "v3.3.0",
+    icon: Shield,
+    features: [
+      "Face ID / Touch ID",
+      "Geolocalização offline",
+      "NFC para cartões",
+      "Deep linking"
+    ]
+  },
+  {
+    id: "app-store",
+    title: "App Store Deploy",
+    description: "Publicação iOS App Store e Google Play",
+    status: "planned",
+    progress: 0,
+    version: "v3.3.0",
+    icon: Rocket,
+    features: [
+      "App Store Connect",
+      "Google Play Console",
+      "Ícones e Splash screens",
+      "ASO otimizado"
     ]
   }
 ];

@@ -27,14 +27,16 @@
 
 ---
 
-## 🚀 v3.3.0 - MOBILE APP (Em Progresso)
+## 🚀 v3.3.0 - MOBILE APP (50% Completo)
 
 | Item | Status | Progresso |
 |------|--------|-----------|
 | Capacitor configurado | ✅ | 100% |
-| iOS/Android suporte | 🔄 | 30% |
-| Push notifications | 📋 | Planejado |
-| Camera/Haptics | 📋 | Planejado |
+| iOS/Android config | ✅ | 100% |
+| Camera/Haptics | ✅ | 100% |
+| Push notifications (FCM) | 🔄 | 50% |
+| Native Features | 📋 | Planejado |
+| App Store Deploy | 📋 | Planejado |
 
 ---
 
