@@ -162,6 +162,9 @@ const NOCMonitoring = lazy(() => import(/* webpackChunkName: "page-noc-monitorin
 // Roadmap - PATCH 859
 const Roadmap = lazy(() => import(/* webpackChunkName: "page-roadmap" */ "@/pages/Roadmap"));
 
+// Observability Center - PATCH Roadmap v3.2.0
+const ObservabilityCenter = lazy(() => import(/* webpackChunkName: "page-observability" */ "@/pages/ObservabilityCenter"));
+
 // AI Self-Healing - PATCH 860
 const SelfHealingLogs = lazy(() => import(/* webpackChunkName: "page-self-healing" */ "@/pages/ai/SelfHealingLogs"));
 
@@ -368,6 +371,9 @@ function App() {
                         
 {/* Roadmap - PATCH 859 */}
                         <Route path="roadmap" element={<Roadmap />} />
+
+                        {/* Observability Center - PATCH Roadmap v3.2.0 */}
+                        <Route path="observability" element={<ObservabilityCenter />} />
 
                         {/* Revolutionary Features Hub - PATCH REVOLUTION v1.0 */}
                         <Route path="revolutionary-features" element={<RevolutionaryFeaturesPage />} />

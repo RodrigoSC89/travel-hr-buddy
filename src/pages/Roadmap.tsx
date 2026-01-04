@@ -167,31 +167,32 @@ const roadmapItems: RoadmapItem[] = [
     title: "Testes E2E Playwright",
     description: "Cobertura completa de módulos críticos",
     status: "in-progress",
-    progress: 70,
+    progress: 80,
     version: "v3.2.0",
     icon: TestTube,
     features: [
       "Beta Program ✓",
       "Voice AI ✓",
       "Performance/PWA ✓",
-      "Critical Features ✓",
-      "12+ spec files"
+      "Observability ✓",
+      "15+ spec files"
     ]
   },
   {
     id: "observability",
     title: "Observabilidade Central",
     description: "Sentry, PostHog, heatmaps",
-    status: "planned",
-    progress: 30,
-    version: "v3.3.0",
+    status: "completed",
+    progress: 100,
+    version: "v3.2.0",
     icon: Eye,
     features: [
-      "Sentry para erros",
-      "PostHog analytics",
-      "Heatmaps de uso",
-      "Tracking por módulo"
-    ]
+      "Sentry Error Tracking ✓",
+      "PostHog Analytics ✓",
+      "Web Vitals Monitor ✓",
+      "/observability dashboard ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "documentation",
