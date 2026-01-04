@@ -57,6 +57,22 @@ const roadmapItems: RoadmapItem[] = [
     releaseDate: "2024-12"
   },
   {
+    id: "beta-program",
+    title: "Beta Program Management",
+    description: "Email automation, feedback forms, status page",
+    status: "completed",
+    progress: 100,
+    version: "v3.2.0",
+    icon: Rocket,
+    features: [
+      "Email automation (Resend)",
+      "Beta feedback form interativo",
+      "Status page realtime",
+      "Dashboard de resultados"
+    ],
+    releaseDate: "2025-01"
+  },
+  {
     id: "typescript",
     title: "Type Safety Completo",
     description: "Remoção de @ts-nocheck e tipagem estrita",
@@ -72,48 +88,18 @@ const roadmapItems: RoadmapItem[] = [
     ]
   },
   {
-    id: "testing",
-    title: "Testes E2E Playwright",
-    description: "Cobertura completa de módulos críticos",
-    status: "planned",
-    progress: 40,
+    id: "performance",
+    title: "Performance Otimizada",
+    description: "Lazy loading, cache trimming, modo lite",
+    status: "in-progress",
+    progress: 80,
     version: "v3.2.0",
-    icon: TestTube,
+    icon: Zap,
     features: [
-      "/ai-operations-center",
-      "/security-center",
-      "/integracoes",
-      "IA de Voz"
-    ]
-  },
-  {
-    id: "documentation",
-    title: "Documentação Técnica",
-    description: "Storybook, OpenAPI, Markdown automático",
-    status: "planned",
-    progress: 20,
-    version: "v3.3.0",
-    icon: FileText,
-    features: [
-      "Storybook para UI",
-      "OpenAPI para Edge Functions",
-      "Markdown por módulo",
-      "Publicação em /docs"
-    ]
-  },
-  {
-    id: "ai-autonomy",
-    title: "IA Autônoma Nível 2",
-    description: "Auto-correção e manutenção inteligente",
-    status: "beta",
-    progress: 60,
-    version: "v3.2.0",
-    icon: Brain,
-    features: [
-      "Detecção de falhas",
-      "Correção automática",
-      "Logs em ai_self_healing_logs",
-      "Painel /ai-ops/logs"
+      "100% lazy loading",
+      "Bundle < 1.5MB",
+      "Cache automático",
+      "Modo 2 Mbps"
     ]
   },
   {
@@ -132,6 +118,36 @@ const roadmapItems: RoadmapItem[] = [
     ]
   },
   {
+    id: "voice-ai",
+    title: "IA de Voz",
+    description: "Web Speech + ElevenLabs + AssemblyAI",
+    status: "beta",
+    progress: 70,
+    version: "v3.2.0",
+    icon: Activity,
+    features: [
+      "Comandos de voz",
+      "Transcrição em tempo real",
+      "Resposta por voz",
+      "Contexto por módulo"
+    ]
+  },
+  {
+    id: "ai-autonomy",
+    title: "IA Autônoma Nível 2",
+    description: "Auto-correção e manutenção inteligente",
+    status: "beta",
+    progress: 60,
+    version: "v3.2.0",
+    icon: Brain,
+    features: [
+      "Detecção de falhas",
+      "Correção automática",
+      "Logs em ai_self_healing_logs",
+      "Painel /ai-ops/logs"
+    ]
+  },
+  {
     id: "external-apis",
     title: "APIs Externas",
     description: "Amadeus prod, StormGlass, Copernicus",
@@ -147,18 +163,20 @@ const roadmapItems: RoadmapItem[] = [
     ]
   },
   {
-    id: "voice-ai",
-    title: "IA de Voz",
-    description: "Web Speech + ElevenLabs + AssemblyAI",
-    status: "beta",
-    progress: 70,
+    id: "testing",
+    title: "Testes E2E Playwright",
+    description: "Cobertura completa de módulos críticos",
+    status: "in-progress",
+    progress: 55,
     version: "v3.2.0",
-    icon: Activity,
+    icon: TestTube,
     features: [
-      "Comandos de voz",
-      "Transcrição em tempo real",
-      "Resposta por voz",
-      "Contexto por módulo"
+      "/ai-operations-center ✓",
+      "/security-center ✓",
+      "/integracoes ✓",
+      "/beta-feedback ✓",
+      "/status ✓",
+      "IA de Voz ✓"
     ]
   },
   {
@@ -177,18 +195,18 @@ const roadmapItems: RoadmapItem[] = [
     ]
   },
   {
-    id: "performance",
-    title: "Performance Otimizada",
-    description: "Lazy loading, cache trimming, modo lite",
-    status: "in-progress",
-    progress: 80,
-    version: "v3.2.0",
-    icon: Zap,
+    id: "documentation",
+    title: "Documentação Técnica",
+    description: "Storybook, OpenAPI, Markdown automático",
+    status: "planned",
+    progress: 20,
+    version: "v3.3.0",
+    icon: FileText,
     features: [
-      "100% lazy loading",
-      "Bundle < 1.5MB",
-      "Cache automático",
-      "Modo 2 Mbps"
+      "Storybook para UI",
+      "OpenAPI para Edge Functions",
+      "Markdown por módulo",
+      "Publicação em /docs"
     ]
   }
 ];
