@@ -1,0 +1,167 @@
+# Maritime Realistic Load Testing - Nautilus One v3.2.0
+# Simulates real maritime operation patterns
+
+config:
+  target: "{{ $processEnvironment.NAUTILUS_URL }}"
+  phases:
+    # Morning shift change (6-8 AM UTC) - High activity
+    - duration: 120
+      arrivalRate: 30
+      name: "Morning shift change"
+    
+    # Steady operations (8 AM - 6 PM UTC)
+    - duration: 600
+      arrivalRate: 15
+      name: "Normal operations"
+    
+    # Evening crew reports (6-8 PM UTC)
+    - duration: 120
+      arrivalRate: 25
+      name: "Evening reports"
+    
+    # Night watch (8 PM - 6 AM UTC)
+    - duration: 600
+      arrivalRate: 5
+      name: "Night operations"
+  
+  # Global settings
+  defaults:
+    headers:
+      Content-Type: "application/json"
+  
+  # Plugins
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+  
+  # Variables
+  variables:
+    vessels:
+      - "Santos"
+      - "Rotterdam"
+      - "Singapore"
+      - "Dubai"
+      - "Houston"
+
+scenarios:
+  # Scenario 1: Captain's morning routine (30% of traffic)
+  - name: "Captain Morning Check"
+    weight: 30
+    flow:
+      - get:
+          url: "/dashboard"
+          expect:
+            - statusCode: 200
+      - think: 5
+      - get:
+          url: "/fleet-command"
+          expect:
+            - statusCode: 200
+      - think: 10
+      - get:
+          url: "/weather"
+          expect:
+            - statusCode: 200
+      - think: 5
+      - post:
+          url: "/api/voyage-plan"
+          json:
+            departure: "Santos"
+            arrival: "Rotterdam"
+            cargo_weight: 50000
+            cargo_type: "containers"
+          expect:
+            - statusCode: 
+                - 200
+                - 201
+      - think: 30
+  
+  # Scenario 2: Safety Officer PEOTRAM audit (20% of traffic)
+  - name: "PEOTRAM Audit"
+    weight: 20
+    flow:
+      - get:
+          url: "/peotram"
+          expect:
+            - statusCode: 200
+      - think: 10
+      - post:
+          url: "/api/peotram/start-audit"
+          json:
+            element: "1.1"
+            vessel_id: "{{ $randomString(8) }}"
+          expect:
+            - statusCode: 
+                - 200
+                - 201
+      - think: 60
+      - post:
+          url: "/api/peotram/save-progress"
+          json:
+            element: "1.1"
+            status: "in_progress"
+            notes: "Inspection ongoing"
+          expect:
+            - statusCode: 200
+      - think: 30
+  
+  # Scenario 3: Crew member daily check-in (25% of traffic)
+  - name: "Crew Daily Check"
+    weight: 25
+    flow:
+      - get:
+          url: "/crew/my-schedule"
+          expect:
+            - statusCode: 200
+      - think: 5
+      - post:
+          url: "/api/health-checkin"
+          json:
+            mood: "{{ $randomNumber(1, 5) }}"
+            stress: "{{ $randomNumber(1, 5) }}"
+            sleep_quality: "{{ $randomNumber(1, 5) }}"
+          expect:
+            - statusCode:
+                - 200
+                - 201
+      - think: 10
+      - get:
+          url: "/crew/training"
+          expect:
+            - statusCode: 200
+      - think: 20
+  
+  # Scenario 4: AI Assistant queries (25% of traffic)
+  - name: "AI Assistant Usage"
+    weight: 25
+    flow:
+      - post:
+          url: "/api/ai/chat"
+          json:
+            message: "What's the weather forecast for next 48h?"
+          expect:
+            - statusCode: 200
+      - think: 10
+      - post:
+          url: "/api/ai/chat"
+          json:
+            message: "Show me crew certifications expiring this month"
+          expect:
+            - statusCode: 200
+      - think: 15
+      - post:
+          url: "/api/ai/chat"
+          json:
+            message: "Generate maintenance report for last week"
+          expect:
+            - statusCode: 200
+      - think: 20
+
+# Validation criteria
+ensure:
+  # System handles 30 req/s for 2h
+  - maxErrorRate: 1
+  # P95 latency < 2s during peak
+  - p95: 2000
+  # P99 latency < 5s
+  - p99: 5000
