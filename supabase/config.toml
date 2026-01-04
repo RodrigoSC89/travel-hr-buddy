@@ -974,3 +974,7 @@ comment = "AI Analytics - Usage tracking and statistics for AI Hub"
 [functions.preovid-ai-chat]
 verify_jwt = false
 comment = "Pre-OVID AI Chat - OVIQ4 inspection assistant with evidence generation and voice support"
+
+[functions.send-beta-email]
+verify_jwt = false
+comment = "Beta Program email automation - invitation, welcome, check-in, completion emails via Resend"

@@ -3632,6 +3632,45 @@ export type Database = {
           },
         ]
       }
+      beta_email_logs: {
+        Row: {
+          created_at: string | null
+          email_type: string
+          error_message: string | null
+          id: string
+          recipient_email: string
+          recipient_name: string | null
+          resend_id: string | null
+          sent_at: string | null
+          status: string
+          subject: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_type: string
+          error_message?: string | null
+          id?: string
+          recipient_email: string
+          recipient_name?: string | null
+          resend_id?: string | null
+          sent_at?: string | null
+          status?: string
+          subject: string
+        }
+        Update: {
+          created_at?: string | null
+          email_type?: string
+          error_message?: string | null
+          id?: string
+          recipient_email?: string
+          recipient_name?: string | null
+          resend_id?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string
+        }
+        Relationships: []
+      }
       beta_feedback: {
         Row: {
           attachments: Json | null
@@ -24536,6 +24575,148 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      status_components: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          id: string
+          name: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          name: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          name?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      status_incident_updates: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          incident_id: string
+          message: string
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          incident_id: string
+          message: string
+          status: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          incident_id?: string
+          message?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "status_incident_updates_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "status_incidents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      status_incidents: {
+        Row: {
+          affected_components: string[] | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          resolved_at: string | null
+          severity: string
+          started_at: string
+          status: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          affected_components?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          resolved_at?: string | null
+          severity: string
+          started_at?: string
+          status: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          affected_components?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          resolved_at?: string | null
+          severity?: string
+          started_at?: string
+          status?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      status_uptime_records: {
+        Row: {
+          component_id: string | null
+          created_at: string | null
+          date: string
+          id: string
+          total_downtime_minutes: number | null
+          uptime_percentage: number | null
+        }
+        Insert: {
+          component_id?: string | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          total_downtime_minutes?: number | null
+          uptime_percentage?: number | null
+        }
+        Update: {
+          component_id?: string | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          total_downtime_minutes?: number | null
+          uptime_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "status_uptime_records_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "status_components"
             referencedColumns: ["id"]
           },
         ]
