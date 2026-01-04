@@ -3511,6 +3511,51 @@ export type Database = {
           },
         ]
       }
+      backup_logs: {
+        Row: {
+          backup_type: string
+          completed_at: string | null
+          created_at: string
+          duration_ms: number | null
+          error_message: string | null
+          id: string
+          size_bytes: number | null
+          status: string
+          storage_location: string | null
+          tables_backed_up: string[] | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          backup_type: string
+          completed_at?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          size_bytes?: number | null
+          status: string
+          storage_location?: string | null
+          tables_backed_up?: string[] | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          backup_type?: string
+          completed_at?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          size_bytes?: number | null
+          status?: string
+          storage_location?: string | null
+          tables_backed_up?: string[] | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       behavioral_risk_assessments: {
         Row: {
           assessment_date: string | null
@@ -22724,6 +22769,51 @@ export type Database = {
         }
         Relationships: []
       }
+      security_scan_results: {
+        Row: {
+          created_at: string
+          description: string | null
+          finding_code: string
+          id: string
+          recommendation: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          scan_type: string
+          severity: string
+          status: string | null
+          table_name: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          finding_code: string
+          id?: string
+          recommendation?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          scan_type: string
+          severity: string
+          status?: string | null
+          table_name?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          finding_code?: string
+          id?: string
+          recommendation?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          scan_type?: string
+          severity?: string
+          status?: string | null
+          table_name?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       sensor_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -24755,6 +24845,33 @@ export type Database = {
           status?: string
           updated_at?: string | null
           uptime_percentage?: number | null
+        }
+        Relationships: []
+      }
+      system_health_checks: {
+        Row: {
+          check_type: string
+          created_at: string
+          details: Json | null
+          id: string
+          response_time_ms: number | null
+          status: string
+        }
+        Insert: {
+          check_type: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          response_time_ms?: number | null
+          status: string
+        }
+        Update: {
+          check_type?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          response_time_ms?: number | null
+          status?: string
         }
         Relationships: []
       }
