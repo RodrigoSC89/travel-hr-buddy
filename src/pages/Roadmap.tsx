@@ -204,15 +204,31 @@ const roadmapItems: RoadmapItem[] = [
     id: "documentation",
     title: "Documentação Técnica",
     description: "Storybook, OpenAPI, Markdown automático",
-    status: "in-progress",
-    progress: 60,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: FileText,
     features: [
-      "Storybook configurado ✓",
-      "/docs hub ✓",
-      "Edge Function docs ✓",
-      "Component stories WIP"
+      "Storybook stories ✓",
+      "Button/Card/Badge ✓",
+      "Input/Select/Dialog ✓",
+      "Tabs/Progress/Switch ✓"
+    ],
+    releaseDate: "2025-01"
+  },
+  {
+    id: "mobile-app",
+    title: "Mobile App v3.3.0",
+    description: "Capacitor para iOS e Android",
+    status: "in-progress",
+    progress: 30,
+    version: "v3.3.0",
+    icon: Smartphone,
+    features: [
+      "Capacitor configurado",
+      "iOS/Android suporte",
+      "Push notifications",
+      "Camera/Haptics"
     ]
   }
 ];
