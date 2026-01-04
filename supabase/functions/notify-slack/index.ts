@@ -13,13 +13,27 @@ interface SlackMessage {
   icon_emoji?: string;
 }
 
+type Severity = "critical" | "warning" | "info" | "success";
+
+interface NotificationPayload {
+  message: string;
+  channel?: string;
+  severity?: Severity;
+  title?: string;
+  details?: Record<string, unknown>;
+  source?: string;
+  errorType?: string;
+  stackTrace?: string;
+}
+
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, channel, severity = "info", title, details } = await req.json();
+    const payload: NotificationPayload = await req.json();
+    const { message, severity = "info", title, details, source, errorType, stackTrace } = payload;
     const webhookUrl = Deno.env.get("SLACK_WEBHOOK_URL");
 
     if (!webhookUrl) {
@@ -37,64 +51,105 @@ serve(async (req: Request) => {
       );
     }
 
-    console.log(`[Slack] Sending notification: severity=${severity}, title=${title}`);
+    console.log(`[Slack] Sending notification: severity=${severity}, title=${title}, source=${source}`);
 
-    // Build Slack message with blocks for rich formatting
-    const severityEmoji: Record<string, string> = {
+    const severityEmoji: Record<Severity, string> = {
       critical: "🚨",
       warning: "⚠️",
       info: "ℹ️",
       success: "✅",
     };
 
-    const severityColor: Record<string, string> = {
-      critical: "#FF0000",
-      warning: "#FFA500",
-      info: "#0000FF",
-      success: "#00FF00",
+    const severityColor: Record<Severity, string> = {
+      critical: "#DC2626",
+      warning: "#F59E0B",
+      info: "#3B82F6",
+      success: "#10B981",
     };
 
-    const slackPayload: SlackMessage = {
-      username: "Nautilus One",
-      icon_emoji: "🧭",
-      blocks: [
-        {
-          type: "header",
-          text: {
-            type: "plain_text",
-            text: `${severityEmoji[severity] || "📢"} ${title || "Nautilus Alert"}`,
-            emoji: true,
-          },
+    const blocks: any[] = [
+      {
+        type: "header",
+        text: {
+          type: "plain_text",
+          text: `${severityEmoji[severity]} ${title || "Nautilus Alert"}`,
+          emoji: true,
         },
-        {
-          type: "section",
-          text: {
-            type: "mrkdwn",
-            text: message,
-          },
-        },
-      ],
-    };
-
-    if (details) {
-      slackPayload.blocks!.push({
+      },
+      {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `\`\`\`${JSON.stringify(details, null, 2)}\`\`\``,
+          text: message,
+        },
+      },
+    ];
+
+    // Add error details for critical/warning
+    if ((severity === "critical" || severity === "warning") && (errorType || source)) {
+      blocks.push({
+        type: "section",
+        fields: [
+          ...(errorType ? [{ type: "mrkdwn", text: `*Error Type:*\n\`${errorType}\`` }] : []),
+          ...(source ? [{ type: "mrkdwn", text: `*Source:*\n${source}` }] : []),
+        ],
+      });
+    }
+
+    // Add stack trace for critical errors
+    if (severity === "critical" && stackTrace) {
+      const truncatedStack = stackTrace.slice(0, 500);
+      blocks.push({
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*Stack Trace:*\n\`\`\`${truncatedStack}${stackTrace.length > 500 ? "..." : ""}\`\`\``,
         },
       });
     }
 
-    slackPayload.blocks!.push({
+    // Add additional details
+    if (details) {
+      blocks.push({
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*Details:*\n\`\`\`${JSON.stringify(details, null, 2).slice(0, 800)}\`\`\``,
+        },
+      });
+    }
+
+    // Footer
+    blocks.push({
       type: "context",
       elements: [
         {
           type: "mrkdwn",
-          text: `📅 ${new Date().toISOString()} | 🧭 Nautilus One`,
+          text: `📅 ${new Date().toISOString()} | 🧭 Nautilus One v3.2.0`,
         },
       ],
     });
+
+    // Add action button for critical errors
+    if (severity === "critical") {
+      blocks.push({
+        type: "actions",
+        elements: [
+          {
+            type: "button",
+            text: { type: "plain_text", text: "🔍 View in Sentry" },
+            url: "https://sentry.io/organizations/your-org/issues/",
+            style: "danger",
+          },
+        ],
+      });
+    }
+
+    const slackPayload: SlackMessage = {
+      username: "Nautilus One",
+      icon_emoji: severity === "critical" ? "🚨" : "🧭",
+      blocks,
+    };
 
     const response = await fetch(webhookUrl, {
       method: "POST",
