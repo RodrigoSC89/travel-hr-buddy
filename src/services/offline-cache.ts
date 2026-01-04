@@ -137,7 +137,8 @@ class OfflineCacheService {
     const store = await this.getStore(STORES.PENDING_ACTIONS);
     return new Promise((resolve, reject) => {
       const index = store.index("synced");
-      const request = index.getAll(false as any);
+      // IDBKeyRange for boolean false - IndexedDB stores booleans as 0/1
+      const request = index.getAll(IDBKeyRange.only(0));
       request.onsuccess = () => resolve(request.result as PendingAction[]);
       request.onerror = () => reject(request.error);
     });
