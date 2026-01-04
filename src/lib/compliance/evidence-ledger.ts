@@ -2,10 +2,13 @@
  * PATCH 630 - Evidence Ledger
  * Cryptographic immutable ledger for compliance evidence and audit trails
  * Implements Merkle Tree-like structure for tamper detection
+ * 
+ * SECURITY: Uses ECDSA P-256 digital signatures for evidence authenticity
  */
 
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
+import { DigitalSignatureService, signData, verifySignature } from "@/lib/crypto/digital-signature.service";
 
 export interface EvidenceEntry {
   id: string;
@@ -16,12 +19,14 @@ export interface EvidenceEntry {
   moduleName: string;
   originator: string;
   description: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   hash: string;
   previousHash: string;
   signature: string;
+  publicKey?: string;
+  signatureAlgorithm?: string;
   vesselId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface LedgerSummary {
@@ -37,23 +42,46 @@ export interface LedgerSummary {
  * Generate SHA-256 hash for evidence data
  */
 async function generateHash(data: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const dataBuffer = encoder.encode(data);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  return DigitalSignatureService.hash(data);
 }
 
 /**
- * Generate digital signature for evidence entry
- * NOTE: This is a simplified implementation for demonstration.
- * In production, use proper cryptographic signing with ECDSA or RSA-PSS.
+ * Generate cryptographic digital signature for evidence entry
+ * Uses ECDSA P-256 with SHA-256 for production-grade security
  */
-async function generateSignature(data: string, privateKey: string): Promise<string> {
-  // TODO: Replace with proper digital signature algorithm (ECDSA/RSA-PSS) for production
-  // This simplified version is for demonstration purposes only
-  const combined = data + privateKey;
-  return await generateHash(combined);
+async function generateSignature(data: string): Promise<{ signature: string; publicKey: string; algorithm: string }> {
+  const result = await signData(data);
+  return {
+    signature: result.signature,
+    publicKey: result.publicKey,
+    algorithm: result.algorithm,
+  };
+}
+
+/**
+ * Verify digital signature of evidence entry
+ */
+export async function verifyEvidenceSignature(
+  entry: EvidenceEntry
+): Promise<{ isValid: boolean; error?: string }> {
+  if (!entry.publicKey) {
+    return { isValid: false, error: "No public key found for verification" };
+  }
+  
+  const blockData = JSON.stringify({
+    blockNumber: entry.blockNumber,
+    timestamp: entry.timestamp,
+    eventType: entry.eventType,
+    moduleId: entry.moduleId,
+    moduleName: entry.moduleName,
+    originator: entry.originator,
+    description: entry.description,
+    data: entry.data,
+    previousHash: entry.previousHash,
+  });
+  
+  const result = await verifySignature(blockData, entry.signature, entry.publicKey);
+  return { isValid: result.isValid, error: result.error };
 }
 
 /**
@@ -127,9 +155,9 @@ export async function recordEvidence(
       previousHash: previousBlock.hash
     });
 
-    // Generate hash and signature
+    // Generate hash and cryptographic signature
     const hash = await generateHash(blockData);
-    const signature = await generateSignature(blockData, "nautilus-private-key");
+    const signatureResult = await generateSignature(blockData);
 
     const entry: EvidenceEntry = {
       id: `block-${blockCounter}`,
@@ -143,7 +171,9 @@ export async function recordEvidence(
       data,
       hash,
       previousHash: previousBlock.hash,
-      signature,
+      signature: signatureResult.signature,
+      publicKey: signatureResult.publicKey,
+      signatureAlgorithm: signatureResult.algorithm,
       vesselId,
       metadata
     };

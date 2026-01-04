@@ -57,6 +57,39 @@ We appreciate security researchers who help us keep Nautilus One secure. With yo
 - Follow secure coding guidelines
 - Review RLS policies
 
+## Security Implementation Details
+
+### JWT Token Validation
+
+All API requests are validated using Supabase JWT tokens:
+- Tokens are verified via `supabase.auth.getUser(token)`
+- Results are cached for 5 minutes to reduce API calls
+- Expired tokens are automatically rejected
+- Role-based access control is enforced via `validateAuthWithRole()`
+
+**Location:** `src/middleware/security.middleware.ts`
+
+### Digital Signatures (Compliance Evidence)
+
+Evidence entries are cryptographically signed using ECDSA:
+- **Algorithm:** ECDSA P-256 with SHA-256
+- **Purpose:** Tamper detection for audit trails
+- **Verification:** `verifyEvidenceSignature()` validates entry authenticity
+
+**Location:** `src/lib/crypto/digital-signature.service.ts`
+
+### Key Security Features
+
+| Feature | Implementation | Status |
+|---------|----------------|--------|
+| JWT Validation | Supabase Auth | ✅ Production |
+| Digital Signatures | ECDSA P-256 | ✅ Production |
+| Rate Limiting | In-memory (Redis in prod) | ✅ Active |
+| CORS | Allowlist-based | ✅ Active |
+| Security Headers | CSP, HSTS, etc. | ✅ Active |
+| SQL Injection Detection | Pattern matching | ✅ Active |
+| XSS Prevention | Input sanitization | ✅ Active |
+
 ## Contact
 
 - **Security Team**: security@nautilus.app

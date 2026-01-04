@@ -7,11 +7,13 @@
  * - Input validation
  * - CORS
  * - Request logging
+ * - JWT Token Validation (using Supabase)
  * 
  * Compatible with both Next.js and standalone environments
  */
 
 import { logger } from "@/lib/logger";
+import { supabase } from "@/integrations/supabase/client";
 
 // Define types locally since Next.js is not a dependency
 interface NextRequest extends Request {
@@ -24,6 +26,28 @@ import { SECURITY_HEADERS, RATE_LIMITS, CORS_CONFIG, isAllowedOrigin, logSecurit
 
 // Rate limit store (em produção, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+
+// JWT validation cache to reduce API calls (TTL: 5 minutes)
+const jwtValidationCache = new Map<string, { userId: string; role: string; exp: number; cachedAt: number }>();
+const JWT_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Clean expired JWT validation cache entries
+ */
+function cleanupJwtCache() {
+  const now = Date.now();
+  for (const [token, data] of jwtValidationCache.entries()) {
+    // Remove if cache expired or token expired
+    if (now - data.cachedAt > JWT_CACHE_TTL || data.exp * 1000 < now) {
+      jwtValidationCache.delete(token);
+    }
+  }
+}
+
+// Cleanup JWT cache every 5 minutes
+if (typeof window === 'undefined') {
+  setInterval(cleanupJwtCache, JWT_CACHE_TTL);
+}
 
 // Função para limpar rate limit expirados (executar periodicamente)
 export function cleanupRateLimits() {
@@ -401,9 +425,22 @@ export function withSecurity<T>(
 }
 
 /**
- * Validador de autenticação para edge functions
+ * Validation result interface
  */
-export async function validateAuth(req: Request): Promise<{ valid: boolean; userId?: string; error?: string }> {
+export interface AuthValidationResult {
+  valid: boolean;
+  userId?: string;
+  email?: string;
+  role?: string;
+  exp?: number;
+  error?: string;
+}
+
+/**
+ * Validador de autenticação para edge functions
+ * Uses Supabase JWT validation for secure token verification
+ */
+export async function validateAuth(req: Request): Promise<AuthValidationResult> {
   try {
     const authHeader = req.headers.get('Authorization');
     
@@ -413,20 +450,99 @@ export async function validateAuth(req: Request): Promise<{ valid: boolean; user
     
     const token = authHeader.substring(7);
     
-    // TODO: Implementar validação real do token JWT
-    // Por enquanto, apenas verificar se existe
-    if (!token || token.length < 10) {
-      return { valid: false, error: 'Invalid token' };
+    // Basic token format validation
+    if (!token || token.length < 100) {
+      return { valid: false, error: 'Invalid token format' };
     }
     
-    // Em produção, decodificar e validar o JWT aqui
-    // const decoded = await verifyJWT(token);
-    // return { valid: true, userId: decoded.sub };
+    // Check cache first
+    const cachedResult = jwtValidationCache.get(token);
+    const now = Date.now();
     
-    return { valid: true, userId: 'user-id-placeholder' };
+    if (cachedResult && now - cachedResult.cachedAt < JWT_CACHE_TTL && cachedResult.exp * 1000 > now) {
+      return {
+        valid: true,
+        userId: cachedResult.userId,
+        role: cachedResult.role,
+        exp: cachedResult.exp,
+      };
+    }
+    
+    // Validate token using Supabase
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error || !user) {
+      logger.warn('JWT validation failed', { error: error?.message });
+      return { 
+        valid: false, 
+        error: error?.message || 'Token validation failed' 
+      };
+    }
+    
+    // Extract role from user metadata
+    const role = user.user_metadata?.role || user.app_metadata?.role || 'user';
+    
+    // Decode token to get expiration (without verification since Supabase already verified)
+    let exp = 0;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      exp = payload.exp || 0;
+    } catch {
+      // If we can't decode, assume 1 hour expiry
+      exp = Math.floor(now / 1000) + 3600;
+    }
+    
+    // Cache the result
+    jwtValidationCache.set(token, {
+      userId: user.id,
+      role,
+      exp,
+      cachedAt: now,
+    });
+    
+    logger.info('JWT validated successfully', { userId: user.id });
+    
+    return {
+      valid: true,
+      userId: user.id,
+      email: user.email,
+      role,
+      exp,
+    };
     
   } catch (error) {
     logger.error('Auth validation error', error);
     return { valid: false, error: 'Authentication failed' };
   }
+}
+
+/**
+ * Extract user ID from request (convenience function)
+ */
+export async function getUserIdFromRequest(req: Request): Promise<string | null> {
+  const result = await validateAuth(req);
+  return result.valid ? result.userId || null : null;
+}
+
+/**
+ * Validate auth and require specific role
+ */
+export async function validateAuthWithRole(
+  req: Request, 
+  requiredRoles: string[]
+): Promise<AuthValidationResult> {
+  const result = await validateAuth(req);
+  
+  if (!result.valid) {
+    return result;
+  }
+  
+  if (!result.role || !requiredRoles.includes(result.role)) {
+    return {
+      valid: false,
+      error: `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}`,
+    };
+  }
+  
+  return result;
 }
