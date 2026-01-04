@@ -237,7 +237,38 @@ node scripts/cleanup-console-logs.js
 
 ---
 
-**Status Final:** ✅ **P0 + P1 + P2 CONCLUÍDOS** - Full Public Launch APROVADO 🚀
+**Status Final:** ✅ **P0 + P1 + P2 + P2+ CONCLUÍDOS** - Full Public Launch APROVADO 🚀
+
+---
+
+## ✅ FASE 2+ (P2+) CONCLUÍDA
+
+### 8. Testes E2E para Handlers Implementados
+
+**Novos arquivos de teste criados:**
+
+| Arquivo | Cobertura |
+|---------|-----------|
+| `e2e/crew-wellbeing.spec.ts` | Health Check-in form, sliders, persistência |
+| `e2e/peotram-upload.spec.ts` | File upload, evidências, error handling |
+
+**Executar testes:**
+```bash
+npx playwright test e2e/crew-wellbeing.spec.ts e2e/peotram-upload.spec.ts
+```
+
+---
+
+### 9. strictNullChecks - Plano de Migração
+
+**Documentação criada:** `docs/STRICTNULLCHECKS-MIGRATION.md`
+
+**Status:** Preparação para v3.3.0
+- tsconfig atual: `strictNullChecks: false`
+- Plano de migração gradual por diretório
+- Ordem: lib → utils → hooks → services → components
+
+---
 
 ## Checklist de Lançamento
 
@@ -249,3 +280,14 @@ node scripts/cleanup-console-logs.js
 - [x] App.tsx modularizado
 - [x] Script de cleanup console.logs
 - [x] Logger centralizado funcionando
+- [x] **E2E Tests para handlers novos**
+- [x] **strictNullChecks plano documentado**
+
+---
+
+## Próximos Passos (v3.3.0)
+
+1. Executar `node scripts/cleanup-console-logs.js`
+2. Habilitar `strictNullChecks` gradualmente
+3. Monitorar Sentry por 72h após launch
+4. Coletar feedback de usuários beta

@@ -1,0 +1,168 @@
+# strictNullChecks Migration Plan
+
+## Status: Fase 1 - Preparação
+
+### Objetivo
+Habilitar `strictNullChecks: true` no TypeScript para aumentar a segurança de tipos e capturar erros de null/undefined em tempo de compilação.
+
+### Impacto Estimado
+- **Arquivos afetados**: ~200-400 arquivos
+- **Erros iniciais**: ~1000-2000 erros de compilação
+- **Tempo estimado**: 2-4 sprints (refatoração gradual)
+
+---
+
+## Fase 1: Preparação (Atual)
+
+### 1.1 Análise de Impacto
+```bash
+# Comando para verificar erros com strictNullChecks
+npx tsc --strictNullChecks --noEmit 2>&1 | head -100
+```
+
+### 1.2 Padrões Comuns a Corrigir
+
+#### 1. Optional Chaining
+```typescript
+// ❌ Antes
+const name = user.profile.name;
+
+// ✅ Depois
+const name = user?.profile?.name;
+```
+
+#### 2. Nullish Coalescing
+```typescript
+// ❌ Antes
+const value = data || 'default';
+
+// ✅ Depois
+const value = data ?? 'default';
+```
+
+#### 3. Type Guards
+```typescript
+// ❌ Antes
+function process(data) {
+  return data.length;
+}
+
+// ✅ Depois
+function process(data: string | null): number {
+  if (!data) return 0;
+  return data.length;
+}
+```
+
+#### 4. Non-null Assertion (usar com cuidado)
+```typescript
+// Quando você tem certeza que o valor existe
+const element = document.getElementById('root')!;
+```
+
+---
+
+## Fase 2: Migração Gradual
+
+### 2.1 Criar tsconfig.strictNull.json
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strictNullChecks": true
+  },
+  "include": [
+    "src/lib/**/*",
+    "src/utils/**/*"
+  ]
+}
+```
+
+### 2.2 Ordem de Migração (por prioridade)
+
+1. **Utilitários e Libs** (baixo acoplamento)
+   - `src/lib/logger.ts` ✅
+   - `src/lib/crypto.ts` ✅
+   - `src/lib/validation.ts`
+   - `src/utils/*.ts`
+
+2. **Types e Interfaces** (sem lógica)
+   - `src/types/*.ts`
+   - `src/integrations/supabase/types.ts` (read-only)
+
+3. **Hooks** (média complexidade)
+   - `src/hooks/use-*.ts`
+
+4. **Serviços** (alta complexidade)
+   - `src/services/*.ts`
+   - `src/modules/**/services/*.ts`
+
+5. **Componentes** (maior volume)
+   - `src/components/ui/*` (shadcn - já tipados)
+   - `src/components/**/*.tsx`
+   - `src/modules/**/*.tsx`
+
+---
+
+## Fase 3: Habilitar Globalmente
+
+### 3.1 Atualizar tsconfig.json
+```json
+{
+  "compilerOptions": {
+    "strictNullChecks": true
+  }
+}
+```
+
+### 3.2 Validação Final
+```bash
+npm run build
+npm run test
+npm run lint
+```
+
+---
+
+## Ferramentas de Apoio
+
+### Script de Análise
+```bash
+# Contar erros por diretório
+npx tsc --strictNullChecks --noEmit 2>&1 | grep "error TS" | sed 's/:.*//' | sort | uniq -c | sort -rn | head -20
+```
+
+### Regex para Correções em Massa
+```regex
+# Encontrar acessos potencialmente perigosos
+\w+\.\w+\.\w+ # Cadeias de propriedades sem optional chaining
+```
+
+---
+
+## Arquivos Prioritários para v3.3.0
+
+| Arquivo | Complexidade | Status |
+|---------|--------------|--------|
+| `src/lib/logger.ts` | Baixa | ✅ |
+| `src/lib/crypto.ts` | Baixa | ✅ |
+| `src/lib/validation.ts` | Média | 🔄 |
+| `src/hooks/use-toast.ts` | Baixa | ✅ |
+| `src/services/auth-service.ts` | Alta | 🔄 |
+| `src/modules/mission-control/mobile/syncService.ts` | Alta | ✅ |
+
+---
+
+## Notas
+
+- **Não habilitar** `strictNullChecks` em produção até completar Fase 2
+- Usar `// @ts-expect-error` temporariamente para casos complexos
+- Priorizar arquivos com lógica crítica de segurança
+- Manter testes E2E passando durante toda a migração
+
+---
+
+## Referências
+
+- [TypeScript strictNullChecks](https://www.typescriptlang.org/tsconfig#strictNullChecks)
+- [Migrating to strictNullChecks](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)
