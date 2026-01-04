@@ -237,6 +237,9 @@ const Gamification = lazy(() => import(/* webpackChunkName: "page-gamification" 
 // Revolutionary Features Hub - PATCH REVOLUTION v1.0
 const RevolutionaryFeaturesPage = lazy(() => import(/* webpackChunkName: "page-revolutionary-features" */ "@/pages/RevolutionaryFeaturesPage"));
 
+// External APIs Dashboard - PATCH Roadmap v3.2.0
+const ExternalAPIsPage = lazy(() => import(/* webpackChunkName: "page-external-apis" */ "@/pages/ExternalAPIsPage"));
+
 // AI Hub Central - PATCH AI-REVOLUTION
 const AIHubPage = lazy(() => import(/* webpackChunkName: "page-ai-hub" */ "@/pages/AIHubPage"));
 
@@ -374,6 +377,9 @@ function App() {
 
                         {/* Observability Center - PATCH Roadmap v3.2.0 */}
                         <Route path="observability" element={<ObservabilityCenter />} />
+
+                        {/* External APIs - PATCH Roadmap v3.2.0 */}
+                        <Route path="external-apis" element={<ExternalAPIsPage />} />
 
                         {/* Revolutionary Features Hub - PATCH REVOLUTION v1.0 */}
                         <Route path="revolutionary-features" element={<RevolutionaryFeaturesPage />} />

@@ -151,23 +151,24 @@ const roadmapItems: RoadmapItem[] = [
     id: "external-apis",
     title: "APIs Externas",
     description: "Amadeus prod, StormGlass, Copernicus",
-    status: "in-progress",
-    progress: 50,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: Database,
     features: [
-      "Amadeus produção",
-      "StormGlass meteorologia",
-      "Copernicus satélite",
-      "Zapier webhooks"
-    ]
+      "Amadeus Edge Function ✓",
+      "StormGlass Weather ✓",
+      "Copernicus Marine ✓",
+      "/external-apis dashboard ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "testing",
     title: "Testes E2E Playwright",
     description: "Cobertura completa de módulos críticos",
     status: "in-progress",
-    progress: 80,
+    progress: 85,
     version: "v3.2.0",
     icon: TestTube,
     features: [
@@ -175,7 +176,8 @@ const roadmapItems: RoadmapItem[] = [
       "Voice AI ✓",
       "Performance/PWA ✓",
       "Observability ✓",
-      "15+ spec files"
+      "External APIs ✓",
+      "16+ spec files"
     ]
   },
   {
