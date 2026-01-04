@@ -124,7 +124,8 @@ const element = document.getElementById('root')!;
 | `src/services/backup-service.ts` | ✅ | Removido `any`, tipagem `Record<string, unknown>` |
 | `src/services/ocr-service.ts` | ✅ | Removido `any`, tipagem TesseractBlock |
 | `src/services/nlp-service.ts` | ✅ | Removido `any[]`, tipagem explícita nos retornos |
-| `src/services/voice.service.ts` | ✅ | Tipagem SpeechRecognition (browser API) |
+| `src/services/voice.service.ts` | ✅ | Interface BrowserSpeechRecognition tipada |
+| `src/hooks/use-offline-storage.ts` | ✅ | Já null-safe com IDBKeyRange |
 | `src/services/ai/distributed-ai.service.ts` | ✅ | Já null-safe |
 | `src/services/ai/self-healing-engine.ts` | ✅ | Removido `as any`, interface LogRow tipada |
 | `src/services/weather/weather-fallback.service.ts` | ✅ | Removido `any` do forecast map |
