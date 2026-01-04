@@ -57,13 +57,13 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, []);
 
   // Save data to cache
-  const saveToCache = useCallback(async (key: string, data: any) => {
+  const saveToCache = useCallback(async (key: string, data: unknown) => {
     try {
       const db = await initDB();
       const transaction = db.transaction([CACHE_STORE], "readwrite");
       const store = transaction.objectStore(CACHE_STORE);
       
-      await store.put({
+      store.put({
         key,
         data,
         timestamp: Date.now()
@@ -94,21 +94,21 @@ export const useOfflineStorage = (): UseOfflineStorageReturn => {
   }, [initDB]);
 
   // Add pending change for offline sync
-  const addPendingChange = useCallback(async (action: string, data: any) => {
+  const addPendingChange = useCallback(async (action: string, data: Record<string, unknown>) => {
     try {
       const db = await initDB();
       const transaction = db.transaction([OFFLINE_STORE], "readwrite");
       const store = transaction.objectStore(OFFLINE_STORE);
       
       const offlineData: OfflineData = {
-        id: `${action}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `${action}_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         action,
         data,
         timestamp: Date.now(),
         synced: false
       };
       
-      await store.add(offlineData);
+      store.add(offlineData);
     } catch (error) {
       logger.error("Failed to save offline action:", error);
     }
