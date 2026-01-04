@@ -62,23 +62,23 @@ const element = document.getElementById('root')!;
 
 ---
 
+## Arquivos Migrados (Fase 1)
+
+| Arquivo | Status | Mudanças |
+|---------|--------|----------|
+| `src/lib/utils.ts` | ✅ | null guards em formatCurrency/formatDate |
+| `src/lib/type-helpers.ts` | ✅ | +7 helpers: assertNonNull, isDefined, safeGet, safeJsonParse, toArray, toString, toNumber |
+| `src/lib/logger.ts` | ✅ | Já null-safe |
+| `src/lib/unified/format-utils.unified.ts` | ✅ | Já null-safe |
+| `src/lib/unified/error-handling.unified.ts` | ✅ | Já null-safe |
+| `src/lib/validation/schemas.ts` | ✅ | Zod handles null |
+| `src/lib/status-utils.ts` | ✅ | Fallbacks implementados |
+| `src/lib/cleanup-utils.ts` | ✅ | Null checks em hooks |
+| `src/lib/dashboard-utils.ts` | ✅ | Type assertions corretos |
+
+---
+
 ## Fase 2: Migração Gradual
-
-### 2.1 Criar tsconfig.strictNull.json
-```json
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "strictNullChecks": true
-  },
-  "include": [
-    "src/lib/**/*",
-    "src/utils/**/*"
-  ]
-}
-```
-
-### 2.2 Ordem de Migração (por prioridade)
 
 1. **Utilitários e Libs** (baixo acoplamento)
    - `src/lib/logger.ts` ✅

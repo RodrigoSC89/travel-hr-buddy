@@ -1,6 +1,7 @@
 /**
  * Type Helper Utilities
  * Helper functions to safely convert between null and undefined types
+ * PATCH: strictNullChecks Phase 1 - Enhanced null safety
  */
 
 /**
@@ -41,4 +42,64 @@ export function deepNullToUndefined<T>(obj: T): T {
  */
 export function withDefault<T>(value: T | null | undefined, defaultValue: T): T {
   return value ?? defaultValue;
+}
+
+/**
+ * Assert that a value is not null or undefined
+ * Throws if value is nullish - use only when you're certain the value exists
+ */
+export function assertNonNull<T>(value: T | null | undefined, message?: string): T {
+  if (value == null) {
+    throw new Error(message ?? "Expected non-null value");
+  }
+  return value;
+}
+
+/**
+ * Type guard to check if a value is defined (not null and not undefined)
+ */
+export function isDefined<T>(value: T | null | undefined): value is T {
+  return value !== null && value !== undefined;
+}
+
+/**
+ * Safe access to nested object properties
+ * Returns undefined if any part of the path is null/undefined
+ */
+export function safeGet<T, K extends keyof T>(obj: T | null | undefined, key: K): T[K] | undefined {
+  return obj?.[key];
+}
+
+/**
+ * Safely parse JSON with error handling
+ */
+export function safeJsonParse<T>(json: string | null | undefined, fallback: T): T {
+  if (!json) return fallback;
+  try {
+    return JSON.parse(json) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+/**
+ * Convert optional array to non-null array
+ */
+export function toArray<T>(value: T[] | null | undefined): T[] {
+  return value ?? [];
+}
+
+/**
+ * Convert optional string to non-null string
+ */
+export function toString(value: string | null | undefined, fallback: string = ""): string {
+  return value ?? fallback;
+}
+
+/**
+ * Convert optional number to non-null number
+ */
+export function toNumber(value: number | null | undefined, fallback: number = 0): number {
+  if (value == null || isNaN(value)) return fallback;
+  return value;
 }
