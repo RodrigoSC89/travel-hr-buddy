@@ -39,7 +39,7 @@ const loadTesseract = async () => {
 };
 
 export class OCRService {
-  private worker: any = null;
+  private worker: Awaited<ReturnType<typeof import("tesseract.js").createWorker>> | null = null;
 
   async initialize(language: string = "por+eng"): Promise<void> {
     if (this.worker) {
@@ -48,7 +48,7 @@ export class OCRService {
 
     const TesseractModule = await loadTesseract();
     this.worker = await TesseractModule.createWorker(language, 1, {
-      logger: (m: any) => logger.info("OCR:", m),
+      logger: (m: { status: string; progress: number }) => logger.info("OCR:", m),
     });
   }
 
@@ -67,7 +67,13 @@ export class OCRService {
     const processingTime = Date.now() - startTime;
 
     // Extract blocks with bounding boxes
-    const blocks: OCRBlock[] = data.blocks?.map((block: any) => ({
+    interface TesseractBlock {
+      text: string;
+      confidence: number;
+      bbox: { x0: number; y0: number; x1: number; y1: number };
+    }
+    
+    const blocks: OCRBlock[] = (data.blocks as TesseractBlock[] | undefined)?.map((block) => ({
       text: block.text,
       confidence: block.confidence,
       bbox: block.bbox,

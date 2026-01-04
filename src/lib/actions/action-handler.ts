@@ -26,7 +26,7 @@ export type ActionType =
 export interface ActionResult {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface ActionConfig {
@@ -228,7 +228,7 @@ export const commonActions = {
   /**
    * Export data as JSON
    */
-  exportJSON: (data: any, filename: string): ActionResult => {
+  exportJSON: (data: unknown, filename: string): ActionResult => {
     const json = JSON.stringify(data, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -247,7 +247,7 @@ export const commonActions = {
   /**
    * Export data as CSV
    */
-  exportCSV: (data: Record<string, any>[], filename: string): ActionResult => {
+  exportCSV: (data: Record<string, unknown>[], filename: string): ActionResult => {
     if (!data.length) {
       return { success: false, message: 'Nenhum dado para exportar' };
     }

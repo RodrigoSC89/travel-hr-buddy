@@ -419,8 +419,8 @@ export class NLPService {
   /**
    * Extract tables from text (simplified)
    */
-  extractTables(text: string): any[] {
-    const tables: any[] = [];
+  extractTables(text: string): Array<{ raw: string; rows: number }> {
+    const tables: Array<{ raw: string; rows: number }> = [];
     
     // Look for patterns that indicate tables
     // This is a simplified implementation
@@ -463,7 +463,7 @@ export class NLPService {
   /**
    * Extract highlights (important sentences)
    */
-  extractHighlights(text: string, maxHighlights: number = 5): any[] {
+  extractHighlights(text: string, maxHighlights: number = 5): Array<{ text: string; position: number; relevance: number }> {
     const sentences = text
       .split(/[.!?]+/)
       .map(s => s.trim())

@@ -122,10 +122,14 @@ const element = document.getElementById('root')!;
 | `src/services/supabase.ts` | ✅ | Já null-safe com error handling |
 | `src/services/offline-cache.ts` | ✅ | Removido `as any`, IDBKeyRange correto |
 | `src/services/backup-service.ts` | ✅ | Removido `any`, tipagem `Record<string, unknown>` |
+| `src/services/ocr-service.ts` | ✅ | Removido `any`, tipagem TesseractBlock |
+| `src/services/nlp-service.ts` | ✅ | Removido `any[]`, tipagem explícita nos retornos |
+| `src/services/voice.service.ts` | ✅ | Tipagem SpeechRecognition (browser API) |
 | `src/services/ai/distributed-ai.service.ts` | ✅ | Já null-safe |
 | `src/services/ai/self-healing-engine.ts` | ✅ | Removido `as any`, interface LogRow tipada |
 | `src/services/weather/weather-fallback.service.ts` | ✅ | Removido `any` do forecast map |
 | `src/modules/mission-control/mobile/syncService.ts` | ✅ | Type-safe com mapeamento Supabase |
+| `src/lib/actions/action-handler.ts` | ✅ | Removido `any`, usando `unknown` |
 
 ---
 
