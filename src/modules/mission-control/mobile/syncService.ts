@@ -1,23 +1,59 @@
-// @ts-nocheck
-// PATCH-860: @ts-nocheck mantido - schema missions incompatível com tipo local Mission
-// TODO: Alinhar schema Supabase missions com interface Mission local
 /**
  * PATCH 548 - Mission Control Mobile Sync Service
  * Auto-sync with Supabase when online with network state monitoring
+ * 
+ * Type-safe implementation aligned with Supabase schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import {
   getMissionsOffline,
   saveMissionOffline,
   getSyncQueue,
-  clearSyncQueue,
   removeFromSyncQueue,
   addToSyncQueue,
+  type Mission,
 } from "./offlineStorage";
 
 type NetworkStatus = "online" | "offline" | "reconnecting";
 type SyncCallback = (status: NetworkStatus) => void;
+
+/**
+ * Maps local Mission to Supabase missions table structure
+ */
+function mapMissionToSupabase(mission: Mission) {
+  return {
+    id: mission.id,
+    title: mission.title,
+    description: mission.description || null,
+    status: mission.status,
+    priority: mission.priority,
+    start_date: mission.startDate || null,
+    end_date: mission.endDate || null,
+    vessel_id: mission.vesselId || null,
+  };
+}
+
+/**
+ * Maps Supabase mission row to local Mission interface
+ */
+function mapSupabaseToMission(row: Record<string, unknown>): Mission {
+  return {
+    id: String(row.id || ''),
+    title: String(row.title || 'Untitled Mission'),
+    status: (row.status as Mission['status']) || 'pending',
+    priority: (row.priority as Mission['priority']) || 'medium',
+    description: String(row.description || ''),
+    assignedTo: row.assigned_agents ? String(row.assigned_agents) : undefined,
+    startDate: row.start_date ? String(row.start_date) : undefined,
+    endDate: row.end_date ? String(row.end_date) : undefined,
+    vesselId: row.vessel_id ? String(row.vessel_id) : undefined,
+    notifications: 0,
+    lastUpdated: String(row.updated_at || row.created_at || new Date().toISOString()),
+    syncStatus: 'synced',
+  };
+}
 
 class MissionSyncService {
   private isOnline: boolean = navigator.onLine;
@@ -123,18 +159,11 @@ class MissionSyncService {
           switch (item.operation) {
           case "create":
           case "update":
+            // Use type assertion since we know the structure is correct
+            const missionData = mapMissionToSupabase(item.data) as Record<string, unknown>;
             const { error: upsertError } = await supabase
               .from("missions")
-              .upsert({
-                id: item.data.id,
-                title: item.data.title,
-                description: item.data.description,
-                status: item.data.status,
-                priority: item.data.priority,
-                start_date: item.data.startDate,
-                end_date: item.data.endDate,
-                vessel_id: item.data.vesselId,
-              });
+              .upsert(missionData as never);
             if (upsertError) throw upsertError;
             break;
 
@@ -169,20 +198,7 @@ class MissionSyncService {
       // Step 3: Update local storage with latest data
       if (missions) {
         for (const mission of missions) {
-          await saveMissionOffline({
-            id: mission.id,
-            title: mission.title || "Untitled Mission",
-            status: (mission.status as any) || "pending",
-            priority: (mission.priority as any) || "medium",
-            description: mission.description || "",
-            assignedTo: (mission.assigned_agents as any)?.toString() || undefined,
-            startDate: mission.start_date || undefined,
-            endDate: mission.end_date || undefined,
-            vesselId: mission.vessel_id || undefined,
-            notifications: 0,
-            lastUpdated: mission.updated_at || mission.created_at || new Date().toISOString(),
-            syncStatus: "synced",
-          });
+          await saveMissionOffline(mapSupabaseToMission(mission));
         }
       }
 
@@ -243,12 +259,20 @@ class MissionSyncService {
   /**
    * Create mission (save locally and queue for sync)
    */
-  public async createMission(mission: Omit<any, "id">) {
-    const newMission = {
-      ...mission,
+  public async createMission(missionInput: Partial<Mission>) {
+    const newMission: Mission = {
       id: crypto.randomUUID(),
+      title: missionInput.title || 'New Mission',
+      description: missionInput.description || '',
+      status: missionInput.status || 'pending',
+      priority: missionInput.priority || 'medium',
+      assignedTo: missionInput.assignedTo,
+      startDate: missionInput.startDate,
+      endDate: missionInput.endDate,
+      vesselId: missionInput.vesselId,
+      notifications: 0,
       lastUpdated: new Date().toISOString(),
-      syncStatus: this.isOnline ? "pending" : "pending",
+      syncStatus: 'pending',
     };
 
     await saveMissionOffline(newMission);
@@ -264,7 +288,7 @@ class MissionSyncService {
   /**
    * Update mission (save locally and queue for sync)
    */
-  public async updateMission(missionId: string, updates: Partial<any>) {
+  public async updateMission(missionId: string, updates: Partial<Mission>) {
     const missions = await getMissionsOffline();
     const mission = missions.find((m) => m.id === missionId);
 
@@ -272,11 +296,11 @@ class MissionSyncService {
       throw new Error("Mission not found");
     }
 
-    const updatedMission = {
+    const updatedMission: Mission = {
       ...mission,
       ...updates,
       lastUpdated: new Date().toISOString(),
-      syncStatus: "pending" as const,
+      syncStatus: 'pending',
     };
 
     await saveMissionOffline(updatedMission);

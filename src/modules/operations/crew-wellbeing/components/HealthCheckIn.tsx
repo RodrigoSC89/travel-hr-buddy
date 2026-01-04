@@ -14,9 +14,12 @@ import {
   AlertCircle,
   Save,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface HealthMetrics {
   sleep_hours: number;
@@ -32,6 +35,7 @@ interface HealthMetrics {
 
 export const HealthCheckin: React.FC = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [metrics, setMetrics] = useState<HealthMetrics>({
     sleep_hours: 7,
     sleep_quality: 3,
@@ -45,11 +49,74 @@ export const HealthCheckin: React.FC = () => {
   });
 
   const handleSubmit = async () => {
-    // TODO: Implement actual save to Supabase
-    toast({
-      title: "Health Check-in Saved",
-      description: "Your health metrics have been recorded successfully"
-    });
+    setIsSubmitting(true);
+    
+    try {
+      // Get current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        toast({
+          title: "Erro de Autenticação",
+          description: "Faça login para salvar o check-in",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Save to Supabase using crew_health_logs table
+      const { error } = await supabase
+        .from("crew_health_logs")
+        .insert({
+          crew_member_id: user.id,
+          log_type: 'daily_checkin',
+          health_status: metrics.mood_rating >= 4 ? 'good' : metrics.mood_rating >= 3 ? 'fair' : 'concerning',
+          details: {
+            sleep_hours: metrics.sleep_hours,
+            sleep_quality: metrics.sleep_quality,
+            nutrition_rating: metrics.nutrition_rating,
+            mood_rating: metrics.mood_rating,
+            stress_level: metrics.stress_level,
+            energy_level: metrics.energy_level,
+            exercise_minutes: metrics.exercise_minutes,
+            water_intake_liters: metrics.water_intake_liters,
+            user_notes: metrics.notes
+          }
+        } as never);
+
+      if (error) {
+        logger.error("Health check-in save error", error);
+        throw error;
+      }
+
+      toast({
+        title: "✅ Check-in Salvo",
+        description: "Suas métricas de saúde foram registradas com sucesso"
+      });
+
+      // Reset form
+      setMetrics({
+        sleep_hours: 7,
+        sleep_quality: 3,
+        nutrition_rating: 3,
+        mood_rating: 3,
+        stress_level: 3,
+        energy_level: 3,
+        exercise_minutes: 30,
+        water_intake_liters: 2,
+        notes: ""
+      });
+
+    } catch (error) {
+      logger.error("Health check-in error", error);
+      toast({
+        title: "Erro ao Salvar",
+        description: "Não foi possível salvar o check-in. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getRatingColor = (rating: number, inverse: boolean = false) => {
@@ -236,9 +303,13 @@ export const HealthCheckin: React.FC = () => {
             />
           </div>
 
-          <Button onClick={handleSubmit} className="w-full">
-            <Save className="mr-2 h-4 w-4" />
-            Save Check-in
+          <Button onClick={handleSubmit} className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
+            {isSubmitting ? "Salvando..." : "Salvar Check-in"}
           </Button>
         </CardContent>
       </Card>

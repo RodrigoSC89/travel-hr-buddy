@@ -12,6 +12,7 @@ export interface Mission {
   assignedTo?: string;
   startDate?: string;
   endDate?: string;
+  vesselId?: string;
   notifications?: number;
   lastUpdated: string;
   syncStatus: "synced" | "pending" | "error";
