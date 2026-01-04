@@ -39,10 +39,13 @@ const OffshoreLoader = () => (
   </div>
 );
 
-// Simple inline error boundary
+// Global error boundary with Slack/Discord integration
+import { reportCriticalError } from "@/lib/alerts/slack-error-reporter";
+import * as Sentry from "@sentry/react";
+
 class ErrorBoundary extends Component<
   { children: ReactNode },
-  { hasError: boolean; error?: Error }
+  { hasError: boolean; error?: Error; errorInfo?: ErrorInfo }
 > {
   constructor(props: { children: ReactNode }) {
     super(props);
@@ -54,7 +57,24 @@ class ErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    this.setState({ errorInfo });
+    
+    // Log to console
     console.error("App Error:", error, errorInfo);
+    
+    // Report to Sentry
+    Sentry.captureException(error, {
+      contexts: { react: { componentStack: errorInfo.componentStack } },
+      tags: { boundary: "global", severity: "critical" },
+    });
+    
+    // Report to Slack/Discord (async, fire and forget)
+    reportCriticalError(error, {
+      module: "GlobalErrorBoundary",
+      componentStack: errorInfo.componentStack?.slice(0, 500),
+      url: window.location.href,
+      userAgent: navigator.userAgent,
+    }).catch(err => console.error("Failed to report to Slack/Discord:", err));
   }
 
   render() {
