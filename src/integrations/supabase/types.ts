@@ -30195,6 +30195,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_finance_access: { Args: { _user_id: string }; Returns: boolean }
       has_permission: {
         Args: {
           permission_name: string
@@ -30217,6 +30218,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_admin_or_hr: { Args: { _user_id: string }; Returns: boolean }
       is_hr: { Args: { _user_id: string }; Returns: boolean }
       is_org_admin: {
         Args: { _org_id: string; _user_id: string }
@@ -30354,6 +30356,14 @@ export type Database = {
       }
       user_belongs_to_tenant: {
         Args: { tenant_uuid: string; user_uuid?: string }
+        Returns: boolean
+      }
+      user_has_admin_or_hr_role: {
+        Args: { check_user_id: string }
+        Returns: boolean
+      }
+      user_has_finance_access: {
+        Args: { check_user_id: string }
         Returns: boolean
       }
       user_has_role: {
