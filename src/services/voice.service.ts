@@ -16,20 +16,31 @@ import type {
   CommandExecutionResult,
 } from "@/types/voice";
 
-// Use type assertion for speech recognition to avoid conflicts with lib.dom
-type SpeechRecognitionAny = any;
+// Browser SpeechRecognition type (varies by browser implementation)
+interface BrowserSpeechRecognition {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: { results: SpeechRecognitionResultList }) => void) | null;
+  onerror: ((event: { error: string }) => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
 
 export class VoiceService {
-  private static recognition: SpeechRecognitionAny = null;
+  private static recognition: BrowserSpeechRecognition | null = null;
   private static synthesis: SpeechSynthesis | null = null;
   private static currentSessionId: string | null = null;
-  private static wakeWordDetector: SpeechRecognitionAny = null;
+  private static wakeWordDetector: BrowserSpeechRecognition | null = null;
   private static isWakeWordActive = false;
   private static wakeWordCallback: ((detected: boolean) => void) | null = null;
 
   static initSpeechAPIs(): void {
     if (typeof window !== "undefined") {
-      const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SpeechRecognitionAPI = (window as unknown as { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition || 
+        (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition;
       if (SpeechRecognitionAPI) {
         this.recognition = new SpeechRecognitionAPI();
         this.recognition.continuous = false;
@@ -221,7 +232,8 @@ export class VoiceService {
     this.isWakeWordActive = true;
     this.wakeWordCallback = onDetected;
 
-    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognitionAPI = (window as unknown as { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor }).SpeechRecognition || 
+      (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionConstructor }).webkitSpeechRecognition;
     if (!SpeechRecognitionAPI) throw new Error("Speech recognition not supported");
 
     this.wakeWordDetector = new SpeechRecognitionAPI();
@@ -229,9 +241,9 @@ export class VoiceService {
     this.wakeWordDetector.interimResults = true;
     this.wakeWordDetector.lang = "pt-BR";
 
-    this.wakeWordDetector.onresult = (event: any) => {
+    this.wakeWordDetector.onresult = (event: { results: SpeechRecognitionResultList }) => {
       const results = Array.from({ length: event.results.length }, (_, i) => event.results[i]);
-      const transcript = results.map((r: any) => r[0].transcript).join(" ").toLowerCase();
+      const transcript = results.map((r) => r[0].transcript).join(" ").toLowerCase();
       if (transcript.includes(wakeWord.toLowerCase())) onDetected(true);
     };
 
