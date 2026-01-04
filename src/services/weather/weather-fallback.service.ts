@@ -257,7 +257,14 @@ async function fetchStormGlass(lat: number, lon: number): Promise<WeatherProvide
         currentDirection: sg.currentDirection,
         seaLevel: sg.seaLevel,
       },
-      forecast: data.data?.forecast?.map((f: any) => ({
+      forecast: data.data?.forecast?.map((f: {
+        time: string;
+        airTemperature?: number;
+        windSpeed?: number;
+        windDirection?: number;
+        waveHeight?: number;
+        precipitation?: number;
+      }) => ({
         time: f.time,
         temperature: f.airTemperature,
         windSpeed: f.windSpeed,

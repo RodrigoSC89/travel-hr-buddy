@@ -377,7 +377,7 @@ class SelfHealingEngine {
   async getRecentLogs(limit = 50): Promise<SelfHealingEvent[]> {
     try {
       const { data, error } = await supabase
-        .from("ai_self_healing_logs" as any)
+        .from("ai_self_healing_logs")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -387,16 +387,32 @@ class SelfHealingEngine {
         return [];
       }
 
-      return (data || []).map((log: any) => ({
+      interface LogRow {
+        id: string;
+        event_type: string;
+        severity: string;
+        module_affected: string;
+        issue_description: string;
+        root_cause?: string;
+        action_taken?: string;
+        action_result?: string;
+        correction_type?: string;
+        confidence_score?: number;
+        execution_time_ms?: number;
+        error_stack?: string;
+        metadata?: Record<string, unknown>;
+      }
+
+      return ((data || []) as LogRow[]).map((log) => ({
         id: log.id,
-        eventType: log.event_type,
-        severity: log.severity,
+        eventType: log.event_type as SelfHealingEvent["eventType"],
+        severity: log.severity as SelfHealingEvent["severity"],
         moduleAffected: log.module_affected,
         issueDescription: log.issue_description,
         rootCause: log.root_cause,
         actionTaken: log.action_taken,
-        actionResult: log.action_result,
-        correctionType: log.correction_type,
+        actionResult: log.action_result as SelfHealingEvent["actionResult"],
+        correctionType: log.correction_type as SelfHealingEvent["correctionType"],
         confidenceScore: log.confidence_score,
         executionTimeMs: log.execution_time_ms,
         errorStack: log.error_stack,

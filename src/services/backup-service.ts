@@ -8,7 +8,7 @@ export interface SystemBackup {
   file_path: string;
   file_size?: number | null;
   backup_status: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   created_by?: string | null;
   created_at?: string;
   completed_at?: string | null;
@@ -37,7 +37,7 @@ export class BackupService {
         file_path: d.file_path,
         file_size: d.file_size,
         backup_status: d.backup_status,
-        metadata: (d.metadata as any) || {},
+        metadata: (d.metadata as Record<string, unknown>) || {},
         created_by: d.created_by,
         created_at: d.created_at,
         completed_at: d.completed_at,
@@ -55,21 +55,21 @@ export class BackupService {
   static async createBackupRecord(
     filePath: string,
     backupType: string = "automatic",
-    metadata?: Record<string, any>
+    metadata?: Record<string, unknown>
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const { data: { user } } = await supabase.auth.getUser();
 
       const { error } = await supabase
         .from("system_backups")
-        .insert({
+        .insert([{
           backup_type: backupType,
           file_path: filePath,
           backup_status: "completed",
-          metadata: metadata || {},
-          created_by: user?.id,
+          metadata: JSON.parse(JSON.stringify(metadata || {})),
+          created_by: user?.id ?? null,
           completed_at: new Date().toISOString()
-        });
+        }]);
 
       if (error) {
         Logger.error("Error creating backup record", error, "BackupService");
@@ -105,7 +105,7 @@ export class BackupService {
         file_path: data.file_path,
         file_size: data.file_size,
         backup_status: data.backup_status,
-        metadata: (data.metadata as any) || {},
+        metadata: (data.metadata as Record<string, unknown>) || {},
         created_by: data.created_by,
         created_at: data.created_at,
         completed_at: data.completed_at,
