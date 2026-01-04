@@ -189,6 +189,9 @@ const WhistleblowerV2 = lazy(() => import(/* webpackChunkName: "page-whistleblow
 // Central de Comando - PATCH UNIFY-4.0 (Fusão Nautilus Command + Dashboard)
 const CentralComando = lazy(() => import(/* webpackChunkName: "page-central-comando" */ "@/pages/CentralComando"));
 
+// Billing - PHASE 4 SaaS
+const Billing = lazy(() => import(/* webpackChunkName: "page-billing" */ "@/pages/Billing"));
+
 // Q1 2025 Critical Modules - Cargo, Charter, Port Optimization
 const CargoManagementPage = lazy(() => import(/* webpackChunkName: "page-cargo-management" */ "@/pages/CargoManagementPage"));
 const CharterPartyPage = lazy(() => import(/* webpackChunkName: "page-charter-party" */ "@/pages/CharterPartyPage"));
@@ -304,6 +307,9 @@ function App() {
                         {/* Incident Simulator & Offline - PATCH 853 */}
                         <Route path="simulador" element={<IncidentSimulator />} />
                         <Route path="offline" element={<OfflinePage />} />
+                        
+                        {/* Billing - PHASE 4 SaaS */}
+                        <Route path="billing" element={<Billing />} />
                         
 {/* Integrations & Docs - PATCH 854 */}
                         <Route path="integracoes" element={<IntegrationsCenter />} />
