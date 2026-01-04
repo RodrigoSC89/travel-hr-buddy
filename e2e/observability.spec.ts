@@ -5,7 +5,48 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Observability Center", () => {
-  test.describe("Main Observability Page", () => {
+  test.describe("Unified Observability Dashboard", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/observability");
+    });
+
+    test("should load unified observability page", async ({ page }) => {
+      await expect(page).toHaveURL(/.*observability/);
+      await page.waitForLoadState("networkidle");
+      
+      // Should show the main title
+      await expect(page.locator('text=Observability Center')).toBeVisible({ timeout: 10000 });
+    });
+
+    test("should display metric cards", async ({ page }) => {
+      await page.waitForLoadState("networkidle");
+      
+      // Should show key metrics
+      await expect(page.locator('text=Erros Ativos')).toBeVisible();
+      await expect(page.locator('text=Uptime')).toBeVisible();
+      await expect(page.locator('text=Usuários Ativos')).toBeVisible();
+    });
+
+    test("should have working tabs", async ({ page }) => {
+      await page.waitForSelector('[role="tablist"]', { timeout: 10000 });
+      
+      // Click on Sessions tab
+      await page.click('text=Sessões');
+      await expect(page.locator('text=Sessões Ativas')).toBeVisible();
+      
+      // Click on Usage tab
+      await page.click('text=Uso');
+      await expect(page.locator('text=Uso por Módulo')).toBeVisible();
+    });
+
+    test("should show integration status", async ({ page }) => {
+      await expect(page.locator('text=Status das Integrações')).toBeVisible();
+      await expect(page.locator('text=Sentry')).toBeVisible();
+      await expect(page.locator('text=PostHog')).toBeVisible();
+    });
+  });
+
+  test.describe("AI Observability Page", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto("/ai-observability");
     });
