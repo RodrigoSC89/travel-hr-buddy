@@ -142,6 +142,11 @@ const WeatherMaritime = lazy(() => import(/* webpackChunkName: "page-weather-mar
 const AISTrackerPage = lazy(() => import(/* webpackChunkName: "page-ais-tracker" */ "@/pages/AISTrackerPage"));
 const VoiceTranscriber = lazy(() => import(/* webpackChunkName: "page-voice-transcriber" */ "@/pages/VoiceTranscriber"));
 
+// Beta Program Pages - PATCH Beta Management
+const BetaFeedback = lazy(() => import(/* webpackChunkName: "page-beta-feedback" */ "@/pages/BetaFeedback"));
+const BetaDashboard = lazy(() => import(/* webpackChunkName: "page-beta-dashboard" */ "@/pages/BetaDashboard"));
+const StatusPage = lazy(() => import(/* webpackChunkName: "page-status" */ "@/pages/StatusPage"));
+
 // New Pages - PATCH 857
 const PortAPI = lazy(() => import(/* webpackChunkName: "page-port-api" */ "@/pages/PortAPI"));
 const FlightTracker = lazy(() => import(/* webpackChunkName: "page-flight-tracker" */ "@/pages/FlightTracker"));
@@ -340,6 +345,11 @@ function App() {
                         <Route path="weather-maritime" element={<WeatherMaritime />} />
                         <Route path="ais-tracker-page" element={<AISTrackerPage />} />
                         <Route path="voice-transcriber" element={<VoiceTranscriber />} />
+                        
+                        {/* Beta Program Routes */}
+                        <Route path="beta-feedback" element={<BetaFeedback />} />
+                        <Route path="beta-dashboard" element={<BetaDashboard />} />
+                        <Route path="status" element={<StatusPage />} />
                         
                         {/* NEW: Additional API Pages - PATCH 857 */}
                         <Route path="port-api" element={<PortAPI />} />
