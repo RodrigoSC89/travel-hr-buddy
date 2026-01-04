@@ -1,6 +1,6 @@
-// @ts-nocheck
 /**
  * Performance Utilities - PATCH 597
+ * strictNullChecks Phase 2 - Removed @ts-nocheck
  * 
  * Provides utilities for runtime performance tracking including:
  * - FPS monitoring
@@ -19,6 +19,12 @@ interface PerformanceMemoryInfo {
 
 interface PerformanceWithMemory extends Performance {
   memory?: PerformanceMemoryInfo;
+}
+
+// Layout Shift interface for CLS measurement
+interface LayoutShift extends PerformanceEntry {
+  hadRecentInput: boolean;
+  value: number;
 }
 
 export interface PerformanceMetrics {
@@ -216,6 +222,8 @@ export function monitorMemory(
 
   const checkMemory = () => {
     const memory = performanceWithMemory.memory;
+    if (!memory) return;
+    
     const memoryData = {
       usedJSHeapSize: memory.usedJSHeapSize,
       totalJSHeapSize: memory.totalJSHeapSize,

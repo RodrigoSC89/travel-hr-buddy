@@ -62,7 +62,9 @@ const element = document.getElementById('root')!;
 
 ---
 
-## Arquivos Migrados (Fase 1)
+## Arquivos Migrados (Fase 1 + Fase 2)
+
+### Fase 1: src/lib/ ✅
 
 | Arquivo | Status | Mudanças |
 |---------|--------|----------|
@@ -71,14 +73,21 @@ const element = document.getElementById('root')!;
 | `src/lib/logger.ts` | ✅ | Já null-safe |
 | `src/lib/unified/format-utils.unified.ts` | ✅ | Já null-safe |
 | `src/lib/unified/error-handling.unified.ts` | ✅ | Já null-safe |
-| `src/lib/validation/schemas.ts` | ✅ | Zod handles null |
-| `src/lib/status-utils.ts` | ✅ | Fallbacks implementados |
-| `src/lib/cleanup-utils.ts` | ✅ | Null checks em hooks |
-| `src/lib/dashboard-utils.ts` | ✅ | Type assertions corretos |
+
+### Fase 2: src/utils/ + src/hooks/ ✅
+
+| Arquivo | Status | Mudanças |
+|---------|--------|----------|
+| `src/utils/performance-utils.ts` | ✅ | Removido @ts-nocheck, null guards para memory API |
+| `src/utils/supabase-helpers.ts` | ✅ | Já null-safe com type guards |
+| `src/hooks/use-offline-storage.ts` | ✅ | Substituído `any` por `unknown`, deprecated `substr` → `substring` |
+| `src/hooks/use-toast.ts` | ✅ | Já null-safe |
+| `src/hooks/use-debounce.ts` | ✅ | Já null-safe |
+| `src/hooks/useButtonHandlers.ts` | ✅ | Já null-safe |
 
 ---
 
-## Fase 2: Migração Gradual
+## Fase 3: Migração de Componentes (v3.3.0)
 
 1. **Utilitários e Libs** (baixo acoplamento)
    - `src/lib/logger.ts` ✅
