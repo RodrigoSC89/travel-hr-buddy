@@ -1,4 +1,4 @@
-// @ts-nocheck - Dynamic table access requires type override
+// PATCH 860: Type safety restored - using type assertions for dynamic tables
 "use client";
 
 import { useEffect, useState } from "react";
@@ -36,9 +36,9 @@ export default function SmartWorkflowPage() {
   async function fetchWorkflows() {
     try {
       setIsLoading(true);
-      // Use type assertion for tables not in generated types yet
-      const { data, error } = await (supabase
-        .from("smart_workflows" as never) as ReturnType<typeof supabase.from>)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data, error } = await (supabase as any)
+        .from("smart_workflows")
         .select("*")
         .order("created_at", { ascending: false });
       
@@ -70,12 +70,13 @@ export default function SmartWorkflowPage() {
       setIsCreating(true);
       const { data: userData } = await supabase.auth.getUser();
       
-      const { error } = await (supabase
-        .from("smart_workflows" as never) as ReturnType<typeof supabase.from>)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase as any)
+        .from("smart_workflows")
         .insert({ 
           title: newTitle,
           created_by: userData.user?.id 
-        } as never);
+        });
       
       if (error) throw error;
       
