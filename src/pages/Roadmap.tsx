@@ -76,76 +76,81 @@ const roadmapItems: RoadmapItem[] = [
     id: "typescript",
     title: "Type Safety Completo",
     description: "Remoção de @ts-nocheck e tipagem estrita",
-    status: "in-progress",
-    progress: 90,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: FileText,
     features: [
       "Workflows tipado ✓",
-      "Core services tipados",
-      "Edge Functions mantidos",
-      "~20 arquivos restantes"
-    ]
+      "Core services tipados ✓",
+      "Edge Functions (Deno) ✓",
+      "Strict mode habilitado ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "performance",
     title: "Performance Otimizada",
     description: "Lazy loading, cache trimming, modo lite",
-    status: "in-progress",
-    progress: 90,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: Zap,
     features: [
-      "usePerformanceMonitor hook ✓",
-      "Core Web Vitals tracking ✓",
-      "Lighthouse config ✓",
-      "Bundle optimization ✓"
-    ]
+      "usePerformanceMonitor ✓",
+      "Core Web Vitals ✓",
+      "Lighthouse >90 ✓",
+      "Bundle optimizado ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "pwa-mobile",
     title: "PWA & Mobile Ready",
     description: "TWA Android, Expo iOS, offline completo",
-    status: "in-progress",
-    progress: 85,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: Smartphone,
     features: [
       "usePWAStatus hook ✓",
-      "Background sync worker ✓",
+      "Background sync ✓",
       "Offline detection ✓",
       "Install prompt ✓"
-    ]
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "voice-ai",
     title: "IA de Voz",
     description: "Web Speech + ElevenLabs + AssemblyAI",
-    status: "beta",
-    progress: 70,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: Activity,
     features: [
-      "Comandos de voz",
-      "Transcrição em tempo real",
-      "Resposta por voz",
-      "Contexto por módulo"
-    ]
+      "Comandos de voz ✓",
+      "ElevenLabs TTS ✓",
+      "Voice transcriber ✓",
+      "PEOTRAM voice ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "ai-autonomy",
     title: "IA Autônoma Nível 2",
     description: "Auto-correção e manutenção inteligente",
-    status: "beta",
-    progress: 60,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: Brain,
     features: [
-      "Detecção de falhas",
-      "Correção automática",
-      "Logs em ai_self_healing_logs",
-      "Painel /ai-ops/logs"
-    ]
+      "Detecção de falhas ✓",
+      "Self-healing logs ✓",
+      "/ai-ops/logs ✓",
+      "Level 3 global ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "external-apis",
@@ -167,18 +172,17 @@ const roadmapItems: RoadmapItem[] = [
     id: "testing",
     title: "Testes E2E Playwright",
     description: "Cobertura completa de módulos críticos",
-    status: "in-progress",
-    progress: 85,
+    status: "completed",
+    progress: 100,
     version: "v3.2.0",
     icon: TestTube,
     features: [
-      "Beta Program ✓",
-      "Voice AI ✓",
-      "Performance/PWA ✓",
-      "Observability ✓",
-      "External APIs ✓",
-      "16+ spec files"
-    ]
+      "55+ spec files ✓",
+      "Critical modules ✓",
+      "Compliance suite ✓",
+      "CI/CD integrado ✓"
+    ],
+    releaseDate: "2025-01"
   },
   {
     id: "observability",
@@ -200,15 +204,15 @@ const roadmapItems: RoadmapItem[] = [
     id: "documentation",
     title: "Documentação Técnica",
     description: "Storybook, OpenAPI, Markdown automático",
-    status: "planned",
-    progress: 20,
-    version: "v3.3.0",
+    status: "in-progress",
+    progress: 60,
+    version: "v3.2.0",
     icon: FileText,
     features: [
-      "Storybook para UI",
-      "OpenAPI para Edge Functions",
-      "Markdown por módulo",
-      "Publicação em /docs"
+      "Storybook configurado ✓",
+      "/docs hub ✓",
+      "Edge Function docs ✓",
+      "Component stories WIP"
     ]
   }
 ];
