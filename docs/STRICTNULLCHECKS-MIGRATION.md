@@ -113,11 +113,14 @@ const element = document.getElementById('root')!;
 
 ---
 
-## Serviços Validados (Fase 2+)
+## Serviços Validados (Fase 3)
 
 | Arquivo | Status | Notas |
 |---------|--------|-------|
 | `src/services/enhanced-auth-service.ts` | ✅ | Já null-safe com type guards |
+| `src/services/openai.ts` | ✅ | Já null-safe com retorno `null` explícito |
+| `src/services/supabase.ts` | ✅ | Já null-safe com error handling |
+| `src/services/offline-cache.ts` | ✅ | Removido `as any`, IDBKeyRange correto |
 | `src/modules/mission-control/mobile/syncService.ts` | ✅ | Type-safe com mapeamento Supabase |
 
 ---
