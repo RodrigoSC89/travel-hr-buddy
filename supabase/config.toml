@@ -1011,6 +1011,10 @@ comment = "Operational AI Chat for natural language data analysis using Lovable 
 verify_jwt = false
 comment = "Send weekly executive KPI reports via email using Resend"
 
+[functions.check-integrations-status]
+verify_jwt = false
+comment = "Check status of external integrations (Slack, Discord, Resend)"
+
 [[edge_runtime.cron]]
 name = "iot-anomaly-check"
 function_name = "iot-anomaly-cron"
