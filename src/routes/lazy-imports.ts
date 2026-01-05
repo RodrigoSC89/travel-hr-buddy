@@ -45,23 +45,11 @@ export const AISTracking = lazy(() => import(/* webpackChunkName: "page-ais-trac
 export const AISTrackerPage = lazy(() => import(/* webpackChunkName: "page-ais-tracker" */ "@/pages/AISTrackerPage"));
 export const CertificateBlockchain = lazy(() => import(/* webpackChunkName: "page-cert-blockchain" */ "@/pages/CertificateBlockchain"));
 export const IncidentSimulator = lazy(() => import(/* webpackChunkName: "page-incident-simulator" */ "@/pages/IncidentSimulator"));
-export const VesselContracts = lazy(() => import(/* webpackChunkName: "page-vessel-contracts" */ "@/pages/VesselContractsUnified"));
-export const VesselCTS = lazy(() => import(/* webpackChunkName: "page-vessel-cts" */ "@/pages/VesselCTS"));
-export const VesselHistory = lazy(() => import(/* webpackChunkName: "page-vessel-history" */ "@/pages/VesselHistory"));
-export const GMUD = lazy(() => import(/* webpackChunkName: "page-gmud" */ "@/pages/GMUD"));
-export const ResponsibilityMatrix = lazy(() => import(/* webpackChunkName: "page-responsibility-matrix" */ "@/pages/ResponsibilityMatrix"));
-export const CargoManagementPage = lazy(() => import(/* webpackChunkName: "page-cargo-management" */ "@/pages/CargoManagementPage"));
-export const CharterPartyPage = lazy(() => import(/* webpackChunkName: "page-charter-party" */ "@/pages/CharterPartyPage"));
-export const PortCallOptimizationPage = lazy(() => import(/* webpackChunkName: "page-port-call-optimization" */ "@/pages/PortCallOptimizationPage"));
 export const VoyageAccountingPage = lazy(() => import(/* webpackChunkName: "page-voyage-accounting" */ "@/pages/VoyageAccountingPage"));
 
 // ============= SAFETY & COMPLIANCE =============
-export const SafetyHumanFactors = lazy(() => import(/* webpackChunkName: "page-safety-human-factors" */ "@/pages/SafetyHumanFactors"));
-export const SafetyIMCA = lazy(() => import(/* webpackChunkName: "page-safety-imca" */ "@/pages/SafetyIMCA"));
 export const PreOVIDInspection = lazy(() => import(/* webpackChunkName: "page-pre-ovid" */ "@/pages/PreOVIDInspection"));
 export const SGSOReportPage = lazy(() => import(/* webpackChunkName: "page-sgso-report" */ "@/pages/SGSOReport"));
-export const ISPSPage = lazy(() => import(/* webpackChunkName: "page-isps" */ "@/pages/ISPSPage"));
-export const DrillSimulatorPage = lazy(() => import(/* webpackChunkName: "page-drill-simulator" */ "@/pages/DrillSimulatorPage"));
 export const ComplianceCenter = lazy(() => import(/* webpackChunkName: "module-compliance" */ "@/modules/compliance/pages/ComplianceCenter"));
 export const TrackingCenter = lazy(() => import(/* webpackChunkName: "module-tracking" */ "@/modules/tracking/pages/TrackingCenter"));
 
