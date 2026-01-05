@@ -58,7 +58,7 @@ export default function RegulationsV2() {
   return (
     <PageLayoutV2
       icon={BookOpen}
-      title="Regulamentos V2"
+      title="Regulamentos"
       description="Base de conhecimento regulatório marítimo com IA"
       gradient="blue"
       badges={[

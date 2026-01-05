@@ -12,10 +12,25 @@ export class PEOEngine {
   private imca: PEODPProfile;
 
   constructor() {
-    // @ts-expect-error - PATCH 66.0: JSON profiles need proper typing
-    this.normam = normam101Data as PEODPProfile;
-    // @ts-expect-error - PATCH 66.0: JSON profiles need proper typing
-    this.imca = imcaM117Data as PEODPProfile;
+    // Safely cast JSON data to PEODPProfile with validation
+    this.normam = this.validateProfile(normam101Data, "NORMAM-101");
+    this.imca = this.validateProfile(imcaM117Data, "IMCA-M117");
+  }
+
+  /**
+   * Validates and casts JSON profile data to PEODPProfile
+   */
+  private validateProfile(data: unknown, profileName: string): PEODPProfile {
+    const profile = data as { versao?: string; name?: string; requisitos?: unknown[] };
+    if (!profile.versao || !Array.isArray(profile.requisitos)) {
+      console.warn(`[PEOEngine] Invalid ${profileName} profile structure, using defaults`);
+      return {
+        versao: profileName,
+        name: profileName,
+        requisitos: [],
+      };
+    }
+    return profile as unknown as PEODPProfile;
   }
 
   /**

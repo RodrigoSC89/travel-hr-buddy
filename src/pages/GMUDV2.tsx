@@ -104,7 +104,7 @@ export default function GMUDV2() {
   return (
     <PageLayoutV2
       icon={GitBranch}
-      title="GMUD V2"
+      title="GMUD"
       description="Gestão de Mudanças com workflow automático de assinaturas digitais"
       gradient="purple"
       badges={[

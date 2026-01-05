@@ -1,5 +1,4 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -140,8 +139,6 @@ serve(async (req: Request) => {
     if (resendApiKey && resendApiKey.length > 10) {
       anyChannelConfigured = true;
       try {
-        const resend = new Resend(resendApiKey);
-        
         const htmlContent = `
           <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: ${severityColor[severity]}; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
@@ -160,15 +157,24 @@ serve(async (req: Request) => {
           </div>
         `;
 
-        const emailResponse = await resend.emails.send({
-          from: "Nautilus One <onboarding@resend.dev>",
-          to: [emailTo || "admin@nautilus.one"],
-          subject: `${severityEmoji[severity]} ${title || "Alerta Nautilus"} - ${severity.toUpperCase()}`,
-          html: htmlContent,
+        // Use fetch to send email via Resend API directly
+        const emailResponse = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Nautilus One <onboarding@resend.dev>",
+            to: [emailTo || "admin@nautilus.one"],
+            subject: `${severityEmoji[severity]} ${title || "Alerta Nautilus"} - ${severity.toUpperCase()}`,
+            html: htmlContent,
+          }),
         });
 
-        results.email = !emailResponse.error;
-        console.log(`[Email] ${!emailResponse.error ? "✓" : "✗"} ID: ${emailResponse.data?.id || "N/A"}`);
+        const emailResult = await emailResponse.json();
+        results.email = emailResponse.ok;
+        console.log(`[Email] ${emailResponse.ok ? "✓" : "✗"} ID: ${emailResult.id || "N/A"}`);
       } catch (err) {
         console.error("[Email] Error:", err);
         results.email = false;
