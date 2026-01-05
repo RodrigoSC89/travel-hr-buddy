@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   Shield, Brain, AlertTriangle, CheckCircle, FileText, 
-  TrendingUp, BookOpen, Sparkles, Search
+  TrendingUp, BookOpen, Search
 } from "lucide-react";
 
 interface IMCAIncident {

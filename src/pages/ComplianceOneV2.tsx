@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Scale, Brain, Shield, FileCheck, AlertTriangle, CheckCircle, 
-  TrendingUp, Eye, BookOpen, Sparkles, Flag
+  TrendingUp, Eye, BookOpen, Flag
 } from "lucide-react";
 
 const QUICK_QUESTIONS = [

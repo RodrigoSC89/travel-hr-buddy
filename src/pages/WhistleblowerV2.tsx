@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { 
   Flag, Brain, Shield, Lock, AlertTriangle, CheckCircle, 
-  Eye, Send, Sparkles, MessageSquare
+  Eye, Send, MessageSquare
 } from "lucide-react";
 
 interface Report {

@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { 
   Package, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
-  Box, Scale, Ship, Eye, Edit, Trash2, Sparkles, Anchor, FileWarning
+  Box, Scale, Ship, Eye, Edit, Trash2, Anchor, FileWarning
 } from "lucide-react";
 
 interface CargoItem {

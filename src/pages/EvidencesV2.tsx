@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   FolderOpen, Brain, Upload, Search, FileText, Image, 
-  CheckCircle, Clock, Sparkles
+  CheckCircle, Clock
 } from "lucide-react";
 
 interface Evidence {

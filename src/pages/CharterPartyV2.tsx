@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { 
   FileText, Brain, Shield, Clock, AlertTriangle, Plus, 
   Download, RefreshCw, TrendingUp, BarChart3, CheckCircle,
-  DollarSign, Calendar, Ship, Anchor, Eye, Edit, Trash2, Sparkles, Calculator
+  DollarSign, Calendar, Ship, Anchor, Eye, Edit, Trash2, Calculator
 } from "lucide-react";
 
 interface CharterContract {

@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   AlertTriangle, Brain, Shield, TrendingDown, CheckCircle, 
-  Target, BarChart3, Sparkles
+  Target, BarChart3
 } from "lucide-react";
 
 interface Risk {

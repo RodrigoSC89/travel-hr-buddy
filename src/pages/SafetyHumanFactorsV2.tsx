@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Brain, Heart, Activity, AlertTriangle, CheckCircle, 
-  TrendingUp, Users, Sparkles, Moon, Coffee
+  TrendingUp, Users, Moon, Coffee
 } from "lucide-react";
 
 const QUICK_QUESTIONS = [
