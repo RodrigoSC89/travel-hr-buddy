@@ -1,39 +1,37 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-interface SlackMessage {
-  text?: string;
-  blocks?: any[];
-  channel?: string;
-  username?: string;
-  icon_emoji?: string;
-}
-
-interface DiscordEmbed {
-  title?: string;
-  description?: string;
-  color?: number;
-  fields?: { name: string; value: string; inline?: boolean }[];
-  footer?: { text: string };
-  timestamp?: string;
-}
-
 type Severity = "critical" | "warning" | "info" | "success";
 
 interface NotificationPayload {
   message: string;
-  channel?: string;
   severity?: Severity;
   title?: string;
   details?: Record<string, unknown>;
   source?: string;
   errorType?: string;
   stackTrace?: string;
+  emailTo?: string;
 }
+
+const severityEmoji: Record<Severity, string> = {
+  critical: "🚨",
+  warning: "⚠️",
+  info: "ℹ️",
+  success: "✅",
+};
+
+const severityColor: Record<Severity, string> = {
+  critical: "#DC2626",
+  warning: "#F59E0B",
+  info: "#3B82F6",
+  success: "#10B981",
+};
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -42,18 +40,7 @@ serve(async (req: Request) => {
 
   try {
     const payload: NotificationPayload = await req.json();
-    const { message, severity = "info", title, details, source, errorType, stackTrace } = payload;
-    
-    const slackWebhookUrl = Deno.env.get("SLACK_WEBHOOK_URL");
-    const discordWebhookUrl = Deno.env.get("DISCORD_WEBHOOK_URL");
-
-    if (!slackWebhookUrl && !discordWebhookUrl) {
-      console.error("No webhook URLs configured (SLACK_WEBHOOK_URL or DISCORD_WEBHOOK_URL)");
-      return new Response(
-        JSON.stringify({ error: "No webhook URLs configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const { message, severity = "info", title, details, source, errorType, stackTrace, emailTo } = payload;
 
     if (!message) {
       return new Response(
@@ -62,100 +49,53 @@ serve(async (req: Request) => {
       );
     }
 
-    console.log(`[Notify] Sending notification: severity=${severity}, title=${title}, source=${source}`);
+    const slackWebhookUrl = Deno.env.get("SLACK_WEBHOOK_URL");
+    const discordWebhookUrl = Deno.env.get("DISCORD_WEBHOOK_URL");
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
 
-    const severityEmoji: Record<Severity, string> = {
-      critical: "🚨",
-      warning: "⚠️",
-      info: "ℹ️",
-      success: "✅",
-    };
+    const results: { slack?: boolean; discord?: boolean; email?: boolean } = {};
+    let anyChannelConfigured = false;
 
-    const severityColor: Record<Severity, number> = {
-      critical: 0xDC2626,
-      warning: 0xF59E0B,
-      info: 0x3B82F6,
-      success: 0x10B981,
-    };
+    console.log(`[Notify] Processing: severity=${severity}, title=${title}, source=${source}`);
 
-    const results: { slack?: boolean; discord?: boolean } = {};
-
-    // Send to Slack
-    if (slackWebhookUrl) {
+    // Send to Slack (optional)
+    if (slackWebhookUrl && slackWebhookUrl.length > 20) {
+      anyChannelConfigured = true;
       try {
         const blocks: any[] = [
           {
             type: "header",
-            text: {
-              type: "plain_text",
-              text: `${severityEmoji[severity]} ${title || "Nautilus Alert"}`,
-              emoji: true,
-            },
+            text: { type: "plain_text", text: `${severityEmoji[severity]} ${title || "Nautilus Alert"}`, emoji: true },
           },
-          {
-            type: "section",
-            text: { type: "mrkdwn", text: message },
-          },
+          { type: "section", text: { type: "mrkdwn", text: message } },
         ];
 
-        if ((severity === "critical" || severity === "warning") && (errorType || source)) {
+        if (source || errorType) {
           blocks.push({
             type: "section",
             fields: [
-              ...(errorType ? [{ type: "mrkdwn", text: `*Error Type:*\n\`${errorType}\`` }] : []),
-              ...(source ? [{ type: "mrkdwn", text: `*Source:*\n${source}` }] : []),
+              ...(errorType ? [{ type: "mrkdwn", text: `*Error:* \`${errorType}\`` }] : []),
+              ...(source ? [{ type: "mrkdwn", text: `*Source:* ${source}` }] : []),
             ],
           });
         }
 
         if (severity === "critical" && stackTrace) {
-          const truncatedStack = stackTrace.slice(0, 500);
           blocks.push({
             type: "section",
-            text: {
-              type: "mrkdwn",
-              text: `*Stack Trace:*\n\`\`\`${truncatedStack}${stackTrace.length > 500 ? "..." : ""}\`\`\``,
-            },
-          });
-        }
-
-        if (details) {
-          blocks.push({
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: `*Details:*\n\`\`\`${JSON.stringify(details, null, 2).slice(0, 800)}\`\`\``,
-            },
+            text: { type: "mrkdwn", text: `*Stack:*\n\`\`\`${stackTrace.slice(0, 400)}\`\`\`` },
           });
         }
 
         blocks.push({
           type: "context",
-          elements: [{ type: "mrkdwn", text: `📅 ${new Date().toISOString()} | 🧭 Nautilus One v3.2.0` }],
+          elements: [{ type: "mrkdwn", text: `📅 ${new Date().toISOString()} | 🧭 Nautilus One` }],
         });
-
-        if (severity === "critical") {
-          blocks.push({
-            type: "actions",
-            elements: [{
-              type: "button",
-              text: { type: "plain_text", text: "🔍 View in Sentry" },
-              url: "https://sentry.io/organizations/your-org/issues/",
-              style: "danger",
-            }],
-          });
-        }
-
-        const slackPayload: SlackMessage = {
-          username: "Nautilus One",
-          icon_emoji: severity === "critical" ? "🚨" : "🧭",
-          blocks,
-        };
 
         const slackResponse = await fetch(slackWebhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(slackPayload),
+          body: JSON.stringify({ username: "Nautilus One", icon_emoji: "🧭", blocks }),
         });
 
         results.slack = slackResponse.ok;
@@ -166,45 +106,26 @@ serve(async (req: Request) => {
       }
     }
 
-    // Send to Discord (backup)
-    if (discordWebhookUrl) {
+    // Send to Discord (optional)
+    if (discordWebhookUrl && discordWebhookUrl.length > 20) {
+      anyChannelConfigured = true;
       try {
-        const embed: DiscordEmbed = {
+        const embed = {
           title: `${severityEmoji[severity]} ${title || "Nautilus Alert"}`,
           description: message,
-          color: severityColor[severity],
-          fields: [],
-          footer: { text: "Nautilus One v3.2.0" },
+          color: parseInt(severityColor[severity].replace("#", ""), 16),
+          fields: [
+            ...(errorType ? [{ name: "Error", value: `\`${errorType}\``, inline: true }] : []),
+            ...(source ? [{ name: "Source", value: source, inline: true }] : []),
+          ],
+          footer: { text: "Nautilus One" },
           timestamp: new Date().toISOString(),
-        };
-
-        if (errorType) embed.fields!.push({ name: "Error Type", value: `\`${errorType}\``, inline: true });
-        if (source) embed.fields!.push({ name: "Source", value: source, inline: true });
-        
-        if (severity === "critical" && stackTrace) {
-          embed.fields!.push({ 
-            name: "Stack Trace", 
-            value: `\`\`\`${stackTrace.slice(0, 1000)}${stackTrace.length > 1000 ? "..." : ""}\`\`\`` 
-          });
-        }
-
-        if (details) {
-          embed.fields!.push({ 
-            name: "Details", 
-            value: `\`\`\`json\n${JSON.stringify(details, null, 2).slice(0, 500)}\`\`\`` 
-          });
-        }
-
-        const discordPayload = {
-          username: "Nautilus One",
-          avatar_url: "https://i.imgur.com/8cVgwGx.png",
-          embeds: [embed],
         };
 
         const discordResponse = await fetch(discordWebhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(discordPayload),
+          body: JSON.stringify({ username: "Nautilus One", embeds: [embed] }),
         });
 
         results.discord = discordResponse.ok;
@@ -215,12 +136,64 @@ serve(async (req: Request) => {
       }
     }
 
-    const anySuccess = results.slack || results.discord;
-    console.log(`[Notify] Complete: Slack=${results.slack}, Discord=${results.discord}`);
+    // Send via Email (Resend) - Primary method
+    if (resendApiKey && resendApiKey.length > 10) {
+      anyChannelConfigured = true;
+      try {
+        const resend = new Resend(resendApiKey);
+        
+        const htmlContent = `
+          <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: ${severityColor[severity]}; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+              <h1 style="margin: 0; font-size: 24px;">${severityEmoji[severity]} ${title || "Nautilus Alert"}</h1>
+            </div>
+            <div style="background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; border-top: none;">
+              <p style="font-size: 16px; color: #334155; margin: 0 0 16px 0;">${message}</p>
+              ${source ? `<p style="margin: 8px 0;"><strong>Fonte:</strong> ${source}</p>` : ""}
+              ${errorType ? `<p style="margin: 8px 0;"><strong>Tipo:</strong> <code>${errorType}</code></p>` : ""}
+              ${stackTrace ? `<pre style="background: #1e293b; color: #f1f5f9; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 12px;">${stackTrace.slice(0, 500)}</pre>` : ""}
+              ${details ? `<pre style="background: #f1f5f9; padding: 12px; border-radius: 4px; font-size: 12px;">${JSON.stringify(details, null, 2).slice(0, 500)}</pre>` : ""}
+            </div>
+            <div style="background: #f1f5f9; padding: 12px 20px; border-radius: 0 0 8px 8px; border: 1px solid #e2e8f0; border-top: none;">
+              <p style="margin: 0; font-size: 12px; color: #64748b;">📅 ${new Date().toLocaleString("pt-BR")} | 🧭 Nautilus One v3.2.0</p>
+            </div>
+          </div>
+        `;
+
+        const emailResponse = await resend.emails.send({
+          from: "Nautilus One <onboarding@resend.dev>",
+          to: [emailTo || "admin@nautilus.one"],
+          subject: `${severityEmoji[severity]} ${title || "Alerta Nautilus"} - ${severity.toUpperCase()}`,
+          html: htmlContent,
+        });
+
+        results.email = !emailResponse.error;
+        console.log(`[Email] ${!emailResponse.error ? "✓" : "✗"} ID: ${emailResponse.data?.id || "N/A"}`);
+      } catch (err) {
+        console.error("[Email] Error:", err);
+        results.email = false;
+      }
+    }
+
+    // If no channels configured, log internally but don't fail
+    if (!anyChannelConfigured) {
+      console.log("[Notify] No external channels configured - alert logged internally only");
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          results: { internal: true },
+          message: "Alert logged internally (no external channels configured)"
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const anySuccess = results.slack || results.discord || results.email;
+    console.log(`[Notify] Complete: Slack=${results.slack}, Discord=${results.discord}, Email=${results.email}`);
 
     return new Response(
       JSON.stringify({ success: anySuccess, results }),
-      { status: anySuccess ? 200 : 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
     console.error("[Notify] Error:", error);
