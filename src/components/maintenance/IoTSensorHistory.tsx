@@ -1,9 +1,9 @@
 /**
  * IoT Sensor History Dashboard
- * Trend charts and persistent anomaly alerts
+ * Trend charts, correlation analysis and persistent anomaly alerts
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,11 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  Legend
+  Legend,
+  ScatterChart,
+  Scatter,
+  ZAxis,
+  ReferenceLine
 } from 'recharts';
 import { 
   Activity, 
@@ -36,7 +40,9 @@ import {
   Filter,
   RefreshCw,
   Zap,
-  Droplets
+  Droplets,
+  GitCompare,
+  Target
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -65,6 +71,14 @@ interface AnomalyAlert {
   severity: 'warning' | 'critical';
   created_at: string;
   acknowledged: boolean;
+}
+
+interface CorrelationPoint {
+  vibration: number;
+  temperature: number;
+  timestamp: string;
+  equipment: string;
+  isAnomaly: boolean;
 }
 
 const SENSOR_ICONS: Record<string, React.ElementType> = {
@@ -107,23 +121,19 @@ export function IoTSensorHistory() {
                     timeRange === '24h' ? subHours(new Date(), 24) :
                     subDays(new Date(), 7);
 
-      // Direct fetch to avoid Supabase type constraints
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/equipment_sensors?created_at=gte.${since.toISOString()}&order=created_at.asc&limit=1000`,
-        {
-          headers: {
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          }
-        }
-      );
+      // Use Supabase client directly
+      const { data, error } = await supabase
+        .from('equipment_sensors')
+        .select('*')
+        .gte('created_at', since.toISOString())
+        .order('created_at', { ascending: true })
+        .limit(1000);
 
-      if (!response.ok) {
-        console.warn('Sensor data not available:', response.status);
+      if (error) {
+        console.warn('Sensor data not available:', error);
         return;
       }
 
-      const data = await response.json();
       const sensorData = (data || []) as SensorReading[];
       setReadings(sensorData);
 
@@ -168,7 +178,7 @@ export function IoTSensorHistory() {
   }, [selectedEquipment, selectedSensorType, timeRange]);
 
   // Prepare chart data grouped by sensor type
-  const chartData = React.useMemo(() => {
+  const chartData = useMemo(() => {
     const grouped: Record<string, { time: string; [key: string]: number | string }[]> = {};
     
     readings.forEach(r => {
@@ -193,8 +203,74 @@ export function IoTSensorHistory() {
     return grouped;
   }, [readings]);
 
+  // Prepare correlation data for vibration vs temperature
+  const correlationData = useMemo(() => {
+    const dataByTime: Record<string, Record<string, { vibration?: number; temperature?: number; equipment: string; isAnomaly: boolean }>> = {};
+    
+    readings.forEach(r => {
+      if (r.sensor_type !== 'vibration' && r.sensor_type !== 'temperature') return;
+      
+      const timeKey = format(new Date(r.created_at), 'HH:mm:ss');
+      const equipmentKey = r.equipment_id;
+      
+      if (!dataByTime[timeKey]) {
+        dataByTime[timeKey] = {};
+      }
+      
+      if (!dataByTime[timeKey][equipmentKey]) {
+        dataByTime[timeKey][equipmentKey] = { equipment: r.equipment_name || r.equipment_id, isAnomaly: false };
+      }
+      
+      if (r.sensor_type === 'vibration') {
+        dataByTime[timeKey][equipmentKey].vibration = r.value;
+      } else if (r.sensor_type === 'temperature') {
+        dataByTime[timeKey][equipmentKey].temperature = r.value;
+      }
+      
+      if (r.is_anomaly) {
+        dataByTime[timeKey][equipmentKey].isAnomaly = true;
+      }
+    });
+
+    // Flatten and filter complete pairs
+    const points: CorrelationPoint[] = [];
+    Object.entries(dataByTime).forEach(([timestamp, equipment]) => {
+      Object.values(equipment).forEach(data => {
+        if (data.vibration !== undefined && data.temperature !== undefined) {
+          points.push({
+            vibration: data.vibration,
+            temperature: data.temperature,
+            timestamp,
+            equipment: data.equipment,
+            isAnomaly: data.isAnomaly
+          });
+        }
+      });
+    });
+
+    return points;
+  }, [readings]);
+
+  // Calculate correlation coefficient
+  const correlationCoefficient = useMemo(() => {
+    if (correlationData.length < 2) return 0;
+    
+    const n = correlationData.length;
+    const sumX = correlationData.reduce((sum, p) => sum + p.vibration, 0);
+    const sumY = correlationData.reduce((sum, p) => sum + p.temperature, 0);
+    const sumXY = correlationData.reduce((sum, p) => sum + p.vibration * p.temperature, 0);
+    const sumX2 = correlationData.reduce((sum, p) => sum + p.vibration * p.vibration, 0);
+    const sumY2 = correlationData.reduce((sum, p) => sum + p.temperature * p.temperature, 0);
+    
+    const numerator = n * sumXY - sumX * sumY;
+    const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+    
+    if (denominator === 0) return 0;
+    return numerator / denominator;
+  }, [correlationData]);
+
   // Statistics
-  const stats = React.useMemo(() => {
+  const stats = useMemo(() => {
     const total = readings.length;
     const anomalyCount = readings.filter(r => r.is_anomaly).length;
     const criticalCount = anomalies.filter(a => a.severity === 'critical').length;
@@ -439,6 +515,185 @@ export function IoTSensorHistory() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Correlation Analysis Chart */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <GitCompare className="h-5 w-5" />
+                Análise de Correlação: Vibração × Temperatura
+              </CardTitle>
+              <CardDescription>
+                Previsão de falhas baseada na correlação entre sensores
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge 
+                variant={Math.abs(correlationCoefficient) > 0.7 ? "destructive" : Math.abs(correlationCoefficient) > 0.4 ? "outline" : "secondary"}
+                className="text-sm"
+              >
+                <Target className="h-3 w-3 mr-1" />
+                r = {correlationCoefficient.toFixed(3)}
+              </Badge>
+              <Badge variant="outline" className="text-xs">
+                {correlationData.length} pontos
+              </Badge>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Scatter Plot */}
+            <div className="lg:col-span-3">
+              <ResponsiveContainer width="100%" height={350}>
+                <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis 
+                    type="number" 
+                    dataKey="vibration" 
+                    name="Vibração" 
+                    unit=" mm/s"
+                    domain={['auto', 'auto']}
+                    label={{ value: 'Vibração (mm/s)', position: 'bottom', offset: 0 }}
+                  />
+                  <YAxis 
+                    type="number" 
+                    dataKey="temperature" 
+                    name="Temperatura" 
+                    unit="°C"
+                    domain={['auto', 'auto']}
+                    label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft' }}
+                  />
+                  <ZAxis range={[60, 400]} />
+                  <Tooltip
+                    cursor={{ strokeDasharray: '3 3' }}
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px'
+                    }}
+                    formatter={(value: number, name: string) => [
+                      `${value.toFixed(2)}${name === 'vibration' ? ' mm/s' : '°C'}`,
+                      name === 'vibration' ? 'Vibração' : 'Temperatura'
+                    ]}
+                    labelFormatter={(_, payload) => {
+                      if (payload && payload[0]) {
+                        const data = payload[0].payload as CorrelationPoint;
+                        return `${data.equipment} - ${data.timestamp}`;
+                      }
+                      return '';
+                    }}
+                  />
+                  <Legend />
+                  
+                  {/* Normal points */}
+                  <Scatter
+                    name="Normal"
+                    data={correlationData.filter(p => !p.isAnomaly)}
+                    fill="#3b82f6"
+                    opacity={0.6}
+                  />
+                  
+                  {/* Anomaly points */}
+                  <Scatter
+                    name="Anomalia"
+                    data={correlationData.filter(p => p.isAnomaly)}
+                    fill="#ef4444"
+                    opacity={0.9}
+                    shape="diamond"
+                  />
+                  
+                  {/* Reference lines for thresholds */}
+                  <ReferenceLine y={85} stroke="#f97316" strokeDasharray="5 5" label="Temp Crítica" />
+                  <ReferenceLine x={8} stroke="#8b5cf6" strokeDasharray="5 5" label="Vib Crítica" />
+                </ScatterChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Correlation Analysis */}
+            <div className="space-y-4">
+              <Card className="border-dashed">
+                <CardContent className="pt-4">
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-1">Coeficiente de Correlação</p>
+                    <p className={cn(
+                      "text-3xl font-bold",
+                      Math.abs(correlationCoefficient) > 0.7 ? "text-destructive" :
+                      Math.abs(correlationCoefficient) > 0.4 ? "text-amber-500" :
+                      "text-emerald-500"
+                    )}>
+                      {correlationCoefficient.toFixed(3)}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-dashed">
+                <CardContent className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-2">Interpretação</p>
+                  <div className={cn(
+                    "p-3 rounded-lg text-sm",
+                    Math.abs(correlationCoefficient) > 0.7 ? "bg-destructive/10 text-destructive" :
+                    Math.abs(correlationCoefficient) > 0.4 ? "bg-amber-500/10 text-amber-600" :
+                    "bg-emerald-500/10 text-emerald-600"
+                  )}>
+                    {Math.abs(correlationCoefficient) > 0.7 ? (
+                      <>
+                        <AlertTriangle className="h-4 w-4 inline mr-1" />
+                        <strong>Alta correlação!</strong> Vibração excessiva está causando aquecimento. Risco de falha iminente.
+                      </>
+                    ) : Math.abs(correlationCoefficient) > 0.4 ? (
+                      <>
+                        <Activity className="h-4 w-4 inline mr-1" />
+                        <strong>Correlação moderada.</strong> Monitorar tendência e considerar manutenção preventiva.
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="h-4 w-4 inline mr-1" />
+                        <strong>Correlação baixa.</strong> Sensores operando de forma independente. Equipamento saudável.
+                      </>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-dashed">
+                <CardContent className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-2">Estatísticas</p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>Pontos normais:</span>
+                      <Badge variant="secondary">{correlationData.filter(p => !p.isAnomaly).length}</Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Anomalias:</span>
+                      <Badge variant="destructive">{correlationData.filter(p => p.isAnomaly).length}</Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Média vibração:</span>
+                      <span className="font-mono">
+                        {correlationData.length > 0 
+                          ? (correlationData.reduce((s, p) => s + p.vibration, 0) / correlationData.length).toFixed(2) 
+                          : 0} mm/s
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Média temp:</span>
+                      <span className="font-mono">
+                        {correlationData.length > 0 
+                          ? (correlationData.reduce((s, p) => s + p.temperature, 0) / correlationData.length).toFixed(1) 
+                          : 0}°C
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
