@@ -34,6 +34,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useRouteWeatherFuel } from '@/hooks/useRouteWeatherFuel';
 import { useToast } from '@/hooks/use-toast';
+import { RouteMap } from './RouteMap';
 
 interface RouteOption {
   id: string;
@@ -338,6 +339,20 @@ export function RouteOptimizerDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Route Map */}
+      {(weather.length > 0 || routes.length > 0) && (
+        <RouteMap
+          waypoints={[
+            { ...PORT_COORDS[departurePort] || { lat: -23.96, lon: -46.33 }, name: departurePort },
+            { lat: 36.14, lon: -5.35, name: 'Gibraltar' },
+            { lat: 45.0, lon: -5.0, name: 'Bay of Biscay' },
+            { ...PORT_COORDS[arrivalPort] || { lat: 51.92, lon: 4.48 }, name: arrivalPort },
+          ]}
+          weather={weather}
+          hazards={hazards}
+        />
+      )}
 
       {/* Route Options */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

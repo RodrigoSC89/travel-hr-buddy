@@ -990,3 +990,7 @@ comment = "IoT sensor simulator for equipment_sensors realtime testing"
 [functions.weather-fuel-api]
 verify_jwt = false
 comment = "Weather and fuel prices API for route optimization"
+
+[functions.iot-anomaly-notify]
+verify_jwt = false
+comment = "Send notifications when critical sensor anomalies are detected"

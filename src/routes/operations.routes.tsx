@@ -20,6 +20,7 @@ import {
   SatelliteOptimizerPage,
   CrewWellnessPage,
   RouteOptimizerPage,
+  IoTHistoryPage,
 } from "./lazy-imports";
 
 export const operationsRoutes = (
@@ -36,5 +37,6 @@ export const operationsRoutes = (
     <Route path="satellite-optimizer" element={<SatelliteOptimizerPage />} />
     <Route path="crew-wellness" element={<CrewWellnessPage />} />
     <Route path="route-optimizer" element={<RouteOptimizerPage />} />
+    <Route path="iot-history" element={<IoTHistoryPage />} />
   </>
 );
