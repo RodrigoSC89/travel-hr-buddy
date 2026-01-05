@@ -46,6 +46,8 @@ export const AISTrackerPage = lazy(() => import(/* webpackChunkName: "page-ais-t
 export const CertificateBlockchain = lazy(() => import(/* webpackChunkName: "page-cert-blockchain" */ "@/pages/CertificateBlockchain"));
 export const IncidentSimulator = lazy(() => import(/* webpackChunkName: "page-incident-simulator" */ "@/pages/IncidentSimulator"));
 export const VoyageAccountingPage = lazy(() => import(/* webpackChunkName: "page-voyage-accounting" */ "@/pages/VoyageAccountingPage"));
+export const PredictiveMaintenancePage = lazy(() => import(/* webpackChunkName: "page-predictive-maintenance" */ "@/pages/PredictiveMaintenancePage"));
+export const SatelliteOptimizerPage = lazy(() => import(/* webpackChunkName: "page-satellite-optimizer" */ "@/pages/SatelliteOptimizerPage"));
 
 // ============= SAFETY & COMPLIANCE =============
 export const PreOVIDInspection = lazy(() => import(/* webpackChunkName: "page-pre-ovid" */ "@/pages/PreOVIDInspection"));

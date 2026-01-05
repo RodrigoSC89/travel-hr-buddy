@@ -24,6 +24,7 @@ import { GlobalAILevel3Button } from "./components/ai/GlobalAILevel3Button";
 import { GlobalAIButton } from "./components/ai/GlobalAIButton";
 import { FloatingButtonsContainer } from "./components/global/FloatingButtonsContainer";
 import { NautilusBrainButton } from "./components/global/NautilusBrainButton";
+import { OfflineIndicator } from "./components/offline/OfflineIndicator";
 
 // Performance & Auth
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -211,6 +212,7 @@ function App() {
                       </Routes>
                       
                       <Toaster />
+                      <OfflineIndicator />
                       <FloatingButtonsContainer>
                         <GlobalAIButton />
                         <GlobalAILevel3Button />

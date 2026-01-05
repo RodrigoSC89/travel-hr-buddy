@@ -16,6 +16,8 @@ import {
   IncidentSimulator,
   VoyageAccountingPage,
   TrackingCenter,
+  PredictiveMaintenancePage,
+  SatelliteOptimizerPage,
 } from "./lazy-imports";
 
 export const operationsRoutes = (
@@ -26,5 +28,9 @@ export const operationsRoutes = (
     <Route path="simulador" element={<IncidentSimulator />} />
     <Route path="voyage-accounting" element={<VoyageAccountingPage />} />
     <Route path="tracking/*" element={<TrackingCenter />} />
+    
+    {/* ML & Optimization */}
+    <Route path="predictive-maintenance" element={<PredictiveMaintenancePage />} />
+    <Route path="satellite-optimizer" element={<SatelliteOptimizerPage />} />
   </>
 );
