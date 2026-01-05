@@ -114,20 +114,13 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Mission Command", path: "/mission-command", icon: Target, emoji: "🎯" },
       { label: "Bridge Link", path: "/bridge-link", icon: Link, emoji: "🌉" },
       { label: "Drydock Management", path: "/drydock-management", icon: Anchor, emoji: "🏗️" },
-      // V2 Elevated Modules
-      { label: "🌟 Contratos V2", path: "/vessel-contracts-v2", icon: FileText, emoji: "📝", badge: "V2", status: "new" },
-      { label: "🌟 Charter Party V2", path: "/charter-party-v2", icon: FileText, emoji: "📜", badge: "V2", status: "new" },
-      { label: "🌟 Cargo Management V2", path: "/cargo-management-v2", icon: Ship, emoji: "📦", badge: "V2", status: "new" },
-      { label: "🌟 Port Call V2", path: "/port-call-v2", icon: Anchor, emoji: "⚓", badge: "V2", status: "new" },
-      { label: "🌟 CTS Tripulação V2", path: "/vessel-cts-v2", icon: Users, emoji: "👥", badge: "V2", status: "new" },
-      { label: "🌟 Histórico V2", path: "/vessel-history-v2", icon: Activity, emoji: "📊", badge: "V2", status: "new" },
-      // Legacy
+      // Módulos Consolidados (V2 como fonte de verdade)
       { label: "Contratos de Embarcação", path: "/vessel-contracts", icon: FileText, emoji: "📝" },
       { label: "Charter Party", path: "/charter-party", icon: FileText, emoji: "📜" },
       { label: "Cargo Management", path: "/cargo-management", icon: Ship, emoji: "📦" },
-      { label: "Port Call Optimization", path: "/port-call-optimization", icon: Anchor, emoji: "⚓" },
+      { label: "Port Call", path: "/port-call", icon: Anchor, emoji: "⚓" },
       { label: "CTS Tripulação", path: "/vessel-cts", icon: Users, emoji: "👥" },
-      { label: "Histórico de Embarcações", path: "/vessel-history", icon: Activity, emoji: "📊" },
+      { label: "Histórico de Embarcação", path: "/vessel-history", icon: Activity, emoji: "📊" },
     ],
   },
 
@@ -261,20 +254,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
-      // V2 Elevated Modules - Priority
-      { label: "🌟 GMUD V2", path: "/gmud-v2", icon: Settings, emoji: "🔄", badge: "V2", status: "new" },
-      { label: "🌟 Matriz Resp. V2", path: "/responsibility-matrix-v2", icon: Users, emoji: "📊", badge: "V2", status: "new" },
-      { label: "🌟 Safety HF V2", path: "/safety-human-factors-v2", icon: Brain, emoji: "🧠", badge: "V2", status: "new" },
-      { label: "🌟 Safety IMCA V2", path: "/safety-imca-v2", icon: Shield, emoji: "🛡️", badge: "V2", status: "new" },
-      { label: "🌟 ISPS Security V2", path: "/isps-security-v2", icon: Lock, emoji: "🔐", badge: "V2", status: "new" },
-      { label: "🌟 Drill Simulator V2", path: "/drill-simulator-v2", icon: Target, emoji: "🎯", badge: "V2", status: "new" },
-      { label: "🌟 Compliance One V2", path: "/compliance-one-v2", icon: Shield, emoji: "🛡️", badge: "V2", status: "new" },
-      { label: "🌟 Regulamentos V2", path: "/regulations-v2", icon: FileText, emoji: "📜", badge: "V2", status: "new" },
-      { label: "🌟 Matriz Riscos V2", path: "/risk-matrix-v2", icon: AlertTriangle, emoji: "⚠️", badge: "V2", status: "new" },
-      { label: "🌟 Evidências V2", path: "/evidences-v2", icon: FileText, emoji: "📁", badge: "V2", status: "new" },
-      { label: "🌟 Due Diligence V2", path: "/due-diligence-v2", icon: Users, emoji: "🔍", badge: "V2", status: "new" },
-      { label: "🌟 Canal Denúncias V2", path: "/whistleblower-v2", icon: Bell, emoji: "📢", badge: "V2", status: "new" },
-      // Auditorias Marítimas - Legacy
+      // Auditorias Marítimas Regulatórias
       { label: "PEO-DP", path: "/peo-dp", icon: FileText, emoji: "📋" },
       { label: "PEOTRAM", path: "/peotram", icon: FileText, emoji: "📋" },
       { label: "SGSO", path: "/sgso", icon: FileText, emoji: "📋" },
@@ -282,24 +262,22 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Pre-OVID Inspection", path: "/pre-ovid", icon: Eye, emoji: "🚢" },
       { label: "MLC Inspection", path: "/mlc-inspection", icon: Shield, emoji: "🔍" },
       { label: "Gerador Pacotes PSC", path: "/psc-package", icon: Shield, emoji: "🛡️" },
-      // V3.2.0 - Módulos Legacy
-      { label: "GMUD - Gestão de Mudanças", path: "/gmud", icon: Settings, emoji: "🔄" },
+      // Gestão de Mudanças & Responsabilidades (Consolidado)
+      { label: "GMUD", path: "/gmud", icon: Settings, emoji: "🔄" },
       { label: "Matriz de Responsabilidades", path: "/responsibility-matrix", icon: Users, emoji: "📊" },
+      // Segurança & Fatores Humanos (Consolidado)
       { label: "Safety Human Factors", path: "/safety-human-factors", icon: Brain, emoji: "🧠" },
       { label: "Safety IMCA", path: "/safety-imca", icon: Shield, emoji: "🛡️" },
-      // ISPS & Drills
       { label: "ISPS Security & Cyber", path: "/isps-security", icon: Lock, emoji: "🔐" },
       { label: "Drill Simulator", path: "/drill-simulator", icon: Target, emoji: "🎯" },
-      // Compliance One - ISO 37301
-      { label: "Compliance One", path: "/compliance-center", icon: Shield, emoji: "🛡️" },
-      { label: "Compliance Dashboard", path: "/compliance-center/dashboard", icon: BarChart3, emoji: "📊" },
-      { label: "Regulamentos", path: "/compliance-center/regulamentos", icon: FileText, emoji: "📜" },
-      { label: "Matriz de Riscos", path: "/compliance-center/riscos", icon: AlertTriangle, emoji: "⚠️" },
-      { label: "Evidências", path: "/compliance-center/evidencias", icon: FileText, emoji: "📁" },
-      { label: "Due Diligence", path: "/compliance-center/terceiros", icon: Users, emoji: "🔍" },
-      { label: "Canal de Denúncias", path: "/compliance-center/denuncias", icon: Bell, emoji: "📢" },
-      { label: "IA Compliance", path: "/compliance-center/ia-recommendations", icon: Brain, emoji: "🤖" },
-      // Segurança & Compliance (existentes)
+      // Compliance One - ISO 37301 (Consolidado)
+      { label: "Compliance One", path: "/compliance-one", icon: Shield, emoji: "🛡️" },
+      { label: "Regulamentos", path: "/regulations", icon: FileText, emoji: "📜" },
+      { label: "Matriz de Riscos", path: "/risk-matrix", icon: AlertTriangle, emoji: "⚠️" },
+      { label: "Evidências", path: "/evidences", icon: FileText, emoji: "📁" },
+      { label: "Due Diligence", path: "/due-diligence", icon: Users, emoji: "🔍" },
+      { label: "Canal de Denúncias", path: "/whistleblower", icon: Bell, emoji: "📢" },
+      // Segurança & Compliance
       { label: "Security Center", path: "/security-center", icon: Shield, emoji: "🛡️", requiredRoles: ['admin'] },
       { label: "AI Operations Center", path: "/ai-operations-center", icon: Brain, emoji: "🤖", requiredRoles: ['admin'], badgeType: 'alerts' },
       { label: "Auditoria de Segurança", path: "/auditoria-seguranca", icon: ClipboardList, emoji: "📋", requiredRoles: ['admin', 'auditor'] },

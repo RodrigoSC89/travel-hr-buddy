@@ -1,6 +1,12 @@
 /**
  * Operations & Fleet Routes
  * All vessel, fleet, and operations pages
+ * 
+ * NOTE: V1 modules have been deprecated in favor of V2 (consolidated in v2-modules.routes.tsx)
+ * This file only contains non-duplicated operation routes
+ * 
+ * @version 3.2.0
+ * @consolidation 2025-01-05
  */
 import { Route } from "react-router-dom";
 import {
@@ -8,14 +14,6 @@ import {
   AISTrackerPage,
   CertificateBlockchain,
   IncidentSimulator,
-  VesselContracts,
-  VesselCTS,
-  VesselHistory,
-  GMUD,
-  ResponsibilityMatrix,
-  CargoManagementPage,
-  CharterPartyPage,
-  PortCallOptimizationPage,
   VoyageAccountingPage,
   TrackingCenter,
 } from "./lazy-imports";
@@ -26,14 +24,6 @@ export const operationsRoutes = (
     <Route path="ais-tracker-page" element={<AISTrackerPage />} />
     <Route path="certificate-blockchain" element={<CertificateBlockchain />} />
     <Route path="simulador" element={<IncidentSimulator />} />
-    <Route path="vessel-contracts" element={<VesselContracts />} />
-    <Route path="vessel-cts" element={<VesselCTS />} />
-    <Route path="vessel-history" element={<VesselHistory />} />
-    <Route path="gmud" element={<GMUD />} />
-    <Route path="responsibility-matrix" element={<ResponsibilityMatrix />} />
-    <Route path="cargo-management" element={<CargoManagementPage />} />
-    <Route path="charter-party" element={<CharterPartyPage />} />
-    <Route path="port-call-optimization" element={<PortCallOptimizationPage />} />
     <Route path="voyage-accounting" element={<VoyageAccountingPage />} />
     <Route path="tracking/*" element={<TrackingCenter />} />
   </>
