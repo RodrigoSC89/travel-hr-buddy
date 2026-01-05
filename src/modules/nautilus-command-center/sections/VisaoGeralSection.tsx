@@ -1,17 +1,22 @@
 /**
  * Seção: Visão Geral - Dashboard Principal
+ * Integrado com dados reais do Supabase (IoT, Wellness, AIS)
  */
 
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Ship, Users, Wrench, Package, Shield, DollarSign,
   TrendingUp, TrendingDown, AlertTriangle, Activity, Clock,
-  ArrowRight, BarChart3, Fuel, Anchor
+  ArrowRight, BarChart3, Fuel, Anchor, Thermometer, Heart,
+  MapPin, Gauge, ExternalLink
 } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -23,6 +28,15 @@ interface VisaoGeralSectionProps {
   systemStatus: SystemStatus;
   isLoading: boolean;
   onNavigate: (tab: string) => void;
+}
+
+interface RealTimeStats {
+  iotAnomalies: number;
+  iotCritical: number;
+  sensorHealth: number;
+  crewAtRisk: number;
+  avgWellness: number;
+  vesselsTracking: number;
 }
 
 // Sample data for charts
@@ -44,15 +58,126 @@ const resourceDistribution = [
   { name: "Compliance", value: 8, color: "#EF4444" }
 ];
 
-const recentActivities = [
-  { id: 1, action: "Embarcação MV Atlântico iniciou viagem", time: "Há 5 min", type: "voyage", icon: Ship },
-  { id: 2, action: "Manutenção preventiva concluída - MV Pacific", time: "Há 15 min", type: "maintenance", icon: Wrench },
-  { id: 3, action: "12 certificados renovados", time: "Há 30 min", type: "compliance", icon: Shield },
-  { id: 4, action: "Novo tripulante embarcado - João Silva", time: "Há 1h", type: "crew", icon: Users },
-  { id: 5, action: "Abastecimento concluído - 15.000L", time: "Há 2h", type: "fuel", icon: Fuel }
-];
-
 export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: VisaoGeralSectionProps) {
+  const navigate = useNavigate();
+  const [realTimeStats, setRealTimeStats] = useState<RealTimeStats>({
+    iotAnomalies: 0,
+    iotCritical: 0,
+    sensorHealth: 100,
+    crewAtRisk: 0,
+    avgWellness: 0,
+    vesselsTracking: 0
+  });
+  const [recentActivities, setRecentActivities] = useState<any[]>([]);
+
+  // Fetch real-time stats from Supabase
+  useEffect(() => {
+    async function fetchRealTimeStats() {
+      try {
+        // Fetch IoT sensor anomalies
+        const { data: sensors } = await supabase
+          .from('equipment_sensors')
+          .select('*')
+          .order('recorded_at', { ascending: false })
+          .limit(100);
+
+        const anomalies = sensors?.filter(s => s.is_anomaly) || [];
+        // Critical = value exceeds max_threshold by 20%+
+        const critical = anomalies.filter(s => s.value && s.max_threshold && s.value > s.max_threshold * 1.2);
+        const healthySensors = sensors?.filter(s => !s.is_anomaly).length || 0;
+        const totalSensors = sensors?.length || 1;
+
+        // Fetch crew wellness data
+        const { data: wellness } = await supabase
+          .from('crew_health_checkins')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(50);
+
+        // At risk = stress_level >= 4 or energy_level <= 2
+        const atRisk = wellness?.filter(w => (w.stress_level || 0) >= 4 || (w.energy_level || 5) <= 2) || [];
+        // Calculate overall wellness from mood, energy, sleep (1-5 scale average)
+        const avgWellnessScore = wellness?.length 
+          ? wellness.reduce((acc, w) => acc + ((w.mood + w.energy_level + w.sleep_quality) / 3), 0) / wellness.length 
+          : 3;
+
+        setRealTimeStats({
+          iotAnomalies: anomalies.length,
+          iotCritical: critical.length,
+          sensorHealth: Math.round((healthySensors / totalSensors) * 100),
+          crewAtRisk: atRisk.length,
+          avgWellness: Math.round(avgWellnessScore * 20), // Convert 1-5 to percentage
+          vesselsTracking: 5 // Mock - would come from AIS
+        });
+
+        // Build recent activities from real data
+        const activities: any[] = [];
+        
+        if (critical.length > 0) {
+          activities.push({
+            id: 'iot-critical',
+            action: `${critical.length} alerta(s) crítico(s) em sensores IoT`,
+            time: 'Tempo real',
+            type: 'alert',
+            icon: AlertTriangle,
+            urgent: true
+          });
+        }
+
+        if (atRisk.length > 0) {
+          activities.push({
+            id: 'crew-risk',
+            action: `${atRisk.length} tripulante(s) com stress/fadiga elevado`,
+            time: 'Última hora',
+            type: 'crew',
+            icon: Heart,
+            urgent: true
+          });
+        }
+
+        // Add recent sensor readings
+        sensors?.slice(0, 2).forEach((s, i) => {
+          activities.push({
+            id: `sensor-${i}`,
+            action: `Sensor ${s.equipment_name}: ${s.value?.toFixed(1)} ${s.unit || ''} (${s.sensor_type})`,
+            time: new Date(s.recorded_at || '').toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+            type: 'sensor',
+            icon: Thermometer
+          });
+        });
+
+        // Add wellness check-ins
+        wellness?.slice(0, 2).forEach((w, i) => {
+          const avgScore = ((w.mood + w.energy_level + w.sleep_quality) / 3).toFixed(1);
+          activities.push({
+            id: `wellness-${i}`,
+            action: `Check-in: ${w.crew_member_name || 'Tripulante'} - Bem-estar ${avgScore}/5`,
+            time: new Date(w.created_at || '').toLocaleDateString('pt-BR'),
+            type: 'wellness',
+            icon: Users
+          });
+        });
+
+        setRecentActivities(activities.slice(0, 6));
+      } catch (error) {
+        console.error('Error fetching real-time stats:', error);
+      }
+    }
+
+    fetchRealTimeStats();
+
+    // Set up realtime subscription
+    const channel = supabase
+      .channel('command-center-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'equipment_sensors' }, fetchRealTimeStats)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_health_checkins' }, fetchRealTimeStats)
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   const metrics = [
     {
       title: "Frota Ativa",
@@ -64,31 +189,62 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
       status: "up"
     },
     {
-      title: "Receita Hoje",
-      value: "R$ 2.4M",
-      subtitle: "Faturamento diário",
-      trend: "+8% vs média",
-      icon: DollarSign,
-      color: "from-emerald-500 to-emerald-600",
-      status: "up"
+      title: "Sensores IoT",
+      value: `${realTimeStats.sensorHealth}%`,
+      subtitle: `${realTimeStats.iotCritical} alertas críticos`,
+      trend: realTimeStats.iotAnomalies > 0 ? `${realTimeStats.iotAnomalies} anomalias` : "Tudo normal",
+      icon: Gauge,
+      color: realTimeStats.iotCritical > 0 ? "from-red-500 to-red-600" : "from-emerald-500 to-emerald-600",
+      status: realTimeStats.iotCritical > 0 ? "down" : "up"
+    },
+    {
+      title: "Tripulação",
+      value: `${realTimeStats.avgWellness}%`,
+      subtitle: `${realTimeStats.crewAtRisk} em risco`,
+      trend: realTimeStats.crewAtRisk > 0 ? "Atenção necessária" : "Bem-estar OK",
+      icon: Heart,
+      color: realTimeStats.crewAtRisk > 0 ? "from-amber-500 to-amber-600" : "from-purple-500 to-purple-600",
+      status: realTimeStats.crewAtRisk > 0 ? "down" : "up"
     },
     {
       title: "Alertas",
-      value: String(systemStatus.fleet.alerts),
+      value: String(systemStatus.fleet.alerts + realTimeStats.iotCritical),
       subtitle: "Pendentes de ação",
       trend: "-3 vs ontem",
       icon: AlertTriangle,
       color: "from-amber-500 to-amber-600",
       status: "down"
+    }
+  ];
+
+  const quickAccessCards = [
+    {
+      title: "Executive KPIs",
+      description: "Dashboard consolidado de KPIs",
+      icon: BarChart3,
+      path: "/executive-kpis",
+      color: "from-blue-500 to-indigo-600"
     },
     {
-      title: "Eficiência IA",
-      value: "98.5%",
-      subtitle: "Performance do sistema",
-      trend: "+2% esta semana",
-      icon: Activity,
-      color: "from-purple-500 to-purple-600",
-      status: "up"
+      title: "Vessel Tracking",
+      description: "Rastreamento AIS em tempo real",
+      icon: MapPin,
+      path: "/vessel-tracking",
+      color: "from-emerald-500 to-teal-600"
+    },
+    {
+      title: "IoT Sensors",
+      description: "Histórico e análise de sensores",
+      icon: Thermometer,
+      path: "/iot-history",
+      color: "from-orange-500 to-red-600"
+    },
+    {
+      title: "Route Optimizer",
+      description: "Otimização de rotas com IA",
+      icon: Anchor,
+      path: "/route-optimizer",
+      color: "from-purple-500 to-pink-600"
     }
   ];
 
@@ -120,9 +276,41 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
                   {metric.status === "up" ? (
                     <TrendingUp className="h-3 w-3 text-emerald-500" />
                   ) : (
-                    <TrendingDown className="h-3 w-3 text-emerald-500" />
+                    <TrendingDown className="h-3 w-3 text-red-500" />
                   )}
-                  <span className="text-xs text-emerald-600">{metric.trend}</span>
+                  <span className={`text-xs ${metric.status === "up" ? "text-emerald-600" : "text-red-600"}`}>
+                    {metric.trend}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Quick Access Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {quickAccessCards.map((card, index) => (
+          <motion.div
+            key={card.title}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 + index * 0.05 }}
+          >
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-all hover:-translate-y-1 group"
+              onClick={() => navigate(card.path)}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg bg-gradient-to-br ${card.color}`}>
+                    <card.icon className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{card.title}</p>
+                    <p className="text-xs text-muted-foreground truncate">{card.description}</p>
+                  </div>
+                  <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </CardContent>
             </Card>
@@ -238,7 +426,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
         <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">Status dos Sistemas</CardTitle>
-            <CardDescription>Performance em tempo real</CardDescription>
+            <CardDescription>Performance em tempo real com dados do Supabase</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -257,27 +445,39 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">Tripulação</span>
-                  <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                    OK
+                  <span className="text-sm">IoT Sensors</span>
+                  <Badge 
+                    variant="outline" 
+                    className={realTimeStats.iotCritical > 0 
+                      ? "bg-red-50 text-red-700 border-red-200" 
+                      : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    }
+                  >
+                    {realTimeStats.iotCritical > 0 ? 'Alerta' : 'OK'}
                   </Badge>
                 </div>
-                <Progress value={80.2} className="h-2" />
+                <Progress value={realTimeStats.sensorHealth} className="h-2" />
                 <p className="text-xs text-muted-foreground">
-                  {systemStatus.crew.onboard} embarcados
+                  {realTimeStats.iotAnomalies} anomalias detectadas
                 </p>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm">Manutenção</span>
-                  <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-                    Atenção
+                  <span className="text-sm">Crew Wellness</span>
+                  <Badge 
+                    variant="outline" 
+                    className={realTimeStats.crewAtRisk > 0 
+                      ? "bg-amber-50 text-amber-700 border-amber-200" 
+                      : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    }
+                  >
+                    {realTimeStats.crewAtRisk > 0 ? 'Atenção' : 'OK'}
                   </Badge>
                 </div>
-                <Progress value={systemStatus.maintenance.efficiency} className="h-2" />
+                <Progress value={realTimeStats.avgWellness} className="h-2" />
                 <p className="text-xs text-muted-foreground">
-                  {systemStatus.maintenance.overdue} atrasadas
+                  {realTimeStats.crewAtRisk} tripulantes em risco
                 </p>
               </div>
 
@@ -297,33 +497,41 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
           </CardContent>
         </Card>
 
-        {/* Atividades Recentes */}
+        {/* Atividades Recentes - Dados Reais */}
         <Card>
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">Atividades Recentes</CardTitle>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate("operations")}>
-                Ver mais <ArrowRight className="h-3 w-3 ml-1" />
-              </Button>
+              <Badge variant="outline" className="text-xs">
+                <Activity className="h-3 w-3 mr-1" />
+                Live
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[240px]">
               <div className="p-4 space-y-3">
-                {recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex items-start gap-3">
-                    <div className="p-1.5 rounded-lg bg-muted">
-                      <activity.icon className="h-4 w-4 text-muted-foreground" />
+                {recentActivities.length > 0 ? recentActivities.map((activity) => (
+                  <div key={activity.id} className={`flex items-start gap-3 ${activity.urgent ? 'bg-red-50 dark:bg-red-950/20 -mx-2 px-2 py-1 rounded-lg' : ''}`}>
+                    <div className={`p-1.5 rounded-lg ${activity.urgent ? 'bg-red-100 dark:bg-red-900/30' : 'bg-muted'}`}>
+                      <activity.icon className={`h-4 w-4 ${activity.urgent ? 'text-red-600' : 'text-muted-foreground'}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm truncate">{activity.action}</p>
+                      <p className={`text-sm truncate ${activity.urgent ? 'font-medium text-red-700 dark:text-red-400' : ''}`}>
+                        {activity.action}
+                      </p>
                       <p className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {activity.time}
                       </p>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="text-center text-muted-foreground py-8">
+                    <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">Carregando atividades...</p>
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </CardContent>
