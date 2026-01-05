@@ -24,11 +24,13 @@ import {
   CalendarClock,
   CheckCircle2,
   ShieldCheck,
-  Volume2
+  Volume2,
+  Plug
 } from "lucide-react";
 import { useInspectionNotifications } from "@/hooks/useInspectionNotifications";
 import { toast } from "sonner";
 import { SoundAlertSettings } from "@/components/notifications/SoundAlertSettings";
+import { IntegrationStatusPanel } from "@/components/integrations/IntegrationStatusPanel";
 
 interface NotificationSettings {
   emailAlerts: boolean;
@@ -314,6 +316,9 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
           <SoundAlertSettings />
         </CardContent>
       </Card>
+
+      {/* Integration Status */}
+      <IntegrationStatusPanel />
 
       {/* Inspection Alerts - Pre-OVID */}
       <InspectionAlertsSection settings={settings} onUpdate={onUpdate} />
