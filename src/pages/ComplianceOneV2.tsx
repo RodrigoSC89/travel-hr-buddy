@@ -60,7 +60,6 @@ export default function ComplianceOneV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: Scale, label: "ISO 37301" },
         { icon: Eye, label: "Monitoramento" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

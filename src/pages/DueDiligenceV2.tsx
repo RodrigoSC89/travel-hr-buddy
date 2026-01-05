@@ -82,7 +82,6 @@ export default function DueDiligenceV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: Shield, label: "Risk Assessment" },
         { icon: FileCheck, label: "Compliance Check" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

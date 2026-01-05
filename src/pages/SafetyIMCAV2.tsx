@@ -99,7 +99,6 @@ export default function SafetyIMCAV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: BookOpen, label: "Lições Aprendidas" },
         { icon: Search, label: "Causa Raiz" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

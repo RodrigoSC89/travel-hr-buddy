@@ -98,7 +98,6 @@ export default function WhistleblowerV2() {
         { icon: Brain, label: "IA Classificação" },
         { icon: Lock, label: "100% Confidencial" },
         { icon: Shield, label: "Proteção" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

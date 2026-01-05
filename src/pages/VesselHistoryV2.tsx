@@ -91,7 +91,6 @@ export default function VesselHistoryV2() {
         { icon: Brain, label: "IA Preditiva" },
         { icon: History, label: "Timeline" },
         { icon: Search, label: "OCR Search" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

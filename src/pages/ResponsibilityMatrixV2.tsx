@@ -94,7 +94,6 @@ export default function ResponsibilityMatrixV2() {
         { icon: Brain, label: "IA Sugestões" },
         { icon: Users, label: "RACI Model" },
         { icon: Send, label: "Auto-Notificações" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

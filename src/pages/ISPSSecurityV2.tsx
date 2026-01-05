@@ -64,7 +64,6 @@ export default function ISPSSecurityV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: Lock, label: "ISPS Code" },
         { icon: Wifi, label: "Cyber Security" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

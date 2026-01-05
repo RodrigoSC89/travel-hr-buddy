@@ -84,7 +84,6 @@ export default function EvidencesV2() {
         { icon: Brain, label: "IA Categorização" },
         { icon: Search, label: "OCR Search" },
         { icon: Upload, label: "Multi-Upload" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

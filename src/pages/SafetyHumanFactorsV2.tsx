@@ -59,7 +59,6 @@ export default function SafetyHumanFactorsV2() {
         { icon: Brain, label: "Neurociência" },
         { icon: Heart, label: "QE Assessment" },
         { icon: Activity, label: "Fadiga Tracking" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />
