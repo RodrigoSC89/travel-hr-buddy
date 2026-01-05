@@ -1003,8 +1003,22 @@ comment = "Cron job to check for IoT anomalies every 5 minutes and send notifica
 verify_jwt = false
 comment = "Returns Mapbox public token for client-side map rendering"
 
+[functions.operational-ai-chat]
+verify_jwt = false
+comment = "Operational AI Chat for natural language data analysis using Lovable AI Gateway"
+
+[functions.weekly-report-email]
+verify_jwt = false
+comment = "Send weekly executive KPI reports via email using Resend"
+
 [[edge_runtime.cron]]
 name = "iot-anomaly-check"
 function_name = "iot-anomaly-cron"
 schedule = "*/5 * * * *"
 description = "Check for critical IoT sensor anomalies every 5 minutes and send notifications"
+
+[[edge_runtime.cron]]
+name = "weekly-executive-report"
+function_name = "weekly-report-email"
+schedule = "0 8 * * 1"
+description = "Send weekly executive KPI report every Monday at 08:00 UTC"
