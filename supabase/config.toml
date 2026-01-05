@@ -978,3 +978,15 @@ comment = "Pre-OVID AI Chat - OVIQ4 inspection assistant with evidence generatio
 [functions.send-beta-email]
 verify_jwt = false
 comment = "Beta Program email automation - invitation, welcome, check-in, completion emails via Resend"
+
+# ============================================
+# IoT & Route Optimization - PATCH 1001
+# ============================================
+
+[functions.iot-sensor-simulator]
+verify_jwt = false
+comment = "IoT sensor simulator for equipment_sensors realtime testing"
+
+[functions.weather-fuel-api]
+verify_jwt = false
+comment = "Weather and fuel prices API for route optimization"

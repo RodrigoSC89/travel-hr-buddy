@@ -1,16 +1,15 @@
 /**
- * Route Optimizer Dashboard - PATCH 1000
- * Visual interface for AI-powered route optimization
+ * Route Optimizer Dashboard - PATCH 1001
+ * Visual interface for AI-powered route optimization with real API integration
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
   Navigation, 
   Ship,
@@ -26,10 +25,15 @@ import {
   CheckCircle,
   TrendingDown,
   Anchor,
-  Leaf
+  Leaf,
+  Cloud,
+  Thermometer,
+  Shield,
+  Zap
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { RouteOptimizer } from '@/lib/ai/route-optimizer';
+import { useRouteWeatherFuel } from '@/hooks/useRouteWeatherFuel';
+import { useToast } from '@/hooks/use-toast';
 
 interface RouteOption {
   id: string;
@@ -45,83 +49,123 @@ interface RouteOption {
   bunkerStops: number;
 }
 
-// Mock route options
-const MOCK_ROUTES: RouteOption[] = [
-  {
-    id: '1',
-    name: 'Rota Otimizada',
-    distance: 2850,
-    duration: 168,
-    fuelCost: 45000,
-    fuelConsumption: 85,
-    riskScore: 15,
-    emissions: 265,
-    score: 92,
-    description: 'Melhor equilíbrio entre custo, tempo e segurança',
-    bunkerStops: 1,
-  },
-  {
-    id: '2',
-    name: 'Rota Econômica',
-    distance: 3100,
-    duration: 192,
-    fuelCost: 38000,
-    fuelConsumption: 72,
-    riskScore: 22,
-    emissions: 225,
-    score: 85,
-    description: 'Menor custo de combustível, tempo maior',
-    bunkerStops: 2,
-  },
-  {
-    id: '3',
-    name: 'Rota Direta',
-    distance: 2650,
-    duration: 144,
-    fuelCost: 52000,
-    fuelConsumption: 98,
-    riskScore: 35,
-    emissions: 305,
-    score: 78,
-    description: 'Caminho mais curto, maior consumo e risco',
-    bunkerStops: 0,
-  },
-];
-
-const MOCK_WEATHER = [
-  { zone: 'North Atlantic', condition: 'moderate', waveHeight: 2.5, windSpeed: 18 },
-  { zone: 'English Channel', condition: 'calm', waveHeight: 1.2, windSpeed: 8 },
-  { zone: 'Bay of Biscay', condition: 'rough', waveHeight: 4.5, windSpeed: 28 },
-];
-
-const MOCK_FUEL_PRICES = [
-  { port: 'Rotterdam', hfo: 485, lsfo: 695, bestPrice: true },
-  { port: 'Singapore', hfo: 450, lsfo: 650, bestPrice: false },
-  { port: 'Houston', hfo: 475, lsfo: 680, bestPrice: false },
-];
+// Port coordinates for route calculation
+const PORT_COORDS: Record<string, { lat: number; lon: number }> = {
+  'Santos, Brazil': { lat: -23.9608, lon: -46.3336 },
+  'Rotterdam, Netherlands': { lat: 51.9225, lon: 4.4792 },
+  'Singapore': { lat: 1.2644, lon: 103.8222 },
+  'Houston, USA': { lat: 29.7604, lon: -95.3698 },
+  'Shanghai, China': { lat: 31.2304, lon: 121.4737 },
+  'Fujairah, UAE': { lat: 25.1288, lon: 56.3264 },
+  'Gibraltar': { lat: 36.1408, lon: -5.3536 },
+};
 
 export function RouteOptimizerDashboard() {
   const [departurePort, setDeparturePort] = useState('Santos, Brazil');
   const [arrivalPort, setArrivalPort] = useState('Rotterdam, Netherlands');
-  const [routes, setRoutes] = useState<RouteOption[]>(MOCK_ROUTES);
+  const [routes, setRoutes] = useState<RouteOption[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<RouteOption | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
+  
+  const { weather, fuelPrices, bestBunkerPort, hazards, loading, error, source, fetchRouteData } = useRouteWeatherFuel();
+  const { toast } = useToast();
+
+  // Load initial data on mount
+  useEffect(() => {
+    const departure = PORT_COORDS[departurePort] || { lat: -23.96, lon: -46.33 };
+    const arrival = PORT_COORDS[arrivalPort] || { lat: 51.92, lon: 4.48 };
+    
+    fetchRouteData([
+      { ...departure, name: departurePort },
+      { lat: 36.14, lon: -5.35, name: 'Gibraltar' },
+      { lat: 45.0, lon: -5.0, name: 'Bay of Biscay' },
+      { ...arrival, name: arrivalPort },
+    ]);
+  }, []);
 
   const handleOptimize = async () => {
-    setLoading(true);
-    // Simulate optimization
-    setTimeout(() => {
-      setRoutes(MOCK_ROUTES);
-      setSelectedRoute(MOCK_ROUTES[0]);
-      setLoading(false);
-    }, 1500);
+    setOptimizing(true);
+    
+    const departure = PORT_COORDS[departurePort] || { lat: -23.96, lon: -46.33 };
+    const arrival = PORT_COORDS[arrivalPort] || { lat: 51.92, lon: 4.48 };
+    
+    // Fetch real weather and fuel data
+    await fetchRouteData([
+      { ...departure, name: departurePort },
+      { lat: 36.14, lon: -5.35, name: 'Gibraltar' },
+      { lat: 45.0, lon: -5.0, name: 'Bay of Biscay' },
+      { ...arrival, name: arrivalPort },
+    ]);
+
+    // Calculate routes based on weather conditions
+    const baseDistance = 2850;
+    const hasRoughWeather = weather.some(w => w.maritimeCondition === 'danger' || w.maritimeCondition === 'warning');
+    const avgFuelPrice = fuelPrices.length > 0 
+      ? fuelPrices.reduce((sum, p) => sum + p.lsfo, 0) / fuelPrices.length 
+      : 680;
+
+    const calculatedRoutes: RouteOption[] = [
+      {
+        id: '1',
+        name: 'Rota Otimizada',
+        distance: baseDistance + (hasRoughWeather ? 150 : 0),
+        duration: 168 + (hasRoughWeather ? 12 : 0),
+        fuelCost: Math.round((85 * avgFuelPrice)),
+        fuelConsumption: 85,
+        riskScore: hasRoughWeather ? 25 : 15,
+        emissions: 265,
+        score: hasRoughWeather ? 85 : 92,
+        description: hasRoughWeather 
+          ? 'Desvio de área de mau tempo, equilibrando segurança e eficiência'
+          : 'Melhor equilíbrio entre custo, tempo e segurança',
+        bunkerStops: bestBunkerPort ? 1 : 0,
+      },
+      {
+        id: '2',
+        name: 'Rota Econômica',
+        distance: baseDistance + 250,
+        duration: 192,
+        fuelCost: Math.round((72 * (bestBunkerPort?.lsfo || avgFuelPrice * 0.9))),
+        fuelConsumption: 72,
+        riskScore: hasRoughWeather ? 30 : 22,
+        emissions: 225,
+        score: 85,
+        description: `Reabastecimento em ${bestBunkerPort?.port || 'melhor porto'} para menor custo`,
+        bunkerStops: 2,
+      },
+      {
+        id: '3',
+        name: 'Rota Direta',
+        distance: baseDistance - 200,
+        duration: 144,
+        fuelCost: Math.round((98 * avgFuelPrice)),
+        fuelConsumption: 98,
+        riskScore: hasRoughWeather ? 55 : 35,
+        emissions: 305,
+        score: hasRoughWeather ? 60 : 78,
+        description: hasRoughWeather
+          ? 'ATENÇÃO: Passa por área de mau tempo - risco elevado'
+          : 'Caminho mais curto, maior consumo e risco',
+        bunkerStops: 0,
+      },
+    ];
+
+    setRoutes(calculatedRoutes);
+    setSelectedRoute(calculatedRoutes[0]);
+    setOptimizing(false);
+
+    toast({
+      title: 'Rotas Calculadas',
+      description: `${calculatedRoutes.length} opções com dados ${source === 'openweathermap' ? 'reais' : 'simulados'}`,
+    });
   };
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case 'calm': return 'text-emerald-500 bg-emerald-500/10';
-      case 'moderate': return 'text-amber-500 bg-amber-500/10';
-      case 'rough': return 'text-destructive bg-destructive/10';
+      case 'safe': return 'text-emerald-500 bg-emerald-500/10';
+      case 'caution': return 'text-amber-500 bg-amber-500/10';
+      case 'warning': return 'text-orange-500 bg-orange-500/10';
+      case 'danger': return 'text-destructive bg-destructive/10';
       default: return 'text-muted-foreground bg-muted';
     }
   };
@@ -196,29 +240,61 @@ export function RouteOptimizerDashboard() {
         {/* Weather Conditions */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Wind className="h-4 w-4" />
-              Condições Meteorológicas
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Wind className="h-4 w-4" />
+                Condições Meteorológicas
+              </CardTitle>
+              {source && (
+                <Badge variant="outline" className="text-xs">
+                  {source === 'openweathermap' ? (
+                    <><Cloud className="h-3 w-3 mr-1" /> API Real</>
+                  ) : (
+                    <><Zap className="h-3 w-3 mr-1" /> Simulado</>
+                  )}
+                </Badge>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {MOCK_WEATHER.map((weather, i) => (
+              {weather.length > 0 ? weather.map((w, i) => (
                 <div key={i} className="flex items-center justify-between p-2 rounded-lg border">
                   <div className="flex items-center gap-2">
-                    <Waves className={cn("h-4 w-4", getConditionColor(weather.condition))} />
-                    <span className="font-medium">{weather.zone}</span>
+                    <Waves className={cn("h-4 w-4", getConditionColor(w.maritimeCondition))} />
+                    <span className="font-medium">{w.location}</span>
                   </div>
                   <div className="flex items-center gap-4 text-sm">
-                    <Badge className={getConditionColor(weather.condition)}>
-                      {weather.condition}
+                    <Badge className={getConditionColor(w.maritimeCondition)}>
+                      {w.maritimeCondition}
                     </Badge>
                     <span className="text-muted-foreground">
-                      {weather.waveHeight}m | {weather.windSpeed}kt
+                      {w.waveHeight?.toFixed(1) || '?'}m | {w.windSpeed?.toFixed(0) || '?'}kt
+                    </span>
+                    <span className="text-muted-foreground flex items-center gap-1">
+                      <Thermometer className="h-3 w-3" />
+                      {w.temperature?.toFixed(0) || '?'}°C
                     </span>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="text-center text-muted-foreground py-4">
+                  Clique em "Calcular Rotas" para obter dados meteorológicos
+                </div>
+              )}
+              {hazards.length > 0 && (
+                <div className="pt-2 border-t mt-2">
+                  <span className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-2">
+                    <Shield className="h-3 w-3" /> Alertas de Zona
+                  </span>
+                  {hazards.map((h, i) => (
+                    <Badge key={i} variant="destructive" className="mr-1 mb-1">
+                      <AlertTriangle className="h-3 w-3 mr-1" />
+                      {h.name} ({h.risk})
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -228,31 +304,36 @@ export function RouteOptimizerDashboard() {
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <Fuel className="h-4 w-4" />
-              Preços de Combustível
+              Preços de Combustível (LSFO)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {MOCK_FUEL_PRICES.map((fuel, i) => (
+              {fuelPrices.length > 0 ? fuelPrices.slice(0, 5).map((fuel, i) => (
                 <div key={i} className={cn(
                   "flex items-center justify-between p-2 rounded-lg border",
-                  fuel.bestPrice && "border-emerald-500/50 bg-emerald-500/5"
+                  bestBunkerPort?.port === fuel.port && "border-emerald-500/50 bg-emerald-500/5"
                 )}>
                   <div className="flex items-center gap-2">
                     <Anchor className="h-4 w-4 text-muted-foreground" />
                     <span className="font-medium">{fuel.port}</span>
-                    {fuel.bestPrice && (
+                    {bestBunkerPort?.port === fuel.port && (
                       <Badge variant="outline" className="text-emerald-600 border-emerald-500">
                         Melhor
                       </Badge>
                     )}
                   </div>
                   <div className="flex items-center gap-4 text-sm">
-                    <span>HFO: ${fuel.hfo}</span>
-                    <span>LSFO: ${fuel.lsfo}</span>
+                    <span>HFO: ${fuel.hfo.toFixed(0)}</span>
+                    <span className="font-medium">LSFO: ${fuel.lsfo.toFixed(0)}</span>
+                    <span>MGO: ${fuel.mgo.toFixed(0)}</span>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="text-center text-muted-foreground py-4">
+                  Clique em "Calcular Rotas" para obter preços de bunker
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
