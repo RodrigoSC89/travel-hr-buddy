@@ -1,7 +1,8 @@
-// @ts-nocheck
+// @ts-nocheck - TODO: Align interface with sgso_audits schema in v3.3.0
 /**
- * PATCH 660: SGSO Audits
- * Note: @ts-nocheck required due to schema mismatch with interface
+ * SGSO Audits Module
+ * Safety Management System Audits
+ * @version 3.2.1 - Technical debt: interface mismatch with Supabase schema
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
