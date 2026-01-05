@@ -16,13 +16,17 @@ import {
   Ship, Users, Wrench, Package, Shield, DollarSign,
   TrendingUp, TrendingDown, AlertTriangle, Activity, Clock,
   ArrowRight, BarChart3, Fuel, Anchor, Thermometer, Heart,
-  MapPin, Gauge, ExternalLink
+  MapPin, Gauge, ExternalLink, FileText, Bell, Loader2, Sparkles
 } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell
 } from "recharts";
 import type { SystemStatus } from "../index";
+import { OperationalAIChat } from "@/components/ai-chat/OperationalAIChat";
+import { NotificationSettings } from "@/components/notifications/NotificationSettings";
+import { downloadExecutiveReport } from "@/lib/reports/executive-pdf-generator";
+import { useToast } from "@/hooks/use-toast";
 
 interface VisaoGeralSectionProps {
   systemStatus: SystemStatus;
@@ -60,6 +64,7 @@ const resourceDistribution = [
 
 export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: VisaoGeralSectionProps) {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [realTimeStats, setRealTimeStats] = useState<RealTimeStats>({
     iotAnomalies: 0,
     iotCritical: 0,
@@ -69,6 +74,28 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
     vesselsTracking: 0
   });
   const [recentActivities, setRecentActivities] = useState<any[]>([]);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [showAIChat, setShowAIChat] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      await downloadExecutiveReport();
+      toast({
+        title: "Relatório gerado",
+        description: "O PDF executivo foi baixado com sucesso.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível gerar o relatório.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
 
   // Fetch real-time stats from Supabase
   useEffect(() => {
@@ -250,6 +277,62 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
 
   return (
     <div className="space-y-6">
+      {/* Actions Bar */}
+      <div className="flex flex-wrap gap-3 items-center justify-between">
+        <div className="flex gap-2">
+          <Button 
+            variant={showAIChat ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setShowAIChat(!showAIChat)}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            IA Operacional
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
+          >
+            {isGeneratingPDF ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <FileText className="h-4 w-4 mr-2" />
+            )}
+            Relatório PDF
+          </Button>
+          <Button 
+            variant={showNotificationSettings ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setShowNotificationSettings(!showNotificationSettings)}
+          >
+            <Bell className="h-4 w-4 mr-2" />
+            Notificações
+          </Button>
+        </div>
+      </div>
+
+      {/* AI Chat Panel */}
+      {showAIChat && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+        >
+          <OperationalAIChat />
+        </motion.div>
+      )}
+
+      {/* Notification Settings Panel */}
+      {showNotificationSettings && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+        >
+          <NotificationSettings />
+        </motion.div>
+      )}
       {/* Métricas Principais */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-tour="metrics">
         {metrics.map((metric, index) => (
