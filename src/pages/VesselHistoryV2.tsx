@@ -12,7 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { 
   Ship, Brain, History, FileText, Wrench, Shield, AlertTriangle, 
-  CheckCircle, Calendar, Sparkles, Search, TrendingUp
+  CheckCircle, Calendar, Search, TrendingUp
 } from "lucide-react";
 
 interface HistoryEvent {

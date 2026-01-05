@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Shield, Brain, Lock, AlertTriangle, CheckCircle, 
-  Wifi, Server, Eye, Sparkles, ShieldAlert
+  Wifi, Server, Eye, ShieldAlert
 } from "lucide-react";
 
 const QUICK_QUESTIONS = [

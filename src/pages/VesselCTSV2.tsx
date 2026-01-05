@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Users, Brain, Shield, AlertTriangle, CheckCircle, FileCheck, 
-  UserCheck, GraduationCap, Calendar, Sparkles, RefreshCw
+  UserCheck, GraduationCap, Calendar, RefreshCw
 } from "lucide-react";
 
 interface CrewMember {

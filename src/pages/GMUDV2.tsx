@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   GitBranch, Brain, Shield, Users, CheckCircle, XCircle, Clock, 
-  Send, FileCheck, AlertTriangle, Sparkles, PenTool
+  Send, FileCheck, AlertTriangle, PenTool
 } from "lucide-react";
 
 interface GMUDRequest {

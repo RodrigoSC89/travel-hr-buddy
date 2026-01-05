@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   LayoutGrid, Brain, Users, CheckCircle, AlertTriangle, Clock, 
-  Send, Mail, MessageSquare, Sparkles
+  Send, Mail, MessageSquare
 } from "lucide-react";
 
 interface ResponsibilityItem {

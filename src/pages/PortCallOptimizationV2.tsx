@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { toast } from "sonner";
 import { 
   Anchor, Brain, Clock, AlertTriangle, Plus, Download, RefreshCw, 
-  TrendingUp, CheckCircle, Ship, MapPin, Navigation, Timer, Sparkles, Calendar
+  TrendingUp, CheckCircle, Ship, MapPin, Navigation, Timer, Calendar
 } from "lucide-react";
 
 interface PortCall {

@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Search, Brain, Shield, CheckCircle, AlertTriangle, 
-  Building2, FileCheck, Sparkles
+  Building2, FileCheck
 } from "lucide-react";
 import { useDueDiligenceReports, DueDiligenceReport } from "@/hooks/useDueDiligence";
 

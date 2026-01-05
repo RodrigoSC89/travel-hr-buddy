@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { 
   BookOpen, Brain, FileText, Search, AlertTriangle, 
-  Globe, Calendar, Sparkles, RefreshCw
+  Globe, Calendar, RefreshCw
 } from "lucide-react";
 import { useRegulations, Regulation } from "@/hooks/useRegulations";
 

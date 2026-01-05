@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { 
   Siren, Brain, Timer, CheckCircle, AlertTriangle, 
-  Play, Users, Award, Sparkles, Target
+  Play, Users, Award, Target
 } from "lucide-react";
 
 interface DrillRecord {
