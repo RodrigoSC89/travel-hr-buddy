@@ -12,7 +12,8 @@ import {
   Mail,
   Loader2,
   AlertTriangle,
-  Settings
+  Settings,
+  Info
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -21,7 +22,7 @@ interface IntegrationStatus {
   name: string;
   configured: boolean;
   status: "connected" | "disconnected" | "error";
-  lastTest?: string;
+  optional?: boolean;
 }
 
 interface TestResult {
@@ -44,7 +45,13 @@ export function IntegrationStatusPanel() {
       
       if (error) throw error;
       
-      setIntegrations(data.integrations || []);
+      // Mark Slack/Discord as optional
+      const updatedIntegrations = (data.integrations || []).map((i: IntegrationStatus) => ({
+        ...i,
+        optional: i.name === "Slack" || i.name === "Discord"
+      }));
+      
+      setIntegrations(updatedIntegrations);
     } catch (err) {
       console.error("Failed to fetch integration status:", err);
       toast.error("Erro ao verificar status das integrações");
@@ -197,9 +204,18 @@ export function IntegrationStatusPanel() {
                       {getIcon(integration.name)}
                     </div>
                     <div>
-                      <p className="font-medium">{integration.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium">{integration.name}</p>
+                        {integration.optional && (
+                          <Badge variant="outline" className="text-xs py-0">Opcional</Badge>
+                        )}
+                      </div>
                       <p className="text-xs text-muted-foreground">
-                        {integration.configured ? "Webhook configurado" : "Webhook não configurado"}
+                        {integration.configured 
+                          ? "Configurado" 
+                          : integration.optional 
+                            ? "Não configurado (opcional)" 
+                            : "Não configurado"}
                       </p>
                     </div>
                   </div>
