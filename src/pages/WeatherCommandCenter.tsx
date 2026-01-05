@@ -58,6 +58,7 @@ import { HistoricalWeatherChart } from "@/components/weather/HistoricalWeatherCh
 import { MaritimeWeatherAlerts } from "@/components/weather/MaritimeWeatherAlerts";
 import { MarinhaBrasilPanel } from "@/components/weather/MarinhaBrasilPanel";
 import { WeatherAPITestPanel } from "@/components/weather/WeatherAPITestPanel";
+import { CPTECPanel } from "@/components/weather/CPTECPanel";
 
 interface WeatherData {
   location: {
@@ -498,6 +499,10 @@ export default function WeatherCommandCenter() {
             <Navigation className="w-4 h-4 mr-2" />
             Marinha Brasil
           </TabsTrigger>
+          <TabsTrigger value="cptec">
+            <Sun className="w-4 h-4 mr-2" />
+            CPTEC/INPE
+          </TabsTrigger>
           <TabsTrigger value="history">
             <CalendarDays className="w-4 h-4 mr-2" />
             Histórico
@@ -732,6 +737,13 @@ export default function WeatherCommandCenter() {
               />
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="cptec" className="space-y-4">
+          <CPTECPanel 
+            lat={weatherData?.location.lat}
+            lon={weatherData?.location.lon}
+          />
         </TabsContent>
 
         <TabsContent value="alerts" className="space-y-4">

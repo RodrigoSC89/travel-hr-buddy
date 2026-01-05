@@ -74,6 +74,10 @@ comment = "StormGlass marine weather API - fallback for OpenWeatherMap and Windy
 verify_jwt = false
 comment = "Marinha do Brasil - Boletins meteorológicos oficiais CHM/CPTEC"
 
+[functions.cptec-inpe]
+verify_jwt = false
+comment = "CPTEC/INPE - Previsão meteorológica oficial do Brasil"
+
 [functions.ai-lab-analyze]
 verify_jwt = false
 
