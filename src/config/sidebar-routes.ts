@@ -133,6 +133,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "Central de Manutenção", path: "/maintenance-command", icon: Wrench, emoji: "🔧", status: "active" },
+      { label: "Manutenção Preditiva ML", path: "/predictive-maintenance", icon: Brain, emoji: "🧠", badge: "ML", status: "new" },
       { label: "Saúde da Frota", path: "/maintenance-command?tab=health", icon: Activity, emoji: "💚" },
       { label: "IA Copilot", path: "/maintenance-command?tab=copilot", icon: Brain, emoji: "🤖" },
       { label: "Jobs & Ordens", path: "/maintenance-command?tab=jobs", icon: Briefcase, emoji: "📋" },
@@ -186,6 +187,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "Telemetria 360°", path: "/telemetria", icon: Satellite, emoji: "🛰️" },
       { label: "Telemetria Preditiva", path: "/predictive-telemetry", icon: Activity, emoji: "📈" },
+      { label: "Otimização Satélite", path: "/satellite-optimizer", icon: Satellite, emoji: "📡", badge: "NEW", status: "new" },
       { label: "DGNSS Tracking", path: "/tracking", icon: Satellite, emoji: "📍", badge: "NEW" },
       { label: "GNSS Live", path: "/tracking/gnss-live", icon: Radio, emoji: "📡" },
       { label: "Tracking Alerts", path: "/tracking/alerts", icon: AlertTriangle, emoji: "🚨" },
