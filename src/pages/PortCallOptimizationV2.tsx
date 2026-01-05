@@ -94,7 +94,6 @@ export default function PortCallOptimizationV2() {
         { icon: Brain, label: "IA Preditiva" },
         { icon: Timer, label: "JIT Arrival" },
         { icon: Navigation, label: "ETA Precision" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

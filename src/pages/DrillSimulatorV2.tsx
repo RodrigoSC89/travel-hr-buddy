@@ -91,7 +91,6 @@ export default function DrillSimulatorV2() {
         { icon: Brain, label: "IA Avaliação" },
         { icon: Timer, label: "Performance" },
         { icon: Award, label: "Certificação" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

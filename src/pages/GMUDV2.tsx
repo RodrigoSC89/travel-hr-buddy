@@ -111,7 +111,6 @@ export default function GMUDV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: PenTool, label: "Assinatura Digital" },
         { icon: Users, label: "Multi-Aprovadores" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

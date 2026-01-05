@@ -260,7 +260,6 @@ export default function CharterPartyV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: Calculator, label: "Calculadora Hire" },
         { icon: DollarSign, label: "Demurrage/Despatch" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       {/* Stats Grid */}

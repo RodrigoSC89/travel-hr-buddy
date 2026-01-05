@@ -228,7 +228,6 @@ export default function VesselContractsV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: Shield, label: "SLA Compliance" },
         { icon: FileCheck, label: "BROA Automático" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       {/* Stats Grid */}

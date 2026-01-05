@@ -89,7 +89,6 @@ export default function VesselCTSV2() {
         { icon: Brain, label: "IA Verificação" },
         { icon: GraduationCap, label: "STCW Compliance" },
         { icon: UserCheck, label: "Safe Manning" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

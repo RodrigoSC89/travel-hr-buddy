@@ -65,7 +65,6 @@ export default function RegulationsV2() {
         { icon: Brain, label: "IA Consulta" },
         { icon: Globe, label: "IMO/ILO" },
         { icon: Search, label: "Busca Inteligente" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       <StatsGridV2 stats={stats} columns={4} />

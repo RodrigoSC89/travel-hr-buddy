@@ -266,7 +266,6 @@ export default function CargoManagementV2() {
         { icon: Brain, label: "IA Análise" },
         { icon: Scale, label: "Estabilidade" },
         { icon: FileWarning, label: "IMO/IMDG" },
-        { icon: Sparkles, label: "Layout V2" }
       ]}
     >
       {/* Stats Grid */}
