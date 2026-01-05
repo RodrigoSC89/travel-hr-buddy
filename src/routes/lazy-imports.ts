@@ -99,11 +99,13 @@ export const Roadmap = lazy(() => import(/* webpackChunkName: "page-roadmap" */ 
 
 // ============= EXECUTIVE & BI =============
 export const ExecutiveBIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-bi" */ "@/pages/ExecutiveBIDashboard"));
+export const ExecutiveKPIDashboard = lazy(() => import(/* webpackChunkName: "page-executive-kpi" */ "@/pages/ExecutiveKPIDashboard"));
 export const RevolutionaryFeaturesPage = lazy(() => import(/* webpackChunkName: "page-revolutionary-features" */ "@/pages/RevolutionaryFeaturesPage"));
 export const SustainabilityScorePage = lazy(() => import(/* webpackChunkName: "page-sustainability-score" */ "@/pages/SustainabilityScorePage"));
 export const Gamification = lazy(() => import(/* webpackChunkName: "page-gamification" */ "@/pages/Gamification"));
 export const ExportCenterPage = lazy(() => import(/* webpackChunkName: "page-export-center" */ "@/pages/ExportCenterPage"));
 export const AdvancedSearchPage = lazy(() => import(/* webpackChunkName: "page-advanced-search" */ "@/pages/AdvancedSearchPage"));
+export const VesselTrackingPage = lazy(() => import(/* webpackChunkName: "page-vessel-tracking" */ "@/pages/VesselTrackingPage"));
 
 // ============= SPECIAL PAGES =============
 export const OfflinePage = lazy(() => import(/* webpackChunkName: "page-offline" */ "@/pages/OfflinePage"));
