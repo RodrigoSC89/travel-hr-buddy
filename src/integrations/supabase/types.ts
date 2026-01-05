@@ -30358,14 +30358,6 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: boolean
       }
-      user_has_admin_or_hr_role: {
-        Args: { check_user_id: string }
-        Returns: boolean
-      }
-      user_has_finance_access: {
-        Args: { check_user_id: string }
-        Returns: boolean
-      }
       user_has_role: {
         Args: { _role: string; _user_id: string }
         Returns: boolean
