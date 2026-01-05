@@ -1,6 +1,12 @@
 /**
  * Módulo 1: Contrato do Barco + IA de Downtime
  * Verificação de SLA, geração de BROA, análise de downtime
+ * 
+ * @deprecated Este componente será removido na v4.0.0.
+ * Use VesselContractsUnified.tsx que automaticamente seleciona V2 via feature flag.
+ * @see VesselContractsV2 - Nova versão com PageLayoutV2, AI Chat integrado e DataTableV2
+ * @since v3.2.0
+ * @removal v4.0.0
  */
 import { useState, useEffect } from "react";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
