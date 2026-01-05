@@ -1,8 +1,7 @@
-// @ts-nocheck - TODO: Align interface with sgso_audits schema in v3.3.0
 /**
  * SGSO Audits Module
- * Safety Management System Audits
- * @version 3.2.1 - Technical debt: interface mismatch with Supabase schema
+ * Safety Management System Audits - ANP/IBAMA Compliance
+ * @version 3.2.1 - TypeScript strict compliant
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,45 +10,74 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Save, Eye } from "lucide-react";
+import { Plus, Trash2, Save, Eye, Calendar, ClipboardCheck } from "lucide-react";
 
-interface AuditAction {
-  id?: string;
-  audit_id: string;
-  action_description: string;
-  responsible: string;
-  deadline: string;
-  status: "pending" | "in_progress" | "completed";
+// Interface aligned with sgso_audits Supabase schema
+interface SGSOAudit {
+  id: string;
+  vessel_id: string | null;
+  auditor_id: string | null;
+  audit_date: string;
+  audit_type: string | null;
+  status: string | null;
+  compliance_score: number | null;
+  non_conformities_count: number | null;
+  findings: string | null;
+  recommendations: string | null;
+  next_audit_date: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
-interface Audit {
+// Form data for creating/editing audits
+interface AuditFormData {
   id?: string;
-  title: string;
-  description: string;
-  risk_level: "low" | "medium" | "high" | "critical";
-  criticality: "minor" | "major" | "critical";
-  responsible: string;
-  status: "open" | "in_progress" | "closed";
-  created_at?: string;
-  actions?: AuditAction[];
+  audit_date: string;
+  audit_type: string;
+  status: string;
+  compliance_score: string;
+  non_conformities_count: string;
+  findings: string;
+  recommendations: string;
+  next_audit_date: string;
 }
+
+const AUDIT_TYPES = [
+  { value: "internal", label: "Auditoria Interna" },
+  { value: "external", label: "Auditoria Externa" },
+  { value: "regulatory", label: "Auditoria Regulatória" },
+  { value: "certification", label: "Auditoria de Certificação" },
+  { value: "follow_up", label: "Follow-up" },
+];
+
+const STATUS_OPTIONS = [
+  { value: "scheduled", label: "Agendada" },
+  { value: "in_progress", label: "Em Andamento" },
+  { value: "completed", label: "Concluída" },
+  { value: "cancelled", label: "Cancelada" },
+];
+
+const initialFormData: AuditFormData = {
+  audit_date: new Date().toISOString().split('T')[0],
+  audit_type: "internal",
+  status: "scheduled",
+  compliance_score: "",
+  non_conformities_count: "0",
+  findings: "",
+  recommendations: "",
+  next_audit_date: "",
+};
 
 export default function SGSOAudits() {
-  const [audits, setAudits] = useState<Audit[]>([]);
+  const [audits, setAudits] = useState<SGSOAudit[]>([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const [selectedAudit, setSelectedAudit] = useState<Audit | null>(null);
-  const [formData, setFormData] = useState<Audit>({
-    title: "",
-    description: "",
-    risk_level: "low",
-    criticality: "minor",
-    responsible: "",
-    status: "open",
-  });
+  const [formData, setFormData] = useState<AuditFormData>(initialFormData);
 
   useEffect(() => {
     loadAudits();
@@ -60,19 +88,16 @@ export default function SGSOAudits() {
       setLoading(true);
       const { data, error } = await supabase
         .from("sgso_audits")
-        .select(`
-          *,
-          sgso_actions (*)
-        `)
-        .order("created_at", { ascending: false });
+        .select("*")
+        .order("audit_date", { ascending: false });
 
       if (error) throw error;
 
-      setAudits(data || []);
+      setAudits((data as SGSOAudit[]) || []);
       logger.info("SGSO audits loaded successfully", { count: data?.length });
     } catch (error) {
       logger.error("Failed to load SGSO audits", error);
-      toast.error("Failed to load audits");
+      toast.error("Falha ao carregar auditorias");
     } finally {
       setLoading(false);
     }
@@ -82,65 +107,56 @@ export default function SGSOAudits() {
     e.preventDefault();
 
     try {
+      const auditData = {
+        audit_date: formData.audit_date,
+        audit_type: formData.audit_type,
+        status: formData.status,
+        compliance_score: formData.compliance_score ? parseFloat(formData.compliance_score) : null,
+        non_conformities_count: parseInt(formData.non_conformities_count) || 0,
+        findings: formData.findings || null,
+        recommendations: formData.recommendations || null,
+        next_audit_date: formData.next_audit_date || null,
+      };
+
       if (formData.id) {
         // Update existing audit
         const { error } = await supabase
           .from("sgso_audits")
-          .update({
-            title: formData.title,
-            description: formData.description,
-            risk_level: formData.risk_level,
-            criticality: formData.criticality,
-            responsible: formData.responsible,
-            status: formData.status,
-          })
+          .update(auditData)
           .eq("id", formData.id);
 
         if (error) throw error;
-        toast.success("Audit updated successfully");
+        toast.success("Auditoria atualizada com sucesso");
       } else {
         // Create new audit
         const { error } = await supabase
           .from("sgso_audits")
-          .insert({
-            title: formData.title,
-            description: formData.description,
-            risk_level: formData.risk_level,
-            criticality: formData.criticality,
-            responsible: formData.responsible,
-            status: formData.status,
-          });
+          .insert(auditData);
 
         if (error) throw error;
 
         // Log access for compliance
         await supabase.from("access_logs").insert({
-          action: "sgso_audit_created",
-          resource: "sgso_audits",
-          details: { title: formData.title },
+          action: "create",
+          module_accessed: "sgso_audits",
+          result: "success",
+          details: { audit_type: formData.audit_type, audit_date: formData.audit_date },
         });
 
-        toast.success("Audit created successfully");
+        toast.success("Auditoria criada com sucesso");
       }
 
       setEditMode(false);
-      setFormData({
-        title: "",
-        description: "",
-        risk_level: "low",
-        criticality: "minor",
-        responsible: "",
-        status: "open",
-      });
+      setFormData(initialFormData);
       loadAudits();
     } catch (error) {
       logger.error("Failed to save audit", error);
-      toast.error("Failed to save audit");
+      toast.error("Falha ao salvar auditoria");
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this audit?")) return;
+    if (!confirm("Tem certeza que deseja excluir esta auditoria?")) return;
 
     try {
       const { error } = await supabase.from("sgso_audits").delete().eq("id", id);
@@ -149,38 +165,58 @@ export default function SGSOAudits() {
 
       // Log access for compliance
       await supabase.from("access_logs").insert({
-        action: "sgso_audit_deleted",
-        resource: "sgso_audits",
+        action: "delete",
+        module_accessed: "sgso_audits",
+        result: "success",
         details: { audit_id: id },
       });
 
-      toast.success("Audit deleted successfully");
+      toast.success("Auditoria excluída com sucesso");
       loadAudits();
     } catch (error) {
       logger.error("Failed to delete audit", error);
-      toast.error("Failed to delete audit");
+      toast.error("Falha ao excluir auditoria");
     }
   };
 
-  const handleEdit = (audit: Audit) => {
-    setFormData(audit);
+  const handleEdit = (audit: SGSOAudit) => {
+    setFormData({
+      id: audit.id,
+      audit_date: audit.audit_date,
+      audit_type: audit.audit_type || "internal",
+      status: audit.status || "scheduled",
+      compliance_score: audit.compliance_score?.toString() || "",
+      non_conformities_count: audit.non_conformities_count?.toString() || "0",
+      findings: audit.findings || "",
+      recommendations: audit.recommendations || "",
+      next_audit_date: audit.next_audit_date || "",
+    });
     setEditMode(true);
   };
 
-  const getRiskColor = (level: string) => {
-    const colors = {
-      low: "text-green-600",
-      medium: "text-yellow-600",
-      high: "text-orange-600",
-      critical: "text-red-600",
+  const getStatusBadge = (status: string | null) => {
+    const statusMap: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
+      scheduled: { variant: "secondary", label: "Agendada" },
+      in_progress: { variant: "default", label: "Em Andamento" },
+      completed: { variant: "outline", label: "Concluída" },
+      cancelled: { variant: "destructive", label: "Cancelada" },
     };
-    return colors[level as keyof typeof colors] || "text-gray-600";
+    const config = statusMap[status || "scheduled"] || statusMap.scheduled;
+    return <Badge variant={config.variant}>{config.label}</Badge>;
+  };
+
+  const getScoreColor = (score: number | null) => {
+    if (score === null) return "text-muted-foreground";
+    if (score >= 90) return "text-green-600";
+    if (score >= 70) return "text-yellow-600";
+    if (score >= 50) return "text-orange-600";
+    return "text-red-600";
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <p>Loading audits...</p>
+        <div className="animate-pulse">Carregando auditorias...</div>
       </div>
     );
   }
@@ -190,90 +226,54 @@ export default function SGSOAudits() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">SGSO Audits</h1>
-          <p className="text-muted-foreground">Safety Management System Audits</p>
+          <p className="text-muted-foreground">Sistema de Gestão de Segurança Operacional - Auditorias</p>
         </div>
         <Button onClick={() => setEditMode(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          New Audit
+          Nova Auditoria
         </Button>
       </div>
 
       {editMode && (
         <Card>
           <CardHeader>
-            <CardTitle>{formData.id ? "Edit Audit" : "Create New Audit"}</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <ClipboardCheck className="h-5 w-5" />
+              {formData.id ? "Editar Auditoria" : "Criar Nova Auditoria"}
+            </CardTitle>
             <CardDescription>
-              Fill in the audit details below
+              Preencha os detalhes da auditoria SGSO
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="risk_level">Risk Level</Label>
-                  <Select
-                    value={formData.risk_level}
-                    onValueChange={(value) =>
-                      setFormData({
-                        ...formData,
-                        risk_level: value as Audit["risk_level"],
-                      })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="low">Low</SelectItem>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="high">High</SelectItem>
-                      <SelectItem value="critical">Critical</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="audit_date">Data da Auditoria</Label>
+                  <Input
+                    id="audit_date"
+                    type="date"
+                    value={formData.audit_date}
+                    onChange={(e) => setFormData({ ...formData, audit_date: e.target.value })}
+                    required
+                  />
                 </div>
 
                 <div>
-                  <Label htmlFor="criticality">Criticality</Label>
+                  <Label htmlFor="audit_type">Tipo de Auditoria</Label>
                   <Select
-                    value={formData.criticality}
-                    onValueChange={(value) =>
-                      setFormData({
-                        ...formData,
-                        criticality: value as Audit["criticality"],
-                      })
-                    }
+                    value={formData.audit_type}
+                    onValueChange={(value) => setFormData({ ...formData, audit_type: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="minor">Minor</SelectItem>
-                      <SelectItem value="major">Major</SelectItem>
-                      <SelectItem value="critical">Critical</SelectItem>
+                      {AUDIT_TYPES.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -282,58 +282,95 @@ export default function SGSOAudits() {
                   <Label htmlFor="status">Status</Label>
                   <Select
                     value={formData.status}
-                    onValueChange={(value) =>
-                      setFormData({
-                        ...formData,
-                        status: value as Audit["status"],
-                      })
-                    }
+                    onValueChange={(value) => setFormData({ ...formData, status: value })}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="open">Open</SelectItem>
-                      <SelectItem value="in_progress">In Progress</SelectItem>
-                      <SelectItem value="closed">Closed</SelectItem>
+                      {STATUS_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <Label htmlFor="compliance_score">Score de Conformidade (%)</Label>
+                  <Input
+                    id="compliance_score"
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    placeholder="0-100"
+                    value={formData.compliance_score}
+                    onChange={(e) => setFormData({ ...formData, compliance_score: e.target.value })}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="non_conformities_count">Não Conformidades</Label>
+                  <Input
+                    id="non_conformities_count"
+                    type="number"
+                    min="0"
+                    value={formData.non_conformities_count}
+                    onChange={(e) => setFormData({ ...formData, non_conformities_count: e.target.value })}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="next_audit_date">Próxima Auditoria</Label>
+                  <Input
+                    id="next_audit_date"
+                    type="date"
+                    value={formData.next_audit_date}
+                    onChange={(e) => setFormData({ ...formData, next_audit_date: e.target.value })}
+                  />
+                </div>
+              </div>
+
               <div>
-                <Label htmlFor="responsible">Responsible</Label>
-                <Input
-                  id="responsible"
-                  value={formData.responsible}
-                  onChange={(e) =>
-                    setFormData({ ...formData, responsible: e.target.value })
-                  }
-                  required
+                <Label htmlFor="findings">Achados (Findings)</Label>
+                <Textarea
+                  id="findings"
+                  placeholder="Descreva os achados da auditoria..."
+                  value={formData.findings}
+                  onChange={(e) => setFormData({ ...formData, findings: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="recommendations">Recomendações</Label>
+                <Textarea
+                  id="recommendations"
+                  placeholder="Descreva as recomendações..."
+                  value={formData.recommendations}
+                  onChange={(e) => setFormData({ ...formData, recommendations: e.target.value })}
+                  rows={3}
                 />
               </div>
 
               <div className="flex gap-2">
                 <Button type="submit">
                   <Save className="mr-2 h-4 w-4" />
-                  Save
+                  Salvar
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => {
                     setEditMode(false);
-                    setFormData({
-                      title: "",
-                      description: "",
-                      risk_level: "low",
-                      criticality: "minor",
-                      responsible: "",
-                      status: "open",
-                    });
+                    setFormData(initialFormData);
                   }}
                 >
-                  Cancel
+                  Cancelar
                 </Button>
               </div>
             </form>
@@ -342,56 +379,82 @@ export default function SGSOAudits() {
       )}
 
       <div className="grid gap-4">
-        {audits.map((audit) => (
-          <Card key={audit.id}>
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle>{audit.title}</CardTitle>
-                  <CardDescription>{audit.description}</CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(audit)}
-                  >
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleDelete(audit.id!)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <span className="text-muted-foreground">Risk Level:</span>
-                  <p className={`font-semibold ${getRiskColor(audit.risk_level)}`}>
-                    {audit.risk_level.toUpperCase()}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Criticality:</span>
-                  <p className="font-semibold">{audit.criticality}</p>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Status:</span>
-                  <p className="font-semibold">{audit.status}</p>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Responsible:</span>
-                  <p className="font-semibold">{audit.responsible}</p>
-                </div>
-              </div>
+        {audits.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 text-center text-muted-foreground">
+              Nenhuma auditoria encontrada. Clique em "Nova Auditoria" para começar.
             </CardContent>
           </Card>
-        ))}
+        ) : (
+          audits.map((audit) => (
+            <Card key={audit.id}>
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Calendar className="h-5 w-5 text-muted-foreground" />
+                      {new Date(audit.audit_date).toLocaleDateString('pt-BR')}
+                      <span className="text-base font-normal text-muted-foreground">
+                        - {AUDIT_TYPES.find(t => t.value === audit.audit_type)?.label || audit.audit_type}
+                      </span>
+                    </CardTitle>
+                    <CardDescription className="mt-1">
+                      {audit.findings ? audit.findings.substring(0, 100) + (audit.findings.length > 100 ? '...' : '') : 'Sem achados registrados'}
+                    </CardDescription>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEdit(audit)}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleDelete(audit.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Status:</span>
+                    <div className="mt-1">{getStatusBadge(audit.status)}</div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Score:</span>
+                    <p className={`font-semibold text-lg ${getScoreColor(audit.compliance_score)}`}>
+                      {audit.compliance_score !== null ? `${audit.compliance_score}%` : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Não Conformidades:</span>
+                    <p className="font-semibold text-lg">
+                      {audit.non_conformities_count || 0}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Próxima Auditoria:</span>
+                    <p className="font-semibold">
+                      {audit.next_audit_date ? new Date(audit.next_audit_date).toLocaleDateString('pt-BR') : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Criado em:</span>
+                    <p className="font-semibold">
+                      {audit.created_at ? new Date(audit.created_at).toLocaleDateString('pt-BR') : '-'}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
