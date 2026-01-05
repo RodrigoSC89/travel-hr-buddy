@@ -244,4 +244,8 @@ export const DEFAULT_FLAGS: Record<string, boolean> = {
   'experimental-ui': false,
   'ai-suggestions': true,
   'advanced-analytics': false,
+  // V2 Module Flags
+  'use-v2-modules': true,
+  'external-audit': false,
+  'sgp4-tracking': true,
 };
