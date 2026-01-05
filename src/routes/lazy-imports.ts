@@ -16,6 +16,7 @@ export const Auth = lazy(() => import(/* webpackChunkName: "page-auth" */ "@/pag
 export const UserProfilePage = lazy(() => import(/* webpackChunkName: "page-profile" */ "@/pages/user/profile"));
 export const SystemDebug = lazy(() => import(/* webpackChunkName: "page-debug" */ "@/pages/SystemDebug"));
 export const Billing = lazy(() => import(/* webpackChunkName: "page-billing" */ "@/pages/Billing"));
+export const IoTHistoryPage = lazy(() => import(/* webpackChunkName: "page-iot-history" */ "@/pages/IoTHistoryPage"));
 
 // ============= AI MODULES =============
 export const RevolutionaryAI = lazy(() => import(/* webpackChunkName: "page-ai" */ "@/pages/RevolutionaryAI"));
