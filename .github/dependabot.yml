@@ -12,12 +12,28 @@ updates:
     labels:
       - "dependencies"
       - "npm"
+      - "security"
     commit-message:
       prefix: "chore(deps)"
+    # Security updates with high priority
+    ignore:
+      # Ignore major version updates for stability
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
+      # Security-critical packages - update immediately
+      security-critical:
+        patterns:
+          - "@supabase/*"
+          - "@sentry/*"
+          - "zod"
+        update-types:
+          - "minor"
+          - "patch"
       react:
         patterns:
-          - "react*"
+          - "react"
+          - "react-dom"
           - "@types/react*"
       typescript:
         patterns:
@@ -28,24 +44,41 @@ updates:
           - "vitest"
           - "@testing-library/*"
           - "playwright"
-      supabase:
-        patterns:
-          - "@supabase/*"
+          - "@playwright/*"
       radix:
         patterns:
           - "@radix-ui/*"
       tanstack:
         patterns:
           - "@tanstack/*"
+      ai-ml:
+        patterns:
+          - "openai"
+          - "@tensorflow/*"
+          - "ai"
+      build-tools:
+        patterns:
+          - "vite"
+          - "vite-*"
+          - "tailwindcss"
+          - "postcss"
 
-  # GitHub Actions
+  # GitHub Actions - weekly security updates
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
+      time: "09:00"
+      timezone: "America/Sao_Paulo"
     labels:
       - "dependencies"
       - "github-actions"
+      - "security"
     commit-message:
       prefix: "chore(ci)"
+    # Group all action updates
+    groups:
+      actions:
+        patterns:
+          - "*"
