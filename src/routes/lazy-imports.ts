@@ -48,6 +48,8 @@ export const IncidentSimulator = lazy(() => import(/* webpackChunkName: "page-in
 export const VoyageAccountingPage = lazy(() => import(/* webpackChunkName: "page-voyage-accounting" */ "@/pages/VoyageAccountingPage"));
 export const PredictiveMaintenancePage = lazy(() => import(/* webpackChunkName: "page-predictive-maintenance" */ "@/pages/PredictiveMaintenancePage"));
 export const SatelliteOptimizerPage = lazy(() => import(/* webpackChunkName: "page-satellite-optimizer" */ "@/pages/SatelliteOptimizerPage"));
+export const CrewWellnessPage = lazy(() => import(/* webpackChunkName: "page-crew-wellness" */ "@/pages/CrewWellnessPage"));
+export const RouteOptimizerPage = lazy(() => import(/* webpackChunkName: "page-route-optimizer" */ "@/pages/RouteOptimizerPage"));
 
 // ============= SAFETY & COMPLIANCE =============
 export const PreOVIDInspection = lazy(() => import(/* webpackChunkName: "page-pre-ovid" */ "@/pages/PreOVIDInspection"));

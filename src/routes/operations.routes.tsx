@@ -18,6 +18,8 @@ import {
   TrackingCenter,
   PredictiveMaintenancePage,
   SatelliteOptimizerPage,
+  CrewWellnessPage,
+  RouteOptimizerPage,
 } from "./lazy-imports";
 
 export const operationsRoutes = (
@@ -32,5 +34,7 @@ export const operationsRoutes = (
     {/* ML & Optimization */}
     <Route path="predictive-maintenance" element={<PredictiveMaintenancePage />} />
     <Route path="satellite-optimizer" element={<SatelliteOptimizerPage />} />
+    <Route path="crew-wellness" element={<CrewWellnessPage />} />
+    <Route path="route-optimizer" element={<RouteOptimizerPage />} />
   </>
 );

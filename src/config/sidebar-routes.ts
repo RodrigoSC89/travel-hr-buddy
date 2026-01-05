@@ -111,10 +111,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Maritime Command", path: "/maritime-command", icon: Anchor, emoji: "⚓" },
       { label: "Fleet Command Center", path: "/fleet-command", icon: Ship, emoji: "🚢" },
       { label: "Voyage Command", path: "/voyage-command", icon: Map, emoji: "🗺️" },
+      { label: "Otimização de Rotas AI", path: "/route-optimizer", icon: Compass, emoji: "🧭", badge: "AI", status: "new" },
       { label: "Mission Command", path: "/mission-command", icon: Target, emoji: "🎯" },
       { label: "Bridge Link", path: "/bridge-link", icon: Link, emoji: "🌉" },
       { label: "Drydock Management", path: "/drydock-management", icon: Anchor, emoji: "🏗️" },
-      // Módulos Consolidados (V2 como fonte de verdade)
       { label: "Contratos de Embarcação", path: "/vessel-contracts", icon: FileText, emoji: "📝" },
       { label: "Charter Party", path: "/charter-party", icon: FileText, emoji: "📜" },
       { label: "Cargo Management", path: "/cargo-management", icon: Ship, emoji: "📦" },
@@ -298,7 +298,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       { label: "Nautilus People Hub", path: "/nautilus-people", icon: Users, emoji: "👥" },
       { label: "Gestão de Tripulação", path: "/crew-management", icon: Users, emoji: "👤" },
-      { label: "Bem-estar Tripulação", path: "/crew-wellbeing", icon: Heart, emoji: "❤️" },
+      { label: "Bem-estar AI", path: "/crew-wellness", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
+      { label: "Bem-estar Tripulação", path: "/crew-wellbeing", icon: Heart, emoji: "💚" },
       { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Heart, emoji: "🏥" },
       { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
     ],
