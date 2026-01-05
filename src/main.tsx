@@ -6,6 +6,9 @@ import App from "./App.tsx";
 import "./index.css";
 import { logger } from "@/lib/logger";
 
+// Initialize i18n
+import "@/i18n";
+
 // Initialize theme before rendering
 const initializeTheme = () => {
   try {
