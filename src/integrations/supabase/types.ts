@@ -7413,6 +7413,51 @@ export type Database = {
           },
         ]
       }
+      crew_health_checkins: {
+        Row: {
+          created_at: string
+          crew_member_name: string | null
+          energy_level: number
+          id: string
+          mood: number
+          notes: string | null
+          physical_health: number | null
+          sleep_quality: number
+          social_interaction: number | null
+          stress_level: number
+          user_id: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          crew_member_name?: string | null
+          energy_level: number
+          id?: string
+          mood: number
+          notes?: string | null
+          physical_health?: number | null
+          sleep_quality: number
+          social_interaction?: number | null
+          stress_level: number
+          user_id?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          crew_member_name?: string | null
+          energy_level?: number
+          id?: string
+          mood?: number
+          notes?: string | null
+          physical_health?: number | null
+          sleep_quality?: number
+          social_interaction?: number | null
+          stress_level?: number
+          user_id?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       crew_health_logs: {
         Row: {
           created_at: string | null
@@ -10538,6 +10583,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      equipment_sensors: {
+        Row: {
+          created_at: string
+          equipment_id: string
+          equipment_name: string
+          id: string
+          is_anomaly: boolean | null
+          location: string | null
+          max_threshold: number | null
+          metadata: Json | null
+          min_threshold: number | null
+          recorded_at: string | null
+          sensor_status: string | null
+          sensor_type: string
+          unit: string
+          value: number
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          equipment_id: string
+          equipment_name: string
+          id?: string
+          is_anomaly?: boolean | null
+          location?: string | null
+          max_threshold?: number | null
+          metadata?: Json | null
+          min_threshold?: number | null
+          recorded_at?: string | null
+          sensor_status?: string | null
+          sensor_type: string
+          unit: string
+          value: number
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          equipment_id?: string
+          equipment_name?: string
+          id?: string
+          is_anomaly?: boolean | null
+          location?: string | null
+          max_threshold?: number | null
+          metadata?: Json | null
+          min_threshold?: number | null
+          recorded_at?: string | null
+          sensor_status?: string | null
+          sensor_type?: string
+          unit?: string
+          value?: number
+          vessel_id?: string | null
+        }
+        Relationships: []
       }
       error_logs: {
         Row: {
@@ -21503,6 +21602,78 @@ export type Database = {
           suggested_route?: Json
           time_estimate_hours?: number | null
           weather_data?: Json | null
+        }
+        Relationships: []
+      }
+      route_optimizations: {
+        Row: {
+          arrival_lat: number
+          arrival_lng: number
+          arrival_port: string
+          created_at: string
+          created_by: string | null
+          departure_date: string
+          departure_lat: number
+          departure_lng: number
+          departure_port: string
+          emissions_estimate: number | null
+          eta: string | null
+          fuel_consumption: number | null
+          fuel_cost: number | null
+          id: string
+          risk_score: number | null
+          route_data: Json | null
+          route_score: number | null
+          status: string | null
+          total_distance: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          arrival_lat: number
+          arrival_lng: number
+          arrival_port: string
+          created_at?: string
+          created_by?: string | null
+          departure_date: string
+          departure_lat: number
+          departure_lng: number
+          departure_port: string
+          emissions_estimate?: number | null
+          eta?: string | null
+          fuel_consumption?: number | null
+          fuel_cost?: number | null
+          id?: string
+          risk_score?: number | null
+          route_data?: Json | null
+          route_score?: number | null
+          status?: string | null
+          total_distance?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          arrival_lat?: number
+          arrival_lng?: number
+          arrival_port?: string
+          created_at?: string
+          created_by?: string | null
+          departure_date?: string
+          departure_lat?: number
+          departure_lng?: number
+          departure_port?: string
+          emissions_estimate?: number | null
+          eta?: string | null
+          fuel_consumption?: number | null
+          fuel_cost?: number | null
+          id?: string
+          risk_score?: number | null
+          route_data?: Json | null
+          route_score?: number | null
+          status?: string | null
+          total_distance?: number | null
+          updated_at?: string
+          vessel_id?: string | null
         }
         Relationships: []
       }

@@ -994,3 +994,17 @@ comment = "Weather and fuel prices API for route optimization"
 [functions.iot-anomaly-notify]
 verify_jwt = false
 comment = "Send notifications when critical sensor anomalies are detected"
+
+[functions.iot-anomaly-cron]
+verify_jwt = false
+comment = "Cron job to check for IoT anomalies every 5 minutes and send notifications"
+
+[functions.mapbox-token]
+verify_jwt = false
+comment = "Returns Mapbox public token for client-side map rendering"
+
+[[edge_runtime.cron]]
+name = "iot-anomaly-check"
+function_name = "iot-anomaly-cron"
+schedule = "*/5 * * * *"
+description = "Check for critical IoT sensor anomalies every 5 minutes and send notifications"
