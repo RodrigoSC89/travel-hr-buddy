@@ -57,6 +57,9 @@ import {
   SmartLayout,
 } from "./routes";
 
+// PWA Install Page
+import InstallPage from "./pages/install";
+
 // Simple loader component
 const OffshoreLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -151,6 +154,7 @@ function App() {
                         {/* Public Routes */}
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/unauthorized" element={<Unauthorized />} />
+                        <Route path="/install" element={<InstallPage />} />
                         
                         {/* Protected Routes */}
                         <Route path="/" element={

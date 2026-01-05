@@ -86,6 +86,24 @@ Para produção, remova ou comente a seção `server` e use `npm run build` + `n
 | Camera | @capacitor/camera | ✅ Configurado |
 | Haptics | @capacitor/haptics | ✅ Configurado |
 
+### Internacionalização (i18n)
+
+O sistema suporta 4 idiomas:
+- 🇺🇸 English (en)
+- 🇧🇷 Português (pt)
+- 🇪🇸 Español (es)
+- 🇨🇳 中文 (zh)
+
+Arquivos de tradução em: `src/i18n/locales/*.json`
+
+### Instalação PWA
+
+Acesse `/install` para guia de instalação do app via navegador.
+
+### Integrações Enterprise
+
+SAP e Oracle integrations configuradas em: `src/lib/integrations/enterprise-erp.ts`
+
 ### Próximos Passos
 
 1. [ ] Configurar Firebase Cloud Messaging para push notifications
@@ -104,4 +122,4 @@ Para produção, remova ou comente a seção `server` e use `npm run build` + `n
 
 ---
 
-*Nautilus One v3.3.0 - Mobile App Setup*
+*Nautilus One v3.2.0 - Mobile & Multilingual Ready 📱🌍*
