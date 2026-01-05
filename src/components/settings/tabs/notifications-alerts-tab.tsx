@@ -23,10 +23,12 @@ import {
   AlertTriangle,
   CalendarClock,
   CheckCircle2,
-  ShieldCheck
+  ShieldCheck,
+  Volume2
 } from "lucide-react";
 import { useInspectionNotifications } from "@/hooks/useInspectionNotifications";
 import { toast } from "sonner";
+import { SoundAlertSettings } from "@/components/notifications/SoundAlertSettings";
 
 interface NotificationSettings {
   emailAlerts: boolean;
@@ -294,6 +296,22 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
               </p>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Sound Alerts */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Volume2 className="w-5 h-5 text-primary" />
+            Alertas Sonoros
+          </CardTitle>
+          <CardDescription>
+            Configure sons para alertas críticos de sensores IoT
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SoundAlertSettings />
         </CardContent>
       </Card>
 
