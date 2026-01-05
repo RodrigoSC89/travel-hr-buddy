@@ -24,7 +24,8 @@ import {
   Waves,
   Anchor,
   Cloud,
-  Zap
+  Zap,
+  Sun
 } from "lucide-react";
 
 interface APITestResult {
@@ -46,6 +47,7 @@ export function WeatherAPITestPanel() {
     stormglass: { name: "StormGlass (Marine)", status: "idle" },
     windy: { name: "Windy", status: "idle" },
     marinha: { name: "Marinha do Brasil", status: "idle" },
+    cptec: { name: "CPTEC/INPE (Brasil)", status: "idle" },
     weatherIntegration: { name: "Weather Integration (Unified)", status: "idle" }
   });
   const [isRunningAll, setIsRunningAll] = useState(false);
@@ -176,6 +178,37 @@ export function WeatherAPITestPanel() {
     }
   };
 
+  const testCPTEC = async () => {
+    updateResult("cptec", { status: "loading" });
+    const start = Date.now();
+
+    try {
+      const { data, error } = await supabase.functions.invoke("cptec-inpe", {
+        body: { type: "previsao", lat: coords.lat, lon: coords.lon }
+      });
+
+      if (error) throw error;
+
+      updateResult("cptec", {
+        status: "success",
+        data: {
+          source: data?.source,
+          cidade: data?.cidade,
+          previsoes: data?.previsoes?.length || 0,
+          proxima: data?.previsoes?.[0]
+        },
+        latency: Date.now() - start,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      updateResult("cptec", {
+        status: "error",
+        error: error instanceof Error ? error.message : "Unknown error",
+        latency: Date.now() - start
+      });
+    }
+  };
+
   const testWeatherIntegration = async () => {
     updateResult("weatherIntegration", { status: "loading" });
     const start = Date.now();
@@ -221,6 +254,7 @@ export function WeatherAPITestPanel() {
       testStormGlass(),
       testWindy(),
       testMarinha(),
+      testCPTEC(),
       testWeatherIntegration()
     ]);
 
@@ -228,7 +262,7 @@ export function WeatherAPITestPanel() {
     
     toast({
       title: "Testes concluídos",
-      description: "Todas as APIs foram testadas",
+      description: "Todas as 6 APIs foram testadas",
     });
   };
 
@@ -255,6 +289,8 @@ export function WeatherAPITestPanel() {
         return <Wind className="h-4 w-4" />;
       case "marinha":
         return <Anchor className="h-4 w-4" />;
+      case "cptec":
+        return <Sun className="h-4 w-4" />;
       case "weatherIntegration":
         return <Cloud className="h-4 w-4" />;
       default:
@@ -357,6 +393,7 @@ export function WeatherAPITestPanel() {
                           else if (key === "stormglass") testStormGlass();
                           else if (key === "windy") testWindy();
                           else if (key === "marinha") testMarinha();
+                          else if (key === "cptec") testCPTEC();
                           else if (key === "weatherIntegration") testWeatherIntegration();
                         }}
                         disabled={result.status === "loading"}
