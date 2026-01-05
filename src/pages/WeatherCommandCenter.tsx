@@ -56,6 +56,8 @@ import { WeatherAICopilot } from "@/components/weather/WeatherAICopilot";
 import { WindyMap } from "@/components/weather/WindyMap";
 import { HistoricalWeatherChart } from "@/components/weather/HistoricalWeatherChart";
 import { MaritimeWeatherAlerts } from "@/components/weather/MaritimeWeatherAlerts";
+import { MarinhaBrasilPanel } from "@/components/weather/MarinhaBrasilPanel";
+import { WeatherAPITestPanel } from "@/components/weather/WeatherAPITestPanel";
 
 interface WeatherData {
   location: {
@@ -492,6 +494,10 @@ export default function WeatherCommandCenter() {
             <Map className="w-4 h-4 mr-2" />
             Mapa Interativo
           </TabsTrigger>
+          <TabsTrigger value="marinha">
+            <Navigation className="w-4 h-4 mr-2" />
+            Marinha Brasil
+          </TabsTrigger>
           <TabsTrigger value="history">
             <CalendarDays className="w-4 h-4 mr-2" />
             Histórico
@@ -503,6 +509,10 @@ export default function WeatherCommandCenter() {
           <TabsTrigger value="copilot">
             <Bot className="w-4 h-4 mr-2" />
             Copiloto IA
+          </TabsTrigger>
+          <TabsTrigger value="api-test">
+            <Zap className="w-4 h-4 mr-2" />
+            Teste APIs
           </TabsTrigger>
         </TabsList>
 
@@ -706,8 +716,30 @@ export default function WeatherCommandCenter() {
           <HistoricalWeatherChart location={weatherData?.location.name} />
         </TabsContent>
 
+        <TabsContent value="marinha" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <MarinhaBrasilPanel 
+                lat={weatherData?.location.lat}
+                lon={weatherData?.location.lon}
+              />
+            </div>
+            <div>
+              <MarinhaBrasilPanel 
+                lat={weatherData?.location.lat}
+                lon={weatherData?.location.lon}
+                compact
+              />
+            </div>
+          </div>
+        </TabsContent>
+
         <TabsContent value="alerts" className="space-y-4">
           <MaritimeWeatherAlerts />
+        </TabsContent>
+
+        <TabsContent value="api-test" className="space-y-4">
+          <WeatherAPITestPanel />
         </TabsContent>
 
         <TabsContent value="copilot" className="space-y-4">
