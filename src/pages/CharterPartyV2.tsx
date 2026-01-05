@@ -1,5 +1,5 @@
 /**
- * CharterPartyV2 - Gestão de Charter Party V2
+ * CharterPartyV2 - Gestão de Charter Party
  * Módulo elevado com IA integrada para Time Charter, Voyage Charter e Bareboat
  */
 
@@ -253,7 +253,7 @@ export default function CharterPartyV2() {
   return (
     <PageLayoutV2
       icon={Anchor}
-      title="Charter Party V2"
+      title="Charter Party"
       description="Gestão completa de afretamentos: Time Charter, Voyage Charter e Bareboat com IA"
       gradient="indigo"
       badges={[

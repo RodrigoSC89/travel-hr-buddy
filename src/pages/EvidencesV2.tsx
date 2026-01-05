@@ -1,5 +1,5 @@
 /**
- * EvidencesV2 - Gestão de Evidências V2
+ * EvidencesV2 - Gestão de Evidências
  * Upload, categorização e busca de evidências com IA
  */
 
@@ -77,7 +77,7 @@ export default function EvidencesV2() {
   return (
     <PageLayoutV2
       icon={FolderOpen}
-      title="Evidências V2"
+      title="Evidências"
       description="Gestão centralizada de evidências com OCR e categorização IA"
       gradient="purple"
       badges={[

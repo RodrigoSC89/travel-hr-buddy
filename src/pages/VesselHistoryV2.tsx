@@ -1,5 +1,5 @@
 /**
- * VesselHistoryV2 - Histórico de Embarcação V2
+ * VesselHistoryV2 - Histórico de Embarcação
  * Timeline interativa com IA para análise de padrões
  */
 
@@ -84,7 +84,7 @@ export default function VesselHistoryV2() {
   return (
     <PageLayoutV2
       icon={History}
-      title="Histórico de Embarcação V2"
+      title="Histórico de Embarcação"
       description="Timeline interativa com IA para análise de padrões e predição"
       gradient="teal"
       badges={[

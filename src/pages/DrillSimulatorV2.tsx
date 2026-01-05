@@ -1,5 +1,5 @@
 /**
- * DrillSimulatorV2 - Drill Simulator V2
+ * DrillSimulatorV2 - Drill Simulator
  * Simulação de exercícios de emergência
  */
 
@@ -84,7 +84,7 @@ export default function DrillSimulatorV2() {
   return (
     <PageLayoutV2
       icon={Siren}
-      title="Drill Simulator V2"
+      title="Drill Simulator"
       description="Simulação e avaliação de exercícios de emergência"
       gradient="red"
       badges={[

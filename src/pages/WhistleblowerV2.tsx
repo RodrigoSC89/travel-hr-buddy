@@ -1,5 +1,5 @@
 /**
- * WhistleblowerV2 - Canal de Denúncias V2
+ * WhistleblowerV2 - Canal de Denúncias
  * Canal seguro com classificação IA
  */
 
@@ -91,7 +91,7 @@ export default function WhistleblowerV2() {
   return (
     <PageLayoutV2
       icon={Flag}
-      title="Canal de Denúncias V2"
+      title="Canal de Denúncias"
       description="Canal seguro e confidencial com classificação IA"
       gradient="red"
       badges={[

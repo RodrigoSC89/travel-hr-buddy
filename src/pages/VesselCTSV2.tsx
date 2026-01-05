@@ -1,5 +1,5 @@
 /**
- * VesselCTSV2 - CTS Tripulação V2
+ * VesselCTSV2 - CTS Tripulação
  * Verificação de conformidade STCW com IA
  */
 
@@ -82,7 +82,7 @@ export default function VesselCTSV2() {
   return (
     <PageLayoutV2
       icon={Users}
-      title="CTS Tripulação V2"
+      title="CTS Tripulação"
       description="Verificação de conformidade STCW e Safe Manning com IA"
       gradient="purple"
       badges={[

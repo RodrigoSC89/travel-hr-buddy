@@ -1,5 +1,5 @@
 /**
- * RiskMatrixV2 - Matriz de Riscos V2
+ * RiskMatrixV2 - Matriz de Riscos
  * Gestão de riscos com probabilidade x impacto
  */
 
@@ -86,7 +86,7 @@ export default function RiskMatrixV2() {
   return (
     <PageLayoutV2
       icon={AlertTriangle}
-      title="Matriz de Riscos V2"
+      title="Matriz de Riscos"
       description="Gestão de riscos com matriz probabilidade x impacto e IA"
       gradient="orange"
       badges={[

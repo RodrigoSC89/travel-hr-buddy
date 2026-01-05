@@ -1,5 +1,5 @@
 /**
- * DueDiligenceV2 - Due Diligence V2
+ * DueDiligenceV2 - Due Diligence
  * Verificação de terceiros com IA
  */
 
@@ -75,7 +75,7 @@ export default function DueDiligenceV2() {
   return (
     <PageLayoutV2
       icon={Search}
-      title="Due Diligence V2"
+      title="Due Diligence"
       description="Verificação e análise de terceiros com IA"
       gradient="cyan"
       badges={[

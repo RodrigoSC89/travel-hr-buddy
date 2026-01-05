@@ -1,5 +1,5 @@
 /**
- * SafetyIMCAV2 - Safety IMCA V2
+ * SafetyIMCAV2 - Safety IMCA
  * Análise de incidentes com lições aprendidas
  */
 
@@ -92,7 +92,7 @@ export default function SafetyIMCAV2() {
   return (
     <PageLayoutV2
       icon={Shield}
-      title="Safety IMCA V2"
+      title="Safety IMCA"
       description="Análise de incidentes IMCA com lições aprendidas e IA"
       gradient="red"
       badges={[
