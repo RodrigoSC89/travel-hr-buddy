@@ -1,5 +1,5 @@
 /**
- * VesselContractsV2 - Contratos de Embarcação V2
+ * VesselContractsV2 - Contratos de Embarcação
  * Módulo elevado com IA integrada, layout V2, e funcionalidades completas
  */
 
@@ -221,7 +221,7 @@ export default function VesselContractsV2() {
   return (
     <PageLayoutV2
       icon={FileText}
-      title="Contratos de Embarcação V2"
+      title="Contratos de Embarcação"
       description="Gestão completa de contratos com IA para análise de SLA, downtime e geração de BROA"
       gradient="blue"
       badges={[

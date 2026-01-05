@@ -1,5 +1,5 @@
 /**
- * ResponsibilityMatrixV2 - Matriz de Responsabilidades V2
+ * ResponsibilityMatrixV2 - Matriz de Responsabilidades
  * RACI com automação e notificações
  */
 
@@ -87,7 +87,7 @@ export default function ResponsibilityMatrixV2() {
   return (
     <PageLayoutV2
       icon={LayoutGrid}
-      title="Matriz de Responsabilidades V2"
+      title="Matriz de Responsabilidades"
       description="Gestão RACI com automação de notificações e tracking"
       gradient="orange"
       badges={[

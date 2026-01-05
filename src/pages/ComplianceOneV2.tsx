@@ -1,5 +1,5 @@
 /**
- * ComplianceOneV2 - Compliance One V2
+ * ComplianceOneV2 - Compliance One
  * GRC Dashboard com ISO 37301
  */
 
@@ -53,7 +53,7 @@ export default function ComplianceOneV2() {
   return (
     <PageLayoutV2
       icon={Scale}
-      title="Compliance One V2"
+      title="Compliance One"
       description="GRC Dashboard com framework ISO 37301 e IA"
       gradient="green"
       badges={[

@@ -1,5 +1,5 @@
 /**
- * ISPSSecurityV2 - ISPS Security V2
+ * ISPSSecurityV2 - ISPS Security
  * Segurança marítima e cibersegurança
  */
 
@@ -57,7 +57,7 @@ export default function ISPSSecurityV2() {
   return (
     <PageLayoutV2
       icon={Shield}
-      title="ISPS Security V2"
+      title="ISPS Security"
       description="Segurança marítima e cibersegurança conforme ISPS Code"
       gradient="indigo"
       badges={[

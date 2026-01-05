@@ -1,5 +1,5 @@
 /**
- * PortCallOptimizationV2 - Otimização de Escala Portuária V2
+ * PortCallOptimizationV2 - Otimização de Escala Portuária
  * Módulo elevado com IA para JIT Arrival e coordenação portuária
  */
 
@@ -87,7 +87,7 @@ export default function PortCallOptimizationV2() {
   return (
     <PageLayoutV2
       icon={Anchor}
-      title="Port Call Optimization V2"
+      title="Port Call Optimization"
       description="Otimização Just-in-Time de escalas portuárias com IA preditiva"
       gradient="cyan"
       badges={[

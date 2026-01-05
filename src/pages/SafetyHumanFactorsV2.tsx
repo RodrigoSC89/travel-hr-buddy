@@ -1,5 +1,5 @@
 /**
- * SafetyHumanFactorsV2 - Fatores Humanos V2
+ * SafetyHumanFactorsV2 - Fatores Humanos
  * Neurociência e QE para segurança operacional
  */
 
@@ -52,7 +52,7 @@ export default function SafetyHumanFactorsV2() {
   return (
     <PageLayoutV2
       icon={Brain}
-      title="Safety Human Factors V2"
+      title="Fatores Humanos"
       description="Neurociência e Quociente Emocional para segurança operacional"
       gradient="purple"
       badges={[

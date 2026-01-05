@@ -1,5 +1,5 @@
 /**
- * CargoManagementV2 - Gestão de Carga V2
+ * CargoManagementV2 - Gestão de Carga
  * Módulo elevado com IA integrada para plano de carga, estabilidade e compliance
  */
 
@@ -259,7 +259,7 @@ export default function CargoManagementV2() {
   return (
     <PageLayoutV2
       icon={Package}
-      title="Cargo Management V2"
+      title="Cargo Management"
       description="Gestão completa de carga com plano de estiva, verificação de estabilidade e compliance IMO"
       gradient="green"
       badges={[
