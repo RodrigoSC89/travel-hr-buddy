@@ -16,8 +16,11 @@
  * - GLONASS-OPS
  * - BEIDOU
  * - SBAS (WAAS, EGNOS, MSAS, etc.)
+ * 
+ * SGP4 via satellite.js para propagação orbital precisa
  */
 
+import * as satellite from 'satellite.js';
 import type {
   CelesTrakGPElement,
   CelesTrakGroup,
@@ -36,19 +39,126 @@ const tleCache = new Map<CelesTrakGroup, {
   expires_at: number;
 }>();
 
+// Cache para SatRec objects (evita re-parsing)
+const satrecCache = new Map<string, satellite.SatRec>();
+
 // ============================================
-// Orbital Mechanics (SGP4 simplificado)
+// SGP4 Propagation via satellite.js
 // ============================================
 
 /**
- * Converte elementos orbitais para posição/velocidade (ECI)
- * 
- * NOTA: Para produção, use biblioteca SGP4 completa:
- * - satellite.js (JavaScript)
- * - sgp4 (Python)
- * - vallado/sgp4 (C++)
- * 
- * Esta é implementação simplificada para demonstração.
+ * Convert CelesTrak GP element to TLE format
+ */
+function gpElementToTLE(element: CelesTrakGPElement): { line1: string; line2: string } | null {
+  try {
+    // Se já tiver TLE_LINE1/TLE_LINE2, usar diretamente
+    if ('TLE_LINE1' in element && 'TLE_LINE2' in element) {
+      return {
+        line1: (element as any).TLE_LINE1,
+        line2: (element as any).TLE_LINE2,
+      };
+    }
+    
+    // Construir TLE a partir de elementos OMM (simplificado)
+    // Para precisão total, use dados TLE direto do CelesTrak
+    const noradId = element.NORAD_CAT_ID.toString().padStart(5, '0');
+    const epochYear = new Date(element.EPOCH).getFullYear() % 100;
+    const epochDay = getDayOfYear(new Date(element.EPOCH));
+    
+    // Line 1 (simplified - production should fetch actual TLE)
+    const line1 = `1 ${noradId}U 00000A   ${epochYear.toString().padStart(2, '0')}${epochDay.toFixed(8).padStart(12, '0')} -.00000000  00000-0  00000-0 0  0000`;
+    
+    // Line 2
+    const incl = element.INCLINATION.toFixed(4).padStart(8, ' ');
+    const raan = element.RA_OF_ASC_NODE.toFixed(4).padStart(8, ' ');
+    const ecc = element.ECCENTRICITY.toFixed(7).substring(2); // Remove "0."
+    const argp = element.ARG_OF_PERICENTER.toFixed(4).padStart(8, ' ');
+    const ma = element.MEAN_ANOMALY.toFixed(4).padStart(8, ' ');
+    const mm = element.MEAN_MOTION.toFixed(8).padStart(11, ' ');
+    
+    const line2 = `2 ${noradId} ${incl} ${raan} ${ecc} ${argp} ${ma} ${mm}00000`;
+    
+    return { line1, line2 };
+  } catch {
+    return null;
+  }
+}
+
+function getDayOfYear(date: Date): number {
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff = date.getTime() - start.getTime();
+  const oneDay = 1000 * 60 * 60 * 24;
+  return diff / oneDay;
+}
+
+/**
+ * Get or create SatRec from cache
+ */
+function getSatRec(element: CelesTrakGPElement): satellite.SatRec | null {
+  const cacheKey = `${element.NORAD_CAT_ID}-${element.EPOCH}`;
+  
+  if (satrecCache.has(cacheKey)) {
+    return satrecCache.get(cacheKey)!;
+  }
+  
+  const tle = gpElementToTLE(element);
+  if (!tle) return null;
+  
+  try {
+    const satrec = satellite.twoline2satrec(tle.line1, tle.line2);
+    if (satrec.error === 0) {
+      satrecCache.set(cacheKey, satrec);
+      return satrec;
+    }
+  } catch {
+    // Fall through to return null
+  }
+  
+  return null;
+}
+
+/**
+ * Propagate satellite position using SGP4 (real implementation)
+ */
+function propagateSGP4(
+  element: CelesTrakGPElement,
+  observerTime: Date
+): {
+  position: { x: number; y: number; z: number };
+  velocity: { x: number; y: number; z: number };
+} | null {
+  const satrec = getSatRec(element);
+  if (!satrec) {
+    // Fallback to simplified propagation
+    return propagateSGP4Simplified(element, observerTime);
+  }
+  
+  try {
+    const positionAndVelocity = satellite.propagate(satrec, observerTime);
+    
+    if (!positionAndVelocity || !positionAndVelocity.position || typeof positionAndVelocity.position === 'boolean') {
+      return propagateSGP4Simplified(element, observerTime);
+    }
+    
+    if (!positionAndVelocity.velocity || typeof positionAndVelocity.velocity === 'boolean') {
+      return propagateSGP4Simplified(element, observerTime);
+    }
+    
+    const pos = positionAndVelocity.position;
+    const vel = positionAndVelocity.velocity;
+    
+    return {
+      position: { x: pos.x, y: pos.y, z: pos.z },
+      velocity: { x: vel.x, y: vel.y, z: vel.z },
+    };
+  } catch {
+    return propagateSGP4Simplified(element, observerTime);
+  }
+}
+
+/**
+ * Fallback: Simplified circular orbit approximation
+ * Used when satellite.js parsing fails
  */
 function propagateSGP4Simplified(
   element: CelesTrakGPElement,
@@ -57,43 +167,40 @@ function propagateSGP4Simplified(
   position: { x: number; y: number; z: number };
   velocity: { x: number; y: number; z: number };
 } | null {
-  // TODO: Implementar SGP4 ou usar satellite.js
-  // Por ora, retorna posição estimada (circular orbit approximation)
-  
   const epochDate = new Date(element.EPOCH);
-  const timeSinceEpoch = (observerTime.getTime() - epochDate.getTime()) / 1000; // seconds
+  const timeSinceEpoch = (observerTime.getTime() - epochDate.getTime()) / 1000;
   
-  // Simplified circular orbit (apenas para demonstração)
-  const n = element.MEAN_MOTION * (2 * Math.PI / 86400); // rad/s
-  const M0 = element.MEAN_ANOMALY * (Math.PI / 180); // rad
+  const n = element.MEAN_MOTION * (2 * Math.PI / 86400);
+  const M0 = element.MEAN_ANOMALY * (Math.PI / 180);
   const M = M0 + n * timeSinceEpoch;
   
-  const a = Math.pow((86400 / (2 * Math.PI * element.MEAN_MOTION)), 2/3) * 6378.137; // km (aproximado)
+  const a = Math.pow((86400 / (2 * Math.PI * element.MEAN_MOTION)), 2/3) * 6378.137;
   const i = element.INCLINATION * (Math.PI / 180);
   const omega = element.ARG_OF_PERICENTER * (Math.PI / 180);
   const Omega = element.RA_OF_ASC_NODE * (Math.PI / 180);
   
-  // Assumindo órbita circular (e=0) para simplificação
-  const E = M; // Em órbita circular, E = M
+  const E = M;
   const r = a;
   
-  // Posição no plano orbital
   const x_orb = r * Math.cos(E);
   const y_orb = r * Math.sin(E);
   
-  // Rotação para ECI
   const x = x_orb * (Math.cos(omega) * Math.cos(Omega) - Math.sin(omega) * Math.sin(Omega) * Math.cos(i))
           - y_orb * (Math.sin(omega) * Math.cos(Omega) + Math.cos(omega) * Math.sin(Omega) * Math.cos(i));
   
   const y = x_orb * (Math.cos(omega) * Math.sin(Omega) + Math.sin(omega) * Math.cos(Omega) * Math.cos(i))
           - y_orb * (Math.sin(omega) * Math.sin(Omega) - Math.cos(omega) * Math.cos(Omega) * Math.cos(i));
   
-  const z = x_orb * Math.sin(omega) * Math.sin(i)
-          + y_orb * Math.cos(omega) * Math.sin(i);
+  const z = x_orb * Math.sin(omega) * Math.sin(i) + y_orb * Math.cos(omega) * Math.sin(i);
+  
+  // Calculate velocity (circular orbit approximation)
+  const v = n * r;
+  const vx = -v * Math.sin(M);
+  const vy = v * Math.cos(M);
   
   return {
     position: { x, y, z },
-    velocity: { x: 0, y: 0, z: 0 }, // TODO: Calculate velocity
+    velocity: { x: vx, y: vy, z: 0 },
   };
 }
 
@@ -265,8 +372,8 @@ export function calculateVisibility(
   const visibility: SatelliteVisibility[] = [];
   
   for (const element of elements) {
-    // Propagate to current time
-    const state = propagateSGP4Simplified(element, time);
+    // Propagate to current time using SGP4 (with fallback)
+    const state = propagateSGP4(element, time);
     
     if (!state) continue;
     

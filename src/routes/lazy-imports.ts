@@ -45,7 +45,7 @@ export const AISTracking = lazy(() => import(/* webpackChunkName: "page-ais-trac
 export const AISTrackerPage = lazy(() => import(/* webpackChunkName: "page-ais-tracker" */ "@/pages/AISTrackerPage"));
 export const CertificateBlockchain = lazy(() => import(/* webpackChunkName: "page-cert-blockchain" */ "@/pages/CertificateBlockchain"));
 export const IncidentSimulator = lazy(() => import(/* webpackChunkName: "page-incident-simulator" */ "@/pages/IncidentSimulator"));
-export const VesselContracts = lazy(() => import(/* webpackChunkName: "page-vessel-contracts" */ "@/pages/VesselContracts"));
+export const VesselContracts = lazy(() => import(/* webpackChunkName: "page-vessel-contracts" */ "@/pages/VesselContractsUnified"));
 export const VesselCTS = lazy(() => import(/* webpackChunkName: "page-vessel-cts" */ "@/pages/VesselCTS"));
 export const VesselHistory = lazy(() => import(/* webpackChunkName: "page-vessel-history" */ "@/pages/VesselHistory"));
 export const GMUD = lazy(() => import(/* webpackChunkName: "page-gmud" */ "@/pages/GMUD"));
