@@ -28,44 +28,40 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 5000,
+      chunkSizeWarningLimit: 10000,
       target: "esnext",
-      cssCodeSplit: true,
-      minify: false, // Disable minification to save memory
+      cssCodeSplit: false, // Single CSS file to reduce processing
+      minify: false,
       reportCompressedSize: false,
-      assetsInlineLimit: 4096,
+      assetsInlineLimit: 0, // Don't inline assets
       commonjsOptions: {
         exclude: [/supabase\/functions/],
       },
       rollupOptions: {
         maxParallelFileOps: 1,
-        treeshake: false, // Disable treeshake in dev to save memory
+        treeshake: false,
+        cache: false, // Disable cache to reduce memory
         output: {
-          // Minimal chunking - only split heavy vendors
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom', 'react-router-dom', 'scheduler'],
-            'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-tabs', '@radix-ui/react-select', 'lucide-react'],
-            'vendor-data': ['@supabase/supabase-js', '@tanstack/react-query'],
-          }
+          compact: true,
+          entryFileNames: "[name].js",
+          chunkFileNames: "[name].js",
+          assetFileNames: "[name][extname]",
+          // No manual chunks - let rollup handle it simply
         }
       },
     },
     optimizeDeps: {
-      include: [
-        "react", 
-        "react-dom", 
-        "react-dom/client",
-        "react/jsx-runtime",
-        "react-router-dom",
-        "@supabase/supabase-js",
-        "@tanstack/react-query",
-      ],
-      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three'],
+      include: ["react", "react-dom", "react-router-dom"],
+      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei'],
+      esbuildOptions: {
+        target: "esnext",
+      }
     },
     cacheDir: ".vite-cache",
     esbuild: {
       logLevel: "silent",
       logOverride: { "this-is-undefined-in-esm": "silent" },
+      target: "esnext",
     },
     define: {
       "process.env.NODE_ENV": JSON.stringify(mode),
