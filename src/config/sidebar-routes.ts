@@ -167,6 +167,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🌟 AI Hub Central", path: "/ai-hub", icon: Brain, emoji: "🌟", badge: "REVOLUTION", status: "new" },
       { label: "📊 AI Analytics", path: "/ai-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
       { label: "🚀 Features Revolucionárias", path: "/revolutionary-features", icon: Zap, emoji: "🚀", badge: "NEW", status: "new" },
+      { label: "🤖 Autonomous Command", path: "/autonomous-command", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
       { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
       { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
