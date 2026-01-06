@@ -6,9 +6,7 @@
 
 import { agentOrchestrator, type Situation, type Decision } from './agent-orchestrator';
 import { vesselDigitalTwin, type VesselState, type Anomaly } from './digital-twin';
-import { BlockchainComplianceLedger } from '@/lib/blockchain/compliance-ledger';
-
-const blockchainLedger = new BlockchainComplianceLedger();
+import { blockchainLedger } from '@/lib/blockchain/compliance-ledger';
 
 export interface AutonomousConfig {
   enabled: boolean;
@@ -285,16 +283,19 @@ export class AutonomousDecisionEngine {
    */
   private async recordToBlockchain(decision: Decision): Promise<void> {
     try {
-      await blockchainLedger.recordAuditEvent({
-        auditType: 'autonomous-decision',
-        vesselId: decision.perspectives[0]?.agentId || 'system',
-        vesselName: 'Nautilus One',
-        inspector: 'Autonomous Engine',
-        score: decision.perspectives[0]?.confidence ? decision.perspectives[0].confidence * 100 : 80,
-        findings: [decision.reasoning],
-        recommendation: decision.recommendation,
-        actionRequired: decision.approvalRequired
-      });
+      await blockchainLedger.createComplianceRecord(
+        'audit',
+        decision.perspectives[0]?.agentId || 'system',
+        {
+          type: 'autonomous-decision',
+          vesselName: 'Nautilus One',
+          inspector: 'Autonomous Engine',
+          score: decision.perspectives[0]?.confidence ? decision.perspectives[0].confidence * 100 : 80,
+          findings: [decision.reasoning],
+          recommendation: decision.recommendation,
+          actionRequired: decision.approvalRequired
+        }
+      );
     } catch (error) {
       console.error('[AutonomousEngine] Failed to record to blockchain:', error);
     }
