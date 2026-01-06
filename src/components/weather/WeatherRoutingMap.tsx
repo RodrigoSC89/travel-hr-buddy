@@ -1,6 +1,6 @@
 /**
  * Weather Routing Map Component
- * Visualizes alternative routes and hazard zones on Mapbox
+ * Visualizes alternative routes, hazard zones, and real-time vessel position on Mapbox
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -10,10 +10,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Map, Loader2, MapPin, Route, Shield, CloudRain, Layers } from 'lucide-react';
+import { Map, Loader2, MapPin, Route, Shield, CloudRain, Layers, Ship, Play, Pause } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { AlternativeRoute, HazardZone, Waypoint } from '@/lib/routing/weather-routing';
 import { cn } from '@/lib/utils';
+
+interface VesselPosition {
+  lat: number;
+  lon: number;
+  heading?: number;
+  speed?: number;
+  timestamp: Date;
+}
 
 interface WeatherRoutingMapProps {
   routes: AlternativeRoute[];
@@ -21,6 +29,8 @@ interface WeatherRoutingMapProps {
   selectedRouteId?: string;
   onRouteSelect?: (route: AlternativeRoute) => void;
   className?: string;
+  showVesselAnimation?: boolean;
+  vesselPosition?: VesselPosition;
 }
 
 const ROUTE_COLORS: Record<string, string> = {
@@ -42,16 +52,25 @@ export function WeatherRoutingMap({
   hazardZones,
   selectedRouteId,
   onRouteSelect,
-  className
+  className,
+  showVesselAnimation = true,
+  vesselPosition: externalVesselPosition
 }: WeatherRoutingMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const vesselMarkerRef = useRef<mapboxgl.Marker | null>(null);
+  const animationRef = useRef<number | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAllRoutes, setShowAllRoutes] = useState(true);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationProgress, setAnimationProgress] = useState(0);
+  const [currentVesselPosition, setCurrentVesselPosition] = useState<VesselPosition | null>(
+    externalVesselPosition || null
+  );
 
   // Fetch Mapbox token
   useEffect(() => {
@@ -118,6 +137,10 @@ export function WeatherRoutingMap({
     });
 
     return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      vesselMarkerRef.current?.remove();
       clearMarkers();
       map.current?.remove();
       map.current = null;
@@ -353,6 +376,150 @@ export function WeatherRoutingMap({
     });
   }, [routes, hazardZones, selectedRouteId, showAllRoutes, mapLoaded, clearMarkers]);
 
+  // Create vessel marker
+  const createVesselMarker = useCallback((position: VesselPosition) => {
+    if (!map.current) return null;
+
+    // Remove existing vessel marker
+    vesselMarkerRef.current?.remove();
+
+    const el = document.createElement('div');
+    el.className = 'vessel-marker animate-pulse';
+    el.style.cssText = `
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border: 3px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+      cursor: pointer;
+      transform: rotate(${position.heading || 0}deg);
+      transition: transform 0.5s ease-out;
+    `;
+    el.innerHTML = '🚢';
+
+    const marker = new mapboxgl.Marker(el)
+      .setLngLat([position.lon, position.lat])
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 })
+          .setHTML(`
+            <div style="padding: 8px;">
+              <strong>🚢 Posição Atual</strong>
+              <br/>
+              <small>Lat: ${position.lat.toFixed(4)}°</small>
+              <br/>
+              <small>Lon: ${position.lon.toFixed(4)}°</small>
+              ${position.speed ? `<br/><small>Velocidade: ${position.speed.toFixed(1)} nós</small>` : ''}
+              ${position.heading ? `<br/><small>Rumo: ${position.heading.toFixed(0)}°</small>` : ''}
+              <br/>
+              <small>Atualizado: ${position.timestamp.toLocaleTimeString("pt-BR")}</small>
+            </div>
+          `)
+      )
+      .addTo(map.current);
+
+    vesselMarkerRef.current = marker;
+    return marker;
+  }, []);
+
+  // Update vessel position when external position changes
+  useEffect(() => {
+    if (externalVesselPosition && mapLoaded) {
+      setCurrentVesselPosition(externalVesselPosition);
+      createVesselMarker(externalVesselPosition);
+    }
+  }, [externalVesselPosition, mapLoaded, createVesselMarker]);
+
+  // Animation along route
+  const startRouteAnimation = useCallback(() => {
+    if (!map.current || routes.length === 0) return;
+
+    const selectedRoute = routes.find(r => r.id === selectedRouteId) || routes[0];
+    const waypoints = selectedRoute.waypoints;
+    if (waypoints.length < 2) return;
+
+    setIsAnimating(true);
+    let progress = 0;
+    const totalSteps = 200; // Animation smoothness
+    const animationDuration = 15000; // 15 seconds total
+    const stepDuration = animationDuration / totalSteps;
+
+    // Calculate total distance and cumulative distances
+    const distances: number[] = [0];
+    let totalDistance = 0;
+    for (let i = 1; i < waypoints.length; i++) {
+      const d = Math.sqrt(
+        Math.pow(waypoints[i].lat - waypoints[i-1].lat, 2) +
+        Math.pow(waypoints[i].lon - waypoints[i-1].lon, 2)
+      );
+      totalDistance += d;
+      distances.push(totalDistance);
+    }
+
+    const animate = () => {
+      if (progress >= 1) {
+        setIsAnimating(false);
+        setAnimationProgress(100);
+        return;
+      }
+
+      const currentDistance = progress * totalDistance;
+      
+      // Find current segment
+      let segmentIndex = 0;
+      for (let i = 1; i < distances.length; i++) {
+        if (distances[i] >= currentDistance) {
+          segmentIndex = i - 1;
+          break;
+        }
+      }
+
+      // Interpolate position within segment
+      const segmentStart = distances[segmentIndex];
+      const segmentEnd = distances[segmentIndex + 1] || totalDistance;
+      const segmentProgress = (currentDistance - segmentStart) / (segmentEnd - segmentStart);
+
+      const startWp = waypoints[segmentIndex];
+      const endWp = waypoints[segmentIndex + 1] || waypoints[waypoints.length - 1];
+
+      const lat = startWp.lat + (endWp.lat - startWp.lat) * segmentProgress;
+      const lon = startWp.lon + (endWp.lon - startWp.lon) * segmentProgress;
+      
+      // Calculate heading
+      const heading = Math.atan2(endWp.lon - startWp.lon, endWp.lat - startWp.lat) * (180 / Math.PI);
+
+      const position: VesselPosition = {
+        lat,
+        lon,
+        heading: (heading + 360) % 360,
+        speed: 14,
+        timestamp: new Date(),
+      };
+
+      setCurrentVesselPosition(position);
+      createVesselMarker(position);
+      setAnimationProgress(Math.round(progress * 100));
+
+      progress += 1 / totalSteps;
+      animationRef.current = requestAnimationFrame(() => {
+        setTimeout(animate, stepDuration);
+      });
+    };
+
+    animate();
+  }, [routes, selectedRouteId, createVesselMarker]);
+
+  const stopAnimation = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+    setIsAnimating(false);
+  }, []);
+
   if (loading) {
     return (
       <Card className={className}>
@@ -407,6 +574,28 @@ export function WeatherRoutingMap({
             Mapa de Rotas
           </CardTitle>
           <div className="flex items-center gap-2 flex-wrap">
+            {/* Animation controls */}
+            {showVesselAnimation && (
+              <Button
+                variant={isAnimating ? "destructive" : "default"}
+                size="sm"
+                onClick={isAnimating ? stopAnimation : startRouteAnimation}
+                className="text-xs"
+              >
+                {isAnimating ? (
+                  <>
+                    <Pause className="h-3 w-3 mr-1" />
+                    Parar ({animationProgress}%)
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-3 w-3 mr-1" />
+                    Simular Viagem
+                  </>
+                )}
+              </Button>
+            )}
+
             <Button
               variant="outline"
               size="sm"
@@ -439,6 +628,14 @@ export function WeatherRoutingMap({
               ))}
             </div>
 
+            {/* Vessel position indicator */}
+            {currentVesselPosition && (
+              <Badge variant="outline" className="text-xs bg-blue-500/10 border-blue-500 text-blue-600">
+                <Ship className="h-3 w-3 mr-1" />
+                {currentVesselPosition.lat.toFixed(2)}°, {currentVesselPosition.lon.toFixed(2)}°
+              </Badge>
+            )}
+
             {hazardZones.length > 0 && (
               <Badge variant="destructive" className="text-xs">
                 <Shield className="h-3 w-3 mr-1" />
@@ -448,8 +645,18 @@ export function WeatherRoutingMap({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 relative">
         <div ref={mapContainer} className="h-[400px] rounded-b-lg" />
+        
+        {/* Animation progress bar */}
+        {isAnimating && (
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted">
+            <div 
+              className="h-full bg-primary transition-all duration-300"
+              style={{ width: `${animationProgress}%` }}
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   );
