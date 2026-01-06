@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -47,22 +48,24 @@ export function SyncStatusBadge({ className }: SyncStatusBadgeProps) {
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className={cn('flex items-center gap-1 p-1 rounded-full', status.bg, className)}>
-          <Icon className={cn('h-4 w-4', status.color, isSyncing && 'animate-spin')} />
-          {pendingCount > 0 && (
-            <Badge variant="secondary" className="h-4 min-w-4 p-0 text-[10px] flex items-center justify-center">
-              {pendingCount}
-            </Badge>
-          )}
-        </div>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p className="font-medium">{status.label}</p>
-        {pendingCount > 0 && <p className="text-xs text-muted-foreground">{pendingCount} pendente(s)</p>}
-      </TooltipContent>
-    </Tooltip>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={cn('flex items-center gap-1 p-1 rounded-full', status.bg, className)}>
+            <Icon className={cn('h-4 w-4', status.color, isSyncing && 'animate-spin')} />
+            {pendingCount > 0 && (
+              <Badge variant="secondary" className="h-4 min-w-4 p-0 text-[10px] flex items-center justify-center">
+                {pendingCount}
+              </Badge>
+            )}
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className="font-medium">{status.label}</p>
+          {pendingCount > 0 && <p className="text-xs text-muted-foreground">{pendingCount} pendente(s)</p>}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

@@ -20,6 +20,7 @@ import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
@@ -102,31 +103,33 @@ export function VoiceNLUInlineButton({ className }: VoiceNLUInlineButtonProps) {
         </Sheet>
 
         {/* Main voice button */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="lg"
-              onClick={toggleListening}
-              disabled={isProcessing}
-              className={cn(
-                'h-14 w-14 rounded-full shadow-lg transition-all duration-300',
-                isListening && 'bg-red-500 hover:bg-red-600 animate-pulse ring-4 ring-red-500/30',
-                isProcessing && 'bg-blue-500'
-              )}
-            >
-              {isProcessing ? (
-                <Loader2 className="h-6 w-6 animate-spin" />
-              ) : isListening ? (
-                <MicOff className="h-6 w-6" />
-              ) : (
-                <Mic className="h-6 w-6" />
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="left">
-            <p>{isListening ? 'Parar' : 'Comando de Voz NLU'}</p>
-          </TooltipContent>
-        </Tooltip>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="lg"
+                onClick={toggleListening}
+                disabled={isProcessing}
+                className={cn(
+                  'h-14 w-14 rounded-full shadow-lg transition-all duration-300',
+                  isListening && 'bg-red-500 hover:bg-red-600 animate-pulse ring-4 ring-red-500/30',
+                  isProcessing && 'bg-blue-500'
+                )}
+              >
+                {isProcessing ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : isListening ? (
+                  <MicOff className="h-6 w-6" />
+                ) : (
+                  <Mic className="h-6 w-6" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              <p>{isListening ? 'Parar' : 'Comando de Voz NLU'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
