@@ -462,31 +462,293 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
     return routes.findIndex((r) => (r[key] as number) === bestValue);
   };
 
-  const bestDistance = findBest("totalDistance");
-  const bestDuration = findBest("totalDuration");
-  const bestFuel = findBest("fuelEstimate");
-  const bestRisk = findBest("riskScore");
+  const bestDistanceIdx = findBest("totalDistance");
+  const bestDurationIdx = findBest("totalDuration");
+  const bestFuelIdx = findBest("fuelEstimate");
+  const bestRiskIdx = findBest("riskScore");
+
+  // Calculate differences between routes
+  const getDifferences = () => {
+    const diffs: {
+      label: string;
+      route1: number;
+      route2: number;
+      diff: number;
+      diffPercent: number;
+      unit: string;
+      better: 1 | 2;
+      metric: string;
+    }[] = [];
+
+    for (let i = 0; i < routes.length; i++) {
+      for (let j = i + 1; j < routes.length; j++) {
+        const r1 = routes[i];
+        const r2 = routes[j];
+
+        // Distance
+        const distDiff = r1.totalDistance - r2.totalDistance;
+        const distPercent = (distDiff / Math.max(r1.totalDistance, r2.totalDistance)) * 100;
+        diffs.push({
+          label: `Rota ${i + 1} vs ${j + 1}`,
+          route1: r1.totalDistance,
+          route2: r2.totalDistance,
+          diff: Math.abs(distDiff),
+          diffPercent: Math.abs(distPercent),
+          unit: "nm",
+          better: distDiff > 0 ? 2 : 1,
+          metric: "distância",
+        });
+
+        // Duration
+        const durDiff = r1.totalDuration - r2.totalDuration;
+        const durPercent = (durDiff / Math.max(r1.totalDuration, r2.totalDuration)) * 100;
+        diffs.push({
+          label: `Rota ${i + 1} vs ${j + 1}`,
+          route1: r1.totalDuration,
+          route2: r2.totalDuration,
+          diff: Math.abs(durDiff),
+          diffPercent: Math.abs(durPercent),
+          unit: "h",
+          better: durDiff > 0 ? 2 : 1,
+          metric: "tempo",
+        });
+
+        // Fuel
+        const fuelDiff = r1.fuelEstimate - r2.fuelEstimate;
+        const fuelPercent = (fuelDiff / Math.max(r1.fuelEstimate, r2.fuelEstimate)) * 100;
+        diffs.push({
+          label: `Rota ${i + 1} vs ${j + 1}`,
+          route1: r1.fuelEstimate,
+          route2: r2.fuelEstimate,
+          diff: Math.abs(fuelDiff),
+          diffPercent: Math.abs(fuelPercent),
+          unit: "ton",
+          better: fuelDiff > 0 ? 2 : 1,
+          metric: "combustível",
+        });
+
+        // Risk
+        const riskDiff = r1.riskScore - r2.riskScore;
+        const riskPercent = (riskDiff / Math.max(r1.riskScore, r2.riskScore || 1)) * 100;
+        diffs.push({
+          label: `Rota ${i + 1} vs ${j + 1}`,
+          route1: r1.riskScore,
+          route2: r2.riskScore,
+          diff: Math.abs(riskDiff),
+          diffPercent: Math.abs(riskPercent),
+          unit: "%",
+          better: riskDiff > 0 ? 2 : 1,
+          metric: "risco",
+        });
+      }
+    }
+
+    return diffs;
+  };
+
+  // Calculate potential savings if best options are chosen
+  const calculateSavings = () => {
+    const worstDistance = Math.max(...routes.map((r) => r.totalDistance));
+    const bestDistance = Math.min(...routes.map((r) => r.totalDistance));
+    const distanceSaving = worstDistance - bestDistance;
+    const distancePercent = (distanceSaving / worstDistance) * 100;
+
+    const worstDuration = Math.max(...routes.map((r) => r.totalDuration));
+    const bestDuration = Math.min(...routes.map((r) => r.totalDuration));
+    const durationSaving = worstDuration - bestDuration;
+    const durationPercent = (durationSaving / worstDuration) * 100;
+
+    const worstFuel = Math.max(...routes.map((r) => r.fuelEstimate));
+    const bestFuel = Math.min(...routes.map((r) => r.fuelEstimate));
+    const fuelSaving = worstFuel - bestFuel;
+    const fuelPercent = (fuelSaving / worstFuel) * 100;
+
+    const worstRisk = Math.max(...routes.map((r) => r.riskScore));
+    const bestRisk = Math.min(...routes.map((r) => r.riskScore));
+    const riskReduction = worstRisk - bestRisk;
+
+    return { 
+      distanceSaving, distancePercent,
+      durationSaving, durationPercent,
+      fuelSaving, fuelPercent,
+      riskReduction,
+    };
+  };
+
+  const savings = calculateSavings();
 
   return (
-    <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-      <h4 className="font-medium mb-3">Resumo da Comparação</h4>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-        <Badge variant="outline" className="justify-center py-2">
-          <Route className="h-3 w-3 mr-1" />
-          Menor distância: Rota {bestDistance + 1}
-        </Badge>
-        <Badge variant="outline" className="justify-center py-2">
-          <Clock className="h-3 w-3 mr-1" />
-          Mais rápida: Rota {bestDuration + 1}
-        </Badge>
-        <Badge variant="outline" className="justify-center py-2">
-          <Fuel className="h-3 w-3 mr-1" />
-          Mais econômica: Rota {bestFuel + 1}
-        </Badge>
-        <Badge variant="outline" className="justify-center py-2">
-          <AlertTriangle className="h-3 w-3 mr-1" />
-          Menor risco: Rota {bestRisk + 1}
-        </Badge>
+    <div className="space-y-4">
+      {/* Best Route Badges */}
+      <div className="p-4 bg-muted/50 rounded-lg">
+        <h4 className="font-medium mb-3">Melhores Opções por Critério</h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <Badge variant="outline" className="justify-center py-2" style={{ borderColor: COMPARISON_COLORS[bestDistanceIdx] }}>
+            <Route className="h-3 w-3 mr-1" />
+            Menor distância: Rota {bestDistanceIdx + 1}
+          </Badge>
+          <Badge variant="outline" className="justify-center py-2" style={{ borderColor: COMPARISON_COLORS[bestDurationIdx] }}>
+            <Clock className="h-3 w-3 mr-1" />
+            Mais rápida: Rota {bestDurationIdx + 1}
+          </Badge>
+          <Badge variant="outline" className="justify-center py-2" style={{ borderColor: COMPARISON_COLORS[bestFuelIdx] }}>
+            <Fuel className="h-3 w-3 mr-1" />
+            Mais econômica: Rota {bestFuelIdx + 1}
+          </Badge>
+          <Badge variant="outline" className="justify-center py-2" style={{ borderColor: COMPARISON_COLORS[bestRiskIdx] }}>
+            <AlertTriangle className="h-3 w-3 mr-1" />
+            Menor risco: Rota {bestRiskIdx + 1}
+          </Badge>
+        </div>
+      </div>
+
+      {/* Savings Analysis */}
+      <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+        <h4 className="font-medium mb-3 text-emerald-600 flex items-center gap-2">
+          <CheckCircle className="h-4 w-4" />
+          Economia Potencial (melhor vs pior rota)
+        </h4>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <SavingCard
+            icon={Route}
+            label="Distância"
+            value={`${savings.distanceSaving.toFixed(0)} nm`}
+            percent={savings.distancePercent}
+          />
+          <SavingCard
+            icon={Clock}
+            label="Tempo"
+            value={`${Math.floor(savings.durationSaving)}h`}
+            percent={savings.durationPercent}
+          />
+          <SavingCard
+            icon={Fuel}
+            label="Combustível"
+            value={`${savings.fuelSaving.toFixed(1)} ton`}
+            percent={savings.fuelPercent}
+          />
+          <SavingCard
+            icon={AlertTriangle}
+            label="Redução de Risco"
+            value={`${savings.riskReduction.toFixed(0)} pts`}
+            percent={null}
+            isRisk
+          />
+        </div>
+      </div>
+
+      {/* Detailed Comparison Table */}
+      {routes.length === 2 && (
+        <div className="p-4 bg-muted/50 rounded-lg">
+          <h4 className="font-medium mb-3">Comparação Detalhada</h4>
+          <div className="space-y-2">
+            <ComparisonRow
+              label="Distância"
+              value1={routes[0].totalDistance}
+              value2={routes[1].totalDistance}
+              unit="nm"
+              format={(v) => v.toFixed(0)}
+              lowerIsBetter
+            />
+            <ComparisonRow
+              label="Duração"
+              value1={routes[0].totalDuration}
+              value2={routes[1].totalDuration}
+              unit="h"
+              format={(v) => `${Math.floor(v / 24)}d ${Math.round(v % 24)}h`}
+              lowerIsBetter
+            />
+            <ComparisonRow
+              label="Combustível"
+              value1={routes[0].fuelEstimate}
+              value2={routes[1].fuelEstimate}
+              unit="ton"
+              format={(v) => v.toFixed(1)}
+              lowerIsBetter
+            />
+            <ComparisonRow
+              label="Risco"
+              value1={routes[0].riskScore}
+              value2={routes[1].riskScore}
+              unit="%"
+              format={(v) => v.toFixed(0)}
+              lowerIsBetter
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface SavingCardProps {
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  percent: number | null;
+  isRisk?: boolean;
+}
+
+function SavingCard({ icon: Icon, label, value, percent, isRisk }: SavingCardProps) {
+  return (
+    <div className="text-center p-3 bg-background/60 rounded-lg">
+      <Icon className="h-4 w-4 mx-auto mb-1 text-emerald-600" />
+      <p className="font-semibold text-emerald-600">{value}</p>
+      {percent !== null && (
+        <p className="text-xs text-emerald-500">-{percent.toFixed(1)}%</p>
+      )}
+      <p className="text-xs text-muted-foreground">{label}</p>
+    </div>
+  );
+}
+
+interface ComparisonRowProps {
+  label: string;
+  value1: number;
+  value2: number;
+  unit: string;
+  format: (v: number) => string;
+  lowerIsBetter?: boolean;
+}
+
+function ComparisonRow({ label, value1, value2, unit, format, lowerIsBetter = true }: ComparisonRowProps) {
+  const diff = value1 - value2;
+  const diffPercent = (Math.abs(diff) / Math.max(value1, value2)) * 100;
+  const route1Better = lowerIsBetter ? diff < 0 : diff > 0;
+  const route2Better = lowerIsBetter ? diff > 0 : diff < 0;
+
+  return (
+    <div className="flex items-center gap-2 text-sm">
+      <span className="w-24 text-muted-foreground">{label}</span>
+      <div className="flex-1 flex items-center gap-2">
+        <span className={cn(
+          "flex-1 text-center px-2 py-1 rounded",
+          route1Better ? "bg-emerald-500/20 text-emerald-600 font-medium" : "bg-muted"
+        )}>
+          <span 
+            className="inline-block w-2 h-2 rounded-full mr-1"
+            style={{ backgroundColor: COMPARISON_COLORS[0] }}
+          />
+          {format(value1)} {unit}
+        </span>
+        <span className="text-muted-foreground text-xs w-20 text-center">
+          {diff !== 0 && (
+            <>
+              {route2Better ? "+" : "-"}{diffPercent.toFixed(1)}%
+            </>
+          )}
+          {diff === 0 && "="}
+        </span>
+        <span className={cn(
+          "flex-1 text-center px-2 py-1 rounded",
+          route2Better ? "bg-emerald-500/20 text-emerald-600 font-medium" : "bg-muted"
+        )}>
+          <span 
+            className="inline-block w-2 h-2 rounded-full mr-1"
+            style={{ backgroundColor: COMPARISON_COLORS[1] }}
+          />
+          {format(value2)} {unit}
+        </span>
       </div>
     </div>
   );
