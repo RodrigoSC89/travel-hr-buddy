@@ -870,5 +870,37 @@ Backlog:     ████░░░░░░░░░░░░░░░░░░�
 
 ---
 
+## 🔑 API Keys Pendentes de Configuração
+
+> **Instruções:** Configure via Supabase Dashboard → Settings → Edge Functions → Secrets
+
+| Secret Name | Serviço | Prioridade | Como Obter |
+|-------------|---------|------------|------------|
+| `SLACK_WEBHOOK_URL` | Slack Alerting | P1 | [Slack Apps](https://api.slack.com/apps) → Incoming Webhooks |
+| `TEAMS_WEBHOOK_URL` | Microsoft Teams | P1 | Teams → Channel → Connectors → Incoming Webhook |
+| `DISCORD_WEBHOOK_URL` | Discord Alerting | P2 | Server Settings → Integrations → Webhooks |
+| `RESEND_API_KEY` | Email (Resend) | P1 | [Resend Dashboard](https://resend.com/api-keys) |
+| `BUNKER_API_KEY` | Bunker Prices API | P2 | Ship&Bunker ou Commodities-API |
+| `OPENAI_API_KEY` | AI/GPT Functions | P0 | [OpenAI Platform](https://platform.openai.com/api-keys) |
+| `ANTHROPIC_API_KEY` | Claude AI | P1 | [Anthropic Console](https://console.anthropic.com/) |
+| `ELEVENLABS_API_KEY` | Voice/TTS | P2 | [ElevenLabs](https://elevenlabs.io/) |
+| `MAPBOX_ACCESS_TOKEN` | Maps | P2 | [Mapbox Account](https://account.mapbox.com/) |
+| `SENTRY_DSN` | Error Tracking | P1 | [Sentry Settings](https://sentry.io/settings/) |
+| `STRIPE_SECRET_KEY` | Payments | P1 | [Stripe Dashboard](https://dashboard.stripe.com/apikeys) |
+| `GOOGLE_CALENDAR_CLIENT_ID` | Calendar Sync | P3 | Google Cloud Console |
+| `GOOGLE_CALENDAR_CLIENT_SECRET` | Calendar Sync | P3 | Google Cloud Console |
+| `MICROSOFT_GRAPH_CLIENT_ID` | Outlook/Teams | P2 | Azure Portal |
+| `MICROSOFT_GRAPH_CLIENT_SECRET` | Outlook/Teams | P2 | Azure Portal |
+| `FIREBASE_API_KEY` | Push Notifications | P1 | Firebase Console |
+| `FIREBASE_VAPID_KEY` | Web Push | P1 | Firebase → Cloud Messaging |
+| `POSTHOG_API_KEY` | Analytics | P2 | [PostHog](https://posthog.com/) |
+
+### Status de Configuração
+- ✅ Configurado: SUPABASE_URL, SUPABASE_ANON_KEY
+- ⏳ Pendente: Todos os listados acima
+- 📋 Opcional: GOOGLE_CALENDAR_*, MICROSOFT_GRAPH_*
+
+---
+
 *Kanban gerado automaticamente - Nautilus One Engineering*  
-*Atualizado: 2026-01-05*
+*Atualizado: 2026-01-06*
