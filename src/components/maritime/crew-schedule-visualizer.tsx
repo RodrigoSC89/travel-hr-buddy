@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Users, Clock, Ship, AlertTriangle, CheckCircle, Zap } from "lucide-react";
+import { Calendar, Users, Clock, Ship, AlertTriangle, CheckCircle, Zap, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { CalendarSyncPanel } from "@/components/calendar/CalendarSyncPanel";
+import { watchScheduleToEvents, type CalendarEvent } from "@/lib/calendar/calendar-sync";
 
 interface CrewSchedule {
   id: string;
@@ -245,12 +247,55 @@ export const CrewScheduleVisualizer: React.FC = () => {
           {/* Gantt Chart */}
           {viewMode === "gantt" && generateGanttView()}
 
-          {/* Calendar View Placeholder */}
+          {/* Calendar View with Sync */}
           {viewMode === "calendar" && (
-            <div className="text-center py-12 text-muted-foreground">
-              <Calendar className="w-12 h-12 mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">Visualização em Calendário</h3>
-              <p>Em desenvolvimento - Mostrará escalas em formato de calendário mensal</p>
+            <div className="space-y-6">
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-1">
+                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(day => (
+                  <div key={day} className="text-center text-sm font-medium py-2 text-muted-foreground">
+                    {day}
+                  </div>
+                ))}
+                {Array.from({ length: 35 }, (_, i) => {
+                  const day = i - 3; // Offset for month start
+                  const hasEvent = schedules.some(s => {
+                    const scheduleDay = s.startDate.getDate();
+                    return day > 0 && day <= 31 && (scheduleDay === day || s.endDate.getDate() === day);
+                  });
+                  return (
+                    <div
+                      key={i}
+                      className={`aspect-square border rounded-lg flex flex-col items-center justify-center text-sm ${
+                        day > 0 && day <= 31 ? "bg-background" : "bg-muted/30"
+                      } ${hasEvent ? "ring-2 ring-primary/50" : ""}`}
+                    >
+                      {day > 0 && day <= 31 && (
+                        <>
+                          <span>{day}</span>
+                          {hasEvent && <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1" />}
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Calendar Sync Panel */}
+              <CalendarSyncPanel
+                vesselName={selectedVessel !== "all" ? selectedVessel : undefined}
+                events={schedules.map(s => ({
+                  id: s.id,
+                  title: `${s.rotationType === "on" ? "A Bordo" : "De Folga"}: ${s.crewMember}`,
+                  description: `${s.rank} - ${s.vessel}`,
+                  startDate: s.startDate,
+                  endDate: s.endDate,
+                  location: s.vessel,
+                  category: "watch" as const,
+                  vesselName: s.vessel,
+                  reminder: 1440
+                }))}
+              />
             </div>
           )}
         </CardContent>
