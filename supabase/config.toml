@@ -1003,6 +1003,14 @@ comment = "IoT sensor simulator for equipment_sensors realtime testing"
 verify_jwt = false
 comment = "Weather and fuel prices API for route optimization"
 
+[functions.bunker-prices]
+verify_jwt = false
+comment = "Real-time bunker fuel prices for major global ports"
+
+[functions.bunker-price-forecast]
+verify_jwt = false
+comment = "AI-powered 7-day bunker price forecast with port comparison"
+
 [functions.iot-anomaly-notify]
 verify_jwt = false
 comment = "Send notifications when critical sensor anomalies are detected"
