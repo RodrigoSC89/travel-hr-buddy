@@ -1,6 +1,15 @@
 project_id = "vnbptmixvwropvanyhdb"
 
 # ============================================
+# AUTONOMOUS PLATFORM v4.0 - Added 2026-01-06
+# Multi-agent AI consensus and autonomous decision-making
+# ============================================
+
+[functions.autonomous-ai-consensus]
+verify_jwt = false
+comment = "Multi-LLM orchestration for autonomous decision-making with agent consensus"
+
+# ============================================
 # V2 MODULES AI FUNCTIONS - Added 2026-01-03
 # Unified AI chat and evidence generation for all V2 modules
 # ============================================
