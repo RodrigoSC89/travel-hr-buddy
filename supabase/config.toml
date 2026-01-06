@@ -70,6 +70,10 @@ comment = "Webhook dispatcher for external integrations"
 verify_jwt = false
 comment = "StormGlass marine weather API - fallback for OpenWeatherMap and Windy"
 
+[functions.weather-alert-cron]
+verify_jwt = false
+comment = "Weather alert cron - monitors vessel positions and sends alerts for dangerous conditions"
+
 [functions.marinha-brasil]
 verify_jwt = false
 comment = "Marinha do Brasil - Boletins meteorológicos oficiais CHM/CPTEC"
