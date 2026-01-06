@@ -17,6 +17,7 @@ import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { GlobalBrainProvider } from "./components/global/GlobalBrainProvider";
 import { LiteModeProvider } from "./components/performance/LiteMode";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 // Global components
 import { GlobalVoiceButton } from "./components/voice/GlobalVoiceButton";
@@ -153,7 +154,8 @@ function App() {
                 <RouterType>
                   <LiteModeProvider autoEnable={true}>
                     <GlobalBrainProvider showTrigger={false}>
-                      <Routes>
+                      <TooltipProvider>
+                        <Routes>
                         {/* Public Routes */}
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/unauthorized" element={<Unauthorized />} />
@@ -223,6 +225,7 @@ function App() {
                         <VoiceNLUInlineButton />
                         <NautilusBrainButton />
                       </FloatingButtonsContainer>
+                      </TooltipProvider>
                     </GlobalBrainProvider>
                   </LiteModeProvider>
                 </RouterType>
