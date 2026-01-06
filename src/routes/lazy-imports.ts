@@ -29,6 +29,7 @@ export const AIAnalyticsDashboard = lazy(() => import(/* webpackChunkName: "page
 export const VisionAI = lazy(() => import(/* webpackChunkName: "page-vision-ai" */ "@/pages/VisionAI"));
 export const VoiceAssistant = lazy(() => import(/* webpackChunkName: "page-voice-assistant" */ "@/pages/VoiceAssistant"));
 export const VoiceTranscriber = lazy(() => import(/* webpackChunkName: "page-voice-transcriber" */ "@/pages/VoiceTranscriber"));
+export const AutonomousCommandCenter = lazy(() => import(/* webpackChunkName: "page-autonomous-command" */ "@/pages/AutonomousCommandCenter"));
 
 // ============= SECURITY & MONITORING =============
 export const SecurityCenter = lazy(() => import(/* webpackChunkName: "page-security-center" */ "@/pages/SecurityCenter"));

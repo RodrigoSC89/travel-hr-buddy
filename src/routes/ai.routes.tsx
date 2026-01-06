@@ -14,6 +14,7 @@ import {
   VisionAI,
   VoiceAssistant,
   VoiceTranscriber,
+  AutonomousCommandCenter,
 } from "./lazy-imports";
 
 export const aiRoutes = (
@@ -28,5 +29,6 @@ export const aiRoutes = (
     <Route path="vision-ai" element={<VisionAI />} />
     <Route path="voice-assistant" element={<VoiceAssistant />} />
     <Route path="voice-transcriber" element={<VoiceTranscriber />} />
+    <Route path="autonomous-command" element={<AutonomousCommandCenter />} />
   </>
 );
