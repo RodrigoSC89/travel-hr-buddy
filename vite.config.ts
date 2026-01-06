@@ -242,58 +242,42 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 3000,
       target: "esnext",
       cssCodeSplit: true,
-      // Use esbuild instead of terser to reduce memory usage
       minify: mode === "production" ? "esbuild" : false,
       commonjsOptions: {
         exclude: [/supabase\/functions/],
       },
-      reportCompressedSize: false, // Acelera build
+      reportCompressedSize: false,
       assetsInlineLimit: 4096,
       rollupOptions: {
-        // Reduce memory usage during build
-        maxParallelFileOps: 2,
-        treeshake: mode === "production",
+        maxParallelFileOps: 1, // Reduce to 1 for memory
+        treeshake: mode === "production" ? { moduleSideEffects: false } : false,
         output: {
-          // Simplified chunking to reduce memory usage
+          // Ultra-simplified chunking
           manualChunks: (id) => {
             if (id.includes("node_modules")) {
-              // Core essentials
-              if (id.includes("react/") || id.includes("react-dom/") || id.includes("react-router")) {
-                return "core";
-              }
-              // Supabase
-              if (id.includes("@supabase")) {
-                return "supabase";
-              }
-              // Heavy libraries - separate chunks
-              if (id.includes("three") || id.includes("@react-three")) {
-                return "three";
-              }
-              if (id.includes("@tensorflow") || id.includes("onnxruntime")) {
-                return "ai-ml";
-              }
-              if (id.includes("recharts") || id.includes("chart.js")) {
-                return "charts";
-              }
-              if (id.includes("mapbox-gl")) {
-                return "map";
-              }
-              if (id.includes("firebase")) {
-                return "firebase";
-              }
-              if (id.includes("framer-motion")) {
-                return "motion";
-              }
-              if (id.includes("@radix-ui")) {
-                return "ui";
-              }
-              // Everything else
+              if (id.includes("react") || id.includes("scheduler")) return "react";
+              if (id.includes("@supabase")) return "supabase";
+              if (id.includes("three") || id.includes("@react-three")) return "three";
+              if (id.includes("@tensorflow") || id.includes("onnxruntime")) return "ml";
+              if (id.includes("recharts") || id.includes("chart")) return "charts";
+              if (id.includes("mapbox")) return "map";
+              if (id.includes("firebase")) return "firebase";
+              if (id.includes("framer-motion")) return "motion";
+              if (id.includes("@radix-ui") || id.includes("lucide")) return "ui";
+              if (id.includes("@tanstack")) return "query";
+              // Group remaining vendors into fewer chunks
               return "vendor";
             }
-          }
+            // Split app code by major routes
+            if (id.includes("/pages/")) return "pages";
+            if (id.includes("/components/autonomous")) return "autonomous";
+            if (id.includes("/lib/ai")) return "ai-lib";
+          },
+          // Limit chunk size for memory efficiency
+          experimentalMinChunkSize: 10000,
         }
       },
     },
