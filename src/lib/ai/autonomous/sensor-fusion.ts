@@ -4,7 +4,32 @@
  * NAUTILUS ONE v4.0 - Autonomous Platform
  */
 
-import { EventEmitter } from 'events';
+// Simple browser-compatible EventEmitter
+class SimpleEventEmitter {
+  private listeners: Map<string, ((data: unknown) => void)[]> = new Map();
+
+  on(event: string, callback: (data: unknown) => void) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, []);
+    }
+    this.listeners.get(event)!.push(callback);
+  }
+
+  emit(event: string, data?: unknown) {
+    const callbacks = this.listeners.get(event) || [];
+    callbacks.forEach(cb => cb(data));
+  }
+
+  off(event: string, callback: (data: unknown) => void) {
+    const callbacks = this.listeners.get(event);
+    if (callbacks) {
+      const index = callbacks.indexOf(callback);
+      if (index > -1) {
+        callbacks.splice(index, 1);
+      }
+    }
+  }
+}
 
 export interface SensorReading {
   sensorId: string;
@@ -104,7 +129,7 @@ interface SensorConfig {
   outlierThreshold: number;
 }
 
-class SensorFusionEngine extends EventEmitter {
+class SensorFusionEngine extends SimpleEventEmitter {
   private sensors: Map<string, SensorConfig> = new Map();
   private readings: Map<string, SensorReading[]> = new Map();
   private fusedData: FusedData | null = null;
