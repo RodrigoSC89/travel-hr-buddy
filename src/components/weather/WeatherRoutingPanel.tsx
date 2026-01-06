@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Navigation,
   Ship,
@@ -34,10 +35,12 @@ import {
   CloudRain,
   Anchor,
   Download,
+  History,
 } from "lucide-react";
+import { RouteHistoryPanel } from "./RouteHistoryPanel";
 import { cn } from "@/lib/utils";
 import { useWeatherRouting } from "@/hooks/useWeatherRouting";
-import { AlternativeRoute, Waypoint } from "@/lib/routing/weather-routing";
+import { AlternativeRoute, Waypoint, WeatherRoutingResult, HazardZone, WeatherPoint } from "@/lib/routing/weather-routing";
 import { WeatherRoutingMap } from "./WeatherRoutingMap";
 import { RouteExportDialog } from "./RouteExportDialog";
 
@@ -70,14 +73,25 @@ export function WeatherRoutingPanel({
   const [maxWindSpeed, setMaxWindSpeed] = useState(35);
   const [maxWaveHeight, setMaxWaveHeight] = useState(4);
   const [avoidPiracy, setAvoidPiracy] = useState(true);
+  const [activeTab, setActiveTab] = useState("calculate");
+  const [loadedResult, setLoadedResult] = useState<WeatherRoutingResult | null>(null);
 
   const {
-    result,
+    result: calculatedResult,
     isCalculating,
     calculateRoute,
     selectRoute,
     selectedRoute,
   } = useWeatherRouting();
+
+  // Use loaded result if available, otherwise use calculated result
+  const result = loadedResult || calculatedResult;
+
+  const handleLoadRoute = (routeData: WeatherRoutingResult) => {
+    setLoadedResult(routeData);
+    selectRoute(routeData.recommendedRoute);
+    setActiveTab("calculate");
+  };
 
   const handleCalculate = async () => {
     const originCoords = PORTS[origin] || { lat: -23.96, lon: -46.33 };
@@ -133,8 +147,22 @@ export function WeatherRoutingPanel({
 
   return (
     <div className={cn("space-y-6", className)}>
-      {/* Configuration Card */}
-      <Card>
+      {/* Tabs for Calculate vs History */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="calculate" className="flex items-center gap-2">
+            <Route className="h-4 w-4" />
+            Calcular Rota
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center gap-2">
+            <History className="h-4 w-4" />
+            Histórico
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="calculate" className="space-y-6 mt-4">
+          {/* Configuration Card */}
+          <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Navigation className="h-5 w-5 text-primary" />
@@ -477,6 +505,12 @@ export function WeatherRoutingPanel({
           )}
         </>
       )}
+        </TabsContent>
+
+        <TabsContent value="history" className="mt-4">
+          <RouteHistoryPanel onLoadRoute={handleLoadRoute} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
