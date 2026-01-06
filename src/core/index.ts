@@ -16,6 +16,12 @@ export { MQTTClient } from "./MQTTClient";
 export { contextMesh } from "./context/contextMesh";
 export type { ContextType, SyncStatus, ContextMessage, ContextSubscription } from "./context/contextMesh";
 
+// PATCH 32: Autonomous Platform Exports
+export { autonomousEngine } from "../lib/ai/autonomous/autonomous-engine";
+export { agentOrchestrator } from "../lib/ai/autonomous/agent-orchestrator";
+export { vesselDigitalTwin } from "../lib/ai/autonomous/digital-twin";
+export { selfHealingSystem } from "../lib/ai/autonomous/self-healing";
+
 /**
  * Initialize all collective intelligence systems with error handling
  * @throws Error if any component fails to initialize
