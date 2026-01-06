@@ -38,7 +38,9 @@ import {
   X,
   Edit,
   Save,
+  Map,
 } from "lucide-react";
+import { RouteComparisonMap } from "./RouteComparisonMap";
 import { cn } from "@/lib/utils";
 import { useRouteHistory, StoredRoute } from "@/hooks/useRouteHistory";
 import { WeatherRoutingResult, AlternativeRoute } from "@/lib/routing/weather-routing";
@@ -323,7 +325,7 @@ export function RouteHistoryPanel({
 
       {/* Comparison Dialog */}
       <Dialog open={compareDialogOpen} onOpenChange={setCompareDialogOpen}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <GitCompare className="h-5 w-5" />
@@ -334,6 +336,22 @@ export function RouteHistoryPanel({
             </DialogDescription>
           </DialogHeader>
 
+          {/* Map Comparison */}
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Map className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium">Visualização no Mapa</span>
+            </div>
+            <RouteComparisonMap
+              routes={getComparisonData().map((item, idx) => ({
+                id: item.id,
+                name: item.name,
+                route: item.route,
+              }))}
+              height="350px"
+            />
+          </div>
+
           <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${selectedForCompare.length}, 1fr)` }}>
             {getComparisonData().map((item, idx) => (
               <ComparisonColumn
@@ -342,6 +360,7 @@ export function RouteHistoryPanel({
                 route={item.route}
                 createdAt={item.createdAt}
                 highlight={idx === 0}
+                colorIndex={idx}
               />
             ))}
           </div>
@@ -353,18 +372,41 @@ export function RouteHistoryPanel({
   );
 }
 
+// Distinct colors for comparison (matching RouteComparisonMap)
+const COMPARISON_COLORS = [
+  '#3b82f6', // Blue
+  '#ef4444', // Red  
+  '#10b981', // Green
+  '#f59e0b', // Amber
+  '#8b5cf6', // Purple
+];
+
 interface ComparisonColumnProps {
   name: string;
   route: AlternativeRoute;
   createdAt: string;
   highlight?: boolean;
+  colorIndex?: number;
 }
 
-function ComparisonColumn({ name, route, createdAt, highlight }: ComparisonColumnProps) {
+function ComparisonColumn({ name, route, createdAt, highlight, colorIndex = 0 }: ComparisonColumnProps) {
+  const color = COMPARISON_COLORS[colorIndex % COMPARISON_COLORS.length];
+  
   return (
-    <Card className={cn(highlight && "border-primary")}>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm">{name}</CardTitle>
+    <Card className={cn("relative overflow-hidden", highlight && "border-primary")}>
+      {/* Color indicator bar */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-1" 
+        style={{ backgroundColor: color }}
+      />
+      <CardHeader className="pb-2 pt-4">
+        <div className="flex items-center gap-2">
+          <div 
+            className="w-3 h-3 rounded-full flex-shrink-0"
+            style={{ backgroundColor: color }}
+          />
+          <CardTitle className="text-sm truncate">{name}</CardTitle>
+        </div>
         <CardDescription className="text-xs">
           {formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ptBR })}
         </CardDescription>
