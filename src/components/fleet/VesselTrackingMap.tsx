@@ -83,7 +83,7 @@ export function VesselTrackingMap({
     setRefreshing(true);
     try {
       const { data, error: fnError } = await supabase.functions.invoke('ais-tracking', {
-        body: { action: 'query-only' }
+        body: { operation: 'fleet-status' }
       });
 
       if (fnError) throw fnError;
