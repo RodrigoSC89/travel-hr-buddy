@@ -18,13 +18,12 @@ import {
   Waves, 
   Wind,
   Compass,
-  RefreshCw,
   AlertTriangle,
   CheckCircle,
   Zap
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
-import { sensorFusionEngine, type SensorReading, type FusedData } from '@/lib/ai/autonomous';
+import { sensorFusionEngine, type SensorReading, type FusedData, type SensorType } from '@/lib/ai/autonomous';
 import { cn } from '@/lib/utils';
 
 interface SensorDataPoint {
@@ -40,7 +39,7 @@ interface SensorDataPoint {
 }
 
 interface SensorStatus {
-  type: string;
+  sensorType: SensorType;
   name: string;
   icon: React.ReactNode;
   status: 'active' | 'degraded' | 'offline';
@@ -59,46 +58,44 @@ export function SensorFusionDashboard() {
   // Initialize sensor statuses
   useEffect(() => {
     const initialSensors: SensorStatus[] = [
-      { type: 'gps', name: 'GPS Primário', icon: <Navigation className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.98 },
-      { type: 'gps', name: 'GPS Backup', icon: <Navigation className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.95 },
-      { type: 'gyroscope', name: 'Giroscópio', icon: <Compass className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.97 },
-      { type: 'ais', name: 'AIS Transponder', icon: <Radio className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.99 },
-      { type: 'weather', name: 'Estação Meteo', icon: <Wind className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.92 },
-      { type: 'radar', name: 'Radar Principal', icon: <Waves className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.96 },
-      { type: 'temperature', name: 'Sensor Temp', icon: <Thermometer className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.94 },
-      { type: 'vibration', name: 'Vibração Motor', icon: <Activity className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.91 },
+      { sensorType: 'gps', name: 'GPS Primário', icon: <Navigation className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.98 },
+      { sensorType: 'gps', name: 'GPS Backup', icon: <Navigation className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.95 },
+      { sensorType: 'gyro', name: 'Giroscópio', icon: <Compass className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.97 },
+      { sensorType: 'ais', name: 'AIS Transponder', icon: <Radio className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.99 },
+      { sensorType: 'wind_sensor', name: 'Estação Meteo', icon: <Wind className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.92 },
+      { sensorType: 'radar', name: 'Radar Principal', icon: <Waves className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.96 },
+      { sensorType: 'temperature', name: 'Sensor Temp', icon: <Thermometer className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.94 },
+      { sensorType: 'vibration', name: 'Vibração Motor', icon: <Activity className="h-4 w-4" />, status: 'active', lastUpdate: new Date(), readings: 0, confidence: 0.91 },
     ];
     setSensors(initialSensors);
   }, []);
 
   // Simulate sensor readings
   const simulateSensorReading = useCallback((): SensorReading => {
-    const sensorTypes: SensorReading['type'][] = ['gps', 'gyroscope', 'ais', 'weather', 'radar', 'temperature', 'vibration', 'pressure'];
-    const type = sensorTypes[Math.floor(Math.random() * sensorTypes.length)];
+    const sensorTypes: SensorType[] = ['gps', 'gyro', 'ais', 'wind_sensor', 'radar', 'temperature', 'vibration', 'pressure'];
+    const sensorType = sensorTypes[Math.floor(Math.random() * sensorTypes.length)];
     
     return {
-      id: `sensor-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      type,
-      source: `${type}-primary`,
+      sensorId: `${sensorType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      sensorType,
+      source: `${sensorType}-primary`,
       value: 50 + Math.random() * 50,
-      unit: type === 'temperature' ? '°C' : type === 'pressure' ? 'bar' : 'units',
+      unit: sensorType === 'temperature' ? '°C' : sensorType === 'pressure' ? 'bar' : 'units',
       timestamp: new Date(),
       quality: 0.8 + Math.random() * 0.2,
-      metadata: {
-        lat: -23.5505 + (Math.random() - 0.5) * 0.01,
-        lng: -46.6333 + (Math.random() - 0.5) * 0.01,
-      }
     };
   }, []);
 
   // Start simulation
   const startSimulation = useCallback(() => {
     setIsSimulating(true);
+    sensorFusionEngine.start();
   }, []);
 
   // Stop simulation
   const stopSimulation = useCallback(() => {
     setIsSimulating(false);
+    sensorFusionEngine.stop();
   }, []);
 
   // Simulation loop
@@ -111,7 +108,7 @@ export function SensorFusionDashboard() {
       
       // Process through fusion engine
       readings.forEach(reading => {
-        sensorFusionEngine.addReading(reading);
+        sensorFusionEngine.ingestReading(reading);
       });
       
       // Get fused data
@@ -128,8 +125,8 @@ export function SensorFusionDashboard() {
         ais: 80 + Math.random() * 20,
         weather: 60 + Math.random() * 40,
         radar: 75 + Math.random() * 25,
-        fused: fused.position.confidence * 100,
-        confidence: fused.position.confidence * 100,
+        fused: fused?.confidence || 85,
+        confidence: fused?.confidence || 85,
       };
       
       setHistory(prev => [...prev.slice(-30), newPoint]);
@@ -162,15 +159,6 @@ export function SensorFusionDashboard() {
       case 'active': return 'bg-green-500';
       case 'degraded': return 'bg-yellow-500';
       case 'offline': return 'bg-red-500';
-    }
-  };
-
-  // Get status badge variant
-  const getStatusBadge = (status: 'active' | 'degraded' | 'offline') => {
-    switch (status) {
-      case 'active': return 'default';
-      case 'degraded': return 'secondary';
-      case 'offline': return 'destructive';
     }
   };
 
@@ -290,8 +278,8 @@ export function SensorFusionDashboard() {
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">Confiança Geral</p>
                   <div className="flex items-center gap-2">
-                    <Progress value={fusedData?.position.confidence ? fusedData.position.confidence * 100 : 0} className="flex-1" />
-                    <span className="text-sm font-medium">{fusedData?.position.confidence ? (fusedData.position.confidence * 100).toFixed(0) : 0}%</span>
+                    <Progress value={fusedData?.confidence || 0} className="flex-1" />
+                    <span className="text-sm font-medium">{fusedData?.confidence?.toFixed(0) || 0}%</span>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -325,15 +313,15 @@ export function SensorFusionDashboard() {
                 <div className="space-y-3">
                   <div>
                     <p className="text-sm text-muted-foreground">Latitude</p>
-                    <p className="text-xl font-mono">{fusedData?.position.lat.toFixed(6) || '-23.550500'}°</p>
+                    <p className="text-xl font-mono">{fusedData?.position?.latitude?.toFixed(6) || '-23.550500'}°</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Longitude</p>
-                    <p className="text-xl font-mono">{fusedData?.position.lng.toFixed(6) || '-46.633300'}°</p>
+                    <p className="text-xl font-mono">{fusedData?.position?.longitude?.toFixed(6) || '-46.633300'}°</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    <span className="text-sm">Confiança: {fusedData?.position.confidence ? (fusedData.position.confidence * 100).toFixed(0) : 95}%</span>
+                    <span className="text-sm">Precisão: {fusedData?.position?.accuracy?.toFixed(0) || 10}m</span>
                   </div>
                 </div>
               </CardContent>
@@ -350,15 +338,15 @@ export function SensorFusionDashboard() {
                 <div className="space-y-3">
                   <div>
                     <p className="text-sm text-muted-foreground">Rumo</p>
-                    <p className="text-xl font-mono">{fusedData?.navigation.heading.toFixed(1) || '045.0'}°</p>
+                    <p className="text-xl font-mono">{fusedData?.navigation?.heading?.toFixed(1) || '045.0'}°</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Velocidade</p>
-                    <p className="text-xl font-mono">{fusedData?.navigation.speed.toFixed(1) || '12.5'} nós</p>
+                    <p className="text-sm text-muted-foreground">Velocidade SOG</p>
+                    <p className="text-xl font-mono">{fusedData?.navigation?.speedOverGround?.toFixed(1) || '12.5'} nós</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Aceleração</p>
-                    <p className="text-xl font-mono">{fusedData?.navigation.acceleration.toFixed(2) || '0.05'} m/s²</p>
+                    <p className="text-sm text-muted-foreground">Taxa de Giro</p>
+                    <p className="text-xl font-mono">{fusedData?.navigation?.rateOfTurn?.toFixed(2) || '0.05'}°/min</p>
                   </div>
                 </div>
               </CardContent>
@@ -374,16 +362,16 @@ export function SensorFusionDashboard() {
               <CardContent>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm text-muted-foreground">RPM Motor</p>
-                    <p className="text-xl font-mono">{fusedData?.propulsion.rpm.toFixed(0) || '850'}</p>
+                    <p className="text-sm text-muted-foreground">RPM Motor Principal</p>
+                    <p className="text-xl font-mono">{fusedData?.propulsion?.mainEngineRPM?.[0]?.toFixed(0) || '850'}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Temperatura</p>
-                    <p className="text-xl font-mono">{fusedData?.propulsion.temperature.toFixed(1) || '78.5'}°C</p>
+                    <p className="text-sm text-muted-foreground">Consumo</p>
+                    <p className="text-xl font-mono">{fusedData?.propulsion?.fuelConsumption?.toFixed(1) || '12.5'} L/h</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Vibração</p>
-                    <p className="text-xl font-mono">{fusedData?.propulsion.vibration.toFixed(2) || '2.34'} mm/s</p>
+                    <p className="text-sm text-muted-foreground">Eficiência</p>
+                    <p className="text-xl font-mono">{fusedData?.propulsion?.efficiency?.toFixed(1) || '85.0'}%</p>
                   </div>
                 </div>
               </CardContent>
@@ -419,79 +407,84 @@ export function SensorFusionDashboard() {
           </Card>
         </TabsContent>
 
-        {/* Environment Data */}
+        {/* Environment Tab */}
         <TabsContent value="environment" className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <Card>
-              <CardHeader>
+              <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Wind className="h-5 w-5" />
-                  Condições Meteorológicas
+                  Vento
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-3">
                   <div>
-                    <p className="text-sm text-muted-foreground">Velocidade Vento</p>
-                    <p className="text-xl font-mono">{fusedData?.environment.windSpeed.toFixed(1) || '15.2'} nós</p>
+                    <p className="text-sm text-muted-foreground">Velocidade</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.windSpeed?.toFixed(1) || '15.5'} nós</p>
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Direção Vento</p>
-                    <p className="text-xl font-mono">{fusedData?.environment.windDirection.toFixed(0) || '225'}°</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Altura Ondas</p>
-                    <p className="text-xl font-mono">{fusedData?.environment.waveHeight.toFixed(1) || '1.8'} m</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Período Ondas</p>
-                    <p className="text-xl font-mono">{fusedData?.environment.wavePeriod.toFixed(0) || '8'} s</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Visibilidade</p>
-                    <p className="text-xl font-mono">{fusedData?.environment.visibility.toFixed(1) || '10.5'} km</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Temperatura Ar</p>
-                    <p className="text-xl font-mono">{fusedData?.environment.airTemperature.toFixed(1) || '24.5'}°C</p>
+                    <p className="text-sm text-muted-foreground">Direção</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.windDirection?.toFixed(0) || '225'}°</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Histórico Ambiental</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Waves className="h-5 w-5" />
+                  Mar
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={history}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="time" className="text-xs" />
-                      <YAxis className="text-xs" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'hsl(var(--background))', 
-                          border: '1px solid hsl(var(--border))' 
-                        }} 
-                      />
-                      <Area type="monotone" dataKey="weather" stroke="hsl(var(--chart-4))" fill="hsl(var(--chart-4))" fillOpacity={0.5} name="Vento" />
-                      <Area type="monotone" dataKey="radar" stroke="hsl(var(--chart-5))" fill="hsl(var(--chart-5))" fillOpacity={0.3} name="Ondas" />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Altura de Onda</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.waveHeight?.toFixed(1) || '1.5'}m</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Corrente</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.currentSpeed?.toFixed(1) || '0.8'} nós</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Thermometer className="h-5 w-5" />
+                  Temperatura
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Ar</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.airTemperature?.toFixed(1) || '28.0'}°C</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Água</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.waterTemperature?.toFixed(1) || '24.5'}°C</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Pressão</p>
+                    <p className="text-xl font-mono">{fusedData?.environment?.barometricPressure?.toFixed(0) || '1013'} hPa</p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
-        {/* Confidence Analysis */}
+        {/* Confidence Tab */}
         <TabsContent value="confidence" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Análise de Confiança por Sensor</CardTitle>
-              <CardDescription>Qualidade e confiabilidade dos dados de cada sensor</CardDescription>
+              <CardDescription>Qualidade e disponibilidade das fontes de dados</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -499,80 +492,60 @@ export function SensorFusionDashboard() {
                   <div key={idx} className="flex items-center gap-4">
                     <div className="w-32 flex items-center gap-2">
                       {sensor.icon}
-                      <span className="text-sm truncate">{sensor.name}</span>
+                      <span className="text-sm font-medium truncate">{sensor.name}</span>
                     </div>
                     <div className="flex-1">
                       <Progress value={sensor.confidence * 100} className="h-3" />
                     </div>
-                    <div className="w-20 flex items-center justify-end gap-2">
-                      <span className="text-sm font-medium">{(sensor.confidence * 100).toFixed(0)}%</span>
-                      <Badge variant={getStatusBadge(sensor.status)} className="text-xs">
-                        {sensor.status}
-                      </Badge>
+                    <div className="w-16 text-right">
+                      <span className="text-sm font-bold">{(sensor.confidence * 100).toFixed(0)}%</span>
                     </div>
+                    <Badge variant={
+                      sensor.status === 'active' ? 'default' :
+                      sensor.status === 'degraded' ? 'secondary' : 'destructive'
+                    }>
+                      {sensor.status}
+                    </Badge>
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Alertas de Qualidade</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {sensors.filter(s => s.status !== 'active').length > 0 ? (
-                    sensors.filter(s => s.status !== 'active').map((sensor, idx) => (
-                      <div key={idx} className="flex items-center gap-3 p-2 rounded-lg bg-destructive/10">
-                        <AlertTriangle className="h-4 w-4 text-destructive" />
-                        <div>
-                          <p className="text-sm font-medium">{sensor.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            Status: {sensor.status === 'degraded' ? 'Degradado' : 'Offline'}
-                          </p>
-                        </div>
+          {/* Alerts */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5" />
+                Alertas de Qualidade
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {sensors.filter(s => s.status !== 'active').length > 0 ? (
+                <div className="space-y-2">
+                  {sensors.filter(s => s.status !== 'active').map((sensor, idx) => (
+                    <div key={idx} className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/50">
+                      <div className="flex items-center gap-2">
+                        {sensor.icon}
+                        <span className="font-medium">{sensor.name}</span>
+                        <Badge variant={sensor.status === 'degraded' ? 'secondary' : 'destructive'}>
+                          {sensor.status}
+                        </Badge>
                       </div>
-                    ))
-                  ) : (
-                    <div className="flex items-center gap-3 p-2 rounded-lg bg-green-500/10">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <p className="text-sm">Todos os sensores operando normalmente</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Sensor com qualidade reduzida. Dados sendo compensados por fusão.
+                      </p>
                     </div>
-                  )}
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Estatísticas da Fusão</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total de Leituras</p>
-                    <p className="text-2xl font-bold">{sensors.reduce((acc, s) => acc + s.readings, 0)}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Outliers Detectados</p>
-                    <p className="text-2xl font-bold">{Math.floor(Math.random() * 5)}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Fusões Realizadas</p>
-                    <p className="text-2xl font-bold">{history.length}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Confiança Média</p>
-                    <p className="text-2xl font-bold">
-                      {(sensors.reduce((acc, s) => acc + s.confidence, 0) / sensors.length * 100).toFixed(0)}%
-                    </p>
-                  </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+                  <p>Todos os sensores operando normalmente</p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

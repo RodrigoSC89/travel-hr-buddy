@@ -6,9 +6,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Play, Pause, Square, RefreshCw, Cpu, Activity, Ship,
+  Play, Pause, Square, Cpu, Activity, Ship,
   Users, Fuel, Shield, Brain, AlertTriangle, CheckCircle,
-  Clock, Zap, TrendingUp, BarChart3, Settings, Eye
+  Clock, Zap, TrendingUp, Eye, Settings
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { useAutonomousPlatform } from '@/hooks/useAutonomousPlatform';
+import { SensorFusionDashboard } from '@/components/autonomous/SensorFusionDashboard';
+import { VesselDigitalTwin3D } from '@/components/autonomous/VesselDigitalTwin3D';
 import { cn } from '@/lib/utils';
 
 export default function AutonomousCommandCenter() {
@@ -30,7 +32,6 @@ export default function AutonomousCommandCenter() {
     decisions,
     pendingDecisions,
     anomalies,
-    prediction,
     config,
     initialize,
     start,
@@ -56,8 +57,8 @@ export default function AutonomousCommandCenter() {
     return `${hours}h ${minutes}m ${seconds}s`;
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
+  const getStatusColor = (engineStatus: string) => {
+    switch (engineStatus) {
       case 'running': return 'text-green-500 bg-green-500/10';
       case 'paused': return 'text-yellow-500 bg-yellow-500/10';
       case 'stopped': return 'text-red-500 bg-red-500/10';
@@ -65,8 +66,8 @@ export default function AutonomousCommandCenter() {
     }
   };
 
-  const getAgentStatusColor = (status: string) => {
-    switch (status) {
+  const getAgentStatusColor = (agentStatus: string) => {
+    switch (agentStatus) {
       case 'active': return 'bg-green-500';
       case 'processing': return 'bg-blue-500 animate-pulse';
       case 'idle': return 'bg-yellow-500';
@@ -188,10 +189,11 @@ export default function AutonomousCommandCenter() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+        <TabsList className="grid grid-cols-6 w-full max-w-3xl">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="agents">Agentes IA</TabsTrigger>
           <TabsTrigger value="twin">Digital Twin</TabsTrigger>
+          <TabsTrigger value="sensors">Sensores</TabsTrigger>
           <TabsTrigger value="decisions">Decisões</TabsTrigger>
           <TabsTrigger value="config">Config</TabsTrigger>
         </TabsList>
@@ -392,17 +394,21 @@ export default function AutonomousCommandCenter() {
 
         {/* Digital Twin Tab */}
         <TabsContent value="twin" className="space-y-6">
-          {vesselState ? (
-            <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* 3D Visualization */}
+            <VesselDigitalTwin3D vesselState={vesselState} />
+
+            {/* Equipment & Crew Status */}
+            <div className="space-y-6">
               {/* Equipment Status */}
               <Card>
                 <CardHeader>
                   <CardTitle>Equipamentos</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ScrollArea className="h-[400px]">
+                  <ScrollArea className="h-[200px]">
                     <div className="space-y-3">
-                      {vesselState.equipment.map((eq) => (
+                      {vesselState?.equipment.map((eq) => (
                         <div key={eq.id} className="p-3 rounded-lg border">
                           <div className="flex items-center justify-between mb-2">
                             <span className="font-medium">{eq.name}</span>
@@ -442,9 +448,9 @@ export default function AutonomousCommandCenter() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ScrollArea className="h-[400px]">
+                  <ScrollArea className="h-[200px]">
                     <div className="space-y-3">
-                      {vesselState.crew.map((crew) => (
+                      {vesselState?.crew.map((crew) => (
                         <div key={crew.id} className="p-3 rounded-lg border">
                           <div className="flex items-center justify-between mb-2">
                             <div>
@@ -462,12 +468,10 @@ export default function AutonomousCommandCenter() {
                             <div>
                               <p className="text-xs text-muted-foreground">Fadiga</p>
                               <Progress value={crew.fatigue} className="h-1.5 mt-1" />
-                              <p className="text-xs text-right">{crew.fatigue.toFixed(0)}%</p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground">Stress</p>
                               <Progress value={crew.stress} className="h-1.5 mt-1" />
-                              <p className="text-xs text-right">{crew.stress.toFixed(0)}%</p>
                             </div>
                           </div>
                         </div>
@@ -477,15 +481,12 @@ export default function AutonomousCommandCenter() {
                 </CardContent>
               </Card>
             </div>
-          ) : (
-            <Card className="p-12 text-center">
-              <Ship className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">Digital Twin não inicializado</p>
-              <Button onClick={() => initialize('vessel-001', 'MV Nautilus One')} className="mt-4">
-                Inicializar
-              </Button>
-            </Card>
-          )}
+          </div>
+        </TabsContent>
+
+        {/* Sensors Tab */}
+        <TabsContent value="sensors" className="space-y-6">
+          <SensorFusionDashboard />
         </TabsContent>
 
         {/* Decisions Tab */}

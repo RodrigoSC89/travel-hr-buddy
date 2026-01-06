@@ -3,14 +3,13 @@
  * PATCH AUTONOMOUS: React Three Fiber based vessel visualization
  */
 
-import { Suspense, useRef, useMemo, useState, useEffect } from 'react';
+import { Suspense, useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, Html, Float, Text, MeshWobbleMaterial, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, Environment, Html, Float, MeshWobbleMaterial, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { 
@@ -18,12 +17,11 @@ import {
   ZoomIn, 
   ZoomOut, 
   Layers, 
-  Eye, 
   Thermometer,
   Activity,
   Gauge
 } from 'lucide-react';
-import type { VesselState } from '@/lib/ai/autonomous';
+import type { VesselState, EquipmentState } from '@/lib/ai/autonomous';
 
 // Vessel Hull Component
 function VesselHull({ health = 1 }: { health?: number }) {
@@ -203,6 +201,11 @@ function InfoLabel({
   );
 }
 
+// Helper function to get equipment by type
+function getEquipmentByType(equipment: EquipmentState[], type: string): EquipmentState | undefined {
+  return equipment.find(eq => eq.type === type || eq.id.includes(type));
+}
+
 // Main Vessel Scene
 function VesselScene({ 
   vesselState, 
@@ -214,14 +217,17 @@ function VesselScene({
   showWater?: boolean;
 }) {
   const groupRef = useRef<THREE.Group>(null);
-  const { camera } = useThree();
+  
+  // Get equipment data safely
+  const mainEngine = vesselState?.equipment ? getEquipmentByType(vesselState.equipment, 'engine') : undefined;
   
   // Default values if no vessel state
-  const health = vesselState?.equipment?.['main-engine']?.health || 0.95;
-  const temperature = vesselState?.equipment?.['main-engine']?.temperature || 78;
-  const rpm = vesselState?.equipment?.['main-engine']?.rpm || 850;
+  const health = mainEngine?.health ? mainEngine.health / 100 : 0.95;
+  const temperature = mainEngine?.temperature || 78;
+  const rpm = 850; // RPM would need to be added to EquipmentState if needed
   const speed = vesselState?.speed || 12.5;
   const heading = vesselState?.heading || 45;
+  const vibration = mainEngine?.vibration || 2;
   
   // Gentle vessel motion
   useFrame((state) => {
@@ -251,7 +257,7 @@ function VesselScene({
         <group ref={groupRef}>
           <VesselHull health={health} />
           <Bridge health={health} />
-          <EngineRoom temperature={temperature} vibration={rpm / 500} />
+          <EngineRoom temperature={temperature} vibration={vibration} />
           <Propeller rpm={rpm} />
           
           {/* Info Labels */}
@@ -321,12 +327,15 @@ interface VesselDigitalTwin3DProps {
 export function VesselDigitalTwin3D({ vesselState, className }: VesselDigitalTwin3DProps) {
   const [showLabels, setShowLabels] = useState(true);
   const [showWater, setShowWater] = useState(true);
-  const [autoRotate, setAutoRotate] = useState(false);
   
-  // Equipment health for display
-  const engineHealth = vesselState?.equipment?.['main-engine']?.health || 0.95;
-  const generatorHealth = vesselState?.equipment?.['generator-1']?.health || 0.92;
-  const radarHealth = vesselState?.equipment?.radar?.health || 0.98;
+  // Get equipment health safely
+  const mainEngine = vesselState?.equipment ? getEquipmentByType(vesselState.equipment, 'engine') : undefined;
+  const generator = vesselState?.equipment ? getEquipmentByType(vesselState.equipment, 'generator') : undefined;
+  const radar = vesselState?.equipment ? getEquipmentByType(vesselState.equipment, 'radar') : undefined;
+  
+  const engineHealth = mainEngine?.health ? mainEngine.health / 100 : 0.95;
+  const generatorHealth = generator?.health ? generator.health / 100 : 0.92;
+  const radarHealth = radar?.health ? radar.health / 100 : 0.98;
 
   return (
     <Card className={className}>
