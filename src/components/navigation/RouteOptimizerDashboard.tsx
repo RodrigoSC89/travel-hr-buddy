@@ -1,6 +1,7 @@
 /**
- * Route Optimizer Dashboard - PATCH 1001
+ * Route Optimizer Dashboard - PATCH 1002
  * Visual interface for AI-powered route optimization with real API integration
+ * Integrates Weather Routing Panel for advanced voyage planning
  */
 
 import React, { useState, useEffect } from 'react';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Navigation, 
   Ship,
@@ -29,12 +31,14 @@ import {
   Cloud,
   Thermometer,
   Shield,
-  Zap
+  Zap,
+  CloudRain
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRouteWeatherFuel } from '@/hooks/useRouteWeatherFuel';
 import { useToast } from '@/hooks/use-toast';
 import { RouteMap } from './RouteMap';
+import { WeatherRoutingPanel } from '@/components/weather/WeatherRoutingPanel';
 
 interface RouteOption {
   id: string;
@@ -172,8 +176,20 @@ export function RouteOptimizerDashboard() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Route Input */}
+    <Tabs defaultValue="quick" className="space-y-6">
+      <TabsList className="grid w-full grid-cols-2 max-w-md">
+        <TabsTrigger value="quick" className="flex items-center gap-2">
+          <Zap className="h-4 w-4" />
+          Cálculo Rápido
+        </TabsTrigger>
+        <TabsTrigger value="weather" className="flex items-center gap-2">
+          <CloudRain className="h-4 w-4" />
+          Weather Routing
+        </TabsTrigger>
+      </TabsList>
+
+      {/* Quick Route Tab */}
+      <TabsContent value="quick" className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -507,7 +523,13 @@ export function RouteOptimizerDashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </TabsContent>
+
+      {/* Weather Routing Tab */}
+      <TabsContent value="weather">
+        <WeatherRoutingPanel showMap={true} />
+      </TabsContent>
+    </Tabs>
   );
 }
 

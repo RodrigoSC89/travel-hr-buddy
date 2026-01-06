@@ -37,10 +37,12 @@ import {
 import { cn } from "@/lib/utils";
 import { useWeatherRouting } from "@/hooks/useWeatherRouting";
 import { AlternativeRoute, Waypoint } from "@/lib/routing/weather-routing";
+import { WeatherRoutingMap } from "./WeatherRoutingMap";
 
 interface WeatherRoutingPanelProps {
   className?: string;
   onRouteSelected?: (route: AlternativeRoute) => void;
+  showMap?: boolean;
 }
 
 // Common port coordinates
@@ -58,6 +60,7 @@ const PORTS: Record<string, { lat: number; lon: number }> = {
 export function WeatherRoutingPanel({
   className,
   onRouteSelected,
+  showMap = true,
 }: WeatherRoutingPanelProps) {
   const [origin, setOrigin] = useState("Santos, Brasil");
   const [destination, setDestination] = useState("Rotterdam, Holanda");
@@ -276,6 +279,16 @@ export function WeatherRoutingPanel({
 
       {result && !isCalculating && (
         <>
+          {/* Route Map */}
+          {showMap && (
+            <WeatherRoutingMap
+              routes={[result.recommendedRoute, ...result.alternatives]}
+              hazardZones={result.hazardZones}
+              selectedRouteId={selectedRoute?.id}
+              onRouteSelect={handleSelectRoute}
+            />
+          )}
+
           {/* Hazard Zones Alert */}
           {result.hazardZones.length > 0 && (
             <Card className="border-amber-500/50 bg-amber-500/5">
