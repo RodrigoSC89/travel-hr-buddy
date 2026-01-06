@@ -42,8 +42,8 @@ import {
   DollarSign,
 } from "lucide-react";
 
-// Average bunker prices in USD/ton (updated periodically)
-const BUNKER_PRICES = {
+// Fallback bunker prices in USD/ton (used when API unavailable)
+const FALLBACK_BUNKER_PRICES = {
   VLSFO: 580, // Very Low Sulfur Fuel Oil (0.5% S) - most common
   MGO: 720,   // Marine Gas Oil
   HFO: 450,   // Heavy Fuel Oil (3.5% S) - restricted areas only
@@ -52,6 +52,7 @@ const BUNKER_PRICES = {
 import { RouteComparisonMap } from "./RouteComparisonMap";
 import { cn } from "@/lib/utils";
 import { useRouteHistory, StoredRoute } from "@/hooks/useRouteHistory";
+import { useBunkerPrices } from "@/hooks/useBunkerPrices";
 import { WeatherRoutingResult, AlternativeRoute } from "@/lib/routing/weather-routing";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -70,6 +71,15 @@ export function RouteHistoryPanel({
   vesselId,
 }: RouteHistoryPanelProps) {
   const { routes, isLoading, deleteRoute, isDeleting, updateRouteName, refetch } = useRouteHistory({ vesselId });
+  const { globalAverage: bunkerPrices, lastUpdated: pricesLastUpdated, source: priceSource, isLoading: pricesLoading } = useBunkerPrices();
+  
+  // Use live prices or fallback
+  const BUNKER_PRICES = {
+    VLSFO: bunkerPrices?.vlsfo ?? FALLBACK_BUNKER_PRICES.VLSFO,
+    MGO: bunkerPrices?.mgo ?? FALLBACK_BUNKER_PRICES.MGO,
+    HFO: bunkerPrices?.hfo ?? FALLBACK_BUNKER_PRICES.HFO,
+  };
+  
   const [selectedForCompare, setSelectedForCompare] = useState<string[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
@@ -370,11 +380,17 @@ export function RouteHistoryPanel({
                 createdAt={item.createdAt}
                 highlight={idx === 0}
                 colorIndex={idx}
+                vlsfoPrice={BUNKER_PRICES.VLSFO}
               />
             ))}
           </div>
 
-          <ComparisonSummary routes={getComparisonData().map((d) => d.route)} />
+          <ComparisonSummary 
+            routes={getComparisonData().map((d) => d.route)} 
+            vlsfoPrice={BUNKER_PRICES.VLSFO}
+            priceSource={priceSource}
+            pricesLastUpdated={pricesLastUpdated}
+          />
         </DialogContent>
       </Dialog>
     </>
@@ -396,9 +412,10 @@ interface ComparisonColumnProps {
   createdAt: string;
   highlight?: boolean;
   colorIndex?: number;
+  vlsfoPrice: number;
 }
 
-function ComparisonColumn({ name, route, createdAt, highlight, colorIndex = 0 }: ComparisonColumnProps) {
+function ComparisonColumn({ name, route, createdAt, highlight, colorIndex = 0, vlsfoPrice }: ComparisonColumnProps) {
   const color = COMPARISON_COLORS[colorIndex % COMPARISON_COLORS.length];
   
   return (
@@ -431,7 +448,7 @@ function ComparisonColumn({ name, route, createdAt, highlight, colorIndex = 0 }:
         <MetricRow
           icon={DollarSign}
           label="Custo Est."
-          value={`$${(route.fuelEstimate * BUNKER_PRICES.VLSFO).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
+          value={`$${(route.fuelEstimate * vlsfoPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
           valueClass="text-amber-500"
         />
         <MetricRow
@@ -466,9 +483,12 @@ function MetricRow({ icon: Icon, label, value, valueClass }: MetricRowProps) {
 
 interface ComparisonSummaryProps {
   routes: AlternativeRoute[];
+  vlsfoPrice: number;
+  priceSource?: string;
+  pricesLastUpdated?: string;
 }
 
-function ComparisonSummary({ routes }: ComparisonSummaryProps) {
+function ComparisonSummary({ routes, vlsfoPrice, priceSource, pricesLastUpdated }: ComparisonSummaryProps) {
   if (routes.length < 2) return null;
 
   const findBest = (key: keyof AlternativeRoute, lowest: boolean = true) => {
@@ -579,8 +599,8 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
     const fuelPercent = (fuelSaving / worstFuel) * 100;
 
     // Calculate cost savings in USD
-    const costSaving = fuelSaving * BUNKER_PRICES.VLSFO;
-    const worstCost = worstFuel * BUNKER_PRICES.VLSFO;
+    const costSaving = fuelSaving * vlsfoPrice;
+    const worstCost = worstFuel * vlsfoPrice;
     const costPercent = (costSaving / worstCost) * 100;
 
     const worstRisk = Math.max(...routes.map((r) => r.riskScore));
@@ -666,7 +686,14 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
         
         {/* Bunker Price Reference */}
         <div className="mt-3 pt-3 border-t border-emerald-500/20 text-xs text-muted-foreground flex items-center justify-between">
-          <span>Preço VLSFO referência: ${BUNKER_PRICES.VLSFO}/ton</span>
+          <div className="flex items-center gap-2">
+            <span>Preço VLSFO: ${vlsfoPrice}/ton</span>
+            {priceSource && priceSource !== "fallback" && (
+              <Badge variant="outline" className="text-[10px] px-1 py-0">
+                {priceSource === "market" ? "🔴 Tempo Real" : priceSource}
+              </Badge>
+            )}
+          </div>
           <span className="text-emerald-500">
             {savings.costSaving > 0 && `💰 Economia de $${savings.costSaving.toLocaleString("en-US", { maximumFractionDigits: 0 })} USD`}
           </span>
@@ -704,8 +731,8 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
             />
             <ComparisonRow
               label="Custo (USD)"
-              value1={routes[0].fuelEstimate * BUNKER_PRICES.VLSFO}
-              value2={routes[1].fuelEstimate * BUNKER_PRICES.VLSFO}
+              value1={routes[0].fuelEstimate * vlsfoPrice}
+              value2={routes[1].fuelEstimate * vlsfoPrice}
               unit=""
               format={(v) => `$${v.toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
               lowerIsBetter
