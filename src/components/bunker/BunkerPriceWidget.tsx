@@ -1,9 +1,10 @@
 /**
  * BunkerPriceWidget Component
  * Compact widget for dashboard showing live bunker prices with opportunity alerts
+ * Includes push notification integration for savings > $10k
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,8 @@ import {
   TrendingDown, 
   Minus, 
   Sparkles, 
-  ExternalLink,
-  DollarSign,
-  AlertCircle,
+  Bell,
+  BellRing,
   CheckCircle2,
   RefreshCw,
   ChevronRight
@@ -25,6 +25,8 @@ import { useBunkerPrices } from "@/hooks/useBunkerPrices";
 import { useBunkerForecast } from "@/hooks/useBunkerForecast";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { bunkerSavingsNotificationService } from "@/lib/notifications/bunker-savings-notification-service";
+import { toast } from "sonner";
 
 interface BunkerPriceWidgetProps {
   compact?: boolean;
@@ -40,6 +42,8 @@ const TrendIcon = ({ trend, className = "h-4 w-4" }: { trend?: "up" | "down" | "
 export function BunkerPriceWidget({ compact = false, showForecast = true }: BunkerPriceWidgetProps) {
   const navigate = useNavigate();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [lastAlertShown, setLastAlertShown] = useState<string | null>(null);
   
   const { 
     globalAverage, 
@@ -67,6 +71,45 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
   const cheapestVLSFO = cheapestPort?.vlsfo ?? avgVLSFO;
   const savingsPerTon = avgVLSFO - cheapestVLSFO;
   const potentialSavings = savingsPerTon * 500; // Assume 500 MT typical bunker
+
+  // Initialize notification service and check for opportunities
+  useEffect(() => {
+    const initNotifications = async () => {
+      const success = await bunkerSavingsNotificationService.initialize();
+      setNotificationsEnabled(success && Notification.permission === "granted");
+    };
+    initNotifications();
+  }, []);
+
+  // Check for savings opportunities when prices update
+  useEffect(() => {
+    if (!pricesLoading && prices.length > 0 && notificationsEnabled) {
+      const checkOpportunities = async () => {
+        const alerts = await bunkerSavingsNotificationService.checkOpportunities(
+          prices,
+          globalAverage,
+          500 // estimated tonnage
+        );
+        
+        if (alerts.length > 0 && alerts[0].id !== lastAlertShown) {
+          setLastAlertShown(alerts[0].id);
+        }
+      };
+      checkOpportunities();
+    }
+  }, [prices, globalAverage, pricesLoading, notificationsEnabled, lastAlertShown]);
+
+  const handleEnableNotifications = async () => {
+    if ("Notification" in window) {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        setNotificationsEnabled(true);
+        toast.success("Notificações de economia bunker ativadas!");
+      } else {
+        toast.error("Permissão de notificações negada");
+      }
+    }
+  };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -133,6 +176,20 @@ export function BunkerPriceWidget({ compact = false, showForecast = true }: Bunk
             Preços de Bunker
           </CardTitle>
           <div className="flex items-center gap-2">
+            {/* Notification toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`h-7 w-7 ${notificationsEnabled ? "text-green-600" : "text-muted-foreground"}`}
+              onClick={handleEnableNotifications}
+              title={notificationsEnabled ? "Alertas ativos (>$10k)" : "Ativar alertas de economia"}
+            >
+              {notificationsEnabled ? (
+                <BellRing className="h-3 w-3" />
+              ) : (
+                <Bell className="h-3 w-3" />
+              )}
+            </Button>
             <Button 
               variant="ghost" 
               size="icon" 
