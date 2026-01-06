@@ -119,10 +119,13 @@
 | Módulos principais | 147+ | ✅ 100% |
 | Rotas no App.tsx | 100+ | ✅ 100% |
 | Edge Functions | 20+ | ✅ Deployed |
-| E2E Tests | 55+ specs | ✅ Completo |
+| E2E Tests | 57+ specs | ✅ Completo |
 | Storybook Stories | 8 components | ✅ Completo |
 | Security Score | 95%+ | ✅ Auditado |
 | Lighthouse Score | >90 | ✅ Otimizado |
+| Voice NLU v3 | Claude AI | ✅ Integrado |
+| Mobile Offline Sync | IndexedDB | ✅ Ativo |
+| Calendar Sync | iCal Feed | ✅ Pronto |
 
 ---
 
