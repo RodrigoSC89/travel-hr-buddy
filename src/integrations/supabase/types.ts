@@ -29048,6 +29048,48 @@ export type Database = {
           },
         ]
       }
+      voyage_routes: {
+        Row: {
+          alternatives_count: number
+          created_at: string
+          destination: Json
+          hazards_count: number
+          id: string
+          name: string | null
+          notes: string | null
+          origin: Json
+          recommended_route_id: string
+          route_data: Json
+          vessel_id: string | null
+        }
+        Insert: {
+          alternatives_count?: number
+          created_at?: string
+          destination: Json
+          hazards_count?: number
+          id?: string
+          name?: string | null
+          notes?: string | null
+          origin: Json
+          recommended_route_id: string
+          route_data: Json
+          vessel_id?: string | null
+        }
+        Update: {
+          alternatives_count?: number
+          created_at?: string
+          destination?: Json
+          hazards_count?: number
+          id?: string
+          name?: string | null
+          notes?: string | null
+          origin?: Json
+          recommended_route_id?: string
+          route_data?: Json
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       voyages: {
         Row: {
           actual_arrival: string | null
