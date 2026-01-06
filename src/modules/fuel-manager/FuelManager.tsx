@@ -1,6 +1,6 @@
 /**
- * Fuel Manager Module - PATCH 838
- * Módulo de gestão de combustível com IA
+ * Fuel Manager Module - PATCH 839
+ * Módulo de gestão de combustível com IA e previsão de preços
  */
 
 import React, { useState } from "react";
@@ -27,10 +27,13 @@ import {
   Zap,
   Brain,
   Plus,
-  RefreshCw
+  RefreshCw,
+  DollarSign
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import BunkerPriceChart from "@/components/bunker/BunkerPriceChart";
+import BunkerForecastPanel from "@/components/bunker/BunkerForecastPanel";
 
 // Types
 interface FuelConsumption {
@@ -475,6 +478,10 @@ const FuelManager = () => {
         <TabsList>
           <TabsTrigger value="history">Histórico</TabsTrigger>
           <TabsTrigger value="predictions">Previsões IA</TabsTrigger>
+          <TabsTrigger value="bunker-prices" className="flex items-center gap-1">
+            <DollarSign className="h-3 w-3" />
+            Preços Bunker
+          </TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
@@ -484,6 +491,11 @@ const FuelManager = () => {
 
         <TabsContent value="predictions">
           <AIPredictions />
+        </TabsContent>
+
+        <TabsContent value="bunker-prices" className="space-y-6">
+          <BunkerForecastPanel />
+          <BunkerPriceChart showPortSelector={true} height={350} />
         </TabsContent>
 
         <TabsContent value="analytics">
