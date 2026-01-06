@@ -29,14 +29,16 @@
 
 ## 🚀 v3.3.0 - MOBILE APP (50% Completo)
 
-| Item | Status | Progresso |
-|------|--------|-----------|
-| Capacitor configurado | ✅ | 100% |
-| iOS/Android config | ✅ | 100% |
-| Camera/Haptics | ✅ | 100% |
-| Push notifications (FCM) | 🔄 | 50% |
-| Native Features | 📋 | Planejado |
-| App Store Deploy | 📋 | Planejado |
+| Item | Status | Progresso | Notas |
+|------|--------|-----------|-------|
+| Capacitor configurado | ✅ | 100% | |
+| iOS/Android config | ✅ | 100% | |
+| Camera/Haptics | ✅ | 100% | |
+| Push Notifications (FCM) | ⏳ | 80% | **Pendente:** FIREBASE_SERVER_KEY, FIREBASE_PROJECT_ID |
+| Voice NLU v3 | ✅ | 100% | Claude AI integration |
+| Mobile Offline Sync | ✅ | 100% | IndexedDB + Background Sync |
+| Native Features | 📋 | Planejado | |
+| App Store Deploy | 📋 | Planejado | |
 
 ---
 
