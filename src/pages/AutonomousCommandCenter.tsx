@@ -20,6 +20,8 @@ import { Switch } from '@/components/ui/switch';
 import { useAutonomousPlatform } from '@/hooks/useAutonomousPlatform';
 import { SensorFusionDashboard } from '@/components/autonomous/SensorFusionDashboard';
 import { VesselDigitalTwin3D } from '@/components/autonomous/VesselDigitalTwin3D';
+import { ScenarioSimulatorDashboard } from '@/components/autonomous/ScenarioSimulatorDashboard';
+import { JourneyOrchestratorDashboard } from '@/components/autonomous/JourneyOrchestratorDashboard';
 import { cn } from '@/lib/utils';
 
 export default function AutonomousCommandCenter() {
@@ -189,11 +191,13 @@ export default function AutonomousCommandCenter() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-6 w-full max-w-3xl">
+        <TabsList className="grid grid-cols-8 w-full max-w-4xl">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="agents">Agentes IA</TabsTrigger>
+          <TabsTrigger value="agents">Agentes</TabsTrigger>
           <TabsTrigger value="twin">Digital Twin</TabsTrigger>
           <TabsTrigger value="sensors">Sensores</TabsTrigger>
+          <TabsTrigger value="scp">SCP</TabsTrigger>
+          <TabsTrigger value="ojac">OJAC</TabsTrigger>
           <TabsTrigger value="decisions">Decisões</TabsTrigger>
           <TabsTrigger value="config">Config</TabsTrigger>
         </TabsList>
@@ -487,6 +491,16 @@ export default function AutonomousCommandCenter() {
         {/* Sensors Tab */}
         <TabsContent value="sensors" className="space-y-6">
           <SensorFusionDashboard />
+        </TabsContent>
+
+        {/* SCP Tab - Monte Carlo Simulator */}
+        <TabsContent value="scp" className="space-y-6">
+          <ScenarioSimulatorDashboard />
+        </TabsContent>
+
+        {/* OJAC Tab - Journey Orchestrator */}
+        <TabsContent value="ojac" className="space-y-6">
+          <JourneyOrchestratorDashboard />
         </TabsContent>
 
         {/* Decisions Tab */}
