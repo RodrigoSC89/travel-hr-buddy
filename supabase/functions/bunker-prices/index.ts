@@ -31,6 +31,13 @@ interface BunkerPricesResponse {
   source: string;
 }
 
+interface HistoricalPrice {
+  date: string;
+  vlsfo: number;
+  mgo: number;
+  hfo: number;
+}
+
 // Simulated real-time bunker prices (would be replaced with actual API calls)
 // In production, this would call Ship&Bunker API, Platts, or similar
 const LIVE_BUNKER_DATA: BunkerPrice[] = [
@@ -176,13 +183,46 @@ function calculateGlobalAverage(prices: BunkerPrice[]) {
   };
 }
 
+// Generate 30-day historical data for a port
+function generateHistoricalData(portName: string): HistoricalPrice[] {
+  const portData = LIVE_BUNKER_DATA.find(p => 
+    p.port.toLowerCase() === portName.toLowerCase()
+  ) || LIVE_BUNKER_DATA[1]; // Default to Singapore
+
+  const history: HistoricalPrice[] = [];
+  const today = new Date();
+
+  // Create trend patterns for realism
+  const trendDirection = portData.trend === "up" ? 1 : portData.trend === "down" ? -1 : 0;
+  const volatility = 0.015;
+
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+
+    const dayFactor = (29 - i) / 29;
+    const trendAdjust = trendDirection * dayFactor * 0.04;
+    const dailyNoise = (Math.random() - 0.5) * volatility * 2;
+    const factor = 1 + trendAdjust + dailyNoise;
+
+    history.push({
+      date: date.toISOString().split("T")[0],
+      vlsfo: Math.round(portData.vlsfo * factor),
+      mgo: Math.round(portData.mgo * factor * (1 + (Math.random() - 0.5) * 0.008)),
+      hfo: Math.round(portData.hfo * factor * (1 + (Math.random() - 0.5) * 0.008)),
+    });
+  }
+
+  return history;
+}
+
 serve(async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    const { port, fuelType } = await req.json().catch(() => ({}));
+    const { port, fuelType, includeHistory } = await req.json().catch(() => ({}));
 
     // Get live prices with market variation
     let prices = addMarketVariation(LIVE_BUNKER_DATA);
@@ -198,13 +238,18 @@ serve(async (req: Request): Promise<Response> => {
     // Calculate global average
     const globalAverage = calculateGlobalAverage(LIVE_BUNKER_DATA);
 
-    const response: BunkerPricesResponse = {
+    const response: BunkerPricesResponse & { history?: HistoricalPrice[] } = {
       success: true,
       prices,
       globalAverage,
       lastUpdated: new Date().toISOString(),
       source: "Nautilus Market Data",
     };
+
+    // Include 30-day history if requested
+    if (includeHistory && port) {
+      response.history = generateHistoricalData(port);
+    }
 
     // If specific fuel type requested, add it to response
     if (fuelType) {
@@ -221,6 +266,8 @@ serve(async (req: Request): Promise<Response> => {
         };
       }
     }
+
+    console.log(`Bunker prices fetched for port: ${port || "all"}, includeHistory: ${!!includeHistory}`);
 
     return new Response(JSON.stringify(response), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
