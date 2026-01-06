@@ -39,7 +39,16 @@ import {
   Edit,
   Save,
   Map,
+  DollarSign,
 } from "lucide-react";
+
+// Average bunker prices in USD/ton (updated periodically)
+const BUNKER_PRICES = {
+  VLSFO: 580, // Very Low Sulfur Fuel Oil (0.5% S) - most common
+  MGO: 720,   // Marine Gas Oil
+  HFO: 450,   // Heavy Fuel Oil (3.5% S) - restricted areas only
+  LNG: 800,   // LNG equivalent $/ton
+};
 import { RouteComparisonMap } from "./RouteComparisonMap";
 import { cn } from "@/lib/utils";
 import { useRouteHistory, StoredRoute } from "@/hooks/useRouteHistory";
@@ -420,6 +429,12 @@ function ComparisonColumn({ name, route, createdAt, highlight, colorIndex = 0 }:
         />
         <MetricRow icon={Fuel} label="Combustível" value={`${route.fuelEstimate.toFixed(1)} ton`} />
         <MetricRow
+          icon={DollarSign}
+          label="Custo Est."
+          value={`$${(route.fuelEstimate * BUNKER_PRICES.VLSFO).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
+          valueClass="text-amber-500"
+        />
+        <MetricRow
           icon={AlertTriangle}
           label="Risco"
           value={`${route.riskScore.toFixed(0)}%`}
@@ -563,6 +578,11 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
     const fuelSaving = worstFuel - bestFuel;
     const fuelPercent = (fuelSaving / worstFuel) * 100;
 
+    // Calculate cost savings in USD
+    const costSaving = fuelSaving * BUNKER_PRICES.VLSFO;
+    const worstCost = worstFuel * BUNKER_PRICES.VLSFO;
+    const costPercent = (costSaving / worstCost) * 100;
+
     const worstRisk = Math.max(...routes.map((r) => r.riskScore));
     const bestRisk = Math.min(...routes.map((r) => r.riskScore));
     const riskReduction = worstRisk - bestRisk;
@@ -571,6 +591,7 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
       distanceSaving, distancePercent,
       durationSaving, durationPercent,
       fuelSaving, fuelPercent,
+      costSaving, costPercent,
       riskReduction,
     };
   };
@@ -628,12 +649,27 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
             percent={savings.fuelPercent}
           />
           <SavingCard
+            icon={DollarSign}
+            label="Economia USD"
+            value={`$${savings.costSaving.toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
+            percent={savings.costPercent}
+            isCost
+          />
+          <SavingCard
             icon={AlertTriangle}
             label="Redução de Risco"
             value={`${savings.riskReduction.toFixed(0)} pts`}
             percent={null}
             isRisk
           />
+        </div>
+        
+        {/* Bunker Price Reference */}
+        <div className="mt-3 pt-3 border-t border-emerald-500/20 text-xs text-muted-foreground flex items-center justify-between">
+          <span>Preço VLSFO referência: ${BUNKER_PRICES.VLSFO}/ton</span>
+          <span className="text-emerald-500">
+            {savings.costSaving > 0 && `💰 Economia de $${savings.costSaving.toLocaleString("en-US", { maximumFractionDigits: 0 })} USD`}
+          </span>
         </div>
       </div>
 
@@ -667,6 +703,14 @@ function ComparisonSummary({ routes }: ComparisonSummaryProps) {
               lowerIsBetter
             />
             <ComparisonRow
+              label="Custo (USD)"
+              value1={routes[0].fuelEstimate * BUNKER_PRICES.VLSFO}
+              value2={routes[1].fuelEstimate * BUNKER_PRICES.VLSFO}
+              unit=""
+              format={(v) => `$${v.toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
+              lowerIsBetter
+            />
+            <ComparisonRow
               label="Risco"
               value1={routes[0].riskScore}
               value2={routes[1].riskScore}
@@ -687,15 +731,20 @@ interface SavingCardProps {
   value: string;
   percent: number | null;
   isRisk?: boolean;
+  isCost?: boolean;
 }
 
-function SavingCard({ icon: Icon, label, value, percent, isRisk }: SavingCardProps) {
+function SavingCard({ icon: Icon, label, value, percent, isRisk, isCost }: SavingCardProps) {
+  const iconColor = isCost ? "text-amber-500" : "text-emerald-600";
+  const valueColor = isCost ? "text-amber-500" : "text-emerald-600";
+  const percentColor = isCost ? "text-amber-400" : "text-emerald-500";
+  
   return (
     <div className="text-center p-3 bg-background/60 rounded-lg">
-      <Icon className="h-4 w-4 mx-auto mb-1 text-emerald-600" />
-      <p className="font-semibold text-emerald-600">{value}</p>
+      <Icon className={cn("h-4 w-4 mx-auto mb-1", iconColor)} />
+      <p className={cn("font-semibold", valueColor)}>{value}</p>
       {percent !== null && (
-        <p className="text-xs text-emerald-500">-{percent.toFixed(1)}%</p>
+        <p className={cn("text-xs", percentColor)}>-{percent.toFixed(1)}%</p>
       )}
       <p className="text-xs text-muted-foreground">{label}</p>
     </div>
