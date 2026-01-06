@@ -22,6 +22,8 @@ import { SensorFusionDashboard } from '@/components/autonomous/SensorFusionDashb
 import { VesselDigitalTwin3D } from '@/components/autonomous/VesselDigitalTwin3D';
 import { ScenarioSimulatorDashboard } from '@/components/autonomous/ScenarioSimulatorDashboard';
 import { JourneyOrchestratorDashboard } from '@/components/autonomous/JourneyOrchestratorDashboard';
+import { SEVIDashboard } from '@/components/autonomous/SEVIDashboard';
+import { ICPDashboard } from '@/components/autonomous/ICPDashboard';
 import { cn } from '@/lib/utils';
 
 export default function AutonomousCommandCenter() {
@@ -191,13 +193,15 @@ export default function AutonomousCommandCenter() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-8 w-full max-w-4xl">
+        <TabsList className="flex flex-wrap gap-1 w-full max-w-5xl h-auto">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="agents">Agentes</TabsTrigger>
-          <TabsTrigger value="twin">Digital Twin</TabsTrigger>
+          <TabsTrigger value="twin">Twin</TabsTrigger>
           <TabsTrigger value="sensors">Sensores</TabsTrigger>
           <TabsTrigger value="scp">SCP</TabsTrigger>
           <TabsTrigger value="ojac">OJAC</TabsTrigger>
+          <TabsTrigger value="sevi">SEVI</TabsTrigger>
+          <TabsTrigger value="icp">ICP</TabsTrigger>
           <TabsTrigger value="decisions">Decisões</TabsTrigger>
           <TabsTrigger value="config">Config</TabsTrigger>
         </TabsList>
@@ -501,6 +505,16 @@ export default function AutonomousCommandCenter() {
         {/* OJAC Tab - Journey Orchestrator */}
         <TabsContent value="ojac" className="space-y-6">
           <JourneyOrchestratorDashboard />
+        </TabsContent>
+
+        {/* SEVI Tab - Self-Learning */}
+        <TabsContent value="sevi" className="space-y-6">
+          <SEVIDashboard />
+        </TabsContent>
+
+        {/* ICP Tab - Compliance Predictor */}
+        <TabsContent value="icp" className="space-y-6">
+          <ICPDashboard />
         </TabsContent>
 
         {/* Decisions Tab */}
