@@ -242,204 +242,56 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 1000, // Reduzido para forçar chunks menores
+      chunkSizeWarningLimit: 2000,
       target: "esnext",
       cssCodeSplit: true,
-      minify: "terser",
-      terserOptions: {
-        compress: {
-          drop_console: mode === "production", // Remove console em produção
-          drop_debugger: true,
-          pure_funcs: mode === "production" ? ["console.log", "console.debug", "console.info"] : [],
-        },
-        mangle: {
-          safari10: true, // Compatibilidade
-        },
-        format: {
-          comments: false, // Remove comentários
-        },
-      },
+      // Use esbuild instead of terser to reduce memory usage
+      minify: mode === "production" ? "esbuild" : false,
       commonjsOptions: {
         exclude: [/supabase\/functions/],
       },
-      // Compressão otimizada
       reportCompressedSize: false, // Acelera build
-      assetsInlineLimit: 4096, // Inline assets pequenos
+      assetsInlineLimit: 4096,
       rollupOptions: {
+        // Reduce memory usage during build
+        maxParallelFileOps: 2,
+        treeshake: mode === "production",
         output: {
-          // PATCH 547: Otimização agressiva para chunks menores e melhor cache
+          // Simplified chunking to reduce memory usage
           manualChunks: (id) => {
-            // Core vendors - carregados primeiro (prioritário)
             if (id.includes("node_modules")) {
-              // React core - essencial, sempre carregado
-              if (id.includes("react/") || id.includes("react-dom/")) {
-                return "core-react";
+              // Core essentials
+              if (id.includes("react/") || id.includes("react-dom/") || id.includes("react-router")) {
+                return "core";
               }
-              if (id.includes("react-router")) {
-                return "core-router";
+              // Supabase
+              if (id.includes("@supabase")) {
+                return "supabase";
               }
-              if (id.includes("@tanstack/react-query")) {
-                return "core-query";
+              // Heavy libraries - separate chunks
+              if (id.includes("three") || id.includes("@react-three")) {
+                return "three";
               }
-              
-              // Supabase - crítico, mas pode ser otimizado
-              if (id.includes("@supabase/supabase-js") || id.includes("@supabase/ssr")) {
-                return "core-supabase";
-              }
-              
-              // UI Components - carregamento lazy e granular
-              if (id.includes("@radix-ui")) {
-                // Separar componentes Radix por tipo para melhor cache
-                if (id.includes("dialog") || id.includes("sheet") || id.includes("drawer") || id.includes("alert-dialog")) {
-                  return "ui-modals";
-                }
-                if (id.includes("select") || id.includes("dropdown") || id.includes("popover") || id.includes("hover-card")) {
-                  return "ui-popovers";
-                }
-                if (id.includes("tabs") || id.includes("accordion") || id.includes("collapsible")) {
-                  return "ui-containers";
-                }
-                if (id.includes("toast") || id.includes("tooltip")) {
-                  return "ui-feedback";
-                }
-                return "ui-misc";
-              }
-              
-              // Charts - lazy loading, separado por biblioteca
-              if (id.includes("recharts")) {
-                return "charts-recharts";
-              }
-              if (id.includes("chart.js") || id.includes("react-chartjs-2")) {
-                return "charts-chartjs";
-              }
-              
-              // Map libraries - muito pesadas, totalmente lazy
-              if (id.includes("mapbox-gl")) {
-                return "map";
-              }
-              
-              // Icons - separado para cache
-              if (id.includes("lucide-react")) {
-                return "icons";
-              }
-              
-              // Editor - lazy
-              if (id.includes("@tiptap") || id.includes("y-prosemirror") || id.includes("yjs")) {
-                return "editor";
-              }
-              
-              // Animations - lazy
-              if (id.includes("framer-motion")) {
-                return "motion";
-              }
-              
-              // MQTT - específico para IoT/conectividade
-              if (id.includes("mqtt")) {
-                return "mqtt";
-              }
-              
-              // AI/ML libraries - lazy, pesadas
               if (id.includes("@tensorflow") || id.includes("onnxruntime")) {
                 return "ai-ml";
               }
-              
-              // 3D/XR libraries - lazy, muito pesadas
-              if (id.includes("three") || id.includes("@react-three") || id.includes("webxr")) {
-                return "3d_xr";
+              if (id.includes("recharts") || id.includes("chart.js")) {
+                return "charts";
               }
-              
-              // PDF/Document generation - lazy
-              if (id.includes("jspdf") || id.includes("html2pdf") || id.includes("html2canvas") || id.includes("docx")) {
-                return "pdf-gen";
+              if (id.includes("mapbox-gl")) {
+                return "map";
               }
-              
-              // Firebase - lazy se usado
               if (id.includes("firebase")) {
                 return "firebase";
               }
-              
-              // Date/Time utilities
-              if (id.includes("date-fns")) {
-                return "utils-date";
+              if (id.includes("framer-motion")) {
+                return "motion";
               }
-              
-              // Lodash utilities
-              if (id.includes("lodash")) {
-                return "utils-lodash";
+              if (id.includes("@radix-ui")) {
+                return "ui";
               }
-              
-              // Form handling
-              if (id.includes("react-hook-form") || id.includes("@hookform")) {
-                return "forms";
-              }
-              
-              // Outros vendors agrupados (reduzido ao mínimo)
-              return "vendors";
-            }
-            
-            // Módulos grandes - separar em chunks individuais
-            if (id.includes("src/modules/")) {
-              // Travel module - usado frequentemente
-              if (id.includes("modules/travel")) {
-                return "module-travel";
-              }
-              // HR modules
-              if (id.includes("modules/hr")) {
-                return "module-hr";
-              }
-              // Document modules
-              if (id.includes("modules/documents")) {
-                return "module-docs";
-              }
-              // Intelligence modules
-              if (id.includes("modules/intelligence")) {
-                return "module-intel";
-              }
-              // Logistics
-              if (id.includes("modules/logistics")) {
-                return "module-logistics";
-              }
-              // Operations
-              if (id.includes("modules/operations")) {
-                return "module-ops";
-              }
-              // Fleet
-              if (id.includes("modules/fleet")) {
-                return "module-fleet";
-              }
-              // Emergency
-              if (id.includes("modules/emergency")) {
-                return "module-emergency";
-              }
-              // Compliance
-              if (id.includes("modules/compliance")) {
-                return "module-compliance";
-              }
-              // Connectivity
-              if (id.includes("modules/connectivity")) {
-                return "module-connectivity";
-              }
-              // Finance
-              if (id.includes("modules/finance")) {
-                return "module-finance";
-              }
-              // Assistants
-              if (id.includes("modules/assistants")) {
-                return "module-assistants";
-              }
-              // Demais módulos
-              return "modules-misc";
-            }
-            
-            // Pages - agrupar por área
-            if (id.includes("src/pages/")) {
-              if (id.includes("admin/")) {
-                return "pages-admin";
-              }
-              if (id.includes("developer/")) {
-                return "pages-dev";
-              }
-              return "pages-main";
+              // Everything else
+              return "vendor";
             }
           }
         }
