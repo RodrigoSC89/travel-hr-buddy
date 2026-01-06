@@ -1,6 +1,6 @@
 /**
  * Seção: Visão Geral - Dashboard Principal
- * Integrado com dados reais do Supabase (IoT, Wellness, AIS)
+ * Integrado com dados reais do Supabase (IoT, Wellness, AIS, Bunker)
  */
 
 import { useEffect, useState } from "react";
@@ -27,6 +27,7 @@ import { OperationalAIChat } from "@/components/ai-chat/OperationalAIChat";
 import { NotificationSettings } from "@/components/notifications/NotificationSettings";
 import { downloadExecutiveReport } from "@/lib/reports/executive-pdf-generator";
 import { useToast } from "@/hooks/use-toast";
+import { BunkerPriceWidget } from "@/components/bunker/BunkerPriceWidget";
 
 interface VisaoGeralSectionProps {
   systemStatus: SystemStatus;
@@ -260,11 +261,11 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
       color: "from-emerald-500 to-teal-600"
     },
     {
-      title: "IoT Sensors",
-      description: "Histórico e análise de sensores",
-      icon: Thermometer,
-      path: "/iot-history",
-      color: "from-orange-500 to-red-600"
+      title: "Fuel Manager",
+      description: "Preços de bunker e previsões IA",
+      icon: Fuel,
+      path: "/fuel-manager",
+      color: "from-amber-500 to-orange-600"
     },
     {
       title: "Route Optimizer",
@@ -499,6 +500,51 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
                 </div>
               ))}
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Bunker Prices Widget */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <BunkerPriceWidget showForecast={true} />
+        </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Fuel className="h-4 w-4" />
+              Economia Mensal
+            </CardTitle>
+            <CardDescription>Oportunidades de bunker identificadas</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="text-center py-4">
+              <p className="text-3xl font-bold text-green-600">$23.5k</p>
+              <p className="text-sm text-muted-foreground">Economia potencial este mês</p>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-sm">
+                <span>Oportunidades detectadas</span>
+                <Badge variant="default">12</Badge>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span>Bunkers otimizados</span>
+                <Badge variant="secondary">8</Badge>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span>Economia realizada</span>
+                <Badge className="bg-green-500">$18.2k</Badge>
+              </div>
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full"
+              onClick={() => navigate("/fuel-manager")}
+            >
+              <Sparkles className="h-3 w-3 mr-2" />
+              Ver previsões IA
+            </Button>
           </CardContent>
         </Card>
       </div>
