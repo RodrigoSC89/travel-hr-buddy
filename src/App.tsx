@@ -25,6 +25,8 @@ import { GlobalAIButton } from "./components/ai/GlobalAIButton";
 import { FloatingButtonsContainer } from "./components/global/FloatingButtonsContainer";
 import { NautilusBrainButton } from "./components/global/NautilusBrainButton";
 import { OfflineIndicator } from "./components/offline/OfflineIndicator";
+import { VoiceNLUInlineButton } from "./components/voice/VoiceNLUInlineButton";
+import { SyncStatusBadge } from "./components/mobile/SyncStatusBadge";
 
 // Performance & Auth
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -213,10 +215,12 @@ function App() {
                       
                       <Toaster />
                       <OfflineIndicator />
+                      <SyncStatusBadge className="fixed top-4 right-4 z-40" />
                       <FloatingButtonsContainer>
                         <GlobalAIButton />
                         <GlobalAILevel3Button />
                         <GlobalVoiceButton />
+                        <VoiceNLUInlineButton />
                         <NautilusBrainButton />
                       </FloatingButtonsContainer>
                     </GlobalBrainProvider>
