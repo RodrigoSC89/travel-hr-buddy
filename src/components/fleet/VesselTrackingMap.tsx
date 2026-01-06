@@ -16,17 +16,19 @@ import { cn } from '@/lib/utils';
 
 interface VesselPosition {
   mmsi: string;
-  imo: string;
+  imo?: string;
   name: string;
   lat: number;
   lon: number;
   speed: number;
   course: number;
   heading: number;
-  destination: string;
-  eta: string;
+  destination?: string;
+  eta?: string;
   status: string;
-  timestamp: string;
+  navStatus?: string;
+  timestamp?: string;
+  lastUpdate?: string;
 }
 
 interface VesselTrackingMapProps {
@@ -89,7 +91,22 @@ export function VesselTrackingMap({
       if (fnError) throw fnError;
 
       if (data?.vessels) {
-        setVessels(data.vessels);
+        // Map API response to component format
+        const mappedVessels = data.vessels.map((v: any) => ({
+          mmsi: v.mmsi,
+          imo: v.imo,
+          name: v.name,
+          lat: v.latitude ?? v.lat,
+          lon: v.longitude ?? v.lon,
+          speed: v.speed,
+          course: v.course,
+          heading: v.heading,
+          destination: v.destination,
+          eta: v.eta,
+          status: v.navStatus || v.status || 'Unknown',
+          timestamp: v.lastUpdate || v.timestamp,
+        }));
+        setVessels(mappedVessels);
         setSource(data.source || 'mock');
       }
     } catch (err) {
