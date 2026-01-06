@@ -33,11 +33,13 @@ import {
   Shield,
   CloudRain,
   Anchor,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useWeatherRouting } from "@/hooks/useWeatherRouting";
 import { AlternativeRoute, Waypoint } from "@/lib/routing/weather-routing";
 import { WeatherRoutingMap } from "./WeatherRoutingMap";
+import { RouteExportDialog } from "./RouteExportDialog";
 
 interface WeatherRoutingPanelProps {
   className?: string;
@@ -325,16 +327,31 @@ export function WeatherRoutingPanel({
             </Card>
           )}
 
-          {/* Route Options */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Ship className="h-5 w-5" />
-                Rotas Disponíveis
-              </CardTitle>
-              <CardDescription>
-                Selecione a rota mais adequada para sua navegação
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Ship className="h-5 w-5" />
+                    Rotas Disponíveis
+                  </CardTitle>
+                  <CardDescription>
+                    Selecione a rota mais adequada para sua navegação
+                  </CardDescription>
+                </div>
+                {selectedRoute && (
+                  <RouteExportDialog
+                    result={result}
+                    selectedRoute={selectedRoute}
+                    trigger={
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Exportar
+                      </Button>
+                    }
+                  />
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
