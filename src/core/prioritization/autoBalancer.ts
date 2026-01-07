@@ -1,4 +1,3 @@
-// @ts-nocheck - Dynamic table access requires type override (PATCH 892: to be fixed in future sprint)
 /**
  * PATCH 232: Auto Priority Balancer
  * 
@@ -8,6 +7,13 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Database, Json } from "@/integrations/supabase/types";
+
+// Database types
+type PriorityShiftInsert = Database['public']['Tables']['priority_shifts']['Insert'];
+type PriorityShiftRow = Database['public']['Tables']['priority_shifts']['Row'];
+type DpIncidentRow = Database['public']['Tables']['dp_incidents']['Row'];
+type ActionItemRow = Database['public']['Tables']['action_items']['Row'];
 
 export interface Priority {
   moduleId: string;
@@ -139,13 +145,15 @@ export class AutoPriorityBalancer {
     if (shifts.length === 0) return;
 
     try {
-      // Map to match priority_shifts table schema (uses module_name instead of module_id)
-      const records = shifts.map(shift => ({
+      // Map to match priority_shifts table schema
+      const records: PriorityShiftInsert[] = shifts.map(shift => ({
         module_name: shift.moduleId,
         old_priority: shift.oldPriority,
         new_priority: shift.newPriority,
         reason: shift.reason,
-        context: { task_id: shift.taskId, confidence: shift.confidence },
+        context: { task_id: shift.taskId, confidence: shift.confidence } as Json,
+        shift_type: 'automatic',
+        triggered_by: 'system',
       }));
 
       await supabase.from("priority_shifts").insert(records);
@@ -313,9 +321,11 @@ export class AutoPriorityBalancer {
 
       if (error) throw error;
 
+      const incidents = data as Pick<DpIncidentRow, 'id' | 'severity'>[] | null;
+      
       return {
-        count: data?.length || 0,
-        hasEmergency: data?.some(i => i.severity === "critical") || false,
+        count: incidents?.length || 0,
+        hasEmergency: incidents?.some(i => i.severity === "critical") || false,
       };
     } catch (error) {
       logger.error("Failed to fetch incidents:", error);
@@ -360,7 +370,8 @@ export class AutoPriorityBalancer {
 
       if (error) throw error;
 
-      return (data as { id: string }[] | null)?.length || 0;
+      const items = data as Pick<ActionItemRow, 'id'>[] | null;
+      return items?.length || 0;
     } catch (error) {
       logger.error("Failed to count deadlines:", error);
       return 0;
@@ -384,15 +395,20 @@ export class AutoPriorityBalancer {
 
       if (error) throw error;
 
-      return data?.map(d => ({
-        moduleId: d.module_name,
-        taskId: (d.context as { task_id?: string } | null)?.task_id,
-        oldPriority: d.old_priority,
-        newPriority: d.new_priority,
-        reason: d.reason || "",
-        confidence: (d.context as { confidence?: number } | null)?.confidence || 0.7,
-        timestamp: d.created_at || new Date().toISOString(),
-      })) || [];
+      const shifts = data as PriorityShiftRow[] | null;
+      
+      return shifts?.map(d => {
+        const context = d.context as { task_id?: string; confidence?: number } | null;
+        return {
+          moduleId: d.module_name,
+          taskId: context?.task_id,
+          oldPriority: d.old_priority,
+          newPriority: d.new_priority,
+          reason: d.reason || "",
+          confidence: context?.confidence || 0.7,
+          timestamp: d.created_at || new Date().toISOString(),
+        };
+      }) || [];
     } catch (error) {
       logger.error("Failed to fetch priority history:", error);
       return [];
