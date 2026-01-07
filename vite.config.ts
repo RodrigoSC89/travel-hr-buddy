@@ -35,8 +35,9 @@ export default defineConfig(({ mode }) => {
       reportCompressedSize: false,
       assetsInlineLimit: 0,
       commonjsOptions: {
-        include: [/lodash/, /node_modules/],
+        include: [/lodash/, /react-is/, /node_modules/],
         exclude: [/supabase\/functions/],
+        transformMixedEsModules: true,
       },
       rollupOptions: {
         maxParallelFileOps: 1,
@@ -48,7 +49,7 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: "[name].js",
           assetFileNames: "[name][extname]",
           manualChunks: {
-            "vendor-react": ["react", "react-dom", "react-router-dom"],
+            "vendor-react": ["react", "react-dom", "react-router-dom", "react-is"],
             "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-tabs"],
             "vendor-charts": ["recharts"],
             "vendor-lodash": ["lodash", "lodash-es"],
@@ -57,7 +58,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["react", "react-dom", "react-router-dom", "lodash", "recharts"],
+      include: ["react", "react-dom", "react-router-dom", "lodash", "recharts", "react-is"],
       exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler', 'mapbox-gl'],
       esbuildOptions: {
         target: "esnext",
