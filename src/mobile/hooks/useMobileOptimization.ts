@@ -212,27 +212,17 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
   );
 
   /**
-   * Create a deferred value that updates on idle
+   * Schedule a callback to run on idle (does not use hooks)
    */
-  const useDeferredValue = useCallback(
-    <T>(value: T): T => {
-      const [deferredValue, setDeferredValue] = useState(value);
-
-      useEffect(() => {
-        if ("requestIdleCallback" in window) {
-          const id = requestIdleCallback(() => {
-            setDeferredValue(value);
-          });
-          return () => cancelIdleCallback(id);
-        } else {
-          const id = setTimeout(() => {
-            setDeferredValue(value);
-          }, 100);
-          return () => clearTimeout(id);
-        }
-      }, [value]);
-
-      return deferredValue;
+  const scheduleIdleCallback = useCallback(
+    (callback: () => void): (() => void) => {
+      if ("requestIdleCallback" in window) {
+        const id = requestIdleCallback(callback);
+        return () => cancelIdleCallback(id);
+      } else {
+        const id = setTimeout(callback, 100);
+        return () => clearTimeout(id);
+      }
     },
     []
   );
@@ -288,10 +278,33 @@ export const useMobileOptimization = (config: OptimizationConfig = {}) => {
     throttledCallback,
     debouncedCallback,
     queueOperation,
-    useDeferredValue,
+    scheduleIdleCallback,
     getAnimationConfig,
     getImageStrategy
   };
+};
+
+/**
+ * Hook for deferred value that updates on idle - PROPER HOOK (not callback)
+ */
+export const useIdleDeferredValue = <T>(value: T): T => {
+  const [deferredValue, setDeferredValue] = useState(value);
+
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(() => {
+        setDeferredValue(value);
+      });
+      return () => cancelIdleCallback(id);
+    } else {
+      const id = setTimeout(() => {
+        setDeferredValue(value);
+      }, 100);
+      return () => clearTimeout(id);
+    }
+  }, [value]);
+
+  return deferredValue;
 };
 
 /**
