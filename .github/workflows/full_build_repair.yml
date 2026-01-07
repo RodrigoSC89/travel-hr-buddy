@@ -27,5 +27,8 @@ jobs:
 
       - name: 🔍 Valida build e módulos
         run: |
+          export NODE_OPTIONS="--max-old-space-size=8192"
           npm run build
           echo "✅ Build verificado."
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
