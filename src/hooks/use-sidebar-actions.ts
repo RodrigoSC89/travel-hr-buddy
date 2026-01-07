@@ -1,21 +1,25 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "./use-toast";
+import { useCallback } from "react";
 
 export const useSidebarActions = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = useCallback((path: string) => {
     try {
       // Ensure path starts with / for absolute navigation
       const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-      navigate(normalizedPath);
       
-      toast({
-        title: "Navegação",
-        description: "Carregando módulo...",
-        duration: 1000
-      });
+      // Skip navigation if already on the same path
+      if (location.pathname === normalizedPath) {
+        return;
+      }
+      
+      // Use replace: false to ensure proper history
+      navigate(normalizedPath, { replace: false });
+      
     } catch (error) {
       toast({
         title: "Erro",
@@ -23,7 +27,7 @@ export const useSidebarActions = () => {
         variant: "destructive"
       });
     }
-  };
+  }, [navigate, location.pathname, toast]);
 
   const handleModuleAccess = (moduleKey: string) => {
     // Map module keys to their routes
