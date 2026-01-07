@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 20000,
+      chunkSizeWarningLimit: 50000,
       target: "esnext",
       cssCodeSplit: false,
       minify: false,
@@ -46,25 +46,16 @@ export default defineConfig(({ mode }) => {
           entryFileNames: "[name].js",
           chunkFileNames: "[name].js",
           assetFileNames: "[name][extname]",
-          manualChunks: (id) => {
-            if (id.includes("node_modules")) {
-              if (id.includes("react") || id.includes("react-dom") || id.includes("react-router")) {
-                return "vendor-react";
-              }
-              if (id.includes("three") || id.includes("@react-three")) {
-                return "vendor-3d";
-              }
-              if (id.includes("recharts") || id.includes("chart")) {
-                return "vendor-charts";
-              }
-            }
+          manualChunks: {
+            "vendor-react": ["react", "react-dom", "react-router-dom"],
+            "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-tabs"],
           },
         }
       },
     },
     optimizeDeps: {
       include: ["react", "react-dom", "react-router-dom"],
-      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler'],
+      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler', 'recharts', 'mapbox-gl'],
       esbuildOptions: {
         target: "esnext",
       }
