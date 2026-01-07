@@ -1,10 +1,10 @@
 /**
  * Sidebar Navigation Actions Hook
- * Version: 3.0.0 - Minimal stable hooks (no useToast to prevent hook count issues)
+ * v4.0.0 - Complete rebuild for stable hook count
  */
 import { useNavigate } from "react-router-dom";
 
-// Module route mappings
+// Module route mappings - moved outside hook for performance
 const MODULE_ROUTES: Record<string, string> = {
   dashboard: "/dashboard",
   admin: "/admin",
@@ -36,16 +36,19 @@ const MODULE_ROUTES: Record<string, string> = {
   "mlc-inspection": "/mlc-inspection"
 };
 
-export const useSidebarActions = () => {
-  // Single hook - useNavigate only
+/**
+ * Hook for sidebar navigation actions
+ * Uses exactly 1 hook (useNavigate) for stability
+ */
+export function useSidebarActions() {
   const navigate = useNavigate();
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (path: string): void => {
     const normalizedPath = path.startsWith("/") ? path : `/${path}`;
     navigate(normalizedPath);
   };
 
-  const handleModuleAccess = (moduleKey: string) => {
+  const handleModuleAccess = (moduleKey: string): void => {
     const route = MODULE_ROUTES[moduleKey] || `/${moduleKey}`;
     handleNavigation(route);
   };
@@ -53,5 +56,8 @@ export const useSidebarActions = () => {
   return {
     handleNavigation,
     handleModuleAccess
-  };
-};
+  } as const;
+}
+
+// Named export for compatibility
+export default useSidebarActions;
