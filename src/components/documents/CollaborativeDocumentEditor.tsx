@@ -8,7 +8,7 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import { Doc as YDoc } from "yjs";
 import { WebrtcProvider } from "y-webrtc";
-import { debounce } from "lodash";
+import debounce from "lodash-es/debounce";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
