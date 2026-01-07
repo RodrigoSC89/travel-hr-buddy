@@ -1,6 +1,7 @@
 /**
  * App.tsx - Versão com Sidebar
  */
+import * as React from "react";
 import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
