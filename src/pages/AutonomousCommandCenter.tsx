@@ -3,12 +3,12 @@
  * Main dashboard for Nautilus One Autonomous Platform v4.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import {
   Play, Pause, Square, Cpu, Activity, Ship,
   Users, Fuel, Shield, Brain, AlertTriangle, CheckCircle,
-  Clock, Zap, TrendingUp, Eye, Settings
+  Clock, Zap, TrendingUp, Eye, Settings, Box
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,12 +19,28 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { useAutonomousPlatform } from '@/hooks/useAutonomousPlatform';
 import { SensorFusionDashboard } from '@/components/autonomous/SensorFusionDashboard';
-import { VesselDigitalTwin3D } from '@/components/autonomous/VesselDigitalTwin3D';
+import { VesselDigitalTwin2D } from '@/components/autonomous/VesselDigitalTwin2D';
 import { ScenarioSimulatorDashboard } from '@/components/autonomous/ScenarioSimulatorDashboard';
 import { JourneyOrchestratorDashboard } from '@/components/autonomous/JourneyOrchestratorDashboard';
 import { SEVIDashboard } from '@/components/autonomous/SEVIDashboard';
 import { ICPDashboard } from '@/components/autonomous/ICPDashboard';
+import { Safe3DWrapper } from '@/components/3d/Safe3DWrapper';
 import { cn } from '@/lib/utils';
+
+// Lazy load 3D component to avoid ConcurrentRoot issues
+const VesselDigitalTwin3D = lazy(() => 
+  import('@/components/autonomous/VesselDigitalTwin3D').then(m => ({ default: m.VesselDigitalTwin3D }))
+);
+
+// Loading fallback for 3D
+const Twin3DLoading = () => (
+  <Card className="min-h-[400px] flex items-center justify-center">
+    <div className="text-center text-muted-foreground">
+      <Box className="h-8 w-8 mx-auto mb-2 animate-pulse" />
+      <p className="text-sm">Carregando Digital Twin...</p>
+    </div>
+  </Card>
+);
 
 export default function AutonomousCommandCenter() {
   const {
@@ -403,8 +419,15 @@ export default function AutonomousCommandCenter() {
         {/* Digital Twin Tab */}
         <TabsContent value="twin" className="space-y-6">
           <div className="grid lg:grid-cols-2 gap-6">
-            {/* 3D Visualization */}
-            <VesselDigitalTwin3D vesselState={vesselState} />
+            {/* 3D Visualization with safe fallback */}
+            <Safe3DWrapper 
+              fallback={<VesselDigitalTwin2D vesselState={vesselState || undefined} />}
+              className="min-h-[400px]"
+            >
+              <Suspense fallback={<Twin3DLoading />}>
+                <VesselDigitalTwin3D vesselState={vesselState} />
+              </Suspense>
+            </Safe3DWrapper>
 
             {/* Equipment & Crew Status */}
             <div className="space-y-6">
