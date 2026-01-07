@@ -69,6 +69,8 @@ import EnergyOptimizerDashboard from "./pages/intelligence/EnergyOptimizerDashbo
 import WellnessPredictiveDashboard from "./pages/intelligence/WellnessPredictiveDashboard";
 import DocumentIntelligenceDashboard from "./pages/intelligence/DocumentIntelligenceDashboard";
 import AccidentIntelligenceDashboard from "./pages/intelligence/AccidentIntelligenceDashboard";
+import BlockchainGovernanceDashboard from "./pages/intelligence/BlockchainGovernanceDashboard";
+import CompetitiveIntelligenceDashboard from "./pages/intelligence/CompetitiveIntelligenceDashboard";
 
 // Simple loader component
 const OffshoreLoader = () => (
@@ -209,6 +211,8 @@ function App() {
                           <Route path="intelligence/wellness" element={<WellnessPredictiveDashboard />} />
                           <Route path="intelligence/documents" element={<DocumentIntelligenceDashboard />} />
                           <Route path="intelligence/accidents" element={<AccidentIntelligenceDashboard />} />
+                          <Route path="intelligence/blockchain" element={<BlockchainGovernanceDashboard />} />
+                          <Route path="intelligence/competitive" element={<CompetitiveIntelligenceDashboard />} />
                           
                           {/* Modular Route Groups */}
                           {aiRoutes}
