@@ -140,14 +140,35 @@ const alerts = [
 
 export default function CompetitiveIntelligenceDashboard() {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
+  const [filteredVessels, setFilteredVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [dataSource, setDataSource] = useState<"marinetraffic" | "mock">("mock");
   const [lastUpdate, setLastUpdate] = useState<string>("");
   const [mapboxToken, setMapboxToken] = useState<string>("");
+  const [companyFilter, setCompanyFilter] = useState<string>("all");
+  const [shipTypeFilter, setShipTypeFilter] = useState<string>("all");
+  const [showRoutes, setShowRoutes] = useState(true);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+  const routeSourcesRef = useRef<string[]>([]);
   const { toast } = useToast();
+
+  // Get unique companies and ship types for filters
+  const companies = ["all", ...new Set(vessels.map(v => v.company || "Other"))];
+  const shipTypes = ["all", ...new Set(vessels.map(v => v.shipType))];
+
+  // Apply filters
+  useEffect(() => {
+    let result = vessels;
+    if (companyFilter !== "all") {
+      result = result.filter(v => v.company === companyFilter);
+    }
+    if (shipTypeFilter !== "all") {
+      result = result.filter(v => v.shipType === shipTypeFilter);
+    }
+    setFilteredVessels(result);
+  }, [vessels, companyFilter, shipTypeFilter]);
 
   // Fetch Mapbox token
   useEffect(() => {
@@ -165,7 +186,52 @@ export default function CompetitiveIntelligenceDashboard() {
     fetchToken();
   }, []);
 
-  // Update map markers when vessels change
+  // Fly to selected vessel
+  const flyToVessel = (vessel: VesselPosition) => {
+    setSelectedVessel(vessel);
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [vessel.longitude, vessel.latitude],
+        zoom: 8,
+        pitch: 45,
+        bearing: vessel.heading,
+        duration: 2000,
+        essential: true
+      });
+    }
+  };
+
+  // Generate route line from vessel to destination (simulated)
+  const getRouteCoordinates = (vessel: VesselPosition): [number, number][] => {
+    const destCoords: Record<string, [number, number]> = {
+      "Santos": [-46.3, -23.9],
+      "Rotterdam": [4.5, 51.9],
+      "Hamburg": [9.9, 53.5],
+      "Shanghai": [121.5, 31.2],
+      "Singapore": [103.8, 1.3],
+      "Miami": [-80.2, 25.8],
+      "Le Havre": [0.1, 49.5],
+      "Antwerp": [4.4, 51.2],
+    };
+    
+    const dest = vessel.destination || "";
+    const destKey = Object.keys(destCoords).find(k => dest.toLowerCase().includes(k.toLowerCase()));
+    
+    if (destKey) {
+      const destCoord = destCoords[destKey];
+      // Create curved route with intermediate points
+      const midLng = (vessel.longitude + destCoord[0]) / 2;
+      const midLat = (vessel.latitude + destCoord[1]) / 2 + 5; // Curve offset
+      return [
+        [vessel.longitude, vessel.latitude],
+        [midLng, midLat],
+        [destCoord[0], destCoord[1]]
+      ];
+    }
+    return [];
+  };
+
+  // Update map markers and routes
   const updateMapMarkers = async (map: any) => {
     mapRef.current = map;
     const mb = await loadMapbox();
@@ -174,27 +240,65 @@ export default function CompetitiveIntelligenceDashboard() {
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    vessels.forEach((vessel) => {
+    // Clear existing routes
+    routeSourcesRef.current.forEach(id => {
+      if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getSource(id)) map.removeSource(id);
+    });
+    routeSourcesRef.current = [];
+
+    filteredVessels.forEach((vessel, idx) => {
+      // Add route line if enabled and destination exists
+      if (showRoutes) {
+        const routeCoords = getRouteCoordinates(vessel);
+        if (routeCoords.length > 0) {
+          const sourceId = `route-${vessel.mmsi}`;
+          const layerId = `route-layer-${vessel.mmsi}`;
+          
+          if (!map.getSource(sourceId)) {
+            map.addSource(sourceId, {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                properties: {},
+                geometry: { type: "LineString", coordinates: routeCoords }
+              }
+            });
+            
+            map.addLayer({
+              id: layerId,
+              type: "line",
+              source: sourceId,
+              paint: {
+                "line-color": vessel.company === "Nautilus Fleet" ? "#10b981" : "#06b6d4",
+                "line-width": 2,
+                "line-opacity": 0.6,
+                "line-dasharray": [2, 2]
+              }
+            });
+            
+            routeSourcesRef.current.push(sourceId);
+          }
+        }
+      }
+
+      // Create marker
       const el = document.createElement("div");
       el.className = "vessel-marker";
+      const isNautilus = vessel.company === "Nautilus Fleet";
       el.innerHTML = `
         <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 ${
-          vessel.company === "Nautilus Fleet" 
-            ? "bg-emerald-500 ring-2 ring-emerald-300" 
-            : "bg-cyan-500"
-        }">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-            <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/>
-            <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/>
-            <path d="M12 10v4"/>
+          isNautilus ? "bg-emerald-500 ring-2 ring-emerald-300" : "bg-cyan-500"
+        }" style="transform: rotate(${vessel.heading}deg)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M12 2L4 20l8-4 8 4L12 2z"/>
           </svg>
         </div>
       `;
       
-      el.addEventListener("click", () => setSelectedVessel(vessel));
+      el.addEventListener("click", () => flyToVessel(vessel));
 
-      const marker = new mb.Marker({ element: el, rotation: vessel.heading })
+      const marker = new mb.Marker({ element: el })
         .setLngLat([vessel.longitude, vessel.latitude])
         .setPopup(
           new mb.Popup({ offset: 25 }).setHTML(`
@@ -211,16 +315,14 @@ export default function CompetitiveIntelligenceDashboard() {
     });
 
     // Fit bounds to show all vessels
-    if (vessels.length > 0) {
-      const bounds = vessels.reduce(
-        (acc, v) => {
-          return {
-            minLng: Math.min(acc.minLng, v.longitude),
-            maxLng: Math.max(acc.maxLng, v.longitude),
-            minLat: Math.min(acc.minLat, v.latitude),
-            maxLat: Math.max(acc.maxLat, v.latitude),
-          };
-        },
+    if (filteredVessels.length > 0) {
+      const bounds = filteredVessels.reduce(
+        (acc, v) => ({
+          minLng: Math.min(acc.minLng, v.longitude),
+          maxLng: Math.max(acc.maxLng, v.longitude),
+          minLat: Math.min(acc.minLat, v.latitude),
+          maxLat: Math.max(acc.maxLat, v.latitude),
+        }),
         { minLng: 180, maxLng: -180, minLat: 90, maxLat: -90 }
       );
 
@@ -231,12 +333,12 @@ export default function CompetitiveIntelligenceDashboard() {
     }
   };
 
-  // Update markers when vessels data changes
+  // Update markers when filtered vessels change
   useEffect(() => {
-    if (mapRef.current && vessels.length > 0) {
+    if (mapRef.current && filteredVessels.length > 0) {
       updateMapMarkers(mapRef.current);
     }
-  }, [vessels]);
+  }, [filteredVessels, showRoutes]);
 
   // Fetch AIS data from Edge Function
   const fetchAISData = async () => {
@@ -420,6 +522,49 @@ export default function CompetitiveIntelligenceDashboard() {
         </TabsList>
 
         <TabsContent value="ais" className="space-y-4">
+          {/* Filters Bar */}
+          <Card className="p-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Companhia:</span>
+                <select
+                  value={companyFilter}
+                  onChange={(e) => setCompanyFilter(e.target.value)}
+                  className="bg-background border rounded-md px-3 py-1.5 text-sm"
+                >
+                  {companies.map(c => (
+                    <option key={c} value={c}>{c === "all" ? "Todas" : c}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Tipo:</span>
+                <select
+                  value={shipTypeFilter}
+                  onChange={(e) => setShipTypeFilter(e.target.value)}
+                  className="bg-background border rounded-md px-3 py-1.5 text-sm"
+                >
+                  {shipTypes.map(t => (
+                    <option key={t} value={t}>{t === "all" ? "Todos" : t}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={showRoutes ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShowRoutes(!showRoutes)}
+                >
+                  <Navigation className="h-4 w-4 mr-1" />
+                  Rotas {showRoutes ? "ON" : "OFF"}
+                </Button>
+              </div>
+              <Badge variant="secondary" className="ml-auto">
+                {filteredVessels.length} de {vessels.length} navios
+              </Badge>
+            </div>
+          </Card>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Lista de Navios */}
             <Card className="lg:col-span-1">
@@ -436,7 +581,7 @@ export default function CompetitiveIntelligenceDashboard() {
                       <div className="flex items-center justify-center py-8">
                         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                       </div>
-                    ) : vessels.map((vessel) => (
+                    ) : filteredVessels.map((vessel) => (
                       <div
                         key={vessel.mmsi}
                         className={`p-3 rounded-lg border cursor-pointer transition-all ${
@@ -444,11 +589,11 @@ export default function CompetitiveIntelligenceDashboard() {
                             ? "ring-2 ring-primary bg-primary/5" 
                             : "hover:bg-muted/50"
                         }`}
-                        onClick={() => setSelectedVessel(vessel)}
+                        onClick={() => flyToVessel(vessel)}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <Ship className="h-4 w-4 text-cyan-500" />
+                            <Ship className={`h-4 w-4 ${vessel.company === "Nautilus Fleet" ? "text-emerald-500" : "text-cyan-500"}`} />
                             <span className="font-medium text-sm">{vessel.name}</span>
                           </div>
                           <Badge variant="outline" className="text-xs">

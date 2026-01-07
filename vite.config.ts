@@ -28,25 +28,27 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 10000,
+      chunkSizeWarningLimit: 15000,
       target: "esnext",
-      cssCodeSplit: false, // Single CSS file to reduce processing
+      cssCodeSplit: false,
       minify: false,
       reportCompressedSize: false,
-      assetsInlineLimit: 0, // Don't inline assets
+      assetsInlineLimit: 0,
       commonjsOptions: {
         exclude: [/supabase\/functions/],
       },
       rollupOptions: {
         maxParallelFileOps: 1,
         treeshake: false,
-        cache: false, // Disable cache to reduce memory
+        cache: false,
         output: {
           compact: true,
           entryFileNames: "[name].js",
           chunkFileNames: "[name].js",
           assetFileNames: "[name][extname]",
-          // No manual chunks - let rollup handle it simply
+          manualChunks: {
+            vendor: ["react", "react-dom", "react-router-dom"],
+          },
         }
       },
     },
