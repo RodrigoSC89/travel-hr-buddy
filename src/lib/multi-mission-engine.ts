@@ -1,4 +1,5 @@
 // @ts-nocheck
+// PATCH-CLEANUP: Requires database table: mission_coordination_plans - not yet in schema
 /**
  * PATCH 170.0: Multi-Mission Coordination Engine
  * AI-driven coordination for multi-vessel missions
