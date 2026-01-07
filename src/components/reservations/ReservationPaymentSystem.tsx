@@ -1,8 +1,7 @@
 // @ts-nocheck
-// PATCH-860: Mantido temporariamente - interfaces locais bem definidas, baixa prioridade
+// PATCH 862 - @ts-nocheck mantido - notifications insert requer schema update
 /**
  * PATCH 368 - Reservations - Payment & Calendar Integration
- * Complete reservation system with payment processing and calendar sync
  */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { 
   Calendar,
   CreditCard,
@@ -32,7 +32,6 @@ import {
   Link as LinkIcon,
   X
 } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";

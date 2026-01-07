@@ -21306,6 +21306,7 @@ export type Database = {
         Row: {
           address: string | null
           attachments: string[] | null
+          calendar_event_id: string | null
           confirmation_number: string | null
           contact_info: string | null
           created_at: string | null
@@ -21315,6 +21316,9 @@ export type Database = {
           id: string
           location: string | null
           notes: string | null
+          payment_method: string | null
+          payment_status: string | null
+          payment_transaction_id: string | null
           reservation_type: string
           room_type: string | null
           start_date: string
@@ -21328,6 +21332,7 @@ export type Database = {
         Insert: {
           address?: string | null
           attachments?: string[] | null
+          calendar_event_id?: string | null
           confirmation_number?: string | null
           contact_info?: string | null
           created_at?: string | null
@@ -21337,6 +21342,9 @@ export type Database = {
           id?: string
           location?: string | null
           notes?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          payment_transaction_id?: string | null
           reservation_type: string
           room_type?: string | null
           start_date: string
@@ -21350,6 +21358,7 @@ export type Database = {
         Update: {
           address?: string | null
           attachments?: string[] | null
+          calendar_event_id?: string | null
           confirmation_number?: string | null
           contact_info?: string | null
           created_at?: string | null
@@ -21359,6 +21368,9 @@ export type Database = {
           id?: string
           location?: string | null
           notes?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          payment_transaction_id?: string | null
           reservation_type?: string
           room_type?: string | null
           start_date?: string

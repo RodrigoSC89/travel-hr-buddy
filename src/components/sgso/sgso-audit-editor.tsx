@@ -1,4 +1,5 @@
 // @ts-nocheck
+// PATCH 862 - @ts-nocheck mantido - safety_incidents e sgso_action_plans requerem schema alignment
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
