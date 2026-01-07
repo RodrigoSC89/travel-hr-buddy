@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH-860: Aguardando alinhamento schema communication_channels/messages
+// PATCH-CLEANUP: Requires database table: channel_permissions - not yet in schema
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time
  * Complete WebSocket integration, permissions management, and communication logs

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 1200 - DP Incident Cards with Full AI Integration
  * - Ver relatório: opens detail dialog instead of broken external link
@@ -19,9 +18,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PlanStatusSelect } from "./PlanStatusSelect";
-import { DPIncident, RISK_LEVEL_COLORS, SGSORiskLevel } from "@/types/incident";
+import { DPIncident, RISK_LEVEL_COLORS } from "@/types/incident";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
 import { 
   FileText, 
   Brain, 
@@ -34,6 +34,24 @@ import {
   Shield,
   TrendingUp
 } from "lucide-react";
+
+// Type from database schema
+type IncidentReportRow = Database["public"]["Tables"]["incident_reports"]["Row"];
+
+// Mapped risk levels from database to UI
+type RiskLevel = "baixo" | "moderado" | "alto" | "crítico";
+
+// Helper to safely get risk level
+const getSafeRiskLevel = (level: string | undefined | null): RiskLevel | undefined => {
+  if (!level) return undefined;
+  const validLevels: RiskLevel[] = ["baixo", "moderado", "alto", "crítico"];
+  const lowercased = level.toLowerCase();
+  // Map common values
+  if (lowercased === "low" || lowercased === "medium") return "baixo";
+  if (lowercased === "high") return "alto";
+  if (lowercased === "critical") return "crítico";
+  return validLevels.includes(lowercased as RiskLevel) ? lowercased as RiskLevel : undefined;
+};
 
 interface Incident {
   id: string;
@@ -53,7 +71,7 @@ interface Incident {
   plan_updated_at?: string;
   sgso_category?: string;
   sgso_root_cause?: string;
-  sgso_risk_level?: SGSORiskLevel;
+  sgso_risk_level?: RiskLevel;
 }
 
 interface AIAnalysis {
@@ -104,7 +122,7 @@ export default function IncidentCards() {
           link: `/incident-reports?id=${inc.id}`,
           sgso_category: inc.category,
           sgso_root_cause: inc.root_cause,
-          sgso_risk_level: inc.severity as SGSORiskLevel
+          sgso_risk_level: getSafeRiskLevel(inc.severity)
         })));
       } else {
         // Demo data for testing
@@ -146,7 +164,7 @@ export default function IncidentCards() {
             link: "#",
             sgso_category: "Falha de equipamento",
             sgso_root_cause: "Interferência eletromagnética",
-            sgso_risk_level: "medium"
+            sgso_risk_level: "moderado"
           },
           {
             id: "4",
@@ -161,7 +179,7 @@ export default function IncidentCards() {
             link: "#",
             sgso_category: "Não conformidade com procedimento",
             sgso_root_cause: "Lacunas em procedimentos operacionais",
-            sgso_risk_level: "low"
+            sgso_risk_level: "baixo"
           }
         ]);
       }
