@@ -1,6 +1,7 @@
 /**
- * PATCH 548 - AI Core Types
+ * AI Core Types
  * Central type definitions for all AI systems in Nautilus One
+ * NOTE: Re-exports from submodules for backward compatibility
  */
 
 export * from "./agents";
