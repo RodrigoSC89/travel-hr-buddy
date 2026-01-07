@@ -1,25 +1,14 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "./use-toast";
-import { useCallback } from "react";
 
 export const useSidebarActions = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { toast } = useToast();
 
-  const handleNavigation = useCallback((path: string) => {
+  const handleNavigation = (path: string) => {
     try {
-      // Ensure path starts with / for absolute navigation
       const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-      
-      // Skip navigation if already on the same path
-      if (location.pathname === normalizedPath) {
-        return;
-      }
-      
-      // Use replace: false to ensure proper history
-      navigate(normalizedPath, { replace: false });
-      
+      navigate(normalizedPath);
     } catch (error) {
       toast({
         title: "Erro",
@@ -27,10 +16,9 @@ export const useSidebarActions = () => {
         variant: "destructive"
       });
     }
-  }, [navigate, location.pathname, toast]);
+  };
 
   const handleModuleAccess = (moduleKey: string) => {
-    // Map module keys to their routes
     const moduleRoutes: Record<string, string> = {
       dashboard: "/dashboard",
       admin: "/admin",
