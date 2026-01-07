@@ -1,6 +1,7 @@
 /**
  * Routes Index
  * Centralized route exports
+ * NOTE: Removed "export * from lazy-imports" to prevent heap overflow
  */
 
 // Route groups
@@ -11,9 +12,6 @@ export { complianceRoutes } from "./compliance.routes";
 export { v2ModulesRoutes } from "./v2-modules.routes";
 export { integrationsRoutes } from "./integrations.routes";
 export { executiveRoutes } from "./executive.routes";
-
-// Lazy imports for direct use
-export * from "./lazy-imports";
 
 // Types
 export type { AppRoute, RouteMetadata, LazyComponent } from "./types";
