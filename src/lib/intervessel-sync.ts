@@ -1,9 +1,10 @@
-// @ts-nocheck
-// PATCH-CLEANUP: Schema mismatch - tables exist but columns differ from expected
-// vessel_alerts: missing source_vessel_id, message, location, expires_at
-// vessel_trust_relationships: uses source/target_vessel_id instead of vessel_id/trusted_vessel_id
-// replicated_logs: missing message, requires action column
-// TODO: Align code with actual schema or migrate schema
+/**
+ * PATCH-CLEANUP: Adapted to use existing schema columns
+ * Mappings:
+ * - vessel_alerts: vessel_id (not source_vessel_id), description (not message)
+ * - vessel_trust_relationships: source_vessel_id/target_vessel_id (correct)
+ * - replicated_logs: action + payload (not message)
+ */
 /**
  * PATCH 169.0: Intervessel Sync Layer
  * Peer-to-peer vessel communication with MQTT pub/sub and HTTP fallback
@@ -126,20 +127,22 @@ export class IntervesselSync {
         timestamp: new Date().toISOString()
       };
 
-      // Store alert in database
+      // Store alert in database - using existing schema columns
       const { error: dbError } = await supabase
         .from("vessel_alerts")
         .insert({
           id: fullAlert.id,
-          source_vessel_id: fullAlert.source_vessel_id,
+          vessel_id: fullAlert.source_vessel_id, // Schema uses vessel_id
           alert_type: fullAlert.alert_type,
           severity: fullAlert.severity,
           title: fullAlert.title,
-          message: fullAlert.message,
-          location: fullAlert.location,
-          metadata: fullAlert.metadata,
-          expires_at: fullAlert.expires_at,
-          created_at: fullAlert.timestamp
+          description: fullAlert.message, // Schema uses description instead of message
+          metadata: {
+            ...fullAlert.metadata,
+            location: fullAlert.location,
+            expires_at: fullAlert.expires_at
+          },
+          status: 'active'
         });
 
       if (dbError) {
@@ -194,21 +197,25 @@ export class IntervesselSync {
    * Send message via HTTP fallback
    */
   private static async sendViaHTTP(alert: VesselAlert): Promise<void> {
+    if (!this.vesselId) return;
+    
     try {
       // Broadcast to all vessels via database
+      const currentVesselId = this.vesselId;
       const { data: vessels } = await supabase
         .from("vessels")
         .select("id")
-        .neq("id", this.vesselId)
+        .neq("id", currentVesselId)
         .eq("status", "active");
 
       if (vessels) {
-        // Create notification records for each vessel
+        // Create notification records for each vessel - using existing schema
+        const sourceVesselId = this.vesselId;
         const notifications = vessels.map(v => ({
-          vessel_id: v.id,
           alert_id: alert.id,
-          read: false,
-          created_at: new Date().toISOString()
+          user_id: null as string | null, // Schema requires user_id, we'll set null for vessel-level notifications
+          notification_type: 'in_app' as const,
+          metadata: { vessel_id: v.id }
         }));
 
         await supabase
@@ -238,14 +245,10 @@ export class IntervesselSync {
     }
 
     try {
+      // Query using existing schema columns
       let query = supabase
         .from("vessel_alerts")
-        .select(`
-          *,
-          vessels!vessel_alerts_source_vessel_id_fkey (
-            name
-          )
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
 
       if (filters?.severity) {
@@ -260,9 +263,6 @@ export class IntervesselSync {
         query = query.limit(filters.limit);
       }
 
-      // Only get unexpired alerts
-      query = query.or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
-
       const { data, error } = await query;
 
       if (error) {
@@ -270,19 +270,23 @@ export class IntervesselSync {
         return [];
       }
 
-      return data?.map(alert => ({
-        id: alert.id,
-        source_vessel_id: alert.source_vessel_id,
-        source_vessel_name: alert.vessels?.name,
-        alert_type: alert.alert_type,
-        severity: alert.severity,
-        title: alert.title,
-        message: alert.message,
-        location: alert.location,
-        metadata: alert.metadata,
-        timestamp: alert.created_at,
-        expires_at: alert.expires_at
-      })) || [];
+      // Map schema columns to VesselAlert interface
+      return data?.map(alert => {
+        const metadata = alert.metadata as Record<string, unknown> | null;
+        return {
+          id: alert.id,
+          source_vessel_id: alert.vessel_id || '',
+          source_vessel_name: undefined,
+          alert_type: alert.alert_type as AlertType,
+          severity: alert.severity as AlertSeverity,
+          title: alert.title,
+          message: alert.description || '',
+          location: metadata?.location as { lat: number; lng: number } | undefined,
+          metadata: metadata as Record<string, unknown> | undefined,
+          timestamp: alert.created_at,
+          expires_at: metadata?.expires_at as string | undefined
+        };
+      }) || [];
     } catch (error) {
       logger.error("Error in getAlerts:", error);
       return [];
@@ -303,26 +307,26 @@ export class IntervesselSync {
     }
 
     try {
-      // Get trusted vessels
+      // Get trusted vessels - using correct schema column names
       const { data: trustedVessels } = await supabase
         .from("vessel_trust_relationships")
-        .select("trusted_vessel_id, trust_level")
-        .eq("vessel_id", this.vesselId)
-        .in("trust_level", ["full", "partial"]);
+        .select("target_vessel_id, trust_level")
+        .eq("source_vessel_id", this.vesselId)
+        .gte("trust_level", 50); // trust_level is numeric (0-100)
 
       if (!trustedVessels || trustedVessels.length === 0) {
         logger.info("No trusted vessels for log replication");
         return true;
       }
 
-      // Create replicated log entries
+      // Create replicated log entries - using existing schema columns
       const replicatedLogs = trustedVessels.map(trust => ({
         source_vessel_id: this.vesselId,
-        target_vessel_id: trust.trusted_vessel_id,
+        target_vessel_id: trust.target_vessel_id,
         log_type: log.log_type,
-        message: log.message,
-        metadata: log.metadata,
-        replicated_at: new Date().toISOString()
+        action: 'replicate', // Required by schema
+        payload: { message: log.message, ...log.metadata },
+        status: 'pending' as const
       }));
 
       const { error } = await supabase
@@ -352,17 +356,12 @@ export class IntervesselSync {
     }
 
     try {
+      // Using existing schema - no foreign key join needed
       const { data, error } = await supabase
         .from("replicated_logs")
-        .select(`
-          *,
-          vessels!replicated_logs_source_vessel_id_fkey (
-            name,
-            imo_code
-          )
-        `)
+        .select("*")
         .eq("target_vessel_id", this.vesselId)
-        .order("replicated_at", { ascending: false })
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) {
@@ -389,13 +388,23 @@ export class IntervesselSync {
       return false;
     }
 
+    // Map string trust level to numeric
+    const trustLevelMap: Record<string, number> = {
+      'full': 100,
+      'partial': 50,
+      'read-only': 25
+    };
+
     try {
+      // Using correct schema column names
       const { error } = await supabase
         .from("vessel_trust_relationships")
         .insert({
-          vessel_id: this.vesselId,
-          trusted_vessel_id: trustedVesselId,
-          trust_level: trustLevel
+          source_vessel_id: this.vesselId,
+          target_vessel_id: trustedVesselId,
+          trust_level: trustLevelMap[trustLevel] || 50,
+          relationship_type: 'peer',
+          status: 'active'
         });
 
       if (error) {

@@ -1,7 +1,6 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Schema mismatch - table exists but columns differ from expected
-// Required columns: mission_id, plan_data, ai_confidence (not in current schema)
-// TODO: Migrate schema to match expected structure
+// PATCH-CLEANUP: Keeping @ts-nocheck - requires schema columns: mission_id, plan_data, ai_confidence
+// These columns need to be added via migration before removing @ts-nocheck
 /**
  * PATCH 170.0: Multi-Mission Coordination Engine
  * AI-driven coordination for multi-vessel missions
