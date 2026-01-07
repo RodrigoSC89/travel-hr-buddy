@@ -1,7 +1,7 @@
-// @ts-nocheck - Schema mismatch requires type override (PATCH 892: to be fixed in future sprint)
 /**
  * PATCH 416: Consolidated Crew Management Page
  * Unified crew management with performance, certifications, and mobile support
+ * PATCH 892: Fixed schema alignment with Supabase types
  */
 
 import React, { useState, useEffect, useMemo } from "react";
@@ -23,38 +23,12 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
 
-interface CrewMember {
-  id: string;
-  name: string;
-  position: string;
-  rank?: string;
-  status: string;
-  vessel_id?: string;
-  contact_email?: string;
-  phone?: string;
-  nationality?: string;
-  date_of_birth?: string;
-  created_at: string;
-}
-
-interface Certification {
-  id: string;
-  crew_member_id: string;
-  certification_name: string;
-  issue_date: string;
-  expiry_date: string;
-  status: string;
-}
-
-interface PerformanceReview {
-  id: string;
-  crew_member_id: string;
-  review_date: string;
-  rating: number;
-  reviewer_name?: string;
-  comments?: string;
-}
+// Use types from Supabase schema
+type CrewMember = Database["public"]["Tables"]["crew_members"]["Row"];
+type Certification = Database["public"]["Tables"]["crew_certifications"]["Row"];
+type PerformanceReview = Database["public"]["Tables"]["crew_performance_reviews"]["Row"];
 
 export const ConsolidatedCrewManagement = () => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
@@ -75,7 +49,7 @@ export const ConsolidatedCrewManagement = () => {
       const { data: crewData, error: crewError } = await supabase
         .from("crew_members")
         .select("*")
-        .order("name");
+        .order("full_name");
 
       if (crewError) throw crewError;
 
@@ -98,8 +72,9 @@ export const ConsolidatedCrewManagement = () => {
       setCrewMembers(crewData || []);
       setCertifications(certData || []);
       setPerformances(perfData || []);
-    } catch (error) {
-      console.error("Error loading data:", error);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error loading data:", errorMessage);
       toast({
         title: "Error",
         description: "Failed to load crew data",
@@ -112,6 +87,7 @@ export const ConsolidatedCrewManagement = () => {
 
   const getCrewStats = () => {
     const expiringCerts = certifications.filter(cert => {
+      if (!cert.expiry_date) return false;
       const daysUntilExpiry = Math.floor(
         (new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
       );
@@ -119,7 +95,7 @@ export const ConsolidatedCrewManagement = () => {
     }).length;
 
     const avgRating = performances.length > 0
-      ? performances.reduce((sum, p) => sum + p.rating, 0) / performances.length
+      ? performances.reduce((sum, p) => sum + Number(p.overall_score || 0), 0) / performances.length
       : 0;
 
     return {
@@ -135,24 +111,25 @@ export const ConsolidatedCrewManagement = () => {
   // Memoize certification expiry data to avoid recalculation
   const certificationsWithExpiry = useMemo(() => {
     return certifications.map(cert => {
-      const daysUntilExpiry = Math.floor(
-        (new Date(cert.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-      );
+      const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : null;
+      const daysUntilExpiry = expiryDate 
+        ? Math.floor((expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+        : null;
       return {
         ...cert,
         daysUntilExpiry,
-        isExpiring: daysUntilExpiry <= 30 && daysUntilExpiry > 0,
-        isExpired: daysUntilExpiry <= 0
+        isExpiring: daysUntilExpiry !== null && daysUntilExpiry <= 30 && daysUntilExpiry > 0,
+        isExpired: daysUntilExpiry !== null && daysUntilExpiry <= 0
       };
     });
   }, [certifications]);
 
   const filteredCrew = crewMembers.filter(member =>
-    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     member.position?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | null) => {
     switch (status?.toLowerCase()) {
     case "active": return "bg-green-500/20 text-green-400 border-green-500/30";
     case "on_leave": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
@@ -265,11 +242,11 @@ export const ConsolidatedCrewManagement = () => {
                     <CardHeader className="pb-3">
                       <div className="flex items-start justify-between">
                         <div>
-                          <CardTitle className="text-lg">{member.name}</CardTitle>
+                          <CardTitle className="text-lg">{member.full_name}</CardTitle>
                           <p className="text-sm text-muted-foreground">{member.position}</p>
                         </div>
                         <Badge variant="outline" className={getStatusColor(member.status)}>
-                          {member.status}
+                          {member.status || "unknown"}
                         </Badge>
                       </div>
                     </CardHeader>
@@ -284,9 +261,9 @@ export const ConsolidatedCrewManagement = () => {
                           <span className="text-muted-foreground">Nationality:</span> {member.nationality}
                         </div>
                       )}
-                      {member.contact_email && (
+                      {member.email && (
                         <div className="text-sm text-muted-foreground truncate">
-                          {member.contact_email}
+                          {member.email}
                         </div>
                       )}
                     </CardContent>
@@ -317,9 +294,11 @@ export const ConsolidatedCrewManagement = () => {
                               <Calendar className="inline w-3 h-3 mr-1" />
                               Issued: {new Date(cert.issue_date).toLocaleDateString()}
                             </span>
-                            <span>
-                              Expires: {new Date(cert.expiry_date).toLocaleDateString()}
-                            </span>
+                            {cert.expiry_date && (
+                              <span>
+                                Expires: {new Date(cert.expiry_date).toLocaleDateString()}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <Badge
@@ -368,11 +347,11 @@ export const ConsolidatedCrewManagement = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                          <span className="text-lg font-bold">{review.rating.toFixed(1)}</span>
+                          <span className="text-lg font-bold">{Number(review.overall_score).toFixed(1)}</span>
                         </div>
                       </div>
-                      {review.comments && (
-                        <p className="text-sm text-muted-foreground">{review.comments}</p>
+                      {review.strengths && (
+                        <p className="text-sm text-muted-foreground">{review.strengths}</p>
                       )}
                     </CardContent>
                   </Card>
