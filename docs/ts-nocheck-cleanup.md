@@ -18,7 +18,7 @@ Eliminate all `@ts-nocheck` directives from the codebase while maintaining type 
 | Edge Functions (Deno) | ~30 | 🔵 Low | Requires Deno types |
 
 **Total Files:** ~140  
-**Corrected:** 29 (21%)
+**Corrected:** 31 (22%)
 
 ## ✅ Completed Corrections
 
@@ -168,8 +168,10 @@ export function createMockVessel(overrides: Partial<Vessel> = {}): Vessel {
 - [x] `user-feedback-system.tsx` ✅
 - [x] `SGSOWorkflow.tsx` ✅
 - [x] `shipment-tracking.tsx` ✅
-- [ ] `EnhancedChannelManager.tsx`
-- [ ] `AnalyticsQueryBuilder.tsx`
+- [x] `EnhancedChannelManager.tsx` ✅ (already clean)
+- [x] `AnalyticsQueryBuilder.tsx` ✅ (already clean)
+- [x] `integrated-communication-system.tsx` ✅
+- [ ] `CrewRotationManager.tsx` (awaits crew_rotations table)
 - [ ] `MissionControlConsolidation.tsx`
 
 ### Phase 3: Module Files
