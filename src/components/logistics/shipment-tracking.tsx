@@ -1,4 +1,4 @@
-// PATCH-CLEANUP: Table shipments now exists in schema
+// PATCH-CLEANUP: Uses logistics_shipments table (verified in schema)
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { 
   Package, 
   Truck,
@@ -21,21 +22,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-interface Shipment {
-  id: string;
-  tracking_number: string | null;
-  external_reference: string | null;
-  shipment_type: string | null;
-  origin_port: string | null;
-  destination_port: string | null;
-  departure_date: string | null;
-  estimated_arrival: string | null;
-  actual_arrival: string | null;
-  status: string | null;
-  current_location: string | null;
-  cargo_description: string | null;
-  priority: string | null;
-}
+type Shipment = Database["public"]["Tables"]["logistics_shipments"]["Row"];
 
 export const ShipmentTracking = () => {
   const { toast } = useToast();
@@ -51,16 +38,17 @@ export const ShipmentTracking = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from("shipments")
+        .from("logistics_shipments")
         .select("*")
-        .order("estimated_arrival", { ascending: true });
+        .order("estimated_delivery", { ascending: true });
 
       if (error) throw error;
       setShipments(data || []);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Error loading shipments",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -68,7 +56,7 @@ export const ShipmentTracking = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string | null) => {
     switch (status) {
     case "delivered":
       return <CheckCircle2 className="h-5 w-5 text-green-500" />;
@@ -82,18 +70,18 @@ export const ShipmentTracking = () => {
     }
   };
 
-  const getShippingIcon = (method: string) => {
-    switch (method) {
-    case "air":
+  const getShippingIcon = (carrier: string | null) => {
+    const carrierLower = carrier?.toLowerCase() ?? "";
+    if (carrierLower.includes("air") || carrierLower.includes("fedex") || carrierLower.includes("dhl")) {
       return <Plane className="h-4 w-4" />;
-    case "sea":
-      return <Ship className="h-4 w-4" />;
-    default:
-      return <Truck className="h-4 w-4" />;
     }
+    if (carrierLower.includes("sea") || carrierLower.includes("maersk") || carrierLower.includes("msc")) {
+      return <Ship className="h-4 w-4" />;
+    }
+    return <Truck className="h-4 w-4" />;
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
     const variants: Record<string, "default" | "destructive" | "secondary" | "outline"> = {
       preparing: "secondary",
       shipped: "default",
@@ -107,16 +95,17 @@ export const ShipmentTracking = () => {
       lost: "destructive"
     };
     return (
-      <Badge variant={variants[status] || "default"}>
-        {status.replace("_", " ")}
+      <Badge variant={variants[status ?? ""] || "default"}>
+        {(status ?? "unknown").replace("_", " ")}
       </Badge>
     );
   };
 
   const filteredShipments = shipments.filter(shipment =>
-    shipment.shipment_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    shipment.tracking_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    shipment.carrier?.toLowerCase().includes(searchTerm.toLowerCase())
+    shipment.tracking_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    shipment.carrier.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    shipment.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    shipment.destination.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getActiveShipments = () => {
@@ -198,7 +187,7 @@ export const ShipmentTracking = () => {
             <div className="relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by shipment number, tracking number, or carrier..."
+                placeholder="Search by tracking number, carrier, origin or destination..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
@@ -223,27 +212,19 @@ export const ShipmentTracking = () => {
                         {getStatusIcon(shipment.status)}
                         <div>
                           <div className="flex items-center gap-2">
-                            <h4 className="font-semibold">{shipment.shipment_number}</h4>
+                            <h4 className="font-semibold">{shipment.tracking_number}</h4>
                             {getStatusBadge(shipment.status)}
                           </div>
                           <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-                            {getShippingIcon(shipment.shipping_method)}
-                            <span className="capitalize">{shipment.shipping_method}</span>
-                            {shipment.carrier && (
-                              <>
-                                <span>•</span>
-                                <span>{shipment.carrier}</span>
-                              </>
-                            )}
+                            {getShippingIcon(shipment.carrier)}
+                            <span>{shipment.carrier}</span>
                           </div>
                         </div>
                       </div>
-                      {shipment.tracking_number && (
-                        <Button variant="outline" size="sm">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Track
-                        </Button>
-                      )}
+                      <Button variant="outline" size="sm">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Track
+                      </Button>
                     </div>
 
                     {/* Route Information */}
@@ -253,7 +234,7 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span className="text-sm font-medium">
-                            {shipment.origin_port || "N/A"}
+                            {shipment.origin}
                           </span>
                         </div>
                       </div>
@@ -262,7 +243,7 @@ export const ShipmentTracking = () => {
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
                           <span className="text-sm font-medium">
-                            {shipment.destination_port || "N/A"}
+                            {shipment.destination}
                           </span>
                         </div>
                       </div>
@@ -283,8 +264,8 @@ export const ShipmentTracking = () => {
                         <div className="text-xs text-muted-foreground mb-1">Shipped</div>
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          {shipment.shipped_date ? 
-                            format(new Date(shipment.shipped_date), "MMM dd, yyyy") : 
+                          {shipment.shipped_at ? 
+                            format(new Date(shipment.shipped_at), "MMM dd, yyyy") : 
                             "Not shipped"
                           }
                         </div>
@@ -293,45 +274,43 @@ export const ShipmentTracking = () => {
                         <div className="text-xs text-muted-foreground mb-1">Est. Arrival</div>
                         <div className="flex items-center gap-2 text-sm">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          {shipment.estimated_arrival ? 
-                            format(new Date(shipment.estimated_arrival), "MMM dd, yyyy") : 
+                          {shipment.estimated_delivery ? 
+                            format(new Date(shipment.estimated_delivery), "MMM dd, yyyy") : 
                             "N/A"
                           }
                         </div>
                       </div>
-                      {shipment.actual_arrival && (
+                      {shipment.actual_delivery && (
                         <div>
                           <div className="text-xs text-muted-foreground mb-1">Delivered</div>
                           <div className="flex items-center gap-2 text-sm text-green-600">
                             <CheckCircle2 className="h-4 w-4" />
-                            {format(new Date(shipment.actual_arrival), "MMM dd, yyyy")}
+                            {format(new Date(shipment.actual_delivery), "MMM dd, yyyy")}
                           </div>
                         </div>
                       )}
                     </div>
 
                     {/* Tracking Number */}
-                    {shipment.tracking_number && (
-                      <div className="mt-4 pt-4 border-t">
-                        <div className="text-xs text-muted-foreground mb-1">Tracking Number</div>
-                        <div className="flex items-center justify-between">
-                          <code className="text-sm font-mono">{shipment.tracking_number}</code>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => {
-                              navigator.clipboard.writeText(shipment.tracking_number);
-                              toast({
-                                title: "Copied",
-                                description: "Tracking number copied to clipboard",
-                              });
-                            }}
-                          >
-                            Copy
-                          </Button>
-                        </div>
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="text-xs text-muted-foreground mb-1">Tracking Number</div>
+                      <div className="flex items-center justify-between">
+                        <code className="text-sm font-mono">{shipment.tracking_number}</code>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            navigator.clipboard.writeText(shipment.tracking_number);
+                            toast({
+                              title: "Copied",
+                              description: "Tracking number copied to clipboard",
+                            });
+                          }}
+                        >
+                          Copy
+                        </Button>
                       </div>
-                    )}
+                    </div>
                   </CardContent>
                 </Card>
               ))
