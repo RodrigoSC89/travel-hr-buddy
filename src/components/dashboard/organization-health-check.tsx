@@ -1,4 +1,7 @@
-// @ts-nocheck
+/**
+ * PATCH-CLEANUP: @ts-nocheck REMOVED - Uses existing tables
+ * Tables: organization_users, vessels, maritime_certificates
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -133,9 +136,12 @@ export const OrganizationHealthCheck: React.FC = () => {
       }
 
       // Maritime module checks
-      const hasFleetModule = Array.isArray(currentBranding?.enabled_modules)
-        ? currentBranding?.enabled_modules.includes("fleet")
-        : currentBranding?.enabled_modules?.fleet_management;
+      const enabledModules = currentBranding?.enabled_modules;
+      const hasFleetModule = Array.isArray(enabledModules)
+        ? enabledModules.includes("fleet")
+        : (typeof enabledModules === 'object' && enabledModules !== null 
+            ? (enabledModules as Record<string, unknown>).fleet_management 
+            : false);
         
       if (hasFleetModule) {
         if (newStats.vessels === 0) {
@@ -160,9 +166,11 @@ export const OrganizationHealthCheck: React.FC = () => {
       }
 
       // Analytics check
-      const hasAnalyticsModule = Array.isArray(currentBranding?.enabled_modules)
-        ? currentBranding?.enabled_modules.includes("analytics")
-        : currentBranding?.enabled_modules?.analytics;
+      const hasAnalyticsModule = Array.isArray(enabledModules)
+        ? enabledModules.includes("analytics")
+        : (typeof enabledModules === 'object' && enabledModules !== null 
+            ? (enabledModules as Record<string, unknown>).analytics 
+            : false);
         
       if (hasAnalyticsModule) {
         checks.push({

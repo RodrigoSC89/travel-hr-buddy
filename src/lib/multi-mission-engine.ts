@@ -1,5 +1,7 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Requires database table: mission_coordination_plans - not yet in schema
+// PATCH-CLEANUP: Schema mismatch - table exists but columns differ from expected
+// Required columns: mission_id, plan_data, ai_confidence (not in current schema)
+// TODO: Migrate schema to match expected structure
 /**
  * PATCH 170.0: Multi-Mission Coordination Engine
  * AI-driven coordination for multi-vessel missions

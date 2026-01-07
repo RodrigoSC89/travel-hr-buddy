@@ -1,4 +1,7 @@
-// @ts-nocheck
+/**
+ * PATCH-CLEANUP: @ts-nocheck REMOVED - Uses existing table
+ * Table: user_feedback
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,10 +34,10 @@ interface Feedback {
   type: string;
   priority: string;
   status: string;
-  rating?: number;
-  page_url?: string;
-  browser_info?: string;
-  attachments?: any;
+  rating: number | null;
+  page_url: string | null;
+  browser_info: string | null;
+  attachments?: unknown;
   created_at: string;
   updated_at: string;
 }

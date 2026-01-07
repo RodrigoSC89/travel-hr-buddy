@@ -1,6 +1,9 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Requires database tables: vessel_alerts, vessel_trust_relationships, 
-// vessel_alert_notifications, replicated_logs - not yet in schema
+// PATCH-CLEANUP: Schema mismatch - tables exist but columns differ from expected
+// vessel_alerts: missing source_vessel_id, message, location, expires_at
+// vessel_trust_relationships: uses source/target_vessel_id instead of vessel_id/trusted_vessel_id
+// replicated_logs: missing message, requires action column
+// TODO: Align code with actual schema or migrate schema
 /**
  * PATCH 169.0: Intervessel Sync Layer
  * Peer-to-peer vessel communication with MQTT pub/sub and HTTP fallback
