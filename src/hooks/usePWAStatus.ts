@@ -4,7 +4,7 @@
  * PATCH: Roadmap v3.2.0 - PWA & Mobile Ready
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface PWAStatus {
   isInstalled: boolean;
@@ -122,6 +122,14 @@ export function usePWAStatus() {
     checkServiceWorker();
   }, []);
 
+  // Track mounted state to prevent state updates after unmount
+  const isMountedRef = useRef(true);
+  
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => { isMountedRef.current = false; };
+  }, []);
+
   // Install PWA
   const installPWA = useCallback(async () => {
     if (!deferredPrompt) {
@@ -133,7 +141,7 @@ export function usePWAStatus() {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       
-      if (outcome === 'accepted') {
+      if (outcome === 'accepted' && isMountedRef.current) {
         setStatus(prev => ({ ...prev, isInstalled: true }));
         setDeferredPrompt(null);
         return true;
