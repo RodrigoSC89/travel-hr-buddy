@@ -1,14 +1,11 @@
-// @ts-nocheck
-/**
- * PATCH-CLEANUP: @ts-nocheck required until Supabase types regenerate
- * Code adapted to use existing schema columns:
- * - mission_id -> stored in metadata.mission_id
- * - plan_data -> stored in metadata.plan_data
- * - ai_confidence -> stored in metadata.ai_confidence
- */
 /**
  * PATCH 170.0: Multi-Mission Coordination Engine
  * AI-driven coordination for multi-vessel missions
+ * 
+ * Uses mission_coordination_plans table with metadata column for flexible data storage:
+ * - mission_id -> stored in metadata.mission_id
+ * - plan_data -> stored in metadata.plan_data
+ * - ai_confidence -> stored in metadata.ai_confidence
  * 
  * Supports:
  * - SAR (Search and Rescue) operations
@@ -23,6 +20,7 @@ import { logger } from "@/lib/logger";
 import { MissionEngine, Mission, MissionType, MissionPriority } from "@/lib/mission-engine";
 import { DistributedAIEngine } from "@/lib/distributed-ai-engine";
 import { IntervesselSync } from "@/lib/intervessel-sync";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface CoordinationPlan {
   mission_id: string;
@@ -186,25 +184,26 @@ Format the response as structured data.`;
           decision_type: "mission_coordination"
         });
       }
-    } catch (error) {
-      logger.warn("AI coordination failed, using rule-based fallback:", error);
+    } catch (err) {
+      logger.warn("AI coordination failed, using rule-based fallback");
     }
 
     // Create coordination plan (with or without AI assistance)
+    const missionType = (mission.mission_type || "custom") as MissionType;
     const plan: CoordinationPlan = {
       mission_id: mission.id,
       vessels: vessels.map((vessel, index) => ({
         vessel_id: vessel.id,
         vessel_name: vessel.name,
         role: index === 0 ? "primary" : "support",
-        responsibilities: this.getVesselResponsibilities(mission.mission_type, index === 0 ? "primary" : "support"),
+        responsibilities: this.getVesselResponsibilities(missionType, index === 0 ? "primary" : "support"),
         required_capabilities: missionData.required_capabilities || [],
         status: "assigned"
       })),
       timeline: this.generateTimeline(mission, vessels),
       communication_protocol: "MQTT + HTTP fallback on channel fleet-mission-" + mission.id,
       fallback_plans: this.generateFallbackPlans(mission),
-      success_criteria: this.getSuccessCriteria(mission.mission_type),
+      success_criteria: this.getSuccessCriteria(missionType),
       risk_assessment: this.assessRisk(mission, vessels, missionData),
       ai_confidence: aiResponse?.confidence || 0.7,
       created_at: new Date().toISOString()
@@ -428,8 +427,8 @@ Format the response as structured data.`;
           status: 'draft',
           priority: 5,
           objectives: plan.success_criteria,
-          checkpoints: plan.timeline,
-          risk_assessment: plan.risk_assessment,
+          checkpoints: plan.timeline as unknown as Json,
+          risk_assessment: plan.risk_assessment as unknown as Json,
           metadata: {
             mission_id: missionId,
             plan_data: plan,
@@ -437,7 +436,7 @@ Format the response as structured data.`;
             vessels: plan.vessels,
             communication_protocol: plan.communication_protocol,
             fallback_plans: plan.fallback_plans
-          }
+          } as unknown as Json
         });
 
       if (error) {

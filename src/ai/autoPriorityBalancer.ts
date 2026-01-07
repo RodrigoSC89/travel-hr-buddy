@@ -1,15 +1,18 @@
-// @ts-nocheck - Uses task_id column that doesn't exist in priority_shifts table
 /**
  * PATCH 536 - Auto Priority Balancer
  * 
  * Automatically adjusts task priorities in real-time based on context,
  * urgency, dependencies, and system load.
  * 
+ * Note: Uses priority_shifts table which is optional. 
+ * All DB operations are wrapped with try/catch to handle missing table gracefully.
+ * 
  * @module ai/autoPriorityBalancer
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Json } from "@/integrations/supabase/types";
 
 export type Priority = "low" | "medium" | "high" | "critical";
 
@@ -192,23 +195,33 @@ class AutoPriorityBalancer {
   }
 
   /**
-   * Log priority shift to database (optional - table may not exist)
+   * Log priority shift to database
    */
   private async logPriorityShift(shift: PriorityShift): Promise<void> {
     try {
-      // @ts-expect-error - priority_shifts table is optional and may not exist in all deployments
+      // Map priority names to numeric values for DB
+      const priorityToNumber = (p: Priority): number => {
+        switch (p) {
+          case "critical": return 4;
+          case "high": return 3;
+          case "medium": return 2;
+          case "low": return 1;
+          default: return 2;
+        }
+      };
+
       const { error } = await supabase.from("priority_shifts").insert({
-        task_id: shift.task_id,
-        task_name: shift.task_name,
-        old_priority: shift.old_priority,
-        new_priority: shift.new_priority,
+        module_name: shift.task_name,
+        old_priority: priorityToNumber(shift.old_priority),
+        new_priority: priorityToNumber(shift.new_priority),
         reason: shift.reason,
-        factors: shift.factors as any,
-        timestamp: shift.timestamp
+        triggered_by: "auto_balancer",
+        shift_type: "automatic",
+        context: shift.factors as Json,
+        is_active: true
       });
       
       if (error) {
-        // Table doesn't exist or other error - log but don't throw
         logger.debug("Priority shift not logged to DB", { error: error.message });
       }
     } catch (error) {
@@ -217,29 +230,46 @@ class AutoPriorityBalancer {
   }
 
   /**
-   * Get priority shift history (returns empty array if table doesn't exist)
+   * Get priority shift history
    */
-  async getPriorityShifts(taskId?: string, limit: number = 100): Promise<any[]> {
+  async getPriorityShifts(moduleName?: string, limit: number = 100): Promise<PriorityShift[]> {
     try {
-      // priority_shifts table is optional and may not exist in all deployments
-      const supabaseQuery: any = supabase;
-      let query = supabaseQuery
+      let query = supabase
         .from("priority_shifts")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(limit);
 
-      if (taskId) {
-        query = query.eq("task_id", taskId);
+      if (moduleName) {
+        query = query.eq("module_name", moduleName);
       }
 
       const { data, error } = await query;
       if (error) {
-        // Table doesn't exist - return empty array
         logger.debug("Priority shifts table not available", { error: error.message });
         return [];
       }
-      return data || [];
+
+      // Map DB format back to PriorityShift interface
+      const numberToPriority = (n: number): Priority => {
+        switch (n) {
+          case 4: return "critical";
+          case 3: return "high";
+          case 2: return "medium";
+          case 1: return "low";
+          default: return "medium";
+        }
+      };
+
+      return (data || []).map(row => ({
+        task_id: row.id,
+        task_name: row.module_name,
+        old_priority: numberToPriority(row.old_priority),
+        new_priority: numberToPriority(row.new_priority),
+        reason: row.reason || "",
+        factors: (row.context as Record<string, number>) || {},
+        timestamp: row.created_at || new Date().toISOString()
+      }));
     } catch (error) {
       logger.warn("Failed to fetch priority shifts", { error });
       return [];
