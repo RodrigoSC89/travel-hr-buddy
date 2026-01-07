@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
-      dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query"],
+      dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query", "react-is"],
     },
     build: {
       outDir: "dist",
@@ -35,9 +35,11 @@ export default defineConfig(({ mode }) => {
       reportCompressedSize: false,
       assetsInlineLimit: 0,
       commonjsOptions: {
-        include: [/lodash/, /react-is/, /node_modules/],
+        include: [/node_modules/],
         exclude: [/supabase\/functions/],
         transformMixedEsModules: true,
+        requireReturnsDefault: "auto",
+        esmExternals: true,
       },
       rollupOptions: {
         maxParallelFileOps: 1,
@@ -58,11 +60,21 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["react", "react-dom", "react-router-dom", "lodash", "recharts", "react-is"],
+      include: [
+        "react", 
+        "react-dom", 
+        "react-router-dom", 
+        "lodash", 
+        "lodash-es",
+        "recharts",
+        "recharts > react-is",
+        "react-is",
+      ],
       exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler', 'mapbox-gl'],
       esbuildOptions: {
         target: "esnext",
-      }
+      },
+      force: true,
     },
     cacheDir: ".vite-cache",
     esbuild: {
