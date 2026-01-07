@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
+// Minimal config to prevent heap overflow on large projects
 export default defineConfig(({ mode }) => ({
   base: "/",
   server: {
@@ -20,33 +20,45 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    dedupe: ["react", "react-dom", "react-is"],
   },
   build: {
     outDir: "dist",
     sourcemap: false,
-    target: "esnext",
     minify: false,
+    target: "esnext",
     chunkSizeWarningLimit: 100000,
     cssCodeSplit: false,
     modulePreload: false,
+    reportCompressedSize: false,
     rollupOptions: {
       output: {
         manualChunks: undefined,
+        inlineDynamicImports: true,
       },
       treeshake: false,
-      cache: false,
+      maxParallelFileOps: 1,
     },
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react-router-dom", "react-is"],
-    exclude: ["@tensorflow/tfjs", "onnxruntime-web", "three", "@react-three/fiber", "@react-three/drei", "mapbox-gl"],
+    include: ["react", "react-dom"],
+    exclude: [
+      "@tensorflow/tfjs",
+      "@tensorflow-models/coco-ssd",
+      "onnxruntime-web",
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei",
+      "mapbox-gl",
+      "tesseract.js",
+      "recharts",
+    ],
+    esbuildOptions: {
+      target: "esnext",
+    },
   },
   esbuild: {
     target: "esnext",
-  },
-  define: {
-    "process.env.NODE_ENV": JSON.stringify(mode),
-    "process.env": {},
+    legalComments: "none",
+    treeShaking: false,
   },
 }));
