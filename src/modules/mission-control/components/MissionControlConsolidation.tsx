@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-860: Mantido - jsPDF autotable types + lazy loading patterns
 /**
  * PATCH 505: Mission Control Consolidation Dashboard
  * Unified dashboard integrating all mission control sub-modules
@@ -24,13 +22,6 @@ const MissionLogs = lazy(() => import("../components/MissionLogs").then(m => ({ 
 const AICommander = lazy(() => import("../components/AICommander").then(m => ({ default: m.AICommander })));
 const KPIDashboard = lazy(() => import("../components/KPIDashboard").then(m => ({ default: m.KPIDashboard })));
 import { toast } from "sonner";
-
-// Lazy load jsPDF
-const loadJsPDF = async () => {
-  const { default: jsPDF } = await import("jspdf");
-  await import("jspdf-autotable");
-  return jsPDF;
-};
 
 interface MissionStats {
   total: number;
@@ -64,6 +55,11 @@ export const MissionControlConsolidation: React.FC = () => {
 
   const exportMissionReport = async () => {
     try {
+      // Lazy load jsPDF
+      const jsPDFModule = await import("jspdf");
+      const jsPDF = jsPDFModule.default;
+      await import("jspdf-autotable");
+      
       const doc = new jsPDF();
       
       // Header
@@ -83,7 +79,7 @@ export const MissionControlConsolidation: React.FC = () => {
       doc.text(`Failed: ${stats.failed}`, 20, 76);
       
       // Success Rate
-      const successRate = ((stats.completed / stats.total) * 100).toFixed(1);
+      const successRate = stats.total > 0 ? ((stats.completed / stats.total) * 100).toFixed(1) : "0";
       doc.text(`Success Rate: ${successRate}%`, 20, 83);
       
       // Save PDF
@@ -199,7 +195,7 @@ export const MissionControlConsolidation: React.FC = () => {
 
             <TabsContent value="logs" className="mt-6">
               <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
-                <MissionLogs />
+                <MissionLogs logs={[]} onRefresh={loadMissionStats} />
               </Suspense>
             </TabsContent>
 
@@ -211,7 +207,7 @@ export const MissionControlConsolidation: React.FC = () => {
 
             <TabsContent value="analytics" className="mt-6">
               <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
-                <KPIDashboard />
+                <KPIDashboard modules={[]} />
               </Suspense>
             </TabsContent>
           </Tabs>
