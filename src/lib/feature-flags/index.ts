@@ -1,241 +1,43 @@
 /**
  * Feature Flags System
  * Control feature rollout and A/B testing
+ * 
+ * Refactored into modular structure:
+ * - types.ts: Type definitions
+ * - manager.ts: Core logic
+ * - hooks.ts: React hooks
  */
-import { logger } from "@/lib/logger";
 
-interface FeatureFlag {
-  key: string;
-  enabled: boolean;
-  rolloutPercentage?: number;
-  targetUsers?: string[];
-  targetGroups?: string[];
-  metadata?: Record<string, any>;
-}
+import { FeatureFlagsManager } from './manager';
+import type { FeatureFlagKey } from './types';
 
-interface FeatureFlagsConfig {
-  defaultFlags: Record<string, boolean>;
-  remoteEndpoint?: string;
-  refreshInterval?: number;
-  userId?: string;
-  userGroups?: string[];
-}
+// Export types
+export type { 
+  FeatureFlag, 
+  FeatureFlagsConfig, 
+  FlagEvaluationContext,
+  FlagChangeEvent,
+  FeatureFlagKey,
+} from './types';
 
-class FeatureFlagsManager {
-  private flags: Map<string, FeatureFlag> = new Map();
-  private config: FeatureFlagsConfig;
-  private userHash: number = 0;
-  private refreshTimer: NodeJS.Timeout | null = null;
-  private listeners: Set<(flags: Record<string, boolean>) => void> = new Set();
+// Export hooks
+export { 
+  useFeatureFlag, 
+  useAllFeatureFlags,
+  useFeatureFlags,
+  useFeatureFlagControl,
+  useOnFlagChange,
+  useFeatureGate,
+  useFeatureEnabled,
+} from './hooks';
 
-  constructor() {
-    this.config = {
-      defaultFlags: {},
-    };
-  }
-
-  /**
-   * Initialize feature flags
-   */
-  init(config: FeatureFlagsConfig) {
-    this.config = config;
-
-    // Set default flags
-    Object.entries(config.defaultFlags).forEach(([key, enabled]) => {
-      this.flags.set(key, { key, enabled });
-    });
-
-    // Calculate user hash for consistent rollout
-    if (config.userId) {
-      this.userHash = this.hashString(config.userId);
-    }
-
-    // Load from localStorage
-    this.loadFromStorage();
-
-    // Fetch remote flags
-    if (config.remoteEndpoint) {
-      this.fetchRemoteFlags();
-      this.startRefreshTimer();
-    }
-  }
-
-  private hashString(str: string): number {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return Math.abs(hash);
-  }
-
-  private loadFromStorage() {
-    try {
-      const stored = localStorage.getItem('feature-flags');
-      if (stored) {
-        const flags = JSON.parse(stored);
-        Object.entries(flags).forEach(([key, flag]) => {
-          this.flags.set(key, flag as FeatureFlag);
-        });
-      }
-    } catch (e) {
-      // Ignore storage errors
-    }
-  }
-
-  private saveToStorage() {
-    try {
-      const flags: Record<string, FeatureFlag> = {};
-      this.flags.forEach((flag, key) => {
-        flags[key] = flag;
-      });
-      localStorage.setItem('feature-flags', JSON.stringify(flags));
-    } catch (e) {
-      // Ignore storage errors
-    }
-  }
-
-  private async fetchRemoteFlags() {
-    if (!this.config.remoteEndpoint) return;
-
-    try {
-      const response = await fetch(this.config.remoteEndpoint, {
-        headers: {
-          'X-User-Id': this.config.userId || '',
-          'X-User-Groups': (this.config.userGroups || []).join(','),
-        },
-      });
-
-      if (response.ok) {
-        const flags: FeatureFlag[] = await response.json();
-        flags.forEach(flag => {
-          this.flags.set(flag.key, flag);
-        });
-        this.saveToStorage();
-        this.notifyListeners();
-      }
-    } catch (error) {
-      logger.warn('[FeatureFlags] Failed to fetch remote flags:', error instanceof Error ? { message: error.message } : undefined);
-    }
-  }
-
-  private startRefreshTimer() {
-    if (this.refreshTimer) return;
-    const interval = this.config.refreshInterval || 300000; // 5 minutes
-    this.refreshTimer = setInterval(() => this.fetchRemoteFlags(), interval);
-  }
-
-  private notifyListeners() {
-    const currentFlags = this.getAllFlags();
-    this.listeners.forEach(listener => listener(currentFlags));
-  }
-
-  /**
-   * Check if a feature is enabled
-   */
-  isEnabled(key: string): boolean {
-    const flag = this.flags.get(key);
-    if (!flag) return this.config.defaultFlags[key] ?? false;
-
-    // Check if disabled
-    if (!flag.enabled) return false;
-
-    // Check target users
-    if (flag.targetUsers?.length && this.config.userId) {
-      if (flag.targetUsers.includes(this.config.userId)) return true;
-    }
-
-    // Check target groups
-    if (flag.targetGroups?.length && this.config.userGroups?.length) {
-      const hasGroup = flag.targetGroups.some(g => this.config.userGroups?.includes(g));
-      if (hasGroup) return true;
-    }
-
-    // Check rollout percentage
-    if (flag.rolloutPercentage !== undefined) {
-      const bucket = this.userHash % 100;
-      return bucket < flag.rolloutPercentage;
-    }
-
-    return flag.enabled;
-  }
-
-  /**
-   * Get all flags as simple boolean map
-   */
-  getAllFlags(): Record<string, boolean> {
-    const result: Record<string, boolean> = {};
-    this.flags.forEach((_, key) => {
-      result[key] = this.isEnabled(key);
-    });
-    return result;
-  }
-
-  /**
-   * Set flag locally (for testing/development)
-   */
-  setFlag(key: string, enabled: boolean) {
-    const existing = this.flags.get(key);
-    this.flags.set(key, { ...existing, key, enabled });
-    this.saveToStorage();
-    this.notifyListeners();
-  }
-
-  /**
-   * Subscribe to flag changes
-   */
-  subscribe(listener: (flags: Record<string, boolean>) => void): () => void {
-    this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
-  }
-
-  /**
-   * Set user context
-   */
-  setUser(userId: string, groups?: string[]) {
-    this.config.userId = userId;
-    this.config.userGroups = groups;
-    this.userHash = this.hashString(userId);
-    this.fetchRemoteFlags();
-  }
-}
-
+// Singleton instance
 export const featureFlags = new FeatureFlagsManager();
-
-/**
- * React hook for feature flags
- */
-import { useState, useEffect } from 'react';
-
-export function useFeatureFlag(key: string): boolean {
-  const [enabled, setEnabled] = useState(() => featureFlags.isEnabled(key));
-
-  useEffect(() => {
-    const unsubscribe = featureFlags.subscribe((flags) => {
-      setEnabled(flags[key] ?? false);
-    });
-    return unsubscribe;
-  }, [key]);
-
-  return enabled;
-}
-
-export function useAllFeatureFlags(): Record<string, boolean> {
-  const [flags, setFlags] = useState(() => featureFlags.getAllFlags());
-
-  useEffect(() => {
-    const unsubscribe = featureFlags.subscribe(setFlags);
-    return unsubscribe;
-  }, []);
-
-  return flags;
-}
 
 /**
  * Default feature flags for the application
  */
-export const DEFAULT_FLAGS: Record<string, boolean> = {
+export const DEFAULT_FLAGS: Record<FeatureFlagKey, boolean> = {
   'lite-mode': true,
   'offline-sync': true,
   'progressive-upload': true,
@@ -248,4 +50,55 @@ export const DEFAULT_FLAGS: Record<string, boolean> = {
   'use-v2-modules': true,
   'external-audit': false,
   'sgp4-tracking': true,
+  // New flags
+  'webhook-signatures': true,
+  'enhanced-security': true,
+  'mobile-optimizations': true,
+  'voice-commands': false,
+  'dark-mode-v2': false,
+  'realtime-collaboration': false,
+};
+
+/**
+ * Initialize feature flags with defaults
+ * Call this in your app's entry point
+ */
+export function initializeFeatureFlags(userId?: string, userGroups?: string[]): void {
+  featureFlags.init({
+    defaultFlags: DEFAULT_FLAGS,
+    userId,
+    userGroups,
+    environment: import.meta.env.MODE as 'development' | 'production',
+    refreshInterval: 300000, // 5 minutes
+  });
+}
+
+/**
+ * Feature flag utilities
+ */
+export const FeatureFlagUtils = {
+  /**
+   * Check if running in development mode
+   */
+  isDevelopment: () => import.meta.env.DEV,
+  
+  /**
+   * Check if all experimental features are enabled
+   */
+  isExperimentalMode: () => featureFlags.isEnabled('experimental-ui'),
+  
+  /**
+   * Check if lite mode is active (for low-bandwidth)
+   */
+  isLiteMode: () => featureFlags.isEnabled('lite-mode'),
+  
+  /**
+   * Check if offline features are enabled
+   */
+  isOfflineEnabled: () => featureFlags.isEnabled('offline-sync'),
+  
+  /**
+   * Check if AI features are enabled
+   */
+  isAIEnabled: () => featureFlags.isEnabled('ai-suggestions'),
 };
