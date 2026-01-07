@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { EmployeeTrainingPortal } from "./EmployeeTrainingPortal";
 import { EmployeePaymentsHistory } from "./EmployeePaymentsHistory";
@@ -58,6 +57,15 @@ import { nullToUndefined } from "@/lib/type-helpers";
 import { useToast } from "@/hooks/use-toast";
 import { format, differenceInDays, startOfWeek, endOfWeek, addDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import type { Database } from "@/integrations/supabase/types";
+
+// Type aliases from Supabase schema
+type CrewMemberRow = Database["public"]["Tables"]["crew_members"]["Row"];
+type CrewEmbarkation = Database["public"]["Tables"]["crew_embarkations"]["Row"];
+type CrewCertification = Database["public"]["Tables"]["crew_certifications"]["Row"];
+type PerformanceReview = Database["public"]["Tables"]["crew_performance_reviews"]["Row"];
+type AIRecommendation = Database["public"]["Tables"]["crew_ai_recommendations"]["Row"];
+type DossierDocument = Database["public"]["Tables"]["crew_dossier_documents"]["Row"];
 
 interface DashboardStats {
   totalEmbarkations: number;
@@ -66,15 +74,15 @@ interface DashboardStats {
   complianceRate: number;
   pendingCertificates: number;
   upcomingTraining: number;
-  recentPayments: any[];
-  nextEmbarkation?: any;
+  recentPayments: unknown[];
+  nextEmbarkation?: CrewEmbarkation | null;
 }
 
 interface PersonalCalendar {
-  embarkations: any[];
-  training: any[];
-  certifications: any[];
-  medicalExams: any[];
+  embarkations: CrewEmbarkation[];
+  training: unknown[];
+  certifications: CrewCertification[];
+  medicalExams: unknown[];
 }
 
 interface AIInsight {
@@ -88,6 +96,12 @@ interface AIInsight {
   deadline?: string;
 }
 
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+
 export const ModernEmployeePortal: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -96,18 +110,18 @@ export const ModernEmployeePortal: React.FC = () => {
   const [personalCalendar, setPersonalCalendar] = useState<PersonalCalendar | null>(null);
   const [aiInsights, setAIInsights] = useState<AIInsight[]>([]);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [userProfile, setUserProfile] = useState<unknown>(null);
+  const [userProfile, setUserProfile] = useState<CrewMemberRow | null>(null);
   const [darkMode, setDarkMode] = useState(false);
 
   // AI Chat states
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Document upload states
   const [uploadingDoc, setUploadingDoc] = useState(false);
-  const [documents, setDocuments] = useState<any[]>([]);
+  const [documents, setDocuments] = useState<DossierDocument[]>([]);
 
   useEffect(() => {
     initializePortal();
@@ -303,7 +317,7 @@ export const ModernEmployeePortal: React.FC = () => {
     if (!message.trim() || isProcessing) return;
 
     setIsProcessing(true);
-    const userMessage = { role: "user", content: message, timestamp: new Date() };
+    const userMessage: ChatMessage = { role: "user" as const, content: message, timestamp: new Date() };
     setChatMessages(prev => [...prev, userMessage]);
     setNewMessage("");
 
@@ -323,16 +337,16 @@ export const ModernEmployeePortal: React.FC = () => {
 
       if (error) throw error;
 
-      const aiMessage = {
-        role: "assistant",
-        content: data.response || "Desculpe, não consegui processar sua mensagem.",
+      const aiMessage: ChatMessage = {
+        role: "assistant" as const,
+        content: data?.response || "Desculpe, não consegui processar sua mensagem.",
         timestamp: new Date()
       };
 
       setChatMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      const errorMessage = {
-        role: "assistant",
+      const errorMessage: ChatMessage = {
+        role: "assistant" as const,
         content: "Desculpe, ocorreu um erro. Tente novamente.",
         timestamp: new Date()
       };
@@ -415,7 +429,7 @@ export const ModernEmployeePortal: React.FC = () => {
         <div className="flex items-center justify-between bg-gradient-to-r from-azure-600 to-azure-800 text-white rounded-lg p-6">
           <div className="flex items-center space-x-4">
             <Avatar className="h-16 w-16 border-2 border-white/20">
-              <AvatarImage src={userProfile?.profile_photo_url} />
+              <AvatarImage src={undefined} />
               <AvatarFallback className="bg-white/10 text-white text-lg">
                 {userProfile?.full_name?.charAt(0) || "U"}
               </AvatarFallback>
@@ -731,7 +745,7 @@ export const ModernEmployeePortal: React.FC = () => {
                           <div key={cert.id} className="p-3 border rounded-lg">
                             <p className="font-medium">{cert.certification_name}</p>
                             <p className="text-sm text-muted-foreground">
-                              Vence em {format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR })}
+                              Vence em {cert.expiry_date ? format(new Date(cert.expiry_date), "dd/MM/yyyy", { locale: ptBR }) : "N/A"}
                             </p>
                           </div>
                         ))}
@@ -792,7 +806,7 @@ export const ModernEmployeePortal: React.FC = () => {
                           <div>
                             <p className="font-medium">{doc.document_name}</p>
                             <p className="text-sm text-muted-foreground">
-                              {doc.document_category} • {format(new Date(doc.upload_date), "dd/MM/yyyy")}
+                              {doc.document_category} • {doc.upload_date ? format(new Date(doc.upload_date), "dd/MM/yyyy") : "N/A"}
                             </p>
                           </div>
                         </div>
