@@ -278,7 +278,7 @@ export function validatePassword(password: string): { valid: boolean; errors: st
 
   return {
     valid: false,
-    errors: result.error.errors.map(e => e.message),
+    errors: result.error.issues.map((e: z.ZodIssue) => e.message),
   };
 }
 
@@ -321,7 +321,7 @@ export function validateInput<T>(
 
   return {
     success: false,
-    errors: result.error.errors.map(e => `${e.path.join(".")}: ${e.message}`),
+    errors: result.error.issues.map((e: z.ZodIssue) => `${e.path.join(".")}: ${e.message}`),
   };
 }
 
