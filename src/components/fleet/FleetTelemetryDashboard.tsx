@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time fleet telemetry monitoring with predictive maintenance
@@ -20,16 +19,14 @@ import {
   Waves,
   Zap,
   TrendingUp,
-  TrendingDown,
-  Bell,
-  Settings,
   RefreshCw,
-  Download
+  Download,
+  Settings
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database, Json } from "@/integrations/supabase/types";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { Line, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -53,20 +50,16 @@ ChartJS.register(
   Legend
 );
 
-interface SensorReading {
-  id: string;
-  vessel_id: string;
-  sensor_id: string;
-  sensor_type: string;
+// Use schema types
+type IotSensorData = Database["public"]["Tables"]["iot_sensor_data"]["Row"];
+type Vessel = Database["public"]["Tables"]["vessels"]["Row"];
+
+// Extended sensor reading with computed fields
+interface SensorReading extends IotSensorData {
   sensor_location: string;
-  value: number;
-  unit: string;
-  status: "normal" | "warning" | "critical" | "offline";
   threshold_min: number;
   threshold_max: number;
   is_alert: boolean;
-  reading_timestamp: string;
-  metadata: any;
 }
 
 interface MaintenanceAlert {
@@ -75,7 +68,7 @@ interface MaintenanceAlert {
   alert_type: string;
   severity: "low" | "medium" | "high" | "critical";
   message: string;
-  sensor_data: any;
+  sensor_data: SensorReading | null;
   predicted_failure_date?: string;
   recommended_action: string;
   status: "active" | "acknowledged" | "resolved";
@@ -90,13 +83,20 @@ interface VesselTelemetry {
   last_update: string;
 }
 
-const SENSOR_THRESHOLDS = {
+const SENSOR_THRESHOLDS: Record<string, { min: number; max: number; critical: number }> = {
   temperature: { min: -20, max: 80, critical: 90 },
   pressure: { min: 0, max: 150, critical: 180 },
   vibration: { min: 0, max: 5, critical: 8 },
   fuel_level: { min: 10, max: 100, critical: 5 },
   engine_rpm: { min: 0, max: 3000, critical: 3500 },
 };
+
+// Helper to extract metadata safely
+function extractMetadata<T>(json: Json | null, key: string, fallback: T): T {
+  if (!json || typeof json !== "object" || Array.isArray(json)) return fallback;
+  const value = (json as Record<string, unknown>)[key];
+  return (value as T) ?? fallback;
+}
 
 export const FleetTelemetryDashboard: React.FC = () => {
   const [vessels, setVessels] = useState<VesselTelemetry[]>([]);
@@ -107,39 +107,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    loadTelemetryData();
-    
-    // Set up real-time subscription
-    const subscription = supabase
-      .channel("telemetry-changes")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "iot_sensor_data" },
-        (payload) => {
-          console.log("Telemetry update:", payload);
-          loadTelemetryData();
-        }
-      )
-      .subscribe();
-
-    // Auto-refresh every 10 seconds if enabled
-    if (autoRefresh) {
-      const interval = setInterval(() => {
-        simulateSensorReadings();
-      }, 10000);
-      setRefreshInterval(interval);
-    }
-
-    return () => {
-      subscription.unsubscribe();
-      if (refreshInterval) {
-        clearInterval(refreshInterval);
-      }
-    };
-  }, [autoRefresh]);
-
-  const loadTelemetryData = async () => {
+  const loadTelemetryData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -155,16 +123,30 @@ export const FleetTelemetryDashboard: React.FC = () => {
       const { data: sensorReadings, error: sensorError } = await supabase
         .from("iot_sensor_data")
         .select("*")
-        .order("reading_timestamp", { ascending: false })
+        .order("timestamp", { ascending: false })
         .limit(1000);
 
       if (sensorError) throw sensorError;
 
-      setSensorData(sensorReadings || []);
+      // Transform sensor data to include computed fields
+      const transformedSensors: SensorReading[] = (sensorReadings || []).map((sensor) => {
+        const threshold = SENSOR_THRESHOLDS[sensor.sensor_type] || { min: 0, max: 100, critical: 120 };
+        const isAlert = sensor.status === "critical" || sensor.status === "warning" || sensor.value > threshold.max;
+        
+        return {
+          ...sensor,
+          sensor_location: sensor.location || extractMetadata(sensor.metadata, "location", "Unknown"),
+          threshold_min: extractMetadata(sensor.metadata, "threshold_min", threshold.min),
+          threshold_max: extractMetadata(sensor.metadata, "threshold_max", threshold.max),
+          is_alert: isAlert,
+        };
+      });
+
+      setSensorData(transformedSensors);
 
       // Process telemetry by vessel
-      const telemetryByVessel: VesselTelemetry[] = (vesselsData || []).map((vessel) => {
-        const vesselSensors = (sensorReadings || []).filter(
+      const telemetryByVessel: VesselTelemetry[] = (vesselsData || []).map((vessel: Vessel) => {
+        const vesselSensors = transformedSensors.filter(
           (s) => s.vessel_id === vessel.id
         );
         
@@ -176,113 +158,30 @@ export const FleetTelemetryDashboard: React.FC = () => {
           vessel_name: vessel.name,
           sensors: vesselSensors.slice(0, 20), // Last 20 readings
           health_score: healthScore,
-          last_update: vesselSensors[0]?.reading_timestamp || new Date().toISOString(),
+          last_update: vesselSensors[0]?.timestamp || new Date().toISOString(),
         };
       });
 
       setVessels(telemetryByVessel);
 
       // Check for alerts
-      await checkAndGenerateAlerts(sensorReadings || []);
+      await checkAndGenerateAlerts(transformedSensors);
     } catch (error) {
       console.error("Error loading telemetry:", error);
       toast.error("Failed to load telemetry data");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const calculateHealthScore = (sensors: SensorReading[]): number => {
-    if (sensors.length === 0) return 100;
-
-    const statusWeights = {
-      normal: 1,
-      warning: 0.7,
-      critical: 0.3,
-      offline: 0,
-    };
-
-    const totalWeight = sensors.reduce(
-      (sum, sensor) => sum + (statusWeights[sensor.status] || 0),
-      0
-    );
-
-    return Math.round((totalWeight / sensors.length) * 100);
-  };
-
-  const checkAndGenerateAlerts = async (readings: SensorReading[]) => {
-    const newAlerts: MaintenanceAlert[] = [];
-
-    readings.forEach((reading) => {
-      // Check threshold violations
-      if (reading.value > reading.threshold_max) {
-        newAlerts.push({
-          id: `alert-${reading.id}`,
-          vessel_id: reading.vessel_id,
-          alert_type: "threshold_exceeded",
-          severity: reading.value > reading.threshold_max * 1.2 ? "critical" : "high",
-          message: `${reading.sensor_type} exceeded threshold: ${reading.value}${reading.unit}`,
-          sensor_data: reading,
-          recommended_action: `Inspect ${reading.sensor_location} immediately`,
-          status: "active",
-          created_at: reading.reading_timestamp,
-        });
-      }
-
-      // Check for anomalous patterns (vibration)
-      if (reading.sensor_type === "vibration" && reading.value > 7) {
-        newAlerts.push({
-          id: `alert-vibration-${reading.id}`,
-          vessel_id: reading.vessel_id,
-          alert_type: "vibration_anomaly",
-          severity: "high",
-          message: `Abnormal vibration detected: ${reading.value}${reading.unit}`,
-          sensor_data: reading,
-          predicted_failure_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          recommended_action: "Schedule bearing inspection within 7 days",
-          status: "active",
-          created_at: reading.reading_timestamp,
-        });
-      }
-
-      // Check temperature trends
-      if (reading.sensor_type === "temperature" && reading.value > 75) {
-        newAlerts.push({
-          id: `alert-temp-${reading.id}`,
-          vessel_id: reading.vessel_id,
-          alert_type: "temperature_warning",
-          severity: "medium",
-          message: `Elevated temperature: ${reading.value}${reading.unit}`,
-          sensor_data: reading,
-          recommended_action: "Monitor cooling system",
-          status: "active",
-          created_at: reading.reading_timestamp,
-        });
-      }
-    });
-
-    setAlerts(newAlerts);
-
-    // Store alerts in database if any
-    if (newAlerts.length > 0) {
-      // Send notifications for critical alerts
-      const criticalAlerts = newAlerts.filter((a) => a.severity === "critical");
-      if (criticalAlerts.length > 0) {
-        toast.error(`${criticalAlerts.length} critical alert(s) detected!`, {
-          duration: 10000,
-        });
-      }
-    }
-  };
-
-  const simulateSensorReadings = async () => {
+  const simulateSensorReadings = useCallback(async () => {
     // Simulate new sensor readings for demo purposes
     const { data: vesselsData } = await supabase.from("vessels").select("id").limit(3);
 
     if (!vesselsData) return;
 
     const sensorTypes = ["temperature", "pressure", "vibration", "fuel_level", "engine_rpm"];
-    const newReadings: any[] = [];
+    const newReadings: Database["public"]["Tables"]["iot_sensor_data"]["Insert"][] = [];
 
     vesselsData.forEach((vessel) => {
       sensorTypes.forEach((type) => {
@@ -303,15 +202,15 @@ export const FleetTelemetryDashboard: React.FC = () => {
           vessel_id: vessel.id,
           sensor_id: `sensor-${type}-${vessel.id}`,
           sensor_type: type,
-          sensor_location: `Engine Room ${type}`,
+          location: `Engine Room ${type}`,
           value: Math.round(anomalyValue * 10) / 10,
           unit: type === "temperature" ? "°C" : type === "pressure" ? "bar" : type === "vibration" ? "mm/s" : type === "fuel_level" ? "%" : "RPM",
           status,
-          threshold_min: threshold.min,
-          threshold_max: threshold.max,
-          is_alert: status !== "normal",
-          reading_timestamp: new Date().toISOString(),
-          metadata: {},
+          timestamp: new Date().toISOString(),
+          metadata: {
+            threshold_min: threshold.min,
+            threshold_max: threshold.max,
+          } as unknown as Json,
         });
       });
     });
@@ -322,10 +221,124 @@ export const FleetTelemetryDashboard: React.FC = () => {
     } catch (error) {
       console.error("Error inserting sensor data:", error);
     }
+  }, []);
+
+  useEffect(() => {
+    loadTelemetryData();
+    
+    // Set up real-time subscription
+    const subscription = supabase
+      .channel("telemetry-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "iot_sensor_data" },
+        () => {
+          loadTelemetryData();
+        }
+      )
+      .subscribe();
+
+    // Auto-refresh every 10 seconds if enabled
+    let interval: NodeJS.Timeout | null = null;
+    if (autoRefresh) {
+      interval = setInterval(() => {
+        simulateSensorReadings();
+      }, 10000);
+      setRefreshInterval(interval);
+    }
+
+    return () => {
+      subscription.unsubscribe();
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [autoRefresh, loadTelemetryData, simulateSensorReadings]);
+
+  const calculateHealthScore = (sensors: SensorReading[]): number => {
+    if (sensors.length === 0) return 100;
+
+    const statusWeights: Record<string, number> = {
+      normal: 1,
+      warning: 0.7,
+      critical: 0.3,
+      offline: 0,
+    };
+
+    const totalWeight = sensors.reduce(
+      (sum, sensor) => sum + (statusWeights[sensor.status || "normal"] || 0),
+      0
+    );
+
+    return Math.round((totalWeight / sensors.length) * 100);
+  };
+
+  const checkAndGenerateAlerts = async (readings: SensorReading[]) => {
+    const newAlerts: MaintenanceAlert[] = [];
+
+    readings.forEach((reading) => {
+      // Check threshold violations
+      if (reading.value > reading.threshold_max) {
+        newAlerts.push({
+          id: `alert-${reading.id}`,
+          vessel_id: reading.vessel_id || "",
+          alert_type: "threshold_exceeded",
+          severity: reading.value > reading.threshold_max * 1.2 ? "critical" : "high",
+          message: `${reading.sensor_type} exceeded threshold: ${reading.value}${reading.unit || ""}`,
+          sensor_data: reading,
+          recommended_action: `Inspect ${reading.sensor_location} immediately`,
+          status: "active",
+          created_at: reading.timestamp,
+        });
+      }
+
+      // Check for anomalous patterns (vibration)
+      if (reading.sensor_type === "vibration" && reading.value > 7) {
+        newAlerts.push({
+          id: `alert-vibration-${reading.id}`,
+          vessel_id: reading.vessel_id || "",
+          alert_type: "vibration_anomaly",
+          severity: "high",
+          message: `Abnormal vibration detected: ${reading.value}${reading.unit || ""}`,
+          sensor_data: reading,
+          predicted_failure_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          recommended_action: "Schedule bearing inspection within 7 days",
+          status: "active",
+          created_at: reading.timestamp,
+        });
+      }
+
+      // Check temperature trends
+      if (reading.sensor_type === "temperature" && reading.value > 75) {
+        newAlerts.push({
+          id: `alert-temp-${reading.id}`,
+          vessel_id: reading.vessel_id || "",
+          alert_type: "temperature_warning",
+          severity: "medium",
+          message: `Elevated temperature: ${reading.value}${reading.unit || ""}`,
+          sensor_data: reading,
+          recommended_action: "Monitor cooling system",
+          status: "active",
+          created_at: reading.timestamp,
+        });
+      }
+    });
+
+    setAlerts(newAlerts);
+
+    // Send notifications for critical alerts
+    if (newAlerts.length > 0) {
+      const criticalAlerts = newAlerts.filter((a) => a.severity === "critical");
+      if (criticalAlerts.length > 0) {
+        toast.error(`${criticalAlerts.length} critical alert(s) detected!`, {
+          duration: 10000,
+        });
+      }
+    }
   };
 
   const getSensorIcon = (type: string) => {
-    const icons = {
+    const icons: Record<string, React.ElementType> = {
       temperature: Thermometer,
       pressure: Gauge,
       vibration: Activity,
@@ -336,24 +349,29 @@ export const FleetTelemetryDashboard: React.FC = () => {
     return <Icon className="h-4 w-4" />;
   };
 
-  const getStatusColor = (status: string) => {
-    const colors = {
+  const getStatusColor = (status: string | null) => {
+    const colors: Record<string, string> = {
       normal: "text-green-500",
       warning: "text-yellow-500",
       critical: "text-red-500",
       offline: "text-gray-500",
     };
-    return colors[status] || "text-gray-500";
+    return colors[status || "normal"] || "text-gray-500";
   };
 
   const exportTelemetryData = () => {
+    if (sensorData.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+
     const csvData = sensorData.map((s) => ({
       vessel_id: s.vessel_id,
       sensor_type: s.sensor_type,
       value: s.value,
       unit: s.unit,
       status: s.status,
-      timestamp: s.reading_timestamp,
+      timestamp: s.timestamp,
     }));
 
     const csv = [
