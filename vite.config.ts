@@ -21,8 +21,11 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
       // Force lodash to use lodash-es (ESM compatible)
       "lodash": "lodash-es",
+      // Force single React instance
+      "react": path.resolve(__dirname, "./node_modules/react"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
-    dedupe: ["react", "react-dom", "react-is", "lodash-es"],
+    dedupe: ["react", "react-dom", "react-is", "lodash-es", "@tanstack/react-query"],
   },
   build: {
     outDir: "dist",
