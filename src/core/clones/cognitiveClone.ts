@@ -1,4 +1,3 @@
-// @ts-nocheck - Dynamic table access requires type override (PATCH 892: to be fixed in future sprint)
 /**
  * PATCH 221.0 - Cognitive Clone Core
  * System for creating functional copies of Nautilus with replicated AI + limited context
@@ -6,16 +5,23 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import type { Json } from "@/integrations/supabase/types";
+import type { Database, Json } from "@/integrations/supabase/types";
+
+// Database types
+type CloneRegistryRow = Database['public']['Tables']['clone_registry']['Row'];
+type CloneRegistryInsert = Database['public']['Tables']['clone_registry']['Insert'];
+type AiMemoryRow = Database['public']['Tables']['ai_memory']['Row'];
+type AiMemoryInsert = Database['public']['Tables']['ai_memory']['Insert'];
+type AiConfigurationsRow = Database['public']['Tables']['ai_configurations']['Row'];
 
 export interface CloneConfiguration {
   id: string;
   name: string;
   modules: string[];
   aiContext: {
-    memories: Record<string, any>[];
-    learnings: Record<string, any>[];
-    preferences: Record<string, any>;
+    memories: Record<string, unknown>[];
+    learnings: Record<string, unknown>[];
+    preferences: Record<string, unknown>;
   };
   llmConfig: {
     model: string;
@@ -33,9 +39,18 @@ export interface CloneConfiguration {
 export interface CloneSnapshot {
   configurationId: string;
   timestamp: Date;
-  modules: Record<string, any>[];
-  context: Record<string, any>;
-  llmState: any;
+  modules: Record<string, unknown>[];
+  context: {
+    memories: Record<string, unknown>[];
+    settings: Record<string, unknown>;
+    capabilities: string[];
+  };
+  llmState: {
+    model: string;
+    temperature: number;
+    maxTokens: number;
+    systemPrompt: string;
+  };
   metadata: {
     version: string;
     environment: string;
@@ -76,7 +91,7 @@ class CognitiveClone {
       if (error) {
         logger.error("[CognitiveClone] Failed to load clone registry:", error);
       } else if (clones) {
-        clones.forEach(clone => {
+        clones.forEach((clone: CloneRegistryRow) => {
           this.activeClones.set(clone.id, this.deserializeClone(clone));
         });
         logger.info(`[CognitiveClone] Loaded ${clones.length} active clones`);
@@ -94,23 +109,23 @@ class CognitiveClone {
    * Create a snapshot of current configuration
    */
   async createSnapshot(name?: string): Promise<CloneSnapshot> {
-    logger.info("[CognitiveClone] Creating configuration snapshot...");
+    logger.info("[CognitiveClone] Creating configuration snapshot...", { name });
 
     try {
-      // Capture current module state - using type assertion for newly created table
+      // Capture current module state
       const { data: modules } = await supabase
         .from("ai_memory")
         .select("*")
         .limit(50);
 
-      // Capture AI context - using type assertion for newly created table
+      // Capture AI context
       const { data: memories } = await supabase
         .from("ai_memory")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);
 
-      // Capture preferences and settings - using ai_configurations as fallback
+      // Capture preferences and settings
       const { data: settings } = await supabase
         .from("ai_configurations")
         .select("*")
@@ -120,10 +135,10 @@ class CognitiveClone {
       const snapshot: CloneSnapshot = {
         configurationId: this.generateId(),
         timestamp: new Date(),
-        modules: (modules as Record<string, unknown>[]) || [],
+        modules: this.transformModules(modules),
         context: {
-          memories: (memories as Record<string, unknown>[]) || [],
-          settings: (settings as Record<string, unknown>) || {},
+          memories: this.transformMemories(memories),
+          settings: this.transformSettings(settings),
           capabilities: this.getCurrentCapabilities(),
         },
         llmState: {
@@ -169,7 +184,7 @@ class CognitiveClone {
       const cloneConfig: CloneConfiguration = {
         id: this.generateId(),
         name: options.name,
-        modules: sourceSnapshot.modules.map(m => m.name),
+        modules: sourceSnapshot.modules.map(m => String(m.name || '')),
         aiContext: {
           memories: sourceSnapshot.context.memories || [],
           learnings: [],
@@ -223,14 +238,13 @@ class CognitiveClone {
       // Save to local storage for offline access
       localStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
 
-      // Also save to Supabase for backup - using ai_memory table
-      await supabase
-        .from("ai_memory")
-        .insert({
-          memory_type: "clone_context",
-          content: contextData as unknown as Record<string, unknown>,
-          user_id: config.id,
-        });
+      // Also save to Supabase for backup
+      const insertData: AiMemoryInsert = {
+        memory_type: "clone_context",
+        content: contextData as unknown as Json,
+      };
+
+      await supabase.from("ai_memory").insert(insertData);
 
       logger.info("[CognitiveClone] Clone data persisted successfully");
     } catch (error) {
@@ -244,21 +258,21 @@ class CognitiveClone {
    */
   private async registerClone(config: CloneConfiguration): Promise<void> {
     try {
-      const { error } = await supabase
-        .from("clone_registry")
-        .insert({
-          clone_name: config.name,
-          clone_type: "cognitive",
-          capabilities: config.capabilities as unknown as Json,
-          context_limit: config.contextLimit,
-          memory_snapshot: config.aiContext as unknown as Json,
-          metadata: {
-            llm_config: config.llmConfig,
-            restrictions: config.restrictions,
-            parent_instance_id: config.parentInstanceId,
-          } as unknown as Json,
-          status: "active",
-        });
+      const insertData: CloneRegistryInsert = {
+        clone_name: config.name,
+        clone_type: "cognitive",
+        capabilities: config.capabilities as unknown as Json,
+        context_limit: config.contextLimit,
+        memory_snapshot: config.aiContext as unknown as Json,
+        metadata: {
+          llm_config: config.llmConfig,
+          restrictions: config.restrictions,
+          parent_instance_id: config.parentInstanceId,
+        } as unknown as Json,
+        status: "active",
+      };
+
+      const { error } = await supabase.from("clone_registry").insert(insertData);
 
       if (error) throw error;
 
@@ -274,20 +288,19 @@ class CognitiveClone {
    */
   private async saveSnapshot(snapshot: CloneSnapshot): Promise<void> {
     try {
-      // Using ai_memory table for snapshots
-      const { error } = await supabase
-        .from("ai_memory")
-        .insert({
-          memory_type: "clone_snapshot",
-          content: {
-            id: snapshot.configurationId,
-            timestamp: snapshot.timestamp.toISOString(),
-            modules: snapshot.modules,
-            context: snapshot.context,
-            llm_state: snapshot.llmState,
-            metadata: snapshot.metadata,
-          } as unknown as Record<string, unknown>,
-        });
+      const insertData: AiMemoryInsert = {
+        memory_type: "clone_snapshot",
+        content: {
+          id: snapshot.configurationId,
+          timestamp: snapshot.timestamp.toISOString(),
+          modules: snapshot.modules,
+          context: snapshot.context,
+          llm_state: snapshot.llmState,
+          metadata: snapshot.metadata,
+        } as unknown as Json,
+      };
+
+      const { error } = await supabase.from("ai_memory").insert(insertData);
 
       if (error) throw error;
     } catch (error) {
@@ -335,7 +348,7 @@ class CognitiveClone {
 
       if (error) throw error;
 
-      return (data || []).map(c => this.deserializeClone(c));
+      return (data || []).map((c: CloneRegistryRow) => this.deserializeClone(c));
     } catch (error) {
       logger.error("[CognitiveClone] Failed to list clones:", error);
       return [];
@@ -388,18 +401,58 @@ class CognitiveClone {
     return "You are Nautilus AI, a maritime operations assistant.";
   }
 
-  private deserializeClone(data: any): CloneConfiguration {
+  private transformModules(data: AiMemoryRow[] | null): Record<string, unknown>[] {
+    if (!data) return [];
+    return data.map(item => ({
+      id: item.id,
+      name: item.memory_type,
+      content: item.content,
+      created_at: item.created_at,
+    }));
+  }
+
+  private transformMemories(data: AiMemoryRow[] | null): Record<string, unknown>[] {
+    if (!data) return [];
+    return data.map(item => ({
+      id: item.id,
+      type: item.memory_type,
+      content: item.content,
+      importance: item.importance,
+    }));
+  }
+
+  private transformSettings(data: AiConfigurationsRow | null): Record<string, unknown> {
+    if (!data) return {};
+    return {
+      key: data.config_key,
+      value: data.config_value,
+    };
+  }
+
+  private deserializeClone(data: CloneRegistryRow): CloneConfiguration {
+    const metadata = data.metadata as Record<string, unknown> | null;
+    const memorySnapshot = data.memory_snapshot as Record<string, unknown> | null;
+    
     return {
       id: data.id,
-      name: data.name,
-      modules: data.modules || [],
-      aiContext: data.ai_context || { memories: [], learnings: [], preferences: {} },
-      llmConfig: data.llm_config || {},
+      name: data.clone_name,
+      modules: [],
+      aiContext: {
+        memories: (memorySnapshot?.memories as Record<string, unknown>[]) || [],
+        learnings: (memorySnapshot?.learnings as Record<string, unknown>[]) || [],
+        preferences: (memorySnapshot?.preferences as Record<string, unknown>) || {},
+      },
+      llmConfig: (metadata?.llm_config as CloneConfiguration['llmConfig']) || {
+        model: 'gpt-4',
+        temperature: 0.7,
+        maxTokens: 2000,
+        systemPrompt: this.getSystemPrompt(),
+      },
       contextLimit: data.context_limit || 1000,
-      capabilities: data.capabilities || [],
-      restrictions: data.restrictions || [],
-      createdAt: new Date(data.created_at),
-      parentInstanceId: data.parent_instance_id,
+      capabilities: (data.capabilities as string[]) || [],
+      restrictions: (metadata?.restrictions as string[]) || [],
+      createdAt: new Date(data.created_at || Date.now()),
+      parentInstanceId: data.parent_id || undefined,
     };
   }
 
