@@ -50,6 +50,7 @@ import {
   Legend,
   ComposedChart
 } from "recharts";
+import { BunkerPriceIntegration, type BunkerPrice } from "@/components/optimization/BunkerPriceIntegration";
 
 // Types
 interface ModuleResult {
@@ -136,6 +137,7 @@ export default function UnifiedOptimizationDashboard() {
   ]);
 
   const [isRunning, setIsRunning] = useState(false);
+  const [selectedBunkerPrice, setSelectedBunkerPrice] = useState<BunkerPrice | null>(null);
   const comparisonData = useMemo(() => generateComparisonData(), []);
 
   const runAllModules = async () => {
@@ -277,26 +279,30 @@ export default function UnifiedOptimizationDashboard() {
         </CardContent>
       </Card>
 
-      {/* Detailed Analysis Tabs */}
-      <Tabs defaultValue="comparison" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="comparison">
-            <BarChart3 className="h-4 w-4 mr-2" />
-            Comparativo
-          </TabsTrigger>
-          <TabsTrigger value="radar">
-            <Target className="h-4 w-4 mr-2" />
-            Análise Radar
-          </TabsTrigger>
-          <TabsTrigger value="trends">
-            <TrendingUp className="h-4 w-4 mr-2" />
-            Tendências
-          </TabsTrigger>
-          <TabsTrigger value="scenarios">
-            <Compass className="h-4 w-4 mr-2" />
-            Cenários
-          </TabsTrigger>
-        </TabsList>
+      {/* Main Content with Bunker Prices Sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Left Side - Detailed Analysis */}
+        <div className="lg:col-span-3">
+          {/* Detailed Analysis Tabs */}
+          <Tabs defaultValue="comparison" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="comparison">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Comparativo
+              </TabsTrigger>
+              <TabsTrigger value="radar">
+                <Target className="h-4 w-4 mr-2" />
+                Análise Radar
+              </TabsTrigger>
+              <TabsTrigger value="trends">
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Tendências
+              </TabsTrigger>
+              <TabsTrigger value="scenarios">
+                <Compass className="h-4 w-4 mr-2" />
+                Cenários
+              </TabsTrigger>
+            </TabsList>
 
         <TabsContent value="comparison" className="space-y-4">
           <Card>
@@ -442,7 +448,40 @@ export default function UnifiedOptimizationDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+          </Tabs>
+        </div>
+
+        {/* Right Side - Bunker Prices */}
+        <div className="space-y-4">
+          <BunkerPriceIntegration 
+            onPriceSelect={setSelectedBunkerPrice}
+            selectedPort={selectedBunkerPrice?.portCode}
+          />
+          
+          {selectedBunkerPrice && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Cálculo de Custo</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="text-xs text-muted-foreground">
+                  Com base em {selectedBunkerPrice.port}
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="bg-muted/50 p-2 rounded">
+                    <p className="text-xs text-muted-foreground">1000 ton VLSFO</p>
+                    <p className="font-bold">${(selectedBunkerPrice.vlsfo * 1000).toLocaleString()}</p>
+                  </div>
+                  <div className="bg-muted/50 p-2 rounded">
+                    <p className="text-xs text-muted-foreground">500 ton MGO</p>
+                    <p className="font-bold">${(selectedBunkerPrice.mgo * 500).toLocaleString()}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
 
       {/* Recommendations */}
       <Card>
