@@ -22,20 +22,20 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        "lodash": "lodash-es",
       },
-      dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query", "react-reconciler", "three"],
+      dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query"],
     },
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 50000,
+      chunkSizeWarningLimit: 100000,
       target: "esnext",
       cssCodeSplit: false,
       minify: false,
       reportCompressedSize: false,
       assetsInlineLimit: 0,
       commonjsOptions: {
+        include: [/lodash/, /node_modules/],
         exclude: [/supabase\/functions/],
       },
       rollupOptions: {
@@ -50,13 +50,15 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             "vendor-react": ["react", "react-dom", "react-router-dom"],
             "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-tabs"],
+            "vendor-charts": ["recharts"],
+            "vendor-lodash": ["lodash", "lodash-es"],
           },
         }
       },
     },
     optimizeDeps: {
-      include: ["react", "react-dom", "react-router-dom"],
-      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler', 'recharts', 'mapbox-gl'],
+      include: ["react", "react-dom", "react-router-dom", "lodash", "recharts"],
+      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler', 'mapbox-gl'],
       esbuildOptions: {
         target: "esnext",
       }
