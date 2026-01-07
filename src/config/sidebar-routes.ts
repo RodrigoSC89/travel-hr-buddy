@@ -39,7 +39,8 @@ import {
   BarChart3, Wrench, Compass, Map, Waves, Zap, Users, FileText,
   MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
   ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
-  ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer
+  ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
+  Radar
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -176,6 +177,22 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Auditoria de IA", path: "/ai-audit", icon: Brain, emoji: "🔍" },
       { label: "Voice Assistant IA", path: "/voice-assistant", icon: Mic, emoji: "🎙️" },
       { label: "Assistente de Voz", path: "/assistant/voice", icon: Mic, emoji: "🗣️" },
+    ],
+  },
+
+  // ============================================
+  // 🔬 INTELIGÊNCIA AVANÇADA (NEW!)
+  // ============================================
+  {
+    title: "🔬 Inteligência Avançada",
+    defaultOpen: false,
+    items: [
+      { label: "⚡ OPEC - Otimizador Energético", path: "/intelligence/opec", icon: Zap, emoji: "⚡", badge: "NEW", status: "new" },
+      { label: "❤️ SAWP - Wellness Preditivo", path: "/intelligence/wellness", icon: Activity, emoji: "❤️", badge: "NEW", status: "new" },
+      { label: "📚 CIDM - Central Documentos", path: "/intelligence/documents", icon: FileText, emoji: "📚", badge: "NEW", status: "new" },
+      { label: "🛡️ CIAI - Inteligência Acidentes", path: "/intelligence/accidents", icon: Shield, emoji: "🛡️", badge: "NEW", status: "new" },
+      { label: "🔗 GDCB - Blockchain Governance", path: "/intelligence/blockchain", icon: Database, emoji: "🔗", badge: "NEW", status: "new" },
+      { label: "📡 ICFT - Intel. Competitiva", path: "/intelligence/competitive", icon: Radar, emoji: "📡", badge: "AIS", status: "new" },
     ],
   },
 
