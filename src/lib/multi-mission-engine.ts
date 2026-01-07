@@ -1,6 +1,11 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Keeping @ts-nocheck - requires schema columns: mission_id, plan_data, ai_confidence
-// These columns need to be added via migration before removing @ts-nocheck
+/**
+ * PATCH-CLEANUP: @ts-nocheck required until Supabase types regenerate
+ * Code adapted to use existing schema columns:
+ * - mission_id -> stored in metadata.mission_id
+ * - plan_data -> stored in metadata.plan_data
+ * - ai_confidence -> stored in metadata.ai_confidence
+ */
 /**
  * PATCH 170.0: Multi-Mission Coordination Engine
  * AI-driven coordination for multi-vessel missions
@@ -413,13 +418,26 @@ Format the response as structured data.`;
    */
   private static async saveCoordinationPlan(missionId: string, plan: CoordinationPlan): Promise<void> {
     try {
+      // Using existing schema columns - storing plan in metadata
       const { error } = await supabase
         .from("mission_coordination_plans")
         .insert({
-          mission_id: missionId,
-          plan_data: plan,
-          ai_confidence: plan.ai_confidence,
-          created_at: plan.created_at
+          title: `Coordination Plan - ${missionId.slice(0, 8)}`,
+          description: `Auto-generated coordination plan for mission`,
+          mission_type: 'coordination',
+          status: 'draft',
+          priority: 5,
+          objectives: plan.success_criteria,
+          checkpoints: plan.timeline,
+          risk_assessment: plan.risk_assessment,
+          metadata: {
+            mission_id: missionId,
+            plan_data: plan,
+            ai_confidence: plan.ai_confidence,
+            vessels: plan.vessels,
+            communication_protocol: plan.communication_protocol,
+            fallback_plans: plan.fallback_plans
+          }
         });
 
       if (error) {
@@ -460,20 +478,31 @@ Format the response as structured data.`;
    */
   static async getCoordinationPlan(missionId: string): Promise<CoordinationPlan | null> {
     try {
+      // Query using metadata.mission_id since we store it there
       const { data, error } = await supabase
         .from("mission_coordination_plans")
         .select("*")
-        .eq("mission_id", missionId)
         .order("created_at", { ascending: false })
-        .limit(1)
-        .single();
+        .limit(50);
 
       if (error) {
         logger.error("Error fetching coordination plan:", error);
         return null;
       }
 
-      return data?.plan_data as CoordinationPlan;
+      // Find the plan with matching mission_id in metadata
+      const matchingPlan = data?.find(plan => {
+        const metadata = plan.metadata as Record<string, unknown> | null;
+        return metadata?.mission_id === missionId;
+      });
+
+      if (!matchingPlan) {
+        return null;
+      }
+
+      // Extract plan_data from metadata
+      const metadata = matchingPlan.metadata as Record<string, unknown> | null;
+      return (metadata?.plan_data as CoordinationPlan) || null;
     } catch (error) {
       logger.error("Error in getCoordinationPlan:", error);
       return null;
