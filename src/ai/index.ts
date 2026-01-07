@@ -18,7 +18,7 @@
  */
 
 export { nautilusInference, type InferenceResult, type AnalysisResult } from "./nautilus-inference";
-export * from "./nautilus-core";
+// NOTE: Removed "export * from './nautilus-core'" to prevent heap overflow. Import directly if needed.
 export { 
   runAIContext, 
   getAIContextLogs, 
@@ -330,6 +330,5 @@ export async function getStrategicDecisionSystem() {
   };
 }
 
-// Re-export strategic-decision-system module for backwards compatibility
-// But recommend using lazy loading functions above
-export * from "./strategic-decision-system";
+// NOTE: Removed "export * from './strategic-decision-system'" to prevent heap overflow.
+// Use lazy loading functions above instead.
