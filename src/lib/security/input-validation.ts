@@ -91,7 +91,7 @@ export function validateInput<T>(
     if (error instanceof z.ZodError) {
       return { 
         success: false, 
-        errors: error.errors.map(e => e.message) 
+        errors: error.issues.map((e: z.ZodIssue) => e.message) 
       };
     }
     return { success: false, errors: ["Erro de validação desconhecido"] };

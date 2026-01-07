@@ -51,7 +51,7 @@ export function useForm<T extends Record<string, unknown>>({
     if (result.success) return {};
 
     const errors: Partial<Record<keyof T, string>> = {};
-    result.error.errors.forEach((err) => {
+    result.error.issues.forEach((err: z.ZodIssue) => {
       const path = err.path[0] as keyof T;
       if (path) {
         errors[path] = err.message;
