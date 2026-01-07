@@ -20,30 +20,25 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    dedupe: ["react", "react-dom", "react-is"],
   },
   build: {
     outDir: "dist",
     sourcemap: false,
     target: "esnext",
     minify: false,
-    chunkSizeWarningLimit: 5000,
+    chunkSizeWarningLimit: 10000,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes("node_modules")) {
-            if (id.includes("react")) return "vendor-react";
-            if (id.includes("recharts") || id.includes("react-is")) return "vendor-charts";
-            if (id.includes("radix")) return "vendor-ui";
-            if (id.includes("lodash")) return "vendor-lodash";
-            if (id.includes("mapbox") || id.includes("three") || id.includes("tensorflow")) return "vendor-heavy";
-            return "vendor";
-          }
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom", "react-is"],
+          "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-tabs", "@radix-ui/react-tooltip"],
         },
       },
     },
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react-router-dom"],
+    include: ["react", "react-dom", "react-router-dom", "react-is"],
     exclude: ["@tensorflow/tfjs", "onnxruntime-web", "three", "@react-three/fiber", "@react-three/drei", "mapbox-gl"],
   },
   esbuild: {
