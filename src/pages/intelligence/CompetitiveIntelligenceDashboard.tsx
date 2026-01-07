@@ -4,7 +4,7 @@
  * Integrado com API MarineTraffic via Edge Function
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { LazyMapbox, loadMapbox } from "@/components/maps/LazyMapbox";
 import {
   Ship,
   Radar,
@@ -143,7 +144,99 @@ export default function CompetitiveIntelligenceDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataSource, setDataSource] = useState<"marinetraffic" | "mock">("mock");
   const [lastUpdate, setLastUpdate] = useState<string>("");
+  const [mapboxToken, setMapboxToken] = useState<string>("");
+  const mapRef = useRef<any>(null);
+  const markersRef = useRef<any[]>([]);
   const { toast } = useToast();
+
+  // Fetch Mapbox token
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("mapbox-token");
+        if (error) throw error;
+        if (data?.token) {
+          setMapboxToken(data.token);
+        }
+      } catch (err) {
+        console.error("Failed to fetch Mapbox token:", err);
+      }
+    };
+    fetchToken();
+  }, []);
+
+  // Update map markers when vessels change
+  const updateMapMarkers = async (map: any) => {
+    mapRef.current = map;
+    const mb = await loadMapbox();
+    
+    // Clear existing markers
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
+
+    vessels.forEach((vessel) => {
+      const el = document.createElement("div");
+      el.className = "vessel-marker";
+      el.innerHTML = `
+        <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 ${
+          vessel.company === "Nautilus Fleet" 
+            ? "bg-emerald-500 ring-2 ring-emerald-300" 
+            : "bg-cyan-500"
+        }">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+            <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/>
+            <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/>
+            <path d="M12 10v4"/>
+          </svg>
+        </div>
+      `;
+      
+      el.addEventListener("click", () => setSelectedVessel(vessel));
+
+      const marker = new mb.Marker({ element: el, rotation: vessel.heading })
+        .setLngLat([vessel.longitude, vessel.latitude])
+        .setPopup(
+          new mb.Popup({ offset: 25 }).setHTML(`
+            <div class="p-2">
+              <strong>${vessel.name}</strong><br/>
+              <span class="text-sm">${vessel.company || vessel.shipType}</span><br/>
+              <span class="text-xs text-gray-500">${vessel.speed.toFixed(1)} kn → ${vessel.destination || "N/A"}</span>
+            </div>
+          `)
+        )
+        .addTo(map);
+      
+      markersRef.current.push(marker);
+    });
+
+    // Fit bounds to show all vessels
+    if (vessels.length > 0) {
+      const bounds = vessels.reduce(
+        (acc, v) => {
+          return {
+            minLng: Math.min(acc.minLng, v.longitude),
+            maxLng: Math.max(acc.maxLng, v.longitude),
+            minLat: Math.min(acc.minLat, v.latitude),
+            maxLat: Math.max(acc.maxLat, v.latitude),
+          };
+        },
+        { minLng: 180, maxLng: -180, minLat: 90, maxLat: -90 }
+      );
+
+      map.fitBounds(
+        [[bounds.minLng - 5, bounds.minLat - 5], [bounds.maxLng + 5, bounds.maxLat + 5]],
+        { padding: 50, maxZoom: 8 }
+      );
+    }
+  };
+
+  // Update markers when vessels data changes
+  useEffect(() => {
+    if (mapRef.current && vessels.length > 0) {
+      updateMapMarkers(mapRef.current);
+    }
+  }, [vessels]);
 
   // Fetch AIS data from Edge Function
   const fetchAISData = async () => {
@@ -395,17 +488,24 @@ export default function CompetitiveIntelligenceDashboard() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="h-[200px] rounded-lg bg-gradient-to-br from-cyan-500/5 to-blue-500/10 border border-cyan-500/20 flex items-center justify-center">
-                  <div className="text-center">
-                    <Globe className="h-12 w-12 text-cyan-500/50 mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">Mapa AIS em tempo real</p>
-                    {selectedVessel && (
-                      <p className="text-xs text-muted-foreground">
-                        Lat: {selectedVessel.latitude.toFixed(4)}° | Lng: {selectedVessel.longitude.toFixed(4)}°
-                      </p>
-                    )}
+                {mapboxToken ? (
+                  <LazyMapbox
+                    token={mapboxToken}
+                    center={selectedVessel ? [selectedVessel.longitude, selectedVessel.latitude] : [-50, -10]}
+                    zoom={selectedVessel ? 6 : 3}
+                    style="mapbox://styles/mapbox/dark-v11"
+                    projection="mercator"
+                    onMapLoad={updateMapMarkers}
+                    className="h-[300px]"
+                  />
+                ) : (
+                  <div className="h-[300px] rounded-lg bg-gradient-to-br from-cyan-500/5 to-blue-500/10 border border-cyan-500/20 flex items-center justify-center">
+                    <div className="text-center">
+                      <Globe className="h-12 w-12 text-cyan-500/50 mx-auto mb-2 animate-pulse" />
+                      <p className="text-sm text-muted-foreground">Carregando mapa...</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {selectedVessel && (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
