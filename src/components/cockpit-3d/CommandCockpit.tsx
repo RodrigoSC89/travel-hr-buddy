@@ -3,19 +3,32 @@
  * Main immersive 3D command center view
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { 
   Globe, Ship, AlertTriangle, Activity, 
-  Maximize2, Minimize2, Settings, Radar
+  Maximize2, Minimize2, Settings, Radar, Box
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Globe3D } from './Globe3D';
+import { Globe2D } from './Globe2D';
 import { MetricsHolograph } from './MetricsHolograph';
 import { AIRecommendationsStream } from './AIRecommendationsStream';
 import type { GlobeMarker, KPIMetric3D, AIRecommendation3D, CockpitState } from './types';
 import { supabase } from '@/integrations/supabase/client';
+import { Safe3DWrapper } from '@/components/3d/Safe3DWrapper';
+
+// Lazy load 3D Globe to avoid ConcurrentRoot issues
+const Globe3D = lazy(() => import('./Globe3D').then(m => ({ default: m.Globe3D })));
+
+const GlobeLoading = () => (
+  <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-muted/20 rounded-lg">
+    <div className="text-center text-muted-foreground">
+      <Box className="h-8 w-8 mx-auto mb-2 animate-pulse" />
+      <p className="text-sm">Carregando globo 3D...</p>
+    </div>
+  </div>
+);
 
 export function CommandCockpit() {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -168,15 +181,22 @@ export function CommandCockpit() {
           transition={{ duration: 0.5 }}
         >
           <div className="bg-background/40 backdrop-blur-md border border-border/50 rounded-lg overflow-hidden">
-            <Globe3D 
-              markers={markers} 
-              autoRotate={state.autoRotate}
-              onMarkerClick={(marker) => {
-                toast.info(`Selecionado: ${marker.label || 'Marcador'}`, {
-                  description: `Localização: ${marker.lat?.toFixed(2) || 0}°, ${marker.lng?.toFixed(2) || 0}°`
-                });
-              }}
-            />
+            <Safe3DWrapper 
+              fallback={<Globe2D markers={markers} autoRotate={state.autoRotate} />}
+              className="min-h-[400px]"
+            >
+              <Suspense fallback={<GlobeLoading />}>
+                <Globe3D 
+                  markers={markers} 
+                  autoRotate={state.autoRotate}
+                  onMarkerClick={(marker) => {
+                    toast.info(`Selecionado: ${marker.label || 'Marcador'}`, {
+                      description: `Localização: ${marker.lat?.toFixed(2) || 0}°, ${marker.lng?.toFixed(2) || 0}°`
+                    });
+                  }}
+                />
+              </Suspense>
+            </Safe3DWrapper>
           </div>
           
           {/* Metrics below globe */}
