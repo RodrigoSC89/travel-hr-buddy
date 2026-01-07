@@ -1,7 +1,7 @@
-// @ts-nocheck - Dynamic table access requires type override
 /**
  * MMI Orders Page
  * Manages work orders for MMI maintenance operations
+ * Note: Uses mmi_work_orders table via type assertion (not in generated types)
  */
 import { useEffect, useState } from "react";
 import { logger } from "@/lib/logger";
@@ -13,9 +13,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
 // Lazy import XLSX para não incluir ~2MB no bundle inicial
 const loadXLSX = () => import("xlsx").then(m => m);
-import html2pdf from "html2pdf.js";
+const loadHtml2pdf = () => import("html2pdf.js").then(m => m.default);
 
 // Interface that matches the mmi_os table schema
 interface MMIOSRecord {
@@ -53,14 +54,33 @@ export default function MMIOrdersPage() {
   const loadWorkOrders = async () => {
     try {
       setLoading(true);
-      // Use type assertion for table not in generated types
-      const { data, error } = await (supabase
-        .from("mmi_work_orders" as never) as ReturnType<typeof supabase.from>)
+      // Use mmi_maintenance_jobs as fallback (mmi_work_orders not in schema)
+      const { data, error } = await supabase
+        .from("mmi_maintenance_jobs")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setWorkOrders((data as MMIOSRecord[]) || []);
+      // Map maintenance jobs to work order format
+      const mappedData: MMIOSRecord[] = (data || []).map(job => ({
+        id: job.id,
+        order_number: job.component_name || undefined,
+        title: job.description || undefined,
+        description: job.description || undefined,
+        status: job.status || "open",
+        priority: job.priority || undefined,
+        assigned_to: job.assigned_to || undefined,
+        vessel_id: job.vessel_id || undefined,
+        equipment_id: job.component_id || undefined,
+        scheduled_date: job.scheduled_date || undefined,
+        executed_at: job.completed_date || undefined,
+        technician_comment: undefined,
+        created_at: job.created_at || new Date().toISOString(),
+        updated_at: job.updated_at || undefined,
+        metadata: undefined,
+        notes: undefined,
+      }));
+      setWorkOrders(mappedData);
     } catch (error) {
       logger.error("Error loading work orders:", error);
       toast({
@@ -122,9 +142,10 @@ export default function MMIOrdersPage() {
     xlsx.writeFile(workbook, "ordens-de-servico.xlsx");
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     const element = document.getElementById("os-table");
     if (element) {
+      const html2pdf = await loadHtml2pdf();
       html2pdf()
         .from(element)
         .set({
