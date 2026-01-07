@@ -1,3 +1,7 @@
+/**
+ * Sidebar Navigation Actions Hook
+ * Version: 2.0.0 - Simplified for stable hook count
+ */
 import { useNavigate } from "react-router-dom";
 import { useToast } from "./use-toast";
 
