@@ -1,11 +1,9 @@
-// @ts-nocheck
-// PATCH-CLEANUP: Requires database table: channel_permissions - not yet in schema
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time
  * Complete WebSocket integration, permissions management, and communication logs
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,16 +15,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { MessageSquare, Plus, Send, Users, Shield, Activity, Clock } from "lucide-react";
+import { MessageSquare, Plus, Send, Shield, Activity, Clock } from "lucide-react";
 import { format } from "date-fns";
+import type { Database } from "@/integrations/supabase/types";
+import type { RealtimeChannel } from "@supabase/supabase-js";
+
+type CommunicationChannel = Database["public"]["Tables"]["communication_channels"]["Row"];
+type ChannelMessage = Database["public"]["Tables"]["channel_messages"]["Row"];
 
 interface Channel {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   channel_type: string;
   is_active: boolean;
-  max_members?: number;
+  max_members?: number | null;
   created_at: string;
   created_by: string;
 }
@@ -97,7 +100,20 @@ export const EnhancedChannelManager: React.FC = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setChannels(data || []);
+      
+      // Map to local Channel interface
+      const mappedChannels: Channel[] = (data || []).map(ch => ({
+        id: ch.id,
+        name: ch.name,
+        description: ch.description,
+        channel_type: ch.organization_id ? "private" : "general",
+        is_active: ch.is_active,
+        max_members: ch.member_count,
+        created_at: ch.created_at,
+        created_by: ch.created_by
+      }));
+      
+      setChannels(mappedChannels);
     } catch (error) {
       console.error("Error loading channels:", error);
       toast({
@@ -120,7 +136,19 @@ export const EnhancedChannelManager: React.FC = () => {
         .limit(100);
 
       if (error) throw error;
-      setMessages(data || []);
+      
+      // Map to local Message interface
+      const mappedMessages: Message[] = (data || []).map(msg => ({
+        id: msg.id,
+        channel_id: msg.channel_id || "",
+        sender_id: msg.sender_id || "",
+        message_content: msg.message_content,
+        message_type: msg.message_type || "text",
+        created_at: msg.created_at || new Date().toISOString(),
+        read_by: msg.read_by || []
+      }));
+      
+      setMessages(mappedMessages);
     } catch (error) {
       console.error("Error loading messages:", error);
     }
@@ -134,7 +162,20 @@ export const EnhancedChannelManager: React.FC = () => {
         .eq("channel_id", channelId);
 
       if (error) throw error;
-      setPermissions(data || []);
+      
+      // Map to local Permission interface
+      const mappedPermissions: Permission[] = (data || []).map(perm => ({
+        id: perm.id,
+        channel_id: perm.channel_id,
+        user_id: perm.user_id || "",
+        role: perm.permission_level || "member",
+        can_read: perm.is_active,
+        can_write: perm.is_active,
+        can_moderate: perm.permission_level === "admin",
+        granted_at: perm.granted_at
+      }));
+      
+      setPermissions(mappedPermissions);
     } catch (error) {
       console.error("Error loading permissions:", error);
     }

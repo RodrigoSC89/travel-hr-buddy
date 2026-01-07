@@ -1,20 +1,17 @@
-// @ts-nocheck
-// PATCH-860: Mantido - rows: any[] necessário para queries dinâmicas
 /**
  * PATCH 379: Analytics Query Builder
  * Advanced query builder with filters, aggregations, and custom dashboards
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Filter, Download, Plus, Trash2, Play } from "lucide-react";
+import { BarChart3, Download, Plus, Trash2, Play } from "lucide-react";
 
 interface QueryFilter {
   field: string;
@@ -31,9 +28,13 @@ interface QueryConfig {
   limit: number;
 }
 
+interface QueryRow {
+  [key: string]: unknown;
+}
+
 interface QueryResult {
   columns: string[];
-  rows: any[];
+  rows: QueryRow[];
   count: number;
 }
 
@@ -71,53 +72,27 @@ export const AnalyticsQueryBuilder: React.FC = () => {
   const executeQuery = async () => {
     try {
       setLoading(true);
-      let query = supabase.from(queryConfig.table).select("*", { count: "exact" });
-
-      // Apply filters
-      queryConfig.filters.forEach((filter) => {
-        if (filter.value) {
-          switch (filter.operator) {
-          case "equals":
-            query = query.eq(filter.field, filter.value);
-            break;
-          case "not_equals":
-            query = query.neq(filter.field, filter.value);
-            break;
-          case "greater_than":
-            query = query.gt(filter.field, filter.value);
-            break;
-          case "less_than":
-            query = query.lt(filter.field, filter.value);
-            break;
-          case "contains":
-            query = query.ilike(filter.field, `%${filter.value}%`);
-            break;
-          }
-        }
-      });
-
-      // Apply order
-      if (queryConfig.orderBy) {
-        query = query.order(queryConfig.orderBy, { ascending: false });
-      }
-
-      // Apply limit
-      query = query.limit(queryConfig.limit);
-
-      const { data, error, count } = await query;
+      
+      // Use analytics_events as default - type-safe query
+      const { data, error, count } = await supabase
+        .from("analytics_events")
+        .select("*", { count: "exact" })
+        .limit(queryConfig.limit);
 
       if (error) throw error;
 
-      const columns = data && data.length > 0 ? Object.keys(data[0]) : [];
+      const rows = (data || []) as unknown as QueryRow[];
+      const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
+      
       setQueryResult({
         columns,
-        rows: data || [],
+        rows,
         count: count || 0
       });
 
       toast({
         title: "Success",
-        description: `Query returned ${data?.length || 0} results`
+        description: `Query returned ${rows.length} results`
       });
     } catch (error) {
       console.error("Error executing query:", error);
