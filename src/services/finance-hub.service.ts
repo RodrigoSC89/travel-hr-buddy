@@ -1,5 +1,5 @@
 // @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability
+// PATCH-CLEANUP: Requires tables: finance_transactions, finance_categories, finance_budgets - not in schema
 /**
  * PATCH 384: Finance Hub - CRUD + Reports Service
  * Complete financial management with transactions, budgets, and reporting
