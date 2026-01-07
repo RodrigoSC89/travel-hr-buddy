@@ -50,7 +50,11 @@ const PredictiveMaintenancePage = lazy(() => import("@/pages/PredictiveMaintenan
 // ============================================
 // OPERAÇÕES SUBMARINAS
 // ============================================
-// Placeholder para módulos futuros - usar NotFound por enquanto
+const OceanSonar = lazy(() => import("@/pages/OceanSonar"));
+const UnderwaterDrone = lazy(() => import("@/pages/UnderwaterDrone"));
+const AutoSub = lazy(() => import("@/pages/AutoSub"));
+const SonarAI = lazy(() => import("@/pages/SonarAI"));
+const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
 
 // ============================================
 // IA & AUTOMAÇÃO
@@ -276,6 +280,15 @@ const AppRoutes = () => (
       {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
+      
+      {/* ============================================ */}
+      {/* OPERAÇÕES SUBMARINAS */}
+      {/* ============================================ */}
+      <Route path="/ocean-sonar" element={<OceanSonar />} />
+      <Route path="/underwater-drone" element={<UnderwaterDrone />} />
+      <Route path="/auto-sub" element={<AutoSub />} />
+      <Route path="/sonar-ai" element={<SonarAI />} />
+      <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
       
       {/* ============================================ */}
       {/* IA & AUTOMAÇÃO */}
