@@ -42,7 +42,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from "recharts";
 
 // Types for AIS data
@@ -149,6 +152,14 @@ const COMPANY_COLORS: Record<string, string> = {
   "Other": "#6b7280"
 };
 
+// Interest zones for competitor alerts
+const INTEREST_ZONES = [
+  { id: "santos", name: "Porto de Santos", lat: -23.9, lng: -46.3, radius: 50 },
+  { id: "rotterdam", name: "Porto de Rotterdam", lat: 51.9, lng: 4.5, radius: 50 },
+  { id: "singapore", name: "Estreito de Singapura", lat: 1.3, lng: 103.8, radius: 80 },
+  { id: "suez", name: "Canal de Suez", lat: 30.5, lng: 32.3, radius: 60 },
+];
+
 export default function CompetitiveIntelligenceDashboard() {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [filteredVessels, setFilteredVessels] = useState<VesselPosition[]>([]);
@@ -162,11 +173,62 @@ export default function CompetitiveIntelligenceDashboard() {
   const [showRoutes, setShowRoutes] = useState(true);
   const [showTrails, setShowTrails] = useState(true);
   const [vesselHistory, setVesselHistory] = useState<Record<string, [number, number][]>>({});
+  const [zoneAlerts, setZoneAlerts] = useState<{ vessel: VesselPosition; zone: typeof INTEREST_ZONES[0] }[]>([]);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const routeSourcesRef = useRef<string[]>([]);
   const trailSourcesRef = useRef<string[]>([]);
+  const previousVesselsInZones = useRef<Set<string>>(new Set());
   const { toast } = useToast();
+
+  // Calculate distance between two points in km
+  const haversineDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  };
+
+  // Check for vessels entering interest zones
+  useEffect(() => {
+    const competitorVessels = vessels.filter(v => v.company !== "Nautilus Fleet");
+    const newAlerts: { vessel: VesselPosition; zone: typeof INTEREST_ZONES[0] }[] = [];
+    const currentInZones = new Set<string>();
+
+    competitorVessels.forEach(vessel => {
+      INTEREST_ZONES.forEach(zone => {
+        const distance = haversineDistance(vessel.latitude, vessel.longitude, zone.lat, zone.lng);
+        if (distance <= zone.radius) {
+          const key = `${vessel.mmsi}-${zone.id}`;
+          currentInZones.add(key);
+          
+          if (!previousVesselsInZones.current.has(key)) {
+            newAlerts.push({ vessel, zone });
+            toast({
+              title: `🚨 Alerta de Zona: ${zone.name}`,
+              description: `${vessel.name} (${vessel.company}) entrou na zona de interesse`,
+              variant: "default",
+            });
+          }
+        }
+      });
+    });
+
+    previousVesselsInZones.current = currentInZones;
+    if (newAlerts.length > 0) {
+      setZoneAlerts(prev => [...newAlerts, ...prev].slice(0, 10));
+    }
+  }, [vessels]);
+
+  // Pie chart data for company distribution
+  const pieChartData = Object.keys(COMPANY_COLORS).map(company => ({
+    name: company,
+    value: vessels.filter(v => v.company === company).length,
+    color: COMPANY_COLORS[company]
+  })).filter(d => d.value > 0);
 
   // Get unique companies and ship types for filters
   const companies = ["all", ...new Set(vessels.map(v => v.company || "Other"))];
@@ -802,6 +864,92 @@ export default function CompetitiveIntelligenceDashboard() {
               ))}
             </div>
           </Card>
+
+          {/* Distribution Chart + Zone Alerts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Pie Chart - Company Distribution */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Distribuição por Companhia
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[200px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieChartData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={80}
+                        paddingAngle={2}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        labelLine={false}
+                      >
+                        {pieChartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        formatter={(value: number) => [`${value} navios`, "Quantidade"]}
+                        contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Zone Alerts */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                  Alertas de Zona de Interesse
+                  {zoneAlerts.length > 0 && (
+                    <Badge variant="destructive" className="ml-auto">{zoneAlerts.length}</Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[170px]">
+                  {zoneAlerts.length === 0 ? (
+                    <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
+                      <div className="text-center">
+                        <Target className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                        <p>Nenhum competidor nas zonas monitoradas</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {zoneAlerts.map((alert, idx) => (
+                        <div 
+                          key={idx}
+                          className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center gap-3"
+                        >
+                          <div 
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: COMPANY_COLORS[alert.vessel.company || "Other"] }}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{alert.vessel.name}</p>
+                            <p className="text-xs text-muted-foreground">{alert.zone.name}</p>
+                          </div>
+                          <Badge variant="outline" className="text-xs shrink-0">
+                            {alert.vessel.company}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Lista de Navios */}
