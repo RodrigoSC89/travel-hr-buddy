@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH 863 - @ts-nocheck removed - typed with local interfaces (schema compatible)
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -127,10 +127,33 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       if (error) throw error;
 
-      const formattedMessages: Message[] = (data || []).map((msg: any) => ({
-        ...msg,
-        message_type: msg.message_type as "text" | "voice" | "file" | "alert",
-        sender_name: msg.sender?.full_name || "Unknown"
+      interface RawMessage {
+        id: string;
+        sender_id: string | null;
+        recipient_id: string | null;
+        content: string;
+        message_type: string;
+        file_url?: string | null;
+        voice_duration?: number | null;
+        is_read: boolean;
+        is_urgent: boolean;
+        created_at: string;
+        sender?: { full_name: string } | null;
+        recipient?: { full_name: string } | null;
+      }
+      
+      const formattedMessages: Message[] = ((data as unknown as RawMessage[]) || []).map((msg) => ({
+        id: msg.id,
+        sender_id: msg.sender_id ?? "",
+        recipient_id: msg.recipient_id ?? undefined,
+        content: msg.content,
+        message_type: (msg.message_type as "text" | "voice" | "file" | "alert") ?? "text",
+        file_url: msg.file_url ?? undefined,
+        voice_duration: msg.voice_duration ?? undefined,
+        is_read: msg.is_read,
+        is_urgent: msg.is_urgent,
+        created_at: msg.created_at,
+        sender_name: msg.sender?.full_name ?? "Unknown"
       }));
 
       setMessages(formattedMessages);
@@ -182,12 +205,18 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       if (error) throw error;
 
       // Add message to local state
-      setMessages(prev => [...prev, {
-        ...data,
+      const sentMessage: Message = {
+        id: data.id,
         sender_id: data.sender_id ?? "",
-        message_type: data.message_type as "text" | "voice" | "file" | "alert",
+        recipient_id: data.recipient_id ?? undefined,
+        content: data.content ?? "",
+        message_type: (data.message_type as "text" | "voice" | "file" | "alert") ?? "text",
+        is_read: data.is_read ?? false,
+        is_urgent: data.is_urgent ?? false,
+        created_at: data.created_at ?? new Date().toISOString(),
         sender_name: "Você"
-      }] as any);
+      };
+      setMessages(prev => [...prev, sentMessage]);
 
       setNewMessage("");
 
@@ -241,12 +270,19 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
 
       if (error) throw error;
 
-      setMessages(prev => [...prev, {
-        ...data,
+      const fileMessage: Message = {
+        id: data.id,
         sender_id: data.sender_id ?? "",
-        message_type: data.message_type as "text" | "voice" | "file" | "alert",
+        recipient_id: data.recipient_id ?? undefined,
+        content: data.content ?? "",
+        message_type: (data.message_type as "text" | "voice" | "file" | "alert") ?? "file",
+        file_url: data.file_url ?? undefined,
+        is_read: data.is_read ?? false,
+        is_urgent: data.is_urgent ?? false,
+        created_at: data.created_at ?? new Date().toISOString(),
         sender_name: "Você"
-      }]);
+      };
+      setMessages(prev => [...prev, fileMessage]);
 
       toast({
         title: "Arquivo enviado",
@@ -269,14 +305,36 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     });
     
     // Use Web Speech API for voice recognition
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-      const recognition = new SpeechRecognition();
+    interface SpeechRecognitionEvent {
+      results: { [index: number]: { [index: number]: { transcript: string } } };
+    }
+    
+    interface SpeechRecognitionInstance {
+      lang: string;
+      continuous: boolean;
+      interimResults: boolean;
+      onresult: ((event: SpeechRecognitionEvent) => void) | null;
+      onerror: (() => void) | null;
+      start: () => void;
+    }
+    
+    type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+    
+    const windowWithSpeech = window as Window & { 
+      webkitSpeechRecognition?: SpeechRecognitionConstructor; 
+      SpeechRecognition?: SpeechRecognitionConstructor;
+    };
+    
+    if (windowWithSpeech.webkitSpeechRecognition || windowWithSpeech.SpeechRecognition) {
+      const SpeechRecognitionClass = windowWithSpeech.webkitSpeechRecognition || windowWithSpeech.SpeechRecognition;
+      if (!SpeechRecognitionClass) return;
+      
+      const recognition = new SpeechRecognitionClass();
       recognition.lang = 'pt-BR';
       recognition.continuous = false;
       recognition.interimResults = false;
       
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setNewMessage(transcript);
         setIsRecording(false);

@@ -18,7 +18,7 @@ Eliminate all `@ts-nocheck` directives from the codebase while maintaining type 
 | Edge Functions (Deno) | ~30 | 🔵 Low | Requires Deno types |
 
 **Total Files:** ~140  
-**Corrected:** 28 (20%)
+**Corrected:** 29 (21%)
 
 ## ✅ Completed Corrections
 
@@ -43,6 +43,7 @@ Eliminate all `@ts-nocheck` directives from the codebase while maintaining type 
 | `src/lib/intervessel-sync.ts` | Schema column mismatch | Adapted to use existing columns (vessel_id, description, etc.) |
 | `src/pages/sgso/SGSOWorkflow.tsx` | No issues | Direct removal, code already type-safe |
 | `src/components/logistics/shipment-tracking.tsx` | No issues | Direct removal, code already type-safe |
+| `src/components/communication/integrated-communication-system.tsx` | Any casts | RawMessage interface, typed SpeechRecognition API |
 
 ### Pending - Schema Mismatch (Requires Migration or Code Adaptation)
 
