@@ -1,5 +1,4 @@
-// @ts-nocheck
-// PATCH-CLEANUP: Requires table: non_conformities (not in schema)
+// PATCH-CLEANUP: Table non_conformities now exists in schema
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

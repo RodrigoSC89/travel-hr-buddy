@@ -1,5 +1,4 @@
-// @ts-nocheck
-// PATCH-CLEANUP: Requires table: shipments (not in schema)
+// PATCH-CLEANUP: Table shipments now exists in schema
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,18 +23,18 @@ import { format } from "date-fns";
 
 interface Shipment {
   id: string;
-  shipment_number: string;
-  carrier: string;
-  tracking_number: string;
-  shipping_method: string;
-  origin_port: string;
-  destination_port: string;
-  shipped_date: string;
-  estimated_arrival: string;
-  actual_arrival?: string;
-  status: string;
-  current_location?: string;
-  last_location_update?: string;
+  tracking_number: string | null;
+  external_reference: string | null;
+  shipment_type: string | null;
+  origin_port: string | null;
+  destination_port: string | null;
+  departure_date: string | null;
+  estimated_arrival: string | null;
+  actual_arrival: string | null;
+  status: string | null;
+  current_location: string | null;
+  cargo_description: string | null;
+  priority: string | null;
 }
 
 export const ShipmentTracking = () => {
