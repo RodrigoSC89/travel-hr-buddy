@@ -15257,6 +15257,7 @@ export type Database = {
       }
       mission_coordination_plans: {
         Row: {
+          ai_confidence: number | null
           approved_at: string | null
           approved_by: string | null
           checkpoints: Json | null
@@ -15267,10 +15268,12 @@ export type Database = {
           id: string
           lead_vessel_id: string | null
           metadata: Json | null
+          mission_id: string | null
           mission_type: string
           objectives: Json | null
           organization_id: string | null
           participating_vessels: string[] | null
+          plan_data: Json | null
           priority: number
           resources: Json | null
           risk_assessment: Json | null
@@ -15280,6 +15283,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_confidence?: number | null
           approved_at?: string | null
           approved_by?: string | null
           checkpoints?: Json | null
@@ -15290,10 +15294,12 @@ export type Database = {
           id?: string
           lead_vessel_id?: string | null
           metadata?: Json | null
+          mission_id?: string | null
           mission_type?: string
           objectives?: Json | null
           organization_id?: string | null
           participating_vessels?: string[] | null
+          plan_data?: Json | null
           priority?: number
           resources?: Json | null
           risk_assessment?: Json | null
@@ -15303,6 +15309,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_confidence?: number | null
           approved_at?: string | null
           approved_by?: string | null
           checkpoints?: Json | null
@@ -15313,10 +15320,12 @@ export type Database = {
           id?: string
           lead_vessel_id?: string | null
           metadata?: Json | null
+          mission_id?: string | null
           mission_type?: string
           objectives?: Json | null
           organization_id?: string | null
           participating_vessels?: string[] | null
+          plan_data?: Json | null
           priority?: number
           resources?: Json | null
           risk_assessment?: Json | null
@@ -16704,6 +16713,126 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      non_conformities: {
+        Row: {
+          action_deadline: string | null
+          assigned_to: string | null
+          category: string | null
+          closed_date: string | null
+          corrective_action: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          effectiveness_notes: string | null
+          effectiveness_verified: boolean | null
+          evidence_files: Json | null
+          id: string
+          metadata: Json | null
+          nc_number: string | null
+          organization_id: string | null
+          preventive_action: string | null
+          priority: string | null
+          recurrence_count: number | null
+          reported_by: string | null
+          requirement_code: string | null
+          root_cause: string | null
+          severity: string | null
+          source: string | null
+          source_reference: string | null
+          standard_reference: string | null
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          verification_evidence: Json | null
+          verified_by: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          action_deadline?: string | null
+          assigned_to?: string | null
+          category?: string | null
+          closed_date?: string | null
+          corrective_action?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          effectiveness_notes?: string | null
+          effectiveness_verified?: boolean | null
+          evidence_files?: Json | null
+          id?: string
+          metadata?: Json | null
+          nc_number?: string | null
+          organization_id?: string | null
+          preventive_action?: string | null
+          priority?: string | null
+          recurrence_count?: number | null
+          reported_by?: string | null
+          requirement_code?: string | null
+          root_cause?: string | null
+          severity?: string | null
+          source?: string | null
+          source_reference?: string | null
+          standard_reference?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          verification_evidence?: Json | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          action_deadline?: string | null
+          assigned_to?: string | null
+          category?: string | null
+          closed_date?: string | null
+          corrective_action?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          effectiveness_notes?: string | null
+          effectiveness_verified?: boolean | null
+          evidence_files?: Json | null
+          id?: string
+          metadata?: Json | null
+          nc_number?: string | null
+          organization_id?: string | null
+          preventive_action?: string | null
+          priority?: string | null
+          recurrence_count?: number | null
+          reported_by?: string | null
+          requirement_code?: string | null
+          root_cause?: string | null
+          severity?: string | null
+          source?: string | null
+          source_reference?: string | null
+          standard_reference?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          verification_evidence?: Json | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "non_conformities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "non_conformities_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       noncompliance_explanations: {
         Row: {
@@ -20959,6 +21088,7 @@ export type Database = {
           id: string
           last_sync_at: string | null
           log_type: string
+          message: string | null
           organization_id: string | null
           payload: Json | null
           source_vessel_id: string | null
@@ -20975,6 +21105,7 @@ export type Database = {
           id?: string
           last_sync_at?: string | null
           log_type?: string
+          message?: string | null
           organization_id?: string | null
           payload?: Json | null
           source_vessel_id?: string | null
@@ -20991,6 +21122,7 @@ export type Database = {
           id?: string
           last_sync_at?: string | null
           log_type?: string
+          message?: string | null
           organization_id?: string | null
           payload?: Json | null
           source_vessel_id?: string | null
@@ -24005,6 +24137,120 @@ export type Database = {
             columns: ["alert_id"]
             isOneToOne: false
             referencedRelation: "price_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipments: {
+        Row: {
+          actual_arrival: string | null
+          cargo_description: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          current_location: string | null
+          customs_clearance_date: string | null
+          customs_status: string | null
+          departure_date: string | null
+          destination_country: string | null
+          destination_port: string | null
+          documents: Json | null
+          estimated_arrival: string | null
+          external_reference: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          origin_country: string | null
+          origin_port: string | null
+          priority: string | null
+          shipment_type: string | null
+          shipping_cost: number | null
+          status: string | null
+          tracking_events: Json | null
+          tracking_number: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          volume_cbm: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          actual_arrival?: string | null
+          cargo_description?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          current_location?: string | null
+          customs_clearance_date?: string | null
+          customs_status?: string | null
+          departure_date?: string | null
+          destination_country?: string | null
+          destination_port?: string | null
+          documents?: Json | null
+          estimated_arrival?: string | null
+          external_reference?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          origin_country?: string | null
+          origin_port?: string | null
+          priority?: string | null
+          shipment_type?: string | null
+          shipping_cost?: number | null
+          status?: string | null
+          tracking_events?: Json | null
+          tracking_number?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          volume_cbm?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          actual_arrival?: string | null
+          cargo_description?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          current_location?: string | null
+          customs_clearance_date?: string | null
+          customs_status?: string | null
+          departure_date?: string | null
+          destination_country?: string | null
+          destination_port?: string | null
+          documents?: Json | null
+          estimated_arrival?: string | null
+          external_reference?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          origin_country?: string | null
+          origin_port?: string | null
+          priority?: string | null
+          shipment_type?: string | null
+          shipping_cost?: number | null
+          status?: string | null
+          tracking_events?: Json | null
+          tracking_number?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          volume_cbm?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -28160,6 +28406,7 @@ export type Database = {
           id: string
           metadata: Json | null
           notification_type: string
+          read: boolean | null
           read_at: string | null
           sent_at: string
           user_id: string | null
@@ -28169,6 +28416,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           notification_type?: string
+          read?: boolean | null
           read_at?: string | null
           sent_at?: string
           user_id?: string | null
@@ -28178,6 +28426,7 @@ export type Database = {
           id?: string
           metadata?: Json | null
           notification_type?: string
+          read?: boolean | null
           read_at?: string | null
           sent_at?: string
           user_id?: string | null
@@ -28200,11 +28449,15 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string | null
+          expires_at: string | null
           id: string
+          location: Json | null
+          message: string | null
           metadata: Json | null
           organization_id: string | null
           resolved_at: string | null
           severity: string
+          source_vessel_id: string | null
           status: string
           title: string
           updated_at: string
@@ -28217,11 +28470,15 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          expires_at?: string | null
           id?: string
+          location?: Json | null
+          message?: string | null
           metadata?: Json | null
           organization_id?: string | null
           resolved_at?: string | null
           severity?: string
+          source_vessel_id?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -28234,11 +28491,15 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          expires_at?: string | null
           id?: string
+          location?: Json | null
+          message?: string | null
           metadata?: Json | null
           organization_id?: string | null
           resolved_at?: string | null
           severity?: string
+          source_vessel_id?: string | null
           status?: string
           title?: string
           updated_at?: string
@@ -28250,6 +28511,13 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_alerts_source_vessel_id_fkey"
+            columns: ["source_vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
           {
@@ -28848,7 +29116,9 @@ export type Database = {
           status: string
           target_vessel_id: string | null
           trust_level: number
+          trusted_vessel_id: string | null
           updated_at: string
+          vessel_id: string | null
         }
         Insert: {
           created_at?: string
@@ -28862,7 +29132,9 @@ export type Database = {
           status?: string
           target_vessel_id?: string | null
           trust_level?: number
+          trusted_vessel_id?: string | null
           updated_at?: string
+          vessel_id?: string | null
         }
         Update: {
           created_at?: string
@@ -28876,7 +29148,9 @@ export type Database = {
           status?: string
           target_vessel_id?: string | null
           trust_level?: number
+          trusted_vessel_id?: string | null
           updated_at?: string
+          vessel_id?: string | null
         }
         Relationships: [
           {
@@ -28896,6 +29170,20 @@ export type Database = {
           {
             foreignKeyName: "vessel_trust_relationships_target_vessel_id_fkey"
             columns: ["target_vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_trust_relationships_trusted_vessel_id_fkey"
+            columns: ["trusted_vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_trust_relationships_vessel_id_fkey"
+            columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
             referencedColumns: ["id"]
