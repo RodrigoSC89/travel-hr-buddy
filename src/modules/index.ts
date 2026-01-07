@@ -3,21 +3,8 @@
  * Provides easy access to all module components
  * Updated: PATCH UNIFY-3.0 - Module Consolidation Phase 3
  * 
- * FUSÃO DE MÓDULOS:
- * - Treinamento → Nautilus Academy (unified)
- * - Logística → Procurement & Inventory (unified)
- * - Conectividade → SATCOM Dashboard (unified)
- * - RH → Nautilus People Hub (unified)
- * - IA & Analytics → Nautilus AI Hub (unified)
- * - Automação → Nautilus Automation (unified)
- * - Fleet & Operations → Fleet Operations Center (unified)
- * - Manutenção → Nautilus Maintenance (unified)
- * - Subsea → Subsea Operations (unified)
- * - Viagem/Rotas → Nautilus Voyage (unified)
- * - Satélite → Nautilus Satellite (unified)
- * - Documentos → Nautilus Documents (unified)
- * - Assistentes → Nautilus Assistant (unified)
- * - Comunicação → Nautilus Comms (unified)
+ * NOTE: Barrel exports (export * from) removed to prevent heap overflow
+ * during build. Import directly from submodules when needed.
  */
 
 // ============================================
@@ -50,8 +37,6 @@ export { default as MissionControl } from "./mission-control";
 // ============================================
 export { default as NautilusVoyage } from "./nautilus-voyage";
 export { default as VoyagePlanner } from "./voyage-planner";
-// Deprecated: Use NautilusVoyage instead
-// export { default as RouteCostAnalysis } from "./nautilus-voyage";
 
 // ============================================
 // COMMUNICATION & CONNECTIVITY (UNIFIED → SATCOM & NAUTILUS COMMS)
@@ -64,13 +49,11 @@ export { default as NautilusComms } from "./nautilus-comms";
 // SATELLITE (UNIFIED → NAUTILUS SATELLITE)
 // ============================================
 export { default as NautilusSatellite } from "./nautilus-satellite";
-// Deprecated: Use NautilusSatellite instead
-// export { default as SatelliteTracker } from "./nautilus-satellite";
 
 // ============================================
 // INTELLIGENCE & AI MODULES (UNIFIED → NAUTILUS AI HUB)
+// NOTE: Import directly from "./ai" submodule to avoid loading all AI code
 // ============================================
-export * from "./ai";
 export { default as NautilusAIHub } from "./nautilus-ai-hub";
 
 // ============================================
@@ -85,8 +68,10 @@ export { default as SubseaOperations } from "./subsea-operations";
 
 // ============================================
 // COMPLIANCE MODULES
+// NOTE: Import directly from "./compliance" submodule to avoid loading all code
 // ============================================
-export * from "./compliance";
+export { default as AuditCenter } from "./compliance/audit-center";
+export { default as SGSOSystem } from "./compliance/sgso";
 
 // ============================================
 // ANALYTICS

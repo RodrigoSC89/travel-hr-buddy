@@ -44,7 +44,10 @@ import {
   v2ModulesRoutes,
   integrationsRoutes,
   executiveRoutes,
-  // Core pages
+} from "./routes";
+
+// Core lazy-loaded pages - imported directly to avoid barrel export memory issues
+import {
   Auth,
   Unauthorized,
   Settings,
@@ -59,7 +62,7 @@ import {
   Admin,
   NotFound,
   SmartLayout,
-} from "./routes";
+} from "./routes/lazy-imports";
 
 // PWA Install Page
 import InstallPage from "./pages/install";
