@@ -1,8 +1,10 @@
-// @ts-nocheck
+/**
+ * Smart Onboarding Wizard
+ * Guides users through initial setup with personalized recommendations
+ */
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
@@ -11,6 +13,10 @@ import { CheckCircle, Ship, Users, BarChart3, Calendar, ArrowRight, Sparkles } f
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
+import type { Database, Json } from "@/integrations/supabase/types";
+
+type OnboardingProgressRow = Database["public"]["Tables"]["onboarding_progress"]["Row"];
+type AutomationWorkflowInsert = Database["public"]["Tables"]["automation_workflows"]["Insert"];
 
 interface CompanyProfile {
   company_type: string;
@@ -401,12 +407,12 @@ export const SmartOnboardingWizard: React.FC = () => {
         await supabase
           .from("onboarding_progress")
           .upsert({
-            id: user.id,
+            user_id: user.id,
             current_step: currentStep < steps.length - 1 ? steps[currentStep + 1].id : "completed",
-            completed_steps: updatedData.completed_steps,
+            completed_steps: updatedData.completed_steps as unknown as Json,
             user_type: updatedData.user_type,
-            company_profile: updatedData.company_profile,
-            preferences: updatedData.preferences,
+            company_profile: updatedData.company_profile as unknown as Json,
+            preferences: updatedData.preferences as unknown as Json,
             is_completed: currentStep === steps.length - 1
           });
       }
