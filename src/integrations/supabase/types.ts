@@ -30498,9 +30498,12 @@ export type Database = {
         Args: { p_api_key_id: string; p_window_type: string }
         Returns: boolean
       }
-      is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_admin:
+        | { Args: never; Returns: boolean }
+        | { Args: { _user_id: string }; Returns: boolean }
       is_admin_or_hr: { Args: { _user_id: string }; Returns: boolean }
       is_hr: { Args: { _user_id: string }; Returns: boolean }
+      is_manager_or_above: { Args: never; Returns: boolean }
       is_org_admin: {
         Args: { _org_id: string; _user_id: string }
         Returns: boolean

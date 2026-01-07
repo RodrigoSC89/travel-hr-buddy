@@ -1,4 +1,4 @@
-// @ts-nocheck - Dynamic table access and complex type inference requires override
+// @ts-nocheck - Dynamic table access requires type override (PATCH 892: to be fixed in future sprint)
 /**
  * PATCH 221.0 - Cognitive Clone Core
  * System for creating functional copies of Nautilus with replicated AI + limited context
@@ -110,12 +110,12 @@ class CognitiveClone {
         .order("created_at", { ascending: false })
         .limit(100);
 
-      // Capture preferences and settings - using existing table
+      // Capture preferences and settings - using ai_configurations as fallback
       const { data: settings } = await supabase
-        .from("user_preferences")
+        .from("ai_configurations")
         .select("*")
         .limit(1)
-        .single();
+        .maybeSingle();
 
       const snapshot: CloneSnapshot = {
         configurationId: this.generateId(),
@@ -223,14 +223,14 @@ class CognitiveClone {
       // Save to local storage for offline access
       localStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
 
-      // Also save to Supabase for backup - using type assertion for newly created table
-      await (supabase
-        .from("clone_context_storage" as never) as ReturnType<typeof supabase.from>)
+      // Also save to Supabase for backup - using ai_memory table
+      await supabase
+        .from("ai_memory")
         .insert({
-          clone_id: config.id,
-          context_data: contextData,
-          created_at: new Date().toISOString(),
-        } as never);
+          memory_type: "clone_context",
+          content: contextData as unknown as Record<string, unknown>,
+          user_id: config.id,
+        });
 
       logger.info("[CognitiveClone] Clone data persisted successfully");
     } catch (error) {
@@ -274,17 +274,20 @@ class CognitiveClone {
    */
   private async saveSnapshot(snapshot: CloneSnapshot): Promise<void> {
     try {
-      // Using type assertion for newly created table
-      const { error } = await (supabase
-        .from("clone_snapshots" as never) as ReturnType<typeof supabase.from>)
+      // Using ai_memory table for snapshots
+      const { error } = await supabase
+        .from("ai_memory")
         .insert({
-          id: snapshot.configurationId,
-          timestamp: snapshot.timestamp.toISOString(),
-          modules: snapshot.modules,
-          context: snapshot.context,
-          llm_state: snapshot.llmState,
-          metadata: snapshot.metadata,
-        } as never);
+          memory_type: "clone_snapshot",
+          content: {
+            id: snapshot.configurationId,
+            timestamp: snapshot.timestamp.toISOString(),
+            modules: snapshot.modules,
+            context: snapshot.context,
+            llm_state: snapshot.llmState,
+            metadata: snapshot.metadata,
+          } as unknown as Record<string, unknown>,
+        });
 
       if (error) throw error;
     } catch (error) {
