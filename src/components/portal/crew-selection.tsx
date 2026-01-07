@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -49,10 +48,11 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
         nationality: member.nationality || "Brasil"
       }));
       setCrewMembers(mappedCrew);
-    } catch (error: unknown) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro desconhecido";
       toast({
         title: "Erro ao carregar tripulantes",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {

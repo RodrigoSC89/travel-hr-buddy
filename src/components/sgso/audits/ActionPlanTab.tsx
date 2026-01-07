@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Schema mismatch: sgso_actions table has different columns (PATCH 892: pending refactor)
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
