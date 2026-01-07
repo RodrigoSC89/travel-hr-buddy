@@ -1,14 +1,13 @@
 // @ts-nocheck
-// PATCH-CLEANUP: Requires table: crew_rotations - not in schema
+// PATCH-CLEANUP: Requires table: crew_rotations - not in schema (kept @ts-nocheck)
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
  * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration
+ * Uses crew_embarkations table (adapted from original crew_rotations design)
  */
 
 import React, { useState, useEffect, useCallback } from "react";
 import { DndContext, DragEndEvent, useDraggable, useDroppable } from "@dnd-kit/core";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -38,6 +37,10 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, parseISO, addDays, isBefore, isAfter } from "date-fns";
+import type { Database } from "@/integrations/supabase/types";
+
+type CrewEmbarkationRow = Database["public"]["Tables"]["crew_embarkations"]["Row"];
+type VesselRow = Database["public"]["Tables"]["vessels"]["Row"];
 
 interface CrewMember {
   id: string;
@@ -51,20 +54,20 @@ interface CrewMember {
 interface CrewRotation {
   id: string;
   crew_member_id: string;
-  vessel_id?: string;
+  vessel_id?: string | null;
   rotation_type: "embarkation" | "disembarkation" | "rotation" | "leave" | "emergency";
   scheduled_date: string;
-  actual_date?: string;
+  actual_date?: string | null;
   status: "scheduled" | "confirmed" | "completed" | "cancelled" | "delayed";
-  departure_port?: string;
-  arrival_port?: string;
-  transportation_method?: string;
-  flight_details?: any;
-  accommodation_details?: any;
+  departure_port?: string | null;
+  arrival_port?: string | null;
+  transportation_method?: string | null;
+  flight_details?: Record<string, unknown> | null;
+  accommodation_details?: Record<string, unknown> | null;
   documentation_status: "pending" | "verified" | "incomplete" | "expired";
   medical_clearance: boolean;
-  visa_status?: string;
-  notes?: string;
+  visa_status?: string | null;
+  notes?: string | null;
   crew_member?: CrewMember;
 }
 
