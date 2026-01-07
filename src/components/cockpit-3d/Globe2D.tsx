@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-interface LocalGlobeMarker {
+interface GlobeMarker {
   id?: string;
   lat: number;
   lng: number;
@@ -16,8 +16,6 @@ interface LocalGlobeMarker {
 }
 
 interface Globe2DProps {
-  markers: LocalGlobeMarker[];
-  onMarkerClick?: (marker: LocalGlobeMarker) => void;
   markers: GlobeMarker[];
   onMarkerClick?: (marker: GlobeMarker) => void;
   autoRotate?: boolean;

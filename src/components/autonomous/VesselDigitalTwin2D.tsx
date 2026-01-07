@@ -6,19 +6,14 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { 
   Ship, 
-  Thermometer,
   Activity,
   Gauge,
   Fuel,
   Anchor,
   Navigation,
-  AlertTriangle,
   CheckCircle
 } from 'lucide-react';
 import type { VesselState } from '@/lib/ai/autonomous';
@@ -40,34 +35,40 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  const defaultState: VesselState = {
-    speed: vesselState?.speed ?? 12.5,
-    heading: vesselState?.heading ?? 245,
-    fuelLevel: vesselState?.fuelLevel ?? 78,
-    engineStatus: vesselState?.engineStatus ?? 'running',
-    position: vesselState?.position ?? { lat: 25.7617, lng: -80.1918 },
-    equipment: vesselState?.equipment ?? []
-  };
+  // Use actual VesselState properties
+  const speed = vesselState?.speed ?? 12.5;
+  const heading = vesselState?.heading ?? 245;
+  const fuelOnBoard = vesselState?.fuelOnBoard ?? 850000;
+  const initialFuel = vesselState?.initialFuel ?? 1000000;
+  const fuelPercent = initialFuel > 0 ? Math.round((fuelOnBoard / initialFuel) * 100) : 0;
+  const position = vesselState?.position ?? { lat: 25.7617, lng: -80.1918 };
+  const equipment = vesselState?.equipment ?? [];
+  
+  // Derive engine status from equipment
+  const mainEngine = equipment.find(e => e.type === 'Main Engine' || e.name.includes('Engine'));
+  const engineStatus = mainEngine?.status ?? 'operational';
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'running': return 'text-green-500';
-      case 'idle': return 'text-yellow-500';
-      case 'maintenance': return 'text-orange-500';
-      case 'error': return 'text-red-500';
+      case 'operational': return 'text-green-500';
+      case 'degraded': return 'text-yellow-500';
+      case 'critical': return 'text-orange-500';
+      case 'offline': return 'text-red-500';
       default: return 'text-muted-foreground';
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'running': return 'default';
-      case 'idle': return 'secondary';
-      case 'maintenance': return 'outline';
-      case 'error': return 'destructive';
+      case 'operational': return 'default';
+      case 'degraded': return 'secondary';
+      case 'critical': return 'outline';
+      case 'offline': return 'destructive';
       default: return 'secondary';
     }
   };
+
+  const isEngineRunning = engineStatus === 'operational' || engineStatus === 'degraded';
 
   return (
     <Card className="w-full">
@@ -77,8 +78,8 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
             <Ship className="h-5 w-5 text-primary" />
             Digital Twin 2D
           </CardTitle>
-          <Badge variant={getStatusBadge(defaultState.engineStatus)}>
-            {defaultState.engineStatus.toUpperCase()}
+          <Badge variant={getStatusBadge(engineStatus)}>
+            {engineStatus.toUpperCase()}
           </Badge>
         </div>
       </CardHeader>
@@ -127,7 +128,7 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
             {/* Smoke Stack */}
             <rect x="140" y="15" width="10" height="25" fill="hsl(var(--muted))" />
             {/* Engine Glow */}
-            {defaultState.engineStatus === 'running' && (
+            {isEngineRunning && (
               <circle
                 cx="30"
                 cy="60"
@@ -137,7 +138,7 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
               />
             )}
             {/* Propeller Animation */}
-            {defaultState.engineStatus === 'running' && (
+            {isEngineRunning && (
               <g transform={`translate(20, 70) rotate(${animationPhase * 3})`}>
                 <line x1="-8" y1="0" x2="8" y2="0" stroke="hsl(var(--foreground))" strokeWidth="2" />
                 <line x1="0" y1="-8" x2="0" y2="8" stroke="hsl(var(--foreground))" strokeWidth="2" />
@@ -149,14 +150,14 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
           <div className="absolute top-4 right-4 flex flex-col gap-2">
             <div className={cn(
               "flex items-center gap-1 text-xs",
-              defaultState.engineStatus === 'running' ? "text-green-500" : "text-muted-foreground"
+              isEngineRunning ? "text-green-500" : "text-muted-foreground"
             )}>
               <CheckCircle className="h-3 w-3" />
               Engine
             </div>
             <div className={cn(
               "flex items-center gap-1 text-xs",
-              defaultState.fuelLevel > 20 ? "text-green-500" : "text-yellow-500"
+              fuelPercent > 20 ? "text-green-500" : "text-yellow-500"
             )}>
               <Fuel className="h-3 w-3" />
               Fuel OK
@@ -171,7 +172,7 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
               <Gauge className="h-3 w-3" />
               Velocidade
             </div>
-            <div className="text-lg font-bold">{defaultState.speed.toFixed(1)} kts</div>
+            <div className="text-lg font-bold">{speed.toFixed(1)} kts</div>
           </Card>
 
           <Card className="p-3 bg-muted/50">
@@ -179,7 +180,7 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
               <Navigation className="h-3 w-3" />
               Heading
             </div>
-            <div className="text-lg font-bold">{defaultState.heading}°</div>
+            <div className="text-lg font-bold">{heading}°</div>
           </Card>
 
           <Card className="p-3 bg-muted/50">
@@ -187,8 +188,8 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
               <Fuel className="h-3 w-3" />
               Combustível
             </div>
-            <div className="text-lg font-bold">{defaultState.fuelLevel}%</div>
-            <Progress value={defaultState.fuelLevel} className="h-1 mt-1" />
+            <div className="text-lg font-bold">{fuelPercent}%</div>
+            <Progress value={fuelPercent} className="h-1 mt-1" />
           </Card>
 
           <Card className="p-3 bg-muted/50">
@@ -196,8 +197,8 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
               <Activity className="h-3 w-3" />
               Status
             </div>
-            <div className={cn("text-lg font-bold capitalize", getStatusColor(defaultState.engineStatus))}>
-              {defaultState.engineStatus}
+            <div className={cn("text-lg font-bold capitalize", getStatusColor(engineStatus))}>
+              {engineStatus}
             </div>
           </Card>
         </div>
@@ -209,7 +210,7 @@ export const VesselDigitalTwin2D: React.FC<VesselDigitalTwin2DProps> = ({
             <span>Posição:</span>
           </div>
           <span className="font-mono">
-            {defaultState.position.lat.toFixed(4)}°N, {Math.abs(defaultState.position.lng).toFixed(4)}°W
+            {position.lat.toFixed(4)}°N, {Math.abs(position.lng).toFixed(4)}°W
           </span>
         </div>
       </CardContent>
