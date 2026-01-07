@@ -187,6 +187,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔬 Inteligência Avançada",
     defaultOpen: false,
     items: [
+      { label: "🎯 Otimização Unificada", path: "/optimization-dashboard", icon: Target, emoji: "🎯", badge: "NEW", status: "new" },
       { label: "⚡ OPEC - Otimizador Energético", path: "/intelligence/opec", icon: Zap, emoji: "⚡", badge: "NEW", status: "new" },
       { label: "❤️ SAWP - Wellness Preditivo", path: "/intelligence/wellness", icon: Activity, emoji: "❤️", badge: "NEW", status: "new" },
       { label: "📚 CIDM - Central Documentos", path: "/intelligence/documents", icon: FileText, emoji: "📚", badge: "NEW", status: "new" },

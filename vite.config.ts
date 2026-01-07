@@ -27,14 +27,19 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     target: "esnext",
     minify: false,
-    chunkSizeWarningLimit: 10000,
+    chunkSizeWarningLimit: 50000,
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          "vendor-react": ["react", "react-dom", "react-router-dom", "react-is"],
-          "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-tabs", "@radix-ui/react-tooltip"],
+        manualChunks: (id) => {
+          if (id.includes("node_modules")) {
+            if (id.includes("react")) return "vendor-react";
+            if (id.includes("@radix-ui")) return "vendor-ui";
+            if (id.includes("recharts") || id.includes("chart")) return "vendor-charts";
+          }
         },
       },
+      treeshake: false,
     },
   },
   optimizeDeps: {
