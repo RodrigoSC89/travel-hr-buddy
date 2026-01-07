@@ -23,12 +23,12 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
-      dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query"],
+      dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query", "react-reconciler", "three"],
     },
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 15000,
+      chunkSizeWarningLimit: 20000,
       target: "esnext",
       cssCodeSplit: false,
       minify: false,
@@ -46,15 +46,25 @@ export default defineConfig(({ mode }) => {
           entryFileNames: "[name].js",
           chunkFileNames: "[name].js",
           assetFileNames: "[name][extname]",
-          manualChunks: {
-            vendor: ["react", "react-dom", "react-router-dom"],
+          manualChunks: (id) => {
+            if (id.includes("node_modules")) {
+              if (id.includes("react") || id.includes("react-dom") || id.includes("react-router")) {
+                return "vendor-react";
+              }
+              if (id.includes("three") || id.includes("@react-three")) {
+                return "vendor-3d";
+              }
+              if (id.includes("recharts") || id.includes("chart")) {
+                return "vendor-charts";
+              }
+            }
           },
         }
       },
     },
     optimizeDeps: {
       include: ["react", "react-dom", "react-router-dom"],
-      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei'],
+      exclude: ['@tensorflow/tfjs', 'onnxruntime-web', 'three', '@react-three/fiber', '@react-three/drei', 'react-reconciler'],
       esbuildOptions: {
         target: "esnext",
       }
