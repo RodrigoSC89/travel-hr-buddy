@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - Schema mismatch requires type override (PATCH 892: to be fixed in future sprint)
 /**
  * PATCH 416: Consolidated Crew Management Page
  * Unified crew management with performance, certifications, and mobile support

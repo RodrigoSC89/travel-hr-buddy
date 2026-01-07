@@ -1,4 +1,4 @@
-// @ts-nocheck - Dynamic table access requires type override
+// @ts-nocheck - Dynamic table access requires type override (PATCH 892: to be fixed in future sprint)
 /**
  * PATCH 232: Auto Priority Balancer
  * 
@@ -351,9 +351,9 @@ export class AutoPriorityBalancer {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      // Using type assertion for newly created jobs table
-      const { data, error } = await (supabase
-        .from("jobs" as never) as ReturnType<typeof supabase.from>)
+      // Using action_items table which has due_date
+      const { data, error } = await supabase
+        .from("action_items")
         .select("id")
         .lte("due_date", tomorrow.toISOString())
         .eq("status", "pending");
