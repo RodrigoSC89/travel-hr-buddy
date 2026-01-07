@@ -138,6 +138,15 @@ const alerts = [
   { id: 3, type: "warning", message: "Congestionamento detectado no Porto de Santos", time: "6h" }
 ];
 
+// Company color mapping
+const COMPANY_COLORS: Record<string, string> = {
+  "Nautilus Fleet": "#10b981",
+  "MSC": "#f59e0b",
+  "Maersk": "#3b82f6",
+  "CMA CGM": "#8b5cf6",
+  "Other": "#6b7280"
+};
+
 export default function CompetitiveIntelligenceDashboard() {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [filteredVessels, setFilteredVessels] = useState<VesselPosition[]>([]);
@@ -149,9 +158,12 @@ export default function CompetitiveIntelligenceDashboard() {
   const [companyFilter, setCompanyFilter] = useState<string>("all");
   const [shipTypeFilter, setShipTypeFilter] = useState<string>("all");
   const [showRoutes, setShowRoutes] = useState(true);
+  const [showTrails, setShowTrails] = useState(true);
+  const [vesselHistory, setVesselHistory] = useState<Record<string, [number, number][]>>({});
   const mapRef = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
   const routeSourcesRef = useRef<string[]>([]);
+  const trailSourcesRef = useRef<string[]>([]);
   const { toast } = useToast();
 
   // Get unique companies and ship types for filters
@@ -247,7 +259,57 @@ export default function CompetitiveIntelligenceDashboard() {
     });
     routeSourcesRef.current = [];
 
-    filteredVessels.forEach((vessel, idx) => {
+    // Clear existing trails
+    trailSourcesRef.current.forEach(id => {
+      if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getSource(id)) map.removeSource(id);
+    });
+    trailSourcesRef.current = [];
+
+    filteredVessels.forEach((vessel) => {
+      const companyColor = COMPANY_COLORS[vessel.company || "Other"] || COMPANY_COLORS["Other"];
+
+      // Add trail (position history) if enabled
+      if (showTrails && vesselHistory[vessel.mmsi]?.length > 1) {
+        const trailSourceId = `trail-${vessel.mmsi}`;
+        const trailLayerId = `trail-layer-${vessel.mmsi}`;
+        
+        if (!map.getSource(trailSourceId)) {
+          map.addSource(trailSourceId, {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              properties: {},
+              geometry: { type: "LineString", coordinates: vesselHistory[vessel.mmsi] }
+            }
+          });
+          
+          map.addLayer({
+            id: trailLayerId,
+            type: "line",
+            source: trailSourceId,
+            paint: {
+              "line-color": companyColor,
+              "line-width": 3,
+              "line-opacity": 0.8,
+              "line-gradient": [
+                "interpolate",
+                ["linear"],
+                ["line-progress"],
+                0, "transparent",
+                1, companyColor
+              ]
+            },
+            layout: {
+              "line-cap": "round",
+              "line-join": "round"
+            }
+          });
+          
+          trailSourcesRef.current.push(trailSourceId);
+        }
+      }
+
       // Add route line if enabled and destination exists
       if (showRoutes) {
         const routeCoords = getRouteCoordinates(vessel);
@@ -270,9 +332,9 @@ export default function CompetitiveIntelligenceDashboard() {
               type: "line",
               source: sourceId,
               paint: {
-                "line-color": vessel.company === "Nautilus Fleet" ? "#10b981" : "#06b6d4",
+                "line-color": companyColor,
                 "line-width": 2,
-                "line-opacity": 0.6,
+                "line-opacity": 0.5,
                 "line-dasharray": [2, 2]
               }
             });
@@ -282,14 +344,12 @@ export default function CompetitiveIntelligenceDashboard() {
         }
       }
 
-      // Create marker
+      // Create marker with company color
       const el = document.createElement("div");
       el.className = "vessel-marker";
-      const isNautilus = vessel.company === "Nautilus Fleet";
       el.innerHTML = `
-        <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 ${
-          isNautilus ? "bg-emerald-500 ring-2 ring-emerald-300" : "bg-cyan-500"
-        }" style="transform: rotate(${vessel.heading}deg)">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-125 shadow-lg" 
+             style="background-color: ${companyColor}; transform: rotate(${vessel.heading}deg); box-shadow: 0 0 10px ${companyColor}80;">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
             <path d="M12 2L4 20l8-4 8 4L12 2z"/>
           </svg>
@@ -303,7 +363,10 @@ export default function CompetitiveIntelligenceDashboard() {
         .setPopup(
           new mb.Popup({ offset: 25 }).setHTML(`
             <div class="p-2">
-              <strong>${vessel.name}</strong><br/>
+              <div class="flex items-center gap-2 mb-1">
+                <div class="w-3 h-3 rounded-full" style="background-color: ${companyColor}"></div>
+                <strong>${vessel.name}</strong>
+              </div>
               <span class="text-sm">${vessel.company || vessel.shipType}</span><br/>
               <span class="text-xs text-gray-500">${vessel.speed.toFixed(1)} kn → ${vessel.destination || "N/A"}</span>
             </div>
@@ -338,7 +401,7 @@ export default function CompetitiveIntelligenceDashboard() {
     if (mapRef.current && filteredVessels.length > 0) {
       updateMapMarkers(mapRef.current);
     }
-  }, [filteredVessels, showRoutes]);
+  }, [filteredVessels, showRoutes, showTrails, vesselHistory]);
 
   // Fetch AIS data from Edge Function
   const fetchAISData = async () => {
@@ -367,6 +430,21 @@ export default function CompetitiveIntelligenceDashboard() {
                    v.name.includes("CMA") ? "CMA CGM" :
                    v.name.includes("NAUTILUS") ? "Nautilus Fleet" : "Other"
         }));
+        
+        // Update vessel history for trails
+        setVesselHistory(prev => {
+          const updated = { ...prev };
+          enrichedVessels.forEach((v: VesselPosition) => {
+            const history = updated[v.mmsi] || [];
+            const newPos: [number, number] = [v.longitude, v.latitude];
+            // Only add if position changed
+            const lastPos = history[history.length - 1];
+            if (!lastPos || lastPos[0] !== newPos[0] || lastPos[1] !== newPos[1]) {
+              updated[v.mmsi] = [...history.slice(-19), newPos]; // Keep last 20 positions
+            }
+          });
+          return updated;
+        });
         
         setVessels(enrichedVessels);
         setDataSource(data.source);
@@ -556,12 +634,34 @@ export default function CompetitiveIntelligenceDashboard() {
                   onClick={() => setShowRoutes(!showRoutes)}
                 >
                   <Navigation className="h-4 w-4 mr-1" />
-                  Rotas {showRoutes ? "ON" : "OFF"}
+                  Rotas
+                </Button>
+                <Button
+                  variant={showTrails ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShowTrails(!showTrails)}
+                >
+                  <Activity className="h-4 w-4 mr-1" />
+                  Trails
                 </Button>
               </div>
               <Badge variant="secondary" className="ml-auto">
                 {filteredVessels.length} de {vessels.length} navios
               </Badge>
+            </div>
+            
+            {/* Company Legend */}
+            <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t">
+              <span className="text-xs text-muted-foreground">Legenda:</span>
+              {Object.entries(COMPANY_COLORS).map(([company, color]) => (
+                <div key={company} className="flex items-center gap-1.5">
+                  <div 
+                    className="w-3 h-3 rounded-full" 
+                    style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}80` }}
+                  />
+                  <span className="text-xs">{company}</span>
+                </div>
+              ))}
             </div>
           </Card>
 
