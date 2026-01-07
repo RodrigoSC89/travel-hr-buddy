@@ -59,6 +59,8 @@ import { MaritimeWeatherAlerts } from "@/components/weather/MaritimeWeatherAlert
 import { MarinhaBrasilPanel } from "@/components/weather/MarinhaBrasilPanel";
 import { WeatherAPITestPanel } from "@/components/weather/WeatherAPITestPanel";
 import { CPTECPanel } from "@/components/weather/CPTECPanel";
+import { QuantumRouteMap } from "@/components/weather/QuantumRouteMap";
+import { Atom } from "lucide-react";
 
 interface WeatherData {
   location: {
@@ -519,6 +521,10 @@ export default function WeatherCommandCenter() {
             <Zap className="w-4 h-4 mr-2" />
             Teste APIs
           </TabsTrigger>
+          <TabsTrigger value="quantum-router">
+            <Atom className="w-4 h-4 mr-2" />
+            Quantum Router
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -816,6 +822,10 @@ export default function WeatherCommandCenter() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        <TabsContent value="quantum-router" className="space-y-4">
+          <QuantumRouteMap />
         </TabsContent>
       </Tabs>
     </div>
