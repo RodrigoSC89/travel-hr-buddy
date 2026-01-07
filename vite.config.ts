@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        "lodash": "lodash-es",
       },
       dedupe: ["react", "react-dom", "react-router-dom", "@tanstack/react-query", "react-reconciler", "three"],
     },
