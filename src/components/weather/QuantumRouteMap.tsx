@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { OptimizedRoute, RouteWaypoint, RiskZone } from "@/lib/optimization/quantum-router";
+import { RouteExportButtons } from "@/components/optimization/RouteExportButtons";
 
 // Sample ports for demo
 const samplePorts: RouteWaypoint[] = [
@@ -503,6 +504,15 @@ export function QuantumRouteMap({ mapboxToken, onRouteOptimized, className }: Qu
                 <Badge variant="outline" className="text-xs">
                   Confiança: {(optimizedRoute.confidence * 100).toFixed(0)}% | {optimizedRoute.iterations} iterações
                 </Badge>
+              </div>
+
+              {/* Export Buttons */}
+              <div className="pt-2 border-t">
+                <RouteExportButtons 
+                  route={optimizedRoute} 
+                  routeName={`quantum-route-${origin}-${destination}`}
+                  className="w-full"
+                />
               </div>
             </CardContent>
           </Card>

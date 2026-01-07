@@ -27,19 +27,15 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     target: "esnext",
     minify: false,
-    chunkSizeWarningLimit: 50000,
-    cssCodeSplit: true,
+    chunkSizeWarningLimit: 100000,
+    cssCodeSplit: false,
+    modulePreload: false,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes("node_modules")) {
-            if (id.includes("react")) return "vendor-react";
-            if (id.includes("@radix-ui")) return "vendor-ui";
-            if (id.includes("recharts") || id.includes("chart")) return "vendor-charts";
-          }
-        },
+        manualChunks: undefined,
       },
       treeshake: false,
+      cache: false,
     },
   },
   optimizeDeps: {
