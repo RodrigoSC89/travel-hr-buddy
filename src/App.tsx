@@ -64,6 +64,12 @@ import {
 // PWA Install Page
 import InstallPage from "./pages/install";
 
+// Intelligence Dashboards
+import EnergyOptimizerDashboard from "./pages/intelligence/EnergyOptimizerDashboard";
+import WellnessPredictiveDashboard from "./pages/intelligence/WellnessPredictiveDashboard";
+import DocumentIntelligenceDashboard from "./pages/intelligence/DocumentIntelligenceDashboard";
+import AccidentIntelligenceDashboard from "./pages/intelligence/AccidentIntelligenceDashboard";
+
 // Simple loader component
 const OffshoreLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -197,6 +203,12 @@ function App() {
                           <Route path="mmi-jobs" element={<MMIJobsPanel />} />
                           <Route path="__debug__" element={<SystemDebug />} />
                           <Route path="dev/sidebar-check" element={<SidebarCheck />} />
+                          
+                          {/* Intelligence Dashboards */}
+                          <Route path="intelligence/opec" element={<EnergyOptimizerDashboard />} />
+                          <Route path="intelligence/wellness" element={<WellnessPredictiveDashboard />} />
+                          <Route path="intelligence/documents" element={<DocumentIntelligenceDashboard />} />
+                          <Route path="intelligence/accidents" element={<AccidentIntelligenceDashboard />} />
                           
                           {/* Modular Route Groups */}
                           {aiRoutes}
