@@ -40,7 +40,14 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "lodash-es", "recharts", "react-is"],
+    include: [
+      "react", 
+      "react-dom", 
+      "lodash-es",
+      "recharts",
+      "react-is",
+      "react-smooth",
+    ],
     exclude: [
       "@tensorflow/tfjs",
       "@tensorflow-models/coco-ssd",
@@ -50,7 +57,6 @@ export default defineConfig(({ mode }) => ({
       "@react-three/drei",
       "mapbox-gl",
       "tesseract.js",
-      "recharts",
     ],
     esbuildOptions: {
       target: "esnext",
