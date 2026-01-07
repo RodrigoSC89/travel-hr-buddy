@@ -31,7 +31,9 @@ import {
   Navigation,
   BarChart3,
   RefreshCw,
-  Loader2
+  Loader2,
+  Download,
+  FileSpreadsheet
 } from "lucide-react";
 import {
   LineChart,
@@ -170,6 +172,23 @@ export default function CompetitiveIntelligenceDashboard() {
   const companies = ["all", ...new Set(vessels.map(v => v.company || "Other"))];
   const shipTypes = ["all", ...new Set(vessels.map(v => v.shipType))];
 
+  // Calculate company statistics
+  const companyStats = Object.keys(COMPANY_COLORS).map(company => {
+    const companyVessels = vessels.filter(v => v.company === company);
+    const avgSpeed = companyVessels.length > 0 
+      ? companyVessels.reduce((sum, v) => sum + v.speed, 0) / companyVessels.length 
+      : 0;
+    const activeRoutes = companyVessels.filter(v => v.destination).length;
+    return {
+      company,
+      color: COMPANY_COLORS[company],
+      vesselCount: companyVessels.length,
+      avgSpeed,
+      activeRoutes,
+      underway: companyVessels.filter(v => v.navStatus?.includes("Under way")).length
+    };
+  }).filter(s => s.vesselCount > 0);
+
   // Apply filters
   useEffect(() => {
     let result = vessels;
@@ -181,6 +200,78 @@ export default function CompetitiveIntelligenceDashboard() {
     }
     setFilteredVessels(result);
   }, [vessels, companyFilter, shipTypeFilter]);
+
+  // Export to CSV
+  const exportToCSV = () => {
+    const headers = ["MMSI", "IMO", "Nome", "Companhia", "Tipo", "Latitude", "Longitude", "Velocidade (kn)", "Heading", "Status", "Destino", "ETA", "Última Atualização"];
+    const rows = filteredVessels.map(v => [
+      v.mmsi,
+      v.imo || "",
+      v.name,
+      v.company || "",
+      v.shipType,
+      v.latitude.toFixed(4),
+      v.longitude.toFixed(4),
+      v.speed.toFixed(1),
+      v.heading,
+      v.navStatus,
+      v.destination || "",
+      v.eta || "",
+      v.lastUpdate
+    ]);
+    
+    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `ais-data-${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Exportação concluída",
+      description: `${filteredVessels.length} navios exportados para CSV`,
+    });
+  };
+
+  // Export to Excel (XLSX)
+  const exportToExcel = async () => {
+    try {
+      const XLSX = await import("xlsx");
+      const data = filteredVessels.map(v => ({
+        "MMSI": v.mmsi,
+        "IMO": v.imo || "",
+        "Nome": v.name,
+        "Companhia": v.company || "",
+        "Tipo": v.shipType,
+        "Latitude": v.latitude,
+        "Longitude": v.longitude,
+        "Velocidade (kn)": v.speed,
+        "Heading (°)": v.heading,
+        "Status": v.navStatus,
+        "Destino": v.destination || "",
+        "ETA": v.eta || "",
+        "Última Atualização": v.lastUpdate
+      }));
+      
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "AIS Data");
+      XLSX.writeFile(wb, `ais-data-${new Date().toISOString().split("T")[0]}.xlsx`);
+      
+      toast({
+        title: "Exportação concluída",
+        description: `${filteredVessels.length} navios exportados para Excel`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro na exportação",
+        description: "Falha ao gerar arquivo Excel",
+        variant: "destructive",
+      });
+    }
+  };
 
   // Fetch Mapbox token
   useEffect(() => {
@@ -600,6 +691,41 @@ export default function CompetitiveIntelligenceDashboard() {
         </TabsList>
 
         <TabsContent value="ais" className="space-y-4">
+          {/* Company Statistics Panel */}
+          {companyStats.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {companyStats.map((stat) => (
+                <Card key={stat.company} className="p-3" style={{ borderColor: `${stat.color}40` }}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: stat.color, boxShadow: `0 0 8px ${stat.color}80` }}
+                    />
+                    <span className="text-sm font-medium truncate">{stat.company}</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <p className="text-muted-foreground">Navios</p>
+                      <p className="font-bold text-lg" style={{ color: stat.color }}>{stat.vesselCount}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Vel. Média</p>
+                      <p className="font-bold">{stat.avgSpeed.toFixed(1)} kn</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Rotas Ativas</p>
+                      <p className="font-bold">{stat.activeRoutes}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Em Navegação</p>
+                      <p className="font-bold text-emerald-500">{stat.underway}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+
           {/* Filters Bar */}
           <Card className="p-4">
             <div className="flex flex-wrap items-center gap-4">
@@ -645,9 +771,21 @@ export default function CompetitiveIntelligenceDashboard() {
                   Trails
                 </Button>
               </div>
-              <Badge variant="secondary" className="ml-auto">
-                {filteredVessels.length} de {vessels.length} navios
-              </Badge>
+              
+              {/* Export Buttons */}
+              <div className="flex items-center gap-2 ml-auto">
+                <Button variant="outline" size="sm" onClick={exportToCSV}>
+                  <Download className="h-4 w-4 mr-1" />
+                  CSV
+                </Button>
+                <Button variant="outline" size="sm" onClick={exportToExcel}>
+                  <FileSpreadsheet className="h-4 w-4 mr-1" />
+                  Excel
+                </Button>
+                <Badge variant="secondary">
+                  {filteredVessels.length} de {vessels.length} navios
+                </Badge>
+              </div>
             </div>
             
             {/* Company Legend */}
