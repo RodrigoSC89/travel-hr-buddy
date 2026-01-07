@@ -19,7 +19,10 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Force lodash to use lodash-es (ESM compatible)
+      "lodash": "lodash-es",
     },
+    dedupe: ["react", "react-dom", "react-is", "lodash-es"],
   },
   build: {
     outDir: "dist",
