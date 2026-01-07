@@ -1,6 +1,7 @@
 /**
  * ICFT - Inteligência Competitiva de Frota em Tempo Real
  * Dashboard com monitoramento AIS e análise de mercado
+ * Integrado com API MarineTraffic via Edge Function
  */
 
 import { useState, useEffect } from "react";
@@ -10,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Ship,
   Radar,
@@ -25,7 +28,9 @@ import {
   Globe,
   Anchor,
   Navigation,
-  BarChart3
+  BarChart3,
+  RefreshCw,
+  Loader2
 } from "lucide-react";
 import {
   LineChart,
@@ -34,68 +39,35 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar
+  ResponsiveContainer
 } from "recharts";
 
-// Mock AIS data for competitors
-const competitorVessels = [
-  {
-    id: "mmsi-123456789",
-    name: "MSC Carolina",
-    company: "MSC",
-    type: "Container",
-    lat: 25.7617,
-    lng: -80.1918,
-    speed: 18.5,
-    heading: 45,
-    destination: "Rotterdam",
-    eta: "2025-01-15",
-    status: "underway"
-  },
-  {
-    id: "mmsi-234567890",
-    name: "Maersk Singapore",
-    company: "Maersk",
-    type: "Container",
-    lat: 26.1224,
-    lng: -79.8867,
-    speed: 16.2,
-    heading: 320,
-    destination: "Shanghai",
-    eta: "2025-01-22",
-    status: "underway"
-  },
-  {
-    id: "mmsi-345678901",
-    name: "CMA CGM Marco Polo",
-    company: "CMA CGM",
-    type: "Container",
-    lat: 24.5551,
-    lng: -81.7800,
-    speed: 0,
-    heading: 180,
-    destination: "Miami",
-    eta: "2025-01-08",
-    status: "anchored"
-  },
-  {
-    id: "mmsi-456789012",
-    name: "Evergreen Elite",
-    company: "Evergreen",
-    type: "Container",
-    lat: 25.0343,
-    lng: -80.4100,
-    speed: 14.8,
-    heading: 90,
-    destination: "Santos",
-    eta: "2025-01-18",
-    status: "underway"
-  }
-];
+// Types for AIS data
+interface VesselPosition {
+  mmsi: string;
+  imo?: string;
+  name: string;
+  callsign?: string;
+  latitude: number;
+  longitude: number;
+  course: number;
+  speed: number;
+  heading: number;
+  navStatus: string;
+  shipType: string;
+  destination?: string;
+  eta?: string;
+  lastUpdate: string;
+  company?: string;
+}
+
+interface AISResponse {
+  success: boolean;
+  vessels: VesselPosition[];
+  source: "marinetraffic" | "mock";
+  timestamp: string;
+  count?: number;
+}
 
 const marketOpportunities = [
   {
@@ -166,7 +138,72 @@ const alerts = [
 ];
 
 export default function CompetitiveIntelligenceDashboard() {
-  const [selectedVessel, setSelectedVessel] = useState(competitorVessels[0]);
+  const [vessels, setVessels] = useState<VesselPosition[]>([]);
+  const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataSource, setDataSource] = useState<"marinetraffic" | "mock">("mock");
+  const [lastUpdate, setLastUpdate] = useState<string>("");
+  const { toast } = useToast();
+
+  // Fetch AIS data from Edge Function
+  const fetchAISData = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ais-tracking", {
+        body: {
+          operation: "area-search",
+          bounds: {
+            north: 30,
+            south: -35,
+            east: -30,
+            west: -80
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.success && data.vessels) {
+        // Add company info based on vessel names (simulation)
+        const enrichedVessels = data.vessels.map((v: VesselPosition) => ({
+          ...v,
+          company: v.name.includes("MSC") ? "MSC" : 
+                   v.name.includes("MAERSK") ? "Maersk" :
+                   v.name.includes("CMA") ? "CMA CGM" :
+                   v.name.includes("NAUTILUS") ? "Nautilus Fleet" : "Other"
+        }));
+        
+        setVessels(enrichedVessels);
+        setDataSource(data.source);
+        setLastUpdate(data.timestamp);
+        
+        if (enrichedVessels.length > 0 && !selectedVessel) {
+          setSelectedVessel(enrichedVessels[0]);
+        }
+
+        toast({
+          title: "AIS Atualizado",
+          description: `${enrichedVessels.length} navios rastreados via ${data.source === "marinetraffic" ? "MarineTraffic" : "simulação"}`,
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados AIS:", error);
+      toast({
+        title: "Erro AIS",
+        description: "Falha ao carregar dados de rastreamento",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAISData();
+    // Auto-refresh every 60 seconds
+    const interval = setInterval(fetchAISData, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getDemandColor = (demand: string) => {
     switch (demand) {
@@ -175,6 +212,13 @@ export default function CompetitiveIntelligenceDashboard() {
       case "low": return "text-red-500 bg-red-500/10";
       default: return "";
     }
+  };
+
+  const getNavStatusBadge = (status: string) => {
+    if (status.includes("Under way")) return "bg-emerald-500";
+    if (status.includes("anchor") || status.includes("Anchor")) return "bg-amber-500";
+    if (status.includes("Moored")) return "bg-blue-500";
+    return "bg-gray-500";
   };
 
   return (
@@ -191,13 +235,26 @@ export default function CompetitiveIntelligenceDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-cyan-500 border-cyan-500">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={fetchAISData}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <RefreshCw className="h-4 w-4 mr-2" />
+            )}
+            Atualizar
+          </Button>
+          <Badge variant="outline" className={dataSource === "marinetraffic" ? "text-emerald-500 border-emerald-500" : "text-cyan-500 border-cyan-500"}>
             <Activity className="h-3 w-3 mr-1" />
-            AIS Live
+            {dataSource === "marinetraffic" ? "MarineTraffic Live" : "AIS Simulado"}
           </Badge>
           <Badge variant="outline" className="text-emerald-500 border-emerald-500">
             <Globe className="h-3 w-3 mr-1" />
-            127 navios monitorados
+            {vessels.length} navios
           </Badge>
         </div>
       </div>
@@ -282,11 +339,15 @@ export default function CompetitiveIntelligenceDashboard() {
               <CardContent>
                 <ScrollArea className="h-[350px]">
                   <div className="space-y-3">
-                    {competitorVessels.map((vessel) => (
+                    {isLoading ? (
+                      <div className="flex items-center justify-center py-8">
+                        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                      </div>
+                    ) : vessels.map((vessel) => (
                       <div
-                        key={vessel.id}
+                        key={vessel.mmsi}
                         className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                          selectedVessel.id === vessel.id 
+                          selectedVessel?.mmsi === vessel.mmsi 
                             ? "ring-2 ring-primary bg-primary/5" 
                             : "hover:bg-muted/50"
                         }`}
@@ -298,17 +359,17 @@ export default function CompetitiveIntelligenceDashboard() {
                             <span className="font-medium text-sm">{vessel.name}</span>
                           </div>
                           <Badge variant="outline" className="text-xs">
-                            {vessel.company}
+                            {vessel.company || vessel.shipType}
                           </Badge>
                         </div>
                         <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Navigation className="h-3 w-3" />
-                            {vessel.speed} kn
+                            {vessel.speed.toFixed(1)} kn
                           </span>
                           <span className="flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
-                            {vessel.destination}
+                            {vessel.destination || "N/A"}
                           </span>
                         </div>
                       </div>
@@ -318,53 +379,58 @@ export default function CompetitiveIntelligenceDashboard() {
               </CardContent>
             </Card>
 
-            {/* Mapa Placeholder e Detalhes */}
+            {/* Detalhes do Navio */}
             <Card className="lg:col-span-2">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
                     <Globe className="h-5 w-5" />
-                    {selectedVessel.name}
+                    {selectedVessel?.name || "Selecione um navio"}
                   </CardTitle>
-                  <Badge className={selectedVessel.status === "underway" ? "bg-emerald-500" : "bg-amber-500"}>
-                    {selectedVessel.status === "underway" ? "Em Navegação" : "Ancorado"}
-                  </Badge>
+                  {selectedVessel && (
+                    <Badge className={getNavStatusBadge(selectedVessel.navStatus)}>
+                      {selectedVessel.navStatus}
+                    </Badge>
+                  )}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Mapa placeholder */}
                 <div className="h-[200px] rounded-lg bg-gradient-to-br from-cyan-500/5 to-blue-500/10 border border-cyan-500/20 flex items-center justify-center">
                   <div className="text-center">
                     <Globe className="h-12 w-12 text-cyan-500/50 mx-auto mb-2" />
                     <p className="text-sm text-muted-foreground">Mapa AIS em tempo real</p>
-                    <p className="text-xs text-muted-foreground">
-                      Lat: {selectedVessel.lat.toFixed(4)}° | Lng: {selectedVessel.lng.toFixed(4)}°
-                    </p>
+                    {selectedVessel && (
+                      <p className="text-xs text-muted-foreground">
+                        Lat: {selectedVessel.latitude.toFixed(4)}° | Lng: {selectedVessel.longitude.toFixed(4)}°
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <Navigation className="h-4 w-4 mx-auto text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground mt-1">Velocidade</p>
-                    <p className="font-bold">{selectedVessel.speed} kn</p>
+                {selectedVessel && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="p-3 rounded-lg bg-muted/50 text-center">
+                      <Navigation className="h-4 w-4 mx-auto text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground mt-1">Velocidade</p>
+                      <p className="font-bold">{selectedVessel.speed.toFixed(1)} kn</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/50 text-center">
+                      <Target className="h-4 w-4 mx-auto text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground mt-1">Heading</p>
+                      <p className="font-bold">{selectedVessel.heading}°</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/50 text-center">
+                      <MapPin className="h-4 w-4 mx-auto text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground mt-1">Destino</p>
+                      <p className="font-bold">{selectedVessel.destination || "N/A"}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-muted/50 text-center">
+                      <Clock className="h-4 w-4 mx-auto text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground mt-1">ETA</p>
+                      <p className="font-bold">{selectedVessel.eta ? new Date(selectedVessel.eta).toLocaleDateString("pt-BR") : "N/A"}</p>
+                    </div>
                   </div>
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <Target className="h-4 w-4 mx-auto text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground mt-1">Heading</p>
-                    <p className="font-bold">{selectedVessel.heading}°</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <MapPin className="h-4 w-4 mx-auto text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground mt-1">Destino</p>
-                    <p className="font-bold">{selectedVessel.destination}</p>
-                  </div>
-                  <div className="p-3 rounded-lg bg-muted/50 text-center">
-                    <Clock className="h-4 w-4 mx-auto text-muted-foreground" />
-                    <p className="text-xs text-muted-foreground mt-1">ETA</p>
-                    <p className="font-bold">{new Date(selectedVessel.eta).toLocaleDateString("pt-BR")}</p>
-                  </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </div>
