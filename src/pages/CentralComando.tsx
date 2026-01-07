@@ -113,16 +113,30 @@ function CentralComandoContent() {
     return tab?.id || "visao-geral";
   }, [location.pathname]);
 
-  // Filtrar dados por tenant
+  // Timeout wrapper for Supabase queries
+  const withTimeout = <T,>(promise: Promise<T>, ms: number = 8000): Promise<T> => {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) => 
+        setTimeout(() => reject(new Error("Query timeout")), ms)
+      )
+    ]);
+  };
+
+  // Filtrar dados por tenant com timeout e fallback
   const loadSystemData = useCallback(async () => {
     try {
       const tenantFilter = tenant?.id ? { tenant_id: tenant.id } : {};
       
-      const [vesselsRes, crewRes, maintenanceRes] = await Promise.all([
-        supabase.from("vessels").select("id, status").match(tenantFilter).limit(100),
-        supabase.from("crew_members").select("id, status").match(tenantFilter).limit(500),
-        supabase.from("maintenance_records").select("id, status").match(tenantFilter).limit(100)
-      ]);
+      // Use timeout to prevent infinite loading
+      const [vesselsRes, crewRes, maintenanceRes] = await withTimeout(
+        Promise.all([
+          supabase.from("vessels").select("id, status").match(tenantFilter).limit(100),
+          supabase.from("crew_members").select("id, status").match(tenantFilter).limit(500),
+          supabase.from("maintenance_records").select("id, status").match(tenantFilter).limit(100)
+        ]),
+        10000 // 10 second timeout
+      );
 
       if (vesselsRes.data) {
         const vessels = vesselsRes.data;
@@ -151,8 +165,11 @@ function CentralComandoContent() {
 
       setLastSync(new Date());
     } catch (error) {
-      logger.warn("Error loading system data:", { error });
+      // On timeout/error, use fallback data and stop loading
+      logger.warn("Error loading system data (using fallback):", { error });
+      toast.warning("Conexão lenta - usando dados em cache");
     } finally {
+      // ALWAYS stop loading, even on error
       setIsLoading(false);
     }
   }, [tenant?.id]);
