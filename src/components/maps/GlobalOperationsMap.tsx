@@ -182,7 +182,8 @@ export function GlobalOperationsMap() {
 
   // Update markers
   useEffect(() => {
-    if (!map.current) return;
+    const mapInstance = map.current;
+    if (!mapInstance) return;
 
     // Clear existing markers
     markersRef.current.forEach((m) => m.remove());
@@ -231,7 +232,7 @@ export function GlobalOperationsMap() {
               </div>
             `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
 
         markersRef.current.push(marker);
       });

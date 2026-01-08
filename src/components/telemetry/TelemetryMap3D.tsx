@@ -286,7 +286,8 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
 
   // Update markers
   useEffect(() => {
-    if (!map.current) return;
+    const mapInstance = map.current;
+    if (!mapInstance) return;
 
     // Clear existing markers
     markersRef.current.forEach((m) => m.remove());
@@ -328,7 +329,7 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
           setSelectedVessel(vessel);
           onVesselSelect?.(vessel);
           
-          map.current?.flyTo({
+          mapInstance.flyTo({
             center: [vessel.longitude, vessel.latitude],
             zoom: 8,
             pitch: 60,
@@ -338,7 +339,7 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
 
         const marker = new mapboxgl.Marker({ element: el })
           .setLngLat([vessel.longitude, vessel.latitude])
-          .addTo(map.current!);
+          .addTo(mapInstance);
 
         markersRef.current.push(marker);
       });

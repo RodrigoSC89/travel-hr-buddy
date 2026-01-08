@@ -122,6 +122,9 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
       );
 
       map.current.on('load', () => {
+        const mapInstance = map.current;
+        if (!mapInstance) return;
+        
         setIsLoading(false);
         
         // Add route lines and markers
@@ -137,7 +140,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
                 <p class="text-sm">Área de risco - Evitar navegação</p>
               </div>
             `))
-            .addTo(map.current!);
+            .addTo(mapInstance);
         });
       });
 

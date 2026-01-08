@@ -159,6 +159,9 @@ export function RouteMap({ waypoints, weather = [], hazards = [] }: RouteMapProp
       }, 'route-line');
 
       // Add waypoint markers
+      const mapInstance = map.current;
+      if (!mapInstance) return;
+      
       waypoints.forEach((waypoint, index) => {
         const isStart = index === 0;
         const isEnd = index === waypoints.length - 1;
@@ -187,7 +190,7 @@ export function RouteMap({ waypoints, weather = [], hazards = [] }: RouteMapProp
                 </div>
               `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
       });
 
       // Add weather markers
@@ -230,7 +233,7 @@ export function RouteMap({ waypoints, weather = [], hazards = [] }: RouteMapProp
                 </div>
               `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
       });
 
       // Add hazard zones
@@ -265,7 +268,7 @@ export function RouteMap({ waypoints, weather = [], hazards = [] }: RouteMapProp
                 </div>
               `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
       });
     });
 
