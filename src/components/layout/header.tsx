@@ -20,8 +20,17 @@ import {
 
 export const Header: FC = () => {
   const { isHighContrast, toggleHighContrast } = useHighContrastTheme();
-  const { isMobile, toggleSidebar } = useSidebar();
+  const { isMobile, toggleSidebar, openMobile, setOpenMobile } = useSidebar();
   const navigate = useNavigate();
+
+  // Direct handler for mobile menu - ensures it works
+  const handleMenuClick = () => {
+    if (isMobile) {
+      setOpenMobile(!openMobile);
+    } else {
+      toggleSidebar();
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90">
@@ -30,11 +39,12 @@ export const Header: FC = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={toggleSidebar}
-          className="h-11 w-11 md:h-8 md:w-8 shrink-0 touch-manipulation"
+          onClick={handleMenuClick}
+          className="h-12 w-12 md:h-9 md:w-9 shrink-0 touch-manipulation active:scale-95 transition-transform"
           aria-label="Abrir menu de navegação"
+          aria-expanded={openMobile}
         >
-          <Menu className="h-6 w-6 md:h-5 md:w-5" />
+          <Menu className="h-7 w-7 md:h-5 md:w-5" />
         </Button>
         
         <div className="flex flex-1 items-center justify-between ml-2 md:ml-4 gap-2 min-w-0">
