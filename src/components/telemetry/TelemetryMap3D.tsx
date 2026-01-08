@@ -374,7 +374,7 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
 
         const marker = new mapboxgl.Marker({ element: el })
           .setLngLat([alert.longitude, alert.latitude])
-          .addTo(map.current!);
+          .addTo(mapInstance);
 
         markersRef.current.push(marker);
       });
