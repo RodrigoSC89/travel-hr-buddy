@@ -540,7 +540,7 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
               variant="outline" 
               size="sm" 
               className="w-full"
-              onClick={() => navigate("/fuel-manager")}
+              onClick={() => navigate("/finance-command")}
             >
               <Sparkles className="h-3 w-3 mr-2" />
               Ver previsões IA

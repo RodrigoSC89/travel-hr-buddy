@@ -130,10 +130,10 @@ export default function Patch490PriceAlerts() {
       </Card>
 
       <div className="flex gap-4">
-        <Button onClick={() => window.location.href = "/price-alerts"}>
+        <Button onClick={() => window.location.href = "/alerts-command"}>
           Acessar Price Alerts
         </Button>
-        <Button variant="outline" onClick={() => window.location.href = "/analytics-core"}>
+        <Button variant="outline" onClick={() => window.location.href = "/analytics-command"}>
           Dashboard BI
         </Button>
       </div>

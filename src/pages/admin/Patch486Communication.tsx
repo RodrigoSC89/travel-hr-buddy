@@ -127,7 +127,7 @@ export default function Patch486Communication() {
       </Card>
 
       <div className="flex gap-4">
-        <Button onClick={() => window.location.href = "/channel-manager"}>
+        <Button onClick={() => window.location.href = "/communication-command"}>
           Acessar Communication Center
         </Button>
         <Button variant="outline" onClick={() => window.location.href = "/admin/patches-506-510/validation"}>
