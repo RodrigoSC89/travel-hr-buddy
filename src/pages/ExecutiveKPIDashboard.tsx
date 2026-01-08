@@ -348,12 +348,12 @@ export default function ExecutiveKPIDashboard() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {[
-              { href: '/iot-history', icon: Thermometer, label: 'IoT History', color: 'text-amber-500' },
+              { href: '/telemetria', icon: Thermometer, label: 'IoT Telemetria', color: 'text-amber-500' },
               { href: '/crew-wellness', icon: Heart, label: 'Crew Wellness', color: 'text-rose-500' },
               { href: '/route-optimizer', icon: Navigation, label: 'Route Optimizer', color: 'text-blue-500' },
-              { href: '/vessel-tracking', icon: Ship, label: 'Vessel Tracking', color: 'text-emerald-500' },
-              { href: '/compliance', icon: Shield, label: 'Compliance', color: 'text-purple-500' },
-              { href: '/reports', icon: Activity, label: 'Relatórios', color: 'text-cyan-500' },
+              { href: '/tracking', icon: Ship, label: 'Vessel Tracking', color: 'text-emerald-500' },
+              { href: '/compliance-hub', icon: Shield, label: 'Compliance', color: 'text-purple-500' },
+              { href: '/reports-command', icon: Activity, label: 'Relatórios', color: 'text-cyan-500' },
             ].map((item, i) => (
               <Button key={i} variant="outline" className="h-auto py-4 flex-col gap-2" asChild>
                 <a href={item.href}>

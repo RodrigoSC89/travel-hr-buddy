@@ -198,8 +198,8 @@ class AlertManager {
       severity: savings > 15000 ? "critical" : "warning",
       alertType: "bunker",
       details: { port, savings, currentPrice, fuelType },
-      actionUrl: "/fuel-manager",
-      actionLabel: "Ver Fuel Manager"
+      actionUrl: "/finance-command",
+      actionLabel: "Ver Finance Command"
     });
   }
 
