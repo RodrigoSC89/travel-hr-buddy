@@ -10,7 +10,7 @@ import { SystemStatusIndicator } from "@/components/ui/SystemStatusIndicator";
 import { OfflineSyncIndicator } from "@/components/ui/OfflineSyncIndicator";
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate } from "react-router-dom";
-import { Settings } from "lucide-react";
+import { Settings, Menu } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -20,19 +20,25 @@ import {
 
 export const Header: FC = () => {
   const { isHighContrast, toggleHighContrast } = useHighContrastTheme();
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
   const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90">
       <div className="flex h-14 items-center px-3 md:px-4">
-        {/* Mobile Menu Trigger - Always visible and prominent on mobile */}
-        <div className="flex items-center shrink-0">
-          <SidebarTrigger className="h-10 w-10 md:h-7 md:w-7 touch-manipulation" aria-label="Abrir menu" />
-        </div>
+        {/* Mobile Menu Trigger - Large and prominent for touch */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="h-11 w-11 md:h-8 md:w-8 shrink-0 touch-manipulation"
+          aria-label="Abrir menu de navegação"
+        >
+          <Menu className="h-6 w-6 md:h-5 md:w-5" />
+        </Button>
         
         <div className="flex flex-1 items-center justify-between ml-2 md:ml-4 gap-2 min-w-0">
-          {/* Search - Hidden on very small screens */}
+          {/* Search - Hidden on mobile */}
           <div className="hidden sm:flex flex-1 max-w-md mx-auto">
             <SimpleGlobalSearch />
           </div>
