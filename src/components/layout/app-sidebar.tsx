@@ -144,7 +144,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
 
   return (
     <Sidebar 
-      className="border-r transition-all duration-300"
+      className="border-r transition-all duration-300 bg-sidebar"
       collapsible="icon"
     >
       {/* Header */}

@@ -25,9 +25,9 @@ export const AppLayout: FC = () => {
           <div className="min-h-screen flex w-full bg-background">
             <OfflineIndicator />
             <AppSidebar />
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-w-0">
               <Header />
-              <main className="flex-1 overflow-auto pr-4 pb-28 md:pb-40 md:pr-6">
+              <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-40">
                 <Outlet />
               </main>
             </div>
@@ -41,8 +41,6 @@ export const AppLayout: FC = () => {
               isOpen={isNotificationsOpen}
               onClose={() => setIsNotificationsOpen(false)}
             />
-            
-            {/* Floating buttons are now in App.tsx FloatingButtonsContainer */}
             
             {/* Toast Notifications */}
             <Toaster />
