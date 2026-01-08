@@ -104,22 +104,22 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
             </span>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="text-center p-2 rounded-lg bg-muted/50">
-              <Fuel className="h-4 w-4 mx-auto text-orange-500 mb-1" />
-              <p className="text-lg font-bold">{fuelLevel}%</p>
-              <p className="text-xs text-muted-foreground">Combustível</p>
+          {/* Stats Grid - Responsive */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+            <div className="text-center p-1.5 sm:p-2 rounded-lg bg-muted/50">
+              <Fuel className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-orange-500 mb-0.5 sm:mb-1" />
+              <p className="text-sm sm:text-lg font-bold">{fuelLevel}%</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground truncate">Combustível</p>
             </div>
-            <div className="text-center p-2 rounded-lg bg-muted/50">
-              <Users className="h-4 w-4 mx-auto text-blue-500 mb-1" />
-              <p className="text-lg font-bold">{crewCount}</p>
-              <p className="text-xs text-muted-foreground">Tripulação</p>
+            <div className="text-center p-1.5 sm:p-2 rounded-lg bg-muted/50">
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-blue-500 mb-0.5 sm:mb-1" />
+              <p className="text-sm sm:text-lg font-bold">{crewCount}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground truncate">Tripulação</p>
             </div>
-            <div className="text-center p-2 rounded-lg bg-muted/50">
-              <Activity className="h-4 w-4 mx-auto text-green-500 mb-1" />
-              <p className="text-lg font-bold">{efficiency}%</p>
-              <p className="text-xs text-muted-foreground">Eficiência</p>
+            <div className="text-center p-1.5 sm:p-2 rounded-lg bg-muted/50">
+              <Activity className="h-3 w-3 sm:h-4 sm:w-4 mx-auto text-green-500 mb-0.5 sm:mb-1" />
+              <p className="text-sm sm:text-lg font-bold">{efficiency}%</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground truncate">Eficiência</p>
             </div>
           </div>
 
