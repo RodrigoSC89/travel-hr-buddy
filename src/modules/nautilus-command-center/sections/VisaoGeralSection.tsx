@@ -247,24 +247,24 @@ export function VisaoGeralSection({ systemStatus, isLoading, onNavigate }: Visao
 
   const quickAccessCards = [
     {
-      title: "Executive KPIs",
+      title: "Executive Dashboard",
       description: "Dashboard consolidado de KPIs",
       icon: BarChart3,
-      path: "/executive-kpis",
+      path: "/executive-dashboard",
       color: "from-blue-500 to-indigo-600"
     },
     {
       title: "Vessel Tracking",
       description: "Rastreamento AIS em tempo real",
       icon: MapPin,
-      path: "/vessel-tracking",
+      path: "/tracking",
       color: "from-emerald-500 to-teal-600"
     },
     {
-      title: "Fuel Manager",
-      description: "Preços de bunker e previsões IA",
+      title: "Finance Command",
+      description: "Gestão financeira e bunker",
       icon: Fuel,
-      path: "/fuel-manager",
+      path: "/finance-command",
       color: "from-amber-500 to-orange-600"
     },
     {
