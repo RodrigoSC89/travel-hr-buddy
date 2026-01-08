@@ -1,8 +1,9 @@
 import { useNavigate, NavigateOptions } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { isValidRoute, getSuggestion } from "@/utils/route-audit";
 
 /**
- * Enhanced Navigation Manager with error handling and user feedback
+ * Enhanced Navigation Manager with error handling, user feedback, and route validation
  */
 export const useNavigationManager = () => {
   const navigate = useNavigate();
@@ -13,10 +14,31 @@ export const useNavigationManager = () => {
     options?: NavigateOptions & { 
       showToast?: boolean;
       toastMessage?: string;
+      skipValidation?: boolean;
     }
   ) => {
     try {
-      const { showToast = false, toastMessage, ...navigateOptions } = options || {};
+      const { showToast = false, toastMessage, skipValidation = false, ...navigateOptions } = options || {};
+      
+      // Validate route in development mode
+      if (import.meta.env.DEV && !skipValidation && !isValidRoute(path)) {
+        const suggestion = getSuggestion(path);
+        console.warn(
+          `[NavigationManager] Invalid route: "${path}"`,
+          suggestion ? `\n  → Suggestion: "${suggestion}"` : "",
+          "\n  → Add to VALID_ROUTES in src/utils/route-audit.ts if valid"
+        );
+        
+        // Show toast warning in development
+        toast({
+          title: "⚠️ Rota Inválida (Dev)",
+          description: suggestion 
+            ? `"${path}" não existe. Use "${suggestion}"?` 
+            : `"${path}" não encontrada no App.tsx`,
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
       
       navigate(path, navigateOptions);
       
@@ -49,12 +71,28 @@ export const useNavigationManager = () => {
   };
 
   const navigateHome = () => {
-    navigateTo("/", { replace: true });
+    navigateTo("/central-comando", { replace: true, skipValidation: true });
+  };
+
+  /**
+   * Navigate with automatic route suggestion/correction
+   */
+  const navigateSafe = (path: string, options?: NavigateOptions) => {
+    const suggestion = getSuggestion(path);
+    const targetPath = suggestion || path;
+    
+    if (suggestion && import.meta.env.DEV) {
+      console.info(`[NavigationManager] Auto-corrected: "${path}" → "${suggestion}"`);
+    }
+    
+    navigateTo(targetPath, { ...options, skipValidation: true });
   };
 
   return {
     navigateTo,
     navigateBack,
     navigateHome,
+    navigateSafe,
+    isValidRoute,
   };
 };

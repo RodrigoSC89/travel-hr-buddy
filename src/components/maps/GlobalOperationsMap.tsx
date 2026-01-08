@@ -267,7 +267,7 @@ export function GlobalOperationsMap() {
               </div>
             `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
 
         markersRef.current.push(marker);
       });
