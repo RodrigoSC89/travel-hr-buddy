@@ -303,6 +303,9 @@ export function WeatherRoutingMap({
       });
 
       // Add waypoint markers
+      const mapInstance = map.current;
+      if (!mapInstance) return;
+      
       route.waypoints.forEach((wp, wpIndex) => {
         const isStart = wpIndex === 0;
         const isEnd = wpIndex === route.waypoints.length - 1;
@@ -333,7 +336,7 @@ export function WeatherRoutingMap({
                 </div>
               `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
         markersRef.current.push(marker);
       });
 
@@ -369,7 +372,7 @@ export function WeatherRoutingMap({
                 </div>
               `)
           )
-          .addTo(map.current!);
+          .addTo(mapInstance);
         markersRef.current.push(marker);
       });
     });

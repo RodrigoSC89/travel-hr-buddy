@@ -114,6 +114,9 @@ export function QuantumRouteMap({ mapboxToken, onRouteOptimized, className }: Qu
     map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
 
     map.current.on("load", () => {
+      const mapInstance = map.current;
+      if (!mapInstance) return;
+      
       // Add port markers
       samplePorts.forEach((port) => {
         const color = port.type === "origin" ? "#22c55e" : port.type === "destination" ? "#ef4444" : "#3b82f6";
@@ -126,7 +129,7 @@ export function QuantumRouteMap({ mapboxToken, onRouteOptimized, className }: Qu
               ${port.fuelPrice ? `<br/>Combustível: $${port.fuelPrice}/ton` : ""}
             </div>
           `))
-          .addTo(map.current!);
+          .addTo(mapInstance);
         
         markersRef.current.push(marker);
       });

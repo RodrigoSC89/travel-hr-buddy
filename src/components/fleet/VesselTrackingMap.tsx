@@ -153,7 +153,8 @@ export function VesselTrackingMap({
 
   // Update markers when vessels change
   useEffect(() => {
-    if (!map.current || !vessels.length) return;
+    const mapInstance = map.current;
+    if (!mapInstance || !vessels.length) return;
 
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
@@ -207,7 +208,7 @@ export function VesselTrackingMap({
               </div>
             `)
         )
-        .addTo(map.current!);
+        .addTo(mapInstance);
 
       el.addEventListener('click', () => {
         setSelectedVessel(vessel);
@@ -221,9 +222,9 @@ export function VesselTrackingMap({
     if (vessels.length > 1) {
       const bounds = new mapboxgl.LngLatBounds();
       vessels.forEach(v => bounds.extend([v.lon, v.lat]));
-      map.current.fitBounds(bounds, { padding: 50 });
+      mapInstance.fitBounds(bounds, { padding: 50 });
     } else if (vessels.length === 1) {
-      map.current.flyTo({ center: [vessels[0].lon, vessels[0].lat], zoom: 8 });
+      mapInstance.flyTo({ center: [vessels[0].lon, vessels[0].lat], zoom: 8 });
     }
   }, [vessels, onVesselSelect]);
 
