@@ -19,6 +19,7 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 const Auth = lazy(() => import("@/pages/Auth"));
 const CentralComando = lazy(() => import("@/pages/CentralComando"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
 
 // Central de Comando extras
 const NOC = lazy(() => import("@/pages/NOC"));
@@ -465,6 +466,9 @@ const AppRoutes = () => (
       <Route path="/testing" element={<Dashboard />} />
       <Route path="/feedback" element={<Dashboard />} />
       <Route path="/saas-manager" element={<Admin />} />
+      
+      {/* DEV ONLY - Route Dashboard */}
+      <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>
     
     {/* Catch-all: Redirecionar para central de comando */}

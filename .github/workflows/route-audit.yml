@@ -1,0 +1,42 @@
+name: Route Audit
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.ts'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.ts'
+
+jobs:
+  route-audit:
+    name: Audit Navigation Routes
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Route Audit
+        run: npx ts-node scripts/audit-routes.ts
+        
+      - name: Upload audit report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: route-audit-report
+          path: route-audit-report.txt
+          retention-days: 7
