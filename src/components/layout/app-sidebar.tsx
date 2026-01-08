@@ -100,7 +100,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   });
   
   // All hooks must be called unconditionally at the top
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
   const { canAccessModule, getRoleDisplayName, userRole } = usePermissions();
@@ -108,12 +108,13 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const { currentBranding } = useOrganization();
   const { signOut } = useAuth();
   
-  // Derived state (not hooks)
-  const collapsed = state === "collapsed";
+  // Derived state (not hooks) - on mobile, never show collapsed state
+  const collapsed = isMobile ? false : state === "collapsed";
   const logoSrc = currentBranding?.logo_url || nautilusLogo;
 
   const handleLogout = async () => {
     await signOut();
+    if (isMobile) setOpenMobile(false);
     navigate("/auth");
   };
 
@@ -132,6 +133,10 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const handleItemClick = (url: string) => {
     handleNavigation(url);
     onItemChange?.(url);
+    // Close sidebar on mobile after navigation
+    if (isMobile) {
+      setOpenMobile(false);
+    }
   };
 
   // Render label with emoji
@@ -145,7 +150,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   return (
     <Sidebar 
       className="border-r transition-all duration-300 bg-sidebar"
-      collapsible="icon"
+      collapsible="offcanvas"
     >
       {/* Header */}
       <SidebarHeader className="p-4 border-b border-border">
