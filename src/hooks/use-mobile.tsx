@@ -1,24 +1,39 @@
-import { useState, useEffect } from "react";
+import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
 /**
  * Hook to detect mobile viewport
- * Returns true on mobile, false on desktop
+ * Uses useSyncExternalStore for consistent SSR-safe detection
  */
 export function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = React.useState<boolean>(() => {
+    // Safe initial check for SSR
+    if (typeof window === "undefined") return false;
+    return window.innerWidth < MOBILE_BREAKPOINT;
+  });
 
-  useEffect(() => {
-    // Set initial value
+  React.useEffect(() => {
+    // Ensure we have the correct value after hydration
     const checkMobile = () => window.innerWidth < MOBILE_BREAKPOINT;
+    
+    // Update immediately in case initial state was wrong
     setIsMobile(checkMobile());
 
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-    const onChange = () => setIsMobile(checkMobile());
+    const handleResize = () => {
+      setIsMobile(checkMobile());
+    };
+
+    // Use resize event for more reliable detection
+    window.addEventListener("resize", handleResize);
     
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
+    // Also listen to orientation change for mobile devices
+    window.addEventListener("orientationchange", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
+    };
   }, []);
 
   return isMobile;

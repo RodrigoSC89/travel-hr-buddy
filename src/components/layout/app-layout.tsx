@@ -22,21 +22,25 @@ export const AppLayout: FC = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
       <SEOWrapper>
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={true}>
           <div className="min-h-screen flex w-full bg-background">
             <OfflineIndicator />
+            
+            {/* Sidebar - renders as Sheet on mobile, fixed on desktop */}
             <AppSidebar />
-            <div className="flex-1 flex flex-col min-w-0">
+            
+            {/* Main content area */}
+            <div className="flex-1 flex flex-col min-w-0 w-full">
               <Header />
-              <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-12">
+              <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
                 <Outlet />
               </main>
             </div>
             
-            {/* Mobile Bottom Navigation */}
+            {/* Mobile Bottom Navigation - only shows on mobile */}
             <MobileBottomNav />
             
-            {/* Enhanced Global Features */}
+            {/* Global Features */}
             <GlobalSearch 
               isOpen={isSearchOpen} 
               onOpenChange={setIsSearchOpen} 
