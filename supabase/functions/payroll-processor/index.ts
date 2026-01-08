@@ -255,7 +255,9 @@ async function processPayrollPeriod(
   }
 
   // Calculate totals
-  const totals = payrolls.reduce((acc, p) => ({
+  interface PayrollTotals { gross: number; net: number; deductions: number; taxes: number }
+  interface PayrollRecord { gross_pay?: number; net_pay?: number; tax_amount?: number; pension_contribution?: number }
+  const totals = payrolls.reduce((acc: PayrollTotals, p: PayrollRecord) => ({
     gross: acc.gross + (p.gross_pay || 0),
     net: acc.net + (p.net_pay || 0),
     deductions: acc.deductions + (p.tax_amount || 0) + (p.pension_contribution || 0),
