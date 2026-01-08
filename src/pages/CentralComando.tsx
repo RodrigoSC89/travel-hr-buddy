@@ -81,8 +81,9 @@ function CentralComandoContent() {
   const location = useLocation();
   const tenant = { id: null, name: null }; // Placeholder para multi-tenant
   
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Start false to prevent infinite loading on mobile
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => 
     document.documentElement.classList.contains("dark")
   );
@@ -123,19 +124,26 @@ function CentralComandoContent() {
     ]);
   };
 
-  // Filtrar dados por tenant com timeout e fallback
+  // Filtrar dados por tenant com timeout e fallback - MOBILE FIX
   const loadSystemData = useCallback(async () => {
+    // Prevent loading if already loaded to avoid infinite loops on mobile
+    if (dataLoaded && !isRefreshing) return;
+    
     try {
+      setIsLoading(true);
       const tenantFilter = tenant?.id ? { tenant_id: tenant.id } : {};
       
-      // Use timeout to prevent infinite loading
+      // Use shorter timeout for mobile (5s) vs desktop (10s)
+      const isMobile = window.innerWidth < 768;
+      const timeout = isMobile ? 5000 : 10000;
+      
       const [vesselsRes, crewRes, maintenanceRes] = await withTimeout(
         Promise.all([
           supabase.from("vessels").select("id, status").match(tenantFilter).limit(100),
           supabase.from("crew_members").select("id, status").match(tenantFilter).limit(500),
           supabase.from("maintenance_records").select("id, status").match(tenantFilter).limit(100)
         ]),
-        10000 // 10 second timeout
+        timeout
       );
 
       if (vesselsRes.data) {
@@ -164,34 +172,60 @@ function CentralComandoContent() {
       }
 
       setLastSync(new Date());
+      setDataLoaded(true);
     } catch (error) {
       // On timeout/error, use fallback data and stop loading
       logger.warn("Error loading system data (using fallback):", { error });
-      toast.warning("Conexão lenta - usando dados em cache");
+      if (!dataLoaded) {
+        toast.warning("Conexão lenta - usando dados em cache");
+      }
+      setDataLoaded(true); // Mark as loaded even on error to prevent loops
     } finally {
       // ALWAYS stop loading, even on error
       setIsLoading(false);
     }
-  }, [tenant?.id]);
+  }, [tenant?.id, dataLoaded, isRefreshing]);
 
+  // MOBILE FIX: Load data only once on mount, not on every callback change
   useEffect(() => {
-    loadSystemData();
+    let mounted = true;
+    
+    // Initial load
+    if (!dataLoaded) {
+      loadSystemData();
+    }
 
-    // Real-time subscriptions
+    // Real-time subscriptions - only trigger on actual changes, not loops
     const channel = supabase
       .channel("central-comando-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => loadSystemData())
-      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, () => loadSystemData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => {
+        if (mounted) setDataLoaded(false); // Allow refetch
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, () => {
+        if (mounted) setDataLoaded(false); // Allow refetch
+      })
       .subscribe();
 
-    // Auto refresh every 30 seconds
-    const interval = setInterval(loadSystemData, 30000);
+    // Auto refresh every 60 seconds (increased from 30 for mobile)
+    const interval = setInterval(() => {
+      if (mounted && document.visibilityState === 'visible') {
+        setDataLoaded(false);
+      }
+    }, 60000);
 
     return () => {
+      mounted = false;
       supabase.removeChannel(channel);
       clearInterval(interval);
     };
-  }, [loadSystemData]);
+  }, []); // Empty deps - run only on mount
+
+  // Separate effect to handle data refetch
+  useEffect(() => {
+    if (!dataLoaded) {
+      loadSystemData();
+    }
+  }, [dataLoaded, loadSystemData]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
