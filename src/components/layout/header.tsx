@@ -26,9 +26,9 @@ export const Header: FC = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90">
       <div className="flex h-14 items-center px-3 md:px-4">
-        {/* Mobile Menu Trigger - Always visible */}
+        {/* Mobile Menu Trigger - Always visible and prominent on mobile */}
         <div className="flex items-center shrink-0">
-          <SidebarTrigger className="h-9 w-9 md:h-7 md:w-7" />
+          <SidebarTrigger className="h-10 w-10 md:h-7 md:w-7 touch-manipulation" aria-label="Abrir menu" />
         </div>
         
         <div className="flex flex-1 items-center justify-between ml-2 md:ml-4 gap-2 min-w-0">
