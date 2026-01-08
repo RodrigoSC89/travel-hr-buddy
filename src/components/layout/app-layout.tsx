@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Header } from "@/components/layout/header";
+import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 
 import { useSystemActions } from "@/hooks/use-system-actions";
 import { Toaster } from "@/components/ui/sonner";
@@ -27,10 +28,13 @@ export const AppLayout: FC = () => {
             <AppSidebar />
             <div className="flex-1 flex flex-col min-w-0">
               <Header />
-              <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-40">
+              <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-12">
                 <Outlet />
               </main>
             </div>
+            
+            {/* Mobile Bottom Navigation */}
+            <MobileBottomNav />
             
             {/* Enhanced Global Features */}
             <GlobalSearch 

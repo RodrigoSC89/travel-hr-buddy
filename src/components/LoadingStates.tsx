@@ -10,10 +10,10 @@ import { Loader2, Ship, Waves, Compass, Anchor } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const PageSkeleton = () => (
-  <div className="space-y-6 p-6 animate-in fade-in duration-500">
+  <div className="space-y-6 p-4 md:p-6 animate-in fade-in duration-500">
     <div className="space-y-2">
-      <Skeleton className="h-10 w-80 bg-gradient-to-r from-primary/20 to-primary/10" />
-      <Skeleton className="h-5 w-[600px] bg-muted/50" />
+      <Skeleton className="h-10 w-full max-w-80 bg-gradient-to-r from-primary/20 to-primary/10" />
+      <Skeleton className="h-5 w-full max-w-[600px] bg-muted/50" />
     </div>
     
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -42,12 +42,12 @@ export const PageSkeleton = () => (
 );
 
 export const ModuleSkeleton = () => (
-  <div className="space-y-6 p-6 animate-in fade-in duration-500">
-    <div className="flex items-center gap-4">
-      <Skeleton className="h-16 w-16 rounded-xl" />
-      <div className="space-y-2 flex-1">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-5 w-[500px]" />
+  <div className="space-y-6 p-4 md:p-6 animate-in fade-in duration-500">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <Skeleton className="h-12 w-12 md:h-16 md:w-16 rounded-xl shrink-0" />
+      <div className="space-y-2 flex-1 w-full">
+        <Skeleton className="h-6 md:h-8 w-full max-w-64" />
+        <Skeleton className="h-4 md:h-5 w-full max-w-[400px]" />
       </div>
     </div>
     
