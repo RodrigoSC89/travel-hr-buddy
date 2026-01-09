@@ -3,6 +3,7 @@
  * Gestão de folha de pagamento com validação IA
  */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,23 +11,35 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   DollarSign, Calculator, AlertTriangle, CheckCircle2,
-  FileText, Download, Send, Brain, TrendingUp, Users
+  FileText, Download, Send, Brain, TrendingUp, Users, ExternalLink
 } from 'lucide-react';
+import { usePayroll } from '@/hooks/usePayroll';
+import { useToast } from '@/hooks/use-toast';
+import { exportPayrollToExcel } from '@/lib/export/accountingExport';
 
 export function HRPayrollDashboard() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { 
+    calculations, 
+    summary, 
+    isCalculating, 
+    calculatePayroll,
+    savePayroll 
+  } = usePayroll();
+  
   const [month, setMonth] = useState('01');
   const [year, setYear] = useState('2026');
 
-  const payrollSummary = {
+  // Use real data if available, fallback to mock
+  const payrollSummary = summary || {
     totalEmployees: 338,
     totalGross: 2450000,
     totalNet: 1820000,
-    totalDeductions: 630000,
-    employerCost: 3100000,
-    status: 'calculated',
-    anomalies: 3,
-    processed: 335,
-    pending: 3,
+    totalINSS: 245000,
+    totalIRRF: 185000,
+    totalFGTS: 196000,
+    employeeCount: 338,
   };
 
   const anomalies = [
@@ -34,6 +47,45 @@ export function HRPayrollDashboard() {
     { employee: 'Maria Silva', issue: 'Banco de horas negativo (-80h)', severity: 'medium' },
     { employee: 'Carlos Costa', issue: 'Desconto VT > 6%', severity: 'low' },
   ];
+
+  const handleCalculate = async () => {
+    const referenceMonth = `${year}-${month}`;
+    await calculatePayroll(referenceMonth, {
+      includeOvertime: true,
+      includeNightShift: true,
+    });
+  };
+
+  const handleProcess = async () => {
+    const referenceMonth = `${year}-${month}`;
+    const success = await savePayroll(referenceMonth);
+    if (success) {
+      toast({
+        title: 'Folha processada!',
+        description: 'Os dados foram salvos com sucesso.',
+      });
+    }
+  };
+
+  const handleExport = () => {
+    if (calculations.length > 0 && summary) {
+      exportPayrollToExcel(calculations, summary, `${year}-${month}`);
+    } else {
+      toast({
+        title: 'Calcule a folha primeiro',
+        description: 'É necessário calcular a folha antes de exportar.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleOpenFullPayroll = () => {
+    navigate('/payroll');
+  };
+
+  const totalDeductions = (summary?.totalINSS || 0) + (summary?.totalIRRF || 0);
+  const processedCount = calculations.length || 335;
+  const totalCount = summary?.employeeCount || 338;
 
   return (
     <div className="space-y-6">
@@ -63,11 +115,20 @@ export function HRPayrollDashboard() {
           </Select>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="gap-2">
+          <Button 
+            variant="outline" 
+            className="gap-2"
+            onClick={handleCalculate}
+            disabled={isCalculating}
+          >
             <Calculator className="h-4 w-4" />
-            Calcular Folha
+            {isCalculating ? 'Calculando...' : 'Calcular Folha'}
           </Button>
-          <Button className="gap-2">
+          <Button 
+            className="gap-2"
+            onClick={handleProcess}
+            disabled={calculations.length === 0}
+          >
             <Send className="h-4 w-4" />
             Processar
           </Button>
@@ -83,7 +144,7 @@ export function HRPayrollDashboard() {
                 <Users className="h-5 w-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{payrollSummary.totalEmployees}</p>
+                <p className="text-2xl font-bold">{totalCount}</p>
                 <p className="text-xs text-muted-foreground">Colaboradores</p>
               </div>
             </div>
@@ -97,7 +158,9 @@ export function HRPayrollDashboard() {
                 <DollarSign className="h-5 w-5 text-green-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">R$ {(payrollSummary.totalNet / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold">
+                  R$ {((summary?.totalNet || payrollSummary.totalNet) / 1000000).toFixed(1)}M
+                </p>
                 <p className="text-xs text-muted-foreground">Salários Líquidos</p>
               </div>
             </div>
@@ -111,7 +174,9 @@ export function HRPayrollDashboard() {
                 <TrendingUp className="h-5 w-5 text-amber-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">R$ {(payrollSummary.totalDeductions / 1000).toFixed(0)}k</p>
+                <p className="text-2xl font-bold">
+                  R$ {(totalDeductions / 1000).toFixed(0) || '630'}k
+                </p>
                 <p className="text-xs text-muted-foreground">Descontos</p>
               </div>
             </div>
@@ -125,7 +190,9 @@ export function HRPayrollDashboard() {
                 <Calculator className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-2xl font-bold">R$ {(payrollSummary.employerCost / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold">
+                  R$ {((summary?.totalGross || payrollSummary.totalGross) / 1000000).toFixed(1)}M
+                </p>
                 <p className="text-xs text-muted-foreground">Custo Total</p>
               </div>
             </div>
@@ -146,25 +213,25 @@ export function HRPayrollDashboard() {
             <div className="flex items-center justify-between">
               <span className="text-sm">Progresso</span>
               <span className="text-sm font-medium">
-                {payrollSummary.processed}/{payrollSummary.totalEmployees} ({Math.round((payrollSummary.processed / payrollSummary.totalEmployees) * 100)}%)
+                {processedCount}/{totalCount} ({Math.round((processedCount / totalCount) * 100)}%)
               </span>
             </div>
-            <Progress value={(payrollSummary.processed / payrollSummary.totalEmployees) * 100} />
+            <Progress value={(processedCount / totalCount) * 100} />
             
             <div className="grid grid-cols-3 gap-4 pt-4">
               <div className="text-center p-3 bg-green-500/10 rounded-lg">
                 <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto mb-1" />
-                <p className="text-lg font-bold text-green-500">{payrollSummary.processed}</p>
+                <p className="text-lg font-bold text-green-500">{processedCount}</p>
                 <p className="text-xs text-muted-foreground">Calculados</p>
               </div>
               <div className="text-center p-3 bg-amber-500/10 rounded-lg">
                 <AlertTriangle className="h-5 w-5 text-amber-500 mx-auto mb-1" />
-                <p className="text-lg font-bold text-amber-500">{payrollSummary.anomalies}</p>
+                <p className="text-lg font-bold text-amber-500">{anomalies.length}</p>
                 <p className="text-xs text-muted-foreground">Com Anomalias</p>
               </div>
               <div className="text-center p-3 bg-muted rounded-lg">
                 <FileText className="h-5 w-5 text-muted-foreground mx-auto mb-1" />
-                <p className="text-lg font-bold">{payrollSummary.pending}</p>
+                <p className="text-lg font-bold">{totalCount - processedCount}</p>
                 <p className="text-xs text-muted-foreground">Pendentes</p>
               </div>
             </div>
@@ -206,15 +273,19 @@ export function HRPayrollDashboard() {
 
       {/* Actions */}
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2" onClick={handleOpenFullPayroll}>
+          <ExternalLink className="h-4 w-4" />
+          Abrir Folha Completa
+        </Button>
+        <Button variant="outline" className="gap-2" onClick={handleOpenFullPayroll}>
           <FileText className="h-4 w-4" />
           Gerar Holerites
         </Button>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2" onClick={handleExport}>
           <Download className="h-4 w-4" />
-          Exportar SEFIP
+          Exportar Excel
         </Button>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2" disabled>
           <Download className="h-4 w-4" />
           Exportar eSocial
         </Button>
