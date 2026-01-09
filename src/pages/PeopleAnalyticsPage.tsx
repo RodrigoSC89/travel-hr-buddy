@@ -3,6 +3,7 @@
  * Análises avançadas, predição de turnover, clima organizacional
  */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,26 +13,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { 
   Brain, TrendingUp, TrendingDown, Users, AlertTriangle,
   Target, BarChart3, PieChart, Activity, Zap, 
-  ArrowUpRight, ArrowDownRight, Filter, Download,
-  Calendar, Building2, Smile, Frown, Meh
+  ArrowUpRight, Download, Calendar, Building2, Smile, 
+  Bot, ScanLine, DollarSign, Clock, Award, GraduationCap, UserMinus
 } from 'lucide-react';
 import { 
   AreaChart, Area, BarChart, Bar, PieChart as RePieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  Line, ComposedChart
 } from 'recharts';
 
 export default function PeopleAnalyticsPage() {
+  const navigate = useNavigate();
   const [period, setPeriod] = useState('6m');
   const [department, setDepartment] = useState('all');
 
-  // Mock data
   const kpis = {
-    headcount: { value: 347, change: 5.2, trend: 'up' },
-    turnover: { value: 1.8, change: -12, trend: 'down' },
-    avgTenure: { value: 2.4, change: 8, trend: 'up' },
-    nps: { value: 72, change: 15, trend: 'up' },
-    costPerEmployee: { value: 8500, change: 3, trend: 'up' },
-    trainingHours: { value: 24, change: 20, trend: 'up' },
+    headcount: { value: 347, change: 5.2 },
+    turnover: { value: 1.8, change: -12 },
+    avgTenure: { value: 2.4, change: 8 },
+    nps: { value: 72, change: 15 },
+    costPerEmployee: { value: 8500, change: 3 },
+    trainingHours: { value: 24, change: 20 },
   };
 
   const turnoverData = [
@@ -44,32 +46,56 @@ export default function PeopleAnalyticsPage() {
   ];
 
   const departmentData = [
-    { name: 'Tecnologia', value: 120, color: '#3b82f6' },
-    { name: 'Operações', value: 85, color: '#22c55e' },
-    { name: 'Comercial', value: 60, color: '#f59e0b' },
-    { name: 'Financeiro', value: 42, color: '#8b5cf6' },
-    { name: 'RH', value: 25, color: '#ec4899' },
-    { name: 'Outros', value: 15, color: '#6b7280' },
+    { name: 'Tecnologia', value: 120, growth: 15, turnover: 1.2, avgSalary: 12500, color: '#3b82f6' },
+    { name: 'Operações', value: 85, growth: 8, turnover: 2.1, avgSalary: 8200, color: '#22c55e' },
+    { name: 'Comercial', value: 60, growth: 12, turnover: 3.5, avgSalary: 9800, color: '#f59e0b' },
+    { name: 'Financeiro', value: 42, growth: 5, turnover: 0.8, avgSalary: 11200, color: '#8b5cf6' },
+    { name: 'RH', value: 25, growth: 4, turnover: 0.5, avgSalary: 8900, color: '#ec4899' },
+    { name: 'Outros', value: 15, growth: 0, turnover: 1.0, avgSalary: 7500, color: '#6b7280' },
+  ];
+
+  const headcountTrend = [
+    { month: 'Ago', Tecnologia: 105, Operações: 80, Comercial: 52, Financeiro: 40, RH: 23 },
+    { month: 'Set', Tecnologia: 108, Operações: 81, Comercial: 54, Financeiro: 40, RH: 23 },
+    { month: 'Out', Tecnologia: 110, Operações: 82, Comercial: 55, Financeiro: 41, RH: 24 },
+    { month: 'Nov', Tecnologia: 115, Operações: 83, Comercial: 57, Financeiro: 41, RH: 24 },
+    { month: 'Dez', Tecnologia: 118, Operações: 84, Comercial: 58, Financeiro: 42, RH: 25 },
+    { month: 'Jan', Tecnologia: 120, Operações: 85, Comercial: 60, Financeiro: 42, RH: 25 },
   ];
 
   const riskEmployees = [
-    { name: 'Maria Silva', position: 'Analista Sr', risk: 87, factors: ['Salário abaixo mercado', 'Sem promoção 24m'] },
-    { name: 'Carlos Oliveira', position: 'Dev Full-Stack', risk: 75, factors: ['Alta carga de trabalho', 'Gestor NPS baixo'] },
-    { name: 'Ana Santos', position: 'Designer', risk: 68, factors: ['Férias próximas de vencer', 'Estagnação carreira'] },
-    { name: 'João Costa', position: 'Coordenador', risk: 62, factors: ['Conflitos com equipe'] },
+    { name: 'Maria Silva', position: 'Analista Sr', department: 'Tecnologia', risk: 87, factors: ['Salário abaixo mercado', 'Sem promoção 24m'] },
+    { name: 'Carlos Oliveira', position: 'Dev Full-Stack', department: 'Tecnologia', risk: 75, factors: ['Alta carga de trabalho'] },
+    { name: 'Ana Santos', position: 'Designer', department: 'Marketing', risk: 68, factors: ['Estagnação carreira'] },
+    { name: 'João Costa', position: 'Coordenador', department: 'Operações', risk: 62, factors: ['Conflitos com equipe'] },
   ];
 
   const climateData = [
-    { dimension: 'Liderança', score: 78 },
-    { dimension: 'Cultura', score: 82 },
-    { dimension: 'Comunicação', score: 71 },
-    { dimension: 'Crescimento', score: 65 },
-    { dimension: 'Benefícios', score: 85 },
-    { dimension: 'Ambiente', score: 79 },
+    { dimension: 'Liderança', score: 78, benchmark: 75 },
+    { dimension: 'Cultura', score: 82, benchmark: 80 },
+    { dimension: 'Comunicação', score: 71, benchmark: 78 },
+    { dimension: 'Crescimento', score: 65, benchmark: 80 },
+    { dimension: 'Benefícios', score: 85, benchmark: 82 },
+    { dimension: 'Ambiente', score: 79, benchmark: 77 },
+  ];
+
+  const recruitmentMetrics = [
+    { label: 'Vagas Abertas', value: 18, icon: Target },
+    { label: 'Time-to-Hire', value: '28 dias', icon: Clock },
+    { label: 'Custo/Contratação', value: 'R$ 3.2K', icon: DollarSign },
+    { label: 'Taxa de Aceite', value: '78%', icon: Award },
+  ];
+
+  const costBreakdown = [
+    { category: 'Salários', value: 2100000, percent: 68 },
+    { category: 'Benefícios', value: 620000, percent: 20 },
+    { category: 'Treinamento', value: 180000, percent: 6 },
+    { category: 'Recrutamento', value: 120000, percent: 4 },
+    { category: 'Outros', value: 80000, percent: 2 },
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 py-4 animate-fade-in">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -81,7 +107,19 @@ export default function PeopleAnalyticsPage() {
             Insights preditivos e análises avançadas de RH com IA
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Select value={department} onValueChange={setDepartment}>
+            <SelectTrigger className="w-36">
+              <Building2 className="h-4 w-4 mr-2" />
+              <SelectValue placeholder="Departamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos</SelectItem>
+              {departmentData.map(d => (
+                <SelectItem key={d.name} value={d.name.toLowerCase()}>{d.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Select value={period} onValueChange={setPeriod}>
             <SelectTrigger className="w-32">
               <SelectValue />
@@ -100,6 +138,52 @@ export default function PeopleAnalyticsPage() {
         </div>
       </div>
 
+      {/* Quick Actions - AI Modules */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card 
+          className="cursor-pointer hover:border-primary/50 transition-colors"
+          onClick={() => navigate('/hr-chatbot')}
+        >
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <Bot className="h-6 w-6 text-blue-500" />
+            </div>
+            <div>
+              <p className="font-medium">Assistente de RH 24/7</p>
+              <p className="text-sm text-muted-foreground">Chatbot com IA para colaboradores</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card 
+          className="cursor-pointer hover:border-primary/50 transition-colors"
+          onClick={() => navigate('/hr-ocr')}
+        >
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <ScanLine className="h-6 w-6 text-purple-500" />
+            </div>
+            <div>
+              <p className="font-medium">OCR de Documentos</p>
+              <p className="text-sm text-muted-foreground">Admissão digital com IA</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card 
+          className="cursor-pointer hover:border-primary/50 transition-colors"
+          onClick={() => navigate('/hr-turnover')}
+        >
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-lg bg-red-500/10 flex items-center justify-center">
+              <AlertTriangle className="h-6 w-6 text-red-500" />
+            </div>
+            <div>
+              <p className="font-medium">Predição de Turnover</p>
+              <p className="text-sm text-muted-foreground">Machine Learning para retenção</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
@@ -108,7 +192,7 @@ export default function PeopleAnalyticsPage() {
           { label: 'Tempo Médio', value: kpis.avgTenure.value, change: kpis.avgTenure.change, icon: Calendar, format: 'years' },
           { label: 'eNPS', value: kpis.nps.value, change: kpis.nps.change, icon: Smile, format: 'number' },
           { label: 'Custo/Pessoa', value: kpis.costPerEmployee.value, change: kpis.costPerEmployee.change, icon: BarChart3, format: 'currency' },
-          { label: 'Horas Treinamento', value: kpis.trainingHours.value, change: kpis.trainingHours.change, icon: Target, format: 'hours' },
+          { label: 'Horas Treinamento', value: kpis.trainingHours.value, change: kpis.trainingHours.change, icon: GraduationCap, format: 'hours' },
         ].map((kpi) => (
           <Card key={kpi.label}>
             <CardContent className="p-4">
@@ -134,159 +218,277 @@ export default function PeopleAnalyticsPage() {
         ))}
       </div>
 
-      {/* Main Charts */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Turnover Trend */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-primary" />
-              Evolução do Turnover
-            </CardTitle>
-            <CardDescription>Taxa mensal e movimentações</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <AreaChart data={turnoverData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="month" className="text-xs" />
-                <YAxis className="text-xs" />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))', 
-                    border: '1px solid hsl(var(--border))' 
-                  }} 
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="turnover" 
-                  stroke="hsl(var(--primary))" 
-                  fill="hsl(var(--primary)/0.2)" 
-                  name="Turnover %"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+      {/* Tabs */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="headcount">Headcount</TabsTrigger>
+          <TabsTrigger value="turnover">Turnover</TabsTrigger>
+          <TabsTrigger value="costs">Custos</TabsTrigger>
+        </TabsList>
 
-        {/* Department Distribution */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <PieChart className="h-5 w-5 text-primary" />
-              Distribuição por Departamento
-            </CardTitle>
-            <CardDescription>Headcount atual por área</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <RePieChart>
-                <Pie
-                  data={departmentData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={2}
-                  dataKey="value"
-                >
-                  {departmentData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Turnover Trend */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-primary" />
+                  Evolução do Turnover
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={250}>
+                  <ComposedChart data={turnoverData}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <XAxis dataKey="month" className="text-xs" />
+                    <YAxis yAxisId="left" className="text-xs" />
+                    <YAxis yAxisId="right" orientation="right" className="text-xs" />
+                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
+                    <Legend />
+                    <Bar yAxisId="right" dataKey="hired" fill="#22c55e" name="Admissões" />
+                    <Bar yAxisId="right" dataKey="left" fill="#ef4444" name="Desligamentos" />
+                    <Line yAxisId="left" type="monotone" dataKey="turnover" stroke="hsl(var(--primary))" strokeWidth={2} name="Turnover %" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Department Distribution */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <PieChart className="h-5 w-5 text-primary" />
+                  Distribuição por Departamento
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={250}>
+                  <RePieChart>
+                    <Pie data={departmentData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="value">
+                      {departmentData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </RePieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Risk & Climate */}
+          <div className="grid lg:grid-cols-2 gap-6">
+            <Card className="border-red-500/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-red-500">
+                  <AlertTriangle className="h-5 w-5" />
+                  Risco de Turnover - IA
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {riskEmployees.map((emp, i) => (
+                  <div key={i} className="flex items-center gap-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium">{emp.name}</p>
+                        <Badge variant="destructive">{emp.risk}%</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{emp.position} • {emp.department}</p>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {emp.factors.map((f, j) => (
+                          <Badge key={j} variant="outline" className="text-xs">{f}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <Progress value={emp.risk} className="w-20 h-2" />
+                  </div>
+                ))}
+                <Button variant="outline" className="w-full gap-2" onClick={() => navigate('/hr-turnover')}>
+                  <Brain className="h-4 w-4" />
+                  Ver Análise Completa
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Smile className="h-5 w-5 text-green-500" />
+                  Clima Organizacional
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {climateData.map((item) => (
+                    <div key={item.dimension}>
+                      <div className="flex justify-between mb-1">
+                        <span className="text-sm">{item.dimension}</span>
+                        <span className="text-sm font-medium">{item.score}/100</span>
+                      </div>
+                      <Progress 
+                        value={item.score} 
+                        className={`h-2 ${item.score >= item.benchmark ? '[&>div]:bg-green-500' : item.score >= item.benchmark - 10 ? '[&>div]:bg-amber-500' : '[&>div]:bg-red-500'}`}
+                      />
+                    </div>
                   ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </RePieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Turnover Prediction & Climate */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* High Risk Employees */}
-        <Card className="border-red-500/30">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-500">
-              <AlertTriangle className="h-5 w-5" />
-              Risco de Turnover - IA
-            </CardTitle>
-            <CardDescription>Colaboradores com maior probabilidade de saída</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {riskEmployees.map((emp, i) => (
-              <div key={i} className="flex items-center gap-4 p-3 rounded-lg border border-red-500/20 bg-red-500/5">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium">{emp.name}</p>
-                    <Badge variant="destructive">{emp.risk}%</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{emp.position}</p>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {emp.factors.map((f, j) => (
-                      <Badge key={j} variant="outline" className="text-xs">
-                        {f}
-                      </Badge>
-                    ))}
-                  </div>
                 </div>
-                <Progress 
-                  value={emp.risk} 
-                  className="w-20 h-2"
-                />
-              </div>
+                <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Brain className="h-4 w-4 text-primary" />
+                    <span className="font-medium text-sm">Insight da IA</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    A dimensão "Crescimento" está 15 pontos abaixo da média. Recomendação: implementar PDI estruturado.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="headcount" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                Evolução do Headcount por Departamento
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={headcountTrend}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis dataKey="month" className="text-xs" />
+                  <YAxis className="text-xs" />
+                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
+                  <Legend />
+                  <Area type="monotone" dataKey="Tecnologia" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Operações" stackId="1" stroke="#22c55e" fill="#22c55e" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Comercial" stackId="1" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Financeiro" stackId="1" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="RH" stackId="1" stroke="#ec4899" fill="#ec4899" fillOpacity={0.6} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {departmentData.map((dept) => (
+              <Card key={dept.name}>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="h-3 w-3 rounded-full" style={{ backgroundColor: dept.color }} />
+                      <span className="font-medium">{dept.name}</span>
+                    </div>
+                    <Badge variant={dept.growth > 10 ? 'default' : 'secondary'}>+{dept.growth}%</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Colaboradores</span>
+                      <span className="font-bold text-lg">{dept.value}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Turnover</span>
+                      <span className={dept.turnover > 2 ? 'text-red-500' : 'text-green-500'}>{dept.turnover}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Salário Médio</span>
+                      <span>R$ {dept.avgSalary.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-            <Button variant="outline" className="w-full gap-2">
-              <Brain className="h-4 w-4" />
-              Ver Análise Completa
-            </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </TabsContent>
 
-        {/* Climate Survey */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Smile className="h-5 w-5 text-green-500" />
-              Clima Organizacional
-            </CardTitle>
-            <CardDescription>Última pesquisa: Janeiro 2026 (82% participação)</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {climateData.map((item) => (
-                <div key={item.dimension}>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm">{item.dimension}</span>
-                    <span className="text-sm font-medium">{item.score}/100</span>
+        <TabsContent value="turnover" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <UserMinus className="h-5 w-5 text-red-500" />
+                Taxa de Turnover por Departamento
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={departmentData} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis type="number" className="text-xs" />
+                  <YAxis dataKey="name" type="category" className="text-xs" width={100} />
+                  <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
+                  <Bar dataKey="turnover" fill="hsl(var(--primary))" name="Turnover %" radius={4} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {recruitmentMetrics.map((metric) => (
+              <Card key={metric.label}>
+                <CardContent className="p-4 flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <metric.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <Progress 
-                    value={item.score} 
-                    className={`h-2 ${
-                      item.score >= 80 ? '[&>div]:bg-green-500' : 
-                      item.score >= 70 ? '[&>div]:bg-amber-500' : '[&>div]:bg-red-500'
-                    }`}
-                  />
-                </div>
-              ))}
-            </div>
-            
-            <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <Brain className="h-4 w-4 text-primary" />
-                <span className="font-medium text-sm">Insight da IA</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                A dimensão "Crescimento" está 15 pontos abaixo da média. 
-                Recomendação: implementar programa de PDI estruturado e 
-                comunicar planos de carreira mais claramente.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                  <div>
+                    <p className="text-xl font-bold">{metric.value}</p>
+                    <p className="text-xs text-muted-foreground">{metric.label}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </TabsContent>
 
-      {/* AI Predictions Panel */}
+        <TabsContent value="costs" className="space-y-6">
+          <div className="grid lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-primary" />
+                  Custo Total de RH
+                </CardTitle>
+                <CardDescription>Distribuição mensal: R$ 3.1 milhões</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={250}>
+                  <RePieChart>
+                    <Pie data={costBreakdown} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="value">
+                      {costBreakdown.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#6b7280'][index]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString()}`} />
+                    <Legend />
+                  </RePieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Detalhamento de Custos</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {costBreakdown.map((item) => (
+                  <div key={item.category}>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-sm">{item.category}</span>
+                      <span className="text-sm font-medium">R$ {(item.value / 1000).toFixed(0)}K ({item.percent}%)</span>
+                    </div>
+                    <Progress value={item.percent} className="h-2" />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* AI Predictions */}
       <Card className="border-primary/30 bg-primary/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -295,38 +497,33 @@ export default function PeopleAnalyticsPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Turnover Previsto</p>
               <p className="text-3xl font-bold">2.1%</p>
               <p className="text-sm text-amber-500 flex items-center gap-1">
-                <ArrowUpRight className="h-4 w-4" />
-                +0.3% vs atual
-              </p>
-              <p className="text-xs text-muted-foreground">
-                ~7 saídas esperadas
+                <ArrowUpRight className="h-4 w-4" />+0.3% vs atual
               </p>
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Headcount Projetado</p>
               <p className="text-3xl font-bold">362</p>
               <p className="text-sm text-green-500 flex items-center gap-1">
-                <ArrowUpRight className="h-4 w-4" />
-                +15 (net)
-              </p>
-              <p className="text-xs text-muted-foreground">
-                22 admissões - 7 saídas
+                <ArrowUpRight className="h-4 w-4" />+15 (net)
               </p>
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Custo Total RH</p>
               <p className="text-3xl font-bold">R$ 3.1M</p>
               <p className="text-sm text-amber-500 flex items-center gap-1">
-                <ArrowUpRight className="h-4 w-4" />
-                +5% vs atual
+                <ArrowUpRight className="h-4 w-4" />+5% vs atual
               </p>
-              <p className="text-xs text-muted-foreground">
-                Dentro do orçamento aprovado
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">eNPS Projetado</p>
+              <p className="text-3xl font-bold">75</p>
+              <p className="text-sm text-green-500 flex items-center gap-1">
+                <ArrowUpRight className="h-4 w-4" />+3 pontos
               </p>
             </div>
           </div>
