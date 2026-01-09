@@ -19,9 +19,11 @@ import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 // LAZY LOAD - PÁGINAS PRINCIPAIS
 // ============================================
 const Auth = lazy(() => import("@/pages/Auth"));
+const LandingPage = lazy(() => import("@/pages/LandingPage"));
 const CentralComando = lazy(() => import("@/pages/CentralComando"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
+const Billing = lazy(() => import("@/pages/Billing"));
 
 // Central de Comando extras
 const NOC = lazy(() => import("@/pages/NOC"));
@@ -276,12 +278,17 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // Rotas internas
 const AppRoutes = () => (
-  <Routes>
+<Routes>
+    {/* Public Routes */}
     <Route path="/auth" element={<Auth />} />
+    <Route path="/landing" element={<LandingPage />} />
+    <Route path="/pricing" element={<LandingPage />} />
     
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
       <Route path="/" element={<Navigate to="/central-comando" replace />} />
+      <Route path="/billing" element={<Billing />} />
+      <Route path="/planos" element={<Billing />} />
       
       {/* ============================================ */}
       {/* CENTRAL DE COMANDO */}
