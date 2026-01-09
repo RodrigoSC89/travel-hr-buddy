@@ -1,0 +1,282 @@
+/**
+ * HR Chatbot Component
+ * Assistente virtual de RH 24/7 com IA
+ */
+import { useState, useRef, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { 
+  MessageSquare, X, Send, Bot, User, 
+  Calendar, FileText, DollarSign, HelpCircle,
+  Loader2, Minimize2, Maximize2
+} from 'lucide-react';
+
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+const QUICK_ACTIONS = [
+  { icon: Calendar, label: 'Minhas férias', query: 'Quantos dias de férias eu tenho disponíveis?' },
+  { icon: FileText, label: 'Último holerite', query: 'Quero ver meu último holerite' },
+  { icon: DollarSign, label: '13º salário', query: 'Quando vou receber o 13º salário?' },
+  { icon: HelpCircle, label: 'Políticas', query: 'Quais são as políticas de home office?' },
+];
+
+export function HRChatbot() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      role: 'assistant',
+      content: 'Olá! 👋 Sou o assistente virtual de RH. Como posso ajudar você hoje?',
+      timestamp: new Date(),
+    }
+  ]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
+
+  const handleSend = async (text?: string) => {
+    const messageText = text || input.trim();
+    if (!messageText || isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: messageText,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      // Call HR Chatbot API
+      const response = await fetch(
+        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/hr-chatbot-ai`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`,
+          },
+          body: JSON.stringify({
+            message: messageText,
+            history: messages.map(m => ({ role: m.role, content: m.content })),
+            session_id: 'demo-session',
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = '';
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: '',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+            try {
+              const data = JSON.parse(line.slice(6));
+              const content = data.choices?.[0]?.delta?.content;
+              if (content) {
+                assistantContent += content;
+                setMessages(prev => prev.map(m => 
+                  m.id === assistantMessage.id ? { ...m, content: assistantContent } : m
+                ));
+              }
+            } catch {
+              // Skip invalid JSON
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Chatbot error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Desculpe, tive um problema ao processar sua mensagem. Por favor, tente novamente ou entre em contato com o RH diretamente.',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!isOpen) {
+    return (
+      <Button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-24 right-4 md:bottom-6 h-14 w-14 rounded-full shadow-lg z-50"
+        size="icon"
+      >
+        <MessageSquare className="h-6 w-6" />
+      </Button>
+    );
+  }
+
+  return (
+    <Card className={`fixed z-50 shadow-xl transition-all duration-200 ${
+      isMinimized 
+        ? 'bottom-24 right-4 md:bottom-6 w-72 h-14' 
+        : 'bottom-24 right-4 md:bottom-6 w-[95vw] md:w-96 h-[70vh] md:h-[500px]'
+    }`}>
+      {/* Header */}
+      <CardHeader className="p-3 border-b flex flex-row items-center gap-3">
+        <Avatar className="h-8 w-8">
+          <AvatarFallback className="bg-primary text-primary-foreground">
+            <Bot className="h-4 w-4" />
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1">
+          <CardTitle className="text-sm">Assistente de RH</CardTitle>
+          <Badge variant="secondary" className="text-xs">Online 24/7</Badge>
+        </div>
+        <div className="flex gap-1">
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsMinimized(!isMinimized)}>
+            {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+          </Button>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsOpen(false)}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      </CardHeader>
+
+      {!isMinimized && (
+        <>
+          {/* Messages */}
+          <ScrollArea className="flex-1 p-4 h-[calc(100%-120px)]" ref={scrollRef}>
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <div 
+                  key={message.id}
+                  className={`flex gap-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  {message.role === 'assistant' && (
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        <Bot className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div className={`max-w-[80%] rounded-lg p-3 ${
+                    message.role === 'user' 
+                      ? 'bg-primary text-primary-foreground' 
+                      : 'bg-muted'
+                  }`}>
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <p className="text-xs opacity-50 mt-1">
+                      {message.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                  {message.role === 'user' && (
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarFallback>
+                        <User className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex gap-2 justify-start">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary text-primary-foreground">
+                      <Bot className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="bg-muted rounded-lg p-3">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Actions */}
+            {messages.length === 1 && (
+              <div className="mt-4 space-y-2">
+                <p className="text-xs text-muted-foreground">Perguntas frequentes:</p>
+                <div className="grid grid-cols-2 gap-2">
+                  {QUICK_ACTIONS.map((action) => (
+                    <Button
+                      key={action.label}
+                      variant="outline"
+                      size="sm"
+                      className="justify-start text-xs h-auto py-2"
+                      onClick={() => handleSend(action.query)}
+                    >
+                      <action.icon className="h-3 w-3 mr-2" />
+                      {action.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </ScrollArea>
+
+          {/* Input */}
+          <div className="p-3 border-t">
+            <form 
+              onSubmit={(e) => { e.preventDefault(); handleSend(); }}
+              className="flex gap-2"
+            >
+              <Input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Digite sua pergunta..."
+                disabled={isLoading}
+                className="flex-1"
+              />
+              <Button type="submit" size="icon" disabled={!input.trim() || isLoading}>
+                <Send className="h-4 w-4" />
+              </Button>
+            </form>
+          </div>
+        </>
+      )}
+    </Card>
+  );
+}

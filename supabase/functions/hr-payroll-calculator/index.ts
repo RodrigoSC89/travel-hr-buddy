@@ -305,12 +305,13 @@ serve(async (req) => {
         results.push(result);
 
         // Save to database
+        const { employee_id: _, ...resultWithoutId } = result;
         await supabase.from("hr_payroll").upsert({
           organization_id,
           employee_id: emp.id,
           reference_month,
           reference_year,
-          ...result,
+          ...resultWithoutId,
           status: "calculated",
           calculated_at: new Date().toISOString(),
           ai_validated: true,
