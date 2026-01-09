@@ -1,5 +1,5 @@
 /**
- * SmartSidebar Component - PATCH 861
+ * SmartSidebar Component - PATCH 862
  * Enhanced with: Search, Dynamic Badges, Role-based Filtering
  * 
  * Features:
@@ -7,8 +7,11 @@
  * - Dynamic badge counters (alerts, notifications, tasks)
  * - Role-based route filtering
  * - Responsive mobile menu
+ * - PWA Safe Area Support
+ * - Body scroll lock when open
+ * - GPU-accelerated animations
  */
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
   ChevronDown,
@@ -46,6 +49,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -157,9 +161,52 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
     return location.pathname === path;
   };
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = useCallback(() => {
     setIsMobileOpen(false);
-  };
+  }, []);
+
+  // CORREÇÃO 1: Auto-close sidebar ao navegar (pathname change)
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [location.pathname]);
+
+  // CORREÇÃO 2: Bloquear scroll do body quando sidebar está aberta
+  useEffect(() => {
+    if (isMobileOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isMobileOpen]);
+
+  // CORREÇÃO 4: Click outside fecha sidebar (mousedown + touchstart)
+  useEffect(() => {
+    if (!isMobileOpen) return;
+    
+    const handleOutside = (e: MouseEvent | TouchEvent) => {
+      if (overlayRef.current && e.target === overlayRef.current) {
+        setIsMobileOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('touchstart', handleOutside, { passive: true });
+    
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('touchstart', handleOutside);
+    };
+  }, [isMobileOpen]);
 
   // Auto-open section containing current route
   useEffect(() => {
@@ -172,7 +219,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
         setOpenSection(defaultSection.title);
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, openSection]);
 
   // Render label with emoji
   const renderLabel = (item: SidebarRoute) => {
@@ -209,31 +256,49 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
 
   return (
     <>
-      {/* Mobile menu button */}
+      {/* CORREÇÃO 6: Mobile menu button - Touch target ≥ 44px com safe-area */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-sidebar-background text-sidebar-foreground shadow-lg border border-sidebar-border"
+        className="lg:hidden fixed z-[60] min-h-[44px] min-w-[44px] p-3 rounded-md bg-sidebar-background text-sidebar-foreground shadow-lg border border-sidebar-border touch-manipulation active:scale-95 transition-transform"
+        style={{
+          top: 'max(env(safe-area-inset-top, 16px), 16px)',
+          left: 'max(env(safe-area-inset-left, 16px), 16px)',
+        }}
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         aria-label={isMobileOpen ? "Fechar menu" : "Abrir menu"}
+        aria-expanded={isMobileOpen}
       >
         {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
 
-      {/* Overlay for mobile */}
+      {/* CORREÇÃO 5: Overlay with higher z-index */}
       {isMobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          ref={overlayRef}
+          className="lg:hidden fixed inset-0 bg-black/60 z-[70] backdrop-blur-sm"
           onClick={closeMobileMenu}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar */}
+      {/* CORREÇÃO 3, 5, 9: Sidebar with safe-area, z-index, GPU transform */}
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-sidebar-background text-sidebar-foreground h-screen overflow-y-auto shadow-lg transition-transform duration-300 border-r border-sidebar-border flex flex-col",
+          "fixed lg:static inset-y-0 left-0 z-[80] w-[85vw] max-w-[320px] lg:w-64 lg:max-w-none",
+          "bg-sidebar-background text-sidebar-foreground",
+          "h-screen shadow-xl lg:shadow-lg",
+          "border-r border-sidebar-border flex flex-col",
+          // CORREÇÃO 9: GPU-accelerated transform animation
+          "transition-transform duration-300 ease-out",
+          "will-change-transform backface-hidden",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           className
         )}
+        style={{
+          // CORREÇÃO 3: Safe Area PWA iOS
+          paddingTop: 'env(safe-area-inset-top, 0px)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          paddingLeft: 'env(safe-area-inset-left, 0px)',
+        }}
         role="navigation"
         aria-label="Menu principal"
       >
@@ -286,8 +351,12 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
           )}
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 space-y-1 p-2 overflow-y-auto" aria-label="Navegação do sistema">
+        {/* CORREÇÃO 10: Navigation with iOS smooth scroll */}
+        <nav 
+          className="flex-1 space-y-1 p-2 overflow-y-auto overscroll-contain" 
+          style={{ WebkitOverflowScrolling: 'touch' }}
+          aria-label="Navegação do sistema"
+        >
           {roleLoading ? (
             <div className="flex items-center justify-center py-8">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
