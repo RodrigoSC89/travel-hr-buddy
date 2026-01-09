@@ -49,6 +49,9 @@ const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
 const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrationPage"));
 const BlockchainCompliancePage = lazy(() => import("@/pages/BlockchainCompliancePage"));
 const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
+const MLCSchedulingPage = lazy(() => import("@/pages/MLCSchedulingPage"));
+const SupplierPortalPage = lazy(() => import("@/pages/SupplierPortalPage"));
+const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -285,6 +288,13 @@ const AppRoutes = () => (
       <Route path="/vessel-history" element={<VesselHistoryV2 />} />
       <Route path="/digital-twin" element={<DigitalTwinPage />} />
       <Route path="/logistics-command" element={<LogisticsCommandPage />} />
+      <Route path="/recruitment" element={<RecruitmentPage />} />
+      <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
+      <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
+      <Route path="/company-financials" element={<CompanyFinancialPage />} />
+      <Route path="/mlc-scheduling" element={<MLCSchedulingPage />} />
+      <Route path="/supplier-portal" element={<SupplierPortalPage />} />
+      <Route path="/iot-dashboard" element={<IoTDashboardPage />} />
       {/* ============================================ */}
       {/* MANUTENÇÃO */}
       {/* ============================================ */}
