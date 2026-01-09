@@ -174,6 +174,11 @@ const PeopleAnalyticsPage = lazy(() => import("@/pages/PeopleAnalyticsPage"));
 const Payroll = lazy(() => import("@/pages/Payroll"));
 const TimeTracking = lazy(() => import("@/pages/TimeTracking"));
 
+// HR/DP AI Modules
+const HRChatbotPage = lazy(() => import("@/pages/HRChatbotPage"));
+const HRDocumentOCRPage = lazy(() => import("@/pages/HRDocumentOCRPage"));
+const HRTurnoverPredictionPage = lazy(() => import("@/pages/HRTurnoverPredictionPage"));
+
 // ============================================
 // TREINAMENTOS
 // ============================================
@@ -477,7 +482,18 @@ const AppRoutes = () => (
       <Route path="/portal-colaborador" element={<EmployeePortalPage />} />
       <Route path="/people-analytics" element={<PeopleAnalyticsPage />} />
       <Route path="/hr/analytics" element={<PeopleAnalyticsPage />} />
-      <Route path="/hr/turnover" element={<PeopleAnalyticsPage />} />
+      <Route path="/hr/turnover" element={<HRTurnoverPredictionPage />} />
+      
+      {/* HR AI Modules */}
+      <Route path="/hr-chatbot" element={<HRChatbotPage />} />
+      <Route path="/hr/chatbot" element={<HRChatbotPage />} />
+      <Route path="/assistente-rh" element={<HRChatbotPage />} />
+      <Route path="/hr-ocr" element={<HRDocumentOCRPage />} />
+      <Route path="/hr/document-ocr" element={<HRDocumentOCRPage />} />
+      <Route path="/admissao-digital" element={<HRDocumentOCRPage />} />
+      <Route path="/hr-turnover" element={<HRTurnoverPredictionPage />} />
+      <Route path="/hr/turnover-prediction" element={<HRTurnoverPredictionPage />} />
+      <Route path="/predicao-turnover" element={<HRTurnoverPredictionPage />} />
       
       {/* ============================================ */}
       {/* TREINAMENTOS */}
