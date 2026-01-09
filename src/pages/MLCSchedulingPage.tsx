@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { MLCCrewScheduling } from '@/components/scheduling/MLCCrewScheduling';
 
 const MLCSchedulingPage: React.FC = () => {

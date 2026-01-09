@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { SupplierPortal } from '@/components/suppliers/SupplierPortal';
 
 const SupplierPortalPage: React.FC = () => {

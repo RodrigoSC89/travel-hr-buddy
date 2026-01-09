@@ -22,6 +22,9 @@ export default defineConfig(({ mode }) => ({
       // Force single React instance - CRITICAL for hooks to work
       "react": path.resolve(__dirname, "node_modules/react"),
       "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+      "react-dom/client": path.resolve(__dirname, "node_modules/react-dom/client"),
+      "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
+      "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
       "react-is": path.resolve(__dirname, "node_modules/react-is"),
       // Force lodash to use ESM version
       "lodash": path.resolve(__dirname, "node_modules/lodash-es"),
@@ -29,6 +32,7 @@ export default defineConfig(({ mode }) => ({
     dedupe: [
       "react",
       "react-dom",
+      "react-dom/client",
       "react-is",
       "react/jsx-runtime",
       "react/jsx-dev-runtime",
@@ -40,25 +44,27 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist",
     sourcemap: false,
-    minify: false,
+    minify: "esbuild",
     target: "esnext",
     chunkSizeWarningLimit: 100000,
-    cssCodeSplit: false,
-    modulePreload: false,
+    cssCodeSplit: true,
+    modulePreload: { polyfill: true },
     reportCompressedSize: false,
     rollupOptions: {
       output: {
-        manualChunks: undefined,
-        inlineDynamicImports: true,
+        // Separate React into its own chunk to prevent duplication
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-dom/client'],
+          'query-vendor': ['@tanstack/react-query'],
+        },
       },
-      treeshake: false,
-      maxParallelFileOps: 1,
     },
   },
   optimizeDeps: {
     include: [
       "react",
       "react-dom",
+      "react-dom/client",
       "react-is",
       "react/jsx-runtime",
       "react/jsx-dev-runtime",
@@ -81,10 +87,11 @@ export default defineConfig(({ mode }) => ({
     esbuildOptions: {
       target: "esnext",
     },
+    // Force re-optimization when dependencies change
+    force: mode === "development",
   },
   esbuild: {
     target: "esnext",
     legalComments: "none",
-    treeShaking: false,
   },
 }));
