@@ -122,6 +122,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Port Call", path: "/port-call", icon: Anchor, emoji: "⚓" },
       { label: "CTS Tripulação", path: "/vessel-cts", icon: Users, emoji: "👥" },
       { label: "Histórico de Embarcação", path: "/vessel-history", icon: Activity, emoji: "📊" },
+      { label: "Digital Twin", path: "/digital-twin", icon: Cpu, emoji: "🎮", badge: "v4.0", status: "new" },
+      { label: "Logistics Command", path: "/logistics-command", icon: Truck, emoji: "📦", badge: "v4.0", status: "new" },
     ],
   },
 
@@ -169,6 +171,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "📊 AI Analytics", path: "/ai-analytics", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
       { label: "🚀 Features Revolucionárias", path: "/revolutionary-features", icon: Zap, emoji: "🚀", badge: "NEW", status: "new" },
       { label: "🤖 Autonomous Command", path: "/autonomous-command", icon: Brain, emoji: "🤖", badge: "v4.0", status: "new" },
+      { label: "🎯 Agent Orchestration", path: "/agent-orchestration", icon: Brain, emoji: "🎯", badge: "v4.0", status: "new" },
       { label: "AI Command Center", path: "/ai-command", icon: Brain, emoji: "🧠" },
       { label: "IA Autônoma (Logs)", path: "/ai-ops/logs", icon: Zap, emoji: "🤖" },
       { label: "Observabilidade IA", path: "/ai-observability", icon: Activity, emoji: "📊" },
@@ -321,6 +324,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Bem-estar Tripulação", path: "/crew-wellbeing", icon: Heart, emoji: "💚" },
       { label: "Enfermaria Digital", path: "/medical-infirmary", icon: Heart, emoji: "🏥" },
       { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
+      { label: "Recrutamento AI", path: "/recruitment", icon: Users, emoji: "🎯", badge: "v4.0", status: "new" },
+      { label: "MLC Scheduling", path: "/mlc-scheduling", icon: Calendar, emoji: "📅", badge: "MLC", status: "new" },
     ],
   },
 
@@ -351,6 +356,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Operations Command", path: "/operations-command", icon: Settings, emoji: "⚙️" },
       { label: "Procurement Command", path: "/procurement-command", icon: ShoppingCart, emoji: "🛒" },
       { label: "Gestão de Tarefas", path: "/task-management", icon: ClipboardList, emoji: "📋" },
+      { label: "Supplier Portal", path: "/supplier-portal", icon: ShoppingCart, emoji: "🏭", badge: "v4.0", status: "new" },
+      { label: "Company Financials", path: "/company-financials", icon: DollarSign, emoji: "💹", badge: "v4.0", status: "new" },
+      { label: "Blockchain Compliance", path: "/blockchain-compliance", icon: Database, emoji: "🔗", badge: "v4.0", status: "new" },
     ],
   },
 
@@ -391,6 +399,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "API Gateway", path: "/api-gateway", icon: Globe, emoji: "🌐" },
       { label: "Colaboração", path: "/collaboration", icon: Users, emoji: "🤝" },
       { label: "IoT Dashboard", path: "/iot", icon: HardDrive, emoji: "📊" },
+      { label: "IoT Sensors Real-time", path: "/iot-dashboard", icon: Thermometer, emoji: "🌡️", badge: "v4.0", status: "new" },
       { label: "Gamificação", path: "/gamification", icon: Gamepad2, emoji: "🎮" },
       { label: "Roadmap v3.2", path: "/roadmap", icon: Map, emoji: "🗺️", badge: "NEW" },
       { label: "QA Preview", path: "/qa/preview", icon: Eye, emoji: "🧪" },
