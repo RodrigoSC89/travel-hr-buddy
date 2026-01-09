@@ -171,6 +171,8 @@ const Users = lazy(() => import("@/pages/Users"));
 const HRDashboardPage = lazy(() => import("@/pages/HRDashboardPage"));
 const EmployeePortalPage = lazy(() => import("@/pages/EmployeePortalPage"));
 const PeopleAnalyticsPage = lazy(() => import("@/pages/PeopleAnalyticsPage"));
+const Payroll = lazy(() => import("@/pages/Payroll"));
+const TimeTracking = lazy(() => import("@/pages/TimeTracking"));
 
 // ============================================
 // TREINAMENTOS
@@ -464,7 +466,11 @@ const AppRoutes = () => (
       <Route path="/hr-dashboard" element={<HRDashboardPage />} />
       <Route path="/hr/dashboard" element={<HRDashboardPage />} />
       <Route path="/hr/employees" element={<HRDashboardPage />} />
-      <Route path="/hr/payroll" element={<HRDashboardPage />} />
+      <Route path="/hr/payroll" element={<Payroll />} />
+      <Route path="/payroll" element={<Payroll />} />
+      <Route path="/folha-pagamento" element={<Payroll />} />
+      <Route path="/time-tracking" element={<TimeTracking />} />
+      <Route path="/controle-ponto" element={<TimeTracking />} />
       <Route path="/hr/admissions" element={<HRDashboardPage />} />
       <Route path="/hr/vacations" element={<HRDashboardPage />} />
       <Route path="/employee-portal" element={<EmployeePortalPage />} />

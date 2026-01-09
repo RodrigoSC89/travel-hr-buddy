@@ -146,8 +146,7 @@ export function usePayroll() {
     try {
       const { data, error } = await supabase
         .from('hr_employees')
-        .select('id, full_name, position, department, base_salary, admission_date, metadata')
-        .eq('status', 'active')
+        .select('id, full_name, position, department, base_salary, hire_date, metadata')
         .order('full_name');
 
       if (error) throw error;
@@ -159,8 +158,8 @@ export function usePayroll() {
         position: emp.position || '',
         department: emp.department || '',
         base_salary: Number(emp.base_salary) || 0,
-        dependents: (emp.metadata as any)?.dependents || 0,
-        admission_date: emp.admission_date || '',
+        dependents: typeof emp.metadata === 'object' && emp.metadata !== null ? ((emp.metadata as Record<string, unknown>).dependents as number) || 0 : 0,
+        admission_date: emp.hire_date || '',
       }));
 
       setEmployees(formattedEmployees);
@@ -314,38 +313,37 @@ export function usePayroll() {
     }
 
     try {
+      const [year, monthNum] = month.split('-');
+      
       const records = calculations.map((calc) => ({
         employee_id: calc.employee_id,
-        reference_month: month,
+        reference_month: parseInt(monthNum),
+        reference_year: parseInt(year),
         base_salary: calc.base_salary,
         gross_salary: calc.gross_salary,
         net_salary: calc.net_salary,
-        deductions: {
-          inss: calc.inss_value,
-          irrf: calc.irrf_value,
-          transport_voucher: calc.transport_voucher,
-          meal_voucher: calc.meal_voucher,
-          other: calc.other_deductions,
-        },
-        earnings: {
-          overtime: calc.overtime_value,
-          night_shift: calc.night_shift_value,
-          hazard_pay: calc.hazard_pay,
-          unhealthy_pay: calc.unhealthy_pay,
-          bonus: calc.bonus,
-          commissions: calc.commissions,
-        },
-        taxes: {
-          fgts: calc.fgts_value,
-          employer_inss: calc.employer_inss,
-        },
+        total_deductions: calc.total_deductions,
+        overtime_hours: calc.overtime_hours,
+        overtime_value: calc.overtime_value,
+        night_shift_hours: calc.night_shift_hours,
+        night_shift_value: calc.night_shift_value,
+        inss_employee: calc.inss_value,
+        irrf: calc.irrf_value,
+        fgts: calc.fgts_value,
+        transport_voucher_discount: calc.transport_voucher,
+        meal_voucher_discount: calc.meal_voucher,
+        other_deductions: calc.other_deductions,
+        hazard_pay: calc.hazard_pay,
+        bonuses: calc.bonus,
+        commissions: calc.commissions,
+        inss_employer: calc.employer_inss,
+        fgts_employer: calc.fgts_value,
         status: 'calculated',
-        created_at: new Date().toISOString(),
       }));
 
       const { error } = await supabase
         .from('hr_payroll')
-        .upsert(records, { onConflict: 'employee_id,reference_month' });
+        .upsert(records, { onConflict: 'employee_id,reference_month,reference_year' });
 
       if (error) throw error;
 
