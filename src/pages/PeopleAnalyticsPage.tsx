@@ -1,6 +1,7 @@
 /**
  * People Analytics - Dashboard Preditivo com IA
  * Análises avançadas, predição de turnover, clima organizacional
+ * Conectado a dados reais do Supabase (hr_employees, hr_payroll)
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,66 +11,70 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   Brain, TrendingUp, TrendingDown, Users, AlertTriangle,
   Target, BarChart3, PieChart, Activity, Zap, 
   ArrowUpRight, Download, Calendar, Building2, Smile, 
-  Bot, ScanLine, DollarSign, Clock, Award, GraduationCap, UserMinus
+  Bot, ScanLine, DollarSign, Clock, Award, GraduationCap, UserMinus,
+  RefreshCw
 } from 'lucide-react';
 import { 
   AreaChart, Area, BarChart, Bar, PieChart as RePieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
   Line, ComposedChart
 } from 'recharts';
+import { useEmployeeStats, usePayrollStats, useHeadcountTrend } from '@/hooks/usePeopleAnalytics';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function PeopleAnalyticsPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [period, setPeriod] = useState('6m');
   const [department, setDepartment] = useState('all');
 
+  // Real data from Supabase
+  const { data: employeeStats, isLoading: loadingEmployees, error: employeeError } = useEmployeeStats();
+  const { data: payrollStats, isLoading: loadingPayroll } = usePayrollStats();
+  const { data: headcountTrend, isLoading: loadingTrend } = useHeadcountTrend();
+
+  const isLoading = loadingEmployees || loadingPayroll || loadingTrend;
+
+  // Refetch data
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ['people-analytics-employees'] });
+    queryClient.invalidateQueries({ queryKey: ['people-analytics-payroll'] });
+    queryClient.invalidateQueries({ queryKey: ['people-analytics-headcount-trend'] });
+  };
+
+  // Use real data or fallback to demo data
   const kpis = {
-    headcount: { value: 347, change: 5.2 },
-    turnover: { value: 1.8, change: -12 },
-    avgTenure: { value: 2.4, change: 8 },
-    nps: { value: 72, change: 15 },
-    costPerEmployee: { value: 8500, change: 3 },
+    headcount: { value: employeeStats?.headcount || 0, change: employeeStats?.headcountChange || 0 },
+    turnover: { value: employeeStats?.turnoverRate || 0, change: employeeStats?.turnoverChange || 0 },
+    avgTenure: { value: employeeStats?.avgTenureYears || 0, change: employeeStats?.avgTenureChange || 0 },
+    nps: { value: employeeStats?.avgWellnessScore || 0, change: 15 },
+    costPerEmployee: { value: payrollStats?.avgSalaryPerEmployee || 0, change: payrollStats?.avgSalaryChange || 0 },
     trainingHours: { value: 24, change: 20 },
   };
 
-  const turnoverData = [
-    { month: 'Ago', turnover: 2.1, hired: 8, left: 5 },
-    { month: 'Set', turnover: 1.9, hired: 10, left: 4 },
-    { month: 'Out', turnover: 2.3, hired: 6, left: 6 },
-    { month: 'Nov', turnover: 1.5, hired: 12, left: 3 },
-    { month: 'Dez', turnover: 1.2, hired: 8, left: 2 },
-    { month: 'Jan', turnover: 1.8, hired: 14, left: 4 },
-  ];
+  // Transform headcount trend data for chart
+  const turnoverData = headcountTrend?.map(t => ({
+    month: t.month,
+    turnover: t.count > 0 ? ((t.left / t.count) * 100).toFixed(1) : 0,
+    hired: t.hired,
+    left: t.left,
+  })) || [];
 
-  const departmentData = [
-    { name: 'Tecnologia', value: 120, growth: 15, turnover: 1.2, avgSalary: 12500, color: '#3b82f6' },
-    { name: 'Operações', value: 85, growth: 8, turnover: 2.1, avgSalary: 8200, color: '#22c55e' },
-    { name: 'Comercial', value: 60, growth: 12, turnover: 3.5, avgSalary: 9800, color: '#f59e0b' },
-    { name: 'Financeiro', value: 42, growth: 5, turnover: 0.8, avgSalary: 11200, color: '#8b5cf6' },
-    { name: 'RH', value: 25, growth: 4, turnover: 0.5, avgSalary: 8900, color: '#ec4899' },
-    { name: 'Outros', value: 15, growth: 0, turnover: 1.0, avgSalary: 7500, color: '#6b7280' },
-  ];
+  const departmentData = employeeStats?.departmentDistribution || [];
 
-  const headcountTrend = [
-    { month: 'Ago', Tecnologia: 105, Operações: 80, Comercial: 52, Financeiro: 40, RH: 23 },
-    { month: 'Set', Tecnologia: 108, Operações: 81, Comercial: 54, Financeiro: 40, RH: 23 },
-    { month: 'Out', Tecnologia: 110, Operações: 82, Comercial: 55, Financeiro: 41, RH: 24 },
-    { month: 'Nov', Tecnologia: 115, Operações: 83, Comercial: 57, Financeiro: 41, RH: 24 },
-    { month: 'Dez', Tecnologia: 118, Operações: 84, Comercial: 58, Financeiro: 42, RH: 25 },
-    { month: 'Jan', Tecnologia: 120, Operações: 85, Comercial: 60, Financeiro: 42, RH: 25 },
-  ];
+  const headcountTrendData = headcountTrend?.map(t => ({
+    month: t.month,
+    Total: t.count,
+  })) || [];
 
-  const riskEmployees = [
-    { name: 'Maria Silva', position: 'Analista Sr', department: 'Tecnologia', risk: 87, factors: ['Salário abaixo mercado', 'Sem promoção 24m'] },
-    { name: 'Carlos Oliveira', position: 'Dev Full-Stack', department: 'Tecnologia', risk: 75, factors: ['Alta carga de trabalho'] },
-    { name: 'Ana Santos', position: 'Designer', department: 'Marketing', risk: 68, factors: ['Estagnação carreira'] },
-    { name: 'João Costa', position: 'Coordenador', department: 'Operações', risk: 62, factors: ['Conflitos com equipe'] },
-  ];
+  const riskEmployees = employeeStats?.riskEmployees || [];
 
+  // Static data for climate (would need separate survey table)
   const climateData = [
     { dimension: 'Liderança', score: 78, benchmark: 75 },
     { dimension: 'Cultura', score: 82, benchmark: 80 },
@@ -86,12 +91,14 @@ export default function PeopleAnalyticsPage() {
     { label: 'Taxa de Aceite', value: '78%', icon: Award },
   ];
 
+  // Cost breakdown from payroll
+  const totalPayroll = payrollStats?.totalGrossSalary || 0;
   const costBreakdown = [
-    { category: 'Salários', value: 2100000, percent: 68 },
-    { category: 'Benefícios', value: 620000, percent: 20 },
-    { category: 'Treinamento', value: 180000, percent: 6 },
-    { category: 'Recrutamento', value: 120000, percent: 4 },
-    { category: 'Outros', value: 80000, percent: 2 },
+    { category: 'Salários', value: totalPayroll, percent: 68 },
+    { category: 'Benefícios', value: Math.round(totalPayroll * 0.29), percent: 20 },
+    { category: 'Treinamento', value: Math.round(totalPayroll * 0.09), percent: 6 },
+    { category: 'Recrutamento', value: Math.round(totalPayroll * 0.06), percent: 4 },
+    { category: 'Outros', value: Math.round(totalPayroll * 0.03), percent: 2 },
   ];
 
   return (
@@ -131,6 +138,10 @@ export default function PeopleAnalyticsPage() {
               <SelectItem value="1y">1 ano</SelectItem>
             </SelectContent>
           </Select>
+          <Button variant="outline" className="gap-2" onClick={handleRefresh} disabled={isLoading}>
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            {isLoading ? 'Atualizando...' : 'Atualizar'}
+          </Button>
           <Button variant="outline" className="gap-2">
             <Download className="h-4 w-4" />
             Exportar
@@ -383,21 +394,14 @@ export default function PeopleAnalyticsPage() {
                       <div className="h-3 w-3 rounded-full" style={{ backgroundColor: dept.color }} />
                       <span className="font-medium">{dept.name}</span>
                     </div>
-                    <Badge variant={dept.growth > 10 ? 'default' : 'secondary'}>+{dept.growth}%</Badge>
+                    <Badge variant="secondary">{dept.value} pessoas</Badge>
                   </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Colaboradores</span>
                       <span className="font-bold text-lg">{dept.value}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Turnover</span>
-                      <span className={dept.turnover > 2 ? 'text-red-500' : 'text-green-500'}>{dept.turnover}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-muted-foreground">Salário Médio</span>
-                      <span>R$ {dept.avgSalary.toLocaleString()}</span>
-                    </div>
+                    <Progress value={(dept.value / (employeeStats?.headcount || 1)) * 100} className="h-2" />
                   </div>
                 </CardContent>
               </Card>

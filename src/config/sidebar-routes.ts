@@ -40,7 +40,7 @@ import {
   MessageSquare, Bell, Settings, BookOpen, Award, Heart, Leaf,
   ShoppingCart, Link, Gamepad2, Database, Server, Cpu, Calendar,
   ClipboardList, Briefcase, DollarSign, Truck, HardDrive, Thermometer,
-  Radar
+  Radar, Clock
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -329,6 +329,21 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Gestão de Usuários", path: "/users", icon: Users, emoji: "🔑" },
       { label: "Recrutamento AI", path: "/recruitment", icon: Users, emoji: "🎯", badge: "v4.0", status: "new" },
       { label: "MLC Scheduling", path: "/mlc-scheduling", icon: Calendar, emoji: "📅", badge: "MLC", status: "new" },
+    ],
+  },
+
+  // ============================================
+  // 🤖 RH & IA - Módulos Inteligentes (NEW!)
+  // ============================================
+  {
+    title: "🤖 RH & IA",
+    defaultOpen: false,
+    items: [
+      { label: "💬 Chatbot RH 24/7", path: "/hr-chatbot", icon: MessageSquare, emoji: "💬", badge: "AI", status: "new" },
+      { label: "📄 OCR Documentos", path: "/hr-ocr", icon: FileText, emoji: "📄", badge: "AI", status: "new" },
+      { label: "📉 Predição Turnover", path: "/hr-turnover", icon: TrendingUp, emoji: "📉", badge: "ML", status: "new" },
+      { label: "💰 Folha de Pagamento", path: "/hr-payroll", icon: DollarSign, emoji: "💰", badge: "NEW", status: "new" },
+      { label: "⏰ Ponto Eletrônico", path: "/hr-time-tracking", icon: Clock, emoji: "⏰", badge: "NEW", status: "new" },
     ],
   },
 
