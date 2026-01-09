@@ -12674,6 +12674,1412 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_admissions: {
+        Row: {
+          ai_flags: Json | null
+          ai_validation_score: number | null
+          candidate_email: string
+          candidate_name: string
+          candidate_phone: string | null
+          contract_generated_at: string | null
+          contract_signed_at: string | null
+          contract_template_id: string | null
+          contract_url: string | null
+          created_at: string | null
+          created_by: string | null
+          department: string | null
+          documents_received: Json | null
+          documents_requested: Json | null
+          documents_validated: Json | null
+          first_day_date: string | null
+          id: string
+          invite_sent_at: string | null
+          last_reminder_at: string | null
+          ocr_results: Json | null
+          onboarding_checklist: Json | null
+          onboarding_progress: number | null
+          organization_id: string | null
+          position: string
+          proposed_salary: number | null
+          proposed_start_date: string | null
+          reminder_count: number | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ai_flags?: Json | null
+          ai_validation_score?: number | null
+          candidate_email: string
+          candidate_name: string
+          candidate_phone?: string | null
+          contract_generated_at?: string | null
+          contract_signed_at?: string | null
+          contract_template_id?: string | null
+          contract_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          department?: string | null
+          documents_received?: Json | null
+          documents_requested?: Json | null
+          documents_validated?: Json | null
+          first_day_date?: string | null
+          id?: string
+          invite_sent_at?: string | null
+          last_reminder_at?: string | null
+          ocr_results?: Json | null
+          onboarding_checklist?: Json | null
+          onboarding_progress?: number | null
+          organization_id?: string | null
+          position: string
+          proposed_salary?: number | null
+          proposed_start_date?: string | null
+          reminder_count?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ai_flags?: Json | null
+          ai_validation_score?: number | null
+          candidate_email?: string
+          candidate_name?: string
+          candidate_phone?: string | null
+          contract_generated_at?: string | null
+          contract_signed_at?: string | null
+          contract_template_id?: string | null
+          contract_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          department?: string | null
+          documents_received?: Json | null
+          documents_requested?: Json | null
+          documents_validated?: Json | null
+          first_day_date?: string | null
+          id?: string
+          invite_sent_at?: string | null
+          last_reminder_at?: string | null
+          ocr_results?: Json | null
+          onboarding_checklist?: Json | null
+          onboarding_progress?: number | null
+          organization_id?: string | null
+          position?: string
+          proposed_salary?: number | null
+          proposed_start_date?: string | null
+          reminder_count?: number | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_admissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_benefits: {
+        Row: {
+          benefit_name: string
+          benefit_type: string
+          company_contribution: number | null
+          created_at: string | null
+          description: string | null
+          eligibility_rules: Json | null
+          employee_contribution: number | null
+          id: string
+          is_active: boolean | null
+          is_percentage: boolean | null
+          metadata: Json | null
+          min_tenure_days: number | null
+          organization_id: string | null
+          provider: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          benefit_name: string
+          benefit_type: string
+          company_contribution?: number | null
+          created_at?: string | null
+          description?: string | null
+          eligibility_rules?: Json | null
+          employee_contribution?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_percentage?: boolean | null
+          metadata?: Json | null
+          min_tenure_days?: number | null
+          organization_id?: string | null
+          provider?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          benefit_name?: string
+          benefit_type?: string
+          company_contribution?: number | null
+          created_at?: string | null
+          description?: string | null
+          eligibility_rules?: Json | null
+          employee_contribution?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_percentage?: boolean | null
+          metadata?: Json | null
+          min_tenure_days?: number | null
+          organization_id?: string | null
+          provider?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_benefits_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_chatbot_logs: {
+        Row: {
+          action_taken: string | null
+          ai_response: string | null
+          confidence_score: number | null
+          created_at: string | null
+          employee_id: string | null
+          escalated_to_human: boolean | null
+          feedback_comment: string | null
+          feedback_rating: number | null
+          id: string
+          intent_detected: string | null
+          metadata: Json | null
+          organization_id: string | null
+          resolved: boolean | null
+          response_time_ms: number | null
+          session_id: string
+          tokens_used: number | null
+          user_message: string
+        }
+        Insert: {
+          action_taken?: string | null
+          ai_response?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          employee_id?: string | null
+          escalated_to_human?: boolean | null
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          intent_detected?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          resolved?: boolean | null
+          response_time_ms?: number | null
+          session_id: string
+          tokens_used?: number | null
+          user_message: string
+        }
+        Update: {
+          action_taken?: string | null
+          ai_response?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          employee_id?: string | null
+          escalated_to_human?: boolean | null
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          intent_detected?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          resolved?: boolean | null
+          response_time_ms?: number | null
+          session_id?: string
+          tokens_used?: number | null
+          user_message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_chatbot_logs_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_chatbot_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_climate_responses: {
+        Row: {
+          answers: Json
+          employee_id: string | null
+          id: string
+          keywords: Json | null
+          nps_score: number | null
+          sentiment_score: number | null
+          submitted_at: string | null
+          survey_id: string | null
+          text_feedback: string | null
+        }
+        Insert: {
+          answers: Json
+          employee_id?: string | null
+          id?: string
+          keywords?: Json | null
+          nps_score?: number | null
+          sentiment_score?: number | null
+          submitted_at?: string | null
+          survey_id?: string | null
+          text_feedback?: string | null
+        }
+        Update: {
+          answers?: Json
+          employee_id?: string | null
+          id?: string
+          keywords?: Json | null
+          nps_score?: number | null
+          sentiment_score?: number | null
+          submitted_at?: string | null
+          survey_id?: string | null
+          text_feedback?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_climate_responses_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_climate_responses_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "hr_climate_surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_climate_surveys: {
+        Row: {
+          action_recommendations: Json | null
+          ai_insights: Json | null
+          created_at: string | null
+          created_by: string | null
+          end_date: string
+          id: string
+          is_anonymous: boolean | null
+          nps_score: number | null
+          organization_id: string | null
+          overall_score: number | null
+          questions: Json
+          response_rate: number | null
+          sentiment_analysis: Json | null
+          start_date: string
+          status: string | null
+          survey_name: string
+          survey_type: string | null
+          total_responses: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          action_recommendations?: Json | null
+          ai_insights?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          end_date: string
+          id?: string
+          is_anonymous?: boolean | null
+          nps_score?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          questions: Json
+          response_rate?: number | null
+          sentiment_analysis?: Json | null
+          start_date: string
+          status?: string | null
+          survey_name: string
+          survey_type?: string | null
+          total_responses?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          action_recommendations?: Json | null
+          ai_insights?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          end_date?: string
+          id?: string
+          is_anonymous?: boolean | null
+          nps_score?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          questions?: Json
+          response_rate?: number | null
+          sentiment_analysis?: Json | null
+          start_date?: string
+          status?: string | null
+          survey_name?: string
+          survey_type?: string | null
+          total_responses?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_climate_surveys_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_employee_benefits: {
+        Row: {
+          benefit_id: string | null
+          created_at: string | null
+          custom_value: number | null
+          dependents_count: number | null
+          employee_id: string | null
+          end_date: string | null
+          enrollment_date: string
+          id: string
+          metadata: Json | null
+          status: string | null
+        }
+        Insert: {
+          benefit_id?: string | null
+          created_at?: string | null
+          custom_value?: number | null
+          dependents_count?: number | null
+          employee_id?: string | null
+          end_date?: string | null
+          enrollment_date: string
+          id?: string
+          metadata?: Json | null
+          status?: string | null
+        }
+        Update: {
+          benefit_id?: string | null
+          created_at?: string | null
+          custom_value?: number | null
+          dependents_count?: number | null
+          employee_id?: string | null
+          end_date?: string | null
+          enrollment_date?: string
+          id?: string
+          metadata?: Json | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_employee_benefits_benefit_id_fkey"
+            columns: ["benefit_id"]
+            isOneToOne: false
+            referencedRelation: "hr_benefits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_employee_benefits_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_employees: {
+        Row: {
+          address_city: string | null
+          address_complement: string | null
+          address_neighborhood: string | null
+          address_number: string | null
+          address_state: string | null
+          address_street: string | null
+          address_zip: string | null
+          bank_account: string | null
+          bank_branch: string | null
+          bank_name: string | null
+          base_salary: number | null
+          birth_date: string | null
+          contract_type: string | null
+          cost_center: string | null
+          cpf: string | null
+          created_at: string | null
+          created_by: string | null
+          ctps_number: string | null
+          ctps_series: string | null
+          department: string | null
+          driver_license: string | null
+          driver_license_category: string | null
+          email: string
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          employee_number: string | null
+          full_name: string
+          gender: string | null
+          hire_date: string
+          id: string
+          last_ai_analysis: string | null
+          marital_status: string | null
+          metadata: Json | null
+          military_cert: string | null
+          nationality: string | null
+          notes: string | null
+          organization_id: string | null
+          payment_method: string | null
+          phone: string | null
+          pis_pasep: string | null
+          pix_key: string | null
+          position: string
+          profile_photo_url: string | null
+          rg: string | null
+          salary_currency: string | null
+          status: string | null
+          termination_date: string | null
+          turnover_risk_factors: Json | null
+          turnover_risk_score: number | null
+          updated_at: string | null
+          user_id: string | null
+          voter_id: string | null
+          wellness_score: number | null
+          work_schedule: string | null
+        }
+        Insert: {
+          address_city?: string | null
+          address_complement?: string | null
+          address_neighborhood?: string | null
+          address_number?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          bank_account?: string | null
+          bank_branch?: string | null
+          bank_name?: string | null
+          base_salary?: number | null
+          birth_date?: string | null
+          contract_type?: string | null
+          cost_center?: string | null
+          cpf?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          ctps_number?: string | null
+          ctps_series?: string | null
+          department?: string | null
+          driver_license?: string | null
+          driver_license_category?: string | null
+          email: string
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          employee_number?: string | null
+          full_name: string
+          gender?: string | null
+          hire_date: string
+          id?: string
+          last_ai_analysis?: string | null
+          marital_status?: string | null
+          metadata?: Json | null
+          military_cert?: string | null
+          nationality?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          payment_method?: string | null
+          phone?: string | null
+          pis_pasep?: string | null
+          pix_key?: string | null
+          position: string
+          profile_photo_url?: string | null
+          rg?: string | null
+          salary_currency?: string | null
+          status?: string | null
+          termination_date?: string | null
+          turnover_risk_factors?: Json | null
+          turnover_risk_score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          voter_id?: string | null
+          wellness_score?: number | null
+          work_schedule?: string | null
+        }
+        Update: {
+          address_city?: string | null
+          address_complement?: string | null
+          address_neighborhood?: string | null
+          address_number?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          bank_account?: string | null
+          bank_branch?: string | null
+          bank_name?: string | null
+          base_salary?: number | null
+          birth_date?: string | null
+          contract_type?: string | null
+          cost_center?: string | null
+          cpf?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          ctps_number?: string | null
+          ctps_series?: string | null
+          department?: string | null
+          driver_license?: string | null
+          driver_license_category?: string | null
+          email?: string
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          employee_number?: string | null
+          full_name?: string
+          gender?: string | null
+          hire_date?: string
+          id?: string
+          last_ai_analysis?: string | null
+          marital_status?: string | null
+          metadata?: Json | null
+          military_cert?: string | null
+          nationality?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          payment_method?: string | null
+          phone?: string | null
+          pis_pasep?: string | null
+          pix_key?: string | null
+          position?: string
+          profile_photo_url?: string | null
+          rg?: string | null
+          salary_currency?: string | null
+          status?: string | null
+          termination_date?: string | null
+          turnover_risk_factors?: Json | null
+          turnover_risk_score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          voter_id?: string | null
+          wellness_score?: number | null
+          work_schedule?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_employees_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_onboarding_tasks: {
+        Row: {
+          admission_id: string | null
+          badge_id: string | null
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string | null
+          due_date: string | null
+          employee_id: string | null
+          id: string
+          metadata: Json | null
+          order_index: number | null
+          organization_id: string | null
+          points: number | null
+          status: string | null
+          task_description: string | null
+          task_name: string
+          task_type: string
+        }
+        Insert: {
+          admission_id?: string | null
+          badge_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          employee_id?: string | null
+          id?: string
+          metadata?: Json | null
+          order_index?: number | null
+          organization_id?: string | null
+          points?: number | null
+          status?: string | null
+          task_description?: string | null
+          task_name: string
+          task_type: string
+        }
+        Update: {
+          admission_id?: string | null
+          badge_id?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          employee_id?: string | null
+          id?: string
+          metadata?: Json | null
+          order_index?: number | null
+          organization_id?: string | null
+          points?: number | null
+          status?: string | null
+          task_description?: string | null
+          task_name?: string
+          task_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_onboarding_tasks_admission_id_fkey"
+            columns: ["admission_id"]
+            isOneToOne: false
+            referencedRelation: "hr_admissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_onboarding_tasks_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_onboarding_tasks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_org_structure: {
+        Row: {
+          cost_center: string | null
+          created_at: string | null
+          headcount_actual: number | null
+          headcount_budget: number | null
+          id: string
+          is_active: boolean | null
+          manager_id: string | null
+          metadata: Json | null
+          name: string
+          organization_id: string | null
+          parent_id: string | null
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          cost_center?: string | null
+          created_at?: string | null
+          headcount_actual?: number | null
+          headcount_budget?: number | null
+          id?: string
+          is_active?: boolean | null
+          manager_id?: string | null
+          metadata?: Json | null
+          name: string
+          organization_id?: string | null
+          parent_id?: string | null
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          cost_center?: string | null
+          created_at?: string | null
+          headcount_actual?: number | null
+          headcount_budget?: number | null
+          id?: string
+          is_active?: boolean | null
+          manager_id?: string | null
+          metadata?: Json | null
+          name?: string
+          organization_id?: string | null
+          parent_id?: string | null
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_org_structure_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_org_structure_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_org_structure_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "hr_org_structure"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_payroll: {
+        Row: {
+          advances: number | null
+          ai_anomalies: Json | null
+          ai_suggestions: Json | null
+          ai_validated: boolean | null
+          approved_at: string | null
+          approved_by: string | null
+          base_salary: number
+          bonuses: number | null
+          calculated_at: string | null
+          commissions: number | null
+          created_at: string | null
+          dental_insurance: number | null
+          employee_id: string | null
+          fgts: number | null
+          fgts_employer: number | null
+          gross_salary: number
+          hazard_pay: number | null
+          health_insurance: number | null
+          id: string
+          inss_employee: number | null
+          inss_employer: number | null
+          irrf: number | null
+          meal_voucher_discount: number | null
+          metadata: Json | null
+          net_salary: number
+          night_shift_hours: number | null
+          night_shift_value: number | null
+          organization_id: string | null
+          other_deductions: number | null
+          other_earnings: number | null
+          overtime_hours: number | null
+          overtime_value: number | null
+          paid_at: string | null
+          payment_date: string | null
+          rat: number | null
+          reference_month: number
+          reference_year: number
+          status: string | null
+          terceiros: number | null
+          total_deductions: number
+          total_employer_cost: number | null
+          transport_voucher_discount: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          advances?: number | null
+          ai_anomalies?: Json | null
+          ai_suggestions?: Json | null
+          ai_validated?: boolean | null
+          approved_at?: string | null
+          approved_by?: string | null
+          base_salary: number
+          bonuses?: number | null
+          calculated_at?: string | null
+          commissions?: number | null
+          created_at?: string | null
+          dental_insurance?: number | null
+          employee_id?: string | null
+          fgts?: number | null
+          fgts_employer?: number | null
+          gross_salary: number
+          hazard_pay?: number | null
+          health_insurance?: number | null
+          id?: string
+          inss_employee?: number | null
+          inss_employer?: number | null
+          irrf?: number | null
+          meal_voucher_discount?: number | null
+          metadata?: Json | null
+          net_salary: number
+          night_shift_hours?: number | null
+          night_shift_value?: number | null
+          organization_id?: string | null
+          other_deductions?: number | null
+          other_earnings?: number | null
+          overtime_hours?: number | null
+          overtime_value?: number | null
+          paid_at?: string | null
+          payment_date?: string | null
+          rat?: number | null
+          reference_month: number
+          reference_year: number
+          status?: string | null
+          terceiros?: number | null
+          total_deductions: number
+          total_employer_cost?: number | null
+          transport_voucher_discount?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          advances?: number | null
+          ai_anomalies?: Json | null
+          ai_suggestions?: Json | null
+          ai_validated?: boolean | null
+          approved_at?: string | null
+          approved_by?: string | null
+          base_salary?: number
+          bonuses?: number | null
+          calculated_at?: string | null
+          commissions?: number | null
+          created_at?: string | null
+          dental_insurance?: number | null
+          employee_id?: string | null
+          fgts?: number | null
+          fgts_employer?: number | null
+          gross_salary?: number
+          hazard_pay?: number | null
+          health_insurance?: number | null
+          id?: string
+          inss_employee?: number | null
+          inss_employer?: number | null
+          irrf?: number | null
+          meal_voucher_discount?: number | null
+          metadata?: Json | null
+          net_salary?: number
+          night_shift_hours?: number | null
+          night_shift_value?: number | null
+          organization_id?: string | null
+          other_deductions?: number | null
+          other_earnings?: number | null
+          overtime_hours?: number | null
+          overtime_value?: number | null
+          paid_at?: string | null
+          payment_date?: string | null
+          rat?: number | null
+          reference_month?: number
+          reference_year?: number
+          status?: string | null
+          terceiros?: number | null
+          total_deductions?: number
+          total_employer_cost?: number | null
+          transport_voucher_discount?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_payroll_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_payroll_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_performance_reviews: {
+        Row: {
+          ai_recommendations: Json | null
+          ai_sentiment_analysis: Json | null
+          completed_at: string | null
+          created_at: string | null
+          development_plan: string | null
+          employee_agrees: boolean | null
+          employee_comments: string | null
+          employee_id: string | null
+          goal_achievement: number | null
+          goals_next_period: string | null
+          id: string
+          improvement_areas: string | null
+          innovation: number | null
+          leadership: number | null
+          metadata: Json | null
+          organization_id: string | null
+          overall_score: number | null
+          period_end: string
+          period_start: string
+          review_type: string
+          reviewer_id: string | null
+          soft_skills: number | null
+          status: string | null
+          strengths: string | null
+          teamwork: number | null
+          technical_skills: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          ai_recommendations?: Json | null
+          ai_sentiment_analysis?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          development_plan?: string | null
+          employee_agrees?: boolean | null
+          employee_comments?: string | null
+          employee_id?: string | null
+          goal_achievement?: number | null
+          goals_next_period?: string | null
+          id?: string
+          improvement_areas?: string | null
+          innovation?: number | null
+          leadership?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          period_end: string
+          period_start: string
+          review_type: string
+          reviewer_id?: string | null
+          soft_skills?: number | null
+          status?: string | null
+          strengths?: string | null
+          teamwork?: number | null
+          technical_skills?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          ai_recommendations?: Json | null
+          ai_sentiment_analysis?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          development_plan?: string | null
+          employee_agrees?: boolean | null
+          employee_comments?: string | null
+          employee_id?: string | null
+          goal_achievement?: number | null
+          goals_next_period?: string | null
+          id?: string
+          improvement_areas?: string | null
+          innovation?: number | null
+          leadership?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          period_end?: string
+          period_start?: string
+          review_type?: string
+          reviewer_id?: string | null
+          soft_skills?: number | null
+          status?: string | null
+          strengths?: string | null
+          teamwork?: number | null
+          technical_skills?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_performance_reviews_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_performance_reviews_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_performance_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_requests: {
+        Row: {
+          ai_category: string | null
+          ai_suggested_response: string | null
+          approval_chain: Json | null
+          assigned_to: string | null
+          attachments: Json | null
+          created_at: string | null
+          current_approver: string | null
+          description: string | null
+          due_date: string | null
+          employee_id: string | null
+          id: string
+          organization_id: string | null
+          priority: string | null
+          request_type: string
+          responded_at: string | null
+          responded_by: string | null
+          response: string | null
+          status: string | null
+          subject: string
+          updated_at: string | null
+        }
+        Insert: {
+          ai_category?: string | null
+          ai_suggested_response?: string | null
+          approval_chain?: Json | null
+          assigned_to?: string | null
+          attachments?: Json | null
+          created_at?: string | null
+          current_approver?: string | null
+          description?: string | null
+          due_date?: string | null
+          employee_id?: string | null
+          id?: string
+          organization_id?: string | null
+          priority?: string | null
+          request_type: string
+          responded_at?: string | null
+          responded_by?: string | null
+          response?: string | null
+          status?: string | null
+          subject: string
+          updated_at?: string | null
+        }
+        Update: {
+          ai_category?: string | null
+          ai_suggested_response?: string | null
+          approval_chain?: Json | null
+          assigned_to?: string | null
+          attachments?: Json | null
+          created_at?: string | null
+          current_approver?: string | null
+          description?: string | null
+          due_date?: string | null
+          employee_id?: string | null
+          id?: string
+          organization_id?: string | null
+          priority?: string | null
+          request_type?: string
+          responded_at?: string | null
+          responded_by?: string | null
+          response?: string | null
+          status?: string | null
+          subject?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_time_tracking: {
+        Row: {
+          absence_justified: boolean | null
+          absence_type: string | null
+          approved_at: string | null
+          approved_by: string | null
+          attachment_url: string | null
+          break_hours: number | null
+          clock_in_1: string | null
+          clock_in_2: string | null
+          clock_in_3: string | null
+          clock_in_location: Json | null
+          clock_out_1: string | null
+          clock_out_2: string | null
+          clock_out_3: string | null
+          clock_out_location: Json | null
+          created_at: string | null
+          employee_id: string | null
+          id: string
+          justification: string | null
+          metadata: Json | null
+          night_hours: number | null
+          organization_id: string | null
+          overtime_hours: number | null
+          status: string | null
+          tracking_date: string
+          updated_at: string | null
+          worked_hours: number | null
+        }
+        Insert: {
+          absence_justified?: boolean | null
+          absence_type?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          attachment_url?: string | null
+          break_hours?: number | null
+          clock_in_1?: string | null
+          clock_in_2?: string | null
+          clock_in_3?: string | null
+          clock_in_location?: Json | null
+          clock_out_1?: string | null
+          clock_out_2?: string | null
+          clock_out_3?: string | null
+          clock_out_location?: Json | null
+          created_at?: string | null
+          employee_id?: string | null
+          id?: string
+          justification?: string | null
+          metadata?: Json | null
+          night_hours?: number | null
+          organization_id?: string | null
+          overtime_hours?: number | null
+          status?: string | null
+          tracking_date: string
+          updated_at?: string | null
+          worked_hours?: number | null
+        }
+        Update: {
+          absence_justified?: boolean | null
+          absence_type?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          attachment_url?: string | null
+          break_hours?: number | null
+          clock_in_1?: string | null
+          clock_in_2?: string | null
+          clock_in_3?: string | null
+          clock_in_location?: Json | null
+          clock_out_1?: string | null
+          clock_out_2?: string | null
+          clock_out_3?: string | null
+          clock_out_location?: Json | null
+          created_at?: string | null
+          employee_id?: string | null
+          id?: string
+          justification?: string | null
+          metadata?: Json | null
+          night_hours?: number | null
+          organization_id?: string | null
+          overtime_hours?: number | null
+          status?: string | null
+          tracking_date?: string
+          updated_at?: string | null
+          worked_hours?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_time_tracking_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_time_tracking_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_turnover_predictions: {
+        Row: {
+          action_by: string | null
+          action_date: string | null
+          action_details: string | null
+          action_taken: boolean | null
+          created_at: string | null
+          employee_id: string | null
+          engagement_factor: number | null
+          growth_factor: number | null
+          id: string
+          manager_factor: number | null
+          model_accuracy: number | null
+          model_version: string | null
+          organization_id: string | null
+          performance_factor: number | null
+          predicted_departure_window: string | null
+          prediction_date: string
+          recommended_actions: Json | null
+          risk_level: string
+          risk_score: number
+          salary_factor: number | null
+          similar_departures: Json | null
+          tenure_factor: number | null
+          top_risk_factors: Json | null
+          workload_factor: number | null
+        }
+        Insert: {
+          action_by?: string | null
+          action_date?: string | null
+          action_details?: string | null
+          action_taken?: boolean | null
+          created_at?: string | null
+          employee_id?: string | null
+          engagement_factor?: number | null
+          growth_factor?: number | null
+          id?: string
+          manager_factor?: number | null
+          model_accuracy?: number | null
+          model_version?: string | null
+          organization_id?: string | null
+          performance_factor?: number | null
+          predicted_departure_window?: string | null
+          prediction_date: string
+          recommended_actions?: Json | null
+          risk_level: string
+          risk_score: number
+          salary_factor?: number | null
+          similar_departures?: Json | null
+          tenure_factor?: number | null
+          top_risk_factors?: Json | null
+          workload_factor?: number | null
+        }
+        Update: {
+          action_by?: string | null
+          action_date?: string | null
+          action_details?: string | null
+          action_taken?: boolean | null
+          created_at?: string | null
+          employee_id?: string | null
+          engagement_factor?: number | null
+          growth_factor?: number | null
+          id?: string
+          manager_factor?: number | null
+          model_accuracy?: number | null
+          model_version?: string | null
+          organization_id?: string | null
+          performance_factor?: number | null
+          predicted_departure_window?: string | null
+          prediction_date?: string
+          recommended_actions?: Json | null
+          risk_level?: string
+          risk_score?: number
+          salary_factor?: number | null
+          similar_departures?: Json | null
+          tenure_factor?: number | null
+          top_risk_factors?: Json | null
+          workload_factor?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_turnover_predictions_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_turnover_predictions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_vacations: {
+        Row: {
+          acquisition_end: string
+          acquisition_start: string
+          advance_13th: boolean | null
+          advance_13th_value: number | null
+          ai_conflict_check: Json | null
+          ai_recommended_period: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          days_entitled: number | null
+          days_remaining: number | null
+          days_requested: number | null
+          days_taken: number | null
+          employee_id: string | null
+          end_date: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          rejection_reason: string | null
+          requested_at: string | null
+          sell_days: number | null
+          sell_value: number | null
+          start_date: string | null
+          status: string | null
+          total_value: number | null
+          updated_at: string | null
+          vacation_bonus: number | null
+          vacation_pay: number | null
+        }
+        Insert: {
+          acquisition_end: string
+          acquisition_start: string
+          advance_13th?: boolean | null
+          advance_13th_value?: number | null
+          ai_conflict_check?: Json | null
+          ai_recommended_period?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          days_entitled?: number | null
+          days_remaining?: number | null
+          days_requested?: number | null
+          days_taken?: number | null
+          employee_id?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          rejection_reason?: string | null
+          requested_at?: string | null
+          sell_days?: number | null
+          sell_value?: number | null
+          start_date?: string | null
+          status?: string | null
+          total_value?: number | null
+          updated_at?: string | null
+          vacation_bonus?: number | null
+          vacation_pay?: number | null
+        }
+        Update: {
+          acquisition_end?: string
+          acquisition_start?: string
+          advance_13th?: boolean | null
+          advance_13th_value?: number | null
+          ai_conflict_check?: Json | null
+          ai_recommended_period?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          days_entitled?: number | null
+          days_remaining?: number | null
+          days_requested?: number | null
+          days_taken?: number | null
+          employee_id?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          rejection_reason?: string | null
+          requested_at?: string | null
+          sell_days?: number | null
+          sell_value?: number | null
+          start_date?: string | null
+          status?: string | null
+          total_value?: number | null
+          updated_at?: string | null
+          vacation_bonus?: number | null
+          vacation_pay?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_vacations_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_vacations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hull_inspections: {
         Row: {
           anodes_condition: string | null
