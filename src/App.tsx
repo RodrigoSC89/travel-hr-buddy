@@ -42,6 +42,10 @@ const PortCallOptimizationV2 = lazy(() => import("@/pages/PortCallOptimizationV2
 const VesselCTSV2 = lazy(() => import("@/pages/VesselCTSV2"));
 const VesselHistoryV2 = lazy(() => import("@/pages/VesselHistoryV2"));
 
+// Digital Twin & Logistics (v4.0)
+const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
+const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
+
 // ============================================
 // MANUTENÇÃO
 // ============================================
@@ -275,7 +279,8 @@ const AppRoutes = () => (
       <Route path="/port-call" element={<PortCallOptimizationV2 />} />
       <Route path="/vessel-cts" element={<VesselCTSV2 />} />
       <Route path="/vessel-history" element={<VesselHistoryV2 />} />
-      
+      <Route path="/digital-twin" element={<DigitalTwinPage />} />
+      <Route path="/logistics-command" element={<LogisticsCommandPage />} />
       {/* ============================================ */}
       {/* MANUTENÇÃO */}
       {/* ============================================ */}
