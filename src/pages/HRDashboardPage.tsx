@@ -8,11 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { 
   Users, UserPlus, DollarSign, Calendar, Clock, 
   TrendingUp, AlertTriangle, FileText, MessageSquare,
   Brain, Target, Award, HeartPulse, Search, Plus,
-  Building2, BarChart3, Briefcase, GraduationCap
+  Building2, BarChart3, Briefcase, GraduationCap, Gift, ThermometerSun
 } from 'lucide-react';
 import { HREmployeeList } from '@/components/hr/HREmployeeList';
 import { HRPayrollDashboard } from '@/components/hr/HRPayrollDashboard';
@@ -20,6 +21,11 @@ import { HRAdmissionPipeline } from '@/components/hr/HRAdmissionPipeline';
 import { HRVacationManager } from '@/components/hr/HRVacationManager';
 import { HRTurnoverPrediction } from '@/components/hr/HRTurnoverPrediction';
 import { HRChatbot } from '@/components/hr/HRChatbot';
+import { HRPerformanceReview } from '@/components/hr/HRPerformanceReview';
+import { HRTrainingLMS } from '@/components/hr/HRTrainingLMS';
+import { HROKRsManager } from '@/components/hr/HROKRsManager';
+import { HRBenefitsManager } from '@/components/hr/HRBenefitsManager';
+import { HRClimateSurvey } from '@/components/hr/HRClimatesurvey';
 
 export default function HRDashboardPage() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -160,33 +166,56 @@ export default function HRDashboardPage() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <TabsList className="grid grid-cols-3 sm:grid-cols-6 w-full sm:w-auto">
-            <TabsTrigger value="overview" className="gap-2">
-              <BarChart3 className="h-4 w-4" />
-              <span className="hidden sm:inline">Visão Geral</span>
-            </TabsTrigger>
-            <TabsTrigger value="employees" className="gap-2">
-              <Users className="h-4 w-4" />
-              <span className="hidden sm:inline">Colaboradores</span>
-            </TabsTrigger>
-            <TabsTrigger value="payroll" className="gap-2">
-              <DollarSign className="h-4 w-4" />
-              <span className="hidden sm:inline">Folha</span>
-            </TabsTrigger>
-            <TabsTrigger value="admissions" className="gap-2">
-              <UserPlus className="h-4 w-4" />
-              <span className="hidden sm:inline">Admissões</span>
-            </TabsTrigger>
-            <TabsTrigger value="vacations" className="gap-2">
-              <Calendar className="h-4 w-4" />
-              <span className="hidden sm:inline">Férias</span>
-            </TabsTrigger>
-            <TabsTrigger value="turnover" className="gap-2">
-              <Brain className="h-4 w-4" />
-              <span className="hidden sm:inline">Predição IA</span>
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex flex-col gap-4">
+          <ScrollArea className="w-full">
+            <TabsList className="inline-flex h-10 items-center justify-start gap-1 rounded-md bg-muted p-1 text-muted-foreground w-max">
+              <TabsTrigger value="overview" className="gap-2 whitespace-nowrap">
+                <BarChart3 className="h-4 w-4" />
+                <span className="hidden sm:inline">Visão Geral</span>
+              </TabsTrigger>
+              <TabsTrigger value="employees" className="gap-2 whitespace-nowrap">
+                <Users className="h-4 w-4" />
+                <span className="hidden sm:inline">Colaboradores</span>
+              </TabsTrigger>
+              <TabsTrigger value="payroll" className="gap-2 whitespace-nowrap">
+                <DollarSign className="h-4 w-4" />
+                <span className="hidden sm:inline">Folha</span>
+              </TabsTrigger>
+              <TabsTrigger value="admissions" className="gap-2 whitespace-nowrap">
+                <UserPlus className="h-4 w-4" />
+                <span className="hidden sm:inline">Admissões</span>
+              </TabsTrigger>
+              <TabsTrigger value="vacations" className="gap-2 whitespace-nowrap">
+                <Calendar className="h-4 w-4" />
+                <span className="hidden sm:inline">Férias</span>
+              </TabsTrigger>
+              <TabsTrigger value="turnover" className="gap-2 whitespace-nowrap">
+                <Brain className="h-4 w-4" />
+                <span className="hidden sm:inline">Predição IA</span>
+              </TabsTrigger>
+              <TabsTrigger value="performance" className="gap-2 whitespace-nowrap">
+                <Target className="h-4 w-4" />
+                <span className="hidden sm:inline">Desempenho</span>
+              </TabsTrigger>
+              <TabsTrigger value="training" className="gap-2 whitespace-nowrap">
+                <GraduationCap className="h-4 w-4" />
+                <span className="hidden sm:inline">Treinamentos</span>
+              </TabsTrigger>
+              <TabsTrigger value="okrs" className="gap-2 whitespace-nowrap">
+                <Target className="h-4 w-4" />
+                <span className="hidden sm:inline">OKRs</span>
+              </TabsTrigger>
+              <TabsTrigger value="benefits" className="gap-2 whitespace-nowrap">
+                <Gift className="h-4 w-4" />
+                <span className="hidden sm:inline">Benefícios</span>
+              </TabsTrigger>
+              <TabsTrigger value="climate" className="gap-2 whitespace-nowrap">
+                <ThermometerSun className="h-4 w-4" />
+                <span className="hidden sm:inline">Clima</span>
+              </TabsTrigger>
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
 
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -315,6 +344,26 @@ export default function HRDashboardPage() {
 
         <TabsContent value="turnover">
           <HRTurnoverPrediction />
+        </TabsContent>
+
+        <TabsContent value="performance">
+          <HRPerformanceReview />
+        </TabsContent>
+
+        <TabsContent value="training">
+          <HRTrainingLMS />
+        </TabsContent>
+
+        <TabsContent value="okrs">
+          <HROKRsManager />
+        </TabsContent>
+
+        <TabsContent value="benefits">
+          <HRBenefitsManager />
+        </TabsContent>
+
+        <TabsContent value="climate">
+          <HRClimateSurvey />
         </TabsContent>
       </Tabs>
 
