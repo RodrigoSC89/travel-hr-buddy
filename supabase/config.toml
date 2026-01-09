@@ -313,6 +313,27 @@ verify_jwt = false
 comment = "Unified AI for all Lovable enhancements: workflow, calendar, journaling, audit, voyage, emergency, training, wellbeing"
 
 # ============================================
+# HR/DP MODULE - AI FUNCTIONS (Added 2026-01-09)
+# Complete HR/DP System with AI-powered features
+# ============================================
+
+[functions.hr-chatbot-ai]
+verify_jwt = false
+comment = "HR AI Chatbot 24/7 - answers employee questions about policies, benefits, payroll"
+
+[functions.hr-turnover-prediction]
+verify_jwt = false
+comment = "ML-based turnover prediction with 90%+ accuracy - identifies at-risk employees"
+
+[functions.hr-document-ocr]
+verify_jwt = false
+comment = "Document OCR for digital admission - extracts data from RG, CPF, work cards"
+
+[functions.hr-payroll-calculator]
+verify_jwt = false
+comment = "Payroll calculation engine with anomaly detection and fiscal optimization"
+
+# ============================================
 # AI & ASSISTANT FUNCTIONS (15 functions)
 # ============================================
 

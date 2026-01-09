@@ -159,11 +159,16 @@ const SecurityAuditCenter = lazy(() => import("@/pages/SecurityAuditCenter"));
 const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
 
 // ============================================
-// RH & PESSOAS
+// RH & PESSOAS (HR/DP MODULE)
 // ============================================
 const CrewManagement = lazy(() => import("@/pages/CrewManagement"));
 const CrewWellnessPage = lazy(() => import("@/pages/CrewWellnessPage"));
 const Users = lazy(() => import("@/pages/Users"));
+
+// HR/DP Module - New Pages
+const HRDashboardPage = lazy(() => import("@/pages/HRDashboardPage"));
+const EmployeePortalPage = lazy(() => import("@/pages/EmployeePortalPage"));
+const PeopleAnalyticsPage = lazy(() => import("@/pages/PeopleAnalyticsPage"));
 
 // ============================================
 // TREINAMENTOS
@@ -435,7 +440,7 @@ const AppRoutes = () => (
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
       
       {/* ============================================ */}
-      {/* RH & PESSOAS */}
+      {/* RH & PESSOAS (HR/DP MODULE) */}
       {/* ============================================ */}
       <Route path="/nautilus-people" element={<CrewManagement />} />
       <Route path="/crew-management" element={<CrewManagement />} />
@@ -447,6 +452,19 @@ const AppRoutes = () => (
       <Route path="/company-financials" element={<CompanyFinancialPage />} />
       <Route path="/medical-infirmary" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
+      
+      {/* HR/DP Module - New Routes */}
+      <Route path="/hr-dashboard" element={<HRDashboardPage />} />
+      <Route path="/hr/dashboard" element={<HRDashboardPage />} />
+      <Route path="/hr/employees" element={<HRDashboardPage />} />
+      <Route path="/hr/payroll" element={<HRDashboardPage />} />
+      <Route path="/hr/admissions" element={<HRDashboardPage />} />
+      <Route path="/hr/vacations" element={<HRDashboardPage />} />
+      <Route path="/employee-portal" element={<EmployeePortalPage />} />
+      <Route path="/portal-colaborador" element={<EmployeePortalPage />} />
+      <Route path="/people-analytics" element={<PeopleAnalyticsPage />} />
+      <Route path="/hr/analytics" element={<PeopleAnalyticsPage />} />
+      <Route path="/hr/turnover" element={<PeopleAnalyticsPage />} />
       
       {/* ============================================ */}
       {/* TREINAMENTOS */}
