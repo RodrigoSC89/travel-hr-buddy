@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { IoTSensorDashboard } from '@/components/iot/IoTSensorDashboard';
 
 const IoTDashboardPage: React.FC = () => {
