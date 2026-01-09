@@ -1,6 +1,6 @@
 /**
  * App.tsx - Versão Completa com Todas as Rotas do Sidebar
- * PATCH: Rotas completas para 100+ módulos
+ * PATCH: Rotas completas para 100+ módulos + Mobile/PWA optimizations
  */
 import * as React from "react";
 import { Suspense, lazy } from "react";
@@ -12,6 +12,8 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { SidebarProvider } from "./components/ui/sidebar";
 import { AppSidebar } from "./components/layout/app-sidebar";
 import { ThemeProvider } from "./components/layout/theme-provider";
+import { Header } from "./components/layout/header";
+import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -228,17 +230,30 @@ const Loader = () => (
   </div>
 );
 
-// Layout com Sidebar para rotas autenticadas
+// Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
+        {/* Sidebar - renders as Sheet on mobile via SidebarProvider */}
         <AppSidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <main className="flex-1 overflow-auto">
+        
+        {/* Main content area */}
+        <div className="flex-1 flex flex-col min-w-0 w-full">
+          {/* Header with mobile menu trigger */}
+          <Header />
+          
+          {/* Main content with padding for mobile bottom nav */}
+          <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
             <Outlet />
           </main>
         </div>
+        
+        {/* Mobile Bottom Navigation - only shows on mobile */}
+        <MobileBottomNav />
+        
+        {/* Toast Notifications */}
+        <Toaster />
       </div>
     </SidebarProvider>
   );

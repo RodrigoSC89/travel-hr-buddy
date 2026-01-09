@@ -43,7 +43,12 @@ export const MobileBottomNav: React.FC = () => {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border safe-area-bottom">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border"
+      style={{
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}
+    >
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const active = isActive(item.path);
@@ -54,7 +59,7 @@ export const MobileBottomNav: React.FC = () => {
               key={item.path}
               onClick={() => navigate(item.path)}
               className={cn(
-                "flex flex-col items-center justify-center flex-1 h-full gap-0.5 transition-colors",
+                "flex flex-col items-center justify-center flex-1 h-full min-h-[44px] gap-0.5 transition-colors",
                 "active:scale-95 touch-manipulation",
                 active 
                   ? "text-primary" 
