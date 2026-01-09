@@ -47,6 +47,8 @@ const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
 const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
 const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
 const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrationPage"));
+const BlockchainCompliancePage = lazy(() => import("@/pages/BlockchainCompliancePage"));
+const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -416,6 +418,8 @@ const AppRoutes = () => (
       <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
       <Route path="/recruitment" element={<RecruitmentPage />} />
       <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
+      <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
+      <Route path="/company-financials" element={<CompanyFinancialPage />} />
       <Route path="/medical-infirmary" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
       
