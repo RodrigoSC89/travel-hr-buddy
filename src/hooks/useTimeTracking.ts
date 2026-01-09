@@ -1,12 +1,13 @@
 /**
  * useTimeTracking - Hook para controle de ponto com geolocalização
- * MVP: Integração com Supabase + Geolocation API
+ * Integração com Supabase + Geolocation API
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import type { Json } from '@/integrations/supabase/types';
 
 export type ClockType = 'entry' | 'lunch_start' | 'lunch_end' | 'exit';
 
@@ -40,6 +41,19 @@ export interface ClockStats {
   lateToday: number;
   onVacation: number;
   totalBankHours: number;
+}
+
+// Helper to parse location JSON
+function parseLocationJson(location: Json | null): { lat?: number; lng?: number; address?: string } {
+  if (!location || typeof location !== 'object' || Array.isArray(location)) {
+    return {};
+  }
+  const loc = location as Record<string, Json | undefined>;
+  return {
+    lat: typeof loc.lat === 'number' ? loc.lat : undefined,
+    lng: typeof loc.lng === 'number' ? loc.lng : undefined,
+    address: typeof loc.address === 'string' ? loc.address : undefined,
+  };
 }
 
 export function useTimeTracking() {
@@ -132,23 +146,26 @@ export function useTimeTracking() {
 
       if (error) throw error;
 
-      const formattedRecords: TimeRecord[] = (data || []).map((r: any) => ({
-        id: r.id,
-        employee_id: r.employee_id,
-        employee_name: r.hr_employees?.full_name || 'Desconhecido',
-        tracking_date: r.tracking_date,
-        clock_in: r.clock_in_1 || null,
-        lunch_out: r.clock_out_1 || null,
-        lunch_in: r.clock_in_2 || null,
-        clock_out: r.clock_out_2 || null,
-        worked_hours: r.worked_hours || 0,
-        overtime_hours: r.overtime_hours || 0,
-        status: (r.status as TimeRecord['status']) || 'normal',
-        location_lat: r.geolocation_data?.lat,
-        location_lng: r.geolocation_data?.lng,
-        location_address: r.geolocation_data?.address,
-        is_remote: r.is_offshore || false,
-      }));
+      const formattedRecords: TimeRecord[] = (data || []).map((r) => {
+        const clockInLocation = parseLocationJson(r.clock_in_location);
+        return {
+          id: r.id,
+          employee_id: r.employee_id || '',
+          employee_name: (r.hr_employees as any)?.full_name || 'Desconhecido',
+          tracking_date: r.tracking_date,
+          clock_in: r.clock_in_1 || null,
+          lunch_out: r.clock_out_1 || null,
+          lunch_in: r.clock_in_2 || null,
+          clock_out: r.clock_out_2 || null,
+          worked_hours: Number(r.worked_hours) || 0,
+          overtime_hours: Number(r.overtime_hours) || 0,
+          status: (r.status as TimeRecord['status']) || 'normal',
+          location_lat: clockInLocation.lat,
+          location_lng: clockInLocation.lng,
+          location_address: clockInLocation.address,
+          is_remote: r.status === 'off',
+        };
+      });
 
       setRecords(formattedRecords);
 
@@ -187,7 +204,7 @@ export function useTimeTracking() {
         .from('hr_employees')
         .select('id')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (!employee) return;
 
@@ -201,6 +218,7 @@ export function useTimeTracking() {
       if (error) throw error;
 
       if (data) {
+        const clockInLocation = parseLocationJson(data.clock_in_location);
         setTodayRecord({
           id: data.id,
           employee_id: data.employee_id || '',
@@ -209,13 +227,13 @@ export function useTimeTracking() {
           lunch_out: data.clock_out_1 || null,
           lunch_in: data.clock_in_2 || null,
           clock_out: data.clock_out_2 || null,
-          worked_hours: data.worked_hours || 0,
-          overtime_hours: data.overtime_hours || 0,
+          worked_hours: Number(data.worked_hours) || 0,
+          overtime_hours: Number(data.overtime_hours) || 0,
           status: (data.status as TimeRecord['status']) || 'normal',
-          location_lat: (data.geolocation_data as any)?.lat,
-          location_lng: (data.geolocation_data as any)?.lng,
-          location_address: (data.geolocation_data as any)?.address,
-          is_remote: data.is_offshore || false,
+          location_lat: clockInLocation.lat,
+          location_lng: clockInLocation.lng,
+          location_address: clockInLocation.address,
+          is_remote: data.status === 'off',
         });
       }
     } catch (error) {
@@ -245,7 +263,7 @@ export function useTimeTracking() {
         .from('hr_employees')
         .select('id')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (!employee) {
         toast({
@@ -258,15 +276,7 @@ export function useTimeTracking() {
 
       const today = new Date().toISOString().split('T')[0];
       const now = new Date().toISOString();
-      const currentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-      // Verificar se já existe registro
-      const { data: existing } = await supabase
-        .from('hr_time_tracking')
-        .select('id, clock_in, lunch_out, lunch_in, clock_out')
-        .eq('employee_id', employee.id)
-        .eq('tracking_date', today)
-        .single();
+      const currentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
       const clockFieldMap: Record<ClockType, string> = {
         entry: 'clock_in_1',
@@ -275,22 +285,29 @@ export function useTimeTracking() {
         exit: 'clock_out_2',
       };
 
+      const locationFieldMap: Record<ClockType, string> = {
+        entry: 'clock_in_location',
+        lunch_start: 'clock_out_location',
+        lunch_end: 'clock_in_location',
+        exit: 'clock_out_location',
+      };
+
       const field = clockFieldMap[type];
-      const updateData: Record<string, any> = {
+      const locationField = locationFieldMap[type];
+      
+      const updateData: Record<string, unknown> = {
         [field]: currentTime,
         updated_at: now,
       };
 
       if (location) {
-        updateData.geolocation_data = {
+        updateData[locationField] = {
           lat: location.latitude,
           lng: location.longitude,
           address: location.address,
+          accuracy: location.accuracy,
         };
       }
-
-      // Detectar se é remoto (fora do escritório)
-      updateData.is_offshore = true;
 
       // Verificar atraso (entrada após 08:10)
       if (type === 'entry') {
@@ -303,19 +320,19 @@ export function useTimeTracking() {
       }
 
       // Verificar se já existe registro
-      const { data: existing } = await supabase
+      const { data: existingRecord } = await supabase
         .from('hr_time_tracking')
         .select('id')
         .eq('employee_id', employee.id)
         .eq('tracking_date', today)
         .maybeSingle();
 
-      if (existing) {
+      if (existingRecord) {
         // Atualizar registro existente
         const { error } = await supabase
           .from('hr_time_tracking')
           .update(updateData)
-          .eq('id', existing.id);
+          .eq('id', existingRecord.id);
 
         if (error) throw error;
       } else {
