@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Users, 
   FileText, 
@@ -22,10 +23,11 @@ import {
   Award,
   Ship,
   Brain,
-  Sparkles
+  Sparkles,
+  Loader2
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAIRecruitment } from "@/hooks/useAIRecruitment";
 
 interface Candidate {
   id: string;
@@ -149,52 +151,55 @@ export function RecruitmentPipeline() {
   const [candidates, setCandidates] = useState<Candidate[]>(mockCandidates);
   const [jobOpenings] = useState<JobOpening[]>(mockJobOpenings);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isUploadingCV, setIsUploadingCV] = useState(false);
   const [selectedTab, setSelectedTab] = useState("pipeline");
+  const [cvText, setCvText] = useState("");
+  const [showCVModal, setShowCVModal] = useState(false);
+
+  const { parseCV, isLoading: isParsingCV } = useAIRecruitment();
 
   const filteredCandidates = candidates.filter(c => 
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.rank_applied.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleCVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleCVParse = async () => {
+    if (!cvText.trim()) {
+      toast.error("Cole o conteúdo do CV para análise");
+      return;
+    }
 
-    setIsUploadingCV(true);
-    toast.info("Processando CV com IA...");
-
-    try {
-      // Call the CV parser edge function
-      const { data, error } = await supabase.functions.invoke("cv-parser", {
-        body: { 
-          fileName: file.name,
-          fileType: file.type,
-          fileContent: await file.text()
-        }
-      });
-
-      if (error) throw error;
-
-      // Add parsed candidate to list
+    const result = await parseCV(cvText);
+    
+    if (result) {
       const newCandidate: Candidate = {
         id: crypto.randomUUID(),
-        name: data.parsed?.name || "Candidato Novo",
-        email: data.parsed?.email || "email@example.com",
-        rank_applied: data.parsed?.rank || "Deck Cadet",
-        experience_years: data.parsed?.experience_years || 0,
-        certifications: data.parsed?.certifications || [],
-        match_score: data.match_score || 75,
+        name: result.name || "Candidato Novo",
+        email: result.email || "email@example.com",
+        rank_applied: result.targetRank || result.currentRank || "Deck Cadet",
+        experience_years: result.experience || 0,
+        certifications: result.certifications || [],
+        match_score: result.matchScore || 75,
         status: "new"
       };
 
       setCandidates(prev => [newCandidate, ...prev]);
-      toast.success(`CV processado! Match Score: ${newCandidate.match_score}%`);
+      setCvText("");
+      setShowCVModal(false);
+      toast.success(`Candidato adicionado com Match Score: ${newCandidate.match_score}%`);
+    }
+  };
+
+  const handleCVUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      setCvText(text);
+      setShowCVModal(true);
     } catch (error) {
-      console.error("Error parsing CV:", error);
-      toast.error("Erro ao processar CV. Tente novamente.");
-    } finally {
-      setIsUploadingCV(false);
+      console.error("Error reading file:", error);
+      toast.error("Erro ao ler arquivo");
     }
   };
 
@@ -224,15 +229,19 @@ export function RecruitmentPipeline() {
           <Button variant="outline" asChild>
             <label className="cursor-pointer">
               <Upload className="h-4 w-4 mr-2" />
-              {isUploadingCV ? "Processando..." : "Upload CV"}
+              {isParsingCV ? "Processando..." : "Upload CV"}
               <input 
                 type="file" 
                 className="hidden" 
-                accept=".pdf,.doc,.docx"
+                accept=".pdf,.doc,.docx,.txt"
                 onChange={handleCVUpload}
-                disabled={isUploadingCV}
+                disabled={isParsingCV}
               />
             </label>
+          </Button>
+          <Button onClick={() => setShowCVModal(true)}>
+            <Brain className="h-4 w-4 mr-2" />
+            Analisar CV com IA
           </Button>
           <Button>
             <Briefcase className="h-4 w-4 mr-2" />

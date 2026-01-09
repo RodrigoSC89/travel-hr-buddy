@@ -9,6 +9,18 @@ project_id = "vnbptmixvwropvanyhdb"
 verify_jwt = false
 comment = "Multi-LLM orchestration for autonomous decision-making with agent consensus"
 
+[functions.ai-recruitment]
+verify_jwt = false
+comment = "AI-powered recruitment: CV parsing, candidate matching, interview generation"
+
+[functions.ai-agent-consensus]
+verify_jwt = false
+comment = "Multi-agent AI consensus for maritime operational decisions"
+
+[functions.ai-iot-analytics]
+verify_jwt = false
+comment = "IoT sensor analytics: anomaly detection, predictive maintenance, optimization"
+
 # ============================================
 # V2 MODULES AI FUNCTIONS - Added 2026-01-03
 # Unified AI chat and evidence generation for all V2 modules
