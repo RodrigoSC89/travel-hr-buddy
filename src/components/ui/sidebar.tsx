@@ -156,10 +156,20 @@ const Sidebar = React.forwardRef<
         <SheetContent
           data-sidebar="sidebar"
           data-mobile="true"
-          className="w-[80vw] max-w-[320px] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="w-[85vw] max-w-[320px] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
           side="left"
+          style={{
+            paddingTop: 'env(safe-area-inset-top, 0px)',
+            paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+            paddingLeft: 'env(safe-area-inset-left, 0px)',
+          }}
         >
-          <div className="flex h-full w-full flex-col overflow-y-auto">{children}</div>
+          <div 
+            className="flex h-full w-full flex-col overflow-y-auto overscroll-contain"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     );
