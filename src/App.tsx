@@ -45,6 +45,8 @@ const VesselHistoryV2 = lazy(() => import("@/pages/VesselHistoryV2"));
 // Digital Twin & Logistics (v4.0)
 const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
 const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
+const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
+const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrationPage"));
 
 // ============================================
 // MANUTENÇÃO
@@ -412,6 +414,8 @@ const AppRoutes = () => (
       <Route path="/crew-management" element={<CrewManagement />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
       <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
+      <Route path="/recruitment" element={<RecruitmentPage />} />
+      <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
       <Route path="/medical-infirmary" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
       
