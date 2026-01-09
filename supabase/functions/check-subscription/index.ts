@@ -68,8 +68,10 @@ serve(async (req) => {
       subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
       productId = subscription.items.data[0].price.product as string;
       
-      // Map product IDs to plan names
+      // Map product IDs to plan names (includes legacy and new IDs)
       const productNames: Record<string, string> = {
+        'prod_TlCZjXi65mykUJ': 'starter',
+        'prod_TlCZGV0R8q7gd4': 'professional',
         'prod_Tj7IL3o2MMqFUv': 'starter',
         'prod_Tj7J2F7AKu9anZ': 'professional',
         'prod_Tj7LaAvHIWE95C': 'enterprise',

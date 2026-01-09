@@ -44,8 +44,8 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'starter',
     name: 'Starter',
     description: 'Para pequenas empresas em crescimento',
-    priceId: 'price_1Slf3xAOyLwx0ssAF3W8S0JH',
-    productId: 'prod_Tj7IL3o2MMqFUv',
+    priceId: 'price_1SngA4AOyLwx0ssAHfYecvhF',
+    productId: 'prod_TlCZjXi65mykUJ',
     priceMonthly: 9900, // R$ 99,00
     employeeLimit: 30,
     vesselLimit: 3,
@@ -65,8 +65,8 @@ export const PRICING_TIERS: PricingTier[] = [
     id: 'professional',
     name: 'Professional',
     description: 'Solução completa com IA para PMEs',
-    priceId: 'price_1Slf5DAOyLwx0ssAgsD1Bjoa',
-    productId: 'prod_Tj7J2F7AKu9anZ',
+    priceId: 'price_1SngAmAOyLwx0ssAFTSUkEJV',
+    productId: 'prod_TlCZGV0R8q7gd4',
     priceMonthly: 29900, // R$ 299,00
     employeeLimit: 150,
     vesselLimit: 15,
