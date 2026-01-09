@@ -318,6 +318,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "👥 RH & Pessoas",
     defaultOpen: false,
     items: [
+      { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
+      { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
+      { label: "👤 Portal Colaborador", path: "/employee-portal", icon: Users, emoji: "👤", badge: "NEW", status: "new" },
       { label: "Nautilus People Hub", path: "/nautilus-people", icon: Users, emoji: "👥" },
       { label: "Gestão de Tripulação", path: "/crew-management", icon: Users, emoji: "👤" },
       { label: "Bem-estar AI", path: "/crew-wellness", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
