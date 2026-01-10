@@ -317,6 +317,14 @@ comment = "Unified AI for all Lovable enhancements: workflow, calendar, journali
 # Complete HR/DP System with AI-powered features
 # ============================================
 
+[functions.hr-chat]
+verify_jwt = false
+comment = "HR AI Chatbot 24/7 - answers employee questions about policies, benefits, payroll"
+
+[functions.hr-predictions]
+verify_jwt = false
+comment = "AI predictions for turnover, alerts and recommendations"
+
 [functions.hr-chatbot-ai]
 verify_jwt = false
 comment = "HR AI Chatbot 24/7 - answers employee questions about policies, benefits, payroll"
