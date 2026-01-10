@@ -133,21 +133,6 @@ export function useScheduleRotation() {
     },
   });
 }
-
-// AI Scheduling
-export function useAICrewScheduling() {
-  return useMutation({
-    mutationFn: async ({ vesselId, embarkDate, positionsNeeded }: { vesselId: string; embarkDate: string; positionsNeeded: string[] }) => {
-      const { data, error } = await supabase.functions.invoke('ai-crew-optimizer', {
-        body: { action: 'optimize_schedule', vesselId, embarkDate, positionsNeeded },
-      });
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => toast.success('Otimização concluída!'),
-  });
-}
-
 // AI Scheduling optimization
 export function useAICrewScheduling() {
   return useMutation({
@@ -161,20 +146,12 @@ export function useAICrewScheduling() {
       positionsNeeded: string[];
     }) => {
       const { data, error } = await supabase.functions.invoke('ai-crew-optimizer', {
-        body: {
-          action: 'optimize_schedule',
-          vesselId,
-          embarkDate,
-          positionsNeeded,
-        },
+        body: { action: 'optimize_schedule', vesselId, embarkDate, positionsNeeded },
       });
-      
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
-      toast.success('Otimização concluída!');
-    },
+    onSuccess: () => toast.success('Otimização concluída!'),
   });
 }
 
