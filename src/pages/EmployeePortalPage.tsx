@@ -1,6 +1,7 @@
 /**
  * Portal do Colaborador - Super App Mobile-First
  * PWA com acesso a holerite, férias, benefícios, chat IA
+ * Conectado a dados reais do Supabase
  */
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,38 +10,68 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Skeleton } from '@/components/ui/skeleton';
 import { 
   FileText, Calendar, Gift, MessageSquare, User, 
   Bell, ChevronRight, Download, Clock, TrendingUp,
-  Briefcase, GraduationCap, Heart, AlertCircle
+  Briefcase, GraduationCap, Heart, AlertCircle, Loader2
 } from 'lucide-react';
+import { useEmployeeProfile, useEmployeePayslips } from '@/hooks/useEmployeePortal';
+import { HRChatbot } from '@/components/hr/HRChatbot';
 
 export default function EmployeePortalPage() {
   const [activeTab, setActiveTab] = useState('home');
+  
+  // Real data from Supabase
+  const { data: profile, isLoading: loadingProfile } = useEmployeeProfile();
+  const { data: payslips, isLoading: loadingPayslips } = useEmployeePayslips();
 
-  // Mock employee data
-  const employee = {
-    name: 'João Silva',
-    position: 'Desenvolvedor Full-Stack Sênior',
-    department: 'Tecnologia',
-    avatar: '',
-    hireDate: '2022-03-15',
-    vacationDays: 25,
-    vacationExpiry: '2026-03-15',
-  };
+  const latestPayslip = payslips?.[0];
 
   const notifications = [
-    { id: 1, title: 'Holerite de Janeiro disponível', time: '2h', unread: true },
+    { id: 1, title: `Holerite de ${latestPayslip ? getMonthName(latestPayslip.reference_month) : 'Janeiro'} disponível`, time: '2h', unread: true },
     { id: 2, title: 'Férias aprovadas para Fevereiro', time: '1d', unread: true },
     { id: 3, title: 'Novo curso recomendado', time: '2d', unread: false },
   ];
 
   const quickActions = [
-    { icon: FileText, label: 'Holerite', color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { icon: Calendar, label: 'Férias', color: 'text-green-500', bg: 'bg-green-500/10' },
-    { icon: Clock, label: 'Ponto', color: 'text-purple-500', bg: 'bg-purple-500/10' },
-    { icon: Gift, label: 'Benefícios', color: 'text-amber-500', bg: 'bg-amber-500/10' },
+    { icon: FileText, label: 'Holerite', color: 'text-blue-500', bg: 'bg-blue-500/10', tab: 'documents' },
+    { icon: Calendar, label: 'Férias', color: 'text-green-500', bg: 'bg-green-500/10', tab: 'requests' },
+    { icon: Clock, label: 'Ponto', color: 'text-purple-500', bg: 'bg-purple-500/10', tab: 'home' },
+    { icon: Gift, label: 'Benefícios', color: 'text-amber-500', bg: 'bg-amber-500/10', tab: 'home' },
   ];
+
+  const formatCurrency = (value: number) => 
+    value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  if (loadingProfile) {
+    return (
+      <div className="min-h-screen pb-20 space-y-6">
+        <Skeleton className="h-48 w-full rounded-xl" />
+        <div className="grid grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20" />)}
+        </div>
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
+  const employee = {
+    name: profile?.full_name || 'Colaborador',
+    position: profile?.position || 'Cargo',
+    department: profile?.department || 'Departamento',
+    avatar: profile?.avatar_url || '',
+    hireDate: profile?.hire_date || '',
+    vacationDays: profile?.vacation_balance || 0,
+    vacationExpiry: profile?.vacation_expiry || '',
+  };
+
+  const benefits = profile?.benefits || {
+    vr_balance: 0,
+    va_balance: 0,
+    health_plan: false,
+    dental_plan: false,
+  };
 
   return (
     <div className="min-h-screen pb-20 space-y-6">
@@ -50,7 +81,7 @@ export default function EmployeePortalPage() {
           <Avatar className="h-16 w-16 border-2 border-white/20">
             <AvatarImage src={employee.avatar} />
             <AvatarFallback className="bg-white/20 text-xl">
-              {employee.name.split(' ').map(n => n[0]).join('')}
+              {employee.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
@@ -77,10 +108,14 @@ export default function EmployeePortalPage() {
             <div className="flex-1">
               <p className="text-sm font-medium">{employee.vacationDays} dias de férias</p>
               <p className="text-xs text-primary-foreground/70">
-                Vence em {new Date(employee.vacationExpiry).toLocaleDateString('pt-BR')}
+                {employee.vacationExpiry 
+                  ? `Vence em ${new Date(employee.vacationExpiry).toLocaleDateString('pt-BR')}`
+                  : 'Consulte o RH para mais informações'}
               </p>
             </div>
-            <Button size="sm" variant="secondary">Solicitar</Button>
+            <Button size="sm" variant="secondary" onClick={() => setActiveTab('requests')}>
+              Solicitar
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -88,7 +123,11 @@ export default function EmployeePortalPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-4 gap-3">
         {quickActions.map((action) => (
-          <Card key={action.label} className="cursor-pointer hover:border-primary/50 transition-all active:scale-95">
+          <Card 
+            key={action.label} 
+            className="cursor-pointer hover:border-primary/50 transition-all active:scale-95"
+            onClick={() => setActiveTab(action.tab)}
+          >
             <CardContent className="p-4 flex flex-col items-center gap-2">
               <div className={`p-3 rounded-full ${action.bg}`}>
                 <action.icon className={`h-5 w-5 ${action.color}`} />
@@ -118,26 +157,60 @@ export default function EmployeePortalPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-2xl font-bold text-green-500">R$ 8.420,18</p>
-                  <p className="text-sm text-muted-foreground">Janeiro 2026</p>
+              {loadingPayslips ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Download className="h-4 w-4" />
-                  PDF
-                </Button>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-muted-foreground">Salário Bruto</p>
-                  <p className="font-medium">R$ 12.000,00</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Descontos</p>
-                  <p className="font-medium text-red-500">-R$ 3.579,82</p>
-                </div>
-              </div>
+              ) : latestPayslip ? (
+                <>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-2xl font-bold text-green-500">
+                        {formatCurrency(latestPayslip.net_salary)}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {getMonthName(latestPayslip.reference_month)} {latestPayslip.reference_year}
+                      </p>
+                    </div>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Download className="h-4 w-4" />
+                      PDF
+                    </Button>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Salário Bruto</p>
+                      <p className="font-medium">{formatCurrency(latestPayslip.gross_salary)}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Descontos</p>
+                      <p className="font-medium text-red-500">
+                        -{formatCurrency(latestPayslip.inss_deduction + latestPayslip.irrf_deduction + latestPayslip.other_deductions)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t text-xs text-muted-foreground grid grid-cols-3 gap-2">
+                    <div>
+                      <span>INSS:</span>
+                      <span className="ml-1 font-medium">{formatCurrency(latestPayslip.inss_deduction)}</span>
+                    </div>
+                    <div>
+                      <span>IRRF:</span>
+                      <span className="ml-1 font-medium">{formatCurrency(latestPayslip.irrf_deduction)}</span>
+                    </div>
+                    {latestPayslip.overtime_amount > 0 && (
+                      <div>
+                        <span>H.E.:</span>
+                        <span className="ml-1 font-medium text-green-600">+{formatCurrency(latestPayslip.overtime_amount)}</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p className="text-muted-foreground text-center py-4">
+                  Nenhum holerite disponível
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -151,9 +224,9 @@ export default function EmployeePortalPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {[
-                { name: 'Vale Refeição', balance: 'R$ 847,50', progress: 65 },
-                { name: 'Vale Alimentação', balance: 'R$ 420,00', progress: 42 },
-                { name: 'Plano de Saúde', balance: 'Ativo', progress: 100 },
+                { name: 'Vale Refeição', balance: formatCurrency(benefits.vr_balance), progress: (benefits.vr_balance / 1000) * 100 },
+                { name: 'Vale Alimentação', balance: formatCurrency(benefits.va_balance), progress: (benefits.va_balance / 600) * 100 },
+                { name: 'Plano de Saúde', balance: benefits.health_plan ? 'Ativo' : 'Inativo', progress: benefits.health_plan ? 100 : 0 },
               ].map((benefit) => (
                 <div key={benefit.name} className="flex items-center gap-3">
                   <div className="flex-1">
@@ -195,17 +268,47 @@ export default function EmployeePortalPage() {
         <TabsContent value="documents" className="space-y-4 mt-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Meus Documentos</CardTitle>
+              <CardTitle className="text-lg">Meus Holerites</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {loadingPayslips ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                </div>
+              ) : payslips && payslips.length > 0 ? (
+                payslips.map((p) => (
+                  <div key={p.id} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+                    <FileText className="h-5 w-5 text-red-500" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">
+                        Holerite {getMonthName(p.reference_month)} {p.reference_year}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Líquido: {formatCurrency(p.net_salary)}
+                      </p>
+                    </div>
+                    <Badge variant="secondary">PDF</Badge>
+                    <Download className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                ))
+              ) : (
+                <p className="text-muted-foreground text-center py-4">Nenhum documento disponível</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Outros Documentos</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {[
-                { name: 'Holerite Janeiro 2026', date: '05/01/2026', type: 'PDF' },
                 { name: 'Informe de Rendimentos 2025', date: '28/02/2026', type: 'PDF' },
-                { name: 'Contrato de Trabalho', date: '15/03/2022', type: 'PDF' },
+                { name: 'Contrato de Trabalho', date: employee.hireDate ? new Date(employee.hireDate).toLocaleDateString('pt-BR') : 'N/A', type: 'PDF' },
                 { name: 'Política de Férias', date: '01/01/2026', type: 'PDF' },
               ].map((doc, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
-                  <FileText className="h-5 w-5 text-red-500" />
+                  <FileText className="h-5 w-5 text-blue-500" />
                   <div className="flex-1">
                     <p className="text-sm font-medium">{doc.name}</p>
                     <p className="text-xs text-muted-foreground">{doc.date}</p>
@@ -322,12 +425,14 @@ export default function EmployeePortalPage() {
       </Tabs>
 
       {/* Floating Chat Button */}
-      <Button 
-        size="lg" 
-        className="fixed bottom-24 right-4 md:bottom-6 h-14 w-14 rounded-full shadow-lg"
-      >
-        <MessageSquare className="h-6 w-6" />
-      </Button>
+      <HRChatbot />
     </div>
   );
+}
+
+// Helper function
+function getMonthName(month: number): string {
+  const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  return months[month - 1] || 'Janeiro';
 }
