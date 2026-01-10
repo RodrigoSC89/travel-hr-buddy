@@ -1,11 +1,11 @@
 /**
  * HR Chatbot Component
- * Assistente virtual de RH 24/7 com IA
+ * Assistente virtual de RH 24/7 com IA (usando nova edge function hr-chat)
  */
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -14,6 +14,9 @@ import {
   Calendar, FileText, DollarSign, HelpCircle,
   Loader2, Minimize2, Maximize2
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useEmployeeProfile, useEmployeePayslips } from '@/hooks/useEmployeePortal';
+import { toast } from 'sonner';
 
 interface Message {
   id: string;
@@ -45,6 +48,10 @@ export function HRChatbot() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Get employee context for personalized responses
+  const { data: profile } = useEmployeeProfile();
+  const { data: payslips } = useEmployeePayslips();
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -73,73 +80,62 @@ export function HRChatbot() {
     setIsLoading(true);
 
     try {
-      // Call HR Chatbot API
-      const response = await fetch(
-        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/hr-chatbot-ai`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`,
-          },
-          body: JSON.stringify({
-            message: messageText,
-            history: messages.map(m => ({ role: m.role, content: m.content })),
-            session_id: 'demo-session',
-          }),
-        }
-      );
+      // Build context for AI
+      const latestPayslip = payslips?.[0];
+      const employeeContext = profile ? {
+        name: profile.full_name,
+        position: profile.position,
+        department: profile.department,
+        hireDate: profile.hire_date,
+        vacationDays: profile.vacation_balance,
+        lastPayslip: latestPayslip ? {
+          month: `${latestPayslip.reference_month}/${latestPayslip.reference_year}`,
+          grossSalary: latestPayslip.gross_salary,
+          netSalary: latestPayslip.net_salary,
+        } : null,
+      } : null;
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
+      // Call edge function
+      const { data, error } = await supabase.functions.invoke('hr-chat', {
+        body: {
+          messages: messages
+            .filter(m => m.id !== '1') // Exclude initial greeting
+            .map(m => ({ role: m.role, content: m.content }))
+            .concat([{ role: 'user', content: messageText }]),
+          employeeContext,
+        },
+      });
+
+      if (error) {
+        throw error;
       }
-
-      // Handle streaming response
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let assistantContent = '';
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: '',
+        content: data.content || 'Desculpe, não consegui processar sua mensagem.',
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, assistantMessage]);
 
-      while (reader) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
-
-        for (const line of lines) {
-          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-            try {
-              const data = JSON.parse(line.slice(6));
-              const content = data.choices?.[0]?.delta?.content;
-              if (content) {
-                assistantContent += content;
-                setMessages(prev => prev.map(m => 
-                  m.id === assistantMessage.id ? { ...m, content: assistantContent } : m
-                ));
-              }
-            } catch {
-              // Skip invalid JSON
-            }
-          }
-        }
-      }
     } catch (error) {
       console.error('Chatbot error:', error);
-      const errorMessage: Message = {
+      
+      // Check for rate limit or payment errors
+      const errorMessage = error instanceof Error ? error.message : '';
+      if (errorMessage.includes('429')) {
+        toast.error('Muitas requisições. Aguarde um momento.');
+      } else if (errorMessage.includes('402')) {
+        toast.error('Créditos de IA esgotados.');
+      }
+
+      const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: 'Desculpe, tive um problema ao processar sua mensagem. Por favor, tente novamente ou entre em contato com o RH diretamente.',
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setIsLoading(false);
     }
