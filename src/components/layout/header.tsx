@@ -23,8 +23,13 @@ export const Header: FC = () => {
   const { isMobile, toggleSidebar, openMobile, setOpenMobile } = useSidebar();
   const navigate = useNavigate();
 
-  // Direct handler for mobile menu - ensures it works
-  const handleMenuClick = () => {
+  // Direct handler for mobile menu - ensures it works on iOS PWA
+  const handleMenuClick = (e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('[Header] Menu clicked, isMobile:', isMobile, 'openMobile:', openMobile);
+    
     if (isMobile) {
       setOpenMobile(!openMobile);
     } else {
@@ -33,19 +38,28 @@ export const Header: FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90">
+    <header 
+      className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90"
+      style={{
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+      }}
+    >
       <div className="flex h-14 items-center px-3 md:px-4">
-        {/* Mobile Menu Trigger - Large and prominent for touch */}
-        <Button
-          variant="ghost"
-          size="icon"
+        {/* Mobile Menu Trigger - Large touch target for iOS */}
+        <button
+          type="button"
           onClick={handleMenuClick}
-          className="h-12 w-12 md:h-9 md:w-9 shrink-0 touch-manipulation active:scale-95 transition-transform"
+          onTouchEnd={handleMenuClick}
+          className="h-12 w-12 md:h-9 md:w-9 shrink-0 touch-manipulation active:scale-95 transition-transform flex items-center justify-center rounded-md hover:bg-accent"
           aria-label="Abrir menu de navegação"
           aria-expanded={openMobile}
+          style={{ 
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
+          }}
         >
           <Menu className="h-7 w-7 md:h-5 md:w-5" />
-        </Button>
+        </button>
         
         <div className="flex flex-1 items-center justify-between ml-2 md:ml-4 gap-2 min-w-0">
           {/* Search - Hidden on mobile */}
