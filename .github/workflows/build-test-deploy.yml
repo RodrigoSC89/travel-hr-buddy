@@ -27,12 +27,12 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Full history for changelog generation
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -69,14 +69,14 @@ jobs:
           fi
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-${{ github.sha }}
           path: dist/
           retention-days: 7
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: test-results
@@ -97,10 +97,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build-${{ github.sha }}
           path: dist/
@@ -116,7 +116,7 @@ jobs:
 
       - name: Notify Slack (Success)
         if: success()
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
@@ -135,7 +135,7 @@ jobs:
 
       - name: Notify Slack (Failure)
         if: failure()
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
@@ -164,10 +164,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build-${{ github.sha }}
           path: dist/
@@ -188,7 +188,7 @@ jobs:
 
       - name: Notify Slack (Success)
         if: success()
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
@@ -217,12 +217,12 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build-${{ github.sha }}
           path: dist/
@@ -278,7 +278,7 @@ jobs:
           # Add production smoke test commands here
 
       - name: Create Sentry release
-        uses: getsentry/action-release@v1
+        uses: getsentry/action-release@v3
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
@@ -289,7 +289,7 @@ jobs:
 
       - name: Notify Slack (Success)
         if: success()
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
@@ -308,7 +308,7 @@ jobs:
 
       - name: Notify Slack (Failure)
         if: failure()
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: |
@@ -334,14 +334,14 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Run npm audit
         run: npm audit --audit-level=moderate
         continue-on-error: true
 
       - name: Run Snyk security scan
-        uses: snyk/actions/node@0.4.0
+        uses: snyk/actions/node@v1.0.0
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
