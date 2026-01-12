@@ -1,6 +1,6 @@
 /**
- * AI Prompts Index - Central Registry - PATCH AI-TRAINING v2.1
- * 17 IAs Especializadas com System Prompts Completos
+ * AI Prompts Index - Central Registry - PATCH AI-TRAINING v4.0
+ * 20+ IAs Especializadas com System Prompts Completos
  */
 
 // Core AI Prompts
@@ -25,6 +25,11 @@ export { MLC_AI_CONFIG } from './mlc-ai-prompt';
 
 // Pre-OVID AI Prompt
 export { PREOVID_AI_CONFIG } from './preovid-ai-prompt';
+
+// NEW v4.0 AI Prompts
+export { SGSO_AI_CONFIG } from './sgso-ai-prompt';
+export { HR_AI_CONFIG } from './hr-ai-prompt';
+export { IMCA_AI_CONFIG } from './imca-ai-prompt';
 
 // Type definitions
 export interface AIModuleConfig {
