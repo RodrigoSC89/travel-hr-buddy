@@ -20,7 +20,7 @@ import {
   CheckCircle,
   Loader2
 } from "lucide-react";
-import nautilusLogo from "@/assets/nautilus-logo.png";
+import nautiLogo from "@/assets/nauti-one-logo.png";
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -215,7 +215,7 @@ const Auth: React.FC = () => {
             <div className="flex items-center space-x-3">
               <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center shadow-lg p-2">
                 <img 
-                  src={nautilusLogo} 
+                  src={nautiLogo} 
                   alt="Nautilus One Logo" 
                   className="w-full h-full object-contain"
                 />

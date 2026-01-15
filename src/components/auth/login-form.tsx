@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import nautilusLogo from "@/assets/nautilus-logo.png";
+import nautiLogo from "@/assets/nauti-one-logo.png";
 
 export const LoginForm: React.FC = () => {
   const { signIn } = useAuth();
@@ -61,7 +61,7 @@ export const LoginForm: React.FC = () => {
           <div className="flex justify-center">
             <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-lg p-3">
               <img 
-                src={nautilusLogo} 
+                src={nautiLogo} 
                 alt="Nautilus One Logo" 
                 className="w-full h-full object-contain"
               />

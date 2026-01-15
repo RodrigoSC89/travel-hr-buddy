@@ -91,8 +91,8 @@ export const pwaConfig = {
   includeAssets: ["favicon.ico", "robots.txt", "icons/*.png"],
   
   manifest: {
-    name: "Nautilus One",
-    short_name: "Nautilus",
+    name: "Nauti One",
+    short_name: "Nauti One",
     description: "Maritime Operations Platform",
     theme_color: "#0f172a",
     background_color: "#0f172a",

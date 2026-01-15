@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import nautilusLogo from "@/assets/nautilus-logo.png";
+import nautiLogo from "@/assets/nauti-one-logo.png";
 import { ConnectionIndicator } from "@/components/ui/ConnectionIndicator";
 import { toast } from "sonner";
 
@@ -102,7 +102,7 @@ export function ProfessionalHeader({
               className="flex-shrink-0"
             >
               <img 
-                src={nautilusLogo} 
+                src={nautiLogo} 
                 alt="Nautilus One" 
                 className="h-16 w-16 object-contain drop-shadow-2xl"
               />
