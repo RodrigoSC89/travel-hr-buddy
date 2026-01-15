@@ -216,13 +216,13 @@ const Auth: React.FC = () => {
               <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center shadow-lg p-2">
                 <img 
                   src={nautiLogo} 
-                  alt="Nautilus One Logo" 
+                  alt="Nauti One Logo" 
                   className="w-full h-full object-contain"
                 />
               </div>
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                  NAUTILUS ONE
+                  NAUTI ONE
                 </h1>
                 <p className="text-sm text-muted-foreground font-medium">
                   Sistema Corporativo Marítimo

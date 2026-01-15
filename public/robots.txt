@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nautilus-one.app/sitemap.xml
+Sitemap: https://nauti-one.app/sitemap.xml

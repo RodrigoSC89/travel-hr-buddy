@@ -306,9 +306,9 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
         <div className="p-4 border-b border-sidebar-border">
           <h1 className="font-bold text-xl flex items-center gap-2 text-sidebar-foreground">
             <Ship className="w-6 h-6 text-primary" />
-            🧭 Nautilus One
+            🧭 Nauti One
           </h1>
-          <p className="text-xs text-sidebar-foreground/70 mt-1">Sistema Corporativo</p>
+          <p className="text-xs text-sidebar-foreground/70 mt-1">Sistema Corporativo Marítimo</p>
         </div>
 
         {/* Search */}
@@ -421,8 +421,8 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
 
         {/* Footer */}
         <div className="p-4 border-t border-sidebar-border text-xs text-sidebar-foreground/60 text-center">
-          <p>Nautilus One v3.2.0</p>
-          <p className="mt-1">© 2024-2025 Nautilus</p>
+          <p>Nauti One v4.0.0</p>
+          <p className="mt-1">© 2024-2025 Nauti One</p>
         </div>
       </aside>
     </>

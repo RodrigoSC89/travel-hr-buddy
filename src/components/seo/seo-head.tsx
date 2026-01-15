@@ -11,11 +11,11 @@ interface SEOHeadProps {
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-  title = "Nautilus One - Sistema Marítimo Inteligente",
+  title = "Nauti One - Sistema Marítimo Inteligente",
   description = "Plataforma completa para gestão marítima com IA, analytics avançados e automação inteligente.",
-  keywords = "maritimo, gestão, navegação, IA, analytics, automação, nautilus",
-  image = "/nautilus-og-image.jpg",
-  url = "https://nautilus-one.app",
+  keywords = "maritimo, gestão, navegação, IA, analytics, automação, nauti one",
+  image = "/nauti-og-image.jpg",
+  url = "https://nauti-one.app",
   type = "website"
 }) => {
   return (
@@ -27,7 +27,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="keywords" content={keywords} />
       <meta name="robots" content="index, follow" />
       <meta name="language" content="Portuguese" />
-      <meta name="author" content="Nautilus One" />
+      <meta name="author" content="Nauti One" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -35,7 +35,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:site_name" content="Nautilus One" />
+      <meta property="og:site_name" content="Nauti One" />
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
@@ -54,7 +54,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          "name": "Nautilus One",
+          "name": "Nauti One",
           "description": description,
           "url": url,
           "applicationCategory": "BusinessApplication",
