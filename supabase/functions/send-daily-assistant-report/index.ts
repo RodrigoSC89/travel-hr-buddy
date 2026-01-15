@@ -169,7 +169,7 @@ async function sendEmailViaResend(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: Deno.env.get("EMAIL_FROM") || "noreply@nautilusone.com",
+      from: Deno.env.get("EMAIL_FROM") || "noreply@nauti-one.com",
       to: toEmail,
       subject: subject,
       html: htmlContent,

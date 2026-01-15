@@ -119,7 +119,7 @@ export function useMLCOffline(): UseMLCOfflineReturn {
                   nonCompliantItems: Object.values(inspection.answers).filter(a => a.status === 'non-compliant').length,
                   naItems: Object.values(inspection.answers).filter(a => a.status === 'na').length,
                   nonConformities: [],
-                  shipownerEmail: 'sync@nautilus.app', // Placeholder for sync
+                  shipownerEmail: 'sync@nauti-one.app', // Placeholder for sync
                 },
               });
               

@@ -212,10 +212,10 @@ supabase/functions/
 ## 📞 Suporte
 
 Para dúvidas sobre o módulo MLC Inspection:
-- 📧 Email: support@nautilus.app
-- 📚 Docs: https://docs.nautilus.app/mlc
+- 📧 Email: support@nauti-one.app
+- 📚 Docs: https://docs.nauti-one.app/mlc
 - 💬 Chat: Disponível no sistema
 
 ---
 
-*Desenvolvido por Nautilus One - Maritime HR Management System*
+*Desenvolvido por Nauti One - Maritime HR Management System*

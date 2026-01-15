@@ -2,7 +2,7 @@ import React from "react";
 import AcademyDashboard from "./components/AcademyDashboard";
 
 /**
- * Nautilus Academy - Módulo Centralizado de Treinamentos
+ * Nauti Academy - Módulo Centralizado de Treinamentos
  * 
  * Funcionalidades:
  * - Gestão completa de cursos e treinamentos

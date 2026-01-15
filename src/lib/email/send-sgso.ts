@@ -156,7 +156,7 @@ export async function sendSGSOReport(
     `.trim();
 
     const { data, error } = await resend.emails.send({
-      from: process.env.EMAIL_FROM || "SGSO Reports <relatorios@nautilus-one.com>",
+      from: process.env.EMAIL_FROM || "SGSO Reports <relatorios@nauti-one.com>",
       to: Array.isArray(to) ? to : [to],
       subject: `📄 Relatório SGSO - ${vessel}`,
       html: htmlContent,

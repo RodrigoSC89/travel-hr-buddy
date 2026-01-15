@@ -61,7 +61,7 @@ EMAIL_HOST=smtp.gmail.com        # SMTP host
 EMAIL_PORT=587                    # SMTP port
 EMAIL_USER=your@email.com         # SMTP username
 EMAIL_PASS=your_password          # SMTP password
-EMAIL_FROM=noreply@nautilusone.com # Sender email
+EMAIL_FROM=noreply@nauti-one.com # Sender email
 EMAIL_TO=admin@empresa.com        # Default recipient
 ```
 
