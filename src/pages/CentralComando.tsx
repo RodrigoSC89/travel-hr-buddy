@@ -47,6 +47,9 @@ import { ResilienciaSection } from "@/modules/nautilus-command-center/sections/R
 import { useUnifiedCommandAI } from "@/modules/nautilus-command-center/hooks/useUnifiedCommandAI";
 import { useVoiceCommands } from "@/modules/nautilus-command-center/hooks/useVoiceCommands";
 
+// Voice Assistant with Hotword (ARIA)
+import { VoiceAssistantWithHotword } from "@/components/voice/VoiceAssistantWithHotword";
+
 export interface SystemStatus {
   fleet: { total: number; active: number; maintenance: number; alerts: number };
   crew: { total: number; onboard: number; onLeave: number; expiringCerts: number };
@@ -527,6 +530,15 @@ function CentralComandoContent() {
             )}
           </AnimatePresence>
         </div>
+
+        {/* ARIA Voice Assistant with Hotword */}
+        <VoiceAssistantWithHotword 
+          className="fixed bottom-6 right-6 z-50"
+          onCommand={(cmd) => {
+            console.log('[ARIA] Command received:', cmd);
+            sendMessage(cmd);
+          }}
+        />
       </div>
     </>
   );

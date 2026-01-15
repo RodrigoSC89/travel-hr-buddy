@@ -5,6 +5,10 @@ project_id = "vnbptmixvwropvanyhdb"
 # Multi-agent AI consensus and autonomous decision-making
 # ============================================
 
+[functions.docusign-send]
+verify_jwt = false
+comment = "DocuSign integration - send documents for digital signature"
+
 [functions.autonomous-ai-consensus]
 verify_jwt = false
 comment = "Multi-LLM orchestration for autonomous decision-making with agent consensus"
