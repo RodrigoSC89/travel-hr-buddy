@@ -48,7 +48,7 @@ export function useTelemetryAI() {
     setError(null);
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("nautilus-intelligence", {
+      const { data, error: fnError } = await supabase.functions.invoke("nauti-intelligence", {
         body: {
           operation: "anomaly",
           context: {

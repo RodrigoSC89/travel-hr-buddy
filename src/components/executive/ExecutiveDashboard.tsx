@@ -187,7 +187,7 @@ export function ExecutiveDashboard() {
   const generateAIInsight = useCallback(async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-intelligence", {
+      const { data, error } = await supabase.functions.invoke("nauti-intelligence", {
         body: {
           operation: "analyze",
           context: { module: "executive-dashboard", kpis },

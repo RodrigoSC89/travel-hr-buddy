@@ -254,7 +254,7 @@ Como posso ajudar?`;
       }));
       messageHistory.push({ role: 'user', content: currentInput });
 
-      const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nautilus-brain`, {
+      const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nauti-brain`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

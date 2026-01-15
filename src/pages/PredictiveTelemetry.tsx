@@ -308,7 +308,7 @@ export default function PredictiveTelemetry() {
     toast.info("Executando análise preditiva com IA...");
 
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-intelligence", {
+      const { data, error } = await supabase.functions.invoke("nauti-intelligence", {
         body: {
           operation: "predict",
           data: {

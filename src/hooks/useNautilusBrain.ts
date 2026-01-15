@@ -53,7 +53,7 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
       const { data: { session } } = await supabase.auth.getSession();
       
       const response = await fetch(
-        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nautilus-brain`,
+        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nauti-brain`,
         {
           method: 'POST',
           headers: {

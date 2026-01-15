@@ -365,7 +365,7 @@ export default function IncidentSimulator() {
   const generateAIFeedback = async (score: number) => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-intelligence", {
+      const { data, error } = await supabase.functions.invoke("nauti-intelligence", {
         body: {
           operation: "chat",
           messages: [

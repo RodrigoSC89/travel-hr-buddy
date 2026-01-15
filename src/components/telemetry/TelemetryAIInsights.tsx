@@ -63,7 +63,7 @@ export function TelemetryAIInsights({ vesselData, className, onInsightClick }: T
     setIsAnalyzing(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-intelligence", {
+      const { data, error } = await supabase.functions.invoke("nauti-intelligence", {
         body: {
           operation: "analyze",
           context: {

@@ -148,7 +148,7 @@ export function ContextualCopilot({
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-intelligence", {
+      const { data, error } = await supabase.functions.invoke("nauti-intelligence", {
         body: {
           operation: "copilot",
           context: {

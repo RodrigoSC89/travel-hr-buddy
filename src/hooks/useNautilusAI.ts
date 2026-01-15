@@ -86,7 +86,7 @@ export function useNautilusAI() {
     try {
       const actionContext = getActionContext(action);
 
-      const { data, error: fnError } = await supabase.functions.invoke("nautilus-ai", {
+      const { data, error: fnError } = await supabase.functions.invoke("nauti-ai", {
         body: {
           module,
           action,
