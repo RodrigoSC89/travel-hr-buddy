@@ -2160,15 +2160,15 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   },
 
   // PATCH UNIFY-COMMAND: Fusão de Command Center, Dashboard Executivo, Centro de Operações, Nauti Command
-  "intelligence.nautilus-command": {
-    id: "intelligence.nautilus-command",
+  "intelligence.nauti-command": {
+    id: "intelligence.nauti-command",
     name: "Nauti Command Center",
     category: "intelligence",
     path: "pages/NautilusCommand",
     description: "PATCH UNIFY-COMMAND - Centro de Comando Unificado Nauti One: Visão Geral, Operações em Tempo Real, Análise Executiva, IA Integrada (Gemini 2.5 Flash), Central de Alertas e Configurações. Fusão de: Command Center, Dashboard Executivo, Centro de Operações",
     status: "active",
     completeness: "100%",
-    route: "/nautilus-command",
+    route: "/nauti-command",
     icon: "Brain",
     lazy: true,
     version: "4.0.0",

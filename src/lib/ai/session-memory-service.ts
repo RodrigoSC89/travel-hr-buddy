@@ -58,7 +58,7 @@ class AISessionMemoryService {
   async initialize(): Promise<void> {
     if (this.db) return;
 
-    this.db = await openDB<AIMemoryDB>("nautilus-ai-memory", 2, {
+    this.db = await openDB<AIMemoryDB>("nauti-ai-memory", 2, {
       upgrade(db, oldVersion) {
         if (oldVersion < 1) {
           const memoriesStore = db.createObjectStore("memories", { keyPath: "id" });

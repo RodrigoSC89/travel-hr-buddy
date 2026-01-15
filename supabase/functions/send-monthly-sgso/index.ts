@@ -381,7 +381,7 @@ async function sendEmailViaResend(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: Deno.env.get("EMAIL_FROM") || "SGSO Reports <relatorios@nautilus-one.com>",
+      from: Deno.env.get("EMAIL_FROM") || "SGSO Reports <relatorios@nauti-one.com>",
       to: toEmails,
       subject: `📄 Relatório SGSO - ${vessel}`,
       html: htmlContent,
@@ -417,7 +417,7 @@ serve(async (req) => {
     console.log("🚀 Starting monthly SGSO report generation...");
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    const APP_URL = Deno.env.get("APP_URL") || "https://app.nautilus-one.com";
+    const APP_URL = Deno.env.get("APP_URL") || "https://app.nauti-one.com";
     const SGSO_REPORT_EMAILS = Deno.env.get("SGSO_REPORT_EMAILS") || "seguranca@empresa.com";
 
     if (!RESEND_API_KEY) {

@@ -1,13 +1,13 @@
 {
   "version": "1.0.0",
   "name": "travel-hr-buddy",
-  "codename": "nautilus-one",
+  "codename": "nauti-one",
   "versioningStrategy": "semver",
   
   "environments": {
     "development": {
       "name": "Development",
-      "domain": "dev.nautilus-one.com",
+      "domain": "dev.nauti-one.com",
       "supabase": {
         "projectRef": "${SUPABASE_DEV_PROJECT_REF}",
         "anonKey": "${SUPABASE_DEV_ANON_KEY}",
@@ -29,7 +29,7 @@
     
     "staging": {
       "name": "Staging",
-      "domain": "staging.nautilus-one.com",
+      "domain": "staging.nauti-one.com",
       "supabase": {
         "projectRef": "${SUPABASE_STAGING_PROJECT_REF}",
         "anonKey": "${SUPABASE_STAGING_ANON_KEY}",
@@ -52,7 +52,7 @@
     
     "production": {
       "name": "Production",
-      "domain": "app.nautilus-one.com",
+      "domain": "app.nauti-one.com",
       "supabase": {
         "projectRef": "${SUPABASE_PROD_PROJECT_REF}",
         "anonKey": "${SUPABASE_PROD_ANON_KEY}",
@@ -78,13 +78,13 @@
   "clients": {
     "default": {
       "name": "Default Client",
-      "domain": "app.nautilus-one.com",
+      "domain": "app.nauti-one.com",
       "environment": "production",
       "tenantId": "default"
     },
     "demo": {
       "name": "Demo Client",
-      "domain": "demo.nautilus-one.com",
+      "domain": "demo.nauti-one.com",
       "environment": "production",
       "tenantId": "demo"
     }

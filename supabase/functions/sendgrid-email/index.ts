@@ -57,12 +57,12 @@ serve(async (req) => {
             },
             body: JSON.stringify({
               personalizations: [{ to: recipients.map(email => ({ email })) }],
-              from: { email: "noreply@nautilusone.com", name: "Nautilus One" },
+              from: { email: "noreply@nauti-one.com", name: "Nauti One" },
               subject,
               content: [
                 html ? { type: "text/html", value: html } : { type: "text/plain", value: body },
               ],
-              categories: category ? [category] : ["nautilus-system"],
+              categories: category ? [category] : ["nauti-system"],
             }),
           });
 

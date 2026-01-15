@@ -54,7 +54,7 @@ serve(async (req: Request) => {
     let url = '';
     const headers: HeadersInit = {
       'hibp-api-key': HIBP_API_KEY,
-      'User-Agent': 'NautilusOne-SecurityMonitor',
+      'User-Agent': 'NautiOne-SecurityMonitor',
     };
 
     switch (request.action) {

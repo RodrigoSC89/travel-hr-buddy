@@ -192,7 +192,7 @@ export function useAIChat(options?: {
 
 export function useAIMemory(namespace: string = "default") {
   const [memory, setMemory] = useState<AIMemoryEntry[]>([]);
-  const storageKey = `nautilus-ai-memory-${namespace}`;
+  const storageKey = `nauti-ai-memory-${namespace}`;
 
   useEffect(() => {
     try {

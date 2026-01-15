@@ -354,7 +354,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* IA & AUTOMAÇÃO */}
       {/* ============================================ */}
-      <Route path="/nautilus-command" element={<NautilusCommand />} />
+      <Route path="/nauti-command" element={<NautilusCommand />} />
       <Route path="/revolutionary-ai" element={<RevolutionaryAI />} />
       <Route path="/ai-command" element={<AICommandCenter />} />
       <Route path="/ai-hub" element={<AIHubPage />} />

@@ -245,8 +245,8 @@ export const CORS_CONFIG = {
   allowedOrigins: [
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://nautilus-one.com',
-    'https://*.nautilus-one.com',
+    'https://nauti-one.com',
+    'https://*.nauti-one.com',
   ],
   allowedMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: [
