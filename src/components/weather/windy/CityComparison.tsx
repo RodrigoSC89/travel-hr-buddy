@@ -166,7 +166,7 @@ export const CityComparison: React.FC<CityComparisonProps> = ({
   };
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("flex flex-col h-full", className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
@@ -198,17 +198,18 @@ export const CityComparison: React.FC<CityComparisonProps> = ({
       </div>
 
       {/* Cities Grid */}
-      {cities.length === 0 ? (
-        <Card className="bg-slate-800/50 border-white/10 p-8 text-center">
-          <MapPin className="h-12 w-12 text-white/30 mx-auto mb-4" />
-          <p className="text-white/50 mb-4">Nenhuma cidade selecionada para comparação</p>
-          <Button onClick={onAddCity} className="bg-primary hover:bg-primary/80">
-            <Plus className="h-4 w-4 mr-2" />
-            Adicionar Cidade
-          </Button>
-        </Card>
-      ) : (
-        <ScrollArea className="w-full">
+      <div className="flex-1 mt-4">
+        {cities.length === 0 ? (
+          <Card className="bg-slate-800/50 border-white/10 p-8 text-center h-full flex flex-col items-center justify-center">
+            <MapPin className="h-12 w-12 text-white/30 mx-auto mb-4" />
+            <p className="text-white/50 mb-4">Nenhuma cidade selecionada para comparação</p>
+            <Button onClick={onAddCity} className="bg-primary hover:bg-primary/80">
+              <Plus className="h-4 w-4 mr-2" />
+              Adicionar Cidade
+            </Button>
+          </Card>
+        ) : (
+          <ScrollArea className="w-full h-full">
           <div className={cn(
             "grid gap-4",
             cities.length === 1 && "grid-cols-1",
@@ -349,7 +350,8 @@ export const CityComparison: React.FC<CityComparisonProps> = ({
             })}
           </div>
         </ScrollArea>
-      )}
+        )}
+      </div>
     </div>
   );
 };

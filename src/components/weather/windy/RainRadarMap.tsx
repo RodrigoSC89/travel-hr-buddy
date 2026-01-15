@@ -272,7 +272,7 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
   const maxPrecip = currentFrame?.data.reduce((max, p) => Math.max(max, p.precipitation), 0) || 0;
 
   return (
-    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden", className)}>
+    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden flex flex-col", className)}>
       {/* Header */}
       <div className="p-3 bg-slate-800/50 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -314,7 +314,7 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
       </div>
 
       {/* Canvas */}
-      <div className="relative">
+      <div className="relative flex-1 min-h-[400px]">
         {isLoading && (
           <div className="absolute inset-0 bg-slate-900/80 flex items-center justify-center z-10">
             <Loader2 className="h-8 w-8 text-white animate-spin" />
@@ -329,9 +329,9 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
         
         <canvas
           ref={canvasRef}
-          width={600}
-          height={400}
-          className="w-full h-[400px] object-cover"
+          width={800}
+          height={500}
+          className="w-full h-full object-cover"
         />
         
         {/* Time indicator */}
