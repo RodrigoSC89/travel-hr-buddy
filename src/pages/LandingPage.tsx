@@ -393,7 +393,7 @@ const LandingPage = () => {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <Anchor className="h-6 w-6 text-primary" />
-                  <span className="text-xl font-bold">Nautilus One</span>
+                  <span className="text-xl font-bold">Nauti One</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Sistema de RH Marítimo com IA.
@@ -426,7 +426,7 @@ const LandingPage = () => {
             </div>
             <Separator className="mb-8" />
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-              <p>© 2026 Nautilus One. Todos os direitos reservados.</p>
+              <p>© 2026 Nauti One. Todos os direitos reservados.</p>
               <div className="flex items-center gap-4">
                 <Globe className="h-4 w-4" />
                 <span>Brasil</span>

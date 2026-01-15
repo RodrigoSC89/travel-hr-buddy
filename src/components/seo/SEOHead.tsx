@@ -17,9 +17,9 @@ interface SEOHeadProps {
   structuredData?: Record<string, unknown>;
 }
 
-const DEFAULT_TITLE = 'Nautilus One - Sistema de Gestão Empresarial';
-const DEFAULT_DESCRIPTION = 'Sistema revolucionário de gestão empresarial com módulos de RH, viagens, hospedagem e mais de 50 funcionalidades integradas.';
-const DEFAULT_IMAGE = '/nautilus-logo.png';
+const DEFAULT_TITLE = 'Nauti One - Sistema de Gestão Marítima';
+const DEFAULT_DESCRIPTION = 'Sistema revolucionário de gestão marítima com módulos de RH, tripulação, compliance e mais de 50 funcionalidades integradas.';
+const DEFAULT_IMAGE = '/nauti-logo.png';
 const SITE_URL = typeof window !== 'undefined' ? window.location.origin : '';
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
@@ -33,14 +33,14 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   canonical,
   structuredData
 }) => {
-  const pageTitle = title ? `${title} | Nautilus One` : DEFAULT_TITLE;
+  const pageTitle = title ? `${title} | Nauti One` : DEFAULT_TITLE;
   const pageUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
   const imageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
   const defaultStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'Nautilus One',
+    name: 'Nauti One',
     description: DEFAULT_DESCRIPTION,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web Browser',
@@ -77,7 +77,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:type" content={type} />
       <meta property="og:url" content={pageUrl} />
       <meta property="og:image" content={imageUrl} />
-      <meta property="og:site_name" content="Nautilus One" />
+      <meta property="og:site_name" content="Nauti One" />
       <meta property="og:locale" content="pt_BR" />
       
       {/* Twitter Card */}

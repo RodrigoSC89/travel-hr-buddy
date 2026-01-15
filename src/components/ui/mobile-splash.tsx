@@ -34,10 +34,10 @@ export const MobileSplash = () => {
         </div>
         
         <h1 className="text-3xl font-bold mb-2 font-display">
-          Nautilus One
+          Nauti One
         </h1>
         <p className="text-blue-100 text-lg mb-8">
-          Sistema de Gestão Empresarial
+          Sistema de Gestão Marítima
         </p>
         
         <div className="flex justify-center items-center space-x-2">
