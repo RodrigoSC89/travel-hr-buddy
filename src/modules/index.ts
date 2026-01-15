@@ -25,7 +25,7 @@ export { default as FleetOperations } from "./fleet-operations";
 // MAINTENANCE (UNIFIED → NAUTILUS MAINTENANCE)
 // ============================================
 export { default as MaintenancePlanner } from "./maintenance-planner";
-export { default as NautilusMaintenance } from "./nautilus-maintenance";
+export { default as NautilusMaintenance } from "./nauti-maintenance";
 
 // ============================================
 // MISSION CONTROL
@@ -35,7 +35,7 @@ export { default as MissionControl } from "./mission-control";
 // ============================================
 // VOYAGE & ROUTES (UNIFIED → NAUTILUS VOYAGE)
 // ============================================
-export { default as NautilusVoyage } from "./nautilus-voyage";
+export { default as NautilusVoyage } from "./nauti-voyage";
 export { default as VoyagePlanner } from "./voyage-planner";
 
 // ============================================
@@ -43,23 +43,23 @@ export { default as VoyagePlanner } from "./voyage-planner";
 // ============================================
 export { CommunicationCenter } from "./communication-center";
 export { default as SatcomDashboard } from "./satcom";
-export { default as NautilusComms } from "./nautilus-comms";
+export { default as NautilusComms } from "./nauti-comms";
 
 // ============================================
 // SATELLITE (UNIFIED → NAUTILUS SATELLITE)
 // ============================================
-export { default as NautilusSatellite } from "./nautilus-satellite";
+export { default as NautilusSatellite } from "./nauti-satellite";
 
 // ============================================
 // INTELLIGENCE & AI MODULES (UNIFIED → NAUTILUS AI HUB)
 // NOTE: Import directly from "./ai" submodule to avoid loading all AI code
 // ============================================
-export { default as NautilusAIHub } from "./nautilus-ai-hub";
+export { default as NautilusAIHub } from "./nauti-ai-hub";
 
 // ============================================
 // AUTOMATION (UNIFIED → NAUTILUS AUTOMATION)
 // ============================================
-export { default as NautilusAutomation } from "./nautilus-automation";
+export { default as NautilusAutomation } from "./nauti-automation";
 
 // ============================================
 // SUBSEA OPERATIONS (UNIFIED)
@@ -81,20 +81,20 @@ export { default as AnalyticsCore } from "./analytics";
 // ============================================
 // HR & TRAINING (UNIFIED → NAUTILUS ACADEMY & PEOPLE HUB)
 // ============================================
-export { default as NautilusAcademy } from "./nautilus-academy";
-export { default as NautilusPeople } from "./nautilus-people";
+export { default as NautilusAcademy } from "./nauti-academy";
+export { default as NautilusPeople } from "./nauti-people";
 
 // ============================================
 // DOCUMENTS (UNIFIED → NAUTILUS DOCUMENTS)
 // ============================================
-export { default as NautilusDocuments } from "./nautilus-documents";
+export { default as NautilusDocuments } from "./nauti-documents";
 export { default as IncidentReports } from "./incident-reports";
 export { default as DocumentHub } from "./document-hub";
 
 // ============================================
 // ASSISTANTS (UNIFIED → NAUTILUS ASSISTANT)
 // ============================================
-export { default as NautilusAssistant } from "./nautilus-assistant";
+export { default as NautilusAssistant } from "./nauti-assistant";
 export { default as VoiceAssistant } from "./assistants/voice-assistant";
 
 // ============================================

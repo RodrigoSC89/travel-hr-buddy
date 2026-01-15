@@ -35,17 +35,17 @@ import {
 import { GuidedTour, tourStyles } from "@/components/onboarding/GuidedTour";
 
 // Seções do módulo unificado
-import { VisaoGeralSection } from "@/modules/nautilus-command-center/sections/VisaoGeralSection";
-import { OperacoesSection } from "@/modules/nautilus-command-center/sections/OperacoesSection";
-import { ExecutivoSection } from "@/modules/nautilus-command-center/sections/ExecutivoSection";
-import { IASection } from "@/modules/nautilus-command-center/sections/IASection";
-import { AlertasSection } from "@/modules/nautilus-command-center/sections/AlertasSection";
-import { ConfigSection } from "@/modules/nautilus-command-center/sections/ConfigSection";
-import { ResilienciaSection } from "@/modules/nautilus-command-center/sections/ResilienciaSection";
+import { VisaoGeralSection } from "@/modules/nauti-command-center/sections/VisaoGeralSection";
+import { OperacoesSection } from "@/modules/nauti-command-center/sections/OperacoesSection";
+import { ExecutivoSection } from "@/modules/nauti-command-center/sections/ExecutivoSection";
+import { IASection } from "@/modules/nauti-command-center/sections/IASection";
+import { AlertasSection } from "@/modules/nauti-command-center/sections/AlertasSection";
+import { ConfigSection } from "@/modules/nauti-command-center/sections/ConfigSection";
+import { ResilienciaSection } from "@/modules/nauti-command-center/sections/ResilienciaSection";
 
 // Hooks de IA
-import { useUnifiedCommandAI } from "@/modules/nautilus-command-center/hooks/useUnifiedCommandAI";
-import { useVoiceCommands } from "@/modules/nautilus-command-center/hooks/useVoiceCommands";
+import { useUnifiedCommandAI } from "@/modules/nauti-command-center/hooks/useUnifiedCommandAI";
+import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
 
 // Voice Assistant with Hotword (ARIA)
 import { VoiceAssistantWithHotword } from "@/components/voice/VoiceAssistantWithHotword";
