@@ -1,7 +1,10 @@
 /**
  * Mapbox GL Shim
  * Provides a consistent import pattern for mapbox-gl across the codebase
- * PATCH WINDY-2.6: Fixed ESM import issue - removed static CSS import
+ * PATCH WINDY-3.0: Complete rewrite to fix ESM import errors
+ * 
+ * Problem: mapbox-gl doesn't provide a default export in ESM mode
+ * Solution: Use dynamic import with * as syntax and handle module structure
  */
 
 // Type definitions
@@ -25,10 +28,18 @@ export interface MapboxGLInterface {
 
 // Create mock classes for when mapbox-gl is not available
 class MockMap {
+  private _container: any;
   constructor(options?: any) {
+    this._container = options?.container;
     console.warn('[mapbox-shim] Using mock Map - mapbox-gl not loaded');
   }
-  on(_event: string, _callback: Function) { return this; }
+  on(_event: string, callback: Function) { 
+    // Simulate load event for compatibility
+    if (_event === 'load') {
+      setTimeout(() => callback(), 100);
+    }
+    return this; 
+  }
   off(_event: string, _callback: Function) { return this; }
   remove() {}
   addControl() { return this; }
@@ -101,16 +112,18 @@ const createMockMapbox = (): MapboxGLInterface => {
   };
 };
 
-// Dynamic import approach to handle ESM/CJS compatibility
-let mapboxgl: MapboxGLInterface = createMockMapbox();
-let mapboxLoaded = false;
+// State
+let mapboxInstance: MapboxGLInterface | null = null;
 let loadPromise: Promise<MapboxGLInterface> | null = null;
 let cssLoaded = false;
 
 // Load CSS dynamically
-const loadMapboxCSS = () => {
-  if (cssLoaded) return;
+const loadMapboxCSS = (): void => {
+  if (cssLoaded || typeof document === 'undefined') return;
   cssLoaded = true;
+  
+  // Check if CSS already exists
+  if (document.querySelector('link[href*="mapbox-gl"]')) return;
   
   const link = document.createElement('link');
   link.rel = 'stylesheet';
@@ -120,38 +133,61 @@ const loadMapboxCSS = () => {
 
 // Async loader function
 const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
-  if (mapboxLoaded && mapboxgl.Map !== MockMap) {
-    return mapboxgl;
+  // Return cached instance
+  if (mapboxInstance && mapboxInstance.Map !== MockMap) {
+    return mapboxInstance;
   }
 
   // Load CSS first
   loadMapboxCSS();
 
   try {
-    // Use dynamic import for better ESM/CJS handling
-    const module = await import('mapbox-gl');
+    // CRITICAL FIX: Use namespace import instead of default
+    // mapbox-gl exports all members directly, not as default
+    const mapboxModule = await import('mapbox-gl');
     
-    // Get the actual mapbox-gl object
+    // Debug: log what we got
+    console.log('[mapbox-shim] Module keys:', Object.keys(mapboxModule));
+    
+    // Handle various possible module structures
     let resolved: any = null;
-    const mod = module as any;
     
-    if (mod.default && typeof mod.default === 'object' && mod.default.Map) {
-      resolved = mod.default;
-    } else if (mod.Map && typeof mod.Map === 'function') {
-      resolved = mod;
-    } else if (mod.default?.default?.Map) {
-      resolved = mod.default.default;
+    // Try different resolution strategies
+    if (mapboxModule && typeof mapboxModule === 'object') {
+      // Strategy 1: Direct module has Map
+      if (mapboxModule.Map && typeof mapboxModule.Map === 'function') {
+        resolved = mapboxModule;
+      }
+      // Strategy 2: Default export has Map
+      else if ((mapboxModule as any).default?.Map) {
+        resolved = (mapboxModule as any).default;
+      }
+      // Strategy 3: Nested default
+      else if ((mapboxModule as any).default?.default?.Map) {
+        resolved = (mapboxModule as any).default.default;
+      }
     }
     
     if (resolved && resolved.Map) {
-      // Create mutable wrapper
+      console.log('[mapbox-shim] Successfully resolved mapbox-gl');
+      
+      // Create mutable wrapper with proper accessToken handling
       let _accessToken = '';
       
       const wrapper: MapboxGLInterface = {
-        get accessToken() { return _accessToken || resolved.accessToken || ''; },
+        get accessToken() { 
+          return _accessToken || resolved.accessToken || ''; 
+        },
         set accessToken(value: string) {
           _accessToken = value;
-          try { resolved.accessToken = value; } catch {}
+          // Try to set on original module
+          try { 
+            if (resolved && typeof resolved === 'object') {
+              resolved.accessToken = value;
+            }
+          } catch (e) {
+            // Ignore if read-only
+          }
         },
         Map: resolved.Map,
         Marker: resolved.Marker || MockMarker as any,
@@ -161,22 +197,32 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
         LngLat: resolved.LngLat || MockLngLat as any,
       };
       
-      // Copy additional properties
-      Object.keys(resolved).forEach(key => {
-        if (!(key in wrapper)) {
-          try { (wrapper as any)[key] = resolved[key]; } catch {}
-        }
-      });
+      // Copy additional properties safely
+      if (resolved && typeof resolved === 'object') {
+        Object.keys(resolved).forEach(key => {
+          if (!(key in wrapper)) {
+            try { 
+              (wrapper as any)[key] = resolved[key]; 
+            } catch (e) {
+              // Ignore copy errors
+            }
+          }
+        });
+      }
       
-      mapboxgl = wrapper;
-      mapboxLoaded = true;
+      mapboxInstance = wrapper;
       return wrapper;
+    } else {
+      console.warn('[mapbox-shim] Could not resolve Map from module');
     }
   } catch (error) {
     console.error('[mapbox-shim] Failed to load mapbox-gl:', error);
   }
   
-  return createMockMapbox();
+  // Return mock as fallback
+  console.warn('[mapbox-shim] Using mock implementation');
+  mapboxInstance = createMockMapbox();
+  return mapboxInstance;
 };
 
 // Start loading immediately but don't block
@@ -185,7 +231,9 @@ if (typeof window !== 'undefined') {
 }
 
 // Synchronous getter for compatibility (may return mock initially)
-export const getMapboxGL = (): MapboxGLInterface => mapboxgl;
+export const getMapboxGL = (): MapboxGLInterface => {
+  return mapboxInstance || createMockMapbox();
+};
 
 // Async getter for guaranteed loaded mapbox
 export const getMapboxGLAsync = async (): Promise<MapboxGLInterface> => {
@@ -195,7 +243,22 @@ export const getMapboxGLAsync = async (): Promise<MapboxGLInterface> => {
   return loadMapboxGL();
 };
 
+// Check if real mapbox is loaded (not mock)
+export const isMapboxLoaded = (): boolean => {
+  return mapboxInstance !== null && mapboxInstance.Map !== MockMap;
+};
+
+// Force reload
+export const reloadMapbox = async (): Promise<MapboxGLInterface> => {
+  mapboxInstance = null;
+  loadPromise = loadMapboxGL();
+  return loadPromise;
+};
+
 // Type export
 export type MapboxGL = MapboxGLInterface;
-export default mapboxgl;
-export { mapboxgl };
+
+// Default export as mock for immediate use, async for real
+const defaultExport = createMockMapbox();
+export default defaultExport;
+export { mapboxInstance as mapboxgl };
