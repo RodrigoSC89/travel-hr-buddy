@@ -151,7 +151,7 @@ class SelfHealingEngine {
         case "ai-services":
           // Check AI service availability
           try {
-            const aiCheck = await supabase.functions.invoke("nautilus-llm", {
+            const aiCheck = await supabase.functions.invoke("nauti-llm", {
               body: { prompt: "health-check", mode: "ping" }
             });
             if (aiCheck.error) {

@@ -1,7 +1,7 @@
 /**
- * SOLAS Training - Redirects to unified Nautilus Academy
- * PATCH: UNIFY-TRAINING - All training modules merged into Nautilus Academy
+ * SOLAS Training - Redirects to unified Nauti Academy
+ * PATCH: UNIFY-TRAINING - All training modules merged into Nauti Academy
  */
 
-export { default } from "@/modules/nautilus-academy";
-export { default as SolasTraining } from "@/modules/nautilus-academy";
+export { default } from "@/modules/nauti-academy";
+export { default as SolasTraining } from "@/modules/nauti-academy";

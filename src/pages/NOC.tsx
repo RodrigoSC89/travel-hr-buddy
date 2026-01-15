@@ -38,7 +38,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useVoiceCommands } from "@/modules/nautilus-command-center/hooks/useVoiceCommands";
+import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
 
 // Types
 interface Alert {

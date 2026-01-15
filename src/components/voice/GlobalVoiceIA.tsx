@@ -152,7 +152,7 @@ export function GlobalVoiceIA({ className, onCommand }: GlobalVoiceIAProps) {
     setVoiceState(prev => ({ ...prev, isProcessing: true }));
 
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-brain", {
+      const { data, error } = await supabase.functions.invoke("nauti-brain", {
         body: {
           message: command,
           context: "voice_assistant",

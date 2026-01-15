@@ -636,7 +636,7 @@ export default function ChannelManagerProfessional() {
     
     setIsAiLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke('nauti-llm', {
         body: {
           prompt: `Análise de canal de comunicação: ${aiPrompt}\n\nContexto: Canal "${selectedChannel?.name}" com ${selectedChannel?.member_count} membros.`,
           context: 'channel_management',

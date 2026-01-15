@@ -130,7 +130,7 @@ export async function queryCopilot(
   context?: CopilotContext,
   mode: CopilotMode = "copilot"
 ): Promise<string> {
-  const { data, error } = await supabase.functions.invoke("nautilus-ai", {
+  const { data, error } = await supabase.functions.invoke("nauti-ai", {
     body: {
       module: context?.currentModule || "general",
       action: "chat",
@@ -147,7 +147,7 @@ export async function queryCopilot(
  * Get proactive insights based on current context
  */
 export async function getProactiveInsights(context: CopilotContext): Promise<string[]> {
-  const { data, error } = await supabase.functions.invoke("nautilus-ai", {
+  const { data, error } = await supabase.functions.invoke("nauti-ai", {
     body: {
       module: context.currentModule || "command",
       action: "analyze",

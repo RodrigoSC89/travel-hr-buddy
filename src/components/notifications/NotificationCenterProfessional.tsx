@@ -511,7 +511,7 @@ export default function NotificationCenterProfessional() {
       const unreadCritical = notifications.filter(n => !n.isRead && n.type === 'critical').length;
       const unreadTotal = notifications.filter(n => !n.isRead).length;
       
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke('nauti-llm', {
         body: {
           prompt: `Analise as notificações do sistema: ${unreadTotal} não lidas, ${unreadCritical} críticas. Forneça um resumo executivo e recomendações de priorização.`,
           context: 'notification_analysis',

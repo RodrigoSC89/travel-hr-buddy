@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/layout/theme-provider";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { UserMenu } from "@/components/auth/user-menu";
-import { useVoiceCommands } from "@/modules/nautilus-command-center/hooks/useVoiceCommands";
+import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 // Lazy load dialogs para evitar problemas de hooks

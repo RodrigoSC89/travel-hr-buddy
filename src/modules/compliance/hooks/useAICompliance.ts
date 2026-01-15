@@ -69,7 +69,7 @@ export function useAICompliance() {
       let analysisResult: AIComplianceOutput;
 
       try {
-        const { data, error } = await supabase.functions.invoke("nautilus-llm", {
+        const { data, error } = await supabase.functions.invoke("nauti-llm", {
           body: {
             prompt,
             context: "compliance_analysis",
