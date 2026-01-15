@@ -117,15 +117,32 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (err) {
-      console.error('Weather chat error:', err);
+      console.error('[WeatherChat] Error:', err);
       
-      // Fallback response
+      // Intelligent fallback response with real data
+      let fallbackContent = "Desculpe, tive um problema de conexão. ";
+      
+      if (weather) {
+        fallbackContent += `Posso informar que em ${location.name} agora: **${Math.round(weather.temperature)}°C**, ${weather.description}. `;
+        fallbackContent += `Vento de ${Math.round(weather.wind.speed)} nós. `;
+        
+        if (weather.humidity > 70) {
+          fallbackContent += "🌧️ Umidade alta, considere levar guarda-chuva!";
+        } else if (weather.temperature > 28) {
+          fallbackContent += "☀️ Dia quente, use protetor solar e hidrate-se!";
+        } else if (weather.temperature < 18) {
+          fallbackContent += "🧥 Temperatura amena, leve um casaco.";
+        } else {
+          fallbackContent += "✅ Condições agradáveis para atividades ao ar livre.";
+        }
+      } else {
+        fallbackContent += "Tente novamente em alguns instantes.";
+      }
+      
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: weather 
-          ? `Com base nos dados atuais de ${location.name}: temperatura de ${Math.round(weather.temperature)}°C com ${weather.description}. Vento de ${Math.round(weather.wind.speed)} nós. ${weather.humidity > 70 ? 'Umidade elevada, possível chuva.' : 'Condições estáveis.'}`
-          : "Não foi possível obter dados meteorológicos no momento. Tente novamente em alguns instantes.",
+        content: fallbackContent,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, fallbackMessage]);
@@ -143,16 +160,19 @@ export const WeatherChat: React.FC<WeatherChatProps> = ({
 
   // Initial welcome message
   useEffect(() => {
-    if (messages.length === 0 && weather) {
+    if (messages.length === 0) {
       const welcomeMessage: ChatMessage = {
         id: 'welcome',
         role: 'assistant',
-        content: `Olá! Sou seu assistente meteorológico para ${location.name}. Atualmente ${Math.round(weather.temperature)}°C com ${weather.description}. Como posso ajudar?`,
+        content: weather 
+          ? `Olá! 👋 Sou seu assistente meteorológico para ${location.name}. Atualmente ${Math.round(weather.temperature)}°C com ${weather.description}. Pergunte sobre clima, roupas, atividades ao ar livre ou previsão!`
+          : `Olá! 👋 Sou seu assistente meteorológico para ${location.name}. Carregando dados do clima... Enquanto isso, pode fazer perguntas!`,
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
+      console.log('[WeatherChat] Welcome message set');
     }
-  }, [weather, location.name]);
+  }, [weather, location.name, messages.length]);
 
   if (!isOpen) return null;
 
