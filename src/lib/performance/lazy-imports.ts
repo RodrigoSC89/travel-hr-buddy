@@ -47,8 +47,8 @@ export const loadCocoSsd = async () => {
  * Lazy load Mapbox GL (350KB+)
  */
 export const loadMapboxGL = async () => {
-  const mapboxgl = await import("mapbox-gl");
-  return mapboxgl.default;
+  const { getMapboxGLAsync } = await import("@/lib/mapbox-shim");
+  return getMapboxGLAsync();
 };
 
 /**

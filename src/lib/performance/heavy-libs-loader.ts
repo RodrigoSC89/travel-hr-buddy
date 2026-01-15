@@ -45,9 +45,8 @@ export const loadThreeOrbitControls = () => loadLib("three-orbit", async () => {
 // ========== Maps ==========
 
 export const loadMapboxGL = () => loadLib("mapbox-gl", async () => {
-  const mapboxgl = await import("mapbox-gl");
-  await import("mapbox-gl/dist/mapbox-gl.css");
-  return mapboxgl.default || mapboxgl;
+  const { getMapboxGLAsync } = await import("@/lib/mapbox-shim");
+  return getMapboxGLAsync();
 });
 
 // ========== AI / ML ==========

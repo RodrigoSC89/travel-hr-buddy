@@ -6,14 +6,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin } from "lucide-react";
 
-// Lazy load mapbox-gl - use any type to avoid complex mapbox types
+// Lazy load mapbox-gl via shim
 let mapboxgl: any = null;
 
 export const loadMapbox = async (): Promise<any> => {
   if (!mapboxgl) {
-    const module = await import("mapbox-gl");
-    await import("mapbox-gl/dist/mapbox-gl.css");
-    mapboxgl = module.default || module;
+    const { getMapboxGLAsync } = await import("@/lib/mapbox-shim");
+    mapboxgl = await getMapboxGLAsync();
   }
   return mapboxgl;
 };
