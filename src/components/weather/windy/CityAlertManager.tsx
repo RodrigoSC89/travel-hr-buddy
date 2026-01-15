@@ -188,7 +188,7 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
   const availableCities = cities.filter(c => !alertConfigs.some(a => a.cityId === c.id));
 
   return (
-    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden flex flex-col h-full", className)}>
+    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden", className)}>
       {/* Header */}
       <div className="p-4 bg-slate-800/50 border-b border-white/10">
         <div className="flex items-center justify-between">
@@ -225,8 +225,8 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
         </div>
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-4 pb-8">
+      <ScrollArea className="max-h-[60vh]">
+        <div className="p-4 space-y-4">
           {/* Monitored Cities */}
           {alertConfigs.length === 0 ? (
             <div className="text-center py-8">
