@@ -1,11 +1,12 @@
 /**
  * Weather Command - Windy Style Complete Page
- * PATCH WINDY-2.0: Integrated real Open-Meteo data
+ * PATCH WINDY-2.0: Integrated real Open-Meteo data with City Comparison & Rain Radar
  */
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { 
   MessageSquare, 
@@ -17,9 +18,12 @@ import {
   Waves,
   Wind,
   Droplets,
-  X
+  BarChart3,
+  CloudRain,
+  MapPin
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { WeatherMapWind } from "./WeatherMapWind";
 import { DailyForecastStrip } from "./DailyForecastStrip";
 import { HourlyForecastTable } from "./HourlyForecastTable";
@@ -27,6 +31,8 @@ import { WeatherFooterControls } from "./WeatherFooterControls";
 import { WeatherChat } from "./WeatherChat";
 import { CitySearch } from "./CitySearch";
 import { WeatherAlertSettings } from "./WeatherAlertSettings";
+import { CityComparison } from "./CityComparison";
+import { RainRadarMap } from "./RainRadarMap";
 import { useOpenMeteoWeather } from "@/hooks/useOpenMeteoWeather";
 import type { WeatherLocation, ForecastModel, DisplayMode, ForecastRange } from "./types";
 
@@ -45,6 +51,11 @@ export const WindyWeatherPage: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [favorites, setFavorites] = useState<WeatherLocation[]>([]);
   const [recentSearches, setRecentSearches] = useState<WeatherLocation[]>([]);
+  
+  // New features state
+  const [activeTab, setActiveTab] = useState<string>("forecast");
+  const [comparisonCities, setComparisonCities] = useState<WeatherLocation[]>([]);
+  const [isAddCityDialogOpen, setIsAddCityDialogOpen] = useState(false);
 
   // Settings
   const [forecastRange, setForecastRange] = useState<ForecastRange>('3h');

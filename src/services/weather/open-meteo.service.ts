@@ -428,3 +428,17 @@ export function getWindArrow(degrees: number): string {
   const index = Math.round(degrees / 22.5) % 16;
   return arrows[index];
 }
+
+/**
+ * Unified service object for easier imports
+ */
+export const openMeteoService = {
+  getWeatherData: fetchOpenMeteoWeather,
+  getMarineData: fetchOpenMeteoMarine,
+  getAirQualityData: fetchOpenMeteoAirQuality,
+  getWeatherDescription,
+  getAQIDescription,
+  getWindDirection,
+  getWindArrow,
+  clearCache: clearOpenMeteoCache
+};
