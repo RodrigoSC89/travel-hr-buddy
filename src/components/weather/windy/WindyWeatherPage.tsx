@@ -1,6 +1,6 @@
 /**
  * Weather Command - Windy Style Complete Page
- * PATCH WINDY-2.1: Full integration with Trends, Alerts, PDF Export
+ * PATCH WINDY-2.3: Full integration with Routing, Brazilian Sources, Alert History
  */
 
 import React, { useState, useEffect } from "react";
@@ -24,7 +24,10 @@ import {
   TrendingUp,
   Bell,
   Download,
-  Share2
+  Share2,
+  Navigation,
+  Anchor,
+  History
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -39,6 +42,10 @@ import { CityComparison } from "./CityComparison";
 import { RainRadarMap } from "./RainRadarMap";
 import { WeatherTrendCharts } from "./WeatherTrendCharts";
 import { CityAlertManager } from "./CityAlertManager";
+import { AlertHistoryTimeline } from "./AlertHistoryTimeline";
+import { WeatherRoutingPanel } from "./WeatherRoutingPanel";
+import { BrazilianSourcesPanel } from "./BrazilianSourcesPanel";
+import { WindyMapPlugin } from "@/components/maps/WindyMapPlugin";
 import { useOpenMeteoWeather } from "@/hooks/useOpenMeteoWeather";
 import { downloadWeatherComparisonPDF, shareWeatherComparison } from "@/lib/pdf/weather-comparison-pdf";
 import { openMeteoService } from "@/services/weather/open-meteo.service";
@@ -433,13 +440,34 @@ export const WindyWeatherPage: React.FC = () => {
 
           {/* Tabs for different views */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
-            <TabsList className="bg-slate-800/50 border-b border-white/10 rounded-none justify-start px-4 h-12 flex-shrink-0">
+            <TabsList className="bg-slate-800/50 border-b border-white/10 rounded-none justify-start px-4 h-12 flex-shrink-0 overflow-x-auto">
               <TabsTrigger 
                 value="forecast" 
                 className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary text-white/70"
               >
                 <Wind className="h-4 w-4 mr-2" />
                 Previsão
+              </TabsTrigger>
+              <TabsTrigger 
+                value="windy" 
+                className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 text-white/70"
+              >
+                <Waves className="h-4 w-4 mr-2" />
+                Mapa Windy
+              </TabsTrigger>
+              <TabsTrigger 
+                value="routing" 
+                className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400 text-white/70"
+              >
+                <Navigation className="h-4 w-4 mr-2" />
+                Rotas
+              </TabsTrigger>
+              <TabsTrigger 
+                value="brazil" 
+                className="data-[state=active]:bg-yellow-500/20 data-[state=active]:text-yellow-400 text-white/70"
+              >
+                <Anchor className="h-4 w-4 mr-2" />
+                Fontes BR
               </TabsTrigger>
               <TabsTrigger 
                 value="trends" 
@@ -464,10 +492,17 @@ export const WindyWeatherPage: React.FC = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="alerts" 
-                className="data-[state=active]:bg-yellow-500/20 data-[state=active]:text-yellow-400 text-white/70"
+                className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 text-white/70"
               >
                 <Bell className="h-4 w-4 mr-2" />
                 Alertas
+              </TabsTrigger>
+              <TabsTrigger 
+                value="history" 
+                className="data-[state=active]:bg-slate-500/20 data-[state=active]:text-slate-300 text-white/70"
+              >
+                <History className="h-4 w-4 mr-2" />
+                Histórico
               </TabsTrigger>
             </TabsList>
 
@@ -526,6 +561,30 @@ export const WindyWeatherPage: React.FC = () => {
                   dayLabel={getDayLabel()}
                 />
               </div>
+            </TabsContent>
+
+            {/* Windy Map Tab - Official Windy Plugin */}
+            <TabsContent value="windy" className="flex-1 overflow-hidden m-0">
+              <div className="h-full">
+                <WindyMapPlugin
+                  latitude={location.lat}
+                  longitude={location.lon}
+                  zoom={6}
+                  height="100%"
+                  showControls={true}
+                  overlay="wind"
+                />
+              </div>
+            </TabsContent>
+
+            {/* Maritime Routing Tab */}
+            <TabsContent value="routing" className="flex-1 overflow-auto m-0 p-4">
+              <WeatherRoutingPanel />
+            </TabsContent>
+
+            {/* Brazilian Sources Tab */}
+            <TabsContent value="brazil" className="flex-1 overflow-auto m-0 p-4">
+              <BrazilianSourcesPanel />
             </TabsContent>
 
             {/* Trends Tab */}
@@ -588,6 +647,11 @@ export const WindyWeatherPage: React.FC = () => {
                 cities={POPULAR_CITIES}
                 onAddCity={() => setIsAddCityDialogOpen(true)}
               />
+            </TabsContent>
+
+            {/* History Tab */}
+            <TabsContent value="history" className="flex-1 overflow-auto m-0 p-4">
+              <AlertHistoryTimeline />
             </TabsContent>
           </Tabs>
 

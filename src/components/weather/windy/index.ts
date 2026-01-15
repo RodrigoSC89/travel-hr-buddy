@@ -11,3 +11,6 @@ export { CityComparison } from './CityComparison';
 export { RainRadarMap } from './RainRadarMap';
 export { WeatherTrendCharts } from './WeatherTrendCharts';
 export { CityAlertManager } from './CityAlertManager';
+export { AlertHistoryTimeline } from './AlertHistoryTimeline';
+export { WeatherRoutingPanel } from './WeatherRoutingPanel';
+export { BrazilianSourcesPanel } from './BrazilianSourcesPanel';

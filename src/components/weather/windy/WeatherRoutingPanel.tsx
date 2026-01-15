@@ -109,19 +109,18 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
     if (!mapContainer.current || !mapboxToken || map.current) return;
 
     mapboxgl.accessToken = mapboxToken;
-    map.current = new mapboxgl.Map({
+    const newMap = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/navigation-night-v1',
       center: [-30, 10],
       zoom: 2.5,
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current = newMap;
+    newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    map.current.on('load', () => {
+    newMap.on('load', () => {
       setMapLoaded(true);
-      if (!map.current) return;
-      const currentMap = map.current;
       
       // Add ports markers
       PORTS.forEach(port => {
