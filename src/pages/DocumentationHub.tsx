@@ -72,7 +72,7 @@ export default function DocumentationHub() {
       description: "Documentação dos hooks e sistemas de IA",
       icon: Brain,
       articles: [
-        { title: "useNautilusAI - Hook Universal", path: "#use-nautilus-ai" },
+        { title: "useNautiAI - Hook Universal", path: "#use-nauti-ai" },
         { title: "useAIAssistant - Modo Assistente", path: "#use-ai-assistant" },
         { title: "useAIAdvisor - Especialistas", path: "#use-ai-advisor" },
         { title: "useAutonomousAI - IA Autônoma", path: "#use-autonomous-ai" },
@@ -86,7 +86,7 @@ export default function DocumentationHub() {
       description: "Documentação técnica das APIs",
       icon: Code,
       articles: [
-        { title: "nautilus-intelligence", path: "#nautilus-intelligence" },
+        { title: "nauti-intelligence", path: "#nauti-intelligence" },
         { title: "elevenlabs-voice", path: "#elevenlabs-voice" },
         { title: "external-integrations", path: "#external-integrations" },
         { title: "dp-intelligence-ai", path: "#dp-intelligence" },

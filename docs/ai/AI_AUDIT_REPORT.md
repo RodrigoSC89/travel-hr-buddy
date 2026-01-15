@@ -44,8 +44,8 @@ As 16 IAs especializadas do Nautilus One estão **completamente implementadas** 
 | `peotram-voice-chat` | PEOTRAM Expert | Interação por voz |
 | `peodp-ai-chat` | PEO-DP Assistant | Chat, FMEA, ASOG |
 | `peodp-generate-evidence` | PEO-DP Assistant | Evidências DP |
-| `nautilus-brain` | Nautilus Brain | Comando central |
-| `nautilus-intelligence` | Nautilus Brain | 6 operações (chat, predict, anomaly, insight, copilot, scenario) |
+| `nauti-brain` | Nauti Brain | Comando central |
+| `nauti-intelligence` | Nauti Brain | 6 operações (chat, predict, anomaly, insight, copilot, scenario) |
 | `voice-assistant-chat` | ARIA | Comandos de voz |
 | `bunker-ai` | BunkerBot | Gestão combustível |
 | `safety-ai` | SafetyGuard | Segurança marítima |
