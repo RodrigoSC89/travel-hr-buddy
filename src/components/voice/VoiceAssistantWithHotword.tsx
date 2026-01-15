@@ -470,7 +470,7 @@ export function VoiceAssistantWithHotword({
   };
 
   return (
-    <div className={cn('fixed bottom-6 left-1/2 -translate-x-1/2 z-50', className)}>
+    <div className={cn('fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] pointer-events-auto', className)}>
       <AnimatePresence mode="wait">
         {!isActive ? (
           /* Floating Button Bar */
@@ -479,7 +479,7 @@ export function VoiceAssistantWithHotword({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
-            className="flex items-center gap-2 bg-background/90 backdrop-blur-md rounded-full px-2 py-2 shadow-xl border border-border/50"
+            className="flex items-center gap-2 bg-background/95 backdrop-blur-lg rounded-full px-3 py-2.5 shadow-2xl border-2 border-primary/30"
           >
             {/* Status Badge */}
             <Badge 
