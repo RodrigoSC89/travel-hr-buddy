@@ -67,7 +67,7 @@ export function useAIFleetIntelligence() {
   const positionsQuery = useQuery({
     queryKey: ['fleet-positions'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('vessel_positions')
         .select('*')
         .order('last_update', { ascending: false });
@@ -82,7 +82,7 @@ export function useAIFleetIntelligence() {
   const anomaliesQuery = useQuery({
     queryKey: ['fleet-anomalies'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('fleet_anomalies')
         .select('*')
         .eq('resolved', false)

@@ -46,7 +46,7 @@ export function useAIPEODP(vesselId?: string) {
   const sectionsQuery = useQuery({
     queryKey: ['peo-dp-sections'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('peo_dp_sections')
         .select('*')
         .order('section_number');
@@ -64,7 +64,7 @@ export function useAIPEODP(vesselId?: string) {
   const auditsQuery = useQuery({
     queryKey: ['peo-dp-audits', vesselId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('peo_dp_audits')
         .select('*')
         .order('created_at', { ascending: false })
@@ -245,7 +245,6 @@ function getPEODPLocalData(): PEODPSection[] {
       description: 'Definição de responsabilidades e autoridades',
       requirements: [],
     },
-    // ... mais seções
   ];
 }
 

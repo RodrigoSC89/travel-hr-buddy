@@ -54,7 +54,7 @@ export function useAIAutomation() {
   const automationsQuery = useQuery({
     queryKey: ['automations'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('automations')
         .select('*')
         .order('created_at', { ascending: false });
@@ -69,7 +69,7 @@ export function useAIAutomation() {
   const logsQuery = useQuery({
     queryKey: ['automation-logs'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('automation_logs')
         .select('*')
         .order('executed_at', { ascending: false })
@@ -83,7 +83,7 @@ export function useAIAutomation() {
   // Mutation: Criar automação
   const createAutomationMutation = useMutation({
     mutationFn: async (automation: Omit<Automation, 'id' | 'created_at' | 'trigger_count'>) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('automations')
         .insert({
           ...automation,
@@ -159,7 +159,7 @@ export function useAIAutomation() {
   // Mutation: Toggle automação
   const toggleAutomationMutation = useMutation({
     mutationFn: async (params: { id: string; enabled: boolean }) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('automations')
         .update({ enabled: params.enabled })
         .eq('id', params.id);
