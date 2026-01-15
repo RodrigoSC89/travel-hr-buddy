@@ -110,10 +110,10 @@ export function QuantumRouteMap({ mapboxToken, onRouteOptimized, className }: Qu
       pitch: 30,
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-    map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
+    map.current?.addControl(new mapboxgl.NavigationControl(), "top-right");
+    map.current?.addControl(new mapboxgl.ScaleControl(), "bottom-left");
 
-    map.current.on("load", () => {
+    map.current?.on("load", () => {
       const mapInstance = map.current;
       if (!mapInstance) return;
       

@@ -192,18 +192,18 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
       antialias: true,
     });
 
-    map.current.addControl(
+    map.current?.addControl(
       new mapboxgl.NavigationControl({ visualizePitch: true }),
       "top-right"
     );
 
-    map.current.addControl(
+    map.current?.addControl(
       new mapboxgl.ScaleControl({ maxWidth: 200, unit: "metric" }),
       "bottom-left"
     );
 
     // Add atmosphere and fog for 3D effect
-    map.current.on("style.load", () => {
+    map.current?.on("style.load", () => {
       map.current?.setFog({
         color: "rgb(15, 23, 42)",
         "high-color": "rgb(30, 58, 138)",
@@ -226,12 +226,12 @@ export function TelemetryMap3D({ onVesselSelect, onAlertClick, className }: Tele
       }
     };
 
-    map.current.on("mousedown", () => (userInteracting = true));
-    map.current.on("touchstart", () => (userInteracting = true));
-    map.current.on("mouseup", () => {
+    map.current?.on("mousedown", () => (userInteracting = true));
+    map.current?.on("touchstart", () => (userInteracting = true));
+    map.current?.on("mouseup", () => {
       userInteracting = false;
     });
-    map.current.on("touchend", () => {
+    map.current?.on("touchend", () => {
       userInteracting = false;
     });
 

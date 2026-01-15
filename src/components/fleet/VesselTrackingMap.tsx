@@ -144,7 +144,7 @@ export function VesselTrackingMap({
       zoom: 2
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current?.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     return () => {
       map.current?.remove();

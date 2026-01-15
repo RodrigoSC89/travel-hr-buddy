@@ -97,9 +97,9 @@ export function RouteComparisonMap({
       fitBoundsOptions: { padding: 40 }
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current?.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    map.current.on('load', () => {
+    map.current?.on('load', () => {
       setMapLoaded(true);
     });
 

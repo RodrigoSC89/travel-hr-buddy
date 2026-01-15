@@ -128,10 +128,10 @@ export function WeatherRoutingMap({
       fitBoundsOptions: { padding: 50 }
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.current.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+    map.current?.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current?.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-    map.current.on('load', () => {
+    map.current?.on('load', () => {
       setMapLoaded(true);
     });
 

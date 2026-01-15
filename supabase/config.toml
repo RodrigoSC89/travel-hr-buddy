@@ -191,6 +191,10 @@ verify_jwt = false
 verify_jwt = false
 comment = "Proxy for weather map APIs including OpenWeatherMap"
 
+[functions.weather-ai-chat]
+verify_jwt = false
+comment = "Weather AI Chat - GPT-4o powered contextual weather assistant"
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
