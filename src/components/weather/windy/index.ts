@@ -9,3 +9,5 @@ export { WeatherAlertSettings } from './WeatherAlertSettings';
 export { WindyWeatherPage } from './WindyWeatherPage';
 export { CityComparison } from './CityComparison';
 export { RainRadarMap } from './RainRadarMap';
+export { WeatherTrendCharts } from './WeatherTrendCharts';
+export { CityAlertManager } from './CityAlertManager';
