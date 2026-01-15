@@ -30,7 +30,7 @@ import {
   VolumeX
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useVoiceCommands } from "@/modules/nautilus-command-center/hooks/useVoiceCommands";
+import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -201,7 +201,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
 
     try {
       // Try to call the edge function
-      const { data, error } = await supabase.functions.invoke("nautilus-copilot", {
+      const { data, error } = await supabase.functions.invoke("nauti-copilot", {
         body: { 
           messages: [...messages, userMessage].map(m => ({
             role: m.role,

@@ -44,7 +44,7 @@ export async function nautilusRespond(options: NautilusLLMOptions): Promise<Naut
   const sessionId = crypto.randomUUID();
 
   try {
-    const { data, error } = await supabase.functions.invoke("nautilus-llm", {
+    const { data, error } = await supabase.functions.invoke("nauti-llm", {
       body: {
         prompt,
         contextId,

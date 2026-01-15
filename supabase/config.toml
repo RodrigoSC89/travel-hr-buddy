@@ -159,21 +159,21 @@ verify_jwt = false
 [functions.crew-ai-analysis]
 verify_jwt = true
 
-[functions.nautilus-command]
+[functions.nauti-command]
 verify_jwt = false
 
-[functions.nautilus-brain]
+[functions.nauti-brain]
 verify_jwt = false
-comment = "Nautilus Brain AI - Central intelligence with streaming LLM"
+comment = "Nauti Brain AI - Central intelligence with streaming LLM"
 
-[functions.nautilus-intelligence]
+[functions.nauti-intelligence]
 verify_jwt = false
 comment = "Unified AI Gateway - chatWithAI, predictTrends, detectAnomalies, generateInsights"
 
 [functions.workflow-execute]
 verify_jwt = true
 
-[functions.nautilus-llm]
+[functions.nauti-llm]
 verify_jwt = true
 
 [functions.api-gateway]
@@ -312,11 +312,11 @@ comment = "Generate quiz questions for training modules with answer validation"
 verify_jwt = false
 comment = "SOLAS Training AI with chat, reports, predictions and scheduling via Lovable AI"
 
-[functions.nautilus-people-ai]
+[functions.nauti-people-ai]
 verify_jwt = false
-comment = "Nautilus People Hub AI for HR analytics, recruitment, performance and engagement"
+comment = "Nauti People Hub AI for HR analytics, recruitment, performance and engagement"
 
-[functions.nautilus-enhancement-ai]
+[functions.nauti-enhancement-ai]
 verify_jwt = false
 comment = "Unified AI for all Lovable enhancements: workflow, calendar, journaling, audit, voyage, emergency, training, wellbeing"
 
@@ -869,7 +869,7 @@ comment = "ESG & Waste Management AI - Emissions analysis, waste classification,
 # REVOLUTIONARY FEATURES - PATCH FINAL
 # ============================================
 
-[functions.nautilus-vision]
+[functions.nauti-vision]
 verify_jwt = false
 comment = "Multimodal AI - Image/document analysis with OCR using Gemini Vision"
 

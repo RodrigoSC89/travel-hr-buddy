@@ -124,7 +124,7 @@ export default function VisionAI() {
     setResult(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-vision", {
+      const { data, error } = await supabase.functions.invoke("nauti-vision", {
         body: {
           operation: selectedOperation,
           imageBase64,

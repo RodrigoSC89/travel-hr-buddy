@@ -153,7 +153,7 @@ export function ContextualAIPanel({ defaultExpanded = true, className }: Context
 
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("nautilus-command", {
+      const { data, error } = await supabase.functions.invoke("nauti-command", {
         body: {
           type: "chat",
           messages: [...chatMessages, userMessage],

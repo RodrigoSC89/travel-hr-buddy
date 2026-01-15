@@ -208,7 +208,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     
     try {
       // Try to call the edge function for real AI response
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke('nauti-llm', {
         body: { 
           message,
           context: "workspace_chat",

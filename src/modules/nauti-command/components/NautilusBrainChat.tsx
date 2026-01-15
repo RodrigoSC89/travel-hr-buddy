@@ -103,11 +103,11 @@ Sistema Nautilus One - Contexto Atual:
 ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
       `;
 
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke('nauti-llm', {
         body: {
           prompt: input,
           contextId: 'command-center',
-          moduleId: 'nautilus-brain',
+          moduleId: 'nauti-brain',
           sessionId: `brain-${Date.now()}`,
           mode: 'safe'
         }

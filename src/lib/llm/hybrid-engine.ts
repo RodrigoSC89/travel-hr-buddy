@@ -328,7 +328,7 @@ class HybridLLMEngine {
 
   private async fetchFromCloud(prompt: string, context?: string): Promise<string> {
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke('nauti-llm', {
         body: {
           prompt,
           context,

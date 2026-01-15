@@ -215,7 +215,7 @@ class EmbeddedLLMManager {
 
     // 3. Chamar edge function com Lovable AI
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke('nauti-llm', {
         body: {
           prompt: request.prompt,
           contextId: request.context,
