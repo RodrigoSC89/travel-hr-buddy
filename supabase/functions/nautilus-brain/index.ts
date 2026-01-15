@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SYSTEM_PROMPT = `Você é o Nautilus Brain, a inteligência artificial central do sistema Nautilus One - a plataforma de gestão marítima mais avançada do mundo.
+const SYSTEM_PROMPT = `Você é o Nauti Brain, a inteligência artificial central do sistema Nauti One - a plataforma de gestão marítima mais avançada do mundo.
 
 Suas capacidades incluem:
 - Gestão inteligente de frota marítima
@@ -87,7 +87,7 @@ Analise níveis de estoque, consumo médio e sugira compras otimizadas com forne
 Gere análises executivas com métricas, tendências e recomendações acionáveis.`;
     }
 
-    console.log("Nautilus Brain - Processing request with context:", { 
+    console.log("Nauti Brain - Processing request with context:", { 
       hasContext: !!context, 
       action,
       messagesCount: messages?.length 
@@ -140,7 +140,7 @@ Gere análises executivas com métricas, tendências e recomendações acionáve
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (error) {
-    console.error("Nautilus Brain error:", error);
+    console.error("Nauti Brain error:", error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : "Erro desconhecido" 
     }), {
