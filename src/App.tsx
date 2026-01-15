@@ -26,6 +26,7 @@ const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
 const Billing = lazy(() => import("@/pages/Billing"));
 const BillingPortal = lazy(() => import("@/pages/BillingPortal"));
 const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
+const InteractiveOnboarding = lazy(() => import("@/pages/InteractiveOnboarding"));
 const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
 
 // Central de Comando extras
@@ -301,6 +302,8 @@ const AppRoutes = () => (
       <Route path="/billing-portal" element={<BillingPortal />} />
       <Route path="/planos" element={<Billing />} />
       <Route path="/onboarding" element={<OnboardingDashboard />} />
+      <Route path="/onboarding-tour" element={<InteractiveOnboarding />} />
+      <Route path="/welcome" element={<InteractiveOnboarding />} />
       <Route path="/analytics-feedback" element={<AnalyticsFeedback />} />
       <Route path="/feedback" element={<AnalyticsFeedback />} />
       
