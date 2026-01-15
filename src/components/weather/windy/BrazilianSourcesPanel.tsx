@@ -170,8 +170,8 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
   }, [fetchCPTEC]);
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className={cn("flex flex-col h-full", className)}>
-      <TabsList className="bg-slate-800/50 border border-white/10 flex-shrink-0">
+    <Tabs value={activeTab} onValueChange={setActiveTab} className={cn("", className)}>
+      <TabsList className="bg-slate-800/50 border border-white/10">
         <TabsTrigger 
           value="marinha" 
           className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400"
@@ -189,7 +189,7 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
       </TabsList>
 
       {/* Marinha do Brasil Tab */}
-      <TabsContent value="marinha" className="flex-1 flex flex-col gap-4 mt-4 overflow-auto">
+      <TabsContent value="marinha" className="mt-4 space-y-4">
         <div className="flex items-center gap-4">
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
             <SelectTrigger className="w-48 bg-slate-800 border-white/20 text-white">
@@ -357,7 +357,7 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
       </TabsContent>
 
       {/* CPTEC/INPE Tab */}
-      <TabsContent value="cptec" className="flex-1 flex flex-col gap-4 mt-4 overflow-auto">
+      <TabsContent value="cptec" className="mt-4 space-y-4">
         <div className="flex items-center gap-4">
           <Select value={selectedCity} onValueChange={setSelectedCity}>
             <SelectTrigger className="w-48 bg-slate-800 border-white/20 text-white">

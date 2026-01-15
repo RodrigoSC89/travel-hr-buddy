@@ -298,9 +298,9 @@ export const AlertHistoryTimeline: React.FC<AlertHistoryTimelineProps> = ({
   }
 
   return (
-    <div className={cn("flex flex-col h-full", className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 flex-shrink-0">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card className="bg-slate-800/70 border-white/10 p-3">
           <div className="flex items-center gap-2 mb-1">
             <Bell className="h-4 w-4 text-blue-400" />
@@ -342,7 +342,7 @@ export const AlertHistoryTimeline: React.FC<AlertHistoryTimelineProps> = ({
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 mt-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Calendar */}
         <Card className="bg-slate-900/80 border-white/10 p-4">
           <div className="flex items-center justify-between mb-4">
