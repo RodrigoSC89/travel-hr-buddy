@@ -1,7 +1,7 @@
 /**
  * Weather Routing Panel Component
  * Maritime route optimization considering weather, waves, and currents
- * PATCH WINDY-2.2
+ * PATCH WINDY-2.5: Fixed mapbox-gl async loading
  */
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
@@ -9,25 +9,22 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Navigation, Anchor, Fuel, Clock, AlertTriangle, 
-  Play, RefreshCw, Loader2, MapPin, Ship, Waves,
-  Wind, Zap, CheckCircle, Download, FileText, Map,
+  Loader2, MapPin, Ship, Waves,
+  Wind, Zap, CheckCircle, Download, Map, FileText,
   TrendingDown, Shield
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import mapboxgl from "@/lib/mapbox-shim";
+import { getMapboxGLAsync, type MapboxGL } from "@/lib/mapbox-shim";
 import type { 
-  QuantumMaritimeRouter, 
   OptimizedRoute, 
   RouteWaypoint, 
   WeatherCondition, 
@@ -59,19 +56,13 @@ const RISK_ZONES: RiskZone[] = [
   { id: "azores-high", name: "Alto dos Açores", lat: 38.0, lng: -28.0, radius: 200, riskLevel: "low", type: "weather" },
 ];
 
-const DEFAULT_VESSEL: VesselSpecs = {
-  cruiseSpeed: 14,
-  maxSpeed: 18,
-  fuelConsumption: 35,
-  cargoCapacity: 50000,
-};
-
 export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
   className
 }) => {
   const { toast } = useToast();
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const mapRef = useRef<any>(null);
+  const mapboxglRef = useRef<MapboxGL | null>(null);
   
   const [origin, setOrigin] = useState<string>("santos");
   const [destination, setDestination] = useState<string>("rotterdam");
@@ -85,6 +76,7 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
   const [optimizedRoute, setOptimizedRoute] = useState<OptimizedRoute | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   // Fetch Mapbox token
   useEffect(() => {
@@ -104,135 +96,111 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
     fetchToken();
   }, []);
 
-  // Initialize map
+  // Initialize map asynchronously
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || map.current) return;
+    if (!mapContainer.current || !mapboxToken || mapRef.current) return;
 
-    // Check if mapboxgl.Map is a valid constructor
-    if (!mapboxgl.Map || typeof mapboxgl.Map !== 'function') {
-      console.error('[WeatherRoutingPanel] mapboxgl.Map is not available');
-      return;
-    }
+    const initMap = async () => {
+      try {
+        const mapboxgl = await getMapboxGLAsync();
+        mapboxglRef.current = mapboxgl;
+        
+        // Check if Map constructor is valid
+        if (!mapboxgl.Map || typeof mapboxgl.Map !== 'function') {
+          setMapError('Mapbox não disponível');
+          return;
+        }
 
-    try {
-      mapboxgl.accessToken = mapboxToken;
-      const newMap = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/navigation-night-v1',
-        center: [-30, 10],
-        zoom: 2.5,
-      });
-
-      map.current = newMap;
-      newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-      newMap.on('load', () => {
-        setMapLoaded(true);
-      
-        // Add ports markers
-        PORTS.forEach(port => {
-          const el = document.createElement('div');
-          el.className = 'port-marker';
-          el.style.width = '20px';
-          el.style.height = '20px';
-          el.style.borderRadius = '50%';
-          el.style.backgroundColor = port.type === 'origin' ? '#10b981' : 
-                                     port.type === 'destination' ? '#ef4444' : '#3b82f6';
-          el.style.border = '2px solid white';
-          el.style.cursor = 'pointer';
-
-          new mapboxgl.Marker(el)
-            .setLngLat([port.lng, port.lat])
-            .setPopup(new mapboxgl.Popup().setHTML(`<strong>${port.name}</strong><br/>Combustível: $${port.fuelPrice}/ton`))
-            .addTo(newMap);
+        mapboxgl.accessToken = mapboxToken;
+        const newMap = new mapboxgl.Map({
+          container: mapContainer.current!,
+          style: 'mapbox://styles/mapbox/navigation-night-v1',
+          center: [-30, 10],
+          zoom: 2.5,
         });
 
-        // Add risk zones
-        RISK_ZONES.forEach(zone => {
-          const color = zone.riskLevel === 'high' ? '#ef4444' :
-                       zone.riskLevel === 'medium' ? '#f59e0b' : '#3b82f6';
-          
-          newMap.addSource(`zone-${zone.id}`, {
-            type: 'geojson',
-            data: {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'Point',
-                coordinates: [zone.lng, zone.lat]
-              }
-            }
+        mapRef.current = newMap;
+        newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        newMap.on('load', () => {
+          setMapLoaded(true);
+        
+          PORTS.forEach(port => {
+            const el = document.createElement('div');
+            el.className = 'port-marker';
+            el.style.width = '20px';
+            el.style.height = '20px';
+            el.style.borderRadius = '50%';
+            el.style.backgroundColor = port.type === 'origin' ? '#10b981' : 
+                                       port.type === 'destination' ? '#ef4444' : '#3b82f6';
+            el.style.border = '2px solid white';
+            el.style.cursor = 'pointer';
+
+            new mapboxgl.Marker(el)
+              .setLngLat([port.lng, port.lat])
+              .setPopup(new mapboxgl.Popup().setHTML(`<strong>${port.name}</strong><br/>Combustível: $${port.fuelPrice}/ton`))
+              .addTo(newMap);
           });
 
-          newMap.addLayer({
-            id: `zone-${zone.id}`,
-            type: 'circle',
-            source: `zone-${zone.id}`,
-            paint: {
-              'circle-radius': zone.radius / 10,
-              'circle-color': color,
-              'circle-opacity': 0.2,
-              'circle-stroke-width': 2,
-              'circle-stroke-color': color,
-              'circle-stroke-opacity': 0.5
-            }
+          RISK_ZONES.forEach(zone => {
+            const color = zone.riskLevel === 'high' ? '#ef4444' :
+                         zone.riskLevel === 'medium' ? '#f59e0b' : '#3b82f6';
+            
+            newMap.addSource(`zone-${zone.id}`, {
+              type: 'geojson',
+              data: { type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [zone.lng, zone.lat] } }
+            });
+
+            newMap.addLayer({
+              id: `zone-${zone.id}`,
+              type: 'circle',
+              source: `zone-${zone.id}`,
+              paint: { 'circle-radius': zone.radius / 10, 'circle-color': color, 'circle-opacity': 0.2, 'circle-stroke-width': 2, 'circle-stroke-color': color, 'circle-stroke-opacity': 0.5 }
+            });
           });
         });
-      });
-    } catch (error) {
-      console.error('[WeatherRoutingPanel] Failed to initialize map:', error);
-    }
+      } catch (error) {
+        console.error('[WeatherRoutingPanel] Failed to initialize map:', error);
+        setMapError('Erro ao inicializar mapa');
+      }
+    };
+
+    initMap();
 
     return () => {
-      map.current?.remove();
-      map.current = null;
+      mapRef.current?.remove();
+      mapRef.current = null;
     };
   }, [mapboxToken]);
 
   // Draw optimized route on map
   useEffect(() => {
-    if (!map.current || !mapLoaded || !optimizedRoute) return;
+    if (!mapRef.current || !mapLoaded || !optimizedRoute || !mapboxglRef.current) return;
 
     // Remove existing route layer
-    if (map.current.getLayer('route')) {
-      map.current.removeLayer('route');
-      map.current.removeSource('route');
+    if (mapRef.current.getLayer('route')) {
+      mapRef.current.removeLayer('route');
+      mapRef.current.removeSource('route');
     }
 
-    // Create route coordinates
     const coordinates = optimizedRoute.waypoints.map(wp => [wp.lng, wp.lat]);
 
-    map.current.addSource('route', {
+    mapRef.current.addSource('route', {
       type: 'geojson',
-      data: {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'LineString',
-          coordinates
-        }
-      }
+      data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates } }
     });
 
-    map.current.addLayer({
+    mapRef.current.addLayer({
       id: 'route',
       type: 'line',
       source: 'route',
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      paint: {
-        'line-color': '#10b981',
-        'line-width': 4,
-        'line-dasharray': [2, 1]
-      }
+      layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': '#10b981', 'line-width': 4, 'line-dasharray': [2, 1] }
     });
 
-    // Fit map to route
-    const bounds = new mapboxgl.LngLatBounds();
+    const bounds = new mapboxglRef.current.LngLatBounds();
     coordinates.forEach(coord => bounds.extend(coord as [number, number]));
-    map.current.fitBounds(bounds, { padding: 50 });
+    mapRef.current.fitBounds(bounds, { padding: 50 });
   }, [optimizedRoute, mapLoaded]);
 
   // Run optimization
