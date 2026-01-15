@@ -531,9 +531,8 @@ function CentralComandoContent() {
           </AnimatePresence>
         </div>
 
-        {/* ARIA Voice Assistant with Hotword */}
+        {/* ARIA Voice Assistant with Hotword - Centered Bottom */}
         <VoiceAssistantWithHotword 
-          className="fixed bottom-6 right-6 z-50"
           onCommand={(cmd) => {
             console.log('[ARIA] Command received:', cmd);
             sendMessage(cmd);
