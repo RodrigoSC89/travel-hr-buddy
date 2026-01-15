@@ -1,7 +1,7 @@
 /**
  * Windy Map Plugin Component
  * Embeds interactive Windy weather map with full plugin features
- * PATCH WINDY-3.0: Complete rewrite with proper Windy API integration
+ * PATCH WINDY-3.1: Fixed layout and initialization
  */
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Cloud, Wind, Waves, Thermometer, Loader2, RefreshCw, Maximize2, AlertCircle } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
 interface WindyMapPluginProps {
   latitude?: number;
@@ -22,6 +21,9 @@ interface WindyMapPluginProps {
   overlay?: "wind" | "rain" | "temp" | "clouds" | "waves" | "pressure";
   onMapReady?: (api: any) => void;
 }
+
+// Windy API Key - demo key for development
+const WINDY_API_KEY = "5XejbCIAVmWgaG78DrWz0BkwEuyl6rrV";
 
 // Overlay options for the map
 const OVERLAY_OPTIONS = [
@@ -58,46 +60,19 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   const [currentOverlay, setCurrentOverlay] = useState<string>(overlay);
   const [windyAPI, setWindyAPI] = useState<any>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [apiKey, setApiKey] = useState<string>("");
   const initAttemptRef = useRef(0);
   const scriptLoadedRef = useRef(false);
-
-  // Fetch Windy API key from Supabase secrets
-  useEffect(() => {
-    const fetchApiKey = async () => {
-      try {
-        // Try to get from Supabase Edge Function
-        const { data, error: fnError } = await supabase.functions.invoke("mapbox-token", {
-          body: { type: "windy" }
-        });
-        
-        if (!fnError && data?.windyToken) {
-          setApiKey(data.windyToken);
-          return;
-        }
-
-        // Fallback to environment variable
-        const envKey = import.meta.env.VITE_WINDY_API_KEY;
-        if (envKey) {
-          setApiKey(envKey);
-          return;
-        }
-
-        // Fallback to hardcoded public demo key
-        // This is the official Windy demo key for development
-        setApiKey("5XejbCIAVmWgaG78DrWz0BkwEuyl6rrV");
-      } catch (err) {
-        console.warn('[WindyMapPlugin] Using fallback API key');
-        setApiKey("5XejbCIAVmWgaG78DrWz0BkwEuyl6rrV");
-      }
-    };
-
-    fetchApiKey();
-  }, []);
+  const windyIdRef = useRef(`windy-${Date.now()}`);
 
   // Initialize Windy after script loads
   const initializeWindy = useCallback(() => {
-    if (!apiKey || !windyContainerRef.current) return;
+    const containerId = windyIdRef.current;
+    const container = document.getElementById(containerId);
+    
+    if (!container) {
+      console.warn('[WindyMapPlugin] Container not found');
+      return;
+    }
 
     // Check if windyInit is available
     if (!window.windyInit) {
@@ -115,7 +90,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       console.log('[WindyMapPlugin] Initializing Windy...');
       
       window.windyInit({
-        key: apiKey,
+        key: WINDY_API_KEY,
         verbose: false,
         lat: latitude,
         lon: longitude,
@@ -133,12 +108,10 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       setError("Erro ao inicializar o mapa Windy");
       setIsLoading(false);
     }
-  }, [apiKey, latitude, longitude, zoom, currentOverlay, onMapReady]);
+  }, [latitude, longitude, zoom, currentOverlay, onMapReady]);
 
   // Load Windy script
   const loadWindyScript = useCallback(() => {
-    if (!apiKey) return;
-    
     setIsLoading(true);
     setError(null);
     initAttemptRef.current = 0;
@@ -149,14 +122,9 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       existingScript.remove();
     }
 
-    // Also remove existing Windy container content
-    if (windyContainerRef.current) {
-      windyContainerRef.current.innerHTML = '';
-    }
-
     // Reset Windy global
-    window.windyInit = undefined;
-    window.W = undefined;
+    delete (window as any).windyInit;
+    delete (window as any).W;
 
     // Create new script
     const script = document.createElement("script");
@@ -177,20 +145,22 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
     };
     
     document.head.appendChild(script);
-  }, [apiKey, initializeWindy]);
+  }, [initializeWindy]);
 
-  // Load script when API key is available
+  // Load script on mount
   useEffect(() => {
-    if (apiKey) {
-      loadWindyScript();
-    }
+    loadWindyScript();
 
     return () => {
       // Cleanup on unmount
       const script = document.getElementById("windy-api-script");
       if (script) script.remove();
     };
-  }, [apiKey, loadWindyScript]);
+  }, []);
+    const existingScript = document.getElementById("windy-api-script");
+    if (existingScript) {
+      existingScript.remove();
+    }
 
   // Update overlay when changed
   useEffect(() => {
@@ -208,7 +178,6 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
     if (windyAPI?.map) {
       windyAPI.map.setView([latitude, longitude], zoom);
     } else {
-      // Reload script
       loadWindyScript();
     }
   }, [windyAPI, latitude, longitude, zoom, loadWindyScript]);
@@ -236,29 +205,30 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
   }, []);
 
   const CurrentIcon = OVERLAY_OPTIONS.find(o => o.value === currentOverlay)?.icon || Wind;
+  const windyId = windyIdRef.current;
 
   return (
     <Card className={`bg-slate-900/80 border-white/10 ${className}`}>
       {showControls && (
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-2 pt-3">
           <div className="flex items-center justify-between flex-wrap gap-2">
-            <CardTitle className="text-lg flex items-center gap-2 text-white">
-              <CurrentIcon className="h-5 w-5 text-cyan-400" />
+            <CardTitle className="text-base flex items-center gap-2 text-white">
+              <CurrentIcon className="h-4 w-4 text-cyan-400" />
               Mapa Windy
             </CardTitle>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-xs text-cyan-400 border-cyan-400/50">
-                Windy API
+                API v4
               </Badge>
               <Select value={currentOverlay} onValueChange={setCurrentOverlay}>
-                <SelectTrigger className="w-32 bg-slate-800 border-white/20 text-white">
+                <SelectTrigger className="w-28 h-8 bg-slate-800 border-white/20 text-white text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {OVERLAY_OPTIONS.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       <div className="flex items-center gap-2">
-                        <option.icon className="h-4 w-4" />
+                        <option.icon className="h-3 w-3" />
                         {option.label}
                       </div>
                     </SelectItem>
@@ -269,17 +239,17 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
                 variant="outline" 
                 size="icon" 
                 onClick={handleRefresh}
-                className="border-white/20 text-white hover:bg-white/10"
+                className="h-8 w-8 border-white/20 text-white hover:bg-white/10"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-3 w-3" />
               </Button>
               <Button 
                 variant="outline" 
                 size="icon" 
                 onClick={toggleFullscreen}
-                className="border-white/20 text-white hover:bg-white/10"
+                className="h-8 w-8 border-white/20 text-white hover:bg-white/10"
               >
-                <Maximize2 className="h-4 w-4" />
+                <Maximize2 className="h-3 w-3" />
               </Button>
             </div>
           </div>
@@ -289,7 +259,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
         <div 
           ref={containerRef} 
           className="relative rounded-b-lg overflow-hidden" 
-          style={{ height }}
+          style={{ height, minHeight: '400px' }}
         >
           {/* Loading overlay */}
           {isLoading && (
@@ -321,12 +291,12 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
             </div>
           )}
           
-          {/* Windy map container - must have id="windy" for the API */}
+          {/* Windy map container - MUST have id="windy" for the API */}
           <div 
             ref={windyContainerRef}
-            id="windy" 
+            id={windyId}
             className="w-full h-full bg-slate-800"
-            style={{ minHeight: height }}
+            style={{ minHeight: '400px' }}
           />
         </div>
       </CardContent>
