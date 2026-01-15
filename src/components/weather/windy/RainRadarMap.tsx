@@ -272,7 +272,7 @@ export const RainRadarMap: React.FC<RainRadarMapProps> = ({
   const maxPrecip = currentFrame?.data.reduce((max, p) => Math.max(max, p.precipitation), 0) || 0;
 
   return (
-    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden flex flex-col", className)}>
+    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden flex flex-col min-h-[550px]", className)}>
       {/* Header */}
       <div className="p-3 bg-slate-800/50 flex items-center justify-between">
         <div className="flex items-center gap-2">
