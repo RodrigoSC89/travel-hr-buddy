@@ -201,7 +201,7 @@ async function checkPassword(password?: string): Promise<Response> {
     const suffix = hashHex.substring(5);
 
     const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`, {
-      headers: { 'User-Agent': 'NautilusOne-SecurityMonitor' },
+      headers: { 'User-Agent': 'NautiOne-SecurityMonitor' },
     });
 
     if (!response.ok) {

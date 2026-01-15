@@ -378,7 +378,7 @@ const LandingPage = () => {
                 </Button>
               </Link>
               <Button size="lg" variant="outline" className="gap-2 text-lg px-8" asChild>
-                <a href="mailto:comercial@nautilusone.com.br">
+                <a href="mailto:comercial@nautione.com.br">
                   Falar com Especialista
                 </a>
               </Button>

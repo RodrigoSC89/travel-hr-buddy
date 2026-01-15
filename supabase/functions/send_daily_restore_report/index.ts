@@ -126,8 +126,8 @@ async function sendEmailViaSendGrid(
     body: JSON.stringify({
       personalizations: [{ to: [{ email: toEmail }] }],
       from: { 
-        email: Deno.env.get("EMAIL_FROM") || "noreply@nautilusone.com",
-        name: "Nautilus One Reports"
+        email: Deno.env.get("EMAIL_FROM") || "noreply@nautione.com.br",
+        name: "Nauti One Reports"
       },
       subject: subject,
       content: [{ type: "text/html", value: htmlContent }],
