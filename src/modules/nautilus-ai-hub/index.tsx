@@ -1,16 +1,16 @@
 /**
- * Nautilus AI Hub - Módulo Unificado de Inteligência Artificial
+ * Nauti AI Hub - Módulo Unificado de Inteligência Artificial
  * PATCH UNIFY-2.0 - Fusão dos módulos de IA e Analytics
  * 
  * Módulos fundidos:
- * - ai-insights → Nautilus AI Hub
- * - ai-dashboard → Nautilus AI Hub
- * - predictive-insights → Nautilus AI Hub
- * - predictive-analytics → Nautilus AI Hub
- * - advanced-analytics → Nautilus AI Hub
- * - business-insights → Nautilus AI Hub
- * - ai-adoption → Nautilus AI Hub
- * - workflow-suggestions → Nautilus AI Hub
+ * - ai-insights → Nauti AI Hub
+ * - ai-dashboard → Nauti AI Hub
+ * - predictive-insights → Nauti AI Hub
+ * - predictive-analytics → Nauti AI Hub
+ * - advanced-analytics → Nauti AI Hub
+ * - business-insights → Nauti AI Hub
+ * - ai-adoption → Nauti AI Hub
+ * - workflow-suggestions → Nauti AI Hub
  */
 
 import React, { useState } from "react";

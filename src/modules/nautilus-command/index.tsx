@@ -1,10 +1,10 @@
 /**
- * NAUTILUS COMMAND CENTER - O Cérebro Central do Sistema
+ * NAUTI COMMAND CENTER - O Cérebro Central do Sistema
  * Centro de Comando Unificado com IA Embarcada
  * 
  * Features:
  * - Dashboard Cockpit com status da frota em tempo real
- * - Nautilus Brain - IA Central para toda operação
+ * - Nauti Brain - IA Central para toda operação
  * - Integração total: Frota + Estoque + Manutenção + Tripulação + Compliance
  * - Alertas proativos e recomendações inteligentes
  * - Simulação de cenários e planejamento estratégico

@@ -1,5 +1,5 @@
 /**
- * Hook for Nautilus Enhancement AI
+ * Hook for Nauti Enhancement AI
  * Provides access to all lovable-level AI improvements
  */
 

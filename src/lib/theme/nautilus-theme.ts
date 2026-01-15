@@ -1,5 +1,5 @@
 /**
- * NAUTILUS ONE - SISTEMA DE TEMAS COM ALTO CONTRASTE
+ * NAUTI ONE - SISTEMA DE TEMAS COM ALTO CONTRASTE
  * WCAG AAA Compliant (7:1+ contrast ratio)
  * Otimizado para uso offshore e condições de alta luminosidade
  */

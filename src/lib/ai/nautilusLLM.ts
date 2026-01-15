@@ -1,5 +1,5 @@
 /**
- * NAUTILUS LLM CORE - IA Embarcada do Sistema
+ * NAUTI LLM CORE - IA Embarcada do Sistema
  * PATCH 40.0
  * 
  * Sistema de inteligência artificial integrado para:

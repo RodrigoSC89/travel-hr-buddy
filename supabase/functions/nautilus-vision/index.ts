@@ -6,7 +6,7 @@ const corsHeaders = {
 };
 
 /**
- * Nautilus Vision - Multimodal AI Analysis
+ * Nauti Vision - Multimodal AI Analysis
  * Analyzes images and documents using Gemini Vision
  * Operations: analyze-image, ocr-document, equipment-inspection, certificate-validation
  */

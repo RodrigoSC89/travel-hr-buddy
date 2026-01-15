@@ -1,5 +1,5 @@
 /**
- * useNautilusBrain - Hook for AI-powered chat with Nautilus Brain
+ * useNautiBrain - Hook for AI-powered chat with Nauti Brain
  */
 
 import { useState, useCallback } from 'react';

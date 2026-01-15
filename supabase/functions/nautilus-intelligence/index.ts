@@ -6,7 +6,7 @@ const corsHeaders = {
 };
 
 /**
- * Nautilus Intelligence - Unified AI Gateway
+ * Nauti Intelligence - Unified AI Gateway
  * Integrates chatWithAI, predictTrends, detectAnomalies, generateInsights
  */
 
@@ -25,7 +25,7 @@ interface RequestPayload {
 }
 
 const SYSTEM_PROMPTS: Record<AIOperation, string> = {
-  chat: `Você é o Nautilus AI, assistente especializado em operações marítimas. 
+  chat: `Você é o Nauti AI, assistente especializado em operações marítimas. 
 Você ajuda com gestão de frotas, tripulação, manutenção, compliance (ISM, MLC, STCW), ESG e operações.
 Responda sempre em português do Brasil, de forma clara e profissional.
 Forneça insights acionáveis e específicos para o contexto marítimo.`,
