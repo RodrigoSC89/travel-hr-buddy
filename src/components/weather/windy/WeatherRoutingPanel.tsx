@@ -108,72 +108,80 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken || map.current) return;
 
-    mapboxgl.accessToken = mapboxToken;
-    const newMap = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/navigation-night-v1',
-      center: [-30, 10],
-      zoom: 2.5,
-    });
+    // Check if mapboxgl.Map is a valid constructor
+    if (!mapboxgl.Map || typeof mapboxgl.Map !== 'function') {
+      console.error('[WeatherRoutingPanel] mapboxgl.Map is not available');
+      return;
+    }
 
-    map.current = newMap;
-    newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    try {
+      mapboxgl.accessToken = mapboxToken;
+      const newMap = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/navigation-night-v1',
+        center: [-30, 10],
+        zoom: 2.5,
+      });
 
-    newMap.on('load', () => {
-      setMapLoaded(true);
+      map.current = newMap;
+      newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      newMap.on('load', () => {
+        setMapLoaded(true);
       
-      // Add ports markers
-      PORTS.forEach(port => {
-        const el = document.createElement('div');
-        el.className = 'port-marker';
-        el.style.width = '20px';
-        el.style.height = '20px';
-        el.style.borderRadius = '50%';
-        el.style.backgroundColor = port.type === 'origin' ? '#10b981' : 
-                                   port.type === 'destination' ? '#ef4444' : '#3b82f6';
-        el.style.border = '2px solid white';
-        el.style.cursor = 'pointer';
+        // Add ports markers
+        PORTS.forEach(port => {
+          const el = document.createElement('div');
+          el.className = 'port-marker';
+          el.style.width = '20px';
+          el.style.height = '20px';
+          el.style.borderRadius = '50%';
+          el.style.backgroundColor = port.type === 'origin' ? '#10b981' : 
+                                     port.type === 'destination' ? '#ef4444' : '#3b82f6';
+          el.style.border = '2px solid white';
+          el.style.cursor = 'pointer';
 
-        new mapboxgl.Marker(el)
-          .setLngLat([port.lng, port.lat])
-          .setPopup(new mapboxgl.Popup().setHTML(`<strong>${port.name}</strong><br/>Combustível: $${port.fuelPrice}/ton`))
-          .addTo(map.current!);
-      });
+          new mapboxgl.Marker(el)
+            .setLngLat([port.lng, port.lat])
+            .setPopup(new mapboxgl.Popup().setHTML(`<strong>${port.name}</strong><br/>Combustível: $${port.fuelPrice}/ton`))
+            .addTo(newMap);
+        });
 
-      // Add risk zones
-      RISK_ZONES.forEach(zone => {
-        if (!map.current) return;
-        
-        const color = zone.riskLevel === 'high' ? '#ef4444' :
-                     zone.riskLevel === 'medium' ? '#f59e0b' : '#3b82f6';
-        
-        map.current.addSource(`zone-${zone.id}`, {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Point',
-              coordinates: [zone.lng, zone.lat]
+        // Add risk zones
+        RISK_ZONES.forEach(zone => {
+          const color = zone.riskLevel === 'high' ? '#ef4444' :
+                       zone.riskLevel === 'medium' ? '#f59e0b' : '#3b82f6';
+          
+          newMap.addSource(`zone-${zone.id}`, {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: [zone.lng, zone.lat]
+              }
             }
-          }
-        });
+          });
 
-        map.current.addLayer({
-          id: `zone-${zone.id}`,
-          type: 'circle',
-          source: `zone-${zone.id}`,
-          paint: {
-            'circle-radius': zone.radius / 10,
-            'circle-color': color,
-            'circle-opacity': 0.2,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': color,
-            'circle-stroke-opacity': 0.5
-          }
+          newMap.addLayer({
+            id: `zone-${zone.id}`,
+            type: 'circle',
+            source: `zone-${zone.id}`,
+            paint: {
+              'circle-radius': zone.radius / 10,
+              'circle-color': color,
+              'circle-opacity': 0.2,
+              'circle-stroke-width': 2,
+              'circle-stroke-color': color,
+              'circle-stroke-opacity': 0.5
+            }
+          });
         });
       });
-    });
+    } catch (error) {
+      console.error('[WeatherRoutingPanel] Failed to initialize map:', error);
+    }
 
     return () => {
       map.current?.remove();
