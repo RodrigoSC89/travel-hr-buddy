@@ -24,7 +24,7 @@ export interface AIInsight {
   actions?: string[];
 }
 
-const AI_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-command`;
+const AI_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-command`;
 
 export function useUnifiedCommandAI() {
   const [messages, setMessages] = useState<AIMessage[]>([]);

@@ -20,7 +20,7 @@ const quickActions = [
   { id: "settings", label: "Configurações", icon: Settings, action: "/settings" },
   { id: "operations", label: "Operations Dashboard", icon: Ship, action: "/operations-dashboard" },
   { id: "ai-insights", label: "AI Insights Dashboard", icon: Brain, action: "/ai-insights" },
-  { id: "nautilus-llm", label: "Nautilus LLM Core", icon: Brain, action: "/mission-control/llm" },
+  { id: "nauti-llm", label: "Nauti LLM Core", icon: Brain, action: "/mission-control/llm" },
   { id: "ai-command", label: "AI Command Center", icon: Brain, action: "/mission-control/ai-command" },
   { id: "workflows", label: "Workflow Engine", icon: Workflow, action: "/mission-control/workflows" },
   { id: "autonomy", label: "Autonomy Console", icon: Zap, action: "/mission-control/autonomy" },

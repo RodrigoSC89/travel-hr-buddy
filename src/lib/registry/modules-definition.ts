@@ -455,8 +455,8 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "AI-powered multi-step workflow execution with approval and rollback"
   },
   {
-    id: "nautilus-llm",
-    name: "Nautilus LLM Core",
+    id: "nauti-llm",
+    name: "Nauti LLM Core",
     path: "/mission-control/llm",
     category: "ai",
     aiEnabled: true,

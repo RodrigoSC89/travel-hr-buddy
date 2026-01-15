@@ -85,7 +85,7 @@ export async function showNotification(options: PushNotificationOptions): Promis
         body: options.body,
         icon,
         badge,
-        tag: options.tag || `nautilus-${Date.now()}`,
+        tag: options.tag || `nauti-${Date.now()}`,
         data: {
           ...options.data,
           type: options.type || "info",
@@ -102,7 +102,7 @@ export async function showNotification(options: PushNotificationOptions): Promis
         body: options.body,
         icon,
         badge,
-        tag: options.tag || `nautilus-${Date.now()}`,
+        tag: options.tag || `nauti-${Date.now()}`,
         data: options.data,
         silent: options.silent ?? false
       });

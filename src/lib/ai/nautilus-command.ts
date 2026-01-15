@@ -1,12 +1,12 @@
 /**
- * Nautilus Command AI Client
+ * Nauti Command AI Client
  * Streaming chat interface for AI command center
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 
-const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-command`;
+const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-command`;
 
 export interface Message {
   role: "user" | "assistant" | "system";
