@@ -564,7 +564,7 @@ export const WindyWeatherPage: React.FC = () => {
             </TabsContent>
 
             {/* Windy Map Tab - Official Windy Plugin */}
-            <TabsContent value="windy" className="flex-1 overflow-auto m-0 p-0">
+            <TabsContent value="windy" className="flex-1 m-0 p-0" forceMount style={{ display: activeTab === 'windy' ? 'block' : 'none' }}>
               <WindyMapPlugin
                 latitude={location.lat}
                 longitude={location.lon}
