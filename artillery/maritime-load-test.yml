@@ -1,0 +1,158 @@
+# =============================================
+# NAUTI ONE - ARTILLERY LOAD TESTING
+# 100 Concurrent Users - Maritime Operations
+# =============================================
+
+config:
+  target: "https://vnbptmixvwropvanyhdb.supabase.co"
+  phases:
+    # Warm-up phase
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm-up"
+    # Ramp-up to 50 users
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 50
+      name: "Ramp-up to 50"
+    # Peak load - 100 concurrent users
+    - duration: 120
+      arrivalRate: 100
+      name: "Peak Load 100 users"
+    # Cool-down
+    - duration: 30
+      arrivalRate: 10
+      name: "Cool-down"
+  
+  defaults:
+    headers:
+      Content-Type: "application/json"
+      apikey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE"
+  
+  plugins:
+    expect: {}
+  
+  # Performance thresholds
+  ensure:
+    p95: 2000      # 95th percentile < 2s
+    p99: 5000      # 99th percentile < 5s
+    maxErrorRate: 1 # Max 1% error rate
+
+scenarios:
+  # =============================================
+  # SCENARIO 1: System Health Check
+  # =============================================
+  - name: "System Health Check"
+    weight: 10
+    flow:
+      - post:
+          url: "/functions/v1/system-health"
+          json: {}
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+          capture:
+            - json: "$.status"
+              as: "health_status"
+
+  # =============================================
+  # SCENARIO 2: PEOTRAM AI Evidence Generation
+  # =============================================
+  - name: "PEOTRAM AI Evidence"
+    weight: 25
+    flow:
+      - post:
+          url: "/functions/v1/peotram-generate-evidence"
+          json:
+            action: "generate"
+            elementId: "{{ $randomNumber(1, 13) }}"
+            vesselName: "MV Test Vessel {{ $randomNumber(1, 100) }}"
+            organizationId: "test-org-{{ $randomNumber(1, 5) }}"
+          expect:
+            - statusCode: 200
+
+  # =============================================
+  # SCENARIO 3: PEOTRAM AI Chat
+  # =============================================
+  - name: "PEOTRAM AI Chat"
+    weight: 20
+    flow:
+      - post:
+          url: "/functions/v1/peotram-ai-chat"
+          json:
+            messages:
+              - role: "user"
+                content: "Explique o elemento {{ $randomNumber(1, 13) }} do PEOTRAM"
+            vesselId: "vessel-{{ $randomNumber(1, 50) }}"
+          expect:
+            - statusCode: 200
+
+  # =============================================
+  # SCENARIO 4: GMUD Workflow Creation
+  # =============================================
+  - name: "GMUD Workflow"
+    weight: 15
+    flow:
+      - post:
+          url: "/functions/v1/gmud-workflow"
+          json:
+            action: "create_workflow"
+            gmud_request:
+              id: "gmud-load-test-{{ $randomNumber(1000, 9999) }}"
+              description: "Load Test GMUD - Maintenance Request"
+              vessel_name: "MV Test {{ $randomNumber(1, 20) }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: "workflow"
+
+  # =============================================
+  # SCENARIO 5: Twilio SMS Validation
+  # =============================================
+  - name: "Twilio Number Validation"
+    weight: 10
+    flow:
+      - post:
+          url: "/functions/v1/twilio-alerts"
+          json:
+            operation: "verify-number"
+            to: "+5511{{ $randomNumber(900000000, 999999999) }}"
+            message: "Load test verification"
+          expect:
+            - statusCode: 200
+
+  # =============================================
+  # SCENARIO 6: ElevenLabs TTS
+  # =============================================
+  - name: "Voice TTS Generation"
+    weight: 10
+    flow:
+      - post:
+          url: "/functions/v1/elevenlabs-voice"
+          json:
+            operation: "tts"
+            text: "Sistema operacional. Todos os sensores ativos."
+            language: "pt"
+          expect:
+            - statusCode: 200
+            - hasProperty: "audioContent"
+
+  # =============================================
+  # SCENARIO 7: Database Query Simulation
+  # =============================================
+  - name: "Database Queries"
+    weight: 10
+    flow:
+      - get:
+          url: "/rest/v1/vessels?select=id,name,imo_number&limit=10"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/rest/v1/crew_members?select=id,name,position&limit=20"
+          expect:
+            - statusCode: 200
+
+# =============================================
+# REPORTING
+# =============================================
+# Run with: artillery run artillery/maritime-load-test.yml --output report.json
+# Generate HTML: artillery report report.json --output report.html
