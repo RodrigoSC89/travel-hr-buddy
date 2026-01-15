@@ -136,6 +136,18 @@ export const WindyWeatherPage: React.FC = () => {
     return date.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric' }).toUpperCase();
   };
 
+  // City comparison handlers
+  const handleAddCityToComparison = (city: WeatherLocation) => {
+    if (comparisonCities.length < 4 && !comparisonCities.some(c => c.id === city.id)) {
+      setComparisonCities(prev => [...prev, city]);
+    }
+    setIsAddCityDialogOpen(false);
+  };
+
+  const handleRemoveCityFromComparison = (cityId: string) => {
+    setComparisonCities(prev => prev.filter(c => c.id !== cityId));
+  };
+
   // Show error toast if API fails
   useEffect(() => {
     if (error) {
@@ -269,59 +281,104 @@ export const WindyWeatherPage: React.FC = () => {
             </div>
           )}
 
-          {/* Map */}
-          <WeatherMapWind
-            location={location}
-            weather={currentWeather}
-            layer="wind"
-            className="flex-shrink-0"
-          />
+          {/* Tabs for different views */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+            <TabsList className="bg-slate-800/50 border-b border-white/10 rounded-none justify-start px-4 h-12 flex-shrink-0">
+              <TabsTrigger 
+                value="forecast" 
+                className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary text-white/70"
+              >
+                <Wind className="h-4 w-4 mr-2" />
+                Previsão
+              </TabsTrigger>
+              <TabsTrigger 
+                value="radar" 
+                className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 text-white/70"
+              >
+                <CloudRain className="h-4 w-4 mr-2" />
+                Radar
+              </TabsTrigger>
+              <TabsTrigger 
+                value="compare" 
+                className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 text-white/70"
+              >
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Comparar
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Daily Forecast Strip */}
-          <DailyForecastStrip
-            forecasts={dailyForecast}
-            selectedDay={selectedDay}
-            onSelectDay={setSelectedDay}
-          />
+            {/* Forecast Tab */}
+            <TabsContent value="forecast" className="flex-1 flex flex-col overflow-hidden m-0">
+              {/* Map */}
+              <WeatherMapWind
+                location={location}
+                weather={currentWeather}
+                layer="wind"
+                className="flex-shrink-0"
+              />
 
-          {/* Marine Data Row */}
-          {marineData && (
-            <div className="bg-slate-900/80 border-b border-white/10 px-4 py-2">
-              <div className="flex items-center gap-4 text-sm overflow-x-auto">
-                <div className="flex items-center gap-2 text-cyan-400">
-                  <Waves className="h-4 w-4" />
-                  <span>Ondas: {marineData.waveHeight.toFixed(1)}m</span>
-                </div>
-                <div className="flex items-center gap-2 text-blue-400">
-                  <span>Período: {marineData.wavePeriod.toFixed(0)}s</span>
-                </div>
-                <div className="flex items-center gap-2 text-purple-400">
-                  <span>Swell: {marineData.swellHeight.toFixed(1)}m</span>
-                </div>
-                <div className="flex items-center gap-2 text-green-400">
-                  <span>Água: {marineData.waterTemperature}°C</span>
-                </div>
-                {currentWeather && (
-                  <div className="flex items-center gap-2 text-yellow-400 ml-auto">
-                    <Wind className="h-4 w-4" />
-                    <span>Vento: {Math.round(currentWeather.wind.speed)} km/h</span>
-                    {currentWeather.wind.gust > currentWeather.wind.speed && (
-                      <span className="text-orange-400">(raj. {Math.round(currentWeather.wind.gust)})</span>
+              {/* Daily Forecast Strip */}
+              <DailyForecastStrip
+                forecasts={dailyForecast}
+                selectedDay={selectedDay}
+                onSelectDay={setSelectedDay}
+              />
+
+              {/* Marine Data Row */}
+              {marineData && (
+                <div className="bg-slate-900/80 border-b border-white/10 px-4 py-2">
+                  <div className="flex items-center gap-4 text-sm overflow-x-auto">
+                    <div className="flex items-center gap-2 text-cyan-400">
+                      <Waves className="h-4 w-4" />
+                      <span>Ondas: {marineData.waveHeight.toFixed(1)}m</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-blue-400">
+                      <span>Período: {marineData.wavePeriod.toFixed(0)}s</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-purple-400">
+                      <span>Swell: {marineData.swellHeight.toFixed(1)}m</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-green-400">
+                      <span>Água: {marineData.waterTemperature}°C</span>
+                    </div>
+                    {currentWeather && (
+                      <div className="flex items-center gap-2 text-yellow-400 ml-auto">
+                        <Wind className="h-4 w-4" />
+                        <span>Vento: {Math.round(currentWeather.wind.speed)} km/h</span>
+                        {currentWeather.wind.gust > currentWeather.wind.speed && (
+                          <span className="text-orange-400">(raj. {Math.round(currentWeather.wind.gust)})</span>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-              </div>
-            </div>
-          )}
+                </div>
+              )}
 
-          {/* Hourly Table */}
-          <div className="flex-1 overflow-auto">
-            <HourlyForecastTable
-              forecasts={hourlyForecast}
-              selectedDay={selectedDay}
-              dayLabel={getDayLabel()}
-            />
-          </div>
+              {/* Hourly Table */}
+              <div className="flex-1 overflow-auto">
+                <HourlyForecastTable
+                  forecasts={hourlyForecast}
+                  selectedDay={selectedDay}
+                  dayLabel={getDayLabel()}
+                />
+              </div>
+            </TabsContent>
+
+            {/* Rain Radar Tab */}
+            <TabsContent value="radar" className="flex-1 overflow-auto m-0 p-4">
+              <RainRadarMap location={location} />
+            </TabsContent>
+
+            {/* Compare Tab */}
+            <TabsContent value="compare" className="flex-1 overflow-auto m-0 p-4">
+              <CityComparison
+                cities={comparisonCities}
+                onRemoveCity={handleRemoveCityFromComparison}
+                onAddCity={() => setIsAddCityDialogOpen(true)}
+                maxCities={4}
+              />
+            </TabsContent>
+          </Tabs>
 
           {/* Footer Controls */}
           <WeatherFooterControls
@@ -368,6 +425,66 @@ export const WindyWeatherPage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Add City Dialog */}
+        <Dialog open={isAddCityDialogOpen} onOpenChange={setIsAddCityDialogOpen}>
+          <DialogContent className="bg-slate-900 border-white/10 text-white max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-primary" />
+                Adicionar Cidade para Comparação
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <CitySearch
+                onSelectLocation={handleAddCityToComparison}
+                favorites={favorites}
+                recentSearches={recentSearches}
+                onToggleFavorite={handleToggleFavorite}
+                className="w-full"
+              />
+              
+              {/* Quick add from favorites */}
+              {favorites.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-white/50">Favoritos</p>
+                  <div className="flex flex-wrap gap-2">
+                    {favorites.filter(f => !comparisonCities.some(c => c.id === f.id)).map(fav => (
+                      <Button
+                        key={fav.id}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddCityToComparison(fav)}
+                        className="border-white/20 text-white hover:bg-white/10"
+                      >
+                        <Heart className="h-3 w-3 mr-1 fill-red-400 text-red-400" />
+                        {fav.name.split(',')[0]}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Currently comparing */}
+              {comparisonCities.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-white/50">Comparando ({comparisonCities.length}/4)</p>
+                  <div className="flex flex-wrap gap-2">
+                    {comparisonCities.map(city => (
+                      <Badge
+                        key={city.id}
+                        variant="secondary"
+                        className="bg-primary/20 text-primary"
+                      >
+                        {city.name.split(',')[0]}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
