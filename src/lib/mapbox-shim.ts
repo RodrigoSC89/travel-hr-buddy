@@ -1,11 +1,8 @@
 /**
  * Mapbox GL Shim
  * Provides a consistent import pattern for mapbox-gl across the codebase
- * PATCH WINDY-2.5: Fixed ESM import issue in Vite
+ * PATCH WINDY-2.6: Fixed ESM import issue - removed static CSS import
  */
-
-// Import mapbox-gl CSS first
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Type definitions
 type MapboxMapConstructor = new (options: any) => any;
@@ -15,7 +12,7 @@ type MapboxNavigationControlConstructor = new (options?: any) => any;
 type MapboxLngLatBoundsConstructor = new (sw?: any, ne?: any) => any;
 type MapboxLngLatConstructor = new (lng: number, lat: number) => any;
 
-interface MapboxGLInterface {
+export interface MapboxGLInterface {
   accessToken: string;
   Map: MapboxMapConstructor;
   Marker: MapboxMarkerConstructor;
@@ -28,15 +25,8 @@ interface MapboxGLInterface {
 
 // Create mock classes for when mapbox-gl is not available
 class MockMap {
-  private container: HTMLElement | null = null;
-  
   constructor(options?: any) {
     console.warn('[mapbox-shim] Using mock Map - mapbox-gl not loaded');
-    if (options?.container) {
-      this.container = typeof options.container === 'string' 
-        ? document.getElementById(options.container) 
-        : options.container;
-    }
   }
   on(_event: string, _callback: Function) { return this; }
   off(_event: string, _callback: Function) { return this; }
@@ -115,12 +105,27 @@ const createMockMapbox = (): MapboxGLInterface => {
 let mapboxgl: MapboxGLInterface = createMockMapbox();
 let mapboxLoaded = false;
 let loadPromise: Promise<MapboxGLInterface> | null = null;
+let cssLoaded = false;
+
+// Load CSS dynamically
+const loadMapboxCSS = () => {
+  if (cssLoaded) return;
+  cssLoaded = true;
+  
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css';
+  document.head.appendChild(link);
+};
 
 // Async loader function
 const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
   if (mapboxLoaded && mapboxgl.Map !== MockMap) {
     return mapboxgl;
   }
+
+  // Load CSS first
+  loadMapboxCSS();
 
   try {
     // Use dynamic import for better ESM/CJS handling
@@ -175,7 +180,9 @@ const loadMapboxGL = async (): Promise<MapboxGLInterface> => {
 };
 
 // Start loading immediately but don't block
-loadPromise = loadMapboxGL();
+if (typeof window !== 'undefined') {
+  loadPromise = loadMapboxGL();
+}
 
 // Synchronous getter for compatibility (may return mock initially)
 export const getMapboxGL = (): MapboxGLInterface => mapboxgl;
@@ -187,34 +194,6 @@ export const getMapboxGLAsync = async (): Promise<MapboxGLInterface> => {
   }
   return loadMapboxGL();
 };
-
-// Initialize synchronously with a try-catch for immediate use
-try {
-  // Attempt synchronous require for SSR/build compatibility
-  const syncModule = require('mapbox-gl');
-  if (syncModule) {
-    const resolved = syncModule.default || syncModule;
-    if (resolved && resolved.Map) {
-      let _token = '';
-      mapboxgl = {
-        get accessToken() { return _token || resolved.accessToken || ''; },
-        set accessToken(value: string) {
-          _token = value;
-          try { resolved.accessToken = value; } catch {}
-        },
-        Map: resolved.Map,
-        Marker: resolved.Marker || MockMarker as any,
-        Popup: resolved.Popup || MockPopup as any,
-        NavigationControl: resolved.NavigationControl || MockNavigationControl as any,
-        LngLatBounds: resolved.LngLatBounds || MockLngLatBounds as any,
-        LngLat: resolved.LngLat || MockLngLat as any,
-      };
-      mapboxLoaded = true;
-    }
-  }
-} catch {
-  // Ignore - will use async loader
-}
 
 // Type export
 export type MapboxGL = MapboxGLInterface;
