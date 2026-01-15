@@ -7,3 +7,5 @@ export { WeatherChat } from './WeatherChat';
 export { CitySearch } from './CitySearch';
 export { WeatherAlertSettings } from './WeatherAlertSettings';
 export { WindyWeatherPage } from './WindyWeatherPage';
+export { CityComparison } from './CityComparison';
+export { RainRadarMap } from './RainRadarMap';
