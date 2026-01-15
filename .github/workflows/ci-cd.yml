@@ -215,12 +215,12 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"type": "all_day", "minMagnitude": 4.0}'
       
-      - name: Test Nautilus Predict API
+      - name: Test Nauti Predict API
         run: |
           curl -sf -X POST \
-            "https://${{ secrets.SUPABASE_PROJECT_ID }}.supabase.co/functions/v1/nautilus-predict" \
+            "https://${{ secrets.SUPABASE_PROJECT_ID }}.supabase.co/functions/v1/nauti-predict" \
             -H "Content-Type: application/json" \
-            -d '{"type": "maintenance", "data": {}}' || echo "Nautilus Predict test skipped (API key required)"
+            -d '{"type": "maintenance", "data": {}}' || echo "Nauti Predict test skipped (API key required)"
 
   # ============================================
   # Notify on Success

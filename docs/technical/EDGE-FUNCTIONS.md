@@ -8,8 +8,8 @@
 ## 📋 Índice por Categoria
 
 ### Core
-- [nautilus-brain](#nautilus-brain)
-- [nautilus-ai](#nautilus-ai)
+- [nauti-brain](#nauti-brain)
+- [nauti-ai](#nauti-ai)
 - [system-health](#system-health)
 - [api-gateway](#api-gateway)
 
@@ -36,8 +36,8 @@
 
 ## 🧠 Core Functions
 
-### nautilus-brain
-**Endpoint:** `/functions/v1/nautilus-brain`  
+### nauti-brain
+**Endpoint:** `/functions/v1/nauti-brain`  
 **Método:** POST  
 **Autenticação:** JWT Required
 
@@ -77,7 +77,7 @@ interface NautilusBrainResponse {
 
 **Exemplo de Uso:**
 ```typescript
-const { data } = await supabase.functions.invoke('nautilus-brain', {
+const { data } = await supabase.functions.invoke('nauti-brain', {
   body: {
     command: "Quais tripulantes têm certificados vencendo este mês?",
     context: { module: 'crew-management' }
@@ -87,8 +87,8 @@ const { data } = await supabase.functions.invoke('nautilus-brain', {
 
 ---
 
-### nautilus-ai
-**Endpoint:** `/functions/v1/nautilus-ai`  
+### nauti-ai
+**Endpoint:** `/functions/v1/nauti-ai`  
 **Método:** POST  
 **Autenticação:** JWT Required
 
