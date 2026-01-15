@@ -17,18 +17,18 @@ import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { toast } from "sonner";
 
 // Components
-import { CommandBrainPanel } from "@/modules/nautilus-command/components/CommandBrainPanel";
-import { AIInsightsPanel } from "@/modules/nautilus-command/components/AIInsightsPanel";
-import { NotificationsPanel } from "@/modules/nautilus-command/components/NotificationsPanel";
-import { QuickActionsGrid } from "@/modules/nautilus-command/components/QuickActionsGrid";
-import { SettingsDialog } from "@/modules/nautilus-command/components/SettingsDialog";
+import { CommandBrainPanel } from "@/modules/nauti-command/components/CommandBrainPanel";
+import { AIInsightsPanel } from "@/modules/nauti-command/components/AIInsightsPanel";
+import { NotificationsPanel } from "@/modules/nauti-command/components/NotificationsPanel";
+import { QuickActionsGrid } from "@/modules/nauti-command/components/QuickActionsGrid";
+import { SettingsDialog } from "@/modules/nauti-command/components/SettingsDialog";
 import { FleetIntelligence } from "./FleetIntelligence";
 import { CrewManagement } from "./CrewManagement";
 import { SmartInventory } from "./SmartInventory";
 import { MaintenanceHub } from "./MaintenanceHub";
 import { IoTDashboard } from "./IoTDashboard";
 import { OfflineIndicator } from "./OfflineIndicator";
-import { SystemContext } from "@/modules/nautilus-command/hooks/useNautilusCommandAI";
+import { SystemContext } from "@/modules/nauti-command/hooks/useNautilusCommandAI";
 
 interface Notification {
   id: string;
