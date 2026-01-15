@@ -10,15 +10,15 @@ import {
   fetchOpenMeteoAirQuality,
   getWeatherDescription,
   getAQIDescription,
-  getWindDirection,
-  getWindArrow,
   OpenMeteoResponse,
   OpenMeteoMarineData,
   OpenMeteoAirQuality
 } from '@/services/weather/open-meteo.service';
 import {
-  processWeatherAlerts,
-  WeatherAlert
+  checkWeatherConditions,
+  processAndNotifyAlerts,
+  WeatherAlert,
+  DEFAULT_THRESHOLDS
 } from '@/lib/notifications/weather-alert-service';
 import type { CurrentWeather, DailyForecast, HourlyForecast, MarineData, AirQuality } from '@/components/weather/windy/types';
 
@@ -223,13 +223,18 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
       
       // Process alerts if enabled
       if (enableAlerts && data.current) {
-        const alerts = await processWeatherAlerts({
-          temperature: data.current.temperature_2m,
-          windSpeed: data.current.wind_speed_10m,
-          windGust: data.current.wind_gusts_10m,
-          weatherCode: data.current.weather_code,
-          visibility: (data.current.visibility || 10000) / 1000
-        }, locationName);
+        // Convert km/h to knots for alert service (1 km/h = 0.54 knots)
+        const windSpeedKnots = data.current.wind_speed_10m * 0.54;
+        
+        const alerts = checkWeatherConditions({
+          windSpeed: windSpeedKnots,
+          visibility: (data.current.visibility || 10000) / 1000,
+          pressure: data.current.pressure_msl
+        }, DEFAULT_THRESHOLDS);
+        
+        if (alerts.length > 0) {
+          processAndNotifyAlerts(alerts);
+        }
         
         setActiveAlerts(alerts);
       }
@@ -240,7 +245,7 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
     } finally {
       setIsLoading(false);
     }
-  }, [lat, lon, locationName, enableAlerts, transformWeatherData]);
+  }, [lat, lon, enableAlerts, transformWeatherData]);
 
   // Fetch marine data
   const refreshMarine = useCallback(async () => {
@@ -257,14 +262,17 @@ export function useOpenMeteoWeather(options: UseOpenMeteoWeatherOptions): UseOpe
         const waveHeight = data.hourly.wave_height[idx >= 0 ? idx : 0];
         
         if (waveHeight) {
-          const alerts = await processWeatherAlerts({ waveHeight }, locationName);
-          setActiveAlerts(prev => [...prev.filter(a => a.type !== 'wave'), ...alerts]);
+          const waveAlerts = checkWeatherConditions({ waveHeight }, DEFAULT_THRESHOLDS);
+          if (waveAlerts.length > 0) {
+            processAndNotifyAlerts(waveAlerts);
+          }
+          setActiveAlerts(prev => [...prev.filter(a => a.type !== 'waves'), ...waveAlerts]);
         }
       }
     } catch (err) {
       console.error('[useOpenMeteoWeather] Marine error:', err);
     }
-  }, [lat, lon, locationName, enableAlerts, transformMarineData]);
+  }, [lat, lon, enableAlerts, transformMarineData]);
 
   // Fetch air quality data
   const refreshAirQuality = useCallback(async () => {

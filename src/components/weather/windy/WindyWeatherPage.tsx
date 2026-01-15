@@ -1,21 +1,34 @@
 /**
  * Weather Command - Windy Style Complete Page
- * PATCH WINDY-1.0
+ * PATCH WINDY-2.0: Integrated real Open-Meteo data
  */
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Card } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { MessageSquare, Heart, RefreshCw, Loader2 } from "lucide-react";
+import { 
+  MessageSquare, 
+  Heart, 
+  RefreshCw, 
+  Loader2, 
+  Settings, 
+  AlertTriangle,
+  Waves,
+  Wind,
+  Droplets,
+  X
+} from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { WeatherMapWind } from "./WeatherMapWind";
 import { DailyForecastStrip } from "./DailyForecastStrip";
 import { HourlyForecastTable } from "./HourlyForecastTable";
 import { WeatherFooterControls } from "./WeatherFooterControls";
 import { WeatherChat } from "./WeatherChat";
 import { CitySearch } from "./CitySearch";
-import type { WeatherLocation, CurrentWeather, DailyForecast, HourlyForecast, MarineData, ForecastModel, DisplayMode, ForecastRange } from "./types";
+import { WeatherAlertSettings } from "./WeatherAlertSettings";
+import { useOpenMeteoWeather } from "@/hooks/useOpenMeteoWeather";
+import type { WeatherLocation, ForecastModel, DisplayMode, ForecastRange } from "./types";
 
 const DEFAULT_LOCATION: WeatherLocation = {
   id: "rio",
@@ -24,81 +37,12 @@ const DEFAULT_LOCATION: WeatherLocation = {
   lon: -43.1729
 };
 
-// Generate mock data for demo
-const generateMockData = (location: WeatherLocation) => {
-  const baseTemp = 25 + Math.random() * 5;
-  
-  const current: CurrentWeather = {
-    temperature: baseTemp,
-    feelsLike: baseTemp - 1,
-    humidity: 65 + Math.random() * 20,
-    pressure: 1013,
-    visibility: 10,
-    uvIndex: 6,
-    cloudCoverage: 30,
-    condition: "Partly Cloudy",
-    description: "Parcialmente nublado",
-    icon: "02d",
-    wind: { speed: 12, gust: 18, direction: 225 },
-    sunrise: "05:45",
-    sunset: "18:30"
-  };
-
-  const daily: DailyForecast[] = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() + i);
-    const days = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
-    return {
-      date: date.toISOString().split('T')[0],
-      dayOfWeek: days[date.getDay()],
-      tempMin: baseTemp - 4 + Math.random() * 2,
-      tempMax: baseTemp + 2 + Math.random() * 3,
-      condition: ["Clear", "Partly Cloudy", "Cloudy", "Rain"][Math.floor(Math.random() * 4)],
-      description: ["Ensolarado", "Parcialmente nublado", "Nublado", "Chuva"][Math.floor(Math.random() * 4)],
-      icon: "02d",
-      humidity: 60 + Math.random() * 30,
-      windSpeed: 8 + Math.random() * 12,
-      rainProbability: Math.random() * 60
-    };
-  });
-
-  const hourly: HourlyForecast[] = Array.from({ length: 24 }, (_, i) => ({
-    hour: i,
-    time: `${i.toString().padStart(2, '0')}:00`,
-    temperature: baseTemp + Math.sin(i / 4) * 4,
-    rain: Math.random() > 0.7 ? Math.random() * 2 : 0,
-    windSpeed: 5 + Math.random() * 10,
-    windGust: 10 + Math.random() * 15,
-    windDirection: 180 + Math.random() * 90,
-    humidity: 60 + Math.random() * 30,
-    icon: i >= 6 && i <= 18 ? "02d" : "02n",
-    condition: "Partly Cloudy"
-  }));
-
-  const marine: MarineData = {
-    waveHeight: 1.2 + Math.random(),
-    wavePeriod: 8 + Math.random() * 4,
-    waveDirection: 180,
-    swellHeight: 0.8,
-    waterTemperature: 24,
-    tideLevel: 120,
-    tideType: 'rising',
-    nextTide: { time: "14:30", type: 'high', level: 180 }
-  };
-
-  return { current, daily, hourly, marine };
-};
-
 export const WindyWeatherPage: React.FC = () => {
   const { toast } = useToast();
   const [location, setLocation] = useState<WeatherLocation>(DEFAULT_LOCATION);
-  const [weather, setWeather] = useState<CurrentWeather | null>(null);
-  const [dailyForecast, setDailyForecast] = useState<DailyForecast[]>([]);
-  const [hourlyForecast, setHourlyForecast] = useState<HourlyForecast[]>([]);
-  const [marine, setMarine] = useState<MarineData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [favorites, setFavorites] = useState<WeatherLocation[]>([]);
   const [recentSearches, setRecentSearches] = useState<WeatherLocation[]>([]);
 
@@ -107,35 +51,55 @@ export const WindyWeatherPage: React.FC = () => {
   const [displayMode, setDisplayMode] = useState<DisplayMode>('basic');
   const [forecastModel, setForecastModel] = useState<ForecastModel>('ECMWF');
 
-  const fetchWeather = useCallback(async (loc: WeatherLocation) => {
-    setIsLoading(true);
+  // Use Open-Meteo hook for REAL data
+  const {
+    currentWeather,
+    hourlyForecast,
+    dailyForecast,
+    marineData,
+    airQuality,
+    isLoading,
+    error,
+    lastUpdated,
+    dataSource,
+    activeAlerts,
+    refresh,
+    refreshMarine,
+    refreshAirQuality
+  } = useOpenMeteoWeather({
+    lat: location.lat,
+    lon: location.lon,
+    locationName: location.name,
+    autoRefresh: true,
+    refreshInterval: 600000, // 10 minutes
+    enableAlerts: true
+  });
+
+  // Load favorites from localStorage
+  useEffect(() => {
     try {
-      // Use mock data for now - can be replaced with real API calls
-      const data = generateMockData(loc);
-      setWeather(data.current);
-      setDailyForecast(data.daily);
-      setHourlyForecast(data.hourly);
-      setMarine(data.marine);
+      const saved = localStorage.getItem('weather_favorites');
+      if (saved) setFavorites(JSON.parse(saved));
       
-      toast({
-        title: "Dados atualizados",
-        description: `Clima carregado para ${loc.name}`,
-      });
-    } catch (err) {
-      toast({ title: "Erro ao carregar dados", variant: "destructive" });
-    } finally {
-      setIsLoading(false);
+      const savedRecent = localStorage.getItem('weather_recent');
+      if (savedRecent) setRecentSearches(JSON.parse(savedRecent));
+    } catch (e) {
+      console.error('Failed to load saved locations:', e);
     }
-  }, [toast]);
+  }, []);
+
+  // Save favorites to localStorage
+  useEffect(() => {
+    localStorage.setItem('weather_favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   useEffect(() => {
-    fetchWeather(location);
-  }, []);
+    localStorage.setItem('weather_recent', JSON.stringify(recentSearches));
+  }, [recentSearches]);
 
   const handleSelectLocation = (loc: WeatherLocation) => {
     setLocation(loc);
     setRecentSearches(prev => [loc, ...prev.filter(l => l.id !== loc.id)].slice(0, 10));
-    fetchWeather(loc);
   };
 
   const handleToggleFavorite = (loc: WeatherLocation) => {
@@ -146,6 +110,14 @@ export const WindyWeatherPage: React.FC = () => {
     );
   };
 
+  const handleRefresh = async () => {
+    await Promise.all([refresh(), refreshMarine(), refreshAirQuality()]);
+    toast({
+      title: "Dados atualizados",
+      description: `Clima de ${location.name} atualizado via ${dataSource}`,
+    });
+  };
+
   const getDayLabel = () => {
     if (selectedDay === 0) return `HOJE - ${new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric' }).toUpperCase()}`;
     const date = new Date();
@@ -153,13 +125,24 @@ export const WindyWeatherPage: React.FC = () => {
     return date.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric' }).toUpperCase();
   };
 
+  // Show error toast if API fails
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Erro ao carregar dados",
+        description: error,
+        variant: "destructive"
+      });
+    }
+  }, [error, toast]);
+
   return (
     <div className="min-h-screen bg-slate-950">
       <div className="flex h-screen">
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="p-4 bg-slate-900/80 border-b border-white/10 flex items-center gap-4">
+          <div className="p-4 bg-slate-900/80 border-b border-white/10 flex items-center gap-4 flex-wrap">
             <CitySearch
               onSelectLocation={handleSelectLocation}
               favorites={favorites}
@@ -177,20 +160,78 @@ export const WindyWeatherPage: React.FC = () => {
               <Heart className={favorites.some(f => f.id === location.id) ? "fill-red-400 text-red-400" : ""} />
             </Button>
 
+            {/* Data source badge */}
+            <Badge variant="outline" className="text-green-400 border-green-400/50">
+              {dataSource}
+            </Badge>
+
+            {/* Active alerts indicator */}
+            {activeAlerts.length > 0 && (
+              <Badge variant="destructive" className="animate-pulse">
+                <AlertTriangle className="h-3 w-3 mr-1" />
+                {activeAlerts.length} Alerta{activeAlerts.length > 1 ? 's' : ''}
+              </Badge>
+            )}
+
             <div className="ml-auto flex items-center gap-2">
+              {/* Marine data indicator */}
+              {marineData && (
+                <Badge variant="outline" className="text-cyan-400 border-cyan-400/50">
+                  <Waves className="h-3 w-3 mr-1" />
+                  {marineData.waveHeight.toFixed(1)}m
+                </Badge>
+              )}
+
+              {/* Air quality indicator */}
+              {airQuality && (
+                <Badge variant="outline" className={
+                  airQuality.aqi <= 40 ? "text-green-400 border-green-400/50" :
+                  airQuality.aqi <= 80 ? "text-yellow-400 border-yellow-400/50" :
+                  "text-red-400 border-red-400/50"
+                }>
+                  <Droplets className="h-3 w-3 mr-1" />
+                  AQI {airQuality.aqi}
+                </Badge>
+              )}
+
               <Badge variant="outline" className="text-white/70 border-white/20">
                 {forecastModel}
               </Badge>
+
+              {/* Last updated */}
+              {lastUpdated && (
+                <span className="text-xs text-white/40">
+                  {lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              )}
+
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => fetchWeather(location)}
+                onClick={handleRefresh}
                 disabled={isLoading}
                 className="border-white/20 text-white"
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-                <span className="ml-2">Atualizar</span>
+                <span className="ml-2 hidden sm:inline">Atualizar</span>
               </Button>
+
+              {/* Settings Sheet */}
+              <Sheet open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="border-white/20 text-white"
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="bg-slate-900 border-white/10 w-full sm:max-w-lg overflow-y-auto">
+                  <WeatherAlertSettings onClose={() => setIsSettingsOpen(false)} />
+                </SheetContent>
+              </Sheet>
+
               <Button
                 variant={isChatOpen ? "default" : "outline"}
                 size="sm"
@@ -203,10 +244,24 @@ export const WindyWeatherPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Active Alerts Banner */}
+          {activeAlerts.length > 0 && (
+            <div className="bg-red-900/50 border-b border-red-500/30 px-4 py-2">
+              <div className="flex items-center gap-2 overflow-x-auto">
+                <AlertTriangle className="h-4 w-4 text-red-400 flex-shrink-0" />
+                {activeAlerts.map((alert, idx) => (
+                  <Badge key={idx} variant="destructive" className="flex-shrink-0">
+                    {alert.title}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Map */}
           <WeatherMapWind
             location={location}
-            weather={weather}
+            weather={currentWeather}
             layer="wind"
             className="flex-shrink-0"
           />
@@ -217,6 +272,36 @@ export const WindyWeatherPage: React.FC = () => {
             selectedDay={selectedDay}
             onSelectDay={setSelectedDay}
           />
+
+          {/* Marine Data Row */}
+          {marineData && (
+            <div className="bg-slate-900/80 border-b border-white/10 px-4 py-2">
+              <div className="flex items-center gap-4 text-sm overflow-x-auto">
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <Waves className="h-4 w-4" />
+                  <span>Ondas: {marineData.waveHeight.toFixed(1)}m</span>
+                </div>
+                <div className="flex items-center gap-2 text-blue-400">
+                  <span>Período: {marineData.wavePeriod.toFixed(0)}s</span>
+                </div>
+                <div className="flex items-center gap-2 text-purple-400">
+                  <span>Swell: {marineData.swellHeight.toFixed(1)}m</span>
+                </div>
+                <div className="flex items-center gap-2 text-green-400">
+                  <span>Água: {marineData.waterTemperature}°C</span>
+                </div>
+                {currentWeather && (
+                  <div className="flex items-center gap-2 text-yellow-400 ml-auto">
+                    <Wind className="h-4 w-4" />
+                    <span>Vento: {Math.round(currentWeather.wind.speed)} km/h</span>
+                    {currentWeather.wind.gust > currentWeather.wind.speed && (
+                      <span className="text-orange-400">(raj. {Math.round(currentWeather.wind.gust)})</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Hourly Table */}
           <div className="flex-1 overflow-auto">
@@ -235,21 +320,41 @@ export const WindyWeatherPage: React.FC = () => {
             onDisplayModeChange={setDisplayMode}
             forecastModel={forecastModel}
             onForecastModelChange={setForecastModel}
-            onShare={() => toast({ title: "Link copiado!" })}
+            onShare={() => {
+              navigator.clipboard.writeText(window.location.href);
+              toast({ title: "Link copiado!" });
+            }}
           />
         </div>
 
         {/* Chat Sidebar */}
         {isChatOpen && (
-          <div className="w-80 flex-shrink-0">
+          <div className="w-80 flex-shrink-0 hidden md:block">
             <WeatherChat
               location={location}
-              weather={weather}
+              weather={currentWeather}
               forecast={dailyForecast}
-              marine={marine}
+              marine={marineData}
               isOpen={isChatOpen}
               onClose={() => setIsChatOpen(false)}
             />
+          </div>
+        )}
+
+        {/* Mobile Chat Drawer */}
+        {isChatOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setIsChatOpen(false)} />
+            <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm">
+              <WeatherChat
+                location={location}
+                weather={currentWeather}
+                forecast={dailyForecast}
+                marine={marineData}
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+              />
+            </div>
           </div>
         )}
       </div>

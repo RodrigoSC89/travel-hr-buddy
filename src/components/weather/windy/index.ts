@@ -5,4 +5,5 @@ export { HourlyForecastTable } from './HourlyForecastTable';
 export { WeatherFooterControls } from './WeatherFooterControls';
 export { WeatherChat } from './WeatherChat';
 export { CitySearch } from './CitySearch';
+export { WeatherAlertSettings } from './WeatherAlertSettings';
 export { WindyWeatherPage } from './WindyWeatherPage';
