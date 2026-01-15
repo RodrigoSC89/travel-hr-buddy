@@ -2,10 +2,11 @@
  * VoiceAssistantWithHotword - Complete Voice Assistant with Hotword Detection
  * Floating button centered at bottom with full AI functionality
  * Part of ARIA v4.0 Voice System - "Hey Nauti" activation
+ * NOW WITH ElevenLabs HD Voice Integration!
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { Mic, MicOff, X, Volume2, Bot, Sparkles, Wifi, WifiOff, Send } from 'lucide-react';
+import { Mic, MicOff, X, Volume2, Bot, Sparkles, Wifi, WifiOff, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  audioPlayed?: boolean;
 }
 
 interface VoiceAssistantWithHotwordProps {
@@ -41,6 +43,9 @@ const HOTWORD_PATTERNS = [
   'ei nolty',
 ];
 
+// ARIA Voice - Sarah (friendly female voice)
+const ARIA_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL';
+
 export function VoiceAssistantWithHotword({
   className,
   onCommand,
@@ -49,10 +54,12 @@ export function VoiceAssistantWithHotword({
   const [isListeningForHotword, setIsListeningForHotword] = useState(false);
   const [isListeningForCommand, setIsListeningForCommand] = useState(false);
   const [isProcessingAI, setIsProcessingAI] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [textInput, setTextInput] = useState('');
   const [audioLevel, setAudioLevel] = useState(0);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [useHDVoice, setUseHDVoice] = useState(true);
   
   const recognitionRef = useRef<any>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -60,6 +67,7 @@ export function VoiceAssistantWithHotword({
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Monitor online status
   useEffect(() => {
@@ -372,13 +380,63 @@ export function VoiceAssistantWithHotword({
     return `Entendi: "${command}". Como posso ajudar? Diga "ajuda" para ver opções disponíveis.`;
   };
 
-  const speakResponse = (text: string) => {
+  const speakResponse = async (text: string) => {
+    // Try ElevenLabs HD Voice first if online
+    if (useHDVoice && isOnline) {
+      try {
+        setIsSpeaking(true);
+        const response = await fetch(
+          `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/elevenlabs-voice`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE',
+            },
+            body: JSON.stringify({
+              operation: 'tts',
+              text,
+              voiceId: ARIA_VOICE_ID,
+              language: 'pt',
+            }),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.audioContent) {
+            const audioUrl = `data:audio/mpeg;base64,${data.audioContent}`;
+            const audio = new Audio(audioUrl);
+            audioRef.current = audio;
+            audio.onended = () => setIsSpeaking(false);
+            audio.onerror = () => {
+              setIsSpeaking(false);
+              fallbackToWebSpeech(text);
+            };
+            await audio.play();
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('[ARIA] ElevenLabs failed, using fallback:', error);
+      }
+      setIsSpeaking(false);
+    }
+    
+    // Fallback to Web Speech API
+    fallbackToWebSpeech(text);
+  };
+
+  const fallbackToWebSpeech = (text: string) => {
     if ('speechSynthesis' in window) {
       speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'pt-BR';
       utterance.rate = 1.0;
       utterance.pitch = 1.0;
+      utterance.onend = () => setIsSpeaking(false);
+      setIsSpeaking(true);
       speechSynthesis.speak(utterance);
     }
   };
