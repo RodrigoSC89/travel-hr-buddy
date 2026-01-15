@@ -293,7 +293,7 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
   }, [origin, destination, vesselSpeed, avoidPiracy, toast]);
 
   return (
-    <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-4", className)}>
+    <div className={cn("grid grid-cols-1 lg:grid-cols-3 gap-4 h-full", className)}>
       {/* Configuration Panel */}
       <Card className="bg-slate-900/80 border-white/10">
         <CardHeader>
@@ -438,13 +438,12 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
       </Card>
 
       {/* Map and Results */}
-      <div className="lg:col-span-2 space-y-4">
+      <div className="lg:col-span-2 flex flex-col gap-4">
         {/* Map */}
-        <Card className="bg-slate-900/80 border-white/10 overflow-hidden">
+        <Card className="bg-slate-900/80 border-white/10 overflow-hidden flex-1 relative">
           <div 
             ref={mapContainer} 
-            className="h-[400px] w-full"
-            style={{ minHeight: '400px' }}
+            className="h-full w-full min-h-[350px]"
           />
           {!mapboxToken && (
             <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80">

@@ -131,9 +131,9 @@ export const WeatherTrendCharts: React.FC<WeatherTrendChartsProps> = ({
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("flex flex-col gap-4", className)}>
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 flex-shrink-0">
         <Card className="bg-slate-800/70 border-white/10 p-3">
           <div className="flex items-center gap-2 mb-1">
             <Thermometer className="h-4 w-4 text-red-400" />
