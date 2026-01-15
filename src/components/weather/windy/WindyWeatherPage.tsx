@@ -1,6 +1,6 @@
 /**
  * Weather Command - Windy Style Complete Page
- * PATCH WINDY-2.0: Integrated real Open-Meteo data with City Comparison & Rain Radar
+ * PATCH WINDY-2.1: Full integration with Trends, Alerts, PDF Export
  */
 
 import React, { useState, useEffect } from "react";
@@ -20,7 +20,11 @@ import {
   Droplets,
   BarChart3,
   CloudRain,
-  MapPin
+  MapPin,
+  TrendingUp,
+  Bell,
+  Download,
+  Share2
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -33,8 +37,24 @@ import { CitySearch } from "./CitySearch";
 import { WeatherAlertSettings } from "./WeatherAlertSettings";
 import { CityComparison } from "./CityComparison";
 import { RainRadarMap } from "./RainRadarMap";
+import { WeatherTrendCharts } from "./WeatherTrendCharts";
+import { CityAlertManager } from "./CityAlertManager";
 import { useOpenMeteoWeather } from "@/hooks/useOpenMeteoWeather";
-import type { WeatherLocation, ForecastModel, DisplayMode, ForecastRange } from "./types";
+import { downloadWeatherComparisonPDF, shareWeatherComparison } from "@/lib/pdf/weather-comparison-pdf";
+import { openMeteoService } from "@/services/weather/open-meteo.service";
+import type { WeatherLocation, ForecastModel, DisplayMode, ForecastRange, CurrentWeather, DailyForecast } from "./types";
+
+// Popular Brazilian cities for alerts
+const POPULAR_CITIES: WeatherLocation[] = [
+  { id: "santos", name: "Santos, SP", lat: -23.9608, lon: -46.3335 },
+  { id: "rio", name: "Rio de Janeiro, RJ", lat: -22.9068, lon: -43.1729 },
+  { id: "sp", name: "São Paulo, SP", lat: -23.5505, lon: -46.6333 },
+  { id: "macae", name: "Macaé, RJ", lat: -22.3708, lon: -41.7869 },
+  { id: "vitoria", name: "Vitória, ES", lat: -20.3155, lon: -40.3128 },
+  { id: "salvador", name: "Salvador, BA", lat: -12.9714, lon: -38.5014 },
+  { id: "recife", name: "Recife, PE", lat: -8.0476, lon: -34.8770 },
+  { id: "fortaleza", name: "Fortaleza, CE", lat: -3.7319, lon: -38.5267 },
+];
 
 const DEFAULT_LOCATION: WeatherLocation = {
   id: "rio",
@@ -56,6 +76,8 @@ export const WindyWeatherPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("forecast");
   const [comparisonCities, setComparisonCities] = useState<WeatherLocation[]>([]);
   const [isAddCityDialogOpen, setIsAddCityDialogOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [comparisonData, setComparisonData] = useState<Map<string, { current: CurrentWeather | null; daily: DailyForecast[] }>>(new Map());
 
   // Settings
   const [forecastRange, setForecastRange] = useState<ForecastRange>('3h');
@@ -108,6 +130,63 @@ export const WindyWeatherPage: React.FC = () => {
     localStorage.setItem('weather_recent', JSON.stringify(recentSearches));
   }, [recentSearches]);
 
+  // Fetch comparison data when cities change
+  useEffect(() => {
+    const fetchComparisonData = async () => {
+      const newData = new Map<string, { current: CurrentWeather | null; daily: DailyForecast[] }>();
+      
+      for (const city of comparisonCities) {
+        try {
+          const weatherData = await openMeteoService.getWeatherData(city.lat, city.lon);
+          
+          const current: CurrentWeather | null = weatherData.current ? {
+            temperature: weatherData.current.temperature_2m,
+            feelsLike: weatherData.current.apparent_temperature,
+            humidity: weatherData.current.relative_humidity_2m,
+            pressure: weatherData.current.pressure_msl,
+            visibility: (weatherData.current.visibility || 10000) / 1000,
+            uvIndex: weatherData.current.uv_index || 0,
+            cloudCoverage: weatherData.current.cloud_cover,
+            condition: 'Clear',
+            description: 'Céu limpo',
+            icon: '☀️',
+            wind: {
+              speed: weatherData.current.wind_speed_10m,
+              gust: weatherData.current.wind_gusts_10m,
+              direction: weatherData.current.wind_direction_10m
+            },
+            sunrise: weatherData.daily?.sunrise?.[0]?.split('T')[1] || '06:00',
+            sunset: weatherData.daily?.sunset?.[0]?.split('T')[1] || '18:00'
+          } : null;
+          
+          const days = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
+          const daily: DailyForecast[] = weatherData.daily?.time?.slice(0, 7).map((date: string, i: number) => ({
+            date,
+            dayOfWeek: days[new Date(date).getDay()],
+            tempMin: weatherData.daily!.temperature_2m_min[i],
+            tempMax: weatherData.daily!.temperature_2m_max[i],
+            condition: 'Clear',
+            description: 'Céu limpo',
+            icon: '☀️',
+            humidity: 0,
+            windSpeed: weatherData.daily!.wind_speed_10m_max[i],
+            rainProbability: weatherData.daily!.precipitation_probability_max?.[i] || 0
+          })) || [];
+          
+          newData.set(city.id, { current, daily });
+        } catch (err) {
+          console.error(`Failed to fetch data for ${city.name}:`, err);
+        }
+      }
+      
+      setComparisonData(newData);
+    };
+    
+    if (comparisonCities.length > 0) {
+      fetchComparisonData();
+    }
+  }, [comparisonCities]);
+
   const handleSelectLocation = (loc: WeatherLocation) => {
     setLocation(loc);
     setRecentSearches(prev => [loc, ...prev.filter(l => l.id !== loc.id)].slice(0, 10));
@@ -146,6 +225,77 @@ export const WindyWeatherPage: React.FC = () => {
 
   const handleRemoveCityFromComparison = (cityId: string) => {
     setComparisonCities(prev => prev.filter(c => c.id !== cityId));
+  };
+
+  // Export PDF handler
+  const handleExportPDF = async () => {
+    if (comparisonCities.length === 0) {
+      toast({
+        title: "Nenhuma cidade para exportar",
+        description: "Adicione cidades para comparação primeiro",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsExporting(true);
+    try {
+      const citiesData = comparisonCities.map(city => {
+        const data = comparisonData.get(city.id);
+        return {
+          location: city,
+          current: data?.current || null,
+          daily: data?.daily || []
+        };
+      });
+
+      await downloadWeatherComparisonPDF(citiesData, undefined, {
+        title: 'Comparação Meteorológica - Nautilus'
+      });
+
+      toast({
+        title: "PDF exportado!",
+        description: "O relatório foi baixado com sucesso"
+      });
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      toast({
+        title: "Erro ao exportar",
+        description: "Falha ao gerar o PDF",
+        variant: "destructive"
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Share handler
+  const handleShare = async () => {
+    if (comparisonCities.length === 0) {
+      toast({
+        title: "Nenhuma cidade para compartilhar",
+        description: "Adicione cidades para comparação primeiro",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const citiesData = comparisonCities.map(city => {
+      const data = comparisonData.get(city.id);
+      return {
+        location: city,
+        current: data?.current || null,
+        daily: data?.daily || []
+      };
+    });
+
+    const success = await shareWeatherComparison(citiesData);
+    if (success) {
+      toast({
+        title: "Compartilhado!",
+        description: "Dados copiados para a área de transferência"
+      });
+    }
   };
 
   // Show error toast if API fails
@@ -292,6 +442,13 @@ export const WindyWeatherPage: React.FC = () => {
                 Previsão
               </TabsTrigger>
               <TabsTrigger 
+                value="trends" 
+                className="data-[state=active]:bg-orange-500/20 data-[state=active]:text-orange-400 text-white/70"
+              >
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Tendências
+              </TabsTrigger>
+              <TabsTrigger 
                 value="radar" 
                 className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 text-white/70"
               >
@@ -304,6 +461,13 @@ export const WindyWeatherPage: React.FC = () => {
               >
                 <BarChart3 className="h-4 w-4 mr-2" />
                 Comparar
+              </TabsTrigger>
+              <TabsTrigger 
+                value="alerts" 
+                className="data-[state=active]:bg-yellow-500/20 data-[state=active]:text-yellow-400 text-white/70"
+              >
+                <Bell className="h-4 w-4 mr-2" />
+                Alertas
               </TabsTrigger>
             </TabsList>
 
@@ -364,6 +528,14 @@ export const WindyWeatherPage: React.FC = () => {
               </div>
             </TabsContent>
 
+            {/* Trends Tab */}
+            <TabsContent value="trends" className="flex-1 overflow-auto m-0 p-4">
+              <WeatherTrendCharts 
+                dailyForecast={dailyForecast}
+                hourlyForecast={hourlyForecast}
+              />
+            </TabsContent>
+
             {/* Rain Radar Tab */}
             <TabsContent value="radar" className="flex-1 overflow-auto m-0 p-4">
               <RainRadarMap location={location} />
@@ -371,11 +543,50 @@ export const WindyWeatherPage: React.FC = () => {
 
             {/* Compare Tab */}
             <TabsContent value="compare" className="flex-1 overflow-auto m-0 p-4">
-              <CityComparison
-                cities={comparisonCities}
-                onRemoveCity={handleRemoveCityFromComparison}
+              <div className="space-y-4">
+                {/* Export Actions */}
+                {comparisonCities.length > 0 && (
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleShare}
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Compartilhar
+                    </Button>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={handleExportPDF}
+                      disabled={isExporting}
+                      className="bg-primary hover:bg-primary/80"
+                    >
+                      {isExporting ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <Download className="h-4 w-4 mr-2" />
+                      )}
+                      Exportar PDF
+                    </Button>
+                  </div>
+                )}
+                
+                <CityComparison
+                  cities={comparisonCities}
+                  onRemoveCity={handleRemoveCityFromComparison}
+                  onAddCity={() => setIsAddCityDialogOpen(true)}
+                  maxCities={4}
+                />
+              </div>
+            </TabsContent>
+
+            {/* Alerts Tab */}
+            <TabsContent value="alerts" className="flex-1 overflow-auto m-0 p-4">
+              <CityAlertManager 
+                cities={POPULAR_CITIES}
                 onAddCity={() => setIsAddCityDialogOpen(true)}
-                maxCities={4}
               />
             </TabsContent>
           </Tabs>
@@ -432,7 +643,7 @@ export const WindyWeatherPage: React.FC = () => {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-primary" />
-                Adicionar Cidade para Comparação
+                Adicionar Cidade
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
