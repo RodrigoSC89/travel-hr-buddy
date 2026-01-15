@@ -74,7 +74,7 @@ export function useAIMaintenancePrediction(vesselId?: string) {
   const equipmentQuery = useQuery({
     queryKey: ['maintenance-equipment', vesselId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('equipment')
         .select('*')
         .order('health_score', { ascending: true });
@@ -89,7 +89,7 @@ export function useAIMaintenancePrediction(vesselId?: string) {
   const predictionsQuery = useQuery({
     queryKey: ['maintenance-predictions', vesselId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('failure_predictions')
         .select('*')
         .order('probability', { ascending: false });
@@ -103,7 +103,7 @@ export function useAIMaintenancePrediction(vesselId?: string) {
   const plansQuery = useQuery({
     queryKey: ['maintenance-plans', vesselId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('maintenance_plans')
         .select('*')
         .order('scheduled_date', { ascending: true });

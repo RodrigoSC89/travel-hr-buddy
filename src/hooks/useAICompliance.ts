@@ -61,7 +61,7 @@ export function useAICompliance(vesselId?: string) {
   const statusQuery = useQuery({
     queryKey: ['compliance-status', vesselId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('compliance_status')
         .select('*')
         .order('score', { ascending: true });
@@ -76,7 +76,7 @@ export function useAICompliance(vesselId?: string) {
   const alertsQuery = useQuery({
     queryKey: ['compliance-alerts', vesselId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('compliance_alerts')
         .select('*')
         .eq('resolved', false)
@@ -156,7 +156,7 @@ export function useAICompliance(vesselId?: string) {
   // Mutation: Resolver alerta
   const resolveAlertMutation = useMutation({
     mutationFn: async (alertId: string) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('compliance_alerts')
         .update({ resolved: true, resolved_at: new Date().toISOString() })
         .eq('id', alertId);

@@ -55,7 +55,7 @@ export function useAIGMUD() {
   const gmudsQuery = useQuery({
     queryKey: ['gmuds'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('gmuds')
         .select('*')
         .order('created_at', { ascending: false });
@@ -71,7 +71,7 @@ export function useAIGMUD() {
     mutationFn: async (gmudData: Partial<GMUD>) => {
       const code = `GMUD-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999)).padStart(4, '0')}`;
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('gmuds')
         .insert({
           ...gmudData,
