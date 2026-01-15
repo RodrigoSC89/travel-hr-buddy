@@ -116,7 +116,7 @@ async function analyzeWithVision(
     },
   ];
 
-  console.log(`[nautilus-vision] Processing ${operation} with ${mimeType}`);
+  console.log(`[nauti-vision] Processing ${operation} with ${mimeType}`);
 
   const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
@@ -156,7 +156,7 @@ serve(async (req) => {
     
     if (!imageData && imageUrl) {
       // Fetch image from URL
-      console.log(`[nautilus-vision] Fetching image from URL: ${imageUrl}`);
+      console.log(`[nauti-vision] Fetching image from URL: ${imageUrl}`);
       const imageResponse = await fetch(imageUrl);
       const arrayBuffer = await imageResponse.arrayBuffer();
       imageData = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
@@ -208,7 +208,7 @@ serve(async (req) => {
       // Keep as text if JSON parsing fails
     }
 
-    console.log(`[nautilus-vision] ${operation} completed successfully`);
+    console.log(`[nauti-vision] ${operation} completed successfully`);
 
     return new Response(
       JSON.stringify({ 
@@ -222,7 +222,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error("nautilus-vision error:", error);
+    console.error("nauti-vision error:", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

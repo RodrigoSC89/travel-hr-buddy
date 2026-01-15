@@ -23,7 +23,7 @@ export const useNautilusPeopleAI = () => {
 
     try {
       const { data: response, error: fnError } = await supabase.functions.invoke<AIResponse>(
-        'nautilus-people-ai',
+        'nauti-people-ai',
         { body: { action, data } }
       );
 

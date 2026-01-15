@@ -7,7 +7,7 @@ import { openDB, IDBPDatabase } from 'idb';
 import { supabase } from '@/integrations/supabase/client';
 import { logger } from '@/lib/logger';
 
-const DB_NAME = 'nautilus-llm-cache';
+const DB_NAME = 'nauti-llm-cache';
 const STORE_NAME = 'responses';
 const DB_VERSION = 1;
 

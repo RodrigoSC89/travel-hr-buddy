@@ -213,7 +213,7 @@ serve(async (req: Request) => {
     );
 
   } catch (error) {
-    console.error("Error in nautilus-people-ai:", error);
+    console.error("Error in nauti-people-ai:", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Erro desconhecido" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

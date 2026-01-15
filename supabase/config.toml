@@ -774,16 +774,12 @@ verify_jwt = false
 comment = "DP Mentor AI - Dynamic Positioning training and mentoring system"
 
 # ============================================
-# NAUTILUS COMMAND CENTER AI
+# NAUTI COMMAND CENTER AI
 # ============================================
 
-[functions.nautilus-brain]
+[functions.nauti-predict]
 verify_jwt = false
-comment = "Nautilus Brain - Central AI for maritime operations with multi-model orchestration"
-
-[functions.nautilus-predict]
-verify_jwt = false
-comment = "Nautilus Predict - Predictive maintenance and operational analytics"
+comment = "Nauti Predict - Predictive maintenance and operational analytics"
 
 # ============================================
 # AI SPECIALIZED FUNCTIONS (Phase 4)
@@ -849,9 +845,9 @@ comment = "AI Incident Analysis for safety and risk assessment"
 verify_jwt = false
 comment = "Web Vitals performance reporting endpoint"
 
-[functions.nautilus-ai]
+[functions.nauti-ai]
 verify_jwt = false
-comment = "Nautilus AI - Unified AI gateway for all modules via Lovable AI"
+comment = "Nauti AI - Unified AI gateway for all modules via Lovable AI"
 
 [functions.compliance-ai]
 verify_jwt = false
