@@ -107,12 +107,12 @@ const LandingPage = () => {
   return (
     <>
       <Helmet>
-        <title>Nautilus One - Sistema de RH Marítimo com IA | Gestão de Tripulação</title>
+        <title>Nauti One - Sistema de RH Marítimo com IA | Gestão de Tripulação</title>
         <meta name="description" content="Sistema completo de RH marítimo com IA. Gestão de tripulação, folha de pagamento, compliance MLC 2006 e STCW. Experimente grátis!" />
         <meta name="keywords" content="RH marítimo, gestão tripulação, folha pagamento marítimo, MLC 2006, STCW, software marítimo, offshore" />
-        <meta property="og:title" content="Nautilus One - Sistema de RH Marítimo com IA" />
+        <meta property="og:title" content="Nauti One - Sistema de RH Marítimo com IA" />
         <meta property="og:description" content="Gestão completa de tripulação, folha de pagamento e compliance para empresas marítimas." />
-        <link rel="canonical" href="https://nautilusone.com.br" />
+        <link rel="canonical" href="https://nautione.com.br" />
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -122,7 +122,7 @@ const LandingPage = () => {
             <div className="flex items-center gap-2">
               <Anchor className="h-8 w-8 text-primary" />
               <span className="text-2xl font-bold bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
-                Nautilus One
+                Nauti One
               </span>
             </div>
             <nav className="hidden md:flex items-center gap-6">
@@ -304,7 +304,7 @@ const LandingPage = () => {
                         variant={tier.recommended ? 'default' : 'outline'}
                         onClick={() => {
                           if (tier.isEnterprise) {
-                            window.location.href = 'mailto:comercial@nautilusone.com.br?subject=Nautilus Enterprise';
+                            window.location.href = 'mailto:comercial@nautione.com.br?subject=Nauti Enterprise';
                           } else {
                             navigate('/auth?mode=signup');
                           }

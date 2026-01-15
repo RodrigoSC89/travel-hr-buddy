@@ -321,7 +321,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "🏢 HR Dashboard", path: "/hr-dashboard", icon: Users, emoji: "🏢", badge: "NEW", status: "new" },
       { label: "📊 People Analytics", path: "/people-analytics", icon: BarChart3, emoji: "📊", badge: "AI", status: "new" },
       { label: "👤 Portal Colaborador", path: "/employee-portal", icon: Users, emoji: "👤", badge: "NEW", status: "new" },
-      { label: "Nautilus People Hub", path: "/nautilus-people", icon: Users, emoji: "👥" },
+      { label: "Nauti People Hub", path: "/nautilus-people", icon: Users, emoji: "👥" },
       { label: "Gestão de Tripulação", path: "/crew-management", icon: Users, emoji: "👤" },
       { label: "Bem-estar AI", path: "/crew-wellness", icon: Heart, emoji: "❤️", badge: "AI", status: "new" },
       { label: "Bem-estar Tripulação", path: "/crew-wellbeing", icon: Heart, emoji: "💚" },
@@ -354,7 +354,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🎓 Treinamentos",
     defaultOpen: false,
     items: [
-      { label: "Nautilus Academy", path: "/nautilus-academy", icon: BookOpen, emoji: "🎓" },
+      { label: "Nauti Academy", path: "/nautilus-academy", icon: BookOpen, emoji: "🎓" },
       { label: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", icon: Award, emoji: "📚" },
       { label: "Mentor DP", path: "/mentor-dp", icon: Users, emoji: "🧑‍🏫" },
       { label: "DP Intelligence", path: "/dp-intelligence", icon: Brain, emoji: "🧭" },
