@@ -1,5 +1,5 @@
 /**
- * useNautilusPredictions - Hook for AI-powered predictions
+ * useNautiPredictions - Hook for AI-powered predictions
  */
 
 import { useState, useCallback } from 'react';

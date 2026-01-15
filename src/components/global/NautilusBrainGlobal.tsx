@@ -1,5 +1,5 @@
 /**
- * NAUTILUS BRAIN GLOBAL - IA Central Acessível de Qualquer Módulo
+ * NAUTI BRAIN GLOBAL - IA Central Acessível de Qualquer Módulo
  * PATCH 1002 - Fixed React import to use named imports
  */
 

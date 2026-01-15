@@ -188,7 +188,7 @@ export default function NautilusCommandCenter() {
   return (
     <>
       <Helmet>
-        <title>Nautilus Command Center | Central de Inteligência Premium</title>
+        <title>Nauti Command Center | Central de Inteligência Premium</title>
         <meta name="description" content="Central de Inteligência e Operações em Tempo Real - Dashboard unificado com IA autônoma" />
       </Helmet>
 
@@ -218,7 +218,7 @@ export default function NautilusCommandCenter() {
               </motion.div>
               <div>
                 <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
-                  Nautilus Command Center
+                  Nauti Command Center
                 </h1>
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
                   <Waves className="h-3 w-3" />

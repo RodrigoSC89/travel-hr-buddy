@@ -24,7 +24,7 @@ serve(async (req: Request) => {
 
     switch (action) {
       case "chat":
-        systemPrompt = `Você é o Nautilus People AI, um assistente especializado em Recursos Humanos com expertise em:
+        systemPrompt = `Você é o Nauti People AI, um assistente especializado em Recursos Humanos com expertise em:
         - Gestão de Talentos e Recrutamento
         - Avaliação de Desempenho e OKRs
         - Clima Organizacional e Engajamento

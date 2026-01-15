@@ -1,5 +1,5 @@
 /**
- * Nautilus AI - Edge Function Unificada
+ * Nauti AI - Edge Function Unificada
  * Provê IA para todos os módulos do sistema via Lovable AI Gateway
  */
 

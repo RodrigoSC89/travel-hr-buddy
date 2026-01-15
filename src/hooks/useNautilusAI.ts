@@ -1,5 +1,5 @@
 /**
- * NAUTILUS AI - Hook Universal para LLM em todos os módulos
+ * NAUTI AI - Hook Universal para LLM em todos os módulos
  * Centraliza chamadas de IA com contexto específico por módulo
  */
 
