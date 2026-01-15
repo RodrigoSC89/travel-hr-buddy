@@ -2159,19 +2159,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // PATCH UNIFY-COMMAND: Fusão de Command Center, Dashboard Executivo, Centro de Operações, Nautilus Command
+  // PATCH UNIFY-COMMAND: Fusão de Command Center, Dashboard Executivo, Centro de Operações, Nauti Command
   "intelligence.nautilus-command": {
     id: "intelligence.nautilus-command",
-    name: "Nautilus Command Center",
+    name: "Nauti Command Center",
     category: "intelligence",
     path: "pages/NautilusCommand",
-    description: "PATCH UNIFY-COMMAND - Centro de Comando Unificado: Visão Geral, Operações em Tempo Real, Análise Executiva, IA Integrada (Gemini 2.5 Flash), Central de Alertas e Configurações. Fusão de: Command Center, Dashboard Executivo, Centro de Operações",
+    description: "PATCH UNIFY-COMMAND - Centro de Comando Unificado Nauti One: Visão Geral, Operações em Tempo Real, Análise Executiva, IA Integrada (Gemini 2.5 Flash), Central de Alertas e Configurações. Fusão de: Command Center, Dashboard Executivo, Centro de Operações",
     status: "active",
     completeness: "100%",
     route: "/nautilus-command",
     icon: "Brain",
     lazy: true,
-    version: "2.0.0",
+    version: "4.0.0",
   },
 
   // DEPRECATED: Workflow Visual - Fusão no Workflow Command Center (PATCH UNIFY-12.0)

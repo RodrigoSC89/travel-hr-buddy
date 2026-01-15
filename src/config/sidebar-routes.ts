@@ -1,7 +1,7 @@
 /**
  * ⚠️ ATENÇÃO DESENVOLVEDORES - ESTRUTURA PROTEGIDA ⚠️
  * =========================================================
- * Esta estrutura de sidebar foi VALIDADA pela diretoria do Nautilus One.
+ * Esta estrutura de sidebar foi VALIDADA pela diretoria do Nauti One.
  * 
  * ❌ NÃO remover, sobrescrever ou simplificar os grupos abaixo
  * ❌ NÃO reduzir a versão "mínima" ou simplificada
