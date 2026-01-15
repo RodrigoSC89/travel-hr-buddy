@@ -188,7 +188,7 @@ export const CityAlertManager: React.FC<CityAlertManagerProps> = ({
   const availableCities = cities.filter(c => !alertConfigs.some(a => a.cityId === c.id));
 
   return (
-    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden flex flex-col", className)}>
+    <Card className={cn("bg-slate-900/80 border-white/10 overflow-hidden flex flex-col min-h-[500px]", className)}>
       {/* Header */}
       <div className="p-4 bg-slate-800/50 border-b border-white/10">
         <div className="flex items-center justify-between">

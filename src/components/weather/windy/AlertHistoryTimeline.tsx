@@ -298,7 +298,7 @@ export const AlertHistoryTimeline: React.FC<AlertHistoryTimelineProps> = ({
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-4 min-h-[600px]", className)}>
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Card className="bg-slate-800/70 border-white/10 p-3">

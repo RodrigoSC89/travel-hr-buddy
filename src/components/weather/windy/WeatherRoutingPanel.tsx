@@ -293,10 +293,10 @@ export const WeatherRoutingPanel: React.FC<WeatherRoutingPanelProps> = ({
   }, [origin, destination, vesselSpeed, avoidPiracy, toast]);
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("space-y-4 min-h-[600px]", className)}>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Configuration Panel */}
-        <Card className="bg-slate-900/80 border-white/10">
+        <Card className="bg-slate-900/80 border-white/10 h-fit">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-white">
             <Navigation className="h-5 w-5 text-primary" />

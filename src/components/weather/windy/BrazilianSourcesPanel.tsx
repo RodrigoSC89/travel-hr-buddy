@@ -170,7 +170,7 @@ export const BrazilianSourcesPanel: React.FC<BrazilianSourcesPanelProps> = ({
   }, [fetchCPTEC]);
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className={cn("space-y-4", className)}>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className={cn("space-y-4 min-h-[500px]", className)}>
       <TabsList className="bg-slate-800/50 border border-white/10 w-fit">
         <TabsTrigger 
           value="marinha" 
