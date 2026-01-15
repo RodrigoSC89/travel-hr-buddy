@@ -24,6 +24,9 @@ const CentralComando = lazy(() => import("@/pages/CentralComando"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
 const Billing = lazy(() => import("@/pages/Billing"));
+const BillingPortal = lazy(() => import("@/pages/BillingPortal"));
+const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
+const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
 
 // Central de Comando extras
 const NOC = lazy(() => import("@/pages/NOC"));
@@ -295,7 +298,11 @@ const AppRoutes = () => (
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
       <Route path="/" element={<Navigate to="/central-comando" replace />} />
       <Route path="/billing" element={<Billing />} />
+      <Route path="/billing-portal" element={<BillingPortal />} />
       <Route path="/planos" element={<Billing />} />
+      <Route path="/onboarding" element={<OnboardingDashboard />} />
+      <Route path="/analytics-feedback" element={<AnalyticsFeedback />} />
+      <Route path="/feedback" element={<AnalyticsFeedback />} />
       
       {/* ============================================ */}
       {/* CENTRAL DE COMANDO */}
