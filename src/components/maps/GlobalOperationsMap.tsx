@@ -125,18 +125,18 @@ export function GlobalOperationsMap() {
       pitch: 30,
     });
 
-    map.current.addControl(
+    map.current?.addControl(
       new mapboxgl.NavigationControl({ visualizePitch: true }),
       "top-right"
     );
 
-    map.current.addControl(
+    map.current?.addControl(
       new mapboxgl.ScaleControl({ maxWidth: 200, unit: "metric" }),
       "bottom-left"
     );
 
     // Add atmosphere
-    map.current.on("style.load", () => {
+    map.current?.on("style.load", () => {
       map.current?.setFog({
         color: "rgb(20, 20, 30)",
         "high-color": "rgb(36, 92, 223)",
@@ -158,12 +158,12 @@ export function GlobalOperationsMap() {
       }
     };
 
-    map.current.on("mousedown", () => (userInteracting = true));
-    map.current.on("mouseup", () => {
+    map.current?.on("mousedown", () => (userInteracting = true));
+    map.current?.on("mouseup", () => {
       userInteracting = false;
       spinGlobe();
     });
-    map.current.on("moveend", spinGlobe);
+    map.current?.on("moveend", spinGlobe);
 
     spinGlobe();
 

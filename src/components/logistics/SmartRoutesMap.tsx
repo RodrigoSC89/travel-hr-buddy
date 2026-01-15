@@ -116,12 +116,12 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
         pitch: 0,
       });
 
-      map.current.addControl(
+      map.current?.addControl(
         new mapboxgl.NavigationControl({ visualizePitch: true }),
         'top-right'
       );
 
-      map.current.on('load', () => {
+      map.current?.on('load', () => {
         const mapInstance = map.current;
         if (!mapInstance) return;
         
@@ -144,7 +144,7 @@ export const SmartRoutesMap: React.FC<SmartRoutesMapProps> = ({ mapboxToken }) =
         });
       });
 
-      map.current.on('error', () => {
+      map.current?.on('error', () => {
         setIsLoading(false);
         toast.error("Erro ao carregar mapa");
       });

@@ -106,9 +106,9 @@ export function RouteMap({ waypoints, weather = [], hazards = [] }: RouteMapProp
       fitBoundsOptions: { padding: 50 }
     });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.current?.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    map.current.on('load', () => {
+    map.current?.on('load', () => {
       if (!map.current) return;
 
       // Add route line
