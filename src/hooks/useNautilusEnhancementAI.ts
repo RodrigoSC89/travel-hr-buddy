@@ -45,7 +45,7 @@ export function useNautilusEnhancementAI() {
     setError(null);
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke('nautilus-enhancement-ai', {
+      const { data, error: fnError } = await supabase.functions.invoke('nauti-enhancement-ai', {
         body: { type, message, context }
       });
 

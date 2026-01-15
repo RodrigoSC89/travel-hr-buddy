@@ -78,7 +78,7 @@ export interface ScenarioResult {
   recommendations: string[];
 }
 
-const EDGE_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-intelligence`;
+const EDGE_FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nauti-intelligence`;
 
 /**
  * Chat with AI assistant

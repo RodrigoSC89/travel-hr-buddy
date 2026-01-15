@@ -42,7 +42,7 @@ export function useNautilusPredictions(): UseNautilusPredictionsReturn {
     setError(null);
 
     try {
-      const { data: result, error: invokeError } = await supabase.functions.invoke('nautilus-predict', {
+      const { data: result, error: invokeError } = await supabase.functions.invoke('nauti-predict', {
         body: { type, data }
       });
 
