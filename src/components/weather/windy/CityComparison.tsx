@@ -166,7 +166,7 @@ export const CityComparison: React.FC<CityComparisonProps> = ({
   };
 
   return (
-    <div className={cn("", className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">

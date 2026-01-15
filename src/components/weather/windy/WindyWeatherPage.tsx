@@ -317,10 +317,10 @@ export const WindyWeatherPage: React.FC = () => {
   }, [error, toast]);
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="flex h-screen">
+    <div className="min-h-screen bg-slate-950 overflow-hidden">
+      <div className="flex h-[100dvh]">
         {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col min-h-0">
           {/* Header */}
           <div className="p-4 bg-slate-900/80 border-b border-white/10 flex items-center gap-4 flex-wrap">
             <CitySearch
@@ -439,8 +439,8 @@ export const WindyWeatherPage: React.FC = () => {
           )}
 
           {/* Tabs for different views */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
-            <TabsList className="bg-slate-800/50 border-b border-white/10 rounded-none justify-start px-4 h-12 flex-shrink-0 overflow-x-auto">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0 overflow-hidden">
+            <TabsList className="bg-slate-800/50 border-b border-white/10 rounded-none justify-start px-4 h-12 shrink-0 overflow-x-auto">
               <TabsTrigger 
                 value="forecast" 
                 className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary text-white/70"
@@ -582,17 +582,17 @@ export const WindyWeatherPage: React.FC = () => {
             </TabsContent>
 
             {/* Maritime Routing Tab */}
-            <TabsContent value="routing" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
+            <TabsContent value="routing" className="m-0 p-2 sm:p-4 overflow-y-auto">
               <WeatherRoutingPanel />
             </TabsContent>
 
             {/* Brazilian Sources Tab */}
-            <TabsContent value="brazil" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
+            <TabsContent value="brazil" className="m-0 p-2 sm:p-4 overflow-y-auto">
               <BrazilianSourcesPanel />
             </TabsContent>
 
             {/* Trends Tab */}
-            <TabsContent value="trends" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
+            <TabsContent value="trends" className="m-0 p-2 sm:p-4 overflow-y-auto">
               <WeatherTrendCharts 
                 dailyForecast={dailyForecast}
                 hourlyForecast={hourlyForecast}
@@ -600,16 +600,16 @@ export const WindyWeatherPage: React.FC = () => {
             </TabsContent>
 
             {/* Rain Radar Tab */}
-            <TabsContent value="radar" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
+            <TabsContent value="radar" className="m-0 p-2 sm:p-4 overflow-y-auto">
               <RainRadarMap location={location} />
             </TabsContent>
 
             {/* Compare Tab */}
-            <TabsContent value="compare" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
-              <div className="flex flex-col gap-4">
+            <TabsContent value="compare" className="m-0 p-2 sm:p-4 overflow-y-auto">
+              <div className="space-y-4">
                 {/* Export Actions */}
                 {comparisonCities.length > 0 && (
-                  <div className="flex items-center justify-end gap-2 flex-shrink-0">
+                  <div className="flex items-center justify-end gap-2">
                     <Button
                       variant="outline"
                       size="sm"
@@ -641,13 +641,12 @@ export const WindyWeatherPage: React.FC = () => {
                   onRemoveCity={handleRemoveCityFromComparison}
                   onAddCity={() => setIsAddCityDialogOpen(true)}
                   maxCities={4}
-                  className="flex-1"
                 />
               </div>
             </TabsContent>
 
             {/* Alerts Tab */}
-            <TabsContent value="alerts" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
+            <TabsContent value="alerts" className="m-0 p-2 sm:p-4 overflow-y-auto">
               <CityAlertManager 
                 cities={POPULAR_CITIES}
                 onAddCity={() => setIsAddCityDialogOpen(true)}
@@ -655,7 +654,7 @@ export const WindyWeatherPage: React.FC = () => {
             </TabsContent>
 
             {/* History Tab */}
-            <TabsContent value="history" className="flex-1 m-0 p-2 sm:p-4 overflow-y-auto">
+            <TabsContent value="history" className="m-0 p-2 sm:p-4 overflow-y-auto">
               <AlertHistoryTimeline />
             </TabsContent>
           </Tabs>
