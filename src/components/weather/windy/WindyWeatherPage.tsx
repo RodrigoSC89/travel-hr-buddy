@@ -415,11 +415,14 @@ export const WindyWeatherPage: React.FC = () => {
               <Button
                 variant={isChatOpen ? "default" : "outline"}
                 size="sm"
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                className={isChatOpen ? "" : "border-white/20 text-white"}
+                onClick={() => {
+                  console.log('[WeatherChat] Toggle chat:', !isChatOpen);
+                  setIsChatOpen(!isChatOpen);
+                }}
+                className={`transition-all duration-200 ${isChatOpen ? "bg-primary ring-2 ring-primary/50" : "border-white/20 text-white hover:bg-white/10"}`}
               >
-                <MessageSquare className="h-4 w-4 mr-2" />
-                Chat IA
+                <MessageSquare className={`h-4 w-4 mr-2 ${isChatOpen ? "animate-pulse" : ""}`} />
+                {isChatOpen ? "Fechar Chat" : "Chat IA"}
               </Button>
             </div>
           </div>
@@ -674,32 +677,44 @@ export const WindyWeatherPage: React.FC = () => {
           />
         </div>
 
-        {/* Chat Sidebar */}
+        {/* Chat Sidebar - Desktop */}
         {isChatOpen && (
-          <div className="w-80 flex-shrink-0 hidden md:block">
+          <div className="w-80 flex-shrink-0 hidden md:flex animate-in slide-in-from-right-5 duration-300">
             <WeatherChat
               location={location}
               weather={currentWeather}
               forecast={dailyForecast}
               marine={marineData}
               isOpen={isChatOpen}
-              onClose={() => setIsChatOpen(false)}
+              onClose={() => {
+                console.log('[WeatherChat] Closing desktop chat');
+                setIsChatOpen(false);
+              }}
             />
           </div>
         )}
 
-        {/* Mobile Chat Drawer */}
+        {/* Mobile Chat Drawer - Full Screen Overlay */}
         {isChatOpen && (
-          <div className="fixed inset-0 z-50 md:hidden">
-            <div className="absolute inset-0 bg-black/50" onClick={() => setIsChatOpen(false)} />
-            <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm">
+          <div className="fixed inset-0 z-50 md:hidden animate-in fade-in duration-200">
+            <div 
+              className="absolute inset-0 bg-black/70 backdrop-blur-sm" 
+              onClick={() => {
+                console.log('[WeatherChat] Closing mobile chat via overlay');
+                setIsChatOpen(false);
+              }} 
+            />
+            <div className="absolute right-0 top-0 bottom-0 w-full max-w-sm animate-in slide-in-from-right duration-300 shadow-2xl">
               <WeatherChat
                 location={location}
                 weather={currentWeather}
                 forecast={dailyForecast}
                 marine={marineData}
                 isOpen={isChatOpen}
-                onClose={() => setIsChatOpen(false)}
+                onClose={() => {
+                  console.log('[WeatherChat] Closing mobile chat');
+                  setIsChatOpen(false);
+                }}
               />
             </div>
           </div>
