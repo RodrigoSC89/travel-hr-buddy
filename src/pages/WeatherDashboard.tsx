@@ -1,9 +1,9 @@
 /**
- * DEPRECATED: Redirecionado para Weather Command Center
- * PATCH UNIFY-10.0
+ * Weather Dashboard - Windy Style
+ * PATCH WINDY-1.0
  */
-import { Navigate } from "react-router-dom";
+import { WindyWeatherPage } from "@/components/weather/windy";
 
 export default function WeatherDashboard() {
-  return <Navigate to="/weather-command" replace />;
+  return <WindyWeatherPage />;
 }
