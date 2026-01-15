@@ -1,76 +1,105 @@
 /**
  * Mapbox GL Shim
  * Provides a consistent import pattern for mapbox-gl across the codebase
- * PATCH WINDY-1.2: Fixed ESM default export issue
+ * PATCH WINDY-2.3: Enhanced ESM/CJS compatibility
  */
 
-import * as mapboxglModule from 'mapbox-gl';
+import mapboxglDefault from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-// Handle both ESM and CJS exports
-const mapboxglOriginal = (mapboxglModule as any).default || mapboxglModule;
+// Get the actual mapbox-gl module, handling both ESM and CJS exports
+const getMapboxGL = () => {
+  // Try default export first
+  if (mapboxglDefault && typeof mapboxglDefault === 'object' && 'Map' in mapboxglDefault) {
+    return mapboxglDefault;
+  }
+  
+  // Fallback: try accessing as any
+  const mod = mapboxglDefault as any;
+  if (mod?.default && typeof mod.default === 'object' && 'Map' in mod.default) {
+    return mod.default;
+  }
+  
+  // Last resort: return whatever we have
+  return mapboxglDefault;
+};
+
+const mapboxglOriginal = getMapboxGL();
 
 // Create a mutable wrapper around mapbox-gl to allow setting accessToken
-// Some bundlers freeze the default export, preventing token assignment
 const createMutableMapbox = () => {
-  // If mapbox-gl is not loaded properly, return a stub
+  // Safety check
   if (!mapboxglOriginal || typeof mapboxglOriginal !== 'object') {
-    console.warn('[mapbox-shim] mapbox-gl not loaded properly, using stub');
+    console.error('[mapbox-shim] mapbox-gl not loaded properly');
+    // Return stub with proper class implementations
     return {
       accessToken: '',
-      Map: class {},
-      Marker: class {},
-      Popup: class {},
+      Map: class MockMap {
+        constructor() {
+          console.warn('[mapbox-shim] Using mock Map - mapbox-gl not loaded');
+        }
+        on() { return this; }
+        remove() {}
+        addControl() {}
+        setView() {}
+        getZoom() { return 0; }
+        getCenter() { return { lat: 0, lng: 0 }; }
+      },
+      Marker: class MockMarker {
+        setLngLat() { return this; }
+        setPopup() { return this; }
+        addTo() { return this; }
+      },
+      Popup: class MockPopup {
+        setHTML() { return this; }
+      },
       NavigationControl: class {},
-      LngLatBounds: class {},
+      LngLatBounds: class {
+        extend() { return this; }
+      },
       LngLat: class {},
     };
   }
 
-  // Check if the original module is frozen
+  // Check if we can use the original directly
   const isFrozen = Object.isFrozen(mapboxglOriginal);
   
   if (!isFrozen) {
-    // If not frozen, use it directly
     return mapboxglOriginal;
   }
 
-  // Create a shallow copy that we can modify
-  const mapboxMutable: any = {};
+  // Create a mutable copy for frozen modules
+  const mapboxMutable: Record<string, any> = {};
   
-  // Copy all properties from original
-  for (const key of Object.keys(mapboxglOriginal)) {
-    mapboxMutable[key] = (mapboxglOriginal as any)[key];
-  }
+  // Copy all enumerable properties
+  Object.keys(mapboxglOriginal).forEach(key => {
+    try {
+      mapboxMutable[key] = (mapboxglOriginal as any)[key];
+    } catch (e) {
+      // Skip non-copyable properties
+    }
+  });
   
-  // Copy prototype chain for classes like Map, Marker, etc.
-  try {
-    Object.setPrototypeOf(mapboxMutable, Object.getPrototypeOf(mapboxglOriginal));
-  } catch {
-    // Ignore if fails
-  }
-  
-  // Ensure critical classes are copied
-  mapboxMutable.Map = mapboxglOriginal.Map;
-  mapboxMutable.Marker = mapboxglOriginal.Marker;
-  mapboxMutable.Popup = mapboxglOriginal.Popup;
-  mapboxMutable.NavigationControl = mapboxglOriginal.NavigationControl;
-  mapboxMutable.LngLatBounds = mapboxglOriginal.LngLatBounds;
-  mapboxMutable.LngLat = mapboxglOriginal.LngLat;
+  // Explicitly copy critical classes
+  const criticalClasses = ['Map', 'Marker', 'Popup', 'NavigationControl', 'LngLatBounds', 'LngLat'];
+  criticalClasses.forEach(cls => {
+    if ((mapboxglOriginal as any)[cls]) {
+      mapboxMutable[cls] = (mapboxglOriginal as any)[cls];
+    }
+  });
   
   // Internal storage for access token
   let _accessToken = '';
   
   // Define writable accessToken property
   Object.defineProperty(mapboxMutable, 'accessToken', {
-    get: () => _accessToken,
+    get: () => _accessToken || (mapboxglOriginal as any).accessToken,
     set: (value: string) => {
       _accessToken = value;
-      // Also try to set it on the original in case it works
       try {
         (mapboxglOriginal as any).accessToken = value;
       } catch {
-        // Ignore if it fails
+        // Ignore if frozen
       }
     },
     configurable: true,
@@ -82,5 +111,7 @@ const createMutableMapbox = () => {
 
 const mapboxgl = createMutableMapbox();
 
-export default mapboxgl;
+// Type export for proper typing
+export type MapboxGL = typeof mapboxglDefault;
+export default mapboxgl as MapboxGL;
 export { mapboxgl };
