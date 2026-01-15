@@ -7112,6 +7112,103 @@ export type Database = {
           },
         ]
       }
+      crew_contracts: {
+        Row: {
+          base_salary: number | null
+          benefits: Json | null
+          contract_number: string | null
+          contract_type: string
+          created_at: string | null
+          crew_member_id: string | null
+          currency: string | null
+          docusign_envelope_id: string | null
+          end_date: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+          position: string
+          rank: string | null
+          signed_at: string | null
+          signed_by_company: boolean | null
+          signed_by_crew: boolean | null
+          start_date: string
+          status: string
+          terms_conditions: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          base_salary?: number | null
+          benefits?: Json | null
+          contract_number?: string | null
+          contract_type?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          currency?: string | null
+          docusign_envelope_id?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          position: string
+          rank?: string | null
+          signed_at?: string | null
+          signed_by_company?: boolean | null
+          signed_by_crew?: boolean | null
+          start_date: string
+          status?: string
+          terms_conditions?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          base_salary?: number | null
+          benefits?: Json | null
+          contract_number?: string | null
+          contract_type?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          currency?: string | null
+          docusign_envelope_id?: string | null
+          end_date?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          position?: string
+          rank?: string | null
+          signed_at?: string | null
+          signed_by_company?: boolean | null
+          signed_by_crew?: boolean | null
+          start_date?: string
+          status?: string
+          terms_conditions?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_contracts_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_contracts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_contracts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_development_goals: {
         Row: {
           category: string
@@ -9230,6 +9327,68 @@ export type Database = {
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "document_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      docusign_envelopes: {
+        Row: {
+          created_at: string | null
+          document_data: Json | null
+          document_title: string
+          document_type: string
+          envelope_id: string | null
+          expires_at: string | null
+          id: string
+          organization_id: string | null
+          recipients: Json | null
+          sender_email: string | null
+          sender_id: string | null
+          signed_at: string | null
+          status: string
+          updated_at: string | null
+          webhook_data: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_data?: Json | null
+          document_title: string
+          document_type: string
+          envelope_id?: string | null
+          expires_at?: string | null
+          id?: string
+          organization_id?: string | null
+          recipients?: Json | null
+          sender_email?: string | null
+          sender_id?: string | null
+          signed_at?: string | null
+          status?: string
+          updated_at?: string | null
+          webhook_data?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          document_data?: Json | null
+          document_title?: string
+          document_type?: string
+          envelope_id?: string | null
+          expires_at?: string | null
+          id?: string
+          organization_id?: string | null
+          recipients?: Json | null
+          sender_email?: string | null
+          sender_id?: string | null
+          signed_at?: string | null
+          status?: string
+          updated_at?: string | null
+          webhook_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "docusign_envelopes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -12082,6 +12241,98 @@ export type Database = {
             columns: ["gmud_request_id"]
             isOneToOne: false
             referencedRelation: "gmud_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gmud_workflows: {
+        Row: {
+          actual_end: string | null
+          actual_start: string | null
+          approval_status: string | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string | null
+          description: string | null
+          executed_at: string | null
+          executed_by: string | null
+          id: string
+          impact_analysis: string | null
+          justification: string | null
+          metadata: Json | null
+          organization_id: string | null
+          planned_end: string | null
+          planned_start: string | null
+          priority: string
+          requester_id: string | null
+          requester_name: string | null
+          risk_level: string | null
+          rollback_plan: string | null
+          status: string
+          updated_at: string | null
+          workflow_name: string
+          workflow_type: string
+        }
+        Insert: {
+          actual_end?: string | null
+          actual_start?: string | null
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
+          id?: string
+          impact_analysis?: string | null
+          justification?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          planned_end?: string | null
+          planned_start?: string | null
+          priority?: string
+          requester_id?: string | null
+          requester_name?: string | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          status?: string
+          updated_at?: string | null
+          workflow_name: string
+          workflow_type?: string
+        }
+        Update: {
+          actual_end?: string | null
+          actual_start?: string | null
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string | null
+          description?: string | null
+          executed_at?: string | null
+          executed_by?: string | null
+          id?: string
+          impact_analysis?: string | null
+          justification?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          planned_end?: string | null
+          planned_start?: string | null
+          priority?: string
+          requester_id?: string | null
+          requester_name?: string | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          status?: string
+          updated_at?: string | null
+          workflow_name?: string
+          workflow_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gmud_workflows_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -16502,6 +16753,120 @@ export type Database = {
         }
         Relationships: []
       }
+      maritime_incidents: {
+        Row: {
+          closed_at: string | null
+          contributing_factors: Json | null
+          corrective_actions: Json | null
+          created_at: string | null
+          description: string
+          environmental_impact: string | null
+          fatalities_count: number | null
+          id: string
+          immediate_actions: string | null
+          incident_number: string | null
+          incident_type: string
+          injuries_count: number | null
+          investigated_by: string | null
+          investigation_findings: string | null
+          investigation_status: string | null
+          lessons_learned: string | null
+          location_description: string | null
+          location_lat: number | null
+          location_lng: number | null
+          metadata: Json | null
+          occurred_at: string
+          organization_id: string | null
+          property_damage_estimate: number | null
+          reported_at: string | null
+          reported_by: string | null
+          root_cause: string | null
+          severity: string
+          status: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          closed_at?: string | null
+          contributing_factors?: Json | null
+          corrective_actions?: Json | null
+          created_at?: string | null
+          description: string
+          environmental_impact?: string | null
+          fatalities_count?: number | null
+          id?: string
+          immediate_actions?: string | null
+          incident_number?: string | null
+          incident_type: string
+          injuries_count?: number | null
+          investigated_by?: string | null
+          investigation_findings?: string | null
+          investigation_status?: string | null
+          lessons_learned?: string | null
+          location_description?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          metadata?: Json | null
+          occurred_at: string
+          organization_id?: string | null
+          property_damage_estimate?: number | null
+          reported_at?: string | null
+          reported_by?: string | null
+          root_cause?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          closed_at?: string | null
+          contributing_factors?: Json | null
+          corrective_actions?: Json | null
+          created_at?: string | null
+          description?: string
+          environmental_impact?: string | null
+          fatalities_count?: number | null
+          id?: string
+          immediate_actions?: string | null
+          incident_number?: string | null
+          incident_type?: string
+          injuries_count?: number | null
+          investigated_by?: string | null
+          investigation_findings?: string | null
+          investigation_status?: string | null
+          lessons_learned?: string | null
+          location_description?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          metadata?: Json | null
+          occurred_at?: string
+          organization_id?: string | null
+          property_damage_estimate?: number | null
+          reported_at?: string | null
+          reported_by?: string | null
+          root_cause?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maritime_incidents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maritime_incidents_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_read_status: {
         Row: {
           id: string
@@ -19167,6 +19532,50 @@ export type Database = {
             foreignKeyName: "organization_metrics_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_settings: {
+        Row: {
+          created_at: string | null
+          feature_flags: Json | null
+          id: string
+          notification_preferences: Json | null
+          organization_id: string | null
+          settings_key: string
+          settings_value: Json | null
+          theme_config: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feature_flags?: Json | null
+          id?: string
+          notification_preferences?: Json | null
+          organization_id?: string | null
+          settings_key: string
+          settings_value?: Json | null
+          theme_config?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feature_flags?: Json | null
+          id?: string
+          notification_preferences?: Json | null
+          organization_id?: string | null
+          settings_key?: string
+          settings_value?: Json | null
+          theme_config?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_settings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: true
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
@@ -30253,6 +30662,90 @@ export type Database = {
           },
         ]
       }
+      vessel_inspections: {
+        Row: {
+          corrective_actions: Json | null
+          created_at: string | null
+          deficiencies: Json | null
+          deficiencies_count: number | null
+          detention: boolean | null
+          detention_duration_hours: number | null
+          id: string
+          inspection_date: string
+          inspection_type: string
+          inspector_name: string | null
+          inspector_organization: string | null
+          metadata: Json | null
+          next_inspection_due: string | null
+          organization_id: string | null
+          overall_result: string | null
+          port_country: string | null
+          port_name: string | null
+          report_file_url: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          corrective_actions?: Json | null
+          created_at?: string | null
+          deficiencies?: Json | null
+          deficiencies_count?: number | null
+          detention?: boolean | null
+          detention_duration_hours?: number | null
+          id?: string
+          inspection_date: string
+          inspection_type: string
+          inspector_name?: string | null
+          inspector_organization?: string | null
+          metadata?: Json | null
+          next_inspection_due?: string | null
+          organization_id?: string | null
+          overall_result?: string | null
+          port_country?: string | null
+          port_name?: string | null
+          report_file_url?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          corrective_actions?: Json | null
+          created_at?: string | null
+          deficiencies?: Json | null
+          deficiencies_count?: number | null
+          detention?: boolean | null
+          detention_duration_hours?: number | null
+          id?: string
+          inspection_date?: string
+          inspection_type?: string
+          inspector_name?: string | null
+          inspector_organization?: string | null
+          metadata?: Json | null
+          next_inspection_due?: string | null
+          organization_id?: string | null
+          overall_result?: string | null
+          port_country?: string | null
+          port_name?: string | null
+          report_file_url?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_inspections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vessel_manuals: {
         Row: {
           created_at: string | null
@@ -30830,6 +31323,62 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      voice_commands_log: {
+        Row: {
+          command_text: string
+          command_type: string | null
+          confidence_score: number | null
+          created_at: string | null
+          device_info: Json | null
+          error_message: string | null
+          execution_time_ms: number | null
+          id: string
+          organization_id: string | null
+          response_text: string | null
+          success: boolean | null
+          user_id: string | null
+          was_hotword_triggered: boolean | null
+        }
+        Insert: {
+          command_text: string
+          command_type?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          device_info?: Json | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          organization_id?: string | null
+          response_text?: string | null
+          success?: boolean | null
+          user_id?: string | null
+          was_hotword_triggered?: boolean | null
+        }
+        Update: {
+          command_text?: string
+          command_type?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          device_info?: Json | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          organization_id?: string | null
+          response_text?: string | null
+          success?: boolean | null
+          user_id?: string | null
+          was_hotword_triggered?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voice_commands_log_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       voice_conversations: {
         Row: {
