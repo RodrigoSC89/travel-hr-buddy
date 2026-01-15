@@ -9331,6 +9331,60 @@ export type Database = {
           },
         ]
       }
+      documents: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          crew_member_id: string | null
+          document_type: string | null
+          expiry_date: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          mime_type: string | null
+          organization_id: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+          uploaded_by: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          document_type?: string | null
+          expiry_date?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          mime_type?: string | null
+          organization_id?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+          uploaded_by?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          document_type?: string | null
+          expiry_date?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          mime_type?: string | null
+          organization_id?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+          uploaded_by?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       docusign_envelopes: {
         Row: {
           created_at: string | null
@@ -31743,6 +31797,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      voyage_charters: {
+        Row: {
+          cargo_type: string | null
+          charter_type: string | null
+          charterer_name: string
+          created_at: string | null
+          discharge_port: string | null
+          freight_rate: number | null
+          id: string
+          laycan_end: string | null
+          laycan_start: string | null
+          loading_port: string | null
+          organization_id: string
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          cargo_type?: string | null
+          charter_type?: string | null
+          charterer_name: string
+          created_at?: string | null
+          discharge_port?: string | null
+          freight_rate?: number | null
+          id?: string
+          laycan_end?: string | null
+          laycan_start?: string | null
+          loading_port?: string | null
+          organization_id: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          cargo_type?: string | null
+          charter_type?: string | null
+          charterer_name?: string
+          created_at?: string | null
+          discharge_port?: string | null
+          freight_rate?: number | null
+          id?: string
+          laycan_end?: string | null
+          laycan_start?: string | null
+          loading_port?: string | null
+          organization_id?: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
       }
       voyage_costs: {
         Row: {
