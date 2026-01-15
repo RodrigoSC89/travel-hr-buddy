@@ -1,15 +1,32 @@
 /**
  * Mapbox GL Shim
  * Provides a consistent import pattern for mapbox-gl across the codebase
- * PATCH WINDY-1.1: Fixed frozen object accessToken assignment
+ * PATCH WINDY-1.2: Fixed ESM default export issue
  */
 
-import mapboxglOriginal from 'mapbox-gl';
+import * as mapboxglModule from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+
+// Handle both ESM and CJS exports
+const mapboxglOriginal = (mapboxglModule as any).default || mapboxglModule;
 
 // Create a mutable wrapper around mapbox-gl to allow setting accessToken
 // Some bundlers freeze the default export, preventing token assignment
 const createMutableMapbox = () => {
+  // If mapbox-gl is not loaded properly, return a stub
+  if (!mapboxglOriginal || typeof mapboxglOriginal !== 'object') {
+    console.warn('[mapbox-shim] mapbox-gl not loaded properly, using stub');
+    return {
+      accessToken: '',
+      Map: class {},
+      Marker: class {},
+      Popup: class {},
+      NavigationControl: class {},
+      LngLatBounds: class {},
+      LngLat: class {},
+    };
+  }
+
   // Check if the original module is frozen
   const isFrozen = Object.isFrozen(mapboxglOriginal);
   
@@ -27,7 +44,11 @@ const createMutableMapbox = () => {
   }
   
   // Copy prototype chain for classes like Map, Marker, etc.
-  Object.setPrototypeOf(mapboxMutable, Object.getPrototypeOf(mapboxglOriginal));
+  try {
+    Object.setPrototypeOf(mapboxMutable, Object.getPrototypeOf(mapboxglOriginal));
+  } catch {
+    // Ignore if fails
+  }
   
   // Ensure critical classes are copied
   mapboxMutable.Map = mapboxglOriginal.Map;
