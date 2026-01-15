@@ -214,9 +214,9 @@ export const ReservationPaymentSystem: React.FC = () => {
       // Generate iCal format
       const icalContent = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Nautilus One//Reservation System//EN
+PRODID:-//Nauti One//Reservation System//EN
 BEGIN:VEVENT
-UID:${reservation.id}@nautilusone.com
+UID:${reservation.id}@nautione.com
 DTSTART:${format(parseISO(reservation.start_date), "yyyyMMdd'T'HHmmss")}
 DTEND:${format(parseISO(reservation.end_date), "yyyyMMdd'T'HHmmss")}
 SUMMARY:${calendarEvent.title}

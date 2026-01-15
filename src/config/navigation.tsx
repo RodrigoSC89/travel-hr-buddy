@@ -1,9 +1,9 @@
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
-// Navegação principal do Nautilus One
-// PATCH UNIFY-FINAL: Nautilus Command Center é o ponto de entrada principal
+// Navegação principal do Nauti One
+// PATCH UNIFY-FINAL: Nauti Command Center é o ponto de entrada principal
 export const NAVIGATION = [
-  { name: "Nautilus Command Center", path: "/nautilus-command", component: safeLazyImport(() => import("@/pages/NautilusCommand"), "Nautilus Command Center") },
+  { name: "Nauti Command Center", path: "/nautilus-command", component: safeLazyImport(() => import("@/pages/NautilusCommand"), "Nauti Command Center") },
   // PATCH 192.0: Unified Fleet Command Center (fusão de 3 módulos)
   { name: "Fleet Command Center", path: "/fleet-command", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
   { name: "Sistema Marítimo", path: "/sistema-maritimo", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
@@ -44,7 +44,7 @@ export const NAVIGATION = [
   // PATCH UNIFY-12.0: Workflow Command Center (fusão de 4 módulos de workflow)
   { name: "Workflow Command Center", path: "/workflow-command", component: safeLazyImport(() => import("@/pages/WorkflowCommandCenter"), "Workflow Command Center") },
   { name: "Workflow", path: "/workflow", component: safeLazyImport(() => import("@/pages/Workflow"), "Workflow") },
-  { name: "Nautilus People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nautilus-people"), "Nautilus People Hub") },
+  { name: "Nauti People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nautilus-people"), "Nauti People Hub") },
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
   { name: "System Diagnostic", path: "/system-diagnostic", component: safeLazyImport(() => import("@/pages/SystemDiagnostic"), "System Diagnostic") },
   { name: "Execution Roadmap", path: "/execution-roadmap", component: safeLazyImport(() => import("@/pages/ExecutionRoadmap"), "Execution Roadmap") },

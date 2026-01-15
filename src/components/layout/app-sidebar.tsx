@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
-import nautilusLogo from "@/assets/nautilus-logo.png";
+import nautiLogo from "@/assets/nauti-one-logo.png";
 import { usePermissions, Permission } from "@/hooks/use-permissions";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import {
@@ -61,7 +61,7 @@ import { SIDEBAR_ROUTES, type SidebarGroup as SidebarRouteGroup } from "@/config
 // Quick access items that appear at the top
 const quickAccessItems = [
   {
-    title: "Nautilus Command",
+    title: "Nauti Command",
     url: "/nautilus-command",
     icon: Brain,
   },
@@ -110,7 +110,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   
   // Derived state (not hooks) - on mobile, never show collapsed state
   const collapsed = isMobile ? false : state === "collapsed";
-  const logoSrc = currentBranding?.logo_url || nautilusLogo;
+  const logoSrc = currentBranding?.logo_url || nautiLogo;
 
   const handleLogout = async () => {
     await signOut();
@@ -157,15 +157,15 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
             <img 
-              src={`${logoSrc}?v=3`}
-              alt={currentBranding?.company_name || "Nautilus One"}
+              src={`${logoSrc}?v=4`}
+              alt={currentBranding?.company_name || "Nauti One"}
               className="w-10 h-10 object-contain"
             />
           </div>
           {!collapsed && (
             <div className="flex flex-col min-w-0">
               <h1 className="text-sm font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent truncate">
-                NAUTILUS ONE
+                NAUTI ONE
               </h1>
               <span className="text-xs text-muted-foreground font-medium truncate">
                 Sistema Corporativo
@@ -344,8 +344,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </button>
             
             <div className="text-xs text-muted-foreground text-center pt-2 border-t border-border">
-              <p>Versão 3.0.2</p>
-              <p className="mt-1">© 2024-2025 Nautilus</p>
+              <p>Versão 4.0.0</p>
+              <p className="mt-1">© 2024-2025 Nauti One</p>
             </div>
           </div>
         ) : (

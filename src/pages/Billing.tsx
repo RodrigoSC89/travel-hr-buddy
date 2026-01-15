@@ -44,7 +44,7 @@ export default function Billing() {
       return;
     }
     if (tier.isEnterprise) {
-      window.location.href = 'mailto:comercial@nautilusone.com.br?subject=Nautilus Enterprise';
+      window.location.href = 'mailto:comercial@nautione.com.br?subject=Nauti One Enterprise';
       return;
     }
     createCheckout(tier.priceId);
@@ -54,7 +54,7 @@ export default function Billing() {
     <div className="container mx-auto py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Planos Nautilus One</h1>
+          <h1 className="text-4xl font-bold mb-4">Planos Nauti One</h1>
           <p className="text-muted-foreground text-lg">
             Escolha o plano ideal para sua operação marítima
           </p>
@@ -184,7 +184,7 @@ export default function Billing() {
           <p>✓ 14 dias de teste grátis em todos os planos pagos</p>
           <p>✓ Cancele a qualquer momento sem compromisso</p>
           <p className="mt-4">
-            Dúvidas? Entre em contato: <a href="mailto:comercial@nautilusone.com.br" className="text-primary hover:underline">comercial@nautilusone.com.br</a>
+            Dúvidas? Entre em contato: <a href="mailto:comercial@nautione.com.br" className="text-primary hover:underline">comercial@nautione.com.br</a>
           </p>
         </div>
       </div>

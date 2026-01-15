@@ -17,12 +17,12 @@ export default function NautilusCommand() {
   return (
     <>
       <Helmet>
-        <title>Nautilus Command Center | Centro de Comando Integrado</title>
+        <title>Nauti Command Center | Centro de Comando Integrado</title>
         <meta 
           name="description" 
-          content="Centro de comando unificado com IA para gestão marítima avançada - Visão Geral, Operações, Análise Executiva, IA, Alertas e Configurações" 
+          content="Centro de comando unificado Nauti One com IA para gestão marítima avançada - Visão Geral, Operações, Análise Executiva, IA, Alertas e Configurações" 
         />
-        <meta name="keywords" content="command center, maritime operations, IA, dashboard executivo, gestão marítima" />
+        <meta name="keywords" content="command center, maritime operations, IA, dashboard executivo, gestão marítima, nauti one" />
         <link rel="canonical" href="/nautilus-command" />
       </Helmet>
       <NautilusCommandCenterUnified />

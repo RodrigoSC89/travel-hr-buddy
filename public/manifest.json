@@ -94,9 +94,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Command Center",
+      "name": "Nauti Command Center",
       "short_name": "Command",
-      "description": "Centro de Comando Unificado",
+      "description": "Centro de Comando Unificado Nauti One",
       "url": "/nautilus-command",
       "icons": [{ "src": "/icons/nauti-one-logo.png", "sizes": "96x96" }]
     },

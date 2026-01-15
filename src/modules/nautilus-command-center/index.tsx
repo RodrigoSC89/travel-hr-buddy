@@ -1,6 +1,6 @@
 /**
- * 🚀 NAUTILUS COMMAND CENTER - PREMIUM EDITION
- * Fusão de: Command Center, Dashboard Executivo, Nautilus Command, Centro de Operações
+ * 🚀 NAUTI COMMAND CENTER - PREMIUM EDITION
+ * Fusão de: Command Center, Dashboard Executivo, Nauti Command, Centro de Operações
  * 
  * Central de Inteligência e Operações em Tempo Real
  * PATCH PREMIUM-1.0 - Design extraordinário com IA autônoma

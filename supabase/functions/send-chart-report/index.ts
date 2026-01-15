@@ -32,7 +32,7 @@ serve(async (req) => {
     const emailPort = parseInt(Deno.env.get("EMAIL_PORT") || "587", 10);
     const emailUser = Deno.env.get("EMAIL_USER");
     const emailPass = Deno.env.get("EMAIL_PASS");
-    const emailFrom = Deno.env.get("EMAIL_FROM") || "noreply@nautilusone.com";
+    const emailFrom = Deno.env.get("EMAIL_FROM") || "noreply@nautione.com";
     const defaultEmailTo = Deno.env.get("EMAIL_TO") || "admin@empresa.com";
 
     if (!emailUser || !emailPass) {
@@ -40,7 +40,7 @@ serve(async (req) => {
     }
 
     const recipientEmail = toEmail || defaultEmailTo;
-    const emailSubject = subject || `📊 ${chartType || "Chart"} Report - Nautilus One`;
+    const emailSubject = subject || `📊 ${chartType || "Chart"} Report - Nauti One`;
 
     // Clean base64 string (remove data:image/png;base64, prefix if present)
     const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
