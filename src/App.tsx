@@ -222,6 +222,7 @@ const IoT = lazy(() => import("@/pages/IoT"));
 const Gamification = lazy(() => import("@/pages/Gamification"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
+const StatusPage = lazy(() => import("@/pages/StatusPage"));
 
 // ============================================
 // ADMIN & DASHBOARDS
@@ -294,6 +295,7 @@ const AppRoutes = () => (
     <Route path="/auth" element={<Auth />} />
     <Route path="/landing" element={<LandingPage />} />
     <Route path="/pricing" element={<LandingPage />} />
+    <Route path="/status" element={<StatusPage />} />
     
     {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
