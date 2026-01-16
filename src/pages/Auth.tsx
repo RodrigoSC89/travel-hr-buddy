@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Eye, 
   EyeOff, 
@@ -18,8 +19,11 @@ import {
   User,
   ArrowRight,
   CheckCircle,
-  Loader2
+  Loader2,
+  AlertTriangle,
+  RefreshCw
 } from "lucide-react";
+import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
 
 const signInSchema = z.object({
@@ -51,6 +55,36 @@ const Auth: React.FC = () => {
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
+  const [networkError, setNetworkError] = useState(false);
+
+  // Clear corrupted session on mount if there are network issues
+  useEffect(() => {
+    const clearCorruptedSession = async () => {
+      try {
+        // Check if there's a stored session that might be corrupted
+        const storedSession = localStorage.getItem('sb-vnbptmixvwropvanyhdb-auth-token');
+        if (storedSession) {
+          try {
+            const parsed = JSON.parse(storedSession);
+            // If refresh_token exists but is very short (corrupted), clear it
+            if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
+              console.warn('[Auth] Clearing corrupted session token');
+              await supabase.auth.signOut();
+              localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
+              setNetworkError(false);
+            }
+          } catch {
+            // Invalid JSON, clear it
+            localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
+          }
+        }
+      } catch (error) {
+        console.warn('[Auth] Error clearing session:', error);
+      }
+    };
+
+    clearCorruptedSession();
+  }, []);
 
   // Call all hooks before any conditional returns
   const signInForm = useForm<SignInFormData>({
@@ -83,10 +117,41 @@ const Auth: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
+  const handleClearSession = async () => {
+    try {
+      setIsLoading(true);
+      await supabase.auth.signOut();
+      localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
+      setNetworkError(false);
+      toast.success("Sessão limpa com sucesso", {
+        description: "Tente fazer login novamente."
+      });
+    } catch (error) {
+      console.error('[Auth] Error clearing session:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
+    setNetworkError(false);
     try {
-      await signIn(data.email, data.password);
+      const result = await signIn(data.email, data.password);
+      if (result?.error) {
+        // Check for network errors
+        if (result.error.message?.includes('Failed to fetch') || 
+            result.error.name === 'AuthRetryableFetchError') {
+          setNetworkError(true);
+          toast.error("Erro de conexão", {
+            description: "Verifique sua internet ou tente limpar a sessão."
+          });
+        }
+      }
+    } catch (error: any) {
+      if (error?.message?.includes('Failed to fetch')) {
+        setNetworkError(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -338,6 +403,30 @@ const Auth: React.FC = () => {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </form>
+
+                    {/* Network Error Warning */}
+                    {networkError && (
+                      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 space-y-2">
+                        <div className="flex items-center gap-2 text-yellow-600">
+                          <AlertTriangle className="h-4 w-4" />
+                          <span className="text-sm font-medium">Problema de conexão detectado</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Se você está tendo problemas para entrar, tente limpar a sessão anterior.
+                        </p>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={handleClearSession}
+                          disabled={isLoading}
+                          className="w-full"
+                        >
+                          <RefreshCw className="h-3 w-3 mr-2" />
+                          Limpar sessão e tentar novamente
+                        </Button>
+                      </div>
+                    )}
 
                     <div className="text-center">
                       <Button
