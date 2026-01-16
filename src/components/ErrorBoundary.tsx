@@ -2,9 +2,11 @@
  * Global Error Boundary
  * 
  * Captura erros React e exibe UI de fallback
+ * PATCH: Sentry integration activated
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import * as Sentry from '@sentry/react';
 import { logger } from '@/lib/logger';
 
 interface Props {
@@ -37,7 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Log error
+    // Log error locally
     logger.error('Error caught by boundary:', { error, errorInfo });
     
     this.setState({
@@ -50,8 +52,15 @@ export class ErrorBoundary extends Component<Props, State> {
       this.props.onError(error, errorInfo);
     }
     
-    // TODO: Send to error tracking service (Sentry)
-    // logErrorToService(error, errorInfo);
+    // Send to Sentry for production monitoring
+    Sentry.withScope((scope) => {
+      scope.setTag('error_type', 'react_boundary');
+      scope.setLevel('error');
+      scope.setContext('react', {
+        componentStack: errorInfo.componentStack,
+      });
+      Sentry.captureException(error);
+    });
   }
 
   handleReset = (): void => {
@@ -147,12 +156,14 @@ export interface ErrorContext {
 export function logError(error: Error, context?: ErrorContext): void {
   logger.error('Error:', { error, context });
   
-  // TODO: Send to error tracking service
-  // if (window.Sentry) {
-  //   window.Sentry.captureException(error, {
-  //     extra: context,
-  //   });
-  // }
+  // Send to Sentry for production monitoring
+  Sentry.withScope((scope) => {
+    if (context?.component) scope.setTag('component', context.component);
+    if (context?.action) scope.setTag('action', context.action);
+    if (context?.userId) scope.setUser({ id: context.userId });
+    scope.setContext('error_context', context || {});
+    Sentry.captureException(error);
+  });
 }
 
 /**
