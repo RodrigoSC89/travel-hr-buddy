@@ -1,7 +1,7 @@
 /**
- * App.tsx - PATCH 871 - Fixed React singleton with QueryClient inside component
+ * App.tsx - PATCH 872 - Fixed queryClient definition with direct React imports
  */
-import * as React from "react";
+import React, { Suspense, lazy, useMemo } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -12,8 +12,6 @@ import { AppSidebar } from "./components/layout/app-sidebar";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
-
-const { Suspense, lazy, useEffect, useState, useMemo } = React;
 
 // Initialize monitoring in production
 if (typeof window !== "undefined" && import.meta.env.PROD) {
@@ -472,22 +470,22 @@ const AppRoutes = () => (
   </Routes>
 );
 
-// App principal - PATCH 871: Create queryClient inside component to ensure React context
-function App() {
-  // Create QueryClient using useMemo to ensure stable reference
-  const queryClient = useMemo(() => new QueryClient({
-    defaultOptions: {
-      queries: { 
-        staleTime: 1000 * 60 * 5, 
-        retry: 1,
-        refetchOnWindowFocus: false,
-      },
-      mutations: {
-        retry: 1,
-      },
+// PATCH 872: Create QueryClient OUTSIDE component to avoid recreation issues
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { 
+      staleTime: 1000 * 60 * 5, 
+      retry: 1,
+      refetchOnWindowFocus: false,
     },
-  }), []);
+    mutations: {
+      retry: 1,
+    },
+  },
+});
 
+// App principal
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-theme">
