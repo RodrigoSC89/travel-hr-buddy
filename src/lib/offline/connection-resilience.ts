@@ -1,6 +1,7 @@
 /**
- * Connection Resilience - PATCH 850
+ * Connection Resilience - PATCH 870
  * Handles connection failures gracefully with retry and fallback strategies
+ * Optimized for slow connections (3G, LTE, 5G with latency)
  */
 
 import { logger } from "@/lib/logger";
@@ -20,10 +21,11 @@ export interface ConnectionState {
   saveData: boolean;
 }
 
+// PATCH 870: Increased retries and delays for slow networks
 const DEFAULT_RETRY_CONFIG: RetryConfig = {
-  maxRetries: 3,
+  maxRetries: 5, // Increased from 3
   baseDelayMs: 1000,
-  maxDelayMs: 30000,
+  maxDelayMs: 45000, // Increased from 30000
   backoffMultiplier: 2,
 };
 
@@ -154,12 +156,15 @@ class ConnectionResilience {
 
   /**
    * Get adaptive timeout based on connection quality
+   * PATCH 870: Extended timeouts for slow connections
    */
   private getAdaptiveTimeout(): number {
-    if (this.state.effectiveType === 'slow-2g') return 30000;
-    if (this.state.effectiveType === '2g') return 20000;
-    if (this.state.effectiveType === '3g') return 15000;
-    return 10000;
+    // Extended timeouts for maritime/slow connections
+    if (this.state.effectiveType === 'slow-2g') return 45000;
+    if (this.state.effectiveType === '2g') return 35000;
+    if (this.state.effectiveType === '3g') return 25000;
+    if (this.state.rtt > 500) return 30000; // High latency
+    return 15000; // Default for 4G
   }
 
   private sleep(ms: number): Promise<void> {
