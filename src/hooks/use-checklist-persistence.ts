@@ -1,6 +1,9 @@
 /**
  * Checklist Persistence Hook
  * PATCH: Implements save/submit to Supabase for maritime checklists
+ * 
+ * Note: Uses 'any' type assertions as the 'checklists' table was just created
+ * and types haven't been regenerated yet
  */
 
 import { useState, useCallback } from 'react';
@@ -65,7 +68,8 @@ export function useChecklistPersistence(): UseChecklistPersistenceReturn {
         updated_at: new Date().toISOString(),
       };
 
-      const { error: upsertError } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: upsertError } = await (supabase as any)
         .from('checklists')
         .upsert(checklistData, { onConflict: 'id' });
 
@@ -95,7 +99,8 @@ export function useChecklistPersistence(): UseChecklistPersistenceReturn {
     setError(null);
 
     try {
-      const { error: updateError } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: updateError } = await (supabase as any)
         .from('checklists')
         .update({
           status: 'pending_review',
@@ -125,7 +130,8 @@ export function useChecklistPersistence(): UseChecklistPersistenceReturn {
     setError(null);
 
     try {
-      let query = supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let query = (supabase as any)
         .from('checklists')
         .select('*')
         .order('updated_at', { ascending: false });
@@ -141,7 +147,8 @@ export function useChecklistPersistence(): UseChecklistPersistenceReturn {
       }
 
       // Transform database format to Checklist type
-      return (data || []).map((row) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (data || []).map((row: any) => ({
         id: row.id,
         title: row.title,
         type: row.type as Checklist['type'],
@@ -200,7 +207,8 @@ export function useChecklistPersistence(): UseChecklistPersistenceReturn {
 
   const deleteChecklist = useCallback(async (id: string): Promise<boolean> => {
     try {
-      const { error: deleteError } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: deleteError } = await (supabase as any)
         .from('checklists')
         .delete()
         .eq('id', id);
