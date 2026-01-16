@@ -55,6 +55,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
+    let retryCount = 0;
+    const maxRetries = 3;
 
     const initializeAuth = async () => {
       try {
@@ -87,24 +89,48 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         
         subscription = data.subscription;
 
-        // THEN check for existing session
-        const { data: sessionData, error } = await supabase.auth.getSession();
+        // THEN check for existing session with retry logic
+        const fetchSession = async (): Promise<void> => {
+          try {
+            const { data: sessionData, error } = await supabase.auth.getSession();
 
-        if (!mounted) return;
+            if (!mounted) return;
 
-        if (error) {
-          Logger.warn("Error getting session", error, "AuthContext");
-          setTimeout(() => {
-            toast.error("Erro de Sessão", {
-              description: "Não foi possível recuperar a sessão.",
-            });
-          }, 0);
-        }
-        
-        setSession(sessionData.session);
-        setUser(sessionData.session?.user ?? null);
-        setIsLoading(false);
-        setIsInitialized(true);
+            if (error) {
+              // Handle network errors with retry
+              if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
+                if (retryCount < maxRetries) {
+                  retryCount++;
+                  Logger.warn(`Session fetch failed, retrying (${retryCount}/${maxRetries})...`, error, "AuthContext");
+                  await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+                  return fetchSession();
+                }
+              }
+              Logger.warn("Error getting session", error, "AuthContext");
+            }
+            
+            setSession(sessionData?.session ?? null);
+            setUser(sessionData?.session?.user ?? null);
+            setIsLoading(false);
+            setIsInitialized(true);
+          } catch (fetchError) {
+            if (!mounted) return;
+            
+            // Network error - retry with exponential backoff
+            if (retryCount < maxRetries) {
+              retryCount++;
+              Logger.warn(`Network error, retrying (${retryCount}/${maxRetries})...`, fetchError, "AuthContext");
+              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+              return fetchSession();
+            }
+            
+            Logger.warn("Failed to fetch session after retries", fetchError, "AuthContext");
+            setIsLoading(false);
+            setIsInitialized(true);
+          }
+        };
+
+        await fetchSession();
       } catch (error) {
         if (!mounted) return;
         Logger.warn("Error initializing auth", error, "AuthContext");
