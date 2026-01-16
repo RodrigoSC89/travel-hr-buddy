@@ -4,17 +4,19 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 /**
- * PATCH 854: Fixed React duplicate instance error
- * - Added cacheDir with timestamp to force fresh build
- * - Ensured all React-related packages are properly deduplicated
+ * PATCH 855: DEFINITIVE React singleton fix
+ * Root cause: Multiple React instances in bundle from stale cache
+ * Solution: Force single React via alias + optimizeDeps + manual chunks
  */
 export default defineConfig(({ mode }) => ({
   base: "/",
   server: {
-    host: true,
+    host: "::",
     port: 8080,
-    strictPort: true,
-    hmr: { overlay: false },
+    strictPort: false,
+    hmr: {
+      overlay: true,
+    },
   },
   plugins: [
     react(),
@@ -23,9 +25,12 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Force single React instance
-      "react": path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
+      // CRITICAL: Force single React instance via absolute paths
+      "react": path.resolve(__dirname, "node_modules/react"),
+      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+      "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
+      "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
+      "scheduler": path.resolve(__dirname, "node_modules/scheduler"),
     },
     dedupe: [
       "react",
@@ -39,14 +44,21 @@ export default defineConfig(({ mode }) => ({
     ],
   },
   build: {
-    outDir: "dist",
-    sourcemap: false,
-    minify: "esbuild",
     target: "esnext",
-    chunkSizeWarningLimit: 100000,
+    minify: "esbuild",
+    sourcemap: false,
+    cssMinify: true,
     cssCodeSplit: true,
-    modulePreload: { polyfill: true },
-    reportCompressedSize: false,
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Force React into single chunk to prevent duplication
+          "react-vendor": ["react", "react-dom", "react-dom/client", "scheduler"],
+          "query": ["@tanstack/react-query"],
+        },
+      },
+    },
   },
   optimizeDeps: {
     include: [
@@ -61,24 +73,14 @@ export default defineConfig(({ mode }) => ({
     ],
     exclude: [
       "@tensorflow/tfjs",
-      "@tensorflow-models/coco-ssd",
       "onnxruntime-web",
-      "three",
-      "@react-three/fiber",
-      "@react-three/drei",
-      "mapbox-gl",
       "tesseract.js",
     ],
     force: true,
-    // Force fresh cache on every build
-    esbuildOptions: {
-      target: "esnext",
-    },
   },
-  // Force unique cache directory
-  cacheDir: `.vite-cache-${Date.now()}`,
   esbuild: {
     target: "esnext",
     legalComments: "none",
+    jsx: "automatic",
   },
 }));
