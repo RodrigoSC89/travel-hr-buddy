@@ -1,8 +1,7 @@
 /**
- * App.tsx - PATCH 855 - Production Ready with Monitoring
- * Includes Sentry, PostHog, and Health Check integration
+ * App.tsx - PATCH 861 - Fixed React singleton for hooks
  */
-import { Suspense, lazy, useEffect } from "react";
+import * as React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -13,6 +12,8 @@ import { AppSidebar } from "./components/layout/app-sidebar";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
+
+const { Suspense, lazy, useEffect } = React;
 
 // Initialize monitoring in production
 if (typeof window !== "undefined" && import.meta.env.PROD) {

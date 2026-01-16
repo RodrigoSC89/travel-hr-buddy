@@ -1,15 +1,11 @@
 /**
- * main.tsx - PATCH 853 - Simplified React initialization
- * Fixed: Removed custom singleton to prevent duplicate React instances
+ * main.tsx - PATCH 861 - Fixed React singleton
  */
-
-import React from "react";
+import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
-
-// Initialize i18n
 import "@/i18n";
 
 // Initialize theme before rendering
