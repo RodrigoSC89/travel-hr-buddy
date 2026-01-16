@@ -1,5 +1,251 @@
 {
-  "version": "1.0",
-  "standard": "NORMAM-01",
-  "rules": []
+  "version": "2.0",
+  "standard": "NORMAM-01/DPC",
+  "title": "Normas da Autoridade Marítima para Embarcações Empregadas na Navegação em Mar Aberto",
+  "authority": "Diretoria de Portos e Costas - Marinha do Brasil",
+  "lastUpdate": "2024-01-15",
+  "dpRequirements": {
+    "chapter": "Anexo 15-C - Operações com Posicionamento Dinâmico",
+    "sections": [
+      {
+        "id": "15C-1",
+        "title": "Definições e Classificações",
+        "items": [
+          {
+            "id": "15C-1.1",
+            "code": "NORMAM-15C-1.1",
+            "requirement": "Sistema de Posicionamento Dinâmico (DP)",
+            "description": "Sistema que automaticamente controla a posição e aproamento de uma embarcação por meio de propulsão ativa",
+            "evidences": ["Certificado de Classe DP", "Manual do Sistema DP"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-1.2",
+            "code": "NORMAM-15C-1.2",
+            "requirement": "Classificação DP1",
+            "description": "Embarcação com sistema DP básico sem redundância",
+            "evidences": ["Certificado DP1", "FMEA básico"],
+            "criticality": "major"
+          },
+          {
+            "id": "15C-1.3",
+            "code": "NORMAM-15C-1.3",
+            "requirement": "Classificação DP2",
+            "description": "Embarcação com redundância que mantém posição após falha simples",
+            "evidences": ["Certificado DP2", "FMEA completo", "Testes de redundância"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-1.4",
+            "code": "NORMAM-15C-1.4",
+            "requirement": "Classificação DP3",
+            "description": "Embarcação com separação física e proteção contra incêndio e alagamento",
+            "evidences": ["Certificado DP3", "FMEA extensivo", "Análise de separação física"],
+            "criticality": "critical"
+          }
+        ]
+      },
+      {
+        "id": "15C-2",
+        "title": "Requisitos de Pessoal",
+        "items": [
+          {
+            "id": "15C-2.1",
+            "code": "NORMAM-15C-2.1",
+            "requirement": "Operador de DP (DPO)",
+            "description": "Tripulante certificado para operar sistema de posicionamento dinâmico",
+            "evidences": ["Certificado STCW", "Endosso DPO", "Log Book atualizado"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-2.2",
+            "code": "NORMAM-15C-2.2",
+            "requirement": "Treinamento Inicial",
+            "description": "Curso básico de DP reconhecido pelo Nautical Institute",
+            "evidences": ["Certificado de curso básico DP", "Carga horária mínima 80h"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-2.3",
+            "code": "NORMAM-15C-2.3",
+            "requirement": "Treinamento Avançado",
+            "description": "Curso avançado de DP com simulador",
+            "evidences": ["Certificado de curso avançado", "Registro de horas em simulador"],
+            "criticality": "major"
+          },
+          {
+            "id": "15C-2.4",
+            "code": "NORMAM-15C-2.4",
+            "requirement": "Experiência Marítima",
+            "description": "Mínimo de 12 meses de experiência em embarcação DP",
+            "evidences": ["Log Book com horas DP", "Atestado de embarque"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-2.5",
+            "code": "NORMAM-15C-2.5",
+            "requirement": "Revalidação",
+            "description": "Revalidação de certificado DPO a cada 5 anos",
+            "evidences": ["Certificado revalidado", "Comprovante de reciclagem"],
+            "criticality": "major"
+          }
+        ]
+      },
+      {
+        "id": "15C-3",
+        "title": "Requisitos Operacionais",
+        "items": [
+          {
+            "id": "15C-3.1",
+            "code": "NORMAM-15C-3.1",
+            "requirement": "FMEA (Failure Mode and Effects Analysis)",
+            "description": "Análise de modos de falha e efeitos do sistema DP",
+            "evidences": ["Relatório FMEA aprovado", "Testes de prova FMEA", "Revisão anual"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-3.2",
+            "code": "NORMAM-15C-3.2",
+            "requirement": "ASOG (Activity Specific Operating Guidelines)",
+            "description": "Diretrizes operacionais específicas para atividades em DP",
+            "evidences": ["Documento ASOG aprovado", "Matriz de ações", "CAM atualizado"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-3.3",
+            "code": "NORMAM-15C-3.3",
+            "requirement": "Checklists Operacionais",
+            "description": "Listas de verificação para operações DP",
+            "evidences": ["Checklists preenchidos", "Registros de verificação diária"],
+            "criticality": "major"
+          },
+          {
+            "id": "15C-3.4",
+            "code": "NORMAM-15C-3.4",
+            "requirement": "Watch Keeping",
+            "description": "Procedimentos de quarto para operações DP",
+            "evidences": ["Escala de quarto", "Registros de passagem de serviço"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-3.5",
+            "code": "NORMAM-15C-3.5",
+            "requirement": "Limites Operacionais",
+            "description": "Definição de limites ambientais para operação",
+            "evidences": ["Tabela de limites operacionais", "Registros de monitoramento"],
+            "criticality": "critical"
+          }
+        ]
+      },
+      {
+        "id": "15C-4",
+        "title": "Requisitos de Manutenção",
+        "items": [
+          {
+            "id": "15C-4.1",
+            "code": "NORMAM-15C-4.1",
+            "requirement": "Plano de Manutenção DP",
+            "description": "Sistema de manutenção planejada para equipamentos DP",
+            "evidences": ["PMS atualizado", "Registros de manutenção", "Histórico de equipamentos"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-4.2",
+            "code": "NORMAM-15C-4.2",
+            "requirement": "Testes Periódicos",
+            "description": "Testes de funcionamento dos sistemas DP",
+            "evidences": ["Cronograma de testes", "Registros de testes realizados"],
+            "criticality": "major"
+          },
+          {
+            "id": "15C-4.3",
+            "code": "NORMAM-15C-4.3",
+            "requirement": "Calibração de Sensores",
+            "description": "Calibração periódica de sensores de posição e referência",
+            "evidences": ["Certificados de calibração", "Registros de verificação"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-4.4",
+            "code": "NORMAM-15C-4.4",
+            "requirement": "Peças Sobressalentes",
+            "description": "Estoque de peças críticas para sistema DP",
+            "evidences": ["Lista de sobressalentes", "Controle de estoque"],
+            "criticality": "major"
+          }
+        ]
+      },
+      {
+        "id": "15C-5",
+        "title": "Requisitos de Documentação",
+        "items": [
+          {
+            "id": "15C-5.1",
+            "code": "NORMAM-15C-5.1",
+            "requirement": "Manual de Operações DP",
+            "description": "Manual com procedimentos operacionais do sistema DP",
+            "evidences": ["Manual atualizado", "Controle de revisão"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-5.2",
+            "code": "NORMAM-15C-5.2",
+            "requirement": "DP Logbook",
+            "description": "Livro de registro de operações DP",
+            "evidences": ["Logbook preenchido", "Assinaturas dos operadores"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-5.3",
+            "code": "NORMAM-15C-5.3",
+            "requirement": "Relatórios de Incidentes",
+            "description": "Registro de incidentes e quase-acidentes em operações DP",
+            "evidences": ["Relatórios de incidentes", "Análise de causa raiz"],
+            "criticality": "major"
+          },
+          {
+            "id": "15C-5.4",
+            "code": "NORMAM-15C-5.4",
+            "requirement": "Registros de Treinamento",
+            "description": "Documentação de treinamentos da tripulação DP",
+            "evidences": ["Matriz de treinamentos", "Certificados individuais"],
+            "criticality": "major"
+          }
+        ]
+      },
+      {
+        "id": "15C-6",
+        "title": "Requisitos de Inspeção e Certificação",
+        "items": [
+          {
+            "id": "15C-6.1",
+            "code": "NORMAM-15C-6.1",
+            "requirement": "Inspeção Anual",
+            "description": "Inspeção anual do sistema DP por sociedade classificadora",
+            "evidences": ["Relatório de inspeção", "Certificado de conformidade"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-6.2",
+            "code": "NORMAM-15C-6.2",
+            "requirement": "DP Trials",
+            "description": "Testes de prova anuais do sistema DP",
+            "evidences": ["Relatório de DP Trials", "Capability Plots atualizados"],
+            "criticality": "critical"
+          },
+          {
+            "id": "15C-6.3",
+            "code": "NORMAM-15C-6.3",
+            "requirement": "Vistoria da Autoridade Marítima",
+            "description": "Vistoria periódica pela Capitania dos Portos",
+            "evidences": ["Termo de vistoria", "Certificação nacional"],
+            "criticality": "critical"
+          }
+        ]
+      }
+    ]
+  },
+  "totalRequirements": 26,
+  "criticalRequirements": 18,
+  "majorRequirements": 8
 }
