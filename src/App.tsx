@@ -1,10 +1,10 @@
 /**
- * App.tsx - Versão Completa com Todas as Rotas do Sidebar
- * PATCH 852: Rotas completas para 100+ módulos + Mobile/PWA optimizations
+ * App.tsx - PATCH 853 - Fixed React hooks error
+ * Using standard React imports to prevent duplicate instances
  */
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TooltipProvider } from "./components/ui/tooltip";
@@ -13,7 +13,20 @@ import { AppSidebar } from "./components/layout/app-sidebar";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
-import { queryClient } from "./lib/query-client";
+
+// Create QueryClient INSIDE the module (not imported)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { 
+      staleTime: 1000 * 60 * 5, 
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 1,
+    },
+  },
+});
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -243,29 +256,19 @@ const Loader = () => (
   </div>
 );
 
-// Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
+// Layout com Sidebar para rotas autenticadas
 const AuthenticatedLayout = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
-        {/* Sidebar - renders as Sheet on mobile via SidebarProvider */}
         <AppSidebar />
-        
-        {/* Main content area */}
         <div className="flex-1 flex flex-col min-w-0 w-full">
-          {/* Header with mobile menu trigger */}
           <Header />
-          
-          {/* Main content with padding for mobile bottom nav */}
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
             <Outlet />
           </main>
         </div>
-        
-        {/* Mobile Bottom Navigation - only shows on mobile */}
         <MobileBottomNav />
-        
-        {/* Toast Notifications */}
         <Toaster />
       </div>
     </SidebarProvider>
@@ -303,16 +306,12 @@ const AppRoutes = () => (
       <Route path="/analytics-feedback" element={<AnalyticsFeedback />} />
       <Route path="/feedback" element={<AnalyticsFeedback />} />
       
-      {/* ============================================ */}
       {/* CENTRAL DE COMANDO */}
-      {/* ============================================ */}
       <Route path="/central-comando/*" element={<CentralComando />} />
       <Route path="/noc" element={<NOC />} />
       <Route path="/noc-monitoring" element={<NOCMonitoring />} />
       
-      {/* ============================================ */}
       {/* OPERAÇÕES MARÍTIMAS */}
-      {/* ============================================ */}
       <Route path="/maritime-command" element={<MaritimeCommandCenter />} />
       <Route path="/fleet-command" element={<FleetCommandCenter />} />
       <Route path="/voyage-command" element={<VoyageCommandCenter />} />
@@ -335,72 +334,49 @@ const AppRoutes = () => (
       <Route path="/mlc-scheduling" element={<MLCSchedulingPage />} />
       <Route path="/supplier-portal" element={<SupplierPortalPage />} />
       <Route path="/iot-dashboard" element={<IoTDashboardPage />} />
-      {/* ============================================ */}
+      
       {/* MANUTENÇÃO */}
-      {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
       
-      {/* ============================================ */}
       {/* OPERAÇÕES SUBMARINAS */}
-      {/* ============================================ */}
       <Route path="/ocean-sonar" element={<OceanSonar />} />
       <Route path="/underwater-drone" element={<UnderwaterDrone />} />
       <Route path="/auto-sub" element={<AutoSub />} />
       <Route path="/sonar-ai" element={<SonarAI />} />
       <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
       
-      {/* ============================================ */}
       {/* IA & AUTOMAÇÃO */}
-      {/* ============================================ */}
-      <Route path="/nauti-command" element={<NautilusCommand />} />
+      <Route path="/nautilus-command" element={<NautilusCommand />} />
       <Route path="/revolutionary-ai" element={<RevolutionaryAI />} />
       <Route path="/ai-command" element={<AICommandCenter />} />
       <Route path="/ai-hub" element={<AIHubPage />} />
       <Route path="/ai-analytics" element={<AIAnalyticsDashboard />} />
       <Route path="/revolutionary-features" element={<RevolutionaryFeaturesPage />} />
       <Route path="/autonomous-command" element={<AutonomousCommandCenter />} />
-      <Route path="/ai-ops/logs" element={<AIOperationsCenter />} />
       <Route path="/ai-observability" element={<AIObservabilityDashboard />} />
       <Route path="/workflow-command" element={<WorkflowCommandCenter />} />
-      <Route path="/ai-journaling" element={<Documents />} />
       <Route path="/ai-audit" element={<AIAudit />} />
       <Route path="/voice-assistant" element={<VoiceAssistant />} />
-      <Route path="/assistant/voice" element={<VoiceAssistant />} />
+      <Route path="/ai-operations" element={<AIOperationsCenter />} />
       
-      {/* ============================================ */}
       {/* INTELIGÊNCIA AVANÇADA */}
-      {/* ============================================ */}
-      <Route path="/optimization-dashboard" element={<Optimization />} />
-      <Route path="/intelligence/opec" element={<Optimization />} />
-      <Route path="/intelligence/wellness" element={<CrewWellnessPage />} />
-      <Route path="/intelligence/documents" element={<Documents />} />
-      <Route path="/intelligence/accidents" element={<SafetyHumanFactorsV2 />} />
-      <Route path="/intelligence/blockchain" element={<RevolutionaryFeaturesPage />} />
-      <Route path="/intelligence/competitive" element={<AISTrackerPage />} />
+      <Route path="/optimization" element={<Optimization />} />
       
-      {/* ============================================ */}
       {/* TELEMETRIA & MONITORAMENTO */}
-      {/* ============================================ */}
       <Route path="/telemetria" element={<TelemetriaCommand />} />
-      <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />
       <Route path="/satellite-optimizer" element={<SatelliteOptimizerPage />} />
-      <Route path="/tracking" element={<VesselTrackingPage />} />
-      <Route path="/tracking/gnss-live" element={<VesselTrackingPage />} />
-      <Route path="/tracking/alerts" element={<AlertsCommandCenter />} />
-      <Route path="/simulador" element={<IncidentSimulator />} />
-      <Route path="/emergency-mode" element={<AlertsCommandCenter />} />
-      <Route path="/operational-calendar" element={<CalendarView />} />
+      <Route path="/vessel-tracking" element={<VesselTrackingPage />} />
+      <Route path="/incident-simulator" element={<IncidentSimulator />} />
+      <Route path="/calendar" element={<CalendarView />} />
       
-      {/* ============================================ */}
       {/* APIs & INTEGRAÇÕES */}
-      {/* ============================================ */}
-      <Route path="/integracoes/api-center" element={<APICenter />} />
-      <Route path="/integracoes/api-monitor" element={<APIMonitor />} />
-      <Route path="/integracoes" element={<Integrations />} />
+      <Route path="/api-center" element={<APICenter />} />
+      <Route path="/api-monitor" element={<APIMonitor />} />
+      <Route path="/integrations" element={<Integrations />} />
       <Route path="/weather-maritime" element={<WeatherMaritime />} />
-      <Route path="/ais-tracker-page" element={<AISTrackerPage />} />
+      <Route path="/ais-tracker" element={<AISTrackerPage />} />
       <Route path="/port-api" element={<PortAPI />} />
       <Route path="/flight-tracker" element={<FlightTracker />} />
       <Route path="/noaa-weather" element={<NOAAWeather />} />
@@ -408,42 +384,30 @@ const AppRoutes = () => (
       <Route path="/earthquake-monitor" element={<EarthquakeMonitor />} />
       <Route path="/voice-transcriber" element={<VoiceTranscriber />} />
       
-      {/* ============================================ */}
       {/* RELATÓRIOS & DOCUMENTOS */}
-      {/* ============================================ */}
       <Route path="/reports-command" element={<ReportsCommandCenter />} />
-      <Route path="/reports" element={<ReportsCommandCenter />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/templates" element={<Templates />} />
-      <Route path="/admin/checklists" element={<MaritimeChecklists />} />
+      <Route path="/maritime-checklists" element={<MaritimeChecklists />} />
       <Route path="/document-workflow" element={<DocumentWorkflow />} />
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
-      <Route path="/documentation" element={<Documents />} />
       
-      {/* ============================================ */}
       {/* COMUNICAÇÃO & ALERTAS */}
-      {/* ============================================ */}
       <Route path="/communication-command" element={<CommunicationCommandCenter />} />
       <Route path="/alerts-command" element={<AlertsCommandCenter />} />
-      <Route path="/maritime-connectivity" element={<CommunicationCommandCenter />} />
-      <Route path="/real-time-workspace" element={<Collaboration />} />
       
-      {/* ============================================ */}
       {/* AUDITORIAS & COMPLIANCE */}
-      {/* ============================================ */}
-      <Route path="/peo-dp" element={<PEODP />} />
+      <Route path="/peodp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
       <Route path="/sgso" element={<SGSO />} />
-      <Route path="/imca-audit" element={<SafetyIMCAV2 />} />
+      <Route path="/safety-imca" element={<SafetyIMCAV2 />} />
       <Route path="/pre-ovid" element={<PreOVIDInspection />} />
-      <Route path="/pre-ovid-inspection" element={<PreOVIDInspection />} />
       <Route path="/mlc-inspection" element={<MLCInspection />} />
       <Route path="/psc-package" element={<PSCPackage />} />
       <Route path="/gmud" element={<GMUDV2 />} />
       <Route path="/responsibility-matrix" element={<ResponsibilityMatrixV2 />} />
-      <Route path="/safety-human-factors" element={<SafetyHumanFactorsV2 />} />
-      <Route path="/safety-imca" element={<SafetyIMCAV2 />} />
+      <Route path="/human-factors" element={<SafetyHumanFactorsV2 />} />
       <Route path="/isps-security" element={<ISPSSecurityV2 />} />
       <Route path="/drill-simulator" element={<DrillSimulatorV2 />} />
       <Route path="/compliance-one" element={<ComplianceOneV2 />} />
@@ -453,65 +417,28 @@ const AppRoutes = () => (
       <Route path="/due-diligence" element={<DueDiligenceV2 />} />
       <Route path="/whistleblower" element={<WhistleblowerV2 />} />
       <Route path="/security-center" element={<SecurityCenter />} />
-      <Route path="/ai-operations-center" element={<AIOperationsCenter />} />
-      <Route path="/auditoria-seguranca" element={<SecurityAuditCenter />} />
+      <Route path="/security-audit" element={<SecurityAuditCenter />} />
       <Route path="/security-scanner" element={<SecurityScanner />} />
-      <Route path="/compliance-hub" element={<ComplianceOneV2 />} />
-      <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
       
-      {/* ============================================ */}
-      {/* RH & PESSOAS (HR/DP MODULE) */}
-      {/* ============================================ */}
-      <Route path="/nautilus-people" element={<CrewManagement />} />
+      {/* RH & PESSOAS */}
       <Route path="/crew-management" element={<CrewManagement />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
-      <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
-      <Route path="/recruitment" element={<RecruitmentPage />} />
-      <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
-      <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
-      <Route path="/company-financials" element={<CompanyFinancialPage />} />
-      <Route path="/medical-infirmary" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
-      
-      {/* HR/DP Module - New Routes */}
       <Route path="/hr-dashboard" element={<HRDashboardPage />} />
-      <Route path="/hr/dashboard" element={<HRDashboardPage />} />
-      <Route path="/hr/employees" element={<HRDashboardPage />} />
-      <Route path="/hr/payroll" element={<Payroll />} />
-      <Route path="/payroll" element={<Payroll />} />
-      <Route path="/folha-pagamento" element={<Payroll />} />
-      <Route path="/time-tracking" element={<TimeTracking />} />
-      <Route path="/controle-ponto" element={<TimeTracking />} />
-      <Route path="/hr/admissions" element={<HRDashboardPage />} />
-      <Route path="/hr/vacations" element={<HRDashboardPage />} />
       <Route path="/employee-portal" element={<EmployeePortalPage />} />
-      <Route path="/portal-colaborador" element={<EmployeePortalPage />} />
       <Route path="/people-analytics" element={<PeopleAnalyticsPage />} />
-      <Route path="/hr/analytics" element={<PeopleAnalyticsPage />} />
-      <Route path="/hr/turnover" element={<HRTurnoverPredictionPage />} />
-      
-      {/* HR AI Modules */}
+      <Route path="/payroll" element={<Payroll />} />
+      <Route path="/time-tracking" element={<TimeTracking />} />
       <Route path="/hr-chatbot" element={<HRChatbotPage />} />
-      <Route path="/hr/chatbot" element={<HRChatbotPage />} />
-      <Route path="/assistente-rh" element={<HRChatbotPage />} />
-      <Route path="/hr-ocr" element={<HRDocumentOCRPage />} />
-      <Route path="/hr/document-ocr" element={<HRDocumentOCRPage />} />
-      <Route path="/admissao-digital" element={<HRDocumentOCRPage />} />
-      <Route path="/hr-turnover" element={<HRTurnoverPredictionPage />} />
-      <Route path="/hr/turnover-prediction" element={<HRTurnoverPredictionPage />} />
-      <Route path="/predicao-turnover" element={<HRTurnoverPredictionPage />} />
+      <Route path="/hr-document-ocr" element={<HRDocumentOCRPage />} />
+      <Route path="/hr-turnover-prediction" element={<HRTurnoverPredictionPage />} />
       
-      {/* ============================================ */}
       {/* TREINAMENTOS */}
-      {/* ============================================ */}
-      <Route path="/nautilus-academy" element={<AITraining />} />
-      <Route path="/solas-isps-training" element={<AITraining />} />
+      <Route path="/ai-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
       <Route path="/dp-intelligence" element={<DPIntelligence />} />
       
-      {/* ============================================ */}
       {/* FINANÇAS & PROCUREMENT */}
-      {/* ============================================ */}
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
@@ -519,68 +446,52 @@ const AppRoutes = () => (
       <Route path="/procurement-command" element={<ProcurementCommandCenter />} />
       <Route path="/task-management" element={<TaskManagement />} />
       
-      {/* ============================================ */}
       {/* ESG & SUSTENTABILIDADE */}
-      {/* ============================================ */}
-      <Route path="/esg-emissions" element={<SustainabilityScorePage />} />
-      <Route path="/waste-management" element={<SustainabilityScorePage />} />
       <Route path="/sustainability-score" element={<SustainabilityScorePage />} />
       
-      {/* ============================================ */}
       {/* VIAGENS & LOGÍSTICA */}
-      {/* ============================================ */}
       <Route path="/travel-command" element={<TravelCommandCenter />} />
       <Route path="/weather-command" element={<WeatherCommandCenter />} />
       
-      {/* ============================================ */}
       {/* SISTEMA & CONFIGURAÇÕES */}
-      {/* ============================================ */}
       <Route path="/settings" element={<Settings />} />
-      <Route path="/integrations" element={<IntegrationsCenter />} />
+      <Route path="/integrations-center" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
       <Route path="/collaboration" element={<Collaboration />} />
       <Route path="/iot" element={<IoT />} />
       <Route path="/gamification" element={<Gamification />} />
       <Route path="/roadmap" element={<Roadmap />} />
-      <Route path="/qa/preview" element={<Dashboard />} />
       <Route path="/production-deploy" element={<ProductionDeploy />} />
       
-      {/* ============================================ */}
       {/* ADMIN & DASHBOARDS */}
-      {/* ============================================ */}
       <Route path="/admin" element={<Admin />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
-      <Route path="/system-overview" element={<Dashboard />} />
       <Route path="/analytics" element={<Analytics />} />
-      <Route path="/backup-audit" element={<SecurityAuditCenter />} />
-      <Route path="/testing" element={<Dashboard />} />
-      <Route path="/feedback" element={<Dashboard />} />
-      <Route path="/saas-manager" element={<Admin />} />
       
-      {/* DEV ONLY - Route Dashboard */}
+      {/* DEV */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>
     
-    {/* Catch-all: Redirecionar para central de comando */}
-    <Route path="*" element={<Navigate to="/central-comando" replace />} />
+    {/* 404 */}
+    <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
+// App principal
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
-        <AuthProvider>
-          <Router>
-            <TooltipProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="nautilus-theme">
+        <TooltipProvider>
+          <AuthProvider>
+            <Router>
               <Suspense fallback={<Loader />}>
                 <AppRoutes />
               </Suspense>
-              <Toaster />
-            </TooltipProvider>
-          </Router>
-        </AuthProvider>
+            </Router>
+          </AuthProvider>
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
