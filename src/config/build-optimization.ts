@@ -26,16 +26,16 @@ export const mobileBuildConfig: Partial<UserConfig["build"]> = {
     },
   },
   
-  // Code splitting
+  // Code splitting - IMPORTANT: Keep React in same chunk as UI to prevent useRef errors
   rollupOptions: {
     output: {
-      // Manual chunks for better caching
+      // Manual chunks for better caching - Keep Radix with React to share context
       manualChunks: {
-        // Core React (rarely changes)
-        "vendor-react": ["react", "react-dom", "react-router-dom"],
-        
-        // UI Components
-        "vendor-ui": [
+        // Core React + UI Components (MUST be together for hooks to work)
+        "vendor-react": [
+          "react", 
+          "react-dom", 
+          "react-router-dom",
           "@radix-ui/react-dialog",
           "@radix-ui/react-dropdown-menu",
           "@radix-ui/react-popover",
