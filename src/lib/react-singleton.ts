@@ -1,17 +1,70 @@
 /**
- * React Singleton - Ensures single React instance
- * This file is imported early to guarantee React is loaded once
+ * React Singleton - CRITICAL: Ensures single React instance
+ * This file MUST be imported first in main.tsx to prevent duplicate React issues
+ * 
+ * Error this prevents:
+ * - "Cannot read properties of null (reading 'useEffect')"
+ * - "Invalid hook call. Hooks can only be called inside of the body of a function component"
  */
-import * as React from "react";
+
+// Import React hooks directly to ensure they're from the same instance
+import React, { 
+  useState, 
+  useEffect, 
+  useCallback, 
+  useMemo, 
+  useRef, 
+  useContext,
+  useReducer,
+  useLayoutEffect,
+  useImperativeHandle,
+  useDebugValue,
+  useDeferredValue,
+  useId,
+  useInsertionEffect,
+  useSyncExternalStore,
+  useTransition
+} from "react";
+
 import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
-// Export React to ensure single instance is used everywhere
-export { React, ReactDOM };
-
-// Validation - log if multiple instances detected
+// Attach to window to ensure global singleton
 if (typeof window !== "undefined") {
-  const existingReact = (window as unknown as { __REACT_DEVTOOLS_GLOBAL_HOOK__?: { renderers?: Map<number, unknown> } }).__REACT_DEVTOOLS_GLOBAL_HOOK__;
-  if (existingReact?.renderers && existingReact.renderers.size > 1) {
-    console.warn("[React Singleton] Multiple React renderers detected!");
+  const win = window as unknown as { 
+    React?: typeof React; 
+    ReactDOM?: typeof ReactDOM;
+    __REACT_SINGLETON_INITIALIZED__?: boolean;
+  };
+  
+  // Only initialize once
+  if (!win.__REACT_SINGLETON_INITIALIZED__) {
+    win.React = React;
+    win.ReactDOM = ReactDOM;
+    win.__REACT_SINGLETON_INITIALIZED__ = true;
   }
 }
+
+// Re-export everything for consistent imports
+export { 
+  React, 
+  ReactDOM, 
+  createRoot,
+  useState, 
+  useEffect, 
+  useCallback, 
+  useMemo, 
+  useRef, 
+  useContext,
+  useReducer,
+  useLayoutEffect,
+  useImperativeHandle,
+  useDebugValue,
+  useDeferredValue,
+  useId,
+  useInsertionEffect,
+  useSyncExternalStore,
+  useTransition
+};
+
+export default React;

@@ -3,7 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// Fix for multiple React instances and ESM compatibility
+// PATCH 852: Fix for multiple React instances
+// This configuration ensures all React imports resolve to the same instance
 export default defineConfig(({ mode }) => ({
   base: "/",
   server: {
@@ -11,15 +12,22 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     strictPort: true,
     hmr: { overlay: false },
+    // Force dependency pre-bundling on every restart in dev
+    watch: {
+      usePolling: false,
+    },
   },
   plugins: [
-    react(),
+    react({
+      // Use automatic JSX runtime
+      jsxImportSource: undefined,
+    }),
     mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Force single React instance - CRITICAL for hooks to work
+      // CRITICAL: Force ALL React imports to single instance
       "react": path.resolve(__dirname, "node_modules/react"),
       "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
       "react-dom/client": path.resolve(__dirname, "node_modules/react-dom/client"),
@@ -37,6 +45,7 @@ export default defineConfig(({ mode }) => ({
       "react/jsx-runtime",
       "react/jsx-dev-runtime",
       "@tanstack/react-query",
+      "@tanstack/query-core",
       "@radix-ui/react-dialog",
       "@radix-ui/react-dropdown-menu",
       "@radix-ui/react-popover",
@@ -45,6 +54,7 @@ export default defineConfig(({ mode }) => ({
       "@radix-ui/react-primitive",
       "lodash-es",
       "framer-motion",
+      "scheduler",
     ],
   },
   build: {
@@ -60,8 +70,8 @@ export default defineConfig(({ mode }) => ({
       output: {
         // Separate React into its own chunk to prevent duplication
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-dom/client'],
-          'query-vendor': ['@tanstack/react-query'],
+          'react-core': ['react', 'react-dom', 'react-dom/client', 'scheduler'],
+          'react-query': ['@tanstack/react-query', '@tanstack/query-core'],
         },
       },
     },
@@ -74,7 +84,9 @@ export default defineConfig(({ mode }) => ({
       "react-is",
       "react/jsx-runtime",
       "react/jsx-dev-runtime",
+      "scheduler",
       "@tanstack/react-query",
+      "@tanstack/query-core",
       "@radix-ui/react-dialog",
       "@radix-ui/react-dropdown-menu",
       "@radix-ui/react-popover",
@@ -97,9 +109,10 @@ export default defineConfig(({ mode }) => ({
     esbuildOptions: {
       target: "esnext",
     },
-    // Force re-optimization when dependencies change
-    force: mode === "development",
+    // CRITICAL: Force cache invalidation
+    force: true,
   },
+  cacheDir: ".vite-cache-" + Date.now().toString(36).slice(-4),
   esbuild: {
     target: "esnext",
     legalComments: "none",
