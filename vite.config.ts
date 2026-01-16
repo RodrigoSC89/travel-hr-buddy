@@ -4,7 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 /**
- * PATCH 860: Ultimate React singleton fix - forces single React instance
+ * PATCH 861: Fixed React singleton - single cache directory
  */
 export default defineConfig(({ mode }) => {
   const reactPath = path.resolve(__dirname, "node_modules/react");
@@ -35,15 +35,11 @@ export default defineConfig(({ mode }) => {
       dedupe: [
         "react", "react-dom", "react-dom/client", "react-is",
         "react/jsx-runtime", "react/jsx-dev-runtime", "scheduler",
-        "@tanstack/react-query", "@radix-ui/react-context",
-        "@radix-ui/react-tooltip", "@radix-ui/react-dialog",
-        "@radix-ui/react-dropdown-menu", "@radix-ui/react-tabs",
-        "@radix-ui/react-accordion", "@radix-ui/react-select",
-        "@radix-ui/react-popover", "@radix-ui/react-primitive",
-        "@radix-ui/react-slot", "@radix-ui/react-compose-refs",
+        "@tanstack/react-query",
       ],
     },
-    cacheDir: `node_modules/.vite-${Date.now()}`,
+    // Fixed cache directory - no dynamic timestamp
+    cacheDir: "node_modules/.vite",
     build: {
       target: "esnext",
       minify: "esbuild",

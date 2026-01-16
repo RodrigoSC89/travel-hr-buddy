@@ -3,7 +3,8 @@
  * Mostra score por elemento, não conformidades pendentes e indicadores gerais
  */
 
-import React, { useMemo } from "react";
+import * as React from "react";
+const { useMemo } = React;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";

@@ -3,7 +3,8 @@
  * Gera templates e sugestões contextuais para cada requisito PEOTRAM 2024
  */
 
-import React, { useState, useCallback } from "react";
+import * as React from "react";
+const { useState, useCallback } = React;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
