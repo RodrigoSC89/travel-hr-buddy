@@ -5,12 +5,11 @@ import { componentTagger } from "lovable-tagger";
 import viteCompression from "vite-plugin-compression";
 
 /**
- * PATCH 870: Optimized for slow connections
- * - Gzip + Brotli compression
- * - Aggressive code splitting
- * - React singleton fix
+ * PATCH 871: FINAL React singleton fix
+ * The key insight: use a SINGLE cache directory and ensure all React imports resolve to same file
  */
 export default defineConfig(({ mode }) => {
+  // Resolve to exact React paths to prevent duplicates
   const reactPath = path.resolve(__dirname, "node_modules/react");
   const reactDomPath = path.resolve(__dirname, "node_modules/react-dom");
   
@@ -25,14 +24,14 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mode === "development" && componentTagger(),
-      // PATCH 870: Gzip compression
+      // Gzip compression
       viteCompression({
         algorithm: "gzip",
         ext: ".gz",
-        threshold: 1024, // Only compress files > 1KB
+        threshold: 1024,
         deleteOriginFile: false,
       }),
-      // PATCH 870: Brotli compression (better than gzip)
+      // Brotli compression
       viteCompression({
         algorithm: "brotliCompress",
         ext: ".br",
@@ -43,67 +42,68 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        // CRITICAL: Force all React imports to same path
         "react": reactPath,
         "react-dom": reactDomPath,
-        "react-dom/client": path.resolve(__dirname, "node_modules/react-dom/client"),
-        "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
-        "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
+        "react-dom/client": path.resolve(reactDomPath, "client"),
+        "react/jsx-runtime": path.resolve(reactPath, "jsx-runtime"),
+        "react/jsx-dev-runtime": path.resolve(reactPath, "jsx-dev-runtime"),
         "scheduler": path.resolve(__dirname, "node_modules/scheduler"),
       },
       dedupe: [
-        "react", "react-dom", "react-dom/client", "react-is",
-        "react/jsx-runtime", "react/jsx-dev-runtime", "scheduler",
+        "react", 
+        "react-dom", 
+        "react-dom/client",
+        "react-is",
+        "react/jsx-runtime", 
+        "react/jsx-dev-runtime", 
+        "scheduler",
         "@tanstack/react-query",
       ],
     },
-    cacheDir: "node_modules/.vite-fresh",
+    // PATCH 871: Single stable cache directory
+    cacheDir: "node_modules/.vite_cache",
     build: {
       target: "esnext",
       minify: "esbuild",
       sourcemap: false,
-      // PATCH 870: Smaller chunks for faster loading
       chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
-          // PATCH 870: Aggressive code splitting
+          // PATCH 871: Put React + Query in SAME chunk
           manualChunks: (id) => {
-            // React core (CRITICAL: keep React + Query together)
+            // All React-related must go together
             if (
               id.includes("node_modules/react") || 
               id.includes("node_modules/scheduler") ||
+              id.includes("node_modules/use-sync-external-store") ||
               id.includes("@tanstack/react-query")
             ) {
-              return "react-core";
+              return "react-vendor";
             }
-            // UI components
             if (id.includes("@radix-ui")) return "radix-ui";
-            // Charts (heavy, lazy load)
             if (id.includes("recharts") || id.includes("chart.js")) return "charts";
-            // AI/ML (very heavy, lazy load)
-            if (id.includes("openai") || id.includes("tensorflow") || id.includes("onnx")) return "ai";
-            // Supabase
             if (id.includes("@supabase")) return "supabase";
-            // Icons
             if (id.includes("lucide-react")) return "icons";
-            // Forms
-            if (id.includes("react-hook-form") || id.includes("zod")) return "forms";
-            // Date utilities
-            if (id.includes("date-fns")) return "date-utils";
           },
         },
       },
     },
     optimizeDeps: {
+      // PATCH 871: Pre-bundle React ecosystem together
       include: [
         "react", 
         "react-dom", 
         "react-dom/client", 
         "scheduler", 
         "@tanstack/react-query",
-        "react-is"
+        "react-is",
+        "use-sync-external-store",
+        "use-sync-external-store/shim",
       ],
       exclude: ["@tensorflow/tfjs", "onnxruntime-web", "tesseract.js"],
-      force: true,
+      // PATCH 871: Force clean rebuild
+      force: mode === "development",
       esbuildOptions: {
         define: {
           global: 'globalThis',
