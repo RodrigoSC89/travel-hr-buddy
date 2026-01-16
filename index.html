@@ -17,15 +17,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <!-- Cache Control - Force fresh resources -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <!-- PATCH 870: Removed aggressive no-cache for better PWA performance -->
     
-    <!-- Font Preconnect -->
+    <!-- API Preconnect - Critical for slow connections -->
+    <link rel="preconnect" href="https://vnbptmixvwropvanyhdb.supabase.co" crossorigin="anonymous">
+    <link rel="dns-prefetch" href="https://vnbptmixvwropvanyhdb.supabase.co">
+    
+    <!-- Font Preconnect - System fonts preferred for speed -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
     
     <!-- Asset Preload -->
     <link rel="preload" as="image" href="/icons/nauti-one-logo.png" type="image/png" />

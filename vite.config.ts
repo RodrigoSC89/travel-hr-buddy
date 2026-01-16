@@ -2,10 +2,13 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
+import viteCompression from "vite-plugin-compression";
 
 /**
- * PATCH 862: Force React singleton by bundling React + Query together
- * The key fix is putting @tanstack/react-query in the same chunk as React
+ * PATCH 870: Optimized for slow connections
+ * - Gzip + Brotli compression
+ * - Aggressive code splitting
+ * - React singleton fix
  */
 export default defineConfig(({ mode }) => {
   const reactPath = path.resolve(__dirname, "node_modules/react");
@@ -22,6 +25,20 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mode === "development" && componentTagger(),
+      // PATCH 870: Gzip compression
+      viteCompression({
+        algorithm: "gzip",
+        ext: ".gz",
+        threshold: 1024, // Only compress files > 1KB
+        deleteOriginFile: false,
+      }),
+      // PATCH 870: Brotli compression (better than gzip)
+      viteCompression({
+        algorithm: "brotliCompress",
+        ext: ".br",
+        threshold: 1024,
+        deleteOriginFile: false,
+      }),
     ].filter(Boolean),
     resolve: {
       alias: {
@@ -39,17 +56,18 @@ export default defineConfig(({ mode }) => {
         "@tanstack/react-query",
       ],
     },
-    // Force new cache to invalidate old chunks
     cacheDir: "node_modules/.vite-fresh",
     build: {
       target: "esnext",
       minify: "esbuild",
       sourcemap: false,
+      // PATCH 870: Smaller chunks for faster loading
+      chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
-          // CRITICAL: Bundle React AND React-Query together in same chunk
+          // PATCH 870: Aggressive code splitting
           manualChunks: (id) => {
-            // React + React Query MUST be in same chunk
+            // React core (CRITICAL: keep React + Query together)
             if (
               id.includes("node_modules/react") || 
               id.includes("node_modules/scheduler") ||
@@ -57,13 +75,25 @@ export default defineConfig(({ mode }) => {
             ) {
               return "react-core";
             }
+            // UI components
             if (id.includes("@radix-ui")) return "radix-ui";
+            // Charts (heavy, lazy load)
+            if (id.includes("recharts") || id.includes("chart.js")) return "charts";
+            // AI/ML (very heavy, lazy load)
+            if (id.includes("openai") || id.includes("tensorflow") || id.includes("onnx")) return "ai";
+            // Supabase
+            if (id.includes("@supabase")) return "supabase";
+            // Icons
+            if (id.includes("lucide-react")) return "icons";
+            // Forms
+            if (id.includes("react-hook-form") || id.includes("zod")) return "forms";
+            // Date utilities
+            if (id.includes("date-fns")) return "date-utils";
           },
         },
       },
     },
     optimizeDeps: {
-      // Pre-bundle all React-related packages together
       include: [
         "react", 
         "react-dom", 
@@ -73,10 +103,8 @@ export default defineConfig(({ mode }) => {
         "react-is"
       ],
       exclude: ["@tensorflow/tfjs", "onnxruntime-web", "tesseract.js"],
-      // Force fresh optimization
       force: true,
       esbuildOptions: {
-        // Ensure single React instance in esbuild
         define: {
           global: 'globalThis',
         },
