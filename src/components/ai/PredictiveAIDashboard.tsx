@@ -449,13 +449,13 @@ export function PredictiveAIDashboard() {
               <div className="space-y-4">
                 {modelMetrics.map((model) => (
                   <div 
-                    key={model.name}
+                    key={model.modelName}
                     className="p-4 rounded-lg border bg-card"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div>
-                        <h4 className="font-medium capitalize">{model.name.replace('_', ' ')}</h4>
-                        <p className="text-sm text-muted-foreground">{model.version}</p>
+                        <h4 className="font-medium capitalize">{model.modelName.replace('_', ' ')}</h4>
+                        <p className="text-sm text-muted-foreground">{model.modelVersion}</p>
                       </div>
                       <Badge className={cn(
                         "border",
@@ -471,7 +471,7 @@ export function PredictiveAIDashboard() {
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <p className="text-muted-foreground">Algoritmo</p>
-                        <p className="font-medium">{model.version}</p>
+                        <p className="font-medium">{model.modelVersion}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Features</p>

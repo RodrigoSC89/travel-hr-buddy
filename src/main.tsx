@@ -1,8 +1,12 @@
-// main.tsx - PATCH 851 - React singleton initialization
-// Import React singleton FIRST to ensure single instance
-import "@/lib/react-singleton";
-import * as React from "react";
-import { createRoot } from "react-dom/client";
+/**
+ * main.tsx - PATCH 852 - React singleton initialization
+ * CRITICAL: Import order matters to prevent duplicate React instances
+ */
+
+// Step 1: Import React singleton FIRST
+import { React, createRoot } from "@/lib/react-singleton";
+
+// Step 2: Other imports
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";

@@ -1,11 +1,10 @@
 /**
  * App.tsx - Versão Completa com Todas as Rotas do Sidebar
- * PATCH: Rotas completas para 100+ módulos + Mobile/PWA optimizations
+ * PATCH 852: Rotas completas para 100+ módulos + Mobile/PWA optimizations
  */
-import * as React from "react";
-import { Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TooltipProvider } from "./components/ui/tooltip";
@@ -14,6 +13,7 @@ import { AppSidebar } from "./components/layout/app-sidebar";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
+import { queryClient } from "./lib/query-client";
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -232,12 +232,6 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const ExecutiveDashboard = lazy(() => import("@/pages/ExecutiveDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 
-// Query client
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { staleTime: 1000 * 60 * 5, retry: 1 },
-  },
-});
 
 // Loader
 const Loader = () => (
