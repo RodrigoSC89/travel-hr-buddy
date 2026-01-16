@@ -70,15 +70,31 @@ serve(async (req: Request) => {
   }
 
   try {
-    const { messages, systemPrompt, action } = await req.json();
+    const body = await req.json();
+    const { messages, systemPrompt, action } = body;
+    
+    // Health check ping
+    if (action === "ping" || action === "health-check" || body.test === true) {
+      return new Response(JSON.stringify({ 
+        status: "ok",
+        service: "peotram-ai-chat",
+        timestamp: new Date().toISOString()
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
       console.error("LOVABLE_API_KEY is not configured");
       throw new Error("LOVABLE_API_KEY is not configured");
     }
+    
+    // Ensure messages is an array
+    const messageArray = Array.isArray(messages) ? messages : [];
 
-    console.log("Processing PEOTRAM AI chat request with", messages?.length || 0, "messages, action:", action);
+    console.log("Processing PEOTRAM AI chat request with", messageArray.length, "messages, action:", action);
 
     // Build the full system prompt based on action
     let fullSystemPrompt = systemPrompt || SYSTEM_PROMPT;
@@ -122,7 +138,7 @@ Forneça uma matriz estruturada com:
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: fullSystemPrompt },
-          ...messages,
+          ...messageArray,
         ],
       }),
     });
