@@ -161,7 +161,9 @@ export function logError(error: Error, context?: ErrorContext): void {
     if (context?.component) scope.setTag('component', context.component);
     if (context?.action) scope.setTag('action', context.action);
     if (context?.userId) scope.setUser({ id: context.userId });
-    scope.setContext('error_context', context || {});
+    if (context) {
+      scope.setContext('error_context', context as Record<string, unknown>);
+    }
     Sentry.captureException(error);
   });
 }
