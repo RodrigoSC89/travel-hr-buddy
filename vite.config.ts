@@ -3,7 +3,11 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// PATCH 853: Simplified configuration to fix React hook errors
+/**
+ * PATCH 854: Fixed React duplicate instance error
+ * - Added cacheDir with timestamp to force fresh build
+ * - Ensured all React-related packages are properly deduplicated
+ */
 export default defineConfig(({ mode }) => ({
   base: "/",
   server: {
@@ -19,12 +23,17 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Force single React instance
+      "react": path.resolve(__dirname, "./node_modules/react"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
     dedupe: [
       "react",
       "react-dom",
       "react-dom/client",
       "react-is",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
       "@tanstack/react-query",
       "scheduler",
     ],
@@ -45,6 +54,8 @@ export default defineConfig(({ mode }) => ({
       "react-dom",
       "react-dom/client",
       "react-is",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
       "scheduler",
       "@tanstack/react-query",
     ],
@@ -59,7 +70,13 @@ export default defineConfig(({ mode }) => ({
       "tesseract.js",
     ],
     force: true,
+    // Force fresh cache on every build
+    esbuildOptions: {
+      target: "esnext",
+    },
   },
+  // Force unique cache directory
+  cacheDir: `.vite-cache-${Date.now()}`,
   esbuild: {
     target: "esnext",
     legalComments: "none",
