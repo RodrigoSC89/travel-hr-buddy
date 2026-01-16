@@ -107,11 +107,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core (carrega primeiro)
-          'core': ['react', 'react-dom', 'react-router-dom'],
-          
-          // UI Components
-          'ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+          // Core + UI (MUST be together for React hooks to work correctly)
+          'core': ['react', 'react-dom', 'react-router-dom', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
           
           // Charts (lazy)
           'charts': ['recharts', 'chart.js'],
