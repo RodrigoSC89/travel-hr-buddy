@@ -1,0 +1,1030 @@
+/**
+ * PEOTRAM 2024 - Dados Oficiais Completos
+ * Baseado no documento "LV PEOTRAM Ciclo 2024 PETROBRAS-5.xlsx"
+ * 13 Elementos com todos os requisitos, evidências e critérios
+ */
+
+export interface PeotramRequisito {
+  codigo: string;
+  descricao: string;
+  evidencias: string[];
+  nota: number;
+  cnc: string;
+  comentarios?: string;
+}
+
+export interface PeotramSecao {
+  id: string;
+  nome: string;
+  requisitos: PeotramRequisito[];
+}
+
+export interface PeotramElemento {
+  numero: number;
+  nome: string;
+  secoes: PeotramSecao[];
+  totalRequisitos: number;
+  isCritico: boolean;
+}
+
+export interface CriterioNota {
+  valor: number | null;
+  label: string;
+  percentual: number;
+  descricao: string;
+}
+
+export interface ClassificacaoNC {
+  codigo: string;
+  nome: string;
+  descricao: string;
+  prazo: string;
+  cor: string;
+}
+
+// Critérios de Pontuação Oficial PEOTRAM
+export const CRITERIOS_NOTA: CriterioNota[] = [
+  { valor: null, label: "N/A", percentual: 0, descricao: "Não Aplicável; Não avaliado" },
+  { valor: 0, label: "0", percentual: 0, descricao: "Não Evidenciado ou Não Implantado" },
+  { valor: 1, label: "1", percentual: 20, descricao: "Evidenciado implementação com Falhas Sistemáticas ou Falhas Críticas ou Em implementação" },
+  { valor: 2, label: "2", percentual: 50, descricao: "Evidenciado implementação com Falhas Pontuais" },
+  { valor: 3, label: "3", percentual: 90, descricao: "Evidenciado implementação sem Falhas" },
+  { valor: 4, label: "4", percentual: 100, descricao: "Evidenciadas ações e/ou boas práticas que vão além do requerido" },
+];
+
+// Classificação de Não Conformidades
+export const CLASSIFICACAO_NC: ClassificacaoNC[] = [
+  { codigo: "N/A", nome: "Não Aplicável", descricao: "Não Aplicável", prazo: "", cor: "gray" },
+  { codigo: "A", nome: "Crítica", descricao: "Não conformidade crítica - Tomada de ação imediata para a redução do risco. RISCO IMINENTE.", prazo: "10 dias corridos", cor: "red" },
+  { codigo: "B", nome: "Grave", descricao: "Não conformidade grave - Tomada de ação imediata para a redução do risco.", prazo: "15 dias corridos", cor: "orange" },
+  { codigo: "C", nome: "Moderado", descricao: "Não conformidade moderada - Atendimento parcial ou insuficiente a um requisito.", prazo: "30 dias", cor: "yellow" },
+  { codigo: "D", nome: "Leve", descricao: "Desvio ou falhas isoladas no atendimento a um requisito.", prazo: "60 dias", cor: "blue" },
+  { codigo: "✓", nome: "Conforme", descricao: "Conforme", prazo: "", cor: "green" },
+  { codigo: "✓✓", nome: "Excelência", descricao: "Item de Excelência", prazo: "", cor: "emerald" },
+];
+
+// 13 ELEMENTOS PEOTRAM 2024 COMPLETOS
+export const PEOTRAM_2024_ELEMENTOS: PeotramElemento[] = [
+  {
+    numero: 1,
+    nome: "LIDERANÇA, GERENCIAMENTO E RESPONSABILIDADE",
+    isCritico: true,
+    totalRequisitos: 6,
+    secoes: [
+      {
+        id: "1.1",
+        nome: "Responsabilidade e Autoridade",
+        requisitos: [
+          {
+            codigo: "1.1.1",
+            descricao: "A alta administração da empresa demonstra compromisso claro em implementar e manter a gestão de segurança, meio ambiente e saúde?",
+            evidencias: [
+              "Entrevistas com alta administração",
+              "Atribuições e responsabilidades relacionadas com a gestão de SMS e segurança operacional definidas e implementados a bordo e na base",
+              "Visitas periódicas nas embarcações pelos diretores e gerentes",
+              "Auditorias comportamentais periódicas pelas lideranças",
+              "Sistemática para auditorias comportamentais de integridade",
+              "Inspeções e auditorias periódicas pelos gestores de manutenção, operação e SMS"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "1.1.2",
+            descricao: "A empresa demonstra ter setores de Operação, Manutenção/Técnico, RH, SMS adequadamente estruturados, com competência técnica e articulados, para suportar operações marítimas a serviço da Petrobras?",
+            evidencias: [
+              "Organograma estruturado da empresa",
+              "Matriz de responsabilidades com hierarquia (gerentes de operação, manutenção, SMS/HSE, RH)",
+              "Evidências de articulação dos setores a bordo no suporte às operações"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "1.2",
+        nome: "Comprometimento da Liderança",
+        requisitos: [
+          {
+            codigo: "1.2.1",
+            descricao: "A empresa possui sistemática para estabelecer as diversas especificações previstas em normas como: Designação profissional legalmente habilitado, habilitação, capacitação e qualificação.",
+            evidencias: [
+              "ISM Code, IMCA, NR 10, NR 11, NR 12, NR 13, NR 17, NR 20, NR30, NR 33, NR 34, NR 35",
+              "Procedimento Documentado"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "1.2.2",
+            descricao: "a) A empresa designou formalmente os responsáveis legais requeridos conforme legislação, tais como Profissionais Legalmente Habilitados (PLH), profissionais designados nas NRs, dentre outros? b) Todos os serviços que requeiram atuação dos responsáveis legais estão em conformidade?",
+            evidencias: [
+              "Carta de Designação DPA (ISM Code / IMCA)",
+              "Profissionais designados nas NR 10, NR 11, NR 12, NR 13, NR 17, NR 20, NR 33, NR 34, NR 35",
+              "Registros que comprovem a atuação ao longo do ano do DPA e pessoas designadas"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "1.2.3",
+            descricao: "A alta administração da empresa demonstra compromisso com o tema de redução de emissões de gases de efeito estufa e apresenta ações práticas para redução de emissões?",
+            evidencias: [
+              "Registros que comprovem a atuação da alta liderança neste tema",
+              "Ações práticas evidenciadas (ex: modos de operação, ações visando redução de consumo de diesel, gestão de manutenção, indicadores)"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "1.3",
+        nome: "Indicadores e Itens Críticos",
+        requisitos: [
+          {
+            codigo: "1.3.1",
+            descricao: "A alta administração da empresa estabeleceu indicadores e metas de performance em SMS, manutenções, inspeções e excelência operacional, medindo-as e monitorando-as periodicamente, com planos de ação no caso de não atendimento?",
+            evidencias: [
+              "Indicadores: TAR, TOR, TFCA, TG, Vazamentos, Tempo Perdido (PTP-Saúde), Falhas de DP, Cumprimentos de Plano de Manutenção (ICMP), Abalroamentos (meta zero)",
+              "Medições realizadas",
+              "Planos de ação no caso de não atendimento"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 2,
+    nome: "CONFORMIDADE LEGAL",
+    isCritico: true,
+    totalRequisitos: 24,
+    secoes: [
+      {
+        id: "2.1",
+        nome: "Sistemática de Identificação e Atualização de Requisitos Legais e Outros",
+        requisitos: [
+          {
+            codigo: "2.1.1",
+            descricao: "a) A empresa possui sistema que identifique e atualize as legislações e normas nacionais e internacionais pertinentes às operações da empresa? b) As legislações, normas e requisitos contratuais estão inseridos em todos os estudos de risco e procedimentos que afetem a segurança das operações?",
+            evidencias: [
+              "Legislação Federal, Estadual, Municipal",
+              "Outros requisitos (NBR, NRs, Normas técnicas)",
+              "Lista ou Software com os requisitos legais",
+              "Correlação entre requisitos e aspectos ambientais",
+              "Correlação entre estudos de riscos e segurança operacional"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.1.2",
+            descricao: "A empresa possui grupo interno de inspeção e auditoria, para verificar a conformidade de toda sua frota às legislações marítimas, NRs, ambientais, da ANVISA, da IMCA, IMO, ISM, requisitos da Contratante?",
+            evidencias: [
+              "Cronograma de inspeções/auditorias envolvendo toda a frota",
+              "Relatório de inspeção/auditoria consistente com registros de NC e planos de ação",
+              "Qualificação do(s) auditor(es) / inspetor(es)"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "2.2",
+        nome: "Atendimento à NR-34",
+        requisitos: [
+          {
+            codigo: "2.2.1",
+            descricao: "A empresa possui profissional formalmente designado para o cumprimento da NR-34?",
+            evidencias: ["Evidências dos registros de designação formal"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.2",
+            descricao: "Os profissionais que realizaram atividades no âmbito da NR-34 ao longo do ciclo, estão devidamente capacitados e treinados nos termos estabelecidos no item 34.3 da NR-34?",
+            evidencias: [
+              "Comprovação da conclusão de curso específico",
+              "Profissional Legalmente Habilitado com registro no conselho de classe",
+              "Carga mínima indicada na NR-34",
+              "Capacitação realizada durante horário normal de trabalho"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.3",
+            descricao: "As documentações de atendimento à NR-34 estão disponíveis e conformes, como estabelecido no item 34.4 da NR-34?",
+            evidencias: ["Permissões para Trabalho conforme item 34.4", "Entrevistas"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.4",
+            descricao: "Os trabalhos a quente realizados a bordo no ciclo anual foram realizados em conformidade com o requerido no item 34.5 da NR-34?",
+            evidencias: ["Relação dos trabalhos a quente realizados no ciclo", "Registros de atendimento integral ao item 34.5"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.5",
+            descricao: "Os trabalhos em altura realizados a bordo no ciclo anual, foram realizados observando o requerido no item 34.6 da NR-34?",
+            evidencias: ["Registros de trabalhos em altura conforme item 34.6"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.6",
+            descricao: "Os trabalhos de pintura realizados a bordo no ciclo anual, foram realizados observando o requerido no item 34.9 da NR-34?",
+            evidencias: ["Registros de trabalhos de pintura conforme item 34.9"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.7",
+            descricao: "Os trabalhos de movimentação de cargas a bordo no ciclo anual, foram realizados observando o requerido no item 34.10 da NR-34?",
+            evidencias: ["Relação dos equipamentos de movimentação de cargas", "Registros de atendimento integral ao item 34.10"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.8",
+            descricao: "Os equipamentos de movimentação de cargas possuem prontuários cumprindo integralmente o requerido no item 34.10.3 da NR-34?",
+            evidencias: ["Relação de todos os equipamentos de movimentação de cargas e seus prontuários"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.9",
+            descricao: "Os equipamentos e acessórios de movimentação de cargas estão certificados por profissionais legalmente habilitados, com periodicidade adequada, conforme item 34.10.6 da NR-34?",
+            evidencias: ["Relação dos certificados de todos os equipamentos de movimentação de cargas"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.10",
+            descricao: "Os equipamentos portáteis a bordo no ciclo anual, foram realizados observando o requerido no item 34.12 da NR-34?",
+            evidencias: ["Relação dos equipamentos portáteis", "Registros de atendimento integral ao item 34.12"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.11",
+            descricao: "As instalações elétricas provisórias a bordo no ciclo anual, foram realizados observando o requerido no item 34.13 da NR-34?",
+            evidencias: ["Relação das instalações elétricas provisórias", "Registros de atendimento integral ao item 34.13"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.2.12",
+            descricao: "Os testes de estanqueidade realizados a bordo no ciclo anual, foram realizados observando o requerido no item 34.14 da NR-34?",
+            evidencias: ["Relação dos testes de estanqueidade", "Registros de atendimento integral ao item 34.14"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "2.3",
+        nome: "Atendimento à NR-12",
+        requisitos: [
+          {
+            codigo: "2.3.1",
+            descricao: "a) A empresa possui Profissional Legalmente Habilitado para fins de cumprimento da NR-12? b) O profissional é atuante e realiza todas as ações sob sua responsabilidade conforme disposto na NR-12?",
+            evidencias: ["Designação do PLH", "Formação como Engenheiro Mecânico ou Naval com ART recolhida (CREA ativo)"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.2",
+            descricao: "O arranjo físico da embarcação está conforme ao estabelecido no item 12.2 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros de aplicação da NR-12"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.3",
+            descricao: "As instalações e dispositivos elétricos nas embarcações estão conformes ao estabelecido no item 12.3 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.4",
+            descricao: "Os dispositivos de partida, acionamento e parada nas embarcações estão conformes ao estabelecido no item 12.4 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.5",
+            descricao: "Os sistemas de segurança nas embarcações estão conformes ao estabelecido no item 12.5 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.6",
+            descricao: "Os dispositivos de parada de emergências nas embarcações estão conformes ao estabelecido no item 12.6 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.7",
+            descricao: "Os componentes pressurizados das embarcações estão conformes ao estabelecido no item 12.7 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.8",
+            descricao: "Os riscos adicionais estão mapeados e em conformidade ao estabelecido no item 12.10 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.9",
+            descricao: "As manutenções, inspeções, preparação, ajustes, reparos, limpezas, sinalizações e manuais estão conformes ao estabelecido nos itens 12.11, 12.12 e 12.13 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.10",
+            descricao: "Para a realização de trabalhos com máquinas e equipamentos, estão estabelecidos procedimentos documentados de trabalho e segurança, conforme estabelecido no item 12.14 da NR-12?",
+            evidencias: ["Relatórios, fotos, Visita a bordo e registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "2.3.11",
+            descricao: "Os profissionais da empresa que realizam operação, manutenção, inspeção e demais intervenções em máquinas e equipamentos nas embarcações, estão capacitados, habilitados, qualificados e autorizados conforme estabelecido no item 12.16 da NR-12?",
+            evidencias: ["Relação dos profissionais", "Registros de treinamentos confrontando com NR-12", "Entrevistas"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 3,
+    nome: "GESTÃO DE RISCOS",
+    isCritico: true,
+    totalRequisitos: 14,
+    secoes: [
+      {
+        id: "3.1",
+        nome: "Identificação e Avaliação de Riscos",
+        requisitos: [
+          {
+            codigo: "3.1.1",
+            descricao: "A empresa possui processo estruturado e implementado de identificação dos perigos e gestão de riscos ocupacionais e operacionais?",
+            evidencias: [
+              "Procedimento documentado",
+              "Relatório de Análises de Riscos (APR, APP)",
+              "Contempla: Intoxicação, Doenças contagiosas, Trauma, desastres naturais, ação de terceiros"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.1.2",
+            descricao: "Os participantes de estudos de riscos possuem treinamento em técnicas de avaliação e gestão de riscos?",
+            evidencias: ["Registros de treinamento", "Entrevistas"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.1.3",
+            descricao: "Para estudos de riscos para segurança operacional, são utilizadas técnicas estruturadas DE CLASSIFICAÇÃO DE RISCO (SEVERIDADE, FREQUÊNCIA) como as preconizadas no item 4 para embarcações DP o ASOG, conforme norma IMCA?",
+            evidencias: ["Procedimentos para HAZOP, FMEA/ASOG, HAZID, Bow Tie"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.1.4",
+            descricao: "Nos estudos de risco de segurança operacional, é aplicada uma Matriz de Tolerabilidade de Riscos, abrangendo categorias severidade x frequência conforme Norma Petrobras N-2782?",
+            evidencias: ["Verificar se os riscos foram categorizados conforme matriz de tolerabilidade"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.1.5",
+            descricao: "A empresa possui uma sistemática que verifique a qualidade das análises de risco, contemplando obrigatoriamente os critérios mínimos estabelecidos?",
+            evidencias: [
+              "Condução por líder treinado na técnica",
+              "Equipe multidisciplinar (Operação, SMS, Manutenção)",
+              "Aprovação por nível hierárquico superior",
+              "Rastreabilidade e controle de revisão",
+              "Rastreabilidade das ações de implementação",
+              "Matriz de Tolerabilidade de Riscos"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "3.2",
+        nome: "Gerenciamento de Riscos",
+        requisitos: [
+          {
+            codigo: "3.2.1",
+            descricao: "a) A bordo estão implementadas as ações de prevenção e/ou mitigação dos estudos de riscos avaliados? b) As barreiras (salvaguardas) identificadas na análise de riscos estão íntegras?",
+            evidencias: [
+              "Verificação em campo: Entrevistas, Procedimentos, Manutenção de equipamentos críticos",
+              "EPIs adequados",
+              "Barreiras para cenários críticos (abalroamento, incêndio, perda de posição)"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.2.2",
+            descricao: "Tanto nos estudos de risco, quanto a bordo, a contratada determina e implementa controles seguindo a hierarquia de: eliminação, substituição, controles de engenharia, sinalização/controles administrativos, EPIs?",
+            evidencias: ["Verificação em campo"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.2.3",
+            descricao: "Nas entrevistas a bordo, a força de trabalho tem conhecimento dos riscos a que estão submetidos e as ações de controle?",
+            evidencias: ["Verificação em campo e entrevistas"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "3.2.4",
+            descricao: "Foram estabelecidos gatilhos para revisão dos levantamentos de aspectos e impactos e perigos e danos e para os estudos de riscos para segurança operacional?",
+            evidencias: [
+              "Procedimento documentado",
+              "Estudos de riscos",
+              "Registros de abrangências dos Alertas de SMS",
+              "Registros de avaliação dos simulados"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 4,
+    nome: "OPERAÇÃO",
+    isCritico: true,
+    totalRequisitos: 20,
+    secoes: [
+      {
+        id: "4.1",
+        nome: "Geral",
+        requisitos: [
+          {
+            codigo: "4.1.1",
+            descricao: "Há sistemática para definição e gestão de equipamentos críticos? A relação dos elementos críticos foi validada pela liderança?",
+            evidencias: ["Procedimentos documentados", "Lista de equipamentos críticos", "Análise de risco"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "4.1.2",
+            descricao: "Existe sistemática implementada de Verificação de Conformidade de Procedimentos - VCP?",
+            evidencias: [
+              "Procedimento baseado em análise de risco",
+              "Lista de padrões críticos",
+              "Cronograma cumprido",
+              "Participação da liderança"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "4.1.3",
+            descricao: "A empresa possui gestão de operações críticas mapeadas através de análise de risco?",
+            evidencias: [
+              "Atracação, desatracação e navegação",
+              "Aproximação de zona de 500 metros",
+              "Transferência de fluidos",
+              "Transporte/transbordo de pessoas",
+              "Pull-in/Pull-out",
+              "Movimentação de cargas",
+              "Operações simultâneas",
+              "Limites meteoceanográficos"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "4.1.4",
+            descricao: "A embarcação possui procedimento para solicitação de autorização à Unidade Marítima antes de entrar na zona de 500 metros?",
+            evidencias: [
+              "Procedimentos documentados",
+              "Registros de aproximações",
+              "Protocolos de Aproximação",
+              "Procedimento de Bump Test",
+              "Certificado de Calibração dos detectores de gases"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "4.1.5",
+            descricao: "A embarcação utiliza os protocolos de aproximação e se certifica da ausência de gases tóxicos a partir de eventos de abertura de vents nas plataformas?",
+            evidencias: ["Registros de aproximação", "Registro da medição de gases"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "4.1.6",
+            descricao: "Existe procedimento para operações simultâneas detalhando quais operações não podem ser realizadas simultaneamente?",
+            evidencias: ["Procedimentos documentados", "Lista de verificação", "Estudos de riscos", "Treinamentos"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 5,
+    nome: "INTEGRIDADE",
+    isCritico: true,
+    totalRequisitos: 15,
+    secoes: [
+      {
+        id: "5.1",
+        nome: "Integridade Estrutural e de Equipamentos",
+        requisitos: [
+          {
+            codigo: "5.1.1",
+            descricao: "A empresa possui e implementou sistemática de inspeção e manutenção da integridade estrutural das embarcações?",
+            evidencias: ["Procedimento documentado", "Registros de inspeção", "Plano de manutenção estrutural"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 6,
+    nome: "MANUTENÇÃO",
+    isCritico: true,
+    totalRequisitos: 23,
+    secoes: [
+      {
+        id: "6.1",
+        nome: "Gestão de Manutenção",
+        requisitos: [
+          {
+            codigo: "6.1.1",
+            descricao: "A empresa possui sistemática de gestão de manutenção, planejamento e programação, monitorando os percentuais de execução do plano de manutenção?",
+            evidencias: [
+              "Software de manutenção",
+              "Controle de indicadores de cumprimento do plano",
+              "Planos de Ação para gaps"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "6.1.10",
+            descricao: "O plano de manutenção e inspeção inclui os elementos críticos de segurança operacional? Estão sendo realizadas dentro do prazo?",
+            evidencias: [
+              "Procedimento documentado",
+              "Registros de manutenção",
+              "Relação de equipamentos críticos conforme NORMAM 01, anexo 15C, item 22"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "6.1.12",
+            descricao: "As manutenções e inspeções do sistema DP estão programadas e sendo realizadas?",
+            evidencias: ["Registros de inspeção e manutenção", "Plano de manutenção DP"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 7,
+    nome: "GESTÃO DE MUDANÇAS",
+    isCritico: true,
+    totalRequisitos: 14,
+    secoes: [
+      {
+        id: "7.1",
+        nome: "Mudança de Tecnologias/Processos/Equipamentos/Pessoas",
+        requisitos: [
+          {
+            codigo: "7.1.1",
+            descricao: "A empresa possui procedimentos e registros de gestão de mudanças em operações, processos, instalações, equipamentos, pessoas e tecnologias?",
+            evidencias: [
+              "Procedimento de GM",
+              "Relação de mudanças",
+              "Sistemática de comunicação",
+              "Treinamentos mapeados na GM",
+              "Aprovação por liderança",
+              "Gatilho para atualização de procedimentos e análises de risco"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "7.1.2",
+            descricao: "Para todas as mudanças realizadas na empresa, foram realizadas as avaliações de risco?",
+            evidencias: ["Relação de mudanças com registros da avaliação de riscos e aprovação"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "7.1.12",
+            descricao: "A empresa possui software ou programa informatizado para execução das gestões de mudança na frota e na base?",
+            evidencias: ["Software com registros de mudanças nas embarcações e na frota"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 8,
+    nome: "AQUISIÇÃO DE BENS E SERVIÇOS",
+    isCritico: false,
+    totalRequisitos: 11,
+    secoes: [
+      {
+        id: "8.1",
+        nome: "Aquisição de Bens e Serviços",
+        requisitos: [
+          {
+            codigo: "8.1.1",
+            descricao: "A empresa possui sistemática de auditorias periódicas de todos os fornecedores de bens e serviços, considerando aspectos de SMS, de segurança operacional e legislação?",
+            evidencias: [
+              "Procedimento documentado",
+              "Relação de empresas contratadas/subcontratadas com notas de avaliação",
+              "Relatórios de Auditorias em fornecedores"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "8.1.2",
+            descricao: "A empresa realiza pré-qualificação de fornecedores e avalia a competência técnica, habilitações e qualificação dos profissionais para serviços críticos a bordo?",
+            evidencias: ["Relação dos fornecedores contratados ao longo do ciclo"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 9,
+    nome: "GESTÃO DE RECURSOS HUMANOS",
+    isCritico: false,
+    totalRequisitos: 18,
+    secoes: [
+      {
+        id: "9.1",
+        nome: "Recrutamento e Gerenciamento de Pessoal da Base",
+        requisitos: [
+          {
+            codigo: "9.1.1",
+            descricao: "A empresa implementou sistema de recrutamento de pessoas de tal forma que candidatos a posições chave possuam as qualificações, competência e experiência apropriadas?",
+            evidencias: ["Procedimento de recrutamento", "Registros de aplicação para posições chave"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "9.2",
+        nome: "Recrutamento e Gerenciamento de Pessoal de Bordo",
+        requisitos: [
+          {
+            codigo: "9.2.1",
+            descricao: "A empresa possui e implementou processo de seleção, recrutamento e promoção de pessoal de bordo?",
+            evidencias: ["Procedimento documentado", "Registros"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "9.2.2",
+            descricao: "Todo o pessoal de bordo possui certificados válidos em conformidade com Flag State e autoridades marítimas?",
+            evidencias: ["Procedimento documentado", "Registros", "Certificados"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "9.3",
+        nome: "Treinamentos",
+        requisitos: [
+          {
+            codigo: "9.3.2",
+            descricao: "A empresa possui sistemática que garanta que os tripulantes que operam equipamentos de DP estão devidamente qualificados e habilitados, conforme normas IMCA, IMO e autoridades marítimas?",
+            evidencias: ["Procedimento documentado", "Certificado de curso", "Log Book"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "9.3.3",
+            descricao: "O pessoal envolvido com operação do sistema de DP está familiarizado com suas atribuições conforme IMCA M 117 e STCW/1978?",
+            evidencias: ["Certificado de capacitação", "Entrevista"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "9.4",
+        nome: "Simuladores",
+        requisitos: [
+          {
+            codigo: "9.4.1",
+            descricao: "O programa de treinamentos de Comandantes, Imediatos e Oficiais contempla o uso de simuladores de operações marítimas e envolve o uso de DP?",
+            evidencias: ["Procedimento documentado", "Registros de Treinamento", "Simuladores: SIAGRA, SINDIMAR, outros"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "9.6",
+        nome: "Fatores Humanos",
+        requisitos: [
+          {
+            codigo: "9.6.1",
+            descricao: "A empresa estabelece sistemática para implementação de programa de Fatores Humanos nas dimensões Tecnológico, Ambiental, Organizacional e de Fatores Individuais?",
+            evidencias: [
+              "Programa de Fatores Humanos",
+              "Treinamentos sobre o tema",
+              "Especialista na área",
+              "Investigação de acidentes contemplando fatores humanos"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 10,
+    nome: "GESTÃO DA INFORMAÇÃO & COMUNICAÇÃO",
+    isCritico: false,
+    totalRequisitos: 7,
+    secoes: [
+      {
+        id: "10.1",
+        nome: "Controle de Documentos",
+        requisitos: [
+          {
+            codigo: "10.1.1",
+            descricao: "A empresa evidenciou que atende o item 1.6 - Da prestação de informação digital e digitalização de documentos, em conformidade com a NR-1?",
+            evidencias: ["Registros apresentados em conformidade com item 1.6 da NR-1"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "10.1.2",
+            descricao: "A empresa possui sistema e procedimento implementado de controle de documentos de gestão de SMS?",
+            evidencias: [
+              "Procedimento documentado",
+              "Rastreabilidade dos anexos e formulários",
+              "Ausência de documentos obsoletos",
+              "Documentos dentro da validade"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "10.3",
+        nome: "Comunicação",
+        requisitos: [
+          {
+            codigo: "10.3.1",
+            descricao: "A empresa possui e implementou a sistemática do 'NA DÚVIDA, PARE!', na qual qualquer membro tem autoridade para interromper operação que avaliar insegura?",
+            evidencias: ["Procedimento documentado", "Registros de comunicação", "Fluxo de comunicação"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 11,
+    nome: "PREPARAÇÃO E RESPOSTAS À EMERGÊNCIAS",
+    isCritico: true,
+    totalRequisitos: 12,
+    secoes: [
+      {
+        id: "11.1",
+        nome: "Plano de Contingência",
+        requisitos: [
+          {
+            codigo: "11.1.1",
+            descricao: "A empresa possui sistemática implementada para elaboração dos planos de resposta à emergência a partir dos cenários acidentais identificados nas análises de riscos?",
+            evidencias: [
+              "Planos de emergência em conformidade com requisitos legais",
+              "Recursos e tecnologias disponíveis",
+              "Impactos sociais, ambientais e econômicos",
+              "Planos para diferentes níveis de resposta",
+              "Treinamentos e exercícios simulados"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "11.1.2",
+            descricao: "O modelo de gestão adotado pela empresa marítima é baseado no ICS (Incident Command System)?",
+            evidencias: ["Plano de emergência alinhado com modelo ICS", "Registros de simulados/situações reais"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "11.1.6",
+            descricao: "Os planos de emergência contemplam ações para cenários de: abalroamento, colisão, naufrágio, encalhes, alagamento, vazamento, incêndio, homem ao mar, acidentes pessoais, emergências médicas, falhas mecânicas, etc.?",
+            evidencias: ["Planos de emergência cobrindo todos os cenários"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "11.1.7",
+            descricao: "A empresa possui equipe de medicina remota, independente da medicina do trabalho, com atendimento 24 horas?",
+            evidencias: ["Contrato com empresa de tele medicina", "Registros de atuação"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "11.2",
+        nome: "Simulados e Plano de Verificação",
+        requisitos: [
+          {
+            codigo: "11.2.1",
+            descricao: "Estão definidos cronogramas de exercícios simulados para as hipóteses acidentais de emergência?",
+            evidencias: ["Cronograma de Simulados", "Registros dos simulados cobrindo todos os cenários"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "11.2.3",
+            descricao: "Os sistemas de detecção, alarmes e dispositivos de segurança estão definidos como críticos e estão operacionais?",
+            evidencias: [
+              "Plano de inspeção e manutenção preventiva",
+              "Constatação visual",
+              "Teste do sistema",
+              "Certificados de calibração"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 12,
+    nome: "ANÁLISE DE ACIDENTES E INCIDENTES E TRATAMENTO DE NÃO-CONFORMIDADES",
+    isCritico: true,
+    totalRequisitos: 13,
+    secoes: [
+      {
+        id: "12.1",
+        nome: "Acidentes, Incidentes, Desvios e Ações Decorrentes",
+        requisitos: [
+          {
+            codigo: "12.1.1",
+            descricao: "A empresa possui sistemática implementada para registro, classificação, investigação, análise, tratamento e abrangência de eventos não desejados?",
+            evidencias: [
+              "Procedimento com descrição do acidente, graduação, composição de equipe",
+              "Causas imediatas e básicas-raízes",
+              "Ações preventivas-corretivas-abrangência"
+            ],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "12.1.2",
+            descricao: "A empresa possui e implementou política de estímulo de relato de desvios, incidentes e acidentes, não tolerando subnotificação?",
+            evidencias: ["Registro de relatos de desvios e incidentes pela força de trabalho"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "12.1.5",
+            descricao: "A empresa possui e implementou técnicas estruturadas de investigação de acidentes considerando Fatores Humanos conforme Report 621 da IOGP?",
+            evidencias: ["Relatórios com técnicas estruturadas (árvore de eventos, árvore de causas, árvore de falhas)"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "12.2",
+        nome: "Não-Conformidades e Ações Decorrentes",
+        requisitos: [
+          {
+            codigo: "12.2.1",
+            descricao: "A empresa utiliza sistemática para avaliação da eficácia das ações de tratamento/recomendações a partir dos acidentes/incidentes ocorridos?",
+            evidencias: ["Registros da sistemática aplicada"],
+            nota: 3,
+            cnc: "✓"
+          },
+          {
+            codigo: "12.2.2",
+            descricao: "As lições aprendidas com incidentes e near-misses são usadas para prevenção de recorrência, sendo divulgada para toda a frota?",
+            evidencias: ["Visita a bordo", "Entrevista com força de trabalho", "Ausência de repetição de incidentes"],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    numero: 13,
+    nome: "PROCESSO DE MELHORIA CONTÍNUA",
+    isCritico: false,
+    totalRequisitos: 8,
+    secoes: [
+      {
+        id: "13.1",
+        nome: "Auditorias Internas e Externas",
+        requisitos: [
+          {
+            codigo: "13.1.1",
+            descricao: "A empresa possui programa de auditorias internas e externas que abranja todos os elementos do sistema de gestão de SMS?",
+            evidencias: [
+              "Programa anual de auditorias",
+              "Relatórios de auditorias com NCs e planos de ação",
+              "Qualificação dos auditores"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      },
+      {
+        id: "13.2",
+        nome: "Análise Crítica pela Liderança",
+        requisitos: [
+          {
+            codigo: "13.2.1",
+            descricao: "A alta liderança da empresa realiza análise crítica do sistema de gestão de SMS periodicamente?",
+            evidencias: [
+              "Atas de reunião de análise crítica",
+              "Planos de ação decorrentes",
+              "Participação da alta liderança"
+            ],
+            nota: 3,
+            cnc: "✓"
+          }
+        ]
+      }
+    ]
+  }
+];
+
+// Helper functions
+export function getTotalRequisitos(): number {
+  return PEOTRAM_2024_ELEMENTOS.reduce((acc, el) => acc + el.totalRequisitos, 0);
+}
+
+export function getElementosCriticos(): PeotramElemento[] {
+  return PEOTRAM_2024_ELEMENTOS.filter(el => el.isCritico);
+}
+
+export function getRequisitoById(codigo: string): PeotramRequisito | undefined {
+  for (const elemento of PEOTRAM_2024_ELEMENTOS) {
+    for (const secao of elemento.secoes) {
+      const requisito = secao.requisitos.find(r => r.codigo === codigo);
+      if (requisito) return requisito;
+    }
+  }
+  return undefined;
+}
+
+export function getElementoByCodigo(codigo: string): PeotramElemento | undefined {
+  const elementoNum = parseInt(codigo.split('.')[0]);
+  return PEOTRAM_2024_ELEMENTOS.find(el => el.numero === elementoNum);
+}

@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import * as React from "react";
 
-// PATCH 620: Extended theme support with nautilus theme
+// PATCH 857: Fix React singleton - use React namespace to avoid multiple instances
 type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";
 
 type ThemeProviderProps = {
@@ -19,7 +19,7 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 };
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
@@ -27,14 +27,16 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  const [theme, setTheme] = React.useState<Theme>(() => {
+    try {
+      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    } catch {
+      return defaultTheme;
+    }
+  });
 
-  useEffect(() => {
+  React.useEffect(() => {
     const root = window.document.documentElement;
-
-    // PATCH 620: Remove all theme classes
     root.classList.remove("light", "dark", "nautilus", "high-contrast");
 
     if (theme === "system") {
@@ -42,22 +44,24 @@ export function ThemeProvider({
         .matches
         ? "dark"
         : "light";
-
       root.classList.add(systemTheme);
       return;
     }
 
-    // PATCH 620: Apply selected theme
     root.classList.add(theme);
   }, [theme]);
 
-  const value = {
+  const value = React.useMemo(() => ({
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
+    setTheme: (newTheme: Theme) => {
+      try {
+        localStorage.setItem(storageKey, newTheme);
+      } catch {
+        // Ignore localStorage errors
+      }
+      setTheme(newTheme);
     },
-  };
+  }), [theme, storageKey]);
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
@@ -67,10 +71,8 @@ export function ThemeProvider({
 }
 
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-
+  const context = React.useContext(ThemeProviderContext);
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider");
-
   return context;
 };
