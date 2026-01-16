@@ -4,7 +4,8 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 /**
- * PATCH 861: Fixed React singleton - single cache directory
+ * PATCH 862: Force React singleton by bundling React + Query together
+ * The key fix is putting @tanstack/react-query in the same chunk as React
  */
 export default defineConfig(({ mode }) => {
   const reactPath = path.resolve(__dirname, "node_modules/react");
@@ -38,26 +39,48 @@ export default defineConfig(({ mode }) => {
         "@tanstack/react-query",
       ],
     },
-    // Fixed cache directory - no dynamic timestamp
-    cacheDir: "node_modules/.vite",
+    // Force new cache to invalidate old chunks
+    cacheDir: "node_modules/.vite-fresh",
     build: {
       target: "esnext",
       minify: "esbuild",
       sourcemap: false,
       rollupOptions: {
         output: {
+          // CRITICAL: Bundle React AND React-Query together in same chunk
           manualChunks: (id) => {
-            if (id.includes("node_modules/react") || id.includes("node_modules/scheduler")) return "react-core";
+            // React + React Query MUST be in same chunk
+            if (
+              id.includes("node_modules/react") || 
+              id.includes("node_modules/scheduler") ||
+              id.includes("@tanstack/react-query")
+            ) {
+              return "react-core";
+            }
             if (id.includes("@radix-ui")) return "radix-ui";
-            if (id.includes("@tanstack/react-query")) return "query";
           },
         },
       },
     },
     optimizeDeps: {
-      include: ["react", "react-dom", "react-dom/client", "scheduler", "@tanstack/react-query"],
+      // Pre-bundle all React-related packages together
+      include: [
+        "react", 
+        "react-dom", 
+        "react-dom/client", 
+        "scheduler", 
+        "@tanstack/react-query",
+        "react-is"
+      ],
       exclude: ["@tensorflow/tfjs", "onnxruntime-web", "tesseract.js"],
+      // Force fresh optimization
       force: true,
+      esbuildOptions: {
+        // Ensure single React instance in esbuild
+        define: {
+          global: 'globalThis',
+        },
+      },
     },
     esbuild: { target: "esnext", jsx: "automatic" },
   };
