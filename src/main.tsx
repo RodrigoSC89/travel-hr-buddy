@@ -25,6 +25,33 @@ const initializeTheme = () => {
 
 initializeTheme();
 
+// Handle redirect path from 404.html (for direct URL access on SPAs)
+const handleRedirectPath = () => {
+  try {
+    // Check URL query param first (from 404.html redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectFromUrl = urlParams.get('redirect');
+    
+    if (redirectFromUrl && redirectFromUrl !== '/' && redirectFromUrl !== '/index.html') {
+      window.history.replaceState(null, '', decodeURIComponent(redirectFromUrl));
+      return;
+    }
+    
+    // Fallback to sessionStorage
+    const redirectPath = sessionStorage.getItem('redirectPath');
+    if (redirectPath && redirectPath !== '/' && redirectPath !== '/index.html') {
+      sessionStorage.removeItem('redirectPath');
+      if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+        window.history.replaceState(null, '', redirectPath);
+      }
+    }
+  } catch {
+    // Ignore errors in private browsing
+  }
+};
+
+handleRedirectPath();
+
 // Defer non-critical initializations - only after app is loaded
 const initializeOptionalFeatures = async () => {
   // Wait for app to be interactive first
