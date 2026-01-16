@@ -1,7 +1,7 @@
 /**
- * App.tsx - PATCH 872 - Fixed queryClient definition with direct React imports
+ * App.tsx - PATCH 873: Simplified with standard React imports
  */
-import React, { Suspense, lazy, useMemo } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -13,12 +13,19 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 
-// Initialize monitoring in production
-if (typeof window !== "undefined" && import.meta.env.PROD) {
-  import("./lib/monitoring").then(({ initMonitoring }) => {
-    initMonitoring();
-  });
-}
+// Create QueryClient at module level (standard pattern)
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { 
+      staleTime: 1000 * 60 * 5, 
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 1,
+    },
+  },
+});
 
 // ============================================
 // LAZY LOAD - PÁGINAS PRINCIPAIS
@@ -237,7 +244,6 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const ExecutiveDashboard = lazy(() => import("@/pages/ExecutiveDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 
-
 // Loader
 const Loader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
@@ -279,7 +285,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // Rotas internas
 const AppRoutes = () => (
-<Routes>
+  <Routes>
     {/* Public Routes */}
     <Route path="/auth" element={<Auth />} />
     <Route path="/landing" element={<LandingPage />} />
@@ -356,7 +362,7 @@ const AppRoutes = () => (
       <Route path="/optimization" element={<Optimization />} />
       
       {/* TELEMETRIA & MONITORAMENTO */}
-      <Route path="/telemetria" element={<TelemetriaCommand />} />
+      <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />
       <Route path="/satellite-optimizer" element={<SatelliteOptimizerPage />} />
       <Route path="/vessel-tracking" element={<VesselTrackingPage />} />
@@ -390,7 +396,7 @@ const AppRoutes = () => (
       <Route path="/alerts-command" element={<AlertsCommandCenter />} />
       
       {/* AUDITORIAS & COMPLIANCE */}
-      <Route path="/peodp" element={<PEODP />} />
+      <Route path="/peo-dp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
       <Route path="/sgso" element={<SGSO />} />
       <Route path="/safety-imca" element={<SafetyIMCAV2 />} />
@@ -399,7 +405,7 @@ const AppRoutes = () => (
       <Route path="/psc-package" element={<PSCPackage />} />
       <Route path="/gmud" element={<GMUDV2 />} />
       <Route path="/responsibility-matrix" element={<ResponsibilityMatrixV2 />} />
-      <Route path="/human-factors" element={<SafetyHumanFactorsV2 />} />
+      <Route path="/safety-human-factors" element={<SafetyHumanFactorsV2 />} />
       <Route path="/isps-security" element={<ISPSSecurityV2 />} />
       <Route path="/drill-simulator" element={<DrillSimulatorV2 />} />
       <Route path="/compliance-one" element={<ComplianceOneV2 />} />
@@ -413,7 +419,7 @@ const AppRoutes = () => (
       <Route path="/security-scanner" element={<SecurityScanner />} />
       
       {/* RH & PESSOAS */}
-      <Route path="/crew-management" element={<CrewManagement />} />
+      <Route path="/crew" element={<CrewManagement />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
       <Route path="/hr-dashboard" element={<HRDashboardPage />} />
@@ -469,20 +475,6 @@ const AppRoutes = () => (
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
-
-// PATCH 872: Create QueryClient OUTSIDE component to avoid recreation issues
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { 
-      staleTime: 1000 * 60 * 5, 
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-    mutations: {
-      retry: 1,
-    },
-  },
-});
 
 // App principal
 function App() {
