@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,6 @@ import {
   ArrowRight,
   CheckCircle,
   Loader2,
-  AlertTriangle,
   RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
@@ -49,123 +48,49 @@ type SignInFormData = z.infer<typeof signInSchema>;
 type SignUpFormData = z.infer<typeof signUpSchema>;
 type ResetFormData = z.infer<typeof resetSchema>;
 
-// Resilient login with retry logic
-const performResilientSignIn = async (
-  email: string, 
-  password: string,
-  maxRetries: number = 3
-): Promise<{ success: boolean; error: Error | null; retries: number }> => {
-  let lastError: Error | null = null;
-  
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (!error) {
-        return { success: true, error: null, retries: attempt };
-      }
-      
-      // Not a network error - return immediately
-      if (!error.message?.includes('Failed to fetch') && 
-          error.name !== 'AuthRetryableFetchError') {
-        return { success: false, error, retries: attempt };
-      }
-      
-      lastError = error;
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error("Erro desconhecido");
-      
-      // Only retry on network errors
-      if (!lastError.message?.includes('Failed to fetch')) {
-        return { success: false, error: lastError, retries: attempt };
-      }
-    }
-    
-    // Exponential backoff: 1s, 2s, 4s
-    if (attempt < maxRetries - 1) {
-      await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
-    }
-  }
-  
-  return { success: false, error: lastError, retries: maxRetries };
-};
-
 const Auth: React.FC = () => {
   const { user, isLoading: authLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
-  const [networkError, setNetworkError] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const hasAttemptedCleanup = useRef(false);
 
-  // Clear corrupted session on mount (only once)
-  useEffect(() => {
-    if (hasAttemptedCleanup.current) return;
-    hasAttemptedCleanup.current = true;
-    
-    const clearCorruptedSession = async () => {
-      try {
-        const storedSession = localStorage.getItem('sb-vnbptmixvwropvanyhdb-auth-token');
-        if (storedSession) {
-          try {
-            const parsed = JSON.parse(storedSession);
-            // If refresh_token exists but is very short (corrupted), clear it
-            if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
-              console.warn('[Auth] Clearing corrupted session token');
-              await supabase.auth.signOut();
-              localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
-            }
-          } catch {
-            // Invalid JSON, clear it
-            localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
-          }
-        }
-      } catch (error) {
-        console.warn('[Auth] Error clearing session:', error);
-      }
-    };
-
-    clearCorruptedSession();
-  }, []);
-
-  // Reset network error when user changes tabs or input
-  useEffect(() => {
-    setNetworkError(false);
-    setRetryCount(0);
-  }, [activeTab]);
-
-  // Call all hooks before any conditional returns
+  // All hooks must be called before any conditional returns
   const signInForm = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: "",
-      password: ""
-    }
+    defaultValues: { email: "", password: "" }
   });
 
   const signUpForm = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      fullName: ""
-    }
+    defaultValues: { email: "", password: "", confirmPassword: "", fullName: "" }
   });
 
   const resetForm = useForm<ResetFormData>({
     resolver: zodResolver(resetSchema),
-    defaultValues: {
-      email: ""
-    }
+    defaultValues: { email: "" }
   });
 
-  // Redirect if already authenticated (after all hooks)
+  // Single cleanup effect on mount - no state updates
+  useEffect(() => {
+    const cleanup = async () => {
+      try {
+        const stored = localStorage.getItem('sb-vnbptmixvwropvanyhdb-auth-token');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.refresh_token && parsed.refresh_token.length < 20) {
+            await supabase.auth.signOut();
+            localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
+          }
+        }
+      } catch {
+        localStorage.removeItem('sb-vnbptmixvwropvanyhdb-auth-token');
+      }
+    };
+    cleanup();
+  }, []);
+
+  // Redirect after all hooks
   if (user) {
     return <Navigate to="/" replace />;
   }
@@ -173,32 +98,16 @@ const Auth: React.FC = () => {
   const handleClearSession = async () => {
     try {
       setIsLoading(true);
-      
-      // Clear all auth-related storage
       await supabase.auth.signOut();
       
-      // Clear localStorage items
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && (key.includes('supabase') || key.includes('sb-'))) {
-          keysToRemove.push(key);
-        }
-      }
-      keysToRemove.forEach(key => localStorage.removeItem(key));
+      // Clear all supabase keys
+      Object.keys(localStorage)
+        .filter(k => k.includes('supabase') || k.includes('sb-'))
+        .forEach(k => localStorage.removeItem(k));
       
-      // Reset state
-      setNetworkError(false);
-      setRetryCount(0);
-      
-      toast.success("Sessão limpa com sucesso", {
-        description: "Tente fazer login novamente."
-      });
-    } catch (error) {
-      console.error('[Auth] Error clearing session:', error);
-      toast.error("Erro ao limpar sessão", {
-        description: "Tente recarregar a página."
-      });
+      toast.success("Sessão limpa", { description: "Tente fazer login novamente." });
+    } catch {
+      toast.error("Erro ao limpar sessão");
     } finally {
       setIsLoading(false);
     }
@@ -206,52 +115,26 @@ const Auth: React.FC = () => {
 
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
-    setNetworkError(false);
-    setRetryCount(0);
     
     try {
-      const result = await performResilientSignIn(data.email, data.password, 3);
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
       
-      setRetryCount(result.retries);
-      
-      if (result.success) {
-        // Login succeeded - don't show network error
-        setNetworkError(false);
-        toast.success("Login realizado com sucesso");
-        return;
-      }
-      
-      if (result.error) {
-        const errorMessage = result.error.message || "Erro desconhecido";
-        
-        // Check if it's a network-related error after all retries failed
-        if (errorMessage.includes('Failed to fetch') || 
-            result.error.name === 'AuthRetryableFetchError') {
-          setNetworkError(true);
-          toast.error("Erro de conexão", {
-            description: `Falha após ${result.retries + 1} tentativas. Verifique sua internet.`
-          });
-        } else if (errorMessage.includes('Invalid login credentials')) {
-          toast.error("Credenciais inválidas", {
-            description: "Email ou senha incorretos."
-          });
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
         } else {
-          toast.error("Erro no login", {
-            description: errorMessage
-          });
+          toast.error("Erro no login", { description: error.message });
         }
-      }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      
-      if (errorMessage.includes('Failed to fetch')) {
-        setNetworkError(true);
-        toast.error("Erro de conexão", {
-          description: "Verifique sua internet ou tente limpar a sessão."
-        });
       } else {
-        toast.error("Erro no login", { description: errorMessage });
+        toast.success("Login realizado com sucesso");
       }
+    } catch (err) {
+      toast.error("Erro no login", { 
+        description: err instanceof Error ? err.message : "Erro desconhecido" 
+      });
     } finally {
       setIsLoading(false);
     }
@@ -259,7 +142,6 @@ const Auth: React.FC = () => {
 
   const handleSignUp = async (data: SignUpFormData) => {
     setIsLoading(true);
-    setNetworkError(false);
     
     try {
       const redirectUrl = `${window.location.origin}/`;
@@ -269,25 +151,21 @@ const Auth: React.FC = () => {
         password: data.password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: {
-            full_name: data.fullName,
-          }
+          data: { full_name: data.fullName }
         }
       });
 
       if (error) {
-        if (error.message?.includes('Failed to fetch')) {
-          setNetworkError(true);
-        }
         toast.error("Erro no cadastro", { description: error.message });
       } else {
         toast.success("Cadastro realizado!", {
           description: "Verifique seu email para confirmar a conta."
         });
       }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      toast.error("Erro no cadastro", { description: errorMessage });
+    } catch (err) {
+      toast.error("Erro no cadastro", { 
+        description: err instanceof Error ? err.message : "Erro desconhecido" 
+      });
     } finally {
       setIsLoading(false);
     }
@@ -310,9 +188,8 @@ const Auth: React.FC = () => {
           description: "Verifique seu email para redefinir a senha."
         });
       }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      toast.error("Erro", { description: errorMessage });
+    } catch (err) {
+      toast.error("Erro", { description: err instanceof Error ? err.message : "Erro desconhecido" });
     } finally {
       setIsLoading(false);
     }
@@ -320,27 +197,22 @@ const Auth: React.FC = () => {
 
   const handleOAuthSignIn = async (provider: "google" | "github" | "azure") => {
     setOauthLoading(provider);
-    setNetworkError(false);
     
     try {
       const redirectUrl = `${window.location.origin}/`;
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo: redirectUrl,
-        }
+        options: { redirectTo: redirectUrl }
       });
 
       if (error) {
-        if (error.message?.includes('Failed to fetch')) {
-          setNetworkError(true);
-        }
         toast.error("Erro no login", { description: error.message });
       }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
-      toast.error("Erro no login", { description: errorMessage });
+    } catch (err) {
+      toast.error("Erro no login", { 
+        description: err instanceof Error ? err.message : "Erro desconhecido" 
+      });
     } finally {
       setOauthLoading(null);
     }
@@ -523,11 +395,6 @@ const Auth: React.FC = () => {
                           placeholder="seu@email.com"
                           className="pl-10"
                           {...signInForm.register("email")}
-                          onChange={(e) => {
-                            signInForm.register("email").onChange(e);
-                            // Reset network error when user types
-                            if (networkError) setNetworkError(false);
-                          }}
                         />
                       </div>
                       {signInForm.formState.errors.email && (
@@ -545,11 +412,6 @@ const Auth: React.FC = () => {
                           placeholder="Digite sua senha"
                           className="pl-10 pr-10"
                           {...signInForm.register("password")}
-                          onChange={(e) => {
-                            signInForm.register("password").onChange(e);
-                            // Reset network error when user types
-                            if (networkError) setNetworkError(false);
-                          }}
                         />
                         <Button
                           type="button"
@@ -574,7 +436,7 @@ const Auth: React.FC = () => {
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          {retryCount > 0 ? `Tentativa ${retryCount + 1}...` : "Entrando..."}
+                          Entrando...
                         </>
                       ) : (
                         <>
@@ -585,29 +447,20 @@ const Auth: React.FC = () => {
                     </Button>
                   </form>
 
-                  {/* Network Error Warning - Only show after actual failures */}
-                  {networkError && (
-                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 space-y-2">
-                      <div className="flex items-center gap-2 text-yellow-600">
-                        <AlertTriangle className="h-4 w-4" />
-                        <span className="text-sm font-medium">Problema de conexão detectado</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Se você está tendo problemas para entrar, tente limpar a sessão anterior.
-                      </p>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleClearSession}
-                        disabled={isLoading}
-                        className="w-full"
-                      >
-                        <RefreshCw className="h-3 w-3 mr-2" />
-                        Limpar sessão e tentar novamente
-                      </Button>
-                    </div>
-                  )}
+                  {/* Session Clear Button - Always available */}
+                  <div className="pt-2 border-t">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleClearSession}
+                      disabled={isLoading}
+                      className="w-full text-muted-foreground hover:text-foreground"
+                    >
+                      <RefreshCw className="h-3 w-3 mr-2" />
+                      Limpar sessão (problemas de login?)
+                    </Button>
+                  </div>
 
                   <div className="text-center">
                     <Button
@@ -721,25 +574,6 @@ const Auth: React.FC = () => {
                     </Button>
                   </form>
 
-                  {networkError && (
-                    <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 space-y-2">
-                      <div className="flex items-center gap-2 text-yellow-600">
-                        <AlertTriangle className="h-4 w-4" />
-                        <span className="text-sm font-medium">Problema de conexão</span>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={handleClearSession}
-                        disabled={isLoading}
-                        className="w-full"
-                      >
-                        <RefreshCw className="h-3 w-3 mr-2" />
-                        Limpar sessão
-                      </Button>
-                    </div>
-                  )}
 
                   <OAuthButtons />
                 </TabsContent>
