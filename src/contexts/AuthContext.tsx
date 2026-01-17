@@ -57,9 +57,10 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let subscription: { unsubscribe: () => void } | null = null;
     let retryCount = 0;
     const maxRetries = 2; // Reduzido para evitar delays longos
-    const maxInitTimeout = 5000; // 5 segundos máximo para inicializar
+    // AUMENTADO para conexões maritimas lentas (satélite 30-120s latência)
+    const maxInitTimeout = 15000; // 15 segundos máximo para inicializar
 
-    // Safety timeout - SEMPRE sai do loading após 5 segundos
+    // Safety timeout - SEMPRE sai do loading após timeout
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
         Logger.warn("Auth init timeout - forcing ready state", undefined, "AuthContext");

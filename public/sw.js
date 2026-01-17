@@ -1,6 +1,7 @@
-// Service Worker Avançado - Nautilus One v4
+// Service Worker Avançado - Nautilus One v5
 // Otimizado para internet lenta e modo offline
-const CACHE_VERSION = 'v4';
+// FIX: Auth requests agora são SEMPRE bypass do cache
+const CACHE_VERSION = 'v5';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
@@ -71,6 +72,16 @@ self.addEventListener('fetch', (event) => {
 
   // Ignorar chrome-extension e outros protocolos
   if (!url.protocol.startsWith('http')) return;
+
+  // ⚠️ CRÍTICO: NUNCA cachear requisições de autenticação!
+  // Isso inclui /auth/v1/, tokens, sessions, etc.
+  if (url.pathname.includes('/auth/') || 
+      url.pathname.includes('/token') ||
+      url.pathname.includes('/session') ||
+      url.hostname.includes('supabase') && url.pathname.includes('auth')) {
+    // Deixar passar direto para a rede sem interceptação
+    return;
+  }
 
   // Imagens: Cache First com limite
   if (isImageRequest(url.pathname)) {
