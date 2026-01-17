@@ -6,7 +6,7 @@
 import React, { useState } from "react";
 import { Bell, Bot, Sun, Moon, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/layout/theme-provider";
+import { useTheme } from "next-themes";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { UserMenu } from "@/components/auth/user-menu";
 import { useVoiceCommands } from "@/modules/nauti-command-center/hooks/useVoiceCommands";
