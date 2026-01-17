@@ -88,17 +88,7 @@ export const CalendarIntegration = () => {
     };
 
     fetchEvents();
-  }, [logSuccess, logError]);
-      } catch (error) {
-        console.error("Error fetching events:", error);
-        logError("FETCH", "calendar_events", error as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, [logSuccess, logError]);
+  }, []);
 
   const handleConnect = useCallback(async (provider: "outlook" | "google") => {
     toast.info(`Iniciando conexão OAuth2 com ${provider === "outlook" ? "Microsoft" : "Google"}...`);
@@ -479,55 +469,46 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
         <TabsContent value="events" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>Eventos Programados</span>
-                <Badge variant="outline">{events.length} eventos</Badge>
-              </CardTitle>
+              <CardTitle>Eventos de Compliance</CardTitle>
               <CardDescription>
-                Auditorias, inspeções e prazos do Supabase
+                Auditorias, inspeções e prazos para sincronizar
               </CardDescription>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {events.length === 0 ? (
-                    <div className="text-center py-8 text-muted-foreground">
-                      Nenhum evento programado encontrado
-                    </div>
-                  ) : (
-                    events.map(event => (
-                      <div 
-                        key={event.id}
-                        className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-muted/50 transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">{getTypeIcon(event.type)}</span>
-                          <div>
-                            <p className="font-medium">{event.title}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {format(event.date, "EEEE, dd 'de' MMMM", { locale: ptBR })}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={getPriorityColor(event.priority)}>
-                            {event.priority}
-                          </Badge>
-                          {event.synced ? (
-                            <Badge variant="outline" className="bg-green-500/10 text-green-500">
-                              <CheckCircle2 className="h-3 w-3 mr-1" />
-                              Sync
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500">
-                              <Clock className="h-3 w-3 mr-1" />
-                              Pendente
-                            </Badge>
-                          )}
+                  {events.map(event => (
+                    <div 
+                      key={event.id}
+                      className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{getTypeIcon(event.type)}</span>
+                        <div>
+                          <p className="font-medium">{event.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {format(event.date, "dd/MM/yyyy", { locale: ptBR })}
+                          </p>
                         </div>
                       </div>
-                    ))
-                  )}
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className={getPriorityColor(event.priority)}>
+                          {event.priority}
+                        </Badge>
+                        {event.synced ? (
+                          <Badge variant="outline" className="bg-green-500/10 text-green-500">
+                            <CheckCircle2 className="h-3 w-3 mr-1" />
+                            Sync
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Pendente
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </ScrollArea>
             </CardContent>
@@ -541,6 +522,9 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
                 <Settings className="h-5 w-5" />
                 Configurações de Sincronização
               </CardTitle>
+              <CardDescription>
+                Configure quais tipos de eventos sincronizar automaticamente
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
@@ -594,7 +578,7 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
               <div className="space-y-4">
                 <h4 className="font-medium">Lembretes</h4>
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="auto-reminders">Criar Lembretes</Label>
+                  <Label htmlFor="auto-reminders">Criar lembretes automaticamente</Label>
                   <Switch 
                     id="auto-reminders" 
                     checked={syncSettings.autoCreateReminders}
@@ -603,12 +587,12 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
                     }
                   />
                 </div>
-                <div className="flex items-center gap-4">
-                  <Label htmlFor="reminder-days">Antecedência</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="reminder-days">Antecedência (dias)</Label>
                   <Select 
-                    value={String(syncSettings.reminderDays)}
-                    onValueChange={(val) => 
-                      setSyncSettings(prev => ({ ...prev, reminderDays: Number(val) }))
+                    value={syncSettings.reminderDays.toString()}
+                    onValueChange={(value) => 
+                      setSyncSettings(prev => ({ ...prev, reminderDays: parseInt(value) }))
                     }
                   >
                     <SelectTrigger className="w-32">
@@ -619,6 +603,7 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
                       <SelectItem value="3">3 dias</SelectItem>
                       <SelectItem value="7">7 dias</SelectItem>
                       <SelectItem value="14">14 dias</SelectItem>
+                      <SelectItem value="30">30 dias</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -626,8 +611,13 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
 
               <Separator />
 
-              <Button className="w-full" onClick={() => toast.success("Configurações salvas!")}>
-                <Check className="h-4 w-4 mr-2" />
+              <Button 
+                className="w-full" 
+                onClick={() => {
+                  logSuccess("UPDATE", "calendar_settings", null, syncSettings);
+                  toast.success("Configurações salvas!");
+                }}
+              >
                 Salvar Configurações
               </Button>
             </CardContent>
@@ -637,3 +627,5 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
     </div>
   );
 };
+
+export default CalendarIntegration;
