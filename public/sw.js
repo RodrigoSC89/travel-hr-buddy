@@ -1,42 +1,24 @@
-// Service Worker Avançado - Nautilus One v5
-// Otimizado para offline-first + páginas críticas cacheadas
-const CACHE_VERSION = 'v5';
+// Service Worker Avançado - Nautilus One v4
+// Otimizado para internet lenta e modo offline
+const CACHE_VERSION = 'v4';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
 const IMAGE_CACHE = `nautilus-images-${CACHE_VERSION}`;
-const PAGES_CACHE = `nautilus-pages-${CACHE_VERSION}`;
 
 // Limites de cache
 const MAX_DYNAMIC_CACHE_SIZE = 50;
 const MAX_IMAGE_CACHE_SIZE = 100;
 const MAX_API_CACHE_SIZE = 30;
-const MAX_PAGES_CACHE_SIZE = 30;
 const API_CACHE_TTL = 5 * 60 * 1000; // 5 minutos
 
-// Assets estáticos para pre-cache CRÍTICO
+// Assets estáticos para pre-cache
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
   '/favicon.ico',
-  '/manifest.json',
-  '/icons/nauti-one-logo.png'
-];
-
-// Páginas críticas para pre-cache (app shell)
-const CRITICAL_PAGES = [
-  '/central-comando',
-  '/central-comando/visao-geral',
-  '/peotram',
-  '/gmud',
-  '/crew',
-  '/vessel-contracts',
-  '/fleet-command',
-  '/maintenance-command',
-  '/digital-twin',
-  '/hr-dashboard',
-  '/billing'
+  '/manifest.json'
 ];
 
 // URLs da API que devem ser cacheadas
@@ -45,48 +27,24 @@ const API_PATTERNS = [
   /\/functions\/v1\//
 ];
 
-// URLs de navegação que devem retornar o index.html (SPA routing)
-const SPA_ROUTES_PATTERN = /^\/(central-comando|peotram|gmud|crew|vessel|fleet|maintenance|digital|hr|billing|admin|settings|auth)/;
-
 // Instalação do Service Worker
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing v5...');
+  console.log('[SW] Installing v4...');
   event.waitUntil(
-    Promise.all([
-      // Pre-cache assets estáticos
-      caches.open(STATIC_CACHE).then((cache) => {
+    caches.open(STATIC_CACHE)
+      .then((cache) => {
         console.log('[SW] Pre-caching static assets');
         return cache.addAll(STATIC_ASSETS).catch(err => {
-          console.warn('[SW] Some static assets failed to cache:', err);
+          console.warn('[SW] Some assets failed to cache:', err);
         });
-      }),
-      // Pre-cache do app shell (index.html) para todas as rotas críticas
-      caches.open(PAGES_CACHE).then(async (cache) => {
-        console.log('[SW] Pre-caching critical pages (app shell)');
-        try {
-          // Fetch index.html uma vez e armazena para todas as rotas
-          const indexResponse = await fetch('/index.html');
-          if (indexResponse.ok) {
-            // Cache the index.html for root and all critical pages
-            await cache.put('/index.html', indexResponse.clone());
-            
-            // Create cached responses for critical SPA routes
-            for (const page of CRITICAL_PAGES) {
-              await cache.put(page, indexResponse.clone());
-            }
-            console.log('[SW] Critical pages cached:', CRITICAL_PAGES.length);
-          }
-        } catch (err) {
-          console.warn('[SW] Pages pre-cache failed:', err);
-        }
       })
-    ]).then(() => self.skipWaiting())
+      .then(() => self.skipWaiting())
   );
 });
 
 // Ativação e limpeza de caches antigos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating v5...');
+  console.log('[SW] Activating v4...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
@@ -113,12 +71,6 @@ self.addEventListener('fetch', (event) => {
 
   // Ignorar chrome-extension e outros protocolos
   if (!url.protocol.startsWith('http')) return;
-
-  // SPA Navigation: Retornar index.html para rotas da aplicação
-  if (request.mode === 'navigate' && url.origin === self.location.origin) {
-    event.respondWith(handleNavigationRequest(request, url));
-    return;
-  }
 
   // Imagens: Cache First com limite
   if (isImageRequest(url.pathname)) {
@@ -147,53 +99,6 @@ self.addEventListener('fetch', (event) => {
   // Outros recursos: Cache First com Network Fallback
   event.respondWith(cacheFirstStrategy(request, DYNAMIC_CACHE));
 });
-
-// Handler especial para navegação SPA
-async function handleNavigationRequest(request, url) {
-  try {
-    // Tentar network primeiro para navegação
-    const networkResponse = await fetch(request);
-    
-    // Cache a resposta se bem sucedida
-    if (networkResponse.ok) {
-      const cache = await caches.open(PAGES_CACHE);
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
-  } catch (error) {
-    // Offline: tentar cache
-    console.log('[SW] Navigation offline, trying cache for:', url.pathname);
-    
-    // Primeiro tenta a rota específica
-    const cachedPage = await caches.match(request);
-    if (cachedPage) {
-      console.log('[SW] Serving cached page:', url.pathname);
-      return cachedPage;
-    }
-    
-    // Para rotas SPA, retorna index.html cacheado
-    if (SPA_ROUTES_PATTERN.test(url.pathname)) {
-      const indexCache = await caches.match('/index.html');
-      if (indexCache) {
-        console.log('[SW] Serving cached index.html for SPA route:', url.pathname);
-        return indexCache;
-      }
-    }
-    
-    // Fallback para página offline
-    const offlinePage = await caches.match('/offline.html');
-    if (offlinePage) {
-      console.log('[SW] Serving offline page');
-      return offlinePage;
-    }
-    
-    return new Response('Offline - Nauti One', { 
-      status: 503, 
-      headers: { 'Content-Type': 'text/html' } 
-    });
-  }
-}
 
 // Estratégias de cache
 
@@ -446,4 +351,4 @@ async function getCacheSize() {
   return totalSize;
 }
 
-console.log('[SW] Service Worker v5 loaded - Offline-First with SPA routing');
+console.log('[SW] Service Worker v4 loaded');

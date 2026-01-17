@@ -3,10 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// PATCH 852: Force single React instance - Critical fix for hooks
-const reactPath = path.resolve(__dirname, "node_modules/react");
-const reactDomPath = path.resolve(__dirname, "node_modules/react-dom");
-
+// Fix for multiple React instances and ESM compatibility
 export default defineConfig(({ mode }) => ({
   base: "/",
   server: {
@@ -16,21 +13,18 @@ export default defineConfig(({ mode }) => ({
     hmr: { overlay: false },
   },
   plugins: [
-    react({
-      // Ensure consistent JSX runtime
-      jsxImportSource: undefined,
-    }),
+    react(),
     mode === "development" && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
       // Force single React instance - CRITICAL for hooks to work
-      "react": reactPath,
-      "react-dom": reactDomPath,
-      "react-dom/client": path.resolve(reactDomPath, "client"),
-      "react/jsx-runtime": path.resolve(reactPath, "jsx-runtime"),
-      "react/jsx-dev-runtime": path.resolve(reactPath, "jsx-dev-runtime"),
+      "react": path.resolve(__dirname, "node_modules/react"),
+      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+      "react-dom/client": path.resolve(__dirname, "node_modules/react-dom/client"),
+      "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
+      "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
       "react-is": path.resolve(__dirname, "node_modules/react-is"),
       // Force lodash to use ESM version
       "lodash": path.resolve(__dirname, "node_modules/lodash-es"),
@@ -64,18 +58,10 @@ export default defineConfig(({ mode }) => ({
     reportCompressedSize: false,
     rollupOptions: {
       output: {
-        // Unified React chunk to prevent any duplication
-        manualChunks: (id) => {
-          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
-            return 'vendor-react';
-          }
-          if (id.includes('@tanstack/react-query')) {
-            return 'vendor-react';
-          }
-          if (id.includes('@radix-ui')) {
-            return 'vendor-radix';
-          }
-          return undefined;
+        // Separate React into its own chunk to prevent duplication
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-dom/client'],
+          'query-vendor': ['@tanstack/react-query'],
         },
       },
     },
@@ -111,8 +97,8 @@ export default defineConfig(({ mode }) => ({
     esbuildOptions: {
       target: "esnext",
     },
-    // Force re-optimization to clear stale cache
-    force: true,
+    // Force re-optimization when dependencies change
+    force: mode === "development",
   },
   esbuild: {
     target: "esnext",

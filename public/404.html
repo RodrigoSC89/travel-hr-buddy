@@ -52,23 +52,19 @@
   </div>
 
   <script>
-    // SPA redirect: Store path and load the React app
-    (function() {
-      try {
-        var fullPath = window.location.pathname + window.location.search + window.location.hash;
-        
-        // Don't store if already at root or index
-        if (fullPath !== '/' && fullPath !== '/index.html') {
-          sessionStorage.setItem('redirectPath', fullPath);
-        }
-        
-        // Redirect to root to load the React app with BrowserRouter
-        window.location.replace('/?redirect=' + encodeURIComponent(fullPath));
-      } catch (e) {
-        console.warn('Redirect failed, going to root');
-        window.location.replace('/');
-      }
-    })();
+    // Store the current path to preserve it after redirect
+    // This handles direct URL access or page refresh on any route
+    try {
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      sessionStorage.setItem('redirectPath', path);
+      
+      // Redirect to index.html to load the React app
+      window.location.replace('/index.html');
+    } catch (error) {
+      // Fallback if sessionStorage is not available (private browsing, etc.)
+      console.warn('SessionStorage not available, redirecting to home');
+      window.location.replace('/');
+    }
   </script>
   <noscript>
     <p style="color: #f87171; margin-top: 20px;">
