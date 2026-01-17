@@ -225,4 +225,21 @@ export const PEO_DP_SECTIONS = [
   { id: 9, name: 'Auditoria e Conformidade', lines: '581-622', items: 10 },
 ];
 
-export default PEO_DP_AI_SYSTEM_PROMPT;
+// Config object for AI module registry
+export const PEO_DP_AI_CONFIG = {
+  name: 'PEO-DP 2026 Assistant',
+  model: 'google/gemini-2.5-flash',
+  temperature: 0.7,
+  max_tokens: 4000,
+  systemPrompt: PEO_DP_AI_SYSTEM_PROMPT,
+  actions: {
+    generate_evidence: 'Gerar evidência PEO-DP',
+    analyze_redundancy: 'Analisar redundância de sistema',
+    explain_fmea: 'Explicar cenário FMEA',
+    check_asog: 'Verificar status ASOG',
+    troubleshoot: 'Diagnosticar problema DP',
+    calculate_capability: 'Calcular capability DP'
+  }
+};
+
+export default PEO_DP_AI_CONFIG;
