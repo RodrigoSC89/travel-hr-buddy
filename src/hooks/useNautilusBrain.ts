@@ -1,10 +1,14 @@
 /**
  * useNautiBrain - Hook for AI-powered chat with Nauti Brain
+ * Now with circuit breaker, tracing, and maritime optimization
  */
 
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useCircuitBreaker } from '@/hooks/use-circuit-breaker';
+import { useTracing } from '@/hooks/use-tracing';
+import { useOfflineSync } from '@/hooks/use-offline-sync';
 
 export interface Message {
   role: 'user' | 'assistant';
@@ -29,6 +33,15 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Circuit breaker for resilience
+  const { execute: executeWithBreaker, state: circuitState } = useCircuitBreaker('nauti-brain');
+
+  // Tracing for observability
+  const { traceApi } = useTracing({ componentName: 'NautilusBrain' });
+
+  // Offline sync for maritime conditions
+  const { getTimeout, isMaritime, connectionQuality } = useOfflineSync();
+
   const sendMessage = useCallback(async (content: string) => {
     const userMessage: Message = { role: 'user', content, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
@@ -49,23 +62,48 @@ export function useNautilusBrain(context?: SystemContext): UseNautilusBrainRetur
       });
     };
 
+    // Warn if circuit is open
+    if (circuitState === 'OPEN') {
+      toast.warning('Sistema de IA temporariamente indisponível. Tentando reconectar...');
+    }
+
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
-      const response = await fetch(
-        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nauti-brain`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.access_token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE'}`,
-          },
-          body: JSON.stringify({
-            messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
-            context,
-          }),
-        }
-      );
+      // Use adaptive timeout for maritime conditions
+      const timeout = getTimeout();
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      // Log connection quality for debugging
+      if (isMaritime) {
+        console.log('[NautiBrain] Maritime mode active:', {
+          latency: connectionQuality?.rtt,
+          bandwidth: connectionQuality?.downlink,
+          timeout,
+        });
+      }
+
+      // Execute with circuit breaker protection
+      const response = await executeWithBreaker(async () => {
+        const res = await fetch(
+          `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/nauti-brain`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session?.access_token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE'}`,
+            },
+            body: JSON.stringify({
+              messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
+              context,
+            }),
+            signal: controller.signal,
+          }
+        );
+        clearTimeout(timeoutId);
+        return res;
+      }) as Response;
 
       if (!response.ok) {
         if (response.status === 429) {
