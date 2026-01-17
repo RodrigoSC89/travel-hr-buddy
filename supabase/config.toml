@@ -264,6 +264,12 @@ function_name = "forecast-weekly"
 schedule = "0 3 * * 0"  # Every Sunday at 03:00 UTC
 description = "MMI: Generate weekly AI forecasts for maintenance jobs and create work orders automatically"
 
+[[edge_runtime.cron]]
+name = "check-certificate-expiry"
+function_name = "check-certificate-expiry"
+schedule = "0 5 * * *"  # Every day at 05:00 UTC (02:00 BRT)
+description = "Check certificate expirations and send alerts for expiring/expired certificates"
+
 [functions.log-incident]
 verify_jwt = false
 import_map = "./import_map.json"
