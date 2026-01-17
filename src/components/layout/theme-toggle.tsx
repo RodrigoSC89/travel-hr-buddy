@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/layout/theme-provider";
 
 // PATCH 859: Extended theme toggle with nautilus and high-contrast themes
 export function ThemeToggle() {

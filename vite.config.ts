@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => ({
       "react-is",
       "scheduler",
       "@tanstack/react-query",
-      "next-themes",
+      // next-themes removed - using pure React solution
       // Radix UI packages that use React
       "@radix-ui/react-tooltip",
       "@radix-ui/react-dialog",
@@ -95,7 +95,7 @@ export default defineConfig(({ mode }) => ({
       "scheduler",
       "@tanstack/react-query",
       "react-router-dom",
-      "next-themes",
+      // next-themes removed
     ],
     
     exclude: [
