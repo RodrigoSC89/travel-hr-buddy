@@ -4,6 +4,7 @@
  */
 import * as React from "react";
 import { Suspense, lazy } from "react";
+import { LazyLoadErrorBoundary } from "@/components/error/LazyLoadErrorBoundary";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -606,9 +607,11 @@ function App() {
         <AuthProvider>
           <Router>
             <TooltipProvider>
-              <Suspense fallback={<Loader />}>
-                <AppRoutes />
-              </Suspense>
+              <LazyLoadErrorBoundary>
+                <Suspense fallback={<Loader />}>
+                  <AppRoutes />
+                </Suspense>
+              </LazyLoadErrorBoundary>
               <Toaster />
             </TooltipProvider>
           </Router>
