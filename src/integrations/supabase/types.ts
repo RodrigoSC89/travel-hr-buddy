@@ -4962,136 +4962,6 @@ export type Database = {
           },
         ]
       }
-      checklists: {
-        Row: {
-          actual_duration: number | null
-          ai_analysis: Json | null
-          approved_at: string | null
-          approved_by: string | null
-          completed_at: string | null
-          compliance_score: number | null
-          created_at: string
-          description: string | null
-          due_date: string | null
-          estimated_duration: number | null
-          id: string
-          inspector_id: string | null
-          inspector_name: string | null
-          items: Json | null
-          location: Json | null
-          offline_data: Json | null
-          organization_id: string | null
-          parent_checklist_id: string | null
-          priority: string | null
-          rejection_reason: string | null
-          scheduled_for: string | null
-          status: string | null
-          sync_status: string | null
-          tags: string[] | null
-          template: Json | null
-          title: string
-          type: string
-          updated_at: string
-          version: string | null
-          vessel_id: string | null
-          vessel_name: string | null
-          weather: Json | null
-          workflow: Json | null
-        }
-        Insert: {
-          actual_duration?: number | null
-          ai_analysis?: Json | null
-          approved_at?: string | null
-          approved_by?: string | null
-          completed_at?: string | null
-          compliance_score?: number | null
-          created_at?: string
-          description?: string | null
-          due_date?: string | null
-          estimated_duration?: number | null
-          id?: string
-          inspector_id?: string | null
-          inspector_name?: string | null
-          items?: Json | null
-          location?: Json | null
-          offline_data?: Json | null
-          organization_id?: string | null
-          parent_checklist_id?: string | null
-          priority?: string | null
-          rejection_reason?: string | null
-          scheduled_for?: string | null
-          status?: string | null
-          sync_status?: string | null
-          tags?: string[] | null
-          template?: Json | null
-          title: string
-          type: string
-          updated_at?: string
-          version?: string | null
-          vessel_id?: string | null
-          vessel_name?: string | null
-          weather?: Json | null
-          workflow?: Json | null
-        }
-        Update: {
-          actual_duration?: number | null
-          ai_analysis?: Json | null
-          approved_at?: string | null
-          approved_by?: string | null
-          completed_at?: string | null
-          compliance_score?: number | null
-          created_at?: string
-          description?: string | null
-          due_date?: string | null
-          estimated_duration?: number | null
-          id?: string
-          inspector_id?: string | null
-          inspector_name?: string | null
-          items?: Json | null
-          location?: Json | null
-          offline_data?: Json | null
-          organization_id?: string | null
-          parent_checklist_id?: string | null
-          priority?: string | null
-          rejection_reason?: string | null
-          scheduled_for?: string | null
-          status?: string | null
-          sync_status?: string | null
-          tags?: string[] | null
-          template?: Json | null
-          title?: string
-          type?: string
-          updated_at?: string
-          version?: string | null
-          vessel_id?: string | null
-          vessel_name?: string | null
-          weather?: Json | null
-          workflow?: Json | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "checklists_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "checklists_parent_checklist_id_fkey"
-            columns: ["parent_checklist_id"]
-            isOneToOne: false
-            referencedRelation: "checklists"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "checklists_vessel_id_fkey"
-            columns: ["vessel_id"]
-            isOneToOne: false
-            referencedRelation: "vessels"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       class_surveys: {
         Row: {
           certificates_issued: string[] | null
@@ -9738,16 +9608,12 @@ export type Database = {
       }
       dp_incidents: {
         Row: {
-          ai_analysis: Json | null
-          ai_recommendations: string[] | null
-          analyzed_at: string | null
           created_at: string | null
           dp_class: string | null
           id: string
           incident_date: string
           link: string | null
           location: string | null
-          risk_level: string | null
           root_cause: string | null
           severity: string | null
           source: string | null
@@ -9759,16 +9625,12 @@ export type Database = {
           vessel: string | null
         }
         Insert: {
-          ai_analysis?: Json | null
-          ai_recommendations?: string[] | null
-          analyzed_at?: string | null
           created_at?: string | null
           dp_class?: string | null
           id: string
           incident_date: string
           link?: string | null
           location?: string | null
-          risk_level?: string | null
           root_cause?: string | null
           severity?: string | null
           source?: string | null
@@ -9780,16 +9642,12 @@ export type Database = {
           vessel?: string | null
         }
         Update: {
-          ai_analysis?: Json | null
-          ai_recommendations?: string[] | null
-          analyzed_at?: string | null
           created_at?: string | null
           dp_class?: string | null
           id?: string
           incident_date?: string
           link?: string | null
           location?: string | null
-          risk_level?: string | null
           root_cause?: string | null
           severity?: string | null
           source?: string | null
