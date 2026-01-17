@@ -1,6 +1,6 @@
-// Service Worker Avançado - Nautilus One v6
-// PATCH 870: Otimizado para conexões lentas (3G, LTE, 5G com latência)
-const CACHE_VERSION = 'v6';
+// Service Worker Avançado - Nautilus One v5
+// Otimizado para offline-first + páginas críticas cacheadas
+const CACHE_VERSION = 'v5';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
@@ -10,9 +10,9 @@ const PAGES_CACHE = `nautilus-pages-${CACHE_VERSION}`;
 // Limites de cache
 const MAX_DYNAMIC_CACHE_SIZE = 50;
 const MAX_IMAGE_CACHE_SIZE = 100;
-const MAX_API_CACHE_SIZE = 50; // Increased
+const MAX_API_CACHE_SIZE = 30;
 const MAX_PAGES_CACHE_SIZE = 30;
-const API_CACHE_TTL = 10 * 60 * 1000; // 10 minutos (increased from 5)
+const API_CACHE_TTL = 5 * 60 * 1000; // 5 minutos
 
 // Assets estáticos para pre-cache CRÍTICO
 const STATIC_ASSETS = [
@@ -36,20 +36,17 @@ const CRITICAL_PAGES = [
   '/maintenance-command',
   '/digital-twin',
   '/hr-dashboard',
-  '/billing',
-  '/auth',
-  '/dashboard'
+  '/billing'
 ];
 
 // URLs da API que devem ser cacheadas
 const API_PATTERNS = [
   /\/rest\/v1\//,
-  /\/functions\/v1\//,
-  /supabase\.co/
+  /\/functions\/v1\//
 ];
 
 // URLs de navegação que devem retornar o index.html (SPA routing)
-const SPA_ROUTES_PATTERN = /^\/(central-comando|peotram|gmud|crew|vessel|fleet|maintenance|digital|hr|billing|admin|settings|auth|dashboard)/;
+const SPA_ROUTES_PATTERN = /^\/(central-comando|peotram|gmud|crew|vessel|fleet|maintenance|digital|hr|billing|admin|settings|auth)/;
 
 // Instalação do Service Worker
 self.addEventListener('install', (event) => {
@@ -201,8 +198,7 @@ async function handleNavigationRequest(request, url) {
 // Estratégias de cache
 
 async function networkFirstStrategy(request, cacheName) {
-  // PATCH 870: Extended timeouts for slow connections
-  const timeoutMs = isSlowConnection() ? 30000 : 15000; // Increased significantly
+  const timeoutMs = isSlowConnection() ? 15000 : 8000;
   
   try {
     const controller = new AbortController();
@@ -222,11 +218,10 @@ async function networkFirstStrategy(request, cacheName) {
     // Try to get cached response first
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
-      console.log('[SW] Serving from cache (network failed):', request.url);
+      console.log('[SW] Serving from cache:', request.url);
       // Clone and add header to indicate cached response
       const headers = new Headers(cachedResponse.headers);
       headers.set('X-Cached', 'true');
-      headers.set('X-Cache-Reason', 'network-failed');
       return new Response(cachedResponse.body, {
         status: cachedResponse.status,
         statusText: cachedResponse.statusText,
@@ -239,24 +234,15 @@ async function networkFirstStrategy(request, cacheName) {
       return new Response(JSON.stringify({ 
         error: 'Offline', 
         cached: false,
-        message: 'Você está offline. Reconecte para atualizar os dados.',
-        canRetry: true
+        message: 'Você está offline. Reconecte para atualizar os dados.'
       }), {
         status: 503,
         headers: { 'Content-Type': 'application/json' }
       });
     }
     
-    // PATCH 870: Return a more helpful error for slow connections
-    return new Response(JSON.stringify({ 
-      error: 'SlowConnection', 
-      cached: false,
-      message: 'Conexão lenta. Tente novamente em alguns segundos.',
-      canRetry: true
-    }), {
-      status: 504,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    // Network error but online - let it pass through
+    throw error;
   }
 }
 
@@ -338,15 +324,7 @@ function isSlowConnection() {
   // Check if connection API is available
   if ('connection' in navigator) {
     const conn = navigator.connection;
-    // PATCH 870: More aggressive slow detection
-    return (
-      conn.saveData || 
-      conn.effectiveType === '2g' || 
-      conn.effectiveType === 'slow-2g' ||
-      conn.effectiveType === '3g' ||
-      (conn.rtt && conn.rtt > 300) ||
-      (conn.downlink && conn.downlink < 1)
-    );
+    return conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g';
   }
   return false;
 }

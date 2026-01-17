@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle, AlertCircle, FileText, Save, Send, Camera, Mic, Upload, Plus, Trash2, Star, Award, Brain } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-
-const { useState, useEffect } = React;
 
 interface AuditElement {
   number: string;

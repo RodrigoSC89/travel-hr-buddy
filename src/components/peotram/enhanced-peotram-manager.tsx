@@ -1,8 +1,6 @@
-import * as React from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
-const { useState, useEffect, lazy, Suspense } = React;
-
-// PATCH 861: Lazy load components with React singleton fix
+// PATCH 549: Lazy load components to prevent bundle bloat and freezing
 const EnhancedPeotramDashboard = lazy(() => import("./enhanced-peotram-dashboard").then(m => ({ default: m.EnhancedPeotramDashboard })));
 const PeotramAuditWizard = lazy(() => import("./peotram-audit-wizard").then(m => ({ default: m.PeotramAuditWizard })));
 const PeotramReportsGenerator = lazy(() => import("./peotram-reports-generator").then(m => ({ default: m.PeotramReportsGenerator })));
@@ -38,10 +36,6 @@ const Peotram13ElementsTabs = lazy(() => import("./peotram-13-elements-tabs"));
 const Peotram13Dashboard = lazy(() => import("./peotram-13-elements-dashboard"));
 const PeotramEvidenceUploader = lazy(() => import("./peotram-evidence-uploader"));
 const PeotramPdfReport = lazy(() => import("./peotram-pdf-report"));
-// NEW: Audit Form and Progress Dashboard
-const PeotramAuditForm = lazy(() => import("./peotram-audit-form").then(m => ({ default: m.PeotramAuditForm })));
-const PeotramProgressDashboard = lazy(() => import("./peotram-progress-dashboard").then(m => ({ default: m.PeotramProgressDashboard })));
-const PeotramAIEvidenceGenerator = lazy(() => import("./peotram-ai-evidence-generator").then(m => ({ default: m.PeotramAIEvidenceGenerator })));
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

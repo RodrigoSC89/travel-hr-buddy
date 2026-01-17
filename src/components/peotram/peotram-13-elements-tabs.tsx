@@ -1,15 +1,10 @@
 import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { 
-  PEOTRAM_2024_ELEMENTOS_OFICIAIS,
-  getElementosCriticosOficial,
-  getTotalRequisitosOficial,
-  type PeotramElementoCompleto
-} from "@/data/peotram-2024-integrated";
 import { 
   PEOTRAM_2024_ELEMENTS, 
   getTotalItems, 

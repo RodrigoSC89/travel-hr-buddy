@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,8 +37,6 @@ import { ClassSurveyDashboard } from "@/components/compliance/ClassSurveyDashboa
 import { STCWCompetencyMatrix } from "@/components/crew/STCWCompetencyMatrix";
 import { MLCComplianceDashboard } from "@/components/crew/MLCComplianceDashboard";
 import { PEODP7PillarsOverview } from "./peodp-7-pillars-overview";
-// NEW: Import 114 PEO-DP 2026 requirements
-import { PEODP_2026_ALL_REQUIREMENTS, PEODP_2026_STATS } from "@/data/peodp-2026-complete";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -81,8 +79,6 @@ import {
   getScoreColor,
   getScoreLevel
 } from "@/types/peodp-checklist";
-
-const { useState } = React;
 
 interface DPPlan {
   id: string;
