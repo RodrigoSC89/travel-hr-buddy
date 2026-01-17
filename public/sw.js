@@ -1,7 +1,6 @@
-// Service Worker Avançado - Nautilus One v6
-// PATCH 855: Otimizado para conexões lentas (3G, LTE, 5G)
-// IMPORTANTE: Auth requests NUNCA são cacheados
-const CACHE_VERSION = 'v6';
+// Service Worker Avançado - Nautilus One v5
+// Otimizado para offline-first + páginas críticas cacheadas
+const CACHE_VERSION = 'v5';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
@@ -13,7 +12,7 @@ const MAX_DYNAMIC_CACHE_SIZE = 50;
 const MAX_IMAGE_CACHE_SIZE = 100;
 const MAX_API_CACHE_SIZE = 30;
 const MAX_PAGES_CACHE_SIZE = 30;
-const API_CACHE_TTL = 10 * 60 * 1000; // 10 minutos para conexões lentas
+const API_CACHE_TTL = 5 * 60 * 1000; // 5 minutos
 
 // Assets estáticos para pre-cache CRÍTICO
 const STATIC_ASSETS = [
@@ -37,19 +36,10 @@ const CRITICAL_PAGES = [
   '/maintenance-command',
   '/digital-twin',
   '/hr-dashboard',
-  '/billing',
-  '/auth'
+  '/billing'
 ];
 
-// CRÍTICO: URLs que NUNCA devem ser cacheadas (sempre network)
-const NEVER_CACHE_PATTERNS = [
-  /\/auth\//,           // Supabase auth
-  /\/token/,            // Token refresh
-  /\/session/,          // Session management
-  /supabase\.co\/auth/, // Direct Supabase auth calls
-];
-
-// URLs da API que podem ser cacheadas (exceto auth)
+// URLs da API que devem ser cacheadas
 const API_PATTERNS = [
   /\/rest\/v1\//,
   /\/functions\/v1\//
@@ -113,12 +103,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// PATCH 855: Verificar se URL nunca deve ser cacheada
-function shouldNeverCache(url) {
-  const urlString = url.toString();
-  return NEVER_CACHE_PATTERNS.some(pattern => pattern.test(urlString));
-}
-
 // Estratégia de cache inteligente
 self.addEventListener('fetch', (event) => {
   const { request } = event;
@@ -129,13 +113,6 @@ self.addEventListener('fetch', (event) => {
 
   // Ignorar chrome-extension e outros protocolos
   if (!url.protocol.startsWith('http')) return;
-
-  // CRÍTICO: Auth requests SEMPRE vão direto para network (nunca cache)
-  if (shouldNeverCache(url)) {
-    console.log('[SW] Auth request - network only:', url.pathname);
-    event.respondWith(networkOnlyWithTimeout(request));
-    return;
-  }
 
   // SPA Navigation: Retornar index.html para rotas da aplicação
   if (request.mode === 'navigate' && url.origin === self.location.origin) {
@@ -149,7 +126,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // API requests (não-auth): Network First com fallback para cache
+  // API requests: Network First com fallback para cache
   if (API_PATTERNS.some((pattern) => pattern.test(url.pathname))) {
     event.respondWith(networkFirstStrategy(request, API_CACHE));
     return;
@@ -170,29 +147,6 @@ self.addEventListener('fetch', (event) => {
   // Outros recursos: Cache First com Network Fallback
   event.respondWith(cacheFirstStrategy(request, DYNAMIC_CACHE));
 });
-
-// PATCH 855: Network only with generous timeout for auth
-async function networkOnlyWithTimeout(request) {
-  try {
-    // 60 second timeout for auth requests on slow connections
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 60000);
-    
-    const response = await fetch(request, { signal: controller.signal });
-    clearTimeout(timeoutId);
-    return response;
-  } catch (error) {
-    console.warn('[SW] Auth request failed:', error.message);
-    // Return a proper error response instead of failing silently
-    return new Response(JSON.stringify({ 
-      error: 'Network unavailable',
-      message: 'Não foi possível conectar ao servidor. Verifique sua conexão.'
-    }), { 
-      status: 503, 
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
-}
 
 // Handler especial para navegação SPA
 async function handleNavigationRequest(request, url) {
@@ -492,4 +446,4 @@ async function getCacheSize() {
   return totalSize;
 }
 
-console.log('[SW] Service Worker v6 loaded - Optimized for slow connections (3G/LTE/5G)');
+console.log('[SW] Service Worker v5 loaded - Offline-First with SPA routing');

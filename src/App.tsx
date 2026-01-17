@@ -1,13 +1,11 @@
 /**
- * App.tsx - PATCH 861 - SIMPLIFIED PROVIDERS
- * 
- * All providers are inside App.tsx, not in main.tsx
- * Using standard imports (not namespace imports)
+ * App.tsx - Versão Completa com Todas as Rotas do Sidebar
+ * PATCH: Rotas completas para 100+ módulos + Mobile/PWA optimizations
  */
-import React, { lazy, Suspense } from "react";
+import * as React from "react";
+import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from "react-helmet-async";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TooltipProvider } from "./components/ui/tooltip";
@@ -17,28 +15,8 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 
-// CRITICAL: Create QueryClient inside App.tsx (not imported)
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { 
-      staleTime: 1000 * 60 * 5,
-      gcTime: 1000 * 60 * 30,
-      retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: true,
-      networkMode: 'offlineFirst',
-    },
-    mutations: {
-      retry: 2,
-      retryDelay: 1000,
-      networkMode: 'offlineFirst',
-    },
-  },
-});
-
 // ============================================
-// LAZY LOAD - All pages use lazy
+// LAZY LOAD - PÁGINAS PRINCIPAIS
 // ============================================
 const Auth = lazy(() => import("@/pages/Auth"));
 const LandingPage = lazy(() => import("@/pages/LandingPage"));
@@ -50,8 +28,14 @@ const BillingPortal = lazy(() => import("@/pages/BillingPortal"));
 const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
 const InteractiveOnboarding = lazy(() => import("@/pages/InteractiveOnboarding"));
 const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
+
+// Central de Comando extras
 const NOC = lazy(() => import("@/pages/NOC"));
 const NOCMonitoring = lazy(() => import("@/pages/NOCMonitoring"));
+
+// ============================================
+// OPERAÇÕES MARÍTIMAS
+// ============================================
 const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
 const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
 const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
@@ -65,6 +49,8 @@ const CargoManagementV2 = lazy(() => import("@/pages/CargoManagementV2"));
 const PortCallOptimizationV2 = lazy(() => import("@/pages/PortCallOptimizationV2"));
 const VesselCTSV2 = lazy(() => import("@/pages/VesselCTSV2"));
 const VesselHistoryV2 = lazy(() => import("@/pages/VesselHistoryV2"));
+
+// Digital Twin & Logistics (v4.0)
 const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
 const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
 const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
@@ -74,13 +60,25 @@ const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
 const MLCSchedulingPage = lazy(() => import("@/pages/MLCSchedulingPage"));
 const SupplierPortalPage = lazy(() => import("@/pages/SupplierPortalPage"));
 const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
+
+// ============================================
+// MANUTENÇÃO
+// ============================================
 const MaintenanceCommandCenter = lazy(() => import("@/pages/MaintenanceCommandCenter"));
 const PredictiveMaintenancePage = lazy(() => import("@/pages/PredictiveMaintenancePage"));
+
+// ============================================
+// OPERAÇÕES SUBMARINAS
+// ============================================
 const OceanSonar = lazy(() => import("@/pages/OceanSonar"));
 const UnderwaterDrone = lazy(() => import("@/pages/UnderwaterDrone"));
 const AutoSub = lazy(() => import("@/pages/AutoSub"));
 const SonarAI = lazy(() => import("@/pages/SonarAI"));
 const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
+
+// ============================================
+// IA & AUTOMAÇÃO
+// ============================================
 const NautilusCommand = lazy(() => import("@/pages/NautilusCommand"));
 const RevolutionaryAI = lazy(() => import("@/pages/RevolutionaryAI"));
 const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
@@ -93,13 +91,25 @@ const WorkflowCommandCenter = lazy(() => import("@/pages/WorkflowCommandCenter")
 const AIAudit = lazy(() => import("@/pages/AIAudit"));
 const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
 const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
+
+// ============================================
+// INTELIGÊNCIA AVANÇADA
+// ============================================
 const Optimization = lazy(() => import("@/pages/Optimization"));
+
+// ============================================
+// TELEMETRIA & MONITORAMENTO
+// ============================================
 const TelemetriaCommand = lazy(() => import("@/pages/TelemetriaCommand"));
 const PredictiveTelemetry = lazy(() => import("@/pages/PredictiveTelemetry"));
 const SatelliteOptimizerPage = lazy(() => import("@/pages/SatelliteOptimizerPage"));
 const VesselTrackingPage = lazy(() => import("@/pages/VesselTrackingPage"));
 const IncidentSimulator = lazy(() => import("@/pages/IncidentSimulator"));
 const CalendarView = lazy(() => import("@/pages/CalendarView"));
+
+// ============================================
+// APIs & INTEGRAÇÕES
+// ============================================
 const APICenter = lazy(() => import("@/pages/APICenter"));
 const APIMonitor = lazy(() => import("@/pages/APIMonitor"));
 const Integrations = lazy(() => import("@/pages/Integrations"));
@@ -111,6 +121,10 @@ const NOAAWeather = lazy(() => import("@/pages/NOAAWeather"));
 const OpenSkyFlights = lazy(() => import("@/pages/OpenSkyFlights"));
 const EarthquakeMonitor = lazy(() => import("@/pages/EarthquakeMonitor"));
 const VoiceTranscriber = lazy(() => import("@/pages/VoiceTranscriber"));
+
+// ============================================
+// RELATÓRIOS & DOCUMENTOS
+// ============================================
 const ReportsCommandCenter = lazy(() => import("@/pages/ReportsCommandCenter"));
 const Documents = lazy(() => import("@/pages/Documents"));
 const Templates = lazy(() => import("@/pages/Templates"));
@@ -118,8 +132,16 @@ const MaritimeChecklists = lazy(() => import("@/pages/MaritimeChecklists"));
 const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
 const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
 const AdvancedSearchPage = lazy(() => import("@/pages/AdvancedSearchPage"));
+
+// ============================================
+// COMUNICAÇÃO & ALERTAS
+// ============================================
 const CommunicationCommandCenter = lazy(() => import("@/pages/CommunicationCommandCenter"));
 const AlertsCommandCenter = lazy(() => import("@/pages/AlertsCommandCenter"));
+
+// ============================================
+// AUDITORIAS & COMPLIANCE
+// ============================================
 const PEODP = lazy(() => import("@/pages/PEODP"));
 const PEOTRAM = lazy(() => import("@/pages/PEOTRAM"));
 const SGSO = lazy(() => import("@/pages/SGSO"));
@@ -141,29 +163,57 @@ const WhistleblowerV2 = lazy(() => import("@/pages/WhistleblowerV2"));
 const SecurityCenter = lazy(() => import("@/pages/SecurityCenter"));
 const SecurityAuditCenter = lazy(() => import("@/pages/SecurityAuditCenter"));
 const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
+
+// ============================================
+// RH & PESSOAS (HR/DP MODULE)
+// ============================================
 const CrewManagement = lazy(() => import("@/pages/CrewManagement"));
 const CrewWellnessPage = lazy(() => import("@/pages/CrewWellnessPage"));
 const Users = lazy(() => import("@/pages/Users"));
+
+// HR/DP Module - New Pages
 const HRDashboardPage = lazy(() => import("@/pages/HRDashboardPage"));
 const EmployeePortalPage = lazy(() => import("@/pages/EmployeePortalPage"));
 const PeopleAnalyticsPage = lazy(() => import("@/pages/PeopleAnalyticsPage"));
 const Payroll = lazy(() => import("@/pages/Payroll"));
 const TimeTracking = lazy(() => import("@/pages/TimeTracking"));
+
+// HR/DP AI Modules
 const HRChatbotPage = lazy(() => import("@/pages/HRChatbotPage"));
 const HRDocumentOCRPage = lazy(() => import("@/pages/HRDocumentOCRPage"));
 const HRTurnoverPredictionPage = lazy(() => import("@/pages/HRTurnoverPredictionPage"));
+
+// ============================================
+// TREINAMENTOS
+// ============================================
 const AITraining = lazy(() => import("@/pages/AITraining"));
 const MentorDP = lazy(() => import("@/pages/MentorDP"));
 const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
+
+// ============================================
+// FINANÇAS & PROCUREMENT
+// ============================================
 const FinanceCommandCenter = lazy(() => import("@/pages/FinanceCommandCenter"));
 const VoyageAccountingPage = lazy(() => import("@/pages/VoyageAccountingPage"));
 const AnalyticsCommandCenter = lazy(() => import("@/pages/AnalyticsCommandCenter"));
 const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
 const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenter"));
 const TaskManagement = lazy(() => import("@/pages/TaskManagement"));
+
+// ============================================
+// ESG & SUSTENTABILIDADE
+// ============================================
 const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePage"));
+
+// ============================================
+// VIAGENS & LOGÍSTICA
+// ============================================
 const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandCenter"));
 const WeatherCommandCenter = lazy(() => import("@/pages/WeatherCommandCenter"));
+
+// ============================================
+// SISTEMA & CONFIGURAÇÕES
+// ============================================
 const Settings = lazy(() => import("@/pages/Settings"));
 const IntegrationsCenter = lazy(() => import("@/pages/IntegrationsCenter"));
 const APIGateway = lazy(() => import("@/pages/APIGateway"));
@@ -173,42 +223,62 @@ const Gamification = lazy(() => import("@/pages/Gamification"));
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
 const StatusPage = lazy(() => import("@/pages/StatusPage"));
+
+// ============================================
+// ADMIN & DASHBOARDS
+// ============================================
 const Admin = lazy(() => import("@/pages/Admin"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const ExecutiveDashboard = lazy(() => import("@/pages/ExecutiveDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 
-// Loader component
+// Query client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 1000 * 60 * 5, retry: 1 },
+  },
+});
+
+// Loader
 const Loader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="text-center space-y-4">
       <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
       <p className="text-foreground">Carregando Nautilus One...</p>
-      <p className="text-muted-foreground text-sm">Otimizado para conexões lentas</p>
     </div>
   </div>
 );
 
-// Layout with Sidebar for authenticated routes
+// Layout com Sidebar para rotas autenticadas - CORRIGIDO COM HEADER E MOBILE NAV
 const AuthenticatedLayout = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
+        {/* Sidebar - renders as Sheet on mobile via SidebarProvider */}
         <AppSidebar />
+        
+        {/* Main content area */}
         <div className="flex-1 flex flex-col min-w-0 w-full">
+          {/* Header with mobile menu trigger */}
           <Header />
+          
+          {/* Main content with padding for mobile bottom nav */}
           <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
             <Outlet />
           </main>
         </div>
+        
+        {/* Mobile Bottom Navigation - only shows on mobile */}
         <MobileBottomNav />
+        
+        {/* Toast Notifications */}
         <Toaster />
       </div>
     </SidebarProvider>
   );
 };
 
-// Protected route component
+// Componente de rota protegida
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
   
@@ -218,16 +288,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// App Routes
+// Rotas internas
 const AppRoutes = () => (
-  <Routes>
+<Routes>
     {/* Public Routes */}
     <Route path="/auth" element={<Auth />} />
     <Route path="/landing" element={<LandingPage />} />
     <Route path="/pricing" element={<LandingPage />} />
     <Route path="/status" element={<StatusPage />} />
     
-    {/* Authenticated routes with Sidebar */}
+    {/* Rotas autenticadas com Sidebar */}
     <Route element={<ProtectedRoute><AuthenticatedLayout /></ProtectedRoute>}>
       <Route path="/" element={<Navigate to="/central-comando" replace />} />
       <Route path="/billing" element={<Billing />} />
@@ -238,9 +308,17 @@ const AppRoutes = () => (
       <Route path="/welcome" element={<InteractiveOnboarding />} />
       <Route path="/analytics-feedback" element={<AnalyticsFeedback />} />
       <Route path="/feedback" element={<AnalyticsFeedback />} />
+      
+      {/* ============================================ */}
+      {/* CENTRAL DE COMANDO */}
+      {/* ============================================ */}
       <Route path="/central-comando/*" element={<CentralComando />} />
       <Route path="/noc" element={<NOC />} />
       <Route path="/noc-monitoring" element={<NOCMonitoring />} />
+      
+      {/* ============================================ */}
+      {/* OPERAÇÕES MARÍTIMAS */}
+      {/* ============================================ */}
       <Route path="/maritime-command" element={<MaritimeCommandCenter />} />
       <Route path="/fleet-command" element={<FleetCommandCenter />} />
       <Route path="/voyage-command" element={<VoyageCommandCenter />} />
@@ -263,62 +341,115 @@ const AppRoutes = () => (
       <Route path="/mlc-scheduling" element={<MLCSchedulingPage />} />
       <Route path="/supplier-portal" element={<SupplierPortalPage />} />
       <Route path="/iot-dashboard" element={<IoTDashboardPage />} />
+      {/* ============================================ */}
+      {/* MANUTENÇÃO */}
+      {/* ============================================ */}
       <Route path="/maintenance-command" element={<MaintenanceCommandCenter />} />
       <Route path="/predictive-maintenance" element={<PredictiveMaintenancePage />} />
+      
+      {/* ============================================ */}
+      {/* OPERAÇÕES SUBMARINAS */}
+      {/* ============================================ */}
       <Route path="/ocean-sonar" element={<OceanSonar />} />
       <Route path="/underwater-drone" element={<UnderwaterDrone />} />
       <Route path="/auto-sub" element={<AutoSub />} />
       <Route path="/sonar-ai" element={<SonarAI />} />
       <Route path="/deep-risk-ai" element={<DeepRiskAI />} />
-      <Route path="/nautilus-command" element={<NautilusCommand />} />
+      
+      {/* ============================================ */}
+      {/* IA & AUTOMAÇÃO */}
+      {/* ============================================ */}
+      <Route path="/nauti-command" element={<NautilusCommand />} />
       <Route path="/revolutionary-ai" element={<RevolutionaryAI />} />
       <Route path="/ai-command" element={<AICommandCenter />} />
       <Route path="/ai-hub" element={<AIHubPage />} />
       <Route path="/ai-analytics" element={<AIAnalyticsDashboard />} />
       <Route path="/revolutionary-features" element={<RevolutionaryFeaturesPage />} />
       <Route path="/autonomous-command" element={<AutonomousCommandCenter />} />
+      <Route path="/ai-ops/logs" element={<AIOperationsCenter />} />
       <Route path="/ai-observability" element={<AIObservabilityDashboard />} />
       <Route path="/workflow-command" element={<WorkflowCommandCenter />} />
+      <Route path="/ai-journaling" element={<Documents />} />
       <Route path="/ai-audit" element={<AIAudit />} />
       <Route path="/voice-assistant" element={<VoiceAssistant />} />
-      <Route path="/ai-operations" element={<AIOperationsCenter />} />
-      <Route path="/optimization" element={<Optimization />} />
+      <Route path="/assistant/voice" element={<VoiceAssistant />} />
+      
+      {/* ============================================ */}
+      {/* INTELIGÊNCIA AVANÇADA */}
+      {/* ============================================ */}
+      <Route path="/optimization-dashboard" element={<Optimization />} />
+      <Route path="/intelligence/opec" element={<Optimization />} />
+      <Route path="/intelligence/wellness" element={<CrewWellnessPage />} />
+      <Route path="/intelligence/documents" element={<Documents />} />
+      <Route path="/intelligence/accidents" element={<SafetyHumanFactorsV2 />} />
+      <Route path="/intelligence/blockchain" element={<RevolutionaryFeaturesPage />} />
+      <Route path="/intelligence/competitive" element={<AISTrackerPage />} />
+      
+      {/* ============================================ */}
+      {/* TELEMETRIA & MONITORAMENTO */}
+      {/* ============================================ */}
+      <Route path="/telemetria" element={<TelemetriaCommand />} />
       <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />
       <Route path="/satellite-optimizer" element={<SatelliteOptimizerPage />} />
-      <Route path="/vessel-tracking" element={<VesselTrackingPage />} />
-      <Route path="/incident-simulator" element={<IncidentSimulator />} />
-      <Route path="/calendar" element={<CalendarView />} />
-      <Route path="/api-center" element={<APICenter />} />
-      <Route path="/api-monitor" element={<APIMonitor />} />
-      <Route path="/integrations" element={<Integrations />} />
+      <Route path="/tracking" element={<VesselTrackingPage />} />
+      <Route path="/tracking/gnss-live" element={<VesselTrackingPage />} />
+      <Route path="/tracking/alerts" element={<AlertsCommandCenter />} />
+      <Route path="/simulador" element={<IncidentSimulator />} />
+      <Route path="/emergency-mode" element={<AlertsCommandCenter />} />
+      <Route path="/operational-calendar" element={<CalendarView />} />
+      
+      {/* ============================================ */}
+      {/* APIs & INTEGRAÇÕES */}
+      {/* ============================================ */}
+      <Route path="/integracoes/api-center" element={<APICenter />} />
+      <Route path="/integracoes/api-monitor" element={<APIMonitor />} />
+      <Route path="/integracoes" element={<Integrations />} />
       <Route path="/weather-maritime" element={<WeatherMaritime />} />
-      <Route path="/ais-tracker" element={<AISTrackerPage />} />
+      <Route path="/ais-tracker-page" element={<AISTrackerPage />} />
       <Route path="/port-api" element={<PortAPI />} />
       <Route path="/flight-tracker" element={<FlightTracker />} />
       <Route path="/noaa-weather" element={<NOAAWeather />} />
       <Route path="/opensky-flights" element={<OpenSkyFlights />} />
       <Route path="/earthquake-monitor" element={<EarthquakeMonitor />} />
       <Route path="/voice-transcriber" element={<VoiceTranscriber />} />
+      
+      {/* ============================================ */}
+      {/* RELATÓRIOS & DOCUMENTOS */}
+      {/* ============================================ */}
       <Route path="/reports-command" element={<ReportsCommandCenter />} />
+      <Route path="/reports" element={<ReportsCommandCenter />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/templates" element={<Templates />} />
-      <Route path="/checklists" element={<MaritimeChecklists />} />
+      <Route path="/admin/checklists" element={<MaritimeChecklists />} />
       <Route path="/document-workflow" element={<DocumentWorkflow />} />
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
+      <Route path="/documentation" element={<Documents />} />
+      
+      {/* ============================================ */}
+      {/* COMUNICAÇÃO & ALERTAS */}
+      {/* ============================================ */}
       <Route path="/communication-command" element={<CommunicationCommandCenter />} />
       <Route path="/alerts-command" element={<AlertsCommandCenter />} />
-      <Route path="/peodp" element={<PEODP />} />
+      <Route path="/maritime-connectivity" element={<CommunicationCommandCenter />} />
+      <Route path="/real-time-workspace" element={<Collaboration />} />
+      
+      {/* ============================================ */}
+      {/* AUDITORIAS & COMPLIANCE */}
+      {/* ============================================ */}
+      <Route path="/peo-dp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
       <Route path="/sgso" element={<SGSO />} />
-      <Route path="/safety-imca" element={<SafetyIMCAV2 />} />
+      <Route path="/imca-audit" element={<SafetyIMCAV2 />} />
       <Route path="/pre-ovid" element={<PreOVIDInspection />} />
+      <Route path="/pre-ovid-inspection" element={<PreOVIDInspection />} />
       <Route path="/mlc-inspection" element={<MLCInspection />} />
       <Route path="/psc-package" element={<PSCPackage />} />
       <Route path="/gmud" element={<GMUDV2 />} />
       <Route path="/responsibility-matrix" element={<ResponsibilityMatrixV2 />} />
       <Route path="/safety-human-factors" element={<SafetyHumanFactorsV2 />} />
+      <Route path="/safety-imca" element={<SafetyIMCAV2 />} />
       <Route path="/isps-security" element={<ISPSSecurityV2 />} />
       <Route path="/drill-simulator" element={<DrillSimulatorV2 />} />
       <Route path="/compliance-one" element={<ComplianceOneV2 />} />
@@ -328,69 +459,136 @@ const AppRoutes = () => (
       <Route path="/due-diligence" element={<DueDiligenceV2 />} />
       <Route path="/whistleblower" element={<WhistleblowerV2 />} />
       <Route path="/security-center" element={<SecurityCenter />} />
-      <Route path="/security-audit" element={<SecurityAuditCenter />} />
+      <Route path="/ai-operations-center" element={<AIOperationsCenter />} />
+      <Route path="/auditoria-seguranca" element={<SecurityAuditCenter />} />
       <Route path="/security-scanner" element={<SecurityScanner />} />
-      <Route path="/crew" element={<CrewManagement />} />
+      <Route path="/compliance-hub" element={<ComplianceOneV2 />} />
+      <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
+      
+      {/* ============================================ */}
+      {/* RH & PESSOAS (HR/DP MODULE) */}
+      {/* ============================================ */}
+      <Route path="/nautilus-people" element={<CrewManagement />} />
+      <Route path="/crew-management" element={<CrewManagement />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
+      <Route path="/crew-wellbeing" element={<CrewWellnessPage />} />
+      <Route path="/recruitment" element={<RecruitmentPage />} />
+      <Route path="/agent-orchestration" element={<AgentOrchestrationPage />} />
+      <Route path="/blockchain-compliance" element={<BlockchainCompliancePage />} />
+      <Route path="/company-financials" element={<CompanyFinancialPage />} />
+      <Route path="/medical-infirmary" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
+      
+      {/* HR/DP Module - New Routes */}
       <Route path="/hr-dashboard" element={<HRDashboardPage />} />
-      <Route path="/employee-portal" element={<EmployeePortalPage />} />
-      <Route path="/people-analytics" element={<PeopleAnalyticsPage />} />
+      <Route path="/hr/dashboard" element={<HRDashboardPage />} />
+      <Route path="/hr/employees" element={<HRDashboardPage />} />
+      <Route path="/hr/payroll" element={<Payroll />} />
       <Route path="/payroll" element={<Payroll />} />
+      <Route path="/folha-pagamento" element={<Payroll />} />
       <Route path="/time-tracking" element={<TimeTracking />} />
+      <Route path="/controle-ponto" element={<TimeTracking />} />
+      <Route path="/hr/admissions" element={<HRDashboardPage />} />
+      <Route path="/hr/vacations" element={<HRDashboardPage />} />
+      <Route path="/employee-portal" element={<EmployeePortalPage />} />
+      <Route path="/portal-colaborador" element={<EmployeePortalPage />} />
+      <Route path="/people-analytics" element={<PeopleAnalyticsPage />} />
+      <Route path="/hr/analytics" element={<PeopleAnalyticsPage />} />
+      <Route path="/hr/turnover" element={<HRTurnoverPredictionPage />} />
+      
+      {/* HR AI Modules */}
       <Route path="/hr-chatbot" element={<HRChatbotPage />} />
+      <Route path="/hr/chatbot" element={<HRChatbotPage />} />
+      <Route path="/assistente-rh" element={<HRChatbotPage />} />
       <Route path="/hr-ocr" element={<HRDocumentOCRPage />} />
+      <Route path="/hr/document-ocr" element={<HRDocumentOCRPage />} />
+      <Route path="/admissao-digital" element={<HRDocumentOCRPage />} />
       <Route path="/hr-turnover" element={<HRTurnoverPredictionPage />} />
-      <Route path="/ai-training" element={<AITraining />} />
+      <Route path="/hr/turnover-prediction" element={<HRTurnoverPredictionPage />} />
+      <Route path="/predicao-turnover" element={<HRTurnoverPredictionPage />} />
+      
+      {/* ============================================ */}
+      {/* TREINAMENTOS */}
+      {/* ============================================ */}
+      <Route path="/nautilus-academy" element={<AITraining />} />
+      <Route path="/solas-isps-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
       <Route path="/dp-intelligence" element={<DPIntelligence />} />
+      
+      {/* ============================================ */}
+      {/* FINANÇAS & PROCUREMENT */}
+      {/* ============================================ */}
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
       <Route path="/operations-command" element={<OperationsCommandCenter />} />
       <Route path="/procurement-command" element={<ProcurementCommandCenter />} />
-      <Route path="/tasks" element={<TaskManagement />} />
-      <Route path="/sustainability" element={<SustainabilityScorePage />} />
+      <Route path="/task-management" element={<TaskManagement />} />
+      
+      {/* ============================================ */}
+      {/* ESG & SUSTENTABILIDADE */}
+      {/* ============================================ */}
+      <Route path="/esg-emissions" element={<SustainabilityScorePage />} />
+      <Route path="/waste-management" element={<SustainabilityScorePage />} />
+      <Route path="/sustainability-score" element={<SustainabilityScorePage />} />
+      
+      {/* ============================================ */}
+      {/* VIAGENS & LOGÍSTICA */}
+      {/* ============================================ */}
       <Route path="/travel-command" element={<TravelCommandCenter />} />
       <Route path="/weather-command" element={<WeatherCommandCenter />} />
+      
+      {/* ============================================ */}
+      {/* SISTEMA & CONFIGURAÇÕES */}
+      {/* ============================================ */}
       <Route path="/settings" element={<Settings />} />
-      <Route path="/integrations-center" element={<IntegrationsCenter />} />
+      <Route path="/integrations" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
       <Route path="/collaboration" element={<Collaboration />} />
       <Route path="/iot" element={<IoT />} />
       <Route path="/gamification" element={<Gamification />} />
       <Route path="/roadmap" element={<Roadmap />} />
+      <Route path="/qa/preview" element={<Dashboard />} />
       <Route path="/production-deploy" element={<ProductionDeploy />} />
+      
+      {/* ============================================ */}
+      {/* ADMIN & DASHBOARDS */}
+      {/* ============================================ */}
       <Route path="/admin" element={<Admin />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
+      <Route path="/system-overview" element={<Dashboard />} />
       <Route path="/analytics" element={<Analytics />} />
+      <Route path="/backup-audit" element={<SecurityAuditCenter />} />
+      <Route path="/testing" element={<Dashboard />} />
+      <Route path="/feedback" element={<Dashboard />} />
+      <Route path="/saas-manager" element={<Admin />} />
+      
+      {/* DEV ONLY - Route Dashboard */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>
     
-    {/* 404 */}
-    <Route path="*" element={<NotFound />} />
+    {/* Catch-all: Redirecionar para central de comando */}
+    <Route path="*" element={<Navigate to="/central-comando" replace />} />
   </Routes>
 );
 
-// Main App Component
 function App() {
   return (
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <TooltipProvider>
-            <Router>
-              <AuthProvider>
-                <Suspense fallback={<Loader />}>
-                  <AppRoutes />
-                </Suspense>
-              </AuthProvider>
-            </Router>
-          </TooltipProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
+        <AuthProvider>
+          <Router>
+            <TooltipProvider>
+              <Suspense fallback={<Loader />}>
+                <AppRoutes />
+              </Suspense>
+              <Toaster />
+            </TooltipProvider>
+          </Router>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

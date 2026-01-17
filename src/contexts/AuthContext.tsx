@@ -1,7 +1,8 @@
-// AuthContext - PATCH 856 - Fixed React hooks with namespace import
-import * as React from "react";
+// AuthContext - PATCH 850.3 - Fixed React import to use named imports
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
+import type { ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
-import { supabase, getNetworkStatus } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Logger } from "@/lib/utils/logger";
 
@@ -18,6 +19,7 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
 }
 
+// Default context value to prevent null errors
 const defaultAuthValue: AuthContextType = {
   user: null,
   session: null,
@@ -29,10 +31,10 @@ const defaultAuthValue: AuthContextType = {
   resetPassword: async () => ({ error: null }),
 };
 
-const AuthContext = React.createContext<AuthContextType>(defaultAuthValue);
+const AuthContext = createContext<AuthContextType>(defaultAuthValue);
 
 export const useAuth = (): AuthContextType => {
-  const context = React.useContext(AuthContext);
+  const context = useContext(AuthContext);
   if (!context) {
     Logger.warn("useAuth called outside of AuthProvider, returning default value");
     return defaultAuthValue;
@@ -41,20 +43,20 @@ export const useAuth = (): AuthContextType => {
 };
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [isInitialized, setIsInitialized] = React.useState(false);
+export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     let retryCount = 0;
-    const maxRetries = 5; // PATCH 855: Increased retries for slow connections
+    const maxRetries = 3;
 
     const initializeAuth = async () => {
       try {
@@ -68,6 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
             setIsLoading(false);
             setIsInitialized(true);
             
+            // Use setTimeout to defer toast calls (avoid deadlock)
             if (event === "SIGNED_IN") {
               setTimeout(() => {
                 toast.success("Bem-vindo!", {
@@ -86,54 +89,42 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
         
         subscription = data.subscription;
 
-        // PATCH 855: Enhanced session fetch with better retry logic
+        // THEN check for existing session with retry logic
         const fetchSession = async (): Promise<void> => {
           try {
-            const networkStatus = getNetworkStatus();
-            Logger.info(`Network status: ${networkStatus.quality} (${networkStatus.effectiveType})`, null, "AuthContext");
-            
             const { data: sessionData, error } = await supabase.auth.getSession();
 
             if (!mounted) return;
 
             if (error) {
-              const isNetworkError = 
-                error.message?.includes('Failed to fetch') || 
-                error.name === 'AuthRetryableFetchError' ||
-                error.message?.includes('network');
-              
-              if (isNetworkError && retryCount < maxRetries) {
-                retryCount++;
-                const delay = 1000 * Math.pow(2, retryCount - 1); // Exponential backoff
-                Logger.warn(`Session fetch failed, retry ${retryCount}/${maxRetries} in ${delay}ms`, error, "AuthContext");
-                await new Promise(resolve => setTimeout(resolve, delay));
-                return fetchSession();
+              // Handle network errors with retry
+              if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
+                if (retryCount < maxRetries) {
+                  retryCount++;
+                  Logger.warn(`Session fetch failed, retrying (${retryCount}/${maxRetries})...`, error, "AuthContext");
+                  await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+                  return fetchSession();
+                }
               }
-              
-              Logger.warn("Error getting session after retries", error, "AuthContext");
+              Logger.warn("Error getting session", error, "AuthContext");
             }
             
             setSession(sessionData?.session ?? null);
             setUser(sessionData?.session?.user ?? null);
             setIsLoading(false);
             setIsInitialized(true);
-          } catch (fetchError: any) {
+          } catch (fetchError) {
             if (!mounted) return;
             
-            const isNetworkError = 
-              fetchError?.name === 'AbortError' ||
-              fetchError?.message?.includes('Failed to fetch') ||
-              fetchError?.message?.includes('network');
-            
-            if (isNetworkError && retryCount < maxRetries) {
+            // Network error - retry with exponential backoff
+            if (retryCount < maxRetries) {
               retryCount++;
-              const delay = 1000 * Math.pow(2, retryCount - 1);
-              Logger.warn(`Network error, retry ${retryCount}/${maxRetries} in ${delay}ms`, fetchError, "AuthContext");
-              await new Promise(resolve => setTimeout(resolve, delay));
+              Logger.warn(`Network error, retrying (${retryCount}/${maxRetries})...`, fetchError, "AuthContext");
+              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
               return fetchSession();
             }
             
-            Logger.warn("Failed to fetch session after all retries", fetchError, "AuthContext");
+            Logger.warn("Failed to fetch session after retries", fetchError, "AuthContext");
             setIsLoading(false);
             setIsInitialized(true);
           }
@@ -158,65 +149,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
     };
   }, []);
 
-  // PATCH 855: Enhanced signIn with better error handling for slow connections
-  const signIn = React.useCallback(async (email: string, password: string) => {
-    setIsLoading(true);
-    
-    const networkStatus = getNetworkStatus();
-    if (networkStatus.quality === 'offline') {
-      setIsLoading(false);
-      const error = new Error("Sem conexão com internet. Verifique sua rede.");
-      toast.error("Sem conexão", { description: error.message });
-      return { error };
-    }
-    
-    try {
-      Logger.info(`Login attempt on ${networkStatus.quality} connection`, null, "AuthContext");
-      
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        let message = error.message;
-        
-        // Translate common errors
-        if (error.message?.includes('Invalid login credentials')) {
-          message = 'Email ou senha incorretos';
-        } else if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
-          message = 'Problema de conexão. O sistema vai tentar novamente automaticamente.';
-        } else if (error.message?.includes('rate limit')) {
-          message = 'Muitas tentativas. Aguarde alguns minutos.';
-        }
-        
-        toast.error("Erro no login", { description: message });
-        setIsLoading(false);
-        return { error };
-      }
-
-      setIsLoading(false);
-      return { error: null };
-    } catch (err: any) {
-      setIsLoading(false);
-      
-      let message = "Erro ao fazer login";
-      
-      if (err?.name === 'AbortError') {
-        message = 'Conexão expirou. Sua internet está lenta, mas o sistema vai tentar novamente.';
-      } else if (err?.message?.includes('Failed to fetch')) {
-        message = 'Erro de rede. Verifique sua conexão e tente novamente.';
-      } else if (err?.message) {
-        message = err.message;
-      }
-      
-      const error = new Error(message);
-      toast.error("Erro no login", { description: message });
-      return { error };
-    }
-  }, []);
-
-  const signUp = React.useCallback(async (email: string, password: string, fullName: string) => {
+  const signUp = useCallback(async (email: string, password: string, fullName: string) => {
     setIsLoading(true);
     
     const redirectUrl = `${window.location.origin}/`;
@@ -227,12 +160,16 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: { full_name: fullName }
+          data: {
+            full_name: fullName,
+          }
         }
       });
 
       if (error) {
-        toast.error("Erro no cadastro", { description: error.message });
+        toast.error("Erro no cadastro", {
+          description: error.message,
+        });
         setIsLoading(false);
         return { error };
       }
@@ -251,19 +188,19 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
     }
   }, []);
 
-  const signInWithOAuth = React.useCallback(async (provider: OAuthProvider) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     
-    const redirectUrl = `${window.location.origin}/`;
-    
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: redirectUrl }
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
       if (error) {
-        toast.error("Erro no login", { description: error.message });
+        toast.error("Erro no login", {
+          description: error.message,
+        });
         setIsLoading(false);
         return { error };
       }
@@ -278,7 +215,38 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
     }
   }, []);
 
-  const signOut = React.useCallback(async () => {
+  const signInWithOAuth = useCallback(async (provider: OAuthProvider) => {
+    setIsLoading(true);
+    
+    const redirectUrl = `${window.location.origin}/`;
+    
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: redirectUrl,
+        }
+      });
+
+      if (error) {
+        toast.error("Erro no login", {
+          description: error.message,
+        });
+        setIsLoading(false);
+        return { error };
+      }
+
+      setIsLoading(false);
+      return { error: null };
+    } catch (err) {
+      setIsLoading(false);
+      const error = err instanceof Error ? err : new Error("Erro desconhecido");
+      toast.error("Erro no login", { description: error.message });
+      return { error };
+    }
+  }, []);
+
+  const signOut = useCallback(async () => {
     setIsLoading(true);
     try {
       await supabase.auth.signOut();
@@ -289,7 +257,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
     }
   }, []);
 
-  const resetPassword = React.useCallback(async (email: string) => {
+  const resetPassword = useCallback(async (email: string) => {
     const redirectUrl = `${window.location.origin}/auth?type=recovery`;
     
     try {
@@ -298,7 +266,9 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
       });
 
       if (error) {
-        toast.error("Erro", { description: error.message });
+        toast.error("Erro", {
+          description: error.message,
+        });
         return { error };
       }
       
@@ -314,7 +284,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
     }
   }, []);
 
-  const value: AuthContextType = React.useMemo(() => ({
+  const value: AuthContextType = useMemo(() => ({
     user,
     session,
     isLoading,
@@ -325,6 +295,7 @@ export function AuthProvider({ children }: AuthProviderProps): React.JSX.Element
     resetPassword,
   }), [user, session, isLoading, signUp, signIn, signInWithOAuth, signOut, resetPassword]);
 
+  // Always render provider - children handle loading state
   return (
     <AuthContext.Provider value={value}>
       {children}

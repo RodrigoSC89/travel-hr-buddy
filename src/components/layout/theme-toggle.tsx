@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/layout/theme-provider";
 
-// PATCH 859: Extended theme toggle with nautilus and high-contrast themes
+// PATCH 620: Extended theme toggle with nautilus and high-contrast themes
 export function ThemeToggle() {
-  const { setTheme, theme } = useTheme();
+  const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>

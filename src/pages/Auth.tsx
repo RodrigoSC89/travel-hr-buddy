@@ -133,44 +133,24 @@ const Auth: React.FC = () => {
     }
   };
 
-  // PATCH 855: Enhanced sign in with better UX for slow connections
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
     setNetworkError(false);
-    
-    // Show info toast for slow connections
-    const connectionToast = toast.loading("Conectando ao servidor...", {
-      description: "Aguarde, pode levar até 30 segundos em conexões lentas."
-    });
-    
     try {
       const result = await signIn(data.email, data.password);
-      toast.dismiss(connectionToast);
-      
       if (result?.error) {
-        const isNetworkError = 
-          result.error.message?.includes('Failed to fetch') || 
-          result.error.message?.includes('conexão') ||
-          result.error.message?.includes('network') ||
-          (result.error as any).name === 'AuthRetryableFetchError';
-        
-        if (isNetworkError) {
+        // Check for network errors
+        if (result.error.message?.includes('Failed to fetch') || 
+            result.error.name === 'AuthRetryableFetchError') {
           setNetworkError(true);
+          toast.error("Erro de conexão", {
+            description: "Verifique sua internet ou tente limpar a sessão."
+          });
         }
       }
     } catch (error: any) {
-      toast.dismiss(connectionToast);
-      
-      const isNetworkError = 
-        error?.message?.includes('Failed to fetch') ||
-        error?.message?.includes('conexão') ||
-        error?.name === 'AbortError';
-      
-      if (isNetworkError) {
+      if (error?.message?.includes('Failed to fetch')) {
         setNetworkError(true);
-        toast.error("Problema de conexão", {
-          description: "Sua internet está instável. O sistema tentou reconectar automaticamente."
-        });
       }
     } finally {
       setIsLoading(false);
@@ -419,17 +399,8 @@ const Auth: React.FC = () => {
                       className="w-full"
                       disabled={isLoading || authLoading}
                     >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Conectando (pode levar até 30s)...
-                        </>
-                      ) : (
-                        <>
-                          Entrar
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </>
-                      )}
+                      {isLoading ? "Entrando..." : "Entrar"}
+                      <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </form>
 
