@@ -6,6 +6,7 @@
 // Core AI Prompts
 export { PEOTRAM_AI_CONFIG } from './peotram-ai-prompt';
 export { PEODP_AI_CONFIG } from './peodp-ai-prompt';
+export { PEO_DP_AI_CONFIG } from './peo-dp-ai-prompt';
 export { COMMAND_AI_CONFIG } from './command-ai-prompt';
 export { VOICE_AI_CONFIG } from './voice-ai-prompt';
 
