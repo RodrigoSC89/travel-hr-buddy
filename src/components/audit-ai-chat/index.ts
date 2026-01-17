@@ -7,4 +7,5 @@ export { ChatMessage } from './ChatMessage';
 export { QuickActions } from './QuickActions';
 export { ChatHistory } from './ChatHistory';
 export { EvidencePDFGenerator } from './EvidencePDFGenerator';
+export { HistoryExporter } from './HistoryExporter';
 export { type ChatSession, type ChatMessage as PersistentChatMessage } from '@/hooks/use-audit-chat-persistence';
