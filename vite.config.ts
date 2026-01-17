@@ -77,6 +77,9 @@ export default defineConfig(({ mode }) => {
     },
     
     optimizeDeps: {
+      // PATCH 857: Force unique cache to eliminate stale React instances
+      force: true,
+      
       // Pre-bundle these together to ensure single React instance
       include: [
         "react",
@@ -89,6 +92,7 @@ export default defineConfig(({ mode }) => {
         "@tanstack/react-query",
         "react-router-dom",
       ],
+      
       // Heavy libs that shouldn't be pre-bundled
       exclude: [
         "@tensorflow/tfjs",
@@ -100,13 +104,17 @@ export default defineConfig(({ mode }) => {
         "mapbox-gl",
         "tesseract.js",
       ],
-      // CRITICAL: Force rebuild of the dependency cache
-      force: true,
-      // Use a consistent cache directory
+      
       esbuildOptions: {
         target: "esnext",
+        // Force all JSX to use same React
+        jsx: "automatic",
+        jsxImportSource: "react",
       },
     },
+    
+    // PATCH 857: Unique cache directory to force fresh build
+    cacheDir: "node_modules/.vite-nautilus-857",
     
     esbuild: {
       target: "esnext",
