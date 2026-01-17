@@ -4,13 +4,16 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 /**
- * PATCH 860: SIMPLIFIED config to fix React duplicate instances
+ * PATCH 863: Force complete cache invalidation
+ * Timestamp: ${Date.now()}
  * 
- * The error happens because different chunks load different React instances.
- * Solution: Minimal config with essential deduplication only.
+ * Solution: Simplified config with aggressive deduplication
  */
 export default defineConfig(({ mode }) => ({
   base: "/",
+  
+  // CRITICAL: Clear old cache entries
+  cacheDir: ".vite-cache-" + Date.now(),
   
   server: {
     host: true,
@@ -27,16 +30,16 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Force single React instance
+      "react": path.resolve(__dirname, "./node_modules/react"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
     },
-    // CRITICAL: Force all these packages to use the same instance
     dedupe: [
       "react",
       "react-dom",
       "react-is",
       "scheduler",
       "@tanstack/react-query",
-      // next-themes removed - using pure React solution
-      // Radix UI packages that use React
       "@radix-ui/react-tooltip",
       "@radix-ui/react-dialog",
       "@radix-ui/react-popover",
@@ -85,7 +88,6 @@ export default defineConfig(({ mode }) => ({
   },
   
   optimizeDeps: {
-    // Force rebuild
     force: true,
     
     include: [
@@ -95,7 +97,6 @@ export default defineConfig(({ mode }) => ({
       "scheduler",
       "@tanstack/react-query",
       "react-router-dom",
-      // next-themes removed
     ],
     
     exclude: [
