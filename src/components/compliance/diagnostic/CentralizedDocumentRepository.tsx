@@ -5,6 +5,8 @@
  */
 
 import { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -59,6 +61,40 @@ const CATEGORIES = [
   { id: 'report', name: 'Relatórios', icon: FileText }
 ];
 
+// Hook para buscar documentos reais do Supabase
+function useDocuments() {
+  return useQuery({
+    queryKey: ['vault-documents'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('vault_documents')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+      
+      if (error) throw error;
+      
+      return (data || []).map(doc => ({
+        id: doc.id,
+        name: doc.title || 'Documento',
+        type: doc.file_type?.split('/')[1] || 'pdf',
+        category: 'procedure' as Document['category'],
+        module: 'Geral' as Document['module'],
+        version: String(doc.version || '1.0'),
+        status: 'current' as Document['status'],
+        created_at: doc.created_at || new Date().toISOString(),
+        updated_at: doc.updated_at || doc.created_at || new Date().toISOString(),
+        created_by: 'Sistema',
+        size: doc.file_size ? `${(doc.file_size / 1024).toFixed(1)} KB` : 'N/A',
+        tags: doc.tags || [],
+        description: doc.content?.substring(0, 100),
+        ocr_indexed: !!doc.content,
+        download_count: 0
+      } as Document));
+    }
+  });
+}
+
 const MOCK_DOCUMENTS: Document[] = [
   {
     id: '1',
@@ -95,76 +131,6 @@ const MOCK_DOCUMENTS: Document[] = [
     description: 'Manual completo de operações de posicionamento dinâmico',
     ocr_indexed: true,
     download_count: 123
-  },
-  {
-    id: '3',
-    name: 'Checklist Pré-Operacional PEOTRAM',
-    type: 'xlsx',
-    category: 'checklist',
-    module: 'PEOTRAM',
-    version: '1.5',
-    status: 'current',
-    created_at: '2024-03-10',
-    updated_at: '2025-01-05',
-    created_by: 'Carlos Oliveira',
-    size: '856 KB',
-    tags: ['checklist', 'pré-operacional', 'diário'],
-    description: 'Lista de verificação diária conforme requisitos PEOTRAM',
-    ocr_indexed: false,
-    download_count: 89
-  },
-  {
-    id: '4',
-    name: 'Formulário de Registro de NC',
-    type: 'docx',
-    category: 'form',
-    module: 'Geral',
-    version: '4.1',
-    status: 'current',
-    created_at: '2022-08-15',
-    updated_at: '2024-11-20',
-    created_by: 'Ana Pereira',
-    size: '245 KB',
-    tags: ['NC', 'não conformidade', 'registro', 'qualidade'],
-    description: 'Formulário padrão para abertura e registro de não conformidades',
-    ocr_indexed: true,
-    download_count: 234
-  },
-  {
-    id: '5',
-    name: 'POP-DP-003 - Troca de DP Operador',
-    type: 'pdf',
-    category: 'procedure',
-    module: 'PEO-DP',
-    version: '2.3',
-    status: 'outdated',
-    created_at: '2023-02-28',
-    updated_at: '2024-06-15',
-    created_by: 'Pedro Costa',
-    size: '1.2 MB',
-    tags: ['DP', 'operador', 'troca', 'rendição'],
-    vessel: 'Todos',
-    description: 'Procedimento para troca de operadores DP durante operação',
-    ocr_indexed: true,
-    download_count: 67
-  },
-  {
-    id: '6',
-    name: 'Relatório de Auditoria PEOTRAM Q4-2024',
-    type: 'pdf',
-    category: 'report',
-    module: 'PEOTRAM',
-    version: '1.0',
-    status: 'current',
-    created_at: '2024-12-20',
-    updated_at: '2024-12-20',
-    created_by: 'Auditor Externo',
-    size: '4.5 MB',
-    tags: ['auditoria', 'Q4', '2024', 'relatório'],
-    vessel: 'Navio Beta',
-    description: 'Relatório completo da auditoria PEOTRAM do 4º trimestre',
-    ocr_indexed: true,
-    download_count: 28
   }
 ];
 
@@ -176,7 +142,8 @@ const VERSION_HISTORY: Version[] = [
 ];
 
 export function CentralizedDocumentRepository() {
-  const [documents] = useState<Document[]>(MOCK_DOCUMENTS);
+  const { data: realDocuments, isLoading } = useDocuments();
+  const documents = realDocuments?.length ? realDocuments : MOCK_DOCUMENTS;
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedModule, setSelectedModule] = useState('all');
