@@ -163,6 +163,7 @@ const WhistleblowerV2 = lazy(() => import("@/pages/WhistleblowerV2"));
 const SecurityCenter = lazy(() => import("@/pages/SecurityCenter"));
 const SecurityAuditCenter = lazy(() => import("@/pages/SecurityAuditCenter"));
 const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
+const AuditAIChatPage = lazy(() => import("@/pages/AuditAIChatPage"));
 
 // ============================================
 // RH & PESSOAS (HR/DP MODULE)
@@ -438,6 +439,7 @@ const AppRoutes = () => (
       {/* ============================================ */}
       {/* AUDITORIAS & COMPLIANCE */}
       {/* ============================================ */}
+      <Route path="/audit-ai-chat" element={<AuditAIChatPage />} />
       <Route path="/peo-dp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
       <Route path="/sgso" element={<SGSO />} />

@@ -278,6 +278,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
+      // Chat IA Agêntico (NOVO)
+      { label: "🤖 Audit AI Chat", path: "/audit-ai-chat", icon: Brain, emoji: "🤖", badge: "NEW", status: "new" },
       // Auditorias Marítimas Regulatórias
       { label: "PEO-DP", path: "/peo-dp", icon: FileText, emoji: "📋" },
       { label: "PEOTRAM", path: "/peotram", icon: FileText, emoji: "📋" },
