@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Mic,
@@ -18,21 +18,20 @@ import {
   Brain,
   Sparkles,
   FileText,
-  Download,
   History,
-  Trash2,
   ClipboardCheck,
-  AlertTriangle,
-  CheckCircle,
   Loader2,
-  QrCode,
-  FileDown,
   RefreshCw
 } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { QuickActions } from "./QuickActions";
 import { ChatHistory } from "./ChatHistory";
 import { EvidencePDFGenerator } from "./EvidencePDFGenerator";
+import { 
+  useAuditChatPersistence, 
+  type ChatMessage as PersistentMessage, 
+  type ChatSession 
+} from "@/hooks/use-audit-chat-persistence";
 
 export interface Message {
   id: string;
@@ -42,14 +41,8 @@ export interface Message {
   module?: string;
 }
 
-export interface ChatSession {
-  id: string;
-  title: string;
-  messages: Message[];
-  module: 'peotram' | 'peodp';
-  createdAt: Date;
-  updatedAt: Date;
-}
+// Re-export ChatSession for other components
+export type { ChatSession } from "@/hooks/use-audit-chat-persistence";
 
 interface AuditAIChatPageProps {
   defaultModule?: 'peotram' | 'peodp';
@@ -73,7 +66,19 @@ const PEODP_QUICK_ACTIONS = [
   { label: "Analisar Incidente DP", prompt: "Como investigar e reportar um incidente DP conforme IMCA DPOIS? Liste os passos, classificação e documentação." },
 ];
 
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/module-ai-chat`;
+const CHAT_URL = `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/module-ai-chat`;
+const ANON_KEY = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE`;
+
+// Helper to convert between Message types
+const toMessage = (pm: PersistentMessage): Message => ({
+  ...pm,
+  timestamp: new Date(pm.timestamp)
+});
+
+const toPersistentMessage = (m: Message): PersistentMessage => ({
+  ...m,
+  timestamp: m.timestamp.toISOString()
+});
 
 export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPageProps) {
   const [activeModule, setActiveModule] = useState<'peotram' | 'peodp'>(defaultModule);
@@ -81,38 +86,21 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [showPDFGenerator, setShowPDFGenerator] = useState(false);
   const [selectedMessageForPDF, setSelectedMessageForPDF] = useState<Message | null>(null);
   
+  const { 
+    sessions, 
+    isLoading: sessionsLoading,
+    createSession,
+    saveSession,
+    deleteSession 
+  } = useAuditChatPersistence(activeModule);
+  
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Load sessions from localStorage
-  useEffect(() => {
-    const savedSessions = localStorage.getItem('audit-chat-sessions');
-    if (savedSessions) {
-      const parsed = JSON.parse(savedSessions);
-      setSessions(parsed.map((s: any) => ({
-        ...s,
-        createdAt: new Date(s.createdAt),
-        updatedAt: new Date(s.updatedAt),
-        messages: s.messages.map((m: any) => ({
-          ...m,
-          timestamp: new Date(m.timestamp)
-        }))
-      })));
-    }
-  }, []);
-
-  // Save sessions to localStorage
-  useEffect(() => {
-    if (sessions.length > 0) {
-      localStorage.setItem('audit-chat-sessions', JSON.stringify(sessions));
-    }
-  }, [sessions]);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -190,7 +178,7 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${ANON_KEY}`,
         },
         body: JSON.stringify({
           module: activeModule,
@@ -272,39 +260,28 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
         }
       }
 
-      // Save to session
-      const sessionId = activeSessionId || `session_${Date.now()}`;
-      if (!activeSessionId) {
-        setActiveSessionId(sessionId);
-      }
+      // Save session
+      const assistantMessage: Message = {
+        id: `assistant_${Date.now()}`,
+        role: 'assistant',
+        content: assistantContent,
+        timestamp: new Date(),
+        module: activeModule
+      };
 
-      setSessions(prev => {
-        const existing = prev.find(s => s.id === sessionId);
-        const updatedMessages = [...messages, userMessage, {
-          id: `assistant_${Date.now()}`,
-          role: 'assistant' as const,
-          content: assistantContent,
-          timestamp: new Date(),
-          module: activeModule
-        }];
+      const allMessages = [...messages, userMessage, assistantMessage];
+      const persistentMessages = allMessages.map(toPersistentMessage);
 
-        if (existing) {
-          return prev.map(s => s.id === sessionId ? {
-            ...s,
-            messages: updatedMessages,
-            updatedAt: new Date()
-          } : s);
+      if (activeSessionId) {
+        const session = sessions.find(s => s.id === activeSessionId);
+        if (session) {
+          saveSession({ ...session, messages: persistentMessages });
         }
-
-        return [...prev, {
-          id: sessionId,
-          title: text.substring(0, 50) + (text.length > 50 ? '...' : ''),
-          messages: updatedMessages,
-          module: activeModule,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }];
-      });
+      } else {
+        const title = text.substring(0, 50) + (text.length > 50 ? '...' : '');
+        const newSession = createSession(title, persistentMessages);
+        setActiveSessionId(newSession.id);
+      }
 
     } catch (error) {
       console.error('Chat error:', error);
@@ -312,7 +289,7 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, activeModule, activeSessionId]);
+  }, [input, isLoading, messages, activeModule, activeSessionId, sessions, createSession, saveSession]);
 
   const handleQuickAction = (prompt: string) => {
     setInput(prompt);
@@ -326,14 +303,14 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
   };
 
   const loadSession = (session: ChatSession) => {
-    setMessages(session.messages);
+    setMessages(session.messages.map(toMessage));
     setActiveSessionId(session.id);
     setActiveModule(session.module);
     setShowHistory(false);
   };
 
-  const deleteSession = (sessionId: string) => {
-    setSessions(prev => prev.filter(s => s.id !== sessionId));
+  const handleDeleteSession = (sessionId: string) => {
+    deleteSession(sessionId);
     if (activeSessionId === sessionId) {
       startNewChat();
     }
@@ -354,8 +331,8 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-xl bg-${moduleColor}-500/10`}>
-              <Brain className={`h-8 w-8 text-${moduleColor}-500`} />
+            <div className="p-3 rounded-xl bg-primary/10">
+              <Brain className="h-8 w-8 text-primary" />
             </div>
             <div>
               <h1 className="text-2xl font-bold">Assistente Agêntico</h1>
@@ -387,7 +364,10 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
         </div>
 
         {/* Module Tabs */}
-        <Tabs value={activeModule} onValueChange={(v) => setActiveModule(v as 'peotram' | 'peodp')}>
+        <Tabs value={activeModule} onValueChange={(v) => {
+          setActiveModule(v as 'peotram' | 'peodp');
+          startNewChat();
+        }}>
           <TabsList className="grid w-full max-w-md grid-cols-2">
             <TabsTrigger value="peotram" className="gap-2">
               <ClipboardCheck className="h-4 w-4" />
@@ -412,10 +392,10 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
               </CardHeader>
               <CardContent>
                 <ChatHistory
-                  sessions={sessions.filter(s => s.module === activeModule)}
+                  sessions={sessions}
                   activeSessionId={activeSessionId}
                   onLoadSession={loadSession}
-                  onDeleteSession={deleteSession}
+                  onDeleteSession={handleDeleteSession}
                 />
               </CardContent>
             </Card>
@@ -426,10 +406,10 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
-                  <Sparkles className={`h-4 w-4 text-${moduleColor}-500`} />
+                  <Sparkles className="h-4 w-4 text-primary" />
                   Chat {moduleTitle}
                 </CardTitle>
-                <Badge variant="outline" className={`text-${moduleColor}-600`}>
+                <Badge variant="outline">
                   {messages.length} mensagens
                 </Badge>
               </div>
@@ -488,7 +468,6 @@ export function AuditAIChatPage({ defaultModule = 'peotram' }: AuditAIChatPagePr
                 <Button
                   onClick={() => sendMessage()}
                   disabled={!input.trim() || isLoading}
-                  className={`bg-${moduleColor}-500 hover:bg-${moduleColor}-600`}
                 >
                   {isLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />

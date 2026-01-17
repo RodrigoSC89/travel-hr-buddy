@@ -12,7 +12,7 @@ import {
   Clock,
   ChevronRight
 } from "lucide-react";
-import { ChatSession } from "./AuditAIChatPage";
+import { type ChatSession } from "@/hooks/use-audit-chat-persistence";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,7 +47,8 @@ export function ChatHistory({
     );
   }
 
-  const formatDate = (date: Date) => {
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -70,7 +71,7 @@ export function ChatHistory({
     <ScrollArea className="h-[400px]">
       <div className="space-y-2">
         {sessions
-          .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+          .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
           .map((session) => (
             <div
               key={session.id}
