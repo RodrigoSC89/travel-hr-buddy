@@ -1,0 +1,386 @@
+/**
+ * Compliance Integration Hub
+ * Central hub connecting all compliance functionalities
+ */
+
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { 
+  Layout, Grid3X3, AlertTriangle, Sparkles, Calendar, 
+  FileText, CheckCircle2, Clock, TrendingUp, Shield,
+  Ship, Users, ArrowRight, Zap, Target, BarChart3
+} from 'lucide-react';
+
+import { TraceabilityMatrix } from './TraceabilityMatrix';
+import { UnifiedEvidenceGenerator } from './UnifiedEvidenceGenerator';
+import { AutomaticReportsScheduler } from './AutomaticReportsScheduler';
+
+type HubView = 'overview' | 'matrix' | 'evidence' | 'reports' | 'workflow';
+
+interface QuickAction {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  view: HubView;
+}
+
+const QUICK_ACTIONS: QuickAction[] = [
+  {
+    id: 'matrix',
+    title: 'Matriz de Rastreabilidade',
+    description: 'Drill-down completo: Módulo → Requisito → Elemento → LV → Evidência',
+    icon: Grid3X3,
+    color: 'bg-blue-500',
+    view: 'matrix'
+  },
+  {
+    id: 'evidence',
+    title: 'Gerador de Evidências IA',
+    description: 'Gere evidências automaticamente para PEOTRAM e PEO-DP',
+    icon: Sparkles,
+    color: 'bg-purple-500',
+    view: 'evidence'
+  },
+  {
+    id: 'reports',
+    title: 'Relatórios Automáticos',
+    description: 'Agende e gerencie relatórios de compliance',
+    icon: Calendar,
+    color: 'bg-green-500',
+    view: 'reports'
+  },
+  {
+    id: 'workflow',
+    title: 'Fluxo de NCs',
+    description: 'Workflow automático de não conformidades',
+    icon: AlertTriangle,
+    color: 'bg-orange-500',
+    view: 'workflow'
+  }
+];
+
+const INTEGRATION_STATUS = [
+  { system: 'PEOTRAM', status: 'connected', lastSync: '2 min atrás', records: 195 },
+  { system: 'PEO-DP', status: 'connected', lastSync: '5 min atrás', records: 114 },
+  { system: 'Supabase', status: 'connected', lastSync: 'Real-time', records: 565 },
+  { system: 'Email (Resend)', status: 'connected', lastSync: 'On-demand', records: null },
+  { system: 'AI (Claude/Gemini)', status: 'connected', lastSync: 'On-demand', records: null }
+];
+
+const RECENT_ACTIVITIES = [
+  { id: '1', action: 'NC Aberta', item: 'NC-2025-00045', module: 'PEOTRAM', time: '5 min atrás', type: 'nc' },
+  { id: '2', action: 'Evidência Gerada', item: 'EV-1737123456', module: 'PEO-DP', time: '15 min atrás', type: 'evidence' },
+  { id: '3', action: 'Relatório Enviado', item: 'Conformidade Mensal', module: 'PEOTRAM', time: '1h atrás', type: 'report' },
+  { id: '4', action: 'NC Fechada', item: 'NC-2025-00042', module: 'PEO-DP', time: '2h atrás', type: 'nc' },
+  { id: '5', action: 'Auditoria Concluída', item: 'AUD-2025-012', module: 'PEOTRAM', time: '3h atrás', type: 'audit' }
+];
+
+export function ComplianceIntegrationHub() {
+  const [activeView, setActiveView] = useState<HubView>('overview');
+
+  const renderContent = () => {
+    switch (activeView) {
+      case 'matrix':
+        return <TraceabilityMatrix />;
+      case 'evidence':
+        return <UnifiedEvidenceGenerator />;
+      case 'reports':
+        return <AutomaticReportsScheduler />;
+      case 'workflow':
+        return (
+          <div className="flex items-center justify-center h-64 text-muted-foreground">
+            <div className="text-center">
+              <AlertTriangle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Acesse o Fluxo de NCs pelo menu principal</p>
+              <Button variant="link" className="mt-2" onClick={() => window.location.href = '/compliance-roadmap'}>
+                Ir para Compliance Roadmap
+              </Button>
+            </div>
+          </div>
+        );
+      default:
+        return renderOverview();
+    }
+  };
+
+  const renderOverview = () => (
+    <div className="space-y-6">
+      {/* Quick Stats */}
+      <div className="grid grid-cols-4 gap-4">
+        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Score PEOTRAM</p>
+                <p className="text-3xl font-bold">87%</p>
+              </div>
+              <Shield className="h-8 w-8 text-blue-500" />
+            </div>
+            <Progress value={87} className="mt-3 h-2" />
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Score PEO-DP</p>
+                <p className="text-3xl font-bold">92%</p>
+              </div>
+              <Target className="h-8 w-8 text-purple-500" />
+            </div>
+            <Progress value={92} className="mt-3 h-2" />
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">NCs Abertas</p>
+                <p className="text-3xl font-bold">12</p>
+              </div>
+              <AlertTriangle className="h-8 w-8 text-orange-500" />
+            </div>
+            <div className="mt-3 flex items-center gap-2 text-sm">
+              <Badge variant="destructive">3 críticas</Badge>
+              <Badge variant="secondary">9 normais</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Evidências IA</p>
+                <p className="text-3xl font-bold">48</p>
+              </div>
+              <Sparkles className="h-8 w-8 text-green-500" />
+            </div>
+            <div className="mt-3 flex items-center gap-1 text-sm text-green-600">
+              <TrendingUp className="h-4 w-4" />
+              +15% este mês
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Acesso Rápido</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {QUICK_ACTIONS.map(action => (
+            <Card 
+              key={action.id}
+              className="cursor-pointer hover:bg-muted/50 transition-all hover:shadow-md"
+              onClick={() => setActiveView(action.view)}
+            >
+              <CardContent className="pt-4">
+                <div className={`p-3 rounded-lg ${action.color} w-fit mb-3`}>
+                  <action.icon className="h-6 w-6 text-white" />
+                </div>
+                <h4 className="font-semibold mb-1">{action.title}</h4>
+                <p className="text-sm text-muted-foreground">{action.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-6">
+        {/* Integration Status */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              Status das Integrações
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {INTEGRATION_STATUS.map(int => (
+                <div key={int.system} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-2 h-2 rounded-full ${int.status === 'connected' ? 'bg-green-500' : 'bg-red-500'}`} />
+                    <span className="font-medium">{int.system}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    {int.records && <span>{int.records} registros</span>}
+                    <span>{int.lastSync}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Clock className="h-5 w-5 text-primary" />
+              Atividade Recente
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-64">
+              <div className="space-y-3">
+                {RECENT_ACTIVITIES.map(activity => (
+                  <div key={activity.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${
+                        activity.type === 'nc' ? 'bg-orange-500/10' :
+                        activity.type === 'evidence' ? 'bg-purple-500/10' :
+                        activity.type === 'report' ? 'bg-green-500/10' : 'bg-blue-500/10'
+                      }`}>
+                        {activity.type === 'nc' ? <AlertTriangle className="h-4 w-4 text-orange-500" /> :
+                         activity.type === 'evidence' ? <Sparkles className="h-4 w-4 text-purple-500" /> :
+                         activity.type === 'report' ? <FileText className="h-4 w-4 text-green-500" /> :
+                         <CheckCircle2 className="h-4 w-4 text-blue-500" />}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{activity.action}</p>
+                        <p className="text-xs text-muted-foreground">{activity.item}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <Badge variant="outline" className="text-xs">{activity.module}</Badge>
+                      <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Modules Overview */}
+      <div className="grid grid-cols-2 gap-6">
+        <Card className="border-blue-500/20">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Ship className="h-5 w-5 text-blue-500" />
+              PEOTRAM
+            </CardTitle>
+            <CardDescription>195 requisitos | 13 elementos</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span>Conformidade Geral</span>
+                <span className="font-medium">87%</span>
+              </div>
+              <Progress value={87} className="h-2" />
+              <div className="grid grid-cols-3 gap-2 mt-4">
+                <div className="text-center p-2 rounded-lg bg-green-500/10">
+                  <p className="text-lg font-bold text-green-600">156</p>
+                  <p className="text-xs text-muted-foreground">Conformes</p>
+                </div>
+                <div className="text-center p-2 rounded-lg bg-orange-500/10">
+                  <p className="text-lg font-bold text-orange-600">27</p>
+                  <p className="text-xs text-muted-foreground">Pendentes</p>
+                </div>
+                <div className="text-center p-2 rounded-lg bg-red-500/10">
+                  <p className="text-lg font-bold text-red-600">12</p>
+                  <p className="text-xs text-muted-foreground">NCs</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-purple-500/20">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Target className="h-5 w-5 text-purple-500" />
+              PEO-DP
+            </CardTitle>
+            <CardDescription>114 requisitos | 8 seções</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span>Conformidade Geral</span>
+                <span className="font-medium">92%</span>
+              </div>
+              <Progress value={92} className="h-2" />
+              <div className="grid grid-cols-3 gap-2 mt-4">
+                <div className="text-center p-2 rounded-lg bg-green-500/10">
+                  <p className="text-lg font-bold text-green-600">105</p>
+                  <p className="text-xs text-muted-foreground">Conformes</p>
+                </div>
+                <div className="text-center p-2 rounded-lg bg-orange-500/10">
+                  <p className="text-lg font-bold text-orange-600">6</p>
+                  <p className="text-xs text-muted-foreground">Pendentes</p>
+                </div>
+                <div className="text-center p-2 rounded-lg bg-red-500/10">
+                  <p className="text-lg font-bold text-red-600">3</p>
+                  <p className="text-xs text-muted-foreground">NCs</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <Layout className="h-6 w-6 text-primary" />
+            Hub de Integração Compliance
+          </h2>
+          <p className="text-muted-foreground">
+            Central unificada para PEOTRAM e PEO-DP
+          </p>
+        </div>
+        {activeView !== 'overview' && (
+          <Button variant="outline" onClick={() => setActiveView('overview')}>
+            ← Voltar ao Overview
+          </Button>
+        )}
+      </div>
+
+      {/* Navigation */}
+      {activeView === 'overview' ? null : (
+        <Tabs value={activeView} onValueChange={(v) => setActiveView(v as HubView)}>
+          <TabsList>
+            <TabsTrigger value="overview">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="matrix">
+              <Grid3X3 className="h-4 w-4 mr-2" />
+              Matriz
+            </TabsTrigger>
+            <TabsTrigger value="evidence">
+              <Sparkles className="h-4 w-4 mr-2" />
+              Evidências
+            </TabsTrigger>
+            <TabsTrigger value="reports">
+              <Calendar className="h-4 w-4 mr-2" />
+              Relatórios
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      )}
+
+      {/* Content */}
+      {renderContent()}
+    </div>
+  );
+}
