@@ -4,13 +4,15 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 /**
- * PATCH 856: CRITICAL FIX for React duplicate instances
+ * PATCH 858: FINAL FIX for React duplicate instances
  * 
- * The error "Cannot read properties of null (reading 'useEffect')" 
- * happens when multiple React instances exist.
+ * The error "Cannot read properties of null (reading 'useState')" 
+ * happens when multiple React instances exist in the bundle.
  * 
- * Solution: Simplified config with aggressive deduplication
+ * Solution: Force complete cache invalidation with timestamp
  */
+const CACHE_VERSION = Date.now(); // Force new cache on every restart
+
 export default defineConfig(({ mode }) => {
   const reactPath = path.resolve(__dirname, "node_modules/react");
   const reactDomPath = path.resolve(__dirname, "node_modules/react-dom");
@@ -26,7 +28,10 @@ export default defineConfig(({ mode }) => {
     },
     
     plugins: [
-      react(),
+      react({
+        // Use SWC for JSX transform with React 18
+        jsxImportSource: "react",
+      }),
       mode === "development" && componentTagger(),
     ].filter(Boolean),
     
@@ -76,8 +81,11 @@ export default defineConfig(({ mode }) => {
       },
     },
     
+    // PATCH 858: Force complete cache invalidation
+    cacheDir: `node_modules/.vite-cache-${CACHE_VERSION}`,
+    
     optimizeDeps: {
-      // PATCH 857: Force unique cache to eliminate stale React instances
+      // Force rebuild of the dependency cache
       force: true,
       
       // Pre-bundle these together to ensure single React instance
@@ -113,12 +121,11 @@ export default defineConfig(({ mode }) => {
       },
     },
     
-    // PATCH 857: Unique cache directory to force fresh build
-    cacheDir: "node_modules/.vite-nautilus-857",
-    
     esbuild: {
       target: "esnext",
       legalComments: "none",
+      jsx: "automatic",
+      jsxImportSource: "react",
     },
   };
 });
