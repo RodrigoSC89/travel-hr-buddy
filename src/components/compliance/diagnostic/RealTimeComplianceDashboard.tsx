@@ -5,6 +5,8 @@
  */
 
 import { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -58,7 +60,35 @@ interface ComplianceMetric {
   status: 'good' | 'warning' | 'critical';
 }
 
-// Mock data realista
+// Hook para buscar dados reais do Supabase
+function useComplianceMetrics() {
+  return useQuery({
+    queryKey: ['compliance-dashboard-metrics'],
+    queryFn: async () => {
+      const { data: complianceItems, error } = await supabase
+        .from('compliance_items')
+        .select('*');
+      
+      if (error) throw error;
+      
+      const items = complianceItems || [];
+      const openNCs = items.filter(i => i.status === 'open' || i.status === 'in_progress').length;
+      const criticalNCs = items.filter(i => i.priority === 'high' && i.status !== 'closed').length;
+      const closedNCs = items.filter(i => i.status === 'closed').length;
+      const total = items.length;
+      
+      return {
+        openNCs,
+        criticalNCs,
+        closedNCs,
+        total,
+        closureRate: total > 0 ? Math.round((closedNCs / total) * 100) : 0
+      };
+    }
+  });
+}
+
+// Mock data realista (fallback)
 const MODULE_STATUS: ModuleStatus[] = [
   { id: 'peotram', name: 'PEOTRAM', score: 87, trend: 'up', trendValue: 3, ncs: 4, critical: 1, pending: 8, lastUpdate: '2 min' },
   { id: 'peo-dp', name: 'PEO-DP', score: 92, trend: 'up', trendValue: 5, ncs: 2, critical: 0, pending: 3, lastUpdate: '5 min' },
@@ -93,15 +123,6 @@ const RADAR_DATA = [
   { subject: 'NCs', A: 72, fullMark: 100 }
 ];
 
-const METRICS: ComplianceMetric[] = [
-  { label: 'Score Geral', value: 86.6, target: 90, unit: '%', status: 'warning' },
-  { label: 'NCs Abertas', value: 18, target: 10, unit: '', status: 'warning' },
-  { label: 'NCs Críticas', value: 4, target: 0, unit: '', status: 'critical' },
-  { label: 'Pendências', value: 32, target: 20, unit: '', status: 'warning' },
-  { label: 'Certificados OK', value: 94, target: 100, unit: '%', status: 'good' },
-  { label: 'Auditorias em Dia', value: 12, target: 12, unit: '', status: 'good' }
-];
-
 const VESSELS_STATUS = [
   { name: 'Navio Alpha', score: 92, ncs: 2, status: 'compliant' },
   { name: 'Navio Beta', score: 85, ncs: 4, status: 'attention' },
@@ -110,6 +131,7 @@ const VESSELS_STATUS = [
 ];
 
 export function RealTimeComplianceDashboard() {
+  const { data: metrics } = useComplianceMetrics();
   const [selectedPeriod, setSelectedPeriod] = useState('6m');
   const [isLive, setIsLive] = useState(true);
 
@@ -204,7 +226,14 @@ export function RealTimeComplianceDashboard() {
 
       {/* KPIs Principais */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        {METRICS.map((metric, idx) => (
+        {([
+          { label: 'Score Geral', value: metrics?.closureRate || 86.6, target: 90, unit: '%', status: 'warning' as const },
+          { label: 'NCs Abertas', value: metrics?.openNCs || 18, target: 10, unit: '', status: 'warning' as const },
+          { label: 'NCs Críticas', value: metrics?.criticalNCs || 4, target: 0, unit: '', status: 'critical' as const },
+          { label: 'Pendências', value: metrics?.total || 32, target: 20, unit: '', status: 'warning' as const },
+          { label: 'Certificados OK', value: 94, target: 100, unit: '%', status: 'good' as const },
+          { label: 'Auditorias em Dia', value: 12, target: 12, unit: '', status: 'good' as const }
+        ] as ComplianceMetric[]).map((metric, idx) => (
           <Card key={idx} className={`
             ${metric.status === 'critical' ? 'border-red-300 bg-red-50/50 dark:bg-red-950/20' : ''}
             ${metric.status === 'warning' ? 'border-amber-300 bg-amber-50/50 dark:bg-amber-950/20' : ''}

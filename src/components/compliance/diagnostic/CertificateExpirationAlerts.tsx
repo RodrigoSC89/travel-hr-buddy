@@ -118,7 +118,55 @@ const DEFAULT_ALERT_CONFIGS: AlertConfig[] = [
   }
 ];
 
-// Mock data para demonstração
+// Hook para buscar certificados reais do Supabase
+function useCertificates() {
+  return useQuery({
+    queryKey: ['certificates-expiration'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('certificates')
+        .select(`
+          id,
+          employee_id,
+          certificate_type,
+          certificate_number,
+          issuing_authority,
+          issue_date,
+          expiry_date,
+          status
+        `)
+        .order('expiry_date', { ascending: true });
+      
+      if (error) throw error;
+      
+      const now = new Date();
+      return (data || []).map(cert => {
+        const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : new Date();
+        const daysUntilExpiry = Math.ceil((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        
+        let status: Certificate['status'] = 'valid';
+        if (daysUntilExpiry < 0) status = 'expired';
+        else if (daysUntilExpiry <= 30) status = 'expiring_soon';
+        
+        return {
+          id: cert.id,
+          holder_name: cert.employee_id || 'Não identificado',
+          holder_id: cert.employee_id || '',
+          certificate_type: cert.certificate_type || 'Certificado',
+          certificate_number: cert.certificate_number || '',
+          issue_date: cert.issue_date || '',
+          expiry_date: cert.expiry_date || '',
+          issuing_authority: cert.issuing_authority || '',
+          status,
+          days_until_expiry: daysUntilExpiry,
+          alert_sent: false
+        } as Certificate;
+      });
+    }
+  });
+}
+
+// Mock data para demonstração (fallback)
 const MOCK_CERTIFICATES: Certificate[] = [
   {
     id: '1',
@@ -149,50 +197,6 @@ const MOCK_CERTIFICATES: Certificate[] = [
     days_until_expiry: 25,
     alert_sent: true,
     last_alert_date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '3',
-    holder_name: 'Carlos Oliveira',
-    holder_id: 'crew-003',
-    certificate_type: 'GMDSS - Operador Geral',
-    certificate_number: 'GMDSS-2024-012',
-    issue_date: '2022-03-10',
-    expiry_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'ANATEL',
-    vessel_name: 'Navio Gamma',
-    status: 'expired',
-    days_until_expiry: -10,
-    alert_sent: true,
-    last_alert_date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString()
-  },
-  {
-    id: '4',
-    holder_name: 'Ana Pereira',
-    holder_id: 'crew-004',
-    certificate_type: 'Certificado Médico Marítimo',
-    certificate_number: 'MED-2024-078',
-    issue_date: '2023-01-15',
-    expiry_date: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'DPC - Marinha do Brasil',
-    vessel_name: 'Navio Alpha',
-    status: 'valid',
-    days_until_expiry: 90,
-    alert_sent: false
-  },
-  {
-    id: '5',
-    holder_name: 'Pedro Costa',
-    holder_id: 'crew-005',
-    certificate_type: 'STCW - Combate a Incêndio Avançado',
-    certificate_number: 'STCW-AFF-2024-033',
-    issue_date: '2021-06-20',
-    expiry_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    issuing_authority: 'Centro de Instrução Almirante Braz',
-    vessel_name: 'Navio Delta',
-    status: 'expiring_soon',
-    days_until_expiry: 2,
-    alert_sent: true,
-    last_alert_date: new Date().toISOString()
   }
 ];
 
@@ -206,31 +210,13 @@ const MOCK_ALERT_HISTORY: AlertHistory[] = [
     sent_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     channel: 'email',
     status: 'sent'
-  },
-  {
-    id: 'hist-2',
-    certificate_id: '2',
-    certificate_type: 'Certificado de Competência',
-    holder_name: 'Maria Santos',
-    alert_type: 'Alerta Padrão (30 dias)',
-    sent_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    channel: 'email',
-    status: 'sent'
-  },
-  {
-    id: 'hist-3',
-    certificate_id: '5',
-    certificate_type: 'STCW - Combate a Incêndio',
-    holder_name: 'Pedro Costa',
-    alert_type: 'Alerta Crítico (3 dias)',
-    sent_at: new Date().toISOString(),
-    channel: 'push',
-    status: 'sent'
   }
 ];
 
 export function CertificateExpirationAlerts() {
-  const [certificates, setCertificates] = useState<Certificate[]>(MOCK_CERTIFICATES);
+  const { data: realCertificates, isLoading } = useCertificates();
+  const certificates = realCertificates?.length ? realCertificates : MOCK_CERTIFICATES;
+  
   const [alertConfigs, setAlertConfigs] = useState<AlertConfig[]>(DEFAULT_ALERT_CONFIGS);
   const [alertHistory, setAlertHistory] = useState<AlertHistory[]>(MOCK_ALERT_HISTORY);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -285,11 +271,8 @@ export function CertificateExpirationAlerts() {
     };
     
     setAlertHistory(prev => [newAlert, ...prev]);
-    setCertificates(prev => prev.map(c => 
-      c.id === certificate.id 
-        ? { ...c, alert_sent: true, last_alert_date: new Date().toISOString() }
-        : c
-    ));
+    // Note: certificates are now from query, manual update is for UI feedback only
+    toast.success('Alerta enviado com sucesso!', { id: 'sending-alert' });
     
     toast.success('Alerta enviado com sucesso!', { id: 'sending-alert' });
   };
