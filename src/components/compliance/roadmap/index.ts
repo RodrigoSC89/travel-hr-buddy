@@ -5,3 +5,4 @@ export { NCAutomaticWorkflow } from './NCAutomaticWorkflow';
 export { PredictiveComplianceAI } from './PredictiveComplianceAI';
 export { CalendarIntegration } from './CalendarIntegration';
 export { AuditTrailSystem } from './AuditTrailSystem';
+export { SmartNotifications } from './SmartNotifications';

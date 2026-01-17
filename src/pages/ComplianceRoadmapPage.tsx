@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
-  LayoutDashboard, Bell, Calculator, GitBranch, Brain, Calendar, History
+  LayoutDashboard, Bell, Calculator, GitBranch, Brain, Calendar, History, BellRing
 } from 'lucide-react';
 
 // Lazy load components for better performance
@@ -33,6 +33,9 @@ const CalendarIntegration = lazy(() =>
 const AuditTrailSystem = lazy(() => 
   import('@/components/compliance/roadmap/AuditTrailSystem').then(m => ({ default: m.AuditTrailSystem }))
 );
+const SmartNotifications = lazy(() => 
+  import('@/components/compliance/roadmap/SmartNotifications').then(m => ({ default: m.SmartNotifications }))
+);
 
 const LoadingFallback = () => (
   <div className="space-y-4">
@@ -53,6 +56,7 @@ const tabs = [
   { id: 'workflow', label: 'Fluxo NC', icon: GitBranch },
   { id: 'predictive', label: 'Preditivo', icon: Brain },
   { id: 'calendar', label: 'Calendário', icon: Calendar },
+  { id: 'notifications', label: 'Notificações', icon: BellRing },
   { id: 'audit', label: 'Audit Trail', icon: History }
 ];
 
@@ -75,7 +79,7 @@ export default function ComplianceRoadmapPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             {tabs.map(tab => {
               const Icon = tab.icon;
               return (
@@ -106,6 +110,9 @@ export default function ComplianceRoadmapPage() {
               </TabsContent>
               <TabsContent value="calendar" className="m-0">
                 <CalendarIntegration />
+              </TabsContent>
+              <TabsContent value="notifications" className="m-0">
+                <SmartNotifications />
               </TabsContent>
               <TabsContent value="audit" className="m-0">
                 <AuditTrailSystem />

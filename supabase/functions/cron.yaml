@@ -20,3 +20,7 @@ functions:
     schedule: '0 2 * * 0' # Every Sunday at 02:00 UTC - PATCH 507: Weekly automated backup
     endpoint: '/weekly-backup'
     method: POST
+  compliance-deadline-cron:
+    schedule: '0 7 * * *' # Daily at 07:00 UTC (04:00 BRT) - Check compliance deadlines
+    endpoint: '/compliance-deadline-cron'
+    method: POST
