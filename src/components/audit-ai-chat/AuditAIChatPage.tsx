@@ -21,12 +21,16 @@ import {
   History,
   ClipboardCheck,
   Loader2,
-  RefreshCw
+  RefreshCw,
+  Cloud,
+  CloudOff
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { ChatMessage } from "./ChatMessage";
 import { QuickActions } from "./QuickActions";
 import { ChatHistory } from "./ChatHistory";
 import { EvidencePDFGenerator } from "./EvidencePDFGenerator";
+import { HistoryExporter } from "./HistoryExporter";
 import { 
   useAuditChatPersistence, 
   type ChatMessage as PersistentMessage, 
