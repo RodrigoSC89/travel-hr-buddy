@@ -1,11 +1,13 @@
 /**
- * App.tsx - PATCH 856 - Fixed React hooks error definitively
+ * App.tsx - PATCH 861 - SIMPLIFIED PROVIDERS
  * 
- * CRITICAL: Use namespace imports to ensure consistent React instance
+ * All providers are inside App.tsx, not in main.tsx
+ * Using standard imports (not namespace imports)
  */
-import * as React from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "sonner";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { TooltipProvider } from "./components/ui/tooltip";
@@ -36,145 +38,145 @@ const queryClient = new QueryClient({
 });
 
 // ============================================
-// LAZY LOAD - All pages use React.lazy
+// LAZY LOAD - All pages use lazy
 // ============================================
-const Auth = React.lazy(() => import("@/pages/Auth"));
-const LandingPage = React.lazy(() => import("@/pages/LandingPage"));
-const CentralComando = React.lazy(() => import("@/pages/CentralComando"));
-const NotFound = React.lazy(() => import("@/pages/NotFound"));
-const DevRoutesDashboard = React.lazy(() => import("@/pages/DevRoutesDashboard"));
-const Billing = React.lazy(() => import("@/pages/Billing"));
-const BillingPortal = React.lazy(() => import("@/pages/BillingPortal"));
-const OnboardingDashboard = React.lazy(() => import("@/pages/OnboardingDashboard"));
-const InteractiveOnboarding = React.lazy(() => import("@/pages/InteractiveOnboarding"));
-const AnalyticsFeedback = React.lazy(() => import("@/pages/AnalyticsFeedback"));
-const NOC = React.lazy(() => import("@/pages/NOC"));
-const NOCMonitoring = React.lazy(() => import("@/pages/NOCMonitoring"));
-const MaritimeCommandCenter = React.lazy(() => import("@/pages/MaritimeCommandCenter"));
-const FleetCommandCenter = React.lazy(() => import("@/pages/FleetCommandCenter"));
-const VoyageCommandCenter = React.lazy(() => import("@/pages/VoyageCommandCenter"));
-const RouteOptimizerPage = React.lazy(() => import("@/pages/RouteOptimizerPage"));
-const MissionCommandCenter = React.lazy(() => import("@/pages/MissionCommandCenter"));
-const BridgeLink = React.lazy(() => import("@/pages/BridgeLink"));
-const DrydockManagement = React.lazy(() => import("@/pages/DrydockManagement"));
-const VesselContractsUnified = React.lazy(() => import("@/pages/VesselContractsUnified"));
-const CharterPartyV2 = React.lazy(() => import("@/pages/CharterPartyV2"));
-const CargoManagementV2 = React.lazy(() => import("@/pages/CargoManagementV2"));
-const PortCallOptimizationV2 = React.lazy(() => import("@/pages/PortCallOptimizationV2"));
-const VesselCTSV2 = React.lazy(() => import("@/pages/VesselCTSV2"));
-const VesselHistoryV2 = React.lazy(() => import("@/pages/VesselHistoryV2"));
-const DigitalTwinPage = React.lazy(() => import("@/pages/DigitalTwinPage"));
-const LogisticsCommandPage = React.lazy(() => import("@/pages/LogisticsCommandPage"));
-const RecruitmentPage = React.lazy(() => import("@/pages/RecruitmentPage"));
-const AgentOrchestrationPage = React.lazy(() => import("@/pages/AgentOrchestrationPage"));
-const BlockchainCompliancePage = React.lazy(() => import("@/pages/BlockchainCompliancePage"));
-const CompanyFinancialPage = React.lazy(() => import("@/pages/CompanyFinancialPage"));
-const MLCSchedulingPage = React.lazy(() => import("@/pages/MLCSchedulingPage"));
-const SupplierPortalPage = React.lazy(() => import("@/pages/SupplierPortalPage"));
-const IoTDashboardPage = React.lazy(() => import("@/pages/IoTDashboardPage"));
-const MaintenanceCommandCenter = React.lazy(() => import("@/pages/MaintenanceCommandCenter"));
-const PredictiveMaintenancePage = React.lazy(() => import("@/pages/PredictiveMaintenancePage"));
-const OceanSonar = React.lazy(() => import("@/pages/OceanSonar"));
-const UnderwaterDrone = React.lazy(() => import("@/pages/UnderwaterDrone"));
-const AutoSub = React.lazy(() => import("@/pages/AutoSub"));
-const SonarAI = React.lazy(() => import("@/pages/SonarAI"));
-const DeepRiskAI = React.lazy(() => import("@/pages/DeepRiskAI"));
-const NautilusCommand = React.lazy(() => import("@/pages/NautilusCommand"));
-const RevolutionaryAI = React.lazy(() => import("@/pages/RevolutionaryAI"));
-const AICommandCenter = React.lazy(() => import("@/pages/AICommandCenter"));
-const AIHubPage = React.lazy(() => import("@/pages/AIHubPage"));
-const AIAnalyticsDashboard = React.lazy(() => import("@/pages/AIAnalyticsDashboard"));
-const RevolutionaryFeaturesPage = React.lazy(() => import("@/pages/RevolutionaryFeaturesPage"));
-const AutonomousCommandCenter = React.lazy(() => import("@/pages/AutonomousCommandCenter"));
-const AIObservabilityDashboard = React.lazy(() => import("@/pages/AIObservabilityDashboard"));
-const WorkflowCommandCenter = React.lazy(() => import("@/pages/WorkflowCommandCenter"));
-const AIAudit = React.lazy(() => import("@/pages/AIAudit"));
-const VoiceAssistant = React.lazy(() => import("@/pages/VoiceAssistant"));
-const AIOperationsCenter = React.lazy(() => import("@/pages/AIOperationsCenter"));
-const Optimization = React.lazy(() => import("@/pages/Optimization"));
-const TelemetriaCommand = React.lazy(() => import("@/pages/TelemetriaCommand"));
-const PredictiveTelemetry = React.lazy(() => import("@/pages/PredictiveTelemetry"));
-const SatelliteOptimizerPage = React.lazy(() => import("@/pages/SatelliteOptimizerPage"));
-const VesselTrackingPage = React.lazy(() => import("@/pages/VesselTrackingPage"));
-const IncidentSimulator = React.lazy(() => import("@/pages/IncidentSimulator"));
-const CalendarView = React.lazy(() => import("@/pages/CalendarView"));
-const APICenter = React.lazy(() => import("@/pages/APICenter"));
-const APIMonitor = React.lazy(() => import("@/pages/APIMonitor"));
-const Integrations = React.lazy(() => import("@/pages/Integrations"));
-const WeatherMaritime = React.lazy(() => import("@/pages/WeatherMaritime"));
-const AISTrackerPage = React.lazy(() => import("@/pages/AISTrackerPage"));
-const PortAPI = React.lazy(() => import("@/pages/PortAPI"));
-const FlightTracker = React.lazy(() => import("@/pages/FlightTracker"));
-const NOAAWeather = React.lazy(() => import("@/pages/NOAAWeather"));
-const OpenSkyFlights = React.lazy(() => import("@/pages/OpenSkyFlights"));
-const EarthquakeMonitor = React.lazy(() => import("@/pages/EarthquakeMonitor"));
-const VoiceTranscriber = React.lazy(() => import("@/pages/VoiceTranscriber"));
-const ReportsCommandCenter = React.lazy(() => import("@/pages/ReportsCommandCenter"));
-const Documents = React.lazy(() => import("@/pages/Documents"));
-const Templates = React.lazy(() => import("@/pages/Templates"));
-const MaritimeChecklists = React.lazy(() => import("@/pages/MaritimeChecklists"));
-const DocumentWorkflow = React.lazy(() => import("@/pages/DocumentWorkflow"));
-const ExportCenterPage = React.lazy(() => import("@/pages/ExportCenterPage"));
-const AdvancedSearchPage = React.lazy(() => import("@/pages/AdvancedSearchPage"));
-const CommunicationCommandCenter = React.lazy(() => import("@/pages/CommunicationCommandCenter"));
-const AlertsCommandCenter = React.lazy(() => import("@/pages/AlertsCommandCenter"));
-const PEODP = React.lazy(() => import("@/pages/PEODP"));
-const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
-const SGSO = React.lazy(() => import("@/pages/SGSO"));
-const SafetyIMCAV2 = React.lazy(() => import("@/pages/SafetyIMCAV2"));
-const PreOVIDInspection = React.lazy(() => import("@/pages/PreOVIDInspection"));
-const MLCInspection = React.lazy(() => import("@/pages/MLCInspection"));
-const PSCPackage = React.lazy(() => import("@/pages/PSCPackage"));
-const GMUDV2 = React.lazy(() => import("@/pages/GMUDV2"));
-const ResponsibilityMatrixV2 = React.lazy(() => import("@/pages/ResponsibilityMatrixV2"));
-const SafetyHumanFactorsV2 = React.lazy(() => import("@/pages/SafetyHumanFactorsV2"));
-const ISPSSecurityV2 = React.lazy(() => import("@/pages/ISPSSecurityV2"));
-const DrillSimulatorV2 = React.lazy(() => import("@/pages/DrillSimulatorV2"));
-const ComplianceOneV2 = React.lazy(() => import("@/pages/ComplianceOneV2"));
-const RegulationsV2 = React.lazy(() => import("@/pages/RegulationsV2"));
-const RiskMatrixV2 = React.lazy(() => import("@/pages/RiskMatrixV2"));
-const EvidencesV2 = React.lazy(() => import("@/pages/EvidencesV2"));
-const DueDiligenceV2 = React.lazy(() => import("@/pages/DueDiligenceV2"));
-const WhistleblowerV2 = React.lazy(() => import("@/pages/WhistleblowerV2"));
-const SecurityCenter = React.lazy(() => import("@/pages/SecurityCenter"));
-const SecurityAuditCenter = React.lazy(() => import("@/pages/SecurityAuditCenter"));
-const SecurityScanner = React.lazy(() => import("@/pages/SecurityScanner"));
-const CrewManagement = React.lazy(() => import("@/pages/CrewManagement"));
-const CrewWellnessPage = React.lazy(() => import("@/pages/CrewWellnessPage"));
-const Users = React.lazy(() => import("@/pages/Users"));
-const HRDashboardPage = React.lazy(() => import("@/pages/HRDashboardPage"));
-const EmployeePortalPage = React.lazy(() => import("@/pages/EmployeePortalPage"));
-const PeopleAnalyticsPage = React.lazy(() => import("@/pages/PeopleAnalyticsPage"));
-const Payroll = React.lazy(() => import("@/pages/Payroll"));
-const TimeTracking = React.lazy(() => import("@/pages/TimeTracking"));
-const HRChatbotPage = React.lazy(() => import("@/pages/HRChatbotPage"));
-const HRDocumentOCRPage = React.lazy(() => import("@/pages/HRDocumentOCRPage"));
-const HRTurnoverPredictionPage = React.lazy(() => import("@/pages/HRTurnoverPredictionPage"));
-const AITraining = React.lazy(() => import("@/pages/AITraining"));
-const MentorDP = React.lazy(() => import("@/pages/MentorDP"));
-const DPIntelligence = React.lazy(() => import("@/pages/DPIntelligence"));
-const FinanceCommandCenter = React.lazy(() => import("@/pages/FinanceCommandCenter"));
-const VoyageAccountingPage = React.lazy(() => import("@/pages/VoyageAccountingPage"));
-const AnalyticsCommandCenter = React.lazy(() => import("@/pages/AnalyticsCommandCenter"));
-const OperationsCommandCenter = React.lazy(() => import("@/pages/OperationsCommandCenter"));
-const ProcurementCommandCenter = React.lazy(() => import("@/pages/ProcurementCommandCenter"));
-const TaskManagement = React.lazy(() => import("@/pages/TaskManagement"));
-const SustainabilityScorePage = React.lazy(() => import("@/pages/SustainabilityScorePage"));
-const TravelCommandCenter = React.lazy(() => import("@/pages/TravelCommandCenter"));
-const WeatherCommandCenter = React.lazy(() => import("@/pages/WeatherCommandCenter"));
-const Settings = React.lazy(() => import("@/pages/Settings"));
-const IntegrationsCenter = React.lazy(() => import("@/pages/IntegrationsCenter"));
-const APIGateway = React.lazy(() => import("@/pages/APIGateway"));
-const Collaboration = React.lazy(() => import("@/pages/Collaboration"));
-const IoT = React.lazy(() => import("@/pages/IoT"));
-const Gamification = React.lazy(() => import("@/pages/Gamification"));
-const Roadmap = React.lazy(() => import("@/pages/Roadmap"));
-const ProductionDeploy = React.lazy(() => import("@/pages/ProductionDeploy"));
-const StatusPage = React.lazy(() => import("@/pages/StatusPage"));
-const Admin = React.lazy(() => import("@/pages/Admin"));
-const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
-const ExecutiveDashboard = React.lazy(() => import("@/pages/ExecutiveDashboard"));
-const Analytics = React.lazy(() => import("@/pages/Analytics"));
+const Auth = lazy(() => import("@/pages/Auth"));
+const LandingPage = lazy(() => import("@/pages/LandingPage"));
+const CentralComando = lazy(() => import("@/pages/CentralComando"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
+const Billing = lazy(() => import("@/pages/Billing"));
+const BillingPortal = lazy(() => import("@/pages/BillingPortal"));
+const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
+const InteractiveOnboarding = lazy(() => import("@/pages/InteractiveOnboarding"));
+const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
+const NOC = lazy(() => import("@/pages/NOC"));
+const NOCMonitoring = lazy(() => import("@/pages/NOCMonitoring"));
+const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
+const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
+const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
+const RouteOptimizerPage = lazy(() => import("@/pages/RouteOptimizerPage"));
+const MissionCommandCenter = lazy(() => import("@/pages/MissionCommandCenter"));
+const BridgeLink = lazy(() => import("@/pages/BridgeLink"));
+const DrydockManagement = lazy(() => import("@/pages/DrydockManagement"));
+const VesselContractsUnified = lazy(() => import("@/pages/VesselContractsUnified"));
+const CharterPartyV2 = lazy(() => import("@/pages/CharterPartyV2"));
+const CargoManagementV2 = lazy(() => import("@/pages/CargoManagementV2"));
+const PortCallOptimizationV2 = lazy(() => import("@/pages/PortCallOptimizationV2"));
+const VesselCTSV2 = lazy(() => import("@/pages/VesselCTSV2"));
+const VesselHistoryV2 = lazy(() => import("@/pages/VesselHistoryV2"));
+const DigitalTwinPage = lazy(() => import("@/pages/DigitalTwinPage"));
+const LogisticsCommandPage = lazy(() => import("@/pages/LogisticsCommandPage"));
+const RecruitmentPage = lazy(() => import("@/pages/RecruitmentPage"));
+const AgentOrchestrationPage = lazy(() => import("@/pages/AgentOrchestrationPage"));
+const BlockchainCompliancePage = lazy(() => import("@/pages/BlockchainCompliancePage"));
+const CompanyFinancialPage = lazy(() => import("@/pages/CompanyFinancialPage"));
+const MLCSchedulingPage = lazy(() => import("@/pages/MLCSchedulingPage"));
+const SupplierPortalPage = lazy(() => import("@/pages/SupplierPortalPage"));
+const IoTDashboardPage = lazy(() => import("@/pages/IoTDashboardPage"));
+const MaintenanceCommandCenter = lazy(() => import("@/pages/MaintenanceCommandCenter"));
+const PredictiveMaintenancePage = lazy(() => import("@/pages/PredictiveMaintenancePage"));
+const OceanSonar = lazy(() => import("@/pages/OceanSonar"));
+const UnderwaterDrone = lazy(() => import("@/pages/UnderwaterDrone"));
+const AutoSub = lazy(() => import("@/pages/AutoSub"));
+const SonarAI = lazy(() => import("@/pages/SonarAI"));
+const DeepRiskAI = lazy(() => import("@/pages/DeepRiskAI"));
+const NautilusCommand = lazy(() => import("@/pages/NautilusCommand"));
+const RevolutionaryAI = lazy(() => import("@/pages/RevolutionaryAI"));
+const AICommandCenter = lazy(() => import("@/pages/AICommandCenter"));
+const AIHubPage = lazy(() => import("@/pages/AIHubPage"));
+const AIAnalyticsDashboard = lazy(() => import("@/pages/AIAnalyticsDashboard"));
+const RevolutionaryFeaturesPage = lazy(() => import("@/pages/RevolutionaryFeaturesPage"));
+const AutonomousCommandCenter = lazy(() => import("@/pages/AutonomousCommandCenter"));
+const AIObservabilityDashboard = lazy(() => import("@/pages/AIObservabilityDashboard"));
+const WorkflowCommandCenter = lazy(() => import("@/pages/WorkflowCommandCenter"));
+const AIAudit = lazy(() => import("@/pages/AIAudit"));
+const VoiceAssistant = lazy(() => import("@/pages/VoiceAssistant"));
+const AIOperationsCenter = lazy(() => import("@/pages/AIOperationsCenter"));
+const Optimization = lazy(() => import("@/pages/Optimization"));
+const TelemetriaCommand = lazy(() => import("@/pages/TelemetriaCommand"));
+const PredictiveTelemetry = lazy(() => import("@/pages/PredictiveTelemetry"));
+const SatelliteOptimizerPage = lazy(() => import("@/pages/SatelliteOptimizerPage"));
+const VesselTrackingPage = lazy(() => import("@/pages/VesselTrackingPage"));
+const IncidentSimulator = lazy(() => import("@/pages/IncidentSimulator"));
+const CalendarView = lazy(() => import("@/pages/CalendarView"));
+const APICenter = lazy(() => import("@/pages/APICenter"));
+const APIMonitor = lazy(() => import("@/pages/APIMonitor"));
+const Integrations = lazy(() => import("@/pages/Integrations"));
+const WeatherMaritime = lazy(() => import("@/pages/WeatherMaritime"));
+const AISTrackerPage = lazy(() => import("@/pages/AISTrackerPage"));
+const PortAPI = lazy(() => import("@/pages/PortAPI"));
+const FlightTracker = lazy(() => import("@/pages/FlightTracker"));
+const NOAAWeather = lazy(() => import("@/pages/NOAAWeather"));
+const OpenSkyFlights = lazy(() => import("@/pages/OpenSkyFlights"));
+const EarthquakeMonitor = lazy(() => import("@/pages/EarthquakeMonitor"));
+const VoiceTranscriber = lazy(() => import("@/pages/VoiceTranscriber"));
+const ReportsCommandCenter = lazy(() => import("@/pages/ReportsCommandCenter"));
+const Documents = lazy(() => import("@/pages/Documents"));
+const Templates = lazy(() => import("@/pages/Templates"));
+const MaritimeChecklists = lazy(() => import("@/pages/MaritimeChecklists"));
+const DocumentWorkflow = lazy(() => import("@/pages/DocumentWorkflow"));
+const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
+const AdvancedSearchPage = lazy(() => import("@/pages/AdvancedSearchPage"));
+const CommunicationCommandCenter = lazy(() => import("@/pages/CommunicationCommandCenter"));
+const AlertsCommandCenter = lazy(() => import("@/pages/AlertsCommandCenter"));
+const PEODP = lazy(() => import("@/pages/PEODP"));
+const PEOTRAM = lazy(() => import("@/pages/PEOTRAM"));
+const SGSO = lazy(() => import("@/pages/SGSO"));
+const SafetyIMCAV2 = lazy(() => import("@/pages/SafetyIMCAV2"));
+const PreOVIDInspection = lazy(() => import("@/pages/PreOVIDInspection"));
+const MLCInspection = lazy(() => import("@/pages/MLCInspection"));
+const PSCPackage = lazy(() => import("@/pages/PSCPackage"));
+const GMUDV2 = lazy(() => import("@/pages/GMUDV2"));
+const ResponsibilityMatrixV2 = lazy(() => import("@/pages/ResponsibilityMatrixV2"));
+const SafetyHumanFactorsV2 = lazy(() => import("@/pages/SafetyHumanFactorsV2"));
+const ISPSSecurityV2 = lazy(() => import("@/pages/ISPSSecurityV2"));
+const DrillSimulatorV2 = lazy(() => import("@/pages/DrillSimulatorV2"));
+const ComplianceOneV2 = lazy(() => import("@/pages/ComplianceOneV2"));
+const RegulationsV2 = lazy(() => import("@/pages/RegulationsV2"));
+const RiskMatrixV2 = lazy(() => import("@/pages/RiskMatrixV2"));
+const EvidencesV2 = lazy(() => import("@/pages/EvidencesV2"));
+const DueDiligenceV2 = lazy(() => import("@/pages/DueDiligenceV2"));
+const WhistleblowerV2 = lazy(() => import("@/pages/WhistleblowerV2"));
+const SecurityCenter = lazy(() => import("@/pages/SecurityCenter"));
+const SecurityAuditCenter = lazy(() => import("@/pages/SecurityAuditCenter"));
+const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
+const CrewManagement = lazy(() => import("@/pages/CrewManagement"));
+const CrewWellnessPage = lazy(() => import("@/pages/CrewWellnessPage"));
+const Users = lazy(() => import("@/pages/Users"));
+const HRDashboardPage = lazy(() => import("@/pages/HRDashboardPage"));
+const EmployeePortalPage = lazy(() => import("@/pages/EmployeePortalPage"));
+const PeopleAnalyticsPage = lazy(() => import("@/pages/PeopleAnalyticsPage"));
+const Payroll = lazy(() => import("@/pages/Payroll"));
+const TimeTracking = lazy(() => import("@/pages/TimeTracking"));
+const HRChatbotPage = lazy(() => import("@/pages/HRChatbotPage"));
+const HRDocumentOCRPage = lazy(() => import("@/pages/HRDocumentOCRPage"));
+const HRTurnoverPredictionPage = lazy(() => import("@/pages/HRTurnoverPredictionPage"));
+const AITraining = lazy(() => import("@/pages/AITraining"));
+const MentorDP = lazy(() => import("@/pages/MentorDP"));
+const DPIntelligence = lazy(() => import("@/pages/DPIntelligence"));
+const FinanceCommandCenter = lazy(() => import("@/pages/FinanceCommandCenter"));
+const VoyageAccountingPage = lazy(() => import("@/pages/VoyageAccountingPage"));
+const AnalyticsCommandCenter = lazy(() => import("@/pages/AnalyticsCommandCenter"));
+const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
+const ProcurementCommandCenter = lazy(() => import("@/pages/ProcurementCommandCenter"));
+const TaskManagement = lazy(() => import("@/pages/TaskManagement"));
+const SustainabilityScorePage = lazy(() => import("@/pages/SustainabilityScorePage"));
+const TravelCommandCenter = lazy(() => import("@/pages/TravelCommandCenter"));
+const WeatherCommandCenter = lazy(() => import("@/pages/WeatherCommandCenter"));
+const Settings = lazy(() => import("@/pages/Settings"));
+const IntegrationsCenter = lazy(() => import("@/pages/IntegrationsCenter"));
+const APIGateway = lazy(() => import("@/pages/APIGateway"));
+const Collaboration = lazy(() => import("@/pages/Collaboration"));
+const IoT = lazy(() => import("@/pages/IoT"));
+const Gamification = lazy(() => import("@/pages/Gamification"));
+const Roadmap = lazy(() => import("@/pages/Roadmap"));
+const ProductionDeploy = lazy(() => import("@/pages/ProductionDeploy"));
+const StatusPage = lazy(() => import("@/pages/StatusPage"));
+const Admin = lazy(() => import("@/pages/Admin"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const ExecutiveDashboard = lazy(() => import("@/pages/ExecutiveDashboard"));
+const Analytics = lazy(() => import("@/pages/Analytics"));
 
 // Loader component
 const Loader = () => (
@@ -374,19 +376,21 @@ const AppRoutes = () => (
 // Main App Component
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <TooltipProvider>
-          <Router>
-            <AuthProvider>
-              <React.Suspense fallback={<Loader />}>
-                <AppRoutes />
-              </React.Suspense>
-            </AuthProvider>
-          </Router>
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <TooltipProvider>
+            <Router>
+              <AuthProvider>
+                <Suspense fallback={<Loader />}>
+                  <AppRoutes />
+                </Suspense>
+              </AuthProvider>
+            </Router>
+          </TooltipProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }
 
