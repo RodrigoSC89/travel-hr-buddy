@@ -1,10 +1,16 @@
-import * as React from "react";
+/**
+ * theme-provider.tsx - PATCH 857
+ * 
+ * Using createContext and useState from React namespace to ensure
+ * single React instance is used throughout the application.
+ */
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
-// PATCH 856: Extended theme support with nautilus theme
+// Extended theme support with nautilus theme
 type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";
 
 type ThemeProviderProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   defaultTheme?: Theme;
   storageKey?: string;
 };
@@ -19,7 +25,7 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 };
 
-const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
@@ -27,11 +33,15 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = React.useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+  const [theme, setThemeState] = useState<Theme>(() => {
+    try {
+      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    } catch {
+      return defaultTheme;
+    }
+  });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const root = window.document.documentElement;
 
     // Remove all theme classes
@@ -53,9 +63,13 @@ export function ThemeProvider({
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
+    setTheme: (newTheme: Theme) => {
+      try {
+        localStorage.setItem(storageKey, newTheme);
+      } catch {
+        // Ignore localStorage errors
+      }
+      setThemeState(newTheme);
     },
   };
 
@@ -67,7 +81,7 @@ export function ThemeProvider({
 }
 
 export const useTheme = () => {
-  const context = React.useContext(ThemeProviderContext);
+  const context = useContext(ThemeProviderContext);
 
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider");
