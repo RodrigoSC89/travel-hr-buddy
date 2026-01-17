@@ -4,7 +4,7 @@
  */
 
 // Core AI Prompts
-export { PEOTRAM_AI_CONFIG } from './peotram-ai-prompt';
+export { PEOTRAM_AI_CONFIG, PEOTRAM_AI_SYSTEM_PROMPT, PEOTRAM_ELEMENTS } from './peotram-ai-prompt';
 export { PEODP_AI_CONFIG } from './peodp-ai-prompt';
 export { PEO_DP_AI_CONFIG, PEO_DP_AI_SYSTEM_PROMPT, PEO_DP_SECTIONS } from './peo-dp-ai-prompt';
 export { COMMAND_AI_CONFIG } from './command-ai-prompt';
