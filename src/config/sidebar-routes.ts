@@ -278,6 +278,8 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
+      // Dashboard Executivo de Compliance (NOVO)
+      { label: "📊 Dashboard Executivo", path: "/compliance-executive", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
       // Centro de Compliance Avançado (NOVO - Roadmap Completo)
       { label: "🚀 Compliance Avançado", path: "/compliance-roadmap", icon: Shield, emoji: "🚀", badge: "NEW", status: "new" },
       // Chat IA Agêntico (NOVO)

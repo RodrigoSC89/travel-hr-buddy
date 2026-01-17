@@ -155,6 +155,7 @@ const SafetyHumanFactorsV2 = lazy(() => import("@/pages/SafetyHumanFactorsV2"));
 const ISPSSecurityV2 = lazy(() => import("@/pages/ISPSSecurityV2"));
 const DrillSimulatorV2 = lazy(() => import("@/pages/DrillSimulatorV2"));
 const ComplianceOneV2 = lazy(() => import("@/pages/ComplianceOneV2"));
+const ExecutiveCompliancePage = lazy(() => import("@/pages/ExecutiveCompliancePage"));
 const RegulationsV2 = lazy(() => import("@/pages/RegulationsV2"));
 const RiskMatrixV2 = lazy(() => import("@/pages/RiskMatrixV2"));
 const EvidencesV2 = lazy(() => import("@/pages/EvidencesV2"));
@@ -472,6 +473,8 @@ const AppRoutes = () => (
       <Route path="/compliance-scoring" element={<ComplianceRoadmapPage />} />
       <Route path="/nc-workflow" element={<ComplianceRoadmapPage />} />
       <Route path="/predictive-compliance" element={<ComplianceRoadmapPage />} />
+      <Route path="/compliance-executive" element={<ExecutiveCompliancePage />} />
+      <Route path="/executive-compliance" element={<ExecutiveCompliancePage />} />
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
       
       {/* ============================================ */}
