@@ -1,12 +1,12 @@
 /**
- * theme-provider.tsx - PATCH 857
+ * theme-provider.tsx - PATCH 859 - FINAL FIX
  * 
- * Using createContext and useState from React namespace to ensure
- * single React instance is used throughout the application.
+ * Using next-themes instead of custom implementation to avoid
+ * React hooks conflict issues with multiple React instances.
  */
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import type { ReactNode } from "react";
 
-// Extended theme support with nautilus theme
 type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";
 
 type ThemeProviderProps = {
@@ -15,76 +15,24 @@ type ThemeProviderProps = {
   storageKey?: string;
 };
 
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-const initialState: ThemeProviderState = {
-  theme: "system",
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
-
 export function ThemeProvider({
   children,
   defaultTheme = "system",
   storageKey = "vite-ui-theme",
-  ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    try {
-      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
-    } catch {
-      return defaultTheme;
-    }
-  });
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-
-    // Remove all theme classes
-    root.classList.remove("light", "dark", "nautilus", "high-contrast");
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    // Apply selected theme
-    root.classList.add(theme);
-  }, [theme]);
-
-  const value = {
-    theme,
-    setTheme: (newTheme: Theme) => {
-      try {
-        localStorage.setItem(storageKey, newTheme);
-      } catch {
-        // Ignore localStorage errors
-      }
-      setThemeState(newTheme);
-    },
-  };
-
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme={defaultTheme}
+      storageKey={storageKey}
+      enableSystem
+      disableTransitionOnChange
+      themes={["light", "dark", "system", "nautilus", "high-contrast"]}
+    >
       {children}
-    </ThemeProviderContext.Provider>
+    </NextThemesProvider>
   );
 }
 
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider");
-
-  return context;
-};
+// Re-export useTheme from next-themes for compatibility
+export { useTheme } from "next-themes";
