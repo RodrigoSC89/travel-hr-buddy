@@ -1,10 +1,12 @@
 /**
- * main.tsx - PATCH 853 - Simplified React initialization
- * Fixed: Removed custom singleton to prevent duplicate React instances
+ * main.tsx - PATCH 854 - Fixed React hooks + slow connection optimizations
+ * 
+ * CRITICAL: This file uses ONLY standard React imports.
+ * Do NOT import React from anywhere else.
  */
 
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
@@ -26,7 +28,7 @@ const initializeTheme = () => {
 
 initializeTheme();
 
-// Handle redirect path from 404.html
+// Handle redirect path from 404.html (SPA routing)
 const handleRedirectPath = () => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
@@ -51,25 +53,46 @@ const handleRedirectPath = () => {
 
 handleRedirectPath();
 
-// Register service worker after page load (only in production)
-if ("serviceWorker" in navigator && import.meta.env.PROD) {
+// Register service worker after page load
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     try {
-      await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-    } catch {
-      // Ignore SW errors
+      // Unregister old service workers first
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        if (registration.active?.scriptURL?.includes('sw.js')) {
+          // Keep the main SW
+          continue;
+        }
+        // Unregister others
+        await registration.unregister();
+      }
+      
+      // Register main service worker
+      await navigator.serviceWorker.register("/sw.js", { 
+        scope: "/",
+        updateViaCache: "none"
+      });
+      console.log("✅ Service Worker registered");
+    } catch (err) {
+      console.warn("Service Worker registration failed:", err);
     }
   });
 }
 
-// Render the app
+// Render the app using standard ReactDOM
 const container = document.getElementById("root");
-if (container) {
-  createRoot(container).render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
-    </React.StrictMode>
-  );
+
+if (!container) {
+  throw new Error("Root element not found");
 }
+
+const root = ReactDOM.createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  </React.StrictMode>
+);

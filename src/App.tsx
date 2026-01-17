@@ -1,8 +1,10 @@
 /**
- * App.tsx - PATCH 853 - Fixed React hooks error
- * Using standard React imports to prevent duplicate instances
+ * App.tsx - PATCH 854 - Fixed React hooks + slow connection optimizations
+ * 
+ * CRITICAL: All React imports must come from the same module.
+ * QueryClient is created INSIDE this file, not imported.
  */
-import { Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
@@ -14,16 +16,23 @@ import { ThemeProvider } from "./components/layout/theme-provider";
 import { Header } from "./components/layout/header";
 import { MobileBottomNav } from "./components/layout/mobile-bottom-nav";
 
-// Create QueryClient INSIDE the module (not imported)
+// CRITICAL: Create QueryClient INSIDE App.tsx (not imported from another file)
+// This prevents duplicate React instance issues
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: { 
-      staleTime: 1000 * 60 * 5, 
-      retry: 1,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 30, // 30 minutes
+      retry: 3, // Retry 3 times for slow connections
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
+      networkMode: 'offlineFirst', // Prefer cache when offline
     },
     mutations: {
-      retry: 1,
+      retry: 2,
+      retryDelay: 1000,
+      networkMode: 'offlineFirst',
     },
   },
 });
@@ -246,12 +255,13 @@ const ExecutiveDashboard = lazy(() => import("@/pages/ExecutiveDashboard"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 
 
-// Loader
+// Loader component - optimized for slow connections
 const Loader = () => (
   <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="text-center space-y-4">
       <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
       <p className="text-foreground">Carregando Nautilus One...</p>
+      <p className="text-muted-foreground text-sm">Otimizado para conexões lentas</p>
     </div>
   </div>
 );
@@ -287,7 +297,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // Rotas internas
 const AppRoutes = () => (
-<Routes>
+  <Routes>
     {/* Public Routes */}
     <Route path="/auth" element={<Auth />} />
     <Route path="/landing" element={<LandingPage />} />
@@ -363,8 +373,8 @@ const AppRoutes = () => (
       {/* INTELIGÊNCIA AVANÇADA */}
       <Route path="/optimization" element={<Optimization />} />
       
-      {/* TELEMETRIA & MONITORAMENTO */}
-      <Route path="/telemetria" element={<TelemetriaCommand />} />
+      {/* TELEMETRIA */}
+      <Route path="/telemetria-command" element={<TelemetriaCommand />} />
       <Route path="/predictive-telemetry" element={<PredictiveTelemetry />} />
       <Route path="/satellite-optimizer" element={<SatelliteOptimizerPage />} />
       <Route path="/vessel-tracking" element={<VesselTrackingPage />} />
@@ -384,20 +394,20 @@ const AppRoutes = () => (
       <Route path="/earthquake-monitor" element={<EarthquakeMonitor />} />
       <Route path="/voice-transcriber" element={<VoiceTranscriber />} />
       
-      {/* RELATÓRIOS & DOCUMENTOS */}
+      {/* RELATÓRIOS */}
       <Route path="/reports-command" element={<ReportsCommandCenter />} />
       <Route path="/documents" element={<Documents />} />
       <Route path="/templates" element={<Templates />} />
-      <Route path="/maritime-checklists" element={<MaritimeChecklists />} />
+      <Route path="/checklists" element={<MaritimeChecklists />} />
       <Route path="/document-workflow" element={<DocumentWorkflow />} />
       <Route path="/export-center" element={<ExportCenterPage />} />
       <Route path="/advanced-search" element={<AdvancedSearchPage />} />
       
-      {/* COMUNICAÇÃO & ALERTAS */}
+      {/* COMUNICAÇÃO */}
       <Route path="/communication-command" element={<CommunicationCommandCenter />} />
       <Route path="/alerts-command" element={<AlertsCommandCenter />} />
       
-      {/* AUDITORIAS & COMPLIANCE */}
+      {/* COMPLIANCE */}
       <Route path="/peodp" element={<PEODP />} />
       <Route path="/peotram" element={<PEOTRAM />} />
       <Route path="/sgso" element={<SGSO />} />
@@ -407,7 +417,7 @@ const AppRoutes = () => (
       <Route path="/psc-package" element={<PSCPackage />} />
       <Route path="/gmud" element={<GMUDV2 />} />
       <Route path="/responsibility-matrix" element={<ResponsibilityMatrixV2 />} />
-      <Route path="/human-factors" element={<SafetyHumanFactorsV2 />} />
+      <Route path="/safety-human-factors" element={<SafetyHumanFactorsV2 />} />
       <Route path="/isps-security" element={<ISPSSecurityV2 />} />
       <Route path="/drill-simulator" element={<DrillSimulatorV2 />} />
       <Route path="/compliance-one" element={<ComplianceOneV2 />} />
@@ -421,7 +431,7 @@ const AppRoutes = () => (
       <Route path="/security-scanner" element={<SecurityScanner />} />
       
       {/* RH & PESSOAS */}
-      <Route path="/crew-management" element={<CrewManagement />} />
+      <Route path="/crew" element={<CrewManagement />} />
       <Route path="/crew-wellness" element={<CrewWellnessPage />} />
       <Route path="/users" element={<Users />} />
       <Route path="/hr-dashboard" element={<HRDashboardPage />} />
@@ -430,30 +440,30 @@ const AppRoutes = () => (
       <Route path="/payroll" element={<Payroll />} />
       <Route path="/time-tracking" element={<TimeTracking />} />
       <Route path="/hr-chatbot" element={<HRChatbotPage />} />
-      <Route path="/hr-document-ocr" element={<HRDocumentOCRPage />} />
-      <Route path="/hr-turnover-prediction" element={<HRTurnoverPredictionPage />} />
+      <Route path="/hr-ocr" element={<HRDocumentOCRPage />} />
+      <Route path="/hr-turnover" element={<HRTurnoverPredictionPage />} />
       
       {/* TREINAMENTOS */}
       <Route path="/ai-training" element={<AITraining />} />
       <Route path="/mentor-dp" element={<MentorDP />} />
       <Route path="/dp-intelligence" element={<DPIntelligence />} />
       
-      {/* FINANÇAS & PROCUREMENT */}
+      {/* FINANÇAS */}
       <Route path="/finance-command" element={<FinanceCommandCenter />} />
       <Route path="/voyage-accounting" element={<VoyageAccountingPage />} />
       <Route path="/analytics-command" element={<AnalyticsCommandCenter />} />
       <Route path="/operations-command" element={<OperationsCommandCenter />} />
       <Route path="/procurement-command" element={<ProcurementCommandCenter />} />
-      <Route path="/task-management" element={<TaskManagement />} />
+      <Route path="/tasks" element={<TaskManagement />} />
       
-      {/* ESG & SUSTENTABILIDADE */}
-      <Route path="/sustainability-score" element={<SustainabilityScorePage />} />
+      {/* ESG */}
+      <Route path="/sustainability" element={<SustainabilityScorePage />} />
       
-      {/* VIAGENS & LOGÍSTICA */}
+      {/* VIAGENS */}
       <Route path="/travel-command" element={<TravelCommandCenter />} />
       <Route path="/weather-command" element={<WeatherCommandCenter />} />
       
-      {/* SISTEMA & CONFIGURAÇÕES */}
+      {/* SISTEMA */}
       <Route path="/settings" element={<Settings />} />
       <Route path="/integrations-center" element={<IntegrationsCenter />} />
       <Route path="/api-gateway" element={<APIGateway />} />
@@ -463,13 +473,11 @@ const AppRoutes = () => (
       <Route path="/roadmap" element={<Roadmap />} />
       <Route path="/production-deploy" element={<ProductionDeploy />} />
       
-      {/* ADMIN & DASHBOARDS */}
+      {/* ADMIN */}
       <Route path="/admin" element={<Admin />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
       <Route path="/analytics" element={<Analytics />} />
-      
-      {/* DEV */}
       <Route path="/dev-routes" element={<DevRoutesDashboard />} />
     </Route>
     
@@ -478,19 +486,19 @@ const AppRoutes = () => (
   </Routes>
 );
 
-// App principal
+// Main App Component
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="nautilus-theme">
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <TooltipProvider>
-          <AuthProvider>
-            <Router>
+          <Router>
+            <AuthProvider>
               <Suspense fallback={<Loader />}>
                 <AppRoutes />
               </Suspense>
-            </Router>
-          </AuthProvider>
+            </AuthProvider>
+          </Router>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
