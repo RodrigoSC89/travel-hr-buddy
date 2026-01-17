@@ -5,10 +5,15 @@ import { componentTagger } from "lovable-tagger";
 import viteCompression from "vite-plugin-compression";
 
 /**
- * PATCH 873: Simplified React singleton - remove complex aliasing that causes issues
- * Let Vite handle React deduplication naturally with just dedupe option
+ * PATCH 870: Optimized for slow connections
+ * - Gzip + Brotli compression
+ * - Aggressive code splitting
+ * - React singleton fix
  */
 export default defineConfig(({ mode }) => {
+  const reactPath = path.resolve(__dirname, "node_modules/react");
+  const reactDomPath = path.resolve(__dirname, "node_modules/react-dom");
+  
   return {
     base: "/",
     server: {
@@ -20,12 +25,14 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mode === "development" && componentTagger(),
+      // PATCH 870: Gzip compression
       viteCompression({
         algorithm: "gzip",
         ext: ".gz",
-        threshold: 1024,
+        threshold: 1024, // Only compress files > 1KB
         deleteOriginFile: false,
       }),
+      // PATCH 870: Brotli compression (better than gzip)
       viteCompression({
         algorithm: "brotliCompress",
         ext: ".br",
@@ -36,26 +43,72 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        "react": reactPath,
+        "react-dom": reactDomPath,
+        "react-dom/client": path.resolve(__dirname, "node_modules/react-dom/client"),
+        "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
+        "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
+        "scheduler": path.resolve(__dirname, "node_modules/scheduler"),
       },
-      // PATCH 873: Let Vite dedupe without complex aliasing
-      dedupe: ["react", "react-dom"],
+      dedupe: [
+        "react", "react-dom", "react-dom/client", "react-is",
+        "react/jsx-runtime", "react/jsx-dev-runtime", "scheduler",
+        "@tanstack/react-query",
+      ],
     },
+    cacheDir: "node_modules/.vite-fresh",
     build: {
       target: "esnext",
       minify: "esbuild",
       sourcemap: false,
+      // PATCH 870: Smaller chunks for faster loading
       chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
-          manualChunks: {
-            "react-vendor": ["react", "react-dom", "@tanstack/react-query"],
+          // PATCH 870: Aggressive code splitting
+          manualChunks: (id) => {
+            // React core (CRITICAL: keep React + Query together)
+            if (
+              id.includes("node_modules/react") || 
+              id.includes("node_modules/scheduler") ||
+              id.includes("@tanstack/react-query")
+            ) {
+              return "react-core";
+            }
+            // UI components
+            if (id.includes("@radix-ui")) return "radix-ui";
+            // Charts (heavy, lazy load)
+            if (id.includes("recharts") || id.includes("chart.js")) return "charts";
+            // AI/ML (very heavy, lazy load)
+            if (id.includes("openai") || id.includes("tensorflow") || id.includes("onnx")) return "ai";
+            // Supabase
+            if (id.includes("@supabase")) return "supabase";
+            // Icons
+            if (id.includes("lucide-react")) return "icons";
+            // Forms
+            if (id.includes("react-hook-form") || id.includes("zod")) return "forms";
+            // Date utilities
+            if (id.includes("date-fns")) return "date-utils";
           },
         },
       },
     },
     optimizeDeps: {
-      include: ["react", "react-dom", "@tanstack/react-query"],
+      include: [
+        "react", 
+        "react-dom", 
+        "react-dom/client", 
+        "scheduler", 
+        "@tanstack/react-query",
+        "react-is"
+      ],
       exclude: ["@tensorflow/tfjs", "onnxruntime-web", "tesseract.js"],
+      force: true,
+      esbuildOptions: {
+        define: {
+          global: 'globalThis',
+        },
+      },
     },
     esbuild: { target: "esnext", jsx: "automatic" },
   };

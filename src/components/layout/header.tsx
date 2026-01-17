@@ -79,7 +79,6 @@ export const Header: FC = () => {
               </>
             ) : (
               <>
-                <MobileConnectionIndicator />
                 <OfflineSyncIndicator />
                 <SystemStatusIndicator />
                 <OrganizationSelector />

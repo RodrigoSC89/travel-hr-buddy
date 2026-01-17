@@ -1,10 +1,10 @@
-import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from "react";
+import * as React from "react";
 
-// PATCH 874: Fix React singleton - use named imports to avoid multiple instances
+// PATCH 857: Fix React singleton - use React namespace to avoid multiple instances
 type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";
 
 type ThemeProviderProps = {
-  children: ReactNode;
+  children: React.ReactNode;
   defaultTheme?: Theme;
   storageKey?: string;
 };
@@ -19,7 +19,7 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 };
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
@@ -27,7 +27,7 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => {
+  const [theme, setTheme] = React.useState<Theme>(() => {
     try {
       return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
     } catch {
@@ -35,7 +35,7 @@ export function ThemeProvider({
     }
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark", "nautilus", "high-contrast");
 
@@ -51,7 +51,7 @@ export function ThemeProvider({
     root.classList.add(theme);
   }, [theme]);
 
-  const value = useMemo(() => ({
+  const value = React.useMemo(() => ({
     theme,
     setTheme: (newTheme: Theme) => {
       try {
@@ -59,7 +59,7 @@ export function ThemeProvider({
       } catch {
         // Ignore localStorage errors
       }
-      setThemeState(newTheme);
+      setTheme(newTheme);
     },
   }), [theme, storageKey]);
 
@@ -71,7 +71,7 @@ export function ThemeProvider({
 }
 
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+  const context = React.useContext(ThemeProviderContext);
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider");
   return context;
