@@ -167,6 +167,13 @@ const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
 const AuditAIChatPage = lazy(() => import("@/pages/AuditAIChatPage"));
 const ComplianceRoadmapPage = lazy(() => import("@/pages/ComplianceRoadmapPage"));
 
+// Diagnostic Components Pages
+const DiagnosticCertificatesPage = lazy(() => import("@/pages/DiagnosticCertificatesPage"));
+const DiagnosticDashboardPage = lazy(() => import("@/pages/DiagnosticDashboardPage"));
+const DiagnosticDocumentsPage = lazy(() => import("@/pages/DiagnosticDocumentsPage"));
+const DiagnosticNCsPage = lazy(() => import("@/pages/DiagnosticNCsPage"));
+const DiagnosticReportsPage = lazy(() => import("@/pages/DiagnosticReportsPage"));
+
 // ============================================
 // RH & PESSOAS (HR/DP MODULE)
 // ============================================
@@ -476,6 +483,13 @@ const AppRoutes = () => (
       <Route path="/compliance-executive" element={<ExecutiveCompliancePage />} />
       <Route path="/executive-compliance" element={<ExecutiveCompliancePage />} />
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
+      
+      {/* Diagnostic Components - 5 Soluções */}
+      <Route path="/diagnostic-certificates" element={<DiagnosticCertificatesPage />} />
+      <Route path="/diagnostic-dashboard" element={<DiagnosticDashboardPage />} />
+      <Route path="/diagnostic-documents" element={<DiagnosticDocumentsPage />} />
+      <Route path="/diagnostic-ncs" element={<DiagnosticNCsPage />} />
+      <Route path="/diagnostic-reports" element={<DiagnosticReportsPage />} />
       
       {/* ============================================ */}
       {/* RH & PESSOAS (HR/DP MODULE) */}

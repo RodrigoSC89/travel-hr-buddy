@@ -278,6 +278,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🔍 Auditorias",
     defaultOpen: false,
     items: [
+      // ===== DIAGNÓSTICO RÁPIDO - 5 SOLUÇÕES =====
+      { label: "🔔 Alertas Certificados", path: "/diagnostic-certificates", icon: Bell, emoji: "🔔", badge: "NEW", status: "new" },
+      { label: "📊 Dashboard Compliance", path: "/diagnostic-dashboard", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
+      { label: "📁 Repositório Docs", path: "/diagnostic-documents", icon: FileText, emoji: "📁", badge: "NEW", status: "new" },
+      { label: "⚠️ Workflow NCs", path: "/diagnostic-ncs", icon: AlertTriangle, emoji: "⚠️", badge: "NEW", status: "new" },
+      { label: "📈 Relatórios Auto", path: "/diagnostic-reports", icon: FileText, emoji: "📈", badge: "NEW", status: "new" },
       // Dashboard Executivo de Compliance (NOVO)
       { label: "📊 Dashboard Executivo", path: "/compliance-executive", icon: BarChart3, emoji: "📊", badge: "NEW", status: "new" },
       // Centro de Compliance Avançado (NOVO - Roadmap Completo)
