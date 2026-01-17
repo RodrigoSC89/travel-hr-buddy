@@ -1,12 +1,12 @@
 /**
- * main.tsx - PATCH 854 - Fixed React hooks + slow connection optimizations
+ * main.tsx - PATCH 856 - Fixed React hooks error definitively
  * 
- * CRITICAL: This file uses ONLY standard React imports.
- * Do NOT import React from anywhere else.
+ * This file uses ONLY the standard 'react' and 'react-dom' packages.
+ * Do NOT import React from any other source.
  */
 
-import React from "react";
-import ReactDOM from "react-dom/client";
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
@@ -57,18 +57,6 @@ handleRedirectPath();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     try {
-      // Unregister old service workers first
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      for (const registration of registrations) {
-        if (registration.active?.scriptURL?.includes('sw.js')) {
-          // Keep the main SW
-          continue;
-        }
-        // Unregister others
-        await registration.unregister();
-      }
-      
-      // Register main service worker
       await navigator.serviceWorker.register("/sw.js", { 
         scope: "/",
         updateViaCache: "none"
@@ -80,13 +68,14 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-// Render the app using standard ReactDOM
+// Get root element
 const container = document.getElementById("root");
 
 if (!container) {
   throw new Error("Root element not found");
 }
 
+// Create root and render
 const root = ReactDOM.createRoot(container);
 
 root.render(
