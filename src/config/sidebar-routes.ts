@@ -280,7 +280,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     items: [
       // Centro de Compliance Avançado (NOVO - Roadmap Completo)
       { label: "🚀 Compliance Avançado", path: "/compliance-roadmap", icon: Shield, emoji: "🚀", badge: "NEW", status: "new" },
-    items: [
       // Chat IA Agêntico (NOVO)
       { label: "🤖 Audit AI Chat", path: "/audit-ai-chat", icon: Brain, emoji: "🤖", badge: "NEW", status: "new" },
       // Auditorias Marítimas Regulatórias
