@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import type { FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
-import { Anchor, Wifi, WifiOff, RefreshCw, Trash2, Loader2 } from "lucide-react";
+import { Anchor, Wifi, WifiOff, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const Login = () => {
@@ -16,19 +15,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [connectionError, setConnectionError] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const [retryTimeLeft, setRetryTimeLeft] = useState(0);
   
   const { signIn } = useAuth();
-  const navigate = useNavigate();
-
-  // Timer para countdown de retry
-  useEffect(() => {
-    if (retryTimeLeft > 0) {
-      const timer = setTimeout(() => setRetryTimeLeft(retryTimeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [retryTimeLeft]);
 
   // Limpar sessão corrompida
   const handleClearSession = useCallback(() => {
@@ -45,7 +33,6 @@ const Login = () => {
       
       setErrorMessage("");
       setConnectionError(false);
-      setRetryCount(0);
       setPassword("");
       toast.success("Sessão limpa com sucesso!");
     } catch (error) {
@@ -62,90 +49,55 @@ const Login = () => {
     setErrorMessage("");
     setConnectionError(false);
 
-    const maxRetries = 3;
-    let currentRetry = 0;
-
-    const attemptLogin = async (): Promise<boolean> => {
-      try {
-        console.log(`🔐 Tentativa de login ${currentRetry + 1}/${maxRetries}...`);
+    try {
+      console.log("🔐 Tentando login...");
+      
+      // Login simples - sem retry complexo que pode causar race conditions
+      const { error } = await signIn(email.toLowerCase().trim(), password);
+      
+      if (error) {
+        // Classificar tipo de erro
+        const errorMsg = error.message?.toLowerCase() || "";
         
-        const { error } = await signIn(email.toLowerCase().trim(), password);
-        
-        if (error) {
-          // Verificar tipo de erro
-          const errorMsg = error.message?.toLowerCase() || "";
-          
-          if (errorMsg.includes("network") || 
-              errorMsg.includes("fetch") || 
-              errorMsg.includes("timeout") ||
-              errorMsg.includes("retryable")) {
-            // Erro de conexão - tentar novamente
-            setConnectionError(true);
-            throw new Error("connection");
-          }
-          
-          // Erro de credenciais ou outro erro
-          setErrorMessage(error.message || "Email ou senha incorretos");
-          return false;
+        // Erros de rede/conexão
+        if (errorMsg.includes("network") || 
+            errorMsg.includes("fetch") || 
+            errorMsg.includes("timeout") ||
+            errorMsg.includes("retryable") ||
+            errorMsg.includes("failed to fetch")) {
+          setConnectionError(true);
+          setErrorMessage("Problema de conexão. Verifique sua internet.");
+        } 
+        // Credenciais inválidas
+        else if (errorMsg.includes("invalid") || errorMsg.includes("credentials")) {
+          setErrorMessage("Email ou senha incorretos");
         }
-        
-        // Sucesso!
+        // Outros erros
+        else {
+          setErrorMessage(error.message || "Erro ao fazer login");
+        }
+      } else {
+        // Sucesso! Não precisa navegar - AuthContext vai detectar sessão
         toast.success("Login realizado com sucesso!");
-        navigate("/dashboard");
-        return true;
-        
-      } catch (err: any) {
-        if (err.message === "connection") {
-          throw err;
-        }
-        
-        // Erro inesperado
-        const isNetworkError = err.name === "TypeError" || 
-                               err.message?.includes("fetch") ||
-                               err.message?.includes("network");
-        
-        if (isNetworkError) {
-          setConnectionError(true);
-          throw new Error("connection");
-        }
-        
+      }
+      
+    } catch (err: any) {
+      console.error("Erro no login:", err);
+      
+      // Verificar se é erro de rede
+      const isNetworkError = err.name === "TypeError" || 
+                             err.message?.includes("fetch") ||
+                             err.message?.includes("network");
+      
+      if (isNetworkError) {
+        setConnectionError(true);
+        setErrorMessage("Problema de conexão. Verifique sua internet.");
+      } else {
         setErrorMessage(err.message || "Erro ao fazer login");
-        return false;
       }
-    };
-
-    // Loop de retry com backoff exponencial
-    while (currentRetry < maxRetries) {
-      try {
-        const success = await attemptLogin();
-        if (success) {
-          setLoading(false);
-          return;
-        }
-        break; // Erro de credenciais, não tentar novamente
-        
-      } catch (err: any) {
-        if (err.message === "connection" && currentRetry < maxRetries - 1) {
-          currentRetry++;
-          setRetryCount(currentRetry);
-          
-          // Backoff exponencial: 2s, 4s, 8s
-          const waitTime = Math.pow(2, currentRetry);
-          setRetryTimeLeft(waitTime);
-          
-          console.log(`⏳ Aguardando ${waitTime}s antes da próxima tentativa...`);
-          await new Promise(resolve => setTimeout(resolve, waitTime * 1000));
-          
-        } else {
-          // Última tentativa falhou
-          setErrorMessage("Problema de conexão. Verifique sua internet e tente novamente.");
-          setConnectionError(true);
-          break;
-        }
-      }
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -212,8 +164,7 @@ const Login = () => {
                   </span>
                 </div>
                 <AlertDescription className="text-amber-300/80 text-xs">
-                  {retryCount > 0 && `Tentativa ${retryCount}/3. `}
-                  O sistema está otimizado para conexões lentas (3G/4G/5G).
+                  O sistema está otimizado para conexões lentas (3G/4G/5G/Satélite).
                 </AlertDescription>
                 <Button
                   type="button"
@@ -226,14 +177,6 @@ const Login = () => {
                   Limpar sessão
                 </Button>
               </Alert>
-            )}
-
-            {/* Countdown de retry */}
-            {retryTimeLeft > 0 && (
-              <div className="flex items-center justify-center gap-2 text-slate-400 text-sm">
-                <RefreshCw className="h-4 w-4 animate-spin" />
-                <span>Tentando novamente em {retryTimeLeft}s...</span>
-              </div>
             )}
 
             <Button 
