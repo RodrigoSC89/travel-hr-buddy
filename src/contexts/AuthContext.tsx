@@ -56,7 +56,17 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     let retryCount = 0;
-    const maxRetries = 3;
+    const maxRetries = 2; // Reduzido para evitar delays longos
+    const maxInitTimeout = 5000; // 5 segundos máximo para inicializar
+
+    // Safety timeout - SEMPRE sai do loading após 5 segundos
+    const safetyTimeout = setTimeout(() => {
+      if (mounted && isLoading) {
+        Logger.warn("Auth init timeout - forcing ready state", undefined, "AuthContext");
+        setIsLoading(false);
+        setIsInitialized(true);
+      }
+    }, maxInitTimeout);
 
     const initializeAuth = async () => {
       try {
@@ -97,16 +107,15 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
             if (!mounted) return;
 
             if (error) {
-              // Handle network errors with retry
-              if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
-                if (retryCount < maxRetries) {
-                  retryCount++;
-                  Logger.warn(`Session fetch failed, retrying (${retryCount}/${maxRetries})...`, error, "AuthContext");
-                  await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
-                  return fetchSession();
-                }
+              // Handle network errors with limited retry
+              if ((error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') && retryCount < maxRetries) {
+                retryCount++;
+                Logger.warn(`Session fetch failed, retrying (${retryCount}/${maxRetries})...`, error, "AuthContext");
+                await new Promise(resolve => setTimeout(resolve, 500 * retryCount)); // Backoff mais curto
+                return fetchSession();
               }
-              Logger.warn("Error getting session", error, "AuthContext");
+              // Após retries, continua sem sessão (usuário fará login)
+              Logger.warn("Error getting session, continuing without auth", error, "AuthContext");
             }
             
             setSession(sessionData?.session ?? null);
@@ -116,15 +125,16 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           } catch (fetchError) {
             if (!mounted) return;
             
-            // Network error - retry with exponential backoff
+            // Network error - retry com backoff curto
             if (retryCount < maxRetries) {
               retryCount++;
               Logger.warn(`Network error, retrying (${retryCount}/${maxRetries})...`, fetchError, "AuthContext");
-              await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+              await new Promise(resolve => setTimeout(resolve, 500 * retryCount));
               return fetchSession();
             }
             
-            Logger.warn("Failed to fetch session after retries", fetchError, "AuthContext");
+            // Sempre finaliza o loading mesmo em erro
+            Logger.warn("Failed to fetch session after retries, continuing", fetchError, "AuthContext");
             setIsLoading(false);
             setIsInitialized(true);
           }
@@ -143,6 +153,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     return () => {
       mounted = false;
+      clearTimeout(safetyTimeout);
       if (subscription) {
         subscription.unsubscribe();
       }
