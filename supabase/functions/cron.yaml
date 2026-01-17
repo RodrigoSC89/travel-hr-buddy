@@ -24,3 +24,7 @@ functions:
     schedule: '0 7 * * *' # Daily at 07:00 UTC (04:00 BRT) - Check compliance deadlines
     endpoint: '/compliance-deadline-cron'
     method: POST
+  check-certificate-expiry:
+    schedule: '0 5 * * *' # Daily at 05:00 UTC (02:00 BRT) - Monitor certificate expirations
+    endpoint: '/check-certificate-expiry'
+    method: POST
