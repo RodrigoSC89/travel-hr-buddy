@@ -8,7 +8,6 @@ import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
 import { SystemStatusIndicator } from "@/components/ui/SystemStatusIndicator";
 import { OfflineSyncIndicator } from "@/components/ui/OfflineSyncIndicator";
-import { MobileConnectionIndicator } from "@/components/ui/MobileConnectionIndicator";
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate } from "react-router-dom";
 import { Settings, Menu } from "lucide-react";
@@ -69,11 +68,10 @@ export const Header: FC = () => {
           </div>
           
           {/* Navigation items */}
-            <nav className="flex items-center gap-1 md:gap-2 ml-auto shrink-0">
-            {/* Mobile: Show connection indicator + essential items */}
+          <nav className="flex items-center gap-1 md:gap-2 ml-auto shrink-0">
+            {/* Mobile: Show only essential items */}
             {isMobile ? (
               <>
-                <MobileConnectionIndicator />
                 <RealTimeNotificationCenter />
                 <UserMenu />
               </>

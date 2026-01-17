@@ -5,6 +5,9 @@ import type { Database } from "./types";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://vnbptmixvwropvanyhdb.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE";
 
+// Import the supabase client like this:
+// import { supabase } from "@/integrations/supabase/client";
+
 // Safe storage adapter that checks for localStorage availability
 // This prevents crashes in environments where localStorage is not available (e.g., Cloudflare Workers, SSR)
 const safeLocalStorage = (() => {
@@ -31,104 +34,20 @@ const safeLocalStorage = (() => {
   };
 })();
 
-// Custom fetch with timeout and retry for mobile networks
-const createResilientFetch = () => {
-  const MAX_RETRIES = 3;
-  const INITIAL_TIMEOUT = 15000; // 15s initial timeout
-  const MAX_TIMEOUT = 30000; // 30s max timeout
-
-  return async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    const url = typeof input === 'string' ? input : input.toString();
-    let lastError: Error | null = null;
-    
-    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-      const controller = new AbortController();
-      const timeout = Math.min(INITIAL_TIMEOUT * Math.pow(1.5, attempt), MAX_TIMEOUT);
-      const timeoutId = setTimeout(() => controller.abort(), timeout);
-      
-      try {
-        const response = await fetch(input, {
-          ...init,
-          signal: controller.signal,
-        });
-        
-        clearTimeout(timeoutId);
-        
-        // If response is ok or it's a client error (4xx), return immediately
-        if (response.ok || (response.status >= 400 && response.status < 500)) {
-          return response;
-        }
-        
-        // Server error (5xx) - retry
-        if (response.status >= 500) {
-          lastError = new Error(`Server error: ${response.status}`);
-          console.warn(`[Supabase] Server error ${response.status}, attempt ${attempt + 1}/${MAX_RETRIES}`);
-          await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)));
-          continue;
-        }
-        
-        return response;
-      } catch (error: any) {
-        clearTimeout(timeoutId);
-        lastError = error;
-        
-        // If aborted due to timeout or network error, retry
-        if (error.name === 'AbortError' || error.message?.includes('Failed to fetch')) {
-          console.warn(`[Supabase] Network error on attempt ${attempt + 1}/${MAX_RETRIES}:`, error.message);
-          
-          // Wait before retry with exponential backoff
-          if (attempt < MAX_RETRIES - 1) {
-            const delay = 1000 * Math.pow(2, attempt);
-            await new Promise(r => setTimeout(r, delay));
-          }
-          continue;
-        }
-        
-        // Non-retryable error, throw immediately
-        throw error;
-      }
-    }
-    
-    // All retries exhausted
-    throw lastError || new Error('Failed to fetch after retries');
-  };
-};
-
-// Detect if running on mobile
-const isMobile = typeof navigator !== 'undefined' && 
-  /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
     storage: safeLocalStorage,
     persistSession: true,
     autoRefreshToken: true,
-    detectSessionInUrl: true,
-    flowType: 'pkce',
   },
   realtime: {
     params: {
-      eventsPerSecond: isMobile ? 5 : 10, // Reduce for mobile
+      eventsPerSecond: 10,
     },
   },
   global: {
     headers: {
       "x-client-info": "nautilus-travel-hr-buddy",
     },
-    // Use resilient fetch for mobile or when connection might be unstable
-    fetch: isMobile ? createResilientFetch() : undefined,
-  },
-  db: {
-    schema: 'public',
   },
 });
-
-// Export connection status helper
-export const checkSupabaseConnection = async (): Promise<boolean> => {
-  try {
-    const { error } = await supabase.from('organizations').select('id').limit(1).maybeSingle();
-    return !error;
-  } catch {
-    return false;
-  }
-};
