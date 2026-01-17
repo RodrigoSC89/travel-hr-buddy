@@ -164,6 +164,7 @@ const SecurityCenter = lazy(() => import("@/pages/SecurityCenter"));
 const SecurityAuditCenter = lazy(() => import("@/pages/SecurityAuditCenter"));
 const SecurityScanner = lazy(() => import("@/pages/SecurityScanner"));
 const AuditAIChatPage = lazy(() => import("@/pages/AuditAIChatPage"));
+const ComplianceRoadmapPage = lazy(() => import("@/pages/ComplianceRoadmapPage"));
 
 // ============================================
 // RH & PESSOAS (HR/DP MODULE)
@@ -465,6 +466,12 @@ const AppRoutes = () => (
       <Route path="/auditoria-seguranca" element={<SecurityAuditCenter />} />
       <Route path="/security-scanner" element={<SecurityScanner />} />
       <Route path="/compliance-hub" element={<ComplianceOneV2 />} />
+      <Route path="/compliance-roadmap" element={<ComplianceRoadmapPage />} />
+      <Route path="/compliance-dashboard" element={<ComplianceRoadmapPage />} />
+      <Route path="/compliance-alerts" element={<ComplianceRoadmapPage />} />
+      <Route path="/compliance-scoring" element={<ComplianceRoadmapPage />} />
+      <Route path="/nc-workflow" element={<ComplianceRoadmapPage />} />
+      <Route path="/predictive-compliance" element={<ComplianceRoadmapPage />} />
       <Route path="/safety-guardian" element={<SafetyHumanFactorsV2 />} />
       
       {/* ============================================ */}
