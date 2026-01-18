@@ -15713,6 +15713,165 @@ export type Database = {
           },
         ]
       }
+      invoice_items: {
+        Row: {
+          amount: number
+          category: string | null
+          created_at: string
+          description: string
+          id: string
+          invoice_id: string | null
+          metadata: Json | null
+          quantity: number
+          tax_amount: number | null
+          tax_rate: number | null
+          unit: string | null
+          unit_price: number
+        }
+        Insert: {
+          amount: number
+          category?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          invoice_id?: string | null
+          metadata?: Json | null
+          quantity?: number
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit?: string | null
+          unit_price: number
+        }
+        Update: {
+          amount?: number
+          category?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id?: string | null
+          metadata?: Json | null
+          quantity?: number
+          tax_amount?: number | null
+          tax_rate?: number | null
+          unit?: string | null
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          charterer_id: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          due_at: string | null
+          erp_reference: string | null
+          erp_sync_at: string | null
+          erp_sync_status: string | null
+          id: string
+          invoice_number: string | null
+          issued_at: string | null
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          paid_at: string | null
+          payment_terms: string | null
+          status: Database["public"]["Enums"]["invoice_status"]
+          subtotal: number
+          tax_amount: number
+          total_amount: number
+          updated_at: string
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          charterer_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          due_at?: string | null
+          erp_reference?: string | null
+          erp_sync_at?: string | null
+          erp_sync_status?: string | null
+          id?: string
+          invoice_number?: string | null
+          issued_at?: string | null
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          paid_at?: string | null
+          payment_terms?: string | null
+          status?: Database["public"]["Enums"]["invoice_status"]
+          subtotal?: number
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          charterer_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          due_at?: string | null
+          erp_reference?: string | null
+          erp_sync_at?: string | null
+          erp_sync_status?: string | null
+          id?: string
+          invoice_number?: string | null
+          issued_at?: string | null
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          paid_at?: string | null
+          payment_terms?: string | null
+          status?: Database["public"]["Enums"]["invoice_status"]
+          subtotal?: number
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_charterer_id_fkey"
+            columns: ["charterer_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       iot_sensor_data: {
         Row: {
           created_at: string
@@ -22512,6 +22671,65 @@ export type Database = {
           },
         ]
       }
+      pricing_rules: {
+        Row: {
+          base_rate: number
+          conditions: Json | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          organization_id: string | null
+          rule_type: string
+          unit: string
+          updated_at: string
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          base_rate: number
+          conditions?: Json | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          organization_id?: string | null
+          rule_type: string
+          unit: string
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          base_rate?: number
+          conditions?: Json | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          organization_id?: string | null
+          rule_type?: string
+          unit?: string
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       priority_shifts: {
         Row: {
           context: Json | null
@@ -26410,6 +26628,125 @@ export type Database = {
           },
         ]
       }
+      siscomex_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: unknown
+          transmission_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          transmission_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown
+          transmission_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siscomex_audit_log_transmission_id_fkey"
+            columns: ["transmission_id"]
+            isOneToOne: false
+            referencedRelation: "siscomex_transmissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      siscomex_transmissions: {
+        Row: {
+          acknowledged_at: string | null
+          created_at: string
+          created_by: string | null
+          error_message: string | null
+          id: string
+          max_retries: number | null
+          organization_id: string | null
+          payload: Json
+          retry_count: number | null
+          scheduled_at: string | null
+          sent_at: string | null
+          siscomex_protocol: string | null
+          siscomex_response: Json | null
+          status: Database["public"]["Enums"]["siscomex_transmission_status"]
+          transmission_type: Database["public"]["Enums"]["siscomex_transmission_type"]
+          updated_at: string
+          vessel_id: string | null
+          voyage_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          max_retries?: number | null
+          organization_id?: string | null
+          payload?: Json
+          retry_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          siscomex_protocol?: string | null
+          siscomex_response?: Json | null
+          status?: Database["public"]["Enums"]["siscomex_transmission_status"]
+          transmission_type: Database["public"]["Enums"]["siscomex_transmission_type"]
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          error_message?: string | null
+          id?: string
+          max_retries?: number | null
+          organization_id?: string | null
+          payload?: Json
+          retry_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          siscomex_protocol?: string | null
+          siscomex_response?: Json | null
+          status?: Database["public"]["Enums"]["siscomex_transmission_status"]
+          transmission_type?: Database["public"]["Enums"]["siscomex_transmission_type"]
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "siscomex_transmissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "siscomex_transmissions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       smart_drill_executions: {
         Row: {
           ai_evaluation: Json | null
@@ -26765,6 +27102,81 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      soc_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_acknowledged: boolean | null
+          message: string
+          metadata: Json | null
+          organization_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          source_module: string | null
+          source_reference_id: string | null
+          title: string
+          vessel_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          message: string
+          metadata?: Json | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity: string
+          source_module?: string | null
+          source_reference_id?: string | null
+          title: string
+          vessel_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          message?: string
+          metadata?: Json | null
+          organization_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          source_module?: string | null
+          source_reference_id?: string | null
+          title?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "soc_alerts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "soc_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -33380,6 +33792,20 @@ export type Database = {
             }[]
           }
         | { Args: { p_user_id: string }; Returns: string }
+      create_soc_alert: {
+        Args: {
+          p_alert_type: string
+          p_message: string
+          p_metadata?: Json
+          p_organization_id: string
+          p_severity: string
+          p_source_module?: string
+          p_source_reference_id?: string
+          p_title: string
+          p_vessel_id?: string
+        }
+        Returns: string
+      }
       create_tide_alert: {
         Args: {
           p_alert_type: string
@@ -33729,6 +34155,28 @@ export type Database = {
         | "emergency_procedure"
         | "training_record"
         | "maintenance_procedure"
+      invoice_status:
+        | "draft"
+        | "pending_approval"
+        | "approved"
+        | "sent"
+        | "paid"
+        | "overdue"
+        | "cancelled"
+        | "disputed"
+      siscomex_transmission_status:
+        | "pending"
+        | "processing"
+        | "sent"
+        | "acknowledged"
+        | "error"
+        | "cancelled"
+      siscomex_transmission_type:
+        | "entry"
+        | "exit"
+        | "manifest"
+        | "crew_list"
+        | "cargo_declaration"
       user_role:
         | "admin"
         | "hr_manager"
@@ -33886,6 +34334,31 @@ export const Constants = {
         "emergency_procedure",
         "training_record",
         "maintenance_procedure",
+      ],
+      invoice_status: [
+        "draft",
+        "pending_approval",
+        "approved",
+        "sent",
+        "paid",
+        "overdue",
+        "cancelled",
+        "disputed",
+      ],
+      siscomex_transmission_status: [
+        "pending",
+        "processing",
+        "sent",
+        "acknowledged",
+        "error",
+        "cancelled",
+      ],
+      siscomex_transmission_type: [
+        "entry",
+        "exit",
+        "manifest",
+        "crew_list",
+        "cargo_declaration",
       ],
       user_role: [
         "admin",
