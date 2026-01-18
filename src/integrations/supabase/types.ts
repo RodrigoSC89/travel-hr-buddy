@@ -2398,6 +2398,63 @@ export type Database = {
         }
         Relationships: []
       }
+      api_endpoints: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          examples: Json | null
+          id: string
+          is_deprecated: boolean | null
+          is_public: boolean | null
+          method: string
+          parameters: Json | null
+          path: string
+          rate_limit_per_minute: number | null
+          request_schema: Json | null
+          response_schema: Json | null
+          summary: string | null
+          tags: string[] | null
+          updated_at: string | null
+          version: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          examples?: Json | null
+          id?: string
+          is_deprecated?: boolean | null
+          is_public?: boolean | null
+          method: string
+          parameters?: Json | null
+          path: string
+          rate_limit_per_minute?: number | null
+          request_schema?: Json | null
+          response_schema?: Json | null
+          summary?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          examples?: Json | null
+          id?: string
+          is_deprecated?: boolean | null
+          is_public?: boolean | null
+          method?: string
+          parameters?: Json | null
+          path?: string
+          rate_limit_per_minute?: number | null
+          request_schema?: Json | null
+          response_schema?: Json | null
+          summary?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          version?: string | null
+        }
+        Relationships: []
+      }
       api_gateway_requests: {
         Row: {
           api_key_id: string | null
@@ -6206,6 +6263,84 @@ export type Database = {
           },
         ]
       }
+      compliance_violations: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          auto_resolved: boolean | null
+          created_at: string | null
+          detected_at: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          notification_sent: boolean | null
+          organization_id: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          rule_id: string | null
+          severity: string
+          status: string | null
+          updated_at: string | null
+          violation_details: Json
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          auto_resolved?: boolean | null
+          created_at?: string | null
+          detected_at?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          notification_sent?: boolean | null
+          organization_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          rule_id?: string | null
+          severity: string
+          status?: string | null
+          updated_at?: string | null
+          violation_details: Json
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          auto_resolved?: boolean | null
+          created_at?: string | null
+          detected_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          notification_sent?: boolean | null
+          organization_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          rule_id?: string | null
+          severity?: string
+          status?: string | null
+          updated_at?: string | null
+          violation_details?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_violations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_violations_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_workflows: {
         Row: {
           assigned_to: string | null
@@ -8825,6 +8960,80 @@ export type Database = {
           },
         ]
       }
+      customer_health_metrics: {
+        Row: {
+          active_users_count: number | null
+          api_calls_last_30d: number | null
+          arr: number | null
+          churn_risk: number | null
+          created_at: string | null
+          engagement_trend: string | null
+          features_used_count: number | null
+          health_score: number | null
+          id: string
+          last_calculated_at: string | null
+          logins_last_30d: number | null
+          mrr: number | null
+          nps_score: number | null
+          organization_id: string
+          recommended_actions: Json | null
+          risk_factors: Json | null
+          support_tickets_last_30d: number | null
+          updated_at: string | null
+          usage_trend: string | null
+        }
+        Insert: {
+          active_users_count?: number | null
+          api_calls_last_30d?: number | null
+          arr?: number | null
+          churn_risk?: number | null
+          created_at?: string | null
+          engagement_trend?: string | null
+          features_used_count?: number | null
+          health_score?: number | null
+          id?: string
+          last_calculated_at?: string | null
+          logins_last_30d?: number | null
+          mrr?: number | null
+          nps_score?: number | null
+          organization_id: string
+          recommended_actions?: Json | null
+          risk_factors?: Json | null
+          support_tickets_last_30d?: number | null
+          updated_at?: string | null
+          usage_trend?: string | null
+        }
+        Update: {
+          active_users_count?: number | null
+          api_calls_last_30d?: number | null
+          arr?: number | null
+          churn_risk?: number | null
+          created_at?: string | null
+          engagement_trend?: string | null
+          features_used_count?: number | null
+          health_score?: number | null
+          id?: string
+          last_calculated_at?: string | null
+          logins_last_30d?: number | null
+          mrr?: number | null
+          nps_score?: number | null
+          organization_id?: string
+          recommended_actions?: Json | null
+          risk_factors?: Json | null
+          support_tickets_last_30d?: number | null
+          updated_at?: string | null
+          usage_trend?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_health_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dashboard_activities: {
         Row: {
           activity_type: string
@@ -9614,6 +9823,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "docusign_envelopes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      domain_events: {
+        Row: {
+          aggregate_id: string
+          aggregate_type: string
+          created_at: string | null
+          data: Json
+          event_type: string
+          event_version: number
+          id: string
+          metadata: Json | null
+          organization_id: string | null
+        }
+        Insert: {
+          aggregate_id: string
+          aggregate_type: string
+          created_at?: string | null
+          data: Json
+          event_type: string
+          event_version?: number
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+        }
+        Update: {
+          aggregate_id?: string
+          aggregate_type?: string
+          created_at?: string | null
+          data?: Json
+          event_type?: string
+          event_version?: number
+          id?: string
+          metadata?: Json | null
+          organization_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "domain_events_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -11300,6 +11553,44 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      event_snapshots: {
+        Row: {
+          aggregate_id: string
+          aggregate_type: string
+          created_at: string | null
+          id: string
+          organization_id: string | null
+          snapshot_version: number
+          state: Json
+        }
+        Insert: {
+          aggregate_id: string
+          aggregate_type: string
+          created_at?: string | null
+          id?: string
+          organization_id?: string | null
+          snapshot_version: number
+          state: Json
+        }
+        Update: {
+          aggregate_id?: string
+          aggregate_type?: string
+          created_at?: string | null
+          id?: string
+          organization_id?: string | null
+          snapshot_version?: number
+          state?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_snapshots_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       evidences: {
         Row: {
@@ -15228,6 +15519,109 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      incident_runbooks: {
+        Row: {
+          auto_execute: boolean | null
+          created_at: string | null
+          description: string | null
+          escalation_policy: Json | null
+          estimated_resolution_time: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          notification_channels: Json | null
+          organization_id: string | null
+          severity: string | null
+          steps: Json
+          tags: string[] | null
+          trigger_conditions: Json
+          updated_at: string | null
+        }
+        Insert: {
+          auto_execute?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          escalation_policy?: Json | null
+          estimated_resolution_time?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          notification_channels?: Json | null
+          organization_id?: string | null
+          severity?: string | null
+          steps: Json
+          tags?: string[] | null
+          trigger_conditions: Json
+          updated_at?: string | null
+        }
+        Update: {
+          auto_execute?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          escalation_policy?: Json | null
+          estimated_resolution_time?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          notification_channels?: Json | null
+          organization_id?: string | null
+          severity?: string | null
+          steps?: Json
+          tags?: string[] | null
+          trigger_conditions?: Json
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incident_runbooks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      incident_timeline: {
+        Row: {
+          created_at: string | null
+          description: string
+          event_type: string
+          id: string
+          incident_id: string | null
+          metadata: Json | null
+          user_id: string | null
+          user_name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          event_type: string
+          id?: string
+          incident_id?: string | null
+          metadata?: Json | null
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          event_type?: string
+          id?: string
+          incident_id?: string | null
+          metadata?: Json | null
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "incident_timeline_incident_id_fkey"
+            columns: ["incident_id"]
+            isOneToOne: false
+            referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       incident_types: {
         Row: {
@@ -30456,6 +30850,50 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "external_entities"
             referencedColumns: ["entity_id"]
+          },
+        ]
+      }
+      usage_events: {
+        Row: {
+          event_category: string | null
+          event_name: string
+          id: string
+          organization_id: string | null
+          page_url: string | null
+          properties: Json | null
+          session_id: string | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          event_category?: string | null
+          event_name: string
+          id?: string
+          organization_id?: string | null
+          page_url?: string | null
+          properties?: Json | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          event_category?: string | null
+          event_name?: string
+          id?: string
+          organization_id?: string | null
+          page_url?: string | null
+          properties?: Json | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
           },
         ]
       }
