@@ -1,7 +1,8 @@
-// Service Worker Avançado - Nautilus One v7
-// CRITICAL FIX: Auth requests (GET & POST) são SEMPRE bypass
+// Service Worker Avançado - Nautilus One v8
+// CRITICAL FIX: Auth requests (ALL endpoints) são SEMPRE bypass
 // CRITICAL FIX: JS/CSS chunks são SEMPRE Network First
-const CACHE_VERSION = 'v7';
+// CRITICAL FIX: Timeouts aumentados para redes de satélite
+const CACHE_VERSION = 'v8';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
@@ -30,7 +31,7 @@ const API_PATTERNS = [
 
 // Instalação do Service Worker
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing v7...');
+  console.log('[SW] Installing v8 - Auth bypass + Extended timeouts...');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
@@ -45,7 +46,7 @@ self.addEventListener('install', (event) => {
 
 // Ativação e limpeza de caches antigos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating v7 - clearing old caches...');
+  console.log('[SW] Activating v8 - clearing ALL old caches...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
@@ -71,15 +72,28 @@ self.addEventListener('fetch', (event) => {
   if (!url.protocol.startsWith('http')) return;
 
   // ⚠️ CRÍTICO: NUNCA interceptar requisições de autenticação (GET ou POST)!
-  // Isso inclui /auth/v1/, tokens, sessions, etc.
+  // Isso inclui /auth/v1/, tokens, sessions, callback, signup, login, etc.
   const isAuthRequest = 
     url.pathname.includes('/auth/') || 
+    url.pathname.includes('/auth') ||
     url.pathname.includes('/token') ||
     url.pathname.includes('/session') ||
-    (url.hostname.includes('supabase') && url.pathname.includes('auth'));
+    url.pathname.includes('/callback') ||
+    url.pathname.includes('/signup') ||
+    url.pathname.includes('/login') ||
+    url.pathname.includes('/verify') ||
+    url.pathname.includes('/recover') ||
+    url.pathname.includes('/user') ||
+    url.pathname.includes('/logout') ||
+    (url.hostname.includes('supabase') && (
+      url.pathname.includes('auth') || 
+      url.pathname.includes('token') ||
+      url.pathname.includes('session')
+    ));
   
   if (isAuthRequest) {
     // NÃO interceptar - deixar passar direto para a rede
+    console.log('[SW] Auth bypass:', url.pathname);
     return;
   }
 
@@ -124,7 +138,8 @@ self.addEventListener('fetch', (event) => {
 // Estratégias de cache
 
 async function networkFirstStrategy(request, cacheName) {
-  const timeoutMs = isSlowConnection() ? 15000 : 8000;
+  // Timeouts aumentados para conexões marítimas/satélite
+  const timeoutMs = isSlowConnection() ? 25000 : 12000;
   
   try {
     const controller = new AbortController();
@@ -175,7 +190,8 @@ async function networkFirstStrategy(request, cacheName) {
 // ⚠️ CRÍTICO: Network First com fallback para chunks JS/CSS e HTML
 // Se a rede falhar, tenta cache, mas SEMPRE prefere rede
 async function networkFirstWithFallback(request) {
-  const timeoutMs = isSlowConnection() ? 20000 : 10000;
+  // Timeouts MUITO generosos para redes instáveis (30s slow, 15s normal)
+  const timeoutMs = isSlowConnection() ? 30000 : 15000;
   
   try {
     const controller = new AbortController();
@@ -304,9 +320,15 @@ function isSlowConnection() {
   // Check if connection API is available
   if ('connection' in navigator) {
     const conn = navigator.connection;
-    return conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g';
+    // Considerar também 3g como lento para ser mais conservador
+    return conn.saveData || 
+           conn.effectiveType === '2g' || 
+           conn.effectiveType === 'slow-2g' ||
+           conn.effectiveType === '3g' ||
+           (conn.downlink && conn.downlink < 2); // Menos de 2Mbps
   }
-  return false;
+  // Se não tem API de conexão, assumir que pode ser lento (mobile antigo)
+  return true;
 }
 
 async function trimCache(cacheName, maxSize) {
@@ -426,4 +448,4 @@ async function getCacheSize() {
   return totalSize;
 }
 
-console.log('[SW] Service Worker v7 loaded - Auth bypass + Network First JS');
+console.log('[SW] Service Worker v8 loaded - Full Auth bypass + Extended timeouts for maritime connections');
