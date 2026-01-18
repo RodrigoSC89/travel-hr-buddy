@@ -1,7 +1,7 @@
-// Service Worker Avançado - Nautilus One v5
-// Otimizado para internet lenta e modo offline
-// FIX: Auth requests agora são SEMPRE bypass do cache
-const CACHE_VERSION = 'v5';
+// Service Worker Avançado - Nautilus One v6
+// CRITICAL FIX: JS/CSS chunks são SEMPRE Network First para evitar erros após deploy
+// FIX: Auth requests são SEMPRE bypass do cache
+const CACHE_VERSION = 'v6';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
@@ -13,13 +13,13 @@ const MAX_IMAGE_CACHE_SIZE = 100;
 const MAX_API_CACHE_SIZE = 30;
 const API_CACHE_TTL = 5 * 60 * 1000; // 5 minutos
 
-// Assets estáticos para pre-cache
+// Assets estáticos para pre-cache (APENAS arquivos que não mudam!)
 const STATIC_ASSETS = [
   '/',
-  '/index.html',
   '/offline.html',
   '/favicon.ico',
   '/manifest.json'
+  // NÃO cachear index.html - sempre buscar da rede
 ];
 
 // URLs da API que devem ser cacheadas
@@ -30,7 +30,7 @@ const API_PATTERNS = [
 
 // Instalação do Service Worker
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing v4...');
+  console.log('[SW] Installing v6...');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
@@ -45,7 +45,7 @@ self.addEventListener('install', (event) => {
 
 // Ativação e limpeza de caches antigos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating v4...');
+  console.log('[SW] Activating v6 - clearing old caches...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
@@ -74,12 +74,17 @@ self.addEventListener('fetch', (event) => {
   if (!url.protocol.startsWith('http')) return;
 
   // ⚠️ CRÍTICO: NUNCA cachear requisições de autenticação!
-  // Isso inclui /auth/v1/, tokens, sessions, etc.
   if (url.pathname.includes('/auth/') || 
       url.pathname.includes('/token') ||
       url.pathname.includes('/session') ||
       url.hostname.includes('supabase') && url.pathname.includes('auth')) {
-    // Deixar passar direto para a rede sem interceptação
+    return; // Bypass completo
+  }
+
+  // ⚠️ CRÍTICO: JS e CSS chunks SEMPRE Network First
+  // Isso previne erros de "Failed to fetch dynamically imported module"
+  if (isJSorCSSChunk(url.pathname)) {
+    event.respondWith(networkFirstWithFallback(request));
     return;
   }
 
@@ -95,20 +100,20 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Assets estáticos: Cache First
-  if (isStaticAsset(url.pathname)) {
+  // Páginas HTML: SEMPRE Network First (para pegar novos builds)
+  if (request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(networkFirstWithFallback(request));
+    return;
+  }
+
+  // Fontes e outros assets estáticos: Cache First
+  if (isFontOrStaticAsset(url.pathname)) {
     event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
     return;
   }
 
-  // Páginas HTML: Stale While Revalidate
-  if (request.headers.get('accept')?.includes('text/html')) {
-    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
-    return;
-  }
-
-  // Outros recursos: Cache First com Network Fallback
-  event.respondWith(cacheFirstStrategy(request, DYNAMIC_CACHE));
+  // Outros recursos: Network First
+  event.respondWith(networkFirstWithFallback(request));
 });
 
 // Estratégias de cache
@@ -158,6 +163,52 @@ async function networkFirstStrategy(request, cacheName) {
     }
     
     // Network error but online - let it pass through
+    throw error;
+  }
+}
+
+// ⚠️ CRÍTICO: Network First com fallback para chunks JS/CSS e HTML
+// Se a rede falhar, tenta cache, mas SEMPRE prefere rede
+async function networkFirstWithFallback(request) {
+  const timeoutMs = isSlowConnection() ? 20000 : 10000;
+  
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    
+    const networkResponse = await fetch(request, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
+    if (networkResponse.ok) {
+      // Cachear para fallback offline
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    console.log('[SW] Network failed, trying cache for:', request.url);
+    
+    // Tentar cache como fallback
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      console.log('[SW] Serving from cache:', request.url);
+      return cachedResponse;
+    }
+    
+    // Para navegação, mostrar página offline
+    if (request.mode === 'navigate') {
+      const offlinePage = await caches.match('/offline.html');
+      if (offlinePage) return offlinePage;
+    }
+    
+    // Erro de chunk - retornar erro claro para o ErrorBoundary tratar
+    if (request.url.includes('/assets/') && request.url.endsWith('.js')) {
+      return new Response('Chunk load failed', { 
+        status: 503, 
+        statusText: 'Chunk Load Failed'
+      });
+    }
+    
     throw error;
   }
 }
@@ -228,8 +279,16 @@ async function imageStrategy(request) {
 }
 
 // Helpers
-function isStaticAsset(pathname) {
-  return /\.(js|css|woff|woff2|ttf|eot)$/.test(pathname);
+
+// Detecta chunks JS/CSS (arquivos com hash no nome)
+function isJSorCSSChunk(pathname) {
+  // Arquivos como: Component-AbCdEf12.js, style-XyZ123.css
+  return /\/assets\/.*-[a-zA-Z0-9]{6,}\.(js|css)$/.test(pathname);
+}
+
+// Fontes e assets que realmente não mudam
+function isFontOrStaticAsset(pathname) {
+  return /\.(woff|woff2|ttf|eot)$/.test(pathname);
 }
 
 function isImageRequest(pathname) {
@@ -362,4 +421,4 @@ async function getCacheSize() {
   return totalSize;
 }
 
-console.log('[SW] Service Worker v4 loaded');
+console.log('[SW] Service Worker v6 loaded - JS chunks are Network First');
