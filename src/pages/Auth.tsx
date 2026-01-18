@@ -20,10 +20,55 @@ import {
   ArrowRight,
   CheckCircle,
   Loader2,
-  RefreshCw
+  RefreshCw,
+  WifiOff,
+  Wifi
 } from "lucide-react";
 import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
+
+// Hook para monitorar conexão em tempo real
+const useNetworkStatus = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isSlowConnection, setIsSlowConnection] = useState(false);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Detectar conexão lenta
+    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    if (connection) {
+      const checkSlow = () => {
+        const effectiveType = connection.effectiveType;
+        const downlink = connection.downlink;
+        setIsSlowConnection(
+          effectiveType === '2g' || 
+          effectiveType === 'slow-2g' || 
+          effectiveType === '3g' ||
+          (downlink && downlink < 2)
+        );
+      };
+      checkSlow();
+      connection.addEventListener('change', checkSlow);
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+        connection.removeEventListener('change', checkSlow);
+      };
+    }
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  return { isOnline, isSlowConnection };
+};
 
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -50,6 +95,7 @@ type ResetFormData = z.infer<typeof resetSchema>;
 
 const Auth: React.FC = () => {
   const { user, isLoading: authLoading } = useAuth();
+  const { isOnline, isSlowConnection } = useNetworkStatus();
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("signin");
   const [isLoading, setIsLoading] = useState(false);
@@ -116,8 +162,8 @@ const Auth: React.FC = () => {
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
     
-    // Verificar conexão antes de tentar login
-    if (!navigator.onLine) {
+    // Verificar conexão antes de tentar login (usar estado reativo)
+    if (!isOnline) {
       toast.error("Sem conexão", { 
         description: "Você está offline. Conecte-se à internet para fazer login." 
       });
@@ -387,6 +433,24 @@ const Auth: React.FC = () => {
 
         {/* Right Side - Auth Forms */}
         <div className="w-full max-w-md mx-auto">
+          {/* Network Status Banner */}
+          {!isOnline && (
+            <div className="mb-4 p-3 rounded-lg bg-destructive/10 border border-destructive/30 flex items-center gap-2">
+              <WifiOff className="h-5 w-5 text-destructive" />
+              <span className="text-sm text-destructive font-medium">
+                Você está offline. Conecte-se à internet para fazer login.
+              </span>
+            </div>
+          )}
+          {isOnline && isSlowConnection && (
+            <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex items-center gap-2">
+              <Wifi className="h-5 w-5 text-yellow-600" />
+              <span className="text-sm text-yellow-700 dark:text-yellow-400 font-medium">
+                Conexão lenta detectada. O login pode demorar um pouco.
+              </span>
+            </div>
+          )}
+          
           <Card className="shadow-xl border-border bg-card">
             <CardHeader className="space-y-1 text-center">
               <CardTitle className="text-2xl font-bold text-card-foreground">
