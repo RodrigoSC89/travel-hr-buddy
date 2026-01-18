@@ -1,7 +1,7 @@
-// Service Worker Avançado - Nautilus One v6
-// CRITICAL FIX: JS/CSS chunks são SEMPRE Network First para evitar erros após deploy
-// FIX: Auth requests são SEMPRE bypass do cache
-const CACHE_VERSION = 'v6';
+// Service Worker Avançado - Nautilus One v7
+// CRITICAL FIX: Auth requests (GET & POST) são SEMPRE bypass
+// CRITICAL FIX: JS/CSS chunks são SEMPRE Network First
+const CACHE_VERSION = 'v7';
 const STATIC_CACHE = `nautilus-static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `nautilus-dynamic-${CACHE_VERSION}`;
 const API_CACHE = `nautilus-api-${CACHE_VERSION}`;
@@ -30,7 +30,7 @@ const API_PATTERNS = [
 
 // Instalação do Service Worker
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing v6...');
+  console.log('[SW] Installing v7...');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
@@ -45,7 +45,7 @@ self.addEventListener('install', (event) => {
 
 // Ativação e limpeza de caches antigos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating v6 - clearing old caches...');
+  console.log('[SW] Activating v7 - clearing old caches...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
@@ -67,19 +67,24 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Ignorar requisições não-GET
-  if (request.method !== 'GET') return;
-
   // Ignorar chrome-extension e outros protocolos
   if (!url.protocol.startsWith('http')) return;
 
-  // ⚠️ CRÍTICO: NUNCA cachear requisições de autenticação!
-  if (url.pathname.includes('/auth/') || 
-      url.pathname.includes('/token') ||
-      url.pathname.includes('/session') ||
-      url.hostname.includes('supabase') && url.pathname.includes('auth')) {
-    return; // Bypass completo
+  // ⚠️ CRÍTICO: NUNCA interceptar requisições de autenticação (GET ou POST)!
+  // Isso inclui /auth/v1/, tokens, sessions, etc.
+  const isAuthRequest = 
+    url.pathname.includes('/auth/') || 
+    url.pathname.includes('/token') ||
+    url.pathname.includes('/session') ||
+    (url.hostname.includes('supabase') && url.pathname.includes('auth'));
+  
+  if (isAuthRequest) {
+    // NÃO interceptar - deixar passar direto para a rede
+    return;
   }
+
+  // Ignorar requisições não-GET para caching (POST, PUT, DELETE, etc.)
+  if (request.method !== 'GET') return;
 
   // ⚠️ CRÍTICO: JS e CSS chunks SEMPRE Network First
   // Isso previne erros de "Failed to fetch dynamically imported module"
@@ -421,4 +426,4 @@ async function getCacheSize() {
   return totalSize;
 }
 
-console.log('[SW] Service Worker v6 loaded - JS chunks are Network First');
+console.log('[SW] Service Worker v7 loaded - Auth bypass + Network First JS');

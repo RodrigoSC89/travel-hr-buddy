@@ -55,93 +55,60 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   useEffect(() => {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
-    let retryCount = 0;
-    const maxRetries = 2; // Reduzido para evitar delays longos
-    // AUMENTADO para conexões maritimas lentas (satélite 30-120s latência)
-    const maxInitTimeout = 15000; // 15 segundos máximo para inicializar
-
-    // Safety timeout - SEMPRE sai do loading após timeout
+    
+    // Timeout de segurança - SEMPRE sai do loading
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
         Logger.warn("Auth init timeout - forcing ready state", undefined, "AuthContext");
         setIsLoading(false);
         setIsInitialized(true);
       }
-    }, maxInitTimeout);
+    }, 20000); // 20 segundos para conexões muito lentas
 
     const initializeAuth = async () => {
       try {
-        // Set up auth state listener FIRST
+        // Set up auth state listener FIRST (critical for session detection)
         const { data } = supabase.auth.onAuthStateChange(
           (event, currentSession) => {
             if (!mounted) return;
             
+            // Update state synchronously
             setSession(currentSession);
             setUser(currentSession?.user ?? null);
             setIsLoading(false);
             setIsInitialized(true);
             
-            // Use setTimeout to defer toast calls (avoid deadlock)
+            // Defer toasts to prevent deadlock
             if (event === "SIGNED_IN") {
-              setTimeout(() => {
-                toast.success("Bem-vindo!", {
-                  description: "Login realizado com sucesso.",
-                });
-              }, 0);
+              setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
             } else if (event === "SIGNED_OUT") {
-              setTimeout(() => {
-                toast.info("Desconectado", {
-                  description: "Você foi desconectado com sucesso.",
-                });
-              }, 0);
+              setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
             }
           }
         );
         
         subscription = data.subscription;
 
-        // THEN check for existing session with retry logic
-        const fetchSession = async (): Promise<void> => {
-          try {
-            const { data: sessionData, error } = await supabase.auth.getSession();
+        // THEN check for existing session (simple, no retry - customFetch handles retries)
+        try {
+          const { data: sessionData, error } = await supabase.auth.getSession();
 
-            if (!mounted) return;
+          if (!mounted) return;
 
-            if (error) {
-              // Handle network errors with limited retry
-              if ((error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') && retryCount < maxRetries) {
-                retryCount++;
-                Logger.warn(`Session fetch failed, retrying (${retryCount}/${maxRetries})...`, error, "AuthContext");
-                await new Promise(resolve => setTimeout(resolve, 500 * retryCount)); // Backoff mais curto
-                return fetchSession();
-              }
-              // Após retries, continua sem sessão (usuário fará login)
-              Logger.warn("Error getting session, continuing without auth", error, "AuthContext");
-            }
-            
-            setSession(sessionData?.session ?? null);
-            setUser(sessionData?.session?.user ?? null);
-            setIsLoading(false);
-            setIsInitialized(true);
-          } catch (fetchError) {
-            if (!mounted) return;
-            
-            // Network error - retry com backoff curto
-            if (retryCount < maxRetries) {
-              retryCount++;
-              Logger.warn(`Network error, retrying (${retryCount}/${maxRetries})...`, fetchError, "AuthContext");
-              await new Promise(resolve => setTimeout(resolve, 500 * retryCount));
-              return fetchSession();
-            }
-            
-            // Sempre finaliza o loading mesmo em erro
-            Logger.warn("Failed to fetch session after retries, continuing", fetchError, "AuthContext");
+          if (error) {
+            Logger.warn("Error getting session", error, "AuthContext");
+          }
+          
+          setSession(sessionData?.session ?? null);
+          setUser(sessionData?.session?.user ?? null);
+        } catch (fetchError) {
+          Logger.warn("Failed to fetch session", fetchError, "AuthContext");
+        } finally {
+          if (mounted) {
             setIsLoading(false);
             setIsInitialized(true);
           }
-        };
-
-        await fetchSession();
+        }
       } catch (error) {
         if (!mounted) return;
         Logger.warn("Error initializing auth", error, "AuthContext");
