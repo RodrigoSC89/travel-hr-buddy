@@ -72,25 +72,35 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
 
   clearCachesAndReload = async () => {
     try {
-      // Unregister service workers
+      // Unregister ALL service workers first
       if ('serviceWorker' in navigator) {
         const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map(r => r.unregister()));
+        for (const registration of registrations) {
+          // Skip waiting on any waiting service worker
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+          await registration.unregister();
+        }
         console.log('[LazyLoadErrorBoundary] Service workers unregistered');
       }
       
-      // Clear caches
+      // Clear ALL caches
       if ('caches' in window) {
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.log('[LazyLoadErrorBoundary] Caches cleared');
+        console.log('[LazyLoadErrorBoundary] All caches cleared');
       }
+      
+      // Clear session storage
+      sessionStorage.clear();
+      
     } catch (e) {
       console.error('[LazyLoadErrorBoundary] Cache clear error:', e);
     }
     
-    // Force reload from server
-    window.location.reload();
+    // Force hard reload - bypass cache completely
+    window.location.href = window.location.origin + window.location.pathname + '?_sw=' + Date.now();
   };
 
   handleManualRetry = () => {
