@@ -34,11 +34,17 @@ const safeLocalStorage = (() => {
   };
 })();
 
-// Detecta se é conexão lenta
+// Detecta se é conexão lenta (2G, 3G, satélite, <2Mbps)
 const isSlowConnection = (): boolean => {
   if ('connection' in navigator) {
     const conn = (navigator as any).connection;
-    return conn?.saveData || conn?.effectiveType === '2g' || conn?.effectiveType === 'slow-2g' || (conn?.downlink && conn.downlink < 1);
+    return (
+      conn?.saveData || 
+      conn?.effectiveType === '2g' || 
+      conn?.effectiveType === 'slow-2g' || 
+      conn?.effectiveType === '3g' ||
+      (conn?.downlink && conn.downlink < 2)
+    );
   }
   return false;
 };
