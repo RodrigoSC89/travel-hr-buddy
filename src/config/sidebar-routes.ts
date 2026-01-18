@@ -99,6 +99,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Alertas", path: "/central-comando/alertas", icon: Bell, emoji: "🚨", badgeType: 'alerts' },
       { label: "NOC 24/7", path: "/noc", icon: Eye, emoji: "🖥️", requiredRoles: ['admin', 'supervisor', 'manager'] },
       { label: "NOC Monitoring", path: "/noc-monitoring", icon: Activity, emoji: "📡", requiredRoles: ['admin', 'supervisor', 'manager'] },
+      { label: "SOC Dashboard", path: "/soc", icon: Shield, emoji: "🛡️", badge: "NEW", status: "new" },
     ],
   },
 
