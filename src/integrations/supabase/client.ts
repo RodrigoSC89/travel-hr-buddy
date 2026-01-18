@@ -46,13 +46,14 @@ const isSlowConnection = (): boolean => {
 // Custom fetch with retry for maritime satellite connections
 // CRITICAL: Otimizado para conexões de 2Mbps e satélite
 const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-  const MAX_RETRIES = 4; // Aumentado para redes instáveis
+  const MAX_RETRIES = 4;
   const slow = isSlowConnection();
   
-  // Timeouts adaptativos: 20s/30s/45s/60s para conexões lentas, 10s/15s/20s/30s para normais
+  // Timeouts adaptativos para conexões marítimas/satélite
+  // Slow: 25s/40s/55s/70s | Normal: 12s/20s/28s/36s
   const getTimeout = (attempt: number) => {
-    const base = slow ? 20000 : 10000;
-    return base + (attempt * (slow ? 15000 : 5000));
+    const base = slow ? 25000 : 12000;
+    return base + (attempt * (slow ? 15000 : 8000));
   };
   
   let lastError: Error | null = null;
@@ -62,42 +63,61 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promis
     const timeout = getTimeout(attempt);
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     
+    // Handle external abort signal (compatible with all browsers)
+    const externalSignal = init?.signal;
+    let externalAbortHandler: (() => void) | undefined;
+    
+    if (externalSignal) {
+      externalAbortHandler = () => controller.abort();
+      externalSignal.addEventListener('abort', externalAbortHandler);
+    }
+    
     try {
-      // Merge signals se já houver um no init
-      const mergedSignal = init?.signal 
-        ? AbortSignal.any?.([controller.signal, init.signal]) ?? controller.signal
-        : controller.signal;
-      
       const response = await fetch(input, {
         ...init,
-        signal: mergedSignal,
+        signal: controller.signal,
       });
       clearTimeout(timeoutId);
+      if (externalSignal && externalAbortHandler) {
+        externalSignal.removeEventListener('abort', externalAbortHandler);
+      }
       return response;
     } catch (error) {
       clearTimeout(timeoutId);
+      if (externalSignal && externalAbortHandler) {
+        externalSignal.removeEventListener('abort', externalAbortHandler);
+      }
       lastError = error as Error;
+      
+      // Check if aborted by external signal (user cancelled)
+      if (externalSignal?.aborted) {
+        throw error;
+      }
       
       // Verificar se é erro recuperável
       const isAborted = (error as Error).name === 'AbortError';
-      const isNetworkError = (error as Error).message?.includes('Failed to fetch') ||
-        (error as Error).message?.includes('NetworkError') ||
-        (error as Error).message?.includes('network') ||
-        (error as Error).message?.includes('Network request failed') ||
-        (error as Error).message?.includes('fetch');
+      const errorMessage = (error as Error).message || '';
+      const isNetworkError = 
+        errorMessage.includes('Failed to fetch') ||
+        errorMessage.includes('NetworkError') ||
+        errorMessage.includes('network') ||
+        errorMessage.includes('Network request failed') ||
+        errorMessage.includes('fetch') ||
+        errorMessage.includes('CORS') ||
+        errorMessage.includes('Load failed');
       
       const isRetryable = isAborted || isNetworkError;
       
       // Se não é recuperável ou é a última tentativa, lançar erro
       if (!isRetryable || attempt === MAX_RETRIES - 1) {
-        console.error(`[Supabase] Request failed after ${attempt + 1} attempts:`, (error as Error).message);
+        console.error(`[Supabase] Request failed after ${attempt + 1} attempts:`, errorMessage);
         throw error;
       }
       
-      // Backoff exponencial com jitter: 1s, 2s, 4s (+ random 0-500ms)
-      const jitter = Math.random() * 500;
-      const delay = Math.min(1000 * Math.pow(2, attempt) + jitter, 8000);
-      console.log(`[Supabase] Retry ${attempt + 1}/${MAX_RETRIES} after ${Math.round(delay)}ms (timeout was ${timeout}ms)...`);
+      // Backoff exponencial com jitter: 1.5s, 3s, 6s (+ random 0-1s)
+      const jitter = Math.random() * 1000;
+      const delay = Math.min(1500 * Math.pow(2, attempt) + jitter, 10000);
+      console.log(`[Supabase] Retry ${attempt + 1}/${MAX_RETRIES} after ${Math.round(delay)}ms (timeout was ${timeout}ms, slow=${slow})...`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
