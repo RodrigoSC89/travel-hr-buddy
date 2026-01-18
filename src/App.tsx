@@ -33,6 +33,7 @@ const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
 // Central de Comando extras
 const NOC = lazy(() => import("@/pages/NOC"));
 const NOCMonitoring = lazy(() => import("@/pages/NOCMonitoring"));
+const SOCPage = lazy(() => import("@/pages/SOCPage"));
 
 // ============================================
 // OPERAÇÕES MARÍTIMAS
@@ -326,6 +327,8 @@ const AppRoutes = () => (
       <Route path="/central-comando/*" element={<CentralComando />} />
       <Route path="/noc" element={<NOC />} />
       <Route path="/noc-monitoring" element={<NOCMonitoring />} />
+      <Route path="/soc" element={<SOCPage />} />
+      <Route path="/soc-dashboard" element={<SOCPage />} />
       
       {/* ============================================ */}
       {/* OPERAÇÕES MARÍTIMAS */}
