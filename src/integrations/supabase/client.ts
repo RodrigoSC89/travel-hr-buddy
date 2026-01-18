@@ -34,11 +34,59 @@ const safeLocalStorage = (() => {
   };
 })();
 
+// Custom fetch with retry for maritime satellite connections
+const customFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+  const MAX_RETRIES = 3;
+  const INITIAL_TIMEOUT = 15000; // 15s para conexões lentas
+  
+  let lastError: Error | null = null;
+  
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    const controller = new AbortController();
+    const timeout = INITIAL_TIMEOUT * (attempt + 1); // Aumenta timeout a cada retry
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    try {
+      const response = await fetch(input, {
+        ...init,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      return response;
+    } catch (error) {
+      clearTimeout(timeoutId);
+      lastError = error as Error;
+      
+      // Se foi abortado por timeout ou é erro de rede, retry
+      const isRetryable = 
+        error instanceof Error && (
+          error.name === 'AbortError' ||
+          error.message.includes('Failed to fetch') ||
+          error.message.includes('NetworkError') ||
+          error.message.includes('network')
+        );
+      
+      if (!isRetryable || attempt === MAX_RETRIES - 1) {
+        throw error;
+      }
+      
+      // Backoff exponencial: 500ms, 1s, 2s
+      const delay = Math.min(500 * Math.pow(2, attempt), 2000);
+      console.log(`[Supabase] Retry ${attempt + 1}/${MAX_RETRIES} after ${delay}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  throw lastError || new Error('Max retries exceeded');
+};
+
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
     storage: safeLocalStorage,
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce', // Mais seguro para mobile/PWA
   },
   realtime: {
     params: {
@@ -49,5 +97,6 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     headers: {
       "x-client-info": "nautilus-travel-hr-buddy",
     },
+    fetch: customFetch,
   },
 });

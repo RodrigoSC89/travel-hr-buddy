@@ -118,13 +118,20 @@ const Auth: React.FC = () => {
     
     try {
       const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
+        email: data.email.toLowerCase().trim(),
         password: data.password,
       });
       
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
+        // Classificar erros para mensagens mais claras
+        const errorMsg = error.message.toLowerCase();
+        
+        if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
+        } else if (errorMsg.includes('email not confirmed')) {
+          toast.error("Email não confirmado", { description: "Verifique seu email para confirmar a conta." });
+        } else if (errorMsg.includes('too many requests')) {
+          toast.error("Muitas tentativas", { description: "Aguarde alguns minutos e tente novamente." });
         } else {
           toast.error("Erro no login", { description: error.message });
         }
@@ -132,8 +139,11 @@ const Auth: React.FC = () => {
         toast.success("Login realizado com sucesso");
       }
     } catch (err) {
-      toast.error("Erro no login", { 
-        description: err instanceof Error ? err.message : "Erro desconhecido" 
+      // Network errors são tratados pelo customFetch no client.ts
+      // Se chegou aqui, é um erro real
+      console.error("Login error:", err);
+      toast.error("Erro de conexão", { 
+        description: "Verifique sua internet e tente novamente." 
       });
     } finally {
       setIsLoading(false);

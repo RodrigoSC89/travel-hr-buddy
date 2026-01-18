@@ -3,7 +3,7 @@
  * Força atualização do SW quando detecta versão antiga ou erros de chunk
  */
 
-const EXPECTED_SW_VERSION = 'v6';
+const EXPECTED_SW_VERSION = 'v7';
 const SW_VERSION_KEY = 'nautilus_sw_version';
 const LAST_UPDATE_CHECK_KEY = 'nautilus_sw_last_check';
 
