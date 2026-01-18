@@ -56,14 +56,24 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // Timeout de segurança - SEMPRE sai do loading
+    // Timeout de segurança AGRESSIVO - SEMPRE sai do loading
+    // Para conexões muito lentas, não podemos esperar indefinidamente
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
-        Logger.warn("Auth init timeout - forcing ready state", undefined, "AuthContext");
+        Logger.warn("Auth init timeout (30s) - forcing ready state", undefined, "AuthContext");
         setIsLoading(false);
         setIsInitialized(true);
       }
-    }, 20000); // 20 segundos para conexões muito lentas
+    }, 30000); // 30 segundos para conexões muito lentas (satélite)
+
+    // Timeout intermediário para sair do loading visualmente mais cedo
+    const visualTimeout = setTimeout(() => {
+      if (mounted && isLoading && !isInitialized) {
+        Logger.info("Auth visual timeout (10s) - marking initialized", undefined, "AuthContext");
+        setIsInitialized(true);
+        // NÃO setar isLoading = false ainda - esperar getSession
+      }
+    }, 10000);
 
     const initializeAuth = async () => {
       try {
@@ -72,13 +82,13 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           (event, currentSession) => {
             if (!mounted) return;
             
-            // Update state synchronously
+            // Update state synchronously - NUNCA async aqui
             setSession(currentSession);
             setUser(currentSession?.user ?? null);
             setIsLoading(false);
             setIsInitialized(true);
             
-            // Defer toasts to prevent deadlock
+            // Defer toasts to prevent deadlock - usar setTimeout(0)
             if (event === "SIGNED_IN") {
               setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
             } else if (event === "SIGNED_OUT") {
@@ -89,20 +99,23 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         
         subscription = data.subscription;
 
-        // THEN check for existing session (simple, no retry - customFetch handles retries)
+        // THEN check for existing session
+        // O customFetch no Supabase client já faz retry automático
         try {
           const { data: sessionData, error } = await supabase.auth.getSession();
 
           if (!mounted) return;
 
           if (error) {
+            // Log mas não falhe - o usuário pode fazer login manualmente
             Logger.warn("Error getting session", error, "AuthContext");
           }
           
           setSession(sessionData?.session ?? null);
           setUser(sessionData?.session?.user ?? null);
         } catch (fetchError) {
-          Logger.warn("Failed to fetch session", fetchError, "AuthContext");
+          // Erro de rede/timeout - não bloquear o app
+          Logger.warn("Failed to fetch session (network issue)", fetchError, "AuthContext");
         } finally {
           if (mounted) {
             setIsLoading(false);
@@ -111,6 +124,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         }
       } catch (error) {
         if (!mounted) return;
+        // Erro crítico - ainda assim liberar o app
         Logger.warn("Error initializing auth", error, "AuthContext");
         setIsLoading(false);
         setIsInitialized(true);
@@ -122,6 +136,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     return () => {
       mounted = false;
       clearTimeout(safetyTimeout);
+      clearTimeout(visualTimeout);
       if (subscription) {
         subscription.unsubscribe();
       }

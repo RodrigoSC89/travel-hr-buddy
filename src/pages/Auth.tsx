@@ -116,6 +116,15 @@ const Auth: React.FC = () => {
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
     
+    // Verificar conexão antes de tentar login
+    if (!navigator.onLine) {
+      toast.error("Sem conexão", { 
+        description: "Você está offline. Conecte-se à internet para fazer login." 
+      });
+      setIsLoading(false);
+      return;
+    }
+    
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email: data.email.toLowerCase().trim(),
@@ -132,6 +141,10 @@ const Auth: React.FC = () => {
           toast.error("Email não confirmado", { description: "Verifique seu email para confirmar a conta." });
         } else if (errorMsg.includes('too many requests')) {
           toast.error("Muitas tentativas", { description: "Aguarde alguns minutos e tente novamente." });
+        } else if (errorMsg.includes('fetch') || errorMsg.includes('network') || errorMsg.includes('timeout') || errorMsg.includes('aborted')) {
+          toast.error("Problema de conexão", { 
+            description: "Sua conexão está instável. Tente novamente ou use o botão 'Limpar sessão'." 
+          });
         } else {
           toast.error("Erro no login", { description: error.message });
         }
@@ -139,12 +152,24 @@ const Auth: React.FC = () => {
         toast.success("Login realizado com sucesso");
       }
     } catch (err) {
-      // Network errors são tratados pelo customFetch no client.ts
-      // Se chegou aqui, é um erro real
+      const errorMessage = err instanceof Error ? err.message.toLowerCase() : '';
       console.error("Login error:", err);
-      toast.error("Erro de conexão", { 
-        description: "Verifique sua internet e tente novamente." 
-      });
+      
+      // Identificar erros de rede/timeout
+      if (errorMessage.includes('fetch') || 
+          errorMessage.includes('network') || 
+          errorMessage.includes('timeout') || 
+          errorMessage.includes('aborted') ||
+          errorMessage.includes('max retries')) {
+        toast.error("Conexão lenta detectada", { 
+          description: "A rede está muito lenta. Aguarde e tente novamente, ou use o botão 'Limpar sessão' abaixo.",
+          duration: 8000
+        });
+      } else {
+        toast.error("Erro de conexão", { 
+          description: "Verifique sua internet e tente novamente." 
+        });
+      }
     } finally {
       setIsLoading(false);
     }
