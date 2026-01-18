@@ -3,9 +3,11 @@
  * Automatically retries failed chunk loads by refreshing the page
  * This fixes "Failed to fetch dynamically imported module" errors
  * caused by stale Service Worker cache after deploys
+ * 
+ * v2: Integrado com sw-update-manager para limpeza mais robusta
  */
 import React, { Component, ReactNode } from 'react';
-import { Loader2, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Loader2, RefreshCw, AlertTriangle, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Props {
@@ -17,10 +19,12 @@ interface State {
   hasError: boolean;
   isChunkError: boolean;
   retryCount: number;
+  isOnline: boolean;
 }
 
 const MAX_AUTO_RETRIES = 2;
 const RETRY_KEY = 'chunk_error_retry_count';
+const LAST_ERROR_KEY = 'chunk_error_last_time';
 
 export class LazyLoadErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
@@ -28,12 +32,24 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
     
     // Check if we've been retrying
     const storedRetries = sessionStorage.getItem(RETRY_KEY);
-    const retryCount = storedRetries ? parseInt(storedRetries, 10) : 0;
+    const lastError = sessionStorage.getItem(LAST_ERROR_KEY);
+    
+    // Reset retry count if last error was more than 5 minutes ago
+    let retryCount = storedRetries ? parseInt(storedRetries, 10) : 0;
+    if (lastError) {
+      const elapsed = Date.now() - parseInt(lastError, 10);
+      if (elapsed > 5 * 60 * 1000) {
+        retryCount = 0;
+        sessionStorage.removeItem(RETRY_KEY);
+        sessionStorage.removeItem(LAST_ERROR_KEY);
+      }
+    }
     
     this.state = {
       hasError: false,
       isChunkError: false,
       retryCount,
+      isOnline: navigator.onLine,
     };
   }
 
@@ -43,13 +59,48 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
       error.message.includes('Failed to fetch dynamically imported module') ||
       error.message.includes('Loading chunk') ||
       error.message.includes('ChunkLoadError') ||
-      error.message.includes('Loading CSS chunk');
+      error.message.includes('Loading CSS chunk') ||
+      error.message.includes('error loading dynamically imported module') ||
+      error.message.includes('Unable to preload CSS');
     
     return { hasError: true, isChunkError };
   }
 
+  componentDidMount() {
+    // Clear retry count on successful mount
+    if (!this.state.hasError) {
+      sessionStorage.removeItem(RETRY_KEY);
+      sessionStorage.removeItem(LAST_ERROR_KEY);
+    }
+    
+    // Listen for online/offline events
+    window.addEventListener('online', this.handleOnline);
+    window.addEventListener('offline', this.handleOffline);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('online', this.handleOnline);
+    window.removeEventListener('offline', this.handleOffline);
+  }
+
+  handleOnline = () => {
+    this.setState({ isOnline: true });
+    // Se estava offline e voltou, tentar recarregar
+    if (this.state.hasError && this.state.isChunkError) {
+      this.handleManualRetry();
+    }
+  };
+
+  handleOffline = () => {
+    this.setState({ isOnline: false });
+  };
+
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('[LazyLoadErrorBoundary] Error caught:', error.message);
+    console.error('[LazyLoadErrorBoundary] Component stack:', errorInfo.componentStack);
+    
+    // Store error timestamp
+    sessionStorage.setItem(LAST_ERROR_KEY, Date.now().toString());
     
     if (this.state.isChunkError && this.state.retryCount < MAX_AUTO_RETRIES) {
       // Store retry count and reload
@@ -63,53 +114,69 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
-    // Clear retry count on successful mount
-    if (!this.state.hasError) {
-      sessionStorage.removeItem(RETRY_KEY);
-    }
-  }
-
   clearCachesAndReload = async () => {
+    console.log('[LazyLoadErrorBoundary] Starting cache clear...');
+    
     try {
-      // Unregister ALL service workers first
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const registration of registrations) {
-          // Skip waiting on any waiting service worker
-          if (registration.waiting) {
-            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      // Use the centralized SW manager if available
+      try {
+        const { forceFullCacheClear } = await import('@/lib/sw-update-manager');
+        await forceFullCacheClear();
+      } catch {
+        // Fallback: manual cleanup
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const registration of registrations) {
+            if (registration.waiting) {
+              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+            await registration.unregister();
           }
-          await registration.unregister();
+          console.log('[LazyLoadErrorBoundary] Service workers unregistered');
         }
-        console.log('[LazyLoadErrorBoundary] Service workers unregistered');
+        
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+          console.log('[LazyLoadErrorBoundary] All caches cleared');
+        }
       }
-      
-      // Clear ALL caches
-      if ('caches' in window) {
-        const cacheNames = await caches.keys();
-        await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.log('[LazyLoadErrorBoundary] All caches cleared');
-      }
-      
-      // Clear session storage
-      sessionStorage.clear();
       
     } catch (e) {
       console.error('[LazyLoadErrorBoundary] Cache clear error:', e);
     }
     
-    // Force hard reload - bypass cache completely
-    window.location.href = window.location.origin + window.location.pathname + '?_sw=' + Date.now();
+    // Force hard reload - bypass cache completely with cache-busting query
+    const url = new URL(window.location.href);
+    url.searchParams.set('_sw', Date.now().toString());
+    window.location.replace(url.toString());
   };
 
   handleManualRetry = () => {
     sessionStorage.removeItem(RETRY_KEY);
+    sessionStorage.removeItem(LAST_ERROR_KEY);
     this.clearCachesAndReload();
   };
 
   render() {
     if (this.state.hasError) {
+      // Se offline, mostrar mensagem específica
+      if (!this.state.isOnline) {
+        return (
+          <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+            <WifiOff className="h-12 w-12 text-amber-500 mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Sem Conexão</h2>
+            <p className="text-muted-foreground text-center mb-6 max-w-md">
+              Você está offline. Reconecte à internet para carregar a aplicação.
+            </p>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Wifi className="h-4 w-4 animate-pulse" />
+              Aguardando conexão...
+            </div>
+          </div>
+        );
+      }
+      
       // If it's a chunk error and we're within auto-retry limit, show loading
       if (this.state.isChunkError && this.state.retryCount < MAX_AUTO_RETRIES) {
         return (
@@ -117,6 +184,9 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
             <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
             <p className="text-muted-foreground text-center">
               Atualizando aplicação...
+            </p>
+            <p className="text-xs text-muted-foreground/60 mt-2">
+              Tentativa {this.state.retryCount + 1} de {MAX_AUTO_RETRIES}
             </p>
           </div>
         );
@@ -132,10 +202,13 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
               Uma nova versão do Nautilus One está disponível. 
               Clique abaixo para atualizar.
             </p>
-            <Button onClick={this.handleManualRetry} size="lg">
-              <RefreshCw className="h-4 w-4 mr-2" />
+            <Button onClick={this.handleManualRetry} size="lg" className="gap-2">
+              <RefreshCw className="h-4 w-4" />
               Atualizar Aplicação
             </Button>
+            <p className="text-xs text-muted-foreground/60 mt-4 max-w-sm text-center">
+              Se o problema persistir, limpe o cache do navegador manualmente ou reinstale o app.
+            </p>
           </div>
         );
       }
@@ -148,8 +221,8 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
           <p className="text-muted-foreground text-center mb-6">
             Algo deu errado. Tente recarregar a página.
           </p>
-          <Button onClick={() => window.location.reload()}>
-            <RefreshCw className="h-4 w-4 mr-2" />
+          <Button onClick={() => window.location.reload()} className="gap-2">
+            <RefreshCw className="h-4 w-4" />
             Recarregar
           </Button>
         </div>

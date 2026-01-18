@@ -45,12 +45,20 @@ const initializeOptionalFeatures = async () => {
   }
 };
 
-// Register service worker after page load (only in production)
+// Register and manage service worker (only in production)
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", async () => {
     try {
-      await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-      logger.info("Service Worker registered");
+      // Import SW manager for better update handling
+      const { registerServiceWorker, checkAndUpdateServiceWorker } = await import("@/lib/sw-update-manager");
+      
+      // Register SW with optimized settings
+      await registerServiceWorker();
+      
+      // Check for updates
+      await checkAndUpdateServiceWorker();
+      
+      logger.info("Service Worker registered and checked for updates");
     } catch (error) {
       logger.warn("Service worker registration failed:", error instanceof Error ? { message: error.message } : undefined);
     }
