@@ -50,12 +50,12 @@ export function useChurnPrediction() {
         organization_id: row.organization_id || "",
         health_score: row.health_score || 0,
         churn_risk: row.churn_risk || 0,
-        churn_signals: (row.churn_signals as Record<string, boolean>) || {},
+        churn_signals: (row.risk_factors as Record<string, boolean>) || {},
         last_calculated_at: row.last_calculated_at || "",
         logins_last_30d: row.logins_last_30d || 0,
-        features_used: row.features_used || 0,
+        features_used: row.features_used_count || 0,
         api_calls_last_30d: row.api_calls_last_30d || 0,
-        support_tickets_open: row.support_tickets_open || 0,
+        support_tickets_open: row.support_tickets_last_30d || 0,
         arr: row.arr || 0
       })) as CustomerHealthMetrics[];
     }
@@ -81,62 +81,9 @@ export function useChurnPrediction() {
   // Recalculate health for organization
   const recalculateHealth = useMutation({
     mutationFn: async (organizationId: string) => {
-      // Fetch usage events for last 30 days
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-      const { data: events } = await supabase
-        .from("analytics_events")
-        .select("*")
-        .eq("organization_id", organizationId)
-        .gte("timestamp", thirtyDaysAgo.toISOString());
-
-      if (!events) return null;
-
-      // Calculate metrics from events
-      const loginEvents = events.filter(e => e.event_name === "login");
-      const errorEvents = events.filter(e => e.event_name === "error");
-      const featureEvents = events.filter(e => e.event_name === "feature_used");
-
-      const uniqueFeatures = new Set(
-        featureEvents.map(e => (e.properties as Record<string, any>)?.feature_name)
-      ).size;
-
-      const signals = {
-        declining_usage: loginEvents.length < 10,
-        increased_errors: errorEvents.length / Math.max(events.length, 1) > 0.05,
-        support_escalation: false,
-        feature_abandonment: uniqueFeatures < 5,
-        admin_inactivity: loginEvents.length === 0
-      };
-
-      const healthScore = customerHealthService.calculateHealth(organizationId, {
-        logins: loginEvents.length,
-        features: uniqueFeatures,
-        apiCalls: events.length,
-        errors: errorEvents.length
-      });
-
-      const churnRisk = customerHealthService.calculateChurnRisk(signals);
-
-      // Update in database
-      const { data, error } = await supabase
-        .from("customer_health_metrics")
-        .upsert({
-          organization_id: organizationId,
-          health_score: healthScore,
-          churn_risk: churnRisk,
-          churn_signals: signals,
-          logins_last_30d: loginEvents.length,
-          features_used: uniqueFeatures,
-          api_calls_last_30d: events.length,
-          last_calculated_at: new Date().toISOString()
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      // Use the service to calculate health score
+      const healthMetrics = await customerHealthService.calculateHealthScore(organizationId);
+      return healthMetrics;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customer-health"] });

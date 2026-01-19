@@ -27,9 +27,10 @@ export interface IncidentTimelineEntry {
 
 export interface Runbook {
   id: string;
-  incident_type: string;
-  title: string;
-  steps: string[];
+  name: string;
+  description: string;
+  severity: string;
+  steps: { step: number; action: string; auto: boolean }[];
   is_active: boolean;
 }
 
@@ -65,11 +66,11 @@ export function useIncidentManagement() {
         if (!incidentId) continue;
         
         if (!incidentMap.has(incidentId)) {
-          const metadata = entry.metadata as Record<string, any> || {};
+          const metadata = entry.metadata as Record<string, unknown> || {};
           incidentMap.set(incidentId, {
             id: incidentId,
-            title: metadata.title || `Incident ${incidentId.slice(0, 8)}`,
-            service: metadata.service || "unknown",
+            title: (metadata.title as string) || `Incident ${incidentId.slice(0, 8)}`,
+            service: (metadata.service as string) || "unknown",
             severity: (metadata.severity as Incident["severity"]) || "medium",
             status: "open",
             detected_at: entry.created_at || new Date().toISOString(),
@@ -107,9 +108,10 @@ export function useIncidentManagement() {
       
       return (data || []).map(r => ({
         id: r.id,
-        incident_type: r.incident_type,
-        title: r.title,
-        steps: (r.steps as string[]) || [],
+        name: r.name,
+        description: r.description || "",
+        severity: r.severity,
+        steps: (r.steps as { step: number; action: string; auto: boolean }[]) || [],
         is_active: r.is_active || false
       })) as Runbook[];
     }
@@ -144,30 +146,38 @@ export function useIncidentManagement() {
   // Create incident
   const createIncident = useMutation({
     mutationFn: async (params: {
+      organizationId: string;
       title: string;
       service: string;
       severity: Incident["severity"];
       description?: string;
     }) => {
-      const incident = incidentManager.createIncident({
+      const incident = await incidentManager.createIncident(params.organizationId, {
         title: params.title,
-        service: params.service,
-        severity: params.severity
+        description: params.description || "",
+        severity: params.severity,
+        status: "open",
+        priority: params.severity === "critical" ? 1 : params.severity === "high" ? 2 : 3,
+        category: params.service,
+        affected_services: [params.service],
+        affected_users_count: 0,
+        runbook_id: null,
+        runbook_progress: [],
+        detected_at: new Date().toISOString(),
+        acknowledged_at: null,
+        acknowledged_by: null,
+        resolved_at: null,
+        resolved_by: null,
+        closed_at: null,
+        time_to_acknowledge: null,
+        time_to_resolve: null,
+        root_cause: null,
+        resolution_summary: null,
+        lessons_learned: null,
+        action_items: [],
+        pagerduty_incident_id: null,
+        slack_channel: null
       });
-
-      // Save to database
-      await supabase
-        .from("incident_timeline")
-        .insert({
-          incident_id: incident.id,
-          event_type: "detected",
-          description: params.description || `Incident created: ${params.title}`,
-          metadata: {
-            title: params.title,
-            service: params.service,
-            severity: params.severity
-          }
-        });
 
       return incident;
     },
@@ -202,10 +212,11 @@ export function useIncidentManagement() {
   const resolveIncident = useMutation({
     mutationFn: async (params: {
       incidentId: string;
+      userId: string;
       rootCause?: string;
       resolution?: string;
     }) => {
-      incidentManager.resolveIncident(params.incidentId);
+      await incidentManager.updateStatus(params.incidentId, "resolved", params.userId, params.resolution);
 
       const { error } = await supabase
         .from("incident_timeline")
@@ -226,7 +237,7 @@ export function useIncidentManagement() {
   // Get runbook for incident type
   const getRunbook = useCallback((incidentType: string): Runbook | undefined => {
     return runbooks.find(r => 
-      r.incident_type.toLowerCase() === incidentType.toLowerCase()
+      r.name.toLowerCase().includes(incidentType.toLowerCase())
     );
   }, [runbooks]);
 

@@ -6,15 +6,15 @@
 import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { eventStore } from "@/lib/event-sourcing/event-store";
+import { eventStore, AggregateType } from "@/lib/event-sourcing/event-store";
 
 export interface DomainEvent {
   id: string;
   aggregate_type: string;
   aggregate_id: string;
   event_type: string;
-  data: Record<string, any>;
-  metadata: Record<string, any>;
+  data: Record<string, unknown>;
+  metadata: Record<string, unknown>;
   event_version: number;
   created_at: string;
 }
@@ -46,8 +46,8 @@ export function useEventSourcing() {
         aggregate_type: row.aggregate_type,
         aggregate_id: row.aggregate_id,
         event_type: row.event_type,
-        data: (row.data as Record<string, any>) || {},
-        metadata: (row.metadata as Record<string, any>) || {},
+        data: (row.data as Record<string, unknown>) || {},
+        metadata: (row.metadata as Record<string, unknown>) || {},
         event_version: row.event_version,
         created_at: row.created_at || new Date().toISOString()
       })) as DomainEvent[];
@@ -81,18 +81,20 @@ export function useEventSourcing() {
   // Append event
   const appendEvent = useMutation({
     mutationFn: async (params: {
-      aggregateType: string;
+      organizationId: string;
+      aggregateType: AggregateType;
       aggregateId: string;
       eventType: string;
-      data: Record<string, any>;
+      data: Record<string, unknown>;
       userId?: string;
     }) => {
       const event = await eventStore.append(
+        params.organizationId,
         params.aggregateType,
         params.aggregateId,
         params.eventType,
         params.data,
-        params.userId
+        { user_id: params.userId || "system", timestamp: new Date().toISOString() }
       );
 
       return event;
@@ -104,17 +106,16 @@ export function useEventSourcing() {
 
   // Get events for aggregate
   const getAggregateEvents = useCallback(async (
-    aggregateType: string, 
     aggregateId: string
   ): Promise<DomainEvent[]> => {
-    const dbEvents = await eventStore.getEvents(aggregateType, aggregateId);
+    const dbEvents = await eventStore.getEvents(aggregateId);
     return dbEvents.map(row => ({
       id: row.id,
       aggregate_type: row.aggregate_type,
       aggregate_id: row.aggregate_id,
       event_type: row.event_type,
-      data: (row.data as Record<string, any>) || {},
-      metadata: (row.metadata as Record<string, any>) || {},
+      data: (row.data as unknown as Record<string, unknown>) || {},
+      metadata: (row.metadata as unknown as Record<string, unknown>) || {},
       event_version: row.event_version,
       created_at: row.created_at || new Date().toISOString()
     }));
@@ -122,12 +123,11 @@ export function useEventSourcing() {
 
   // Replay aggregate to get current state
   const replayAggregate = useCallback(async <T>(
-    aggregateType: string,
     aggregateId: string,
     reducer: (state: T, event: DomainEvent) => T,
     initialState: T
   ): Promise<T> => {
-    const aggregateEvents = await getAggregateEvents(aggregateType, aggregateId);
+    const aggregateEvents = await getAggregateEvents(aggregateId);
     return aggregateEvents.reduce(reducer, initialState);
   }, [getAggregateEvents]);
 
@@ -138,14 +138,13 @@ export function useEventSourcing() {
 
   // Get timeline for entity
   const getEntityTimeline = useCallback(async (
-    aggregateType: string,
     aggregateId: string
   ): Promise<Array<{
     timestamp: string;
     eventType: string;
     summary: string;
   }>> => {
-    const entityEvents = await getAggregateEvents(aggregateType, aggregateId);
+    const entityEvents = await getAggregateEvents(aggregateId);
     
     return entityEvents.map(event => ({
       timestamp: event.created_at,
