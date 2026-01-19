@@ -1,10 +1,10 @@
 /**
- * Service Worker Update Manager v11
- * Estratégia minimalista: SW só cacheia imagens
- * CRITICAL: Desabilita SW completamente se detectar loops
+ * Service Worker Update Manager v12-minimal
+ * SW agora é MÍNIMO - apenas push notifications
+ * NENHUM cache de fetch para evitar problemas de PWA
  */
 
-const EXPECTED_SW_VERSION = 'v11';
+const EXPECTED_SW_VERSION = 'v12-minimal';
 const SW_VERSION_KEY = 'nautilus_sw_version';
 const LAST_UPDATE_CHECK_KEY = 'nautilus_sw_last_check';
 const SW_DISABLED_KEY = 'nautilus_sw_disabled';
