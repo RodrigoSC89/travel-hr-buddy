@@ -109,6 +109,21 @@ export function canManage(role: string | undefined): boolean {
 }
 
 /**
+ * Get authenticated user from Supabase client
+ */
+export async function getAuthenticatedUser(supabase: SupabaseClientType): Promise<{ user: User | null; error: string | null }> {
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) {
+      return { user: null, error: error?.message || 'Not authenticated' };
+    }
+    return { user: user as unknown as User, error: null };
+  } catch (err) {
+    return { user: null, error: 'Authentication failed' };
+  }
+}
+
+/**
  * Validate API key for external integrations
  */
 export async function validateApiKey(apiKey: string): Promise<{ valid: boolean; organizationId?: string }> {
