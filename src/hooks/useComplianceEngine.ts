@@ -6,18 +6,16 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { complianceEngine } from "@/lib/compliance-as-code/compliance-engine";
+import { complianceEngine, MARITIME_COMPLIANCE_RULES } from "@/lib/compliance-as-code/compliance-engine";
 
 export interface ComplianceViolation {
   id: string;
   rule_id: string;
-  regulation: string;
-  severity: string;
   entity_type: string;
   entity_id: string;
-  message: string;
-  detected_at: string;
+  severity: string;
   status: string;
+  detected_at: string;
   resolved_at?: string;
   resolution_notes?: string;
 }
@@ -47,50 +45,49 @@ export function useComplianceEngine() {
         .limit(100);
 
       if (error) throw error;
-      return data as ComplianceViolation[];
+      
+      return (data || []).map(row => ({
+        id: row.id,
+        rule_id: row.rule_id,
+        entity_type: row.entity_type,
+        entity_id: row.entity_id,
+        severity: row.severity,
+        status: row.status,
+        detected_at: row.detected_at || new Date().toISOString(),
+        resolved_at: row.resolved_at || undefined,
+        resolution_notes: row.resolution_notes || undefined
+      })) as ComplianceViolation[];
     }
   });
 
   // Get active (unresolved) violations
   const activeViolations = violations.filter(v => v.status === "open" || v.status === "in_progress");
 
-  // Calculate stats
-  const rules = complianceEngine.rules;
+  // Use the predefined rules from the compliance engine
+  const rules = MARITIME_COMPLIANCE_RULES;
+  
   const stats: ComplianceStats = {
     totalRules: rules.length,
-    activeRules: rules.filter(r => r.enabled).length,
-    criticalViolations: activeViolations.filter(v => v.severity === "CRITICAL").length,
-    highViolations: activeViolations.filter(v => v.severity === "HIGH").length,
-    mediumViolations: activeViolations.filter(v => v.severity === "MEDIUM").length,
-    lowViolations: activeViolations.filter(v => v.severity === "LOW").length,
+    activeRules: rules.filter(r => r.is_active).length,
+    criticalViolations: activeViolations.filter(v => v.severity === "critical").length,
+    highViolations: activeViolations.filter(v => v.severity === "high").length,
+    mediumViolations: activeViolations.filter(v => v.severity === "medium").length,
+    lowViolations: activeViolations.filter(v => v.severity === "low").length,
     complianceRate: violations.length > 0 
       ? Math.round((1 - activeViolations.length / Math.max(violations.length, 1)) * 100)
       : 100
   };
 
   // Run full audit
-  const runAudit = useCallback(async () => {
+  const runAudit = useCallback(async (organizationId: string) => {
     setIsAuditing(true);
     try {
-      // Fetch crews for audit
-      const { data: crews } = await supabase
-        .from("crew_members")
-        .select("*")
-        .limit(500);
-
-      if (!crews) return [];
-
-      const allViolations: ComplianceViolation[] = [];
-
-      for (const crew of crews) {
-        const crewViolations = await complianceEngine.audit(crew, "crew");
-        allViolations.push(...crewViolations);
-      }
-
+      const result = await complianceEngine.runFullAudit(organizationId);
+      
       // Refresh violations list
       await queryClient.invalidateQueries({ queryKey: ["compliance-violations"] });
 
-      return allViolations;
+      return result;
     } finally {
       setIsAuditing(false);
     }
@@ -100,21 +97,15 @@ export function useComplianceEngine() {
   const resolveViolation = useMutation({
     mutationFn: async ({ 
       violationId, 
-      resolution 
+      resolution,
+      userId
     }: { 
       violationId: string; 
       resolution: string;
+      userId: string;
     }) => {
-      const { error } = await supabase
-        .from("compliance_violations")
-        .update({
-          status: "resolved",
-          resolved_at: new Date().toISOString(),
-          resolution_notes: resolution
-        })
-        .eq("id", violationId);
-
-      if (error) throw error;
+      const success = await complianceEngine.resolveViolation(violationId, userId, resolution);
+      if (!success) throw new Error("Failed to resolve violation");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["compliance-violations"] });
@@ -123,15 +114,9 @@ export function useComplianceEngine() {
 
   // Acknowledge violation (mark as in progress)
   const acknowledgeViolation = useMutation({
-    mutationFn: async (violationId: string) => {
-      const { error } = await supabase
-        .from("compliance_violations")
-        .update({
-          status: "acknowledged"
-        })
-        .eq("id", violationId);
-
-      if (error) throw error;
+    mutationFn: async ({ violationId, userId }: { violationId: string; userId: string }) => {
+      const success = await complianceEngine.acknowledgeViolation(violationId, userId);
+      if (!success) throw new Error("Failed to acknowledge violation");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["compliance-violations"] });
@@ -140,15 +125,7 @@ export function useComplianceEngine() {
 
   // Get rules
   const getRules = useCallback(() => {
-    return complianceEngine.rules;
-  }, []);
-
-  // Toggle rule
-  const toggleRule = useCallback((ruleId: string) => {
-    const rule = complianceEngine.rules.find(r => r.id === ruleId);
-    if (rule) {
-      rule.enabled = !rule.enabled;
-    }
+    return MARITIME_COMPLIANCE_RULES;
   }, []);
 
   return {
@@ -160,7 +137,6 @@ export function useComplianceEngine() {
     runAudit,
     resolveViolation,
     acknowledgeViolation,
-    getRules,
-    toggleRule
+    getRules
   };
 }

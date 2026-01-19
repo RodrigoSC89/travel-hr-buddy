@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback, useEffect } from "react";
-import { EdgeAIRuntime } from "@/lib/edge-ai/onnx-runtime";
+import { onnxRuntime, MARITIME_MODELS } from "@/lib/edge-ai/onnx-runtime";
 
 export interface ModelConfig {
   name: string;
@@ -29,9 +29,6 @@ export interface EdgeAIStatus {
   lastPrediction: EdgeAIPrediction | null;
 }
 
-// Create singleton runtime
-const runtime = new EdgeAIRuntime();
-
 export function useEdgeAI() {
   const [status, setStatus] = useState<EdgeAIStatus>({
     isReady: false,
@@ -45,25 +42,29 @@ export function useEdgeAI() {
   // Initialize runtime
   useEffect(() => {
     const init = async () => {
-      const ready = await runtime.initialize();
-      setStatus(prev => ({
-        ...prev,
-        isReady: ready,
-        offlineCapable: ready
-      }));
+      try {
+        await onnxRuntime.initialize();
+        setStatus(prev => ({
+          ...prev,
+          isReady: true,
+          offlineCapable: true
+        }));
+      } catch (error) {
+        console.warn("ONNX Runtime initialization failed:", error);
+      }
     };
     init();
   }, []);
 
   // Load a model
-  const loadModel = useCallback(async (config: ModelConfig) => {
+  const loadModel = useCallback(async (modelKey: string) => {
     setIsLoading(true);
     try {
-      const success = await runtime.loadModel(config);
+      const success = await onnxRuntime.loadModel(modelKey);
       if (success) {
         setStatus(prev => ({
           ...prev,
-          loadedModels: [...prev.loadedModels, config.name]
+          loadedModels: [...prev.loadedModels, modelKey]
         }));
       }
       return success;
@@ -72,28 +73,29 @@ export function useEdgeAI() {
     }
   }, []);
 
-  // Run prediction
+  // Run prediction using ONNX runtime
   const predict = useCallback(async (
-    modelName: string, 
-    inputs: Record<string, number[]>
+    modelKey: string, 
+    inputs: number[]
   ): Promise<EdgeAIPrediction | null> => {
     const startTime = performance.now();
     
     try {
-      const result = await runtime.predict(modelName, inputs);
+      const result = await onnxRuntime.infer(modelKey, inputs);
       if (!result) return null;
 
       const latencyMs = performance.now() - startTime;
+      const modelConfig = MARITIME_MODELS[modelKey];
 
       // Find highest probability class
-      const maxIndex = result.indexOf(Math.max(...result));
-      const labels = getLabelsForModel(modelName);
+      const predictions_arr = result.predictions as number[];
+      const maxIndex = predictions_arr.indexOf(Math.max(...predictions_arr));
 
       const prediction: EdgeAIPrediction = {
-        modelName,
+        modelName: modelConfig?.name || modelKey,
         prediction: maxIndex,
-        confidence: result[maxIndex],
-        label: labels[maxIndex] || `class_${maxIndex}`,
+        confidence: result.confidence,
+        label: modelConfig?.labels?.[maxIndex] || `class_${maxIndex}`,
         timestamp: new Date(),
         latencyMs
       };
@@ -111,43 +113,28 @@ export function useEdgeAI() {
   // Crew risk assessment
   const assessCrewRisk = useCallback(async (crew: {
     age: number;
-    yearsAtSea: number;
-    certifications: number;
-    restHours: number;
-  }): Promise<EdgeAIPrediction | null> => {
-    return predict("crew-risk", {
-      age: [crew.age],
-      years_at_sea: [crew.yearsAtSea],
-      certifications: [crew.certifications],
-      rest_hours: [crew.restHours]
-    });
-  }, [predict]);
+    yearsExperience: number;
+    certificationsCount: number;
+    lastMedicalDays: number;
+    voyagesCompleted: number;
+    incidentCount: number;
+    trainingScore: number;
+    restHoursAvg: number;
+    workHoursAvg: number;
+    satisfactionScore: number;
+  }) => {
+    return onnxRuntime.assessCrewRisk(crew);
+  }, []);
 
   // Maintenance prediction
-  const predictMaintenance = useCallback(async (equipment: {
-    temperature: number;
-    oilPressure: number;
-    fuelConsumption: number;
-    vibration: number;
-    noiseLevel: number;
-  }): Promise<EdgeAIPrediction | null> => {
-    return predict("maintenance-predictor", {
-      temperature: [equipment.temperature],
-      oil_pressure: [equipment.oilPressure],
-      fuel_consumption: [equipment.fuelConsumption],
-      vibration: [equipment.vibration],
-      noise_level: [equipment.noiseLevel]
-    });
-  }, [predict]);
+  const predictMaintenance = useCallback(async (equipmentFeatures: number[]) => {
+    return onnxRuntime.predictMaintenance(equipmentFeatures);
+  }, []);
 
-  // Anomaly detection
-  const detectAnomaly = useCallback(async (
-    metrics: number[]
-  ): Promise<EdgeAIPrediction | null> => {
-    return predict("anomaly-detector", {
-      metrics
-    });
-  }, [predict]);
+  // Document classification
+  const classifyDocument = useCallback(async (textEmbedding: number[]) => {
+    return onnxRuntime.classifyDocument(textEmbedding);
+  }, []);
 
   // Get model stats
   const getStats = useCallback(() => {
@@ -170,6 +157,15 @@ export function useEdgeAI() {
     };
   }, [predictions]);
 
+  // Get available models
+  const getAvailableModels = useCallback(() => {
+    return Object.entries(MARITIME_MODELS).map(([key, config]) => ({
+      key,
+      name: config.name,
+      isLoaded: onnxRuntime.isModelLoaded(key)
+    }));
+  }, []);
+
   return {
     status,
     isLoading,
@@ -178,17 +174,8 @@ export function useEdgeAI() {
     predict,
     assessCrewRisk,
     predictMaintenance,
-    detectAnomaly,
-    getStats
+    classifyDocument,
+    getStats,
+    getAvailableModels
   };
-}
-
-// Helper to get labels for different models
-function getLabelsForModel(modelName: string): string[] {
-  const labelMaps: Record<string, string[]> = {
-    "crew-risk": ["low_risk", "medium_risk", "high_risk"],
-    "maintenance-predictor": ["normal", "warning", "critical"],
-    "anomaly-detector": ["normal", "anomaly"]
-  };
-  return labelMaps[modelName] || [];
 }
