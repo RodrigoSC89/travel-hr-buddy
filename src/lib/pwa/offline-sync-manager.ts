@@ -110,8 +110,10 @@ class OfflineSyncManager {
     return id;
   }
 
+  // PATCH iOS PWA: Não bloquear baseado em navigator.onLine (não é confiável no iOS)
+  // Permitir tentativa de sync - se falhar, as mutações ficam pendentes
   async syncPendingMutations(): Promise<SyncResult> {
-    if (this.syncInProgress || !navigator.onLine) {
+    if (this.syncInProgress) {
       return { success: false, synced: 0, failed: 0 };
     }
 

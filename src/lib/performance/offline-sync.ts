@@ -152,8 +152,10 @@ class OfflineSyncManager {
   }
 
   // Process pending operations
+  // PATCH iOS PWA: Não bloquear baseado em navigator.onLine (não é confiável no iOS)
+  // Permitir tentativa de sync - se falhar, as operações ficam pendentes
   async processPendingOperations(): Promise<void> {
-    if (!this.db || this.syncInProgress || !navigator.onLine) return;
+    if (!this.db || this.syncInProgress) return;
 
     this.syncInProgress = true;
     this.notifyListeners({ isOnline: true, pendingCount: 0, lastSync: null, syncing: true });

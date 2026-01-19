@@ -114,9 +114,10 @@ export function useDeltaSync(options: UseDeltaSyncOptions = {}) {
 
   /**
    * Manually trigger sync
+   * PATCH iOS PWA: Não bloquear baseado em navigator.onLine (não é confiável)
    */
   const syncNow = useCallback(async () => {
-    if (isSyncing || !navigator.onLine) return;
+    if (isSyncing) return;
 
     setIsSyncing(true);
     try {

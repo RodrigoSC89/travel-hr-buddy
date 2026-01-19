@@ -236,9 +236,9 @@ class HybridLLMEngine {
     if (lowerPrompt.includes('status') || lowerPrompt.includes('saúde') || lowerPrompt.includes('health')) {
       return OFFLINE_RESPONSES['status'];
     }
-    if (!navigator.onLine) {
-      return OFFLINE_RESPONSES['offline'];
-    }
+    // PATCH iOS PWA: Não forçar modo offline baseado em navigator.onLine
+    // navigator.onLine não é confiável no iOS Safari PWA
+    // Deixar o sistema tentar a query online - se falhar, tratamos o erro
 
     return null;
   }
